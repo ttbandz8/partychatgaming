@@ -1,7 +1,9 @@
 import pymongo 
+from decouple import config
 
 
-myclient = pymongo.MongoClient("mongodb+srv://tharper:Ty390924@cluster0.zhrbu.mongodb.net/kingsgambitdatabase?retryWrites=true&w=majority")
+TOKEN = config('MONGOTOKEN')
+myclient = pymongo.MongoClient(TOKEN)
 
 kohdb = myclient["kingofthehilldb"]
 
