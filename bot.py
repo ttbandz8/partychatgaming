@@ -1,30 +1,18 @@
-import pymongo 
-from decouple import config
+import db
+import time
 
+now = time.asctime()
 
-TOKEN = config('MONGOTOKEN')
-myclient = pymongo.MongoClient(TOKEN)
-
-kohdb = myclient["kingofthehilldb"]
-
-usercol = kohdb["users"]
-
-userlist = [
-    { "IGN": "ttbandz", "Discord Name": "lowkey lowkey", "Score": "1"},
-    { "IGN:": "johndoe", "Discord Name:": "johnd123", "Score": "2"}
+users = [
+    { "IGN": "ttbandz", "Discord Name": "lowkey lowkey", "timestamp": now},
+    { "IGN": "johndoe", "Discord Name:": "johnd123", "timestamp": now}
 ]
 
-user = usercol.insert_many(userlist)
-
-#print(user.inserted_ids)
-
-sessioncol = kohdb["sessions"]
+db.addUsers(users)
 
 sessionlist = [
-     { "Date": "4/20/21", "Game": "kingofthehill"},
-    { "Date": "4/21/21", "Game": "kingofthehill"}
-]   
+     { "Date": "4/20/21", "Game": "kingofthehill", "timestamp": now},
+    { "Date": "4/21/21", "Game": "kingofthehill", "timestampe": now}
+]
 
-session = sessioncol.insert_many(sessionlist)
-
-#print(session.inserted_ids)
+insert_sessions = db.sessions_col.insert_many(sessionlist)
