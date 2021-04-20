@@ -16,13 +16,15 @@ def col_exists(col):
     collections = db.list_collection_names()
     if col in collections:
         return True
+    else:
+        return False
 
 # Check if User exists
 def user_exists(data):
     collection_exists = col_exists("USERS")
     if collection_exists:
-        exists = users_col.find_one(data)
-        if exists:
+        userexists = users_col.find_one(data)
+        if userexists:
             return True
         else:
             return False
@@ -33,25 +35,43 @@ def user_exists(data):
 # Adds Multiple Users
 def addUsers(users):
     try:
-        for user in users:
-            exists = user_exists({"IGN": user["IGN"]})
+        if isinstance(users, list):
+            for user in users:
+                exists = user_exists({'DISNAME': user['DISNAME']})
+                if exists:
+                    print("User already exists.")
+                else:
+                    print("Inserting new user.")
+                    users_col.insert_one(user)
+        else:
+            exists = user_exists({'DISNAME': users['DISNAME']})
             if exists:
                 print("User already exists.")
             else:
                 print("Inserting new user.")
-                users_col.insert_one(user)
+                users_col.insert_one(users)
     except:
         print("Add Users failed.")
 
 # Deletes Users
 def deleteUser(users):
     try:
-        for user in users:
-            exists = user_exists(user)
+        if isinstance(users, list):
+            for user in users:
+                exists = user_exists(user)
+                if exists:
+                    users_col.delete_one(user)
+                    print("User deleted.")
+                else:
+                    print("User does not exist.")
+        else:
+            exists = user_exists(users)
             if exists:
-                users_col.delete_one(user)
+                users_col.delete_one(users)
+                print("User deleted.")
             else:
                 print("User does not exist.")
+
     except:
         print("Delete User failed.")
 
