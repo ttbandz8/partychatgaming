@@ -60,14 +60,14 @@ def deleteUser(users):
             for user in users:
                 exists = user_exists(user)
                 if exists:
-                    users_col.delete_one(user)
+                    users_col.delete_one({'DISNAME': user['DISNAME']})
                     print("User deleted.")
                 else:
                     print("User does not exist.")
         else:
-            exists = user_exists(users)
+            exists = user_exists({'DISNAME': users['DISNAME']})
             if exists:
-                users_col.delete_one(users)
+                users_col.delete_one({'DISNAME': users['DISNAME']})
                 print("User deleted.")
             else:
                 print("User does not exist.")

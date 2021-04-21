@@ -51,15 +51,15 @@ class SCORES():
 
 ''' Data Functions'''
 def newUser(users):
-    userList = []
+    user_list = []
     if isinstance(users, list):
         for user in users:
-            u = USER(user['DISNAME'], user['IGN'], user['GAMES'])
-            userList.append(asdict(u))
+            u = USER(**user)
+            user_list.append(asdict(u))
     else:
-        u = USER(users['DISNAME'], users['IGN'], users['GAMES'])
+        u = USER(**users)
         return asdict(u)
-    return userList
+    return user_list
 
 
 

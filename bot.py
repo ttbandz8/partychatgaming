@@ -5,17 +5,20 @@ import classes as data
 now = time.asctime()
 
 u = [
-    {'DISNAME': 'johnd123', "IGN": [{'CODM': 'John Doe'}], "GAMES": ["CODM"]},
-    {'DISNAME': 'bricks', "IGN": [{'CODM': 'John Doe'}], "GAMES": ["CODM"]}
+    {"DISNAME": "johnd123", "IGN": [{'CODM': 'John Doe'}], "GAMES": ["CODM"], "TEAMS": [{"NAME": "TESTTEAM"}]},
+    {"DISNAME": "bricks", "IGN": [{'CODM': 'John Doe'}], "GAMES": ["CODM"]}
 ]
 
-d = {'DISNAME': 'bricks', "IGN": [{'CODM': 'John Doe'}], "GAMES": ["CODM"]}
+d = {"DISNAME": "johnd123", "IGN": [{'CODM': 'John Doe'}], "GAMES": ["CODM"], "TEAMS": [{"NAME": "TESTTEAM"}]}
 
 # db.deleteUser(d)
 
-# db.addUsers(data.newUser(u))
+db.addUsers(data.newUser(u))
 
-# print()
+# list = []
+# for key in d.keys():
+#     list.append(key)
+# print(list)
 
 sessionlist = [
      { "Date": "4/20/21", "Game": "kingofthehill", "timestamp": now},
