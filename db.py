@@ -110,5 +110,52 @@ def addTeam(team):
     except:
         print("Cannot add team failed.")
 
+'''Delete Team'''
+def deleteTeam(team, user):
+    try:
+        exists = team_exists({'TNAME': team['TNAME']})
+        if exists:
+            team = teams_col.find_one(team)
+            if user in team['MEMBERS']:
+                teams_col.delete_one({'TNAME': team['TNAME']})
+                print("Team deleted.")
+            else:
+                print("This user is not a member of the team.")
+        else:
+            print("Team does not exist.")
+
+    except:
+        print("Delete Team failed.")
+
+'''Delete Team Member'''
+def deleteTeamMember(query, value, user):
+    try:
+        exists = team_exists({'TNAME': query['TNAME']})
+        if exists:
+            team = teams_col.find_one(query)
+            if user in team['MEMBERS']:
+                update = teams_col.update_one(query, value, upsert=True)
+                print(update)
+            else:
+                print("This user is not a member of the team.")
+        else:
+            print("Team does not exist.")
+
+    except:
+        print("Delete Team Member failed.")
+
+'''Updates Team data'''
+def updateTeam(query, new_value, user):
+    exists = team_exists({'TNAME': query['TNAME']})
+    if exists:
+        team = teams_col.find_one(query)
+        if user in team['MEMBERS']:
+            update = teams_col.update_one(query, new_value, upsert=True)
+            print(update)
+        else:
+            print("This user is not a member of the team.")
+    else:
+        print("Cannot update.")
+
 
 
