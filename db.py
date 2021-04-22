@@ -4,14 +4,16 @@ from decouple import config
 
 TOKEN = config('MONGOTOKEN_TEST')
 mongo = pymongo.MongoClient(TOKEN)
+
 db = mongo["PCGTEST"]
 users_col = db["USERS"]
+teams_col = db["TEAMS"]
 sessions_col = db["SESSIONS"]
 games_col = db["GAMES"]
 matches_col = db["MATCHES"]
 tournaments_col = db["TOURNAMENTS"]
 
-# Check if Collection exists
+'''Check if Collection Exists'''
 def col_exists(col):
     collections = db.list_collection_names()
     if col in collections:
@@ -19,7 +21,7 @@ def col_exists(col):
     else:
         return False
 
-# Check if User exists
+'''Check If User Exists'''
 def user_exists(data):
     collection_exists = col_exists("USERS")
     if collection_exists:
@@ -32,7 +34,7 @@ def user_exists(data):
         return False
 
 
-# Adds Multiple Users
+'''Add new User'''
 def addUsers(users):
     try:
         if isinstance(users, list):
@@ -53,7 +55,7 @@ def addUsers(users):
     except:
         print("Add Users failed.")
 
-# Deletes Users
+'''Delete User'''
 def deleteUser(users):
     try:
         if isinstance(users, list):
@@ -75,12 +77,38 @@ def deleteUser(users):
     except:
         print("Delete User failed.")
 
-# Updates User data
-def updateUser(query, newvalues):
-    exists = user_exists(query)
+'''Updates User data'''
+def updateUser(query, new_value):
+    exists = user_exists({'DISNAME': query['DISNAME']})
     if exists:
-        users_col.update_one(query, newvalues)
+        update = users_col.update_one(query, new_value, upsert=True)
+        print(update)
     else:
         print("Cannot update.")
+
+'''Check If Teams Exists'''
+def team_exists(data):
+    collection_exists = col_exists("TEAMS")
+    if collection_exists:
+        teamexists = teams_col.find_one(data)
+        if teamexists:
+            return True
+        else:
+            return False
+    else:
+        return False
+
+'''Add new Team'''
+def addTeam(team):
+    try:
+        exists = team_exists({'TNAME': team['TNAME']})
+        if exists:
+            print("Team already exists.")
+        else:
+            print("Inserting new Team.")
+            teams_col.insert_one(team)
+    except:
+        print("Cannot add team failed.")
+
 
 

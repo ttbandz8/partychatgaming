@@ -6,16 +6,15 @@ now = time.asctime()
 @dataclass(frozen=True, order=True)
 class USER():
     DISNAME: str
-    IGN: list
-    GAMES: list[str]
-    TEAMS: list[str] = field(default_factory=lambda: ['PARTYCHATGAMING'])
+    IGN: list[str] = field(default_factory=lambda: [{'DEFAULT': 'PARTYCHATGAMING'}])
+    GAMES: list[str] = field(default_factory=lambda: ['PARTYCHATGAMING'])
     TIMESTAMP: str = now
 
 @dataclass(frozen=True, order=True)
 class TEAMS():
-    NAME: str
+    TNAME: str
     MEMBERS: list
-    GAME: str
+    GAMES: list[str] = field(default_factory=lambda: ['PARTYCHATGAMING'])
     TIMESTAMP: str = now
 
 @dataclass(frozen=True, order=True)

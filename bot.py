@@ -4,25 +4,13 @@ import classes as data
 
 now = time.asctime()
 
+'''User must have predefined roles of the games they play before creating users
+   User input for IGN will be available after User is created and goes to join game events
+   User input for TEAM will be available after User is created. There will be a command to add Team. '''
 u = [
-    {"DISNAME": "johnd123", "IGN": [{'CODM': 'John Doe'}], "GAMES": ["CODM"], "TEAMS": [{"NAME": "TESTTEAM"}]},
-    {"DISNAME": "bricks", "IGN": [{'CODM': 'John Doe'}], "GAMES": ["CODM"]}
+    {"DISNAME": "johnd123", "GAMES": ["CODM"]},
+    {"DISNAME": "bricks", "GAMES": ["CODM"]}
 ]
 
-d = {"DISNAME": "johnd123", "IGN": [{'CODM': 'John Doe'}], "GAMES": ["CODM"], "TEAMS": [{"NAME": "TESTTEAM"}]}
-
-# db.deleteUser(d)
-
-db.addUsers(data.newUser(u))
-
-# list = []
-# for key in d.keys():
-#     list.append(key)
-# print(list)
-
-sessionlist = [
-     { "Date": "4/20/21", "Game": "kingofthehill", "timestamp": now},
-    { "Date": "4/21/21", "Game": "kingofthehill", "timestampe": now}
-]
-
-# insert_sessions = db.sessions_col.insert_many(sessionlist)
+team = {'TNAME': 'TEAM1', 'MEMBERS': 'bricks'}
+db.addTeam(team)
