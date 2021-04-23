@@ -5,16 +5,6 @@
     db.createTeam(data.newTeam(team), user)
     db.createUsers(data.newUser(new_user))
 
-# USER
-DISNAME: str
-IGN: list[str] = field(default_factory=lambda: [{'DEFAULT': 'PCG'}])
-GAMES: list[str] = field(default_factory=lambda: ['PCG'])
-TEAMS: list[str] = field(default_factory=lambda: ['PCG'])
-WINS: int = field(default_factory=lambda: 0)
-LOSSES: int = field(default_factory=lambda: 0)
-TOURNAMENT_WINS: int = field(default_factory=lambda: 0)
-TIMESTAMP: str = now
-
 # Add New User
     db.addUsers(data.newUser(USER))
 
