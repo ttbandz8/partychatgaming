@@ -12,22 +12,32 @@ u = [
     {"DISNAME": "bricks", "GAMES": ["CODM"]}
 ]
 
-team = {'TNAME': 'TEAM1', 'MEMBERS': ['bricks']}
+new_user = {"DISNAME": "rocbambino"}
 
-d_team = {'TNAME': 'TEAM1'}
-# db.addTeam(team)
+q =  {"DISNAME": "bricks", "GAMES": ["CODM"]}
+
+team = {'TNAME': 'TEAM111111', 'MEMBERS': ['bricks']}
+
+t = {'TNAME': 'TEAM1'}
+
 user = 'bricks'
 
-# new_user = {'$addToSet': {'MEMBERS': 'Rocbambino'}}
+# new_value = {'$addToSet': {'MEMBERS': 'johnd123'}}
 
-# query = {'TNAME': 'TEAM1'}
+# db.createTeam(team, user)
 
-new_user = {'$pull': {'MEMBERS': 'Rocbambino'}}
+# db.deleteTeam(t, user)
 
-query = {'TNAME': 'TEAM1'}
+# db.addTeamMember(t, new_value, user)
 
+# n =[x for x in new_value.values()][0]['MEMBERS']
 
-db.deleteTeamMember(query, new_user, user)
-# db.updateTeam(query, new_user, user)
+# print(n)
 
-# db.deleteTeam(d_team, user)
+# db.queryUser(q)
+
+# db.queryTeam(t)
+
+# db.createTeam(data.newTeam(team), user)
+
+# db.createUsers(data.newUser(new_user))

@@ -6,23 +6,32 @@ now = time.asctime()
 @dataclass(frozen=True, order=True)
 class USER():
     DISNAME: str
-    IGN: list[str] = field(default_factory=lambda: [{'DEFAULT': 'PARTYCHATGAMING'}])
-    GAMES: list[str] = field(default_factory=lambda: ['PARTYCHATGAMING'])
+    IGN: list[str] = field(default_factory=lambda: [{'DEFAULT': 'PCG'}])
+    GAMES: list[str] = field(default_factory=lambda: ['PCG'])
+    TEAMS: list[str] = field(default_factory=lambda: ['PCG'])
+    WINS: int = field(default_factory=lambda: 0)
+    LOSSES: int = field(default_factory=lambda: 0)
+    TOURNAMENT_WINS: int = field(default_factory=lambda: 0)
     TIMESTAMP: str = now
 
 @dataclass(frozen=True, order=True)
 class TEAMS():
     TNAME: str
     MEMBERS: list
-    GAMES: list[str] = field(default_factory=lambda: ['PARTYCHATGAMING'])
+    TOURNAMENT_WINS: int = field(default_factory=lambda: 0)
+    WINS: int = field(default_factory=lambda: 0)
+    LOSSES: int = field(default_factory=lambda: 0) 
+    GAMES: list[str] = field(default_factory=lambda: ['PCG'])
+    BADGES: list[str] = field(default_factory=lambda: ['PCG'])
     TIMESTAMP: str = now
 
 @dataclass(frozen=True, order=True)
 class SESSIONS():
-    ADMIN: str
+    OWNER: str
     TITLE: str
+    TYPE: str
     TEAMS: list
-    USERS: list
+    PLAYERS: list
     MATCHES: list
     TIMESTAMP: str = now
 
@@ -34,8 +43,9 @@ class MATCHES():
 
 @dataclass(frozen=True, order=True)
 class TOURNAMENTS():
-    ADMIN: str
-    USERS: list
+    OWNER: str
+    PLAYERS: list
+    TEAMS: list
     TITLE: str
     MATCHES: list
     TIMESTAMP: str = now
@@ -59,6 +69,10 @@ def newUser(users):
         u = USER(**users)
         return asdict(u)
     return user_list
+
+def newTeam(team):
+    t = TEAMS(**team)
+    return asdict(t)
 
 
 

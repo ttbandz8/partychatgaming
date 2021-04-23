@@ -33,9 +33,23 @@ def user_exists(data):
     else:
         return False
 
+'''Query User'''
+def queryUser(user):
+    try:
+        exists = user_exists({'DISNAME': user['DISNAME']})
+        if exists:
+            data = users_col.find_one(user)
+            print(data)
+            return data
+        else:
+            print("User doesn't exist.")
+           
+    except:
+        print("Find user failed.")
+
 
 '''Add new User'''
-def addUsers(users):
+def createUsers(users):
     try:
         if isinstance(users, list):
             for user in users:
@@ -86,6 +100,8 @@ def updateUser(query, new_value):
     else:
         print("Cannot update.")
 
+
+
 '''Check If Teams Exists'''
 def team_exists(data):
     collection_exists = col_exists("TEAMS")
@@ -98,15 +114,40 @@ def team_exists(data):
     else:
         return False
 
-'''Add new Team'''
-def addTeam(team):
+
+'''Query Team'''
+def queryTeam(team):
     try:
         exists = team_exists({'TNAME': team['TNAME']})
         if exists:
-            print("Team already exists.")
+            data = teams_col.find_one(team)
+            print(data)
+            return data
         else:
-            print("Inserting new Team.")
-            teams_col.insert_one(team)
+            print("Team doesn't exist.")
+           
+    except:
+        print("Find team failed.")
+
+'''Add new Team'''
+def createTeam(team, user):
+    try:
+        user_exist = user_exists({'DISNAME': user})
+        if user_exist:
+            exists = team_exists({'TNAME': team['TNAME']})
+            if exists:
+                print("Team already exists.")
+            else:
+                print("Inserting new Team.")
+                teams_col.insert_one(team)
+
+                # Add Team to User Profile as well
+                query = {'DISNAME': user}
+                new_value = {'$addToSet': {'TEAMS': team['TNAME']}}
+                users_col.update_one(query, new_value)
+                print("Team added to user profile")
+        else:
+            print("User does not exist. Create profile.")
     except:
         print("Cannot add team failed.")
 
@@ -119,6 +160,8 @@ def deleteTeam(team, user):
             if user in team['MEMBERS']:
                 teams_col.delete_one({'TNAME': team['TNAME']})
                 print("Team deleted.")
+                users_col.update_many({'TEAMS': team['TNAME']}, {'$pull': {'TEAMS':  team['TNAME']}})
+                print("Team deleted from user profile.")
             else:
                 print("This user is not a member of the team.")
         else:
@@ -145,17 +188,27 @@ def deleteTeamMember(query, value, user):
         print("Delete Team Member failed.")
 
 '''Updates Team data'''
-def updateTeam(query, new_value, user):
+def addTeamMember(query, new_value, user):
     exists = team_exists({'TNAME': query['TNAME']})
     if exists:
         team = teams_col.find_one(query)
         if user in team['MEMBERS']:
-            update = teams_col.update_one(query, new_value, upsert=True)
-            print(update)
+            teams_col.update_one(query, new_value, upsert=True)
+            print("User added to the team.")
+
+
+             # Add Team to User Profile as well
+            add_user = [x for x in new_value.values()][0]['MEMBERS']
+            query = {'DISNAME': add_user}
+            new_value = {'$addToSet': {'TEAMS': team['TNAME']}}
+            users_col.update_one(query, new_value)
+            print("Team added to user profile")
         else:
             print("This user is not a member of the team.")
     else:
         print("Cannot update.")
+
+
 
 
 
