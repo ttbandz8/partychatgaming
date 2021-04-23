@@ -9,8 +9,10 @@ class USER():
     IGN: list[str] = field(default_factory=lambda: [{'DEFAULT': 'PCG'}])
     GAMES: list[str] = field(default_factory=lambda: ['PCG'])
     TEAMS: list[str] = field(default_factory=lambda: ['PCG'])
-    WINS: int = field(default_factory=lambda: 0)
-    LOSSES: int = field(default_factory=lambda: 0)
+    RWINS: list = field(default_factory=lambda: [{'1V1': 0}, {'2V2': 0}, {'3V3': 0}, {'4V4': 0}, {'5V5': 0}])
+    RLOSSES: list = field(default_factory=lambda: [{'1V1': 0}, {'2V2': 0}, {'3V3': 0}, {'4V4': 0}, {'5V5': 0}])
+    URWINS: list = field(default_factory=lambda: [{'1V1': 0}, {'2V2': 0}, {'3V3': 0}, {'4V4': 0}, {'5V5': 0}])
+    URLOSSES: list = field(default_factory=lambda: [{'1V1': 0}, {'2V2': 0}, {'3V3': 0}, {'4V4': 0}, {'5V5': 0}])
     TOURNAMENT_WINS: int = field(default_factory=lambda: 0)
     TIMESTAMP: str = now
 
@@ -19,8 +21,10 @@ class TEAMS():
     TNAME: str
     MEMBERS: list
     TOURNAMENT_WINS: int = field(default_factory=lambda: 0)
-    WINS: int = field(default_factory=lambda: 0)
-    LOSSES: int = field(default_factory=lambda: 0) 
+    RWINS: list = field(default_factory=lambda: [{'1V1': 0}, {'2V2': 0}, {'3V3': 0}, {'4V4': 0}, {'5V5': 0}])
+    RLOSSES: list = field(default_factory=lambda: [{'1V1': 0}, {'2V2': 0}, {'3V3': 0}, {'4V4': 0}, {'5V5': 0}])
+    URWINS: list = field(default_factory=lambda: [{'1V1': 0}, {'2V2': 0}, {'3V3': 0}, {'4V4': 0}, {'5V5': 0}])
+    URLOSSES: list = field(default_factory=lambda: [{'1V1': 0}, {'2V2': 0}, {'3V3': 0}, {'4V4': 0}, {'5V5': 0}])
     GAMES: list[str] = field(default_factory=lambda: ['PCG'])
     BADGES: list[str] = field(default_factory=lambda: ['PCG'])
     TIMESTAMP: str = now
@@ -28,12 +32,13 @@ class TEAMS():
 @dataclass(frozen=True, order=True)
 class SESSIONS():
     OWNER: str
-    TITLE: str
     TYPE: str
     PLAYERS: list
     MATCHES: list
-    TEAMS: list
+    GAME: str
     TEAM_SESSION: bool = field(default_factory=lambda: False)
+    GOC_FLAG: bool = field(default_factory=lambda: False)
+    RANKED_FLAG: bool = field(default_factory=lambda: False)
     AVAILABLE: bool = field(default_factory=lambda: True)
     TIMESTAMP: str = now
 
@@ -49,6 +54,7 @@ class TOURNAMENTS():
     PLAYERS: list
     TEAMS: list
     TITLE: str
+    GAME: str
     MATCHES: list
     TIMESTAMP: str = now
 

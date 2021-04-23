@@ -41,3 +41,10 @@ user = 'bricks'
 # db.createTeam(data.newTeam(team), user)
 
 # db.createUsers(data.newUser(new_user))
+
+session_team_test =  [
+    {'TEAM1': ['PLAYER1', 'PLAYER2', 'PLAYER3', 'PLAYER4'], 'SCORE': 0},
+    {'TEAM2': ['PLAYER1', 'PLAYER2', 'PLAYER3', 'PLAYER4'], 'SCORE': 0}
+]
+
+print(session_team_test[0]['TEAM1'][0])
