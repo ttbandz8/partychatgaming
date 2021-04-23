@@ -30,9 +30,11 @@ class SESSIONS():
     OWNER: str
     TITLE: str
     TYPE: str
-    TEAMS: list
     PLAYERS: list
     MATCHES: list
+    TEAMS: list
+    TEAM_SESSION: bool = field(default_factory=lambda: False)
+    AVAILABLE: bool = field(default_factory=lambda: True)
     TIMESTAMP: str = now
 
 @dataclass(frozen=True, order=True)
