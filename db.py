@@ -48,7 +48,7 @@ def queryUser(user):
         print("Find user failed.")
 
 
-'''Add new User'''
+'''Create User'''
 def createUsers(users):
     try:
         if isinstance(users, list):
@@ -99,6 +99,11 @@ def updateUser(query, new_value):
         print(update)
     else:
         print("Cannot update.")
+
+
+
+
+
 
 
 
@@ -210,5 +215,29 @@ def addTeamMember(query, new_value, user):
 
 
 
+
+
+
+
+'''Check If Teams Exists'''
+def session_exist(data):
+    collection_exists = col_exists("SESSIONS")
+    if collection_exists:
+        sessionexists = sessions_col.find_one(data)
+        if sessionexists:
+            return True
+        else:
+            return False
+    else:
+        return False
+
+'''Create Session'''
+def createSession(session):
+    exists = session_exist({'OWNER': session['OWNER'], 'AVAILABLE': True})
+    if exists:
+        print("Unable to create session.")
+    else:
+        print("Inserting new user.")
+        # users_col.insert_one(users)
 
 

@@ -35,12 +35,14 @@ class SESSIONS():
     OWNER: str
     GAME: str
     TYPE: str
-    PLAYERS: list
-    MATCHES: list[str] = field(default_factory=lambda: [''])
+    TEAMS: list[str] = field(default_factory=lambda: [])
+    PLAYERS: list[str] = field(default_factory=lambda: [])
+    MATCHES: list[str] = field(default_factory=lambda: [])
     TEAM_SESSION: bool = field(default_factory=lambda: False)
     GOC_FLAG: bool = field(default_factory=lambda: False)
     RANKED_FLAG: bool = field(default_factory=lambda: False)
     AVAILABLE: bool = field(default_factory=lambda: True)
+    WINNER: str = field(default_factory=lambda: 'N/A')
     TIMESTAMP: str = now
 
 @dataclass(frozen=True, order=True)
@@ -85,6 +87,7 @@ def newTeam(team):
 
 def newSession(session):
     s = SESSIONS(**session)
+    print(s)
     return asdict(s)
 
 
