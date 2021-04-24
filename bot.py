@@ -47,4 +47,6 @@ session_team_test =  [
     {'TEAM2': ['PLAYER1', 'PLAYER2', 'PLAYER3', 'PLAYER4'], 'SCORE': 0}
 ]
 
+# s = {'OWNER': 'bricks', 'GAME': 'CODM', 'TYPE': '1V1', 'PLAYERS': ['']}
 print(session_team_test[0]['TEAM1'][0])
+

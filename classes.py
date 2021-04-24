@@ -9,6 +9,7 @@ class USER():
     IGN: list[str] = field(default_factory=lambda: [{'DEFAULT': 'PCG'}])
     GAMES: list[str] = field(default_factory=lambda: ['PCG'])
     TEAMS: list[str] = field(default_factory=lambda: ['PCG'])
+    TITLES: list[str] = field(default_factory=lambda: ['PCG'])
     RWINS: list = field(default_factory=lambda: [{'1V1': 0}, {'2V2': 0}, {'3V3': 0}, {'4V4': 0}, {'5V5': 0}])
     RLOSSES: list = field(default_factory=lambda: [{'1V1': 0}, {'2V2': 0}, {'3V3': 0}, {'4V4': 0}, {'5V5': 0}])
     URWINS: list = field(default_factory=lambda: [{'1V1': 0}, {'2V2': 0}, {'3V3': 0}, {'4V4': 0}, {'5V5': 0}])
@@ -32,10 +33,10 @@ class TEAMS():
 @dataclass(frozen=True, order=True)
 class SESSIONS():
     OWNER: str
+    GAME: str
     TYPE: str
     PLAYERS: list
-    MATCHES: list
-    GAME: str
+    MATCHES: list[str] = field(default_factory=lambda: [''])
     TEAM_SESSION: bool = field(default_factory=lambda: False)
     GOC_FLAG: bool = field(default_factory=lambda: False)
     RANKED_FLAG: bool = field(default_factory=lambda: False)
@@ -58,7 +59,7 @@ class TOURNAMENTS():
     MATCHES: list
     TIMESTAMP: str = now
 
-@dataclass(frozen=True, order=True)
+@dataclass(frozen=True, order=True) 
 class SCORES():
     TOTAL: int
     MATCHES: list
@@ -81,6 +82,10 @@ def newUser(users):
 def newTeam(team):
     t = TEAMS(**team)
     return asdict(t)
+
+def newSession(session):
+    s = SESSIONS(**session)
+    return asdict(s)
 
 
 

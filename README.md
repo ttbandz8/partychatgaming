@@ -86,3 +86,17 @@
             * Upon score, the loser should be cycled to the end of the line. 
             * Only Server Admins can run Kings Gambit tournaments
             * If flagged, user who wins also counts win toward his team during tourney for tourney points
+
+# Session Functions
+    Create Session
+    Add To Session:
+        Check Flags
+    Remove From Session
+    End Session
+    Update Session:
+        Add Scores
+        Tally Scores
+        Add Winner
+        Check Flags
+            If Ranked and Team Session Add Ranked Scores on Profiles (User / Team)(Based on Flag)
+            If GOC Add Score to Team In Tournament
