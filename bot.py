@@ -10,5 +10,7 @@ now = time.asctime()
    User input for TEAM will be available after User is created. There will be a command to add Team. '''
 
 
-print(db.createSession(data.newSession(td.OneVsOne)))
 
+# db.querySession(td.session_query)
+
+db.recruitToTeamInSession(td.session_query, td.session_add_member)

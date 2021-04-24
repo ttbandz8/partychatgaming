@@ -104,9 +104,6 @@ def updateUser(query, new_value):
 
 
 
-
-
-
 '''Check If Teams Exists'''
 def team_exists(data):
     collection_exists = col_exists("TEAMS")
@@ -218,7 +215,6 @@ def addTeamMember(query, new_value, user):
 
 
 
-
 '''Check If Teams Exists'''
 def session_exist(data):
     collection_exists = col_exists("SESSIONS")
@@ -231,13 +227,52 @@ def session_exist(data):
     else:
         return False
 
+'''Query Session'''
+def querySession(session):
+    try:
+        exists = session_exist({'OWNER': session['OWNER'], 'AVAILABLE': True})
+        if exists:
+            data = sessions_col.find_one(session)
+            print(data)
+            return data
+        else:
+            print("Session doesn't exist.")
+           
+    except:
+        print("Find Session failed.")
+
 '''Create Session'''
 def createSession(session):
     exists = session_exist({'OWNER': session['OWNER'], 'AVAILABLE': True})
     if exists:
-        print("Unable to create session.")
+        print("Session Already Exists.")
     else:
-        print("Inserting new user.")
-        # users_col.insert_one(users)
+        sessions_col.insert_one(session)
+        print("New Session started. ")
+
+''' Join Session '''
+def joinASession(session, player):
+    print('Join Session')
 
 
+'''Recruit Players to your session'''
+def recruitToTeamInSession(query, players_being_recruited):
+    One = '1V1'
+    Two = '2V2'
+    Three = '3V3'
+    Four = '4V4'
+    Five = '5V5'
+
+    # for player in players_being_recruited:
+        
+    players_unregistered = [x for x in players_being_recruited if user_exists({'DISNAME': x}) == False]
+    if players_unregistered:
+        print("Players aren't registered. ")
+    else:
+        exists = session_exist({'OWNER': query['OWNER'], 'AVAILABLE': True})
+        if exists:
+            data = querySession(query)
+            if data['TYPE'] != '1V1':
+                teams = [team for team in data['TEAMS']]
+                print(teams)
+                print("Cannot recruit during 1v1. ")

@@ -23,6 +23,7 @@
     $pull = Removes from array (opposite of push)
 
 # Create New Team
+    Users can only be part of one team per game
     db.addTeam(data.newTeam(TEAM))
 
 # Add Team Member
@@ -44,6 +45,9 @@
 
 
 # Session Logic
+    Joining Session
+    Players must recruit you to their team. 
+
     TYPES:
         1V1
             * If flagged, user who wins also counts win toward his team during tourney for tourney points as it could be "Put ya mans up"
