@@ -48,36 +48,36 @@
     Joining Session
     Players must recruit you to their team. 
 
-    TYPES:
-        1V1
+    SESSION TYPE:
+        1 (1V1)
             * If flagged, user who wins also counts win toward his team during tourney for tourney points as it could be "Put ya mans up"
             * If TEAM_SESSION flag is True, the win / loss will count toward the winners team
             * If Ranked Flag is True, the win / loss will count toward Ranked win / loss. It will count toward Unranked win / loss otherwise.
             * If GOC_Flag is True, the win /loss will count toward Tournament win / loss & Ranked win / loss. 
             * [{'PLAYER': 'foo', 'SCORE': 1}, {'PLAYER': 'bar', 'SCORE': 0}]
 
-        2V2
+        2 (2V2)
             * If flagged, user who wins also counts win toward his team during tourney for tourney points as it could be "Put ya mans up"
             * If TEAM_SESSION flag is True, the win will count toward the winners team 
             * If Ranked Flag is True, the win / loss will count toward Ranked win / loss. It will count toward Unranked win / loss otherwise.
             * If GOC_Flag is True, the win /loss will count toward Tournament win / loss & Ranked win / loss. 
             * [{'TEAM1': ['PLAYER1', 'PLAYER2'], 'SCORE': 0}, {'TEAM2': ['PLAYER1', 'PLAYER2'], 'SCORE': 0}]
 
-        3V3
+        3 (3V3)
             * If flagged, user who wins also counts win toward his team during tourney for tourney points as it could be "Put ya mans up"
             * If TEAM_SESSION flag is True, the win will count toward the winners team
             * If Ranked Flag is True, the win / loss will count toward Ranked win / loss. It will count toward Unranked win / loss otherwise.
             * If GOC_Flag is True, the win /loss will count toward Tournament win / loss & Ranked win / loss. 
             * [{'TEAM1': ['PLAYER1', 'PLAYER2', 'PLAYER3'], 'SCORE': 0}, {'TEAM2': ['PLAYER1', 'PLAYER2', 'PLAYER3'], 'SCORE': 0}]
 
-        4V4
+        4 (4V4)
             * If flagged, user who wins also counts win toward his team during tourney for tourney points as it could be "Put ya mans up" 
             * If TEAM_SESSION flag is True, the win will count toward the winners team
             * If Ranked Flag is True, the win / loss will count toward Ranked win / loss. It will count toward Unranked win / loss otherwise.
             * If GOC_Flag is True, the win /loss will count toward Tournament win / loss & Ranked win / loss. 
             * [{'TEAM1': ['PLAYER1', 'PLAYER2', 'PLAYER3', 'PLAYER4'], 'SCORE': 0},{'TEAM2': ['PLAYER1', 'PLAYER2', 'PLAYER3', 'PLAYER4'], 'SCORE': 0}]
 
-        5V5
+        5 (5V5)
             * If flagged, user who wins also counts win toward his team during tourney for tourney points as it could be "Put ya mans up" 
             * If TEAM_SESSION flag is True, the win will count toward the winners team
             * If Ranked Flag is True, the win / loss will count toward Ranked win / loss. It will count toward Unranked win / loss otherwise.

@@ -12,5 +12,5 @@ now = time.asctime()
 
 
 # db.querySession(td.session_query)
-
-db.recruitToTeamInSession(td.session_query, td.session_add_member)
+# db.joinSession(td.session_query, td.joining_sessions)
+db.createSession(data.newSession(td.TwoVsTwo))

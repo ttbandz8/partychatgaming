@@ -35,12 +35,13 @@ class TEAMS():
 class SESSIONS():
     OWNER: str
     GAME: str
-    TYPE: str
+    TYPE: int
     TEAMS: list[str] = field(default_factory=lambda: [])
     # PLAYERS: list[str] = field(default_factory=lambda: [])
     # TEAM_SESSION: bool = field(default_factory=lambda: False)
     RANKED: bool = field(default_factory=lambda: False)
     GOC: bool = field(default_factory=lambda: False)
+    KINGSGAMBIT: str = field(default_factory=lambda: False)
     AVAILABLE: bool = field(default_factory=lambda: True)
     MATCHES: list[str] = field(default_factory=lambda: [])
     WINNER: str = field(default_factory=lambda: 'N/A')

@@ -215,7 +215,7 @@ def addTeamMember(query, new_value, user):
 
 
 
-'''Check If Teams Exists'''
+'''Check If Sessions Exists'''
 def session_exist(data):
     collection_exists = col_exists("SESSIONS")
     if collection_exists:
@@ -233,7 +233,6 @@ def querySession(session):
         exists = session_exist({'OWNER': session['OWNER'], 'AVAILABLE': True})
         if exists:
             data = sessions_col.find_one(session)
-            print(data)
             return data
         else:
             print("Session doesn't exist.")
@@ -247,32 +246,10 @@ def createSession(session):
     if exists:
         print("Session Already Exists.")
     else:
-        sessions_col.insert_one(session)
-        print("New Session started. ")
-
-''' Join Session '''
-def joinASession(session, player):
-    print('Join Session')
-
-
-'''Recruit Players to your session'''
-def recruitToTeamInSession(query, players_being_recruited):
-    One = '1V1'
-    Two = '2V2'
-    Three = '3V3'
-    Four = '4V4'
-    Five = '5V5'
-
-    # for player in players_being_recruited:
-        
-    players_unregistered = [x for x in players_being_recruited if user_exists({'DISNAME': x}) == False]
-    if players_unregistered:
-        print("Players aren't registered. ")
-    else:
-        exists = session_exist({'OWNER': query['OWNER'], 'AVAILABLE': True})
-        if exists:
-            data = querySession(query)
-            if data['TYPE'] != '1V1':
-                teams = [team for team in data['TEAMS']]
-                print(teams)
-                print("Cannot recruit during 1v1. ")
+        players_per_team_count = [x for x in session['TEAMS'][0]['TEAM']]
+        if session['TYPE'] != len(players_per_team_count):
+            print("Team and Session Type do not match. ")
+        else:
+            sessions_col.insert_one(session)
+            print("New Session started. ")
+            
