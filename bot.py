@@ -99,14 +99,6 @@ async def delete(ctx, user: User, args):
 
 
 
-
-
-#          elif command[1] == 'delete' and not more_than_four_args and command[3] == 'iwanttodeletemyaccount':
-
-#          else:
-#             await channel.send("Invalid command. ")
-
-
 DISCORD_TOKEN = config('DISCORD_TOKEN')
 
 bot.run(DISCORD_TOKEN)
