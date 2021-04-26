@@ -39,13 +39,12 @@ def queryUser(user):
         exists = user_exists({'DISNAME': user['DISNAME']})
         if exists:
             data = users_col.find_one(user)
-            print(data)
             return data
         else:
-            print("User doesn't exist.")
+            return "User doesn't exist. "
            
     except:
-        print("Find user failed.")
+        return "Find user failed. "
 
 
 '''Create User'''
@@ -57,15 +56,16 @@ def createUsers(users):
                 if exists:
                     print("User already exists.")
                 else:
-                    print("Inserting new user.")
-                    users_col.insert_one(user)
+                    data = users_col.insert_one(user)
+                    return data
         else:
             exists = user_exists({'DISNAME': users['DISNAME']})
             if exists:
-                print("User already exists.")
+                return "User already registered. "
             else:
                 print("Inserting new user.")
-                users_col.insert_one(users)
+                data = users_col.insert_one(users)
+                return "Registration complete. "
     except:
         print("Add Users failed.")
 
