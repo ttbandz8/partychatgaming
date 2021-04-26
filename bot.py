@@ -101,4 +101,4 @@ async def delete(ctx, user: User, args):
 
 DISCORD_TOKEN = config('DISCORD_TOKEN')
 
-bot.run(DISCORD_TOKEN)
+bot.run('ODM1OTY4MjE1MjU0NDMzNzkz.YIXKEg.Rkpq-J1uFNYwLlDR8x6KpDVqqP4')
