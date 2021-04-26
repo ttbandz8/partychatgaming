@@ -41,7 +41,7 @@ def queryUser(user):
             data = users_col.find_one(user)
             return data
         else:
-            return "User doesn't exist. "
+            return False
            
     except:
         return "Find user failed. "
@@ -77,16 +77,16 @@ def deleteUser(users):
                 exists = user_exists(user)
                 if exists:
                     users_col.delete_one({'DISNAME': user['DISNAME']})
-                    print("User deleted.")
+                    return "User removed from the system. "
                 else:
-                    print("User does not exist.")
+                    return "User does not exist in the system. "
         else:
             exists = user_exists({'DISNAME': users['DISNAME']})
             if exists:
                 users_col.delete_one({'DISNAME': users['DISNAME']})
-                print("User deleted.")
+                return "User has been removed from the system. "
             else:
-                print("User does not exist.")
+                return "User does not exist in the system. "
 
     except:
         print("Delete User failed.")

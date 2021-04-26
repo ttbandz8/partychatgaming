@@ -3,6 +3,12 @@ import time
 import classes as data
 import test_data as td
 import discord
+from discord.ext import commands
+
+# Converters
+from discord import User
+from discord import Member
+
 import logging
 import requests
 from decouple import config
@@ -26,78 +32,81 @@ logger.addHandler(handler)
 
 client = discord.Client()
 
-@client.event
+bot = commands.Bot(command_prefix=">")
+
+@bot.event
 async def on_ready():
-   print('Plugged in as {0.user}'.format(client))
+   print('Bot is ready. ')
 
+@bot.command()
+async def lookup(ctx, user: User):
+   query = {'DISNAME': str(user)}
+   d = db.queryUser(query)
 
-@client.event
-async def on_message(message):
-   #### VARIABLES ####
-   server = message.guild
-   author = message.author
-   channel = message.channel
-   name = author.name
-   mentions = message.mentions
-   # mentioned = f'{mentions[0].name}#{mentions[0].discriminator}'.format(client)
-   msg = message.content
+   if d:
+      name = d['DISNAME'].split("#",1)[0]
+      games = d['GAMES']
+      ign = d['IGN']
+      teams = d['TEAMS']
+      titles = d['TITLES']
+      avatar = d['AVATAR']
+      rwins = d['RWINS']
+      rlosses = d['RLOSSES']
+      urwins = d['URWINS']
+      urlosses = d['URLOSSES']
+      tournament_wins = d['TOURNAMENT_WINS']
 
-   if message.author == client.user:
-        return
+      rwins_to_string = dict(ChainMap(*rwins))
+      rlosses_to_string = dict(ChainMap(*rlosses))
+      urwins_to_string = dict(ChainMap(*urwins))
+      urlosses_to_string = dict(ChainMap(*urlosses))
+      ign_to_string = dict(ChainMap(*ign))
+
+      embedVar = discord.Embed(title=f"{name}'s profile".format(client), description="Party Chat Gaming Database", colour=000000)
+      embedVar.set_thumbnail(url=avatar)
+      embedVar.add_field(name="Games", value=' '.join(str(x) for x in games))
+      embedVar.add_field(name="In-Game Names", value="\n".join(f'{k}: {v}' for k,v in ign_to_string.items()))
+      embedVar.add_field(name="Teams", value=' '.join(str(x) for x in teams))
+      embedVar.add_field(name="Titles", value=' '.join(str(x) for x in titles))
+      embedVar.add_field(name="Ranked Wins", value="\n".join(f'{k}: {v}' for k,v in rwins_to_string.items()))
+      embedVar.add_field(name="Ranked Losses", value="\n".join(f'{k}: {v}' for k,v in rlosses_to_string.items()))
+      embedVar.add_field(name="Normal Wins", value="\n".join(f'{k}: {v}' for k,v in urwins_to_string.items()))
+      embedVar.add_field(name="Normal Losses", value="\n".join(f'{k}: {v}' for k,v in urlosses_to_string.items()))
+      embedVar.add_field(name="Tournament Wins", value=tournament_wins)
+      await ctx.send(embed=embedVar)
+   else:
+      await ctx.send("User does not exist in the system. ")
+
    
-   if msg.startswith("$pcg"):
-      command = msg.split()
-      more_than_two_args = len(command) == 3
+@bot.command()
+async def register(ctx):
+   user = {'DISNAME': str(ctx.author), 'AVATAR': str(ctx.author.avatar_url)}
+   response = db.createUsers(data.newUser(user))
+   await ctx.send(response)
 
-      if len(command) == 1:
-         await channel.send("Invalid command. ")
-      else:
-         
-         # REGISTER USER
-         if command[1] == 'register' and not more_than_two_args:
-            user = {'DISNAME': str(author), 'AVATAR': str(author.avatar_url)}
-            response = db.createUsers(data.newUser(user))
-            await channel.send(response)
-         
-         # QUERY USER
-         elif mentions and not more_than_two_args:
-            mentioned = f'{mentions[0].name}#{mentions[0].discriminator}'.format(client)
-            query = {'DISNAME': mentioned}
-            d = db.queryUser(query)
-            name = d['DISNAME'].split("#",1)[0]
-            games = d['GAMES']
-            ign = d['IGN']
-            teams = d['TEAMS']
-            titles = d['TITLES']
-            avatar = d['AVATAR']
-            rwins = d['RWINS']
-            rlosses = d['RLOSSES']
-            urwins = d['URWINS']
-            urlosses = d['URLOSSES']
-            tournament_wins = d['TOURNAMENT_WINS']
+@bot.command()
+async def delete(ctx, user: User, args):
+   if args == 'IWANTTODELETEMYACCOUNT':
+      if str(ctx.author) == str(user):
+         query = {'DISNAME': str(ctx.author)}
+         user_is_validated = db.queryUser(query)
+         if user_is_validated:
+            delete_user_resp = db.deleteUser(query)
+            await ctx.send(delete_user_resp)
+   else:
+      await ctx.send("Invalid command")
+            
 
-            rwins_to_string = dict(ChainMap(*rwins))
-            rlosses_to_string = dict(ChainMap(*rlosses))
-            urwins_to_string = dict(ChainMap(*urwins))
-            urlosses_to_string = dict(ChainMap(*urlosses))
-            ign_to_string = dict(ChainMap(*ign))
 
-            embedVar = discord.Embed(title=f"{name}'s profile".format(client), description="Party Chat Gaming Database", colour=000000)
-            embedVar.set_thumbnail(url=avatar)
-            embedVar.add_field(name="Games", value=' '.join(str(x) for x in games))
-            embedVar.add_field(name="In-Game Names", value="\n".join(f'{k}: {v}' for k,v in ign_to_string.items()))
-            embedVar.add_field(name="Teams", value=' '.join(str(x) for x in teams))
-            embedVar.add_field(name="Titles", value=' '.join(str(x) for x in titles), inline=False)
-            embedVar.add_field(name="Ranked Wins", value="\n".join(f'{k}: {v}' for k,v in rwins_to_string.items()))
-            embedVar.add_field(name="Ranked Losses", value="\n".join(f'{k}: {v}' for k,v in rlosses_to_string.items()))
-            embedVar.add_field(name="Normal Wins", value="\n".join(f'{k}: {v}' for k,v in urwins_to_string.items()))
-            embedVar.add_field(name="Normal Losses", value="\n".join(f'{k}: {v}' for k,v in urlosses_to_string.items()))
-            embedVar.add_field(name="Tournament Wins", value=tournament_wins)
-            await channel.send(embed=embedVar)
-         else:
-            await channel.send("Invalid command. ")
-      
+
+
+
+#          elif command[1] == 'delete' and not more_than_four_args and command[3] == 'iwanttodeletemyaccount':
+
+#          else:
+#             await channel.send("Invalid command. ")
+
 
 DISCORD_TOKEN = config('DISCORD_TOKEN')
 
-client.run(DISCORD_TOKEN)
+bot.run(DISCORD_TOKEN)
