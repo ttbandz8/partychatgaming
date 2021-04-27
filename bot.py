@@ -83,7 +83,7 @@ async def lk(ctx, user: User):
       embedVar.add_field(name="Tournament Wins", value=tournament_wins)
       await ctx.send(embed=embedVar, delete_after=15)
    else:
-      await ctx.send("User does not exist in the system. ", delete_after=5)
+      await ctx.send("User does not exist in the system. ")
 
    
 @bot.command()
@@ -171,49 +171,6 @@ async def c1v1(ctx, args):
       session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 1, "TEAMS": [{"TEAM": [str(ctx.author)], "SCORE": 0, "POSITION": 0}], "RANKED": True}
       resp = db.createSession(data.newSession(session_query))
       await ctx.send(resp, delete_after=5)
-# @bot.command()
-# @commands.check(validate_user)
-# async def c2v2(ctx, *user: User):
-#    user_query = {'DISNAME': str(ctx.author)}
-#    session_type = args
-#    users = [str(x) for x in user]
-#    if session_type > 1:
-#       print("Not a 1v1. ")
-#    else:
-#       print("1v1")
-
-# @bot.command()
-# @commands.check(validate_user)
-# async def c3v3(ctx, *user: User):
-#    user_query = {'DISNAME': str(ctx.author)}
-#    session_type = args
-#    users = [str(x) for x in user]
-#    if session_type > 1:
-#       print("Not a 1v1. ")
-#    else:
-#       print("1v1")
-
-# @bot.command()
-# @commands.check(validate_user)
-# async def c4v4(ctx, *user: User):
-#    user_query = {'DISNAME': str(ctx.author)}
-#    session_type = args
-#    users = [str(x) for x in user]
-#    if session_type > 1:
-#       print("Not a 1v1. ")
-#    else:
-#       print("1v1")
-
-# @bot.command()
-# @commands.check(validate_user)
-# async def c5v5(ctx, *user: User):
-#    user_query = {'DISNAME': str(ctx.author)}
-#    session_type = args
-#    users = [str(x) for x in user]
-#    if session_type > 1:
-#       print("Not a 1v1. ")
-#    else:
-#       print("1v1")
 
 @bot.command()
 @commands.check(validate_user)
