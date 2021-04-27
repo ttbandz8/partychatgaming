@@ -114,8 +114,11 @@ async def addGame(ctx, args):
 
 
 DISCORD_TOKEN = config('DISCORD_TOKEN')
+
 bot.run('ODM1OTY4MjE1MjU0NDMzNzkz.YIXKEg.Rkpq-J1uFNYwLlDR8x6KpDVqqP4')
 
 # Add game to database (done)
 # Add game to user profile
 # 
+
+
