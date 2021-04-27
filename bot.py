@@ -101,4 +101,17 @@ async def delete(ctx, user: User, args):
 
 DISCORD_TOKEN = config('DISCORD_TOKEN')
 
+
+
+tyron = {'OWNER': 'bricks'}
+#team = {'TEAM': ['lowkeychef', 'aroc', 'tyron'], 'SCORE': '1', 'POSITION': '1'}
+#db.joinSession(tyron, team)
+
+db.endSession(tyron)
+
+
+
 bot.run('ODM1OTY4MjE1MjU0NDMzNzkz.YIXKEg.Rkpq-J1uFNYwLlDR8x6KpDVqqP4')
+
+
+

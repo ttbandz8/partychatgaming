@@ -253,3 +253,31 @@ def createSession(session):
             sessions_col.insert_one(session)
             print("New Session started. ")
             
+def joinSession(session, query):
+    sessionquery = querySession(session)
+    matchtype = sessionquery['TYPE']
+    if matchtype == len(query['TEAM']):
+        p = [x for x in sessionquery['TEAMS']]
+        list_matching = [x for x in p[0]['TEAM'] if x in query['TEAM']]
+        if len(list_matching) == 0:
+            teaminsert = sessions_col.update_one(session, {'$addToSet': {'TEAMS': query}, '$set': {'IS_FULL': True}})
+            return 'Session Joined'
+        else: 
+            return 'Cannot add team, session full'
+    elif matchtype < len(query['TEAM']):
+        return 'Too many players in team'
+    elif matchtype > len(query['TEAM']):
+        return 'Not enough players in team'
+
+def endSession(session):
+    exists = session_exist({'OWNER': session['OWNER'], 'AVAILABLE': True})
+    if exists:
+        sessions_col.update_one(session, {'$set': {'AVAILABLE': False}})
+        print('Session Ended')
+    else:
+        print("Session Unavailable")
+    
+        
+       # print(p[0]['TEAM'])
+    
+        #print(list_matching)
