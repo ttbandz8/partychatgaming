@@ -272,7 +272,7 @@ def querySession(session):
             data = sessions_col.find_one(session)
             return data
         else:
-            return "Session doesn't exist."
+            return False
            
     except:
         return "Find Session failed."
@@ -302,7 +302,7 @@ def joinSession(session, query):
             teaminsert = sessions_col.update_one(session, {'$addToSet': {'TEAMS': query}, '$set': {'IS_FULL': True}})
             return 'Session Joined'
         else: 
-            return 'Cannot add team, session full'
+            return 'Session full.'
     elif matchtype < len(query['TEAM']):
         return 'Too many players in team'
     elif matchtype > len(query['TEAM']):
@@ -313,6 +313,6 @@ def endSession(session):
     exists = session_exist({'OWNER': session['OWNER'], 'AVAILABLE': True})
     if exists:
         sessions_col.update_one(session, {'$set': {'AVAILABLE': False}})
-        print('Session Ended')
+        return 'Session Ended'
     else:
-        print("Session Unavailable")
+        return 'Session Unavailable'
