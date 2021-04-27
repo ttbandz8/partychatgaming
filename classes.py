@@ -65,16 +65,6 @@ class TOURNAMENTS():
     MATCHES: list
     TIMESTAMP: str = now
 
-@dataclass(frozen=True, order=True)
-class TOURNAMENTS():
-    OWNER: str
-    PLAYERS: list
-    TEAMS: list
-    TITLE: str
-    GAME: str
-    MATCHES: list
-    TIMESTAMP: str = now
-
 @dataclass(frozen=True, order=True) 
 class SCORES():
     TOTAL: int
@@ -85,6 +75,7 @@ class SCORES():
 class GAMES():
     GAME: str
     IMAGE_URL: str
+    IGN: bool = field(default_factory=lambda: False)
     ALIASES: list[str] = field(default_factory=lambda: [])
     TIMESTAMP: str = now
 

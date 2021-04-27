@@ -1,5 +1,15 @@
 # partychatgaming
 
+# COMMANDS
+    Register = >r
+    Lookup User = >lk @user
+    Delete Account = >d @user IWANTTODELETEMYACCOUNT
+    Add Game & In Game Name = >ag game in_game_name
+    Create Unranked Session = >curs type teammates(if not 1v1)
+    Create Ranked Session = >crs type teammates(if not 1v1)
+    Create KingsGambit Session = >ckg type
+    Join Session = >js @owner
+    End Session = >es
 # Classes 
     Whenever you see data.something() we are using the data classes to pass default values
     db.createTeam(data.newTeam(team), user)

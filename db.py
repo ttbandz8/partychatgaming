@@ -96,9 +96,9 @@ def updateUser(query, new_value):
     exists = user_exists({'DISNAME': query['DISNAME']})
     if exists:
         update = users_col.update_one(query, new_value, upsert=True)
-        print(update)
+        return "Update completed. "
     else:
-        print("Cannot update.")
+        return "Update failed. "
 
 
 
@@ -234,6 +234,11 @@ def queryGame(game):
     except:
         print("Find Game failed.")
 
+'''Query Game'''
+def query_all_games():
+    games = games_col.find()
+    return games
+
 '''Add Game'''
 def add_game(game):
     exists = game_exists({'GAME': game['GAME']})
@@ -267,24 +272,26 @@ def querySession(session):
             data = sessions_col.find_one(session)
             return data
         else:
-            print("Session doesn't exist.")
+            return "Session doesn't exist."
            
     except:
-        print("Find Session failed.")
+        return "Find Session failed."
 
 '''Create Session'''
 def createSession(session):
     exists = session_exist({'OWNER': session['OWNER'], 'AVAILABLE': True})
     if exists:
-        print("Session Already Exists.")
+        return "Session Already Exists."
     else:
         players_per_team_count = [x for x in session['TEAMS'][0]['TEAM']]
         if session['TYPE'] != len(players_per_team_count):
-            print("Team and Session Type do not match. ")
+            print(players_per_team_count)
+            return "Team and Session Type do not match. "
         else:
             sessions_col.insert_one(session)
-            print("New Session started. ")
-            
+            return "New Session started. "
+
+'''Join Session'''
 def joinSession(session, query):
     sessionquery = querySession(session)
     matchtype = sessionquery['TYPE']
@@ -301,6 +308,7 @@ def joinSession(session, query):
     elif matchtype > len(query['TEAM']):
         return 'Not enough players in team'
 
+'''End Session'''
 def endSession(session):
     exists = session_exist({'OWNER': session['OWNER'], 'AVAILABLE': True})
     if exists:
@@ -308,8 +316,3 @@ def endSession(session):
         print('Session Ended')
     else:
         print("Session Unavailable")
-    
-        
-       # print(p[0]['TEAM'])
-    
-        #print(list_matching)
