@@ -123,7 +123,6 @@ def queryTeam(team):
         exists = team_exists({'TNAME': team['TNAME']})
         if exists:
             data = teams_col.find_one(team)
-            print(data)
             return data
         else:
             print("Team doesn't exist.")
@@ -210,6 +209,39 @@ def addTeamMember(query, new_value, user):
     else:
         print("Cannot update.")
 
+
+'''Check If Games Exists'''
+def game_exists(game):
+    collection_exists = col_exists("GAMES")
+    if collection_exists:
+        gamesexist = games_col.find_one(game)
+        if gamesexist:
+            return True
+        else:
+            return False
+    else:
+        return False
+
+'''Query Game'''
+def queryGame(game):
+    try:
+        exists = game_exists({'ALIASES': game['ALIASES']})
+        if exists:
+            data = games_col.find_one(game)
+            return data
+        else:
+            print("Game doesn't exist.")
+    except:
+        print("Find Game failed.")
+
+'''Add Game'''
+def add_game(game):
+    exists = game_exists({'GAME': game['GAME']})
+    if exists:
+        print("Game Already Exists.")
+    else:
+       added = games_col.insert_one(game)
+       return("Game has been added")
 
 
 

@@ -34,11 +34,20 @@ client = discord.Client()
 
 bot = commands.Bot(command_prefix=">")
 
+def validate_user(ctx):
+   query = {'DISNAME': str(ctx.author)}
+   validate = db.queryUser(query)
+   if validate:
+      return True
+   else:
+      return False
+
 @bot.event
 async def on_ready():
    print('Bot is ready. ')
 
 @bot.command()
+@commands.check(validate_user)
 async def lookup(ctx, user: User):
    query = {'DISNAME': str(user)}
    d = db.queryUser(query)
@@ -95,10 +104,18 @@ async def delete(ctx, user: User, args):
             await ctx.send(delete_user_resp)
    else:
       await ctx.send("Invalid command")
+
+@bot.command()
+async def addGame(ctx, args):
+   user = {'DISNAME': str(ctx.author)}
+   await ctx.send(response)
             
 
 
 
 DISCORD_TOKEN = config('DISCORD_TOKEN')
-
 bot.run('ODM1OTY4MjE1MjU0NDMzNzkz.YIXKEg.Rkpq-J1uFNYwLlDR8x6KpDVqqP4')
+
+# Add game to database (done)
+# Add game to user profile
+# 

@@ -65,10 +65,27 @@ class TOURNAMENTS():
     MATCHES: list
     TIMESTAMP: str = now
 
+@dataclass(frozen=True, order=True)
+class TOURNAMENTS():
+    OWNER: str
+    PLAYERS: list
+    TEAMS: list
+    TITLE: str
+    GAME: str
+    MATCHES: list
+    TIMESTAMP: str = now
+
 @dataclass(frozen=True, order=True) 
 class SCORES():
     TOTAL: int
     MATCHES: list
+    TIMESTAMP: str = now
+
+@dataclass(frozen=True, order=True) 
+class GAMES():
+    GAME: str
+    IMAGE_URL: str
+    ALIASES: list[str] = field(default_factory=lambda: [])
     TIMESTAMP: str = now
 
 
@@ -92,6 +109,11 @@ def newTeam(team):
 def newSession(session):
     s = SESSIONS(**session)
     return asdict(s)
+
+def newGame(game):
+    g = GAMES(**game)
+    return asdict(g)
+
 
 
 
