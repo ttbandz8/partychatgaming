@@ -316,3 +316,13 @@ def endSession(session):
         return 'Session Ended'
     else:
         return 'Session Unavailable'
+
+'''Update Session'''
+def updateSession(session, query, update_query):
+    exists = session_exist({'OWNER': session['OWNER'], 'AVAILABLE': True})
+    if exists:
+        data = sessions_col.update_one(query, update_query)
+        return True
+    else:
+        return False
+        
