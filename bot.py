@@ -164,7 +164,7 @@ async def uign(ctx, args1, args2):
 async def c1v1(ctx, args):
    game = [x for x in db.query_all_games()][0]
    session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 1, "TEAMS": [{"TEAM": [str(ctx.author)], "SCORE": 0, "POSITION": 0}]}
-   if args == "ur":
+   if args == "n":
       resp = db.createSession(data.newSession(session_query))
       await ctx.send(resp, delete_after=5)
    elif args == "r":
@@ -219,7 +219,7 @@ async def session(ctx, user: User):
       if session['RANKED'] == True:
          ranked = "Ranked"
       elif session['RANKED'] == False:
-         ranked = "Unranked"
+         ranked = "Normal"
 
       teams = [x for x in session['TEAMS']]
       team_list = []
