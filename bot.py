@@ -174,6 +174,24 @@ async def c1v1(ctx, args):
 
 @bot.command()
 @commands.check(validate_user)
+async def score(ctx, user: User):
+   session_query = {"OWNER": str(ctx.author), "AVAILABLE": True}
+   session_data = db.querySession(session_query)
+   teams = [x for x in session_data['TEAMS']]
+   winning_team = {}
+   for x in teams:
+      if str(user) in x['TEAM']: 
+         winning_team = x
+   new_score = winning_team['SCORE'] + 1
+   print(new_score)
+   update_query = {'$set': {'TEAMS': [{'SCORE': new_score}]}}
+   query = {'POSITION': winning_team['POSITION']}
+   response = db.updateSession(session_query, query, update_query)
+   await ctx.send(response)
+
+
+@bot.command()
+@commands.check(validate_user)
 async def es(ctx):
    session_query = {"OWNER": str(ctx.author), "AVAILABLE": True}
    end = db.endSession(session_query)
