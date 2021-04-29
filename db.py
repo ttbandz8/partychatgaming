@@ -106,7 +106,6 @@ def updateUser(query, new_value):
 
 '''Check If Teams Exists'''
 def team_exists(data):
-    print(data)
     collection_exists = col_exists("TEAMS")
     if collection_exists:
         teamexists = teams_col.find_one(data)
@@ -158,18 +157,17 @@ def deleteTeam(team, user):
         exists = team_exists({'TNAME': team['TNAME']})
         if exists:
             team = teams_col.find_one(team)
-            if user in team['MEMBERS']:
+            if user == team['OWNER']:
+                users_col.update_many({'TEAMS': team['TNAME']}, {'$set': {'TEAMS': ['PCG']}})
                 teams_col.delete_one({'TNAME': team['TNAME']})
-                print("Team deleted.")
-                users_col.update_many({'TEAMS': team['TNAME']}, {'$pull': {'TEAMS':  team['TNAME']}})
-                print("Team deleted from user profile.")
+                return "Team deleted."
             else:
-                print("This user is not a member of the team.")
+                return "This user is not a member of the team."
         else:
-            print("Team does not exist.")
+            return "Team does not exist."
 
     except:
-        print("Delete Team failed.")
+        return "Delete Team failed."
 
 '''Delete Team Member'''
 def deleteTeamMember(query, value, user):
@@ -178,36 +176,38 @@ def deleteTeamMember(query, value, user):
         if exists:
             team = teams_col.find_one(query)
             if user in team['MEMBERS']:
+
                 update = teams_col.update_one(query, value, upsert=True)
-                print(update)
+                # Add Team to User Profile as well
+                query = {'DISNAME': user}
+                new_value = {'$set': {'TEAMS': ['PCG']}}
+                users_col.update_one(query, new_value)
+
             else:
-                print("This user is not a member of the team.")
+                return "This user is not a member of the team."
         else:
-            print("Team does not exist.")
+            return "Team does not exist."
 
     except:
         print("Delete Team Member failed.")
 
 '''Updates Team data'''
-def addTeamMember(query, new_value, user):
+def addTeamMember(query, add_to_team_query, user, new_user):
     exists = team_exists({'TNAME': query['TNAME']})
     if exists:
         team = teams_col.find_one(query)
-        if user in team['MEMBERS']:
-            teams_col.update_one(query, new_value, upsert=True)
-            print("User added to the team.")
-
+        if user == team['OWNER']:
+            teams_col.update_one(query, add_to_team_query, upsert=True)
 
              # Add Team to User Profile as well
-            add_user = [x for x in new_value.values()][0]['MEMBERS']
-            query = {'DISNAME': add_user}
-            new_value = {'$addToSet': {'TEAMS': team['TNAME']}}
+            query = {'DISNAME': new_user}
+            new_value = {'$set': {'TEAMS': [team['TNAME']]}}
             users_col.update_one(query, new_value)
-            print("Team added to user profile")
+            return "User added to the team. "
         else:
-            print("This user is not a member of the team.")
+            return "The Owner of the team can add new members. "
     else:
-        print("Cannot update.")
+        return "Cannot add user to the team."
 
 
 '''Check If Games Exists'''
@@ -325,4 +325,6 @@ def updateSession(session, query, update_query):
         return True
     else:
         return False
-        
+
+# '''Save Winner Of Session'''
+# def exhibitions(session):

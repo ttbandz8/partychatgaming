@@ -48,6 +48,8 @@ class SESSIONS():
 @dataclass(frozen=True, order=True)
 class MATCHES():
     USER: str
+    RANKED: bool
+    NORMAL: bool
     MATCHES: list
     TIMESTAMP: str = now
 

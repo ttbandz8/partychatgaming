@@ -82,7 +82,7 @@ async def lk(ctx, user: User):
       embedVar.add_field(name="Tournament Wins", value=tournament_wins)
       await ctx.send(embed=embedVar, delete_after=15)
    else:
-      await ctx.send("User does not exist in the system. ")
+      await ctx.send("User does not exist in the system. ", delete_after=3)
 
    
 @bot.command()
@@ -439,11 +439,124 @@ async def ct(ctx, args1, *args):
       return user == ctx.author and str(reaction.emoji) == '👍'
 
    try:
-      confirmed = await bot.wait_for('reaction_add', timeout=8.0, check=check)
+      confirmed = await bot.wait_for('reaction_add', timeout=5.0, check=check)
       response = db.createTeam(data.newTeam(team_query), str(ctx.author))
       await ctx.send(response, delete_after=5)
    except:
       print("Team not created. ")
+
+@bot.command()
+@commands.check(validate_user)
+async def att(ctx, user1: User, *args):
+   team_name = " ".join([*args])
+   team_query = {'OWNER': str(ctx.author), 'TNAME': team_name}
+   team = db.queryTeam(team_query)
+   accept = await ctx.send(f"Do you want to join team {team_name}?".format(bot), delete_after=8)
+   for emoji in emojis:
+      await accept.add_reaction(emoji)
+
+   def check(reaction, user):
+      return user == user1 and str(reaction.emoji) == '👍'
+
+   try:
+      confirmed = await bot.wait_for('reaction_add', timeout=5.0, check=check)
+      new_value_query = {'$push': {'MEMBERS': str(user1)}}
+      response = db.addTeamMember(team_query, new_value_query, str(ctx.author), str(user1))
+      await ctx.send(response, delete_after=5)
+   except:
+      print("Team not created. ")
+
+@bot.command()
+@commands.check(validate_user)
+async def lkt(ctx, *args):
+   team_name = " ".join([*args])
+   team_query = {'TNAME': team_name}
+   team = db.queryTeam(team_query)
+   if team:
+      team_name = team['TNAME']
+      games = team['GAMES']
+      # avatar = game['IMAGE_URL']
+      badges = team['BADGES']
+      ranked = team['RANKED']
+      normal = team['NORMAL']
+      tournament_wins = team['TOURNAMENT_WINS']
+
+
+      ranked_to_string = dict(ChainMap(*ranked))
+      normal_to_string = dict(ChainMap(*normal))
+
+      team_list = []
+      for members in team['MEMBERS']:
+         mem_query = db.queryUser({'DISNAME': members})
+         ign_list = [x for x in mem_query['IGN']]
+         ign_list_keys = [k for k in ign_list[0].keys()]
+         if ign_list_keys == games:
+            team_list.append(f"{ign_list[0][games[0]]}") 
+         else:
+            team_list.append(f"{members}")
+
+
+      embedVar = discord.Embed(title=f"{team_name}' Team Card".format(bot), description="Party Chat Gaming Database", colour=000000)
+      # embedVar.set_thumbnail(url=avatar)
+      embedVar.add_field(name="Games", value=f'{games[0]}'.format(bot))
+      embedVar.add_field(name="Members", value="\n".join(f'{t}'.format(bot) for t in team_list), inline=False)
+      embedVar.add_field(name="Ranked", value="\n".join(f'{k}: {"/".join([str(int) for int in v])}' for k,v in ranked_to_string.items()))
+      embedVar.add_field(name="Normals", value="\n".join(f'{k}: {"/".join([str(int) for int in v])}' for k,v in normal_to_string.items()))
+      embedVar.add_field(name="Tournament Wins", value=tournament_wins)
+
+      await ctx.send(embed=embedVar, delete_after=20)
+   else:
+      await ctx.send("Team does not exist. ", delete_after=5)
+
+
+@bot.command()
+@commands.check(validate_user)
+async def dtm(ctx, user1: User, *args):
+   team_name = " ".join([*args])
+   team_query = {'OWNER': str(ctx.author), 'TNAME': team_name}
+   team = db.queryTeam(team_query)
+
+   if str(ctx.author) == team['OWNER']:
+      accept = await ctx.send(f"Do you want to remove {str(user1)} from the team?".format(bot), delete_after=8)
+      for emoji in emojis:
+         await accept.add_reaction(emoji)
+
+      def check(reaction, user):
+         return user == ctx.author and str(reaction.emoji) == '👍'
+
+      try:
+         confirmed = await bot.wait_for('reaction_add', timeout=5.0, check=check)
+         new_value_query = {'$pull': {'MEMBERS': str(user1)}}
+         response = db.deleteTeamMember(team_query, new_value_query, str(user1))
+         await ctx.send(response, delete_after=5)
+      except:
+         print("Team not created. ")
+   else:
+      return "Only the owner remove team members. "
+
+@bot.command()
+@commands.check(validate_user)
+async def dt(ctx, *args):
+   team_name = " ".join([*args])
+   team_query = {'OWNER': str(ctx.author), 'TNAME': team_name}
+   team = db.queryTeam(team_query)
+   if team['OWNER'] == str(ctx.author):
+      accept = await ctx.send(f"Do you want to delete the {team['GAMES'][0]} team {team_name}?".format(bot), delete_after=10)
+      for emoji in emojis:
+         await accept.add_reaction(emoji)
+
+      def check(reaction, user):
+         return user == ctx.author and str(reaction.emoji) == '👍'
+
+      try:
+         confirmed = await bot.wait_for('reaction_add', timeout=8.0, check=check)
+         response = db.deleteTeam(team, str(ctx.author))
+         print(response)
+         await ctx.send(response, delete_after=5)
+      except:
+         print("Team not created. ")
+   else:
+      await ctx.send("Only the owner of the team can delete the team. ")
 
 
 DISCORD_TOKEN = config('DISCORD_TOKEN')
