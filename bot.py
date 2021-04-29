@@ -29,6 +29,7 @@ logger.setLevel(logging.INFO)
 handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
 handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
 logger.addHandler(handler)
+emojis = ['👍', '👎']
 
 client = discord.Client()
 
@@ -58,17 +59,17 @@ async def lk(ctx, user: User):
       teams = d['TEAMS']
       titles = d['TITLES']
       avatar = d['AVATAR']
-      rwins = d['RWINS']
-      rlosses = d['RLOSSES']
-      urwins = d['URWINS']
-      urlosses = d['URLOSSES']
+      ranked = d['RANKED']
+      normal = d['NORMAL']
       tournament_wins = d['TOURNAMENT_WINS']
 
-      rwins_to_string = dict(ChainMap(*rwins))
-      rlosses_to_string = dict(ChainMap(*rlosses))
-      urwins_to_string = dict(ChainMap(*urwins))
-      urlosses_to_string = dict(ChainMap(*urlosses))
+
+      ranked_to_string = dict(ChainMap(*ranked))
+      normal_to_string = dict(ChainMap(*normal))
       ign_to_string = dict(ChainMap(*ign))
+
+
+      
 
       embedVar = discord.Embed(title=f"{name}'s profile".format(client), description="Party Chat Gaming Database", colour=000000)
       embedVar.set_thumbnail(url=avatar)
@@ -76,10 +77,8 @@ async def lk(ctx, user: User):
       embedVar.add_field(name="In-Game Name", value="\n".join(f'{v}' for k,v in ign_to_string.items()))
       embedVar.add_field(name="Teams", value=' '.join(str(x) for x in teams))
       embedVar.add_field(name="Titles", value=' '.join(str(x) for x in titles))
-      embedVar.add_field(name="Ranked Wins", value="\n".join(f'{k}: {v}' for k,v in rwins_to_string.items()))
-      embedVar.add_field(name="Ranked Losses", value="\n".join(f'{k}: {v}' for k,v in rlosses_to_string.items()))
-      embedVar.add_field(name="Normal Wins", value="\n".join(f'{k}: {v}' for k,v in urwins_to_string.items()))
-      embedVar.add_field(name="Normal Losses", value="\n".join(f'{k}: {v}' for k,v in urlosses_to_string.items()))
+      embedVar.add_field(name="Ranked", value="\n".join(f'{k}: {"/".join([str(int) for int in v])}' for k,v in ranked_to_string.items()))
+      embedVar.add_field(name="Normals", value="\n".join(f'{k}: {"/".join([str(int) for int in v])}' for k,v in normal_to_string.items()))
       embedVar.add_field(name="Tournament Wins", value=tournament_wins)
       await ctx.send(embed=embedVar, delete_after=15)
    else:
@@ -156,7 +155,6 @@ async def uign(ctx, args1, args2):
    else:
       await ctx.send("Game is unavailable. ", delete_after=3)
    
-   
 
 
 @bot.command()
@@ -172,6 +170,161 @@ async def c1v1(ctx, args):
       resp = db.createSession(data.newSession(session_query))
       await ctx.send(resp, delete_after=5)
 
+
+@bot.command()
+@commands.check(validate_user)
+async def c2v2(ctx, args, user1: User):
+   game = [x for x in db.query_all_games()][0]
+   
+   validate_teammate = db.queryUser({'DISNAME': str(user1)})
+
+   if validate_teammate:
+      accept = await ctx.send("Will you join the session?", delete_after=10)
+      for emoji in emojis:
+         await accept.add_reaction(emoji)
+
+      def check(reaction, user):
+         return user == user1 and str(reaction.emoji) == '👍'
+
+      try:
+         reaction, user = await bot.wait_for('reaction_add', timeout=10.0, check=check)
+
+
+         session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 2, "TEAMS": [{"TEAM": [str(ctx.author), str(user1)], "SCORE": 0, "POSITION": 0}]}
+         if args == "n":
+            resp = db.createSession(data.newSession(session_query))
+            await ctx.send(resp, delete_after=5)
+         elif args == "r":
+            session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 2, "TEAMS": [{"TEAM": [str(ctx.author), str(user1)], "SCORE": 0, "POSITION": 0}], "RANKED": True}
+            resp = db.createSession(data.newSession(session_query))
+            await ctx.send(resp, delete_after=5)
+      except:
+         await ctx.send("Did not work")
+   else:
+      await ctx.send("Users must register.", delete_after=5)
+
+@bot.command()
+@commands.check(validate_user)
+async def c3v3(ctx, args, user1: User, user2: User):
+   game = [x for x in db.query_all_games()][0]
+   
+   teammates = [str(user1), str(user2)]
+   valid_teammates = []
+   for x in teammates:
+      valid = db.queryUser(x)
+      if valid:
+         valid_teammates.append(valid["DISNAME"])
+      else:
+         await ctx.send(f"{valid['DISNAME']} needs to register.".format(bot), delete_after=5)
+
+   if valid_teammates:
+      accept = await ctx.send("Will you join the session?", delete_after=10)
+      for emoji in emojis:
+         await accept.add_reaction(emoji)
+
+      def check(reaction, user):
+         return user in valid_teammates and str(reaction.emoji) == '👍'
+
+      try:
+         reaction, user = await bot.wait_for('reaction_add', timeout=10.0, check=check)
+
+
+         session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 2, "TEAMS": [{"TEAM": [str(ctx.author), str(user1), str(user2)], "SCORE": 0, "POSITION": 0}]}
+         if args == "n":
+            resp = db.createSession(data.newSession(session_query))
+            await ctx.send(resp, delete_after=5)
+         elif args == "r":
+            session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 2, "TEAMS": [{"TEAM": [str(ctx.author), str(user1), str(user2)], "SCORE": 0, "POSITION": 0}], "RANKED": True}
+            resp = db.createSession(data.newSession(session_query))
+            await ctx.send(resp, delete_after=5)
+      except:
+         await ctx.send("Did not work")
+   else:
+      await ctx.send("Users must register.", delete_after=5)
+
+
+@bot.command()
+@commands.check(validate_user)
+async def c4v4(ctx, args, user1: User, user2: User, user3: User):
+   game = [x for x in db.query_all_games()][0]
+   
+   teammates = [str(user1), str(user2), str(user3)]
+   valid_teammates = []
+   for x in teammates:
+      valid = db.queryUser(x)
+      if valid:
+         valid_teammates.append(valid["DISNAME"])
+      else:
+         await ctx.send(f"{valid['DISNAME']} needs to register.".format(bot), delete_after=5)
+
+   if valid_teammates:
+      accept = await ctx.send("Will you join the session?", delete_after=10)
+      for emoji in emojis:
+         await accept.add_reaction(emoji)
+
+      def check(reaction, user):
+         return user in valid_teammates and str(reaction.emoji) == '👍'
+
+      try:
+         reaction, user = await bot.wait_for('reaction_add', timeout=10.0, check=check)
+
+
+         session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 2, "TEAMS": [{"TEAM": [str(ctx.author), str(user1), str(user2), str(user3)], "SCORE": 0, "POSITION": 0}]}
+         if args == "n":
+            resp = db.createSession(data.newSession(session_query))
+            await ctx.send(resp, delete_after=5)
+         elif args == "r":
+            session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 2, "TEAMS": [{"TEAM": [str(ctx.author), str(user1), str(user2), str(user3)], "SCORE": 0, "POSITION": 0}], "RANKED": True}
+            resp = db.createSession(data.newSession(session_query))
+            await ctx.send(resp, delete_after=5)
+      except:
+         await ctx.send("Did not work")
+   else:
+      await ctx.send("Users must register.", delete_after=5)
+
+
+@bot.command()
+@commands.check(validate_user)
+async def c5v5(ctx, args, user1: User, user2: User, user3: User, user4: User):
+   game = [x for x in db.query_all_games()][0]
+   
+   teammates = [str(user1), str(user2), str(user3), str(user4)]
+   valid_teammates = []
+   for x in teammates:
+      valid = db.queryUser(x)
+      if valid:
+         valid_teammates.append(valid["DISNAME"])
+      else:
+         await ctx.send(f"{valid['DISNAME']} needs to register.".format(bot), delete_after=5)
+
+   if valid_teammates:
+      accept = await ctx.send("Will you join the session?", delete_after=10)
+      for emoji in emojis:
+         await accept.add_reaction(emoji)
+
+      def check(reaction, user):
+         return user in valid_teammates and str(reaction.emoji) == '👍'
+
+      try:
+         reaction, user = await bot.wait_for('reaction_add', timeout=10.0, check=check)
+
+
+         session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 2, "TEAMS": [{"TEAM": [str(ctx.author), str(user1), str(user2), str(user3), str(user4)], "SCORE": 0, "POSITION": 0}]}
+         if args == "n":
+            resp = db.createSession(data.newSession(session_query))
+            await ctx.send(resp, delete_after=5)
+         elif args == "r":
+            session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 2, "TEAMS": [{"TEAM": [str(ctx.author), str(user1), str(user2), str(user3), str(user4 )], "SCORE": 0, "POSITION": 0}], "RANKED": True}
+            resp = db.createSession(data.newSession(session_query))
+            await ctx.send(resp, delete_after=5)
+      except:
+         await ctx.send("Did not work")
+   else:
+      await ctx.send("Users must register.", delete_after=5)
+
+
+
+
 @bot.command()
 @commands.check(validate_user)
 async def score(ctx, user: User):
@@ -183,11 +336,14 @@ async def score(ctx, user: User):
       if str(user) in x['TEAM']: 
          winning_team = x
    new_score = winning_team['SCORE'] + 1
-   print(new_score)
-   update_query = {'$set': {'TEAMS': [{'SCORE': new_score}]}}
-   query = {'POSITION': winning_team['POSITION']}
+   update_query = {'$set': {'TEAMS.$.SCORE': new_score}}
+   query = {"_id": session_data["_id"], "TEAMS.TEAM": str(user)}
    response = db.updateSession(session_query, query, update_query)
-   await ctx.send(response)
+   if response:
+      await ctx.send(f"+1", delete_after=2)
+   else:
+      await ctx.send(f"Score not added. Please, try again. ", delete_after=5)
+
 
 
 @bot.command()
@@ -207,11 +363,15 @@ async def js(ctx, *user: User):
       join_query = {"TEAM": [str(ctx.author)], "SCORE": 0, "POSITION": 1}
       session_joined = db.joinSession(session_query, join_query)
       await ctx.send(session_joined, delete_after=5)
+   if match_type ==2:
+      join_query = {"TEAM": [str(ctx.author), (str(user[1]))], "SCORE": 0, "POSITION": 1}
+      session_joined = db.joinSession(session_query, join_query)
+      await ctx.send(session_joined, delete_after=5)
 
 
 @bot.command()
 @commands.check(validate_user)
-async def session(ctx, user: User):
+async def s(ctx, user: User):
    session_owner = {'OWNER': str(user), "AVAILABLE": True}
    session = db.querySession(session_owner)
    if session:
@@ -242,7 +402,9 @@ async def session(ctx, user: User):
       teams = [x for x in session['TEAMS']]
       team_list = []
       for x in teams:
+         print(x)
          for members in x['TEAM']:
+            print(members)
             mem_query = db.queryUser({'DISNAME': members})
             ign_list = [x for x in mem_query['IGN']]
             ign_list_keys = [k for k in ign_list[0].keys()]
@@ -260,6 +422,28 @@ async def session(ctx, user: User):
       await ctx.send(embed=embedVar, delete_after=15)
    else:
       await ctx.send("Session does not exist. ", delete_after=5)
+
+
+@bot.command()
+@commands.check(validate_user)
+async def ct(ctx, args1, *args):
+   game_query = {'ALIASES': args1}
+   game = db.queryGame(game_query)['GAME']
+   team_name = " ".join([*args])
+   team_query = {'OWNER': str(ctx.author), 'TNAME': team_name, 'MEMBERS': [str(ctx.author)], 'GAMES': [game]}
+   accept = await ctx.send(f"Do you want to create the {game} team {team_name}?".format(bot), delete_after=10)
+   for emoji in emojis:
+      await accept.add_reaction(emoji)
+
+   def check(reaction, user):
+      return user == ctx.author and str(reaction.emoji) == '👍'
+
+   try:
+      confirmed = await bot.wait_for('reaction_add', timeout=8.0, check=check)
+      response = db.createTeam(data.newTeam(team_query), str(ctx.author))
+      await ctx.send(response, delete_after=5)
+   except:
+      print("Team not created. ")
 
 
 DISCORD_TOKEN = config('DISCORD_TOKEN')

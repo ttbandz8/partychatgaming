@@ -11,10 +11,8 @@ class USER():
     GAMES: list[str] = field(default_factory=lambda: ['PCG'])
     TEAMS: list[str] = field(default_factory=lambda: ['PCG'])
     TITLES: list[str] = field(default_factory=lambda: ['PCG'])
-    RWINS: list = field(default_factory=lambda: [{'1V1': 0}, {'2V2': 0}, {'3V3': 0}, {'4V4': 0}, {'5V5': 0}])
-    RLOSSES: list = field(default_factory=lambda: [{'1V1': 0}, {'2V2': 0}, {'3V3': 0}, {'4V4': 0}, {'5V5': 0}])
-    URWINS: list = field(default_factory=lambda: [{'1V1': 0}, {'2V2': 0}, {'3V3': 0}, {'4V4': 0}, {'5V5': 0}])
-    URLOSSES: list = field(default_factory=lambda: [{'1V1': 0}, {'2V2': 0}, {'3V3': 0}, {'4V4': 0}, {'5V5': 0}])
+    RANKED: list = field(default_factory=lambda: [{'1V1': [0, 0, 0]}, {'2V2': [0, 0, 0]}, {'3V3': [0, 0, 0]}, {'4V4': [0, 0, 0]}, {'5V5': [0, 0, 0]}])
+    NORMAL: list = field(default_factory=lambda: [{'1V1': [0, 0, 0]}, {'2V2': [0, 0, 0]}, {'3V3': [0, 0, 0]}, {'4V4': [0, 0, 0]}, {'5V5': [0, 0, 0]}])
     TOURNAMENT_WINS: int = field(default_factory=lambda: 0)
     TIMESTAMP: str = now
 
@@ -24,12 +22,10 @@ class TEAMS():
     TNAME: str
     MEMBERS: list
     TOURNAMENT_WINS: int = field(default_factory=lambda: 0)
-    RWINS: list = field(default_factory=lambda: [{'1V1': 0}, {'2V2': 0}, {'3V3': 0}, {'4V4': 0}, {'5V5': 0}])
-    RLOSSES: list = field(default_factory=lambda: [{'1V1': 0}, {'2V2': 0}, {'3V3': 0}, {'4V4': 0}, {'5V5': 0}])
-    URWINS: list = field(default_factory=lambda: [{'1V1': 0}, {'2V2': 0}, {'3V3': 0}, {'4V4': 0}, {'5V5': 0}])
-    URLOSSES: list = field(default_factory=lambda: [{'1V1': 0}, {'2V2': 0}, {'3V3': 0}, {'4V4': 0}, {'5V5': 0}])
+    RANKED: list = field(default_factory=lambda: [{'1V1': [0, 0, 0]}, {'2V2': [0, 0, 0]}, {'3V3': [0, 0, 0]}, {'4V4': [0, 0, 0]}, {'5V5': [0, 0, 0]}])
+    NORMAL: list = field(default_factory=lambda: [{'1V1': [0, 0, 0]}, {'2V2': [0, 0, 0]}, {'3V3': [0, 0, 0]}, {'4V4': [0, 0, 0]}, {'5V5': [0, 0, 0]}])
     GAMES: list[str] = field(default_factory=lambda: ['PCG'])
-    BADGES: list[str] = field(default_factory=lambda: ['PCG'])
+    BADGES: list[str] = field(default_factory=lambda: ['New Team'])
     TIMESTAMP: str = now
 
 @dataclass(frozen=True, order=True)

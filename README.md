@@ -11,6 +11,7 @@
     Create KingsGambit Session = >ckg type
     Join Session = >js @owner
     End Session = >es
+    SCORE = >score @user_from_team_who_scored
 
 # Classes 
     Whenever you see data.something() we are using the data classes to pass default values

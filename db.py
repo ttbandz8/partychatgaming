@@ -25,8 +25,8 @@ def col_exists(col):
 def user_exists(data):
     collection_exists = col_exists("USERS")
     if collection_exists:
-        userexists = users_col.find_one(data)
-        if userexists:
+        user_does_exist = users_col.find_one(data)
+        if user_does_exist:
             return True
         else:
             return False
@@ -106,6 +106,7 @@ def updateUser(query, new_value):
 
 '''Check If Teams Exists'''
 def team_exists(data):
+    print(data)
     collection_exists = col_exists("TEAMS")
     if collection_exists:
         teamexists = teams_col.find_one(data)
@@ -126,7 +127,6 @@ def queryTeam(team):
             return data
         else:
             print("Team doesn't exist.")
-           
     except:
         print("Find team failed.")
 
@@ -137,20 +137,20 @@ def createTeam(team, user):
         if user_exist:
             exists = team_exists({'TNAME': team['TNAME']})
             if exists:
-                print("Team already exists.")
+                return "Team already exists."
             else:
                 print("Inserting new Team.")
                 teams_col.insert_one(team)
 
                 # Add Team to User Profile as well
                 query = {'DISNAME': user}
-                new_value = {'$addToSet': {'TEAMS': team['TNAME']}}
+                new_value = {'$set': {'TEAMS': [team['TNAME']]}}
                 users_col.update_one(query, new_value)
-                print("Team added to user profile")
+                return "Team has been created. "
         else:
-            print("User does not exist. Create profile.")
+            return "User does not exist. Create profile."
     except:
-        print("Cannot add team failed.")
+        return "Cannot create team."
 
 '''Delete Team'''
 def deleteTeam(team, user):
@@ -316,16 +316,13 @@ def endSession(session):
         return 'Session Ended'
     else:
         return 'Session Unavailable'
-<<<<<<< HEAD
-=======
 
 '''Update Session'''
 def updateSession(session, query, update_query):
     exists = session_exist({'OWNER': session['OWNER'], 'AVAILABLE': True})
     if exists:
-        data = sessions_col.update_one(query, update_query)
+        sessions_col.update_one(query, update_query)
         return True
     else:
         return False
         
->>>>>>> b4cb020c67aad6d72352ac3fec35dd2d84e6fdbd
