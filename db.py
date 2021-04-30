@@ -281,6 +281,20 @@ def querySession(session):
 def querySessionMembers(session):
     data = sessions_col.find_one(session)
     return data
+ 
+
+'''Query Session'''
+def querySessionWinner(session):
+    try:
+        exists = session_exist({'OWNER': session['OWNER'],'TYPE' : session['TYPE'], })
+        if exists:
+            data = sessions_col.find_one(session)
+            return data
+        else:
+            return False
+           
+    except:
+        return "Find Session failed."
 
 
 '''Create Session'''
@@ -318,7 +332,7 @@ def joinSession(session, query):
 def endSession(session):
     exists = session_exist({'OWNER': session['OWNER'], 'AVAILABLE': True})
     if exists:
-        '''save session values, run score query-> insert into matches database'''  
+        '''save session values, run score query-> insert into matches database''' 
         sessions_col.update_one(session, {'$set': {'AVAILABLE': False}})
         return 'Session Ended'
     else:

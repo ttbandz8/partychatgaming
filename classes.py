@@ -74,6 +74,7 @@ class SCORES():
 class GAMES():
     GAME: str
     IMAGE_URL: str
+    TYPE: list[int] = field(default_factory=lambda: [])
     IGN: bool = field(default_factory=lambda: False)
     ALIASES: list[str] = field(default_factory=lambda: [])
     TIMESTAMP: str = now

@@ -670,12 +670,63 @@ async def sw(ctx):
    session_data['WINNER'] = winning_team
    winner = session_data['WINNER']
    print(winner)
+   session = session_data
+   update_query = {'$set': {'WINNER': winner}}
+   query = {"_id": session_data["_id"], "TEAMS.TEAM": str(ctx.author)}
+   db.updateSession(session, query, update_query)
    await ctx.send(winner['TEAM'], delete_after=5)
 
+# @bot.command()
+# @commands.check(validate_user)
+# async def sl(ctx):
+#    session_query = {"OWNER": str(ctx.author), "AVAILABLE": True}
+#    session_data = db.querySession(session_query)
+#    teams = [x for x in session_data['TEAMS']]
+#    losing_team = {}
+#    low_score = teams[0]['SCORE']
+#    for x in teams:
+#       if x['SCORE'] <= low_score:
+#          low_score = x['SCORE']
+#          losing_team = x
+#    session_data['LOSER'] = losing_team
+#    loser = session_data['LOSER']
+#    session = session_data
+#    update_query = {'$set': {'LOSER': loser}}
+#    query = {"_id": session_data["_id"], "TEAMS.TEAM": str(ctx.author)}
+#    db.updateSession(session, query, update_query)
+#    game_type = "1v1"
+#    if session_data['RANKED'] == False:
+#       if session['TYPE'] == 1:
+#          game_type = "1v1"
+#       elif session['TYPE'] == 2:
+#          game_type = "2v2"
+#       elif session['TYPE'] == 3:
+#          game_type = "3v3"
+#       elif session['TYPE'] == 4:
+#          game_type = "4v4"
+#       elif session['TYPE'] == 5:
+#          game_type = "5v5"
+#       # print(losing_team)
+#       # print(losing_team['TEAM'])
+#       for x in losing_team['TEAM']:
+#          player = db.queryUser({'DISNAME': x})
+#          testlist = [x for x in player['RANKED']]
+#          current_score = 2
+#          for y in testlist:
+#             current_score = y[game_type][1]
+#          print(current_score)
+#          # query = {'DISNAME' : x}
+#          # new_value = {'$set': {'RANKED.{game_type}'} 
+#          # db.updateUser(query,)
+#    else :
+#       print("hello world")
 
 
 
 
+
+
+   # await ctx.send(loser['TEAM'], delete_after=5)
 
 
 
