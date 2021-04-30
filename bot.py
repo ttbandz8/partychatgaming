@@ -84,13 +84,53 @@ async def lk(ctx, user: User):
    else:
       await ctx.send("User does not exist in the system. ", delete_after=3)
 
-   
+@bot.command()
+async def flex(ctx):
+   query = {'DISNAME': str(ctx.author)}
+   d = db.queryUser(query)
+
+   if d:
+      name = d['DISNAME'].split("#",1)[0]
+      games = d['GAMES']
+      ign = d['IGN']
+      teams = d['TEAMS']
+      titles = d['TITLES']
+      avatar = d['AVATAR']
+      ranked = d['RANKED']
+      normal = d['NORMAL']
+      tournament_wins = d['TOURNAMENT_WINS']
+
+
+      ranked_to_string = dict(ChainMap(*ranked))
+      normal_to_string = dict(ChainMap(*normal))
+      ign_to_string = dict(ChainMap(*ign))
+
+
+      
+
+      embedVar = discord.Embed(title=f"{name}'s profile".format(client), description="Party Chat Gaming Database", colour=000000)
+      embedVar.set_thumbnail(url=avatar)
+      embedVar.add_field(name="Game", value=' '.join(str(x) for x in games))
+      embedVar.add_field(name="In-Game Name", value="\n".join(f'{v}' for k,v in ign_to_string.items()))
+      embedVar.add_field(name="Teams", value=' '.join(str(x) for x in teams))
+      embedVar.add_field(name="Titles", value=' '.join(str(x) for x in titles))
+      embedVar.add_field(name="Ranked", value="\n".join(f'{k}: {"/".join([str(int) for int in v])}' for k,v in ranked_to_string.items()))
+      embedVar.add_field(name="Normals", value="\n".join(f'{k}: {"/".join([str(int) for int in v])}' for k,v in normal_to_string.items()))
+      embedVar.add_field(name="Tournament Wins", value=tournament_wins)
+      await ctx.send(embed=embedVar, delete_after=15)
+   else:
+      await ctx.send("User does not exist in the system. ", delete_after=3)
+
+
+
 @bot.command()
 async def r(ctx):
    user = {'DISNAME': str(ctx.author), 'AVATAR': str(ctx.author.avatar_url)}
    response = db.createUsers(data.newUser(user))
    await ctx.send(response, delete_after=5)
 
+
+'''delete user'''
 @bot.command()
 @commands.check(validate_user)
 async def d(ctx, user: User, args):
@@ -103,6 +143,8 @@ async def d(ctx, user: User, args):
             await ctx.send(delete_user_resp, delete_after=5)
    else:
       await ctx.send("Invalid command", delete_after=5)
+
+
 
 @bot.command()
 @commands.check(validate_user)
@@ -557,6 +599,85 @@ async def dt(ctx, *args):
          print("Team not created. ")
    else:
       await ctx.send("Only the owner of the team can delete the team. ")
+
+
+@bot.command()
+@commands.check(validate_user)
+async def cs(ctx, user: User):
+   current_session = {'TEAMS.TEAM': str(user), "AVAILABLE": True}
+   session = db.querySessionMembers(current_session)
+   if session:
+      game_query = {'ALIASES': session['GAME']}
+      game = db.queryGame(game_query)
+
+      name = session['OWNER'].split("#",1)[0]
+      games = game['GAME']
+      avatar = game['IMAGE_URL']
+      game_type = " "
+      if session['TYPE'] == 1:
+         game_type = "1v1"
+      elif session['TYPE'] == 2:
+         game_type = "2v2"
+      elif session['TYPE'] == 3:
+         game_type = "3v3"
+      elif session['TYPE'] == 4:
+         game_type = "4v4"
+      elif session['TYPE'] == 5:
+         game_type = "5v5"
+
+      ranked = " "
+      if session['RANKED'] == True:
+         ranked = "Ranked"
+      elif session['RANKED'] == False:
+         ranked = "Normal"
+
+      teams = [x for x in session['TEAMS']]
+      team_list = []
+      for x in teams:
+         print(x)
+         for members in x['TEAM']:
+            print(members)
+            mem_query = db.queryUser({'DISNAME': members})
+            ign_list = [x for x in mem_query['IGN']]
+            ign_list_keys = [k for k in ign_list[0].keys()]
+            if ign_list_keys == [games]:
+               team_list.append(f"{ign_list[0][games]}: {x['SCORE']}")
+            else:
+               team_list.append(f"{members}: {x['SCORE']}")
+
+      embedVar = discord.Embed(title=f"{name}'s {games} Session ".format(bot), description="Party Chat Gaming Database", colour=000000)
+      embedVar.set_thumbnail(url=avatar)
+      embedVar.add_field(name="Match Type", value=f'{game_type}'.format(bot))
+      embedVar.add_field(name="Ranked", value=f'{ranked}'.format(bot))
+      embedVar.add_field(name="Competitors", value="\n".join(f'{t}'.format(bot) for t in team_list), inline=False)
+      await ctx.send(embed=embedVar, delete_after=15)
+   else:
+      await ctx.send("Session does not exist. ", delete_after=5)
+
+
+@bot.command()
+@commands.check(validate_user)
+async def sw(ctx):
+   session_query = {"OWNER": str(ctx.author), "AVAILABLE": True}
+   session_data = db.querySession(session_query)
+   teams = [x for x in session_data['TEAMS']]
+   winning_team = {}
+   high_score = teams[0]['SCORE']
+   for x in teams:
+      if x['SCORE'] >= high_score:
+         high_score = x['SCORE']
+         winning_team = x
+   session_data['WINNER'] = winning_team
+   winner = session_data['WINNER']
+   print(winner)
+   await ctx.send(winner['TEAM'], delete_after=5)
+
+
+
+
+
+
+
 
 
 DISCORD_TOKEN = config('DISCORD_TOKEN')

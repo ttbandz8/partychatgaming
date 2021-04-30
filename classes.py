@@ -43,14 +43,15 @@ class SESSIONS():
     IS_FULL: bool = field(default_factory=lambda: False)
     MATCHES: list[str] = field(default_factory=lambda: [])
     WINNER: str = field(default_factory=lambda: 'N/A')
+    LOSER: str = field(default_factory=lambda: 'N/A')
     TIMESTAMP: str = now
 
 @dataclass(frozen=True, order=True)
 class MATCHES():
     USER: str
-    RANKED: bool
-    NORMAL: bool
-    MATCHES: list
+    RANKED: bool = field(default_factory=lambda: False)
+    NORMAL: bool = field(default_factory=lambda: True)
+    WIN: bool = field(default_factory=lambda: False)
     TIMESTAMP: str = now
 
 @dataclass(frozen=True, order=True)
@@ -103,6 +104,9 @@ def newGame(game):
     g = GAMES(**game)
     return asdict(g)
 
+def newMatch(match):
+    m = MATCH(**match)
+    return asdict(m)
 
 
 
