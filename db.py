@@ -92,10 +92,10 @@ def deleteUser(users):
         print("Delete User failed.")
 
 '''Updates User data'''
-def updateUser(query, new_value):
+def updateUser(query, new_value, arrayFilters):
     exists = user_exists({'DISNAME': query['DISNAME']})
     if exists:
-        update = users_col.update_one(query, new_value, upsert=True)
+        update = users_col.update_one(query, new_value, array_filters=arrayFilters)
         return "Update completed. "
     else:
         return "Update failed. "
@@ -277,26 +277,6 @@ def querySession(session):
     except:
         return "Find Session failed."
 
-'''Query Session Members'''
-def querySessionMembers(session):
-    data = sessions_col.find_one(session)
-    return data
- 
-
-'''Query Session'''
-def querySessionWinner(session):
-    try:
-        exists = session_exist({'OWNER': session['OWNER'],'TYPE' : session['TYPE'], })
-        if exists:
-            data = sessions_col.find_one(session)
-            return data
-        else:
-            return False
-           
-    except:
-        return "Find Session failed."
-
-
 '''Create Session'''
 def createSession(session):
     exists = session_exist({'OWNER': session['OWNER'], 'AVAILABLE': True})
@@ -332,7 +312,6 @@ def joinSession(session, query):
 def endSession(session):
     exists = session_exist({'OWNER': session['OWNER'], 'AVAILABLE': True})
     if exists:
-        '''save session values, run score query-> insert into matches database''' 
         sessions_col.update_one(session, {'$set': {'AVAILABLE': False}})
         return 'Session Ended'
     else:
@@ -346,20 +325,3 @@ def updateSession(session, query, update_query):
         return True
     else:
         return False
-
-
-'''Check If Match Exist 
-def match_exist(data):
-    collection_exists = col_exists("MATCH")
-    if collection_exists:
-        sessionexists = matches_col.find_one(data)
-        if sessionexists:
-            return True
-        else:
-            return False
-    else:
-        return False'''
-
-
-# '''Save Winner Of Session'''
-# def exhibitions(session):

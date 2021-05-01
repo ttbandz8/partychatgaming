@@ -4,6 +4,7 @@ import classes as data
 import test_data as td
 import discord
 from discord.ext import commands
+from PIL import Image, ImageFont, ImageDraw
 
 # Converters
 from discord import User
@@ -71,7 +72,7 @@ async def lk(ctx, user: User):
 
       
 
-      embedVar = discord.Embed(title=f"{name}'s profile".format(client), description="Party Chat Gaming Database", colour=000000)
+      embedVar = discord.Embed(title=f"{name}'s Profile Card".format(client), description="Party Chat Gaming Database", colour=000000)
       embedVar.set_thumbnail(url=avatar)
       embedVar.add_field(name="Game", value=' '.join(str(x) for x in games))
       embedVar.add_field(name="In-Game Name", value="\n".join(f'{v}' for k,v in ign_to_string.items()))
@@ -105,10 +106,30 @@ async def flex(ctx):
       normal_to_string = dict(ChainMap(*normal))
       ign_to_string = dict(ChainMap(*ign))
 
+      game_text = ' '.join(str(x) for x in games)
+      titles_text = ' '.join(str(x) for x in titles)
+      teams_text = ' '.join(str(x) for x in teams)
+
+      
+      img = Image.open("GAMES.png")
+
+      draw = ImageDraw.Draw(img)
+      header = ImageFont.truetype("Roboto-Regular.ttf", 86)
+      p = ImageFont.truetype("Roboto-Regular.ttf", 36)
+
+      draw.text((350,50), name, (0,0,0), font=header)
+      draw.text((350, 400), game_text, (255, 255, 255), font=p)
+      draw.text((170, 600), titles_text, (255, 255, 255), font=p)
+      draw.text((680, 600), teams_text, (255, 255, 255), font=p)
+      img.save("text.png")
+
+      await ctx.send(file=discord.File("text.png"))
+
+
 
       
 
-      embedVar = discord.Embed(title=f"{name}'s profile".format(client), description="Party Chat Gaming Database", colour=000000)
+      embedVar = discord.Embed(title=f"My Profile Card", description="Party Chat Gaming Database", colour=000000)
       embedVar.set_thumbnail(url=avatar)
       embedVar.add_field(name="Game", value=' '.join(str(x) for x in games))
       embedVar.add_field(name="In-Game Name", value="\n".join(f'{v}' for k,v in ign_to_string.items()))
@@ -117,7 +138,7 @@ async def flex(ctx):
       embedVar.add_field(name="Ranked", value="\n".join(f'{k}: {"/".join([str(int) for int in v])}' for k,v in ranked_to_string.items()))
       embedVar.add_field(name="Normals", value="\n".join(f'{k}: {"/".join([str(int) for int in v])}' for k,v in normal_to_string.items()))
       embedVar.add_field(name="Tournament Wins", value=tournament_wins)
-      await ctx.send(embed=embedVar, delete_after=15)
+      # await ctx.send(embed=embedVar, delete_after=15)
    else:
       await ctx.send("User does not exist in the system. ", delete_after=3)
 
@@ -676,56 +697,49 @@ async def sw(ctx):
    db.updateSession(session, query, update_query)
    await ctx.send(winner['TEAM'], delete_after=5)
 
-# @bot.command()
-# @commands.check(validate_user)
-# async def sl(ctx):
-#    session_query = {"OWNER": str(ctx.author), "AVAILABLE": True}
-#    session_data = db.querySession(session_query)
-#    teams = [x for x in session_data['TEAMS']]
-#    losing_team = {}
-#    low_score = teams[0]['SCORE']
-#    for x in teams:
-#       if x['SCORE'] <= low_score:
-#          low_score = x['SCORE']
-#          losing_team = x
-#    session_data['LOSER'] = losing_team
-#    loser = session_data['LOSER']
-#    session = session_data
-#    update_query = {'$set': {'LOSER': loser}}
-#    query = {"_id": session_data["_id"], "TEAMS.TEAM": str(ctx.author)}
-#    db.updateSession(session, query, update_query)
-#    game_type = "1v1"
-#    if session_data['RANKED'] == False:
-#       if session['TYPE'] == 1:
-#          game_type = "1v1"
-#       elif session['TYPE'] == 2:
-#          game_type = "2v2"
-#       elif session['TYPE'] == 3:
-#          game_type = "3v3"
-#       elif session['TYPE'] == 4:
-#          game_type = "4v4"
-#       elif session['TYPE'] == 5:
-#          game_type = "5v5"
-#       # print(losing_team)
-#       # print(losing_team['TEAM'])
-#       for x in losing_team['TEAM']:
-#          player = db.queryUser({'DISNAME': x})
-#          testlist = [x for x in player['RANKED']]
-#          current_score = 2
-#          for y in testlist:
-#             current_score = y[game_type][1]
-#          print(current_score)
-#          # query = {'DISNAME' : x}
-#          # new_value = {'$set': {'RANKED.{game_type}'} 
-#          # db.updateUser(query,)
-#    else :
-#       print("hello world")
+@bot.command()
+@commands.check(validate_user)
+async def sl(ctx):
+   session_query = {"OWNER": str(ctx.author), "AVAILABLE": True}
+   session_data = db.querySession(session_query)
+   teams = [x for x in session_data['TEAMS']]
+   losing_team = {}
+   low_score = teams[0]['SCORE']
+   for x in teams:
+      if x['SCORE'] <= low_score:
+         low_score = x['SCORE']
+         losing_team = x
+   session_data['LOSER'] = losing_team
+   loser = session_data['LOSER']
+   session = session_data
+   update_query = {'$set': {'LOSER': loser}}
+   query = {"_id": session_data["_id"], "TEAMS.TEAM": str(ctx.author)}
+   db.updateSession(session, query, update_query)
+   game_type = ""
+   if session_data['RANKED'] == False:
+      if session['TYPE'] == 1:
+         game_type = "1v1"
+      elif session['TYPE'] == 2:
+         game_type = "2v2"
+      elif session['TYPE'] == 3:
+         game_type = "3v3"
+      elif session['TYPE'] == 4:
+         game_type = "4v4"
+      elif session['TYPE'] == 5:
+         game_type = "5v5"
 
-
-
-
-
-
+      for x in losing_team['TEAM']:
+         player = db.queryUser({'DISNAME': x})
+         types_of_matches_list = [x for x in player['NORMAL']]
+         types_of_matches = dict(ChainMap(*types_of_matches_list))
+         current_score = types_of_matches[game_type.upper()]
+         # print(current_score)
+         query = {'DISNAME': player['DISNAME']}
+         new_value = {"$inc": {'NORMAL.$[type].' + game_type.upper() + '.1': 1}}
+         filter_query = [{'type.' + game_type.upper(): current_score}]
+         db.updateUser(query, new_value, filter_query)
+   else :
+      print("hello world")
    # await ctx.send(loser['TEAM'], delete_after=5)
 
 
