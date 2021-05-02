@@ -85,17 +85,116 @@ async def lk(ctx, user: User):
    else:
       await ctx.send("User does not exist in the system. ", delete_after=3)
 
+'''TITLES'''
+@bot.command()
+@commands.check(validate_user)
+async def nt(ctx, args1: str, args2: int, args3: int, args4: int):
+   if ctx.author.guild_permissions.administrator == True:
+      title_query = {'TITLE': str(args1), 'WINS_REQUIREMENTS': int(args2), 'TOURNAMENT_REQUIREMENTS': int(args3), 'TIER': int(args4)}
+      added = db.createTitle(data.newTitle(title_query))
+      await ctx.send(added, delete_after=3)
+   else:
+      print("Nah Nigga this ain't going down like you think pussy boy")
+
+@bot.command()
+@commands.check(validate_user)
+async def at(ctx):
+   user_query = {'DISNAME': str(ctx.author)}
+   user = db.queryUser(user_query)
+   tournament_wins = user['TOURNAMENT_WINS']
+   # card_query = {'TOURNAMENT_REQUIREMENTS': tournament_wins}
+   resp = db.queryAllTitles()
+   titles = []
+   unavailable_titles = []
+   for title in resp:
+      if tournament_wins >= title['TOURNAMENT_REQUIREMENTS']:
+         titles.append(title['TITLE'])
+   
+   embedVar = discord.Embed(title=f"Your Available Titles", description="Titles are earned through valor and tournament achievements.", colour=000000)
+   embedVar.add_field(name="Unlocked Titles", value="\n".join(titles))
+   await ctx.send(embed=embedVar, delete_after=15)
+
+@bot.command()
+@commands.check(validate_user)
+async def ut(ctx, args):
+   user_query = {'DISNAME': str(ctx.author)}
+   user = db.queryUser(user_query)
+   tournament_wins = user['TOURNAMENT_WINS']
+   title_query = {'TOURNAMENT_REQUIREMENTS': tournament_wins}
+   resp = db.queryAllTitles()
+   titles = []
+   for title in resp:
+      if tournament_wins >= title['TOURNAMENT_REQUIREMENTS']:
+         titles.append(title['TITLE'])
+   if args in titles:
+      response = db.updateUserNoFilter(user_query, {'$set': {'TITLE': args}})
+      await ctx.send(response)
+   else:
+      return "Unable to update title."
+
+'''CARDS'''
+@bot.command()
+@commands.check(validate_user)
+async def nc(ctx, args1: str, args2: str, args3: int, args4: int, args5: int):
+   if ctx.author.guild_permissions.administrator == True:
+      card_query = {'PATH': str(args1), 'NAME': str(args2), 'WINS_REQUIREMENTS': int(args3), 'TOURNAMENT_REQUIREMENTS': int(args4), 'TIER': int(args5)}
+      added = db.createCard(data.newCard(card_query))
+      await ctx.send(added, delete_after=3)
+   else:
+      print("Nah Nigga this ain't going down like you think pussy boy")
+
+
+@bot.command()
+@commands.check(validate_user)
+async def ac(ctx):
+   user_query = {'DISNAME': str(ctx.author)}
+   user = db.queryUser(user_query)
+   tournament_wins = user['TOURNAMENT_WINS']
+   # card_query = {'TOURNAMENT_REQUIREMENTS': tournament_wins}
+   resp = db.queryAllCards()
+   cards = []
+   unavailable_cards = []
+   for card in resp:
+      if tournament_wins >= card['TOURNAMENT_REQUIREMENTS']:
+         cards.append(card['NAME'])
+   
+   embedVar = discord.Embed(title=f"Your Available Cards", description="Cards are earned through valor and tournament achievements.", colour=000000)
+   embedVar.add_field(name="Unlocked Cards", value="\n".join(cards))
+   await ctx.send(embed=embedVar, delete_after=15)
+
+
+@bot.command()
+@commands.check(validate_user)
+async def uc(ctx, args):
+   user_query = {'DISNAME': str(ctx.author)}
+   user = db.queryUser(user_query)
+   tournament_wins = user['TOURNAMENT_WINS']
+   card_query = {'TOURNAMENT_REQUIREMENTS': tournament_wins}
+   resp = db.queryAllCards()
+   cards = []
+   for card in resp:
+      if tournament_wins >= card['TOURNAMENT_REQUIREMENTS']:
+         cards.append(card['NAME'])
+   if args in cards:
+      response = db.updateUserNoFilter(user_query, {'$set': {'CARD': args}})
+      await ctx.send(response)
+   else:
+      return "Unable to update card."
+ 
+
 @bot.command()
 async def flex(ctx):
    query = {'DISNAME': str(ctx.author)}
    d = db.queryUser(query)
+
+   card = db.queryCard({'NAME': d['CARD']})
 
    if d:
       name = d['DISNAME'].split("#",1)[0]
       games = d['GAMES']
       ign = d['IGN']
       teams = d['TEAMS']
-      titles = d['TITLES']
+      title = d['TITLE']
       avatar = d['AVATAR']
       ranked = d['RANKED']
       normal = d['NORMAL']
@@ -107,20 +206,30 @@ async def flex(ctx):
       ign_to_string = dict(ChainMap(*ign))
 
       game_text = ' '.join(str(x) for x in games)
-      titles_text = ' '.join(str(x) for x in titles)
+      titles_text = ' '.join(str(x) for x in title)
       teams_text = ' '.join(str(x) for x in teams)
+      normals_text = "\n".join(f'{k}: {"/".join([str(int) for int in v])}' for k,v in normal_to_string.items())
+      ranked_text = "\n".join(f'{k}: {"/".join([str(int) for int in v])}' for k,v in ranked_to_string.items())
 
       
-      img = Image.open("GAMES.png")
+      img = Image.open(requests.get(card['PATH'], stream=True).raw)
 
       draw = ImageDraw.Draw(img)
-      header = ImageFont.truetype("Roboto-Regular.ttf", 86)
-      p = ImageFont.truetype("Roboto-Regular.ttf", 36)
+      header = ImageFont.truetype("KomikaTitle-Paint.ttf", 60)
+      tournament_wins_font = ImageFont.truetype("RobotoCondensed-Bold.ttf", 35)
+      p = ImageFont.truetype("Roboto-Bold.ttf", 25)
 
-      draw.text((350,50), name, (0,0,0), font=header)
-      draw.text((350, 400), game_text, (255, 255, 255), font=p)
-      draw.text((170, 600), titles_text, (255, 255, 255), font=p)
-      draw.text((680, 600), teams_text, (255, 255, 255), font=p)
+      profile_pic = Image.open(requests.get(d['AVATAR'], stream=True).raw)
+      profile_pic_resized = profile_pic.resize((120, 120), resample=0)
+      img.paste(profile_pic_resized, (1045, 30))
+      draw.text((95,45), name, (255, 255, 255), font=header, align="left")
+      draw.text((5,65), str(tournament_wins), (255, 255, 255), font=tournament_wins_font, align="center")
+      draw.text((60, 320), game_text, (255, 255, 255), font=p, align="center")
+      draw.text((368, 320), teams_text, (255, 255, 255), font=p, align="center")
+      draw.text((650, 320), titles_text, (255, 255, 255), font=p, align="center")
+      draw.text((865, 320), normals_text, (255, 255, 255), font=p, align="center")
+      draw.text((1040, 320), ranked_text, (255, 255, 255), font=p, align="center")
+
       img.save("text.png")
 
       await ctx.send(file=discord.File("text.png"))
@@ -129,15 +238,15 @@ async def flex(ctx):
 
       
 
-      embedVar = discord.Embed(title=f"My Profile Card", description="Party Chat Gaming Database", colour=000000)
-      embedVar.set_thumbnail(url=avatar)
-      embedVar.add_field(name="Game", value=' '.join(str(x) for x in games))
-      embedVar.add_field(name="In-Game Name", value="\n".join(f'{v}' for k,v in ign_to_string.items()))
-      embedVar.add_field(name="Teams", value=' '.join(str(x) for x in teams))
-      embedVar.add_field(name="Titles", value=' '.join(str(x) for x in titles))
-      embedVar.add_field(name="Ranked", value="\n".join(f'{k}: {"/".join([str(int) for int in v])}' for k,v in ranked_to_string.items()))
-      embedVar.add_field(name="Normals", value="\n".join(f'{k}: {"/".join([str(int) for int in v])}' for k,v in normal_to_string.items()))
-      embedVar.add_field(name="Tournament Wins", value=tournament_wins)
+      # embedVar = discord.Embed(title=f"My Profile Card", description="Party Chat Gaming Database", colour=000000)
+      # embedVar.set_thumbnail(url=avatar)
+      # embedVar.add_field(name="Game", value=' '.join(str(x) for x in games))
+      # embedVar.add_field(name="In-Game Name", value="\n".join(f'{v}' for k,v in ign_to_string.items()))
+      # embedVar.add_field(name="Teams", value=' '.join(str(x) for x in teams))
+      # embedVar.add_field(name="Titles", value=' '.join(str(x) for x in titles))
+      # embedVar.add_field(name="Ranked", value="\n".join(f'{k}: {"/".join([str(int) for int in v])}' for k,v in ranked_to_string.items()))
+      # embedVar.add_field(name="Normals", value="\n".join(f'{k}: {"/".join([str(int) for int in v])}' for k,v in normal_to_string.items()))
+      # embedVar.add_field(name="Tournament Wins", value=tournament_wins)
       # await ctx.send(embed=embedVar, delete_after=15)
    else:
       await ctx.send("User does not exist in the system. ", delete_after=3)
@@ -181,21 +290,21 @@ async def ag(ctx, *args):
       if title not in user_data['GAMES'] and ign != True:
          if "PCG" in user_data['GAMES']:
             query_to_update_game = {"$set": {"GAMES": [title]}}
-            resp = db.updateUser(user, query_to_update_game)
+            resp = db.updateUserNoFilter(user, query_to_update_game)
             ctx.send(resp, delete_after=5)
          else:
             query_to_update_game = {"$addToSet": {"GAMES": title}}
-            resp = db.updateUser(user, query_to_update_game)
+            resp = db.updateUserNoFilter(user, query_to_update_game)
             ctx.send(resp, delete_after=5)
       elif title not in user_data['GAMES'] and ign == True:
          if "PCG" in user_data['GAMES']:
             query_to_update_game = {"$set": {"GAMES": [title], "IGN": [{title : args[1]}]}}
-            resp = db.updateUser(user, query_to_update_game)
+            resp = db.updateUserNoFilter(user, query_to_update_game)
             await ctx.send(resp, delete_after=5)
          else:
 
             query_to_update_game = {"$addToSet": {"GAMES": title, "IGN": {title : args[1]}}}
-            resp = db.updateUser(user, query_to_update_game)
+            resp = db.updateUserNoFilter(user, query_to_update_game)
             await ctx.send(resp, delete_after=5)
 
 @bot.command()
@@ -211,7 +320,7 @@ async def uign(ctx, args1, args2):
       ign = game['IGN']
       if ign:
          update_query = {"$set": {"IGN": [{title : new_ign}]}}
-         updated = db.updateUser(user, update_query)
+         updated = db.updateUserNoFilter(user, update_query)
          await ctx.send(updated)
       else:
          await ctx.send("In Game Names unavailable for this game. ", delete_after=3)

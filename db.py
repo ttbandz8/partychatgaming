@@ -12,6 +12,8 @@ sessions_col = db["SESSIONS"]
 games_col = db["GAMES"]
 matches_col = db["MATCHES"]
 tournaments_col = db["TOURNAMENTS"]
+cards_col = db["CARDS"]
+titles_col = db["TITLES"]
 
 '''Check if Collection Exists'''
 def col_exists(col):
@@ -32,6 +34,75 @@ def user_exists(data):
             return False
     else:
         return False
+
+'''Check If Card Exists'''
+def card_exists(data):
+    collection_exists = col_exists("CARDS")
+    if collection_exists:
+        card_does_exist = cards_col.find_one(data)
+        if card_does_exist:
+            return True
+        else:
+            return False
+    else:
+        return False
+
+'''New Card'''
+def createCard(card):
+    try:
+        cardexists = card_exists({'PATH': card['PATH']})
+        if cardexists:
+            return "Card already exists."
+        else:
+            cards_col.insert_one(card)
+            return "New Card created."
+    except:
+        return "Cannot create card."
+
+def queryAllCards():
+    data = cards_col.find()
+    return data
+
+def queryCard(query):
+    data = cards_col.find_one(query)
+    return data
+
+
+'''Check If Title Exists'''
+def title_exists(data):
+    collection_exists = col_exists("TITLES")
+    if collection_exists:
+        title_does_exist = titles_col.find_one(data)
+        if title_does_exist:
+            return True
+        else:
+            return False
+    else:
+        return False
+
+'''New Title'''
+def createTitle(title):
+    try:
+        titleexists = title_exists({'TITLE': title['TITLE']})
+        if titleexists:
+            return "Title already exists."
+        else:
+            titles_col.insert_one(title)
+            return "New Title created."
+    except:
+        return "Cannot create Title."
+
+def queryAllTitles():
+    data = titles_col.find()
+    return data
+
+def queryTitle(query):
+    data = titles_col.find_one(query)
+    return data
+
+
+
+
 
 '''Query User'''
 def queryUser(user):
@@ -96,6 +167,14 @@ def updateUser(query, new_value, arrayFilters):
     exists = user_exists({'DISNAME': query['DISNAME']})
     if exists:
         update = users_col.update_one(query, new_value, array_filters=arrayFilters)
+        return "Update completed. "
+    else:
+        return "Update failed. "
+
+def updateUserNoFilter(query, new_value):
+    exists = user_exists({'DISNAME': query['DISNAME']})
+    if exists:
+        update = users_col.update_one(query, new_value)
         return "Update completed. "
     else:
         return "Update failed. "
@@ -325,3 +404,4 @@ def updateSession(session, query, update_query):
         return True
     else:
         return False
+

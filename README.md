@@ -12,6 +12,9 @@
     Join Session = >js @owner
     End Session = >es
     SCORE = >score @user_from_team_who_scored
+    nc = Add Card (admin only)
+    ac = Available Cards
+    uc = Update your card
 
 # Classes 
     Whenever you see data.something() we are using the data classes to pass default values
