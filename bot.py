@@ -73,15 +73,15 @@ async def lk(ctx, user: User):
 
       
 
-      embedVar = discord.Embed(title=f"{name}'s Profile Card".format(client), description="Party Chat Gaming Database", colour=000000)
+      embedVar = discord.Embed(title= f":triangular_flag_on_post: " + f"{name}".format(client), description=":bank: Party Chat Gaming Database™️", colour=000000)
       embedVar.set_thumbnail(url=avatar)
-      embedVar.add_field(name="Game", value=' '.join(str(x) for x in games))
-      embedVar.add_field(name="In-Game Name", value="\n".join(f'{v}' for k,v in ign_to_string.items()))
-      embedVar.add_field(name="Teams", value=' '.join(str(x) for x in teams))
-      embedVar.add_field(name="Titles", value=' '.join(str(x) for x in titles))
-      embedVar.add_field(name="Ranked", value="\n".join(f'{k}: {"/".join([str(int) for int in v])}' for k,v in ranked_to_string.items()))
-      embedVar.add_field(name="Normals", value="\n".join(f'{k}: {"/".join([str(int) for int in v])}' for k,v in normal_to_string.items()))
-      embedVar.add_field(name="Tournament Wins", value=tournament_wins)
+      embedVar.add_field(name="Game" + " :video_game:" , value=' '.join(str(x) for x in games))
+      embedVar.add_field(name="In-Game Name" + " :selfie:", value="\n".join(f'{v}' for k,v in ign_to_string.items()))
+      embedVar.add_field(name="Teams" + " :military_helmet:", value=' '.join(str(x) for x in teams))
+      embedVar.add_field(name="Titles" + " :crown:", value=' '.join(str(x) for x in titles))
+      embedVar.add_field(name="Ranked" + " :medal:", value="\n".join(f'{k}: {"/".join([str(int) for int in v])}' for k,v in ranked_to_string.items()))
+      embedVar.add_field(name="Normals" + " :crossed_swords:", value="\n".join(f'{k}: {"/".join([str(int) for int in v])}' for k,v in normal_to_string.items()))
+      embedVar.add_field(name="Tournament Wins" + " :fireworks:", value=tournament_wins)
       await ctx.send(embed=embedVar, delete_after=15)
    else:
       await ctx.send("User does not exist in the system. ", delete_after=3)
@@ -345,7 +345,6 @@ async def c1v1(ctx, args):
       await ctx.send(resp, delete_after=5)
 
 
-
 @bot.command()
 @commands.check(validate_user)
 async def c2v2(ctx, args, user1: User):
@@ -514,10 +513,10 @@ async def score(ctx, user: User):
    response = db.updateSession(session_query, query, update_query)
    reciever = db.queryUser({'DISNAME': str(user)})
    name = reciever['DISNAME']
-   message = "You Scored, Don't Let Up"
+   message = ":one: You Scored, Don't Let Up :one:"
    await DM(ctx, user, message)
    if response:
-      await ctx.send(f"{user.mention}" +f"+1", delete_after=2)
+      await ctx.send(f"{user.mention}" +f" :heavy_plus_sign::one:", delete_after=2)
    else:
       await ctx.send(f"Score not added. Please, try again. ", delete_after=5)
 
@@ -547,8 +546,8 @@ async def invite(ctx, args, user1: User):
    validate_opponent = db.queryUser({'DISNAME': str(user1)})
 
    if validate_opponent:
-      await DM(ctx, user1, f"{ctx.author.mention}" + "has challeneged you...")
-      accept = await ctx.send(f"{user1.mention}, Will you join the session?", delete_after=15)
+      await DM(ctx, user1, f"{ctx.author.mention}" + " has challeneged you... :eyes:")
+      accept = await ctx.send(f"{user1.mention}, Will you join the session? :fire:", delete_after=15)
       for emoji in emojis:
          await accept.add_reaction(emoji)
 
@@ -962,7 +961,7 @@ async def sw(ctx):
          db.updateUser(query, new_value, filter_query)
          uid = player['DID']
          user = await bot.fetch_user(uid)
-         await DM(ctx, user, "You Won. Doesnt Prove Much Tho")
+         await DM(ctx, user, "You Won. Doesnt Prove Much Tho :yawning_face:")
          await ctx.send(f"Competitor " + f"{user.mention}" + " earns a victory ! :100:", delete_after=5)
 
    else :
@@ -1009,7 +1008,7 @@ async def sl(ctx):
          db.updateUser(query, new_value, filter_query)
          uid = player['DID']
          user = await bot.fetch_user(uid)
-         await DM(ctx, user, "You Lost. Try Again")
+         await DM(ctx, user, "You Lost. Get back in there :poop:")
          await ctx.send(f"Competitor " + f"{user.mention}" + " took another L! :eyes:", delete_after=5)
    else :
       print("hello world")
