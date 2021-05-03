@@ -527,6 +527,13 @@ async def es(ctx):
    end = db.endSession(session_query)
    await ctx.send(end, delete_after=5)
 
+@bot.command()
+@commands.check(validate_user)
+async def ds(ctx):
+   session_query = {"OWNER": str(ctx.author), "AVAILABLE": True}
+   response = db.deleteSession(session_query)
+   await ctx.send(response, delete_after=5)
+
 
 @bot.command()
 @commands.check(validate_user)
@@ -537,7 +544,7 @@ async def invite(ctx, args, user1: User):
 
    if validate_opponent:
       await DM(ctx, user1, f"{ctx.author.mention}" + "has challeneged you...")
-      accept = await ctx.send("Will you join the session?", delete_after=10)
+      accept = await ctx.send(f"{user1.mention}, Will you join the session?", delete_after=15)
       for emoji in emojis:
          await accept.add_reaction(emoji)
 
@@ -546,17 +553,16 @@ async def invite(ctx, args, user1: User):
       try:
          reaction, user = await bot.wait_for('reaction_add', timeout=10.0, check=check)
 
-
-         session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 1, "TEAMS": [{"TEAM": [str(ctx.author)], "SCORE": 0, "POSITION": 0}]}
-         join_query = {"TEAM" : [str(user1)], "SCORE": 0, "POSITION": 1}
+         session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 1, "TEAMS": [{"TEAM": [str(ctx.author)], "SCORE": 0, "POSITION": 0}], "AVAILABLE": True}
+         join_query = {"TEAM": [str(user1)], "SCORE": 0, "POSITION": 1}
          if args == "n":
             session = db.createSession(data.newSession(session_query))
-            resp = db.joinSession(session, join_query)
+            resp = db.joinSession(session_query, join_query)
             await ctx.send(resp, delete_after=5)
          elif args == "r":
-            session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 1, "TEAMS": [{"TEAM": [str(ctx.author)], "SCORE": 0, "POSITION": 0}], "RANKED": True}
+            session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 1, "TEAMS": [{"TEAM": [str(ctx.author)], "SCORE": 0, "POSITION": 0}], "RANKED": True, "AVAILABLE": True}
             session = db.createSession(data.newSession(session_query))
-            resp = db.joinSession(session, join_query)
+            resp = db.joinSession(session_query, join_query)
             await ctx.send(resp, delete_after=5)
       except:
          await ctx.send("Did not work")

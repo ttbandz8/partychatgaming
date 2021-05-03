@@ -380,10 +380,15 @@ def joinSession(session, query):
     sessionquery = querySession(session)
     matchtype = sessionquery['TYPE']
     if matchtype == len(query['TEAM']):
+        # List of current teams in session
         p = [x for x in sessionquery['TEAMS']]
+        
+        # Check if team trying to join is part of a team already
         list_matching = [x for x in p[0]['TEAM'] if x in query['TEAM']]
+
         if len(list_matching) == 0:
             teaminsert = sessions_col.update_one(session, {'$addToSet': {'TEAMS': query}, '$set': {'IS_FULL': True}})
+
             return 'Session Joined'
         else: 
             return 'Session full.'
@@ -397,6 +402,15 @@ def endSession(session):
     exists = session_exist({'OWNER': session['OWNER'], 'AVAILABLE': True})
     if exists:
         sessions_col.update_one(session, {'$set': {'AVAILABLE': False}})
+        return 'Session Ended'
+    else:
+        return 'Session Unavailable'
+
+'''End Session'''
+def deleteSession(session):
+    exists = session_exist({'OWNER': session['OWNER'], 'AVAILABLE': True})
+    if exists:
+        sessions_col.delete_one({'OWNER': session['OWNER'], 'AVAILABLE': True})
         return 'Session Ended'
     else:
         return 'Session Unavailable'
