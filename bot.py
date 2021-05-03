@@ -629,25 +629,49 @@ async def s(ctx, user: User):
          ranked = "Normal"
 
       teams = [x for x in session['TEAMS']]
+    
       team_list = []
-      for x in teams:
-         for members in x['TEAM']:
-            mem_query = db.queryUser({'DISNAME': members})
-            ign_list = [x for x in mem_query['IGN']]
-            ign_list_keys = [k for k in ign_list[0].keys()]
-            if ign_list_keys == [games]:
-               team_list.append(f"{ign_list[0][games]}: {x['SCORE']}")
-            else:
-               team_list.append(f"{members}: {x['SCORE']}")
+      team_1 = [x for x in teams if x['POSITION'] == 0] # position 0
+      team_2 = [x for x in teams if x['POSITION'] == 1] # position 1
 
-      print(team_list)
+      team_1_comp = ""
+      team_2_comp = ""
+
+      team_1_score = ""
+      team_2_score = ""
+
+      for x in team_1:
+         # n = x['TEAM'].split("#",1)[1]
+         team_1_comp = "\n".join(x['TEAM'])
+         team_1_score = f" Score: {x['SCORE']}"
+
+      
+      for x in team_2:
+         team_2_comp = "\n".join(x['TEAM'])
+         team_2_score = f" Score: {x['SCORE']}"
+
+      # for x in team_1:
+      #    for members in x['TEAM']:
+      #       mem_query = db.queryUser({'DISNAME': members})
+      #       ign_list = [x for x in mem_query['IGN']]
+      #       ign_list_keys = [k for k in ign_list[0].keys()]
+      #       if ign_list_keys == [games]:
+      #          team_list.append(f"{ign_list[0][games]}: {x['SCORE']}")
+      #       else:
+      #          team_list.append(f"{members}: {x['SCORE']}")
+
+      # print(team_1)
 
 
       embedVar = discord.Embed(title=f"{name}'s {games} Session ".format(bot), description="Party Chat Gaming Database", colour=000000)
       embedVar.set_thumbnail(url=avatar)
       embedVar.add_field(name="Match Type", value=f'{game_type}'.format(bot))
       embedVar.add_field(name="Ranked", value=f'{ranked}'.format(bot))
-      embedVar.add_field(name="Competitors", value="\n".join(f'{t}'.format(bot) for t in team_list), inline=False)
+      embedVar.add_field(name=f"Team 1 - {team_1_score}", value=team_1_comp, inline=False)
+      if team_2_comp:
+         embedVar.add_field(name=f"Team 2 - {team_2_score}", value=team_2_comp, inline=False)
+      else:
+         await ctx.send("No one has joined to compete. ", delete_after=5)
       await ctx.send(embed=embedVar, delete_after=15)
    else:
       await ctx.send("Session does not exist. ", delete_after=5)
@@ -899,22 +923,49 @@ async def cs(ctx, user: User):
          ranked = "Normal"
 
       teams = [x for x in session['TEAMS']]
+    
       team_list = []
-      for x in teams:
-         for members in x['TEAM']:
-            mem_query = db.queryUser({'DISNAME': members})
-            ign_list = [x for x in mem_query['IGN']]
-            ign_list_keys = [k for k in ign_list[0].keys()]
-            if ign_list_keys == [games]:
-               team_list.append(f"{ign_list[0][games]}: {x['SCORE']}")
-            else:
-               team_list.append(f"{members}: {x['SCORE']}")
+      team_1 = [x for x in teams if x['POSITION'] == 0] # position 0
+      team_2 = [x for x in teams if x['POSITION'] == 1] # position 1
+
+      team_1_comp = ""
+      team_2_comp = ""
+
+      team_1_score = ""
+      team_2_score = ""
+
+      for x in team_1:
+         # n = x['TEAM'].split("#",1)[1]
+         team_1_comp = "\n".join(x['TEAM'])
+         team_1_score = f" Score: {x['SCORE']}"
+
+      
+      for x in team_2:
+         team_2_comp = "\n".join(x['TEAM'])
+         team_2_score = f" Score: {x['SCORE']}"
+
+      # for x in team_1:
+      #    for members in x['TEAM']:
+      #       mem_query = db.queryUser({'DISNAME': members})
+      #       ign_list = [x for x in mem_query['IGN']]
+      #       ign_list_keys = [k for k in ign_list[0].keys()]
+      #       if ign_list_keys == [games]:
+      #          team_list.append(f"{ign_list[0][games]}: {x['SCORE']}")
+      #       else:
+      #          team_list.append(f"{members}: {x['SCORE']}")
+
+      # print(team_1)
+
 
       embedVar = discord.Embed(title=f"{name}'s {games} Session ".format(bot), description="Party Chat Gaming Database", colour=000000)
       embedVar.set_thumbnail(url=avatar)
       embedVar.add_field(name="Match Type", value=f'{game_type}'.format(bot))
       embedVar.add_field(name="Ranked", value=f'{ranked}'.format(bot))
-      embedVar.add_field(name="Competitors", value="\n".join(f'{t}'.format(bot) for t in team_list), inline=False)
+      embedVar.add_field(name=f"Team 1 - {team_1_score}", value=team_1_comp, inline=False)
+      if team_2_comp:
+         embedVar.add_field(name=f"Team 2 - {team_2_score}", value=team_2_comp, inline=False)
+      else:
+         await ctx.send("No one has joined to compete. ", delete_after=5)
       await ctx.send(embed=embedVar, delete_after=15)
    else:
       await ctx.send("Session does not exist. ", delete_after=5)
