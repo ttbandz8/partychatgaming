@@ -369,7 +369,7 @@ def createSession(session):
     else:
         players_per_team_count = [x for x in session['TEAMS'][0]['TEAM']]
         if session['TYPE'] != len(players_per_team_count):
-            print(players_per_team_count)
+
             return "Team and Session Type do not match. "
         else:
             sessions_col.insert_one(session)
