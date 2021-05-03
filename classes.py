@@ -16,7 +16,7 @@ class USER():
     RANKED: list = field(default_factory=lambda: [{'1V1': [0, 0, 0]}, {'2V2': [0, 0, 0]}, {'3V3': [0, 0, 0]}, {'4V4': [0, 0, 0]}, {'5V5': [0, 0, 0]}])
     NORMAL: list = field(default_factory=lambda: [{'1V1': [0, 0, 0]}, {'2V2': [0, 0, 0]}, {'3V3': [0, 0, 0]}, {'4V4': [0, 0, 0]}, {'5V5': [0, 0, 0]}])
     TOURNAMENT_WINS: int = field(default_factory=lambda: 0)
-    AVAILABLE: bool = field(default_factory=lambda: False)
+    AVAILABLE: bool = field(default_factory=lambda: True)
     TIMESTAMP: str = now
 
 

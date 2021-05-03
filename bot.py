@@ -58,7 +58,7 @@ async def lk(ctx, user: User):
       games = d['GAMES']
       ign = d['IGN']
       teams = d['TEAMS']
-      titles = d['TITLES']
+      titles = d['TITLE']
       avatar = d['AVATAR']
       ranked = d['RANKED']
       normal = d['NORMAL']
@@ -350,7 +350,7 @@ async def c2v2(ctx, args, user1: User):
    validate_teammate = db.queryUser({'DISNAME': str(user1)})
 
    if validate_teammate:
-      accept = await ctx.send("Will you join the session?", delete_after=10)
+      accept = await ctx.send(f"{user1.mention}, Will you join the session?", delete_after=10)
       for emoji in emojis:
          await accept.add_reaction(emoji)
 
@@ -618,9 +618,7 @@ async def s(ctx, user: User):
       teams = [x for x in session['TEAMS']]
       team_list = []
       for x in teams:
-         print(x)
          for members in x['TEAM']:
-            print(members)
             mem_query = db.queryUser({'DISNAME': members})
             ign_list = [x for x in mem_query['IGN']]
             ign_list_keys = [k for k in ign_list[0].keys()]
@@ -628,6 +626,8 @@ async def s(ctx, user: User):
                team_list.append(f"{ign_list[0][games]}: {x['SCORE']}")
             else:
                team_list.append(f"{members}: {x['SCORE']}")
+
+      print(team_list)
 
 
       embedVar = discord.Embed(title=f"{name}'s {games} Session ".format(bot), description="Party Chat Gaming Database", colour=000000)
