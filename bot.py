@@ -920,7 +920,7 @@ async def sl(ctx):
          current_score = types_of_matches[game_type.upper()]
          # print(current_score)
          query = {'DISNAME': player['DISNAME']}
-         new_value = {"$inc": {'NORMAL.$[type].' + game_type.upper() + '.1': 0}}
+         new_value = {"$inc": {'NORMAL.$[type].' + game_type.upper() + '.1': 1}}
          filter_query = [{'type.' + game_type.upper(): current_score}]
          db.updateUser(query, new_value, filter_query)
          print("hi")
