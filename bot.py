@@ -275,7 +275,6 @@ async def d(ctx, user: User, args):
       await ctx.send("Invalid command", delete_after=5)
 
 
-
 @bot.command()
 @commands.check(validate_user)
 async def ag(ctx, *args):
@@ -327,7 +326,6 @@ async def uign(ctx, args1, args2):
    else:
       await ctx.send("Game is unavailable. ", delete_after=3)
    
-
 
 @bot.command()
 @commands.check(validate_user)
@@ -495,8 +493,6 @@ async def c5v5(ctx, args, user1: User, user2: User, user3: User, user4: User):
       await ctx.send("Users must register.", delete_after=5)
 
 
-
-
 @bot.command()
 @commands.check(validate_user)
 async def score(ctx, user: User):
@@ -511,17 +507,23 @@ async def score(ctx, user: User):
    update_query = {'$set': {'TEAMS.$.SCORE': new_score}}
    query = {"_id": session_data["_id"], "TEAMS.TEAM": str(user)}
    response = db.updateSession(session_query, query, update_query)
+   reciever = db.queryUser({'DISNAME': str(user)})
+   name = reciever['DISNAME']#.split("#",1)[0]
+   message = "You Scored, Don't Let Up"
+   await DM(ctx, user, message)
+  # DM(reciever,"You Scored, Keep it Up")
    if response:
       await ctx.send(f"+1", delete_after=2)
    else:
       await ctx.send(f"Score not added. Please, try again. ", delete_after=5)
 
 
-
 @bot.command()
 @commands.check(validate_user)
 async def es(ctx):
    session_query = {"OWNER": str(ctx.author), "AVAILABLE": True}
+   await sw(ctx)
+   await sl(ctx)
    end = db.endSession(session_query)
    await ctx.send(end, delete_after=5)
 
@@ -545,6 +547,61 @@ async def js(ctx, *user: User):
 @commands.check(validate_user)
 async def s(ctx, user: User):
    session_owner = {'OWNER': str(user), "AVAILABLE": True}
+   session = db.querySession(session_owner)
+   if session:
+      game_query = {'ALIASES': session['GAME']}
+      game = db.queryGame(game_query)
+
+      name = session['OWNER'].split("#",1)[0]
+      games = game['GAME']
+      avatar = game['IMAGE_URL']
+      game_type = " "
+      if session['TYPE'] == 1:
+         game_type = "1v1"
+      elif session['TYPE'] == 2:
+         game_type = "2v2"
+      elif session['TYPE'] == 3:
+         game_type = "3v3"
+      elif session['TYPE'] == 4:
+         game_type = "4v4"
+      elif session['TYPE'] == 5:
+         game_type = "5v5"
+
+      ranked = " "
+      if session['RANKED'] == True:
+         ranked = "Ranked"
+      elif session['RANKED'] == False:
+         ranked = "Normal"
+
+      teams = [x for x in session['TEAMS']]
+      team_list = []
+      for x in teams:
+         print(x)
+         for members in x['TEAM']:
+            print(members)
+            mem_query = db.queryUser({'DISNAME': members})
+            ign_list = [x for x in mem_query['IGN']]
+            ign_list_keys = [k for k in ign_list[0].keys()]
+            if ign_list_keys == [games]:
+               team_list.append(f"{ign_list[0][games]}: {x['SCORE']}")
+            else:
+               team_list.append(f"{members}: {x['SCORE']}")
+
+
+      embedVar = discord.Embed(title=f"{name}'s {games} Session ".format(bot), description="Party Chat Gaming Database", colour=000000)
+      embedVar.set_thumbnail(url=avatar)
+      embedVar.add_field(name="Match Type", value=f'{game_type}'.format(bot))
+      embedVar.add_field(name="Ranked", value=f'{ranked}'.format(bot))
+      embedVar.add_field(name="Competitors", value="\n".join(f'{t}'.format(bot) for t in team_list), inline=False)
+      await ctx.send(embed=embedVar, delete_after=15)
+   else:
+      await ctx.send("Session does not exist. ", delete_after=5)
+
+
+@bot.command()
+@commands.check(validate_user)
+async def ms(ctx):
+   session_owner = {'OWNER': str(ctx.author), "AVAILABLE": True}
    session = db.querySession(session_owner)
    if session:
       game_query = {'ALIASES': session['GAME']}
@@ -706,6 +763,7 @@ async def dtm(ctx, user1: User, *args):
    else:
       return "Only the owner remove team members. "
 
+
 @bot.command()
 @commands.check(validate_user)
 async def dt(ctx, *args):
@@ -764,9 +822,7 @@ async def cs(ctx, user: User):
       teams = [x for x in session['TEAMS']]
       team_list = []
       for x in teams:
-         print(x)
          for members in x['TEAM']:
-            print(members)
             mem_query = db.queryUser({'DISNAME': members})
             ign_list = [x for x in mem_query['IGN']]
             ign_list_keys = [k for k in ign_list[0].keys()]
@@ -785,8 +841,6 @@ async def cs(ctx, user: User):
       await ctx.send("Session does not exist. ", delete_after=5)
 
 
-@bot.command()
-@commands.check(validate_user)
 async def sw(ctx):
    session_query = {"OWNER": str(ctx.author), "AVAILABLE": True}
    session_data = db.querySession(session_query)
@@ -799,15 +853,37 @@ async def sw(ctx):
          winning_team = x
    session_data['WINNER'] = winning_team
    winner = session_data['WINNER']
-   print(winner)
    session = session_data
    update_query = {'$set': {'WINNER': winner}}
    query = {"_id": session_data["_id"], "TEAMS.TEAM": str(ctx.author)}
    db.updateSession(session, query, update_query)
-   await ctx.send(winner['TEAM'], delete_after=5)
+   game_type = ""
+   if session_data['RANKED'] == False:
+      if session['TYPE'] == 1:
+         game_type = "1v1"
+      elif session['TYPE'] == 2:
+         game_type = "2v2"
+      elif session['TYPE'] == 3:
+         game_type = "3v3"
+      elif session['TYPE'] == 4:
+         game_type = "4v4"
+      elif session['TYPE'] == 5:
+         game_type = "5v5"
 
-@bot.command()
-@commands.check(validate_user)
+      for x in winning_team['TEAM']:
+         player = db.queryUser({'DISNAME': x})
+         types_of_matches_list = [x for x in player['NORMAL']]
+         types_of_matches = dict(ChainMap(*types_of_matches_list))
+         current_score = types_of_matches[game_type.upper()]
+         # print(current_score)
+         query = {'DISNAME': player['DISNAME']}
+         new_value = {"$inc": {'NORMAL.$[type].' + game_type.upper() + '.0': 1}}
+         filter_query = [{'type.' + game_type.upper(): current_score}]
+         db.updateUser(query, new_value, filter_query)
+   else :
+      print("hello world")
+
+
 async def sl(ctx):
    session_query = {"OWNER": str(ctx.author), "AVAILABLE": True}
    session_data = db.querySession(session_query)
@@ -844,14 +920,18 @@ async def sl(ctx):
          current_score = types_of_matches[game_type.upper()]
          # print(current_score)
          query = {'DISNAME': player['DISNAME']}
-         new_value = {"$inc": {'NORMAL.$[type].' + game_type.upper() + '.1': 1}}
+         new_value = {"$inc": {'NORMAL.$[type].' + game_type.upper() + '.1': 0}}
          filter_query = [{'type.' + game_type.upper(): current_score}]
          db.updateUser(query, new_value, filter_query)
+         print("hi")
    else :
       print("hello world")
    # await ctx.send(loser['TEAM'], delete_after=5)
 
 
+async def DM(ctx, user, m,  message=None):
+    message = message or "This Message is sent via DM"
+    await user.send(m)
 
 
 DISCORD_TOKEN = config('DISCORD_TOKEN')

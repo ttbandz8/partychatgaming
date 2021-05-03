@@ -355,6 +355,11 @@ def querySession(session):
            
     except:
         return "Find Session failed."
+        
+'''Query Session Members'''
+def querySessionMembers(session):
+    data = sessions_col.find_one(session)
+    return data
 
 '''Create Session'''
 def createSession(session):
