@@ -6,15 +6,17 @@
     Delete Account = >d @user IWANTTODELETEMYACCOUNT
     Add Game & In Game Name = >ag game in_game_name
     Update In Game Name = >uign
-    Create Unranked Session = >c1v1 ur teammates(if not 1v1)
+    Create Normal Session = >c1v1 n teammates(if not 1v1)
     Create Ranked Session = >c1v1 r teammates(if not 1v1)
     Create KingsGambit Session = >ckg type
     Join Session = >js @owner
     End Session = >es
     SCORE = >score @user_from_team_who_scored
-    nc = Add Card (admin only)
-    ac = Available Cards
-    uc = Update your card
+    Check User Session = > >cs @user
+    Delete Team = > dt(Teamname)
+    Delete Teammate = > dt(@user, Teamname)
+    Flex (Show Custom Card) => >flex
+
 
 # Classes 
     Whenever you see data.something() we are using the data classes to pass default values

@@ -6,6 +6,7 @@ now = time.asctime()
 @dataclass(frozen=True, order=True)
 class USER():
     DISNAME: str
+    DID: str 
     AVATAR: list[str] = field(default_factory=lambda: [''])
     IGN: list[str] = field(default_factory=lambda: [{'DEFAULT': 'PCG'}])
     GAMES: list[str] = field(default_factory=lambda: ['PCG'])

@@ -255,7 +255,7 @@ async def flex(ctx):
 
 @bot.command()
 async def r(ctx):
-   user = {'DISNAME': str(ctx.author), 'AVATAR': str(ctx.author.avatar_url)}
+   user = {'DISNAME': str(ctx.author), 'DID' : str(ctx.author.id), 'AVATAR': str(ctx.author.avatar_url)}
    response = db.createUsers(data.newUser(user))
    await ctx.send(response, delete_after=5)
 
@@ -339,6 +339,7 @@ async def c1v1(ctx, args):
       session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 1, "TEAMS": [{"TEAM": [str(ctx.author)], "SCORE": 0, "POSITION": 0}], "RANKED": True}
       resp = db.createSession(data.newSession(session_query))
       await ctx.send(resp, delete_after=5)
+
 
 
 @bot.command()
@@ -508,12 +509,11 @@ async def score(ctx, user: User):
    query = {"_id": session_data["_id"], "TEAMS.TEAM": str(user)}
    response = db.updateSession(session_query, query, update_query)
    reciever = db.queryUser({'DISNAME': str(user)})
-   name = reciever['DISNAME']#.split("#",1)[0]
+   name = reciever['DISNAME']
    message = "You Scored, Don't Let Up"
    await DM(ctx, user, message)
-  # DM(reciever,"You Scored, Keep it Up")
    if response:
-      await ctx.send(f"+1", delete_after=2)
+      await ctx.send(f"{user.mention}" +f"+1", delete_after=2)
    else:
       await ctx.send(f"Score not added. Please, try again. ", delete_after=5)
 
@@ -526,6 +526,42 @@ async def es(ctx):
    await sl(ctx)
    end = db.endSession(session_query)
    await ctx.send(end, delete_after=5)
+
+
+@bot.command()
+@commands.check(validate_user)
+async def invite(ctx, args, user1: User):
+   game = [x for x in db.query_all_games()][0]
+   
+   validate_opponent = db.queryUser({'DISNAME': str(user1)})
+
+   if validate_opponent:
+      await DM(ctx, user1, f"{ctx.author.mention}" + "has challeneged you...")
+      accept = await ctx.send("Will you join the session?", delete_after=10)
+      for emoji in emojis:
+         await accept.add_reaction(emoji)
+
+      def check(reaction, user):
+         return user == user1 and str(reaction.emoji) == '👍'
+      try:
+         reaction, user = await bot.wait_for('reaction_add', timeout=10.0, check=check)
+
+
+         session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 1, "TEAMS": [{"TEAM": [str(ctx.author)], "SCORE": 0, "POSITION": 0}]}
+         join_query = {"TEAM" : [str(ctx.user1)], "SCORE": 0, "POSITION": 1}
+         if args == "n":
+            session = db.createSession(data.newSession(session_query))
+            resp = db.joinSession(session, join_query)
+            await ctx.send(resp, delete_after=5)
+         elif args == "r":
+            session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 1, "TEAMS": [{"TEAM": [str(ctx.author)], "SCORE": 0, "POSITION": 0}], "RANKED": True}
+            session = db.createSession(data.newSession(session_query))
+            resp = db.joinSession(session, join_query)
+            await ctx.send(resp, delete_after=5)
+      except:
+         await ctx.send("Did not work")
+   else:
+      await ctx.send("Users must register.", delete_after=5)
 
 @bot.command()
 @commands.check(validate_user)
@@ -875,11 +911,16 @@ async def sw(ctx):
          types_of_matches_list = [x for x in player['NORMAL']]
          types_of_matches = dict(ChainMap(*types_of_matches_list))
          current_score = types_of_matches[game_type.upper()]
-         # print(current_score)
          query = {'DISNAME': player['DISNAME']}
+         #uid = {'DID' : player['DID']}
          new_value = {"$inc": {'NORMAL.$[type].' + game_type.upper() + '.0': 1}}
          filter_query = [{'type.' + game_type.upper(): current_score}]
          db.updateUser(query, new_value, filter_query)
+         uid = player['DID']
+         user = await bot.fetch_user(uid)
+         await DM(ctx, user, "You Won. Doesnt Prove Much Tho")
+         await ctx.send(f"Competitor " + f"{user.mention}" + " earns a victory ! :100:", delete_after=5)
+
    else :
       print("hello world")
 
@@ -918,20 +959,23 @@ async def sl(ctx):
          types_of_matches_list = [x for x in player['NORMAL']]
          types_of_matches = dict(ChainMap(*types_of_matches_list))
          current_score = types_of_matches[game_type.upper()]
-         # print(current_score)
          query = {'DISNAME': player['DISNAME']}
          new_value = {"$inc": {'NORMAL.$[type].' + game_type.upper() + '.1': 1}}
          filter_query = [{'type.' + game_type.upper(): current_score}]
          db.updateUser(query, new_value, filter_query)
-         print("hi")
+         uid = player['DID']
+         user = await bot.fetch_user(uid)
+         await DM(ctx, user, "You Lost. Try Again")
+         await ctx.send(f"Competitor " + f"{user.mention}" + " took another L! :eyes:", delete_after=5)
    else :
       print("hello world")
    # await ctx.send(loser['TEAM'], delete_after=5)
 
 
-async def DM(ctx, user, m,  message=None):
+async def DM(ctx, user : User, m,  message=None):
     message = message or "This Message is sent via DM"
     await user.send(m)
+
 
 
 DISCORD_TOKEN = config('DISCORD_TOKEN')
