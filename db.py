@@ -12,6 +12,8 @@ sessions_col = db["SESSIONS"]
 games_col = db["GAMES"]
 matches_col = db["MATCHES"]
 tournaments_col = db["TOURNAMENTS"]
+cards_col = db["CARDS"]
+titles_col = db["TITLES"]
 
 '''Check if Collection Exists'''
 def col_exists(col):
@@ -32,6 +34,75 @@ def user_exists(data):
             return False
     else:
         return False
+
+'''Check If Card Exists'''
+def card_exists(data):
+    collection_exists = col_exists("CARDS")
+    if collection_exists:
+        card_does_exist = cards_col.find_one(data)
+        if card_does_exist:
+            return True
+        else:
+            return False
+    else:
+        return False
+
+'''New Card'''
+def createCard(card):
+    try:
+        cardexists = card_exists({'PATH': card['PATH']})
+        if cardexists:
+            return "Card already exists."
+        else:
+            cards_col.insert_one(card)
+            return "New Card created."
+    except:
+        return "Cannot create card."
+
+def queryAllCards():
+    data = cards_col.find()
+    return data
+
+def queryCard(query):
+    data = cards_col.find_one(query)
+    return data
+
+
+'''Check If Title Exists'''
+def title_exists(data):
+    collection_exists = col_exists("TITLES")
+    if collection_exists:
+        title_does_exist = titles_col.find_one(data)
+        if title_does_exist:
+            return True
+        else:
+            return False
+    else:
+        return False
+
+'''New Title'''
+def createTitle(title):
+    try:
+        titleexists = title_exists({'TITLE': title['TITLE']})
+        if titleexists:
+            return "Title already exists."
+        else:
+            titles_col.insert_one(title)
+            return "New Title created."
+    except:
+        return "Cannot create Title."
+
+def queryAllTitles():
+    data = titles_col.find()
+    return data
+
+def queryTitle(query):
+    data = titles_col.find_one(query)
+    return data
+
+
+
+
 
 '''Query User'''
 def queryUser(user):
@@ -96,6 +167,14 @@ def updateUser(query, new_value, arrayFilters):
     exists = user_exists({'DISNAME': query['DISNAME']})
     if exists:
         update = users_col.update_one(query, new_value, array_filters=arrayFilters)
+        return "Update completed. "
+    else:
+        return "Update failed. "
+
+def updateUserNoFilter(query, new_value):
+    exists = user_exists({'DISNAME': query['DISNAME']})
+    if exists:
+        update = users_col.update_one(query, new_value)
         return "Update completed. "
     else:
         return "Update failed. "
@@ -249,6 +328,9 @@ def add_game(game):
        return("Game has been added")
 
 
+
+
+
 '''Check If Sessions Exists'''
 def session_exist(data):
     collection_exists = col_exists("SESSIONS")
@@ -273,13 +355,11 @@ def querySession(session):
            
     except:
         return "Find Session failed."
-
-
+        
 '''Query Session Members'''
 def querySessionMembers(session):
     data = sessions_col.find_one(session)
     return data
-
 
 '''Create Session'''
 def createSession(session):
@@ -312,24 +392,6 @@ def joinSession(session, query):
     elif matchtype > len(query['TEAM']):
         return 'Not enough players in team'
 
-'''Invite to Session'''
-def sessionInvite(session, query):
-    sessionquery = querySession(session)
-    matchtype = sessionquery['TYPE']
-    if matchtype == len(query['TEAM']):
-        p = [x for x in sessionquery['TEAMS']]
-        list_matching = [x for x in p[0]['TEAM'] if x in query['TEAM']]
-        if len(list_matching) == 0:
-            teaminsert = sessions_col.update_one(session, {'$addToSet': {'TEAMS': query}, '$set': {'IS_FULL': True}})
-            return 'Session Joined'
-        else: 
-            return 'Session full.'
-    elif matchtype < len(query['TEAM']):
-        return 'Too many players in team'
-    elif matchtype > len(query['TEAM']):
-        return 'Not enough players in team'
-
-        
 '''End Session'''
 def endSession(session):
     exists = session_exist({'OWNER': session['OWNER'], 'AVAILABLE': True})

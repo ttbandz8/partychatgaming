@@ -548,7 +548,7 @@ async def invite(ctx, args, user1: User):
 
 
          session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 1, "TEAMS": [{"TEAM": [str(ctx.author)], "SCORE": 0, "POSITION": 0}]}
-         join_query = {"TEAM" : [str(ctx.user1)], "SCORE": 0, "POSITION": 1}
+         join_query = {"TEAM" : [str(user1)], "SCORE": 0, "POSITION": 1}
          if args == "n":
             session = db.createSession(data.newSession(session_query))
             resp = db.joinSession(session, join_query)

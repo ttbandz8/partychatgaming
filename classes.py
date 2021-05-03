@@ -11,7 +11,7 @@ class USER():
     IGN: list[str] = field(default_factory=lambda: [{'DEFAULT': 'PCG'}])
     GAMES: list[str] = field(default_factory=lambda: ['PCG'])
     TEAMS: list[str] = field(default_factory=lambda: ['PCG'])
-    TITLES: str = field(default_factory=lambda: 'PCG')
+    TITLE: str = field(default_factory=lambda: 'PCG')
     CARD: str = field(default_factory=lambda: "Dark")
     RANKED: list = field(default_factory=lambda: [{'1V1': [0, 0, 0]}, {'2V2': [0, 0, 0]}, {'3V3': [0, 0, 0]}, {'4V4': [0, 0, 0]}, {'5V5': [0, 0, 0]}])
     NORMAL: list = field(default_factory=lambda: [{'1V1': [0, 0, 0]}, {'2V2': [0, 0, 0]}, {'3V3': [0, 0, 0]}, {'4V4': [0, 0, 0]}, {'5V5': [0, 0, 0]}])
