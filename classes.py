@@ -50,6 +50,7 @@ class SESSIONS():
     WINNER: str = field(default_factory=lambda: 'N/A')
     LOSER: str = field(default_factory=lambda: 'N/A')
     TIMESTAMP: str = now
+    SCRIM: bool = field(default_factory=lambda: False) 
 
 @dataclass(frozen=True, order=True)
 class MATCHES():

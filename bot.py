@@ -364,12 +364,12 @@ async def c2v2(ctx, args, user1: User):
          reaction, user = await bot.wait_for('reaction_add', timeout=10.0, check=check)
 
 
-         session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 2, "TEAMS": [{"TEAM": [str(ctx.author), str(user1)], "SCORE": 0, "POSITION": 0}]}
+         session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 3, "TEAMS": [{"TEAM": [str(ctx.author), str(user1)], "SCORE": 0, "POSITION": 0}]}
          if args == "n":
             resp = db.createSession(data.newSession(session_query))
             await ctx.send(resp, delete_after=5)
          elif args == "r":
-            session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 2, "TEAMS": [{"TEAM": [str(ctx.author), str(user1)], "SCORE": 0, "POSITION": 0}], "RANKED": True}
+            session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 3, "TEAMS": [{"TEAM": [str(ctx.author), str(user1)], "SCORE": 0, "POSITION": 0}], "RANKED": True}
             resp = db.createSession(data.newSession(session_query))
             await ctx.send(resp, delete_after=5)
       except:
@@ -380,86 +380,96 @@ async def c2v2(ctx, args, user1: User):
 @bot.command()
 @commands.check(validate_user)
 async def c3v3(ctx, args, user1: User, user2: User):
-   game = [x for x in db.query_all_games()][0]
-   
-   teammates = [str(user1), str(user2)]
-   valid_teammates = []
-   for x in teammates:
-      valid = db.queryUser(x)
-      if valid:
-         valid_teammates.append(valid["DISNAME"])
-      else:
-         await ctx.send(f"{valid['DISNAME']} needs to register.".format(bot), delete_after=5)
+   if ctx.author.guild_permissions.administrator == True:
+      game = [x for x in db.query_all_games()][0]
+      
+      teammates = [str(user1), str(user2)]
+      valid_teammates = []
+      for x in teammates:
+         valid = db.queryUser({'DISNAME' : str(x)})
+         if valid:
+            valid_teammates.append(valid["DISNAME"])
+         else:
+            await ctx.send(f"{valid['DISNAME']} needs to register.".format(bot), delete_after=5)
 
-   if valid_teammates:
-      accept = await ctx.send("Will you join the session?", delete_after=10)
-      for emoji in emojis:
-         await accept.add_reaction(emoji)
-
-      def check(reaction, user):
-         return user in valid_teammates and str(reaction.emoji) == '👍'
-
-      try:
-         reaction, user = await bot.wait_for('reaction_add', timeout=10.0, check=check)
-
-
-         session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 2, "TEAMS": [{"TEAM": [str(ctx.author), str(user1), str(user2)], "SCORE": 0, "POSITION": 0}]}
+      if valid_teammates:
+         accept = await ctx.send("SCRIM STARTING : 3v3 ", delete_after=10)
+         session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 3, "SCRIM": True, "TEAMS": [{"TEAM": [str(ctx.author), str(user1), str(user2)], "SCORE": 0, "POSITION": 0}]}
          if args == "n":
             resp = db.createSession(data.newSession(session_query))
             await ctx.send(resp, delete_after=5)
          elif args == "r":
-            session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 2, "TEAMS": [{"TEAM": [str(ctx.author), str(user1), str(user2)], "SCORE": 0, "POSITION": 0}], "RANKED": True}
+            session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 3, "SCRIM": True, "TEAMS": [{"TEAM": [str(ctx.author), str(user1), str(user2)], "SCORE": 0, "POSITION": 0}], "RANKED": True}
             resp = db.createSession(data.newSession(session_query))
             await ctx.send(resp, delete_after=5)
-      except:
-         await ctx.send("Did not work")
+      else:
+         await ctx.send("Users must register.", delete_after=5)
    else:
-      await ctx.send("Users must register.", delete_after=5)
+      await ctx.send("Public SCRIMS coming soon! Join a League Team to Participate ! :military_helmet:", delete_after=5)
 
 
 @bot.command()
 @commands.check(validate_user)
 async def c4v4(ctx, args, user1: User, user2: User, user3: User):
-   game = [x for x in db.query_all_games()][0]
-   
-   teammates = [str(user1), str(user2), str(user3)]
-   valid_teammates = []
-   for x in teammates:
-      valid = db.queryUser(x)
-      if valid:
-         valid_teammates.append(valid["DISNAME"])
-      else:
-         await ctx.send(f"{valid['DISNAME']} needs to register.".format(bot), delete_after=5)
+   if ctx.author.guild_permissions.administrator == True:
+      game = [x for x in db.query_all_games()][0]
+      
+      teammates = [str(user1), str(user2), str(user3)]
+      valid_teammates = []
+      for x in teammates:
+         valid = db.queryUser({'DISNAME' : str(x)})
+         if valid:
+            valid_teammates.append(valid["DISNAME"])
+         else:
+            await ctx.send(f"{valid['DISNAME']} needs to register.".format(bot), delete_after=5)
 
-   if valid_teammates:
-      accept = await ctx.send("Will you join the session?", delete_after=10)
-      for emoji in emojis:
-         await accept.add_reaction(emoji)
-
-      def check(reaction, user):
-         return user in valid_teammates and str(reaction.emoji) == '👍'
-
-      try:
-         reaction, user = await bot.wait_for('reaction_add', timeout=10.0, check=check)
-
-
-         session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 2, "TEAMS": [{"TEAM": [str(ctx.author), str(user1), str(user2), str(user3)], "SCORE": 0, "POSITION": 0}]}
+      if valid_teammates:
+         accept = await ctx.send("SCRIM STARTING : 4v4 ", delete_after=10)
+         session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 4, "SCRIM": True, "TEAMS": [{"TEAM": [str(ctx.author), str(user1), str(user2), str(user3)], "SCORE": 0, "POSITION": 0}]}
          if args == "n":
             resp = db.createSession(data.newSession(session_query))
             await ctx.send(resp, delete_after=5)
          elif args == "r":
-            session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 2, "TEAMS": [{"TEAM": [str(ctx.author), str(user1), str(user2), str(user3)], "SCORE": 0, "POSITION": 0}], "RANKED": True}
+            session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 4, "SCRIM": True, "TEAMS": [{"TEAM": [str(ctx.author), str(user1), str(user2), str(user3)], "SCORE": 0, "POSITION": 0}], "RANKED": True}
             resp = db.createSession(data.newSession(session_query))
             await ctx.send(resp, delete_after=5)
-      except:
-         await ctx.send("Did not work")
+      else:
+         await ctx.send("Users must register.", delete_after=5)
    else:
-      await ctx.send("Users must register.", delete_after=5)
-
+      await ctx.send("Public SCRIMS coming soon! Join a League Team to Participate ! :military_helmet:", delete_after=5)
 
 @bot.command()
 @commands.check(validate_user)
 async def c5v5(ctx, args, user1: User, user2: User, user3: User, user4: User):
+   if ctx.author.guild_permissions.administrator == True:
+      game = [x for x in db.query_all_games()][0]
+      
+      teammates = [str(user1), str(user2), str(user3), str(user4)]
+      valid_teammates = []
+      for x in teammates:
+         valid = db.queryUser({'DISNAME' : str(x)})
+         if valid:
+            valid_teammates.append(valid["DISNAME"])
+         else:
+            await ctx.send(f"{valid['DISNAME']} needs to register.".format(bot), delete_after=5)
+
+      if valid_teammates:
+         accept = await ctx.send("SCRIM STARTING : 5v5 ", delete_after=10)
+         session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 5, "SCRIM": True, "TEAMS": [{"TEAM": [str(ctx.author), str(user1), str(user2), str(user3), str(user4)], "SCORE": 0, "POSITION": 0}]}
+         if args == "n":
+            resp = db.createSession(data.newSession(session_query))
+            await ctx.send(resp, delete_after=5)
+         elif args == "r":
+            session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 5, "SCRIM": True, "TEAMS": [{"TEAM": [str(ctx.author), str(user1), str(user2), str(user3), str(user4)], "SCORE": 0, "POSITION": 0}], "RANKED": True}
+            resp = db.createSession(data.newSession(session_query))
+            await ctx.send(resp, delete_after=5)
+      else:
+         await ctx.send("Users must register.", delete_after=5)
+   else:
+      await ctx.send("Public SCRIMS coming soon! Join a League Team to Participate ! :military_helmet:", delete_after=5)
+
+#Legacy v5v5 code
+async def cmps(ctx, args, user1: User, user2: User, user3: User, user4: User):
    game = [x for x in db.query_all_games()][0]
    
    teammates = [str(user1), str(user2), str(user3), str(user4)]
@@ -516,11 +526,12 @@ async def score(ctx, user: User):
    message = ":one: You Scored, Don't Let Up :one:"
    await DM(ctx, user, message)
    if response:
-      await ctx.send(f"{user.mention}" +f" :heavy_plus_sign::one:", delete_after=2)
+      await ctx.send(f"{user.mention}" +f" + :one:", delete_after=2)
    else:
       await ctx.send(f"Score not added. Please, try again. ", delete_after=5)
 
 
+#end session and push data to database
 @bot.command()
 @commands.check(validate_user)
 async def es(ctx):
@@ -530,6 +541,8 @@ async def es(ctx):
    end = db.endSession(session_query)
    await ctx.send(end, delete_after=5)
 
+
+#delete session from database
 @bot.command()
 @commands.check(validate_user)
 async def ds(ctx):
@@ -537,7 +550,7 @@ async def ds(ctx):
    response = db.deleteSession(session_query)
    await ctx.send(response, delete_after=5)
 
-
+#invite user to 1v1
 @bot.command()
 @commands.check(validate_user)
 async def invite(ctx, args, user1: User):
@@ -572,6 +585,7 @@ async def invite(ctx, args, user1: User):
    else:
       await ctx.send("Users must register.", delete_after=5)
 
+#Join Session with up to 4 mates
 @bot.command()
 @commands.check(validate_user)
 async def js(ctx, *user: User):
@@ -596,8 +610,61 @@ async def js(ctx, *user: User):
          join_query = {"TEAM": [str(ctx.author), (str(user[1]))], "SCORE": 0, "POSITION": 1}
          session_joined = db.joinSession(session_query, join_query)
          await ctx.send(session_joined, delete_after=5)
+      if match_type ==3:
+         join_query = {"TEAM": [str(ctx.author), (str(user[1])), str(user[2])], "SCORE": 0, "POSITION": 1}
+         session_joined = db.joinSession(session_query, join_query)
+         await ctx.send(session_joined, delete_after=5)
+      if match_type ==4:
+         join_query = {"TEAM": [str(ctx.author), (str(user[1])), str(user[2]), str(user[3])], "SCORE": 0, "POSITION": 1}
+         session_joined = db.joinSession(session_query, join_query)
+         await ctx.send(session_joined, delete_after=5)
+      if match_type ==5:
+         join_query = {"TEAM": [str(ctx.author), (str(user[1])), str(user[2]), str(user[3]), str(user[4])], "SCORE": 0, "POSITION": 1}
+         session_joined = db.joinSession(session_query, join_query)
+         await ctx.send(session_joined, delete_after=5)
 
+#Session Generator Admin's can pull users in sessions up to 5's
+@bot.command()
+@commands.check(validate_user)
+async def sg(ctx, *user: User):
+   if ctx.author.guild_permissions.administrator == True:  
+      session_query = {"OWNER": str(ctx.author), "AVAILABLE": True}
+      session = db.querySession(session_query)
+      match_type = session['TYPE']
+      invalid_user = False
+      for u in user:
+         user_query = ({'DISNAME': str(u)})
+         resp = db.queryUser(user_query)
+         if not resp:
+            invalid_user = True
+      
+      if invalid_user:
+         await ctx.send("You must first register before joining sessions. ", delete_after=5)
+      else:
+         if match_type == 1:
+            join_query = {"TEAM": [str(user[0])], "SCORE": 0, "POSITION": 1}
+            session_joined = db.joinSession(session_query, join_query)
+            await ctx.send(session_joined, delete_after=5)
+         if match_type ==2:
+            join_query = {"TEAM": [str(user[0]), (str(user[1]))], "SCORE": 0, "POSITION": 1}
+            session_joined = db.joinSession(session_query, join_query)
+            await ctx.send(session_joined, delete_after=5)
+         if match_type ==3:
+            join_query = {"TEAM": [str(user[0]), (str(user[1])), str(user[2])], "SCORE": 0, "POSITION": 1}
+            session_joined = db.joinSession(session_query, join_query)
+            await ctx.send(session_joined, delete_after=5)
+         if match_type ==4:
+            join_query = {"TEAM": [str(user[0]), (str(user[1])), str(user[2]), str(user[3])], "SCORE": 0, "POSITION": 1}
+            session_joined = db.joinSession(session_query, join_query)
+            await ctx.send(session_joined, delete_after=5)
+         if match_type ==5:
+            join_query = {"TEAM": [str(user[0]), (str(user[1])), str(user[2]), str(user[3]), str(user[4])], "SCORE": 0, "POSITION": 1}
+            session_joined = db.joinSession(session_query, join_query)
+            await ctx.send(session_joined, delete_after=5)
+   else:
+      await ctx.send("Admin Only", delete_after=5)
 
+#Check if User is hosting a session
 @bot.command()
 @commands.check(validate_user)
 async def s(ctx, user: User):
@@ -676,7 +743,7 @@ async def s(ctx, user: User):
    else:
       await ctx.send("Session does not exist. ", delete_after=5)
 
-
+#Check your current session
 @bot.command()
 @commands.check(validate_user)
 async def ms(ctx):
@@ -783,7 +850,8 @@ async def att(ctx, user1: User, *args):
    team_name = " ".join([*args])
    team_query = {'OWNER': str(ctx.author), 'TNAME': team_name}
    team = db.queryTeam(team_query)
-   accept = await ctx.send(f"Do you want to join team {team_name}?".format(bot), delete_after=8)
+   await DM(ctx, user1, f"{ctx.author.mention}" + f" has invited you to join {team_name} !" + f" React in server to join {team_name}" )
+   accept = await ctx.send(f"{user1.mention}" +f" do you want to join team {team_name}?".format(bot), delete_after=8)
    for emoji in emojis:
       await accept.add_reaction(emoji)
 
