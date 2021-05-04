@@ -526,8 +526,6 @@ async def c3v3(ctx, args, user1: User, user2: User):
             session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 3, "SCRIM": True, "TEAMS": [{"TEAM": [str(ctx.author), str(user1), str(user2)], "SCORE": 0, "POSITION": 0}], "RANKED": True}
             resp = db.createSession(data.newSession(session_query))
             await ctx.send(resp, delete_after=5)
-      except:
-         await ctx.send(m.INVITE_NOT_ACCEPTED, delete_after=3)
    else:
       await ctx.send(m.USER_NOT_REGISTERED, delete_after=5)
 
@@ -557,8 +555,7 @@ async def c4v4(ctx, args, user1: User, user2: User, user3: User):
             session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 4, "SCRIM": True, "TEAMS": [{"TEAM": [str(ctx.author), str(user1), str(user2), str(user3)], "SCORE": 0, "POSITION": 0}], "RANKED": True}
             resp = db.createSession(data.newSession(session_query))
             await ctx.send(resp, delete_after=5)
-      except:
-         await ctx.send(m.INVITE_NOT_ACCEPTED, delete_after=3)
+
    else:
       await ctx.send(m.USER_NOT_REGISTERED, delete_after=5)
 
