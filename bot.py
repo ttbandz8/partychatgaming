@@ -330,6 +330,69 @@ async def uign(ctx, args1, args2):
    else:
       await ctx.send("Game is unavailable. ", delete_after=3)
    
+@bot.command()
+@commands.check(validate_user)
+async def kg(ctx):
+   if ctx.author.guild_permissions.administrator == True:
+      game = [x for x in db.query_all_games()][0]
+      session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 1, "TEAMS": [{"TEAM": [str(ctx.author)], "SCORE": 0, "POSITION": 0}], "KINGSGAMBIT": True, "RANKED": True}
+      resp = db.createSession(data.newSession(session_query))
+      await ctx.send(resp, delete_after=5)
+   else:
+      print('Kings gambit unavailable')
+
+
+@bot.command()
+@commands.check(validate_user)
+async def jkg(ctx, user1: User):
+   session_query = {"OWNER": str(user1), "AVAILABLE": True, "KINGSGAMBIT": True}
+   session = db.querySession(session_query)
+   match_type = session['TYPE']
+   invalid_user = False
+   if invalid_user:
+      await ctx.send("You must first register before joining sessions. ", delete_after=5)
+   else:
+      teams_list = [x for x in session['TEAMS']]
+      positions = []
+      for x in teams_list:
+         positions.append(x['POSITION'])
+      new_position = max(positions) + 1
+
+         
+      join_query = {"TEAM": [str(ctx.author)], "SCORE": 0, "POSITION": new_position}
+      session_joined = db.joinKingsGambit(session_query, join_query)
+      await ctx.send(session_joined, delete_after=5)
+   
+
+@bot.command()
+@commands.check(validate_user)
+async def scorejkg(ctx, user: User):
+   session_query = {"OWNER": str(ctx.author), "AVAILABLE": True, "KINGSGAMBIT": True}
+   session_data = db.querySession(session_query)
+   teams = [x for x in session_data['TEAMS']]
+   winning_team = {}
+   for x in teams:
+      if str(user) in x['TEAM']: 
+         winning_team = x
+   
+   print(teams)
+   new_score = winning_team['SCORE'] + 1
+   update_query = {'$set': {'TEAMS.$.SCORE': new_score}}
+   query = {"_id": session_data["_id"], "TEAMS.TEAM": str(user)}
+   response = db.updateSession(session_query, query, update_query)
+
+   # Add logic to move positions
+
+   reciever = db.queryUser({'DISNAME': str(user)})
+   name = reciever['DISNAME']
+   message = ":one: You Scored, Don't Let Up :one:"
+   await DM(ctx, user, message)
+   if response:
+      await ctx.send(f"{user.mention}" +f" :heavy_plus_sign::one:", delete_after=2)
+   else:
+      await ctx.send(f"Score not added. Please, try again. ", delete_after=5)
+     
+
 
 @bot.command()
 @commands.check(validate_user)
@@ -500,7 +563,7 @@ async def c5v5(ctx, args, user1: User, user2: User, user3: User, user4: User):
 @bot.command()
 @commands.check(validate_user)
 async def score(ctx, user: User):
-   session_query = {"OWNER": str(ctx.author), "AVAILABLE": True}
+   session_query = {"OWNER": str(ctx.author), "AVAILABLE": True, "KINGSGAMBIT": False}
    session_data = db.querySession(session_query)
    teams = [x for x in session_data['TEAMS']]
    winning_team = {}
