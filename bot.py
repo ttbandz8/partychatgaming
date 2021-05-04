@@ -540,6 +540,17 @@ async def ds(ctx):
 
 @bot.command()
 @commands.check(validate_user)
+async def das(ctx):
+   user_query = {"DISNAME": str(ctx.author)}
+   if ctx.author.guild_permissions.administrator == True:
+      resp = db.deleteAllSessions(user_query)
+      await ctx.send(resp)
+   else:
+      await ctx.send("Admin only command.")
+
+
+@bot.command()
+@commands.check(validate_user)
 async def invite(ctx, args, user1: User):
    game = [x for x in db.query_all_games()][0]
    
@@ -597,6 +608,28 @@ async def js(ctx, *user: User):
          session_joined = db.joinSession(session_query, join_query)
          await ctx.send(session_joined, delete_after=5)
 
+@bot.command()
+@commands.check(validate_user)
+async def iby(ctx, user: User):
+   win_query = {'WINNER.TEAM': [str(ctx.author)], 'LOSER.TEAM': [str(user)]}
+   win_count = 0
+   win_sessions = db.querySessionForUser(win_query)
+   for x in win_sessions:
+      win_count +=1
+
+   loss_query = {'WINNER.TEAM': [str(user)], 'LOSER.TEAM': [str(ctx.author)]}
+   loss_count = 0
+   loss_sessions = db.querySessionForUser(loss_query)
+   for x in loss_sessions:
+      loss_count +=1
+
+   total_games = win_count + loss_count
+
+   message = f"{str(ctx.author.mention)} has defeated {str(user.mention)} {win_count} out of {total_games} matches!"
+   if total_games == 0:
+      message = "You two have not played each other. "
+   await ctx.send(message)
+
 
 @bot.command()
 @commands.check(validate_user)
@@ -641,7 +674,6 @@ async def s(ctx, user: User):
       team_2_score = ""
 
       for x in team_1:
-         # n = x['TEAM'].split("#",1)[1]
          team_1_comp = "\n".join(x['TEAM'])
          team_1_score = f" Score: {x['SCORE']}"
 
@@ -649,19 +681,6 @@ async def s(ctx, user: User):
       for x in team_2:
          team_2_comp = "\n".join(x['TEAM'])
          team_2_score = f" Score: {x['SCORE']}"
-
-      # for x in team_1:
-      #    for members in x['TEAM']:
-      #       mem_query = db.queryUser({'DISNAME': members})
-      #       ign_list = [x for x in mem_query['IGN']]
-      #       ign_list_keys = [k for k in ign_list[0].keys()]
-      #       if ign_list_keys == [games]:
-      #          team_list.append(f"{ign_list[0][games]}: {x['SCORE']}")
-      #       else:
-      #          team_list.append(f"{members}: {x['SCORE']}")
-
-      # print(team_1)
-
 
       embedVar = discord.Embed(title=f"{name}'s {games} Session ".format(bot), description="Party Chat Gaming Database", colour=000000)
       embedVar.set_thumbnail(url=avatar)

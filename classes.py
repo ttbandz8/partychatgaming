@@ -43,10 +43,10 @@ class SESSIONS():
     # TEAM_SESSION: bool = field(default_factory=lambda: False)
     RANKED: bool = field(default_factory=lambda: False)
     GOC: bool = field(default_factory=lambda: False)
+    TOURNAMENT: str = field(default_factory=lambda: False)
     KINGSGAMBIT: str = field(default_factory=lambda: False)
     AVAILABLE: bool = field(default_factory=lambda: True)
     IS_FULL: bool = field(default_factory=lambda: False)
-    MATCHES: list[str] = field(default_factory=lambda: [])
     WINNER: str = field(default_factory=lambda: 'N/A')
     LOSER: str = field(default_factory=lambda: 'N/A')
     TIMESTAMP: str = now

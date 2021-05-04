@@ -355,6 +355,12 @@ def querySession(session):
            
     except:
         return "Find Session failed."
+
+'''Query How Many Times I Beat You'''
+def querySessionForUser(query):
+    data = sessions_col.find(query)
+    return data
+
         
 '''Query Session Members'''
 def querySessionMembers(session):
@@ -406,7 +412,7 @@ def endSession(session):
     else:
         return 'Session Unavailable'
 
-'''End Session'''
+'''Delete Session'''
 def deleteSession(session):
     exists = session_exist({'OWNER': session['OWNER'], 'AVAILABLE': True})
     if exists:
@@ -414,6 +420,15 @@ def deleteSession(session):
         return 'Session Ended'
     else:
         return 'Session Unavailable'
+
+'''Delete All Sessions'''
+def deleteAllSessions(user_query):
+    exists = user_exists({'DISNAME': user_query['DISNAME']})
+    if exists:
+        sessions_col.delete_many({})
+        return 'All Sessions Deleted'
+    else:
+        return 'Unable to Delete All Sessions'
 
 '''Update Session'''
 def updateSession(session, query, update_query):
