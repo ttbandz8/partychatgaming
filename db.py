@@ -397,6 +397,32 @@ def joinSession(session, query):
     elif matchtype > len(query['TEAM']):
         return 'Not enough players in team'
 
+
+
+'''Join Kings Gambit'''
+def joinKingsGambit(session, query):
+    sessionquery = querySession(session)
+    matchtype = sessionquery['TYPE']
+    if matchtype == len(query['TEAM']):
+        # List of current teams in session
+        p = [x for x in sessionquery['TEAMS']]
+        
+        # Check if team trying to join is part of a team already
+        list_matching = [x for x in p[0]['TEAM'] if x in query['TEAM']]
+
+        if len(list_matching) == 0:
+            teaminsert = sessions_col.update_one(session, {'$addToSet': {'TEAMS': query}})
+
+            return 'Session Joined'
+        else: 
+            return 'Session full.'
+    elif matchtype < len(query['TEAM']):
+        return 'Too many players in team'
+    elif matchtype > len(query['TEAM']):
+        return 'Not enough players in team'
+
+
+
 '''End Session'''
 def endSession(session):
     exists = session_exist({'OWNER': session['OWNER'], 'AVAILABLE': True})
