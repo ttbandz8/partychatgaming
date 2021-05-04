@@ -2,6 +2,7 @@ import db
 import time
 import classes as data
 import test_data as td
+import messages as m
 import discord
 from discord.ext import commands
 from PIL import Image, ImageFont, ImageDraw
@@ -42,7 +43,7 @@ async def validate_user(ctx):
    if valid:
       return True
    else:
-      msg = await ctx.send("You must register to use this command. ")
+      msg = await ctx.send(m.USER_NOT_REGISTERED)
       return False
 
 @bot.event
@@ -84,7 +85,7 @@ async def lk(ctx, user: User):
       embedVar.add_field(name="Tournament Wins" + " :fireworks:", value=tournament_wins)
       await ctx.send(embed=embedVar, delete_after=15)
    else:
-      await ctx.send("User does not exist in the system. ", delete_after=3)
+      await ctx.send(m.USER_NOT_REGISTERED, delete_after=3)
 
 '''TITLES'''
 @bot.command()
@@ -95,7 +96,7 @@ async def nt(ctx, args1: str, args2: int, args3: int, args4: int):
       added = db.createTitle(data.newTitle(title_query))
       await ctx.send(added, delete_after=3)
    else:
-      print("Nah Nigga this ain't going down like you think pussy boy")
+      print(m.ADMIN_ONLY_COMMAND)
 
 @bot.command()
 @commands.check(validate_user)
@@ -142,7 +143,7 @@ async def nc(ctx, args1: str, args2: str, args3: int, args4: int, args5: int):
       added = db.createCard(data.newCard(card_query))
       await ctx.send(added, delete_after=3)
    else:
-      print("Nah Nigga this ain't going down like you think pussy boy")
+      print(m.ADMIN_ONLY_COMMAND)
 
 
 @bot.command()
@@ -329,8 +330,131 @@ async def uign(ctx, args1, args2):
          await ctx.send("In Game Names unavailable for this game. ", delete_after=3)
    else:
       await ctx.send("Game is unavailable. ", delete_after=3)
+
+''' Kings Gambit '''
+@bot.command()
+@commands.check(validate_user)
+async def kg(ctx):
+   if ctx.author.guild_permissions.administrator == True:
+      game = [x for x in db.query_all_games()][0]
+      session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 1, "TEAMS": [], "KINGSGAMBIT": True, "RANKED": True, "TOURNAMENT": True}
+      resp = db.createSession(data.newSession(session_query))
+      await ctx.send(resp, delete_after=5)
+   else:
+      print(m.ADMIN_ONLY_COMMAND)
+
+
+@bot.command()
+@commands.check(validate_user)
+async def jkg(ctx, user1: User):
+   session_query = {"OWNER": str(user1), "AVAILABLE": True, "KINGSGAMBIT": True}
+   session = db.querySession(session_query)
+
+
+   teams_list = [x for x in session['TEAMS']]
+   current_member = []
+   positions = []
+   new_position = 0
+
+   if bool(teams_list):
+      for x in teams_list:
+         
+         if str(user1) in x['TEAM']:
+            current_member.append(str(user1))
+         positions.append(x['POSITION'])
+      new_position = max(positions) + 1
+
+   if bool(current_member):
+      join_query = {"TEAM": [str(ctx.author)], "SCORE": 0, "POSITION": new_position}
+      session_joined = db.joinKingsGambit(session_query, join_query)
+      await ctx.send(session_joined, delete_after=5)
+   else:
+      await ctx.send(m.ALREADY_IN_SESSION, delete_after=5)
    
 
+@bot.command()
+@commands.check(validate_user)
+async def skg(ctx, user: User):
+   session_query = {"OWNER": str(ctx.author), "AVAILABLE": True, "KINGSGAMBIT": True}
+   session_data = db.querySession(session_query)
+   teams = [x for x in session_data['TEAMS']]
+   winning_team = {}
+   for x in teams:
+      if str(user) in x['TEAM'] and x['POSITION'] < 2: 
+         winning_team = x
+
+   new_score = winning_team['SCORE'] + 1
+   update_query = {'$set': {'TEAMS.$.SCORE': new_score}}
+   query = {"_id": session_data["_id"], "TEAMS.TEAM": str(user)}
+   response = db.updateSession(session_query, query, update_query)
+
+
+   positions = []
+   loser = {}
+
+   ''' IF POSITIN 0 WINS '''
+   if winning_team['POSITION'] == 0:
+
+      for x in teams:
+         positions.append(x['POSITION'])
+         if x['POSITION'] == 1:
+            loser = x
+
+      query = {"OWNER": str(ctx.author), "AVAILABLE": True, "KINGSGAMBIT": True}
+      update_query = {'$set': {'TEAMS.$[type].POSITION': max(positions) + 1}}
+      arrayFilter = [{'type.' + 'TEAM': loser['TEAM']}]
+      response = db.updatekg(session_query, query, update_query, arrayFilter)
+      
+      for x in teams:
+         if x['POSITION'] > 1:
+            query = {"OWNER": str(ctx.author), "AVAILABLE": True, "KINGSGAMBIT": True}
+            update_query = {'$inc': {'TEAMS.$[type].POSITION': -1}}
+            arrayFilter = [{'type.' + 'TEAM': x['TEAM']}]
+            response = db.updatekg(session_query, query, update_query, arrayFilter)
+
+      query = {"OWNER": str(ctx.author), "AVAILABLE": True, "KINGSGAMBIT": True}
+      update_query = {'$inc': {'TEAMS.$[type].POSITION': - 1}}
+      arrayFilter = [{'type.' + 'TEAM': loser['TEAM']}]
+      response = db.updatekg(session_query, query, update_query, arrayFilter)
+
+
+   ''' IF POSITIN 1 WINS '''
+   if winning_team['POSITION'] == 1:
+
+      for x in teams:
+         positions.append(x['POSITION'])
+         if x['POSITION'] == 0:
+            loser = x
+
+      query = {"OWNER": str(ctx.author), "AVAILABLE": True, "KINGSGAMBIT": True}
+      update_query = {'$set': {'TEAMS.$[type].POSITION': max(positions) + 1}}
+      arrayFilter = [{'type.' + 'TEAM': loser['TEAM']}]
+      response = db.updatekg(session_query, query, update_query, arrayFilter)
+
+      query = {"OWNER": str(ctx.author), "AVAILABLE": True, "KINGSGAMBIT": True}
+      update_query = {'$set': {'TEAMS.$[type].POSITION': 0}}
+      arrayFilter = [{'type.' + 'TEAM': winning_team['TEAM']}]
+      response = db.updatekg(session_query, query, update_query, arrayFilter)
+
+      for x in teams:
+         if x['POSITION'] > 1:
+            query = {"OWNER": str(ctx.author), "AVAILABLE": True, "KINGSGAMBIT": True}
+            update_query = {'$inc': {'TEAMS.$[type].POSITION': -1}}
+            arrayFilter = [{'type.' + 'TEAM': x['TEAM']}]
+            response = db.updatekg(session_query, query, update_query, arrayFilter)
+
+      query = {"OWNER": str(ctx.author), "AVAILABLE": True, "KINGSGAMBIT": True}
+      update_query = {'$inc': {'TEAMS.$[type].POSITION': - 1}}
+      arrayFilter = [{'type.' + 'TEAM': loser['TEAM']}]
+      response = db.updatekg(session_query, query, update_query, arrayFilter)
+
+   if response:
+      await ctx.send(f"{user.mention}" +f" :heavy_plus_sign::one:", delete_after=2)
+   else:
+      await ctx.send(f"Score not added. Please, try again. ", delete_after=5) 
+
+
+''' Create 1v1 - 5v5 Sessions '''
 @bot.command()
 @commands.check(validate_user)
 async def c1v1(ctx, args):
@@ -373,9 +497,9 @@ async def c2v2(ctx, args, user1: User):
             resp = db.createSession(data.newSession(session_query))
             await ctx.send(resp, delete_after=5)
       except:
-         await ctx.send("Did not work")
+         await ctx.send(m.INVITE_NOT_ACCEPTED, delete_after=3)
    else:
-      await ctx.send("Users must register.", delete_after=5)
+      await ctx.send(m.USER_NOT_REGISTERED, delete_after=5)
 
 @bot.command()
 @commands.check(validate_user)
@@ -402,10 +526,10 @@ async def c3v3(ctx, args, user1: User, user2: User):
             session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 3, "SCRIM": True, "TEAMS": [{"TEAM": [str(ctx.author), str(user1), str(user2)], "SCORE": 0, "POSITION": 0}], "RANKED": True}
             resp = db.createSession(data.newSession(session_query))
             await ctx.send(resp, delete_after=5)
-      else:
-         await ctx.send("Users must register.", delete_after=5)
+      except:
+         await ctx.send(m.INVITE_NOT_ACCEPTED, delete_after=3)
    else:
-      await ctx.send("Public SCRIMS coming soon! Join a League Team to Participate ! :military_helmet:", delete_after=5)
+      await ctx.send(m.USER_NOT_REGISTERED, delete_after=5)
 
 
 @bot.command()
@@ -433,10 +557,11 @@ async def c4v4(ctx, args, user1: User, user2: User, user3: User):
             session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 4, "SCRIM": True, "TEAMS": [{"TEAM": [str(ctx.author), str(user1), str(user2), str(user3)], "SCORE": 0, "POSITION": 0}], "RANKED": True}
             resp = db.createSession(data.newSession(session_query))
             await ctx.send(resp, delete_after=5)
-      else:
-         await ctx.send("Users must register.", delete_after=5)
+      except:
+         await ctx.send(m.INVITE_NOT_ACCEPTED, delete_after=3)
    else:
-      await ctx.send("Public SCRIMS coming soon! Join a League Team to Participate ! :military_helmet:", delete_after=5)
+      await ctx.send(m.USER_NOT_REGISTERED, delete_after=5)
+
 
 @bot.command()
 @commands.check(validate_user)
@@ -502,15 +627,16 @@ async def cmps(ctx, args, user1: User, user2: User, user3: User, user4: User):
             resp = db.createSession(data.newSession(session_query))
             await ctx.send(resp, delete_after=5)
       except:
-         await ctx.send("Did not work")
+         await ctx.send(m.INVITE_NOT_ACCEPTED, delete_after=3)
    else:
-      await ctx.send("Users must register.", delete_after=5)
+      await ctx.send(m.USER_NOT_REGISTERED, delete_after=5)
 
 
+''' Score '''
 @bot.command()
 @commands.check(validate_user)
 async def score(ctx, user: User):
-   session_query = {"OWNER": str(ctx.author), "AVAILABLE": True}
+   session_query = {"OWNER": str(ctx.author), "AVAILABLE": True, "KINGSGAMBIT": False}
    session_data = db.querySession(session_query)
    teams = [x for x in session_data['TEAMS']]
    winning_team = {}
@@ -550,7 +676,18 @@ async def ds(ctx):
    response = db.deleteSession(session_query)
    await ctx.send(response, delete_after=5)
 
-#invite user to 1v1
+''' Delete All Sessions '''
+@bot.command()
+@commands.check(validate_user)
+async def das(ctx):
+   user_query = {"DISNAME": str(ctx.author)}
+   if ctx.author.guild_permissions.administrator == True:
+      resp = db.deleteAllSessions(user_query)
+      await ctx.send(resp)
+   else:
+      await ctx.send(m.ADMIN_ONLY_COMMAND)
+
+''' Invite to 1v1 '''
 @bot.command()
 @commands.check(validate_user)
 async def invite(ctx, args, user1: User):
@@ -581,7 +718,7 @@ async def invite(ctx, args, user1: User):
             resp = db.joinSession(session_query, join_query)
             await ctx.send(resp, delete_after=5)
       except:
-         await ctx.send("Did not work")
+         await ctx.send(m.INVITE_NOT_ACCEPTED, delete_after=3)
    else:
       await ctx.send("Users must register.", delete_after=5)
 
@@ -600,7 +737,7 @@ async def js(ctx, *user: User):
          invalid_user = True
    
    if invalid_user:
-      await ctx.send("You must first register before joining sessions. ", delete_after=5)
+      await ctx.send(m.USER_NOT_REGISTERED, delete_after=5)
    else:
       if match_type == 1:
          join_query = {"TEAM": [str(ctx.author)], "SCORE": 0, "POSITION": 1}
@@ -664,6 +801,31 @@ async def sg(ctx, *user: User):
    else:
       await ctx.send("Admin Only", delete_after=5)
 
+      
+''' How many times have I beaten someone '''
+@bot.command()
+@commands.check(validate_user)
+async def iby(ctx, user: User):
+   win_query = {'WINNER.TEAM': [str(ctx.author)], 'LOSER.TEAM': [str(user)]}
+   win_count = 0
+   win_sessions = db.querySessionForUser(win_query)
+   for x in win_sessions:
+      win_count +=1
+
+   loss_query = {'WINNER.TEAM': [str(user)], 'LOSER.TEAM': [str(ctx.author)]}
+   loss_count = 0
+   loss_sessions = db.querySessionForUser(loss_query)
+   for x in loss_sessions:
+      loss_count +=1
+
+   total_games = win_count + loss_count
+
+   message = f"{str(ctx.author.mention)} has defeated {str(user.mention)} {win_count} out of {total_games} matches!"
+   if total_games == 0:
+      message = "You two have not played each other. "
+   await ctx.send(message)
+
+
 #Check if User is hosting a session
 @bot.command()
 @commands.check(validate_user)
@@ -677,6 +839,8 @@ async def s(ctx, user: User):
       name = session['OWNER'].split("#",1)[0]
       games = game['GAME']
       avatar = game['IMAGE_URL']
+      tournament = session['TOURNAMENT']
+      kingsgambit = session['KINGSGAMBIT']
       game_type = " "
       if session['TYPE'] == 1:
          game_type = "1v1"
@@ -700,6 +864,8 @@ async def s(ctx, user: User):
       team_list = []
       team_1 = [x for x in teams if x['POSITION'] == 0] # position 0
       team_2 = [x for x in teams if x['POSITION'] == 1] # position 1
+      other_teams = [x for x in teams if x['POSITION'] > 1] # position 1
+
 
       team_1_comp = ""
       team_2_comp = ""
@@ -707,36 +873,52 @@ async def s(ctx, user: User):
       team_1_score = ""
       team_2_score = ""
 
+      king_score = 0
+
+      other_teams_comp = []
+
       for x in team_1:
          # n = x['TEAM'].split("#",1)[1]
          team_1_comp = "\n".join(x['TEAM'])
          team_1_score = f" Score: {x['SCORE']}"
+         king_score = x['SCORE']
+
 
       
       for x in team_2:
          team_2_comp = "\n".join(x['TEAM'])
          team_2_score = f" Score: {x['SCORE']}"
 
-      # for x in team_1:
-      #    for members in x['TEAM']:
-      #       mem_query = db.queryUser({'DISNAME': members})
-      #       ign_list = [x for x in mem_query['IGN']]
-      #       ign_list_keys = [k for k in ign_list[0].keys()]
-      #       if ign_list_keys == [games]:
-      #          team_list.append(f"{ign_list[0][games]}: {x['SCORE']}")
-      #       else:
-      #          team_list.append(f"{members}: {x['SCORE']}")
+      if kingsgambit:
+         for x in other_teams:
+            p = x['POSITION']
+            for a in x['TEAM']:
+               other_teams_comp.append({a:p})
 
-      # print(team_1)
-
+      other_teams_comp_to_str = dict(ChainMap(*other_teams_comp))
+      n = dict(sorted(other_teams_comp_to_str.items(), key=lambda item: item[1]))
+      other_teams_sorted_list = "\n".join(f'{k}' for k,v in n.items())
 
       embedVar = discord.Embed(title=f"{name}'s {games} Session ".format(bot), description="Party Chat Gaming Database", colour=000000)
       embedVar.set_thumbnail(url=avatar)
       embedVar.add_field(name="Match Type", value=f'{game_type}'.format(bot))
       embedVar.add_field(name="Ranked", value=f'{ranked}'.format(bot))
-      embedVar.add_field(name=f"Team 1 - {team_1_score}", value=team_1_comp, inline=False)
+      if tournament:
+         embedVar.add_field(name="Tournament", value="Yes")
+      
+      if kingsgambit:
+         embedVar.add_field(name="Kings Gambit", value="Yes")
+      
+      if kingsgambit and king_score > 0:
+         embedVar.add_field(name=f"King - {team_1_score}", value=team_1_comp, inline=False)
+      else:
+         embedVar.add_field(name=f"Team 1 - {team_1_score}", value=team_1_comp, inline=False)
+      
       if team_2_comp:
          embedVar.add_field(name=f"Team 2 - {team_2_score}", value=team_2_comp, inline=False)
+      
+      if kingsgambit:
+         embedVar.add_field(name=f"Up Next...", value=other_teams_sorted_list, inline=False)
       else:
          await ctx.send("No one has joined to compete. ", delete_after=5)
       await ctx.send(embed=embedVar, delete_after=15)
@@ -746,13 +928,14 @@ async def s(ctx, user: User):
 #Check your current session
 @bot.command()
 @commands.check(validate_user)
-async def ms(ctx):
+async def ms(ctx):  
    session_owner = {'OWNER': str(ctx.author), "AVAILABLE": True}
    session = db.querySession(session_owner)
    if session:
       game_query = {'ALIASES': session['GAME']}
       game = db.queryGame(game_query)
-
+      tournament = session['TOURNAMENT']
+      kingsgambit = session['KINGSGAMBIT']
       name = session['OWNER'].split("#",1)[0]
       games = game['GAME']
       avatar = game['IMAGE_URL']
@@ -779,6 +962,8 @@ async def ms(ctx):
       team_list = []
       team_1 = [x for x in teams if x['POSITION'] == 0] # position 0
       team_2 = [x for x in teams if x['POSITION'] == 1] # position 1
+      other_teams = [x for x in teams if x['POSITION'] > 1] # position 1
+
 
       team_1_comp = ""
       team_2_comp = ""
@@ -786,43 +971,59 @@ async def ms(ctx):
       team_1_score = ""
       team_2_score = ""
 
+      king_score = 0
+
+      other_teams_comp = []
+
       for x in team_1:
          # n = x['TEAM'].split("#",1)[1]
          team_1_comp = "\n".join(x['TEAM'])
          team_1_score = f" Score: {x['SCORE']}"
+         king_score = x['SCORE']
+
 
       
       for x in team_2:
          team_2_comp = "\n".join(x['TEAM'])
          team_2_score = f" Score: {x['SCORE']}"
 
-      # for x in team_1:
-      #    for members in x['TEAM']:
-      #       mem_query = db.queryUser({'DISNAME': members})
-      #       ign_list = [x for x in mem_query['IGN']]
-      #       ign_list_keys = [k for k in ign_list[0].keys()]
-      #       if ign_list_keys == [games]:
-      #          team_list.append(f"{ign_list[0][games]}: {x['SCORE']}")
-      #       else:
-      #          team_list.append(f"{members}: {x['SCORE']}")
+      if kingsgambit:
+         for x in other_teams:
+            p = x['POSITION']
+            for a in x['TEAM']:
+               other_teams_comp.append({a:p})
 
-      # print(team_1)
-
+      other_teams_comp_to_str = dict(ChainMap(*other_teams_comp))
+      n = dict(sorted(other_teams_comp_to_str.items(), key=lambda item: item[1]))
+      other_teams_sorted_list = "\n".join(f'{k}' for k,v in n.items())
 
       embedVar = discord.Embed(title=f"{name}'s {games} Session ".format(bot), description="Party Chat Gaming Database", colour=000000)
       embedVar.set_thumbnail(url=avatar)
       embedVar.add_field(name="Match Type", value=f'{game_type}'.format(bot))
       embedVar.add_field(name="Ranked", value=f'{ranked}'.format(bot))
-      embedVar.add_field(name=f"Team 1 - {team_1_score}", value=team_1_comp, inline=False)
+      if tournament:
+         embedVar.add_field(name="Tournament", value="Yes")
+      
+      if kingsgambit:
+         embedVar.add_field(name="Kings Gambit", value="Yes")
+      
+      if kingsgambit and king_score > 0:
+         embedVar.add_field(name=f"King - {team_1_score}", value=team_1_comp, inline=False)
+      else:
+         embedVar.add_field(name=f"Team 1 - {team_1_score}", value=team_1_comp, inline=False)
+      
       if team_2_comp:
          embedVar.add_field(name=f"Team 2 - {team_2_score}", value=team_2_comp, inline=False)
+      
+      if kingsgambit:
+         embedVar.add_field(name=f"Up Next...", value=other_teams_sorted_list, inline=False)
       else:
          await ctx.send("No one has joined to compete. ", delete_after=5)
       await ctx.send(embed=embedVar, delete_after=15)
    else:
       await ctx.send("Session does not exist. ", delete_after=5)
 
-
+''' Team Functions '''
 @bot.command()
 @commands.check(validate_user)
 async def ct(ctx, args1, *args):
@@ -959,7 +1160,7 @@ async def dt(ctx, *args):
    else:
       await ctx.send("Only the owner of the team can delete the team. ")
 
-
+''' Check What Session A Player Is In '''
 @bot.command()
 @commands.check(validate_user)
 async def cs(ctx, user: User):
@@ -972,6 +1173,8 @@ async def cs(ctx, user: User):
       name = session['OWNER'].split("#",1)[0]
       games = game['GAME']
       avatar = game['IMAGE_URL']
+      tournament = session['TOURNAMENT']
+      kingsgambit = session['KINGSGAMBIT']
       game_type = " "
       if session['TYPE'] == 1:
          game_type = "1v1"
@@ -995,6 +1198,8 @@ async def cs(ctx, user: User):
       team_list = []
       team_1 = [x for x in teams if x['POSITION'] == 0] # position 0
       team_2 = [x for x in teams if x['POSITION'] == 1] # position 1
+      other_teams = [x for x in teams if x['POSITION'] > 1] # position 1
+
 
       team_1_comp = ""
       team_2_comp = ""
@@ -1002,36 +1207,52 @@ async def cs(ctx, user: User):
       team_1_score = ""
       team_2_score = ""
 
+      king_score = 0
+
+      other_teams_comp = []
+
       for x in team_1:
          # n = x['TEAM'].split("#",1)[1]
          team_1_comp = "\n".join(x['TEAM'])
          team_1_score = f" Score: {x['SCORE']}"
+         king_score = x['SCORE']
+
 
       
       for x in team_2:
          team_2_comp = "\n".join(x['TEAM'])
          team_2_score = f" Score: {x['SCORE']}"
 
-      # for x in team_1:
-      #    for members in x['TEAM']:
-      #       mem_query = db.queryUser({'DISNAME': members})
-      #       ign_list = [x for x in mem_query['IGN']]
-      #       ign_list_keys = [k for k in ign_list[0].keys()]
-      #       if ign_list_keys == [games]:
-      #          team_list.append(f"{ign_list[0][games]}: {x['SCORE']}")
-      #       else:
-      #          team_list.append(f"{members}: {x['SCORE']}")
+      if kingsgambit:
+         for x in other_teams:
+            p = x['POSITION']
+            for a in x['TEAM']:
+               other_teams_comp.append({a:p})
 
-      # print(team_1)
-
+      other_teams_comp_to_str = dict(ChainMap(*other_teams_comp))
+      n = dict(sorted(other_teams_comp_to_str.items(), key=lambda item: item[1]))
+      other_teams_sorted_list = "\n".join(f'{k}' for k,v in n.items())
 
       embedVar = discord.Embed(title=f"{name}'s {games} Session ".format(bot), description="Party Chat Gaming Database", colour=000000)
       embedVar.set_thumbnail(url=avatar)
       embedVar.add_field(name="Match Type", value=f'{game_type}'.format(bot))
       embedVar.add_field(name="Ranked", value=f'{ranked}'.format(bot))
-      embedVar.add_field(name=f"Team 1 - {team_1_score}", value=team_1_comp, inline=False)
+      if tournament:
+         embedVar.add_field(name="Tournament", value="Yes")
+      
+      if kingsgambit:
+         embedVar.add_field(name="Kings Gambit", value="Yes")
+      
+      if kingsgambit and king_score > 0:
+         embedVar.add_field(name=f"King - {team_1_score}", value=team_1_comp, inline=False)
+      else:
+         embedVar.add_field(name=f"Team 1 - {team_1_score}", value=team_1_comp, inline=False)
+      
       if team_2_comp:
          embedVar.add_field(name=f"Team 2 - {team_2_score}", value=team_2_comp, inline=False)
+      
+      if kingsgambit:
+         embedVar.add_field(name=f"Up Next...", value=other_teams_sorted_list, inline=False)
       else:
          await ctx.send("No one has joined to compete. ", delete_after=5)
       await ctx.send(embed=embedVar, delete_after=15)
@@ -1056,55 +1277,67 @@ async def sw(ctx):
    query = {"_id": session_data["_id"], "TEAMS.TEAM": str(ctx.author)}
    db.updateSession(session, query, update_query)
    game_type = ""
-   if session_data['RANKED'] == False:
-      if session['TYPE'] == 1:
-         game_type = "1v1"
-      elif session['TYPE'] == 2:
-         game_type = "2v2"
-      elif session['TYPE'] == 3:
-         game_type = "3v3"
-      elif session['TYPE'] == 4:
-         game_type = "4v4"
-      elif session['TYPE'] == 5:
-         game_type = "5v5"
 
-      for x in winning_team['TEAM']:
-         player = db.queryUser({'DISNAME': x})
-         types_of_matches_list = [x for x in player['NORMAL']]
-         types_of_matches = dict(ChainMap(*types_of_matches_list))
-         current_score = types_of_matches[game_type.upper()]
-         query = {'DISNAME': player['DISNAME']}
-         #uid = {'DID' : player['DID']}
+   if session['TYPE'] == 1:
+      game_type = "1v1"
+   elif session['TYPE'] == 2:
+      game_type = "2v2"
+   elif session['TYPE'] == 3:
+      game_type = "3v3"
+   elif session['TYPE'] == 4:
+      game_type = "4v4"
+   elif session['TYPE'] == 5:
+      game_type = "5v5"
+
+   for x in winning_team['TEAM']:
+      player = db.queryUser({'DISNAME': x})
+      types_of_matches_list = [x for x in player['NORMAL']]
+      types_of_matches = dict(ChainMap(*types_of_matches_list))
+      current_score = types_of_matches[game_type.upper()]
+      query = {'DISNAME': player['DISNAME']}
+      #uid = {'DID' : player['DID']}
+      
+      new_value = {}
+      if session_data['TOURNAMENT']:
+         new_value = {"$inc": {'TOURNAMENT_WINS': 1}}
+      elif session_data['RANKED']:
+         new_value = {"$inc": {'RANKED.$[type].' + game_type.upper() + '.0': 1}}
+      elif session_data['NORMAL']:
          new_value = {"$inc": {'NORMAL.$[type].' + game_type.upper() + '.0': 1}}
-         filter_query = [{'type.' + game_type.upper(): current_score}]
-         db.updateUser(query, new_value, filter_query)
-         uid = player['DID']
-         user = await bot.fetch_user(uid)
-         await DM(ctx, user, "You Won. Doesnt Prove Much Tho :yawning_face:")
-         await ctx.send(f"Competitor " + f"{user.mention}" + " earns a victory ! :100:", delete_after=5)
+      filter_query = [{'type.' + game_type.upper(): current_score}]
 
-   else :
-      print("hello world")
+      if session_data['TOURNAMENT']:
+         db.updateUserNoFilter(query, new_value)
+      else:
+         db.updateUser(query, new_value, filter_query)
+      
+      uid = player['DID']
+      user = await bot.fetch_user(uid)
+      await DM(ctx, user, "You Won. Doesnt Prove Much Tho :yawning_face:")
+      await ctx.send(f"Competitor " + f"{user.mention}" + " earns a victory ! :100:", delete_after=5)
 
 
 async def sl(ctx):
    session_query = {"OWNER": str(ctx.author), "AVAILABLE": True}
    session_data = db.querySession(session_query)
-   teams = [x for x in session_data['TEAMS']]
-   losing_team = {}
-   low_score = teams[0]['SCORE']
-   for x in teams:
-      if x['SCORE'] <= low_score:
-         low_score = x['SCORE']
-         losing_team = x
-   session_data['LOSER'] = losing_team
-   loser = session_data['LOSER']
-   session = session_data
-   update_query = {'$set': {'LOSER': loser}}
-   query = {"_id": session_data["_id"], "TEAMS.TEAM": str(ctx.author)}
-   db.updateSession(session, query, update_query)
-   game_type = ""
-   if session_data['RANKED'] == False:
+   if session_data['KINGSGAMBIT']:
+      return await ctx.send("Session has ended. See you for the next Kings Gambit!")
+   else:
+      teams = [x for x in session_data['TEAMS']]
+      losing_team = {}
+      low_score = teams[0]['SCORE']
+      for x in teams:
+         if x['SCORE'] <= low_score:
+            low_score = x['SCORE']
+            losing_team = x
+      session_data['LOSER'] = losing_team
+      loser = session_data['LOSER']
+      session = session_data
+      update_query = {'$set': {'LOSER': loser}}
+      query = {"_id": session_data["_id"], "TEAMS.TEAM": str(ctx.author)}
+      db.updateSession(session, query, update_query)
+      game_type = ""
+      
       if session['TYPE'] == 1:
          game_type = "1v1"
       elif session['TYPE'] == 2:
@@ -1122,22 +1355,87 @@ async def sl(ctx):
          types_of_matches = dict(ChainMap(*types_of_matches_list))
          current_score = types_of_matches[game_type.upper()]
          query = {'DISNAME': player['DISNAME']}
-         new_value = {"$inc": {'NORMAL.$[type].' + game_type.upper() + '.1': 1}}
+
+         new_value = {}
+         if session_data['TOURNAMENT']:
+            new_value = {"$set": {'TOURNAMENT_LOSSES': 1}}
+         elif session_data['RANKED']:
+            new_value = {"$inc": {'RANKED.$[type].' + game_type.upper() + '.1': 1}}
+         elif session_data['NORMAL']:
+            new_value = {"$inc": {'NORMAL.$[type].' + game_type.upper() + '.1': 1}}
          filter_query = [{'type.' + game_type.upper(): current_score}]
-         db.updateUser(query, new_value, filter_query)
+
+         
+         if session_data['TOURNAMENT']:
+            db.updateUserNoFilter(query, new_value)
+         else:
+            db.updateUser(query, new_value, filter_query)
+
          uid = player['DID']
          user = await bot.fetch_user(uid)
          await DM(ctx, user, "You Lost. Get back in there :poop:")
          await ctx.send(f"Competitor " + f"{user.mention}" + " took another L! :eyes:", delete_after=5)
-   else :
-      print("hello world")
-   # await ctx.send(loser['TEAM'], delete_after=5)
+
+      # await ctx.send(loser['TEAM'], delete_after=5)
 
 
 async def DM(ctx, user : User, m,  message=None):
     message = message or "This Message is sent via DM"
     await user.send(m)
 
+'''
+1V1 ADMIN TOURNAMENTS
+Admin will create the session, users will join session via invite, users will submit screenshot (or admin will watch) and score based on winner
+'''
+@bot.command()
+@commands.check(validate_user)
+async def e(ctx):
+   if ctx.author.guild_permissions.administrator == True:
+      game = [x for x in db.query_all_games()][0]
+      session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 1, "TEAMS": [], "RANKED": True, "TOURNAMENT": True, }
+      resp = db.createSession(data.newSession(session_query))
+      await ctx.send(resp, delete_after=5)
+   else:
+      await ctx.send(m.ADMIN_ONLY_COMMAND)
+
+@bot.command()
+@commands.check(validate_user)
+async def einvite(ctx, user1: User):
+   if ctx.author.guild_permissions.administrator == True:
+      game = [x for x in db.query_all_games()][0]
+      
+      validate_opponent = db.queryUser({'DISNAME': str(user1)})
+
+      if validate_opponent:
+         await DM(ctx, user1, f"{ctx.author.mention}" + " has invited you to a Tournament Match :eyes:")
+         accept = await ctx.send(f"{user1.mention}, Will you join the Exhibition? :fire:", delete_after=15)
+         for emoji in emojis:
+            await accept.add_reaction(emoji)
+
+         def check(reaction, user):
+            return user == user1 and str(reaction.emoji) == '👍'
+         try:
+            reaction, user = await bot.wait_for('reaction_add', timeout=10.0, check=check)
+
+            session_query = {"OWNER": str(ctx.author),"TOURNAMENT": True , "AVAILABLE": True}
+            session_data = db.querySession(session_query)
+            teams_list = [x for x in session_data['TEAMS']]
+            positions = []
+            new_position = 0
+            if bool(teams_list):
+               for x in teams_list:
+                  positions.append(x['POSITION'])
+               new_position = max(positions) + 1
+
+            join_query = {"TEAM": [str(user1)], "SCORE": 0, "POSITION": new_position}
+            resp = db.joinExhibition(session_query, join_query)
+            await ctx.send(resp, delete_after=5)
+         except:
+            await ctx.send("User did not accept.")
+      else:
+         await ctx.send(m.USER_NOT_REGISTERED, delete_after=5)
+   else:
+      await ctx.send(m.ADMIN_ONLY_COMMAND)
 
 
 DISCORD_TOKEN = config('DISCORD_TOKEN')

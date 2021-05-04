@@ -17,7 +17,9 @@ class USER():
     RANKED: list = field(default_factory=lambda: [{'1V1': [0, 0, 0]}, {'2V2': [0, 0, 0]}, {'3V3': [0, 0, 0]}, {'4V4': [0, 0, 0]}, {'5V5': [0, 0, 0]}])
     NORMAL: list = field(default_factory=lambda: [{'1V1': [0, 0, 0]}, {'2V2': [0, 0, 0]}, {'3V3': [0, 0, 0]}, {'4V4': [0, 0, 0]}, {'5V5': [0, 0, 0]}])
     TOURNAMENT_WINS: int = field(default_factory=lambda: 0)
+    # TOURNAMENT_LOSSES: int = field(default_factory=lambda: 0)
     AVAILABLE: bool = field(default_factory=lambda: True)
+    WALLET: int = field(default_factory=lambda: 0)
     TIMESTAMP: str = now
 
 
@@ -43,14 +45,14 @@ class SESSIONS():
     # TEAM_SESSION: bool = field(default_factory=lambda: False)
     RANKED: bool = field(default_factory=lambda: False)
     GOC: bool = field(default_factory=lambda: False)
+    TOURNAMENT: str = field(default_factory=lambda: False)
+    SCRIM: bool = field(default_factory=lambda: False)
     KINGSGAMBIT: str = field(default_factory=lambda: False)
     AVAILABLE: bool = field(default_factory=lambda: True)
     IS_FULL: bool = field(default_factory=lambda: False)
-    MATCHES: list[str] = field(default_factory=lambda: [])
     WINNER: str = field(default_factory=lambda: 'N/A')
     LOSER: str = field(default_factory=lambda: 'N/A')
     TIMESTAMP: str = now
-    SCRIM: bool = field(default_factory=lambda: False) 
 
 @dataclass(frozen=True, order=True)
 class MATCHES():
@@ -74,6 +76,7 @@ class TOURNAMENTS():
 class CARDS():
     PATH: str
     NAME: str
+    PRICE: int = field(default_factory=lambda: 10)
     TIER: int = field(default_factory=lambda: 1)
     WINS_REQUIREMENTS: int = field(default_factory=lambda: 0)
     TOURNAMENT_REQUIREMENTS: int = field(default_factory=lambda: 0)
@@ -101,6 +104,16 @@ class GAMES():
     IGN: bool = field(default_factory=lambda: False)
     ALIASES: list[str] = field(default_factory=lambda: [])
     TIMESTAMP: str = now
+
+@dataclass(frozen=True, order=True) 
+class GOC():
+    TITLE: str
+    TYPE: int
+    AVAILABLE: bool = field(default_factory=lambda: False)
+    REGISTRATION: bool = field(default_factory=lambda: False)
+    PARTICIPANTS: list[str] = field(default_factory=lambda: [])
+    TIMESTAMP: str = now
+
 
 
 
