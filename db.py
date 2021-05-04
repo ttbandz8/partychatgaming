@@ -1,5 +1,6 @@
 import pymongo 
 from decouple import config
+import messages as m
 
 
 TOKEN = config('MONGOTOKEN_TEST')
@@ -117,6 +118,11 @@ def queryUser(user):
     except:
         return "Find user failed. "
 
+''' Query All Users '''
+def queryAllUsers():
+    data = users_col.find()
+    return data
+
 
 '''Create User'''
 def createUsers(users):
@@ -171,6 +177,7 @@ def updateUser(query, new_value, arrayFilters):
     else:
         return "Update failed. "
 
+'''Update User With No Array Filters'''
 def updateUserNoFilter(query, new_value):
     exists = user_exists({'DISNAME': query['DISNAME']})
     if exists:
@@ -178,8 +185,6 @@ def updateUserNoFilter(query, new_value):
         return "Update completed. "
     else:
         return "Update failed. "
-
-
 
 
 
@@ -207,6 +212,12 @@ def queryTeam(team):
             print("Team doesn't exist.")
     except:
         print("Find team failed.")
+
+'''Query All Teams'''
+def queryTeam(team):
+    data = teams_col.find()
+    return data
+
 
 '''Add new Team'''
 def createTeam(team, user):
@@ -422,12 +433,12 @@ def joinExhibition(session, query):
             if len(list_matching) == 0:
                 teaminsert = sessions_col.update_one(session, {'$addToSet': {'TEAMS': query}, '$set': {'IS_FULL': True}})
 
-                return 'Session Joined'
+                return m.SESSION_JOINED
             else: 
                 return 'Session full.'
         else:
             teaminsert = sessions_col.update_one(session, {'$addToSet': {'TEAMS': query}})
-            return 'Session Joined'
+            return m.SESSION_JOINED
 
 
 
@@ -435,23 +446,25 @@ def joinExhibition(session, query):
 def joinKingsGambit(session, query):
     sessionquery = querySession(session)
     matchtype = sessionquery['TYPE']
-    if matchtype == len(query['TEAM']):
-        # List of current teams in session
-        p = [x for x in sessionquery['TEAMS']]
-        
-        # Check if team trying to join is part of a team already
-        list_matching = [x for x in p[0]['TEAM'] if x in query['TEAM']]
+    if len(query['TEAM']) != 3:
+        if len(query['TEAM']) != 1:       
+            # List of current teams in session
+            p = [x for x in sessionquery['TEAMS']]
+            
+            # Check if team trying to join is part of a team already
+            list_matching = [x for x in p[0]['TEAM'] if x in query['TEAM']]
 
-        if len(list_matching) == 0:
+            if len(list_matching) == 0:
+                teaminsert = sessions_col.update_one(session, {'$addToSet': {'TEAMS': query}})
+
+                return m.SESSION_JOINED
+            else: 
+                return 'Session full.'
+        else:
             teaminsert = sessions_col.update_one(session, {'$addToSet': {'TEAMS': query}})
+            return m.SESSION_JOINED
 
-            return 'Session Joined'
-        else: 
-            return 'Session full.'
-    elif matchtype < len(query['TEAM']):
-        return 'Too many players in team'
-    elif matchtype > len(query['TEAM']):
-        return 'Not enough players in team'
+
 
 
 
@@ -487,6 +500,16 @@ def updateSession(session, query, update_query):
     exists = session_exist({'OWNER': session['OWNER'], 'AVAILABLE': True})
     if exists:
         sessions_col.update_one(query, update_query)
+        return True
+    else:
+        return False
+
+
+'''Update Session'''
+def updatekg(session, query, update_query, arrayFilter):
+    exists = session_exist({'OWNER': session['OWNER'], 'AVAILABLE': True, "KINGSGAMBIT": True})
+    if exists:
+        sessions_col.update_one(query, update_query,  array_filters=arrayFilter)
         return True
     else:
         return False
