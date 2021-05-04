@@ -373,13 +373,17 @@ def createSession(session):
     if exists:
         return "Session Already Exists."
     else:
-        players_per_team_count = [x for x in session['TEAMS'][0]['TEAM']]
-        if session['TYPE'] != len(players_per_team_count):
-
-            return "Team and Session Type do not match. "
-        else:
+        if session['TOURNAMENT']:
             sessions_col.insert_one(session)
-            return "New Session started. "
+            return "New Tournament has been created"
+        else:       
+            players_per_team_count = [x for x in session['TEAMS'][0]['TEAM']]
+            if session['TYPE'] != len(players_per_team_count):
+
+                return "Team and Session Type do not match. "
+            else:
+                sessions_col.insert_one(session)
+                return "New Session started. "
 
 '''Join Session'''
 def joinSession(session, query):
@@ -402,6 +406,28 @@ def joinSession(session, query):
         return 'Too many players in team'
     elif matchtype > len(query['TEAM']):
         return 'Not enough players in team'
+
+'''Join Exhibition'''
+def joinExhibition(session, query):
+    sessionquery = querySession(session)
+    matchtype = sessionquery['TYPE']
+    if len(query['TEAM']) != 3:
+        if len(query['TEAM']) != 1:       
+            # List of current teams in session
+            p = [x for x in sessionquery['TEAMS']]
+            
+            # Check if team trying to join is part of a team already
+            list_matching = [x for x in p[0]['TEAM'] if x in query['TEAM']]
+
+            if len(list_matching) == 0:
+                teaminsert = sessions_col.update_one(session, {'$addToSet': {'TEAMS': query}, '$set': {'IS_FULL': True}})
+
+                return 'Session Joined'
+            else: 
+                return 'Session full.'
+        else:
+            teaminsert = sessions_col.update_one(session, {'$addToSet': {'TEAMS': query}})
+            return 'Session Joined'
 
 
 
