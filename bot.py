@@ -673,6 +673,8 @@ async def s(ctx, user: User):
       name = session['OWNER'].split("#",1)[0]
       games = game['GAME']
       avatar = game['IMAGE_URL']
+      tournament = session['TOURNAMENT']
+      kingsgambit = session['KINGSGAMBIT']
       game_type = " "
       if session['TYPE'] == 1:
          game_type = "1v1"
@@ -704,7 +706,6 @@ async def s(ctx, user: User):
       team_2_score = ""
 
       for x in team_1:
-         # n = x['TEAM'].split("#",1)[1]
          team_1_comp = "\n".join(x['TEAM'])
          team_1_score = f" Score: {x['SCORE']}"
 
@@ -713,23 +714,17 @@ async def s(ctx, user: User):
          team_2_comp = "\n".join(x['TEAM'])
          team_2_score = f" Score: {x['SCORE']}"
 
-      # for x in team_1:
-      #    for members in x['TEAM']:
-      #       mem_query = db.queryUser({'DISNAME': members})
-      #       ign_list = [x for x in mem_query['IGN']]
-      #       ign_list_keys = [k for k in ign_list[0].keys()]
-      #       if ign_list_keys == [games]:
-      #          team_list.append(f"{ign_list[0][games]}: {x['SCORE']}")
-      #       else:
-      #          team_list.append(f"{members}: {x['SCORE']}")
-
-      # print(team_1)
-
 
       embedVar = discord.Embed(title=f"{name}'s {games} Session ".format(bot), description="Party Chat Gaming Database", colour=000000)
       embedVar.set_thumbnail(url=avatar)
       embedVar.add_field(name="Match Type", value=f'{game_type}'.format(bot))
       embedVar.add_field(name="Ranked", value=f'{ranked}'.format(bot))
+      if tournament:
+         embedVar.add_field(name="Tournament", value="Yes")
+      
+      if kingsgambit:
+         embedVar.add_field(name="Kings Gambit", value="Yes")
+
       embedVar.add_field(name=f"Team 1 - {team_1_score}", value=team_1_comp, inline=False)
       if team_2_comp:
          embedVar.add_field(name=f"Team 2 - {team_2_score}", value=team_2_comp, inline=False)
@@ -748,7 +743,8 @@ async def ms(ctx):
    if session:
       game_query = {'ALIASES': session['GAME']}
       game = db.queryGame(game_query)
-
+      tournament = session['TOURNAMENT']
+      kingsgambit = session['KINGSGAMBIT']
       name = session['OWNER'].split("#",1)[0]
       games = game['GAME']
       avatar = game['IMAGE_URL']
@@ -809,6 +805,10 @@ async def ms(ctx):
       embedVar.set_thumbnail(url=avatar)
       embedVar.add_field(name="Match Type", value=f'{game_type}'.format(bot))
       embedVar.add_field(name="Ranked", value=f'{ranked}'.format(bot))
+      if tournament:
+         embedVar.add_field(name="Tournament", value="Yes")
+      if kingsgambit:
+         embedVar.add_field(name="Kings Gambit", value="Yes")
       embedVar.add_field(name=f"Team 1 - {team_1_score}", value=team_1_comp, inline=False)
       if team_2_comp:
          embedVar.add_field(name=f"Team 2 - {team_2_score}", value=team_2_comp, inline=False)
@@ -967,6 +967,8 @@ async def cs(ctx, user: User):
       name = session['OWNER'].split("#",1)[0]
       games = game['GAME']
       avatar = game['IMAGE_URL']
+      tournament = session['TOURNAMENT']
+      kingsgambit = session['KINGSGAMBIT']
       game_type = " "
       if session['TYPE'] == 1:
          game_type = "1v1"
@@ -1024,6 +1026,10 @@ async def cs(ctx, user: User):
       embedVar.set_thumbnail(url=avatar)
       embedVar.add_field(name="Match Type", value=f'{game_type}'.format(bot))
       embedVar.add_field(name="Ranked", value=f'{ranked}'.format(bot))
+      if tournament:
+         embedVar.add_field(name="Tournament", value="Yes")
+      if kingsgambit:
+         embedVar.add_field(name="Kings Gambit", value="Yes")
       embedVar.add_field(name=f"Team 1 - {team_1_score}", value=team_1_comp, inline=False)
       if team_2_comp:
          embedVar.add_field(name=f"Team 2 - {team_2_score}", value=team_2_comp, inline=False)
@@ -1133,6 +1139,59 @@ async def DM(ctx, user : User, m,  message=None):
     message = message or "This Message is sent via DM"
     await user.send(m)
 
+'''
+1V1 ADMIN TOURNAMENTS
+Admin will create the session, users will join session via invite, users will submit screenshot (or admin will watch) and score based on winner
+'''
+@bot.command()
+@commands.check(validate_user)
+async def e(ctx):
+   if ctx.author.guild_permissions.administrator == True:
+      game = [x for x in db.query_all_games()][0]
+      session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 1, "TEAMS": [], "RANKED": True, "TOURNAMENT": True, }
+      resp = db.createSession(data.newSession(session_query))
+      await ctx.send(resp, delete_after=5)
+   else:
+      await ctx.send("Admin Only Command")
+
+@bot.command()
+@commands.check(validate_user)
+async def einvite(ctx, user1: User):
+   if ctx.author.guild_permissions.administrator == True:
+      game = [x for x in db.query_all_games()][0]
+      
+      validate_opponent = db.queryUser({'DISNAME': str(user1)})
+
+      if validate_opponent:
+         await DM(ctx, user1, f"{ctx.author.mention}" + " has invited you to a Tournament Match :eyes:")
+         accept = await ctx.send(f"{user1.mention}, Will you join the Exhibition? :fire:", delete_after=15)
+         for emoji in emojis:
+            await accept.add_reaction(emoji)
+
+         def check(reaction, user):
+            return user == user1 and str(reaction.emoji) == '👍'
+         try:
+            reaction, user = await bot.wait_for('reaction_add', timeout=10.0, check=check)
+
+            session_query = {"OWNER": str(ctx.author),"TOURNAMENT": True , "AVAILABLE": True}
+            session_data = db.querySession(session_query)
+            teams_list = [x for x in session_data['TEAMS']]
+            positions = []
+            new_position = 0
+            if bool(teams_list):
+               for x in teams_list:
+                  positions.append(x['POSITION'])
+               new_position = max(positions) + 1
+
+            join_query = {"TEAM": [str(user1)], "SCORE": 0, "POSITION": new_position}
+            resp = db.joinExhibition(session_query, join_query)
+            await ctx.send(resp, delete_after=5)
+         except:
+            await ctx.send("Did not work")
+      else:
+         await ctx.send("Users must register.", delete_after=5)
+   else:
+      await ctx.send("Admin Only Command")
 
 
 DISCORD_TOKEN = config('DISCORD_TOKEN')
