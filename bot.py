@@ -257,12 +257,73 @@ async def flex(ctx):
 
 
 @bot.command()
+@commands.check(validate_user)
+async def cb(ctx):
+   query = {'DISNAME': str(ctx.author)}
+   d = db.queryUser(query)
+
+   vault = db.queryVault({'OWNER': d['DISNAME']})
+   if vault:
+      name = d['DISNAME'].split("#",1)[0]
+      avatar = d['AVATAR']
+      balance = vault['BALANCE']
+
+
+
+      embedVar = discord.Embed(title= f":triangular_flag_on_post: " + f"{name}".format(client), description=":bank: Party Chat Gaming Vault™️", colour=000000)
+      embedVar.set_thumbnail(url=avatar)
+      embedVar.add_field(name="Balance" + " :fireworks:", value=balance)
+      await ctx.send(embed=embedVar, delete_after=15)
+
+   else:
+      newVault = db.createVault({'OWNER': d['DISNAME']})
+      print(newVault)
+
+
+@bot.command()
+@commands.check(validate_user)
+async def bless(ctx, args, user1: User):
+   if ctx.author.guild_permissions.administrator == True:
+      blessAmount = args
+      posBlessAmount = 0 + abs(int(blessAmount))
+      query = {'DISNAME': str(user1)}
+      vaultOwner = db.queryUser(query)
+      if vaultOwner:
+         vault = db.queryVault({'OWNER' : vaultOwner['DISNAME']})
+         update_query = {"$inc": {'BALANCE': posBlessAmount}}
+         db.updateVaultNoFilter(vault, update_query)
+      else:
+         print("cant find vault")
+
+
+@bot.command()
+@commands.check(validate_user)
+async def curse(ctx,args, user1: User):
+   if ctx.author.guild_permissions.administrator == True:
+      curseAmount = args
+      negCurseAmount = 0 - abs(int(curseAmount))
+      query = {'DISNAME': str(user1)}
+      vaultOwner = db.queryUser(query)
+      if vaultOwner:
+         vault = db.queryVault({'OWNER' : vaultOwner['DISNAME']})
+         update_query = {"$inc": {'BALANCE': int(negCurseAmount)}}
+         db.updateVaultNoFilter(vault, update_query)
+      else:
+         print("cant find vault")
+
+@bot.command()
 async def r(ctx):
    disname = str(ctx.author)
    name = disname.split("#",1)[0]
    user = {'DISNAME': disname, 'NAME': name, 'DID' : str(ctx.author.id), 'AVATAR': str(ctx.author.avatar_url)}
    response = db.createUsers(data.newUser(user))
-   await ctx.send(response, delete_after=5)
+   userQuery = db.queryUser({'DISNAME': str(ctx.author)})
+   vault = db.queryVault({'OWNER': userQuery['DISNAME']})
+   if vault:
+      await ctx.send(response, delete_after=5)
+   else:
+      vault = db.createVault(data.newVault({'OWNER' : userQuery['DISNAME']}))
+      await ctx.send(response, delete_after=5)        
 
 
 '''delete user'''
@@ -275,6 +336,12 @@ async def d(ctx, user: User, args):
          user_is_validated = db.queryUser(query)
          if user_is_validated:
             delete_user_resp = db.deleteUser(query)
+            vault = db.queryVault({'OWNER': user_is_validated['DISNAME']})
+            if vault:
+               db.deleteVault(vault)
+               print("vault gone")
+            else:
+               print("coudlnt delete")
             await ctx.send(delete_user_resp, delete_after=5)
    else:
       await ctx.send("Invalid command", delete_after=5)
@@ -311,6 +378,7 @@ async def ag(ctx, *args):
             resp = db.updateUserNoFilter(user, query_to_update_game)
             await ctx.send(resp, delete_after=5)
 
+
 @bot.command()
 @commands.check(validate_user)
 async def uign(ctx, args1, args2):
@@ -330,6 +398,8 @@ async def uign(ctx, args1, args2):
          await ctx.send("In Game Names unavailable for this game. ", delete_after=3)
    else:
       await ctx.send("Game is unavailable. ", delete_after=3)
+
+
 
 ''' Kings Gambit '''
 @bot.command()
@@ -452,6 +522,7 @@ async def skg(ctx, user: User):
       await ctx.send(f"{user.mention}" +f" :heavy_plus_sign::one:", delete_after=2)
    else:
       await ctx.send(f"Score not added. Please, try again. ", delete_after=5) 
+
 
 
 ''' Create 1v1 - 5v5 Sessions '''
@@ -673,6 +744,7 @@ async def ds(ctx):
    response = db.deleteSession(session_query)
    await ctx.send(response, delete_after=5)
 
+
 ''' Delete All Sessions '''
 @bot.command()
 @commands.check(validate_user)
@@ -683,6 +755,7 @@ async def das(ctx):
       await ctx.send(resp)
    else:
       await ctx.send(m.ADMIN_ONLY_COMMAND)
+
 
 ''' Invite to 1v1 '''
 @bot.command()
@@ -718,6 +791,7 @@ async def invite(ctx, args, user1: User):
          await ctx.send(m.INVITE_NOT_ACCEPTED, delete_after=3)
    else:
       await ctx.send("Users must register.", delete_after=5)
+
 
 #Join Session with up to 4 mates
 @bot.command()

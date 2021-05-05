@@ -15,6 +15,7 @@ matches_col = db["MATCHES"]
 tournaments_col = db["TOURNAMENTS"]
 cards_col = db["CARDS"]
 titles_col = db["TITLES"]
+vault_col =db["VAULT"]
 
 '''Check if Collection Exists'''
 def col_exists(col):
@@ -35,6 +36,73 @@ def user_exists(data):
             return False
     else:
         return False
+
+
+'''Check If Vault exist'''
+def vault_exist(data):
+    collection_exists = col_exists("VAULT")
+    if collection_exists:
+        vault_does_exist = vault_col.find_one(data)
+        if vault_does_exist:
+            return True
+        else:
+            return False
+    else:
+        return False
+
+
+'''New Vault'''
+def createVault(vault):
+    try:
+        vaultexist = vault_exist({'OWNER': vault['OWNER']})
+        if vaultexist:
+            return "Vault already exists."
+        else:
+            vault_col.insert_one(vault)
+            return "New Vault created."
+    except:
+        return "Cannot create vault."
+
+def queryAllVault():
+    data = vault_col.find()
+    return data
+
+def queryVault(query):
+    data = vault_col.find_one(query)
+    return data
+
+
+'''Delete Vault'''
+def deleteVault(vaults):
+    try:
+        if isinstance(vaults, list):
+            for vault in vaults:
+                exists = vault_exist(vault)
+                if exists:
+                    vault_col.delete_one({'OWNER': vault['OWNER']})
+                    return "Vault removed from the system. "
+                else:
+                    return "Vault does not exist in the system. "
+        else:
+            exists = vault_exist({'OWNER': vaults['OWNER']})
+            if exists:
+                vault_col.delete_one({'OWNER': vaults['OWNER']})
+                return "Vault has been removed from the system. "
+            else:
+                return "Vault does not exist in the system. "
+
+    except:
+        print("Delete Vault failed.")
+
+
+'''Update User With No Array Filters'''
+def updateVaultNoFilter(query, new_value):
+    exists = vault_exist({'OWNER': query['OWNER']})
+    if exists:
+        update = vault_col.update_one(query, new_value)
+        return "Update completed. "
+    else:
+        return "Update failed. "
 
 '''Check If Card Exists'''
 def card_exists(data):
@@ -100,9 +168,6 @@ def queryAllTitles():
 def queryTitle(query):
     data = titles_col.find_one(query)
     return data
-
-
-
 
 
 '''Query User'''
