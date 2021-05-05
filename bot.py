@@ -59,7 +59,7 @@ async def lk(ctx, user: User):
       name = d['DISNAME'].split("#",1)[0]
       games = d['GAMES']
       ign = d['IGN']
-      teams = d['TEAMS']
+      team = d['TEAM']
       titles = d['TITLE']
       avatar = d['AVATAR']
       ranked = d['RANKED']
@@ -78,7 +78,7 @@ async def lk(ctx, user: User):
       embedVar.set_thumbnail(url=avatar)
       embedVar.add_field(name="Game" + " :video_game:" , value=' '.join(str(x) for x in games))
       embedVar.add_field(name="In-Game Name" + " :selfie:", value="\n".join(f'{v}' for k,v in ign_to_string.items()))
-      embedVar.add_field(name="Teams" + " :military_helmet:", value=' '.join(str(x) for x in teams))
+      embedVar.add_field(name="Team" + " :military_helmet:", value=team)
       embedVar.add_field(name="Titles" + " :crown:", value=' '.join(str(x) for x in titles))
       embedVar.add_field(name="Ranked" + " :medal:", value="\n".join(f'{k}: {"/".join([str(int) for int in v])}' for k,v in ranked_to_string.items()))
       embedVar.add_field(name="Normals" + " :crossed_swords:", value="\n".join(f'{k}: {"/".join([str(int) for int in v])}' for k,v in normal_to_string.items()))
@@ -86,6 +86,83 @@ async def lk(ctx, user: User):
       await ctx.send(embed=embedVar, delete_after=15)
    else:
       await ctx.send(m.USER_NOT_REGISTERED, delete_after=3)
+
+
+
+@bot.command()
+@commands.check(validate_user)
+async def cgoc(ctx, args1: str, args2: int, args3: bool, args4: int, args5: str ):
+   if ctx.author.guild_permissions.administrator == True:
+      goc_query = {'TITLE': args1, 'TYPE': args2, 'TEAM_FLAG': args3, 'REWARD': args4, 'IMG_URL': args5, 'REGISTRATION': True}
+      response = db.createGoc(data.newGoc(goc_query))
+      await ctx.send(response, delete_after=3)
+   else:
+      print(m.ADMIN_ONLY_COMMAND)
+
+@bot.command()
+@commands.check(validate_user)
+async def gocsup(ctx):
+   goc_query = {'REGISTRATION': True}
+   goc_response = db.queryGoc(goc_query)
+   user = str(ctx.author)
+   user_data = db.queryUser({'DISNAME': str(ctx.author)})
+
+   if goc_response['TEAM_FLAG']:
+      # Make it so that Team Owner has to be the one to register the team
+      team_data = db.queryTeam({'TNAME': user_data['TEAM']})
+      if team_data['OWNER'] == str(ctx.author):
+         if len(team_data['MEMBERS']) >= goc_response['TYPE']:
+            new_value =  {'$addToSet': {'PARTICIPANTS': str(team_data['TNAME'])}}
+            response = db.updateGoc(goc_query, new_value)
+            await ctx.send(f"{team_data['TNAME']} is now registered for GODS OF COD. ")           
+      else:
+         await ctx.send("Only the owner of the team can register team for Tournaments. ")
+   else:
+      if user in goc_response['PARTICIPANTS']:
+         await ctx.send(m.ALREADY_IN_TOURNEY, delete_after=4)
+      else:
+         new_value =  {'$addToSet': {'PARTICIPANTS': user}}
+         response = db.updateGoc(goc_query, new_value)
+         await ctx.send(f"{ctx.author.mention} is now registered for GODS OF COD. ")
+
+@bot.command()
+async def lkgoc(ctx):
+   query = {'REGISTRATION': True}
+   g = db.queryGoc(query)
+
+   if d:
+      title = g['TITLE']
+      team_flag = g['TEAM_FLAG']
+      game_type = " "
+      if g['TYPE'] == 1:
+         game_type = "1v1"
+      elif g['TYPE'] == 2:
+         game_type = "2v2"
+      elif g['TYPE'] == 3:
+         game_type = "3v3"
+      elif g['TYPE'] == 4:
+         game_type = "4v4"
+      elif g['TYPE'] == 5:
+         game_type = "5v5"
+
+      available = g['AVAILABLE']
+      registration = g['REGISTRATION']
+      avatar = g['IMG_URL']
+      reward = g['REWARD']
+
+      
+
+      embedVar = discord.Embed(title=f"GODS OF COD: {title}", description="Party Chat Gaming Database™️", colour=000000)
+      embedVar.set_image(url=avatar)
+      embedVar.add_field(name="TEAM TOURNAMENT" , value=str(team_flag))
+      embedVar.add_field(name="TOURNAMENT STYLE", value=game_type)
+      embedVar.add_field(name="TOURNAMENT AVAILABLE", value=str(available))
+      embedVar.add_field(name="TOURNAMENT REGISTRATION", value=str(registration))
+      embedVar.add_field(name="REWARD", value=f"${reward}", inline=False)
+      await ctx.send(embed=embedVar)
+   else:
+      await ctx.send(m.USER_NOT_REGISTERED, delete_after=3)
+
 
 '''TITLES'''
 @bot.command()
@@ -196,7 +273,7 @@ async def flex(ctx):
       name = d['DISNAME'].split("#",1)[0]
       games = d['GAMES']
       ign = d['IGN']
-      teams = d['TEAMS']
+      team = d['TEAM']
       title = d['TITLE']
       avatar = d['AVATAR']
       ranked = d['RANKED']
@@ -210,7 +287,6 @@ async def flex(ctx):
 
       game_text = ' '.join(str(x) for x in games)
       titles_text = ' '.join(str(x) for x in title)
-      teams_text = ' '.join(str(x) for x in teams)
       normals_text = "\n".join(f'{k}: {"/".join([str(int) for int in v])}' for k,v in normal_to_string.items())
       ranked_text = "\n".join(f'{k}: {"/".join([str(int) for int in v])}' for k,v in ranked_to_string.items())
 
@@ -228,7 +304,7 @@ async def flex(ctx):
       draw.text((95,45), name, (255, 255, 255), font=header, align="left")
       draw.text((5,65), str(tournament_wins), (255, 255, 255), font=tournament_wins_font, align="center")
       draw.text((60, 320), game_text, (255, 255, 255), font=p, align="center")
-      draw.text((368, 320), teams_text, (255, 255, 255), font=p, align="center")
+      draw.text((368, 320), team, (255, 255, 255), font=p, align="center")
       draw.text((650, 320), titles_text, (255, 255, 255), font=p, align="center")
       draw.text((865, 320), normals_text, (255, 255, 255), font=p, align="center")
       draw.text((1040, 320), ranked_text, (255, 255, 255), font=p, align="center")
@@ -237,23 +313,8 @@ async def flex(ctx):
 
       await ctx.send(file=discord.File("text.png"))
 
-
-
-      
-
-      # embedVar = discord.Embed(title=f"My Profile Card", description="Party Chat Gaming Database", colour=000000)
-      # embedVar.set_thumbnail(url=avatar)
-      # embedVar.add_field(name="Game", value=' '.join(str(x) for x in games))
-      # embedVar.add_field(name="In-Game Name", value="\n".join(f'{v}' for k,v in ign_to_string.items()))
-      # embedVar.add_field(name="Teams", value=' '.join(str(x) for x in teams))
-      # embedVar.add_field(name="Titles", value=' '.join(str(x) for x in titles))
-      # embedVar.add_field(name="Ranked", value="\n".join(f'{k}: {"/".join([str(int) for int in v])}' for k,v in ranked_to_string.items()))
-      # embedVar.add_field(name="Normals", value="\n".join(f'{k}: {"/".join([str(int) for int in v])}' for k,v in normal_to_string.items()))
-      # embedVar.add_field(name="Tournament Wins", value=tournament_wins)
-      # await ctx.send(embed=embedVar, delete_after=15)
    else:
       await ctx.send("User does not exist in the system. ", delete_after=3)
-
 
 
 @bot.command()
@@ -263,7 +324,7 @@ async def r(ctx):
    user = {'DISNAME': disname, 'NAME': name, 'DID' : str(ctx.author.id), 'AVATAR': str(ctx.author.avatar_url)}
    response = db.createUsers(data.newUser(user))
    await ctx.send(response, delete_after=5)
-
+ 
 
 '''delete user'''
 @bot.command()
@@ -913,11 +974,12 @@ async def s(ctx, user: User):
       
       if team_2_comp:
          embedVar.add_field(name=f"Team 2 - {team_2_score}", value=team_2_comp, inline=False)
+      else:
+         await ctx.send("No one has joined to compete. ", delete_after=5)
       
       if kingsgambit:
          embedVar.add_field(name=f"Up Next...", value=other_teams_sorted_list, inline=False)
-      else:
-         await ctx.send("No one has joined to compete. ", delete_after=5)
+
       await ctx.send(embed=embedVar, delete_after=15)
    else:
       await ctx.send("Session does not exist. ", delete_after=5)
@@ -1011,11 +1073,12 @@ async def ms(ctx):
       
       if team_2_comp:
          embedVar.add_field(name=f"Team 2 - {team_2_score}", value=team_2_comp, inline=False)
-      
-      if kingsgambit:
-         embedVar.add_field(name=f"Up Next...", value=other_teams_sorted_list, inline=False)
       else:
          await ctx.send("No one has joined to compete. ", delete_after=5)
+
+      if kingsgambit:
+         embedVar.add_field(name=f"Up Next...", value=other_teams_sorted_list, inline=False)
+
       await ctx.send(embed=embedVar, delete_after=15)
    else:
       await ctx.send("Session does not exist. ", delete_after=5)
@@ -1247,11 +1310,12 @@ async def cs(ctx, user: User):
       
       if team_2_comp:
          embedVar.add_field(name=f"Team 2 - {team_2_score}", value=team_2_comp, inline=False)
+      else:
+         await ctx.send("No one has joined to compete. ", delete_after=5)
       
       if kingsgambit:
          embedVar.add_field(name=f"Up Next...", value=other_teams_sorted_list, inline=False)
-      else:
-         await ctx.send("No one has joined to compete. ", delete_after=5)
+
       await ctx.send(embed=embedVar, delete_after=15)
    else:
       await ctx.send("Session does not exist. ", delete_after=5)
@@ -1299,7 +1363,7 @@ async def sw(ctx):
          new_value = {"$inc": {'TOURNAMENT_WINS': 1}}
       elif session_data['RANKED']:
          new_value = {"$inc": {'RANKED.$[type].' + game_type.upper() + '.0': 1}}
-      elif session_data['NORMAL']:
+      elif not session_data['RANKED']:
          new_value = {"$inc": {'NORMAL.$[type].' + game_type.upper() + '.0': 1}}
       filter_query = [{'type.' + game_type.upper(): current_score}]
 
@@ -1358,7 +1422,7 @@ async def sl(ctx):
             new_value = {"$set": {'TOURNAMENT_LOSSES': 1}}
          elif session_data['RANKED']:
             new_value = {"$inc": {'RANKED.$[type].' + game_type.upper() + '.1': 1}}
-         elif session_data['NORMAL']:
+         elif not session_data['RANKED']:
             new_value = {"$inc": {'NORMAL.$[type].' + game_type.upper() + '.1': 1}}
          filter_query = [{'type.' + game_type.upper(): current_score}]
 

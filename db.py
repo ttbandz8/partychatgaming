@@ -15,6 +15,8 @@ matches_col = db["MATCHES"]
 tournaments_col = db["TOURNAMENTS"]
 cards_col = db["CARDS"]
 titles_col = db["TITLES"]
+goc_col = db["GOC"]
+
 
 '''Check if Collection Exists'''
 def col_exists(col):
@@ -48,6 +50,37 @@ def card_exists(data):
     else:
         return False
 
+
+
+
+''' GOC '''
+'''Check If Card Exists'''
+def goc_exists(data):
+    collection_exists = col_exists("GOC")
+    if collection_exists:
+        goc_does_exist = goc_col.find_one(data)
+        if goc_does_exist:
+            return True
+        else:
+            return False
+    else:
+        return False
+
+def createGoc(query):
+    response = goc_col.insert_one(query)
+    return "Gods Of COD Created. "
+
+def queryGoc(query):
+    response = goc_col.find_one(query)
+    return response
+
+def updateGoc(query, new_value):
+    exists = goc_exists(query)
+    if exists:
+        data = goc_col.update_one(query, new_value)
+    else:
+        return m.TOURNEY_DOES_NOT_EXIST
+
 '''New Card'''
 def createCard(card):
     try:
@@ -69,7 +102,8 @@ def queryCard(query):
     return data
 
 
-'''Check If Title Exists'''
+
+''' TITLES '''
 def title_exists(data):
     collection_exists = col_exists("TITLES")
     if collection_exists:
@@ -81,7 +115,6 @@ def title_exists(data):
     else:
         return False
 
-'''New Title'''
 def createTitle(title):
     try:
         titleexists = title_exists({'TITLE': title['TITLE']})
@@ -103,9 +136,7 @@ def queryTitle(query):
 
 
 
-
-
-'''Query User'''
+''' USERS '''
 def queryUser(user):
     try:
         exists = user_exists({'DISNAME': user['DISNAME']})
@@ -118,13 +149,10 @@ def queryUser(user):
     except:
         return "Find user failed. "
 
-''' Query All Users '''
 def queryAllUsers():
     data = users_col.find()
     return data
 
-
-'''Create User'''
 def createUsers(users):
     try:
         if isinstance(users, list):
@@ -146,7 +174,6 @@ def createUsers(users):
     except:
         print("Add Users failed.")
 
-'''Delete User'''
 def deleteUser(users):
     try:
         if isinstance(users, list):
@@ -168,7 +195,6 @@ def deleteUser(users):
     except:
         print("Delete User failed.")
 
-'''Updates User data'''
 def updateUser(query, new_value, arrayFilters):
     exists = user_exists({'DISNAME': query['DISNAME']})
     if exists:
@@ -177,7 +203,6 @@ def updateUser(query, new_value, arrayFilters):
     else:
         return "Update failed. "
 
-'''Update User With No Array Filters'''
 def updateUserNoFilter(query, new_value):
     exists = user_exists({'DISNAME': query['DISNAME']})
     if exists:
@@ -188,7 +213,7 @@ def updateUserNoFilter(query, new_value):
 
 
 
-'''Check If Teams Exists'''
+''' TEAMS '''
 def team_exists(data):
     collection_exists = col_exists("TEAMS")
     if collection_exists:
@@ -200,8 +225,6 @@ def team_exists(data):
     else:
         return False
 
-
-'''Query Team'''
 def queryTeam(team):
     try:
         exists = team_exists({'TNAME': team['TNAME']})
@@ -213,17 +236,16 @@ def queryTeam(team):
     except:
         print("Find team failed.")
 
-'''Query All Teams'''
-def queryTeam(team):
+def queryAllTeams(team):
     data = teams_col.find()
     return data
 
-
-'''Add new Team'''
 def createTeam(team, user):
     try:
-        user_exist = user_exists({'DISNAME': user})
-        if user_exist:
+        find_user = queryUser({'DISNAME': user})
+        if find_user['TEAM']:
+            return "User is already part of a team. "
+        else:
             exists = team_exists({'TNAME': team['TNAME']})
             if exists:
                 return "Team already exists."
@@ -233,15 +255,12 @@ def createTeam(team, user):
 
                 # Add Team to User Profile as well
                 query = {'DISNAME': user}
-                new_value = {'$set': {'TEAMS': [team['TNAME']]}}
+                new_value = {'$set': {'TEAM': team['TNAME']}}
                 users_col.update_one(query, new_value)
                 return "Team has been created. "
-        else:
-            return "User does not exist. Create profile."
     except:
         return "Cannot create team."
 
-'''Delete Team'''
 def deleteTeam(team, user):
     try:
         exists = team_exists({'TNAME': team['TNAME']})
@@ -259,7 +278,6 @@ def deleteTeam(team, user):
     except:
         return "Delete Team failed."
 
-'''Delete Team Member'''
 def deleteTeamMember(query, value, user):
     try:
         exists = team_exists({'TNAME': query['TNAME']})
@@ -281,7 +299,6 @@ def deleteTeamMember(query, value, user):
     except:
         print("Delete Team Member failed.")
 
-'''Updates Team data'''
 def addTeamMember(query, add_to_team_query, user, new_user):
     exists = team_exists({'TNAME': query['TNAME']})
     if exists:
@@ -299,8 +316,6 @@ def addTeamMember(query, add_to_team_query, user, new_user):
     else:
         return "Cannot add user to the team."
 
-
-'''Check If Games Exists'''
 def game_exists(game):
     collection_exists = col_exists("GAMES")
     if collection_exists:
@@ -312,7 +327,9 @@ def game_exists(game):
     else:
         return False
 
-'''Query Game'''
+
+
+''' GAMES '''
 def queryGame(game):
     try:
         exists = game_exists({'ALIASES': game['ALIASES']})
@@ -324,12 +341,10 @@ def queryGame(game):
     except:
         print("Find Game failed.")
 
-'''Query Game'''
 def query_all_games():
     games = games_col.find()
     return games
 
-'''Add Game'''
 def add_game(game):
     exists = game_exists({'GAME': game['GAME']})
     if exists:
@@ -341,8 +356,7 @@ def add_game(game):
 
 
 
-
-'''Check If Sessions Exists'''
+''' SESSIONS '''
 def session_exist(data):
     collection_exists = col_exists("SESSIONS")
     if collection_exists:
@@ -354,7 +368,6 @@ def session_exist(data):
     else:
         return False
 
-'''Query Session'''
 def querySession(session):
     try:
         exists = session_exist({'OWNER': session['OWNER'], 'AVAILABLE': True})
@@ -367,18 +380,14 @@ def querySession(session):
     except:
         return "Find Session failed."
 
-'''Query How Many Times I Beat You'''
 def querySessionForUser(query):
     data = sessions_col.find(query)
     return data
-
-        
-'''Query Session Members'''
+   
 def querySessionMembers(session):
     data = sessions_col.find_one(session)
     return data
 
-'''Create Session'''
 def createSession(session):
     exists = session_exist({'OWNER': session['OWNER'], 'AVAILABLE': True})
     if exists:
@@ -396,7 +405,6 @@ def createSession(session):
                 sessions_col.insert_one(session)
                 return "New Session started. "
 
-'''Join Session'''
 def joinSession(session, query):
     sessionquery = querySession(session)
     matchtype = sessionquery['TYPE']
@@ -418,7 +426,6 @@ def joinSession(session, query):
     elif matchtype > len(query['TEAM']):
         return 'Not enough players in team'
 
-'''Join Exhibition'''
 def joinExhibition(session, query):
     sessionquery = querySession(session)
     matchtype = sessionquery['TYPE']
@@ -440,9 +447,6 @@ def joinExhibition(session, query):
             teaminsert = sessions_col.update_one(session, {'$addToSet': {'TEAMS': query}})
             return m.SESSION_JOINED
 
-
-
-'''Join Kings Gambit'''
 def joinKingsGambit(session, query):
     sessionquery = querySession(session)
     matchtype = sessionquery['TYPE']
@@ -464,11 +468,6 @@ def joinKingsGambit(session, query):
             teaminsert = sessions_col.update_one(session, {'$addToSet': {'TEAMS': query}})
             return m.SESSION_JOINED
 
-
-
-
-
-'''End Session'''
 def endSession(session):
     exists = session_exist({'OWNER': session['OWNER'], 'AVAILABLE': True})
     if exists:
@@ -477,7 +476,6 @@ def endSession(session):
     else:
         return 'Session Unavailable'
 
-'''Delete Session'''
 def deleteSession(session):
     exists = session_exist({'OWNER': session['OWNER'], 'AVAILABLE': True})
     if exists:
@@ -486,7 +484,6 @@ def deleteSession(session):
     else:
         return 'Session Unavailable'
 
-'''Delete All Sessions'''
 def deleteAllSessions(user_query):
     exists = user_exists({'DISNAME': user_query['DISNAME']})
     if exists:
@@ -495,7 +492,6 @@ def deleteAllSessions(user_query):
     else:
         return 'Unable to Delete All Sessions'
 
-'''Update Session'''
 def updateSession(session, query, update_query):
     exists = session_exist({'OWNER': session['OWNER'], 'AVAILABLE': True})
     if exists:
@@ -505,7 +501,9 @@ def updateSession(session, query, update_query):
         return False
 
 
-'''Update Session'''
+
+
+''' KINGS GAMBIT '''
 def updatekg(session, query, update_query, arrayFilter):
     exists = session_exist({'OWNER': session['OWNER'], 'AVAILABLE': True, "KINGSGAMBIT": True})
     if exists:

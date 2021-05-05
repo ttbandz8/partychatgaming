@@ -11,7 +11,7 @@ class USER():
     AVATAR: list[str] = field(default_factory=lambda: [''])
     IGN: list[str] = field(default_factory=lambda: [{'DEFAULT': 'PCG'}])
     GAMES: list[str] = field(default_factory=lambda: ['PCG'])
-    TEAMS: list[str] = field(default_factory=lambda: ['PCG'])
+    TEAM: str = field(default_factory=lambda: 'PCG')
     TITLE: str = field(default_factory=lambda: 'PCG')
     CARD: str = field(default_factory=lambda: "Dark")
     RANKED: list = field(default_factory=lambda: [{'1V1': [0, 0, 0]}, {'2V2': [0, 0, 0]}, {'3V3': [0, 0, 0]}, {'4V4': [0, 0, 0]}, {'5V5': [0, 0, 0]}])
@@ -109,6 +109,9 @@ class GAMES():
 class GOC():
     TITLE: str
     TYPE: int
+    IMG_URL: str
+    REWARD: int
+    TEAM_FLAG: bool = field(default_factory=lambda: False)
     AVAILABLE: bool = field(default_factory=lambda: False)
     REGISTRATION: bool = field(default_factory=lambda: False)
     PARTICIPANTS: list[str] = field(default_factory=lambda: [])
@@ -153,5 +156,8 @@ def newMatch(match):
     m = MATCH(**match)
     return asdict(m)
 
+def newGoc(goc):
+    godsOfCod = GOC(**goc)
+    return asdict(godsOfCod)
 
 
