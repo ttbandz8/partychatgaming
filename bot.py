@@ -88,7 +88,7 @@ async def lk(ctx, user: User):
       await ctx.send(m.USER_NOT_REGISTERED, delete_after=3)
 
 
-
+# Create Gods of Cod
 @bot.command()
 @commands.check(validate_user)
 async def cgoc(ctx, args1: str, args2: int, args3: bool, args4: int, args5: str ):
@@ -99,6 +99,19 @@ async def cgoc(ctx, args1: str, args2: int, args3: bool, args4: int, args5: str 
    else:
       print(m.ADMIN_ONLY_COMMAND)
 
+# Start Gods of Cod
+@bot.command()
+@commands.check(validate_user)
+async def sgoc(ctx):
+   if ctx.author.guild_permissions.administrator == True:
+      goc_query = {'REGISTRATION': True}
+      new_value = {'$set': {'REGISTRATION': False}, '$set': {'AVAILABLE': True}}
+      response = db.updateGoc(goc_query, new_value)
+      await ctx.send("GODS OF COD has begun. ")
+   else:
+      print(m.ADMIN_ONLY_COMMAND)
+
+# Gods of Cod SignUp
 @bot.command()
 @commands.check(validate_user)
 async def gocsup(ctx):
@@ -108,15 +121,18 @@ async def gocsup(ctx):
    user_data = db.queryUser({'DISNAME': str(ctx.author)})
 
    if goc_response['TEAM_FLAG']:
-      # Make it so that Team Owner has to be the one to register the team
-      team_data = db.queryTeam({'TNAME': user_data['TEAM']})
-      if team_data['OWNER'] == str(ctx.author):
-         if len(team_data['MEMBERS']) >= goc_response['TYPE']:
-            new_value =  {'$addToSet': {'PARTICIPANTS': str(team_data['TNAME'])}}
-            response = db.updateGoc(goc_query, new_value)
-            await ctx.send(f"{team_data['TNAME']} is now registered for GODS OF COD. ")           
+      if user_data['TEAM'] == 'PCG':
+         await ctx.send("This is a Team Only Tournament. ")
       else:
-         await ctx.send("Only the owner of the team can register team for Tournaments. ")
+         # Make it so that Team Owner has to be the one to register the team
+         team_data = db.queryTeam({'TNAME': user_data['TEAM']})
+         if team_data['OWNER'] == str(ctx.author):
+            if len(team_data['MEMBERS']) >= goc_response['TYPE']:
+               new_value =  {'$addToSet': {'PARTICIPANTS': str(team_data['TNAME'])}}
+               response = db.updateGoc(goc_query, new_value)
+               await ctx.send(f"{team_data['TNAME']} is now registered for GODS OF COD. ")           
+         else:
+            await ctx.send("Only the owner of the team can register team for Tournaments. ")
    else:
       if user in goc_response['PARTICIPANTS']:
          await ctx.send(m.ALREADY_IN_TOURNEY, delete_after=4)
@@ -125,6 +141,7 @@ async def gocsup(ctx):
          response = db.updateGoc(goc_query, new_value)
          await ctx.send(f"{ctx.author.mention} is now registered for GODS OF COD. ")
 
+# Lookup Gods of Cod
 @bot.command()
 async def lkgoc(ctx):
    query = {'REGISTRATION': True}
@@ -149,6 +166,7 @@ async def lkgoc(ctx):
       registration = g['REGISTRATION']
       avatar = g['IMG_URL']
       reward = g['REWARD']
+      participants = "\n".join(g['PARTICIPANTS'])
 
       
 
@@ -158,6 +176,7 @@ async def lkgoc(ctx):
       embedVar.add_field(name="TOURNAMENT STYLE", value=game_type)
       embedVar.add_field(name="TOURNAMENT AVAILABLE", value=str(available))
       embedVar.add_field(name="TOURNAMENT REGISTRATION", value=str(registration))
+      embedVar.add_field(name="Registered Participants", value=participants)
       embedVar.add_field(name="REWARD", value=f"${reward}", inline=False)
       await ctx.send(embed=embedVar)
    else:
@@ -260,6 +279,17 @@ async def uc(ctx, args):
    else:
       return "Unable to update card."
  
+
+@bot.command()
+@commands.check(validate_user)
+async def vc(ctx, args):
+   card = db.queryCard({'NAME':args})
+   if card:
+      img = Image.open(requests.get(card['PATH'], stream=True).raw)
+      img.save("text.png")
+      await ctx.send(file=discord.File("text.png"))
+   else:
+      await ctx.send(m.CARD_DOESNT_EXIST, delete_after=3)
 
 @bot.command()
 @commands.check(validate_user)
