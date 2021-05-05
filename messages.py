@@ -11,3 +11,10 @@ TOURNEY_DOES_NOT_EXIST="Tournament does not exist. "
 ALREADY_IN_TOURNEY="You're' already registred for the tournament. "
 
 CARD_DOESNT_EXIST="Card does not exist in the system. "
+USER_DOESNT_HAVE_THE_CARD="Card unavailable. "
+PURCHASE_COMPLETE="Purchase completed!"
+USER_ALREADY_HAS_CARD="You already own this card. "
+
+USER_ALREADY_HAS_TITLE="You already own this title. "
+TITLE_DOESNT_EXIST="Title does not exist in the system. "
+USER_DOESNT_HAVE_THE_Title="Title unavailable. "

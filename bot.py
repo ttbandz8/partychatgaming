@@ -35,7 +35,7 @@ emojis = ['👍', '👎']
 
 client = discord.Client()
 
-bot = commands.Bot(command_prefix=">")
+bot = commands.Bot(command_prefix="#")
 
 async def validate_user(ctx):
    query = {'DISNAME': str(ctx.author)}
@@ -91,7 +91,7 @@ async def lk(ctx, user: User):
 # Create Gods of Cod
 @bot.command()
 @commands.check(validate_user)
-async def cgoc(ctx, args1: str, args2: int, args3: bool, args4: int, args5: str ):
+async def goc(ctx, args1: str, args2: int, args3: bool, args4: int, args5: str ):
    if ctx.author.guild_permissions.administrator == True:
       goc_query = {'TITLE': args1, 'TYPE': args2, 'TEAM_FLAG': args3, 'REWARD': args4, 'IMG_URL': args5, 'REGISTRATION': True}
       response = db.createGoc(data.newGoc(goc_query))
@@ -111,10 +111,10 @@ async def sgoc(ctx):
    else:
       print(m.ADMIN_ONLY_COMMAND)
 
-# Create a Goc Match
+# Create a Goc Session
 @bot.command()
 @commands.check(validate_user)
-async def mgoc(ctx):
+async def cgoc(ctx):
    if ctx.author.guild_permissions.administrator == True:
       query = {'REGISTRATION': True}
       g = db.queryGoc(query)
@@ -129,9 +129,10 @@ async def mgoc(ctx):
    else:
       await ctx.send(m.ADMIN_ONLY_COMMAND)
 
+# Invite to Gods of Cod
 @bot.command()
 @commands.check(validate_user)
-async def gocinvite(ctx, args : str,  user1: User):
+async def goci(ctx, args : str,  user1: User):
    if ctx.author.guild_permissions.administrator == True:
       game = [x for x in db.query_all_games()][0]
       goc_query = {'TITLE': str(args)}
@@ -170,7 +171,6 @@ async def gocinvite(ctx, args : str,  user1: User):
                await ctx.send(m.USER_NOT_REGISTERED, delete_after=5)
    else:
       await ctx.send(m.ADMIN_ONLY_COMMAND)
-
 
 # Delete Gods of Cod
 @bot.command()
@@ -215,7 +215,7 @@ async def rgoc(ctx):
 
 # Lookup Gods of Cod
 @bot.command()
-async def lkgoc(ctx):
+async def goclk(ctx):
    query = {'REGISTRATION': True}
    g = db.queryGoc(query)
 
@@ -256,12 +256,12 @@ async def lkgoc(ctx):
       await ctx.send("No GODS OF COD at this time. ", delete_after=5)
 
 
-'''TITLES'''
+# New Titles
 @bot.command()
 @commands.check(validate_user)
-async def nt(ctx, args1: str, args2: int, args3: int, args4: int):
+async def nt(ctx, args1: str, args2: int, args3: int):
    if ctx.author.guild_permissions.administrator == True:
-      title_query = {'TITLE': str(args1), 'WINS_REQUIREMENTS': int(args2), 'TOURNAMENT_REQUIREMENTS': int(args3), 'TIER': int(args4)}
+      title_query = {'TITLE': str(args1), 'TOURNAMENT_REQUIREMENTS': int(args2), 'PRICE': int(args3)}
       added = db.createTitle(data.newTitle(title_query))
       await ctx.send(added, delete_after=3)
    else:
@@ -269,39 +269,69 @@ async def nt(ctx, args1: str, args2: int, args3: int, args4: int):
 
 @bot.command()
 @commands.check(validate_user)
-async def at(ctx):
-   user_query = {'DISNAME': str(ctx.author)}
-   user = db.queryUser(user_query)
-   tournament_wins = user['TOURNAMENT_WINS']
-   # card_query = {'TOURNAMENT_REQUIREMENTS': tournament_wins}
-   resp = db.queryAllTitles()
+async def bt(ctx, args: str):
+   vault_query = {'OWNER' : str(ctx.author)}
+   vault = db.altQueryVault(vault_query)
+   shop = db.queryShopTitles()
    titles = []
-   unavailable_titles = []
-   for title in resp:
-      if tournament_wins >= title['TOURNAMENT_REQUIREMENTS']:
-         titles.append(title['TITLE'])
-   
-   embedVar = discord.Embed(title=f"Your Available Titles", description="Titles are earned through valor and tournament achievements.", colour=000000)
-   embedVar.add_field(name="Unlocked Titles", value="\n".join(titles))
-   await ctx.send(embed=embedVar, delete_after=15)
+
+   currentBalance = vault['BALANCE']
+   cost = 0
+   mintedTitle = ""
+   for title in shop:
+
+      if args == title['TITLE']:
+         mintedTitle = title['TITLE']
+         cost = title['PRICE']
+
+   if bool(mintedTitle):
+      if mintedTitle in vault['TITLES']:
+         await ctx.send(m.USER_ALREADY_HAS_TITLE, delete_after=5)
+      else:
+         newBalance = currentBalance - cost
+
+         if newBalance < 0 :
+            await ctx.send("You have an insufficent Balance")
+         else:
+            await curse(ctx, cost, ctx.author)
+            response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'TITLES': args}})
+            await ctx.send(m.PURCHASE_COMPLETE)
+   else:
+      await ctx.send(m.TITLE_DOESNT_EXIST)
 
 @bot.command()
 @commands.check(validate_user)
 async def ut(ctx, args):
    user_query = {'DISNAME': str(ctx.author)}
    user = db.queryUser(user_query)
-   tournament_wins = user['TOURNAMENT_WINS']
-   title_query = {'TOURNAMENT_REQUIREMENTS': tournament_wins}
-   resp = db.queryAllTitles()
-   titles = []
-   for title in resp:
-      if tournament_wins >= title['TOURNAMENT_REQUIREMENTS']:
-         titles.append(title['TITLE'])
-   if args in titles:
-      response = db.updateUserNoFilter(user_query, {'$set': {'TITLE': args}})
-      await ctx.send(response)
+
+   vault_query = {'OWNER' : str(ctx.author)}
+   vault = db.altQueryVault(vault_query)
+
+   resp = db.queryTitle({'TITLE': args})
+
+   if resp['TOURNAMENT_REQUIREMENTS'] == 0:
+
+      # Do not Check Tourney wins
+      if args in vault['TITLES']:
+         response = db.updateUserNoFilter(user_query, {'$set': {'TITLE': args}})
+         await ctx.send(response)
+      else:
+         await ctx.send(m.USER_DOESNT_HAVE_THE_Title, delete_after=5)
    else:
-      return "Unable to update title."
+
+      # Check tourney wins
+      tournament_wins = user['TOURNAMENT_WINS']
+      title_query = {'TOURNAMENT_REQUIREMENTS': tournament_wins}
+
+      if tournament_wins >= resp['TOURNAMENT_REQUIREMENTS']:
+         if args in vault['TITLES']:
+            response = db.updateUserNoFilter(user_query, {'$set': {'TITLE': args}})
+            await ctx.send(response)
+         else:
+            await ctx.send(m.USER_DOESNT_HAVE_THE_Title, delete_after=5)
+      else:
+         return "Unable to update Title."
 
 '''CARDS'''
 @bot.command()
@@ -317,38 +347,36 @@ async def nc(ctx, args1: str, args2: str, args3: int, args4: int):
 
 @bot.command()
 @commands.check(validate_user)
-async def ac(ctx):
-   user_query = {'DISNAME': str(ctx.author)}
-   user = db.queryUser(user_query)
-   tournament_wins = user['TOURNAMENT_WINS']
-   # card_query = {'TOURNAMENT_REQUIREMENTS': tournament_wins}
-   resp = db.queryAllCards()
-   cards = []
-   unavailable_cards = []
-   for card in resp:
-      if tournament_wins >= card['TOURNAMENT_REQUIREMENTS']:
-         cards.append(card['NAME'])
-   
-   embedVar = discord.Embed(title=f"Your Available Cards", description="Cards are earned through valor and tournament achievements.", colour=000000)
-   embedVar.add_field(name="Unlocked Cards", value="\n".join(cards))
-   await ctx.send(embed=embedVar, delete_after=15)
-
-
-@bot.command()
-@commands.check(validate_user)
 async def shop(ctx):
-   user_query = {'DISNAME': str(ctx.author)}
-   user = db.queryUser(user_query)
-   resp = db.queryAllCards()
+   resp = db.queryShopCards()
+   vault_query = {'OWNER' : str(ctx.author)}
+   vault = db.altQueryVault(vault_query)
    cards = []
    unavailable_cards = []
    for card in resp:
-      cards.append(card['NAME'])
-   
-   embedVar = discord.Embed(title=f"Card Shop", description="Cards are earned through valor and tournament achievements.", colour=000000)
-   embedVar.add_field(name="Unlocked Cards (*use >vc CARD) ", value="\n".join(cards))
-   await ctx.send(embed=embedVar, delete_after=15)
+      if card['PRICE'] != 0 and card['PRICE'] < (vault['BALANCE'] + 1000):
+         cards.append({card['NAME']: card['PRICE']})
 
+   title_resp = db.queryShopTitles()
+   titles = []
+   unavailable_titles = []
+   for title in title_resp:
+      if title['PRICE'] != 0 and title['PRICE'] < (vault['BALANCE'] + 1000):
+         titles.append({title['TITLE']: title['PRICE']})
+
+   cards_to_str = dict(ChainMap(*cards))
+   n = dict(sorted(cards_to_str.items(), key=lambda item: item[1]))
+   cards_sorted_list = "\n".join(f'{k} : ' +  f" :coin:{'{:,}'.format(v)}"  for k,v in n.items())
+
+   titles_to_str = dict(ChainMap(*titles))
+   n = dict(sorted(titles_to_str.items(), key=lambda item: item[1]))
+   titles_sorted_list = "\n".join(f'{k} : ' +  f" :coin:{'{:,}'.format(v)}"  for k,v in n.items())
+   
+   embedVar = discord.Embed(title=f":shopping_cart: Flex Shop", description="To preview cards, use the #vc card command. " + "\n" + "You will unlock more purchasable cards as you save and earn more gold. ", colour=000000)
+   embedVar.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236723/PCG%20LOGOS%20AND%20RESOURCES/Party_Chat_Shop.png")
+   embedVar.add_field(name=":shopping_bags: Available Cards", value=cards_sorted_list)
+   embedVar.add_field(name=":shopping_bags: Available Titles", value=titles_sorted_list)
+   await ctx.send(embed=embedVar, delete_after=30)
 
 @bot.command()
 @commands.check(validate_user)
@@ -357,56 +385,68 @@ async def bc(ctx, args: str):
    vault = db.altQueryVault(vault_query)
    shop = db.queryShopCards()
    cards = []
-   print(vault['OWNER'])
+
    currentBalance = vault['BALANCE']
    cost = 0
-   mintedCard = " "
+   mintedCard = ""
    for card in shop:
       if args == card['NAME']:
          mintedCard = card['NAME']
          cost = card['PRICE']
+
+
+   if bool(mintedCard):
+      if mintedCard in vault['CARDS']:
+         await ctx.send(m.USER_ALREADY_HAS_CARD, delete_after=5)
       else:
-         print("No card found")
-   newBalance = currentBalance - cost
-   if newBalance < 0 :
-      await ctx.send("You have an insefficient Balance")
+         newBalance = currentBalance - cost
+
+         if newBalance < 0 :
+            await ctx.send("You have an insufficent Balance")
+         else:
+            await curse(ctx, cost, ctx.author)
+            response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': args}})
+            await ctx.send(m.PURCHASE_COMPLETE)
    else:
-      response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': args}})
-      await ctx.send(response)
-      # currentBalance = vault['BALANCE']
-      # newBalance = currentBalance - cost
-      # if newBalance < 0 :
-      #    await ctx.send("You have an insefficient Balance")
-      # else:
-      #    response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': args}})
-      #    await ctx.send(response)
-      
-      # if args in cards:
-      #    mintedCard = {'NAME' : cards['']}
-      # #response = db.updateUserNoFilter(user_query, {'$set': {'CARD': args}})
-      # response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'CARDS': str(args)}} )
-      # await ctx.send(response)
+      await ctx.send(m.CARD_DOESNT_EXIST)
 
-
+### Update card
 @bot.command()
 @commands.check(validate_user)
 async def uc(ctx, args):
    user_query = {'DISNAME': str(ctx.author)}
    user = db.queryUser(user_query)
-   tournament_wins = user['TOURNAMENT_WINS']
-   card_query = {'TOURNAMENT_REQUIREMENTS': tournament_wins}
-   resp = db.queryAllCards()
-   cards = []
-   for card in resp:
-      if tournament_wins >= card['TOURNAMENT_REQUIREMENTS']:
-         cards.append(card['NAME'])
-   if args in cards:
-      response = db.updateUserNoFilter(user_query, {'$set': {'CARD': args}})
-      await ctx.send(response)
-   else:
-      return "Unable to update card."
- 
 
+   vault_query = {'OWNER' : str(ctx.author)}
+   vault = db.altQueryVault(vault_query)
+
+   resp = db.queryCard({'NAME': args})
+
+   if resp['TOURNAMENT_REQUIREMENTS'] == 0:
+
+      # Do not Check Tourney wins
+      if args in vault['CARDS']:
+         response = db.updateUserNoFilter(user_query, {'$set': {'CARD': args}})
+         await ctx.send(response)
+      else:
+         await ctx.send(m.USER_DOESNT_HAVE_THE_CARD, delete_after=5)
+   else:
+
+      # Check tourney wins
+      tournament_wins = user['TOURNAMENT_WINS']
+      card_query = {'TOURNAMENT_REQUIREMENTS': tournament_wins}
+
+      if tournament_wins >= resp['TOURNAMENT_REQUIREMENTS']:
+         if args in vault['CARDS']:
+            response = db.updateUserNoFilter(user_query, {'$set': {'CARD': args}})
+            await ctx.send(response)
+         else:
+            await ctx.send(m.USER_DOESNT_HAVE_THE_CARD, delete_after=5)
+      else:
+         return "Unable to update card."
+
+ 
+### View preview of Card
 @bot.command()
 @commands.check(validate_user)
 async def vc(ctx, args):
@@ -499,12 +539,21 @@ async def vault(ctx):
       name = d['DISNAME'].split("#",1)[0]
       avatar = d['AVATAR']
       balance = vault['BALANCE']
+      cards = vault['CARDS']
+      titles = vault['TITLES']
 
 
 
-      embedVar = discord.Embed(title= f":triangular_flag_on_post: " + f"{name}".format(client), description=":bank: Party Chat Gaming Vault™️", colour=000000)
+      embedVar = discord.Embed(title= f":triangular_flag_on_post: " + f"{name}".format(client) +"\n" + f" :coin:{'{:,}'.format(balance)}", description=":bank: Your Party Chat Gaming Vault™️", colour=000000)
       embedVar.set_thumbnail(url=avatar)
-      embedVar.add_field(name="Balance" + " :fireworks:", value=balance)
+      # embedVar.add_field(name="Balance" + " :fireworks:", value=f":coin:{balance}")
+      if bool(cards):
+         embedVar.add_field(name="Cards" + " :fireworks:", value="\n".join(cards))
+      else:
+         embedVar.set_footer(text="No Cards available")
+      
+      if bool(titles):
+         embedVar.add_field(name="Titles" + " :fireworks:", value="\n".join(titles))
       await ctx.send(embed=embedVar, delete_after=15)
 
    else:
@@ -1622,7 +1671,14 @@ async def sw(ctx):
       game_type = "5v5"
 
    for x in winning_team['TEAM']:
+ 
       player = db.queryUser({'DISNAME': x})
+      winner_earned_tourney_cards = False
+      winner_earned_tourney_titles = False
+
+      tourney_cards = db.queryTournamentCards()
+      tourney_titles = db.queryTournamentTitles()
+
       types_of_matches_list = [x for x in player['NORMAL']]
       types_of_matches = dict(ChainMap(*types_of_matches_list))
       current_score = types_of_matches[game_type.upper()]
@@ -1632,22 +1688,59 @@ async def sw(ctx):
       new_value = {}
       if session_data['TOURNAMENT']:
          new_value = {"$inc": {'TOURNAMENT_WINS': 1}}
+
+
       elif session_data['RANKED']:
          new_value = {"$inc": {'RANKED.$[type].' + game_type.upper() + '.0': 1}}
+
       elif not session_data['RANKED']:
          new_value = {"$inc": {'NORMAL.$[type].' + game_type.upper() + '.0': 1}}
+
       filter_query = [{'type.' + game_type.upper(): current_score}]
 
       if session_data['TOURNAMENT']:
          db.updateUserNoFilter(query, new_value)
+
+         # Add new tourney cards to winner vault if applicable
+
+         vault_query = {'OWNER' : x}
+         vault = db.altQueryVault(vault_query)
+         cards = []
+         titles = []
+         for card in tourney_cards:
+            if player['TOURNAMENT_WINS'] == (card['TOURNAMENT_REQUIREMENTS'] - 1):
+               cards.append(card['NAME'])
+
+         for title in tourney_titles:
+            if player['TOURNAMENT_WINS'] == (title['TOURNAMENT_REQUIREMENTS'] - 1):
+               titles.append(title['TITLE']) 
+
+         if bool(cards):
+            winner_earned_tourney_cards=True
+            for card in cards:
+               db.updateVaultNoFilter(vault_query, {'$addToSet':{'CARDS': card}})
+
+         if bool(titles):
+            winner_earned_tourney_titles=True
+            for title in titles:
+               db.updateVaultNoFilter(vault_query, {'$addToSet':{'TITLES': title}})
+         else:
+            print("No update")
       else:
          db.updateUser(query, new_value, filter_query)
       
       uid = player['DID']
       user = await bot.fetch_user(uid)
       await bless(ctx, 10, user)
+
       await DM(ctx, user, "You Won. Doesnt Prove Much Tho :yawning_face:")
-      await ctx.send(f"Competitor " + f"{user.mention}" + " earns a victory ! :100:", delete_after=5)
+
+      if winner_earned_tourney_cards or winner_earned_tourney_titles:
+         await ctx.send(f"Competitor " + f"{user.mention}" + " earns a victory ! :100:", delete_after=5)
+         await ctx.send( f"{user.mention}" + "You have Unlocked New Items in your Vault! :eyes:", delete_after=5)
+      else:
+         await ctx.send(f"Competitor " + f"{user.mention}" + " earns a victory ! :100:", delete_after=5)
+
 
 
 async def sl(ctx):

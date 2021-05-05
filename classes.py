@@ -19,7 +19,6 @@ class USER():
     TOURNAMENT_WINS: int = field(default_factory=lambda: 0)
     # TOURNAMENT_LOSSES: int = field(default_factory=lambda: 0)
     AVAILABLE: bool = field(default_factory=lambda: True)
-    BAG: list[str] = field(default_factory=lambda: ['PCG'])
     TIMESTAMP: str = now
 
 
@@ -84,8 +83,7 @@ class CARDS():
 @dataclass(frozen=True, order=True) 
 class TITLES():
     TITLE: str
-    TIER: int = field(default_factory=lambda: 1)
-    WINS_REQUIREMENTS: int = field(default_factory=lambda: 0)
+    PRICE: int = field(default_factory=lambda: 0)
     TOURNAMENT_REQUIREMENTS: int = field(default_factory=lambda: 0)
     TIMESTAMP: str = now
 
@@ -120,7 +118,8 @@ class GOC():
 class VAULT():
     OWNER: str
     BALANCE: int = field(default_factory=lambda: 100)
-    CARDS: list[str] = field(default_factory=lambda: [])
+    CARDS: list[str] = field(default_factory=lambda: ['Dark'])
+    TITLES: list[str] = field(default_factory=lambda: ['Starter'])
 
 
 
