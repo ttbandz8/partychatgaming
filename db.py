@@ -169,6 +169,22 @@ def updateGoc(query, new_value):
     else:
         return m.TOURNEY_DOES_NOT_EXIST
 
+def addTeamMember(query, add_to_team_query, user, new_user):
+    exists = team_exists({'TNAME': query['TNAME']})
+    if exists:
+        team = teams_col.find_one(query)
+        if user == team['OWNER']:
+            teams_col.update_one(query, add_to_team_query, upsert=True)
+
+             # Add Team to User Profile as well
+            query = {'DISNAME': new_user}
+            new_value = {'$set': {'TEAM': team['TNAME']}}
+            users_col.update_one(query, new_value)
+            return "User added to the team. "
+        else:
+            return "The Owner of the team can add new members. "
+    else:
+        return "Cannot add user to the team."
 '''New Card'''
 def createCard(card):
     try:

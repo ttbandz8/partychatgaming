@@ -131,40 +131,43 @@ async def mgoc(ctx):
 
 @bot.command()
 @commands.check(validate_user)
-async def gocinvite(ctx, user1: User):
+async def gocinvite(ctx, args : str,  user1: User):
    if ctx.author.guild_permissions.administrator == True:
       game = [x for x in db.query_all_games()][0]
-      
-      validate_opponent = db.queryUser({'DISNAME': str(user1)})
+      goc_query = {'TITLE': str(args)}
+      goc = db.queryGoc(goc_query)
+      participant = []
+      playername = ""
+      for players in goc['PARTICIPANTS']:
+         validateParticipant = db.queryUser({'DISNAME' : str(user1)})
+         #print(validateParticipant)
+         if players == validateParticipant['DISNAME']:
+            validate_opponent = True
+            if validate_opponent:
+               await DM(ctx,user1,f"{ctx.author.mention}" + " has invited you to a GOC Tournament Match :eyes:")
+               accept = await ctx.send(f"{user1.mention}, Will you join the GOC Match? :fire:", delete_after=15)
+               for emoji in emojis:
+                  await accept.add_reaction(emoji)
+               def check(reaction, user):
+                  return user == user1 and str(reaction.emoji) == '👍'
+               try:
+                  reaction, user = await bot.wait_for('reaction_add', timeout=10.0, check=check)
+                  #Check If Teammate
 
-      if validate_opponent:
-         await DM(ctx, user1, f"{ctx.author.mention}" + " has invited you to a Tournament Match :eyes:")
-         accept = await ctx.send(f"{user1.mention}, Will you join the Exhibition? :fire:", delete_after=15)
-         for emoji in emojis:
-            await accept.add_reaction(emoji)
-
-         def check(reaction, user):
-            return user == user1 and str(reaction.emoji) == '👍'
-         try:
-            reaction, user = await bot.wait_for('reaction_add', timeout=10.0, check=check)
-
-            session_query = {"OWNER": str(ctx.author),"TOURNAMENT": True , "AVAILABLE": True}
-            session_data = db.querySession(session_query)
-            teams_list = [x for x in session_data['TEAMS']]
-            positions = []
-            new_position = 0
-            if bool(teams_list):
-               for x in teams_list:
-                  positions.append(x['POSITION'])
-               new_position = max(positions) + 1
-
-            join_query = {"TEAM": [str(user1)], "SCORE": 0, "POSITION": new_position}
-            resp = db.joinExhibition(session_query, join_query)
-            await ctx.send(resp, delete_after=5)
-         except:
-            await ctx.send("User did not accept.")
-      else:
-         await ctx.send(m.USER_NOT_REGISTERED, delete_after=5)
+                  #Create Session
+                  session_query = {"OWNER": str(ctx.author),'RANKED' : True, 'GOC': True, 'TOURNAMENT': True, 'GOC_TITLE': goc['TITLE'], "GAME": game["GAME"], "TYPE": 1, "TEAMS": [{"TEAM": [str(ctx.author)], "SCORE": 0, "POSITION": 0}], "AVAILABLE": True}
+                  join_query = {"TEAM": [str(user1)], "SCORE": 0, "POSITION": 1}
+                  session = db.createSession(data.newSession(session_query))
+                  resp = db.joinSession(session_query, join_query)
+                  await ctx.send(resp, delete_after=5)              
+               except:
+                  await ctx.send("User did not accept.")   
+         else:
+            validateUser = db.queryUser({'DISNAME': players})
+            if validateUser:
+               print("Participants: " + validateUser['DISNAME'])
+            else:
+               await ctx.send(m.USER_NOT_REGISTERED, delete_after=5)
    else:
       await ctx.send(m.ADMIN_ONLY_COMMAND)
 
@@ -183,7 +186,7 @@ async def dgoc(ctx):
 # Gods of Cod SignUp
 @bot.command()
 @commands.check(validate_user)
-async def gocsup(ctx):
+async def rgoc(ctx):
    goc_query = {'REGISTRATION': True}
    goc_response = db.queryGoc(goc_query)
    user = str(ctx.author)
@@ -540,6 +543,7 @@ async def curse(ctx,args, user1: User):
       else:
          print("cant find vault")
 
+
 @bot.command()
 async def r(ctx):
    disname = str(ctx.author)
@@ -751,7 +755,6 @@ async def skg(ctx, user: User):
       await ctx.send(f"{user.mention}" +f" :heavy_plus_sign::one:", delete_after=2)
    else:
       await ctx.send(f"Score not added. Please, try again. ", delete_after=5) 
-
 
 
 ''' Create 1v1 - 5v5 Sessions '''
@@ -1143,6 +1146,7 @@ async def s(ctx, user: User):
       tournament = session['TOURNAMENT']
       kingsgambit = session['KINGSGAMBIT']
       goc = session['GOC']
+      gocname = session['GOC_TITLE']
       game_type = " "
       if session['TYPE'] == 1:
          game_type = "1v1"
@@ -1158,8 +1162,10 @@ async def s(ctx, user: User):
       ranked = " "
       if session['RANKED'] == True:
          ranked = "Ranked"
+         stype = ":medal:"
       elif session['RANKED'] == False:
          ranked = "Normal"
+         stype = ":crossed_swords:"
 
       teams = [x for x in session['TEAMS']]
     
@@ -1203,8 +1209,8 @@ async def s(ctx, user: User):
 
       embedVar = discord.Embed(title=f"{name}'s {games} Session ".format(bot), description="Party Chat Gaming Database", colour=000000)
       embedVar.set_thumbnail(url=avatar)
-      embedVar.add_field(name="Match Type", value=f'{game_type}'.format(bot))
-      embedVar.add_field(name="Ranked", value=f'{ranked}'.format(bot))
+      embedVar.add_field(name="Match", value=f'{game_type}'.format(bot))
+      embedVar.add_field(name="Type: " + stype, value=f'{ranked}'.format(bot))
       if tournament:
          embedVar.add_field(name="Tournament", value="Yes")
       
@@ -1215,12 +1221,12 @@ async def s(ctx, user: User):
          embedVar.add_field(name="GODS OF COD", value="Yes")
       
       if kingsgambit and king_score > 0:
-         embedVar.add_field(name=f"King - {team_1_score}", value=team_1_comp, inline=False)
+         embedVar.add_field(name=f":crown:King - {team_1_score}", value=team_1_comp, inline=False)
       else:
-         embedVar.add_field(name=f"Team 1 - {team_1_score}", value=team_1_comp, inline=False)
+         embedVar.add_field(name=f":military_helmet:Team 1 - {team_1_score}", value=team_1_comp, inline=False)
       
       if team_2_comp:
-         embedVar.add_field(name=f"Team 2 - {team_2_score}", value=team_2_comp, inline=False)
+         embedVar.add_field(name=f":military_helmet:Team 2 - {team_2_score}", value=team_2_comp, inline=False)
       else:
          await ctx.send("No one has joined to compete. ", delete_after=5)
       
@@ -1246,6 +1252,7 @@ async def ms(ctx):
       games = game['GAME']
       avatar = game['IMAGE_URL']
       goc = session['GOC']
+      gocname = session['GOC_TITLE']
       game_type = " "
       if session['TYPE'] == 1:
          game_type = "1v1"
@@ -1261,8 +1268,10 @@ async def ms(ctx):
       ranked = " "
       if session['RANKED'] == True:
          ranked = "Ranked"
+         stype = ":medal:"
       elif session['RANKED'] == False:
          ranked = "Normal"
+         stype = ":crossed_swords:"
 
       teams = [x for x in session['TEAMS']]
     
@@ -1306,8 +1315,8 @@ async def ms(ctx):
 
       embedVar = discord.Embed(title=f"{name}'s {games} Session ".format(bot), description="Party Chat Gaming Database", colour=000000)
       embedVar.set_thumbnail(url=avatar)
-      embedVar.add_field(name="Match Type", value=f'{game_type}'.format(bot))
-      embedVar.add_field(name="Ranked", value=f'{ranked}'.format(bot))
+      embedVar.add_field(name="Match ", value=f'{game_type}'.format(bot))
+      embedVar.add_field(name="Type: " + stype , value=f'{ranked}'.format(bot))
       if tournament:
          embedVar.add_field(name="Tournament", value="Yes")
       
@@ -1315,15 +1324,15 @@ async def ms(ctx):
          embedVar.add_field(name="Kings Gambit", value="Yes")
 
       if goc:
-         embedVar.add_field(name="GODS OF COD", value="Yes")
+         embedVar.add_field(name="GODS OF COD : " + f"{gocname}", value="Yes")
       
       if kingsgambit and king_score > 0:
-         embedVar.add_field(name=f"King - {team_1_score}", value=team_1_comp, inline=False)
+         embedVar.add_field(name=f":crown:King - {team_1_score}", value=team_1_comp, inline=False)
       else:
-         embedVar.add_field(name=f"Team 1 - {team_1_score}", value=team_1_comp, inline=False)
+         embedVar.add_field(name=f":military_helmet:Team 1 - {team_1_score}", value=team_1_comp, inline=False)
       
       if team_2_comp:
-         embedVar.add_field(name=f"Team 2 - {team_2_score}", value=team_2_comp, inline=False)
+         embedVar.add_field(name=f":military_helmet:Team 2 - {team_2_score}", value=team_2_comp, inline=False)
       else:
          await ctx.send("No one has joined to compete. ", delete_after=5)
 
@@ -1333,6 +1342,117 @@ async def ms(ctx):
       await ctx.send(embed=embedVar, delete_after=15)
    else:
       await ctx.send("Session does not exist. ", delete_after=5)
+
+
+''' Check What Session A Player Is In '''
+@bot.command()
+@commands.check(validate_user)
+async def cs(ctx, user: User):
+   current_session = {'TEAMS.TEAM': str(user), "AVAILABLE": True}
+   session = db.querySessionMembers(current_session)
+   if session:
+      game_query = {'ALIASES': session['GAME']}
+      game = db.queryGame(game_query)
+
+      name = session['OWNER'].split("#",1)[0]
+      games = game['GAME']
+      avatar = game['IMAGE_URL']
+      tournament = session['TOURNAMENT']
+      print(tournament)
+      kingsgambit = session['KINGSGAMBIT']
+      goc = session['GOC']
+      gocname = session['GOC_TITLE']
+      game_type = " "
+      if session['TYPE'] == 1:
+         game_type = "1v1"
+      elif session['TYPE'] == 2:
+         game_type = "2v2"
+      elif session['TYPE'] == 3:
+         game_type = "3v3"
+      elif session['TYPE'] == 4:
+         game_type = "4v4"
+      elif session['TYPE'] == 5:
+         game_type = "5v5"
+
+      ranked = " "
+      if session['RANKED'] == True:
+         ranked = "Ranked"
+         stype = ":medal:"
+      elif session['RANKED'] == False:
+         ranked = "Normal"
+         stype = ":crossed_swords:"
+
+      teams = [x for x in session['TEAMS']]
+    
+      team_list = []
+      team_1 = [x for x in teams if x['POSITION'] == 0] # position 0
+      team_2 = [x for x in teams if x['POSITION'] == 1] # position 1
+      other_teams = [x for x in teams if x['POSITION'] > 1] # position 1
+
+
+      team_1_comp = ""
+      team_2_comp = ""
+
+      team_1_score = ""
+      team_2_score = ""
+
+      king_score = 0
+
+      other_teams_comp = []
+
+      for x in team_1:
+         # n = x['TEAM'].split("#",1)[1]
+         team_1_comp = "\n".join(x['TEAM'])
+         team_1_score = f" Score: {x['SCORE']}"
+         king_score = x['SCORE']
+
+
+      
+      for x in team_2:
+         team_2_comp = "\n".join(x['TEAM'])
+         team_2_score = f" Score: {x['SCORE']}"
+
+      if kingsgambit:
+         for x in other_teams:
+            p = x['POSITION']
+            for a in x['TEAM']:
+               other_teams_comp.append({a:p})
+
+      other_teams_comp_to_str = dict(ChainMap(*other_teams_comp))
+      n = dict(sorted(other_teams_comp_to_str.items(), key=lambda item: item[1]))
+      other_teams_sorted_list = "\n".join(f'{k}' for k,v in n.items())
+
+      embedVar = discord.Embed(title=f"{name}'s {games} Session ".format(bot), description="Party Chat Gaming Database", colour=000000)
+      embedVar.set_thumbnail(url=avatar)
+      embedVar.add_field(name="Match", value=f'{game_type}'.format(bot))
+      embedVar.add_field(name="Type: "+ stype, value=f'{ranked}'.format(bot))
+      if tournament:
+         embedVar.add_field(name="Tournament", value="Yes")
+      
+      if kingsgambit:
+         embedVar.add_field(name="Kings Gambit", value="Yes")
+      
+      if goc:
+         embedVar.add_field(name="GODS OF COD", value="Yes")
+      
+      if kingsgambit and king_score > 0:
+         embedVar.add_field(name=f":crown:King - {team_1_score}", value=team_1_comp, inline=False)
+      else:
+         embedVar.add_field(name=f":military_helmet:Team 1 - {team_1_score}", value=team_1_comp, inline=False)
+      
+      if team_2_comp:
+         embedVar.add_field(name=f":military_helmet:Team 2 - {team_2_score}", value=team_2_comp, inline=False)
+      else:
+         await ctx.send("No one has joined to compete. ", delete_after=5)
+      
+      if kingsgambit:
+         embedVar.add_field(name=f"Up Next...", value=other_teams_sorted_list, inline=False)
+
+      await ctx.send(embed=embedVar, delete_after=15)
+   else:
+      await ctx.send("Session does not exist. ", delete_after=5)
+
+
 
 ''' Team Functions '''
 @bot.command()
@@ -1470,110 +1590,6 @@ async def dt(ctx, *args):
          print("Team not created. ")
    else:
       await ctx.send("Only the owner of the team can delete the team. ")
-
-''' Check What Session A Player Is In '''
-@bot.command()
-@commands.check(validate_user)
-async def cs(ctx, user: User):
-   current_session = {'TEAMS.TEAM': str(user), "AVAILABLE": True}
-   session = db.querySessionMembers(current_session)
-   if session:
-      game_query = {'ALIASES': session['GAME']}
-      game = db.queryGame(game_query)
-
-      name = session['OWNER'].split("#",1)[0]
-      games = game['GAME']
-      avatar = game['IMAGE_URL']
-      tournament = session['TOURNAMENT']
-      kingsgambit = session['KINGSGAMBIT']
-      goc = session['GOC']
-      game_type = " "
-      if session['TYPE'] == 1:
-         game_type = "1v1"
-      elif session['TYPE'] == 2:
-         game_type = "2v2"
-      elif session['TYPE'] == 3:
-         game_type = "3v3"
-      elif session['TYPE'] == 4:
-         game_type = "4v4"
-      elif session['TYPE'] == 5:
-         game_type = "5v5"
-
-      ranked = " "
-      if session['RANKED'] == True:
-         ranked = "Ranked"
-      elif session['RANKED'] == False:
-         ranked = "Normal"
-
-      teams = [x for x in session['TEAMS']]
-    
-      team_list = []
-      team_1 = [x for x in teams if x['POSITION'] == 0] # position 0
-      team_2 = [x for x in teams if x['POSITION'] == 1] # position 1
-      other_teams = [x for x in teams if x['POSITION'] > 1] # position 1
-
-
-      team_1_comp = ""
-      team_2_comp = ""
-
-      team_1_score = ""
-      team_2_score = ""
-
-      king_score = 0
-
-      other_teams_comp = []
-
-      for x in team_1:
-         # n = x['TEAM'].split("#",1)[1]
-         team_1_comp = "\n".join(x['TEAM'])
-         team_1_score = f" Score: {x['SCORE']}"
-         king_score = x['SCORE']
-
-
-      
-      for x in team_2:
-         team_2_comp = "\n".join(x['TEAM'])
-         team_2_score = f" Score: {x['SCORE']}"
-
-      if kingsgambit:
-         for x in other_teams:
-            p = x['POSITION']
-            for a in x['TEAM']:
-               other_teams_comp.append({a:p})
-
-      other_teams_comp_to_str = dict(ChainMap(*other_teams_comp))
-      n = dict(sorted(other_teams_comp_to_str.items(), key=lambda item: item[1]))
-      other_teams_sorted_list = "\n".join(f'{k}' for k,v in n.items())
-
-      embedVar = discord.Embed(title=f"{name}'s {games} Session ".format(bot), description="Party Chat Gaming Database", colour=000000)
-      embedVar.set_thumbnail(url=avatar)
-      embedVar.add_field(name="Match Type", value=f'{game_type}'.format(bot))
-      embedVar.add_field(name="Ranked", value=f'{ranked}'.format(bot))
-      if tournament:
-         embedVar.add_field(name="Tournament", value="Yes")
-      
-      if kingsgambit:
-         embedVar.add_field(name="Kings Gambit", value="Yes")
-      
-      if goc:
-         embedVar.add_field(name="GODS OF COD", value="Yes")
-      
-      if kingsgambit and king_score > 0:
-         embedVar.add_field(name=f"King - {team_1_score}", value=team_1_comp, inline=False)
-      else:
-         embedVar.add_field(name=f"Team 1 - {team_1_score}", value=team_1_comp, inline=False)
-      
-      if team_2_comp:
-         embedVar.add_field(name=f"Team 2 - {team_2_score}", value=team_2_comp, inline=False)
-      else:
-         await ctx.send("No one has joined to compete. ", delete_after=5)
-      
-      if kingsgambit:
-         embedVar.add_field(name=f"Up Next...", value=other_teams_sorted_list, inline=False)
-
-      await ctx.send(embed=embedVar, delete_after=15)
-   else:
-      await ctx.send("Session does not exist. ", delete_after=5)
 
 
 async def sw(ctx):
