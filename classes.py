@@ -19,7 +19,7 @@ class USER():
     TOURNAMENT_WINS: int = field(default_factory=lambda: 0)
     # TOURNAMENT_LOSSES: int = field(default_factory=lambda: 0)
     AVAILABLE: bool = field(default_factory=lambda: True)
-    WALLET: int = field(default_factory=lambda: 0)
+    BAG: list[str] = field(default_factory=lambda: ['PCG'])
     TIMESTAMP: str = now
 
 
@@ -117,6 +117,11 @@ class GOC():
     PARTICIPANTS: list[str] = field(default_factory=lambda: [])
     TIMESTAMP: str = now
 
+@dataclass(frozen=True, order=True)
+class VAULT():
+    OWNER: str
+    BALANCE: int = field(default_factory=lambda: 100)
+
 
 
 
@@ -160,4 +165,7 @@ def newGoc(goc):
     godsOfCod = GOC(**goc)
     return asdict(godsOfCod)
 
+def newVault(vault):
+    v = VAULT(**vault)
+    return asdict(v)
 
