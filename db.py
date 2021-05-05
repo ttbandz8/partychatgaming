@@ -147,11 +147,19 @@ def goc_exists(data):
         return False
 
 def createGoc(query):
-    response = goc_col.insert_one(query)
-    return "Gods Of COD Created. "
+    exists = goc_exists(query)
+    if exists:
+        return "Gods of Cod already created. "
+    else:
+        response = goc_col.insert_one(query)
+        return "Gods Of COD Created. "
 
 def queryGoc(query):
     response = goc_col.find_one(query)
+    return response
+
+def deleteGoc(query):
+    response = goc_col.delete_one(query)
     return response
 
 def updateGoc(query, new_value):
@@ -395,7 +403,7 @@ def addTeamMember(query, add_to_team_query, user, new_user):
 
              # Add Team to User Profile as well
             query = {'DISNAME': new_user}
-            new_value = {'$set': {'TEAMS': [team['TNAME']]}}
+            new_value = {'$set': {'TEAM': team['TNAME']}}
             users_col.update_one(query, new_value)
             return "User added to the team. "
         else:
@@ -482,7 +490,7 @@ def createSession(session):
     else:
         if session['TOURNAMENT']:
             sessions_col.insert_one(session)
-            return "New Tournament has been created"
+            return "New Tournament Session has been created"
         else:       
             players_per_team_count = [x for x in session['TEAMS'][0]['TEAM']]
             if session['TYPE'] != len(players_per_team_count):

@@ -45,6 +45,7 @@ class SESSIONS():
     # TEAM_SESSION: bool = field(default_factory=lambda: False)
     RANKED: bool = field(default_factory=lambda: False)
     GOC: bool = field(default_factory=lambda: False)
+    GOC_TITLE: str = field(default_factory=lambda: 'N/A')
     TOURNAMENT: str = field(default_factory=lambda: False)
     SCRIM: bool = field(default_factory=lambda: False)
     KINGSGAMBIT: str = field(default_factory=lambda: False)

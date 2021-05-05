@@ -88,7 +88,7 @@ async def lk(ctx, user: User):
       await ctx.send(m.USER_NOT_REGISTERED, delete_after=3)
 
 
-
+# Create Gods of Cod
 @bot.command()
 @commands.check(validate_user)
 async def cgoc(ctx, args1: str, args2: int, args3: bool, args4: int, args5: str ):
@@ -99,6 +99,88 @@ async def cgoc(ctx, args1: str, args2: int, args3: bool, args4: int, args5: str 
    else:
       print(m.ADMIN_ONLY_COMMAND)
 
+# Start Gods of Cod
+@bot.command()
+@commands.check(validate_user)
+async def sgoc(ctx):
+   if ctx.author.guild_permissions.administrator == True:
+      goc_query = {'REGISTRATION': True}
+      new_value = {'$set': {'REGISTRATION': False}, '$set': {'AVAILABLE': True}}
+      response = db.updateGoc(goc_query, new_value)
+      await ctx.send("GODS OF COD has begun. ")
+   else:
+      print(m.ADMIN_ONLY_COMMAND)
+
+# Create a Goc Match
+@bot.command()
+@commands.check(validate_user)
+async def mgoc(ctx):
+   if ctx.author.guild_permissions.administrator == True:
+      query = {'REGISTRATION': True}
+      g = db.queryGoc(query)
+      if g:
+         game = [x for x in db.query_all_games()][0]
+         session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 1, "TEAMS": [], "RANKED": True, "TOURNAMENT": True, "GOC": True, "GOC_TITLE": g['TITLE']}
+         resp = db.createSession(data.newSession(session_query))
+         await ctx.send(resp, delete_after=5)
+
+      else:
+         await ctx.send(m.TOURNEY_DOES_NOT_EXIST, delete_after=5)
+   else:
+      await ctx.send(m.ADMIN_ONLY_COMMAND)
+
+@bot.command()
+@commands.check(validate_user)
+async def gocinvite(ctx, user1: User):
+   if ctx.author.guild_permissions.administrator == True:
+      game = [x for x in db.query_all_games()][0]
+      
+      validate_opponent = db.queryUser({'DISNAME': str(user1)})
+
+      if validate_opponent:
+         await DM(ctx, user1, f"{ctx.author.mention}" + " has invited you to a Tournament Match :eyes:")
+         accept = await ctx.send(f"{user1.mention}, Will you join the Exhibition? :fire:", delete_after=15)
+         for emoji in emojis:
+            await accept.add_reaction(emoji)
+
+         def check(reaction, user):
+            return user == user1 and str(reaction.emoji) == '👍'
+         try:
+            reaction, user = await bot.wait_for('reaction_add', timeout=10.0, check=check)
+
+            session_query = {"OWNER": str(ctx.author),"TOURNAMENT": True , "AVAILABLE": True}
+            session_data = db.querySession(session_query)
+            teams_list = [x for x in session_data['TEAMS']]
+            positions = []
+            new_position = 0
+            if bool(teams_list):
+               for x in teams_list:
+                  positions.append(x['POSITION'])
+               new_position = max(positions) + 1
+
+            join_query = {"TEAM": [str(user1)], "SCORE": 0, "POSITION": new_position}
+            resp = db.joinExhibition(session_query, join_query)
+            await ctx.send(resp, delete_after=5)
+         except:
+            await ctx.send("User did not accept.")
+      else:
+         await ctx.send(m.USER_NOT_REGISTERED, delete_after=5)
+   else:
+      await ctx.send(m.ADMIN_ONLY_COMMAND)
+
+
+# Delete Gods of Cod
+@bot.command()
+@commands.check(validate_user)
+async def dgoc(ctx):
+   if ctx.author.guild_permissions.administrator == True:
+      goc_query = {'AVAILABLE': True}
+      response = db.deleteGoc(goc_query)
+      await ctx.send("GODS OF COD has ended. ")
+   else:
+      print(m.ADMIN_ONLY_COMMAND)
+
+# Gods of Cod SignUp
 @bot.command()
 @commands.check(validate_user)
 async def gocsup(ctx):
@@ -108,15 +190,18 @@ async def gocsup(ctx):
    user_data = db.queryUser({'DISNAME': str(ctx.author)})
 
    if goc_response['TEAM_FLAG']:
-      # Make it so that Team Owner has to be the one to register the team
-      team_data = db.queryTeam({'TNAME': user_data['TEAM']})
-      if team_data['OWNER'] == str(ctx.author):
-         if len(team_data['MEMBERS']) >= goc_response['TYPE']:
-            new_value =  {'$addToSet': {'PARTICIPANTS': str(team_data['TNAME'])}}
-            response = db.updateGoc(goc_query, new_value)
-            await ctx.send(f"{team_data['TNAME']} is now registered for GODS OF COD. ")           
+      if user_data['TEAM'] == 'PCG':
+         await ctx.send("This is a Team Only Tournament. ")
       else:
-         await ctx.send("Only the owner of the team can register team for Tournaments. ")
+         # Make it so that Team Owner has to be the one to register the team
+         team_data = db.queryTeam({'TNAME': user_data['TEAM']})
+         if team_data['OWNER'] == str(ctx.author):
+            if len(team_data['MEMBERS']) >= goc_response['TYPE']:
+               new_value =  {'$addToSet': {'PARTICIPANTS': str(team_data['TNAME'])}}
+               response = db.updateGoc(goc_query, new_value)
+               await ctx.send(f"{team_data['TNAME']} is now registered for GODS OF COD. ")           
+         else:
+            await ctx.send("Only the owner of the team can register team for Tournaments. ")
    else:
       if user in goc_response['PARTICIPANTS']:
          await ctx.send(m.ALREADY_IN_TOURNEY, delete_after=4)
@@ -125,12 +210,13 @@ async def gocsup(ctx):
          response = db.updateGoc(goc_query, new_value)
          await ctx.send(f"{ctx.author.mention} is now registered for GODS OF COD. ")
 
+# Lookup Gods of Cod
 @bot.command()
 async def lkgoc(ctx):
    query = {'REGISTRATION': True}
    g = db.queryGoc(query)
 
-   if d:
+   if g:
       title = g['TITLE']
       team_flag = g['TEAM_FLAG']
       game_type = " "
@@ -149,6 +235,7 @@ async def lkgoc(ctx):
       registration = g['REGISTRATION']
       avatar = g['IMG_URL']
       reward = g['REWARD']
+      participants = "\n".join(g['PARTICIPANTS'])
 
       
 
@@ -158,10 +245,12 @@ async def lkgoc(ctx):
       embedVar.add_field(name="TOURNAMENT STYLE", value=game_type)
       embedVar.add_field(name="TOURNAMENT AVAILABLE", value=str(available))
       embedVar.add_field(name="TOURNAMENT REGISTRATION", value=str(registration))
+      if participants:
+         embedVar.add_field(name="Registered Participants", value=participants)
       embedVar.add_field(name="REWARD", value=f"${reward}", inline=False)
       await ctx.send(embed=embedVar)
    else:
-      await ctx.send(m.USER_NOT_REGISTERED, delete_after=3)
+      await ctx.send("No GODS OF COD at this time. ", delete_after=5)
 
 
 '''TITLES'''
@@ -1053,6 +1142,7 @@ async def s(ctx, user: User):
       avatar = game['IMAGE_URL']
       tournament = session['TOURNAMENT']
       kingsgambit = session['KINGSGAMBIT']
+      goc = session['GOC']
       game_type = " "
       if session['TYPE'] == 1:
          game_type = "1v1"
@@ -1120,6 +1210,9 @@ async def s(ctx, user: User):
       
       if kingsgambit:
          embedVar.add_field(name="Kings Gambit", value="Yes")
+      
+      if goc:
+         embedVar.add_field(name="GODS OF COD", value="Yes")
       
       if kingsgambit and king_score > 0:
          embedVar.add_field(name=f"King - {team_1_score}", value=team_1_comp, inline=False)
@@ -1152,6 +1245,7 @@ async def ms(ctx):
       name = session['OWNER'].split("#",1)[0]
       games = game['GAME']
       avatar = game['IMAGE_URL']
+      goc = session['GOC']
       game_type = " "
       if session['TYPE'] == 1:
          game_type = "1v1"
@@ -1219,6 +1313,9 @@ async def ms(ctx):
       
       if kingsgambit:
          embedVar.add_field(name="Kings Gambit", value="Yes")
+
+      if goc:
+         embedVar.add_field(name="GODS OF COD", value="Yes")
       
       if kingsgambit and king_score > 0:
          embedVar.add_field(name=f"King - {team_1_score}", value=team_1_comp, inline=False)
@@ -1389,6 +1486,7 @@ async def cs(ctx, user: User):
       avatar = game['IMAGE_URL']
       tournament = session['TOURNAMENT']
       kingsgambit = session['KINGSGAMBIT']
+      goc = session['GOC']
       game_type = " "
       if session['TYPE'] == 1:
          game_type = "1v1"
@@ -1456,6 +1554,9 @@ async def cs(ctx, user: User):
       
       if kingsgambit:
          embedVar.add_field(name="Kings Gambit", value="Yes")
+      
+      if goc:
+         embedVar.add_field(name="GODS OF COD", value="Yes")
       
       if kingsgambit and king_score > 0:
          embedVar.add_field(name=f"King - {team_1_score}", value=team_1_comp, inline=False)
