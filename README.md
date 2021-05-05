@@ -1,6 +1,25 @@
 # partychatgaming
 
-# COMMANDS
+# COMMANDS 
+    Command Prefix = #
+    Lookup - lk
+    Register - r
+
+
+    GODS OF COD
+    goc - Create Gods of Cod
+    rgoc - Register Gods of Cod
+    sgoc - Start Gods of Cod
+    cgoc - Create Gods of Cod Session
+    goci - Invite Gods of Cod Session
+    dgoc - Delete Gods of Cod
+    goclk - Lookup Gods of Cod Info
+    egoc - End Gods of Cod
+    // gocrules - Lookup Gods of Cod Rules (Needs to be created)
+
+
+
+
     Register = >r
     Lookup User = >lk @user
     Delete Account = >d @user IWANTTODELETEMYACCOUNT

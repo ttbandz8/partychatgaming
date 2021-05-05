@@ -185,6 +185,10 @@ def queryAllCards():
     data = cards_col.find()
     return data
 
+def queryTournamentCards():
+    data = cards_col.find({'TOURNAMENT_REQUIREMENTS': {'$gt': 0}})
+    return data
+
 def queryShopCards():
     data = cards_col.find({'TOURNAMENT_REQUIREMENTS': 0})
     return data 
@@ -196,8 +200,6 @@ def altQueryShopCards(args):
 def queryCard(query):
     data = cards_col.find_one(query)
     return data
-
-
 
 ''' TITLES '''
 def title_exists(data):
@@ -230,6 +232,13 @@ def queryTitle(query):
     data = titles_col.find_one(query)
     return data
 
+def queryTournamentTitles():
+    data = titles_col.find({'TOURNAMENT_REQUIREMENTS': {'$gt': 0}})
+    return data
+
+def queryShopTitles():
+    data = titles_col.find({'TOURNAMENT_REQUIREMENTS': 0})
+    return data 
 
 '''Query User'''
 def queryUser(user):
@@ -263,7 +272,6 @@ def createUsers(users):
             if exists:
                 return "User already registered. "
             else:
-                print("Inserting new user.")
                 data = users_col.insert_one(users)
                 return "Registration complete. "
     except:
