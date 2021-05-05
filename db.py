@@ -74,6 +74,10 @@ def queryVault(query):
     return data
 
 
+def altQueryVault(query):
+    data = vault_col.find_one(query)
+    return data
+
 '''Delete Vault'''
 def deleteVault(vaults):
     try:
@@ -97,7 +101,7 @@ def deleteVault(vaults):
         print("Delete Vault failed.")
 
 
-'''Update User With No Array Filters'''
+'''Update Vault With No Array Filters'''
 def updateVaultNoFilter(query, new_value):
     exists = vault_exist({'OWNER': query['OWNER']})
     if exists:
@@ -117,6 +121,14 @@ def card_exists(data):
             return False
     else:
         return False
+
+def deleteAllCards(user_query):
+    exists = user_exists({'DISNAME': user_query['DISNAME']})
+    if exists:
+        cards_col.delete_many({})
+        return 'All Cards Deleted'
+    else:
+        return 'Unable to Delete All Cards'
 
 
 
@@ -164,6 +176,14 @@ def createCard(card):
 def queryAllCards():
     data = cards_col.find()
     return data
+
+def queryShopCards():
+    data = cards_col.find({'TOURNAMENT_REQUIREMENTS': 0})
+    return data 
+
+def altQueryShopCards(args):
+    data = cards_col.find({'TOURNAMENT_REQUIREMENTS': 0})
+    return data 
 
 def queryCard(query):
     data = cards_col.find_one(query)

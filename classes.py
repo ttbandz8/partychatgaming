@@ -76,9 +76,7 @@ class TOURNAMENTS():
 class CARDS():
     PATH: str
     NAME: str
-    PRICE: int = field(default_factory=lambda: 10)
-    TIER: int = field(default_factory=lambda: 1)
-    WINS_REQUIREMENTS: int = field(default_factory=lambda: 0)
+    PRICE: int = field(default_factory=lambda: 0)
     TOURNAMENT_REQUIREMENTS: int = field(default_factory=lambda: 0)
     TIMESTAMP: str = now
 
@@ -121,6 +119,7 @@ class GOC():
 class VAULT():
     OWNER: str
     BALANCE: int = field(default_factory=lambda: 100)
+    CARDS: list[str] = field(default_factory=lambda: [])
 
 
 

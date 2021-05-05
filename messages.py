@@ -9,3 +9,5 @@ SESSION_JOINED="User has joined the session.  "
 
 TOURNEY_DOES_NOT_EXIST="Tournament does not exist. "
 ALREADY_IN_TOURNEY="You're' already registred for the tournament. "
+
+CARD_DOESNT_EXIST="Card does not exist in the system. "

@@ -214,9 +214,9 @@ async def ut(ctx, args):
 '''CARDS'''
 @bot.command()
 @commands.check(validate_user)
-async def nc(ctx, args1: str, args2: str, args3: int, args4: int, args5: int):
+async def nc(ctx, args1: str, args2: str, args3: int, args4: int):
    if ctx.author.guild_permissions.administrator == True:
-      card_query = {'PATH': str(args1), 'NAME': str(args2), 'WINS_REQUIREMENTS': int(args3), 'TOURNAMENT_REQUIREMENTS': int(args4), 'TIER': int(args5)}
+      card_query = {'PATH': str(args1), 'NAME': str(args2), 'TOURNAMENT_REQUIREMENTS': int(args3),'PRICE': int(args4)}
       added = db.createCard(data.newCard(card_query))
       await ctx.send(added, delete_after=3)
    else:
@@ -244,6 +244,60 @@ async def ac(ctx):
 
 @bot.command()
 @commands.check(validate_user)
+async def shop(ctx):
+   user_query = {'DISNAME': str(ctx.author)}
+   user = db.queryUser(user_query)
+   resp = db.queryAllCards()
+   cards = []
+   unavailable_cards = []
+   for card in resp:
+      cards.append(card['NAME'])
+   
+   embedVar = discord.Embed(title=f"Card Shop", description="Cards are earned through valor and tournament achievements.", colour=000000)
+   embedVar.add_field(name="Unlocked Cards (*use >vc CARD) ", value="\n".join(cards))
+   await ctx.send(embed=embedVar, delete_after=15)
+
+
+@bot.command()
+@commands.check(validate_user)
+async def bc(ctx, args: str):
+   vault_query = {'OWNER' : str(ctx.author)}
+   vault = db.altQueryVault(vault_query)
+   shop = db.queryShopCards()
+   cards = []
+   print(vault['OWNER'])
+   currentBalance = vault['BALANCE']
+   cost = 0
+   mintedCard = " "
+   for card in shop:
+      if args == card['NAME']:
+         mintedCard = card['NAME']
+         cost = card['PRICE']
+      else:
+         print("No card found")
+   newBalance = currentBalance - cost
+   if newBalance < 0 :
+      await ctx.send("You have an insefficient Balance")
+   else:
+      response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': args}})
+      await ctx.send(response)
+      # currentBalance = vault['BALANCE']
+      # newBalance = currentBalance - cost
+      # if newBalance < 0 :
+      #    await ctx.send("You have an insefficient Balance")
+      # else:
+      #    response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': args}})
+      #    await ctx.send(response)
+      
+      # if args in cards:
+      #    mintedCard = {'NAME' : cards['']}
+      # #response = db.updateUserNoFilter(user_query, {'$set': {'CARD': args}})
+      # response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'CARDS': str(args)}} )
+      # await ctx.send(response)
+
+
+@bot.command()
+@commands.check(validate_user)
 async def uc(ctx, args):
    user_query = {'DISNAME': str(ctx.author)}
    user = db.queryUser(user_query)
@@ -260,6 +314,31 @@ async def uc(ctx, args):
    else:
       return "Unable to update card."
  
+
+@bot.command()
+@commands.check(validate_user)
+async def vc(ctx, args):
+   card = db.queryCard({'NAME':args})
+   if card:
+      img = Image.open(requests.get(card['PATH'], stream=True).raw)
+      img.save("text.png")
+      await ctx.send(file=discord.File("text.png"))
+   else:
+      await ctx.send(m.CARD_DOESNT_EXIST, delete_after=3)
+
+
+
+''' Delete All Sessions '''
+@bot.command()
+@commands.check(validate_user)
+async def dac(ctx):
+   user_query = {"DISNAME": str(ctx.author)}
+   if ctx.author.guild_permissions.administrator == True:
+      resp = db.deleteAllCards(user_query)
+      await ctx.send(resp)
+   else:
+      await ctx.send(m.ADMIN_ONLY_COMMAND)
+
 
 @bot.command()
 @commands.check(validate_user)
@@ -319,7 +398,7 @@ async def flex(ctx):
 
 @bot.command()
 @commands.check(validate_user)
-async def cb(ctx):
+async def vault(ctx):
    query = {'DISNAME': str(ctx.author)}
    d = db.queryUser(query)
 
@@ -816,6 +895,7 @@ async def das(ctx):
       await ctx.send(resp)
    else:
       await ctx.send(m.ADMIN_ONLY_COMMAND)
+
 
 
 ''' Invite to 1v1 '''
@@ -1448,6 +1528,7 @@ async def sw(ctx):
       
       uid = player['DID']
       user = await bot.fetch_user(uid)
+      await bless(ctx, 10, user)
       await DM(ctx, user, "You Won. Doesnt Prove Much Tho :yawning_face:")
       await ctx.send(f"Competitor " + f"{user.mention}" + " earns a victory ! :100:", delete_after=5)
 
@@ -1508,6 +1589,7 @@ async def sl(ctx):
 
          uid = player['DID']
          user = await bot.fetch_user(uid)
+         await curse(ctx, 5, user)
          await DM(ctx, user, "You Lost. Get back in there :poop:")
          await ctx.send(f"Competitor " + f"{user.mention}" + " took another L! :eyes:", delete_after=5)
 
