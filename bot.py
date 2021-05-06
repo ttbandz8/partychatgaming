@@ -176,12 +176,44 @@ async def goci(ctx, *participant: User):
             except:
                await ctx.send("User did not accept.")
          else:
-            await ctx.send(m.USER_NOT_REGISTERED_FOR_GOC)
+            await ctx.send(m.USER_NOT_REGISTERED_FOR_GOC, delete_after=5)
 
       elif goc['TYPE'] != 1:
-         print(participant)
+         # Check if same team members
+         list_of_teams = set()
          for member in participant:
-            print(str(member))
+            member_data = db.queryUser({'DISNAME': str(member)})
+            list_of_teams.add(member_data['TEAM'])
+         
+         if len(list_of_teams) > 1:
+            await ctx.send(m.DIFFERENT_TEAMS, delete_after=5)
+         else:
+            team_name="".join(list_of_teams)
+            team_members=[]
+            if team_name in goc['PARTICIPANTS']:
+               for member in participant:
+                  await DM(ctx, member ,f"{ctx.author.mention}" + " has invited you to a GOC Tournament Match :eyes:")
+                  accept = await ctx.send(f"{member.mention}, Will you join the GOC Match? :fire:", delete_after=8)
+                  
+                  for emoji in emojis:
+                     await accept.add_reaction(emoji)
+
+                  def check(reaction, user):
+                     return user == member and str(reaction.emoji) == '👍'
+                  try:
+                     reaction, user = await bot.wait_for('reaction_add', timeout=10.0, check=check)
+                     team_members.append(str(member))
+                     # await ctx.send(f'{member.mention} accepted the ready check!', delete_after=3)
+                  except:
+                     await ctx.send("User did not accept.")
+               if len(team_members) == goc['TYPE']:
+                  join_query = {"TEAM": team_members, "SCORE": 0, "POSITION": team_position}
+                  resp = db.joinSession(session_query, join_query)
+                  await ctx.send(resp, delete_after=5)      
+               else:
+                  await ctx.send(m.FAILED_TO_ACCEPT)                       
+            else:
+               await ctx.send(m.USER_NOT_REGISTERED_FOR_GOC, delete_after=5)
 
      
 
@@ -219,6 +251,14 @@ async def goci(ctx, *participant: User):
       #          await ctx.send(m.USER_NOT_REGISTERED, delete_after=5)
    else:
       await ctx.send(m.ADMIN_ONLY_COMMAND)
+
+# Leaderboard
+# @bot.command()
+# @commands.check(validate_user)
+# async def gocleaderboard(ctx, args):
+#    goc_data = db.queryGoc({'TITLE': args})
+#    if goc_data:
+#       print("yes")
 
 # Delete Gods of Cod
 @bot.command()
@@ -639,6 +679,22 @@ async def bless(ctx, args, user1: User):
          db.updateVaultNoFilter(vault, update_query)
       else:
          print("cant find vault")
+
+@bot.command()
+@commands.check(validate_user)
+async def blessall(ctx, args):
+   if ctx.author.guild_permissions.administrator == True:
+      blessAmount = args
+      posBlessAmount = 0 + abs(int(blessAmount))
+      data = db.queryAllVault()
+      for vault in data:
+         vault = db.queryVault({'OWNER' : vault['OWNER']})
+         update_query = {"$inc": {'BALANCE': posBlessAmount}}
+         db.updateVaultNoFilter(vault, update_query)
+      await ctx.send("All have been blessed. ")
+   else:
+      await ctx.send(m.ADMIN_ONLY_COMMAND)
+
 
 
 @bot.command()
@@ -1718,7 +1774,14 @@ async def sw(ctx):
    session_data['WINNER'] = winning_team
    winner = session_data['WINNER']
    session = session_data
-   update_query = {'$set': {'WINNER': winner}}
+   goc_player_team = ""
+   if session_data['GOC']:
+      for x in winning_team['TEAM']:
+         player = db.queryUser({'DISNAME': x})
+         goc_player_team = player['TEAM']
+         update_query = {'$set': {'WINNER': winner, 'WINNING_TEAM': goc_player_team}}
+   else:
+      update_query = {'$set': {'WINNER': winner,}}
    query = {"_id": session_data["_id"], "TEAMS.TEAM": str(ctx.author)}
    db.updateSession(session, query, update_query)
    game_type = ""
@@ -1735,10 +1798,10 @@ async def sw(ctx):
       game_type = "5v5"
 
    for x in winning_team['TEAM']:
- 
       player = db.queryUser({'DISNAME': x})
       winner_earned_tourney_cards = False
       winner_earned_tourney_titles = False
+      goc_player_team = player['TEAM']
 
       tourney_cards = db.queryTournamentCards()
       tourney_titles = db.queryTournamentTitles()
