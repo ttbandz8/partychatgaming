@@ -1180,15 +1180,15 @@ async def score(ctx, user: User):
 async def es(ctx):
    session_query = {"OWNER": str(ctx.author), "AVAILABLE": True}
    session = db.querySession(session_query)
-   if session['WINNER'] == session['LOSER']:
-      await sl(ctx)
-      end = db.endSession(session_query)
-      await ctx.send(end, delete_after=5)
-   else:
+   teams = [x for x in session['TEAMS']]
+   if len(teams) != 1:
       await sw(ctx)
       await sl(ctx)
       end = db.endSession(session_query)
       await ctx.send(end, delete_after=5)
+   else:
+      end = db.endSession(session_query)
+      await ctx.send(m.SESSION_HAS_ENDED)
 
 
 #delete session from database
@@ -1829,13 +1829,14 @@ async def sw(ctx):
    winner = session_data['WINNER']
    session = session_data
    goc_player_team = ""
+   update_query = {}
    if session_data['GOC']:
       for x in winning_team['TEAM']:
          player = db.queryUser({'DISNAME': x})
          goc_player_team = player['TEAM']
          update_query = {'$set': {'WINNER': winner, 'WINNING_TEAM': goc_player_team}}
    else:
-      update_query = {'$set': {'WINNER': winner,}}
+      update_query = {'$set': {'WINNER': winner}}
    query = {"_id": session_data["_id"], "TEAMS.TEAM": str(ctx.author)}
    db.updateSession(session, query, update_query)
    game_type = ""

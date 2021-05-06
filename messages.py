@@ -26,7 +26,7 @@ NO_AVAILABLE_GOC="No GODS OF COD at this time."
 UNABLE_TO_REGISTER_FOR_GOC="Registration has ended. "
 USER_NOT_REGISTERED_FOR_GOC="You are not registered for GODS OF COD. "
 DIFFERENT_TEAMS="You are not registered on the same team. "
-
+SESSION_HAS_ENDED="The session has ended. "
 FAILED_TO_ACCEPT="Failed to accept ready up. "
 
 GODS_OF_COD_RULES="""
