@@ -362,7 +362,7 @@ def queryAllTeams(team):
 def createTeam(team, user):
     try:
         find_user = queryUser({'DISNAME': user})
-        if find_user['TEAM']:
+        if find_user['TEAM'] and find_user['TEAM'] != 'PCG':
             return "User is already part of a team. "
         else:
             exists = team_exists({'TNAME': team['TNAME']})

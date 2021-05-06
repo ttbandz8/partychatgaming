@@ -122,6 +122,7 @@ async def cgoc(ctx):
       if g:
          game = [x for x in db.query_all_games()][0]
          session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": g['TYPE'], "TEAMS": [], "RANKED": True, "TOURNAMENT": True, "GOC": True, "GOC_TITLE": g['TITLE']}
+         print("Created Session")
          resp = db.createSession(data.newSession(session_query))
          await ctx.send(resp, delete_after=5)
       else:
@@ -155,7 +156,7 @@ async def goci(ctx, *participant: User):
          await ctx.send(m.TOO_MANY_PLAYERS_ON_TEAM)
 
       elif goc['TYPE'] == 1: 
-         playername = ""
+
          if str(participant[0]) in goc['PARTICIPANTS']:
             await DM(ctx, participant[0] ,f"{ctx.author.mention}" + " has invited you to a GOC Tournament Match :eyes:")
             accept = await ctx.send(f"{participant[0].mention}, Will you join the GOC Match? :fire:", delete_after=15)
@@ -176,6 +177,11 @@ async def goci(ctx, *participant: User):
                await ctx.send("User did not accept.")
          else:
             await ctx.send(m.USER_NOT_REGISTERED_FOR_GOC)
+
+      elif goc['TYPE'] != 1:
+         print(participant)
+         for member in participant:
+            print(str(member))
 
      
 
