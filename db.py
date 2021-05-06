@@ -406,10 +406,10 @@ def deleteTeamMember(query, value, user):
 
                 update = teams_col.update_one(query, value, upsert=True)
                 # Add Team to User Profile as well
-                query = {'DISNAME': user}
-                new_value = {'$set': {'TEAMS': ['PCG']}}
+                query = {'DISNAME': str(user)}
+                new_value = {'$set': {'TEAM': 'PCG'}}
                 users_col.update_one(query, new_value)
-
+                return "User has been removed from team. "
             else:
                 return "This user is not a member of the team."
         else:
@@ -527,7 +527,7 @@ def createSession(session):
 def joinSession(session, query):
     sessionquery = querySession(session)
     matchtype = sessionquery['TYPE']
-    if session['GOC'] and query['POSITION'] == 0:
+    if sessionquery['GOC'] and query['POSITION'] == 0:
         teaminsert = sessions_col.update_one(session, {'$addToSet': {'TEAMS': query}})
         return m.SESSION_JOINED
     else:
