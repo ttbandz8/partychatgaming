@@ -28,8 +28,8 @@ class TEAMS():
     TNAME: str
     MEMBERS: list
     TOURNAMENT_WINS: int = field(default_factory=lambda: 0)
-    RANKED: list = field(default_factory=lambda: [{'1V1': [0, 0, 0]}, {'2V2': [0, 0, 0]}, {'3V3': [0, 0, 0]}, {'4V4': [0, 0, 0]}, {'5V5': [0, 0, 0]}])
-    NORMAL: list = field(default_factory=lambda: [{'1V1': [0, 0, 0]}, {'2V2': [0, 0, 0]}, {'3V3': [0, 0, 0]}, {'4V4': [0, 0, 0]}, {'5V5': [0, 0, 0]}])
+    SCRIM_WINS: int = field(default_factory=lambda: 0)
+    SCRIM_LOSSES: int = field(default_factory=lambda: 0)
     GAMES: list[str] = field(default_factory=lambda: ['PCG'])
     LOGO_URL:  str = field(default_factory=lambda: '')
     LOGO_FLAG: bool = field(default_factory=lambda: False)
@@ -42,8 +42,6 @@ class SESSIONS():
     GAME: str
     TYPE: int
     TEAMS: list[str] = field(default_factory=lambda: [])
-    # PLAYERS: list[str] = field(default_factory=lambda: [])
-    # TEAM_SESSION: bool = field(default_factory=lambda: False)
     RANKED: bool = field(default_factory=lambda: False)
     GOC: bool = field(default_factory=lambda: False)
     GOC_TITLE: str = field(default_factory=lambda: 'N/A')
@@ -53,6 +51,7 @@ class SESSIONS():
     AVAILABLE: bool = field(default_factory=lambda: True)
     IS_FULL: bool = field(default_factory=lambda: False)
     WINNING_TEAM: str = field(default_factory=lambda: 'N/A')
+    LOSING_TEAM: str = field(default_factory=lambda: 'N/A')
     WINNER: str = field(default_factory=lambda: 'N/A')
     LOSER: str = field(default_factory=lambda: 'N/A')
     TIMESTAMP: str = now
