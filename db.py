@@ -362,7 +362,7 @@ def queryAllTeams(team):
 def createTeam(team, user):
     try:
         find_user = queryUser({'DISNAME': user})
-        if find_user['TEAM']:
+        if find_user['TEAM'] and find_user['TEAM'] != 'PCG':
             return "User is already part of a team. "
         else:
             exists = team_exists({'TNAME': team['TNAME']})
@@ -527,23 +527,27 @@ def createSession(session):
 def joinSession(session, query):
     sessionquery = querySession(session)
     matchtype = sessionquery['TYPE']
-    if matchtype == len(query['TEAM']):
-        # List of current teams in session
-        p = [x for x in sessionquery['TEAMS']]
-        
-        # Check if team trying to join is part of a team already
-        list_matching = [x for x in p[0]['TEAM'] if x in query['TEAM']]
+    if session['GOC'] and query['POSITION'] == 0:
+        teaminsert = sessions_col.update_one(session, {'$addToSet': {'TEAMS': query}})
+        return m.SESSION_JOINED
+    else:
+        if matchtype == len(query['TEAM']):
+            # List of current teams in session
+            p = [x for x in sessionquery['TEAMS']]
+            
+            # Check if team trying to join is part of a team already
+            list_matching = [x for x in p[0]['TEAM'] if x in query['TEAM']]
 
-        if len(list_matching) == 0:
-            teaminsert = sessions_col.update_one(session, {'$addToSet': {'TEAMS': query}, '$set': {'IS_FULL': True}})
+            if len(list_matching) == 0:
+                teaminsert = sessions_col.update_one(session, {'$addToSet': {'TEAMS': query}, '$set': {'IS_FULL': True}})
 
-            return 'Session Joined'
-        else: 
-            return 'Session full.'
-    elif matchtype < len(query['TEAM']):
-        return 'Too many players in team'
-    elif matchtype > len(query['TEAM']):
-        return 'Not enough players in team'
+                return 'Session Joined'
+            else: 
+                return 'Session full.'
+        elif matchtype < len(query['TEAM']):
+            return 'Too many players in team'
+        elif matchtype > len(query['TEAM']):
+            return 'Not enough players in team'
 
 def joinExhibition(session, query):
     sessionquery = querySession(session)
