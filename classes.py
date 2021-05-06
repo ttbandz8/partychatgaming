@@ -31,6 +31,8 @@ class TEAMS():
     RANKED: list = field(default_factory=lambda: [{'1V1': [0, 0, 0]}, {'2V2': [0, 0, 0]}, {'3V3': [0, 0, 0]}, {'4V4': [0, 0, 0]}, {'5V5': [0, 0, 0]}])
     NORMAL: list = field(default_factory=lambda: [{'1V1': [0, 0, 0]}, {'2V2': [0, 0, 0]}, {'3V3': [0, 0, 0]}, {'4V4': [0, 0, 0]}, {'5V5': [0, 0, 0]}])
     GAMES: list[str] = field(default_factory=lambda: ['PCG'])
+    LOGO_URL:  str = field(default_factory=lambda: '')
+    LOGO_FLAG: bool = field(default_factory=lambda: False)
     BADGES: list[str] = field(default_factory=lambda: ['New Team'])
     TIMESTAMP: str = now
 
@@ -114,7 +116,7 @@ class GOC():
     AVAILABLE: bool = field(default_factory=lambda: False)
     REGISTRATION: bool = field(default_factory=lambda: False)
     PARTICIPANTS: list[str] = field(default_factory=lambda: [])
-    WINNER: list[str] = field(default_factory=lambda: '')  
+    WINNER: str = field(default_factory=lambda: '')  
     TIMESTAMP: str = now
 
 @dataclass(frozen=True, order=True)
