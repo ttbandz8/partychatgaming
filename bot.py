@@ -99,13 +99,14 @@ async def goc(ctx, args1: str, args2: int, args3: bool, args4: int, args5: str )
    else:
       print(m.ADMIN_ONLY_COMMAND)
 
+
 # Start Gods of Cod
 @bot.command()
 @commands.check(validate_user)
 async def sgoc(ctx):
    if ctx.author.guild_permissions.administrator == True:
       goc_query = {'REGISTRATION': True}
-      new_value = {'$set': {'REGISTRATION': False}, '$set': {'AVAILABLE': True}}
+      new_value = {'$set': {'REGISTRATION': False,'AVAILABLE': True}}
       response = db.updateGoc(goc_query, new_value)
       await ctx.send("GODS OF COD has begun. ")
    else:
@@ -116,14 +117,13 @@ async def sgoc(ctx):
 @commands.check(validate_user)
 async def cgoc(ctx):
    if ctx.author.guild_permissions.administrator == True:
-      query = {'REGISTRATION': True}
+      query = {'AVAILABLE': True}
       g = db.queryGoc(query)
       if g:
          game = [x for x in db.query_all_games()][0]
-         session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 1, "TEAMS": [], "RANKED": True, "TOURNAMENT": True, "GOC": True, "GOC_TITLE": g['TITLE']}
+         session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": g['TYPE'], "TEAMS": [], "RANKED": True, "TOURNAMENT": True, "GOC": True, "GOC_TITLE": g['TITLE']}
          resp = db.createSession(data.newSession(session_query))
          await ctx.send(resp, delete_after=5)
-
       else:
          await ctx.send(m.TOURNEY_DOES_NOT_EXIST, delete_after=5)
    else:
@@ -132,43 +132,85 @@ async def cgoc(ctx):
 # Invite to Gods of Cod
 @bot.command()
 @commands.check(validate_user)
-async def goci(ctx, args : str,  user1: User):
+async def goci(ctx, *participant: User):
    if ctx.author.guild_permissions.administrator == True:
       game = [x for x in db.query_all_games()][0]
-      goc_query = {'TITLE': str(args)}
+      goc_query = {'AVAILABLE': True}
       goc = db.queryGoc(goc_query)
-      participant = []
-      playername = ""
-      for players in goc['PARTICIPANTS']:
-         validateParticipant = db.queryUser({'DISNAME' : str(user1)})
-         #print(validateParticipant)
-         if players == validateParticipant['DISNAME']:
-            validate_opponent = True
-            if validate_opponent:
-               await DM(ctx,user1,f"{ctx.author.mention}" + " has invited you to a GOC Tournament Match :eyes:")
-               accept = await ctx.send(f"{user1.mention}, Will you join the GOC Match? :fire:", delete_after=15)
-               for emoji in emojis:
-                  await accept.add_reaction(emoji)
-               def check(reaction, user):
-                  return user == user1 and str(reaction.emoji) == '👍'
-               try:
-                  reaction, user = await bot.wait_for('reaction_add', timeout=10.0, check=check)
-                  #Check If Teammate
 
-                  #Create Session
-                  session_query = {"OWNER": str(ctx.author),'RANKED' : True, 'GOC': True, 'TOURNAMENT': True, 'GOC_TITLE': goc['TITLE'], "GAME": game["GAME"], "TYPE": 1, "TEAMS": [{"TEAM": [str(ctx.author)], "SCORE": 0, "POSITION": 0}], "AVAILABLE": True}
-                  join_query = {"TEAM": [str(user1)], "SCORE": 0, "POSITION": 1}
-                  session = db.createSession(data.newSession(session_query))
-                  resp = db.joinSession(session_query, join_query)
-                  await ctx.send(resp, delete_after=5)              
-               except:
-                  await ctx.send("User did not accept.")   
+      session_query = {"OWNER": str(ctx.author),'RANKED' : True, 'GOC': True, 'TOURNAMENT': True, 'GOC_TITLE': goc['TITLE'], "AVAILABLE": True}
+      current_session = db.querySession(session_query)
+
+      team_position = 0
+
+      if not bool(current_session['TEAMS']):
+         team_position = 0
+      else:
+         team_position = 1
+
+      if len(participant) < goc['TYPE']:
+         await ctx.send(m.TOO_FEW_PLAYERS_ON_TEAM)
+
+      elif len(participant) > goc['TYPE']:
+         await ctx.send(m.TOO_MANY_PLAYERS_ON_TEAM)
+
+      elif goc['TYPE'] == 1: 
+         playername = ""
+         if str(participant[0]) in goc['PARTICIPANTS']:
+            await DM(ctx, participant[0] ,f"{ctx.author.mention}" + " has invited you to a GOC Tournament Match :eyes:")
+            accept = await ctx.send(f"{participant[0].mention}, Will you join the GOC Match? :fire:", delete_after=15)
+            
+            for emoji in emojis:
+               await accept.add_reaction(emoji)
+
+            def check(reaction, user):
+               return user == participant[0] and str(reaction.emoji) == '👍'
+            try:
+               reaction, user = await bot.wait_for('reaction_add', timeout=10.0, check=check)
+
+               join_query = {"TEAM": [str(participant[0])], "SCORE": 0, "POSITION": team_position}
+               resp = db.joinSession(session_query, join_query)
+               print(resp)
+               await ctx.send(resp, delete_after=5)              
+            except:
+               await ctx.send("User did not accept.")
          else:
-            validateUser = db.queryUser({'DISNAME': players})
-            if validateUser:
-               print("Participants: " + validateUser['DISNAME'])
-            else:
-               await ctx.send(m.USER_NOT_REGISTERED, delete_after=5)
+            await ctx.send(m.USER_NOT_REGISTERED_FOR_GOC)
+
+     
+
+      # participant = []
+      # playername = ""
+      # for players in goc['PARTICIPANTS']:
+      #    validateParticipant = db.queryUser({'DISNAME' : str(user1)})
+      #    #print(validateParticipant)
+      #    if players == validateParticipant['DISNAME']:
+      #       validate_opponent = True
+      #       if validate_opponent:
+      #          await DM(ctx,user1,f"{ctx.author.mention}" + " has invited you to a GOC Tournament Match :eyes:")
+      #          accept = await ctx.send(f"{user1.mention}, Will you join the GOC Match? :fire:", delete_after=15)
+      #          for emoji in emojis:
+      #             await accept.add_reaction(emoji)
+      #          def check(reaction, user):
+      #             return user == user1 and str(reaction.emoji) == '👍'
+      #          try:
+      #             reaction, user = await bot.wait_for('reaction_add', timeout=10.0, check=check)
+      #             #Check If Teammate
+
+      #             #Create Session
+      #             session_query = {"OWNER": str(ctx.author),'RANKED' : True, 'GOC': True, 'TOURNAMENT': True, 'GOC_TITLE': goc['TITLE'], "GAME": game["GAME"], "TYPE": 1, "TEAMS": [{"TEAM": [str(ctx.author)], "SCORE": 0, "POSITION": 0}], "AVAILABLE": True}
+      #             join_query = {"TEAM": [str(user1)], "SCORE": 0, "POSITION": 1}
+      #             session = db.createSession(data.newSession(session_query))
+      #             resp = db.joinSession(session_query, join_query)
+      #             await ctx.send(resp, delete_after=5)              
+      #          except:
+      #             await ctx.send("User did not accept.")   
+      #    else:
+      #       validateUser = db.queryUser({'DISNAME': players})
+      #       if validateUser:
+      #          print("Participants: " + validateUser['DISNAME'])
+      #       else:
+      #          await ctx.send(m.USER_NOT_REGISTERED, delete_after=5)
    else:
       await ctx.send(m.ADMIN_ONLY_COMMAND)
 
@@ -177,7 +219,7 @@ async def goci(ctx, args : str,  user1: User):
 @commands.check(validate_user)
 async def dgoc(ctx):
    if ctx.author.guild_permissions.administrator == True:
-      goc_query = {'AVAILABLE': True}
+      goc_query = {'ARCHIVED': False}
       response = db.deleteGoc(goc_query)
       await ctx.send("GODS OF COD has ended. ")
    else:
@@ -189,34 +231,37 @@ async def dgoc(ctx):
 async def rgoc(ctx):
    goc_query = {'REGISTRATION': True}
    goc_response = db.queryGoc(goc_query)
-   user = str(ctx.author)
-   user_data = db.queryUser({'DISNAME': str(ctx.author)})
+   if goc_response:
+      user = str(ctx.author)
+      user_data = db.queryUser({'DISNAME': str(ctx.author)})
 
-   if goc_response['TEAM_FLAG']:
-      if user_data['TEAM'] == 'PCG':
-         await ctx.send("This is a Team Only Tournament. ")
-      else:
-         # Make it so that Team Owner has to be the one to register the team
-         team_data = db.queryTeam({'TNAME': user_data['TEAM']})
-         if team_data['OWNER'] == str(ctx.author):
-            if len(team_data['MEMBERS']) >= goc_response['TYPE']:
-               new_value =  {'$addToSet': {'PARTICIPANTS': str(team_data['TNAME'])}}
-               response = db.updateGoc(goc_query, new_value)
-               await ctx.send(f"{team_data['TNAME']} is now registered for GODS OF COD. ")           
+      if goc_response['TEAM_FLAG']:
+         if user_data['TEAM'] == 'PCG':
+            await ctx.send("This is a Team Only Tournament. ")
          else:
-            await ctx.send("Only the owner of the team can register team for Tournaments. ")
-   else:
-      if user in goc_response['PARTICIPANTS']:
-         await ctx.send(m.ALREADY_IN_TOURNEY, delete_after=4)
+            # Make it so that Team Owner has to be the one to register the team
+            team_data = db.queryTeam({'TNAME': user_data['TEAM']})
+            if team_data['OWNER'] == str(ctx.author):
+               if len(team_data['MEMBERS']) >= goc_response['TYPE']:
+                  new_value =  {'$addToSet': {'PARTICIPANTS': str(team_data['TNAME'])}}
+                  response = db.updateGoc(goc_query, new_value)
+                  await ctx.send(f"{team_data['TNAME']} is now registered for GODS OF COD. ")           
+            else:
+               await ctx.send("Only the owner of the team can register team for Tournaments. ")
       else:
-         new_value =  {'$addToSet': {'PARTICIPANTS': user}}
-         response = db.updateGoc(goc_query, new_value)
-         await ctx.send(f"{ctx.author.mention} is now registered for GODS OF COD. ")
+         if user in goc_response['PARTICIPANTS']:
+            await ctx.send(m.ALREADY_IN_TOURNEY, delete_after=4)
+         else:
+            new_value =  {'$addToSet': {'PARTICIPANTS': user}}
+            response = db.updateGoc(goc_query, new_value)
+            await ctx.send(f"{ctx.author.mention} is now registered for GODS OF COD. ")
+   else:
+      await ctx.send(m.UNABLE_TO_REGISTER_FOR_GOC)
 
 # Lookup Gods of Cod
 @bot.command()
 async def goclk(ctx):
-   query = {'REGISTRATION': True}
+   query = {'ARCHIVED': False}
    g = db.queryGoc(query)
 
    if g:
@@ -253,7 +298,20 @@ async def goclk(ctx):
       embedVar.add_field(name="REWARD", value=f"${reward}", inline=False)
       await ctx.send(embed=embedVar)
    else:
-      await ctx.send("No GODS OF COD at this time. ", delete_after=5)
+      await ctx.send(m.NO_AVAILABLE_GOC, delete_after=5)
+
+@bot.command()
+async def gocrules(ctx):
+   query = {'AVAILABLE': True}
+   g = db.queryGoc(query)
+
+   if g:
+
+      embedVar = discord.Embed(title=f"GODS OF COD: RULES", description="Party Chat Gaming Database™️", colour=000000)
+      embedVar.add_field(name="Updated Rules for Gods of Cod" , value=m.GODS_OF_COD_RULES)
+      await ctx.send(embed=embedVar)
+   else:
+      await ctx.send(m.NO_AVAILABLE_GOC, delete_after=5)
 
 
 # New Titles
@@ -460,16 +518,16 @@ async def vc(ctx, args):
 
 
 
-''' Delete All Sessions '''
-@bot.command()
-@commands.check(validate_user)
-async def dac(ctx):
-   user_query = {"DISNAME": str(ctx.author)}
-   if ctx.author.guild_permissions.administrator == True:
-      resp = db.deleteAllCards(user_query)
-      await ctx.send(resp)
-   else:
-      await ctx.send(m.ADMIN_ONLY_COMMAND)
+# ''' Delete All Cards '''
+# @bot.command()
+# @commands.check(validate_user)
+# async def dac(ctx):
+#    user_query = {"DISNAME": str(ctx.author)}
+#    if ctx.author.guild_permissions.administrator == True:
+#       resp = db.deleteAllCards(user_query)
+#       await ctx.send(resp)
+#    else:
+#       await ctx.send(m.ADMIN_ONLY_COMMAND)
 
 
 @bot.command()

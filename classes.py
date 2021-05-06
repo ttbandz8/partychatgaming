@@ -108,6 +108,7 @@ class GOC():
     TYPE: int
     IMG_URL: str
     REWARD: int
+    ARCHIVED: bool = field(default_factory=lambda: False)
     TEAM_FLAG: bool = field(default_factory=lambda: False)
     AVAILABLE: bool = field(default_factory=lambda: False)
     REGISTRATION: bool = field(default_factory=lambda: False)
