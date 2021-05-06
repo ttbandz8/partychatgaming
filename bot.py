@@ -582,14 +582,16 @@ async def shop(ctx):
    unavailable_cards = []
    for card in resp:
       if card['PRICE'] != 0 and card['PRICE'] < (vault['BALANCE'] + 1000):
-         cards.append({card['NAME']: card['PRICE']})
+         if card['NAME'] not in vault['CARDS']:
+            cards.append({card['NAME']: card['PRICE']})
 
    title_resp = db.queryShopTitles()
    titles = []
    unavailable_titles = []
    for title in title_resp:
       if title['PRICE'] != 0 and title['PRICE'] < (vault['BALANCE'] + 1000):
-         titles.append({title['TITLE']: title['PRICE']})
+         if title['TITLE'] not in vault['TITLES']:
+            titles.append({title['TITLE']: title['PRICE']})
 
    cards_to_str = dict(ChainMap(*cards))
    n = dict(sorted(cards_to_str.items(), key=lambda item: item[1]))
