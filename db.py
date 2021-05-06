@@ -351,7 +351,18 @@ def queryTeam(team):
             data = teams_col.find_one(team)
             return data
         else:
-            print("Team doesn't exist.")
+           return False
+    except:
+        print("Find team failed.")
+
+def updateTeam(query, new_value):
+    try:
+        exists = team_exists({'TNAME': query['TNAME']})
+        if exists:
+            data = teams_col.update_one(query, new_value)
+            return data
+        else:
+           return False
     except:
         print("Find team failed.")
 
@@ -527,27 +538,30 @@ def createSession(session):
 def joinSession(session, query):
     sessionquery = querySession(session)
     matchtype = sessionquery['TYPE']
-    if sessionquery['GOC'] and query['POSITION'] == 0:
-        teaminsert = sessions_col.update_one(session, {'$addToSet': {'TEAMS': query}})
-        return m.SESSION_JOINED
+    if not sessionquery['IS_FULL']:
+        if sessionquery['GOC'] and query['POSITION'] == 0:
+            teaminsert = sessions_col.update_one(session, {'$addToSet': {'TEAMS': query}})
+            return m.SESSION_JOINED
+        else:
+            if matchtype == len(query['TEAM']):
+                # List of current teams in session
+                p = [x for x in sessionquery['TEAMS']]
+                
+                # Check if team trying to join is part of a team already
+                list_matching = [x for x in p[0]['TEAM'] if x in query['TEAM']]
+
+                if len(list_matching) == 0:
+                    teaminsert = sessions_col.update_one(session, {'$addToSet': {'TEAMS': query}, '$set': {'IS_FULL': True}})
+
+                    return 'Session Joined'
+                else: 
+                    return 'Session full.'
+            elif matchtype < len(query['TEAM']):
+                return 'Too many players in team'
+            elif matchtype > len(query['TEAM']):
+                return 'Not enough players in team'
     else:
-        if matchtype == len(query['TEAM']):
-            # List of current teams in session
-            p = [x for x in sessionquery['TEAMS']]
-            
-            # Check if team trying to join is part of a team already
-            list_matching = [x for x in p[0]['TEAM'] if x in query['TEAM']]
-
-            if len(list_matching) == 0:
-                teaminsert = sessions_col.update_one(session, {'$addToSet': {'TEAMS': query}, '$set': {'IS_FULL': True}})
-
-                return 'Session Joined'
-            else: 
-                return 'Session full.'
-        elif matchtype < len(query['TEAM']):
-            return 'Too many players in team'
-        elif matchtype > len(query['TEAM']):
-            return 'Not enough players in team'
+        return "Session is full. "
 
 def joinExhibition(session, query):
     sessionquery = querySession(session)

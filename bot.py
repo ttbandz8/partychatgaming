@@ -189,79 +189,81 @@ async def goci(ctx, *participant: User):
 
       session_query = {"OWNER": str(ctx.author),'RANKED' : True, 'GOC': True, 'TOURNAMENT': True, 'GOC_TITLE': goc['TITLE'], "AVAILABLE": True}
       current_session = db.querySession(session_query)
-
-      team_position = 0
-
-      if not bool(current_session['TEAMS']):
+      if current_session:
          team_position = 0
-      else:
-         team_position = 1
 
-      if len(participant) < goc['TYPE']:
-         await ctx.send(m.TOO_FEW_PLAYERS_ON_TEAM)
-
-      elif len(participant) > goc['TYPE']:
-         await ctx.send(m.TOO_MANY_PLAYERS_ON_TEAM)
-
-      elif goc['TYPE'] == 1: 
-
-         if str(participant[0]) in goc['PARTICIPANTS']:
-            await DM(ctx, participant[0] ,f"{ctx.author.mention}" + " has invited you to a GOC Tournament Match :eyes:")
-            accept = await ctx.send(f"{participant[0].mention}, Will you join the GOC Match? :fire:", delete_after=15)
-            
-            for emoji in emojis:
-               await accept.add_reaction(emoji)
-
-            def check(reaction, user):
-               return user == participant[0] and str(reaction.emoji) == '👍'
-            try:
-               reaction, user = await bot.wait_for('reaction_add', timeout=10.0, check=check)
-
-               join_query = {"TEAM": [str(participant[0])], "SCORE": 0, "POSITION": team_position}
-               resp = db.joinSession(session_query, join_query)
-               print(resp)
-               await ctx.send(resp, delete_after=5)              
-            except:
-               await ctx.send("User did not accept.")
+         if not bool(current_session['TEAMS']):
+            team_position = 0
          else:
-            await ctx.send(m.USER_NOT_REGISTERED_FOR_GOC, delete_after=5)
+            team_position = 1
 
-      elif goc['TYPE'] != 1:
-         # Check if same team members
-         list_of_teams = set()
-         for member in participant:
-            member_data = db.queryUser({'DISNAME': str(member)})
-            list_of_teams.add(member_data['TEAM'])
-         
-         if len(list_of_teams) > 1:
-            await ctx.send(m.DIFFERENT_TEAMS, delete_after=5)
-         else:
-            team_name="".join(list_of_teams)
-            team_members=[]
-            if team_name in goc['PARTICIPANTS']:
-               for member in participant:
-                  await DM(ctx, member ,f"{ctx.author.mention}" + " has invited you to a GOC Tournament Match :eyes:")
-                  accept = await ctx.send(f"{member.mention}, Will you join the GOC Match? :fire:", delete_after=8)
-                  
-                  for emoji in emojis:
-                     await accept.add_reaction(emoji)
+         if len(participant) < goc['TYPE']:
+            await ctx.send(m.TOO_FEW_PLAYERS_ON_TEAM)
 
-                  def check(reaction, user):
-                     return user == member and str(reaction.emoji) == '👍'
-                  try:
-                     reaction, user = await bot.wait_for('reaction_add', timeout=10.0, check=check)
-                     team_members.append(str(member))
-                     # await ctx.send(f'{member.mention} accepted the ready check!', delete_after=3)
-                  except:
-                     await ctx.send("User did not accept.")
-               if len(team_members) == goc['TYPE']:
-                  join_query = {"TEAM": team_members, "SCORE": 0, "POSITION": team_position}
+         elif len(participant) > goc['TYPE']:
+            await ctx.send(m.TOO_MANY_PLAYERS_ON_TEAM)
+
+         elif goc['TYPE'] == 1: 
+
+            if str(participant[0]) in goc['PARTICIPANTS']:
+               await DM(ctx, participant[0] ,f"{ctx.author.mention}" + " has invited you to a GOC Tournament Match :eyes:")
+               accept = await ctx.send(f"{participant[0].mention}, Will you join the GOC Match? :fire:", delete_after=15)
+               
+               for emoji in emojis:
+                  await accept.add_reaction(emoji)
+
+               def check(reaction, user):
+                  return user == participant[0] and str(reaction.emoji) == '👍'
+               try:
+                  reaction, user = await bot.wait_for('reaction_add', timeout=10.0, check=check)
+
+                  join_query = {"TEAM": [str(participant[0])], "SCORE": 0, "POSITION": team_position}
                   resp = db.joinSession(session_query, join_query)
-                  await ctx.send(resp, delete_after=5)      
-               else:
-                  await ctx.send(m.FAILED_TO_ACCEPT)                       
+                  print(resp)
+                  await ctx.send(resp, delete_after=5)              
+               except:
+                  await ctx.send("User did not accept.")
             else:
                await ctx.send(m.USER_NOT_REGISTERED_FOR_GOC, delete_after=5)
+
+         elif goc['TYPE'] != 1:
+            # Check if same team members
+            list_of_teams = set()
+            for member in participant:
+               member_data = db.queryUser({'DISNAME': str(member)})
+               list_of_teams.add(member_data['TEAM'])
+            
+            if len(list_of_teams) > 1:
+               await ctx.send(m.DIFFERENT_TEAMS, delete_after=5)
+            else:
+               team_name="".join(list_of_teams)
+               team_members=[]
+               if team_name in goc['PARTICIPANTS']:
+                  for member in participant:
+                     await DM(ctx, member ,f"{ctx.author.mention}" + " has invited you to a GOC Tournament Match :eyes:")
+                     accept = await ctx.send(f"{member.mention}, Will you join the GOC Match? :fire:", delete_after=8)
+                     
+                     for emoji in emojis:
+                        await accept.add_reaction(emoji)
+
+                     def check(reaction, user):
+                        return user == member and str(reaction.emoji) == '👍'
+                     try:
+                        reaction, user = await bot.wait_for('reaction_add', timeout=10.0, check=check)
+                        team_members.append(str(member))
+                        # await ctx.send(f'{member.mention} accepted the ready check!', delete_after=3)
+                     except:
+                        await ctx.send("User did not accept.")
+                  if len(team_members) == goc['TYPE']:
+                     join_query = {"TEAM": team_members, "SCORE": 0, "POSITION": team_position}
+                     resp = db.joinSession(session_query, join_query)
+                     await ctx.send(resp, delete_after=5)      
+                  else:
+                     await ctx.send(m.FAILED_TO_ACCEPT)                       
+               else:
+                  await ctx.send(m.USER_NOT_REGISTERED_FOR_GOC, delete_after=5)
+      else:
+         await ctx.send(m.SESSION_DOES_NOT_EXIST)
 
 
    else:
@@ -1775,7 +1777,7 @@ async def cteam(ctx, args1, *args):
 
 @bot.command()
 @commands.check(validate_user)
-async def att(ctx, args, user1: User):
+async def att(ctx, user1: User):
    owner_profile = db.queryUser({'DISNAME': str(ctx.author)})
    team_profile = db.queryTeam({'TNAME': owner_profile['TEAM']})
 
@@ -1821,14 +1823,10 @@ async def lkt(ctx, *args):
       games = team['GAMES']
       # avatar = game['IMAGE_URL']
       badges = team['BADGES']
-      ranked = team['RANKED']
-      normal = team['NORMAL']
+      scrim_wins = team['SCRIM_WINS']
+      scrim_losses = team['SCRIM_LOSSES']
       tournament_wins = team['TOURNAMENT_WINS']
       logo = team['LOGO_URL']
-
-
-      ranked_to_string = dict(ChainMap(*ranked))
-      normal_to_string = dict(ChainMap(*normal))
 
       team_list = []
       for members in team['MEMBERS']:
@@ -1846,8 +1844,8 @@ async def lkt(ctx, *args):
          embedVar.set_image(url=logo)
       embedVar.add_field(name="Games :video_game:", value=f'{games[0]}'.format(bot))
       embedVar.add_field(name="Members :military_helmet:", value="\n".join(f'{t}'.format(bot) for t in team_list), inline=False)
-      embedVar.add_field(name="Ranked :medal:", value="\n".join(f'{k}: {"/".join([str(int) for int in v])}' for k,v in ranked_to_string.items()))
-      embedVar.add_field(name="Normals :crossed_swords:", value="\n".join(f'{k}: {"/".join([str(int) for int in v])}' for k,v in normal_to_string.items()))
+      embedVar.add_field(name="Scrim Wins :medal:", value=scrim_wins)
+      embedVar.add_field(name="Scrim Losses :crossed_swords:", value=scrim_losses)
       embedVar.add_field(name="Tournament Wins :fireworks:", value=tournament_wins, inline=False)
 
       await ctx.send(embed=embedVar, delete_after=20)
@@ -1915,27 +1913,30 @@ async def dt(ctx, *args):
    team_name = " ".join([*args])
    team_query = {'OWNER': str(ctx.author), 'TNAME': team_name}
    team = db.queryTeam(team_query)
-   if team['OWNER'] == str(ctx.author):
-      accept = await ctx.send(f"Do you want to delete the {team['GAMES'][0]} team {team_name}?".format(bot), delete_after=10)
-      for emoji in emojis:
-         await accept.add_reaction(emoji)
+   if team:
+      if team['OWNER'] == str(ctx.author):
+         accept = await ctx.send(f"Do you want to delete the {team['GAMES'][0]} team {team_name}?".format(bot), delete_after=10)
+         for emoji in emojis:
+            await accept.add_reaction(emoji)
 
-      def check(reaction, user):
-         return user == ctx.author and str(reaction.emoji) == '👍'
+         def check(reaction, user):
+            return user == ctx.author and str(reaction.emoji) == '👍'
 
-      try:
-         confirmed = await bot.wait_for('reaction_add', timeout=8.0, check=check)
-         response = db.deleteTeam(team, str(ctx.author))
+         try:
+            confirmed = await bot.wait_for('reaction_add', timeout=8.0, check=check)
+            response = db.deleteTeam(team, str(ctx.author))
 
-         user_query = {'DISNAME': str(ctx.author)}
-         new_value = {'$set': {'TEAM': 'PCG'}}
-         db.updateUserNoFilter(user_query, new_value)
+            user_query = {'DISNAME': str(ctx.author)}
+            new_value = {'$set': {'TEAM': 'PCG'}}
+            db.updateUserNoFilter(user_query, new_value)
 
-         await ctx.send(response, delete_after=5)
-      except:
-         print("Team not created. ")
+            await ctx.send(response, delete_after=5)
+         except:
+            print("Team not created. ")
+      else:
+         await ctx.send("Only the owner of the team can delete the team. ")
    else:
-      await ctx.send("Only the owner of the team can delete the team. ")
+      await ctx.send(m.TEAM_DOESNT_EXIST, delete_after=5)
 
 
 async def sw(ctx):
@@ -1951,17 +1952,30 @@ async def sw(ctx):
    session_data['WINNER'] = winning_team
    winner = session_data['WINNER']
    session = session_data
-   goc_player_team = ""
+   
+   players_team_name = ""
    update_query = {}
+   add_score_to_team={}
    if session_data['GOC']:
       for x in winning_team['TEAM']:
          player = db.queryUser({'DISNAME': x})
-         goc_player_team = player['TEAM']
-         update_query = {'$set': {'WINNER': winner, 'WINNING_TEAM': goc_player_team}}
+         players_team_name = player['TEAM']
+         update_query = {'$set': {'WINNER': winner, 'WINNING_TEAM': players_team_name}}
+         add_score_to_team = {'$inc': {'TOURNAMENT_WINS': 1}}
+
+   elif session_data['SCRIM']:
+      for x in winning_team['TEAM']:
+         player = db.queryUser({'DISNAME': x})
+         players_team_name = player['TEAM']
+         update_query = {'$set': {'WINNER': winner, 'WINNING_TEAM': players_team_name}}
+         add_score_to_team = {'$inc': {'SCRIM_WINS': 1}}
+
    else:
       update_query = {'$set': {'WINNER': winner}}
+
    query = {"_id": session_data["_id"], "TEAMS.TEAM": str(ctx.author)}
    db.updateSession(session, query, update_query)
+   db.updateTeam({'TNAME': players_team_name}, add_score_to_team)
    game_type = ""
 
    if session['TYPE'] == 1:
