@@ -7,6 +7,7 @@ import discord
 import DiscordUtils
 from discord.ext import commands
 from PIL import Image, ImageFont, ImageDraw
+import numpy as np
 
 # Converters
 from discord import User
@@ -593,19 +594,39 @@ async def shop(ctx):
          if title['TITLE'] not in vault['TITLES']:
             titles.append({title['TITLE']: title['PRICE']})
 
+ 
    cards_to_str = dict(ChainMap(*cards))
    n = dict(sorted(cards_to_str.items(), key=lambda item: item[1]))
    cards_sorted_list = "\n".join(f'{k} : ' +  f" :coin:{'{:,}'.format(v)}"  for k,v in n.items())
+   cards_list_array = cards_sorted_list.split("\n")
+   
+   # Upon adding more cards, be sure it increate the number below
+   cards_broken_up = np.array_split(cards_list_array, 7)
 
+   # Upon adding more cards, be sure it increate the number below
    titles_to_str = dict(ChainMap(*titles))
    n = dict(sorted(titles_to_str.items(), key=lambda item: item[1]))
    titles_sorted_list = "\n".join(f'{k} : ' +  f" :coin:{'{:,}'.format(v)}"  for k,v in n.items())
-   
-   embedVar = discord.Embed(title=f":shopping_cart: Flex Shop", description="To preview cards, use the #vc card command. " + "\n" + "You will unlock more purchasable items as you save and earn more gold. ", colour=000000)
-   embedVar.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236723/PCG%20LOGOS%20AND%20RESOURCES/Party_Chat_Shop.png")
-   embedVar.add_field(name=":shopping_bags: Available Cards", value=cards_sorted_list)
-   embedVar.add_field(name=":shopping_bags: Available Titles", value=titles_sorted_list)
-   await ctx.send(embed=embedVar, delete_after=30)
+   titles_list_array = titles_sorted_list.split("\n")
+   titles_broken_up = np.array_split(titles_list_array, 7)
+  
+   embed_list = []
+   for i in range(0, len(titles_broken_up)):
+      globals()['embedVar%s' % i] = discord.Embed(title=f":shopping_cart: Flex Shop", description="To preview cards, use the #vc card command. " + "\n" + "You will unlock more purchasable items as you save and earn more gold. ", colour=000000, value='Page 1')
+      globals()['embedVar%s' % i].set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236723/PCG%20LOGOS%20AND%20RESOURCES/Party_Chat_Shop.png")
+      globals()['embedVar%s' % i].add_field(name=":shopping_bags: Available Cards", value="\n".join(cards_broken_up[i]))
+      globals()['embedVar%s' % i].add_field(name=":shopping_bags: Available Titles", value="\n".join(titles_broken_up[i]))
+      embed_list.append(globals()['embedVar%s' % i])
+
+   paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+   paginator.add_reaction('⏮️', "first")
+   paginator.add_reaction('⏪', "back")
+   paginator.add_reaction('🔐', "lock")
+   paginator.add_reaction('⏩', "next")
+   paginator.add_reaction('⏭️', "last")
+   embeds = embed_list
+   await paginator.run(embeds)
+
 
 @bot.command()
 @commands.check(validate_user)
@@ -771,20 +792,44 @@ async def vault(ctx):
       cards = vault['CARDS']
       titles = vault['TITLES']
 
+      cards_broken_up = np.array_split(cards, 6)
+      titles_broken_up = np.array_split(titles, 6)
 
-
-      embedVar = discord.Embed(title= f":triangular_flag_on_post: " + f"{name}".format(client) +"\n" + f" :coin:{'{:,}'.format(balance)}", description=":bank: Your Party Chat Gaming Vault™️", colour=000000)
-      embedVar.set_thumbnail(url=avatar)
-      # embedVar.add_field(name="Balance" + " :fireworks:", value=f":coin:{balance}")
-      if bool(cards):
-         embedVar.add_field(name="Cards" + " :fireworks:", value="\n".join(cards))
+      if len(cards) < 25:
+         embedVar = discord.Embed(title= f":triangular_flag_on_post: " + f"{name}".format(client) +"\n" + f" :coin:{'{:,}'.format(balance)}", description=":bank: Your Party Chat Gaming Vault™️", colour=000000)
+         embedVar.set_thumbnail(url=avatar)
+         # embedVar.add_field(name="Balance" + " :fireworks:", value=f":coin:{balance}")
+         if bool(cards):
+            embedVar.add_field(name="Cards" + " :fireworks:", value="\n".join(cards))
+         else:
+            embedVar.set_footer(text="No Cards available")
+         
+         if bool(titles):
+            embedVar.add_field(name="Titles" + " :fireworks:", value="\n".join(titles))
+         await ctx.send(embed=embedVar, delete_after=15)
       else:
-         embedVar.set_footer(text="No Cards available")
-      
-      if bool(titles):
-         embedVar.add_field(name="Titles" + " :fireworks:", value="\n".join(titles))
-      await ctx.send(embed=embedVar, delete_after=15)
+         embed_list = []
+         for i in range(0, len(titles_broken_up)):
+            globals()['embedVar%s' % i] = discord.Embed(title= f":triangular_flag_on_post: " + f"{name}".format(client) +"\n" + f" :coin:{'{:,}'.format(balance)}", description=":bank: Your Party Chat Gaming Vault™️", colour=000000)
+            globals()['embedVar%s' % i].set_thumbnail(url=avatar)
+            # embedVar.add_field(name="Balance" + " :fireworks:", value=f":coin:{balance}")
+            if bool(cards):
+               globals()['embedVar%s' % i].add_field(name="Cards" + " :fireworks:", value="\n".join(cards_broken_up[i]))
+            else:
+               globals()['embedVar%s' % i].set_footer(text="No Cards available")
+            
+            if bool(titles):
+               globals()['embedVar%s' % i].add_field(name="Titles" + " :fireworks:", value="\n".join(titles_broken_up[i]))
+            embed_list.append(globals()['embedVar%s' % i])
 
+         paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+         paginator.add_reaction('⏮️', "first")
+         paginator.add_reaction('⏪', "back")
+         paginator.add_reaction('🔐', "lock")
+         paginator.add_reaction('⏩', "next")
+         paginator.add_reaction('⏭️', "last")
+         embeds = embed_list
+         await paginator.run(embeds)
    else:
       newVault = db.createVault({'OWNER': d['DISNAME']})
       print(newVault)
