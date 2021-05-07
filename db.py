@@ -4,30 +4,30 @@ import messages as m
 
 
 
-databaseName = 'PCGTEST'
-settings = {
-  'host': 'iad2-c13-2.mongo.objectrocket.com:52423,iad2-c13-0.mongo.objectrocket.com:52423,iad2-c13-1.mongo.objectrocket.com:52423',
-  'username': '92bricks',
-  'password': 'eg4umv8tByo27nDt',
-  'options': "?authSource=PCGTEST&replicaSet=4006c6fe70f349938710aefca9b6173f".format(**locals())
-}
+# databaseName = 'PCGTEST'
+# settings = {
+#   'host': 'iad2-c13-2.mongo.objectrocket.com:52423,iad2-c13-0.mongo.objectrocket.com:52423,iad2-c13-1.mongo.objectrocket.com:52423',
+#   'username': '92bricks',
+#   'password': 'eg4umv8tByo27nDt',
+#   'options': "?authSource=PCGTEST&replicaSet=4006c6fe70f349938710aefca9b6173f".format(**locals())
+# }
 
-try:
-   conn = pymongo.MongoClient("mongodb://{username}:{password}@{host}/{options}".format(**settings))
-   collectionNames = conn[databaseName].collection_names()
-   print("Connected")
-   print("Collection Names {}".format(collectionNames))
-#    conn.close()
-except Exception as ex:
-   print("Error: {}".format(ex))
-   exit('Failed to connect, terminating.')
+# try:
+#    conn = pymongo.MongoClient("mongodb://{username}:{password}@{host}/{options}".format(**settings))
+#    collectionNames = conn[databaseName].collection_names()
+#    print("Connected")
+#    print("Collection Names {}".format(collectionNames))
+# #    conn.close()
+# except Exception as ex:
+#    print("Error: {}".format(ex))
+#    exit('Failed to connect, terminating.')
 
-print("Finished") # Done!
-
+# print("Finished") # Done!
+uri = config(MONGODB_URI)
 # TOKEN = config('MONGOTOKEN_TEST')
-# mongo = pymongo.MongoClient(TOKEN)
+mongo = pymongo.MongoClient(uri)
 
-db = conn["PCGTEST"]
+db = mongo["PCGTEST"]
 users_col = db["USERS"]
 teams_col = db["TEAMS"]
 sessions_col = db["SESSIONS"]
@@ -131,28 +131,6 @@ def updateVaultNoFilter(query, new_value):
     else:
         return "Update failed. "
 
-'''Check If Card Exists'''
-def card_exists(data):
-    collection_exists = col_exists("CARDS")
-    if collection_exists:
-        card_does_exist = cards_col.find_one(data)
-        if card_does_exist:
-            return True
-        else:
-            return False
-    else:
-        return False
-
-def deleteAllCards(user_query):
-    exists = user_exists({'DISNAME': user_query['DISNAME']})
-    if exists:
-        cards_col.delete_many({})
-        return 'All Cards Deleted'
-    else:
-        return 'Unable to Delete All Cards'
-
-
-
 
 ''' GOC '''
 '''Check If Card Exists'''
@@ -206,6 +184,28 @@ def addTeamMember(query, add_to_team_query, user, new_user):
             return "The Owner of the team can add new members. "
     else:
         return "Cannot add user to the team."
+
+
+'''Check If Card Exists'''
+def card_exists(data):
+    collection_exists = col_exists("CARDS")
+    if collection_exists:
+        card_does_exist = cards_col.find_one(data)
+        if card_does_exist:
+            return True
+        else:
+            return False
+    else:
+        return False
+
+def deleteAllCards(user_query):
+    exists = user_exists({'DISNAME': user_query['DISNAME']})
+    if exists:
+        cards_col.delete_many({})
+        return 'All Cards Deleted'
+    else:
+        return 'Unable to Delete All Cards'
+
 '''New Card'''
 def createCard(card):
     try:
@@ -238,6 +238,29 @@ def queryCard(query):
     data = cards_col.find_one(query)
     return data
 
+def updateCard(query, new_value):
+    try:
+        cardexists = card_exists({'PATH': query['PATH']})
+        if cardexists:
+            cards_col.update_one(query, new_value)
+            return True
+        else:
+            return False
+    except:
+        return False
+
+def deleteCard(card):
+    try:
+        cardexists = card_exists({'PATH': query['PATH']})
+        if cardexists:
+            cards_col.delete_one(card)
+            return True
+        else:
+            return False
+    except:
+        return False
+
+
 ''' TITLES '''
 def title_exists(data):
     collection_exists = col_exists("TITLES")
@@ -260,6 +283,28 @@ def createTitle(title):
             return "New Title created."
     except:
         return "Cannot create Title."
+
+def updateTitle(query, new_value):
+    try:
+        titleexists = title_exists({'TITLE': query['TITLE']})
+        if titleexists:
+            titles_col.update_one(query, new_value)
+            return True
+        else:
+            return False
+    except:
+        return False
+
+def deleteTitle(title):
+    try:
+        titleexists = title_exists({'TITLE': query['TITLE']})
+        if titleexists:
+            titles_col.delete_one(title)
+            return True
+        else:
+            return False
+    except:
+        return False
 
 def queryAllTitles():
     data = titles_col.find()
