@@ -7,6 +7,29 @@ import messages as m
 # else:
 #     TOKEN = config('MONGOTOKEN_TEST')
 TOKEN = config('MONGOTOKEN_TEST')
+
+# Assumed you have run 'pip install pymongo'
+import pymongo
+databaseName = 'PCGTEST'
+settings = {
+  'host': 'iad2-c13-2.mongo.objectrocket.com:52423,iad2-c13-0.mongo.objectrocket.com:52423,iad2-c13-1.mongo.objectrocket.com:52423',
+  'username': '92bricks',
+  'password': 'eg4umv8tByo27nDt',
+  'options': "?authSource=PCGTEST&replicaSet=4006c6fe70f349938710aefca9b6173f".format(**locals())
+}
+
+try:
+   conn = pymongo.MongoClient("mongodb://{username}:{password}@{host}/{options}".format(**settings))
+   collectionNames = conn[databaseName].collection_names()
+   print("Connected")
+   print("Collection Names {}".format(collectionNames))
+   conn.close()
+except Exception as ex:
+   print("Error: {}".format(ex))
+   exit('Failed to connect, terminating.')
+
+print("Finished") # Done!
+
 mongo = pymongo.MongoClient(TOKEN)
 
 db = mongo["PCGTEST"]
