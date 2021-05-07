@@ -42,10 +42,17 @@ bot = commands.Bot(command_prefix="#")
 async def validate_user(ctx):
    query = {'DISNAME': str(ctx.author)}
    valid = db.queryUser(query)
-   if valid:
+   game = valid['GAMES'][0]
+   default_game = ['PCG']
+
+   if valid and 'PCG' != game:
       return True
+   elif 'PCG' == game:
+      print("Perpin")
+      msg = await ctx.send(m.ADD_A_GAME, delete_after=5)
+      return False
    else:
-      msg = await ctx.send(m.USER_NOT_REGISTERED)
+      msg = await ctx.send(m.USER_NOT_REGISTERED, delete_after=5)
       return False
 
 @bot.event
@@ -193,6 +200,8 @@ async def goc(ctx, args1: str, args2: int, args3: bool, args4: int, args5: str )
       await ctx.send(response, delete_after=3)
    else:
       print(m.ADMIN_ONLY_COMMAND)
+
+
 
 
 # Start Gods of Cod
@@ -936,36 +945,40 @@ async def d(ctx, user: User, args):
 
 
 @bot.command()
-@commands.check(validate_user)
 async def ag(ctx, *args):
    user = {'DISNAME': str(ctx.author)}
    user_data = db.queryUser(user)
-   aliases = [x for x in db.query_all_games() for x in x['ALIASES']]
-   if args[0] in aliases:
-      game_query = {'ALIASES': args[0]}
-      game = db.queryGame(game_query)
-      title = game['GAME']
-      ign = game['IGN']
-      if title not in user_data['GAMES'] and ign != True:
-         if "PCG" in user_data['GAMES']:
-            query_to_update_game = {"$set": {"GAMES": [title]}}
-            resp = db.updateUserNoFilter(user, query_to_update_game)
-            ctx.send(resp, delete_after=5)
-         else:
-            query_to_update_game = {"$addToSet": {"GAMES": title}}
-            resp = db.updateUserNoFilter(user, query_to_update_game)
-            ctx.send(resp, delete_after=5)
-      elif title not in user_data['GAMES'] and ign == True:
-         if "PCG" in user_data['GAMES']:
-            query_to_update_game = {"$set": {"GAMES": [title], "IGN": [{title : args[1]}]}}
-            resp = db.updateUserNoFilter(user, query_to_update_game)
-            await ctx.send(resp, delete_after=5)
-         else:
+ 
+   if user_data:
+      aliases = [x for x in db.query_all_games() for x in x['ALIASES']]
+      
+      if args[0] in aliases:
+         game_query = {'ALIASES': args[0]}
+         game = db.queryGame(game_query)
+         title = game['GAME']
+         ign = game['IGN']
+         if title not in user_data['GAMES'] and ign != True:
+            if "PCG" in user_data['GAMES']:
+               query_to_update_game = {"$set": {"GAMES": [title]}}
+               resp = db.updateUserNoFilter(user, query_to_update_game)
+               ctx.send(resp, delete_after=5)
+            else:
+               query_to_update_game = {"$addToSet": {"GAMES": title}}
+               resp = db.updateUserNoFilter(user, query_to_update_game)
+               await ctx.send(resp, delete_after=5)
+         elif title not in user_data['GAMES'] and ign == True:
 
-            query_to_update_game = {"$addToSet": {"GAMES": title, "IGN": {title : args[1]}}}
-            resp = db.updateUserNoFilter(user, query_to_update_game)
-            await ctx.send(resp, delete_after=5)
+            if "PCG" in user_data['GAMES']:
+               query_to_update_game = {"$set": {"GAMES": [title], "IGN": [{title : args[1]}]}}
+               resp = db.updateUserNoFilter(user, query_to_update_game)
+               await ctx.send(resp, delete_after=5)
+            else:
 
+               query_to_update_game = {"$addToSet": {"GAMES": title, "IGN": {title : args[1]}}}
+               resp = db.updateUserNoFilter(user, query_to_update_game)
+               await ctx.send(resp, delete_after=5)
+   else:
+      await ctx.send(m.USER_NOT_REGISTERED, delete_after=5)
 
 @bot.command()
 @commands.check(validate_user)
@@ -1540,7 +1553,7 @@ async def iby(ctx, args1, user: User):
 #Check if User is hosting a session
 @bot.command()
 @commands.check(validate_user)
-async def s(ctx, user: User):
+async def so(ctx, user: User):
    session_owner = {'OWNER': str(user), "AVAILABLE": True}
    session = db.querySession(session_owner)
    if session:
@@ -2263,6 +2276,8 @@ async def e(ctx):
    else:
       await ctx.send(m.ADMIN_ONLY_COMMAND)
 
+
+
 @bot.command()
 @commands.check(validate_user)
 async def einvite(ctx, user1: User):
@@ -2306,5 +2321,131 @@ async def einvite(ctx, user1: User):
 #    DISCORD_TOKEN = config('DISCORD_TOKEN_PROD')   
 # else:
 #    DISCORD_TOKEN = config('DISCORD_TOKEN_TEST')
+
+@bot.command()
+async def newgame(ctx, *args):
+   if ctx.author.guild_permissions.administrator == True:
+      game_name = " ".join([*args])
+      # games = [x for x in db.query_all_games()][0]
+      
+      response = db.addGame(data.newGame({'GAME': game_name}))
+      await ctx.send(response, delete_after=5)
+   else:
+      await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=5)
+
+
+@bot.command()
+async def addgamealiases(ctx, *args):
+   if ctx.author.guild_permissions.administrator == True:
+      admin = db.queryUser({'DISNAME': str(ctx.author)})
+      if not args:
+         await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=5)
+      else:
+         # game = admin['GAMES'][0]
+         test_game = "Call Of Duty Mobile"
+
+         aliases = []
+
+         for title in args:
+            aliases.append(title)
+
+         query = {'GAME': test_game}
+         new_value = {'$set': {'ALIASES': aliases}}
+
+         response = db.updateGame(query, new_value)
+         await ctx.send(m.UPDATE_COMPLETE, delete_after=5)
+
+@bot.command()
+async def addgamealias(ctx, *args):
+   if ctx.author.guild_permissions.administrator == True:
+      alias = " ".join([*args])
+      admin = db.queryUser({'DISNAME': str(ctx.author)})
+      if not args:
+         await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=5)
+      else:
+         # game = admin['GAMES'][0]
+         test_game = "Call Of Duty Mobile"
+
+         query = {'GAME': test_game}
+         new_value = {'$addToSet': {'ALIASES': alias}}
+
+         response = db.updateGame(query, new_value)
+         await ctx.send(m.UPDATE_COMPLETE, delete_after=5)
+
+@bot.command()
+async def addgametypes(ctx, *args):
+   if ctx.author.guild_permissions.administrator == True:
+      admin = db.queryUser({'DISNAME': str(ctx.author)})
+      if not args:
+         await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=5)
+      else:
+         # game = admin['GAMES'][0]
+         test_game = "Call Of Duty Mobile"
+
+         types = []
+
+         for gametype in args:
+            types.append(gametype)
+
+         query = {'GAME': test_game}
+         new_value = {'$set': {'TYPE': types}}
+
+         response = db.updateGame(query, new_value)
+         await ctx.send(m.UPDATE_COMPLETE, delete_after=5)
+
+@bot.command()
+async def addgameimage(ctx, args):
+   if ctx.author.guild_permissions.administrator == True:
+      admin = db.queryUser({'DISNAME': str(ctx.author)})
+      if not args:
+         await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=5)
+      else:
+
+         test_game = "Call Of Duty Mobile"
+
+         query = {'GAME': test_game}
+         new_value = {'$set': {'IMAGE_URL': args}}
+
+         response = db.updateGame(query, new_value)
+         await ctx.send(m.UPDATE_COMPLETE, delete_after=5)
+
+
+@bot.command()
+async def deletegame(ctx, *args):
+   if ctx.author.guild_permissions.administrator == True:
+      game_name = " ".join([*args])
+      admin = db.queryUser({'DISNAME': str(ctx.author)})
+      if not args:
+         await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=5)
+      else:
+         query = {'GAME': game_name}
+         response = db.deleteGame(query)
+         await ctx.send(m.DELETE_COMPLETE, delete_after=5)
+
+@bot.command()
+# @commands.check(validate_user)
+async def lkg(ctx):
+   data = db.query_all_games()
+
+   if data:
+
+      game_list = []
+      for game in data:
+         game_list.append(game)
+
+      game_title_list = []
+
+      for title in game_list:
+         game_title_list.append(title['GAME'])
+
+      embedVar = discord.Embed(title=f"Games Lookup", description=":bank: Party Chat Gaming Database", colour=000000)
+      embedVar.add_field(name="Games", value="\n".join(game_title_list))
+      embedVar.set_footer(text="More games will be added soon. ")
+
+      await ctx.send(embed=embedVar, delete_after=20)
+   else:
+      await ctx.send(m.NO_GAMES_AVAILABLE, delete_after=5)
+
+
 DISCORD_TOKEN = config('DISCORD_TOKEN_TEST')
 bot.run(DISCORD_TOKEN)

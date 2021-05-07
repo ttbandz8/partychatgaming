@@ -2,14 +2,8 @@ import pymongo
 from decouple import config
 import messages as m
 
-# if NODE_ENV == 'Production':
-#     TOKEN = config('MONGOTOKEN_PROD')
-# else:
-#     TOKEN = config('MONGOTOKEN_TEST')
-TOKEN = config('MONGOTOKEN_TEST')
 
-# Assumed you have run 'pip install pymongo'
-import pymongo
+
 databaseName = 'PCGTEST'
 settings = {
   'host': 'iad2-c13-2.mongo.objectrocket.com:52423,iad2-c13-0.mongo.objectrocket.com:52423,iad2-c13-1.mongo.objectrocket.com:52423',
@@ -23,13 +17,14 @@ try:
    collectionNames = conn[databaseName].collection_names()
    print("Connected")
    print("Collection Names {}".format(collectionNames))
-   conn.close()
+#    conn.close()
 except Exception as ex:
    print("Error: {}".format(ex))
    exit('Failed to connect, terminating.')
 
 print("Finished") # Done!
 
+# TOKEN = config('MONGOTOKEN_TEST')
 # mongo = pymongo.MongoClient(TOKEN)
 
 db = conn["PCGTEST"]
@@ -486,11 +481,25 @@ def queryGame(game):
     except:
         print("Find Game failed.")
 
+def deleteGame(game):
+    try:
+        exists = game_exists({'GAME': game['GAME']})
+        if exists:
+            data = games_col.delete_one(game)
+            return True
+        else:
+            return False
+    except:
+        print("Find Game failed.")
+
 def query_all_games():
     games = games_col.find()
-    return games
+    if games:
+        return games
+    else:
+        return False
 
-def add_game(game):
+def addGame(game):
     exists = game_exists({'GAME': game['GAME']})
     if exists:
         print("Game Already Exists.")
@@ -498,7 +507,13 @@ def add_game(game):
        added = games_col.insert_one(game)
        return("Game has been added")
 
-
+def updateGame(query, new_value):
+    exists = game_exists({'GAME': query['GAME']})
+    if exists:
+       added = games_col.update_one(query, new_value)
+       return("Game has been added")
+    else:
+        return False
 
 
 ''' SESSIONS '''

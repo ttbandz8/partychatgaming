@@ -98,7 +98,7 @@ class SCORES():
 @dataclass(frozen=True, order=True) 
 class GAMES():
     GAME: str
-    IMAGE_URL: str
+    IMAGE_URL: str = field(default_factory=lambda: "")
     TYPE: list[int] = field(default_factory=lambda: [])
     IGN: bool = field(default_factory=lambda: False)
     ALIASES: list[str] = field(default_factory=lambda: [])

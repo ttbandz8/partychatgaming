@@ -36,10 +36,13 @@ RESPONSE_NOT_DETECTED="Command aborted. "
 
 VAULT_RECOVERED="Vault has been recovered. "
 GAME_NOT_DETECTED="Game not detected. "
-
-
+NEW_ALIASES_UPDATE="Aliases added. "
+ADD_A_GAME="Please add a game to your profile before running this command. "
+UPDATE_COMPLETE="Update complete. "
+DELETE_COMPLETE="Deletion has completed. "
 TEAM_DOESNT_EXIST="Team not detected. "
 USER_NOT_ON_TEAM="You are not on a team. "
+NO_GAMES_AVAILABLE="There aren't any games available at this time. "
 GODS_OF_COD_RULES="""
 Search and Destroy: 
 *Score Limit: *10 
