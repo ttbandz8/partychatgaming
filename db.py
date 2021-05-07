@@ -30,9 +30,9 @@ except Exception as ex:
 
 print("Finished") # Done!
 
-mongo = pymongo.MongoClient(TOKEN)
+# mongo = pymongo.MongoClient(TOKEN)
 
-db = mongo["PCGTEST"]
+db = conn["PCGTEST"]
 users_col = db["USERS"]
 teams_col = db["TEAMS"]
 sessions_col = db["SESSIONS"]
