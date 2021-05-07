@@ -1171,12 +1171,12 @@ async def c2v2(ctx, args, user1: User):
          reaction, user = await bot.wait_for('reaction_add', timeout=10.0, check=check)
 
 
-         session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 3, "TEAMS": [{"TEAM": [str(ctx.author), str(user1)], "SCORE": 0, "POSITION": 0}]}
+         session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 2, "TEAMS": [{"TEAM": [str(ctx.author), str(user1)], "SCORE": 0, "POSITION": 0}]}
          if args == "n":
             resp = db.createSession(data.newSession(session_query))
             await ctx.send(resp, delete_after=5)
          elif args == "r":
-            session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 3, "TEAMS": [{"TEAM": [str(ctx.author), str(user1)], "SCORE": 0, "POSITION": 0}], "RANKED": True}
+            session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 2, "TEAMS": [{"TEAM": [str(ctx.author), str(user1)], "SCORE": 0, "POSITION": 0}], "RANKED": True}
             resp = db.createSession(data.newSession(session_query))
             await ctx.send(resp, delete_after=5)
       except:
