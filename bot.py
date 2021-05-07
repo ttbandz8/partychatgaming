@@ -42,8 +42,6 @@ bot = commands.Bot(command_prefix="#")
 async def validate_user(ctx):
    query = {'DISNAME': str(ctx.author)}
    valid = db.queryUser(query)
-   game = valid['GAMES'][0]
-   default_game = ['PCG']
 
    if valid:
       return True
