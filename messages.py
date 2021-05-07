@@ -33,6 +33,8 @@ SESSION_HAS_ENDED="The session has ended. "
 FAILED_TO_ACCEPT="Failed to accept ready up. "
 RESPONSE_NOT_DETECTED="Command aborted. "
 
+GAME_NOT_DETECTED="Game not detected. "
+
 TEAM_DOESNT_EXIST="Team not detected. "
 USER_NOT_ON_TEAM="You are not on a team. "
 GODS_OF_COD_RULES="""

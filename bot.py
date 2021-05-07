@@ -1367,16 +1367,16 @@ async def ds(ctx):
    await ctx.send(response, delete_after=5)
 
 
-''' Delete All Sessions '''
-@bot.command()
-@commands.check(validate_user)
-async def das(ctx):
-   user_query = {"DISNAME": str(ctx.author)}
-   if ctx.author.guild_permissions.administrator == True:
-      resp = db.deleteAllSessions(user_query)
-      await ctx.send(resp)
-   else:
-      await ctx.send(m.ADMIN_ONLY_COMMAND)
+# ''' Delete All Sessions '''
+# @bot.command()
+# @commands.check(validate_user)
+# async def das(ctx):
+#    user_query = {"DISNAME": str(ctx.author)}
+#    if ctx.author.guild_permissions.administrator == True:
+#       resp = db.deleteAllSessions(user_query)
+#       await ctx.send(resp)
+#    else:
+#       await ctx.send(m.ADMIN_ONLY_COMMAND)
 
 
 
@@ -1502,26 +1502,34 @@ async def sg(ctx, *user: User):
 ''' How many times have I beaten someone '''
 @bot.command()
 @commands.check(validate_user)
-async def iby(ctx, user: User):
-   win_query = {'WINNER.TEAM': [str(ctx.author)], 'LOSER.TEAM': [str(user)]}
-   win_count = 0
-   win_sessions = db.querySessionForUser(win_query)
-   for x in win_sessions:
-      win_count +=1
+async def iby(ctx, args1, user: User):
 
-   loss_query = {'WINNER.TEAM': [str(user)], 'LOSER.TEAM': [str(ctx.author)]}
-   loss_count = 0
-   loss_sessions = db.querySessionForUser(loss_query)
-   for x in loss_sessions:
-      loss_count +=1
+   aliases = [x for x in db.query_all_games() for x in x['ALIASES']]
+   game = {}
+   if args1 in aliases:
+      game_query = {'ALIASES': args1}
+      game = db.queryGame(game_query)
 
-   total_games = win_count + loss_count
+      win_query = {'GAME': game['GAME'], 'WINNER.TEAM': [str(ctx.author)], 'LOSER.TEAM': [str(user)]}
+      win_count = 0
+      win_sessions = db.querySessionForUser(win_query)
+      for x in win_sessions:
+         win_count +=1
 
-   message = f"{str(ctx.author.mention)} has defeated {str(user.mention)} {win_count} out of {total_games} matches!"
-   if total_games == 0:
-      message = "You two have not played each other. "
-   await ctx.send(message)
+      loss_query = {'GAME': game['GAME'], 'WINNER.TEAM': [str(user)], 'LOSER.TEAM': [str(ctx.author)]}
+      loss_count = 0
+      loss_sessions = db.querySessionForUser(loss_query)
+      for x in loss_sessions:
+         loss_count +=1
 
+      total_games = win_count + loss_count
+
+      message = f"{str(ctx.author.mention)} has defeated {str(user.mention)} {win_count} out of {total_games} matches!"
+      if total_games == 0:
+         message = "You two have not played each other. "
+      await ctx.send(message)
+   else:
+      await ctx.send(m.GAME_NOT_DETECTED, delete_after=5)
 
 #Check if User is hosting a session
 @bot.command()
