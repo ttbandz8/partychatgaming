@@ -121,7 +121,7 @@ class GOC():
 @dataclass(frozen=True, order=True)
 class VAULT():
     OWNER: str
-    BALANCE: int = field(default_factory=lambda: 100)
+    BALANCE: int = field(default_factory=lambda: 1000)
     CARDS: list[str] = field(default_factory=lambda: ['Dark'])
     TITLES: list[str] = field(default_factory=lambda: ['Starter'])
 
