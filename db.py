@@ -23,9 +23,9 @@ import messages as m
 #    exit('Failed to connect, terminating.')
 
 # print("Finished") # Done!
-uri = os.environ['MONGODB_URI']
+s3 = S3Connection(os.environ['MONGODB_URI'])
 # TOKEN = config('MONGOTOKEN_TEST')
-mongo = pymongo.MongoClient(uri)
+mongo = pymongo.MongoClient(s3)
 
 db = mongo["PCGTEST"]
 users_col = db["USERS"]
