@@ -45,12 +45,8 @@ async def validate_user(ctx):
    game = valid['GAMES'][0]
    default_game = ['PCG']
 
-   if valid and 'PCG' != game:
+   if valid:
       return True
-   elif 'PCG' == game:
-      print("Perpin")
-      msg = await ctx.send(m.ADD_A_GAME, delete_after=5)
-      return False
    else:
       msg = await ctx.send(m.USER_NOT_REGISTERED, delete_after=5)
       return False
