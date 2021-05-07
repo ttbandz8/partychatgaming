@@ -504,15 +504,15 @@ async def nt(ctx, args1: str, args2: int, args3: int):
    else:
       print(m.ADMIN_ONLY_COMMAND)
 
-@bot.command()
-@commands.check(validate_user)
-async def nt(ctx, args1: str, args2: int, args3: int):
-   if ctx.author.guild_permissions.administrator == True:
-      title_query = {'TITLE': str(args1), 'TOURNAMENT_REQUIREMENTS': int(args2), 'PRICE': int(args3)}
-      added = db.createTitle(data.newTitle(title_query))
-      await ctx.send(added, delete_after=3)
-   else:
-      print(m.ADMIN_ONLY_COMMAND)
+# @bot.command()
+# @commands.check(validate_user)
+# async def nt(ctx, args1: str, args2: int, args3: int):
+#    if ctx.author.guild_permissions.administrator == True:
+#       title_query = {'TITLE': str(args1), 'TOURNAMENT_REQUIREMENTS': int(args2), 'PRICE': int(args3)}
+#       added = db.createTitle(data.newTitle(title_query))
+#       await ctx.send(added, delete_after=3)
+#    else:
+#       print(m.ADMIN_ONLY_COMMAND)
 
 @bot.command()
 @commands.check(validate_user)

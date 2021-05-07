@@ -1,5 +1,6 @@
 import pymongo 
 import messages as m
+from decouple import config
 
 
 
@@ -22,8 +23,9 @@ import messages as m
 #    exit('Failed to connect, terminating.')
 
 # print("Finished") # Done!
-# TOKEN = config('MONGOTOKEN_TEST')
-mongo = pymongo.MongoClient(os.environ['MONGODB_URI'])
+TOKEN = config('MONGODB_URI')
+# conn = os.environ['MONGODB_URI']
+mongo = pymongo.MongoClient(TOKEN)
 
 db = mongo["PCGTEST"]
 users_col = db["USERS"]
