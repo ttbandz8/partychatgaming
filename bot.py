@@ -38,6 +38,8 @@ emojis = ['👍', '👎']
 client = discord.Client()
 
 bot = commands.Bot(command_prefix="#")
+bot.remove_command("help")
+
 
 async def validate_user(ctx):
    query = {'DISNAME': str(ctx.author)}
@@ -134,7 +136,7 @@ async def senpai(ctx):
    embed8 = discord.Embed(color=ctx.author.color).add_field(name=":man_teacher: " + "Senpai™️ Says :\n" + "#vc = View Card", value="You got some coin so why not spend it?\nUse #vc 'cardname' to View Card\n*Type card name exactly as seen*\nYou can use #vc at anytime\nMaybe even to find unknown cards...:eyes:\n *hint try #vc ErenDawn*")
    embed9 = discord.Embed(color=ctx.author.color).add_field(name=":man_teacher: " + "Senpai™️ Says :\n" + "Buy with #bc and #bt", value="Now open up the shop lets buy!\n*hint use #shop\nUse #bc 'cardname' or #bt 'title' to make a purchase !\nRemember you can use #vc to view cards in the shop\nAnd no you can't get those shiny cards in the back just yet...:laugh:")
    embed10 = discord.Embed(color=ctx.author.color).add_field(name=":man_teacher: " + "Senpai™️ Says :\n" + "Update with #uc, #ut", value="Now time to get fresh and go #flex but first\n#vault and lets look at our options\nUse #uc 'cardname' to switch to that brand new card\nNow use #ut 'title' put some respeck on it\nOnce you decided on your new swag hit that #flex")
-   embed11 = discord.Embed(color=ctx.author.color).add_field(name=":man_teacher: " + "Senpai™️ Says :\n" + "#ag and start competing!", value="Now You know how to show off your stats\nTime to build your reputation\nAdd the games you want to track using the #ag command\n #ag 'gamename' 'In Game Name'\nYou can update your In Game Name or 'IGN'\nWith the #uign command\n#uign works similar to #ag !\n Just type #uign 'gamename' 'IGN' ")
+   embed11 = discord.Embed(color=ctx.author.color).add_field(name=":man_teacher: " + "Senpai™️ Says :\n" + "#lkg , #ag and start competing!", value="Time to build your reputation\nAdd your very first game using the #ag command\nUse the #lkg command to bring up the available games!\n #ag 'gamename' 'In Game Name'\nYou can update your In Game Name or 'IGN'\nWith the #uign command\n#uign works similar to #ag !\n Just type #uign 'gamename' 'IGN' ")
    embed12 = discord.Embed(color=ctx.author.color).add_field(name=":man_teacher: " + "Senpai™️ Says :\n" + "CONGRATULATIONS !", value="Now you can be take part in all the great features of The Party Chat Gaming:tm: Bot!\nwhen your ready to start making your own custom teams & sessions use #bootcamp!")
    paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
    paginator.add_reaction('⏮️', "first")
@@ -142,7 +144,7 @@ async def senpai(ctx):
    paginator.add_reaction('🔐', "lock")
    paginator.add_reaction('⏩', "next")
    paginator.add_reaction('⏭️', "last")
-   embeds = [embed1, embed2, embed3, embed4, embed5, embed6, embed7, embed8,embed9,embed10,embed11, embed12]
+   embeds = [embed1,embed11, embed2, embed3, embed4, embed5, embed6, embed7, embed8,embed9,embed10,embed12]
    await paginator.run(embeds)
 
 @bot.command()
@@ -1913,6 +1915,44 @@ async def att(ctx, user1: User):
       else:
          await ctx.send(m.OWNER_ONLY_COMMAND, delete_after=5)
 
+
+@bot.command()
+@commands.check(validate_user)
+async def apply(ctx,user1: User):
+   owner_profile = db.queryUser({'DISNAME': str(user1)})
+   team_profile = db.queryTeam({'TNAME': owner_profile['TEAM']})
+
+   if owner_profile['TEAM'] == 'PCG':
+      await ctx.send(m.USER_NOT_ON_TEAM, delete_after=5)
+   else:
+
+      if owner_profile['DISNAME'] == team_profile['OWNER']:
+
+         member_profile = db.queryUser({'DISNAME': str(user1)})
+         # If user is part of a team you cannot add them to your team
+         if member_profile['TEAM'] != 'PCG':
+            await DM(ctx, user1, f"{ctx.author.mention}" + f" Applied to join {team_profile['TNAME']} !" + f" You may accept or deny in server." )
+            accept = await ctx.send(f"{ctx.author.mention}" + " applies to join "+f"{user1.mention}" +f" do you accept...?".format(bot), delete_after=10)
+            for emoji in emojis:
+               await accept.add_reaction(emoji)
+
+            def check(reaction, user):
+               return user == user1 and str(reaction.emoji) == '👍'
+
+            try:
+               confirmed = await bot.wait_for('reaction_add', timeout=5.0, check=check)
+               team_query = {'TNAME': team_profile['TNAME']}
+               new_value_query = {'$push': {'MEMBERS': str(ctx.author)}}
+               response = db.addTeamMember(team_query, new_value_query, str(ctx.author), str(user1))
+               await ctx.send(response, delete_after=20)
+            except:
+               await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=3)
+         else:
+            await ctx.send(m.USER_ALREADY_ON_TEAM, delete_after=5)
+
+      else:
+         await ctx.send(m.OWNER_ONLY_COMMAND, delete_after=5)
+
 @bot.command()
 @commands.check(validate_user)
 async def lkt(ctx, *args):
@@ -2291,6 +2331,561 @@ async def einvite(ctx, user1: User):
    else:
       await ctx.send(m.ADMIN_ONLY_COMMAND)
 
+
+'''
+HElp functions
+
+'''
+@bot.group(invoke_without_command=True)
+async def help(ctx):
+   em = discord.Embed(title = "Party Chat Gaming Bot Help Page", description = "use #help <command> for extended information on that command.", color = ctx.author.color)
+
+   em.add_field(name = "Coin Commands", value = "bless,blessall,curse", inline=True)
+   em.add_field(name = "Player Commands", value = "challenge,d,iby,ms,r",inline=True)
+   em.add_field(name = "Profile Commands", value = "ag,flex,lk,lkg,lkt,uc,uign,ut,vault", inline=True)
+   em.add_field(name = "Senpai:tm: Tutorial Commands", value = "senpai,bootcamp,franchise,legend",inline=True)
+   em.add_field(name = "Sessions", value = "cs,c1v1,c2v2,c3v3,c4v4,c5v5,es,das,ds,js,score,sg,so",inline=True)
+   em.add_field(name = "Shop", value = "nc,nt,c,bt,shop,vc", inline=True)
+   em.add_field(name = "Team", value = "att,cteam,dt,dtm,lteam",inline=True)
+   em.add_field(name = "Tournament Types:", value = "\nExhibitions\nKingsGambit\nGodsOfCod",inline=True)
+   await ctx.send(embed = em)
+
+
+@help.command()
+async def test(ctx):
+   em = discord.Embed(title = "test", description = "test", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#test <test>")
+
+   await ctx.send(embed = em)
+
+@help.command()
+async def Exhibitions(ctx):
+   em = discord.Embed(title = "Exhibitions", description = "Exhibitions are 1v1 Bounty matches between players organized by Admins, winner gets tournament wins", color = ctx.author.color)
+
+   em.add_field(name = "**Commands**\n*use #help <command>*", value = "e,einvite")
+
+   await ctx.send(embed = em)
+
+@help.command()
+async def e(ctx):
+   em = discord.Embed(title = "e", description = "ADMIN: opens up an exhibition lobby", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#e")
+
+   await ctx.send(embed = em)
+
+@help.command()
+async def einvite(ctx):
+   em = discord.Embed(title = "einvite", description = "invites users to join exhibition", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#einvite <user>")
+
+   await ctx.send(embed = em)
+
+@help.command()
+async def KingsGambit(ctx):
+   em = discord.Embed(title = "Kings Gambit", description = "Kings Gambit's are king of the hill style matches where the king decides the rules organized by Admins, winner gets tournament wins", color = ctx.author.color)
+
+   em.add_field(name = "**Commands**\n*use #help <command>*", value = "jkg,kg,skg")
+
+   await ctx.send(embed = em)
+
+@help.command()
+async def jkg(ctx):
+   em = discord.Embed(title = "jkg", description = "Joins Open Kings Gambit Lobby", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#jkg <user>")
+
+   await ctx.send(embed = em)
+
+@help.command()
+async def kg(ctx):
+   em = discord.Embed(title = "kg", description = "ADMIN: Opens Kings Gambit Lobby", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#kg")
+
+   await ctx.send(embed = em)
+
+@help.command()
+async def skg(ctx):
+   em = discord.Embed(title = "skg", description = "Scores Kings Gambit and rotates the hill", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#skg <user>")
+
+   await ctx.send(embed = em)
+
+@help.command()
+async def GodsOfCod(ctx):
+   em = discord.Embed(title = "Gods Of COD", description = "Gods Of COD are cash prize tournaments where teams compete over a series of matches organized by Admins, winner gets tournament wins", color = ctx.author.color)
+
+   em.add_field(name = "**Commands**\n*use #help <command>*", value = "cgoc,dgoc,egoc,goc,gocarchive,goci,sgoc,goclk,gocrules,rgoc")
+
+   await ctx.send(embed = em)
+
+@help.command()
+async def cgoc(ctx):
+   em = discord.Embed(title = "cgoc", description = "ADMIN: Create open Gods of Cod Session", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#cgoc")
+
+   await ctx.send(embed = em)
+
+@help.command()
+async def dgoc(ctx):
+   em = discord.Embed(title = "dgoc", description = "ADMIN: Deletes GOC tournament from database", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#dgoc")
+
+   await ctx.send(embed = em)
+
+@help.command()
+async def egoc(ctx):
+   em = discord.Embed(title = "egoc", description = "ADMIN: Ends Gods Of COD tournament", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#egoc")
+
+   await ctx.send(embed = em)
+
+@help.command()
+async def goc(ctx):
+   em = discord.Embed(title = "goc", description = "Create Gods of Cod Tournament", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#goc <title> <gametype> <gametypeFLAG> <reward> <ImageUrl>")
+
+   await ctx.send(embed = em)
+
+@help.command()
+async def goci(ctx):
+   em = discord.Embed(title = "goci", description = "Invite # of users to Gods of Cod Session", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#goci <user>...")
+
+   await ctx.send(embed = em)
+
+@help.command()
+async def sgoc(ctx):
+   em = discord.Embed(title = "sgoc", description = "End Registration and Start Gods Of Cod Tournament", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#sgoc")
+
+   await ctx.send(embed = em)
+
+@help.command()
+async def gocarchive(ctx):
+   em = discord.Embed(title = "gocarchive", description = "Lookup past Gods Of Cod Tournaments", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#gocarchive <title>")
+
+   await ctx.send(embed = em)
+
+@help.command()
+async def goclk(ctx):
+   em = discord.Embed(title = "goclk", description = "Lookup Current  Gods Of Cod Tournament Information", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#goclk")
+
+   await ctx.send(embed = em)
+
+@help.command()
+async def gocrules(ctx):
+   em = discord.Embed(title = "gorules", description = "Lookup Current Gods Of Cod Tournament Rules", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#gorules")
+
+   await ctx.send(embed = em)
+
+@help.command()
+async def rgoc(ctx):
+   em = discord.Embed(title = "rgoc", description = "Register Player and Player Team for Gods Of Cod Tournament", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#goclk")
+
+   await ctx.send(embed = em)
+
+@help.command()
+async def att(ctx):
+   em = discord.Embed(title = "att", description = "Add Teammate by username", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#att <teamname> <user>")
+
+   await ctx.send(embed = em)
+
+@help.command()
+async def cteam(ctx):
+   em = discord.Embed(title = "cteam", description = "Create a team ", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#cteam <game> <teamname>")
+
+   await ctx.send(embed = em)
+
+@help.command()
+async def dt(ctx):
+   em = discord.Embed(title = "dt", description = "TEAMOWNER: delete team from database", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#dt <teamname>")
+
+   await ctx.send(embed = em)
+
+@help.command()
+async def dtm(ctx):
+   em = discord.Embed(title = "dtm", description = "TEAMOWNER: delete teammate from team", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#dtm <user>")
+
+   await ctx.send(embed = em)
+
+@help.command()
+async def lteam(ctx):
+   em = discord.Embed(title = "lteam", description = "Leave current team", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#lteam")
+
+   await ctx.send(embed = em)
+
+
+@help.command()
+async def nc(ctx):
+   em = discord.Embed(title = "nc", description = "ADMIN: upload new cards to database", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#nc <cardURL> <cardname> <tournament wins> <shopcost>")
+
+   await ctx.send(embed = em)
+
+
+@help.command()
+async def nt(ctx):
+   em = discord.Embed(title = "nt", description = "ADMIN: upload new titles to database", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#nt <titlename> <tournamentwins> <shopcost>")
+
+   await ctx.send(embed = em)
+
+@help.command()
+async def bc(ctx):
+   em = discord.Embed(title = "bc", description = "Buys Card from Flex Shop:tm:", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#bc <cardname>")
+
+   await ctx.send(embed = em)
+
+
+@help.command()
+async def bt(ctx):
+   em = discord.Embed(title = "bt", description = "Buys Title from Flex Shop :tm:", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#bt <titlename>")
+
+   await ctx.send(embed = em)
+
+
+@help.command()
+async def shop(ctx):
+   em = discord.Embed(title = "shop", description = "Opens up Flex Shop:tm:", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#shop")
+
+   await ctx.send(embed = em)
+
+@help.command()
+async def vc(ctx):
+   em = discord.Embed(title = "vc", description = "View any card by cardname", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#vc <cardname>")
+
+   await ctx.send(embed = em)
+
+@help.command()
+async def cs(ctx):
+   em = discord.Embed(title = "cs", description = "Check if a User is playing in a session", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#cs <user>")
+
+   await ctx.send(embed = em)
+
+
+@help.command()
+async def c1v1(ctx):
+   em = discord.Embed(title = "c1v1", description = "Create a 1v1 Lobby ", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#1v1 <ranktype>")
+
+   await ctx.send(embed = em)
+
+
+@help.command()
+async def c2v2(ctx):
+   em = discord.Embed(title = "c2v2", description = "Create a 2v2 Duo or Team Scrimm Lobby ", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#c2v2 <ranktype> <user1>")
+
+   await ctx.send(embed = em)
+
+
+@help.command()
+async def c3v3(ctx):
+   em = discord.Embed(title = "c3v3", description = "Create a 3v3 Team Scrimm Lobby ", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#c3v3 <ranktype> <user1> <user2>")
+
+   await ctx.send(embed = em)
+
+
+@help.command()
+async def c4v4(ctx):
+   em = discord.Embed(title = "c4v4", description = "Create a 4v4 Team Scrimm Lobby ", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#c4v4 <ranktype> <user1> <user2> <user3>")
+
+   await ctx.send(embed = em)
+
+
+@help.command()
+async def c5v5(ctx):
+   em = discord.Embed(title = "c5v5", description = "Create a 5v5 Team Scrimm Lobby ", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#c5v5 <ranktype> <user1> <user2> <user3> <user4>")
+
+   await ctx.send(embed = em)
+
+
+@help.command()
+async def es(ctx):
+   em = discord.Embed(title = "es", description = "Saves then ends the owned session", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#es")
+
+   await ctx.send(embed = em)
+
+
+@help.command()
+async def das(ctx):
+   em = discord.Embed(title = "das", description = "ADMIN:Delete All Sessions from database", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#test <test>")
+
+   await ctx.send(embed = em)
+
+
+@help.command()
+async def ds(ctx):
+   em = discord.Embed(title = "ds", description = "Delete Session without recording data\n*Useful if you make an error", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#test <test>")
+
+   await ctx.send(embed = em)
+
+
+@help.command()
+async def js(ctx):
+   em = discord.Embed(title = "js", description = "Join Session /Join Scrimm\nJoin an open session with up to 4 teammates", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#js <user> ...")
+
+   await ctx.send(embed = em)
+
+
+@help.command()
+async def score(ctx):
+   em = discord.Embed(title = "score", description = "Score a team during any session", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#score <user>")
+
+   await ctx.send(embed = em)
+
+
+@help.command()
+async def sg(ctx):
+   em = discord.Embed(title = "sg", description = "ADMIN: pulls teams up to 5 into a session", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#sg <user> ...")
+
+   await ctx.send(embed = em)
+
+
+@help.command()
+async def so(ctx):
+   em = discord.Embed(title = "so", description = "Checks if user is a Session Owner", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#so <user>")
+
+   await ctx.send(embed = em)
+
+@help.command()
+async def ag(ctx):
+   em = discord.Embed(title = "ag", description = "Add game to list", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#ag <gamename>")
+
+   await ctx.send(embed = em)
+
+
+@help.command()
+async def flex(ctx):
+   em = discord.Embed(title = "flex", description = "Display Custom Player Card", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#flex")
+
+   await ctx.send(embed = em)
+
+@help.command()
+async def lk(ctx):
+   em = discord.Embed(title = "lk", description = "Lookup Player Data", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#lk <username>")
+
+   await ctx.send(embed = em)
+
+@help.command()
+async def lkg(ctx):
+   em = discord.Embed(title = "lkg", description = "Lookup Games supported by bot", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#lkg")
+
+   await ctx.send(embed = em)
+
+@help.command()
+async def lkt(ctx):
+   em = discord.Embed(title = "lkt", description = "Lookup Team Page by Teamname", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#lkt <teamname>")
+
+   await ctx.send(embed = em)
+
+@help.command()
+async def uc(ctx):
+   em = discord.Embed(title = "uc", description = "Update Player Card", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#uc <cardname>")
+
+   await ctx.send(embed = em)
+
+@help.command()
+async def uign(ctx):
+   em = discord.Embed(title = "uign", description = "Update Player In Game Name for game", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#uign <game> <newIGN>")
+
+   await ctx.send(embed = em)
+
+@help.command()
+async def ut(ctx):
+   em = discord.Embed(title = "ut", description = "Update Player Title", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#ut <titlename>")
+
+   await ctx.send(embed = em)
+
+@help.command()
+async def vault(ctx):
+   em = discord.Embed(title = "vault", description = "Opens Player Vault", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#vault")
+
+   await ctx.send(embed = em)
+
+
+@help.command()
+async def bless(ctx):
+   em = discord.Embed(title = "bless", description = "ADMIN:Bless User with coin", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#bless <amount> <user>")
+
+   await ctx.send(embed = em)
+
+@help.command()
+async def blessall(ctx):
+   em = discord.Embed(title = "blessall", description = "ADMIN:Bless all Users with coin", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#blessall <amount>")
+
+   await ctx.send(embed = em)
+
+@help.command()
+async def curse(ctx):
+   em = discord.Embed(title = "curse", description = "ADMIN:Take Coin away from User", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#curse <amount> <user>")
+
+   await ctx.send(embed = em)
+
+
+@help.command()
+async def challenge(ctx):
+   em = discord.Embed(title = "challenge", description = "Challenge User To 1v1 Session", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#challenge <user>")
+
+   await ctx.send(embed = em)
+
+
+@help.command()
+async def d(ctx):
+   em = discord.Embed(title = "d", description = "Delete All User and Vault Data", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#d <user> IWANTTODELETEMYACCOUNT")
+
+   await ctx.send(embed = em)
+
+
+@help.command()
+async def r(ctx):
+   em = discord.Embed(title = "r", description = "Register for access to Bot", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#r")
+
+   await ctx.send(embed = em)
+
+
+@help.command()
+async def iby(ctx):
+   em = discord.Embed(title = "iby", description = "Shows how many matches you've won against another user", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#iby <user>")
+
+   await ctx.send(embed = em)
+
+@help.command()
+async def ms(ctx):
+   em = discord.Embed(title = "ms", description = "Shows the current session YOU are in", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#ms")
+
+   await ctx.send(embed = em)
+
+@help.command()
+async def senpai(ctx):
+   em = discord.Embed(title = "senpai", description = "Opens Senpai:tm: Says Tutorial.", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#senpai")
+
+   await ctx.send(embed = em)
+
+@help.command()
+async def bootcamp(ctx):
+   em = discord.Embed(title = "bootcamp", description = "Opens up Senpai:tm: Bootcamp Tutorial.", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#bootcamp")
+
+   await ctx.send(embed = em)
+
+
+@help.command()
+async def franchise(ctx):
+   em = discord.Embed(title = "franchise", description = "Open up Senpai:tm: Franchise Tutorial.", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#franchise")
+
+   await ctx.send(embed = em)
+
+
+@help.command()
+async def legend(ctx):
+   em = discord.Embed(title = "legend", description = "Open up Senpai:tm: Legend Tutorial.", color = ctx.author.color)
+
+   em.add_field(name = "**Syntax**", value = "#legend")
+
+   await ctx.send(embed = em)
 
 DISCORD_TOKEN = config('DISCORD_TOKEN')
 

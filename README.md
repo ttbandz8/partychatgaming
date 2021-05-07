@@ -1,143 +1,78 @@
-# partychatgaming
-
-# COMMANDS 
-    Command Prefix = #
-    Lookup - lk
-    Register - r
-
-
-    GODS OF COD
-    goc - Create Gods of Cod
-    rgoc - Register Gods of Cod
-    sgoc - Start Gods of Cod
-    cgoc - Create Gods of Cod Session
-    goci - Invite Gods of Cod Session
-    dgoc - Delete Gods of Cod
-    goclk - Lookup Gods of Cod Info
-    egoc - End Gods of Cod
-    // gocrules - Lookup Gods of Cod Rules (Needs to be created)
-
-
-
-
-    Register = >r
-    Lookup User = >lk @user
-    Delete Account = >d @user IWANTTODELETEMYACCOUNT
-    Add Game & In Game Name = >ag game in_game_name
-    Update In Game Name = >uign
-    Create Normal Session = >c1v1 n teammates(if not 1v1)
-    Create Ranked Session = >c1v1 r teammates(if not 1v1)
-    Create KingsGambit Session = >ckg type
-    Join Session = >js @owner
-    End Session = >es
-    SCORE = >score @user_from_team_who_scored
-    Check User Session = > >cs @user
-    Delete Team = > dt(Teamname)
-    Delete Teammate = > dt(@user, Teamname)
-    Flex (Show Custom Card) => >flex
-
-
-# Classes 
-    Whenever you see data.something() we are using the data classes to pass default values
-    db.createTeam(data.newTeam(team), user)
-    db.createUsers(data.newUser(new_user))
-
-# Add New User
-    db.addUsers(data.newUser(USER))
-
-# Delete User
-    db.deleteUser(DATA)
-
-## Updating Lists Example
-    USER = {"DISNAME": "Foo"}
-    PUSH = { "$push": {"IGN": {'BRAWLSTARS': 'Bar'}}}
-    ADDTOSET = {"$addToSet": {"TEAMS": 'Foo'}}
-    db.updateUser(USER, ADDTOSET)
-    db.updateUser(USER, PUSH)
-
-    $addToInsert = Pushes to array only if doesn't exist
-    $push = Pushes to array
-    $pull = Removes from array (opposite of push)
-
-# Create New Team
-    Users can only be part of one team per game
-    db.addTeam(data.newTeam(TEAM))
-
-# Add Team Member
-    db.addTeamMember(QUERY, NEW_VALUE, USER)
-    // USER is the user making the request
-    // this ensures we check if the USER
-    // is part of the team
-    [x for x in new_value.values()][0]['MEMBERS']
-
-# Delete Team
-    The user is needed to first determine if the user is part of that team, in which he/she can then delete the team.
-    db.deleteTeam(TEAM, USER)
-
-# Delete Team Member
-    The user is needed to first determine if the user is part of that team, in which he/she can then delete the team.
-    db.deleteTeamMember(QUERY, MEMBER_TO_DELETE_QUERY, USER)
-    pull = Removes from array (opposite of push)
-
-
-
-# Session Logic
-    Joining Session
-    Players must recruit you to their team. 
-
-    SESSION TYPE:
-        1 (1V1)
-            * If flagged, user who wins also counts win toward his team during tourney for tourney points as it could be "Put ya mans up"
-            * If TEAM_SESSION flag is True, the win / loss will count toward the winners team
-            * If Ranked Flag is True, the win / loss will count toward Ranked win / loss. It will count toward Unranked win / loss otherwise.
-            * If GOC_Flag is True, the win /loss will count toward Tournament win / loss & Ranked win / loss. 
-            * [{'PLAYER': 'foo', 'SCORE': 1}, {'PLAYER': 'bar', 'SCORE': 0}]
-
-        2 (2V2)
-            * If flagged, user who wins also counts win toward his team during tourney for tourney points as it could be "Put ya mans up"
-            * If TEAM_SESSION flag is True, the win will count toward the winners team 
-            * If Ranked Flag is True, the win / loss will count toward Ranked win / loss. It will count toward Unranked win / loss otherwise.
-            * If GOC_Flag is True, the win /loss will count toward Tournament win / loss & Ranked win / loss. 
-            * [{'TEAM1': ['PLAYER1', 'PLAYER2'], 'SCORE': 0}, {'TEAM2': ['PLAYER1', 'PLAYER2'], 'SCORE': 0}]
-
-        3 (3V3)
-            * If flagged, user who wins also counts win toward his team during tourney for tourney points as it could be "Put ya mans up"
-            * If TEAM_SESSION flag is True, the win will count toward the winners team
-            * If Ranked Flag is True, the win / loss will count toward Ranked win / loss. It will count toward Unranked win / loss otherwise.
-            * If GOC_Flag is True, the win /loss will count toward Tournament win / loss & Ranked win / loss. 
-            * [{'TEAM1': ['PLAYER1', 'PLAYER2', 'PLAYER3'], 'SCORE': 0}, {'TEAM2': ['PLAYER1', 'PLAYER2', 'PLAYER3'], 'SCORE': 0}]
-
-        4 (4V4)
-            * If flagged, user who wins also counts win toward his team during tourney for tourney points as it could be "Put ya mans up" 
-            * If TEAM_SESSION flag is True, the win will count toward the winners team
-            * If Ranked Flag is True, the win / loss will count toward Ranked win / loss. It will count toward Unranked win / loss otherwise.
-            * If GOC_Flag is True, the win /loss will count toward Tournament win / loss & Ranked win / loss. 
-            * [{'TEAM1': ['PLAYER1', 'PLAYER2', 'PLAYER3', 'PLAYER4'], 'SCORE': 0},{'TEAM2': ['PLAYER1', 'PLAYER2', 'PLAYER3', 'PLAYER4'], 'SCORE': 0}]
-
-        5 (5V5)
-            * If flagged, user who wins also counts win toward his team during tourney for tourney points as it could be "Put ya mans up" 
-            * If TEAM_SESSION flag is True, the win will count toward the winners team
-            * If Ranked Flag is True, the win / loss will count toward Ranked win / loss. It will count toward Unranked win / loss otherwise.
-            * If GOC_Flag is True, the win /loss will count toward Tournament win / loss & Ranked win / loss. 
-            * [{'TEAM1': ['PLAYER1', 'PLAYER2', 'PLAYER3', 'PLAYER4', 'PLAYER5'], 'SCORE': 0}, {'TEAM2': ['PLAYER1', 'PLAYER2', 'PLAYER3', 'PLAYER4', 'PLAYER5'], 'SCORE': 0}]
-
-        KingsGambit
-            * People can join and rotate via winners
-            * Kings Gambit can include any of the above Session Types
-            * Upon score, the loser should be cycled to the end of the line. 
-            * Only Server Admins can run Kings Gambit tournaments
-            * If flagged, user who wins also counts win toward his team during tourney for tourney points
-
-# Session Functions
-    Create Session
-    Add To Session:
-        Check Flags
-    Remove From Session
-    End Session
-    Update Session:
-        Add Scores
-        Tally Scores
-        Add Winner
-        Check Flags
-            If Ranked and Team Session Add Ranked Scores on Profiles (User / Team)(Based on Flag)
-            If GOC Add Score to Team In Tournament
+# Party Chat Gaming Bot Discord Command List Version 1.0
+ 		!Admin Commands	 	 	 
+ 		~Tutorial	 	 	 
+ 		$Teams	 	 	 
+ 		@Player	 	 	 
+ 	#Command	    Description	                                *args	Example	                                               Reaction
+    Coin :	 	 	 
+•        !bless	    Bless Users with coin	                    2	    #bless 'amount' @user	 
+•        !blessall 	Bless all Users with coin	                1	    #bless 'amount'	 
+•        !curse 	    Take Coin away from User	                2	    #curse 'amount' @user	 
+    Player :	 	 	 
+•        challenge 	Challenge User To 1v1 Session	            1	    #challenge @user	                                   user must respond
+•        d      	Delete User Account From Database	        2	    #d @user IWANTTODELETEMYACCOUNT	                       Certainty Check
+•        help 	    Brings up Help Page	0	#bh @user	 
+•        iby 	    Check how many times you beat a user	    2	    #iby 'game' @user	 
+•        ms 	    Check If You Own a Session	                0	    #ms 	 
+•        r 	        Register User	                            0	    #r	 
+    Profile :	 	 	 
+•        ag 	    Add Game To User Profile	                2	    #ag 'game' 'ingamename'	 
+•        flex 	    Display Player Card	                        0	    #flex	 
+•        lk 	    Lookup User Data	                        1	    #lk @user
+•        lkg 	    Lookup Games avail.	                        1	    #lk 	 
+•        lkt 	    Lookup Team Page	                        1	    #lkt 'teamname'	 
+•        uc 	    Update Flex Card	                        1	    #uc 'cardname'	 
+•        uign 	    Update In Game Name For Specified Game	    2	    #uign 'game' 'newIGN'	 
+•        ut 	    Update Title	                            1	    #ut 'titlename'	 
+•        vault 	    Opens Player Vault	                        0	    #vault	 
+    Senpai Tutorials	 	 	 
+•        bootcamp 	Opens up Senpai Bootcamp Tutorial	        0	    #bootcamp	 
+•        franchise 	Open up Senpai Franchise Tutorial	        0	    #franchise	 
+•        legend 	Open up Senpai Legend Tutorial	            0	    #legend	 
+•        senpai 	Open up Senpai Says Tutorial	            0	    #senpai	 
+        Sessions:	 	 	 
+•        cs 	    Check If a User is playing in a session	    1	    #cs @user	 
+•        c1v1 	    Create open 1v1 Session	                    2	    #c1v1 'gametype' 	 
+•        c2v2 	    Create open 2v2 Session	                    3	    #c2v2 'gametype' @user	                                user must respond
+•        c3v3 	    Create Scrim 3v3 Session	                4	    #c3v3 'gametype' @user @user	                        user must respond
+•        c4v4 	    Create Scrim 4v4 Session	                5	    #c4v4 'gametype' @user @user @user	                    user must respond
+•        c5v5 	    Create Scrim 5v5 Session	                6	    #c5v5 'gametype' @user @user @user @user	            user must respond
+•        es 	    Ends Session and record W/L	                0	    #es	 
+•        !das 	    Delete All Sessions From Database	        0	    #das	 
+•        ds 	    Delete Current Session From Database	    0	    #ds	 
+•        js 	    Join Session/Join Scrim	                    <7	    #js @'sessionowner' @'teammate' etc… <7	                user must respond
+•        score	    Score Session	                            1	    #score @'scoringteamplayer'	 
+•        !sg 	    Pulls Users into Open Sessions	            >6	    #sg @'opposingteammember' . . . <6	 
+•        so	        Check if any User Owns a Session	        1	    #so @'sessionowner'	 
+    Shop :	 	 	 
+•        !nc 	    Add New Cards To Database	                4	    #nc 'cardURL' 'cardname' 'tournamentwincost' 'shopcost'	 
+•        !nt 	    Add New Titles To Database	                3	    #nt 'titlename' 'tournamentwincost' 'shopcost'	 
+•        bc	        Buy Card	                                1	    #bc 'cardname'	 
+•        bt	        Buy Title	                                1	    #bt 'titlename'	 
+•        shop 	    Open Up Shop	                            0	    #shop	 
+•        vc	        View Cards By Name	                        1	    #vcb 'cardname'	 
+    Teams :	 	 	 
+•        att	    Add User To Team	                        2	    #att 'teamname' @user	                                user must respond
+•        cteam 	    Create A Team For Available Games	        2	    #cteam 'game' 'teamname'	                            Spell Check
+•        dt 	    Delete Team From Dataabase	                1	    #dt 'teamname'	                                        Certainty Check
+•        dtm 	    Remove Teammate From Team	                1	    #dtm @user	                                            Certainty Check
+•        lteam  	Leave Designated Team	                    0	    #lteam	 
+    Tournaments :   3 Types	 	 	 
+    !Exhibitions :	1 	 	 
+•        e 	        Start Exhibition Match	                    0	    #e	 
+•        einvite 	Invite User To Join Exhibition Match	    1	    #einvite @user	                                        user must respond
+    Kings Gambit :	2 	 	 
+•        jkg 	    Join Kings Gambit Tournament	            1	    #jkg @user	 
+•        !kg 	    Start Kings Gambit	                        0	    #kg	 
+•        !skg 	    Score Kings Gambit	                        1	    #skg @'scoringuser'	 
+    Gods Of COD :	3 	 	 
+•        !cgoc 	    Create Gods Of Cod Session	                0	    #cgoc	 
+•        !dgoc 	    Delete GOC From Database	                0	    #dgoc	 
+•        !egoc 	    End GOC Tournament 	                        0	    #egoc	 
+•        !goc	    Create GOC tournament	                    5	    #god 'title' 'gametype' 'gametypeFLAG' 'reward' 'ImageURL'	 
+•        !goci 	    Invite # of users to GOC Match 	            <6	    #goci @user … <6	                                    user must respond
+•        !sgoc 	    Start GOC Tournament	                    0	    #sgoc	 
+•        gocarchive Lookup GOC Data from Database	            1	    #godarchive 'title'	 
+•        goclk 	    Lookup GOC Tournament Info	                0	    #goclk	 
+•        gocrules 	Lookup GOC Tournament Rules	                0	    #gocrules	 
+•        rgoc 	    Register Team For GOC	                    0	    #rgoc	 

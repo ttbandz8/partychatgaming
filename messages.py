@@ -64,3 +64,4 @@ NOTE:
 Game modes and Settings 
 Maps: Firing Range, Raid and Standoff
 """
+APPLICATION_DENID="Sorry Kid... Try again next season!"
