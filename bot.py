@@ -728,9 +728,8 @@ async def flex(ctx):
    query = {'DISNAME': str(ctx.author)}
    d = db.queryUser(query)
 
-   card = db.queryCard({'NAME': d['CARD']})
-
    if d:
+      card = db.queryCard({'NAME': d['CARD']})
       name = d['DISNAME'].split("#",1)[0]
       games = d['GAMES']
       ign = d['IGN']
@@ -766,7 +765,7 @@ async def flex(ctx):
       draw.text((5,65), str(tournament_wins), (255, 255, 255), font=tournament_wins_font, align="center")
       draw.text((60, 320), game_text, (255, 255, 255), font=p, align="center")
       draw.text((368, 320), team, (255, 255, 255), font=p, align="center")
-      draw.text((650, 320), titles_text, (255, 255, 255), font=p, align="center")
+      draw.text((635, 320), titles_text, (255, 255, 255), font=p, align="center")
       draw.text((865, 320), normals_text, (255, 255, 255), font=p, align="center")
       draw.text((1040, 320), ranked_text, (255, 255, 255), font=p, align="center")
 
@@ -889,13 +888,15 @@ async def r(ctx):
    name = disname.split("#",1)[0]
    user = {'DISNAME': disname, 'NAME': name, 'DID' : str(ctx.author.id), 'AVATAR': str(ctx.author.avatar_url)}
    response = db.createUsers(data.newUser(user))
-   userQuery = db.queryUser({'DISNAME': str(ctx.author)})
-   vault = db.queryVault({'OWNER': userQuery['DISNAME']})
-   if vault:
-      await ctx.send(response, delete_after=5)
+   if response:
+      vault = db.queryVault({'OWNER': disname})
+      if vault:
+         await ctx.send(m.VAULT_RECOVERED, delete_after=5)
+      else:
+         vault = db.createVault(data.newVault({'OWNER' : disname}))
+         await ctx.send(m.USER_HAS_REGISTERED, delete_after=5)
    else:
-      vault = db.createVault(data.newVault({'OWNER' : userQuery['DISNAME']}))
-      await ctx.send(response, delete_after=5)        
+      await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=3)  
 
 
 '''delete user'''
@@ -1008,26 +1009,31 @@ async def jkg(ctx, user1: User):
    session_query = {"OWNER": str(user1), "AVAILABLE": True, "KINGSGAMBIT": True}
    session = db.querySession(session_query)
 
+   if bool(session['TEAMS']):
+      teams_list = [x for x in session['TEAMS']]
+      current_member = []
+      positions = []
+      new_position = 0
 
-   teams_list = [x for x in session['TEAMS']]
-   current_member = []
-   positions = []
-   new_position = 0
+      if bool(teams_list):
+         for x in teams_list:
 
-   if bool(teams_list):
-      for x in teams_list:
-         
-         if str(user1) in x['TEAM']:
-            current_member.append(str(user1))
-         positions.append(x['POSITION'])
-      new_position = max(positions) + 1
+            if str(ctx.author) in x['TEAM']:
 
-   if bool(current_member):
-      join_query = {"TEAM": [str(ctx.author)], "SCORE": 0, "POSITION": new_position}
+               current_member.append(str(ctx.author))
+            positions.append(x['POSITION'])
+         new_position = max(positions) + 1
+
+      if not bool(current_member):
+         join_query = {"TEAM": [str(ctx.author)], "SCORE": 0, "POSITION": new_position}
+         session_joined = db.joinKingsGambit(session_query, join_query)
+         await ctx.send(session_joined, delete_after=5)
+      else:
+         await ctx.send(m.ALREADY_IN_SESSION, delete_after=5)
+   else:
+      join_query = {"TEAM": [str(ctx.author)], "SCORE": 0, "POSITION": 0}
       session_joined = db.joinKingsGambit(session_query, join_query)
       await ctx.send(session_joined, delete_after=5)
-   else:
-      await ctx.send(m.ALREADY_IN_SESSION, delete_after=5)
    
 
 @bot.command()
@@ -1629,9 +1635,9 @@ async def s(ctx, user: User):
       if team_2_comp:
          embedVar.add_field(name=f":military_helmet:Team 2 - {team_2_score}", value=team_2_comp, inline=False)
       else:
-         await ctx.send("No one has joined to compete. ", delete_after=5)
+         embedVar.add_field(name=f":military_helmet:Team 2", value="Vacant", inline=False)
       
-      if kingsgambit:
+      if kingsgambit and other_teams:
          embedVar.add_field(name=f"Up Next...", value=other_teams_sorted_list, inline=False)
 
       await ctx.send(embed=embedVar, delete_after=15)
@@ -1644,6 +1650,7 @@ async def s(ctx, user: User):
 async def ms(ctx):  
    session_owner = {'OWNER': str(ctx.author), "AVAILABLE": True}
    session = db.querySession(session_owner)
+
    if session:
       game_query = {'ALIASES': session['GAME']}
       game = db.queryGame(game_query)
@@ -1679,7 +1686,7 @@ async def ms(ctx):
       team_list = []
       team_1 = [x for x in teams if x['POSITION'] == 0] # position 0
       team_2 = [x for x in teams if x['POSITION'] == 1] # position 1
-      other_teams = [x for x in teams if x['POSITION'] > 1] # position 1
+      other_teams = [x for x in teams if x['POSITION'] > 1]
 
 
       team_1_comp = ""
@@ -1729,15 +1736,17 @@ async def ms(ctx):
       
       if kingsgambit and king_score > 0:
          embedVar.add_field(name=f":crown:King - {team_1_score}", value=team_1_comp, inline=False)
+      elif not team_1_score:
+         embedVar.add_field(name=f":military_helmet:Team 1", value="Vacant", inline=False)
       else:
          embedVar.add_field(name=f":military_helmet:Team 1 - {team_1_score}", value=team_1_comp, inline=False)
       
       if team_2_comp:
          embedVar.add_field(name=f":military_helmet:Team 2 - {team_2_score}", value=team_2_comp, inline=False)
       else:
-         await ctx.send("No one has joined to compete. ", delete_after=5)
+         embedVar.add_field(name=f":military_helmet:Team 2", value="Vacant", inline=False)
 
-      if kingsgambit:
+      if kingsgambit and other_teams:
          embedVar.add_field(name=f"Up Next...", value=other_teams_sorted_list, inline=False)
 
       await ctx.send(embed=embedVar, delete_after=15)
@@ -1838,15 +1847,17 @@ async def cs(ctx, user: User):
       
       if kingsgambit and king_score > 0:
          embedVar.add_field(name=f":crown:King - {team_1_score}", value=team_1_comp, inline=False)
+      elif not team_1_score:
+         embedVar.add_field(name=f":military_helmet:Team 1", value="Vacant", inline=False)
       else:
          embedVar.add_field(name=f":military_helmet:Team 1 - {team_1_score}", value=team_1_comp, inline=False)
       
       if team_2_comp:
          embedVar.add_field(name=f":military_helmet:Team 2 - {team_2_score}", value=team_2_comp, inline=False)
       else:
-         await ctx.send("No one has joined to compete. ", delete_after=5)
+         embedVar.add_field(name=f":military_helmet:Team 2", value="Vacant", inline=False)
       
-      if kingsgambit:
+      if kingsgambit and other_teams:
          embedVar.add_field(name=f"Up Next...", value=other_teams_sorted_list, inline=False)
 
       await ctx.send(embed=embedVar, delete_after=15)
@@ -2291,7 +2302,9 @@ async def einvite(ctx, user1: User):
    else:
       await ctx.send(m.ADMIN_ONLY_COMMAND)
 
-
-DISCORD_TOKEN = config('DISCORD_TOKEN')
-
+# if NODE_ENV == 'Production':
+#    DISCORD_TOKEN = config('DISCORD_TOKEN_PROD')   
+# else:
+#    DISCORD_TOKEN = config('DISCORD_TOKEN_TEST')
+DISCORD_TOKEN = config('DISCORD_TOKEN_TEST')
 bot.run(DISCORD_TOKEN)

@@ -2,7 +2,10 @@ import pymongo
 from decouple import config
 import messages as m
 
-
+# if NODE_ENV == 'Production':
+#     TOKEN = config('MONGOTOKEN_PROD')
+# else:
+#     TOKEN = config('MONGOTOKEN_TEST')
 TOKEN = config('MONGOTOKEN_TEST')
 mongo = pymongo.MongoClient(TOKEN)
 
@@ -58,10 +61,10 @@ def createVault(vault):
     try:
         vaultexist = vault_exist({'OWNER': vault['OWNER']})
         if vaultexist:
-            return "Vault already exists."
+            return False
         else:
             vault_col.insert_one(vault)
-            return "New Vault created."
+            return True
     except:
         return "Cannot create vault."
 
@@ -267,32 +270,21 @@ def queryUser(user):
             return False
            
     except:
-        return "Find user failed. "
+        return False
 
 def queryAllUsers():
     data = users_col.find()
     return data
 
 def createUsers(users):
-    try:
-        if isinstance(users, list):
-            for user in users:
-                exists = user_exists({'DISNAME': user['DISNAME']})
-                if exists:
-                    print("User already exists.")
-                else:
-                    data = users_col.insert_one(user)
-                    return data
-        else:
-            exists = user_exists({'DISNAME': users['DISNAME']})
-            if exists:
-                return "User already registered. "
-            else:
-                data = users_col.insert_one(users)
-                return "Registration complete. "
-    except:
-        print("Add Users failed.")
-
+    exists = user_exists({'DISNAME': users['DISNAME']})
+    if exists:
+        print("Does exist")
+        return False
+    else:
+        data = users_col.insert_one(users)
+        return True
+    
 def deleteUser(users):
     try:
         if isinstance(users, list):
