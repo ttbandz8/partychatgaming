@@ -1,5 +1,5 @@
 import pymongo 
-from decouple import config
+from boto.s3.connection import S3Connection
 import messages as m
 
 
@@ -23,7 +23,7 @@ import messages as m
 #    exit('Failed to connect, terminating.')
 
 # print("Finished") # Done!
-uri = config(MONGODB_URI)
+uri = os.environ['MONGODB_URI']
 # TOKEN = config('MONGOTOKEN_TEST')
 mongo = pymongo.MongoClient(uri)
 
