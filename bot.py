@@ -976,12 +976,15 @@ async def ag(ctx, *args):
                await ctx.send(resp, delete_after=5)
          elif title not in user_data['GAMES'] and ign == True:
 
-            if "PCG" in user_data['GAMES']:
+            if "PCG" in user_data['GAMES'] and len(args) < 2:
+               query_to_update_game = {"$set": {"GAMES": [title]}}
+               resp = db.updateUserNoFilter(user, query_to_update_game)
+               await ctx.send(resp, delete_after=5)
+            elif "PCG" in user_data['GAMES']:
                query_to_update_game = {"$set": {"GAMES": [title], "IGN": [{title : args[1]}]}}
                resp = db.updateUserNoFilter(user, query_to_update_game)
                await ctx.send(resp, delete_after=5)
             else:
-
                query_to_update_game = {"$addToSet": {"GAMES": title, "IGN": {title : args[1]}}}
                resp = db.updateUserNoFilter(user, query_to_update_game)
                await ctx.send(resp, delete_after=5)
@@ -1707,9 +1710,8 @@ async def so(ctx, user: User):
       team_2 = [x for x in teams if x['POSITION'] == 1] # position 1
       other_teams = [x for x in teams if x['POSITION'] > 1] # position 1
 
-
-      team_1_comp = ""
-      team_2_comp = ""
+      team_1_comp_with_ign = []
+      team_2_comp_with_ign = []
 
       team_1_score = ""
       team_2_score = ""
@@ -1720,15 +1722,35 @@ async def so(ctx, user: User):
 
       for x in team_1:
          # n = x['TEAM'].split("#",1)[1]
-         team_1_comp = "\n".join(x['TEAM'])
          team_1_score = f" Score: {x['SCORE']}"
          king_score = x['SCORE']
+         for y in x['TEAM']:
+            data = db.queryUser({'DISNAME': y})
+            ign = ""
+            for z in data['IGN']:
+               if games in z:
+                  ign = z[games]
+                  team_1_comp_with_ign.append(f"{data['DISNAME']} : {ign}".format(bot))
+               else:
+                  team_1_comp_with_ign.append(f"{data['DISNAME']}")
+         team_1_comp = "\n".join(x['TEAM'])
+
 
 
       
       for x in team_2:
-         team_2_comp = "\n".join(x['TEAM'])
          team_2_score = f" Score: {x['SCORE']}"
+
+         for y in x['TEAM']:
+            data = db.queryUser({'DISNAME': y})
+            ign = ""
+            for z in data['IGN']:
+               if games in z:
+                  ign = z[games]
+                  team_2_comp_with_ign.append(f"{data['DISNAME']} : {ign}".format(bot))
+               else:
+                  team_2_comp_with_ign.append(f"{data['DISNAME']}")
+
 
       if kingsgambit:
          for x in other_teams:
@@ -1742,34 +1764,35 @@ async def so(ctx, user: User):
 
       embedVar = discord.Embed(title=f"{name}'s {games} Session ".format(bot), description="Party Chat Gaming Database", colour=000000)
       embedVar.set_thumbnail(url=avatar)
-      embedVar.add_field(name="Match", value=f'{game_type}'.format(bot))
-      embedVar.add_field(name="Type: " + stype, value=f'{ranked}'.format(bot))
+      embedVar.add_field(name="Match ", value=f'{game_type}'.format(bot))
+      embedVar.add_field(name="Type: " + stype , value=f'{ranked}'.format(bot))
       if tournament:
          embedVar.add_field(name="Tournament", value="Yes")
       
       if kingsgambit:
          embedVar.add_field(name="Kings Gambit", value="Yes")
-      
+
       if goc:
-         embedVar.add_field(name="GODS OF COD", value="Yes")
+         embedVar.add_field(name="GODS OF COD : " + f"{gocname}", value="Yes")
       
       if kingsgambit and king_score > 0:
-         embedVar.add_field(name=f":crown:King - {team_1_score}", value=team_1_comp, inline=False)
+         embedVar.add_field(name=f":crown:King - {team_1_score}", value="\n".join(team_1_comp_with_ign), inline=False)
+      elif not team_1_score:
+         embedVar.add_field(name=f":military_helmet:Team 1", value="Vacant", inline=False)
       else:
-         embedVar.add_field(name=f":military_helmet:Team 1 - {team_1_score}", value=team_1_comp, inline=False)
+         embedVar.add_field(name=f":military_helmet:Team 1 - {team_1_score}", value="\n".join(team_1_comp_with_ign), inline=False)
       
-      if team_2_comp:
-         embedVar.add_field(name=f":military_helmet:Team 2 - {team_2_score}", value=team_2_comp, inline=False)
+      if team_2_comp_with_ign:
+         embedVar.add_field(name=f":military_helmet:Team 2 - {team_2_score}", value="\n".join(team_2_comp_with_ign), inline=False)
       else:
          embedVar.add_field(name=f":military_helmet:Team 2", value="Vacant", inline=False)
-      
+
       if kingsgambit and other_teams:
          embedVar.add_field(name=f"Up Next...", value=other_teams_sorted_list, inline=False)
 
       await ctx.send(embed=embedVar, delete_after=15)
    else:
       await ctx.send(m.SESSION_DOES_NOT_EXIST, delete_after=5)
-
 #Check your current session
 @bot.command()
 @commands.check(validate_user)
@@ -1815,8 +1838,9 @@ async def ms(ctx):
       other_teams = [x for x in teams if x['POSITION'] > 1]
 
 
-      team_1_comp = ""
-      team_2_comp = ""
+
+      team_1_comp_with_ign = []
+      team_2_comp_with_ign = []
 
       team_1_score = ""
       team_2_score = ""
@@ -1827,15 +1851,35 @@ async def ms(ctx):
 
       for x in team_1:
          # n = x['TEAM'].split("#",1)[1]
-         team_1_comp = "\n".join(x['TEAM'])
          team_1_score = f" Score: {x['SCORE']}"
          king_score = x['SCORE']
+         for y in x['TEAM']:
+            data = db.queryUser({'DISNAME': y})
+            ign = ""
+            for z in data['IGN']:
+               if games in z:
+                  ign = z[games]
+                  team_1_comp_with_ign.append(f"{data['DISNAME']} : {ign}".format(bot))
+               else:
+                  team_1_comp_with_ign.append(f"{data['DISNAME']}")
+         team_1_comp = "\n".join(x['TEAM'])
+
 
 
       
       for x in team_2:
-         team_2_comp = "\n".join(x['TEAM'])
          team_2_score = f" Score: {x['SCORE']}"
+
+         for y in x['TEAM']:
+            data = db.queryUser({'DISNAME': y})
+            ign = ""
+            for z in data['IGN']:
+               if games in z:
+                  ign = z[games]
+                  team_2_comp_with_ign.append(f"{data['DISNAME']} : {ign}".format(bot))
+               else:
+                  team_2_comp_with_ign.append(f"{data['DISNAME']}")
+
 
       if kingsgambit:
          for x in other_teams:
@@ -1861,14 +1905,14 @@ async def ms(ctx):
          embedVar.add_field(name="GODS OF COD : " + f"{gocname}", value="Yes")
       
       if kingsgambit and king_score > 0:
-         embedVar.add_field(name=f":crown:King - {team_1_score}", value=team_1_comp, inline=False)
+         embedVar.add_field(name=f":crown:King - {team_1_score}", value="\n".join(team_1_comp_with_ign), inline=False)
       elif not team_1_score:
          embedVar.add_field(name=f":military_helmet:Team 1", value="Vacant", inline=False)
       else:
-         embedVar.add_field(name=f":military_helmet:Team 1 - {team_1_score}", value=team_1_comp, inline=False)
+         embedVar.add_field(name=f":military_helmet:Team 1 - {team_1_score}", value="\n".join(team_1_comp_with_ign), inline=False)
       
-      if team_2_comp:
-         embedVar.add_field(name=f":military_helmet:Team 2 - {team_2_score}", value=team_2_comp, inline=False)
+      if team_2_comp_with_ign:
+         embedVar.add_field(name=f":military_helmet:Team 2 - {team_2_score}", value="\n".join(team_2_comp_with_ign), inline=False)
       else:
          embedVar.add_field(name=f":military_helmet:Team 2", value="Vacant", inline=False)
 
@@ -1926,8 +1970,10 @@ async def cs(ctx, user: User):
       other_teams = [x for x in teams if x['POSITION'] > 1] # position 1
 
 
-      team_1_comp = ""
-      team_2_comp = ""
+
+
+      team_1_comp_with_ign = []
+      team_2_comp_with_ign = []
 
       team_1_score = ""
       team_2_score = ""
@@ -1938,15 +1984,35 @@ async def cs(ctx, user: User):
 
       for x in team_1:
          # n = x['TEAM'].split("#",1)[1]
-         team_1_comp = "\n".join(x['TEAM'])
          team_1_score = f" Score: {x['SCORE']}"
          king_score = x['SCORE']
+         for y in x['TEAM']:
+            data = db.queryUser({'DISNAME': y})
+            ign = ""
+            for z in data['IGN']:
+               if games in z:
+                  ign = z[games]
+                  team_1_comp_with_ign.append(f"{data['DISNAME']} : {ign}".format(bot))
+               else:
+                  team_1_comp_with_ign.append(f"{data['DISNAME']}")
+         team_1_comp = "\n".join(x['TEAM'])
+
 
 
       
       for x in team_2:
-         team_2_comp = "\n".join(x['TEAM'])
          team_2_score = f" Score: {x['SCORE']}"
+
+         for y in x['TEAM']:
+            data = db.queryUser({'DISNAME': y})
+            ign = ""
+            for z in data['IGN']:
+               if games in z:
+                  ign = z[games]
+                  team_2_comp_with_ign.append(f"{data['DISNAME']} : {ign}".format(bot))
+               else:
+                  team_2_comp_with_ign.append(f"{data['DISNAME']}")
+
 
       if kingsgambit:
          for x in other_teams:
@@ -1960,29 +2026,29 @@ async def cs(ctx, user: User):
 
       embedVar = discord.Embed(title=f"{name}'s {games} Session ".format(bot), description="Party Chat Gaming Database", colour=000000)
       embedVar.set_thumbnail(url=avatar)
-      embedVar.add_field(name="Match", value=f'{game_type}'.format(bot))
-      embedVar.add_field(name="Type: "+ stype, value=f'{ranked}'.format(bot))
+      embedVar.add_field(name="Match ", value=f'{game_type}'.format(bot))
+      embedVar.add_field(name="Type: " + stype , value=f'{ranked}'.format(bot))
       if tournament:
          embedVar.add_field(name="Tournament", value="Yes")
       
       if kingsgambit:
          embedVar.add_field(name="Kings Gambit", value="Yes")
-      
+
       if goc:
-         embedVar.add_field(name="GODS OF COD", value="Yes")
+         embedVar.add_field(name="GODS OF COD : " + f"{gocname}", value="Yes")
       
       if kingsgambit and king_score > 0:
-         embedVar.add_field(name=f":crown:King - {team_1_score}", value=team_1_comp, inline=False)
+         embedVar.add_field(name=f":crown:King - {team_1_score}", value="\n".join(team_1_comp_with_ign), inline=False)
       elif not team_1_score:
          embedVar.add_field(name=f":military_helmet:Team 1", value="Vacant", inline=False)
       else:
-         embedVar.add_field(name=f":military_helmet:Team 1 - {team_1_score}", value=team_1_comp, inline=False)
+         embedVar.add_field(name=f":military_helmet:Team 1 - {team_1_score}", value="\n".join(team_1_comp_with_ign), inline=False)
       
-      if team_2_comp:
-         embedVar.add_field(name=f":military_helmet:Team 2 - {team_2_score}", value=team_2_comp, inline=False)
+      if team_2_comp_with_ign:
+         embedVar.add_field(name=f":military_helmet:Team 2 - {team_2_score}", value="\n".join(team_2_comp_with_ign), inline=False)
       else:
          embedVar.add_field(name=f":military_helmet:Team 2", value="Vacant", inline=False)
-      
+
       if kingsgambit and other_teams:
          embedVar.add_field(name=f"Up Next...", value=other_teams_sorted_list, inline=False)
 
