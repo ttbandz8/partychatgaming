@@ -1,6 +1,7 @@
 INVITE_NOT_ACCEPTED="Invite unaccepted. "
 USER_NOT_REGISTERED="Unregistered user detected. "
 ADMIN_ONLY_COMMAND="Admin command detected. "
+USER_HAS_REGISTERED="User has been registered. "
 
 OWNER_ONLY_COMMAND="Team Owner only command. "
 USER_ALREADY_ON_TEAM="User is already part of a team. "
@@ -33,10 +34,15 @@ SESSION_HAS_ENDED="The lobby has ended. "
 FAILED_TO_ACCEPT="Failed to accept ready up. "
 RESPONSE_NOT_DETECTED="Command aborted. "
 
+VAULT_RECOVERED="Vault has been recovered. "
 GAME_NOT_DETECTED="Game not detected. "
-
+NEW_ALIASES_UPDATE="Aliases added. "
+ADD_A_GAME="Please add a game to your profile before running this command. "
+UPDATE_COMPLETE="Update complete. "
+DELETE_COMPLETE="Deletion has completed. "
 TEAM_DOESNT_EXIST="Team not detected. "
 USER_NOT_ON_TEAM="You are not on a team. "
+NO_GAMES_AVAILABLE="There aren't any games available at this time. "
 GODS_OF_COD_RULES="""
 Search and Destroy: 
 *Score Limit: *10 

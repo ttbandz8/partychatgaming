@@ -1,6 +1,6 @@
 import pymongo 
-from decouple import config
 import messages as m
+from decouple import config
 
 
 # PRODUCTION
@@ -62,10 +62,10 @@ def createVault(vault):
     try:
         vaultexist = vault_exist({'OWNER': vault['OWNER']})
         if vaultexist:
-            return "Vault already exists."
+            return False
         else:
             vault_col.insert_one(vault)
-            return "New Vault created."
+            return True
     except:
         return "Cannot create vault."
 
@@ -113,28 +113,6 @@ def updateVaultNoFilter(query, new_value):
         return "Update completed. "
     else:
         return "Update failed. "
-
-'''Check If Card Exists'''
-def card_exists(data):
-    collection_exists = col_exists("CARDS")
-    if collection_exists:
-        card_does_exist = cards_col.find_one(data)
-        if card_does_exist:
-            return True
-        else:
-            return False
-    else:
-        return False
-
-def deleteAllCards(user_query):
-    exists = user_exists({'DISNAME': user_query['DISNAME']})
-    if exists:
-        cards_col.delete_many({})
-        return 'All Cards Deleted'
-    else:
-        return 'Unable to Delete All Cards'
-
-
 
 
 ''' GOC '''
@@ -189,6 +167,28 @@ def addTeamMember(query, add_to_team_query, user, new_user):
             return "The Owner of the team can add new members. "
     else:
         return "Cannot add user to the team."
+
+
+'''Check If Card Exists'''
+def card_exists(data):
+    collection_exists = col_exists("CARDS")
+    if collection_exists:
+        card_does_exist = cards_col.find_one(data)
+        if card_does_exist:
+            return True
+        else:
+            return False
+    else:
+        return False
+
+def deleteAllCards(user_query):
+    exists = user_exists({'DISNAME': user_query['DISNAME']})
+    if exists:
+        cards_col.delete_many({})
+        return 'All Cards Deleted'
+    else:
+        return 'Unable to Delete All Cards'
+
 '''New Card'''
 def createCard(card):
     try:
@@ -221,6 +221,29 @@ def queryCard(query):
     data = cards_col.find_one(query)
     return data
 
+def updateCard(query, new_value):
+    try:
+        cardexists = card_exists({'PATH': query['PATH']})
+        if cardexists:
+            cards_col.update_one(query, new_value)
+            return True
+        else:
+            return False
+    except:
+        return False
+
+def deleteCard(card):
+    try:
+        cardexists = card_exists({'PATH': query['PATH']})
+        if cardexists:
+            cards_col.delete_one(card)
+            return True
+        else:
+            return False
+    except:
+        return False
+
+
 ''' TITLES '''
 def title_exists(data):
     collection_exists = col_exists("TITLES")
@@ -243,6 +266,28 @@ def createTitle(title):
             return "New Title created."
     except:
         return "Cannot create Title."
+
+def updateTitle(query, new_value):
+    try:
+        titleexists = title_exists({'TITLE': query['TITLE']})
+        if titleexists:
+            titles_col.update_one(query, new_value)
+            return True
+        else:
+            return False
+    except:
+        return False
+
+def deleteTitle(title):
+    try:
+        titleexists = title_exists({'TITLE': query['TITLE']})
+        if titleexists:
+            titles_col.delete_one(title)
+            return True
+        else:
+            return False
+    except:
+        return False
 
 def queryAllTitles():
     data = titles_col.find()
@@ -271,32 +316,21 @@ def queryUser(user):
             return False
            
     except:
-        return "Find user failed. "
+        return False
 
 def queryAllUsers():
     data = users_col.find()
     return data
 
 def createUsers(users):
-    try:
-        if isinstance(users, list):
-            for user in users:
-                exists = user_exists({'DISNAME': user['DISNAME']})
-                if exists:
-                    print("User already exists.")
-                else:
-                    data = users_col.insert_one(user)
-                    return data
-        else:
-            exists = user_exists({'DISNAME': users['DISNAME']})
-            if exists:
-                return "User already registered. "
-            else:
-                data = users_col.insert_one(users)
-                return "Registration complete. "
-    except:
-        print("Add Users failed.")
-
+    exists = user_exists({'DISNAME': users['DISNAME']})
+    if exists:
+        print("Does exist")
+        return False
+    else:
+        data = users_col.insert_one(users)
+        return True
+    
 def deleteUser(users):
     try:
         if isinstance(users, list):
@@ -475,11 +509,25 @@ def queryGame(game):
     except:
         print("Find Game failed.")
 
+def deleteGame(game):
+    try:
+        exists = game_exists({'GAME': game['GAME']})
+        if exists:
+            data = games_col.delete_one(game)
+            return True
+        else:
+            return False
+    except:
+        print("Find Game failed.")
+
 def query_all_games():
     games = games_col.find()
-    return games
+    if games:
+        return games
+    else:
+        return False
 
-def add_game(game):
+def addGame(game):
     exists = game_exists({'GAME': game['GAME']})
     if exists:
         print("Game Already Exists.")
@@ -487,7 +535,13 @@ def add_game(game):
        added = games_col.insert_one(game)
        return("Game has been added")
 
-
+def updateGame(query, new_value):
+    exists = game_exists({'GAME': query['GAME']})
+    if exists:
+       added = games_col.update_one(query, new_value)
+       return("Game has been added")
+    else:
+        return False
 
 
 ''' SESSIONS '''
@@ -532,6 +586,8 @@ def createSession(session):
             return "New Tournament Session has been created"
         else:       
             players_per_team_count = [x for x in session['TEAMS'][0]['TEAM']]
+            print(players_per_team_count)
+            print(session['TYPE'])
             if session['TYPE'] != len(players_per_team_count):
 
                 return "Team and Session Type do not match. "
