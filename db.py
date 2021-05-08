@@ -3,6 +3,10 @@ from decouple import config
 import messages as m
 
 
+# PRODUCTION
+# TOKEN = config('MONGODB_URI')
+
+# TEST
 TOKEN = config('MONGOTOKEN_TEST')
 mongo = pymongo.MongoClient(TOKEN)
 
