@@ -37,10 +37,10 @@ emojis = ['👍', '👎']
 
 client = discord.Client()
 
-if config('PROD') == "True":
+if config('ENV') == "production":
    # PRODUCTION
    bot = commands.Bot(command_prefix="#")
-elif config('TEST') ==  "True":
+else:
    # TEST
    bot = commands.Bot(command_prefix=">")
 
@@ -2626,9 +2626,9 @@ async def lkg(ctx):
    else:
       await ctx.send(m.NO_GAMES_AVAILABLE, delete_after=5)
 
-if config('PROD') == "True":
+if config('ENV') == "production":
    DISCORD_TOKEN = config('DISCORD_TOKEN_TEST')
-elif config('TEST') ==  "True":
+else:
    DISCORD_TOKEN = config('DISCORD_TOKEN_FOR_TESTING')
 
 bot.run(DISCORD_TOKEN)
