@@ -2,10 +2,10 @@ import pymongo
 import messages as m
 from decouple import config
 
-if config('PROD') == True:
+if config('PROD') == "True":
     # PRODUCTION
     TOKEN = config('MONGODB_URI')
-else:
+elif config('TEST') ==  "True":
     # TEST
     TOKEN = config('MONGOTOKEN_TEST')
     mongo = pymongo.MongoClient(TOKEN)

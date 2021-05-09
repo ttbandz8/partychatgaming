@@ -2626,9 +2626,9 @@ async def lkg(ctx):
    else:
       await ctx.send(m.NO_GAMES_AVAILABLE, delete_after=5)
 
-if config('PROD') == True:
+if config('PROD') == "True":
    DISCORD_TOKEN = config('DISCORD_TOKEN_TEST')
-else:
+elif config('TEST') ==  "True":
    DISCORD_TOKEN = config('DISCORD_TOKEN_FOR_TESTING')
 
 bot.run(DISCORD_TOKEN)
