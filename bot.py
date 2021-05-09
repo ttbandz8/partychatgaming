@@ -37,10 +37,10 @@ emojis = ['👍', '👎']
 
 client = discord.Client()
 
-if config('PROD') == True:
+if config('PROD') == "True":
    # PRODUCTION
    bot = commands.Bot(command_prefix="#")
-else:
+elif config('TEST') ==  "True":
    # TEST
    bot = commands.Bot(command_prefix=">")
 

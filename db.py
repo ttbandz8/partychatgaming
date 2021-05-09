@@ -5,7 +5,7 @@ from decouple import config
 if config('PROD') == "True":
     # PRODUCTION
     TOKEN = config('MONGODB_URI')
-elif config('TEST') ==  "True":
+elif config('TEST') == "True":
     # TEST
     TOKEN = config('MONGOTOKEN_TEST')
     mongo = pymongo.MongoClient(TOKEN)
