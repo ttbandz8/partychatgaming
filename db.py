@@ -8,7 +8,7 @@ if config('ENV') == "production":
 else:
     # TEST
     TOKEN = config('MONGOTOKEN_TEST')
-    mongo = pymongo.MongoClient(TOKEN)
+mongo = pymongo.MongoClient(TOKEN)
 
 db = mongo["PCGTEST"]
 users_col = db["USERS"]
