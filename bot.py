@@ -37,11 +37,12 @@ emojis = ['👍', '👎']
 
 client = discord.Client()
 
-# PRODUCTION
-bot = commands.Bot(command_prefix="#")
-
-# TEST
-# bot = commands.Bot(command_prefix=">")
+if config('PROD') == True:
+   # PRODUCTION
+   bot = commands.Bot(command_prefix="#")
+else:
+   # TEST
+   bot = commands.Bot(command_prefix=">")
 
 async def validate_user(ctx):
    query = {'DISNAME': str(ctx.author)}
@@ -2625,7 +2626,9 @@ async def lkg(ctx):
    else:
       await ctx.send(m.NO_GAMES_AVAILABLE, delete_after=5)
 
-# REVERSE THIS UPON DEPLOYMENT
-# DISCORD_TOKEN = config('DISCORD_TOKEN_FOR_TESTING')
-DISCORD_TOKEN = config('DISCORD_TOKEN_TEST')
+if config('PROD') == True:
+   DISCORD_TOKEN = config('DISCORD_TOKEN_TEST')
+else:
+   DISCORD_TOKEN = config('DISCORD_TOKEN_FOR_TESTING')
+
 bot.run(DISCORD_TOKEN)

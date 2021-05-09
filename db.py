@@ -2,12 +2,13 @@ import pymongo
 import messages as m
 from decouple import config
 
-# PRODUCTION
-TOKEN = config('MONGODB_URI')
-
-# TEST
-# TOKEN = config('MONGOTOKEN_TEST')
-mongo = pymongo.MongoClient(TOKEN)
+if config('PROD') == True:
+    # PRODUCTION
+    TOKEN = config('MONGODB_URI')
+else:
+    # TEST
+    TOKEN = config('MONGOTOKEN_TEST')
+    mongo = pymongo.MongoClient(TOKEN)
 
 db = mongo["PCGTEST"]
 users_col = db["USERS"]
