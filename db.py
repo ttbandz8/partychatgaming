@@ -2,12 +2,12 @@ import pymongo
 import messages as m
 from decouple import config
 
-
-# PRODUCTION
-# TOKEN = config('MONGODB_URI')
-
-# TEST
-TOKEN = config('MONGOTOKEN_TEST')
+if config('ENV') == "production":
+    # PRODUCTION
+    TOKEN = config('MONGODB_URI')
+else:
+    # TEST
+    TOKEN = config('MONGOTOKEN_TEST')
 mongo = pymongo.MongoClient(TOKEN)
 
 db = mongo["PCGTEST"]
