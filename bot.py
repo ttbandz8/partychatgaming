@@ -422,6 +422,9 @@ async def goci(ctx, *participant: User):
    else:
       await ctx.send(m.ADMIN_ONLY_COMMAND)
 
+
+
+
 # Leaderboard
 # @bot.command()
 # @commands.check(validate_user)
@@ -1402,6 +1405,8 @@ async def c5v5(ctx, args, user1: User, user2: User, user3: User, user4: User):
          await ctx.send(m.USER_NOT_REGISTERED)
    else:
       await ctx.send("Public SCRIMS coming soon! Join a League Team to Participate ! :military_helmet:", delete_after=5)
+
+
 
 #Legacy v5v5 code
 async def cmps(ctx, args, user1: User, user2: User, user3: User, user4: User):
