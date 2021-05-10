@@ -611,6 +611,19 @@ async def nt(ctx, args1: str, args2: int, args3: int):
 #    else:
 #       print(m.ADMIN_ONLY_COMMAND)
 
+
+async def curse(amount, user):
+      curseAmount = amount
+      negCurseAmount = 0 - abs(int(curseAmount))
+      query = {'DISNAME': str(user)}
+      vaultOwner = db.queryUser(query)
+      if vaultOwner:
+         vault = db.queryVault({'OWNER' : vaultOwner['DISNAME']})
+         update_query = {"$inc": {'BALANCE': int(negCurseAmount)}}
+         db.updateVaultNoFilter(vault, update_query)
+      else:
+         print("cant find vault")
+
 @bot.command()
 @commands.check(validate_user)
 async def bt(ctx, args: str):
@@ -637,7 +650,7 @@ async def bt(ctx, args: str):
          if newBalance < 0 :
             await ctx.send("You have an insufficent Balance")
          else:
-            await curse(ctx, cost, ctx.author)
+            await curse(cost, str(ctx.author))
             response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'TITLES': args}})
             await ctx.send(m.PURCHASE_COMPLETE)
    else:
@@ -770,7 +783,7 @@ async def bc(ctx, args: str):
          if newBalance < 0 :
             await ctx.send("You have an insufficent Balance")
          else:
-            await curse(ctx, cost, ctx.author)
+            await curse(cost, str(ctx.author))
             response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': args}})
             await ctx.send(m.PURCHASE_COMPLETE)
    else:
@@ -950,52 +963,52 @@ async def vault(ctx):
       print(newVault)
 
 
-@bot.command()
-@commands.check(validate_user)
-async def bless(ctx, args, user1: User):
-   if ctx.author.guild_permissions.administrator == True:
-      blessAmount = args
-      posBlessAmount = 0 + abs(int(blessAmount))
-      query = {'DISNAME': str(user1)}
-      vaultOwner = db.queryUser(query)
-      if vaultOwner:
-         vault = db.queryVault({'OWNER' : vaultOwner['DISNAME']})
-         update_query = {"$inc": {'BALANCE': posBlessAmount}}
-         db.updateVaultNoFilter(vault, update_query)
-      else:
-         print("cant find vault")
+# @bot.command()
+# @commands.check(validate_user)
+# async def bless(ctx, args, user1: User):
+#    if ctx.author.guild_permissions.administrator == True:
+#       blessAmount = args
+#       posBlessAmount = 0 + abs(int(blessAmount))
+#       query = {'DISNAME': str(user1)}
+#       vaultOwner = db.queryUser(query)
+#       if vaultOwner:
+#          vault = db.queryVault({'OWNER' : vaultOwner['DISNAME']})
+#          update_query = {"$inc": {'BALANCE': posBlessAmount}}
+#          db.updateVaultNoFilter(vault, update_query)
+#       else:
+#          print("cant find vault")
 
-@bot.command()
-@commands.check(validate_user)
-async def blessall(ctx, args):
-   if ctx.author.guild_permissions.administrator == True:
-      blessAmount = args
-      posBlessAmount = 0 + abs(int(blessAmount))
-      data = db.queryAllVault()
-      for vault in data:
-         vault = db.queryVault({'OWNER' : vault['OWNER']})
-         update_query = {"$inc": {'BALANCE': posBlessAmount}}
-         db.updateVaultNoFilter(vault, update_query)
-      await ctx.send("All have been blessed. ")
-   else:
-      await ctx.send(m.ADMIN_ONLY_COMMAND)
+# @bot.command()
+# @commands.check(validate_user)
+# async def blessall(ctx, args):
+#    if ctx.author.guild_permissions.administrator == True:
+#       blessAmount = args
+#       posBlessAmount = 0 + abs(int(blessAmount))
+#       data = db.queryAllVault()
+#       for vault in data:
+#          vault = db.queryVault({'OWNER' : vault['OWNER']})
+#          update_query = {"$inc": {'BALANCE': posBlessAmount}}
+#          db.updateVaultNoFilter(vault, update_query)
+#       await ctx.send("All have been blessed. ")
+#    else:
+#       await ctx.send(m.ADMIN_ONLY_COMMAND)
 
 
 
-@bot.command()
-@commands.check(validate_user)
-async def curse(ctx,args, user1: User):
-   if ctx.author.guild_permissions.administrator == True:
-      curseAmount = args
-      negCurseAmount = 0 - abs(int(curseAmount))
-      query = {'DISNAME': str(user1)}
-      vaultOwner = db.queryUser(query)
-      if vaultOwner:
-         vault = db.queryVault({'OWNER' : vaultOwner['DISNAME']})
-         update_query = {"$inc": {'BALANCE': int(negCurseAmount)}}
-         db.updateVaultNoFilter(vault, update_query)
-      else:
-         print("cant find vault")
+# @bot.command()
+# @commands.check(validate_user)
+# async def curse(ctx,args, user1: User):
+#    if ctx.author.guild_permissions.administrator == True:
+#       curseAmount = args
+#       negCurseAmount = 0 - abs(int(curseAmount))
+#       query = {'DISNAME': str(user1)}
+#       vaultOwner = db.queryUser(query)
+#       if vaultOwner:
+#          vault = db.queryVault({'OWNER' : vaultOwner['DISNAME']})
+#          update_query = {"$inc": {'BALANCE': int(negCurseAmount)}}
+#          db.updateVaultNoFilter(vault, update_query)
+#       else:
+#          print("cant find vault")
 
 
 @bot.command()
@@ -1467,7 +1480,7 @@ async def score(ctx, user: User):
       await ctx.send(f"Score not added. Please, try again. ", delete_after=5)
 
 
-#end session and push data to database
+#end lobby and push data to database
 @bot.command()
 @commands.check(validate_user)
 async def el(ctx):
@@ -1671,6 +1684,7 @@ async def lo(ctx, user: User):
       games = game['GAME']
       avatar = game['IMAGE_URL']
       tournament = session['TOURNAMENT']
+      scrim = session['SCRIM']
       kingsgambit = session['KINGSGAMBIT']
       goc = session['GOC']
       gocname = session['GOC_TITLE']
@@ -1743,6 +1757,9 @@ async def lo(ctx, user: User):
       
       if kingsgambit:
          embedVar.add_field(name="Kings Gambit", value="Yes")
+
+      if scrim:
+         embedVar.add_field(name="Scrim", value="Yes")
       
       if goc:
          embedVar.add_field(name="GODS OF COD", value="Yes")
@@ -1776,6 +1793,7 @@ async def ml(ctx):
       game = db.queryGame(game_query)
       tournament = session['TOURNAMENT']
       kingsgambit = session['KINGSGAMBIT']
+      scrim = session['SCRIM']
       name = session['OWNER'].split("#",1)[0]
       games = game['GAME']
       avatar = game['IMAGE_URL']
@@ -1851,6 +1869,9 @@ async def ml(ctx):
       if kingsgambit:
          embedVar.add_field(name="Kings Gambit", value="Yes")
 
+      if scrim:
+         embedVar.add_field(name="Scrim", value="Yes")
+
       if goc:
          embedVar.add_field(name="GODS OF COD : " + f"{gocname}", value="Yes")
       
@@ -1888,7 +1909,8 @@ async def cl(ctx, user: User):
       games = game['GAME']
       avatar = game['IMAGE_URL']
       tournament = session['TOURNAMENT']
-      print(tournament)
+      
+      scrim = session['SCRIM']
       kingsgambit = session['KINGSGAMBIT']
       goc = session['GOC']
       gocname = session['GOC_TITLE']
@@ -1961,7 +1983,9 @@ async def cl(ctx, user: User):
       
       if kingsgambit:
          embedVar.add_field(name="Kings Gambit", value="Yes")
-      
+
+      if scrim:
+         embedVar.add_field(name="Scrim", value="Yes")
       if goc:
          embedVar.add_field(name="GODS OF COD", value="Yes")
       
@@ -2212,6 +2236,19 @@ async def dt(ctx, *args):
       await ctx.send(m.TEAM_DOESNT_EXIST, delete_after=5)
 
 
+
+async def bless(amount, user):
+   blessAmount = amount
+   posBlessAmount = 0 + abs(int(blessAmount))
+   query = {'DISNAME': str(user)}
+   vaultOwner = db.queryUser(query)
+   if vaultOwner:
+      vault = db.queryVault({'OWNER' : vaultOwner['DISNAME']})
+      update_query = {"$inc": {'BALANCE': posBlessAmount}}
+      db.updateVaultNoFilter(vault, update_query)
+   else:
+      print("cant find vault")
+
 async def sw(ctx):
    session_query = {"OWNER": str(ctx.author), "AVAILABLE": True}
    session_data = db.querySession(session_query)
@@ -2330,7 +2367,7 @@ async def sw(ctx):
       
       uid = player['DID']
       user = await bot.fetch_user(uid)
-      await bless(ctx, blessings, user)
+      await bless(blessings, player['DISNAME'])
 
       await DM(ctx, user, "You Won. Doesnt Prove Much Tho :yawning_face:")
 
@@ -3163,29 +3200,29 @@ async def vault(ctx):
    await ctx.send(embed = em)
 
 
-@help.command()
-async def bless(ctx):
-   em = discord.Embed(title = "bless", description = "ADMIN:Bless User with coin", color = ctx.author.color)
+# @help.command()
+# async def bless(ctx):
+#    em = discord.Embed(title = "bless", description = "ADMIN:Bless User with coin")
 
-   em.add_field(name = "**Syntax**", value = "#bless <amount> <user>")
+#    em.add_field(name = "**Syntax**", value = "#bless <amount> <user>")
 
-   await ctx.send(embed = em)
+#    await ctx.send(embed = em)
 
-@help.command()
-async def blessall(ctx):
-   em = discord.Embed(title = "blessall", description = "ADMIN:Bless all Users with coin", color = ctx.author.color)
+# @help.command()
+# async def blessall(ctx):
+#    em = discord.Embed(title = "blessall", description = "ADMIN:Bless all Users with coin")
 
-   em.add_field(name = "**Syntax**", value = "#blessall <amount>")
+#    em.add_field(name = "**Syntax**", value = "#blessall <amount>")
 
-   await ctx.send(embed = em)
+#    await ctx.send(embed = em)
 
-@help.command()
-async def curse(ctx):
-   em = discord.Embed(title = "curse", description = "ADMIN:Take Coin away from User", color = ctx.author.color)
+# @help.command()
+# async def curse(ctx):
+#    em = discord.Embed(title = "curse", description = "ADMIN:Take Coin away from User")
 
-   em.add_field(name = "**Syntax**", value = "#curse <amount> <user>")
+#    em.add_field(name = "**Syntax**", value = "#curse <amount> <user>")
 
-   await ctx.send(embed = em)
+#    await ctx.send(embed = em)
 
 
 @help.command()
