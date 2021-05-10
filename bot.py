@@ -2268,7 +2268,7 @@ async def sw(ctx):
    update_query = {}
    add_score_to_team={}
    if session_data['GOC']:
-      blessings = blessings + 10000 
+      blessings = blessings + 10000
       for x in winning_team['TEAM']:
          player = db.queryUser({'DISNAME': x})
          players_team_name = player['TEAM']
@@ -2385,7 +2385,6 @@ async def altsl(ctx):
    session_data = db.querySession(session_query)
    teams = [x for x in session_data['TEAMS']]
    losing_team = {}
-   blessings = 0
    low_score = teams[0]['SCORE']
    for x in teams:
       if x['SCORE'] <= low_score:
@@ -2399,7 +2398,6 @@ async def altsl(ctx):
    update_query = {}
    add_score_to_team={}
    if session_data['GOC']:
-      blessings = blessings + 10000 
       for x in losing_team['TEAM']:
          player = db.queryUser({'DISNAME': x})
          players_team_name = player['TEAM']
@@ -2410,30 +2408,24 @@ async def altsl(ctx):
          players_team_name = player['TEAM']
          update_query = {'$set': {'LOSER': loser, 'LOSING_TEAM': players_team_name}}
          add_score_to_team = {'$inc': {'SCRIM_LOSSES': 1}}
-
    else:
       update_query = {'$set': {'LOSER': loser}}
 
    query = {"_id": session_data["_id"], "TEAMS.TEAM": str(ctx.author)}
    db.updateSession(session, query, update_query)
-   db.updateTeam({'TNAME': players_team_name}, add_score_to_team)
+   blah = db.updateTeam({'TNAME': players_team_name}, add_score_to_team)
    game_type = ""
 
    if session['TYPE'] == 1:
       game_type = "1v1"
-      blessings = blessings + 10
    elif session['TYPE'] == 2:
       game_type = "2v2"
-      blessings = blessings + 15
    elif session['TYPE'] == 3:
       game_type = "3v3"
-      blessings = blessings + 30
    elif session['TYPE'] == 4:
       game_type = "4v4"
-      blessings = blessings + 40
    elif session['TYPE'] == 5:
       game_type = "5v5"
-      blessings = blessings + 50
 
    for x in losing_team['TEAM']:
       player = db.queryUser({'DISNAME': x})
@@ -2453,11 +2445,9 @@ async def altsl(ctx):
       new_value = {}
       if session_data['TOURNAMENT']:
          new_value = {"$inc": {'TOURNAMENT_WINS': 0}}
-         blessings = blessings + 100
 
       elif session_data['RANKED']:
          new_value = {"$inc": {'RANKED.$[type].' + game_type.upper() + '.1': 1}}
-         blessings = blessings + (.30*blessings)
 
       elif not session_data['RANKED']:
          new_value = {"$inc": {'NORMAL.$[type].' + game_type.upper() + '.1': 1}}
