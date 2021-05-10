@@ -3122,22 +3122,22 @@ async def lteam(ctx):
    await ctx.send(embed = em)
 
 
-@help.command()
-async def nc(ctx):
-   em = discord.Embed(title = "nc", description = "ADMIN: upload new cards to database", color = ctx.author.color)
+# @help.command()
+# async def nc(ctx):
+#    em = discord.Embed(title = "nc", description = "ADMIN: upload new cards to database", color = ctx.author.color)
 
-   em.add_field(name = "**Syntax**", value = "#nc <cardURL> <cardname> <tournament wins> <shopcost>")
+#    em.add_field(name = "**Syntax**", value = "#nc <cardURL> <cardname> <tournament wins> <shopcost>")
 
-   await ctx.send(embed = em)
+#    await ctx.send(embed = em)
 
 
-@help.command()
-async def nt(ctx):
-   em = discord.Embed(title = "nt", description = "ADMIN: upload new titles to database", color = ctx.author.color)
+# @help.command()
+# async def nt(ctx):
+#    em = discord.Embed(title = "nt", description = "ADMIN: upload new titles to database", color = ctx.author.color)
 
-   em.add_field(name = "**Syntax**", value = "#nt <titlename> <tournamentwins> <shopcost>")
+#    em.add_field(name = "**Syntax**", value = "#nt <titlename> <tournamentwins> <shopcost>")
 
-   await ctx.send(embed = em)
+#    await ctx.send(embed = em)
 
 @help.command()
 async def bc(ctx):
