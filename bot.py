@@ -8,6 +8,7 @@ import DiscordUtils
 from discord.ext import commands
 from PIL import Image, ImageFont, ImageDraw
 import numpy as np
+import help_commands as h
 
 # Converters
 from discord import User
@@ -50,14 +51,15 @@ bot.remove_command("help")
 async def help(ctx):
    em = discord.Embed(title = "Party Chat Gaming Bot Help Page", description = "use #help <command> for extended information on that command.", color = ctx.author.color)
 
-   em.add_field(name = "Coin Commands", value = "bless,blessall,curse", inline=True)
-   em.add_field(name = "Player Commands", value = "challenge,d,iby,ms,r",inline=True)
-   em.add_field(name = "Profile Commands", value = "ag,flex,lk,lkg,lkt,uc,uign,ut,vault", inline=True)
-   em.add_field(name = "Senpai:tm: Tutorial Commands", value = "senpai,bootcamp,franchise,legend",inline=True)
-   em.add_field(name = "Lobbies", value = "cl,c1v1,c2v2,c3v3,c4v4,c5v5,el,dal,dl,j,score,lg,lo",inline=True)
-   em.add_field(name = "Shop", value = "nc,nt,c,bt,shop,vc", inline=True)
-   em.add_field(name = "Team", value = "att,cteam,dt,dtm,lteam",inline=True)
+   em.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png")
+   em.add_field(name = "Player Commands", value =h.PLAYER_COMMANDS , inline=False)
+   em.add_field(name = "Profile Commands", value =h.PROFILE_COMMANDS, inline=False)
+   em.add_field(name = "Senpai:tm: Tutorial Commands", value =h.SENPAI_COMMANDS,inline=False)
+   em.add_field(name = "Lobbies", value =h.LOBBY_COMMANDS,inline=False)
+   em.add_field(name = "Shop", value =h.SHOP_COMMANDS, inline=False)
+   em.add_field(name = "Team", value =h.TEAM_COMMANDS,inline=True)
    em.add_field(name = "Tournament Types:", value = "\nExhibitions\nKingsGambit\nGodsOfCod",inline=True)
+   em.set_footer(text="Many more cards and titles are available via tournament win only. ")
    await ctx.send(embed = em)
 
 async def validate_user(ctx):
