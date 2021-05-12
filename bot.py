@@ -2435,8 +2435,6 @@ async def sw(ctx):
    session_data['WINNER'] = winning_team
    winner = session_data['WINNER']
    session = session_data
-   print(winner)
-   print(high_score)
    
    players_team_name = ""
    update_query = {}
@@ -2455,11 +2453,9 @@ async def sw(ctx):
          update_query = {'$set': {'WINNER': winner, 'WINNING_TEAM': players_team_name}}
          add_score_to_team = {'$inc': {'SCRIM_WINS': 1}}
    else:
-      print(winner)
-      print(high_score)
       update_query = {'$set': {'WINNER': winner}}
 
-   query = {"_id": session_data["_id"], "TEAMS.TEAM": str(ctx.author)}
+   query = {"_id": session_data["_id"]}
    db.updateSession(session, query, update_query)
    db.updateTeam({'TNAME': players_team_name}, add_score_to_team)
    game_type = ""
@@ -2662,7 +2658,7 @@ async def sl(ctx):
       loser = session_data['LOSER']
       session = session_data
       update_query = {'$set': {'LOSER': loser}}
-      query = {"_id": session_data["_id"], "TEAMS.TEAM": str(ctx.author)}
+      query = {"_id": session_data["_id"]}
       db.updateSession(session, query, update_query)
       game_type = ""
       
