@@ -601,8 +601,8 @@ async def gocrules(ctx):
 
 
 @bot.command()
-async def kgrules(ctx):
-      embedVar = discord.Embed(title=f"Kings Gambit: RULES", description="Party Chat Gaming Database™️", colour=000000)
+async def kghelp(ctx):
+      embedVar = discord.Embed(title=f"Kings Gambit: How To Register!", description="Party Chat Gaming Database™️", colour=000000)
       embedVar.add_field(name="REGISTRATION!" , value="Type::arrow_right: #r")
       embedVar.add_field(name="ADD CODM IGN!" , value="Type::arrow_right: #ag codm 'IGN'")
       embedVar.add_field(name="JOIN KINGS GAMBIT!" , value="Type::arrow_right: #jkg @streamer")
