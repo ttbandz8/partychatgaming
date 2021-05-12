@@ -2435,6 +2435,8 @@ async def sw(ctx):
    session_data['WINNER'] = winning_team
    winner = session_data['WINNER']
    session = session_data
+   print(winner)
+   print(high_score)
    
    players_team_name = ""
    update_query = {}
@@ -2452,8 +2454,9 @@ async def sw(ctx):
          players_team_name = player['TEAM']
          update_query = {'$set': {'WINNER': winner, 'WINNING_TEAM': players_team_name}}
          add_score_to_team = {'$inc': {'SCRIM_WINS': 1}}
-
    else:
+      print(winner)
+      print(high_score)
       update_query = {'$set': {'WINNER': winner}}
 
    query = {"_id": session_data["_id"], "TEAMS.TEAM": str(ctx.author)}
