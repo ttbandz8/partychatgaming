@@ -77,6 +77,10 @@ async def validate_user(ctx):
 async def on_ready():
    print('Bot is ready. ')
 
+
+
+
+
 @bot.command()
 @commands.check(validate_user)
 async def legend(ctx):
@@ -594,6 +598,18 @@ async def gocrules(ctx):
       await ctx.send(embed=embedVar)
    else:
       await ctx.send(m.NO_AVAILABLE_GOC, delete_after=5)
+
+
+@bot.command()
+async def kgrules(ctx):
+      embedVar = discord.Embed(title=f"Kings Gambit: RULES", description="Party Chat Gaming Database™️", colour=000000)
+      embedVar.add_field(name="REGISTRATION!" , value="Type::arrow_right: #r")
+      embedVar.add_field(name="ADD CODM IGN!" , value="Type::arrow_right: #ag codm 'IGN'")
+      embedVar.add_field(name="JOIN KINGS GAMBIT!" , value="Type::arrow_right: #jkg @streamer")
+      embedVar.add_field(name="STREAMER LIST" , value="92Bricks, 𝖆𝖓𝖆𝖙𝖍𝖊𝖇𝖔𝖙シ\nDasinista, Dreamer\nEthwixs, Jah\nKiewiski, Liqxuds\nLust, Newlable\nNoobie, Roc.Bambino")
+      embedVar.add_field(name="UPDATE IGN" , value="Type::arrow_right: #uign codm 'IGN'")
+      embedVar.add_field(name="STILL LOST????" , value="use #help or ask a PCG Member for assistance")
+      await ctx.send(embed=embedVar)
 
 
 # New Titles
