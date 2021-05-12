@@ -1163,7 +1163,7 @@ async def jkg(ctx, user1: User):
          new_position = max(positions) + 1
 
       if not bool(current_member):
-         accept = await ctx.send(f"{user1.mention}, Will you allow {ctx.author.mention} to join the Kings Gambit?", delete_after=10)
+         accept = await ctx.send(f"{user1.mention}, will you allow {ctx.author.mention} to join the Kings Gambit?", delete_after=10)
          for emoji in emojis:
             await accept.add_reaction(emoji)
 
@@ -1172,7 +1172,6 @@ async def jkg(ctx, user1: User):
 
          try:
             reaction, user = await bot.wait_for('reaction_add', timeout=10.0, check=check)
-
             join_query = {"TEAM": [str(ctx.author)], "SCORE": 0, "POSITION": new_position}
             session_joined = db.joinKingsGambit(session_query, join_query)
             await ctx.send(session_joined, delete_after=5)
@@ -1186,7 +1185,7 @@ async def jkg(ctx, user1: User):
          await accept.add_reaction(emoji)
 
       def check(reaction, user):
-         return user == ctx.author and str(reaction.emoji) == '👍'
+         return user == user1 and str(reaction.emoji) == '👍'
 
       try:
          reaction, user = await bot.wait_for('reaction_add', timeout=10.0, check=check)
@@ -1845,7 +1844,7 @@ async def lo(ctx, user: User):
             for z in data['IGN']:
                if games in z:
                   ign = z[games]
-                  team_1_comp_with_ign.append(f"{data['DISNAME']} : {ign}".format(bot))
+                  team_1_comp_with_ign.append(f"{data['DISNAME']} : 🎮 {ign}".format(bot))
                else:
                   team_1_comp_with_ign.append(f"{data['DISNAME']}")
          team_1_comp = "\n".join(x['TEAM'])
@@ -1862,7 +1861,7 @@ async def lo(ctx, user: User):
             for z in data['IGN']:
                if games in z:
                   ign = z[games]
-                  team_2_comp_with_ign.append(f"{data['DISNAME']} : {ign}".format(bot))
+                  team_2_comp_with_ign.append(f"{data['DISNAME']} : 🎮 {ign}".format(bot))
                else:
                   team_2_comp_with_ign.append(f"{data['DISNAME']}")
 
@@ -1978,7 +1977,7 @@ async def ml(ctx):
             for z in data['IGN']:
                if games in z:
                   ign = z[games]
-                  team_1_comp_with_ign.append(f"{data['DISNAME']} : {ign}".format(bot))
+                  team_1_comp_with_ign.append(f"{data['DISNAME']} : 🎮 {ign}".format(bot))
                else:
                   team_1_comp_with_ign.append(f"{data['DISNAME']}")
          team_1_comp = "\n".join(x['TEAM'])
@@ -1995,7 +1994,7 @@ async def ml(ctx):
             for z in data['IGN']:
                if games in z:
                   ign = z[games]
-                  team_2_comp_with_ign.append(f"{data['DISNAME']} : {ign}".format(bot))
+                  team_2_comp_with_ign.append(f"{data['DISNAME']} : 🎮 {ign}".format(bot))
                else:
                   team_2_comp_with_ign.append(f"{data['DISNAME']}")
 
@@ -2041,7 +2040,7 @@ async def ml(ctx):
       if kingsgambit and other_teams:
          embedVar.add_field(name=f"Up Next...", value=other_teams_sorted_list, inline=False)
 
-      await ctx.send(embed=embedVar, delete_after=15)
+      await ctx.send(embed=embedVar, delete_after=120)
    else:
       await ctx.send(m.SESSION_DOES_NOT_EXIST, delete_after=5)
 
@@ -2115,7 +2114,7 @@ async def cl(ctx, user: User):
             for z in data['IGN']:
                if games in z:
                   ign = z[games]
-                  team_1_comp_with_ign.append(f"{data['DISNAME']} : {ign}".format(bot))
+                  team_1_comp_with_ign.append(f"{data['DISNAME']} : 🎮 {ign}".format(bot))
                else:
                   team_1_comp_with_ign.append(f"{data['DISNAME']}")
          team_1_comp = "\n".join(x['TEAM'])
@@ -2132,7 +2131,7 @@ async def cl(ctx, user: User):
             for z in data['IGN']:
                if games in z:
                   ign = z[games]
-                  team_2_comp_with_ign.append(f"{data['DISNAME']} : {ign}".format(bot))
+                  team_2_comp_with_ign.append(f"{data['DISNAME']} : 🎮 {ign}".format(bot))
                else:
                   team_2_comp_with_ign.append(f"{data['DISNAME']}")
 
@@ -2477,7 +2476,6 @@ async def sw(ctx):
    elif session['TYPE'] == 5:
       game_type = "5v5"
       blessings = blessings + 50
-
    for x in winning_team['TEAM']:
       player = db.queryUser({'DISNAME': x})
       winner_earned_tourney_cards = False
@@ -2556,119 +2554,92 @@ async def sw(ctx):
 async def altsl(ctx):
    session_query = {"OWNER": str(ctx.author), "AVAILABLE": True}
    session_data = db.querySession(session_query)
-   teams = [x for x in session_data['TEAMS']]
-   losing_team = {}
-   low_score = teams[0]['SCORE']
-   for x in teams:
-      if x['SCORE'] <= low_score:
-         low_score = x['SCORE']
-         losing_team = x
-   session_data['LOSER'] = losing_team
-   loser = session_data['LOSER']
-   session = session_data
-   
-   players_team_name = ""
-   update_query = {}
-   add_score_to_team={}
-   if session_data['GOC']:
-      for x in losing_team['TEAM']:
-         player = db.queryUser({'DISNAME': x})
-         players_team_name = player['TEAM']
-         update_query = {'$set': {'LOSER': loser, 'LOSING_TEAM': players_team_name}}       
-   elif session_data['SCRIM']:
-      for x in losing_team['TEAM']:
-         player = db.queryUser({'DISNAME': x})
-         players_team_name = player['TEAM']
-         update_query = {'$set': {'LOSER': loser, 'LOSING_TEAM': players_team_name}}
-         add_score_to_team = {'$inc': {'SCRIM_LOSSES': 1}}
+   if session_data['KINGSGAMBIT']:
+      return await ctx.send("Lobby has ended. See you for the next Kings Gambit!")
    else:
-      update_query = {'$set': {'LOSER': loser}}
+      teams = [x for x in session_data['TEAMS']]
+      losing_team = {}
+      losing_kingsgambit_teams = []
+      low_score = teams[0]['SCORE']
 
-   query = {"_id": session_data["_id"], "TEAMS.TEAM": str(ctx.author)}
-   db.updateSession(session, query, update_query)
-   blah = db.updateTeam({'TNAME': players_team_name}, add_score_to_team)
-   game_type = ""
-
-   if session['TYPE'] == 1:
-      game_type = "1v1"
-   elif session['TYPE'] == 2:
-      game_type = "2v2"
-   elif session['TYPE'] == 3:
-      game_type = "3v3"
-   elif session['TYPE'] == 4:
-      game_type = "4v4"
-   elif session['TYPE'] == 5:
-      game_type = "5v5"
-
-   for x in losing_team['TEAM']:
-      player = db.queryUser({'DISNAME': x})
-      winner_earned_tourney_cards = False
-      winner_earned_tourney_titles = False
-      goc_player_team = player['TEAM']
-
-      tourney_cards = db.queryTournamentCards()
-      tourney_titles = db.queryTournamentTitles()
-
-      types_of_matches_list = [x for x in player['NORMAL']]
-      types_of_matches = dict(ChainMap(*types_of_matches_list))
-      current_score = types_of_matches[game_type.upper()]
-      query = {'DISNAME': player['DISNAME']}
-      #uid = {'DID' : player['DID']}
+      for x in teams:
+         if x['SCORE'] <= low_score:
+            low_score = x['SCORE']
+            losing_team = x
+      session_data['LOSER'] = losing_team
+      loser = session_data['LOSER']
+      session = session_data
       
-      new_value = {}
-      if session_data['TOURNAMENT']:
-         new_value = {"$inc": {'TOURNAMENT_WINS': 0}}
+      players_team_name = ""
+      update_query = {}
+      add_score_to_team={}
+      if session_data['GOC']:
+         for x in losing_team['TEAM']:
+            player = db.queryUser({'DISNAME': x})
+            players_team_name = player['TEAM']
+            update_query = {'$set': {'LOSER': loser, 'LOSING_TEAM': players_team_name}}       
+      elif session_data['SCRIM']:
+         for x in losing_team['TEAM']:
+            player = db.queryUser({'DISNAME': x})
+            players_team_name = player['TEAM']
+            update_query = {'$set': {'LOSER': loser, 'LOSING_TEAM': players_team_name}}
+            add_score_to_team = {'$inc': {'SCRIM_LOSSES': 1}}
+      else:
+         update_query = {'$set': {'LOSER': loser}}
 
-      elif session_data['RANKED']:
-         new_value = {"$inc": {'RANKED.$[type].' + game_type.upper() + '.1': 1}}
+      query = {"_id": session_data["_id"], "TEAMS.TEAM": str(ctx.author)}
+      db.updateSession(session, query, update_query)
+      blah = db.updateTeam({'TNAME': players_team_name}, add_score_to_team)
+      game_type = ""
 
-      elif not session_data['RANKED']:
-         new_value = {"$inc": {'NORMAL.$[type].' + game_type.upper() + '.1': 1}}
+      if session['TYPE'] == 1:
+         game_type = "1v1"
+      elif session['TYPE'] == 2:
+         game_type = "2v2"
+      elif session['TYPE'] == 3:
+         game_type = "3v3"
+      elif session['TYPE'] == 4:
+         game_type = "4v4"
+      elif session['TYPE'] == 5:
+         game_type = "5v5"
 
-      filter_query = [{'type.' + game_type.upper(): current_score}]
+      for x in losing_team['TEAM']:
+         player = db.queryUser({'DISNAME': x})
+         winner_earned_tourney_cards = False
+         winner_earned_tourney_titles = False
+         goc_player_team = player['TEAM']
 
-      if session_data['TOURNAMENT']:
-         db.updateUserNoFilter(query, new_value)
+         tourney_cards = db.queryTournamentCards()
+         tourney_titles = db.queryTournamentTitles()
 
-         # Add new tourney cards to winner vault if applicable
+         types_of_matches_list = [x for x in player['NORMAL']]
+         types_of_matches = dict(ChainMap(*types_of_matches_list))
+         current_score = types_of_matches[game_type.upper()]
+         query = {'DISNAME': player['DISNAME']}
+         #uid = {'DID' : player['DID']}
+         
+         new_value = {}
+         if session_data['TOURNAMENT']:
+            new_value = {"$inc": {'TOURNAMENT_WINS': 0}}
 
-         vault_query = {'OWNER' : x}
-         vault = db.altQueryVault(vault_query)
-         cards = []
-         titles = []
-         for card in tourney_cards:
-            if player['TOURNAMENT_WINS'] == (card['TOURNAMENT_REQUIREMENTS'] - 1):
-               cards.append(card['NAME'])
+         elif session_data['RANKED']:
+            new_value = {"$inc": {'RANKED.$[type].' + game_type.upper() + '.1': 1}}
 
-         for title in tourney_titles:
-            if player['TOURNAMENT_WINS'] == (title['TOURNAMENT_REQUIREMENTS'] - 1):
-               titles.append(title['TITLE']) 
+         elif not session_data['RANKED']:
+            new_value = {"$inc": {'NORMAL.$[type].' + game_type.upper() + '.1': 1}}
 
-         if bool(cards):
-            winner_earned_tourney_cards=True
-            for card in cards:
-               db.updateVaultNoFilter(vault_query, {'$addToSet':{'CARDS': card}})
+         filter_query = [{'type.' + game_type.upper(): current_score}]
 
-         if bool(titles):
-            winner_earned_tourney_titles=True
-            for title in titles:
-               db.updateVaultNoFilter(vault_query, {'$addToSet':{'TITLES': title}})
+         if session_data['TOURNAMENT']:
+            db.updateUserNoFilter(query, new_value)
          else:
-            print("No update")
-      else:
-         db.updateUser(query, new_value, filter_query)
-      
-      uid = player['DID']
-      user = await bot.fetch_user(uid)
+            db.updateUser(query, new_value, filter_query)
 
-      await DM(ctx, user, "You Lost. Get back in there :poop:")
-
-      if winner_earned_tourney_cards or winner_earned_tourney_titles:
-         await ctx.send(f"Competitor " + f"{user.mention}" + " earns a victory ! :100:", delete_after=5)
-         await ctx.send( f"{user.mention}" + "You have Unlocked New Items in your Vault! :eyes:", delete_after=5)
-      else:
+         uid = player['DID']
+         user = await bot.fetch_user(uid)
+         await curse(5, user)
+         await DM(ctx, user, "You Lost. Get back in there :poop:")
          await ctx.send(f"Competitor " + f"{user.mention}" + " took another L! :eyes:", delete_after=5)
-
 
 
 async def sl(ctx):
@@ -2727,11 +2698,11 @@ async def sl(ctx):
 
          uid = player['DID']
          user = await bot.fetch_user(uid)
-         await curse(ctx, 5, user)
+         await curse(5, user)
          await DM(ctx, user, "You Lost. Get back in there :poop:")
          await ctx.send(f"Competitor " + f"{user.mention}" + " took another L! :eyes:", delete_after=5)
 
-      # await ctx.send(loser['TEAM'], delete_after=5)
+#       # await ctx.send(loser['TEAM'], delete_after=5)
 
 
 async def DM(ctx, user : User, m,  message=None):
