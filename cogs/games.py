@@ -108,7 +108,6 @@ class Games(commands.Cog):
                 response = db.updateGame(query, new_value)
                 await ctx.send(m.UPDATE_COMPLETE, delete_after=5)
 
-
     @commands.command()
     async def deletegame(self, ctx, *args):
         if ctx.author.guild_permissions.administrator == True:
@@ -122,7 +121,6 @@ class Games(commands.Cog):
                 await ctx.send(m.DELETE_COMPLETE, delete_after=5)
 
     @commands.command()
-    # @commands.check(validate_user)
     async def lkg(self, ctx):
         data = db.query_all_games()
 
@@ -141,9 +139,68 @@ class Games(commands.Cog):
             embedVar.add_field(name="Games", value="\n".join(game_title_list))
             embedVar.set_footer(text="More games will be added soon. ")
 
-            await ctx.send(embed=embedVar, delete_after=20)
+            await ctx.send(embed=embedVar)
         else:
             await ctx.send(m.NO_GAMES_AVAILABLE, delete_after=5)
+
+    @commands.command()
+    async def ag(self, ctx, *args):
+        user = {'DISNAME': str(ctx.author)}
+        user_data = db.queryUser(user)
+        
+        if user_data:
+            aliases = [x for x in db.query_all_games() for x in x['ALIASES']]
+            
+            if args[0] in aliases:
+                game_query = {'ALIASES': args[0]}
+                game = db.queryGame(game_query)
+                title = game['GAME']
+                ign = game['IGN']
+                if title not in user_data['GAMES'] and ign != True:
+                    if "PCG" in user_data['GAMES']:
+                        query_to_update_game = {"$set": {"GAMES": [title]}}
+                        resp = db.updateUserNoFilter(user, query_to_update_game)
+                        ctx.send(resp)
+                    else:
+                        query_to_update_game = {"$addToSet": {"GAMES": title}}
+                        resp = db.updateUserNoFilter(user, query_to_update_game)
+                        await ctx.send(resp)
+                elif title not in user_data['GAMES'] and ign == True:
+
+                    if "PCG" in user_data['GAMES'] and len(args) < 2:
+                        query_to_update_game = {"$set": {"GAMES": [title]}}
+                        resp = db.updateUserNoFilter(user, query_to_update_game)
+                        await ctx.send(resp)
+                    elif "PCG" in user_data['GAMES']:
+                        query_to_update_game = {"$set": {"GAMES": [title], "IGN": [{title : args[1]}]}}
+                        resp = db.updateUserNoFilter(user, query_to_update_game)
+                        await ctx.send(resp)
+                    else:
+                        query_to_update_game = {"$addToSet": {"GAMES": title, "IGN": {title : args[1]}}}
+                        resp = db.updateUserNoFilter(user, query_to_update_game)
+                        await ctx.send(resp)
+        else:
+            await ctx.send(m.USER_NOT_REGISTERED, delete_after=5)
+
+    @commands.command()
+    async def uign(self, ctx, args1, args2):
+        user = {'DISNAME': str(ctx.author)}
+        aliases = [x for x in db.query_all_games() for x in x['ALIASES']]
+        new_ign = args2
+        if args1 in aliases:
+            game_query = {'ALIASES': args1}
+            game = db.queryGame(game_query)
+            title = game['GAME']
+            ign = game['IGN']
+            if ign:
+                update_query = {"$set": {"IGN": [{title : new_ign}]}}
+                updated = db.updateUserNoFilter(user, update_query)
+                await ctx.send(updated)
+            else:
+                await ctx.send("In Game Names unavailable for this game. ", delete_after=3)
+        else:
+            await ctx.send("Game is unavailable. ", delete_after=3)
+
 
 
 def setup(bot):
