@@ -704,7 +704,7 @@ async def skg(ctx, user: User):
       await ctx.send(f"Score not added. Please, try again. ", delete_after=5) 
 
 
-''' Create 1v1 - 5v5 Sessions '''
+# Create 1v1 - 5v5 Lobbies
 @bot.command()
 @commands.check(validate_user)
 async def c1v1(ctx, args):
@@ -1179,7 +1179,7 @@ async def iby(ctx, args1, user: User):
    else:
       await ctx.send(m.GAME_NOT_DETECTED, delete_after=5)
 
-#Check if User is hosting a session
+# Check if User is hosting a session
 @bot.command()
 @commands.check(validate_user)
 async def lo(ctx, user: User):
@@ -1311,7 +1311,7 @@ async def lo(ctx, user: User):
    else:
       await ctx.send(m.SESSION_DOES_NOT_EXIST, delete_after=5)
 
-#Check your current session
+# Check your current session
 @bot.command()
 @commands.check(validate_user)
 async def ml(ctx):  
@@ -1446,7 +1446,7 @@ async def ml(ctx):
       await ctx.send(m.SESSION_DOES_NOT_EXIST, delete_after=5)
 
 
-''' Check What Session A Player Is In '''
+# Check What Session A Player Is In
 @bot.command()
 @commands.check(validate_user)
 async def cl(ctx, user: User):
