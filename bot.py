@@ -15,6 +15,7 @@ import help_commands as h
 from discord import User
 from discord import Member
 
+import os
 import logging
 import requests
 from decouple import config
@@ -73,189 +74,40 @@ async def validate_user(ctx):
       msg = await ctx.send(m.USER_NOT_REGISTERED, delete_after=5)
       return False
 
+@bot.command()
+async def load(ctx, extension):
+   # Goes into cogs folder and looks for extension
+   bot.load_extension(f'cogs.{extension}')
+
+@bot.command()
+async def unload(ctx, extension):
+   # Goes into cogs folder and looks for extension
+   bot.unload_extension(f'cogs.{extension}')
+
+for filename in os.listdir('./cogs'):
+   if filename.endswith('.py'):
+      # :-3 removes .py from filename
+      bot.load_extension(f'cogs.{filename[:-3]}')
+
 @bot.event
 async def on_ready():
-   print('Bot is ready. ')
-
-
-
-
+   print('Bot is ready! ')
 
 @bot.command()
-@commands.check(validate_user)
-async def legend(ctx):
-   embed1 = discord.Embed(title= f":crown: " + "Senpai™️ Legend:", description="Use the Reactions to learn with Senpai™️\n\n:brain: Learn about Exhibitions, Kings Gambit and Gods of COD!\n*Write your name is history...*\n\n*The #legend tutorial will walk you through the Tournament System!*\n*For help with specific commands use #help*\n\n*Make sure to say thank you*:heart_exclamation:", colour=000000, value="Page 1")
-   embed1.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Senpai.png")
-   
-   embed2 = discord.Embed(color=ctx.author.color).add_field(name=":crown: " + "Senpai™️ Legend:\n" + "#legend = Tournaments!", value="Welcome to Senpai:tm: Legend!\n(Commands are described in this format:arrow_down:\n\n#command 'argument' 'argument' ...etc )\n\n:warning:Do not go on before completing Senpai:tm: Franchise!\n*Use #franchise*")
-   embed2.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Senpai.png")
-   
-   embed3 = discord.Embed(color=ctx.author.color).add_field(name=":crown: " + "Senpai™️ Legend:\n" + "*Exhibitions* :medal:", value="Exhibitions are 1v1 duels between 2 players!\n*Winner Gets 1 Tournament Win*\n\nHow can you join an exhibition you may ask?\nWell you can't, you'll be invited when your time comes.\n\n*Make sure you accept the Invitation*")
-   embed3.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Senpai.png")
-   
-   embed4 = discord.Embed(color=ctx.author.color).add_field(name=":crown: " + "Senpai™️ Legend:\n" + "#jkg to Join a *Kings Gambit* :crown:", value="Kings Gambits are King of the Hill Lobbies\nRules are....the KING picks the rules\nAdmins can start Kings Gambits matches open for all players\nPlayers can join using the #jkg 'AdminName' command\n\nBe the King at the end of the lobby to win extra :coin: and a Tournament Win!")
-   embed4.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Senpai.png")
-   
-   embed5 = discord.Embed(color=ctx.author.color).add_field(name=":crown: " + "Senpai™️ Legend:\n" + "Gods of COD", value="Gods of Cod are the largest CODM tournaments Party Chat Gaming has to offer\nEach Tournament length, prize and rules are different and are announced before Registrations\nAs long as Registrations are open\nteams can use #rgoc to register their team for GOC\n\n*NOTE as long as 1 player in your team registers, your entire team will be registed!*")
-   embed5.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Senpai.png")
-   
-   embed6 = discord.Embed(color=ctx.author.color).add_field(name=":crown: " + "Senpai™️ Legend:\n" + "Gauntlet Week", value="When the tournament starts, registration is closed and the games begin with The Gauntlet!\nWeeks of fierce competition betweem Teams!\n\nTournament Brackets will be determined based on the number of wins each team earns during Gauntlet Week!")
-   embed6.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Senpai.png")
-   
-   embed7 = discord.Embed(color=ctx.author.color).add_field(name=":crown: " + "Senpai™️ Legend:\n" + "Brackets", value="Brackets take place at the end of Gauntlet!\nTeams are placed according to their total number of wins!\nThe Brackets consist of single elimination matches\nThe Winner of the brackets earns Tournament exclusive loot !\n*And Bragging rights for life*")
-   embed7.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Senpai.png")
-   
-   embed8 = discord.Embed(color=ctx.author.color).add_field(name=":crown: " + "Senpai™️ Legend:\n" + "CONGRATULATIONS !", value="You completed Legend!!\nNow you can start competing in Exhibitions, Kings Gambits, and Gods of Cod Tournaments!!!\nEarn Tournament Wins to gain access to exclusive Cards and Titles and bounties of :coin:!!!\nDon't forget to check out Flex Shop:tm: with that big bag you got now:eyes:\n*Make sure to say thank you*:heart_exclamation:")
-   embed8.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Senpai.png")
-   
-   embed9 = discord.Embed(color=ctx.author.color).add_field(name=":crown: " + "Senpai™️:\n" + "GOOD-BYE!", value="*Thank You*:heart_exclamation:")
-   embed9.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Senpai.png")   
-   
-   paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
-   paginator.add_reaction('⏮️', "first")
-   paginator.add_reaction('⏪', "back")
-   paginator.add_reaction('🔐', "lock")
-   paginator.add_reaction('⏩', "next")
-   paginator.add_reaction('⏭️', "last")
-   embeds = [embed1, embed2, embed3, embed4, embed5, embed6, embed7, embed8,embed9]
-   await paginator.run(embeds)
-
-
-@bot.command()
-@commands.check(validate_user)
-async def franchise(ctx):
-   embed1 = discord.Embed(title= f":checkered_flag: " + "Senpai™️ Franchise:", description="Use the Reactions to learn with Senpai™️\n\n:brain: Learn how to create and manage your own Team!\nTeams gain access to 3v3-5v5 Scrims\n\n*The #franchise tutorial will walk you through the Team System!*\n*For help with specific commands use #help*\n\n*Make sure to say thank you*:heart_exclamation:", colour=000000, value="Page 1")
-   embed1.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Franchise.png")   
-   
-   embed2 = discord.Embed(color=ctx.author.color).add_field(name=":checkered_flag: " + "Senpai™️ Franchise:\n" + "#franchise = Team Play!", value="Welcome to Senpai:tm: Franchise!\n(Commands are described in this format:arrow_down:\n\n#command 'argument' 'argument' ... etc)\n\n:warning:Do not go on before passing Senpai:tm: Bootcamp!\n*Use #bootcamp*")
-   embed2.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Franchise.png")   
-   
-   embed3 = discord.Embed(color=ctx.author.color).add_field(name=":checkered_flag: " + "Senpai™️ Franchise:\n" + "#cteam = Create Team! :military_helmet:", value="Let's start by creating our very own CODM team!\n*Use #cteam 'game' 'teamname'*\n\nOnce the team is created run a #flex or #lk\n\n*HINT: use #cteam codm CODMteamname")
-   embed3.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Franchise.png")   
-   
-   embed4 = discord.Embed(color=ctx.author.color).add_field(name=":checkered_flag: " + "Senpai™️ Franchise:\n" + "#lkt = Lookup Team then #dt = Delete Team", value="Use #lkt to bring up the Team Page\n#lkt 'teamname'\n\nHere you can view Team Members, Stats and the Team Logo\n\n*Try #lkt SenpaiFranchise*")
-   embed4.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Franchise.png")   
-   
-   embed5 = discord.Embed(color=ctx.author.color).add_field(name=":checkered_flag: " + "Senpai™️ Franchise:\n" + "#att = Add To Team ", value="Time to start recruiting Teammates!\n*Make sure you have a teammate ready to reaction respond!*\n\nTo send an invite use\n#att @user 'teamname'\n\nIf your friend accepts your invite they will be added to the members list!\n\n*Players can only be apart of 1 team per game choose your alliances wisely!*")
-   embed5.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Franchise.png")   
-   
-   embed6 = discord.Embed(color=ctx.author.color).add_field(name=":checkered_flag: " + "Senpai™️ Franchise:\n" + "#dtm = Delete Teammate and #lteam = Leave Team", value="Owners can use\n#dtm @user\nTo remove teammates\n*#dtm @SenpaiSays*\n\nTo leave a Team use the #lteam command\n#lteam 'teamname'")
-   embed6.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Franchise.png")  
-   
-   embed7 = discord.Embed(color=ctx.author.color).add_field(name=":checkered_flag: " + "Senpai™️ Franchise:\n" + "SCRIMS! : 3v3 - 5v5", value="Teams can compete in Scrims!\nScrims or Scrimmages are team based lobbies up to 10 players!\n\nThats Right, you can run #c3v3 #c4v4 and #c5v5!\n\nJust use #c3v3 'type' @user @user to create a SCRIM lobby!\n*#c3v3 n @teammate @teammate*\n\n*HINT #c4v4 and #c5v5 work the same way just add more players !*")
-   embed7.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Franchise.png")   
-   
-   embed8 = discord.Embed(color=ctx.author.color).add_field(name=":checkered_flag: " + "Senpai™️ Franchise:\n" + "SCRIMS! : #jl = Join Lobby/Join Scrim", value="Remember the #jl command from #bootcamp?\nTeammates can join Scrims together using #jl\n*#jl @opponentUser @'teammate 1' @'teammate 2'\n\nThis will pull all members into the Scrim Lobby!\n*Like always this works for 4v4's and 5v5s just add more teammates*")
-   embed8.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Franchise.png")   
-   
-   embed9 = discord.Embed(color=ctx.author.color).add_field(name=":checkered_flag: " + "Senpai™️ Franchise:\n" + "SCRIMS! : Scorin and Recordin'", value="Now its time to play IRL!\nPlayers get +1 score per round like usual\nThe Lobby Owner can #score any teammate to add a point for the team!\nOnce you are done playing IRL\nThe Lobby Owner uses #el to close the lobby\nThis will record the scores and update the Player AND Team Profiles!\n\nRemember we are operating off the HONOR system so use *Screenshots* to dispute any *cheating*")
-   embed9.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Franchise.png")   
-   
-   embed10 = discord.Embed(color=ctx.author.color).add_field(name=":checkered_flag: " + "Senpai™️ Franchise:\n" + "CONGRATULATIONS !", value="You completed franchise!\nNow you can start creating and joining teams!\nWin SCRIMS and earn :coin: to buy new items from the Flex Shop:tm:\nWhen your're ready to compete in Tournaments\n*Use #legend!*")
-   embed10.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Senpai.png")   
-   
-   paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
-   paginator.add_reaction('⏮️', "first")
-   paginator.add_reaction('⏪', "back")
-   paginator.add_reaction('🔐', "lock")
-   paginator.add_reaction('⏩', "next")
-   paginator.add_reaction('⏭️', "last")
-   embeds = [embed1, embed2, embed3, embed4, embed5, embed6, embed7, embed8, embed9, embed10]
-   await paginator.run(embeds)
-
-
-@bot.command()
-@commands.check(validate_user)
-async def bootcamp(ctx):
-   embed1 = discord.Embed(title= f":military_helmet: " + "Senpai™️ Bootcamp:", description="Use the Reactions to learn with Senpai™️\n\n:brain: Learn how to Create, Lookup and Score Lobbies.\n\n*The #bootcamp tutorial will walk you through the Lobby System!*\n*For help with specific commands use #help*\n\n*Make sure to say thank you*:heart_exclamation:", colour=000000, value="Page 1")
-   embed1.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Bootcamp.png")
-
-   embed2 = discord.Embed(color=ctx.author.color).add_field(name=":military_helmet: " + "Senpai™️ Bootcamp:\n" + "#bootcamp = training!", value="Welcome to Senpai:tm: Bootcamp!\nCommands are described in this format!:arrow_down:\n\n#command 'argument' 'argument' ... etc)\n\n:warning:Do not go on before playing Senpai:tm: Says!\n*Use #senpai*")
-   embed2.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Bootcamp.png")
- 
-   embed3 = discord.Embed(color=ctx.author.color).add_field(name=":military_helmet: " + "Senpai™️ Bootcamp:\n" + "Lobbies!", value="Now that you've registered!\nCreate Lobbies and #challenge players!\n\n*Hint Make sure you've registered!")
-   embed3.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Bootcamp.png")
-
-   embed4 = discord.Embed(color=ctx.author.color).add_field(name=":military_helmet: " + "Senpai™️ Bootcamp:\n" + "#ml = My Lobby , #lo = Lobby Owner,\nand #cl = Check Lobby", value="Now try the #ml command...\nThis brings up the Lobby you currently Own!\n\nUse the #lo @user to see if another Player Owns a lobby.\n*Hint #lo @yourself*\n\nUse #cl @user to check the current Lobby of any player.\n*Use #cl @yourself!*")
-   embed4.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Bootcamp.png")
-
-   embed5 = discord.Embed(color=ctx.author.color).add_field(name=":military_helmet: " + "Senpai™️ Bootcamp:\n" + "#c1v1 = Create 1v1 ", value="Lets create a 1v1 Lobby...\n\nLobbies are scored by 'type'.\nEither NORMAL(n) or RANKED(r).\n\nTo create a 1v1 Lobby...\nUse #c1v1 'type'\n\n*Hint use #c1v1 n*")
-   embed5.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Bootcamp.png")
-
-   embed6 = discord.Embed(color=ctx.author.color).add_field(name=":military_helmet: " + "Senpai™️ Bootcamp:\n" + "#dl = Delete Lobby", value="To delete a Lobby use #dl .")
-   embed6.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Bootcamp.png")
-
-   embed7 = discord.Embed(color=ctx.author.color).add_field(name=":military_helmet: " + "Senpai™️ Bootcamp:\n" + "#Jl = Join Lobby!", value="Players can join Lobbies using #jl .\nUse #jl @user to join any open 1v1 Lobby.\n\n*HINT #jl @opponent ")
-   embed7.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Bootcamp.png")
-
-   embed8 = discord.Embed(color=ctx.author.color).add_field(name=":military_helmet: " + "Senpai™️ Bootcamp:\n" + "#challenge a friend!", value="Call out players using #challenge!\nTry #challenge 'type' @user\n*Hint #challenge n @SenpaiSays*\n\nIf your oppenent accepts via *reaction*.\nYou will both be pulled into your Own 1v1 Lobby.\n\nNext we'll learn how to #score points and record Wins and Losses.")
-   embed8.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Bootcamp.png")
-
-   embed9 = discord.Embed(color=ctx.author.color).add_field(name=":military_helmet: " + "Senpai™️ Bootcamp:\n" + "#score the Lobby", value="Now its time to play IRL!\nPlayers get +1 #score per IRL round.\n*Lobbies may be open for multiple rounds*\n\nThe Owner tallies the round using the #score command\n*#score @user*\n\nOnce you are done playing IRL...\nThe Lobby OWNER uses #el to End the Lobby.\n#el will record scores and update the the W and L of the players\n\nRemember we are operating off the HONOR system so use *Screenshots* to dispute any *cheating*\n\n*Hint #el will record session data, to delete a incorrect lobby use #dl*")
-   embed9.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Bootcamp.png")
-
-   embed10 = discord.Embed(color=ctx.author.color).add_field(name=":military_helmet: " + "Senpai™️ Bootcamp:\n" + "Team up with #c2v2 = Create 2v2", value="Creating 2v2 lobbies is similar to using #challenge !\n\nUse *#c2v2 'type' @teammate'*\n*Hint try #c2v2 n @senpaisays\n\nIf your teammate accepts you will pull them into a 2v2 Lobby - as Teammates!\nNow other duos can join your 2v2 using #jl\n*Hint #jl @opponentUser @teammateUser*")
-   embed10.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Bootcamp.png")
-
-   embed11 = discord.Embed(color=ctx.author.color).add_field(name=":military_helmet: " + "Senpai™️ Bootcamp:\n" + "CONGRATULATIONS !", value="You completed bootcamp!\nNow you can start creating and joining lobbies!\nWin Lobbies and earn :coin: to buy new items from the Flex Shop:tm:\nWhen your're ready to start/join Teams!\nUse #Franchise!\n\n*HINT use #iby @'playername' to see how many times you beat another player:eyes:")
-   embed11.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Franchise.png")
-
-   paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
-   paginator.add_reaction('⏮️', "first")
-   paginator.add_reaction('⏪', "back")
-   paginator.add_reaction('🔐', "lock")
-   paginator.add_reaction('⏩', "next")
-   paginator.add_reaction('⏭️', "last")
-   embeds = [embed1, embed2, embed3, embed5, embed4, embed6, embed7, embed8, embed9, embed6, embed10, embed11]
-   await paginator.run(embeds)
-
-
-@bot.command()
-async def senpai(ctx):
-   embed1 = discord.Embed(title= f":woman_teacher: " + "Senpai™️", description=" Use the Reactions to learn with Senpai™️\n\n:brain: Learn how to register!\n\n*The #senpai tutorial will walk you through registration!*\n*For help with specific commands use #help*\n\n*Make sure to say thank you*:heart_exclamation:", colour=000000, value="Page 1")
-   embed1.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png")
-
-   embed2 = discord.Embed(color=ctx.author.color).add_field(name=":woman_teacher: " + "Senpai™️\n" + "#senpai = Teacher!", value="Great you did your first Command!\nCommands are written in this format:arrow_down:\n\n#command 'argument1' 'argument2'\n\n*Let's play Senpai:tm: Says!*")
-   embed2.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png")
-   
-   embed3 = discord.Embed(color=ctx.author.color).add_field(name=":woman_teacher: " + "Senpai™️ Says:\n" + "#r = REGISTER !", value="Use #r to register your account!:thumbsup:\n*We only sweep your internet history once... jk :eyes:*\n\n*Hint use #r!*")
-   embed3.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png")
-   
-   embed4 = discord.Embed(color=ctx.author.color).add_field(name=":woman_teacher: " + "Senpai™️ Says:\n" + "#flex :muscle:", value="Now try the #flex command!:muscle:\n#flex to show off your Flex card!\n\nPersonalize your #flex to standout!\n*Hint use #flex!*")
-   embed4.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png")
-  
-   embed5 = discord.Embed(color=ctx.author.color).add_field(name=":woman_teacher: " + "Senpai™️ Says:\n" + "#lk = Lookup:eyes:", value="type #lk @user to Lookup other Registered Players!:mag:\n\nTry #lk @SenpaiSays\nGreat you should see my Stats, Games, Teams, and Title!\n\n*Try #lk @user on another user for practice!*")
-   embed5.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png") 
-   
-   embed6 = discord.Embed(color=ctx.author.color).add_field(name=":woman_teacher: " + "Senpai™️ Says:\n" + "The #vault", value="Use #vault to bring up the Vault\nYour current :coin: and all items are stored in the vault!\n\nEarn :coin: by winning Lobbies and Tournaments.\nSpend :coin: to buy items from the #shop!\n\n*Hint earn special cards and titles by competing in tournaments!*")
-   embed6.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png")
-  
-   embed7 = discord.Embed(color=ctx.author.color).add_field(name=":woman_teacher: " + "Senpai™️ Says :\n" + "#shop till you drop!", value="Type #shop to open the Flex Shop!\nView and Buy new Cards and Titles here!\n\n*As you gain :coin: you will see new items appear in the #shop!\nNew Items are added regularly so check the #shop often!*")
-   embed7.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png")
-   
-   embed8 = discord.Embed(color=ctx.author.color).add_field(name=":woman_teacher: " + "Senpai™️ Says :\n" + "#vc = View Card", value="View the options!\n\nUse #vc 'cardname' to View Card.\nType card name exactly as seen\n\n *Hint Try #vc LoneWolf*")
-   embed8.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png")
-  
-   embed9 = discord.Embed(color=ctx.author.color).add_field(name=":woman_teacher: " + "Senpai™️ Says :\n" + "Buy with #bc and #bt", value="Use #bc 'cardname' or #bt 'title' to add items to your #vault!\n\n*Remember you can use #vc to view cards in the #shop*")
-   embed9.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png")
-  
-   embed10 = discord.Embed(color=ctx.author.color).add_field(name=":woman_teacher: " + "Senpai™️ Says :\n" + "Update with #uc, #ut", value="Use #uc 'cardname' to Update Card.\nNow use #ut 'titlename' to Update Title.\nOnce you've decided on your new look use #flex!\n\n*Hint Use #vault to see your available items!*")
-   embed10.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png")
-   
-   embed11 = discord.Embed(color=ctx.author.color).add_field(name=":woman_teacher: " + "Senpai™️ Says :\n" + "Games !:video_game:\n#lkg , #ag and #uign", value="Use the #lkg command to bring up the available games!\nAdd games using the #ag 'gamename' 'InGameName' command.\nTry #ag codm 'codmIGN' to add COD Mobile !\n\n*Hint use #uign 'game' 'newIGN' to update your In Game Name.*")
-   embed11.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png")
-   
-   embed12 = discord.Embed(color=ctx.author.color).add_field(name=":woman_teacher: " + "Senpai™️ Says :\n" + "CONGRATULATIONS !", value="Welcome to Party Chat Gaming:tm:\nWhen your're ready to start creating lobbies\n*Use #bootcamp!*")
-   embed12.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Bootcamp.png")
-  
-   paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
-   paginator.add_reaction('⏮️', "first")
-   paginator.add_reaction('⏪', "back")
-   paginator.add_reaction('🔐', "lock")
-   paginator.add_reaction('⏩', "next")
-   paginator.add_reaction('⏭️', "last")
-   embeds = [embed1, embed2, embed3, embed4, embed5, embed6, embed7, embed8,embed9,embed10,embed11,embed12]
-   await paginator.run(embeds)
+async def r(ctx):
+   disname = str(ctx.author)
+   name = disname.split("#",1)[0]
+   user = {'DISNAME': disname, 'NAME': name, 'DID' : str(ctx.author.id), 'AVATAR': str(ctx.author.avatar_url)}
+   response = db.createUsers(data.newUser(user))
+   if response:
+      vault = db.queryVault({'OWNER': disname})
+      if vault:
+         await ctx.send(m.VAULT_RECOVERED, delete_after=5)
+      else:
+         vault = db.createVault(data.newVault({'OWNER' : disname}))
+         await ctx.send(m.USER_HAS_REGISTERED, delete_after=5)
+   else:
+      await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=3)  
 
 @bot.command()
 async def lk(ctx, user: User):
@@ -278,9 +130,6 @@ async def lk(ctx, user: User):
       normal_to_string = dict(ChainMap(*normal))
       ign_to_string = dict(ChainMap(*ign))
 
-
-      
-
       embedVar = discord.Embed(title= f":triangular_flag_on_post: " + f"{name}".format(client), description=":bank: Party Chat Gaming Database™️", colour=000000)
       embedVar.set_thumbnail(url=avatar)
       embedVar.add_field(name="Game" + " :video_game:" , value=' '.join(str(x) for x in games))
@@ -295,6 +144,7 @@ async def lk(ctx, user: User):
       await ctx.send(m.USER_NOT_REGISTERED, delete_after=3)
 
 
+
 # Create Gods of Cod
 @bot.command()
 @commands.check(validate_user)
@@ -305,8 +155,6 @@ async def goc(ctx, args1: str, args2: int, args3: bool, args4: int, args5: str )
       await ctx.send(response, delete_after=3)
    else:
       print(m.ADMIN_ONLY_COMMAND)
-
-
 
 
 # Start Gods of Cod
@@ -983,108 +831,6 @@ async def vault(ctx):
    else:
       newVault = db.createVault({'OWNER': d['DISNAME']})
       print(newVault)
-
-
-# @bot.command()
-# @commands.check(validate_user)
-# async def bless(ctx, args, user1: User):
-#    if ctx.author.guild_permissions.administrator == True:
-#       blessAmount = args
-#       posBlessAmount = 0 + abs(int(blessAmount))
-#       query = {'DISNAME': str(user1)}
-#       vaultOwner = db.queryUser(query)
-#       if vaultOwner:
-#          vault = db.queryVault({'OWNER' : vaultOwner['DISNAME']})
-#          update_query = {"$inc": {'BALANCE': posBlessAmount}}
-#          db.updateVaultNoFilter(vault, update_query)
-#       else:
-#          print("cant find vault")
-
-# @bot.command()
-# @commands.check(validate_user)
-# async def blessall(ctx, args):
-#    if ctx.author.guild_permissions.administrator == True:
-#       blessAmount = args
-#       posBlessAmount = 0 + abs(int(blessAmount))
-#       data = db.queryAllVault()
-#       for vault in data:
-#          vault = db.queryVault({'OWNER' : vault['OWNER']})
-#          update_query = {"$inc": {'BALANCE': posBlessAmount}}
-#          db.updateVaultNoFilter(vault, update_query)
-#       await ctx.send("All have been blessed. ")
-#    else:
-#       await ctx.send(m.ADMIN_ONLY_COMMAND)
-
-
-
-# @bot.command()
-# @commands.check(validate_user)
-# async def curse(ctx,args, user1: User):
-#    if ctx.author.guild_permissions.administrator == True:
-#       curseAmount = args
-#       negCurseAmount = 0 - abs(int(curseAmount))
-#       query = {'DISNAME': str(user1)}
-#       vaultOwner = db.queryUser(query)
-#       if vaultOwner:
-#          vault = db.queryVault({'OWNER' : vaultOwner['DISNAME']})
-#          update_query = {"$inc": {'BALANCE': int(negCurseAmount)}}
-#          db.updateVaultNoFilter(vault, update_query)
-#       else:
-#          print("cant find vault")
-
-
-@bot.command()
-async def r(ctx):
-   disname = str(ctx.author)
-   name = disname.split("#",1)[0]
-   user = {'DISNAME': disname, 'NAME': name, 'DID' : str(ctx.author.id), 'AVATAR': str(ctx.author.avatar_url)}
-   response = db.createUsers(data.newUser(user))
-   if response:
-      vault = db.queryVault({'OWNER': disname})
-      if vault:
-         await ctx.send(m.VAULT_RECOVERED, delete_after=5)
-      else:
-         vault = db.createVault(data.newVault({'OWNER' : disname}))
-         await ctx.send(m.USER_HAS_REGISTERED, delete_after=5)
-   else:
-      await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=3)  
-
-
-'''delete user'''
-@bot.command()
-@commands.check(validate_user)
-async def d(ctx, user: User, args):
-   if args == 'IWANTTODELETEMYACCOUNT':
-      if str(ctx.author) == str(user):
-         query = {'DISNAME': str(ctx.author)}
-         user_is_validated = db.queryUser(query)
-         if user_is_validated:
-
-            accept = await ctx.send(f"{ctx.author.mention}, are you sure you want to delete your account? " + "\n" + "All of your wins, tournament wins, shop purchases and other earnings will be removed from the system can can not be recovered. ", delete_after=10)
-            for emoji in emojis:
-               await accept.add_reaction(emoji)
-
-            def check(reaction, user):
-               return user == ctx.author and str(reaction.emoji) == '👍'
-
-            try:
-               reaction, user = await bot.wait_for('reaction_add', timeout=10.0, check=check)
-
-               delete_user_resp = db.deleteUser(query)
-               vault = db.queryVault({'OWNER': user_is_validated['DISNAME']})
-               if vault:
-                  db.deleteVault(vault)
-                  print("vault gone")
-               else:
-                  await ctx.send(delete_user_resp, delete_after=5)
-            except:
-               await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=3)
-
-
-            
-   else:
-      await ctx.send("Invalid command", delete_after=5)
-
 
 @bot.command()
 async def ag(ctx, *args):
@@ -2623,9 +2369,6 @@ async def sw(ctx):
       else:
          await ctx.send(f"Competitor " + f"{user.mention}" + " earns a victory ! :100:", delete_after=5)
 
-
-
-
 async def altsl(ctx):
    session_query = {"OWNER": str(ctx.author), "AVAILABLE": True}
    session_data = db.querySession(session_query)
@@ -2716,70 +2459,6 @@ async def altsl(ctx):
          await DM(ctx, user, "You Lost. Get back in there :poop:")
          await ctx.send(f"Competitor " + f"{user.mention}" + " took another L! :eyes:", delete_after=5)
 
-
-async def sl(ctx):
-   session_query = {"OWNER": str(ctx.author), "AVAILABLE": True}
-   session_data = db.querySession(session_query)
-   if session_data['KINGSGAMBIT']:
-      return await ctx.send("Lobby has ended. See you for the next Kings Gambit!")
-   else:
-      teams = [x for x in session_data['TEAMS']]
-      losing_team = {}
-      low_score = teams[0]['SCORE']
-      for x in teams:
-         if x['SCORE'] <= low_score:
-            low_score = x['SCORE']
-            losing_team = x
-      session_data['LOSER'] = losing_team
-      loser = session_data['LOSER']
-      session = session_data
-      update_query = {'$set': {'LOSER': loser}}
-      query = {"_id": session_data["_id"]}
-      db.updateSession(session, query, update_query)
-      game_type = ""
-      
-      if session['TYPE'] == 1:
-         game_type = "1v1"
-      elif session['TYPE'] == 2:
-         game_type = "2v2"
-      elif session['TYPE'] == 3:
-         game_type = "3v3"
-      elif session['TYPE'] == 4:
-         game_type = "4v4"
-      elif session['TYPE'] == 5:
-         game_type = "5v5"
-
-      for x in losing_team['TEAM']:
-         player = db.queryUser({'DISNAME': x})
-         types_of_matches_list = [x for x in player['NORMAL']]
-         types_of_matches = dict(ChainMap(*types_of_matches_list))
-         current_score = types_of_matches[game_type.upper()]
-         query = {'DISNAME': player['DISNAME']}
-
-         new_value = {}
-         if session_data['TOURNAMENT']:
-            new_value = {"$set": {'TOURNAMENT_LOSSES': 1}}
-         elif session_data['RANKED']:
-            new_value = {"$inc": {'RANKED.$[type].' + game_type.upper() + '.1': 1}}
-         elif not session_data['RANKED']:
-            new_value = {"$inc": {'NORMAL.$[type].' + game_type.upper() + '.1': 1}}
-         filter_query = [{'type.' + game_type.upper(): current_score}]
-
-         
-         if session_data['TOURNAMENT']:
-            db.updateUserNoFilter(query, new_value)
-         else:
-            db.updateUser(query, new_value, filter_query)
-
-         uid = player['DID']
-         user = await bot.fetch_user(uid)
-         await curse(5, user)
-         await DM(ctx, user, "You Lost. Get back in there :poop:")
-         await ctx.send(f"Competitor " + f"{user.mention}" + " took another L! :eyes:", delete_after=5)
-
-#       # await ctx.send(loser['TEAM'], delete_after=5)
-
-
 async def DM(ctx, user : User, m,  message=None):
     message = message or "This Message is sent via DM"
     await user.send(m)
@@ -2844,130 +2523,6 @@ async def einvite(ctx, user1: User):
 #    DISCORD_TOKEN = config('DISCORD_TOKEN_PROD')   
 # else:
 #    DISCORD_TOKEN = config('DISCORD_TOKEN_TEST')
-
-@bot.command()
-async def newgame(ctx, *args):
-   if ctx.author.guild_permissions.administrator == True:
-      game_name = " ".join([*args])
-      # games = [x for x in db.query_all_games()][0]
-      
-      response = db.addGame(data.newGame({'GAME': game_name}))
-      await ctx.send(response, delete_after=5)
-   else:
-      await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=5)
-
-
-@bot.command()
-async def addgamealiases(ctx, *args):
-   if ctx.author.guild_permissions.administrator == True:
-      admin = db.queryUser({'DISNAME': str(ctx.author)})
-      if not args:
-         await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=5)
-      else:
-         # game = admin['GAMES'][0]
-         test_game = "Call Of Duty Mobile"
-
-         aliases = []
-
-         for title in args:
-            aliases.append(title)
-
-         query = {'GAME': test_game}
-         new_value = {'$set': {'ALIASES': aliases}}
-
-         response = db.updateGame(query, new_value)
-         await ctx.send(m.UPDATE_COMPLETE, delete_after=5)
-
-@bot.command()
-async def addgamealias(ctx, *args):
-   if ctx.author.guild_permissions.administrator == True:
-      alias = " ".join([*args])
-      admin = db.queryUser({'DISNAME': str(ctx.author)})
-      if not args:
-         await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=5)
-      else:
-         # game = admin['GAMES'][0]
-         test_game = "Call Of Duty Mobile"
-
-         query = {'GAME': test_game}
-         new_value = {'$addToSet': {'ALIASES': alias}}
-
-         response = db.updateGame(query, new_value)
-         await ctx.send(m.UPDATE_COMPLETE, delete_after=5)
-
-@bot.command()
-async def addgametypes(ctx, *args):
-   if ctx.author.guild_permissions.administrator == True:
-      admin = db.queryUser({'DISNAME': str(ctx.author)})
-      if not args:
-         await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=5)
-      else:
-         # game = admin['GAMES'][0]
-         test_game = "Call Of Duty Mobile"
-
-         types = []
-
-         for gametype in args:
-            types.append(gametype)
-
-         query = {'GAME': test_game}
-         new_value = {'$set': {'TYPE': types}}
-
-         response = db.updateGame(query, new_value)
-         await ctx.send(m.UPDATE_COMPLETE, delete_after=5)
-
-@bot.command()
-async def addgameimage(ctx, args):
-   if ctx.author.guild_permissions.administrator == True:
-      admin = db.queryUser({'DISNAME': str(ctx.author)})
-      if not args:
-         await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=5)
-      else:
-
-         test_game = "Call Of Duty Mobile"
-
-         query = {'GAME': test_game}
-         new_value = {'$set': {'IMAGE_URL': args}}
-
-         response = db.updateGame(query, new_value)
-         await ctx.send(m.UPDATE_COMPLETE, delete_after=5)
-
-
-@bot.command()
-async def deletegame(ctx, *args):
-   if ctx.author.guild_permissions.administrator == True:
-      game_name = " ".join([*args])
-      admin = db.queryUser({'DISNAME': str(ctx.author)})
-      if not args:
-         await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=5)
-      else:
-         query = {'GAME': game_name}
-         response = db.deleteGame(query)
-         await ctx.send(m.DELETE_COMPLETE, delete_after=5)
-
-@bot.command()
-# @commands.check(validate_user)
-async def lkg(ctx):
-   data = db.query_all_games()
-
-   if data:
-
-      game_list = []
-      for game in data:
-         game_list.append(game)
-
-      game_title_list = []
-
-      for title in game_list:
-         game_title_list.append(title['GAME'])
-
-      embedVar = discord.Embed(title=f"Games Lookup", description=":bank: Party Chat Gaming Database", colour=000000)
-      embedVar.add_field(name="Games", value="\n".join(game_title_list))
-      embedVar.set_footer(text="More games will be added soon. ")
-
-      await ctx.send(embed=embedVar, delete_after=20)
-   else:
-      await ctx.send(m.NO_GAMES_AVAILABLE, delete_after=5)
 
 '''
 Help functions
@@ -3167,23 +2722,6 @@ async def lteam(ctx):
 
    await ctx.send(embed = em)
 
-
-# @help.command()
-# async def nc(ctx):
-#    em = discord.Embed(title = "nc", description = "ADMIN: upload new cards to database", color = ctx.author.color)
-
-#    em.add_field(name = "**Syntax**", value = "#nc <cardURL> <cardname> <tournament wins> <shopcost>")
-
-#    await ctx.send(embed = em)
-
-
-# @help.command()
-# async def nt(ctx):
-#    em = discord.Embed(title = "nt", description = "ADMIN: upload new titles to database", color = ctx.author.color)
-
-#    em.add_field(name = "**Syntax**", value = "#nt <titlename> <tournamentwins> <shopcost>")
-
-#    await ctx.send(embed = em)
 
 @help.command()
 async def bc(ctx):
@@ -3409,31 +2947,6 @@ async def vault(ctx):
    await ctx.send(embed = em)
 
 
-# @help.command()
-# async def bless(ctx):
-#    em = discord.Embed(title = "bless", description = "ADMIN:Bless User with coin")
-
-#    em.add_field(name = "**Syntax**", value = "#bless <amount> <user>")
-
-#    await ctx.send(embed = em)
-
-# @help.command()
-# async def blessall(ctx):
-#    em = discord.Embed(title = "blessall", description = "ADMIN:Bless all Users with coin")
-
-#    em.add_field(name = "**Syntax**", value = "#blessall <amount>")
-
-#    await ctx.send(embed = em)
-
-# @help.command()
-# async def curse(ctx):
-#    em = discord.Embed(title = "curse", description = "ADMIN:Take Coin away from User")
-
-#    em.add_field(name = "**Syntax**", value = "#curse <amount> <user>")
-
-#    await ctx.send(embed = em)
-
-
 @help.command()
 async def challenge(ctx):
    em = discord.Embed(title = "challenge", description = "Challenge User To 1v1 Lobby", color = ctx.author.color)
@@ -3443,22 +2956,22 @@ async def challenge(ctx):
    await ctx.send(embed = em)
 
 
-@help.command()
-async def d(ctx):
-   em = discord.Embed(title = "d", description = "Delete All User and Vault Data", color = ctx.author.color)
+# @help.command()
+# async def d(ctx):
+#    em = discord.Embed(title = "d", description = "Delete All User and Vault Data", color = ctx.author.color)
 
-   em.add_field(name = "**Syntax**", value = "#d <user> IWANTTODELETEMYACCOUNT")
+#    em.add_field(name = "**Syntax**", value = "#d <user> IWANTTODELETEMYACCOUNT")
 
-   await ctx.send(embed = em)
+#    await ctx.send(embed = em)
 
 
-@help.command()
-async def r(ctx):
-   em = discord.Embed(title = "r", description = "Register for access to Bot", color = ctx.author.color)
+# @help.command()
+# async def r(ctx):
+#    em = discord.Embed(title = "r", description = "Register for access to Bot", color = ctx.author.color)
 
-   em.add_field(name = "**Syntax**", value = "#r")
+#    em.add_field(name = "**Syntax**", value = "#r")
 
-   await ctx.send(embed = em)
+#    await ctx.send(embed = em)
 
 
 @help.command()
