@@ -16,7 +16,7 @@ class Senpai(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print("Senpai is ready!")
+        print("Senpai Cog is ready!")
 
     async def cog_check(self, ctx):
         return await main.validate_user(ctx)
