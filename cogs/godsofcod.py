@@ -300,3 +300,11 @@ class Godsofcod(commands.Cog):
 
 def setup(bot):
     bot.add_cog(Godsofcod(bot))
+
+# Leaderboard
+# @bot.command()
+# @commands.check(validate_user)
+# async def gocleaderboard(ctx, args):
+#    goc_data = db.queryGoc({'TITLE': args})
+#    if goc_data:
+#       print("yes")
