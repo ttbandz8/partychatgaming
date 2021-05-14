@@ -599,6 +599,16 @@ async def gocrules(ctx):
    else:
       await ctx.send(m.NO_AVAILABLE_GOC, delete_after=5)
 
+@bot.command()
+async def teamHelp(ctx):
+      embedVar = discord.Embed(title=f"Teams!: How To Register!", description="Party Chat Gaming Database™️", colour=000000)
+      embedVar.add_field(name="REGISTRATION!" , value="Type::arrow_right: #cteam codm 'Team Name'")
+      embedVar.add_field(name="INVITE MEMBERS!" , value="Type::arrow_right: #att 'teamname' @user")
+      embedVar.add_field(name="JOIN KINGS GAMBIT!" , value="Type::arrow_right: #jkg @streamer")
+      embedVar.add_field(name="STREAMER LIST" , value="92Bricks, 𝖆𝖓𝖆𝖙𝖍𝖊𝖇𝖔𝖙シ\nDasinista, Dreamer\nEthwixs, Jah\nKiewiski, Liqxuds\nLust, Newlable\nNoobie, Roc.Bambino")
+      embedVar.add_field(name="UPDATE IGN" , value="Type::arrow_right: #uign codm 'IGN'")
+      embedVar.add_field(name="STILL LOST????" , value="use #help or ask a PCG Member for assistance")
+      await ctx.send(embed=embedVar)
 
 @bot.command()
 async def kghelp(ctx):
