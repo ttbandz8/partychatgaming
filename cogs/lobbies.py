@@ -275,7 +275,7 @@ class Lobbies(commands.Cog):
                 await ctx.send(f"Competitor " + f"{user.mention}" + " took an L! :eyes:")
 
     @commands.command()
-    async def lg(self, ctx, *user: User):
+    async def atl(self, ctx, *user: User):
         if ctx.author.guild_permissions.administrator == True:  
             session_query = {"OWNER": str(ctx.author), "AVAILABLE": True}
             session = db.querySession(session_query)
@@ -286,6 +286,9 @@ class Lobbies(commands.Cog):
                 resp = db.queryUser(user_query)
                 if not resp:
                     invalid_user = True
+                if session['GAME'] not in resp['GAMES']:
+                    await ctx.send(m.ADD_A_GAME)
+                    return False
             
             if invalid_user:
                 await ctx.send("You must first register before joining lobbies. ", delete_after=5)

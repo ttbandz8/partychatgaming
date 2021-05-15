@@ -27,6 +27,7 @@ TOO_MANY_PLAYERS_ON_TEAM="Too many players for the team. "
 
 END_GODS="Gods has ended. Thank you to all participants!"
 NO_AVAILABLE_GODS="No Gods at this time."
+NO_AVAILABLE_KINGS_GAMBIT="No Kings Gambit at this time."
 UNABLE_TO_REGISTER_FOR_GODS="Registration has ended. "
 USER_NOT_REGISTERED_FOR_GODS="You are not registered for Gods. "
 DIFFERENT_TEAMS="You are not registered on the same team. "

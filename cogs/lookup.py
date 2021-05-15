@@ -116,18 +116,13 @@ class Lookup(commands.Cog):
             other_teams_sorted_list = "\n".join(f'{k}' for k,v in n.items())
 
             if gods:
-                embedVar = discord.Embed(title=f"{godsname} Lobby: {game_type} ".format(self), description=f"{user.mention} owns this lobby", colour=000000)
+                embedVar = discord.Embed(title=f":trophy: {godsname} Lobby: {game_type} ".format(self), description=f"{user.mention} owns this lobby.\n" + "Compete in PCGs Grand Tournament to determine the one true God of the game!", colour=000000)
             elif kingsgambit:
-                embedVar = discord.Embed(title=f":crown: [Kings Gambit] {games} Lobby: {game_type} ".format(self), description=f"{user.mention} owns this lobby", colour=000000)            
+                embedVar = discord.Embed(title=f":crown: [Kings Gambit]\n{games} Lobby: {game_type} ".format(self), description=f"{user.mention} owns this lobby.\n" + "Compete in 1v1 matches where the winner stays on to determine the king of the game!", colour=000000)            
             else:
                 embedVar = discord.Embed(title=f"{games} Lobby: {game_type} ".format(self), description=f"{user.mention} owns this lobby", colour=000000)            
             embedVar.set_image(url=avatar)
-            if tournament:
-                embedVar.add_field(name="Tournament", value="Yes")
             
-            if kingsgambit:
-                embedVar.add_field(name="Kings Gambit", value="Yes", inline=False)
-
             if scrim:
                 embedVar.add_field(name="Scrim", value="Yes")
             
@@ -238,14 +233,12 @@ class Lookup(commands.Cog):
             other_teams_sorted_list = "\n".join(f'{k}' for k,v in n.items())
 
             if gods:
-                embedVar = discord.Embed(title=f"{godsname} Lobby: {game_type} ".format(self), description=f"{ctx.author.mention} owns this lobby", colour=000000)
+                embedVar = discord.Embed(title=f":trophy: {godsname} Lobby: {game_type} ".format(self), description=f"{ctx.author.mention} owns this lobby.\n" + "Compete in PCGs Grand Tournament to determine the one true God of the game!", colour=000000)
             elif kingsgambit:
-                embedVar = discord.Embed(title=f":crown: [Kings Gambit] {games} Lobby: {game_type} ".format(self), description=f"{ctx.author.mention} owns this lobby", colour=000000)
+                embedVar = discord.Embed(title=f":crown: [Kings Gambit]\n{games} Lobby: {game_type} ".format(self), description=f"{ctx.author.mention} owns this lobby.\n" + "Compete in 1v1 matches where the winner stays on to determine the king of the game!", colour=000000)
             else:
                 embedVar = discord.Embed(title=f"{games} Lobby: {game_type} ".format(self), description=f"{ctx.author.mention} owns this lobby", colour=000000)
             embedVar.set_image(url=avatar)
-            if tournament:
-                embedVar.add_field(name="Tournament", value="Yes")
 
             if scrim:
                 embedVar.add_field(name="Scrim", value="Yes")
@@ -363,14 +356,12 @@ class Lookup(commands.Cog):
             other_teams_sorted_list = "\n".join(f'{k}' for k,v in n.items())
 
             if gods:
-                embedVar = discord.Embed(title=f"{godsname} Lobby: {game_type} ".format(self), description=f"{lobby_owner.mention} owns this lobby", colour=000000)
+                embedVar = discord.Embed(title=f":trophy: {godsname} Lobby: {game_type} ".format(self), description=f"{lobby_owner.mention} owns this lobby.\n" + "Compete in PCGs Grand Tournament to determine the one true God of the game!", colour=000000)
             elif kingsgambit:
-                embedVar = discord.Embed(title=f":crown: [Kings Gambit] {games} Lobby: {game_type} ".format(self), description=f"{lobby_owner.mention} owns this lobby", colour=000000)
+                embedVar = discord.Embed(title=f":crown: [Kings Gambit]\n{games} Lobby: {game_type} ".format(self), description=f"{lobby_owner.mention} owns this lobby.\n" + "Compete in 1v1 matches where the winner stays on to determine the king of the game!", colour=000000)
             else:
                 embedVar = discord.Embed(title=f"{games} Lobby: {game_type} ".format(self), description=f"{lobby_owner.mention} owns this lobby", colour=000000)            
             embedVar.set_image(url=avatar)
-            if tournament:
-                embedVar.add_field(name="Tournament", value="Yes")
 
             if scrim:
                 embedVar.add_field(name="Scrim", value="Yes")
@@ -423,7 +414,7 @@ class Lookup(commands.Cog):
             embedVar.add_field(name="Tournament Wins" + " :fireworks:", value=tournament_wins)
             await ctx.send(embed=embedVar, delete_after=15)
         else:
-            await ctx.send(m.USER_NOT_REGISTERED, delete_after=3)
+            await ctx.send(m.USER_NOT_REGISTERED)
 
     @commands.command()
     async def lkt(self, ctx, *args):
@@ -456,8 +447,7 @@ class Lookup(commands.Cog):
             embed1 = discord.Embed(title=f":checkered_flag: {team_name} Team Card".format(self), description=":bank: Party Chat Gaming Database", colour=000000)
             if team['LOGO_FLAG']:
                 embed1.set_image(url=logo)
-            embed1.add_field(name="Games :video_game:", value="\n".join(games), inline=False)
-            embed1.add_field(name="Owner :man_detective:", value= owner_name.split("#",1)[0])
+            embed1.add_field(name="Owner :man_detective:", value= owner_name.split("#",1)[0], inline=False)
             embed1.add_field(name="Scrim Wins :medal:", value=scrim_wins)
             embed1.add_field(name="Scrim Losses :crossed_swords:", value=scrim_losses)
             embed1.add_field(name="Tournament Wins :fireworks:", value=tournament_wins, inline=False)
@@ -466,16 +456,21 @@ class Lookup(commands.Cog):
             if team['LOGO_FLAG']:
                 embed2.set_image(url=logo)
             embed2.add_field(name="Members :military_helmet:", value="\n".join(f'{t}'.format(self) for t in team_list), inline=False)
+
+            embed3 = discord.Embed(title=f":checkered_flag: {team_name} Team Members".format(self), description=":bank: Party Chat Gaming Database", colour=000000)
+            if team['LOGO_FLAG']:
+                embed3.set_image(url=logo)
+            embed3.add_field(name="Games :video_game:", value="\n".join(games), inline=False)
             paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
             paginator.add_reaction('⏮️', "first")
             paginator.add_reaction('⏪', "back")
             paginator.add_reaction('🔐', "lock")
             paginator.add_reaction('⏩', "next")
             paginator.add_reaction('⏭️', "last")
-            embeds = [embed1, embed2]
+            embeds = [embed1, embed2, embed3]
             await paginator.run(embeds)
         else:
-            await ctx.send(m.TEAM_DOESNT_EXIST, delete_after=5)
+            await ctx.send(m.TEAM_DOESNT_EXIST)
 
 
 def setup(bot):
