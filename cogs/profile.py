@@ -72,19 +72,16 @@ class Profile(commands.Cog):
             team = d['TEAM']
             title = d['TITLE']
             avatar = d['AVATAR']
-            ranked = d['RANKED']
-            normal = d['NORMAL']
+            matches = d['MATCHES']
             tournament_wins = d['TOURNAMENT_WINS']
 
 
-            ranked_to_string = dict(ChainMap(*ranked))
-            normal_to_string = dict(ChainMap(*normal))
+            matches_to_string = dict(ChainMap(*matches))
             ign_to_string = dict(ChainMap(*ign))
 
-            game_text = ' '.join(str(x) for x in games)
+            game_text = '\n'.join(str(x) for x in games)
             titles_text = ' '.join(str(x) for x in title)
-            normals_text = "\n".join(f'{k}: {"/".join([str(int) for int in v])}' for k,v in normal_to_string.items())
-            ranked_text = "\n".join(f'{k}: {"/".join([str(int) for int in v])}' for k,v in ranked_to_string.items())
+            matches_text = "\n".join(f'{k}: {"/".join([str(int) for int in v])}' for k,v in matches_to_string.items())
 
             
             img = Image.open(requests.get(card['PATH'], stream=True).raw)
@@ -99,11 +96,10 @@ class Profile(commands.Cog):
             img.paste(profile_pic_resized, (1045, 30))
             draw.text((95,45), name, (255, 255, 255), font=header, align="left")
             draw.text((5,65), str(tournament_wins), (255, 255, 255), font=tournament_wins_font, align="center")
-            draw.text((60, 320), game_text, (255, 255, 255), font=p, align="center")
+            draw.text((60, 320), game_text, (255, 255, 255), font=p, align="left")
             draw.text((368, 320), team, (255, 255, 255), font=p, align="center")
             draw.text((635, 320), titles_text, (255, 255, 255), font=p, align="center")
-            draw.text((865, 320), normals_text, (255, 255, 255), font=p, align="center")
-            draw.text((1040, 320), ranked_text, (255, 255, 255), font=p, align="center")
+            draw.text((1040, 320), matches_text, (255, 255, 255), font=p, align="center")
 
             img.save("text.png")
 
@@ -218,7 +214,6 @@ class Profile(commands.Cog):
         paginator.add_reaction('⏭️', "last")
         embeds = embed_list
         await paginator.run(embeds)
-
 
 
 def setup(bot):

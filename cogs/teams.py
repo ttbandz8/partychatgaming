@@ -120,48 +120,6 @@ class Teams(commands.Cog):
                 await ctx.send(m.OWNER_ONLY_COMMAND, delete_after=5)
 
     @commands.command()
-    async def lkt(self, ctx, *args):
-        team_name = " ".join([*args])
-        team_query = {'TNAME': team_name}
-        team = db.queryTeam(team_query)
-        owner_name = ""
-        if team:
-            team_name = team['TNAME']
-            owner_name = team['OWNER']
-            games = team['GAMES']
-            # avatar = game['IMAGE_URL']
-            badges = team['BADGES']
-            scrim_wins = team['SCRIM_WINS']
-            scrim_losses = team['SCRIM_LOSSES']
-            tournament_wins = team['TOURNAMENT_WINS']
-            logo = team['LOGO_URL']
-
-            team_list = []
-            for members in team['MEMBERS']:
-                mem_query = db.queryUser({'DISNAME': members})
-                ign_list = [x for x in mem_query['IGN']]
-                ign_list_keys = [k for k in ign_list[0].keys()]
-                if ign_list_keys == games:
-                    team_list.append(f"{ign_list[0][games[0]]}") 
-                else:
-                    team_list.append(f"{members}")
-
-
-            embedVar = discord.Embed(title=f":checkered_flag: {team_name}' Team Card".format(self), description=":bank: Party Chat Gaming Database", colour=000000)
-            if team['LOGO_FLAG']:
-                embedVar.set_image(url=logo)
-            embedVar.add_field(name="Owner :man_detective:", value= owner_name.split("#",1)[0])
-            embedVar.add_field(name="Games :video_game:", value=f'{games[0]}'.format(self))
-            embedVar.add_field(name="Members :military_helmet:", value="\n".join(f'{t}'.format(self) for t in team_list), inline=False)
-            embedVar.add_field(name="Scrim Wins :medal:", value=scrim_wins)
-            embedVar.add_field(name="Scrim Losses :crossed_swords:", value=scrim_losses)
-            embedVar.add_field(name="Tournament Wins :fireworks:", value=tournament_wins, inline=False)
-
-            await ctx.send(embed=embedVar)
-        else:
-            await ctx.send(m.TEAM_DOESNT_EXIST, delete_after=5)
-
-    @commands.command()
     async def dtm(self, ctx, user1: User):
         owner_profile = db.queryUser({'DISNAME': str(ctx.author)})
         team_profile = db.queryTeam({'TNAME': owner_profile['TEAM']})
@@ -244,7 +202,29 @@ class Teams(commands.Cog):
         else:
             await ctx.send(m.TEAM_DOESNT_EXIST, delete_after=5)
 
-
+    @commands.command()
+    async def agt(self, ctx, *args):
+        owner = db.queryUser({'DISNAME': str(ctx.author)})
+        team = db.queryTeam({'TNAME': owner['TEAM']})
+        print(team)
+        alias = " ".join([*args]).lower()
+        if team:
+            if team['OWNER'] == owner['DISNAME']:
+                aliases = [x for x in db.query_all_games() for x in x['ALIASES']]
+                if alias in aliases:
+                    game_query = {'ALIASES': alias}
+                    game = db.queryGame(game_query)
+                    if game:
+                        title = game['GAME']    
+                        query_to_update_game = {"$push": {"GAMES": title}}
+                        resp = db.updateTeam(team, query_to_update_game)
+                        await ctx.send(resp)
+                else:
+                    await ctx.send(m.GAME_UNAVAILABLE)
+            else:
+                await ctx.send(m.OWNER_ONLY_COMMAND)
+        else:
+            await ctx.send(m.TEAM_DOESNT_EXIST)
 
 
 def setup(bot):

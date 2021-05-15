@@ -19,7 +19,7 @@ matches_col = db["MATCHES"]
 tournaments_col = db["TOURNAMENTS"]
 cards_col = db["CARDS"]
 titles_col = db["TITLES"]
-goc_col = db["GOC"]
+gods_col = db["GODS"]
 
 vault_col =db["VAULT"]
 
@@ -115,39 +115,37 @@ def updateVaultNoFilter(query, new_value):
         return "Update failed. "
 
 
-''' GOC '''
-'''Check If Card Exists'''
-def goc_exists(data):
-    collection_exists = col_exists("GOC")
+def gods_exists(data):
+    collection_exists = col_exists("GODS")
     if collection_exists:
-        goc_does_exist = goc_col.find_one(data)
-        if goc_does_exist:
+        gods_does_exist = gods_col.find_one(data)
+        if gods_does_exist:
             return True
         else:
             return False
     else:
         return False
 
-def createGoc(query):
-    exists = goc_exists(query)
+def createGods(query):
+    exists = gods_exists(query)
     if exists:
-        return "Gods of Cod already created. "
+        return "Gods already created. "
     else:
-        response = goc_col.insert_one(query)
-        return "Gods Of COD Created. "
+        response = gods_col.insert_one(query)
+        return "Gods Created. "
 
-def queryGoc(query):
-    response = goc_col.find_one(query)
+def queryGods(query):
+    response = gods_col.find_one(query)
     return response
 
-def deleteGoc(query):
-    response = goc_col.delete_one(query)
+def deleteGods(query):
+    response = gods_col.delete_one(query)
     return response
 
-def updateGoc(query, new_value):
-    exists = goc_exists(query)
+def updateGods(query, new_value):
+    exists = gods_exists(query)
     if exists:
-        data = goc_col.update_one(query, new_value)
+        data = gods_col.update_one(query, new_value)
     else:
         return m.TOURNEY_DOES_NOT_EXIST
 
@@ -505,9 +503,9 @@ def queryGame(game):
             data = games_col.find_one(game)
             return data
         else:
-            print("Game doesn't exist.")
+            return False
     except:
-        print("Find Game failed.")
+        return False
 
 def deleteGame(game):
     try:
@@ -579,9 +577,12 @@ def querySessionMembers(session):
 def createSession(session):
     exists = session_exist({'OWNER': session['OWNER'], 'AVAILABLE': True})
     if exists:
-        return "Session Already Exists."
+        return m.ALREADY_IN_SESSION
     else:
-        if session['TOURNAMENT']:
+        if len(session['TEAMS']) == 0:
+            sessions_col.insert_one(session)
+            return "New Lobby has been created"
+        elif session['TOURNAMENT']:
             sessions_col.insert_one(session)
             return "New Tournament Session has been created"
         else:       
@@ -599,7 +600,10 @@ def joinSession(session, query):
     sessionquery = querySession(session)
     matchtype = sessionquery['TYPE']
     if not sessionquery['IS_FULL']:
-        if sessionquery['GOC'] and query['POSITION'] == 0:
+        if sessionquery['GODS'] and query['POSITION'] == 0:
+            teaminsert = sessions_col.update_one(session, {'$addToSet': {'TEAMS': query}})
+            return m.SESSION_JOINED
+        elif query['POSITION'] == 0:
             teaminsert = sessions_col.update_one(session, {'$addToSet': {'TEAMS': query}})
             return m.SESSION_JOINED
         else:
@@ -613,15 +617,15 @@ def joinSession(session, query):
                 if len(list_matching) == 0:
                     teaminsert = sessions_col.update_one(session, {'$addToSet': {'TEAMS': query}, '$set': {'IS_FULL': True}})
 
-                    return 'Session Joined'
+                    return m.SESSION_JOINED
                 else: 
-                    return 'Session full.'
+                    return 'Lobby full.'
             elif matchtype < len(query['TEAM']):
                 return 'Too many players in team'
             elif matchtype > len(query['TEAM']):
                 return 'Not enough players in team'
     else:
-        return "Session is full. "
+        return "Lobby is full. "
 
 def joinExhibition(session, query):
     sessionquery = querySession(session)
@@ -660,7 +664,7 @@ def joinKingsGambit(session, query):
 
                 return m.SESSION_JOINED
             else: 
-                return 'Session full.'
+                return m.LOBBY_IS_FULL
         else:
             teaminsert = sessions_col.update_one(session, {'$addToSet': {'TEAMS': query}})
             return m.SESSION_JOINED
@@ -669,17 +673,17 @@ def endSession(session):
     exists = session_exist({'OWNER': session['OWNER'], 'AVAILABLE': True})
     if exists:
         sessions_col.update_one(session, {'$set': {'AVAILABLE': False}})
-        return 'Session Ended'
+        return m.SESSION_HAS_ENDED
     else:
-        return 'Session Unavailable'
+        return m.SESSION_DOES_NOT_EXIST
 
 def deleteSession(session):
     exists = session_exist({'OWNER': session['OWNER'], 'AVAILABLE': True})
     if exists:
         sessions_col.delete_one({'OWNER': session['OWNER'], 'AVAILABLE': True})
-        return 'Session Ended'
+        return m.SESSION_HAS_ENDED
     else:
-        return 'Session Unavailable'
+        return m.SESSION_DOES_NOT_EXIST
 
 def deleteAllSessions(user_query):
     exists = user_exists({'DISNAME': user_query['DISNAME']})

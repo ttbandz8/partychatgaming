@@ -14,8 +14,7 @@ class USER():
     TEAM: str = field(default_factory=lambda: 'PCG')
     TITLE: str = field(default_factory=lambda: 'PCG')
     CARD: str = field(default_factory=lambda: "Dark")
-    RANKED: list = field(default_factory=lambda: [{'1V1': [0, 0, 0]}, {'2V2': [0, 0, 0]}, {'3V3': [0, 0, 0]}, {'4V4': [0, 0, 0]}, {'5V5': [0, 0, 0]}])
-    NORMAL: list = field(default_factory=lambda: [{'1V1': [0, 0, 0]}, {'2V2': [0, 0, 0]}, {'3V3': [0, 0, 0]}, {'4V4': [0, 0, 0]}, {'5V5': [0, 0, 0]}])
+    MATCHES: list = field(default_factory=lambda: [{'1V1': [0, 0, 0]}, {'2V2': [0, 0, 0]}, {'3V3': [0, 0, 0]}, {'4V4': [0, 0, 0]}, {'5V5': [0, 0, 0]}])
     TOURNAMENT_WINS: int = field(default_factory=lambda: 0)
     # TOURNAMENT_LOSSES: int = field(default_factory=lambda: 0)
     AVAILABLE: bool = field(default_factory=lambda: True)
@@ -42,9 +41,8 @@ class SESSIONS():
     GAME: str
     TYPE: int
     TEAMS: list[str] = field(default_factory=lambda: [])
-    RANKED: bool = field(default_factory=lambda: False)
-    GOC: bool = field(default_factory=lambda: False)
-    GOC_TITLE: str = field(default_factory=lambda: 'N/A')
+    GODS: bool = field(default_factory=lambda: False)
+    GODS_TITLE: str = field(default_factory=lambda: 'N/A')
     TOURNAMENT: str = field(default_factory=lambda: False)
     SCRIM: bool = field(default_factory=lambda: False)
     KINGSGAMBIT: str = field(default_factory=lambda: False)
@@ -54,14 +52,6 @@ class SESSIONS():
     LOSING_TEAM: str = field(default_factory=lambda: 'N/A')
     WINNER: str = field(default_factory=lambda: 'N/A')
     LOSER: str = field(default_factory=lambda: 'N/A')
-    TIMESTAMP: str = now
-
-@dataclass(frozen=True, order=True)
-class MATCHES():
-    USER: str
-    RANKED: bool = field(default_factory=lambda: False)
-    NORMAL: bool = field(default_factory=lambda: True)
-    WIN: bool = field(default_factory=lambda: False)
     TIMESTAMP: str = now
 
 @dataclass(frozen=True, order=True)
@@ -105,8 +95,9 @@ class GAMES():
     TIMESTAMP: str = now
 
 @dataclass(frozen=True, order=True) 
-class GOC():
+class GODS():
     TITLE: str
+    GAME: str
     TYPE: int
     IMG_URL: str
     REWARD: int
@@ -164,9 +155,9 @@ def newMatch(match):
     m = MATCH(**match)
     return asdict(m)
 
-def newGoc(goc):
-    godsOfCod = GOC(**goc)
-    return asdict(godsOfCod)
+def newGods(gods):
+    god = GODS(**gods)
+    return asdict(god)
 
 def newVault(vault):
     v = VAULT(**vault)

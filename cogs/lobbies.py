@@ -30,248 +30,32 @@ class Lobbies(commands.Cog):
         return await main.validate_user(ctx)
 
     @commands.command()
-    async def c1v1(self, ctx, args):
-        game = [x for x in db.query_all_games()][0]
-        session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 1, "TEAMS": [{"TEAM": [str(ctx.author)], "SCORE": 0, "POSITION": 0}]}
-        if args == "n":
-            resp = db.createSession(data.newSession(session_query))
-            await ctx.send(resp, delete_after=5)
-        elif args == "r":
-            session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 1, "TEAMS": [{"TEAM": [str(ctx.author)], "SCORE": 0, "POSITION": 0}], "RANKED": True}
-            resp = db.createSession(data.newSession(session_query))
-            await ctx.send(resp, delete_after=5)
+    async def lobby(self, ctx, matchtype, *args):
+        game_name = " ".join([*args])
+        query = {'ALIASES': game_name.lower()}
+        game = db.queryGame(query)
+      
+        if game:
+            name = game['GAME']
+            allowed_types = game['TYPE']
 
-    @commands.command()
-    async def c2v2(self, ctx, args, user1: User):
-        game = [x for x in db.query_all_games()][0]
-        
-        validate_teammate = db.queryUser({'DISNAME': str(user1)})
-
-        if validate_teammate:
-            accept = await ctx.send(f"{user1.mention}, Will you join the lobby?", delete_after=10)
-            for emoji in emojis:
-                await accept.add_reaction(emoji)
-
-            def check(reaction, user):
-                return user == user1 and str(reaction.emoji) == '👍'
-
-            try:
-                reaction, user = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
-
-
-                session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 2, "TEAMS": [{"TEAM": [str(ctx.author), str(user1)], "SCORE": 0, "POSITION": 0}]}
-                if args == "n":
+            user_query = {'DISNAME': str(ctx.author)}
+            user = db.queryUser(user_query)
+            if name in user['GAMES']:
+                if int(matchtype) in allowed_types:
+  
+                    session_query = {"OWNER": str(ctx.author), "GAME": name, "TYPE": int(matchtype), "TEAMS": [], 'AVAILABLE': True}
                     resp = db.createSession(data.newSession(session_query))
                     await ctx.send(resp, delete_after=5)
-                elif args == "r":
-                    session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 2, "TEAMS": [{"TEAM": [str(ctx.author), str(user1)], "SCORE": 0, "POSITION": 0}], "RANKED": True}
-                    resp = db.createSession(data.newSession(session_query))
-                    await ctx.send(resp, delete_after=5)
-            except:
-                await ctx.send(m.INVITE_NOT_ACCEPTED, delete_after=3)
-        else:
-            await ctx.send(m.USER_NOT_REGISTERED, delete_after=5)
-
-    @commands.command()
-    async def c3v3(self, ctx, args, user1: User, user2: User):
-        if ctx.author.guild_permissions.administrator == True:
-            game = [x for x in db.query_all_games()][0]
-            
-            teammates = [str(user1), str(user2)]
-            valid_teammates = []
-
-            # Check if same team members
-            list_of_teams = set()
-
-            for x in teammates:
-                valid = db.queryUser({'DISNAME' : str(x)})
-                if valid:
-                    valid_teammates.append(valid["DISNAME"])
-                    list_of_teams.add(valid['TEAM'])
                 else:
-                    await ctx.send(f"{valid['DISNAME']} needs to register.".format(self), delete_after=5)
-
-
-            if len(valid_teammates) == 2:
-                if len(list_of_teams) > 1:
-                    await ctx.send(m.DIFFERENT_TEAMS, delete_after=5)
-                else:
-                    accept = await ctx.send("SCRIM STARTING : 3v3 ", delete_after=10)
-                    session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 3, "SCRIM": True, "TEAMS": [{"TEAM": [str(ctx.author), str(user1), str(user2)], "SCORE": 0, "POSITION": 0}]}
-                    if args == "n":
-                        resp = db.createSession(data.newSession(session_query))
-                        await ctx.send(resp, delete_after=5)
-                    elif args == "r":
-                        session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 3, "SCRIM": True, "TEAMS": [{"TEAM": [str(ctx.author), str(user1), str(user2)], "SCORE": 0, "POSITION": 0}], "RANKED": True}
-                        resp = db.createSession(data.newSession(session_query))
-                        await ctx.send(resp, delete_after=5)
+                    await ctx.send(m.GAME_TYPE_UNSUPPORTED)                    
             else:
-                await ctx.send(m.USER_NOT_REGISTERED)
+                await ctx.send(m.ADD_A_GAME)
         else:
-            await ctx.send(m.USER_NOT_REGISTERED, delete_after=5)
- 
-    @commands.command()
-    async def c4v4(self, ctx, args, user1: User, user2: User, user3: User):
-        if ctx.author.guild_permissions.administrator == True:
-            game = [x for x in db.query_all_games()][0]
-            
-            teammates = [str(user1), str(user2), str(user3)]
-            valid_teammates = []
-
-            # Check if same team members
-            list_of_teams = set()
-
-            for x in teammates:
-                valid = db.queryUser({'DISNAME' : str(x)})
-                if valid:
-                    valid_teammates.append(valid["DISNAME"])
-                    list_of_teams.add(valid['TEAM'])
-                else:
-                    await ctx.send(f"{valid['DISNAME']} needs to register.".format(self), delete_after=5)
-
-            if len(valid_teammates) == 3:
-                if len(list_of_teams) > 1:
-                    await ctx.send(m.DIFFERENT_TEAMS, delete_after=5)
-                else:
-                    accept = await ctx.send("SCRIM STARTING : 4v4 ", delete_after=10)
-                    session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 4, "SCRIM": True, "TEAMS": [{"TEAM": [str(ctx.author), str(user1), str(user2), str(user3)], "SCORE": 0, "POSITION": 0}]}
-                    if args == "n":
-                        resp = db.createSession(data.newSession(session_query))
-                        await ctx.send(resp)
-                    elif args == "r":
-                        session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 4, "SCRIM": True, "TEAMS": [{"TEAM": [str(ctx.author), str(user1), str(user2), str(user3)], "SCORE": 0, "POSITION": 0}], "RANKED": True}
-                        resp = db.createSession(data.newSession(session_query))
-                        await ctx.send(resp)
-            else:
-                await ctx.send(m.USER_NOT_REGISTERED)
-        else:
-            await ctx.send(m.USER_NOT_REGISTERED, delete_after=5)
- 
-    @commands.command()
-    async def c5v5(self, ctx, args, user1: User, user2: User, user3: User, user4: User):
-        if ctx.author.guild_permissions.administrator == True:
-            game = [x for x in db.query_all_games()][0]
-            
-            teammates = [str(user1), str(user2), str(user3), str(user4)]
-            valid_teammates = []
-
-            # Check if same team members
-            list_of_teams = set()
-
-
-            for x in teammates:
-                valid = db.queryUser({'DISNAME' : str(x)})
-                if valid:
-                    valid_teammates.append(valid["DISNAME"])
-                    list_of_teams.add(valid['TEAM'])
-                else:
-                    await ctx.send(f"{valid['DISNAME']} needs to register.".format(self), delete_after=5)
-
-            if len(valid_teammates) == 4:
-                if len(list_of_teams) > 1:
-                    await ctx.send(m.DIFFERENT_TEAMS, delete_after=5)
-                else:
-                    accept = await ctx.send("SCRIM STARTING : 5v5 ", delete_after=10)
-                    session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 5, "SCRIM": True, "TEAMS": [{"TEAM": [str(ctx.author), str(user1), str(user2), str(user3), str(user4)], "SCORE": 0, "POSITION": 0}]}
-                    if args == "n":
-                        resp = db.createSession(data.newSession(session_query))
-                        await ctx.send(resp, delete_after=5)
-                    elif args == "r":
-                        session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 5, "SCRIM": True, "TEAMS": [{"TEAM": [str(ctx.author), str(user1), str(user2), str(user3), str(user4)], "SCORE": 0, "POSITION": 0}], "RANKED": True}
-                        resp = db.createSession(data.newSession(session_query))
-                        await ctx.send(resp, delete_after=5)
-            else:
-                await ctx.send(m.USER_NOT_REGISTERED)
-        else:
-            await ctx.send("Public SCRIMS coming soon! Join a League Team to Participate ! :military_helmet:", delete_after=5)
-
-    # c dynamics
-    @commands.command()
-    async def cversus(self, ctx, args, *participant: User):
-        if ctx.author.guild_permissions.administrator == True:
-            game = [x for x in db.query_all_games()][0]
-            teammates = []
-            #load up teammate array 
-            for users in participant:
-                teammates.append(str(users))
-            valid_teammates = []
-            #Check if same team members
-            list_of_teams = set()
-            for x in teammates:
-                valid = db.queryUser({'DISNAME' : str(x)})
-                if valid:
-                    valid_teammates.append(valid["DISNAME"])
-                    list_of_teams.add(valid['TEAM'])
-                else:
-                    await ctx.send(f"{valid['DISNAME']} needs to register.".format(self), delete_after=5)
-            if len(valid_teammates) == 2:
-                if len(list_of_teams) > 1:
-                    await ctx.send(m.DIFFERENT_TEAMS, delete_after=5)
-                else:
-                    team_name ="".join(list_of_teams)
-                    team_members=[]
-                    for player in participant:
-                        await main.DM(ctx, player, f"{ctx.author.mention}has invited you to a Team Scrimm:military_helmet:")
-                        accept = await ctx.send(f"{player.mention} are you ready to Scrimm?", delete_after=10)
-
-                    for emoji in emojis:
-                        await accept.add_reaction(emoji)
-
-                    def check(reaction,user):
-                        return user == player and str(reaction.emoji)== '👍'
-                    try:
-                        reaction,user = await self.bot.wait_for('reaction_add',timeout=15.0,check=check)
-                        team_members.append(str(player))
-                    except:
-                        await ctx.send(f"{player.mention} did not accept:eyes:")
-                    if args == "n":
-                        session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 3, "SCRIM": True, "TEAMS": [{"TEAM": [str(ctx.author), team_members], "SCORE": 0, "POSITION": 0}]}
-                        resp = db.createSession(data.newSession(session_query))
-                        await ctx.send(resp, delete_after=5)
-                    elif args == "r":
-                        session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 3, "SCRIM": True, "TEAMS": [{"TEAM": [str(ctx.author), team_members], "SCORE": 0, "POSITION": 0}], "RANKED": True}
-                        resp = db.createSession(data.newSession(session_query))
-                        await ctx.send(resp, delete_after=5)
-            else:
-                await ctx.send(m.USER_NOT_REGISTERED)
-        else:
-            await ctx.send(m.USER_NOT_REGISTERED, delete_after=5)
+            await ctx.send(m.GAME_UNAVAILABLE)
 
     @commands.command()
-    async def challenge(self, ctx, args, user1: User):
-        game = [x for x in db.query_all_games()][0]
-        
-        validate_opponent = db.queryUser({'DISNAME': str(user1)})
-
-        if validate_opponent:
-            await main.DM(ctx, user1, f"{ctx.author.mention}" + " has challeneged you... :eyes:")
-            accept = await ctx.send(f"{user1.mention}, Will you join the lobby? :fire:", delete_after=15)
-            for emoji in emojis:
-                await accept.add_reaction(emoji)
-
-            def check(reaction, user):
-                return user == user1 and str(reaction.emoji) == '👍'
-            try:
-                reaction, user = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
-
-                session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 1, "TEAMS": [{"TEAM": [str(ctx.author)], "SCORE": 0, "POSITION": 0}], "AVAILABLE": True}
-                join_query = {"TEAM": [str(user1)], "SCORE": 0, "POSITION": 1}
-                if args == "n":
-                    session = db.createSession(data.newSession(session_query))
-                    resp = db.joinSession(session_query, join_query)
-                    await ctx.send(resp, delete_after=5)
-                elif args == "r":
-                    session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 1, "TEAMS": [{"TEAM": [str(ctx.author)], "SCORE": 0, "POSITION": 0}], "RANKED": True, "AVAILABLE": True}
-                    session = db.createSession(data.newSession(session_query))
-                    resp = db.joinSession(session_query, join_query)
-                    await ctx.send(resp)
-            except:
-                await ctx.send(m.INVITE_NOT_ACCEPTED, delete_after=3)
-        else:
-            await ctx.send("Users must register.", delete_after=5)
-
-    @commands.command()
-    async def dl(self, ctx):
+    async def deletelobby(self, ctx):
         session_query = {"OWNER": str(ctx.author), "AVAILABLE": True}
         response = db.deleteSession(session_query)
         await ctx.send(response)
@@ -282,15 +66,14 @@ class Lobbies(commands.Cog):
         session = db.querySession(session_query)
         teams = [x for x in session['TEAMS']]
         if len(teams) != 1:
-            await sw(ctx)
-            await sl(ctx)
+            await self.sw(ctx)
+            await self.sl(ctx)
             end = db.endSession(session_query)
-            await ctx.send(end, delete_after=5)
+            await ctx.send(end)
         else:
             end = db.endSession(session_query)
             await ctx.send(m.SESSION_HAS_ENDED)
 
-    @commands.command()
     async def sw(self, ctx):
         session_query = {"OWNER": str(ctx.author), "AVAILABLE": True}
         session_data = db.querySession(session_query)
@@ -309,7 +92,7 @@ class Lobbies(commands.Cog):
         players_team_name = ""
         update_query = {}
         add_score_to_team={}
-        if session_data['GOC']:
+        if session_data['GODS']:
             blessings = blessings + 10000
             for x in winning_team['TEAM']:
                 player = db.queryUser({'DISNAME': x})
@@ -349,7 +132,7 @@ class Lobbies(commands.Cog):
             player = db.queryUser({'DISNAME': x})
             winner_earned_tourney_cards = False
             winner_earned_tourney_titles = False
-            goc_player_team = player['TEAM']
+            gods_player_team = player['TEAM']
 
             tourney_cards = db.queryTournamentCards()
             tourney_titles = db.queryTournamentTitles()
@@ -365,12 +148,9 @@ class Lobbies(commands.Cog):
                 new_value = {"$inc": {'TOURNAMENT_WINS': 1}}
                 blessings = blessings + 100
 
-            elif session_data['RANKED']:
-                new_value = {"$inc": {'RANKED.$[type].' + game_type.upper() + '.0': 1}}
+            else:
+                new_value = {"$inc": {'MATCHES.$[type].' + game_type.upper() + '.0': 1}}
                 blessings = blessings + (.30*blessings)
-
-            elif not session_data['RANKED']:
-                new_value = {"$inc": {'NORMAL.$[type].' + game_type.upper() + '.0': 1}}
 
             filter_query = [{'type.' + game_type.upper(): current_score}]
 
@@ -412,12 +192,11 @@ class Lobbies(commands.Cog):
             await main.DM(ctx, user, "You Won. Doesnt Prove Much Tho :yawning_face:")
 
             if winner_earned_tourney_cards or winner_earned_tourney_titles:
-                await ctx.send(f"Competitor " + f"{user.mention}" + " earns a victory ! :100:", delete_after=5)
-                await ctx.send( f"{user.mention}" + "You have Unlocked New Items in your Vault! :eyes:", delete_after=5)
+                await ctx.send(f"Competitor " + f"{user.mention}" + " earns a victory ! :100:")
+                await ctx.send( f"{user.mention}" + "You have Unlocked New Items in your Vault! :eyes:")
             else:
-                await ctx.send(f"Competitor " + f"{user.mention}" + " earns a victory ! :100:", delete_after=5)
+                await ctx.send(f"Competitor " + f"{user.mention}" + " earns a victory ! :100:")
 
-    @commands.command()
     async def sl(self, ctx):
         session_query = {"OWNER": str(ctx.author), "AVAILABLE": True}
         session_data = db.querySession(session_query)
@@ -426,7 +205,6 @@ class Lobbies(commands.Cog):
         else:
             teams = [x for x in session_data['TEAMS']]
             losing_team = {}
-            losing_kingsgambit_teams = []
             low_score = teams[0]['SCORE']
 
             for x in teams:
@@ -440,7 +218,7 @@ class Lobbies(commands.Cog):
             players_team_name = ""
             update_query = {}
             add_score_to_team={}
-            if session_data['GOC']:
+            if session_data['GODS']:
                 for x in losing_team['TEAM']:
                     player = db.queryUser({'DISNAME': x})
                     players_team_name = player['TEAM']
@@ -472,28 +250,16 @@ class Lobbies(commands.Cog):
 
             for x in losing_team['TEAM']:
                 player = db.queryUser({'DISNAME': x})
-                winner_earned_tourney_cards = False
-                winner_earned_tourney_titles = False
-                goc_player_team = player['TEAM']
-
-                tourney_cards = db.queryTournamentCards()
-                tourney_titles = db.queryTournamentTitles()
-
-                types_of_matches_list = [x for x in player['NORMAL']]
+                types_of_matches_list = [x for x in player['MATCHES']]
                 types_of_matches = dict(ChainMap(*types_of_matches_list))
                 current_score = types_of_matches[game_type.upper()]
                 query = {'DISNAME': player['DISNAME']}
-                #uid = {'DID' : player['DID']}
                 
                 new_value = {}
                 if session_data['TOURNAMENT']:
                     new_value = {"$inc": {'TOURNAMENT_WINS': 0}}
-
-                elif session_data['RANKED']:
-                    new_value = {"$inc": {'RANKED.$[type].' + game_type.upper() + '.1': 1}}
-
-                elif not session_data['RANKED']:
-                    new_value = {"$inc": {'NORMAL.$[type].' + game_type.upper() + '.1': 1}}
+                else:
+                    new_value = {"$inc": {'MATCHES.$[type].' + game_type.upper() + '.1': 1}}
 
                 filter_query = [{'type.' + game_type.upper(): current_score}]
 
@@ -504,9 +270,9 @@ class Lobbies(commands.Cog):
 
                 uid = player['DID']
                 user = await self.bot.fetch_user(uid)
-                await main.curse(5, user)
-                await main.DM(ctx, user, "You Lost. Get back in there :poop:")
-                await ctx.send(f"Competitor " + f"{user.mention}" + " took another L! :eyes:", delete_after=5)
+                await main.curse(8, user)
+                await main.DM(ctx, user, "You Lost. Get back in there!")
+                await ctx.send(f"Competitor " + f"{user.mention}" + " took an L! :eyes:")
 
     @commands.command()
     async def lg(self, ctx, *user: User):
@@ -553,36 +319,50 @@ class Lobbies(commands.Cog):
         session = db.querySession(session_query)
         if session:
             match_type = session['TYPE']
-            invalid_user = False
-            for u in user:
-                user_query = ({'DISNAME': str(u)})
-                resp = db.queryUser(user_query)
-                if not resp:
-                    invalid_user = True
-            
-            if invalid_user:
-                await ctx.send(m.USER_NOT_REGISTERED, delete_after=5)
+            game = session['GAME']
+            user_query = ({'DISNAME': str(ctx.author)})
+            response = db.queryUser(user_query)
+            if game not in response['GAMES']:
+                await ctx.send(m.ADD_A_GAME)
             else:
-                if match_type == 1:
-                    join_query = {"TEAM": [str(ctx.author)], "SCORE": 0, "POSITION": 1}
-                    session_joined = db.joinSession(session_query, join_query)
-                    await ctx.send(session_joined, delete_after=5)
-                if match_type == 2:
-                    join_query = {"TEAM": [str(ctx.author), (str(user[1]))], "SCORE": 0, "POSITION": 1}
-                    session_joined = db.joinSession(session_query, join_query)
-                    await ctx.send(session_joined, delete_after=5)
-                if match_type == 3:
-                    join_query = {"TEAM": [str(ctx.author), (str(user[1])), str(user[2])], "SCORE": 0, "POSITION": 1}
-                    session_joined = db.joinSession(session_query, join_query)
-                    await ctx.send(session_joined, delete_after=5)
-                if match_type ==4:
-                    join_query = {"TEAM": [str(ctx.author), (str(user[1])), str(user[2]), str(user[3])], "SCORE": 0, "POSITION": 1}
-                    session_joined = db.joinSession(session_query, join_query)
-                    await ctx.send(session_joined, delete_after=5)
-                if match_type ==5:
-                    join_query = {"TEAM": [str(ctx.author), (str(user[1])), str(user[2]), str(user[3]), str(user[4])], "SCORE": 0, "POSITION": 1}
-                    session_joined = db.joinSession(session_query, join_query)
-                    await ctx.send(session_joined, delete_after=5)
+                invalid_user = False
+                for u in user:
+                    user_query = ({'DISNAME': str(u)})
+                    resp = db.queryUser(user_query)
+                    if not resp:
+                        invalid_user = True
+                        await ctx.send(m.USER_NOT_REGISTERED)
+                    if game not in resp['GAMES']:
+                        invalid_user = True
+                        await ctx.send(m.ADD_A_GAME)
+            
+                if invalid_user:
+                    await ctx.send(m.USER_NOT_REGISTERED, delete_after=5)
+                else:
+                    position=0
+                    if bool(session['TEAMS']):
+                        position=1
+                    if match_type == 1:
+                        join_query = {"TEAM": [str(ctx.author)], "SCORE": 0, "POSITION": position}
+                        session_joined = db.joinSession(session_query, join_query)
+                        await ctx.send(session_joined)
+                    if match_type == 2:
+                        join_query = {"TEAM": [str(ctx.author), (str(user[1]))], "SCORE": 0, "POSITION": position}
+                        session_joined = db.joinSession(session_query, join_query)
+                        await ctx.send(session_joined)
+                    if match_type == 3:
+                        join_query = {"TEAM": [str(ctx.author), (str(user[1])), str(user[2])], "SCORE": 0, "POSITION": position}
+                        session_joined = db.joinSession(session_query, join_query)
+                        await ctx.send(session_joined)
+                    if match_type ==4:
+                        join_query = {"TEAM": [str(ctx.author), (str(user[1])), str(user[2]), str(user[3])], "SCORE": 0, "POSITION": position}
+                        session_joined = db.joinSession(session_query, join_query)
+                        await ctx.send(session_joined)
+                    if match_type ==5:
+                        join_query = {"TEAM": [str(ctx.author), (str(user[1])), str(user[2]), str(user[3]), str(user[4])], "SCORE": 0, "POSITION": position}
+                        session_joined = db.joinSession(session_query, join_query)
+                        await ctx.send(session_joined)
+
         else:
             await ctx.send(m.SESSION_DOES_NOT_EXIST)
 
@@ -611,6 +391,33 @@ class Lobbies(commands.Cog):
 
 def setup(bot):
     bot.add_cog(Lobbies(bot))
+
+    # @commands.command()
+    # async def challenge(self, ctx, user1: User):
+    #     game = [x for x in db.query_all_games()][0]
+        
+    #     validate_opponent = db.queryUser({'DISNAME': str(user1)})
+
+    #     if validate_opponent:
+    #         await main.DM(ctx, user1, f"{ctx.author.mention}" + " has challeneged you... :eyes:")
+    #         accept = await ctx.send(f"{user1.mention}, Will you join the lobby? :fire:", delete_after=15)
+    #         for emoji in emojis:
+    #             await accept.add_reaction(emoji)
+
+    #         def check(reaction, user):
+    #             return user == user1 and str(reaction.emoji) == '👍'
+    #         try:
+    #             reaction, user = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
+    #             join_query = {"TEAM": [str(user1)], "SCORE": 0, "POSITION": 1}
+
+    #             session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 1, "TEAMS": [{"TEAM": [str(ctx.author)], "SCORE": 0, "POSITION": 0}], "AVAILABLE": True}
+    #             session = db.createSession(data.newSession(session_query))
+    #             resp = db.joinSession(session_query, join_query)
+    #             await ctx.send(resp)
+    #         except:
+    #             await ctx.send(m.INVITE_NOT_ACCEPTED, delete_after=3)
+    #     else:
+    #         await ctx.send(m.USER_NOT_REGISTERED, delete_after=5)
 
 
 # ''' Delete All Sessions '''

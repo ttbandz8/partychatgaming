@@ -16,59 +16,65 @@ import DiscordUtils
 
 emojis = ['👍', '👎']
 
-class Godsofcod(commands.Cog):
+class Gods(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print('Gods Of Cod Cog is ready!')
+        print('Gods Cog is ready!')
 
     async def cog_check(self, ctx):
         return await main.validate_user(ctx)
 
     @commands.command()
-    async def goc(self, ctx, args1: str, args2: int, args3: bool, args4: int, args5: str ):
+    async def gods(self, ctx, args1: str, args2: int, args3: int, args4: str, *args: str ):
         if ctx.author.guild_permissions.administrator == True:
-            goc_query = {'TITLE': args1, 'TYPE': args2, 'TEAM_FLAG': args3, 'REWARD': args4, 'IMG_URL': args5, 'REGISTRATION': True}
-            response = db.createGoc(data.newGoc(goc_query))
+            game_name = " ".join([*args])
+            query = {'ALIASES': game_name.lower()}
+            game = db.queryGame(query)
+
+            team_flag = False
+            if args2 > 1:
+                team_flag = True
+
+            gods_query = {'TITLE': args1, 'TYPE': args2, 'TEAM_FLAG': team_flag, 'REWARD': args3, 'IMG_URL': args4, 'GAME': game['GAME'], 'REGISTRATION': True}
+            response = db.createGods(data.newGods(gods_query))
             await ctx.send(response)
         else:
             print(m.ADMIN_ONLY_COMMAND)
     
     @commands.command()
-    async def sgoc(self, ctx):
+    async def startgods(self, ctx):
         if ctx.author.guild_permissions.administrator == True:
-            goc_query = {'REGISTRATION': True}
+            gods_query = {'REGISTRATION': True}
             new_value = {'$set': {'REGISTRATION': False,'AVAILABLE': True}}
-            response = db.updateGoc(goc_query, new_value)
-            await ctx.send("GODS OF COD has begun. ")
+            response = db.updateGods(gods_query, new_value)
+            await ctx.send("Gods has begun. ")
         else:
             print(m.ADMIN_ONLY_COMMAND)
 
     @commands.command()
-    async def cgoc(self, ctx):
+    async def cgods(self, ctx):
         if ctx.author.guild_permissions.administrator == True:
             query = {'AVAILABLE': True}
-            g = db.queryGoc(query)
+            g = db.queryGods(query)
             if g:
-                game = [x for x in db.query_all_games()][0]
-                session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": g['TYPE'], "TEAMS": [], "RANKED": True, "TOURNAMENT": True, "GOC": True, "GOC_TITLE": g['TITLE']}
+                session_query = {"OWNER": str(ctx.author), "GAME": g["GAME"], "TYPE": g['TYPE'], "TEAMS": [], "TOURNAMENT": True, "GODS": True, "GODS_TITLE": g['TITLE']}
                 resp = db.createSession(data.newSession(session_query))
-                await ctx.send(resp, delete_after=5)
+                await ctx.send(resp)
             else:
-                await ctx.send(m.TOURNEY_DOES_NOT_EXIST, delete_after=5)
+                await ctx.send(m.TOURNEY_DOES_NOT_EXIST)
         else:
             await ctx.send(m.ADMIN_ONLY_COMMAND)
 
     @commands.command()
-    async def goci(self, ctx, *participant: User):
+    async def godsi(self, ctx, *participant: User):
         if ctx.author.guild_permissions.administrator == True:
-            game = [x for x in db.query_all_games()][0]
-            goc_query = {'AVAILABLE': True}
-            goc = db.queryGoc(goc_query)
+            gods_query = {'AVAILABLE': True}
+            gods = db.queryGods(gods_query)
 
-            session_query = {"OWNER": str(ctx.author),'RANKED' : True, 'GOC': True, 'TOURNAMENT': True, 'GOC_TITLE': goc['TITLE'], "AVAILABLE": True}
+            session_query = {"OWNER": str(ctx.author), 'GODS': True, 'TOURNAMENT': True, 'GODS_TITLE': gods['TITLE'], "AVAILABLE": True}
             current_session = db.querySession(session_query)
             if current_session:
                 team_position = 0
@@ -78,36 +84,36 @@ class Godsofcod(commands.Cog):
                 else:
                     team_position = 1
 
-                if len(participant) < goc['TYPE']:
+                if len(participant) < gods['TYPE']:
                     await ctx.send(m.TOO_FEW_PLAYERS_ON_TEAM)
 
-                elif len(participant) > goc['TYPE']:
+                elif len(participant) > gods['TYPE']:
                     await ctx.send(m.TOO_MANY_PLAYERS_ON_TEAM)
 
-                elif goc['TYPE'] == 1: 
+                elif gods['TYPE'] == 1: 
 
-                    if str(participant[0]) in goc['PARTICIPANTS']:
-                        await main.DM(ctx, participant[0] ,f"{ctx.author.mention}" + " has invited you to a GOC Tournament Match :eyes:")
-                        accept = await ctx.send(f"{participant[0].mention}, Will you join the GOC Match? :fire:", delete_after=15)
+                    if str(participant[0]) in gods['PARTICIPANTS']:
+                        await main.DM(ctx, participant[0] ,f"{ctx.author.mention}" + " has invited you to a Gods Tournament Match :eyes:")
+                        accept = await ctx.send(f"{participant[0].mention}, Will you join the Gods Match? :fire:")
                     
-                    for emoji in emojis:
-                        await accept.add_reaction(emoji)
+                        for emoji in emojis:
+                            await accept.add_reaction(emoji)
 
-                    def check(reaction, user):
-                        return user == participant[0] and str(reaction.emoji) == '👍'
-                    try:
-                        reaction, user = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
+                        def check(reaction, user):
+                            return user == participant[0] and str(reaction.emoji) == '👍'
+                        try:
+                            reaction, user = await self.bot.wait_for('reaction_add', timeout=30.0, check=check)
 
-                        join_query = {"TEAM": [str(participant[0])], "SCORE": 0, "POSITION": team_position}
-                        resp = db.joinSession(session_query, join_query)
-                        print(resp)
-                        await ctx.send(resp, delete_after=5)              
-                    except:
-                        await ctx.send("User did not accept.")
+                            join_query = {"TEAM": [str(participant[0])], "SCORE": 0, "POSITION": team_position}
+                            resp = db.joinSession(session_query, join_query)
+                            print(resp)
+                            await ctx.send(resp)              
+                        except:
+                            await ctx.send("User did not accept.")
                     else:
-                        await ctx.send(m.USER_NOT_REGISTERED_FOR_GOC, delete_after=5)
+                        await ctx.send(m.USER_NOT_REGISTERED_FOR_GODS)
 
-                elif goc['TYPE'] != 1:
+                elif gods['TYPE'] != 1:
                     # Check if same team members
                     list_of_teams = set()
                     for member in participant:
@@ -119,10 +125,10 @@ class Godsofcod(commands.Cog):
                     else:
                         team_name="".join(list_of_teams)
                         team_members=[]
-                    if team_name in goc['PARTICIPANTS']:
+                    if team_name in gods['PARTICIPANTS']:
                         for member in participant:
-                            await main.DM(ctx, member ,f"{ctx.author.mention}" + " has invited you to a GOC Tournament Match :eyes:")
-                            accept = await ctx.send(f"{member.mention}, Will you join the GOC Match? :fire:", delete_after=8)
+                            await main.DM(ctx, member ,f"{ctx.author.mention}" + " has invited you to a Gods Tournament Match :eyes:")
+                            accept = await ctx.send(f"{member.mention}, Will you join the Gods Match? :fire:", delete_after=8)
                             
                             for emoji in emojis:
                                 await accept.add_reaction(emoji)
@@ -135,14 +141,14 @@ class Godsofcod(commands.Cog):
                                 # await ctx.send(f'{member.mention} accepted the ready check!', delete_after=3)
                             except:
                                 await ctx.send("User did not accept.")
-                        if len(team_members) == goc['TYPE']:
+                        if len(team_members) == gods['TYPE']:
                             join_query = {"TEAM": team_members, "SCORE": 0, "POSITION": team_position}
                             resp = db.joinSession(session_query, join_query)
                             await ctx.send(resp, delete_after=5)      
                         else:
                             await ctx.send(m.FAILED_TO_ACCEPT)                       
                     else:
-                        await ctx.send(m.USER_NOT_REGISTERED_FOR_GOC, delete_after=5)
+                        await ctx.send(m.USER_NOT_REGISTERED_FOR_GODS, delete_after=5)
             else:
                 await ctx.send(m.SESSION_DOES_NOT_EXIST)
 
@@ -150,63 +156,75 @@ class Godsofcod(commands.Cog):
             await ctx.send(m.ADMIN_ONLY_COMMAND)
 
     @commands.command()
-    async def egoc(self, ctx):
+    async def endgods(self, ctx):
         if ctx.author.guild_permissions.administrator == True:
-            goc_query = {'AVAILABLE': True}
+            gods_query = {'AVAILABLE': True}
             new_value = {'$set': {'AVAILABLE': False, 'ARCHIVED': True}}
-            response = db.updateGoc(goc_query, new_value)
-            await ctx.send(m.END_GOC)
+            response = db.updateGods(gods_query, new_value)
+            await ctx.send(m.END_GODS)
         else:
             print(m.ADMIN_ONLY_COMMAND)
 
     @commands.command()
-    async def dgoc(self, ctx):
+    async def deletegods(self, ctx):
         if ctx.author.guild_permissions.administrator == True:
-            goc_query = {'ARCHIVED': False}
-            response = db.deleteGoc(goc_query)
-            await ctx.send("GODS OF COD has ended. ")
+            gods_query = {'ARCHIVED': False}
+            response = db.deleteGods(gods_query)
+            await ctx.send("Gods has ended. ")
         else:
             print(m.ADMIN_ONLY_COMMAND)
 
     @commands.command()
-    async def rgoc(self, ctx):
-        goc_query = {'REGISTRATION': True}
-        goc_response = db.queryGoc(goc_query)
-        if goc_response:
+    async def rgods(self, ctx):
+        gods_query = {'REGISTRATION': True}
+        gods_response = db.queryGods(gods_query)
+        if gods_response:
             user = str(ctx.author)
             user_data = db.queryUser({'DISNAME': str(ctx.author)})
 
-            if goc_response['TEAM_FLAG']:
-                if user_data['TEAM'] == 'PCG':
-                    await ctx.send("This is a Team Only Tournament. ")
-                else:
-                    # Make it so that Team Owner has to be the one to register the team
-                    team_data = db.queryTeam({'TNAME': user_data['TEAM']})
-                    if team_data['OWNER'] == str(ctx.author):
-                        if len(team_data['MEMBERS']) >= goc_response['TYPE']:
-                            new_value =  {'$addToSet': {'PARTICIPANTS': str(team_data['TNAME'])}}
-                            response = db.updateGoc(goc_query, new_value)
-                            await ctx.send(f"{team_data['TNAME']} is now registered for GODS OF COD. ")           
+            if gods_response['GAME'] in user_data['GAMES']:
+                if gods_response['TEAM_FLAG']:
+                    if user_data['TEAM'] == 'PCG':
+                        await ctx.send("This is a Team Only Tournament. ")
+                    else:
+                        # Make it so that Team Owner has to be the one to register the team
+                        team_data = db.queryTeam({'TNAME': user_data['TEAM']})
+                        if gods_response['GAME'] in team_data['GAMES']:
+
+                            if team_data['OWNER'] == str(ctx.author):
+                                if len(team_data['MEMBERS']) >= gods_response['TYPE']:
+                                    new_value =  {'$addToSet': {'PARTICIPANTS': str(team_data['TNAME'])}}
+                                    response = db.updateGods(gods_query, new_value)
+                                    await ctx.send(f"{team_data['TNAME']} is now registered for Gods. ")
+                                else:
+                                    await ctx.send(f"{team_data['TNAME']} does not have enough members to participate in this tournament. ")       
+                            else:
+                                await ctx.send("Only the owner of the team can register team for Tournaments. ")
                         else:
-                            await ctx.send("Only the owner of the team can register team for Tournaments. ")
-            else:
-                if user in goc_response['PARTICIPANTS']:
-                    await ctx.send(m.ALREADY_IN_TOURNEY, delete_after=4)
+
+                            await ctx.send(m.ADD_A_GAME)
                 else:
-                    new_value =  {'$addToSet': {'PARTICIPANTS': user}}
-                    response = db.updateGoc(goc_query, new_value)
-                    await ctx.send(f"{ctx.author.mention} is now registered for GODS OF COD. ")
+                    if user in gods_response['PARTICIPANTS']:
+                        await ctx.send(m.ALREADY_IN_TOURNEY)
+                    else:
+                        new_value =  {'$addToSet': {'PARTICIPANTS': user}}
+                        response = db.updateGods(gods_query, new_value)
+                        await ctx.send(f"{ctx.author.mention} is now registered for Gods. ")
+            
+            else:
+                await ctx.send(m.ADD_A_GAME)                
         else:
-            await ctx.send(m.UNABLE_TO_REGISTER_FOR_GOC)
+            await ctx.send(m.UNABLE_TO_REGISTER_FOR_GODS)
 
     @commands.command()
-    async def goclk(self, ctx):
+    async def godslk(self, ctx):
         query = {'ARCHIVED': False}
-        g = db.queryGoc(query)
+        g = db.queryGods(query)
 
         if g:
             title = g['TITLE']
             team_flag = g['TEAM_FLAG']
+            game = g['GAME']
             game_type = " "
             if g['TYPE'] == 1:
                 game_type = "1v1"
@@ -227,27 +245,30 @@ class Godsofcod(commands.Cog):
 
             
 
-            embedVar = discord.Embed(title=f"GODS OF COD: {title}", description="Party Chat Gaming Database™️", colour=000000)
+            embedVar = discord.Embed(title=f":checkered_flag: {title}", description=f"{game} Party Chat Gaming Tournament™️", colour=000000)
             embedVar.set_image(url=avatar)
-            embedVar.add_field(name="TEAM TOURNAMENT" , value=str(team_flag))
-            embedVar.add_field(name="TOURNAMENT STYLE", value=game_type)
-            embedVar.add_field(name="TOURNAMENT AVAILABLE", value=str(available))
-            embedVar.add_field(name="TOURNAMENT REGISTRATION", value=str(registration))
+            embedVar.add_field(name=":military_helmet: TEAM TOURNAMENT" , value=str(team_flag))
+            embedVar.add_field(name=":skull_crossbones:  TOURNAMENT STYLE", value=game_type)
+            embedVar.add_field(name=":video_game: GAME", value=game)
+            embedVar.add_field(name=":zap: AVAILABLE", value=str(available))
+            embedVar.add_field(name=":sparkler: REGISTRATION", value=str(registration))
             if participants:
                 embedVar.add_field(name="Registered Participants", value=participants)
-            embedVar.add_field(name="REWARD", value=f"${reward}", inline=False)
+            embedVar.add_field(name=":moneybag: REWARD", value=f"${reward}")
             await ctx.send(embed=embedVar)
         else:
-            await ctx.send(m.NO_AVAILABLE_GOC, delete_after=5)
+            await ctx.send(m.NO_AVAILABLE_GODS)
 
     @commands.command()
-    async def gocarchive(self, ctx, args):
-        query = {'ARCHIVED': True, 'TITLE': args}
-        g = db.queryGoc(query)
+    async def godsarchive(self, ctx, *args):
+        title = " ".join([*args])
+        query = {'ARCHIVED': True, 'TITLE': title}
+        g = db.queryGods(query)
 
         if g:
             title = g['TITLE']
             team_flag = g['TEAM_FLAG']
+            game = g['GAME']
             game_type = " "
             if g['TYPE'] == 1:
                 game_type = "1v1"
@@ -269,11 +290,12 @@ class Godsofcod(commands.Cog):
 
             
 
-            embedVar = discord.Embed(title=f"GODS OF COD: {title}", description="Party Chat Gaming Database™️", colour=000000)
+            embedVar = discord.Embed(title=f"{title}", description=f"{game} Party Chat Gaming Tournament™™️", colour=000000)
             embedVar.set_thumbnail(url='https://res.cloudinary.com/dkcmq8o15/image/upload/v1620310701/PCG%20LOGOS%20AND%20RESOURCES/Party_Chat_Archives.png')
             embedVar.set_image(url=avatar)
             embedVar.add_field(name="TEAM TOURNAMENT" , value=str(team_flag))
             embedVar.add_field(name="TOURNAMENT STYLE", value=game_type)
+            embedVar.add_field(name="GAME", value=game)
             embedVar.add_field(name="TOURNAMENT AVAILABLE", value=str(available))
             embedVar.add_field(name="TOURNAMENT REGISTRATION", value=str(registration))
             if participants:
@@ -282,15 +304,15 @@ class Godsofcod(commands.Cog):
 
             if winner:
                 embedVar.add_field(name="Winner", value=winner)
-            embedVar.set_footer(text="This GODS OF COD tournament has been archived. ")
+            embedVar.set_footer(text="This Gods tournament has been archived. ")
             await ctx.send(embed=embedVar)
         else:
             await ctx.send(m.TOURNEY_DOES_NOT_EXIST, delete_after=5)
 
     @commands.command()
-    async def gocrules(self, ctx):
+    async def godsrules(self, ctx):
         query = {'AVAILABLE': True}
-        g = db.queryGoc(query)
+        g = db.queryGods(query)
         if g:
             embedVar = discord.Embed(title=f"GODS OF COD: RULES", description="Party Chat Gaming Database™️", colour=000000)
             embedVar.add_field(name="Updated Rules for Gods of Cod" , value=m.GODS_OF_COD_RULES)
@@ -299,12 +321,12 @@ class Godsofcod(commands.Cog):
             await ctx.send(m.NO_AVAILABLE_GOC, delete_after=5)
 
 def setup(bot):
-    bot.add_cog(Godsofcod(bot))
+    bot.add_cog(Gods(bot))
 
 # Leaderboard
 # @bot.command()
 # @commands.check(validate_user)
-# async def gocleaderboard(ctx, args):
-#    goc_data = db.queryGoc({'TITLE': args})
-#    if goc_data:
+# async def godsleaderboard(ctx, args):
+#    gods_data = db.queryGods({'TITLE': args})
+#    if gods_data:
 #       print("yes")
