@@ -117,6 +117,8 @@ class Lookup(commands.Cog):
 
             if gods:
                 embedVar = discord.Embed(title=f"{godsname} Lobby: {game_type} ".format(self), description=f"{user.mention} owns this lobby", colour=000000)
+            elif kingsgambit:
+                embedVar = discord.Embed(title=f":crown: [Kings Gambit] {games} Lobby: {game_type} ".format(self), description=f"{user.mention} owns this lobby", colour=000000)            
             else:
                 embedVar = discord.Embed(title=f"{games} Lobby: {game_type} ".format(self), description=f"{user.mention} owns this lobby", colour=000000)            
             embedVar.set_image(url=avatar)
@@ -124,7 +126,7 @@ class Lookup(commands.Cog):
                 embedVar.add_field(name="Tournament", value="Yes")
             
             if kingsgambit:
-                embedVar.add_field(name="Kings Gambit", value="Yes")
+                embedVar.add_field(name="Kings Gambit", value="Yes", inline=False)
 
             if scrim:
                 embedVar.add_field(name="Scrim", value="Yes")
@@ -237,14 +239,13 @@ class Lookup(commands.Cog):
 
             if gods:
                 embedVar = discord.Embed(title=f"{godsname} Lobby: {game_type} ".format(self), description=f"{ctx.author.mention} owns this lobby", colour=000000)
+            elif kingsgambit:
+                embedVar = discord.Embed(title=f":crown: [Kings Gambit] {games} Lobby: {game_type} ".format(self), description=f"{ctx.author.mention} owns this lobby", colour=000000)
             else:
                 embedVar = discord.Embed(title=f"{games} Lobby: {game_type} ".format(self), description=f"{ctx.author.mention} owns this lobby", colour=000000)
             embedVar.set_image(url=avatar)
             if tournament:
                 embedVar.add_field(name="Tournament", value="Yes")
-            
-            if kingsgambit:
-                embedVar.add_field(name="Kings Gambit", value="Yes")
 
             if scrim:
                 embedVar.add_field(name="Scrim", value="Yes")
@@ -363,14 +364,13 @@ class Lookup(commands.Cog):
 
             if gods:
                 embedVar = discord.Embed(title=f"{godsname} Lobby: {game_type} ".format(self), description=f"{lobby_owner.mention} owns this lobby", colour=000000)
+            elif kingsgambit:
+                embedVar = discord.Embed(title=f":crown: [Kings Gambit] {games} Lobby: {game_type} ".format(self), description=f"{lobby_owner.mention} owns this lobby", colour=000000)
             else:
                 embedVar = discord.Embed(title=f"{games} Lobby: {game_type} ".format(self), description=f"{lobby_owner.mention} owns this lobby", colour=000000)            
             embedVar.set_image(url=avatar)
             if tournament:
                 embedVar.add_field(name="Tournament", value="Yes")
-            
-            if kingsgambit:
-                embedVar.add_field(name="Kings Gambit", value="Yes")
 
             if scrim:
                 embedVar.add_field(name="Scrim", value="Yes")

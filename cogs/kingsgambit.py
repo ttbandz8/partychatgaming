@@ -28,13 +28,20 @@ class Kingsgambit(commands.Cog):
         return await main.validate_user(ctx)
 
     @commands.command()
-    async def kg(self, ctx):
+    async def kg(self, ctx, *args):
         if ctx.author.guild_permissions.administrator == True:
-            game = [x for x in db.query_all_games()][0]
-            session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 1, "TEAMS": [], "KINGSGAMBIT": True, "RANKED": True, "TOURNAMENT": True}
-            resp = db.createSession(data.newSession(session_query))
-            await ctx.send(resp)
-            await ctx.send(f"{ctx.author.mention}" +" started a *Kings Gambit* :crown:")
+            if args:
+                game_name = " ".join([*args])
+                query = {'ALIASES': game_name.lower()}
+                game = db.queryGame(query)
+                session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 1, "TEAMS": [], "KINGSGAMBIT": True, "TOURNAMENT": True}
+                resp = db.createSession(data.newSession(session_query))
+                if resp == m.ALREADY_IN_SESSION:
+                    await ctx.send(m.ALREADY_IN_SESSION)
+                else:
+                    await ctx.send(f"{ctx.author.mention}" +" started a *Kings Gambit* :crown:")
+            else:
+                await ctx.send(m.GAME_NOT_DETECTED)
         else:
             print(m.ADMIN_ONLY_COMMAND)
 
@@ -42,22 +49,40 @@ class Kingsgambit(commands.Cog):
     async def jkg(self, ctx, user1: User):
         session_query = {"OWNER": str(user1), "AVAILABLE": True, "KINGSGAMBIT": True}
         session = db.querySession(session_query)
+        user = db.queryUser({'DISNAME': str(user1)})
+        if session['GAME'] in user['GAMES']:
+            if bool(session['TEAMS']):
+                teams_list = [x for x in session['TEAMS']]
+                current_member = []
+                positions = []
+                new_position = 0
 
-        if bool(session['TEAMS']):
-            teams_list = [x for x in session['TEAMS']]
-            current_member = []
-            positions = []
-            new_position = 0
+                if bool(teams_list):
+                    for x in teams_list:
+                        if str(ctx.author) in x['TEAM']:
+                            current_member.append(str(ctx.author))
+                            positions.append(x['POSITION'])
+                    new_position = max(positions) + 1
 
-            if bool(teams_list):
-                for x in teams_list:
-                    if str(ctx.author) in x['TEAM']:
-                        current_member.append(str(ctx.author))
-                        positions.append(x['POSITION'])
-                new_position = max(positions) + 1
+                if not bool(current_member):
+                    accept = await ctx.send(f"{user1.mention}, will you allow {ctx.author.mention} to join the Kings Gambit?", delete_after=10)
+                    for emoji in emojis:
+                        await accept.add_reaction(emoji)
 
-            if not bool(current_member):
-                accept = await ctx.send(f"{user1.mention}, will you allow {ctx.author.mention} to join the Kings Gambit?", delete_after=10)
+                    def check(reaction, user):
+                        return user == user1 and str(reaction.emoji) == '👍'
+
+                    try:
+                        reaction, user = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
+                        join_query = {"TEAM": [str(ctx.author)], "SCORE": 0, "POSITION": new_position}
+                        session_joined = db.joinKingsGambit(session_query, join_query)
+                        await ctx.send(session_joined)
+                    except:
+                        await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=5)
+                else:
+                    await ctx.send(m.ALREADY_IN_SESSION, delete_after=5)
+            else:
+                accept = await ctx.send(f"{ctx.author.mention}, Will you allow {user1.mention} to join the Kings Gambit?", delete_after=10)
                 for emoji in emojis:
                     await accept.add_reaction(emoji)
 
@@ -66,28 +91,13 @@ class Kingsgambit(commands.Cog):
 
                 try:
                     reaction, user = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
-                    join_query = {"TEAM": [str(ctx.author)], "SCORE": 0, "POSITION": new_position}
+                    join_query = {"TEAM": [str(ctx.author)], "SCORE": 0, "POSITION": 0}
                     session_joined = db.joinKingsGambit(session_query, join_query)
-                    await ctx.send(session_joined)
+                    await ctx.send(session_joined, delete_after=5)
                 except:
                     await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=5)
-            else:
-                await ctx.send(m.ALREADY_IN_SESSION, delete_after=5)
         else:
-            accept = await ctx.send(f"{ctx.author.mention}, Will you allow {user1.mention} to join the Kings Gambit?", delete_after=10)
-            for emoji in emojis:
-                await accept.add_reaction(emoji)
-
-            def check(reaction, user):
-                return user == user1 and str(reaction.emoji) == '👍'
-
-            try:
-                reaction, user = await bot.wait_for('reaction_add', timeout=10.0, check=check)
-                join_query = {"TEAM": [str(ctx.author)], "SCORE": 0, "POSITION": 0}
-                session_joined = db.joinKingsGambit(session_query, join_query)
-                await ctx.send(session_joined, delete_after=5)
-            except:
-                await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=5)
+            await ctx.send(m.ADD_A_GAME)
 
 
     @commands.command()
