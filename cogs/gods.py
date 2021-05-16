@@ -245,16 +245,16 @@ class Gods(commands.Cog):
 
             
 
-            embedVar = discord.Embed(title=f":checkered_flag: {title}", description=f"{game} Party Chat Gaming Tournament™️", colour=000000)
+            embedVar = discord.Embed(title=f":checkered_flag: {title}", description=f":video_game: {game} Gods Tournament™️", colour=000000)
             embedVar.set_image(url=avatar)
-            embedVar.add_field(name=":military_helmet: TEAM TOURNAMENT" , value=str(team_flag))
             embedVar.add_field(name=":skull_crossbones:  TOURNAMENT STYLE", value=game_type)
-            embedVar.add_field(name=":video_game: GAME", value=game)
-            embedVar.add_field(name=":zap: AVAILABLE", value=str(available))
-            embedVar.add_field(name=":sparkler: REGISTRATION", value=str(registration))
+            if available:
+                embedVar.add_field(name=":zap: Started", value="Yes")
+            if registration:
+                embedVar.add_field(name=":sparkler: Registration", value="Open")
             if participants:
-                embedVar.add_field(name="Registered Participants", value=participants)
-            embedVar.add_field(name=":moneybag: REWARD", value=f"${reward}")
+                embedVar.add_field(name="Participants", value=participants)
+            embedVar.add_field(name=":moneybag: Reward", value=f"${reward}")
             await ctx.send(embed=embedVar)
         else:
             await ctx.send(m.NO_AVAILABLE_GODS)
