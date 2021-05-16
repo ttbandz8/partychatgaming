@@ -188,23 +188,34 @@ class Games(commands.Cog):
             await ctx.send(m.USER_NOT_REGISTERED)
 
     @commands.command()
-    async def uign(self, ctx, args1, args2):
-        user = {'DISNAME': str(ctx.author)}
+    async def uign(self, ctx, args1, *args):
+        user_query = {'DISNAME': str(ctx.author)}
+        user = db.queryUser({'DISNAME': str(ctx.author)})
         aliases = [x for x in db.query_all_games() for x in x['ALIASES']]
-        new_ign = args2
+        new_ign = " ".join([*args])
         if args1 in aliases:
             game_query = {'ALIASES': args1}
             game = db.queryGame(game_query)
             title = game['GAME']
             ign = game['IGN']
-            if ign:
-                update_query = {"$set": {"IGN": [{title : new_ign}]}}
-                updated = db.updateUserNoFilter(user, update_query)
-                await ctx.send(updated)
+            current = []
+            for x in user['IGN']:
+                current = [*x]
+            if title in user['GAMES']:
+                if ign and (title in current):
+                    update_query = {"$set": {"IGN": {title : new_ign}}}
+                    updated = db.updateUserNoFilter(user_query, update_query)
+                    await ctx.send(updated)
+                elif ign and (title not in current):
+                    update_query = {"$push": {"IGN": {title : new_ign}}}
+                    updated = db.updateUserNoFilter(user_query, update_query)
+                    await ctx.send(updated)
+                else:
+                    await ctx.send("In Game Names unavailable for this game. ")
             else:
-                await ctx.send("In Game Names unavailable for this game. ", delete_after=3)
+                await ctx.send(m.ADD_A_GAME)
         else:
-            await ctx.send("Game is unavailable. ", delete_after=3)
+            await ctx.send(m.ADD_A_GAME)
 
 
 

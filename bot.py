@@ -142,8 +142,11 @@ async def iby(ctx, args1, user: User):
          loss_count +=1
 
       total_games = win_count + loss_count
+      if win_count > 0:
+         message = f"{str(ctx.author.mention)} has defeated {str(user.mention)} {win_count} out of {total_games} matches in {game['GAME']}!"
+      else:
+         message = f"{str(ctx.author.mention)} has never defeated {str(user.mention)} in {game['GAME']}!"
 
-      message = f"{str(ctx.author.mention)} has defeated {str(user.mention)} {win_count} out of {total_games} matches!"
       if total_games == 0:
          message = "You two have not played each other. "
       await ctx.send(message)

@@ -30,7 +30,7 @@ class Lobbies(commands.Cog):
         return await main.validate_user(ctx)
 
     @commands.command()
-    async def lobby(self, ctx, matchtype, *args):
+    async def cl(self, ctx, matchtype, *args):
         game_name = " ".join([*args])
         query = {'ALIASES': game_name.lower()}
         game = db.queryGame(query)
@@ -137,7 +137,7 @@ class Lobbies(commands.Cog):
             tourney_cards = db.queryTournamentCards()
             tourney_titles = db.queryTournamentTitles()
 
-            types_of_matches_list = [x for x in player['NORMAL']]
+            types_of_matches_list = [x for x in player['MATCHES']]
             types_of_matches = dict(ChainMap(*types_of_matches_list))
             current_score = types_of_matches[game_type.upper()]
             query = {'DISNAME': player['DISNAME']}

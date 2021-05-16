@@ -30,7 +30,7 @@ class Lookup(commands.Cog):
         return await main.validate_user(ctx)
 
     @commands.command()
-    async def lo(self, ctx, user: User):
+    async def lowner(self, ctx, user: User):
         session_owner = {'OWNER': str(user), "AVAILABLE": True}
         session = db.querySession(session_owner)
         if session:
@@ -191,9 +191,8 @@ class Lookup(commands.Cog):
             king_score = 0
 
             other_teams_comp = []
-
+            king_in_the_lead = []
             for x in team_1:
-                # n = x['TEAM'].split("#",1)[1]
                 team_1_score = f" Score: {x['SCORE']}"
                 king_score = x['SCORE']
                 for y in x['TEAM']:
@@ -227,6 +226,19 @@ class Lookup(commands.Cog):
                     p = x['POSITION']
                     for a in x['TEAM']:
                         other_teams_comp.append({a:p})
+            
+            in_the_lead = {}
+            if kingsgambit:
+                scores = []
+                lead_scores = [x for x in teams if x['SCORE'] > 0]
+                for x in teams:
+                    scores.append(x['SCORE'])
+                
+                for x in lead_scores:
+                    if x['SCORE'] == max(scores):
+                        in_the_lead = {x['TEAM'][0]:x['SCORE']}
+            lead_player = "".join([*in_the_lead])
+            lead_score = "".join([str(*in_the_lead.values())])
 
             other_teams_comp_to_str = dict(ChainMap(*other_teams_comp))
             n = dict(sorted(other_teams_comp_to_str.items(), key=lambda item: item[1]))
@@ -234,9 +246,11 @@ class Lookup(commands.Cog):
 
             if gods:
                 embedVar = discord.Embed(title=f":trophy: {godsname} Lobby: {game_type} ".format(self), description=f"{ctx.author.mention} owns this lobby.\n" + "Compete in PCGs Grand Tournament to determine the one true God of the game!", colour=000000)
-            elif kingsgambit:
+            if kingsgambit:
                 embedVar = discord.Embed(title=f":crown: [Kings Gambit]\n{games} Lobby: {game_type} ".format(self), description=f"{ctx.author.mention} owns this lobby.\n" + "Compete in 1v1 matches where the winner stays on to determine the king of the game!", colour=000000)
-            else:
+            if king_score > 0:
+                embedVar = discord.Embed(title=f":crown: [Kings Gambit]\n:100: {lead_player} Is in the lead with {lead_score} points!".format(self), description=f"{ctx.author.mention} owns this lobby.\n" + "Compete in 1v1 matches where the winner stays on to determine the king of the game!", colour=000000)
+            if not gods and not kingsgambit:
                 embedVar = discord.Embed(title=f"{games} Lobby: {game_type} ".format(self), description=f"{ctx.author.mention} owns this lobby", colour=000000)
             embedVar.set_image(url=avatar)
 
@@ -244,12 +258,12 @@ class Lookup(commands.Cog):
                 embedVar.add_field(name="Scrim", value="Yes")
             
             if kingsgambit and king_score > 0:
-                embedVar.add_field(name=f":crown:King - {team_1_score}", value="\n".join(team_1_comp_with_ign))
+                embedVar.add_field(name=f":crown: King - {team_1_score}", value="\n".join(team_1_comp_with_ign))
             elif not team_1_score:
                 embedVar.add_field(name=f":military_helmet:Team 1", value="Vacant")
             else:
                 embedVar.add_field(name=f":military_helmet:Team 1 - {team_1_score}", value="\n".join(team_1_comp_with_ign))
-            
+
             if team_2_comp_with_ign:
                 embedVar.add_field(name=f":military_helmet:Team 2 - {team_2_score}", value="\n".join(team_2_comp_with_ign))
             else:
@@ -263,7 +277,7 @@ class Lookup(commands.Cog):
             await ctx.send(m.SESSION_DOES_NOT_EXIST, delete_after=5)
 
     @commands.command()
-    async def cl(self, ctx, user: User):
+    async def check(self, ctx, user: User):
         current_session = {'TEAMS.TEAM': str(user), "AVAILABLE": True}
         session = db.querySessionMembers(current_session)
         if session:
@@ -403,16 +417,29 @@ class Lookup(commands.Cog):
 
             matches_to_string = dict(ChainMap(*matches))
             ign_to_string = dict(ChainMap(*ign))
+            embed1 = discord.Embed(title= f":triangular_flag_on_post: " + f"{name}".format(self), description=":bank: Party Chat Gaming Database™️", colour=000000)
+            embed1.set_thumbnail(url=avatar)
+            embed1.add_field(name="Team" + " :military_helmet:", value=team)
+            embed1.add_field(name="Title" + " :crown:", value=' '.join(str(x) for x in titles))
+            embed1.add_field(name="Tournament Wins" + " :fireworks:", value=tournament_wins)
 
-            embedVar = discord.Embed(title= f":triangular_flag_on_post: " + f"{name}".format(self), description=":bank: Party Chat Gaming Database™️", colour=000000)
-            embedVar.set_thumbnail(url=avatar)
-            embedVar.add_field(name="Game" + " :video_game:" , value=' '.join(str(x) for x in games))
-            embedVar.add_field(name="In-Game Name" + " :selfie:", value="\n".join(f'{v}' for k,v in ign_to_string.items()))
-            embedVar.add_field(name="Team" + " :military_helmet:", value=team)
-            embedVar.add_field(name="Titles" + " :crown:", value=' '.join(str(x) for x in titles))
-            embedVar.add_field(name="Match Stats" + " :medal:", value="\n".join(f'{k}: {"/".join([str(int) for int in v])}' for k,v in matches_to_string.items()))
-            embedVar.add_field(name="Tournament Wins" + " :fireworks:", value=tournament_wins)
-            await ctx.send(embed=embedVar, delete_after=15)
+            embed2 = discord.Embed(title= f":triangular_flag_on_post: " + f"{name}".format(self), description=":bank: Party Chat Gaming Database™️", colour=000000)
+            embed2.set_thumbnail(url=avatar)
+            embed2.add_field(name="Game" + " :video_game:" , value='\n'.join(games))
+            embed2.add_field(name="In-Game Name" + " :selfie:", value="\n".join(f'{k}: :video_game: {v}' for k,v in ign_to_string.items()), inline=False)
+
+            embed3 = discord.Embed(title= f":triangular_flag_on_post: " + f"{name}".format(self), description=":bank: Party Chat Gaming Database™️", colour=000000)
+            embed3.set_thumbnail(url=avatar)
+            embed3.add_field(name="Stats" + " :medal:", value="\n".join(f'{k}: {"/".join([str(int) for int in v])}' for k,v in matches_to_string.items()))
+
+            paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+            paginator.add_reaction('⏮️', "first")
+            paginator.add_reaction('⏪', "back")
+            paginator.add_reaction('🔐', "lock")
+            paginator.add_reaction('⏩', "next")
+            paginator.add_reaction('⏭️', "last")
+            embeds = [embed1, embed2, embed3]
+            await paginator.run(embeds)
         else:
             await ctx.send(m.USER_NOT_REGISTERED)
 
