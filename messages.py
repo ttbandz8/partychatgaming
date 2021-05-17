@@ -24,6 +24,7 @@ USER_DOESNT_HAVE_THE_Title="Title unavailable. "
 
 TOO_FEW_PLAYERS_ON_TEAM="Not enough players for the team. "
 TOO_MANY_PLAYERS_ON_TEAM="Too many players for the team. "
+TEAM_ALREADY_PLAYS="Team Already Playing This Game. "
 
 END_GODS="Gods has ended. Thank you to all participants!"
 NO_AVAILABLE_GODS="No Gods at this time."

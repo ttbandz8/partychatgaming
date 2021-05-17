@@ -215,10 +215,14 @@ class Teams(commands.Cog):
                     game_query = {'ALIASES': alias}
                     game = db.queryGame(game_query)
                     if game:
-                        title = game['GAME']    
-                        query_to_update_game = {"$push": {"GAMES": title}}
-                        resp = db.updateTeam(team, query_to_update_game)
-                        await ctx.send(resp)
+                        title = game['GAME']
+                        for games in team['GAMES']:
+                            if games == title:
+                                await ctx.send(m.TEAM_ALREADY_PLAYS)
+                            else: 
+                                query_to_update_game = {"$push": {"GAMES": title}}
+                                resp = db.updateTeam(team, query_to_update_game)
+                                await ctx.send(resp)
                 else:
                     await ctx.send(m.GAME_UNAVAILABLE)
             else:
