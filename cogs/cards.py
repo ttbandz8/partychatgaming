@@ -27,9 +27,9 @@ class Cards(commands.Cog):
 
 
     @commands.command()
-    async def nc(self, ctx, args1: str, args2: str, args3: int, args4: int):
+    async def nc(self, ctx, args1: str, args2: str, args3: int, args4: int, args5: int, args6 : int, args7 : int, args8: int):
         if ctx.author.guild_permissions.administrator == True:
-            card_query = {'PATH': str(args1), 'NAME': str(args2), 'TOURNAMENT_REQUIREMENTS': int(args3),'PRICE': int(args4)}
+            card_query = {'PATH': str(args1), 'NAME': str(args2), 'TOURNAMENT_REQUIREMENTS': int(args3),'PRICE': int(args4), 'HEALTH': int(args5), 'ATTACK': int(args6),'DEFENSE':int(args7),'TYPE': int(args8)}
             added = db.createCard(data.newCard(card_query))
             await ctx.send(added, delete_after=3)
         else:

@@ -71,6 +71,13 @@ class CARDS():
     PRICE: int = field(default_factory=lambda: 0)
     TOURNAMENT_REQUIREMENTS: int = field(default_factory=lambda: 0)
     TIMESTAMP: str = now
+    HEALTH: int = field(default_factory=lambda: 0) 
+    ATTACK: int = field(default_factory=lambda: 0)
+    DEFENSE: int = field(default_factory=lambda: 0)
+    TYPE: int = field(default_factory=lambda: 0)
+    ACCURACY: float = field(default_factory=lambda: .50)
+    SPEED: float = field(default_factory=lambda: .50)
+    VULNERABLE: bool = field(default_factory=lambda: False)
 
 @dataclass(frozen=True, order=True) 
 class TITLES():

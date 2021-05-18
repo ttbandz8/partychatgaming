@@ -275,7 +275,7 @@ class Lobbies(commands.Cog):
                 await ctx.send(f"Competitor " + f"{user.mention}" + " took an L! :eyes:")
 
     @commands.command()
-    async def atl(self, ctx, *user: User):
+    async def add(self, ctx, *user: User):
         if ctx.author.guild_permissions.administrator == True:  
             session_query = {"OWNER": str(ctx.author), "AVAILABLE": True}
             session = db.querySession(session_query)
@@ -390,6 +390,16 @@ class Lobbies(commands.Cog):
             await ctx.send(f"{user.mention}" +f" + :one:", delete_after=2)
         else:
             await ctx.send(f"Score not added. Please, try again. ", delete_after=5)
+
+    @commands.command()
+    async def cards(self,ctx, user: User):
+        print(ctx.author[])
+        await self.cl(self,ctx,1,"Flex")
+        await self.jl(self,ctx,ctx.author)
+        await self.add(self,ctx,user)
+
+
+
 
 
 def setup(bot):
