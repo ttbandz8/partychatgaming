@@ -71,19 +71,27 @@ class CARDS():
     PRICE: int = field(default_factory=lambda: 0)
     TOURNAMENT_REQUIREMENTS: int = field(default_factory=lambda: 0)
     TIMESTAMP: str = now
-    HEALTH: int = field(default_factory=lambda: 0) 
-    ATTACK: int = field(default_factory=lambda: 0)
-    DEFENSE: int = field(default_factory=lambda: 0)
+    MOVESET: list[str] = field(default_factory=lambda: [])
+    HLT: int = field(default_factory=lambda: 300)
+    STAM: int = field(default_factory=lambda: 100) 
+    ATK: int = field(default_factory=lambda: 0)
+    DEF: int = field(default_factory=lambda: 0)
     TYPE: int = field(default_factory=lambda: 0)
-    ACCURACY: float = field(default_factory=lambda: .50)
-    SPEED: float = field(default_factory=lambda: .50)
-    VULNERABLE: bool = field(default_factory=lambda: False)
+    ACC: float = field(default_factory=lambda: .50)
+    PASS: list[str] = field(default_factory=lambda: [])
+    SPD: float = field(default_factory=lambda: .50)
+    VUL: bool = field(default_factory=lambda: False)
+    SHOW: str = field(default_factory=lambda: "N/A")
+    COLLECTION: list[str] = field(default_factory=lambda: [])
 
 @dataclass(frozen=True, order=True) 
 class TITLES():
     TITLE: str
     PRICE: int = field(default_factory=lambda: 0)
     TOURNAMENT_REQUIREMENTS: int = field(default_factory=lambda: 0)
+    ABILITIES: list[str] = field(default_factory=lambda: []) 
+    SHOW: str = field(default_factory=lambda: "N/A")
+    COLLECTION: list[str] = field(default_factory=lambda: [])
     TIMESTAMP: str = now
 
 @dataclass(frozen=True, order=True) 

@@ -27,16 +27,18 @@ class Cards(commands.Cog):
 
 
     @commands.command()
-    async def nc(self, ctx, args1: str, args2: str, args3: int, args4: int, args5: int, args6 : int, args7 : int, args8: int):
+    async def nc(self, ctx, path: str, tournament: int, price: int, *args):
         if ctx.author.guild_permissions.administrator == True:
-            card_query = {'PATH': str(args1), 'NAME': str(args2), 'TOURNAMENT_REQUIREMENTS': int(args3),'PRICE': int(args4), 'HEALTH': int(args5), 'ATTACK': int(args6),'DEFENSE':int(args7),'TYPE': int(args8)}
+            name = " ".join([*args])
+            card_query = {'PATH': str(path), 'NAME': str(name), 'TOURNAMENT_REQUIREMENTS': int(tournament),'PRICE': int(price)}
             added = db.createCard(data.newCard(card_query))
             await ctx.send(added, delete_after=3)
         else:
             print(m.ADMIN_ONLY_COMMAND)
 
     @commands.command()
-    async def bc(self, ctx, args: str):
+    async def bc(self, ctx, *args: str):
+        card_name = " ".join([*args])
         vault_query = {'OWNER' : str(ctx.author)}
         vault = db.altQueryVault(vault_query)
         shop = db.queryShopCards()
@@ -46,7 +48,7 @@ class Cards(commands.Cog):
         cost = 0
         mintedCard = ""
         for card in shop:
-            if args == card['NAME']:
+            if card_name == card['NAME']:
                 mintedCard = card['NAME']
                 cost = card['PRICE']
 
@@ -61,26 +63,27 @@ class Cards(commands.Cog):
                     await ctx.send("You have an insufficent Balance")
                 else:
                     await main.curse(cost, str(ctx.author))
-                    response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': args}})
+                    response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(card_name)}})
                     await ctx.send(m.PURCHASE_COMPLETE)
         else:
             await ctx.send(m.CARD_DOESNT_EXIST)
 
     @commands.command()
-    async def uc(self, ctx, args):
+    async def uc(self, ctx, *args):
+        card_name = " ".join([*args])
         user_query = {'DISNAME': str(ctx.author)}
         user = db.queryUser(user_query)
 
         vault_query = {'OWNER' : str(ctx.author)}
         vault = db.altQueryVault(vault_query)
 
-        resp = db.queryCard({'NAME': args})
-
+        resp = db.queryCard({'NAME': card_name})
+        print(resp)
         if resp['TOURNAMENT_REQUIREMENTS'] == 0:
 
             # Do not Check Tourney wins
-            if args in vault['CARDS']:
-                response = db.updateUserNoFilter(user_query, {'$set': {'CARD': args}})
+            if card_name in vault['CARDS']:
+                response = db.updateUserNoFilter(user_query, {'$set': {'CARD': str(card_name)}})
                 await ctx.send(response)
             else:
                 await ctx.send(m.USER_DOESNT_HAVE_THE_CARD, delete_after=5)
@@ -91,8 +94,8 @@ class Cards(commands.Cog):
             card_query = {'TOURNAMENT_REQUIREMENTS': tournament_wins}
 
             if tournament_wins >= resp['TOURNAMENT_REQUIREMENTS']:
-                if args in vault['CARDS']:
-                    response = db.updateUserNoFilter(user_query, {'$set': {'CARD': args}})
+                if card_name in vault['CARDS']:
+                    response = db.updateUserNoFilter(user_query, {'$set': {'CARD': str(card_name)}})
                     await ctx.send(response)
                 else:
                     await ctx.send(m.USER_DOESNT_HAVE_THE_CARD, delete_after=5)
@@ -100,8 +103,9 @@ class Cards(commands.Cog):
                 return "Unable to update card."
 
     @commands.command()
-    async def vc(self, ctx, args):
-        card = db.queryCard({'NAME':args})
+    async def vc(self, ctx, *args):
+        card_name = " ".join([*args])
+        card = db.queryCard({'NAME':str(card_name)})
         if card:
             img = Image.open(requests.get(card['PATH'], stream=True).raw)
             img.save("text.png")

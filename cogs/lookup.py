@@ -30,7 +30,7 @@ class Lookup(commands.Cog):
         return await main.validate_user(ctx)
 
     @commands.command()
-    async def lowner(self, ctx, user: User):
+    async def owner(self, ctx, user: User):
         session_owner = {'OWNER': str(user), "AVAILABLE": True}
         session = db.querySession(session_owner)
         if session:
@@ -115,6 +115,15 @@ class Lookup(commands.Cog):
             n = dict(sorted(other_teams_comp_to_str.items(), key=lambda item: item[1]))
             other_teams_sorted_list = "\n".join(f'{k}' for k,v in n.items())
 
+            team1="Team 1"
+            team2="Team 2"
+
+            if games == "Crown Unlimited":
+                if team_1:
+                    team1=team_1[0]['CARD']
+                if team_2:
+                    team2=team_2[0]['CARD']
+
             if gods:
                 embedVar = discord.Embed(title=f":trophy: {godsname} Lobby: {game_type} ".format(self), description=f"{user.mention} owns this lobby.\n" + "Compete in PCGs Grand Tournament to determine the one true God of the game!", colour=000000)
             elif kingsgambit:
@@ -129,14 +138,14 @@ class Lookup(commands.Cog):
             if kingsgambit and king_score > 0:
                 embedVar.add_field(name=f":crown:King - {team_1_score}", value="\n".join(team_1_comp_with_ign))
             elif not team_1_score:
-                embedVar.add_field(name=f":military_helmet:Team 1", value="Vacant")
+                embedVar.add_field(name=f":military_helmet:{team1}", value="Vacant")
             else:
-                embedVar.add_field(name=f":military_helmet:Team 1 - {team_1_score}", value="\n".join(team_1_comp_with_ign))
+                embedVar.add_field(name=f":military_helmet:{team1} - {team_1_score}", value="\n".join(team_1_comp_with_ign))
             
             if team_2_comp_with_ign:
-                embedVar.add_field(name=f":military_helmet:Team 2 - {team_2_score}", value="\n".join(team_2_comp_with_ign))
+                embedVar.add_field(name=f":military_helmet:{team2} - {team_2_score}", value="\n".join(team_2_comp_with_ign))
             else:
-                embedVar.add_field(name=f":military_helmet:Team 2", value="Vacant")
+                embedVar.add_field(name=f":military_helmet:{team2}", value="Vacant")
 
             if kingsgambit and other_teams:
                 embedVar.add_field(name=f"Up Next...", value=other_teams_sorted_list)
@@ -244,6 +253,16 @@ class Lookup(commands.Cog):
             n = dict(sorted(other_teams_comp_to_str.items(), key=lambda item: item[1]))
             other_teams_sorted_list = "\n".join(f'{k}' for k,v in n.items())
 
+            team1="Team 1"
+            team2="Team 2"
+
+            if games == "Crown Unlimited":
+
+                if team_1:
+                    team1=team_1[0]['CARD']
+                if team_2:
+                    team2=team_2[0]['CARD']
+
             if gods:
                 embedVar = discord.Embed(title=f":trophy: {godsname} Lobby: {game_type} ".format(self), description=f"{ctx.author.mention} owns this lobby.\n" + "Compete in PCGs Grand Tournament to determine the one true God of the game!", colour=000000)
             if kingsgambit:
@@ -260,14 +279,14 @@ class Lookup(commands.Cog):
             if kingsgambit and king_score > 0:
                 embedVar.add_field(name=f":crown: King - {team_1_score}", value="\n".join(team_1_comp_with_ign))
             elif not team_1_score:
-                embedVar.add_field(name=f":military_helmet:Team 1", value="Vacant")
+                embedVar.add_field(name=f":military_helmet:{team1}", value="Vacant")
             else:
-                embedVar.add_field(name=f":military_helmet:Team 1 - {team_1_score}", value="\n".join(team_1_comp_with_ign))
+                embedVar.add_field(name=f":military_helmet:{team1} - {team_1_score}", value="\n".join(team_1_comp_with_ign))
 
             if team_2_comp_with_ign:
-                embedVar.add_field(name=f":military_helmet:Team 2 - {team_2_score}", value="\n".join(team_2_comp_with_ign))
+                embedVar.add_field(name=f":military_helmet:{team2} - {team_2_score}", value="\n".join(team_2_comp_with_ign))
             else:
-                embedVar.add_field(name=f":military_helmet:Team 2", value="Vacant")
+                embedVar.add_field(name=f":military_helmet:{team2}", value="Vacant")
 
             if kingsgambit and other_teams:
                 embedVar.add_field(name=f"Up Next...", value=other_teams_sorted_list, inline=False)
@@ -369,6 +388,15 @@ class Lookup(commands.Cog):
             n = dict(sorted(other_teams_comp_to_str.items(), key=lambda item: item[1]))
             other_teams_sorted_list = "\n".join(f'{k}' for k,v in n.items())
 
+            team1="Team 1"
+            team2="Team 2"
+
+            if games == "Crown Unlimited":
+                if team_1:
+                    team1=team_1[0]['CARD']
+                if team_2:
+                    team2=team_2[0]['CARD']
+
             if gods:
                 embedVar = discord.Embed(title=f":trophy: {godsname} Lobby: {game_type} ".format(self), description=f"{lobby_owner.mention} owns this lobby.\n" + "Compete in PCGs Grand Tournament to determine the one true God of the game!", colour=000000)
             elif kingsgambit:
@@ -383,14 +411,14 @@ class Lookup(commands.Cog):
             if kingsgambit and king_score > 0:
                 embedVar.add_field(name=f":crown:King - {team_1_score}", value="\n".join(team_1_comp_with_ign))
             elif not team_1_score:
-                embedVar.add_field(name=f":military_helmet:Team 1", value="Vacant", inline=False)
+                embedVar.add_field(name=f":military_helmet:{team1}", value="Vacant", inline=False)
             else:
-                embedVar.add_field(name=f":military_helmet:Team 1 - {team_1_score}", value="\n".join(team_1_comp_with_ign))
+                embedVar.add_field(name=f":military_helmet:{team1} - {team_1_score}", value="\n".join(team_1_comp_with_ign))
             
             if team_2_comp_with_ign:
-                embedVar.add_field(name=f":military_helmet:Team 2 - {team_2_score}", value="\n".join(team_2_comp_with_ign))
+                embedVar.add_field(name=f":military_helmet:{team2} - {team_2_score}", value="\n".join(team_2_comp_with_ign))
             else:
-                embedVar.add_field(name=f":military_helmet:Team 2", value="Vacant")
+                embedVar.add_field(name=f":military_helmet:{team2}", value="Vacant")
 
             if kingsgambit and other_teams:
                 embedVar.add_field(name=f"Up Next...", value=other_teams_sorted_list)

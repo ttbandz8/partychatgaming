@@ -26,9 +26,10 @@ class Titles(commands.Cog):
         return await main.validate_user(ctx)
 
     @commands.command()
-    async def nt(self, ctx, args1: str, args2: int, args3: int):
+    async def nt(self, ctx, tournament: int, price: int, *args):
         if ctx.author.guild_permissions.administrator == True:
-            title_query = {'TITLE': str(args1), 'TOURNAMENT_REQUIREMENTS': int(args2), 'PRICE': int(args3)}
+            title = " ".join([*args])
+            title_query = {'TITLE': str(title), 'TOURNAMENT_REQUIREMENTS': int(tournament), 'PRICE': int(price)}
             added = db.createTitle(data.newTitle(title_query))
             await ctx.send(added, delete_after=3)
         else:
@@ -36,7 +37,8 @@ class Titles(commands.Cog):
 
 
     @commands.command()
-    async def bt(self, ctx, args: str):
+    async def bt(self, ctx, *args: str):
+        title_name=" ".join([*args])
         vault_query = {'OWNER' : str(ctx.author)}
         vault = db.altQueryVault(vault_query)
         shop = db.queryShopTitles()
@@ -47,7 +49,7 @@ class Titles(commands.Cog):
         mintedTitle = ""
         for title in shop:
 
-            if args == title['TITLE']:
+            if title_name == title['TITLE']:
                 mintedTitle = title['TITLE']
                 cost = title['PRICE']
 
@@ -61,26 +63,27 @@ class Titles(commands.Cog):
                     await ctx.send("You have an insufficent Balance")
                 else:
                     await main.curse(cost, str(ctx.author))
-                    response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'TITLES': args}})
+                    response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'TITLES': str(title_name)}})
                     await ctx.send(m.PURCHASE_COMPLETE)
         else:
             await ctx.send(m.TITLE_DOESNT_EXIST)
 
     @commands.command()
-    async def ut(self, ctx, args):
+    async def ut(self, ctx, *args):
+        title_name=" ".join([*args])
         user_query = {'DISNAME': str(ctx.author)}
         user = db.queryUser(user_query)
 
         vault_query = {'OWNER' : str(ctx.author)}
         vault = db.altQueryVault(vault_query)
 
-        resp = db.queryTitle({'TITLE': args})
+        resp = db.queryTitle({'TITLE': str(title_name)})
 
         if resp['TOURNAMENT_REQUIREMENTS'] == 0:
 
             # Do not Check Tourney wins
-            if args in vault['TITLES']:
-                response = db.updateUserNoFilter(user_query, {'$set': {'TITLE': args}})
+            if title_name in vault['TITLES']:
+                response = db.updateUserNoFilter(user_query, {'$set': {'TITLE': str(title_name)}})
                 await ctx.send(response)
             else:
                 await ctx.send(m.USER_DOESNT_HAVE_THE_Title, delete_after=5)
@@ -91,8 +94,8 @@ class Titles(commands.Cog):
             title_query = {'TOURNAMENT_REQUIREMENTS': tournament_wins}
 
             if tournament_wins >= resp['TOURNAMENT_REQUIREMENTS']:
-                if args in vault['TITLES']:
-                    response = db.updateUserNoFilter(user_query, {'$set': {'TITLE': args}})
+                if title_name in vault['TITLES']:
+                    response = db.updateUserNoFilter(user_query, {'$set': {'TITLE': str(title_name)}})
                     await ctx.send(response)
                 else:
                     await ctx.send(m.USER_DOESNT_HAVE_THE_Title, delete_after=5)
