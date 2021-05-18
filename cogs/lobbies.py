@@ -393,7 +393,7 @@ class Lobbies(commands.Cog):
 
     @commands.command()
     async def cards(self,ctx, user: User):
-        print(ctx.author[])
+        lobby_owner = db.queryUser
         await self.cl(self,ctx,1,"Flex")
         await self.jl(self,ctx,ctx.author)
         await self.add(self,ctx,user)
