@@ -58,12 +58,15 @@ class CrownUnlimited(commands.Cog):
                 o_accuracy = o['ACC']
                 o_passive = o['PASS']
                 o_speed = o['SPD']
-                o_vulerable = o['VUL']
                 o_show = o['SHOW']
                 o_title_show = otitle['SHOW']
                 o_title_passive = otitle['ABILITIES']
                 o_vul = False
                 user1 = await self.bot.fetch_user(o_DID)
+                o_title_passive_bool = False
+                # Team 1 Passive Config
+                if (o_show == o_title_show) or (o_title_show == "Unbound"):
+                    o_title_passive_bool = True
 
                 # Moves
                 o_1 = o_moveset[0]
@@ -84,12 +87,16 @@ class CrownUnlimited(commands.Cog):
                 t_accuracy = t['ACC']
                 t_passive = t['PASS']
                 t_speed = t['SPD']
-                t_vulerable = t['VUL']
                 t_show = t['SHOW']
                 t_title_show = ttitle['SHOW']
                 t_title_passive = ttitle['ABILITIES']
-                o_vul = True
+                t_vul = False
                 user2 = await self.bot.fetch_user(t_DID)
+                t_title_passive_bool = False
+
+                # Team 2 Passive Config
+                if (t_show == t_title_show) or (t_title_show == "Unbound"):
+                    t_title_passive_bool = True
 
                 # Moves
                 t_1 = t_moveset[0]
@@ -105,35 +112,58 @@ class CrownUnlimited(commands.Cog):
                 else:
                     turn = 1    
                 
-                test = 10
+                options = [1,2,3,4]
                 await ctx.send(f"{user1.mention}: {o_card} VS {user2.mention}: {t_card} has begun!")
-                print(turn)
+
                 while (o_health >= 0) and (t_health >= 0):
                     if turn == 0:
                         await ctx.send(f"{t_card} has {t_health} health. What move will you use, {user1.mention}?")
-
+                        # Make sure user is responding with move
                         def check(msg):
-                            return msg.author == user1 and msg.channel == ctx.channel and int(msg.content)
+                            return msg.author == user1 and msg.channel == ctx.channel and int(msg.content) in options
                         try:
                             msg = await self.bot.wait_for("message", check=check)
-                            t_health = t_health - int(msg.content)
-                            await ctx.send(f'{msg.content} damage dealt!')
+
+                            # calculate data based on selected move
+                            if int(msg.content) == 1:
+                                dmg = damage_cal(o_1, o_attack, o_defense, o_passive, o_title_passive, o_title_passive_bool, o_vul, o_accuracy)
+                            elif int(msg.content) == 2:
+                                dmg = damage_cal(o_2, o_attack, o_defense, o_passive, o_title_passive, o_title_passive_bool, o_vul, o_accuracy)
+                            elif int(msg.content) == 3:
+                                dmg = damage_cal(o_3, o_attack, o_defense, o_passive, o_title_passive, o_title_passive_bool, o_vul, o_accuracy)
+                            elif int(msg.content) == 4:
+                                dmg = damage_cal(o_enhancer, o_attack, o_defense, o_passive, o_title_passive, o_title_passive_bool, o_vul, o_accuracy)
+
+                            t_health = t_health - dmg
+                            await ctx.send(f'{int(dmg)} damage dealt!')
                             turn = 1
                         except:
                             await ctx.send('Did not work')
 
                     elif turn == 1:
-
                         await ctx.send(f"{o_card} has {o_health} health. What move will you use, {user2.mention}?")
+                        # Make sure user is responding with move
                         def check(msg):
-                            return msg.author == user2 and msg.channel == ctx.channel and int(msg.content)
+                            return msg.author == user2 and msg.channel == ctx.channel and int(msg.content) in options
                         try:
                             msg = await self.bot.wait_for("message", check=check)
-                            o_health = o_health - int(msg.content)
-                            await ctx.send(f'{msg.content} damage dealt!')
+
+                            # calculate data based on selected move
+                            if int(msg.content) == 1:
+                                dmg = damage_cal(t_1, t_attack, t_defense, t_passive, t_title_passive, t_title_passive_bool, t_vul, t_accuracy)
+                            elif int(msg.content) == 2:
+                                dmg = damage_cal(t_2, t_attack, t_defense, t_passive, t_title_passive, t_title_passive_bool, t_vul, t_accuracy)
+                            elif int(msg.content) == 3:
+                                dmg = damage_cal(t_3, t_attack, t_defense, t_passive, t_title_passive, t_title_passive_bool, t_vul, t_accuracy)
+                            elif int(msg.content) == 4:
+                                dmg = damage_cal(t_enhancer, t_attack, t_defense, t_passive, t_title_passive, t_title_passive_bool, t_vul, t_accuracy)
+
+                            o_health = o_health - int(dmg)
+                            await ctx.send(f'{int(dmg)} damage dealt!')
                             turn = 0
                         except:
                             await ctx.send('Did not work')
+                # End the match
                 if t_health >= 0:
                     await ctx.send(f"{user2.mention} you win the match!")
                 elif o_health >=0:
@@ -148,8 +178,8 @@ def starting_position(o,t):
     else:
         return False
 
-def damage_cal(attack, ap, defense, passive, vul):
-    ()
+def damage_cal(ability, attack, defense, card_passive, title_passive, title_passive_bool, vul, accuracy):
+    return 100
 
 def setup(bot):
     bot.add_cog(CrownUnlimited(bot))
