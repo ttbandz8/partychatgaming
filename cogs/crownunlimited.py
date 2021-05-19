@@ -65,7 +65,11 @@ class CrownUnlimited(commands.Cog):
                 o_vul = False
                 user1 = await self.bot.fetch_user(o_DID)
 
-                print(o_moveset)
+                # Moves
+                o_1 = o_moveset[0]
+                o_2 = o_moveset[1]
+                o_3 = o_moveset[2]
+                o_enhancer = o_moveset[3]
 
                 # TEAM 2 Data
                 t_user = db.queryUser({'DISNAME': team_2['TEAM'][0]})
@@ -87,6 +91,12 @@ class CrownUnlimited(commands.Cog):
                 o_vul = True
                 user2 = await self.bot.fetch_user(t_DID)
 
+                # Moves
+                t_1 = t_moveset[0]
+                t_2 = t_moveset[1]
+                t_3 = t_moveset[2]
+                t_enhancer = t_moveset[3]
+
                 turn = 0
                 start = starting_position(o_speed, t_speed)
 
@@ -95,34 +105,39 @@ class CrownUnlimited(commands.Cog):
                 else:
                     turn = 1    
                 
-                # test = 10
-                # while test >= 0:
-                #     await ctx.send(f"Number is {test}. Still not 0!")
-                #     if turn == 0:
+                test = 10
+                await ctx.send(f"{user1.mention}: {o_card} VS {user2.mention}: {t_card} has begun!")
+                print(turn)
+                while (o_health >= 0) and (t_health >= 0):
+                    if turn == 0:
+                        await ctx.send(f"{t_card} has {t_health} health. What move will you use, {user1.mention}?")
 
-                #         await ctx.send(f'{user1.mention} pick a number!')
-                #         def check(msg):
-                #             return msg.author == user1 and msg.channel == ctx.channel
-                #         try:
-                #             msg = await self.bot.wait_for("message", check=check)
-                #             test = test - int(msg.content)
-                #             turn = 1
-                #         except:
-                #             await ctx.send('Did not work')
+                        def check(msg):
+                            return msg.author == user1 and msg.channel == ctx.channel and int(msg.content)
+                        try:
+                            msg = await self.bot.wait_for("message", check=check)
+                            t_health = t_health - int(msg.content)
+                            await ctx.send(f'{msg.content} damage dealt!')
+                            turn = 1
+                        except:
+                            await ctx.send('Did not work')
 
-                #     elif turn == 1:
+                    elif turn == 1:
 
-                #         await ctx.send(f'{user2.mention} pick a number!')
-                #         def check(msg):
-                #             return msg.author == user2 and msg.channel == ctx.channel
-                #         try:
-                #             msg = await self.bot.wait_for("message", check=check)
-                #             test = test - int(msg.content)
-                #             turn = 0
-                #         except:
-                #             await ctx.send('Did not work')
-
-                # await ctx.send("Number is 0!")
+                        await ctx.send(f"{o_card} has {o_health} health. What move will you use, {user2.mention}?")
+                        def check(msg):
+                            return msg.author == user2 and msg.channel == ctx.channel and int(msg.content)
+                        try:
+                            msg = await self.bot.wait_for("message", check=check)
+                            o_health = o_health - int(msg.content)
+                            await ctx.send(f'{msg.content} damage dealt!')
+                            turn = 0
+                        except:
+                            await ctx.send('Did not work')
+                if t_health >= 0:
+                    await ctx.send(f"{user2.mention} you win the match!")
+                elif o_health >=0:
+                    await ctx.send(f"{user1.mention} you win the match!")
         else:
             await ctx.send(m.SESSION_DOES_NOT_EXIST)
 
