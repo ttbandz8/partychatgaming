@@ -195,12 +195,58 @@ class CrownUnlimited(commands.Cog):
                 while (o_health >= 0) and (t_health >= 0):
                     if turn == 0:
                         if o_stamina <= 0:
+                            # o_stamina = o_focus
+                            # o_healthcalc = round((o_focus * .40) + (.05 * o_health))
+                            # o_attackcalc = round(.2 * ((o_focus * .15) + round(.3 * o_attack)))
+                            # o_defensecalc = round(.2 * ((o_focus * .10) + round(.3 * o_defense)))
+                            # o_health = o_health + o_healthcalc
+                            # o_attack = o_attack + o_attackcalc
+                            # o_defense = o_defense + o_defensecalc
+                            # o_used_focus=True
+                            # await ctx.send(f'{o_card} has entered focus state!\nStamina has recovered! Health has increased by {o_healthcalc}!\nAttack has increased by {o_attackcalc}!\nDefense has increased by {o_defensecalc}!')
+                            
+                            luck = 0.0
+                            low = o_health - (o_health*.90)
+                            high = o_health- (o_health*.80)
+                            fortitude = random.randint(int(low), int(high))
+                            message = ""
+
+                            miss_hit = 5 # Miss
+                            low_hit = 10 # Lower Damage
+                            med_hit = 16 # Medium Damage
+                            standard_hit = 19 # Standard Damage
+                            high_hit = 20 # Crit Hit
+                            hit_roll = random.randint(0,20)
+
+                            
+                            if hit_roll <= miss_hit:
+                                luck=0
+                                message=f'Injuries prevent {o_card} from focusing...:eyes:'
+                            elif hit_roll <=10 and hit_roll > 5:
+                                luck = round(fortitude * .25)
+                                message=f'{o_card} recovered slightly... :anger:'
+                            elif hit_roll <=16 and hit_roll > 10:
+                                luck = round(fortitude * .50)
+                                message=f'{o_card} has entered focus state! :bangbang:'
+                            elif hit_roll <=19 and hit_roll > 16:
+                                luck = round(fortitude)
+                                message=f'{o_card} gains significant strength! :anger_right:'
+                            elif hit_roll == 20:
+                                luck = round(fortitude * 2)
+                                message=f"{o_card} Looks Brand new !!!!!! :boom: "
+
                             o_stamina = o_focus
-                            o_health = round(o_health + (o_focus * (.4 + (1/o_health))))
-                            o_attack = round(o_attack + (o_focus * (.15 + (1/o_attack))))
-                            o_defense = round(o_defense + (o_focus * (.10 + (1/o_defense))))
-                            o_used_focus=True
-                            await ctx.send(f'{o_card} has entered focus state!\nStamina has recovered! Health has increased by {round(o_focus * (.4 + (1/o_health)))}!\nAttack has increased by {round(o_focus * (.15 + (1/o_attack)))}!\nDefense has increased by {round(o_focus * (.10 + (1/o_defense)))}!')
+                            o_healthcalc = round((o_focus * .40) + (luck * 1))
+                            o_attackcalc = round(.20 * ((o_focus * .15) + round(luck * 1)))
+                            o_defensecalc = round(.20 * ((o_focus * .15) + round(luck * 1)))
+                            o_health = o_health + o_healthcalc
+                            o_attack = o_attack + o_attackcalc
+                            o_defense =  o_defense + o_defensecalc
+
+
+                            o_used_resolve=True
+                            await ctx.send(f'{message}')
+                            await ctx.send(f'Stamina has recovered! Health has increased by {o_healthcalc}!\nAttack has increased by {o_attackcalc}!\nDefense has increased by {o_defensecalc}!')
                             turn = 1
                         else:
 
@@ -231,8 +277,8 @@ class CrownUnlimited(commands.Cog):
                                         o_health = o_health + o_resolve
                                         o_attack = round(o_attack + (o_resolve / o_attack))
                                         o_defense = round(o_defense - (o_resolve / o_defense))
-                                        o_used_resolve=True
-                                        await ctx.send(f'{o_card} strengthened resolve!!\nStamina has recovered! Health has increased by {o_resolve}!\nAttack has increased by {round(o_attack + (o_resolve / o_attack))}!\nDefenses at risk, dropping by {round(o_defense - (o_resolve / o_defense))} points!!')
+
+                                        await ctx.send(f'{o_card} strengthened resolve!!\nStamina has recovered! Health has increased by {o_resolve}!\nAttack has increased by {round(o_resolve / o_attack)}!\nDefenses at risk, dropping by {round(o_resolve / o_defense)} points!!')
                                         turn=1
                                     else:
                                         await ctx.send(m.CANNOT_USE_RESOLVE)
@@ -271,12 +317,56 @@ class CrownUnlimited(commands.Cog):
                     elif turn == 1:
 
                         if t_stamina <= 0:
+                            # t_stamina = t_focus
+                            # t_healthcalc = round((t_focus * .40) + (.05 * t_health))
+                            # t_attackcalc = round(.20 * ((t_focus * .15) + round(.3 * t_attack)))
+                            # t_defensecalc = round(.20 * ((t_focus * .10) + round(.3 * t_defense)))
+                            # t_health = t_health + t_healthcalc
+                            # t_attack = t_attack + t_attackcalc
+                            # t_defense =  t_defense + t_defensecalc
+
+                            luck = 0.0
+                            low = t_health - (t_health*.90)
+                            high = t_health- (t_health*.80)
+                            fortitude = random.randint(int(low), int(high))
+                            message = ""
+
+                            miss_hit = 5 # Miss
+                            low_hit = 10 # Lower Damage
+                            med_hit = 16 # Medium Damage
+                            standard_hit = 19 # Standard Damage
+                            high_hit = 20 # Crit Hit
+                            hit_roll = random.randint(0,20)
+
+                            
+                            if hit_roll <= miss_hit:
+                                luck=0
+                                message=f'Injuries prevent {t_card} from focusing...:eyes:'
+                            elif hit_roll <=10 and hit_roll > 5:
+                                luck = round(fortitude * .25)
+                                message=f'{t_card} recovered slightly... :anger:'
+                            elif hit_roll <=16 and hit_roll > 10:
+                                luck = round(fortitude * .50)
+                                message=f'{t_card} has entered focus state! :bangbang:'
+                            elif hit_roll <=19 and hit_roll > 16:
+                                luck = round(fortitude)
+                                message=f'{t_card} gains significant strength! :anger_right:'
+                            elif hit_roll == 20:
+                                luck = round(fortitude * 2)
+                                message=f"{t_card} Looks Brand new !!!!!! :boom: "
+
                             t_stamina = t_focus
-                            t_health = t_health + (t_focus * (.4 + (1/t_health)))
-                            t_attack = t_attack + (t_focus * (.15 + (1/t_attack)))
-                            t_defense = t_defense = (t_focus * (.1 + (1/t_defense)))
+                            t_healthcalc = round((t_focus * .40) + (luck * 1))
+                            t_attackcalc = round(.20 * ((t_focus * .15) + round(luck * 1)))
+                            t_defensecalc = round(.20 * ((t_focus * .10) + round(luck * 1)))
+                            t_health = t_health + t_healthcalc
+                            t_attack = t_attack + t_attackcalc
+                            t_defense =  t_defense + t_defensecalc
+
+
                             t_used_focus=True
-                            await ctx.send(f'{t_card} has entered focus state!\nStamina has recovered! Health has increased by {round(.4 + (1/t_health))}!\nAttack has increased by {round(t_focus * (.15 + (1/t_attack)))}!\nDefense has increased by {round(t_focus * (.1 + (1/t_defense)))}!')
+                            await ctx.send(f'{message}')
+                            await ctx.send(f'Stamina has recovered! Health has increased by {t_healthcalc}!\nAttack has increased by {t_attackcalc}!\nDefense has increased by {t_defensecalc}!')
                             turn=0
                         else:
                             player_2_card = showcard(t, t_max_health, t_health)
@@ -307,7 +397,7 @@ class CrownUnlimited(commands.Cog):
                                         t_attack = round(t_attack + (t_resolve / t_attack))
                                         t_defense = round(t_defense - (t_resolve / t_defense))
                                         t_used_resolve=True
-                                        await ctx.send(f'{t_card} strengthened resolve!!\nStamina has recovered! Health has increased by {t_resolve}!\nAttack has increased by {round(t_attack + (t_resolve / t_attack))}!\nDefenses at risk, dropping by {round(t_defense - (t_resolve / t_defense))} points!!')
+                                        await ctx.send(f'{t_card} strengthened resolve!!\nStamina has recovered! Health has increased by {t_resolve}!\nAttack has increased by {round(t_resolve / t_attack)}!\nDefenses at risk, dropping by {round(t_resolve / t_defense)} points!!')
                                         turn=0
                                     else:
                                         await ctx.send(m.CANNOT_USE_RESOLVE)
