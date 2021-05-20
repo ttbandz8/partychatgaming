@@ -504,9 +504,9 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
         true_dmg = random.randint(int(low), int(high))
         message = ""
 
-        miss_hit = 5 # Miss
-        low_hit = 10 # Lower Damage
-        med_hit = 16 # Medium Damage
+        miss_hit = 3 # Miss
+        low_hit = 7 # Lower Damage
+        med_hit = 11 # Medium Damage
         standard_hit = 19 # Standard Damage
         high_hit = 20 # Crit Hit
         hit_roll = random.randint(0,20)
@@ -514,13 +514,13 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
         if hit_roll <= miss_hit:
             true_dmg=0
             message=f'{move} used! It misses! :eyes:'
-        elif hit_roll <=10 and hit_roll > 5:
+        elif hit_roll <=low_hit and hit_roll > miss_hit:
             true_dmg = round(true_dmg * .50)
             message=f'{move} used! It chips for {true_dmg}! :anger:'
-        elif hit_roll <=16 and hit_roll > 10:
+        elif hit_roll <=med_hit and hit_roll > low_hit:
             true_dmg = round(true_dmg * .80)
             message=f'{move} used! It connects for {true_dmg}! :bangbang:'
-        elif hit_roll <=19 and hit_roll > 16:
+        elif hit_roll <=standard_hit and hit_roll > med_hit:
             true_dmg = round(true_dmg)
             message=f'{move} used! It hits for {true_dmg}! :anger_right:'
         elif hit_roll == 20:
@@ -629,7 +629,6 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title):
     moveset = d['MOVESET']
     # Player 2 Moves
     move1 = moveset[0]
-    print(move1)
     move2 = moveset[1]
     move3 = moveset[2]
     move_enhanced = moveset[3]
