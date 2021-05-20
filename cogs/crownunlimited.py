@@ -53,6 +53,7 @@ class CrownUnlimited(commands.Cog):
                 o_max_health = o['HLT']
                 o_health = o['HLT']
                 o_stamina = o['STAM']
+                o_max_stamina = o['STAM']
                 o_moveset = o['MOVESET']
                 o_attack = o['ATK']
                 o_defense = o['DEF']
@@ -115,6 +116,7 @@ class CrownUnlimited(commands.Cog):
                 t_max_health = t['HLT']
                 t_health = t['HLT']
                 t_stamina = t['STAM']
+                t_max_stamina= t['STAM']
                 t_moveset = t['MOVESET']
                 t_attack = t['ATK']
                 t_defense = t['DEF']
@@ -192,6 +194,7 @@ class CrownUnlimited(commands.Cog):
                 options = [1,2,3,4,5]
                 await ctx.send(f"{user1.mention}: {o_card} VS {user2.mention}: {t_card} has begun!")
 
+                # START TURNS
                 while (o_health >= 0) and (t_health >= 0):
                     if turn == 0:
                         if o_stamina <= 0:
@@ -250,7 +253,7 @@ class CrownUnlimited(commands.Cog):
                             turn = 1
                         else:
 
-                            player_1_card = showcard(o, o_max_health, o_health)
+                            player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina)
                             await ctx.send(file=player_1_card)
                             await ctx.send(f"{t_card} has {round(t_health)} health. What move will you use, {user1.mention}\nYour health is {round(o_health)}\n Your Stamina is {round(o_stamina)}")
 
@@ -369,7 +372,7 @@ class CrownUnlimited(commands.Cog):
                             await ctx.send(f'Stamina has recovered! Health has increased by {t_healthcalc}!\nAttack has increased by {t_attackcalc}!\nDefense has increased by {t_defensecalc}!')
                             turn=0
                         else:
-                            player_2_card = showcard(t, t_max_health, t_health)
+                            player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina)
                             await ctx.send(file=player_2_card)
                             await ctx.send(f"{o_card} has {round(o_health)} health. What move will you use, {user2.mention}?\nYour health is {round(t_health)}\n Your Stamina is {round(t_stamina)}")
 
@@ -558,7 +561,7 @@ def health_bar(size, radius, alpha=255):
 
     return image
 
-def round_rectangle(size, radius, alpha=255):
+def stamina_bar(size, radius, alpha=255):
     factor = 5  # Factor to increase the image size that I can later antialiaze the corners
     radius = radius * factor
     image = Image.new('RGBA', (size[0] * factor, size[1] * factor), (0, 0, 0, 0))
@@ -582,12 +585,42 @@ def round_rectangle(size, radius, alpha=255):
     # draw both inner rects
     draw = ImageDraw.Draw(image)
     draw.rectangle([(radius, 0), (mx - radius, my)], fill=(50, 50, 50, alpha))
-    draw.rectangle([(0, radius), (mx, my - radius)], fill=(50, 50, 50, alpha))
+    draw.rectangle([(0, radius), (mx, my - radius)], fill=(30,144,255,alpha))
     image = image.resize(size, Image.ANTIALIAS)  # Smooth the corners
 
     return image
 
-def showcard(d, max_health, health):
+#default bar
+def round_rectangle(size, radius, alpha=55):
+    factor = 5  # Factor to increase the image size that I can later antialiaze the corners
+    radius = radius * factor
+    image = Image.new('RGBA', (size[0] * factor, size[1] * factor), (0, 0, 0, 0))
+
+    # create corner
+    corner = Image.new('RGBA', (radius, radius), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(corner)
+    # added the fill = .. you only drew a line, no fill
+    draw.pieslice((0, 0, radius * 2, radius * 2), 180, 270, fill=(50, 50, 50, alpha + 55))
+
+    # max_x, max_y
+    mx, my = (size[0] * factor, size[1] * factor)
+
+    # paste corner rotated as needed
+    # use corners alpha channel as mask
+    image.paste(corner, (0, 0), corner)
+    image.paste(corner.rotate(90), (0, my - radius), corner.rotate(90))
+    image.paste(corner.rotate(180), (mx - radius, my - radius), corner.rotate(180))
+    image.paste(corner.rotate(270), (mx - radius, 0), corner.rotate(270))
+
+    # draw both inner rects
+    draw = ImageDraw.Draw(image)
+    draw.rectangle([(radius, 0), (mx - radius, my)], fill=(0, 0, 0, alpha))
+    draw.rectangle([(0, radius), (mx, my - radius)], fill=(0, 0, 0, alpha))
+    image = image.resize(size, Image.ANTIALIAS)  # Smooth the corners
+
+    return image
+
+def showcard(d, max_health, health, max_stamina, stamina):
     # matches_to_string = dict(ChainMap(*matches))
     # ign_to_string = dict(ChainMap(*ign))
 
@@ -595,15 +628,26 @@ def showcard(d, max_health, health):
     # titles_text = ' '.join(str(x) for x in title)
     # matches_text = "\n".join(f'{k}: {"/".join([str(int) for int in v])}' for k,v in matches_to_string.items())
     
-    progress=50
-    
-    # Meter
     im = Image.open(requests.get(d['PATH'], stream=True).raw)
-    img = health_bar((health, 20), 0)
-    im.paste(img, (80, 70), img)
-    # Max
-    img2 = round_rectangle((int(max_health), 20), 0)
-    im.paste(img2, (80, 70), img2)
+
+    # Max Health
+    hlt_base = round_rectangle((int(max_health), 30), 0)
+    im.paste(hlt_base, (80, 65), hlt_base)
+    # Health Meter
+    hlt = health_bar((health, 30), 0)
+    im.paste(hlt, (80, 65), hlt)
+
+
+
+
+    # Max Stamina
+    stam_base = round_rectangle((int(max_stamina), 30), 0)
+    im.paste(stam_base, (80, 115), stam_base)
+    # Stamina Meter
+    stam = stamina_bar((stamina, 30), 0)
+    im.paste(stam, (80, 115), stam)
+
+
 
     draw = ImageDraw.Draw(im)
     header = ImageFont.truetype("KomikaTitle-Paint.ttf", 60)
