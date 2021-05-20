@@ -252,8 +252,8 @@ class CrownUnlimited(commands.Cog):
                             await ctx.send(f'Stamina has recovered! Health has increased by {o_healthcalc}!\nAttack has increased by {o_attackcalc}!\nDefense has increased by {o_defensecalc}!')
                             turn = 1
                         else:
-
-                            player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina)
+                            # SHOW CARD
+                            player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle)
                             await ctx.send(file=player_1_card)
                             await ctx.send(f"{t_card} has {round(t_health)} health. What move will you use, {user1.mention}\nYour health is {round(o_health)}\n Your Stamina is {round(o_stamina)}")
 
@@ -372,7 +372,8 @@ class CrownUnlimited(commands.Cog):
                             await ctx.send(f'Stamina has recovered! Health has increased by {t_healthcalc}!\nAttack has increased by {t_attackcalc}!\nDefense has increased by {t_defensecalc}!')
                             turn=0
                         else:
-                            player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina)
+                            # SHOW CARD
+                            player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle)
                             await ctx.send(file=player_2_card)
                             await ctx.send(f"{o_card} has {round(o_health)} health. What move will you use, {user2.mention}?\nYour health is {round(t_health)}\n Your Stamina is {round(t_stamina)}")
 
@@ -620,40 +621,65 @@ def round_rectangle(size, radius, alpha=55):
 
     return image
 
-def showcard(d, max_health, health, max_stamina, stamina):
+def showcard(d, max_health, health, max_stamina, stamina, resolved, title):
     # matches_to_string = dict(ChainMap(*matches))
     # ign_to_string = dict(ChainMap(*ign))
 
     # game_text = '\n'.join(str(x) for x in games)
     # titles_text = ' '.join(str(x) for x in title)
     # matches_text = "\n".join(f'{k}: {"/".join([str(int) for int in v])}' for k,v in matches_to_string.items())
-    
+
+    moveset = d['MOVESET']
+    # Player 2 Moves
+    move1 = moveset[0]
+    print(move1)
+    move2 = moveset[1]
+    move3 = moveset[2]
+    move_enhanced = moveset[3]
+
     im = Image.open(requests.get(d['PATH'], stream=True).raw)
 
     # Max Health
     hlt_base = round_rectangle((int(max_health), 30), 0)
-    im.paste(hlt_base, (80, 65), hlt_base)
+    im.paste(hlt_base, (80, 160), hlt_base)
     # Health Meter
     hlt = health_bar((health, 30), 0)
-    im.paste(hlt, (80, 65), hlt)
-
-
+    im.paste(hlt, (80, 160), hlt)
 
 
     # Max Stamina
     stam_base = round_rectangle((int(max_stamina), 30), 0)
-    im.paste(stam_base, (80, 115), stam_base)
+    im.paste(stam_base, (80, 195), stam_base)
     # Stamina Meter
     stam = stamina_bar((stamina, 30), 0)
-    im.paste(stam, (80, 115), stam)
-
-
+    im.paste(stam, (80, 195), stam)
 
     draw = ImageDraw.Draw(im)
-    header = ImageFont.truetype("KomikaTitle-Paint.ttf", 60)
+    header = ImageFont.truetype("KomikaTitle-Paint.ttf", 55)
     tournament_wins_font = ImageFont.truetype("RobotoCondensed-Bold.ttf", 35)
-    p = ImageFont.truetype("Roboto-Bold.ttf", 25)
+    s = ImageFont.truetype("Roboto-Bold.ttf", 25)
+    h = ImageFont.truetype("Roboto-Bold.ttf", 35)
 
+
+    # Health & Stamina
+    header = ImageFont.truetype("KomikaTitle-Paint.ttf", 60)
+    health_text = f'{health}/{max_health}'
+    stamina_text = f'{max_stamina}/{stamina}'
+    draw.text((185,155), health_text, (255, 255, 255), font=h, align="left")
+    draw.text((82,195), stamina_text, (255, 255, 255), font=s, align="left")
+
+    # Character Name
+    draw.text((82,50), d['NAME'], (255, 255, 255), font=header, align="left")
+    # Title Name
+    draw.text((85,20), title['TITLE'], (255, 255, 255), font=h, align="left")
+
+
+    if resolved:
+                    # side    # vert
+        draw.line(((0, 0), (0, 800)), fill=(0, 150, 255), width=15)
+        draw.line(((1195, 0), (1195, 800)), fill=(0, 150, 255), width=10)
+        draw.line(((1195, 0), (0, 0)), fill=(0, 150, 255), width=15)
+        draw.line(((0, 600), (1195, 600)), fill=(0, 150, 255), width=15)
     # profile_pic = Image.open(requests.get(d['AVATAR'], stream=True).raw)
     # profile_pic_resized = profile_pic.resize((120, 120), resample=0)
     # img.paste(profile_pic_resized, (1045, 30))
