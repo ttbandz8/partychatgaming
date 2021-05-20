@@ -240,7 +240,7 @@ class CrownUnlimited(commands.Cog):
                             turn = 1
                         else:
                             # SHOW CARD
-                            player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle)
+                            player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                             await ctx.send(file=player_1_card)
                             await ctx.send(f"{t_card} has {round(t_health)} health. What move will you use, {user1.mention}\nYour health is {round(o_health)}\n Your Stamina is {round(o_stamina)}")
 
@@ -360,7 +360,7 @@ class CrownUnlimited(commands.Cog):
                             turn=0
                         else:
                             # SHOW CARD
-                            player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle)
+                            player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus)
                             await ctx.send(file=player_2_card)
                             await ctx.send(f"{o_card} has {round(o_health)} health. What move will you use, {user2.mention}?\nYour health is {round(t_health)}\n Your Stamina is {round(t_stamina)}")
 
@@ -618,20 +618,7 @@ def round_rectangle(size, radius, alpha=55):
 
     return image
 
-def showcard(d, max_health, health, max_stamina, stamina, resolved, title):
-    # matches_to_string = dict(ChainMap(*matches))
-    # ign_to_string = dict(ChainMap(*ign))
-
-    # game_text = '\n'.join(str(x) for x in games)
-    # titles_text = ' '.join(str(x) for x in title)
-    # matches_text = "\n".join(f'{k}: {"/".join([str(int) for int in v])}' for k,v in matches_to_string.items())
-
-    moveset = d['MOVESET']
-    # Player 2 Moves
-    move1 = moveset[0]
-    move2 = moveset[1]
-    move3 = moveset[2]
-    move_enhanced = moveset[3]
+def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focused):
 
     im = Image.open(requests.get(d['PATH'], stream=True).raw)
 
@@ -655,12 +642,14 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title):
     tournament_wins_font = ImageFont.truetype("RobotoCondensed-Bold.ttf", 35)
     s = ImageFont.truetype("Roboto-Bold.ttf", 25)
     h = ImageFont.truetype("Roboto-Bold.ttf", 35)
+    m = ImageFont.truetype("KomikaTitle.ttf", 25)
+    r = ImageFont.truetype("Freedom-10eM.ttf", 35)
 
 
     # Health & Stamina
     header = ImageFont.truetype("KomikaTitle-Paint.ttf", 60)
     health_text = f'{health}/{max_health}'
-    stamina_text = f'{max_stamina}/{stamina}'
+    stamina_text = f'{stamina}/{max_stamina}'
     draw.text((185,155), health_text, (255, 255, 255), font=h, align="left")
     draw.text((82,195), stamina_text, (255, 255, 255), font=s, align="left")
 
@@ -669,22 +658,52 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title):
     # Title Name
     draw.text((85,20), title['TITLE'], (255, 255, 255), font=h, align="left")
 
+    if focused:
+                    # side    # vert
+        draw.line(((0, 0), (0, 800)), fill=(30,144,255), width=15)
+        draw.line(((1195, 0), (1195, 800)), fill=(30,144,255), width=10)
+        draw.line(((1195, 0), (0, 0)), fill=(30,144,255), width=15)
+        draw.line(((0, 600), (1195, 600)), fill=(30,144,255), width=15)
+        draw.text((82,130), "FOCUSED", (30,144,255), font=r, align="left")
 
     if resolved:
                     # side    # vert
-        draw.line(((0, 0), (0, 800)), fill=(0, 150, 255), width=15)
-        draw.line(((1195, 0), (1195, 800)), fill=(0, 150, 255), width=10)
-        draw.line(((1195, 0), (0, 0)), fill=(0, 150, 255), width=15)
-        draw.line(((0, 600), (1195, 600)), fill=(0, 150, 255), width=15)
-    # profile_pic = Image.open(requests.get(d['AVATAR'], stream=True).raw)
-    # profile_pic_resized = profile_pic.resize((120, 120), resample=0)
-    # img.paste(profile_pic_resized, (1045, 30))
-    # draw.text((95,45), name, (255, 255, 255), font=header, align="left")
-    # draw.text((5,65), str(tournament_wins), (255, 255, 255), font=tournament_wins_font, align="center")
-    # draw.text((60, 320), game_text, (255, 255, 255), font=p, align="left")
-    # draw.text((368, 320), team, (255, 255, 255), font=p, align="center")
-    # draw.text((635, 320), titles_text, (255, 255, 255), font=p, align="center")
-    # draw.text((1040, 320), matches_text, (255, 255, 255), font=p, align="center")
+        draw.line(((0, 0), (0, 800)), fill=(255,215,0), width=15)
+        draw.line(((1195, 0), (1195, 800)), fill=(255,215,0), width=10)
+        draw.line(((1195, 0), (0, 0)), fill=(255,215,0), width=15)
+        draw.line(((0, 600), (1195, 600)), fill=(255,215,0), width=15)
+        draw.text((280,130), "RESOLVED", (255,215,0), font=r, align="left")
+
+
+    # # 1st Move
+    # draw.rectangle((50, 480, 351, 550), fill=(0, 0, 0))
+
+    # # 2nd Move
+    # draw.rectangle((350, 480, 550, 550), fill=(0, 0, 0))
+
+    # # 3rd Move
+    # draw.rectangle((680, 480, 880, 550), fill=(0, 0, 0), outline=(255, 255, 255))
+
+    # # 4th Move
+    # draw.rectangle((950, 480, 1150, 550), fill=(0, 0, 0), outline=(255, 255, 255))
+
+    moveset = d['MOVESET']
+    # Player Moves
+    move1 = moveset[0]
+    move1_text = list(move1.keys())[0]
+
+    move2 = moveset[1]
+    move2_text = list(move2.keys())[0]
+
+    move3 = moveset[2]
+    move3_text = list(move3.keys())[0]
+
+    move_enhanced = moveset[3]
+    move_enhanced_text = list(move_enhanced.keys())[0]
+    draw.text((82,220), f"1. {move1_text}",  (255, 255, 255), font=m, align="left")
+    draw.text((82,250), f"2. {move2_text}",  (255, 255, 255), font=m, align="left")
+    draw.text((82,280), f"3. {move3_text}",  (255, 255, 255), font=m, align="left")
+    draw.text((82,310), f"4. {move_enhanced_text}",  (255, 255, 255), font=m, align="left")
 
     im.save("text.png")
 
