@@ -204,7 +204,7 @@ class CrownUnlimited(commands.Cog):
                             turn = 1
                         else:
 
-                            player_1_card = showcard(o)
+                            player_1_card = showcard(o, o_max_health, o_health)
                             await ctx.send(file=player_1_card)
                             await ctx.send(f"{t_card} has {round(t_health)} health. What move will you use, {user1.mention}\nYour health is {round(o_health)}\n Your Stamina is {round(o_stamina)}")
 
@@ -279,7 +279,7 @@ class CrownUnlimited(commands.Cog):
                             await ctx.send(f'{t_card} has entered focus state!\nStamina has recovered! Health has increased by {round(.4 + (1/t_health))}!\nAttack has increased by {round(t_focus * (.15 + (1/t_attack)))}!\nDefense has increased by {round(t_focus * (.1 + (1/t_defense)))}!')
                             turn=0
                         else:
-                            player_2_card = showcard(t)
+                            player_2_card = showcard(t, t_max_health, t_health)
                             await ctx.send(file=player_2_card)
                             await ctx.send(f"{o_card} has {round(o_health)} health. What move will you use, {user2.mention}?\nYour health is {round(t_health)}\n Your Stamina is {round(t_stamina)}")
 
@@ -439,18 +439,83 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
         response = {"DMG": true_dmg, "MESSAGE": message, "STAMINA_USED": move_stamina, "CAN_USE_MOVE": can_use_move_flag, "ENHANCE": False}
         return response
 
-def showcard(d):
+def health_bar(size, radius, alpha=255):
+    factor = 5  # Factor to increase the image size that I can later antialiaze the corners
+    radius = radius * factor
+    image = Image.new('RGBA', (size[0] * factor, size[1] * factor), (0, 0, 0, 0))
+
+    # create corner
+    corner = Image.new('RGBA', (radius, radius), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(corner)
+    # added the fill = .. you only drew a line, no fill
+    draw.pieslice((0, 0, radius * 2, radius * 2), 180, 270, fill=(50, 50, 50, alpha + 55))
+
+    # max_x, max_y
+    mx, my = (size[0] * factor, size[1] * factor)
+
+    # paste corner rotated as needed
+    # use corners alpha channel as mask
+    image.paste(corner, (0, 0), corner)
+    image.paste(corner.rotate(90), (0, my - radius), corner.rotate(90))
+    image.paste(corner.rotate(180), (mx - radius, my - radius), corner.rotate(180))
+    image.paste(corner.rotate(270), (mx - radius, 0), corner.rotate(270))
+
+    # draw both inner rects
+    draw = ImageDraw.Draw(image)
+    draw.rectangle([(radius, 0), (mx - radius, my)], fill=(50, 50, 50, alpha))
+    draw.rectangle([(0, radius), (mx, my - radius)], fill=(255,0,0,alpha))
+    image = image.resize(size, Image.ANTIALIAS)  # Smooth the corners
+
+    return image
+
+def round_rectangle(size, radius, alpha=255):
+    factor = 5  # Factor to increase the image size that I can later antialiaze the corners
+    radius = radius * factor
+    image = Image.new('RGBA', (size[0] * factor, size[1] * factor), (0, 0, 0, 0))
+
+    # create corner
+    corner = Image.new('RGBA', (radius, radius), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(corner)
+    # added the fill = .. you only drew a line, no fill
+    draw.pieslice((0, 0, radius * 2, radius * 2), 180, 270, fill=(50, 50, 50, alpha + 55))
+
+    # max_x, max_y
+    mx, my = (size[0] * factor, size[1] * factor)
+
+    # paste corner rotated as needed
+    # use corners alpha channel as mask
+    image.paste(corner, (0, 0), corner)
+    image.paste(corner.rotate(90), (0, my - radius), corner.rotate(90))
+    image.paste(corner.rotate(180), (mx - radius, my - radius), corner.rotate(180))
+    image.paste(corner.rotate(270), (mx - radius, 0), corner.rotate(270))
+
+    # draw both inner rects
+    draw = ImageDraw.Draw(image)
+    draw.rectangle([(radius, 0), (mx - radius, my)], fill=(50, 50, 50, alpha))
+    draw.rectangle([(0, radius), (mx, my - radius)], fill=(50, 50, 50, alpha))
+    image = image.resize(size, Image.ANTIALIAS)  # Smooth the corners
+
+    return image
+
+def showcard(d, max_health, health):
     # matches_to_string = dict(ChainMap(*matches))
     # ign_to_string = dict(ChainMap(*ign))
 
     # game_text = '\n'.join(str(x) for x in games)
     # titles_text = ' '.join(str(x) for x in title)
     # matches_text = "\n".join(f'{k}: {"/".join([str(int) for int in v])}' for k,v in matches_to_string.items())
-
     
-    img = Image.open(requests.get(d['PATH'], stream=True).raw)
+    progress=50
+    
+    # Meter
+    im = Image.open(requests.get(d['PATH'], stream=True).raw)
+    img = health_bar((health, 20), 0)
+    im.paste(img, (80, 70), img)
+    # Max
+    img2 = round_rectangle((int(max_health), 20), 0)
+    im.paste(img2, (80, 70), img2)
 
-    draw = ImageDraw.Draw(img)
+    draw = ImageDraw.Draw(im)
     header = ImageFont.truetype("KomikaTitle-Paint.ttf", 60)
     tournament_wins_font = ImageFont.truetype("RobotoCondensed-Bold.ttf", 35)
     p = ImageFont.truetype("Roboto-Bold.ttf", 25)
@@ -465,7 +530,7 @@ def showcard(d):
     # draw.text((635, 320), titles_text, (255, 255, 255), font=p, align="center")
     # draw.text((1040, 320), matches_text, (255, 255, 255), font=p, align="center")
 
-    img.save("text.png")
+    im.save("text.png")
 
     return discord.File("text.png")
 
