@@ -75,3 +75,5 @@ Game modes and Settings
 Maps: Firing Range, Raid and Standoff
 """
 APPLICATION_DENID="Sorry Kid... Try again next season!"
+NOT_ENOUGH_STAMINA="You're too exhausted to use this move! Try another move!"
+CANNOT_USE_RESOLVE="You have enough resovle to attack! Use a move!"
