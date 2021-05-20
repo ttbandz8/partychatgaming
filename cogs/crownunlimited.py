@@ -191,11 +191,11 @@ class CrownUnlimited(commands.Cog):
                 if t_type == 0 and o_type == 2:
                     t_vul=True
                 
-                options = [1,2,3,4,5]
+                options = [1,2,3,4,5,0]
                 await ctx.send(f"{user1.mention}: {o_card} VS {user2.mention}: {t_card} has begun!")
 
                 # START TURNS
-                while (o_health >= 0) and (t_health >= 0):
+                while (o_health > 0) and (t_health > 0):
                     if turn == 0:
                         if o_stamina <= 0:
                             #fortitude or luck is based on health  
@@ -215,34 +215,35 @@ class CrownUnlimited(commands.Cog):
                             if o_health <= o_max_health:
                                 o_newhealth = o_health + o_healthcalc
                                 if o_newhealth > o_max_health:
-                                    healmessage = "injuries dissapear before your eyes:eyes:"
+                                    healmessage = "the injuries dissapeared"
                                     messagenumber = 1
                                     o_health = o_max_health
                                 else:
-                                    healmessage = "looks like they recovered some health"
+                                    healmessage = "regained some vitality"
                                     messagenumber = 2
                                     o_health = o_newhealth
                             else:
-                                healmessage = "looks like they havent been touched..."
+                                healmessage = f"{t_card}'s blows don't appear to have any effect!"
                                 messagenumber = 0
                             o_attack = o_attack + o_attackcalc
                             o_defense =  o_defense + o_defensecalc
                             o_used_focus = True
                             
-                            await ctx.send(f'{o_card} {healmessage} and they entered the FOCUS STATE!')
+                            await ctx.send(f'{o_card} focused and {healmessage}')
                             if messagenumber != 2:
                                 if messagenumber == 1:
-                                    await ctx.send(f'Stamina has recovered!\nHealth has increased to full!\nAttack has increased by {o_attackcalc}!\nDefense has increased by {o_defensecalc}!')
+                                    await ctx.send(f'Stamina has recovered!')
                                 else:
-                                    await ctx.send(f'Stamina has recovered!\nAttack has increased by {o_attackcalc}!\nDefense has increased by {o_defensecalc}!')
+                                    await ctx.send(f'Stamina has recovered!')
                             else:
-                                await ctx.send(f'Stamina has recovered!\nHealth has increased by {o_healthcalc}!\nAttack has increased by {o_attackcalc}!\nDefense has increased by {o_defensecalc}!')
+                                await ctx.send(f'Stamina has recovered!')
                             turn = 1
                         else:
+
                             # SHOW CARD
                             player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                             await ctx.send(file=player_1_card)
-                            await ctx.send(f"{t_card} has {round(t_health)} health. What move will you use, {user1.mention}\nYour health is {round(o_health)}\n Your Stamina is {round(o_stamina)}")
+                            await ctx.send(f"{t_card} has {round(t_health)} health. What move will you use, {user1.mention}?")
 
                             # Make sure user is responding with move
                             def check(msg):
@@ -251,6 +252,8 @@ class CrownUnlimited(commands.Cog):
                                 msg = await self.bot.wait_for("message",timeout=240.0, check=check)
 
                                 # calculate data based on selected move
+                                if int(msg.content) == 0:
+                                    o_health=0
                                 if int(msg.content) == 1:
                                     dmg = damage_cal(o_card, o_1, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used)
                                 elif int(msg.content) == 2:
@@ -262,6 +265,7 @@ class CrownUnlimited(commands.Cog):
                                     dmg = damage_cal(o_card, o_enhancer, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used)
                                     o_enhancer_used=False
                                 elif int(msg.content) == 5:
+
                                     #Resolve Check and Calculation
                                     if not o_used_resolve and o_used_focus:
                                         #fortitude or luck is based on health  
@@ -279,7 +283,7 @@ class CrownUnlimited(commands.Cog):
                                         o_attack = round(o_attack + o_resolve_attack)
                                         o_defense = round(o_defense - o_resolve_defense)
                                         o_used_resolve = True 
-                                        await ctx.send(f'{o_card} strengthened resolve!!\nStamina has recovered! Health has increased by {o_resolve_health}!\nAttack has increased by {o_resolve_attack}!\nDefenses at risk, dropping by {o_resolve_defense} points!!')
+                                        await ctx.send(f'{o_card} sharpened resolve!')
                                         turn=1
                                     else:
                                         await ctx.send(m.CANNOT_USE_RESOLVE)
@@ -306,6 +310,8 @@ class CrownUnlimited(commands.Cog):
                                             turn=1
                                         else:
                                             t_health = t_health - dmg['DMG']
+                                            if t_health < 0:
+                                                t_health=0
                                             o_stamina = o_stamina - dmg['STAMINA_USED']
                                             await ctx.send(dmg['MESSAGE'])
                                             turn=1
@@ -334,35 +340,36 @@ class CrownUnlimited(commands.Cog):
                             if t_health <= t_max_health:
                                 t_newhealth = t_health + t_healthcalc
                                 if t_newhealth > t_max_health:
-                                    healmessage = "injuries dissapear before your eyes:eyes:"
+                                    healmessage = f"recovered!"
                                     messagenumber = 1
                                     t_health = t_max_health
                                 else:
-                                    healmessage = "looks like they recovered some health"
+                                    healmessage = f"stopped the bleeding..."
                                     messagenumber = 2
                                     t_health = t_newhealth
                             else:
-                                healmessage = "looks like they havent been touched..."
+                                healmessage = f"hasn't been touched..."
                                 messagenumber = 0
 
                             t_attack = t_attack + t_attackcalc
                             t_defense =  t_defense + t_defensecalc
                             t_used_focus=True
-                            await ctx.send(f'{t_card} {healmessage} and they entered the FOCUS STATE!')
+                            await ctx.send(f'{t_card} focused and {healmessage}')
 
                             if messagenumber != 2:
                                 if messagenumber == 1:
-                                    await ctx.send(f'Stamina has recovered!\nHealth has increased to full!\nAttack has increased by {t_attackcalc}!\nDefense has increased by {t_defensecalc}!')
+                                    await ctx.send(f'Stamina has recovered!')
                                 else:
-                                    await ctx.send(f'Stamina has recovered!\nAttack has increased by {t_attackcalc}!\nDefense has increased by {t_defensecalc}!')
+                                    await ctx.send(f'Stamina has recovered!')
                             else:
-                                await ctx.send(f'Stamina has recovered!\nHealth has increased by {t_healthcalc}!\nAttack has increased by {t_attackcalc}!\nDefense has increased by {t_defensecalc}!')
+                                await ctx.send(f'Stamina has recovered!')
                             turn=0
                         else:
+
                             # SHOW CARD
                             player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus)
                             await ctx.send(file=player_2_card)
-                            await ctx.send(f"{o_card} has {round(o_health)} health. What move will you use, {user2.mention}?\nYour health is {round(t_health)}\n Your Stamina is {round(t_stamina)}")
+                            await ctx.send(f"{o_card} has {round(o_health)} health. What move will you use, {user2.mention}?")
 
                             # Make sure user is responding with move
                             def check(msg):
@@ -371,6 +378,8 @@ class CrownUnlimited(commands.Cog):
                                 msg = await self.bot.wait_for("message",timeout=240.0, check=check)
 
                                 # calculate data based on selected move
+                                if int(msg.content) == 0:
+                                    t_health=0
                                 if int(msg.content) == 1:
                                     dmg = damage_cal(t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used)
                                 elif int(msg.content) == 2:
@@ -395,10 +404,10 @@ class CrownUnlimited(commands.Cog):
 
                                         t_stamina = t_stamina + t_resolve
                                         t_health = t_health + t_resolve_health
-                                        t_attack = round(t_attack + o_resolve_attack)
-                                        t_defense = round(t_defense - o_resolve_defense)
+                                        t_attack = round(t_attack + t_resolve_attack)
+                                        t_defense = round(t_defense - t_resolve_defense)
                                         t_used_resolve=True
-                                        await ctx.send(f'{t_card} strengthened resolve!!\nStamina has recovered! Health has increased by {t_resolve_health}!\nAttack has increased by {t_resolve_attack}!\nDefenses at risk, dropping by {t_resolve_defense} points!!')
+                                        await ctx.send(f'{t_card} strengthened resolve!')
                                         turn=0
                                     else:
                                         await ctx.send(m.CANNOT_USE_RESOLVE)
@@ -425,6 +434,8 @@ class CrownUnlimited(commands.Cog):
                                             turn=0
                                         else:
                                             o_health = o_health - int(dmg['DMG'])
+                                            if o_health < 0:
+                                                o_health=0
                                             t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                             await ctx.send(dmg['MESSAGE'])
                                             turn=0
@@ -435,9 +446,9 @@ class CrownUnlimited(commands.Cog):
                             except:
                                 await ctx.send('Did not work')
                 # End the match
-                if t_health >= 0:
+                if o_health <= 0:
                     await ctx.send(f":zap: {user2.mention} you win the match!")
-                elif o_health >=0:
+                elif t_health <=0:
                     await ctx.send(f":zap: {user1.mention} you win the match!")
         else:
             await ctx.send(m.SESSION_DOES_NOT_EXIST)
@@ -513,12 +524,12 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
 
         if hit_roll <= miss_hit:
             true_dmg=0
-            message=f'{move} used! It misses! :eyes:'
+            message=f'{move} used! It misses!'
         elif hit_roll <=low_hit and hit_roll > miss_hit:
-            true_dmg = round(true_dmg * .50)
+            true_dmg = round(true_dmg * .70)
             message=f'{move} used! It chips for {true_dmg}! :anger:'
         elif hit_roll <=med_hit and hit_roll > low_hit:
-            true_dmg = round(true_dmg * .80)
+            true_dmg = round(true_dmg * .85)
             message=f'{move} used! It connects for {true_dmg}! :bangbang:'
         elif hit_roll <=standard_hit and hit_roll > med_hit:
             true_dmg = round(true_dmg)
@@ -620,94 +631,100 @@ def round_rectangle(size, radius, alpha=55):
 
 def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focused):
 
-    im = Image.open(requests.get(d['PATH'], stream=True).raw)
+    if health <= 0:
+        im = Image.open(requests.get(d['PATH'], stream=True).raw)
+        im.save("text.png")
+        return discord.File("text.png")
+    else:
 
-    # Max Health
-    hlt_base = round_rectangle((int(max_health), 30), 0)
-    im.paste(hlt_base, (80, 160), hlt_base)
-    # Health Meter
-    hlt = health_bar((health, 30), 0)
-    im.paste(hlt, (80, 160), hlt)
+        im = Image.open(requests.get(d['PATH'], stream=True).raw)
 
-
-    # Max Stamina
-    stam_base = round_rectangle((int(max_stamina), 30), 0)
-    im.paste(stam_base, (80, 195), stam_base)
-    # Stamina Meter
-    stam = stamina_bar((stamina, 30), 0)
-    im.paste(stam, (80, 195), stam)
-
-    draw = ImageDraw.Draw(im)
-    header = ImageFont.truetype("KomikaTitle-Paint.ttf", 55)
-    tournament_wins_font = ImageFont.truetype("RobotoCondensed-Bold.ttf", 35)
-    s = ImageFont.truetype("Roboto-Bold.ttf", 25)
-    h = ImageFont.truetype("Roboto-Bold.ttf", 35)
-    m = ImageFont.truetype("KomikaTitle.ttf", 25)
-    r = ImageFont.truetype("Freedom-10eM.ttf", 35)
+        # Max Health
+        hlt_base = round_rectangle((int(max_health), 30), 0)
+        im.paste(hlt_base, (80, 160), hlt_base)
+        # Health Meter
+        hlt = health_bar((health, 30), 0)
+        im.paste(hlt, (80, 160), hlt)
 
 
-    # Health & Stamina
-    header = ImageFont.truetype("KomikaTitle-Paint.ttf", 60)
-    health_text = f'{health}/{max_health}'
-    stamina_text = f'{stamina}/{max_stamina}'
-    draw.text((185,155), health_text, (255, 255, 255), font=h, align="left")
-    draw.text((82,195), stamina_text, (255, 255, 255), font=s, align="left")
+        # Max Stamina
+        stam_base = round_rectangle((int(max_stamina), 30), 0)
+        im.paste(stam_base, (80, 195), stam_base)
+        # Stamina Meter
+        stam = stamina_bar((stamina, 30), 0)
+        im.paste(stam, (80, 195), stam)
 
-    # Character Name
-    draw.text((82,50), d['NAME'], (255, 255, 255), font=header, align="left")
-    # Title Name
-    draw.text((85,20), title['TITLE'], (255, 255, 255), font=h, align="left")
-
-    if focused:
-                    # side    # vert
-        draw.line(((0, 0), (0, 800)), fill=(30,144,255), width=15)
-        draw.line(((1195, 0), (1195, 800)), fill=(30,144,255), width=10)
-        draw.line(((1195, 0), (0, 0)), fill=(30,144,255), width=15)
-        draw.line(((0, 600), (1195, 600)), fill=(30,144,255), width=15)
-        draw.text((82,130), "FOCUSED", (30,144,255), font=r, align="left")
-
-    if resolved:
-                    # side    # vert
-        draw.line(((0, 0), (0, 800)), fill=(255,215,0), width=15)
-        draw.line(((1195, 0), (1195, 800)), fill=(255,215,0), width=10)
-        draw.line(((1195, 0), (0, 0)), fill=(255,215,0), width=15)
-        draw.line(((0, 600), (1195, 600)), fill=(255,215,0), width=15)
-        draw.text((280,130), "RESOLVED", (255,215,0), font=r, align="left")
+        draw = ImageDraw.Draw(im)
+        header = ImageFont.truetype("KomikaTitle-Paint.ttf", 55)
+        tournament_wins_font = ImageFont.truetype("RobotoCondensed-Bold.ttf", 35)
+        s = ImageFont.truetype("Roboto-Bold.ttf", 25)
+        h = ImageFont.truetype("Roboto-Bold.ttf", 35)
+        m = ImageFont.truetype("KomikaTitle.ttf", 25)
+        r = ImageFont.truetype("Freedom-10eM.ttf", 35)
 
 
-    # # 1st Move
-    # draw.rectangle((50, 480, 351, 550), fill=(0, 0, 0))
+        # Health & Stamina
+        header = ImageFont.truetype("KomikaTitle-Paint.ttf", 60)
+        health_text = f'{health}/{max_health}'
+        stamina_text = f'{stamina}/{max_stamina}'
+        draw.text((185,155), health_text, (255, 255, 255), font=h, align="left")
+        draw.text((82,195), stamina_text, (255, 255, 255), font=s, align="left")
 
-    # # 2nd Move
-    # draw.rectangle((350, 480, 550, 550), fill=(0, 0, 0))
+        # Character Name
+        draw.text((82,50), d['NAME'], (255, 255, 255), font=header, align="left")
+        # Title Name
+        draw.text((85,20), title['TITLE'], (255, 255, 255), font=h, align="left")
 
-    # # 3rd Move
-    # draw.rectangle((680, 480, 880, 550), fill=(0, 0, 0), outline=(255, 255, 255))
+        if focused:
+                        # side    # vert
+            draw.line(((0, 0), (0, 800)), fill=(30,144,255), width=15)
+            draw.line(((1195, 0), (1195, 800)), fill=(30,144,255), width=10)
+            draw.line(((1195, 0), (0, 0)), fill=(30,144,255), width=15)
+            draw.line(((0, 600), (1195, 600)), fill=(30,144,255), width=15)
+            draw.text((82,130), "FOCUSED", (30,144,255), font=r, align="left")
 
-    # # 4th Move
-    # draw.rectangle((950, 480, 1150, 550), fill=(0, 0, 0), outline=(255, 255, 255))
+        if resolved:
+                        # side    # vert
+            draw.line(((0, 0), (0, 800)), fill=(255,215,0), width=15)
+            draw.line(((1195, 0), (1195, 800)), fill=(255,215,0), width=10)
+            draw.line(((1195, 0), (0, 0)), fill=(255,215,0), width=15)
+            draw.line(((0, 600), (1195, 600)), fill=(255,215,0), width=15)
+            draw.text((280,130), "RESOLVED", (255,215,0), font=r, align="left")
 
-    moveset = d['MOVESET']
-    # Player Moves
-    move1 = moveset[0]
-    move1_text = list(move1.keys())[0]
 
-    move2 = moveset[1]
-    move2_text = list(move2.keys())[0]
+        # # 1st Move
+        # draw.rectangle((50, 480, 351, 550), fill=(0, 0, 0))
 
-    move3 = moveset[2]
-    move3_text = list(move3.keys())[0]
+        # # 2nd Move
+        # draw.rectangle((350, 480, 550, 550), fill=(0, 0, 0))
 
-    move_enhanced = moveset[3]
-    move_enhanced_text = list(move_enhanced.keys())[0]
-    draw.text((82,220), f"1. {move1_text}",  (255, 255, 255), font=m, align="left")
-    draw.text((82,250), f"2. {move2_text}",  (255, 255, 255), font=m, align="left")
-    draw.text((82,280), f"3. {move3_text}",  (255, 255, 255), font=m, align="left")
-    draw.text((82,310), f"4. {move_enhanced_text}",  (255, 255, 255), font=m, align="left")
+        # # 3rd Move
+        # draw.rectangle((680, 480, 880, 550), fill=(0, 0, 0), outline=(255, 255, 255))
 
-    im.save("text.png")
+        # # 4th Move
+        # draw.rectangle((950, 480, 1150, 550), fill=(0, 0, 0), outline=(255, 255, 255))
 
-    return discord.File("text.png")
+        moveset = d['MOVESET']
+        # Player Moves
+        move1 = moveset[0]
+        move1_text = list(move1.keys())[0]
+
+        move2 = moveset[1]
+        move2_text = list(move2.keys())[0]
+
+        move3 = moveset[2]
+        move3_text = list(move3.keys())[0]
+
+        move_enhanced = moveset[3]
+        move_enhanced_text = list(move_enhanced.keys())[0]
+        draw.text((82,220), f"1. {move1_text}",  (255, 255, 255), font=m, align="left")
+        draw.text((82,250), f"2. {move2_text}",  (255, 255, 255), font=m, align="left")
+        draw.text((82,280), f"3. {move3_text}",  (255, 255, 255), font=m, align="left")
+        draw.text((82,310), f"4. {move_enhanced_text}",  (255, 255, 255), font=m, align="left")
+
+        im.save("text.png")
+
+        return discord.File("text.png")
 
 
 def setup(bot):

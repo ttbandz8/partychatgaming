@@ -71,27 +71,27 @@ class CARDS():
     PRICE: int = field(default_factory=lambda: 0)
     TOURNAMENT_REQUIREMENTS: int = field(default_factory=lambda: 0)
     TIMESTAMP: str = now
-    MOVESET: list[str] = field(default_factory=lambda: [])
+    MOVESET: list[str] = field(default_factory=lambda: [{'MOVE1': 20, "STAM": 10}, {'MOVE2': 50, "STAM": 30}, {'ULTIMATE': 100, "STAM": 80}, {'ENHANCER': "Name", "STAM": 20, "TYPE": "TYPE"}])
     HLT: int = field(default_factory=lambda: 300)
     STAM: int = field(default_factory=lambda: 100) 
-    ATK: int = field(default_factory=lambda: 0)
-    DEF: int = field(default_factory=lambda: 0)
+    ATK: int = field(default_factory=lambda: 20)
+    DEF: int = field(default_factory=lambda: 15)
     TYPE: int = field(default_factory=lambda: 0)
     ACC: float = field(default_factory=lambda: .50)
-    PASS: list[str] = field(default_factory=lambda: [])
+    PASS: list[str] = field(default_factory=lambda: [{'NAME': 0, 'TYPE': 'TYPE'}])
     SPD: float = field(default_factory=lambda: .50)
     VUL: bool = field(default_factory=lambda: False)
     SHOW: str = field(default_factory=lambda: "N/A")
-    COLLECTION: list[str] = field(default_factory=lambda: [])
+    COLLECTION: str = field(default_factory=lambda: "N/A")
 
 @dataclass(frozen=True, order=True) 
 class TITLES():
     TITLE: str
     PRICE: int = field(default_factory=lambda: 0)
     TOURNAMENT_REQUIREMENTS: int = field(default_factory=lambda: 0)
-    ABILITIES: list[str] = field(default_factory=lambda: []) 
+    ABILITIES: list[str] = field(default_factory=lambda: [{'TYPE': 0}]) 
     SHOW: str = field(default_factory=lambda: "N/A")
-    COLLECTION: list[str] = field(default_factory=lambda: [])
+    COLLECTION: str = field(default_factory=lambda: "N/A")
     TIMESTAMP: str = now
 
 @dataclass(frozen=True, order=True) 
