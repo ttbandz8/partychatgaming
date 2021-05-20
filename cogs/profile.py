@@ -91,9 +91,9 @@ class Profile(commands.Cog):
             tournament_wins_font = ImageFont.truetype("RobotoCondensed-Bold.ttf", 35)
             p = ImageFont.truetype("Roboto-Bold.ttf", 25)
 
-            profile_pic = Image.open(requests.get(d['AVATAR'], stream=True).raw)
-            profile_pic_resized = profile_pic.resize((120, 120), resample=0)
-            img.paste(profile_pic_resized, (1045, 30))
+            # profile_pic = Image.open(requests.get(d['AVATAR'], stream=True).raw)
+            # profile_pic_resized = profile_pic.resize((120, 120), resample=0)
+            # img.paste(profile_pic_resized, (1045, 30))
             draw.text((95,45), name, (255, 255, 255), font=header, align="left")
             draw.text((5,65), str(tournament_wins), (255, 255, 255), font=tournament_wins_font, align="center")
             draw.text((60, 320), game_text, (255, 255, 255), font=p, align="left")
@@ -189,14 +189,14 @@ class Profile(commands.Cog):
         cards_list_array = cards_sorted_list.split("\n")
         
         # Upon adding more cards, be sure it increate the number below
-        cards_broken_up = np.array_split(cards_list_array, 7)
+        cards_broken_up = np.array_split(cards_list_array, 5)
 
         # Upon adding more cards, be sure it increate the number below
         titles_to_str = dict(ChainMap(*titles))
         n = dict(sorted(titles_to_str.items(), key=lambda item: item[1]))
         titles_sorted_list = "\n".join(f'{k} : ' +  f" :coin:{'{:,}'.format(v)}"  for k,v in n.items())
         titles_list_array = titles_sorted_list.split("\n")
-        titles_broken_up = np.array_split(titles_list_array, 7)
+        titles_broken_up = np.array_split(titles_list_array, 5)
         
         embed_list = []
         for i in range(0, len(titles_broken_up)):

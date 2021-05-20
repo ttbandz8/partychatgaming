@@ -46,7 +46,7 @@ class Lobbies(commands.Cog):
   
                     session_query = {"OWNER": str(ctx.author), "GAME": name, "TYPE": int(matchtype), "TEAMS": [], 'AVAILABLE': True}
                     resp = db.createSession(data.newSession(session_query))
-                    await ctx.send(resp, delete_after=5)
+                    await ctx.send(resp)
                 else:
                     await ctx.send(m.GAME_TYPE_UNSUPPORTED)                    
             else:
@@ -325,6 +325,8 @@ class Lobbies(commands.Cog):
             game = session['GAME']
             user_query = ({'DISNAME': str(ctx.author)})
             response = db.queryUser(user_query)
+            card = response['CARD']
+            title = response['TITLE']
             if game not in response['GAMES']:
                 await ctx.send(m.ADD_A_GAME)
             else:
@@ -345,7 +347,11 @@ class Lobbies(commands.Cog):
                     position=0
                     if bool(session['TEAMS']):
                         position=1
-                    if match_type == 1:
+                    if match_type == 1 and game == 'Crown Unlimited':
+                        join_query = {"TEAM": [str(ctx.author)], "SCORE": 0, "CARD": card, "TITLE": title, "POSITION": position}
+                        session_joined = db.joinSession(session_query, join_query)
+                        await ctx.send(session_joined)
+                    if match_type == 1 and game != 'Crown Unlimited':
                         join_query = {"TEAM": [str(ctx.author)], "SCORE": 0, "POSITION": position}
                         session_joined = db.joinSession(session_query, join_query)
                         await ctx.send(session_joined)
@@ -365,6 +371,8 @@ class Lobbies(commands.Cog):
                         join_query = {"TEAM": [str(ctx.author), (str(user[1])), str(user[2]), str(user[3]), str(user[4])], "SCORE": 0, "POSITION": position}
                         session_joined = db.joinSession(session_query, join_query)
                         await ctx.send(session_joined)
+                    if match_type >5:
+                        await ctx.send(m.TOO_MANY_PLAYERS_ON_TEAM)                     
 
         else:
             await ctx.send(m.SESSION_DOES_NOT_EXIST)
@@ -391,12 +399,12 @@ class Lobbies(commands.Cog):
         else:
             await ctx.send(f"Score not added. Please, try again. ", delete_after=5)
 
-    @commands.command()
-    async def cards(self,ctx, user: User):
-        lobby_owner = db.queryUser
-        await self.cl(self,ctx,1,"Flex")
-        await self.jl(self,ctx,ctx.author)
-        await self.add(self,ctx,user)
+    # @commands.command()
+    # async def cards(self,ctx, user: User):
+    #     print(ctx.author[])
+    #     await self.cl(self,ctx,1,"Flex")
+    #     await self.jl(self,ctx,ctx.author)
+    #     await self.add(self,ctx,user)
 
 
 

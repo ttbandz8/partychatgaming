@@ -206,7 +206,7 @@ class Teams(commands.Cog):
     async def agt(self, ctx, *args):
         owner = db.queryUser({'DISNAME': str(ctx.author)})
         team = db.queryTeam({'TNAME': owner['TEAM']})
-        print(team)
+ 
         alias = " ".join([*args]).lower()
         if team:
             if team['OWNER'] == owner['DISNAME']:
