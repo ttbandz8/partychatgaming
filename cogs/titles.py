@@ -102,15 +102,27 @@ class Titles(commands.Cog):
             else:
                 return "Unable to update Title."
 
+    @commands.command()
+    async def vt(self, ctx, *args):
+        title_name = " ".join([*args])
+        title = db.queryTitle({'TITLE': str(title_name)})
+        if title:
+            title_title = title['TITLE']
+            title_show = title['SHOW']
+            title_passive = title['PASS'][0]
+                # Title Passive
+            o_title_passive_type = list(title_passive.keys())[0]
+            o_title_passive_value = list(title_passive.values())[0]
+            embedVar = discord.Embed(title=f"{title_title}".format(self), description=f"Preview for {title_title} from {title_show}.", colour=000000)
+
+            embedVar.add_field(name="Unique Passive", value=f"`Increases {o_title_passive_type} by {o_title_passive_value}`", inline=False)
+
+            await ctx.send(embed=embedVar)
+
+        else:
+            await ctx.send(m.CARD_DOESNT_EXIST, delete_after=3)
+
+
 
 def setup(bot):
     bot.add_cog(Titles(bot))
-
-# @commands.command()
-# async def nt(self, ctx, args1: str, args2: int, args3: int):
-#    if ctx.author.guild_permissions.administrator == True:
-#       title_query = {'TITLE': str(args1), 'TOURNAMENT_REQUIREMENTS': int(args2), 'PRICE': int(args3)}
-#       added = db.createTitle(data.newTitle(title_query))
-#       await ctx.send(added, delete_after=3)
-#    else:
-#       print(m.ADMIN_ONLY_COMMAND)

@@ -485,13 +485,13 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
     if enhancer:
         if enh == 'ATK':
             enh_type="ATK"
-            atk = atk * (ap / 100)
+            atk = ap
         elif enh == 'DEF':
             enh_type="DEF"
-            defense = defense * (ap / 100)
+            defense = ap
         elif enh == 'STAM':
             enh_type="STAM"
-            stam = stam * (ap / 100)
+            stam = ap
 
     if enhancer:
         message = f'{card} used {move}! enhanced his {enh_type}...'

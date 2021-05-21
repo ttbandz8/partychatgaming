@@ -120,9 +120,11 @@ class Profile(commands.Cog):
             balance = vault['BALANCE']
             cards = vault['CARDS']
             titles = vault['TITLES']
+            arms = vault['ARMS']
 
             cards_broken_up = np.array_split(cards, 6)
             titles_broken_up = np.array_split(titles, 6)
+            arms_broken_up = np.array_split(arms, 6)
 
             if len(cards) < 25:
                 embedVar = discord.Embed(title= f":triangular_flag_on_post: " + f"{name}".format(self) +"\n" + f" :coin:{'{:,}'.format(balance)}", description=":bank: Your Party Chat Gaming Vault™️", colour=000000)
@@ -135,6 +137,9 @@ class Profile(commands.Cog):
                 
                 if bool(titles):
                     embedVar.add_field(name="Titles" + " :fireworks:", value="\n".join(titles))
+
+                if bool(arms):
+                    embedVar.add_field(name="Arms" + " :fireworks:", value="\n".join(arms))
                 await ctx.send(embed=embedVar)
             else:
                 embed_list = []
@@ -149,6 +154,9 @@ class Profile(commands.Cog):
                     
                     if bool(titles):
                         globals()['embedVar%s' % i].add_field(name="Titles" + " :fireworks:", value="\n".join(titles_broken_up[i]))
+
+                    if bool(arms):
+                        globals()['embedVar%s' % i].add_field(name="Arms" + " :fireworks:", value="\n".join(arms_broken_up[i]))
                     embed_list.append(globals()['embedVar%s' % i])
 
                 paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
@@ -182,6 +190,14 @@ class Profile(commands.Cog):
                 if title['TITLE'] not in vault['TITLES']:
                     titles.append({title['TITLE']: title['PRICE']})
 
+        arm_resp = db.queryShopArms()
+        arms = []
+        unavailable_arms = []
+        for arm in arm_resp:
+            if arm['PRICE'] != 0 and arm['PRICE'] < (vault['BALANCE'] + 1000):
+                if arm['ARM'] not in vault['ARMS']:
+                    arms.append({arm['ARM']: arm['PRICE']})
+
         
         cards_to_str = dict(ChainMap(*cards))
         n = dict(sorted(cards_to_str.items(), key=lambda item: item[1]))
@@ -197,6 +213,13 @@ class Profile(commands.Cog):
         titles_sorted_list = "\n".join(f'{k} : ' +  f" :coin:{'{:,}'.format(v)}"  for k,v in n.items())
         titles_list_array = titles_sorted_list.split("\n")
         titles_broken_up = np.array_split(titles_list_array, 5)
+
+        # Upon adding more cards, be sure it increate the number below
+        arms_to_str = dict(ChainMap(*arms))
+        n = dict(sorted(arms_to_str.items(), key=lambda item: item[1]))
+        arms_sorted_list = "\n".join(f'{k} : ' +  f" :coin:{'{:,}'.format(v)}"  for k,v in n.items())
+        arms_list_array = arms_sorted_list.split("\n")
+        arms_broken_up = np.array_split(arms_list_array, 5)
         
         embed_list = []
         for i in range(0, len(titles_broken_up)):
@@ -204,6 +227,7 @@ class Profile(commands.Cog):
             globals()['embedVar%s' % i].set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236723/PCG%20LOGOS%20AND%20RESOURCES/Party_Chat_Shop.png")
             globals()['embedVar%s' % i].add_field(name=":shopping_bags: Available Cards", value="\n".join(cards_broken_up[i]))
             globals()['embedVar%s' % i].add_field(name=":shopping_bags: Available Titles", value="\n".join(titles_broken_up[i]))
+            globals()['embedVar%s' % i].add_field(name=":shopping_bags: Available Arms", value="\n".join(arms_broken_up[i]))
             embed_list.append(globals()['embedVar%s' % i])
 
         paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)

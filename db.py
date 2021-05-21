@@ -20,6 +20,7 @@ tournaments_col = db["TOURNAMENTS"]
 cards_col = db["CARDS"]
 titles_col = db["TITLES"]
 gods_col = db["GODS"]
+arm_col = db["ARM"]
 
 vault_col =db["VAULT"]
 
@@ -301,6 +302,68 @@ def queryTournamentTitles():
 
 def queryShopTitles():
     data = titles_col.find({'TOURNAMENT_REQUIREMENTS': 0})
+    return data 
+
+
+    ''' ARM '''
+def arm_exists(data):
+    collection_exists = col_exists("ARM")
+    if collection_exists:
+        arm_does_exist = arm_col.find_one(data)
+        if arm_does_exist:
+            return True
+        else:
+            return False
+    else:
+        return False
+
+def createArm(arm):
+    try:
+        armexists = arm_exists({'ARM': arm['ARM']})
+        if armexists:
+            return "ARM already exists."
+        else:
+            arm_col.insert_one(arm)
+            return "New ARM created."
+    except:
+        return "Cannot create ARM."
+
+def updateArm(query, new_value):
+    try:
+        armexists = arm_exists({'ARM': query['ARM']})
+        if armexists:
+            arm_col.update_one(query, new_value)
+            return True
+        else:
+            return False
+    except:
+        return False
+
+def deleteArm(query):
+    try:
+        armexists = arm_exists({'ARM': query['ARM']})
+        if armexists:
+            arm_col.delete_one(query)
+            return True
+        else:
+            return False
+    except:
+        return False
+
+def queryAllArms():
+    data = titles_col.find()
+    return data
+
+def queryArm(query):
+    data = arm_col.find_one(query)
+    return data
+
+def queryTournamentArms():
+    data = arm_col.find({'TOURNAMENT_REQUIREMENTS': {'$gt': 0}})
+    return data
+
+def queryShopArms():
+    data = arm_col.find({'TOURNAMENT_REQUIREMENTS': 0})
     return data 
 
 '''Query User'''

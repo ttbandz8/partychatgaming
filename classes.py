@@ -95,6 +95,16 @@ class TITLES():
     TIMESTAMP: str = now
 
 @dataclass(frozen=True, order=True) 
+class ARM():
+    ARM: str
+    PRICE: int = field(default_factory=lambda: 0)
+    TOURNAMENT_REQUIREMENTS: int = field(default_factory=lambda: 0)
+    ABILITIES: list[str] = field(default_factory=lambda: [{'TYPE': 0}]) 
+    SHOW: str = field(default_factory=lambda: "N/A")
+    COLLECTION: str = field(default_factory=lambda: "N/A")
+    TIMESTAMP: str = now
+
+@dataclass(frozen=True, order=True) 
 class SCORES():
     TOTAL: int
     MATCHES: list
@@ -130,6 +140,7 @@ class VAULT():
     BALANCE: int = field(default_factory=lambda: 1000)
     CARDS: list[str] = field(default_factory=lambda: ['Dark'])
     TITLES: list[str] = field(default_factory=lambda: ['Starter'])
+    ARMS: list[str] = field(default_factory=lambda: ['Stock'])
 
 
 
@@ -142,6 +153,10 @@ def newCard(card):
 def newTitle(title):
     title = TITLES(**title)
     return asdict(title)
+
+def newArm(arm):
+    arm = ARM(**arm)
+    return asdict(arm)
 
 def newUser(users):
     user_list = []
