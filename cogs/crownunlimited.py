@@ -859,18 +859,25 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
         move_enhanced_text = list(move_enhanced.keys())[0]
 
         if resolved:
-            draw.text((82,240), f"1. R {move1_text}: 10 Stamina",  (255, 255, 255), font=m, align="left")
-            draw.text((82,270), f"2. R {move2_text}: 30 Stamina",  (255, 255, 255), font=m, align="left")
-            draw.text((82,300), f"3. R {move3_text}: 80 Stamina",  (255, 255, 255), font=m, align="left")
-            draw.text((82,330), f"4. R {move_enhanced_text}: 20 Stamina",  (255, 255, 255), font=m, align="left")
-            draw.text((82,330), f"4. R {move_enhanced_text}: 20 Stamina",  (255, 255, 255), font=m, align="left")
+            draw.text((82,240), f"1. R {move1_text}: 10 STAM",  (255, 255, 255), font=m, align="left")
+            draw.text((82,270), f"2. R {move2_text}: 30 STAM",  (255, 255, 255), font=m, align="left")
+            draw.text((82,300), f"3. R {move3_text}: 80 STAM",  (255, 255, 255), font=m, align="left")
+            draw.text((82,330), f"4. R {move_enhanced_text}: 20 STAM",  (255, 255, 255), font=m, align="left")
+            draw.text((82,550), f"0. Quit.",  (255, 255, 255), font=m, align="left")
         else:
-
-            draw.text((82,240), f"1. {move1_text}: 10 Stamina",  (255, 255, 255), font=m, align="left")
-            draw.text((82,270), f"2. {move2_text}: 30 Stamina",  (255, 255, 255), font=m, align="left")
-            draw.text((82,300), f"3. {move3_text}: 80 Stamina",  (255, 255, 255), font=m, align="left")
-            draw.text((82,330), f"4. {move_enhanced_text}: 20 Stamina",  (255, 255, 255), font=m, align="left")
-            draw.text((82,330), f"4. {move_enhanced_text}: 20 Stamina",  (255, 255, 255), font=m, align="left")
+            if focused:
+                draw.text((82,240), f"1. {move1_text}: 10 STAM",  (255, 255, 255), font=m, align="left")
+                draw.text((82,270), f"2. {move2_text}: 30 STAM",  (255, 255, 255), font=m, align="left")
+                draw.text((82,300), f"3. {move3_text}: 80 STAM",  (255, 255, 255), font=m, align="left")
+                draw.text((82,330), f"4. {move_enhanced_text}: 20 STAM",  (255, 255, 255), font=m, align="left")
+                draw.text((82,360), f"5. Resolve",  (255, 255, 255), font=m, align="left")
+                draw.text((82,550), f"0. Quit.",  (255, 255, 255), font=m, align="left")
+            else:
+                draw.text((82,240), f"1. {move1_text}: 10 STAM",  (255, 255, 255), font=m, align="left")
+                draw.text((82,270), f"2. {move2_text}: 30 STAM",  (255, 255, 255), font=m, align="left")
+                draw.text((82,300), f"3. {move3_text}: 80 STAM",  (255, 255, 255), font=m, align="left")
+                draw.text((82,330), f"4. {move_enhanced_text}: 20 STAM",  (255, 255, 255), font=m, align="left")
+                draw.text((82,550), f"0. Quit.",  (255, 255, 255), font=m, align="left")
 
         im.save("text.png")
 
