@@ -1,3 +1,4 @@
+from cogs.lobbies import Lobbies
 from re import T
 import discord
 from discord.ext import commands
@@ -31,11 +32,14 @@ class CrownUnlimited(commands.Cog):
     # o is Player 1
     # t is Player 2
     @commands.command()
-    async def begin(self, ctx):
+    async def start(self, ctx):
         session_query = {"OWNER": str(ctx.author), "AVAILABLE": True}
         session = db.querySession(session_query)
         if session:
             if session['GAME'] == 'Crown Unlimited':
+                # Get Session Owner Disname for scoring
+                sowner = db.queryUser({'DISNAME': str(session['OWNER'])})
+
                 teams = [x for x in session['TEAMS']]
                 team_1 = [x for x in teams if x['POSITION'] == 0][0] # position 0
                 team_2 = [x for x in teams if x['POSITION'] == 1][0] # position 1
@@ -523,10 +527,52 @@ class CrownUnlimited(commands.Cog):
                 # End the match
                 if o_health <= 0:
                     await ctx.send(f":zap: {user2.mention} you win the match!")
+                    uid = t_DID
+                    tuser = await self.bot.fetch_user(uid)
+
+                    ouid = sowner['DID']
+                    sownerctx = await self.bot.fetch_user(ouid)
+                    response = await score(sownerctx, tuser)
+                    await ctx.send(f"{user2.mention} {response}")
                 elif t_health <=0:
                     await ctx.send(f":zap: {user1.mention} you win the match!")
+                    uid = o_DID
+                    ouser = await self.bot.fetch_user(uid)
+
+                    ouid = sowner['DID']
+                    sownerctx = await self.bot.fetch_user(ouid)
+                    response = await score(sownerctx, ouser)
+                    await ctx.send(f"{user1.mention} {response}")
         else:
             await ctx.send(m.SESSION_DOES_NOT_EXIST)
+
+
+async def score(owner, user: User):
+        session_query = {"OWNER": str(owner), "AVAILABLE": True, "KINGSGAMBIT": False}
+        session_data = db.querySession(session_query)
+        teams = [x for x in session_data['TEAMS']]
+        winning_team = {}
+        for x in teams:
+            if str(user) in x['TEAM']: 
+                winning_team = x
+        new_score = winning_team['SCORE'] + 1
+        update_query = {'$set': {'TEAMS.$.SCORE': new_score}}
+        query = {"_id": session_data["_id"], "TEAMS.TEAM": str(user)}
+        response = db.updateSession(session_query, query, update_query)
+        reciever = db.queryUser({'DISNAME': str(user)})
+        name = reciever['DISNAME']
+        message = ":one: You Scored, Don't Let Up :one:"
+        await main.DM(owner, user, message)
+        
+        message = ""
+
+        if response:
+            message = ":one:"
+        else:
+            message = "Score not added. Please, try again. "
+
+        return message
+        
 
 
 def starting_position(o,t):

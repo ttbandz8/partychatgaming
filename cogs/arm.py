@@ -37,7 +37,7 @@ class Arm(commands.Cog):
 
 
     @commands.command()
-    async def ba(self, ctx, *args: str):
+    async def buyarm(self, ctx, *args: str):
         arm_name=" ".join([*args])
         vault_query = {'OWNER' : str(ctx.author)}
         vault = db.altQueryVault(vault_query)
@@ -69,7 +69,7 @@ class Arm(commands.Cog):
             await ctx.send(m.ARM_DOESNT_EXIST)
 
     @commands.command()
-    async def ua(self, ctx, *args):
+    async def updatearm(self, ctx, *args):
         arm_name=" ".join([*args])
         user_query = {'DISNAME': str(ctx.author)}
         user = db.queryUser(user_query)
@@ -103,7 +103,7 @@ class Arm(commands.Cog):
                 return "Unable to update Arm."
 
     @commands.command()
-    async def va(self, ctx, *args):
+    async def viewarm(self, ctx, *args):
         arm_name = " ".join([*args])
         arm = db.queryArm({'ARM': str(arm_name)})
         if arm:

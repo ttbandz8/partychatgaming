@@ -155,7 +155,7 @@ class Lookup(commands.Cog):
             await ctx.send(m.SESSION_DOES_NOT_EXIST, delete_after=5)
 
     @commands.command()
-    async def ml(self, ctx):  
+    async def lobby(self, ctx):  
         session_owner = {'OWNER': str(ctx.author), "AVAILABLE": True}
         session = db.querySession(session_owner)
 
@@ -428,7 +428,7 @@ class Lookup(commands.Cog):
             await ctx.send(m.SESSION_DOES_NOT_EXIST, delete_after=5)
 
     @commands.command()
-    async def lk(self, ctx, user: User):
+    async def lookup(self, ctx, user: User):
         query = {'DISNAME': str(user)}
         d = db.queryUser(query)
 
@@ -474,7 +474,7 @@ class Lookup(commands.Cog):
             await ctx.send(m.USER_NOT_REGISTERED)
 
     @commands.command()
-    async def lkt(self, ctx, *args):
+    async def lookupteam(self, ctx, *args):
         team_name = " ".join([*args])
         team_query = {'TNAME': team_name}
         team = db.queryTeam(team_query)
