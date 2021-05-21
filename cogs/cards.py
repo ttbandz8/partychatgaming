@@ -79,7 +79,7 @@ class Cards(commands.Cog):
         vault = db.altQueryVault(vault_query)
 
         resp = db.queryCard({'NAME': card_name})
-        print(resp)
+
         if resp['TOURNAMENT_REQUIREMENTS'] == 0:
 
             # Do not Check Tourney wins
@@ -147,7 +147,15 @@ class Cards(commands.Cog):
         else:
             await ctx.send(m.CARD_DOESNT_EXIST, delete_after=3)
 
-
+    ''' Delete All Cards '''
+    @commands.command()
+    async def dac(self, ctx):
+        user_query = {"DISNAME": str(ctx.author)}
+        if ctx.author.guild_permissions.administrator == True:
+            resp = db.deleteAllCards(user_query)
+            await ctx.send(resp)
+        else:
+            await ctx.send(m.ADMIN_ONLY_COMMAND)
 
 def setup(bot):
     bot.add_cog(Cards(bot))

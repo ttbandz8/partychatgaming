@@ -122,7 +122,15 @@ class Titles(commands.Cog):
         else:
             await ctx.send(m.CARD_DOESNT_EXIST, delete_after=3)
 
-
+    ''' Delete All Titles '''
+    @commands.command()
+    async def dat(self, ctx):
+        user_query = {"DISNAME": str(ctx.author)}
+        if ctx.author.guild_permissions.administrator == True:
+            resp = db.deleteAllTitles(user_query)
+            await ctx.send(resp)
+        else:
+            await ctx.send(m.ADMIN_ONLY_COMMAND)
 
 def setup(bot):
     bot.add_cog(Titles(bot))

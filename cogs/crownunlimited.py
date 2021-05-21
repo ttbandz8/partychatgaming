@@ -41,6 +41,7 @@ class CrownUnlimited(commands.Cog):
                 team_2 = [x for x in teams if x['POSITION'] == 1][0] # position 1
                 o = db.queryCard({'NAME': team_1['CARD']})
                 otitle = db.queryTitle({'TITLE': team_1['TITLE']})
+                
 
                 t = db.queryCard({'NAME': team_2['CARD']})
                 ttitle = db.queryTitle({'TITLE': team_1['TITLE']})
@@ -52,6 +53,9 @@ class CrownUnlimited(commands.Cog):
 
                 # Player 1 Data
                 o_user = db.queryUser({'DISNAME': team_1['TEAM'][0]})
+                oarm = db.queryArm({'ARM': o_user['ARM']})
+                oarm_passive = oarm['ABILITIES'][0]
+                oarm_name=oarm['ARM']
                 o_DID = o_user['DID']
                 o_card = o['NAME']
                 o_card_path=o['PATH']
@@ -75,6 +79,9 @@ class CrownUnlimited(commands.Cog):
 
                 # Player 2 Data
                 t_user = db.queryUser({'DISNAME': team_2['TEAM'][0]})
+                tarm = db.queryArm({'ARM': t_user['ARM']})
+                tarm_passive = tarm['ABILITIES'][0]
+                tarm_name=tarm['ARM']
                 t_DID = t_user['DID']
                 t_card = t['NAME']
                 t_card_path=t['PATH']
@@ -145,6 +152,32 @@ class CrownUnlimited(commands.Cog):
                         o_stamina = o_stamina + int(o_title_passive_value)
                     elif o_title_passive_type == 'HLT':
                         o_health = o_health + int(o_title_passive_value)
+
+                # Arm Passive Player 1
+                oarm_passive_type = list(oarm_passive.keys())[0]
+                oarm_passive_value = list(oarm_passive.values())[0]
+
+                if oarm_passive_type == 'ATK':
+                    o_attack = o_attack + int(oarm_passive_value)
+                elif oarm_passive_type == 'DEF':
+                    o_defense = o_defense + int(oarm_passive_value)
+                elif oarm_passive_type == 'STAM':
+                    o_stamina = o_stamina + int(oarm_passive_value)
+                elif oarm_passive_type == 'HLT':
+                    o_health = o_health + int(oarm_passive_value)
+
+                # Arm Passive Player 2
+                tarm_passive_type = list(tarm_passive.keys())[0]
+                tarm_passive_value = list(tarm_passive.values())[0]
+
+                if tarm_passive_type == 'ATK':
+                    t_attack = t_attack + int(tarm_passive_value)
+                elif tarm_passive_type == 'DEF':
+                    t_defense = t_defense + int(tarm_passive_value)
+                elif tarm_passive_type == 'STAM':
+                    t_stamina = t_stamina + int(tarm_passive_value)
+                elif tarm_passive_type == 'HLT':
+                    t_health = t_health + int(tarm_passive_value)
 
                 
 
@@ -793,16 +826,6 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
 
         return discord.File("text.png")
 
-
 def setup(bot):
     bot.add_cog(CrownUnlimited(bot))
 
-# ''' Delete All Cards '''
-# @commands.command()
-# async def dac(self, ctx):
-#    user_query = {"DISNAME": str(ctx.author)}
-#    if ctx.author.guild_permissions.administrator == True:
-#       resp = db.deleteAllCards(user_query)
-#       await ctx.send(resp)
-#    else:
-#       await ctx.send(m.ADMIN_ONLY_COMMAND)

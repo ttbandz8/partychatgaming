@@ -288,6 +288,14 @@ def deleteTitle(title):
     except:
         return False
 
+def deleteAllTitles(user_query):
+    exists = user_exists({'DISNAME': user_query['DISNAME']})
+    if exists:
+        titles_col.delete_many({})
+        return 'All Titles Deleted'
+    else:
+        return 'Unable to Delete All Titles'
+
 def queryAllTitles():
     data = titles_col.find()
     return data
