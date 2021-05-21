@@ -45,6 +45,11 @@ class CrownUnlimited(commands.Cog):
                 t = db.queryCard({'NAME': team_2['CARD']})
                 ttitle = db.queryTitle({'TITLE': team_1['TITLE']})
 
+                ####################################################################
+                #PLayer Data
+
+
+
                 # Player 1 Data
                 o_user = db.queryUser({'DISNAME': team_1['TEAM'][0]})
                 o_DID = o_user['DID']
@@ -67,7 +72,32 @@ class CrownUnlimited(commands.Cog):
                 o_vul = False
                 user1 = await self.bot.fetch_user(o_DID)
                 o_title_passive_bool = False
+
+                # Player 2 Data
+                t_user = db.queryUser({'DISNAME': team_2['TEAM'][0]})
+                t_DID = t_user['DID']
+                t_card = t['NAME']
+                t_card_path=t['PATH']
+                t_max_health = t['HLT']
+                t_health = t['HLT']
+                t_stamina = t['STAM']
+                t_max_stamina= t['STAM']
+                t_moveset = t['MOVESET']
+                t_attack = t['ATK']
+                t_defense = t['DEF']
+                t_type = t['TYPE']
+                t_accuracy = t['ACC']
+                t_passive = t['PASS'][0]
+                t_speed = t['SPD']
+                t_show = t['SHOW']
+                t_title_show = ttitle['SHOW']
+                t_title_passive = ttitle['PASS'][0]
+                t_vul = False
+                user2 = await self.bot.fetch_user(t_DID)
+                t_title_passive_bool = False
                 
+                ################################################################################
+
                 # Player 1 Passive Config
                 if (o_show == o_title_show) or (o_title_show == "Unbound"):
                     o_title_passive_bool = True
@@ -95,6 +125,12 @@ class CrownUnlimited(commands.Cog):
                     o_defense = o_defense + int(o_card_passive)
                 elif o_card_passive_type == 'STAM':
                     o_stamina = o_stamina + int(o_card_passive)
+                elif o_card_passive_type == 'HLT':
+                    o_health = o_health + int(o_card_passive)
+                elif o_card_passive_type == 'LIFE':
+                    o_health = o_health + round(int(o_card_passive) + (.10 * t_health))
+                elif o_card_passive_type == 'DRAIN':
+                    o_stamina = o_stamina + int(o_card_passive)
 
                 # Title Passive
                 o_title_passive_type = list(o_title_passive.keys())[0]
@@ -107,29 +143,10 @@ class CrownUnlimited(commands.Cog):
                         o_defense = o_defense + int(o_title_passive_value)
                     elif o_title_passive_type == 'STAM':
                         o_stamina = o_stamina + int(o_title_passive_value)
+                    elif o_title_passive_type == 'HLT':
+                        o_health = o_health + int(o_title_passive_value)
 
-                # Player 2 Data
-                t_user = db.queryUser({'DISNAME': team_2['TEAM'][0]})
-                t_DID = t_user['DID']
-                t_card = t['NAME']
-                t_card_path=t['PATH']
-                t_max_health = t['HLT']
-                t_health = t['HLT']
-                t_stamina = t['STAM']
-                t_max_stamina= t['STAM']
-                t_moveset = t['MOVESET']
-                t_attack = t['ATK']
-                t_defense = t['DEF']
-                t_type = t['TYPE']
-                t_accuracy = t['ACC']
-                t_passive = t['PASS'][0]
-                t_speed = t['SPD']
-                t_show = t['SHOW']
-                t_title_show = ttitle['SHOW']
-                t_title_passive = ttitle['PASS'][0]
-                t_vul = False
-                user2 = await self.bot.fetch_user(t_DID)
-                t_title_passive_bool = False
+                
 
 
                 # Player 2 Passive Config
@@ -146,6 +163,12 @@ class CrownUnlimited(commands.Cog):
                     t_defense = t_defense + int(t_card_passive)
                 elif t_card_passive_type == 'STAM':
                     t_stamina = t_stamina + int(t_card_passive)
+                elif t_card_passive_type == 'HLT':
+                    t_health = t_health + int(t_card_passive)
+                elif t_card_passive_type == 'LIFE':
+                    t_health = t_health + round(int(t_card_passive) + (.10 * o_health))
+                elif t_card_passive_type == 'DRAIN':
+                    t_stamina = t_stamina + int(t_card_passive)
 
                 # Title Passive
                 t_title_passive_type = list(t_title_passive.keys())[0]
@@ -158,6 +181,8 @@ class CrownUnlimited(commands.Cog):
                         t_defense = t_defense + int(t_title_passive_value)
                     elif t_title_passive_type == 'STAM':
                         t_stamina = t_stamina + int(t_title_passive_value)
+                    elif t_title_passive_type == 'HLT':
+                        t_health = t_health + int(t_title_passive_value)
 
 
                 # Player 2 Moves
@@ -255,14 +280,14 @@ class CrownUnlimited(commands.Cog):
                                 if int(msg.content) == 0:
                                     o_health=0
                                 if int(msg.content) == 1:
-                                    dmg = damage_cal(o_card, o_1, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used)
+                                    dmg = damage_cal(o_card, o_1, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina)
                                 elif int(msg.content) == 2:
-                                    dmg = damage_cal(o_card, o_2, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used)
+                                    dmg = damage_cal(o_card, o_2, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina)
                                 elif int(msg.content) == 3:
-                                    dmg = damage_cal(o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used)
+                                    dmg = damage_cal(o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina)
                                 elif int(msg.content) == 4:
                                     o_enhancer_used=True
-                                    dmg = damage_cal(o_card, o_enhancer, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used)
+                                    dmg = damage_cal(o_card, o_enhancer, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina)
                                     o_enhancer_used=False
                                 elif int(msg.content) == 5:
 
@@ -274,7 +299,7 @@ class CrownUnlimited(commands.Cog):
                                         high = o_health- (o_health * .66)
                                         fortitude = random.randint(int(low), int(high))
                                         #Resolve Scaling
-                                        o_resolve_health = round(fortitude - o_resolve)
+                                        o_resolve_health = round(fortitude + (.5*o_resolve))
                                         o_resolve_attack = round(4 * (o_resolve / (.50 * o_attack)))
                                         o_resolve_defense = round(3 * (o_resolve / (.25 * o_defense)))
 
@@ -296,11 +321,19 @@ class CrownUnlimited(commands.Cog):
                                             enh_type= dmg['ENHANCED_TYPE']
                                         
                                             if enh_type == 'ATK':
-                                                o_attack = o_attack + dmg['DMG']
+                                                o_attack = round(o_attack + dmg['DMG'])
                                             elif enh_type == 'DEF':
-                                                o_defense = o_defense + dmg['DMG']
+                                                o_defense = round(o_defense + dmg['DMG'])
                                             elif enh_type == 'STAM':
-                                                o_stamina = o_stamina + dmg['DMG']
+                                                o_stamina = round(o_stamina + dmg['DMG'])
+                                            elif enh_type == 'HLT':
+                                                o_health = round(o_health + dmg['DMG'])
+                                            elif enh_type == 'LIFE':
+                                                o_health = round(o_health + dmg['DMG'])
+                                                t_health = round(t_health - dmg['DMG'])
+                                            elif enh_type == 'DRAIN':
+                                                o_stamina = round(o_stamina + dmg['DMG'])
+                                                t_stamina = round(t_stamina - dmg['DMG'])
                                             o_stamina = o_stamina - int(dmg['STAMINA_USED'])
                                             await ctx.send(dmg['MESSAGE'])
                                             turn=1
@@ -381,14 +414,14 @@ class CrownUnlimited(commands.Cog):
                                 if int(msg.content) == 0:
                                     t_health=0
                                 if int(msg.content) == 1:
-                                    dmg = damage_cal(t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used)
+                                    dmg = damage_cal(t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina)
                                 elif int(msg.content) == 2:
-                                    dmg = damage_cal(t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used)
+                                    dmg = damage_cal(t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina)
                                 elif int(msg.content) == 3:
-                                    dmg = damage_cal(t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used)
+                                    dmg = damage_cal(t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina)
                                 elif int(msg.content) == 4:
                                     t_enhancer_used=True
-                                    dmg = damage_cal(t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used)
+                                    dmg = damage_cal(t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina)
                                     t_enhancer_used=False
                                 elif int(msg.content) == 5:
                                     if not t_used_resolve and t_used_focus:
@@ -398,7 +431,7 @@ class CrownUnlimited(commands.Cog):
                                         high = t_health- (t_health * .66)
                                         fortitude = random.randint(int(low), int(high))
                                         #Resolve Scaling
-                                        t_resolve_health = round(fortitude - t_resolve)
+                                        t_resolve_health = round(fortitude + (.5*t_resolve))
                                         t_resolve_attack = round(4 * (t_resolve / (.25 * t_attack)))
                                         t_resolve_defense = round(3 * (t_resolve / (.25 * t_defense)))
 
@@ -420,11 +453,19 @@ class CrownUnlimited(commands.Cog):
                                         if dmg['ENHANCE']:
                                             enh_type= dmg['ENHANCED_TYPE']
                                             if enh_type == 'ATK':
-                                                t_attack = t_attack + dmg['DMG']
+                                                t_attack = round(t_attack + dmg['DMG'])
                                             elif enh_type == 'DEF':
-                                                t_defense = t_defense + dmg['DMG']
+                                                t_defense = round(t_defense + dmg['DMG'])
                                             elif enh_type == 'STAM':
-                                                t_stamina = t_stamina + dmg['DMG']
+                                                t_stamina = round(t_stamina + dmg['DMG'])
+                                            elif enh_type == 'HLT':
+                                                t_health = round(t_health + dmg['DMG'])
+                                            elif enh_type == 'LIFE':
+                                                t_health = round(t_health + dmg['DMG'])
+                                                o_health = round(o_health - dmg['DMG'])
+                                            elif enh_type == 'DRAIN':
+                                                t_stamina = round(t_stamina + dmg['DMG'])
+                                                o_stamina = round(o_stamina - dmg['DMG'])
                                             t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                             await ctx.send(dmg['MESSAGE'])
                                             turn = 0
@@ -460,7 +501,7 @@ def starting_position(o,t):
     else:
         return False
 
-def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamina, enhancer): 
+def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamina, enhancer, health, op_health, op_stamina): 
     move = list(ability.keys())[0]
     ap = list(ability.values())[0]
     move_stamina = list(ability.values())[1]
@@ -480,6 +521,9 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
     atk = attack
     defense = defense
     stam = stamina
+    hlt = health
+    lifesteal = op_health
+    drain = op_stamina
 
     enh_type=""
     if enhancer:
@@ -492,9 +536,29 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
         elif enh == 'STAM':
             enh_type="STAM"
             stam = ap
+<<<<<<< HEAD
 
+=======
+        elif enh == 'HLT':
+            enh_type='HLT'
+            hlt = ap + (.10 * health)
+        elif enh == 'LIFE':
+            enh_type='LIFE'
+            lifesteal = ap + (.10 * op_health)
+        elif enh == 'DRAIN':
+            enh_type='DRAIN'
+            drain = ap 
+
+    #handle different staments for lifesteal and drain
+>>>>>>> 770dbf7426b8a31f854465034bd7cfa834d2f504
     if enhancer:
-        message = f'{card} used {move}! enhanced his {enh_type}...'
+        if enh_type == 'DRAIN' or enh_type == 'LIFE':
+            if enh_type == 'DRAIN':
+                message = f'{card} used {move}! absorbing some STAMINA...'
+            else:
+                message = f'{card} used {move}! absorbing some {enh_type}...'
+        else:
+            message = f'{card} used {move}! enhanced {enh_type}...'
         enhanced=0
         if enh_type == "ATK":
             enhanced=atk
@@ -502,6 +566,12 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
             enhanced=defense
         elif enh_type == "STAM":
             enhanced=stam
+        elif enh_type == "HLT":
+            enhanced=hlt
+        elif enh_type == 'LIFE':
+            enhanced =lifesteal
+        elif enh_type == 'DRAIN':
+            enhanced = drain
         
         response = {"DMG": enhanced, "MESSAGE": message, "STAMINA_USED": move_stamina, "CAN_USE_MOVE": can_use_move_flag, "ENHANCED_TYPE": enh_type, "ENHANCE": True}
         return response
@@ -717,10 +787,11 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
 
         move_enhanced = moveset[3]
         move_enhanced_text = list(move_enhanced.keys())[0]
-        draw.text((82,220), f"1. {move1_text}",  (255, 255, 255), font=m, align="left")
-        draw.text((82,250), f"2. {move2_text}",  (255, 255, 255), font=m, align="left")
-        draw.text((82,280), f"3. {move3_text}",  (255, 255, 255), font=m, align="left")
-        draw.text((82,310), f"4. {move_enhanced_text}",  (255, 255, 255), font=m, align="left")
+        draw.text((82,220), f"1. {move1_text}: 10 Stamina",  (255, 255, 255), font=m, align="left")
+        draw.text((82,250), f"2. {move2_text}: 30 Stamina",  (255, 255, 255), font=m, align="left")
+        draw.text((82,280), f"3. {move3_text}: 80 Stamina",  (255, 255, 255), font=m, align="left")
+        draw.text((82,310), f"4. {move_enhanced_text}: 20 Stamina",  (255, 255, 255), font=m, align="left")
+        draw.text((82,310), f"4. {move_enhanced_text}: 20 Stamina",  (255, 255, 255), font=m, align="left")
 
         im.save("text.png")
 
