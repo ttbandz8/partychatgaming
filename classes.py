@@ -14,6 +14,7 @@ class USER():
     TEAM: str = field(default_factory=lambda: 'PCG')
     TITLE: str = field(default_factory=lambda: 'Starter')
     CARD: str = field(default_factory=lambda: "Chunin Naruto")
+    HAND: list[str] = field(default_factory=lambda: [''])
     ARM: str = field(default_factory=lambda: "Stock")
     MATCHES: list = field(default_factory=lambda: [{'1V1': [0, 0, 0]}, {'2V2': [0, 0, 0]}, {'3V3': [0, 0, 0]}, {'4V4': [0, 0, 0]}, {'5V5': [0, 0, 0]}])
     TOURNAMENT_WINS: int = field(default_factory=lambda: 0)
@@ -73,6 +74,7 @@ class CARDS():
     TOURNAMENT_REQUIREMENTS: int = field(default_factory=lambda: 0)
     TIMESTAMP: str = now
     MOVESET: list[str] = field(default_factory=lambda: [{'MOVE1': 20, "STAM": 10}, {'MOVE2': 50, "STAM": 30}, {'ULTIMATE': 100, "STAM": 80}, {'ENHANCER': 0, "STAM": 20, "TYPE": "TYPE"}])
+    RPATH: str = field(default_factory=lambda: "N/A")
     HLT: int = field(default_factory=lambda: 300)
     STAM: int = field(default_factory=lambda: 100) 
     ATK: int = field(default_factory=lambda: 20)

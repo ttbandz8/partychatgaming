@@ -77,3 +77,6 @@ Maps: Firing Range, Raid and Standoff
 APPLICATION_DENID="Sorry Kid... Try again next season!"
 NOT_ENOUGH_STAMINA="You're too exhausted to use this move! Try another move!"
 CANNOT_USE_RESOLVE="You have enough resolve to attack! Use a move!"
+USER_DOESNT_HAVE_THE_ARM="You do not own this Arm."
+ARM_DOESNT_EXIST="This Arm does not exist."
+USER_ALREADY_HAS_ARM="You alread own this Arm"

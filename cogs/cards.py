@@ -132,15 +132,57 @@ class Cards(commands.Cog):
             passive_num = list(o_passive.values())[0]
             passive_type = list(o_passive.values())[1]
 
-            embedVar = discord.Embed(title=f"{o_card} Preview".format(self), description=f"Preview for {o_card} from {o_show}.", colour=000000)
-            # embedVar.set_image(url=card_file)
-            embedVar.add_field(name="Health", value=f"{o_max_health}")
-            embedVar.add_field(name="Stamina", value=f"{o_max_stamina}")
-            embedVar.add_field(name="Attack", value=f"{o_attack}")
-            embedVar.add_field(name="Defense", value=f"{o_defense}")
-            embedVar.add_field(name="Speed", value=f"{o_speed}")
-            embedVar.add_field(name="Unique Passive", value=f"`{passive_name}: Increases {passive_type} by {passive_num}`", inline=False)
+            o_1 = o_moveset[0]
+            o_2 = o_moveset[1]
+            o_3 = o_moveset[2]
+            o_enhancer = o_moveset[3]
+            
+            # Move 1
+            move1 = list(o_1.keys())[0]
+            move1ap = list(o_1.values())[0]
+            move1_stamina = list(o_1.values())[1]
+            
+            # Move 2
+            move2 = list(o_2.keys())[0]
+            move2ap = list(o_2.values())[0]
+            move2_stamina = list(o_2.values())[1]
 
+            # Move 3
+            move3 = list(o_3.keys())[0]
+            move3ap = list(o_3.values())[0]
+            move3_stamina = list(o_3.values())[1]
+
+            # Move Enhancer
+            move4 = list(o_enhancer.keys())[0]
+            move4ap = list(o_enhancer.values())[0]
+            move4_stamina = list(o_enhancer.values())[1]
+            move4enh = list(o_enhancer.values())[2]
+
+            message = ""
+            tip = ""
+            if o_attack > o_defense:
+                message = f"{o_card} is an offensive card. "
+                tip="Equipping defensive titles and arms would help boost survivability"
+            elif o_defense > o_attack:
+                message = f"{o_card} is a defensive card. "
+                tip="Equipping offensive titles and arms would help boost killability"              
+
+            embedVar = discord.Embed(title=f"{o_card}".format(self), description=f"`{message}`", colour=000000)
+            # embedVar.set_image(url=card_file)
+            embedVar.add_field(name="Health", value=f"`{o_max_health}`")
+            embedVar.add_field(name="Stamina", value=f"`{o_max_stamina}`")
+            embedVar.add_field(name="Attack", value=f"`{o_attack}`")
+            embedVar.add_field(name="Defense", value=f"`{o_defense}`")
+            embedVar.add_field(name="Speed", value=f"`{o_speed}`")
+
+            embedVar.add_field(name=f"{move1}", value=f"Power: `{move1ap}`", inline=False)
+            embedVar.add_field(name=f"{move2}", value=f"Power: `{move2ap}`", inline=False)
+            embedVar.add_field(name=f"{move3}", value=f"Power: `{move3ap}`", inline=False)
+            embedVar.add_field(name=f"{move4}", value=f"Power: `{move4ap}`", inline=False)
+            embedVar.add_field(name=f"{move4}", value=f"Passive: `Increases {move4enh} by {move4ap}`", inline=False)
+
+            embedVar.add_field(name="Unique Passive", value=f"`{passive_name}: Increases {passive_type} by {passive_num}`", inline=False)
+            embedVar.set_footer(text=f"{tip}")
             await ctx.send(embed=embedVar)
 
             await ctx.send(file=card_file)

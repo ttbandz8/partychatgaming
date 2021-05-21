@@ -113,14 +113,31 @@ class Arm(commands.Cog):
                 # Arm Passive
             o_arm_passive_type = list(arm_passive.keys())[0]
             o_arm_passive_value = list(arm_passive.values())[0]
-            embedVar = discord.Embed(arm=f"{arm_arm}".format(self), description=f"Preview for {arm_arm} from {arm_show}.", colour=000000)
+
+            message=""
+
+            if o_arm_passive_type == 'ATK':
+                message=f"{arm_arm} is an offensive arm"
+            elif o_arm_passive_type == 'DEF':
+                message=f"{arm_arm} is a defensive arm"
+            elif o_arm_passive_type == 'STAM':
+                message=f"{arm_arm} is an offensive arm"
+            elif o_arm_passive_type == 'HLT':
+                message=f"{arm_arm} is a defensive arm"
+            elif o_arm_passive_type == 'LIFE':
+                message=f"{arm_arm} is a defensive arm"
+            elif o_arm_passive_type == 'DRAIN':
+                message=f"{arm_arm} is an offensive arm"
+
+
+            embedVar = discord.Embed(arm=f"{arm_arm}".format(self), description=f"{message}", colour=000000)
 
             embedVar.add_field(name="Unique Passive", value=f"`Increases {o_arm_passive_type} by {o_arm_passive_value}`", inline=False)
 
             await ctx.send(embed=embedVar)
 
         else:
-            await ctx.send(m.CARD_DOESNT_EXIST, delete_after=3)
+            await ctx.send(m.ARM_DOESNT_EXIST, delete_after=3)
 
 
 

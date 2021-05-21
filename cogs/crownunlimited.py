@@ -41,7 +41,6 @@ class CrownUnlimited(commands.Cog):
                 team_2 = [x for x in teams if x['POSITION'] == 1][0] # position 1
                 o = db.queryCard({'NAME': team_1['CARD']})
                 otitle = db.queryTitle({'TITLE': team_1['TITLE']})
-                
 
                 t = db.queryCard({'NAME': team_2['CARD']})
                 ttitle = db.queryTitle({'TITLE': team_1['TITLE']})
@@ -59,6 +58,7 @@ class CrownUnlimited(commands.Cog):
                 o_DID = o_user['DID']
                 o_card = o['NAME']
                 o_card_path=o['PATH']
+                o_rcard_path=o['RPATH']
                 o_max_health = o['HLT']
                 o_health = o['HLT']
                 o_stamina = o['STAM']
@@ -85,6 +85,7 @@ class CrownUnlimited(commands.Cog):
                 t_DID = t_user['DID']
                 t_card = t['NAME']
                 t_card_path=t['PATH']
+                t_rcard_path=t['RPATH']
                 t_max_health = t['HLT']
                 t_health = t['HLT']
                 t_stamina = t['STAM']
@@ -625,7 +626,7 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
             true_dmg=0
             message=f'`{move}` used! It misses!'
         elif hit_roll <=low_hit and hit_roll > miss_hit:
-            true_dmg = round(true_dmg * .70)
+            true_dmg = round(true_dmg * .75)
             message=f'`{move}` used! It chips for {true_dmg}! :anger:'
         elif hit_roll <=med_hit and hit_roll > low_hit:
             true_dmg = round(true_dmg * .85)
@@ -735,8 +736,10 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
         im.save("text.png")
         return discord.File("text.png")
     else:
-
-        im = Image.open(requests.get(d['PATH'], stream=True).raw)
+        if resolved:
+            im = Image.open(requests.get(d['RPATH'], stream=True).raw)
+        else:
+            im = Image.open(requests.get(d['PATH'], stream=True).raw)
 
         # Max Health
         hlt_base = round_rectangle((int(max_health), 30), 0)
@@ -756,10 +759,10 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
         draw = ImageDraw.Draw(im)
         header = ImageFont.truetype("KomikaTitle-Paint.ttf", 55)
         tournament_wins_font = ImageFont.truetype("RobotoCondensed-Bold.ttf", 35)
-        s = ImageFont.truetype("Roboto-Bold.ttf", 25)
+        s = ImageFont.truetype("Roboto-Bold.ttf", 22)
         h = ImageFont.truetype("Roboto-Bold.ttf", 35)
-        m = ImageFont.truetype("KomikaTitle.ttf", 25)
-        r = ImageFont.truetype("Freedom-10eM.ttf", 35)
+        m = ImageFont.truetype("Roboto-Bold.ttf", 25)
+        r = ImageFont.truetype("Freedom-10eM.ttf", 40)
 
 
         # Health & Stamina
@@ -767,7 +770,7 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
         health_text = f'{health}/{max_health}'
         stamina_text = f'{stamina}/{max_stamina}'
         draw.text((185,155), health_text, (255, 255, 255), font=h, align="left")
-        draw.text((82,195), stamina_text, (255, 255, 255), font=s, align="left")
+        draw.text((82,197), stamina_text, (255, 255, 255), font=s, align="left")
 
         # Character Name
         draw.text((82,50), d['NAME'], (255, 255, 255), font=header, align="left")
@@ -816,11 +819,20 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
 
         move_enhanced = moveset[3]
         move_enhanced_text = list(move_enhanced.keys())[0]
-        draw.text((82,220), f"1. {move1_text}: 10 Stamina",  (255, 255, 255), font=m, align="left")
-        draw.text((82,250), f"2. {move2_text}: 30 Stamina",  (255, 255, 255), font=m, align="left")
-        draw.text((82,280), f"3. {move3_text}: 80 Stamina",  (255, 255, 255), font=m, align="left")
-        draw.text((82,310), f"4. {move_enhanced_text}: 20 Stamina",  (255, 255, 255), font=m, align="left")
-        draw.text((82,310), f"4. {move_enhanced_text}: 20 Stamina",  (255, 255, 255), font=m, align="left")
+
+        if resolved:
+            draw.text((82,240), f"1. R {move1_text}: 10 Stamina",  (255, 255, 255), font=m, align="left")
+            draw.text((82,270), f"2. R {move2_text}: 30 Stamina",  (255, 255, 255), font=m, align="left")
+            draw.text((82,300), f"3. R {move3_text}: 80 Stamina",  (255, 255, 255), font=m, align="left")
+            draw.text((82,330), f"4. R {move_enhanced_text}: 20 Stamina",  (255, 255, 255), font=m, align="left")
+            draw.text((82,330), f"4. R {move_enhanced_text}: 20 Stamina",  (255, 255, 255), font=m, align="left")
+        else:
+
+            draw.text((82,240), f"1. {move1_text}: 10 Stamina",  (255, 255, 255), font=m, align="left")
+            draw.text((82,270), f"2. {move2_text}: 30 Stamina",  (255, 255, 255), font=m, align="left")
+            draw.text((82,300), f"3. {move3_text}: 80 Stamina",  (255, 255, 255), font=m, align="left")
+            draw.text((82,330), f"4. {move_enhanced_text}: 20 Stamina",  (255, 255, 255), font=m, align="left")
+            draw.text((82,330), f"4. {move_enhanced_text}: 20 Stamina",  (255, 255, 255), font=m, align="left")
 
         im.save("text.png")
 

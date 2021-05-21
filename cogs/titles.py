@@ -109,11 +109,27 @@ class Titles(commands.Cog):
         if title:
             title_title = title['TITLE']
             title_show = title['SHOW']
-            title_passive = title['PASS'][0]
+            title_passive = title['ABILITIES'][0]
                 # Title Passive
             o_title_passive_type = list(title_passive.keys())[0]
             o_title_passive_value = list(title_passive.values())[0]
-            embedVar = discord.Embed(title=f"{title_title}".format(self), description=f"Preview for {title_title} from {title_show}.", colour=000000)
+            
+            message=""
+
+            if o_title_passive_type == 'ATK':
+                message=f"{title_title} is an offensive title"
+            elif o_title_passive_type == 'DEF':
+                message=f"{title_title} is a defensive title"
+            elif o_title_passive_type == 'STAM':
+                message=f"{title_title} is an offensive title"
+            elif o_title_passive_type == 'HLT':
+                message=f"{title_title} is a defensive title"
+            elif o_title_passive_type == 'LIFE':
+                message=f"{title_title} is a defensive title"
+            elif o_title_passive_type == 'DRAIN':
+                message=f"{title_title} is an offensive title"
+
+            embedVar = discord.Embed(title=f"{title_title}".format(self), description=f"{message}", colour=000000)
 
             embedVar.add_field(name="Unique Passive", value=f"`Increases {o_title_passive_type} by {o_title_passive_value}`", inline=False)
 
