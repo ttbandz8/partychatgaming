@@ -531,22 +531,24 @@ class CrownUnlimited(commands.Cog):
                     tuser = await self.bot.fetch_user(uid)
 
                     ouid = sowner['DID']
-                    sownerctx = await self.bot.fetch_user(uid)
-                    await score(sownerctx, tuser)
+                    sownerctx = await self.bot.fetch_user(ouid)
+                    response = await score(sownerctx, tuser)
+                    await ctx.send(f"{user2.mention} {response}")
                 elif t_health <=0:
                     await ctx.send(f":zap: {user1.mention} you win the match!")
-                    uid = t_DID
+                    uid = o_DID
                     ouser = await self.bot.fetch_user(uid)
 
                     ouid = sowner['DID']
-                    sownerctx = await self.bot.fetch_user(uid)
-                    await score(sownerctx, ouser)
+                    sownerctx = await self.bot.fetch_user(ouid)
+                    response = await score(sownerctx, ouser)
+                    await ctx.send(f"{user1.mention} {response}")
         else:
             await ctx.send(m.SESSION_DOES_NOT_EXIST)
 
 
-async def score(ctx, user: User):
-        session_query = {"OWNER": str(ctx.author), "AVAILABLE": True, "KINGSGAMBIT": False}
+async def score(owner, user: User):
+        session_query = {"OWNER": str(owner), "AVAILABLE": True, "KINGSGAMBIT": False}
         session_data = db.querySession(session_query)
         teams = [x for x in session_data['TEAMS']]
         winning_team = {}
@@ -560,11 +562,17 @@ async def score(ctx, user: User):
         reciever = db.queryUser({'DISNAME': str(user)})
         name = reciever['DISNAME']
         message = ":one: You Scored, Don't Let Up :one:"
-        await main.DM(ctx, user, message)
+        await main.DM(owner, user, message)
+        
+        message = ""
+
         if response:
-            await ctx.send(f"{user.mention}" +f" + :one:", delete_after=2)
+            message = ":one:"
         else:
-            await ctx.send(f"Score not added. Please, try again. ", delete_after=5)
+            message = "Score not added. Please, try again. "
+
+        return message
+        
 
 
 def starting_position(o,t):

@@ -103,7 +103,7 @@ class Arm(commands.Cog):
                 return "Unable to update Arm."
 
     @commands.command()
-    async def previewarm(self, ctx, *args):
+    async def viewarm(self, ctx, *args):
         arm_name = " ".join([*args])
         arm = db.queryArm({'ARM': str(arm_name)})
         if arm:

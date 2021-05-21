@@ -104,7 +104,7 @@ class Cards(commands.Cog):
                 return "Unable to update card."
 
     @commands.command()
-    async def cardpreview(self, ctx, *args):
+    async def viewcard(self, ctx, *args):
         card_name = " ".join([*args])
         card = db.queryCard({'NAME':str(card_name)})
         if card:
@@ -178,8 +178,6 @@ class Cards(commands.Cog):
             embedVar.add_field(name=f"{move1}", value=f"Power: `{move1ap}`", inline=False)
             embedVar.add_field(name=f"{move2}", value=f"Power: `{move2ap}`", inline=False)
             embedVar.add_field(name=f"{move3}", value=f"Power: `{move3ap}`", inline=False)
-            embedVar.add_field(name=f"{move4}", value=f"Power: `{move4ap}`", inline=False)
-            embedVar.add_field(name=f"{move4}", value=f"Passive: `Increases {move4enh} by {move4ap}`", inline=False)
 
             embedVar.add_field(name="Unique Passive", value=f"`{passive_name}: Increases {passive_type} by {passive_num}`", inline=False)
             embedVar.set_footer(text=f"{tip}")

@@ -103,7 +103,7 @@ class Titles(commands.Cog):
                 return "Unable to update Title."
 
     @commands.command()
-    async def previewtitle(self, ctx, *args):
+    async def viewtitle(self, ctx, *args):
         title_name = " ".join([*args])
         title = db.queryTitle({'TITLE': str(title_name)})
         if title:
