@@ -38,7 +38,7 @@ class Cards(commands.Cog):
             print(m.ADMIN_ONLY_COMMAND)
 
     @commands.command()
-    async def bc(self, ctx, *args: str):
+    async def buycard(self, ctx, *args: str):
         card_name = " ".join([*args])
         vault_query = {'OWNER' : str(ctx.author)}
         vault = db.altQueryVault(vault_query)
@@ -70,7 +70,7 @@ class Cards(commands.Cog):
             await ctx.send(m.CARD_DOESNT_EXIST)
 
     @commands.command()
-    async def uc(self, ctx, *args):
+    async def updatecard(self, ctx, *args):
         card_name = " ".join([*args])
         user_query = {'DISNAME': str(ctx.author)}
         user = db.queryUser(user_query)
@@ -104,7 +104,7 @@ class Cards(commands.Cog):
                 return "Unable to update card."
 
     @commands.command()
-    async def vc(self, ctx, *args):
+    async def cardpreview(self, ctx, *args):
         card_name = " ".join([*args])
         card = db.queryCard({'NAME':str(card_name)})
         if card:

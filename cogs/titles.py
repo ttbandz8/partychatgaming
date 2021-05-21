@@ -26,7 +26,7 @@ class Titles(commands.Cog):
         return await main.validate_user(ctx)
 
     @commands.command()
-    async def nt(self, ctx, tournament: int, price: int, *args):
+    async def newtitle(self, ctx, tournament: int, price: int, *args):
         if ctx.author.guild_permissions.administrator == True:
             title = " ".join([*args])
             title_query = {'TITLE': str(title), 'TOURNAMENT_REQUIREMENTS': int(tournament), 'PRICE': int(price)}
@@ -37,7 +37,7 @@ class Titles(commands.Cog):
 
 
     @commands.command()
-    async def bt(self, ctx, *args: str):
+    async def buytitle(self, ctx, *args: str):
         title_name=" ".join([*args])
         vault_query = {'OWNER' : str(ctx.author)}
         vault = db.altQueryVault(vault_query)
@@ -69,7 +69,7 @@ class Titles(commands.Cog):
             await ctx.send(m.TITLE_DOESNT_EXIST)
 
     @commands.command()
-    async def ut(self, ctx, *args):
+    async def updatetitle(self, ctx, *args):
         title_name=" ".join([*args])
         user_query = {'DISNAME': str(ctx.author)}
         user = db.queryUser(user_query)
@@ -103,7 +103,7 @@ class Titles(commands.Cog):
                 return "Unable to update Title."
 
     @commands.command()
-    async def vt(self, ctx, *args):
+    async def previewtitle(self, ctx, *args):
         title_name = " ".join([*args])
         title = db.queryTitle({'TITLE': str(title_name)})
         if title:
