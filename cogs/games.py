@@ -152,7 +152,7 @@ class Games(commands.Cog):
         
         if user_data:
             aliases = [x for x in db.query_all_games() for x in x['ALIASES']]
-
+            
             if alias in aliases:
                 game_query = {'ALIASES': alias}
                 game = db.queryGame(game_query)
@@ -163,7 +163,7 @@ class Games(commands.Cog):
                         if "PCG" in user_data['GAMES']:
                             query_to_update_game = {"$set": {"GAMES": [title]}}
                             resp = db.updateUserNoFilter(user, query_to_update_game)
-                            ctx.send(resp)
+                            await ctx.send(resp)
                         else:
                             query_to_update_game = {"$addToSet": {"GAMES": title}}
                             resp = db.updateUserNoFilter(user, query_to_update_game)

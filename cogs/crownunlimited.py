@@ -68,7 +68,7 @@ class CrownUnlimited(commands.Cog):
                 o_speed = o['SPD']
                 o_show = o['SHOW']
                 o_title_show = otitle['SHOW']
-                o_title_passive = otitle['PASS'][0]
+                o_title_passive = otitle['ABILITIES'][0]
                 o_vul = False
                 user1 = await self.bot.fetch_user(o_DID)
                 o_title_passive_bool = False
@@ -91,7 +91,7 @@ class CrownUnlimited(commands.Cog):
                 t_speed = t['SPD']
                 t_show = t['SHOW']
                 t_title_show = ttitle['SHOW']
-                t_title_passive = ttitle['PASS'][0]
+                t_title_passive = ttitle['ABILITIES'][0]
                 t_vul = False
                 user2 = await self.bot.fetch_user(t_DID)
                 t_title_passive_bool = False
@@ -217,7 +217,7 @@ class CrownUnlimited(commands.Cog):
                     t_vul=True
                 
                 options = [1,2,3,4,5,0]
-                await ctx.send(f"{user1.mention}: {o_card} VS {user2.mention}: {t_card} has begun!")
+                await ctx.send(f"{user1.mention}: `{o_card}` VS {user2.mention}: `{t_card}` has begun!")
 
                 # START TURNS
                 while (o_health > 0) and (t_health > 0):
@@ -248,13 +248,13 @@ class CrownUnlimited(commands.Cog):
                                     messagenumber = 2
                                     o_health = o_newhealth
                             else:
-                                healmessage = f"{t_card}'s blows don't appear to have any effect!"
+                                healmessage = f"`{t_card}`'s blows don't appear to have any effect!"
                                 messagenumber = 0
                             o_attack = o_attack + o_attackcalc
                             o_defense =  o_defense + o_defensecalc
                             o_used_focus = True
                             
-                            await ctx.send(f'{o_card} focused and {healmessage}')
+                            await ctx.send(f'`{o_card}` focused and {healmessage}')
                             if messagenumber != 2:
                                 if messagenumber == 1:
                                     await ctx.send(f'Stamina has recovered!')
@@ -268,7 +268,7 @@ class CrownUnlimited(commands.Cog):
                             # SHOW CARD
                             player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                             await ctx.send(file=player_1_card)
-                            await ctx.send(f"{t_card} has {round(t_health)} health. What move will you use, {user1.mention}?")
+                            await ctx.send(f"`{t_card}` has {round(t_health)} health. What move will you use, {user1.mention}?")
 
                             # Make sure user is responding with move
                             def check(msg):
@@ -308,7 +308,7 @@ class CrownUnlimited(commands.Cog):
                                         o_attack = round(o_attack + o_resolve_attack)
                                         o_defense = round(o_defense - o_resolve_defense)
                                         o_used_resolve = True 
-                                        await ctx.send(f'{o_card} sharpened resolve!')
+                                        await ctx.send(f'`{o_card}` sharpened resolve!')
                                         turn=1
                                     else:
                                         await ctx.send(m.CANNOT_USE_RESOLVE)
@@ -387,7 +387,7 @@ class CrownUnlimited(commands.Cog):
                             t_attack = t_attack + t_attackcalc
                             t_defense =  t_defense + t_defensecalc
                             t_used_focus=True
-                            await ctx.send(f'{t_card} focused and {healmessage}')
+                            await ctx.send(f'`{t_card}` focused and {healmessage}')
 
                             if messagenumber != 2:
                                 if messagenumber == 1:
@@ -402,7 +402,7 @@ class CrownUnlimited(commands.Cog):
                             # SHOW CARD
                             player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus)
                             await ctx.send(file=player_2_card)
-                            await ctx.send(f"{o_card} has {round(o_health)} health. What move will you use, {user2.mention}?")
+                            await ctx.send(f"`{o_card}` has {round(o_health)} health. What move will you use, {user2.mention}?")
 
                             # Make sure user is responding with move
                             def check(msg):
@@ -440,7 +440,7 @@ class CrownUnlimited(commands.Cog):
                                         t_attack = round(t_attack + t_resolve_attack)
                                         t_defense = round(t_defense - t_resolve_defense)
                                         t_used_resolve=True
-                                        await ctx.send(f'{t_card} strengthened resolve!')
+                                        await ctx.send(f'`{t_card}` strengthened resolve!')
                                         turn=0
                                     else:
                                         await ctx.send(m.CANNOT_USE_RESOLVE)
@@ -536,9 +536,6 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
         elif enh == 'STAM':
             enh_type="STAM"
             stam = ap
-<<<<<<< HEAD
-
-=======
         elif enh == 'HLT':
             enh_type='HLT'
             hlt = ap + (.10 * health)
@@ -550,15 +547,14 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
             drain = ap 
 
     #handle different staments for lifesteal and drain
->>>>>>> 770dbf7426b8a31f854465034bd7cfa834d2f504
     if enhancer:
         if enh_type == 'DRAIN' or enh_type == 'LIFE':
             if enh_type == 'DRAIN':
-                message = f'{card} used {move}! absorbing some STAMINA...'
+                message = f'`{card}` used `{move}`! absorbing some STAMINA...'
             else:
-                message = f'{card} used {move}! absorbing some {enh_type}...'
+                message = f'`{card}` used `{move}`! absorbing some {enh_type}...'
         else:
-            message = f'{card} used {move}! enhanced {enh_type}...'
+            message = f'`{card}` used `{move}`! enhanced {enh_type}...'
         enhanced=0
         if enh_type == "ATK":
             enhanced=atk
@@ -594,19 +590,19 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
 
         if hit_roll <= miss_hit:
             true_dmg=0
-            message=f'{move} used! It misses!'
+            message=f'`{move}` used! It misses!'
         elif hit_roll <=low_hit and hit_roll > miss_hit:
             true_dmg = round(true_dmg * .70)
-            message=f'{move} used! It chips for {true_dmg}! :anger:'
+            message=f'`{move}` used! It chips for {true_dmg}! :anger:'
         elif hit_roll <=med_hit and hit_roll > low_hit:
             true_dmg = round(true_dmg * .85)
-            message=f'{move} used! It connects for {true_dmg}! :bangbang:'
+            message=f'`{move}` used! It connects for {true_dmg}! :bangbang:'
         elif hit_roll <=standard_hit and hit_roll > med_hit:
             true_dmg = round(true_dmg)
-            message=f'{move} used! It hits for {true_dmg}! :anger_right:'
+            message=f'`{move}` used! It hits for {true_dmg}! :anger_right:'
         elif hit_roll == 20:
             true_dmg = round(true_dmg * 2)
-            message=f"{card} used {move}! :boom:   IT CRITICALLY HITS FOR {true_dmg}!! :boom: "
+            message=f"`{card}` used `{move}`! :boom:   IT CRITICALLY HITS FOR {true_dmg}!! :boom: "
 
         response = {"DMG": true_dmg, "MESSAGE": message, "STAMINA_USED": move_stamina, "CAN_USE_MOVE": can_use_move_flag, "ENHANCE": False}
         return response

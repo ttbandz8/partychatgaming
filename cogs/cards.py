@@ -133,7 +133,7 @@ class Cards(commands.Cog):
             passive_type = list(o_passive.values())[1]
 
             embedVar = discord.Embed(title=f"{o_card} Preview".format(self), description=f"Preview for {o_card} from {o_show}.", colour=000000)
-            embedVar.set_image(url=card_file)
+            # embedVar.set_image(url=card_file)
             embedVar.add_field(name="Health", value=f"{o_max_health}")
             embedVar.add_field(name="Stamina", value=f"{o_max_stamina}")
             embedVar.add_field(name="Attack", value=f"{o_attack}")
@@ -143,7 +143,7 @@ class Cards(commands.Cog):
 
             await ctx.send(embed=embedVar)
 
-            # await ctx.send(file=card_file)
+            await ctx.send(file=card_file)
         else:
             await ctx.send(m.CARD_DOESNT_EXIST, delete_after=3)
 

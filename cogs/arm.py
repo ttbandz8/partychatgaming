@@ -109,7 +109,7 @@ class Arm(commands.Cog):
         if arm:
             arm_arm = arm['ARM']
             arm_show = arm['SHOW']
-            arm_passive = arm['PASS'][0]
+            arm_passive = arm['ABILITIES'][0]
                 # Arm Passive
             o_arm_passive_type = list(arm_passive.keys())[0]
             o_arm_passive_value = list(arm_passive.values())[0]
