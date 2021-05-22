@@ -119,6 +119,18 @@ class UNIVERSE():
     TIMESTAMP: str = now
 
 @dataclass(frozen=True, order=True) 
+class BOSS():
+    NAME: str = field(default_factory=lambda: '')
+    PATH: str = field(default_factory=lambda: '')
+    TITLE: str = field(default_factory=lambda: '')
+    ARM: str = field(default_factory=lambda: '')
+    UNIVERSE: str = field(default_factory=lambda: "Unbound")
+    CARD: str = field(default_factory=lambda: '')
+    TIMESTAMP: str = now
+    DESCRIPTION: str = field(default_factory=lambda: '')
+   
+
+@dataclass(frozen=True, order=True) 
 class SCORES():
     TOTAL: int
     MATCHES: list
@@ -189,6 +201,12 @@ def newUniverse(universe):
     nu = UNIVERSE(**universe)
     return asdict(nu)
 
+
+def newBoss(boss):
+    nb = BOSS(**boss)
+    return asdict(nb)
+
+
 def newSession(session):
     s = SESSIONS(**session)
     return asdict(s)
@@ -196,10 +214,6 @@ def newSession(session):
 def newGame(game):
     g = GAMES(**game)
     return asdict(g)
-
-def newMatch(match):
-    m = MATCH(**match)
-    return asdict(m)
 
 def newGods(gods):
     god = GODS(**gods)

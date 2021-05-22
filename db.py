@@ -22,6 +22,7 @@ titles_col = db["TITLES"]
 gods_col = db["GODS"]
 arm_col = db["ARM"]
 universe_col = db['UNIVERSE']
+boss_col = db['BOSS']
 
 vault_col =db["VAULT"]
 
@@ -449,6 +450,64 @@ def queryAllUniverse():
 
 def queryUniverse(query):
     data = universe_col.find_one(query)
+    return data
+
+
+''' BOSS '''
+def boss_exists(data):
+    collection_exists = col_exists("BOSS")
+    if collection_exists:
+        boss_does_exist = boss_col.find_one(data)
+        if boss_does_exist:
+            return True
+        else:
+            return False
+    else:
+        return False
+
+def updateManyBosses(new_value):
+    boss_col.update_many({}, new_value)
+    return True
+
+def createBoss(boss):
+    try:
+        bossexists = boss_exists({'NAME': boss['NAME']})
+        if bossexists:
+            return "Boss already exists."
+        else:
+            boss_col.insert_one(boss)
+            return "New Boss created."
+    except:
+        return "Cannot create Boss."
+
+def updateBoss(query, new_value):
+    try:
+        bossexists = boss_exists({'NAME': query['NAME']})
+        if bossexists:
+            boss_col.update_one(query, new_value)
+            return True
+        else:
+            return False
+    except:
+        return False
+
+def deleteBoss(query):
+    try:
+        bossexists = boss_exists({'NAME': query['NAME']})
+        if bossexists:
+            boss_col.delete_one(query)
+            return True
+        else:
+            return False
+    except:
+        return False
+
+def queryAllBosses():
+    data = boss_col.find()
+    return data
+
+def queryBoss(query):
+    data = boss_col.find_one(query)
     return data
 
 
