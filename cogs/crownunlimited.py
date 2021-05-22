@@ -1002,7 +1002,7 @@ class CrownUnlimited(commands.Cog):
                             embedVar = discord.Embed(title=f"{o_card} What move will you use?", description=f"{t_card} currently has {t_health} health and {t_stamina} stamina.", colour=embed_color_o)
                             if o_used_focus and not o_used_resolve:
                                 embedVar.set_author(name="Press 5 to strengthen resolve!")
-                            embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
+                            embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use 0 to Quit")
                             await ctx.send(embed=embedVar)
                             
                             # Make sure user is responding with move
@@ -1013,7 +1013,7 @@ class CrownUnlimited(commands.Cog):
 
                                 # calculate data based on selected move
                                 if int(msg.content) == 0:
-                                    o_health=0
+                                    o_health = 0
                                 if int(msg.content) == 1:
                                     dmg = damage_cal(o_card, o_1, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina)
                                 elif int(msg.content) == 2:
@@ -1185,7 +1185,7 @@ class CrownUnlimited(commands.Cog):
                                 embedVar = discord.Embed(title=f"{t_card} What move will you use?", description=f"{o_card} currently has {o_health} health and {o_stamina} stamina.", colour=embed_color_t)
                                 if t_used_focus and not t_used_resolve:
                                     embedVar.set_author(name="Press 5 to strengthen resolve!")
-                                embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
+                                embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use 0 to Quit")
                                 await ctx.send(embed=embedVar)
                                 # Make sure user is responding with move
                                 def check(msg):
@@ -1195,7 +1195,7 @@ class CrownUnlimited(commands.Cog):
 
                                     # calculate data based on selected move
                                     if int(msg.content) == 0:
-                                        t_health=0
+                                        t_health = 0
                                     if int(msg.content) == 1:
                                         dmg = damage_cal(t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina)
                                     elif int(msg.content) == 2:
@@ -1460,6 +1460,8 @@ class CrownUnlimited(commands.Cog):
                                         turn = 1
                 if botActive:
                     end_message="Use the #end command to end the tutorial lobby"
+                else:
+                    end_message = "Try Again!"
                 # End the match
                 if o_health <= 0:
                     # await ctx.send(f":zap: {user2.mention} you win the match!")
@@ -1864,6 +1866,8 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
         im.save("text.png")
 
         return discord.File("text.png")
+
+
 
 def setup(bot):
     bot.add_cog(CrownUnlimited(bot))
