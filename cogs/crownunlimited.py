@@ -44,7 +44,6 @@ class CrownUnlimited(commands.Cog):
                 teams = [x for x in session['TEAMS']]
                 team_1 = [x for x in teams if x['POSITION'] == 0][0] # position 0
                 team_2 = [x for x in teams if x['POSITION'] == 1][0] # position 1
-                print(team_2['TEAM'])
 
                 o = db.queryCard({'NAME': team_1['CARD']})
                 otitle = db.queryTitle({'TITLE': team_1['TITLE']})
@@ -272,18 +271,14 @@ class CrownUnlimited(commands.Cog):
                         
 
                         if o_health <= (o_max_health * .25):
-                            print("Below 25")
                             embed_color_o=0xe74c3c
                             
                         elif o_health <= (o_max_health * .50):
-                            print("Below 50")
                             embed_color_o=0xe67e22
                         elif o_health <= (o_max_health * .75):
-                            print("Below 75")
                             embed_color_o=0xf1c40f
                             
                         else:
-                            print("Health is high")
                             embed_color_o = 0x2ecc71
 
                         if o_stamina <= 0:
@@ -450,7 +445,6 @@ class CrownUnlimited(commands.Cog):
                         elif t_health <= (t_max_health * .75):
                             embed_color_t=0xf1c40f
                         else:
-                            print("Health is high")
                             embed_color_t = 0x2ecc71
 
                         if t_stamina <= 0:
@@ -891,11 +885,15 @@ class CrownUnlimited(commands.Cog):
 
                 botActive = False
                 tutorialbot = '837538366509154407'
+                legendbot = '845672426113466395'
                 userID = t_user['DID']
-                print(userID)
                 if tutorialbot == userID:
                     botActive = True
                     await ctx.send(f"Welcome to Bootcamp!")
+                    turn = 0
+                elif legendbot == userID:
+                    botActive = True
+                    await ctx.send(f"Welcome to Legends!")
                     turn = 0
                 else:
                     botActive = False
@@ -934,18 +932,14 @@ class CrownUnlimited(commands.Cog):
                         
 
                         if o_health <= (o_max_health * .25):
-                            print("Below 25")
                             embed_color_o=0xe74c3c
                             
                         elif o_health <= (o_max_health * .50):
-                            print("Below 50")
                             embed_color_o=0xe67e22
                         elif o_health <= (o_max_health * .75):
-                            print("Below 75")
                             embed_color_o=0xf1c40f
                             
                         else:
-                            print("Health is high")
                             embed_color_o = 0x2ecc71
 
                         if o_stamina <= 0:
@@ -1307,6 +1301,34 @@ class CrownUnlimited(commands.Cog):
                                 
 
                                 if o_stamina == 0:
+                                    aiMove = 1
+                                elif t_stamina >= 160 and (t_health >= o_health):
+                                    aiMove = 3
+                                elif t_stamina >= 160:
+                                    aiMove = 3                                   
+                                elif t_stamina >= 150 and (t_health >= o_health):
+                                    aiMove = 1
+                                elif t_stamina >= 150:
+                                    aiMove = 1                                     
+                                elif t_stamina >= 140 and (t_health >= o_health):
+                                    aiMove = 1
+                                elif t_stamina >= 140:
+                                    aiMove = 3                                      
+                                elif t_stamina >= 130 and (t_health >= o_health):
+                                    aiMove = 1
+                                elif t_stamina >= 130:
+                                    aiMove = 3                                     
+                                elif t_stamina >= 120 and (t_health >= o_health):
+                                    aiMove = 2
+                                elif t_stamina >= 120:
+                                    aiMove = 3                                 
+                                elif t_stamina >= 110 and (t_health >= o_health):
+                                    aiMove = 1
+                                elif t_stamina >= 110:
+                                    aiMove = 2                                   
+                                elif t_stamina >= 100 and (t_health >= o_health):
+                                    aiMove = 4
+                                elif t_stamina >= 100:
                                     aiMove = 1
                                 elif t_stamina >= 90 and (t_health >= o_health):
                                     aiMove = 3
@@ -1863,7 +1885,6 @@ def getTime(hgame, mgame, sgame, hnow, mnow, snow):
         else:
             secondsPassed = snow - sgame
     gameTime = str(hoursPassed) + str(minutesPassed) + str(secondsPassed)
-    print(gameTime)
     return gameTime
 
 
