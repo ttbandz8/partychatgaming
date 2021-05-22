@@ -125,7 +125,8 @@ class Arm(commands.Cog):
         if arm:
             arm_arm = arm['ARM']
             arm_show = arm['UNIVERSE']
-            arm_show_img = db.queryUniverse({'TITLE': arm_show['TITLE']})['PATH']
+            if arm_show != 'Unbound':
+                arm_show_img = db.queryUniverse({'TITLE': arm_show['TITLE']})['PATH']
             arm_passive = arm['ABILITIES'][0]
                 # Arm Passive
             o_arm_passive_type = list(arm_passive.keys())[0]
