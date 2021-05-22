@@ -169,7 +169,8 @@ class Cards(commands.Cog):
                 tip="Equipping offensive titles and arms would help boost killability"              
 
             embedVar = discord.Embed(title=f"{o_card}".format(self), description=f"`{message}`", colour=000000)
-            embedVar.set_thumbnail(url=show_img)
+            if o_show != "Unbound":
+                embedVar.set_thumbnail(url=show_img)
             embedVar.add_field(name="Health", value=f"`{o_max_health}`")
             embedVar.add_field(name="Stamina", value=f"`{o_max_stamina}`")
             embedVar.add_field(name="Attack", value=f"`{o_attack}`")

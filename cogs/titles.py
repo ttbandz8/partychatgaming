@@ -131,7 +131,8 @@ class Titles(commands.Cog):
                 message=f"{title_title} is an offensive title"
 
             embedVar = discord.Embed(title=f"{title_title}".format(self), description=f"{message}", colour=000000)
-            embedVar.set_thumbnail(url=title_img)
+            if title_show != "Unbound":
+                embedVar.set_thumbnail(url=title_img)
             embedVar.add_field(name="Unique Passive", value=f"`Increases {o_title_passive_type} by {o_title_passive_value}`", inline=False)
 
             await ctx.send(embed=embedVar)

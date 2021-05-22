@@ -132,7 +132,8 @@ class Arm(commands.Cog):
 
 
             embedVar = discord.Embed(arm=f"{arm_arm}".format(self), description=f"{message}", colour=000000)
-            embedVar.set_thumbnail(url=arm_show_img)
+            if arm_show != "Unbound":
+                embedVar.set_thumbnail(url=arm_show_img)
             embedVar.add_field(name="Unique Passive", value=f"`Increases {o_arm_passive_type} by {o_arm_passive_value}`", inline=False)
 
             await ctx.send(embed=embedVar)
