@@ -676,7 +676,10 @@ class CrownUnlimited(commands.Cog):
     # t is Player 2
     @commands.command()
     async def start(self, ctx):
-        timemark = now
+        starttime = time.asctime()
+        h_gametime = starttime[11:13]
+        m_gametime = starttime[14:16]
+        s_gametime = starttime[17:19]
         session_query = {"OWNER": str(ctx.author), "AVAILABLE": True}
         session = db.querySession(session_query)
         if session:
@@ -1398,9 +1401,11 @@ class CrownUnlimited(commands.Cog):
                     # await ctx.send(f":zap: {user2.mention} you win the match!")
                     uid = t_DID
                     tuser = await self.bot.fetch_user(uid)
-                    # wintime = now - timemark
-                    # print(timemark)
-                    # print(now)
+                    wintime = time.asctime()
+                    h_playtime = int(wintime[11:13])
+                    m_playtime = int(wintime[14:16])
+                    s_playtime = int(wintime[17:19])
+                    gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
 
                     ouid = sowner['DID']
                     sownerctx = await self.bot.fetch_user(ouid)
@@ -1408,23 +1413,35 @@ class CrownUnlimited(commands.Cog):
 
                     embedVar = discord.Embed(title=f":zap: `{t_card}` scores {response} and wins the match!", description=f"Match concluded in {turn_total} turns!", colour=0x1abc9c)
                     embedVar.set_author(name=f"{o_card} lost! ", icon_url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236432/PCG%20LOGOS%20AND%20RESOURCES/PCGBot_1.png")
-                    embedVar.set_footer(text=f"Play again? {now}")
+                    if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
+                        embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[2]} Seconds.")
+                    elif int(gameClock[0]) == 0:
+                        embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                    else: 
+                        embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                     await ctx.send(embed=embedVar)
 
                 elif t_health <=0:
                     uid = o_DID
                     ouser = await self.bot.fetch_user(uid)
-                    # wintime = now - timemark
-                    # print(wintime)
-                    # print(now)
-
+                    wintime = time.asctime()
+                    h_playtime = int(wintime[11:13])
+                    m_playtime = int(wintime[14:16])
+                    s_playtime = int(wintime[17:19])
+                    gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
                     ouid = sowner['DID']
                     sownerctx = await self.bot.fetch_user(ouid)
                     response = await score(sownerctx, ouser)
 
                     embedVar = discord.Embed(title=f":zap: `{o_card}` {response} and wins the match!", description=f"Match concluded in {turn_total} turns!", colour=0xe91e63)
                     embedVar.set_author(name=f"{t_card} lost! ", icon_url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236432/PCG%20LOGOS%20AND%20RESOURCES/PCGBot_1.png")
-                    embedVar.set_footer(text=f"Play again? {now}")
+                    if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
+                        embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[2]} Seconds.")
+                    elif int(gameClock[0]) == 0:
+                        embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                    else: 
+                        embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                    embedVar.set_footer(text=f"Play again? {playtime}")
                     await ctx.send(embed=embedVar)
         
         else:
@@ -1775,6 +1792,28 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
 
 def setup(bot):
     bot.add_cog(CrownUnlimited(bot))
+
+def getTime(hgame, mgame, sgame, hnow, mnow, snow):
+    hoursPassed = hnow - hgame
+    minutesPassed = mnow - mgame
+    secondsPassed = snow - sgame
+    if hoursPassed > 0:
+        minutesPassed = mnow     
+        if minutesPassed > 0:
+            secondsPassed = snow
+        else:
+            secondsPassed = snow - sgame
+    else:
+        minutesPassed = mnow - mgame
+        if minutesPassed > 0:
+            secondsPassed = snow
+        else:
+            secondsPassed = snow - sgame
+    gameTime = str(hoursPassed) + str(minutesPassed) + str(secondsPassed)
+    print(gameTime)
+    return gameTime
+
+
 
 
 
