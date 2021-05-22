@@ -124,7 +124,8 @@ class Arm(commands.Cog):
         arm = db.queryArm({'ARM': str(arm_name)})
         if arm:
             arm_arm = arm['ARM']
-            arm_show = arm['SHOW']
+            arm_show = arm['UNIVERSE']
+            arm_show_img = db.queryUniverse({'TITLE': arm_show['TITLE']})['PATH']
             arm_passive = arm['ABILITIES'][0]
                 # Arm Passive
             o_arm_passive_type = list(arm_passive.keys())[0]
@@ -147,7 +148,7 @@ class Arm(commands.Cog):
 
 
             embedVar = discord.Embed(arm=f"{arm_arm}".format(self), description=f"{message}", colour=000000)
-
+            embedVar.set_thumbnail(url=arm_show_img)
             embedVar.add_field(name="Unique Passive", value=f"`Increases {o_arm_passive_type} by {o_arm_passive_value}`", inline=False)
 
             await ctx.send(embed=embedVar)

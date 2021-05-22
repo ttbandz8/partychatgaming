@@ -84,7 +84,7 @@ class CARDS():
     PASS: list[str] = field(default_factory=lambda: [{'NAME': 0, 'TYPE': 'TYPE'}])
     SPD: float = field(default_factory=lambda: .50)
     VUL: bool = field(default_factory=lambda: False)
-    SHOW: str = field(default_factory=lambda: "N/A")
+    UNIVERSE: str = field(default_factory=lambda: "Unbound")
     COLLECTION: str = field(default_factory=lambda: "N/A")
     STOCK: int = field(default_factory=lambda: 5)
 
@@ -94,7 +94,7 @@ class TITLES():
     PRICE: int = field(default_factory=lambda: 0)
     TOURNAMENT_REQUIREMENTS: int = field(default_factory=lambda: 0)
     ABILITIES: list[str] = field(default_factory=lambda: [{'TYPE': 0}]) 
-    SHOW: str = field(default_factory=lambda: "N/A")
+    UNIVERSE: str = field(default_factory=lambda: "Unbound")
     COLLECTION: str = field(default_factory=lambda: "N/A")
     TIMESTAMP: str = now
     STOCK: int = field(default_factory=lambda: 5)
@@ -105,10 +105,16 @@ class ARM():
     PRICE: int = field(default_factory=lambda: 0)
     TOURNAMENT_REQUIREMENTS: int = field(default_factory=lambda: 0)
     ABILITIES: list[str] = field(default_factory=lambda: [{'TYPE': 0}]) 
-    SHOW: str = field(default_factory=lambda: "N/A")
+    UNIVERSE: str = field(default_factory=lambda: "Unbound")
     COLLECTION: str = field(default_factory=lambda: "N/A")
     TIMESTAMP: str = now
     STOCK: int = field(default_factory=lambda: 5)
+
+@dataclass(frozen=True, order=True) 
+class UNIVERSE():
+    TITLE: str
+    PATH: str = field(default_factory=lambda: '')
+    TIMESTAMP: str = now
 
 @dataclass(frozen=True, order=True) 
 class SCORES():
@@ -149,8 +155,6 @@ class VAULT():
     ARMS: list[str] = field(default_factory=lambda: ['Stock'])
 
 
-
-
 ''' Data Functions'''
 def newCard(card):
     c = CARDS(**card)
@@ -178,6 +182,10 @@ def newUser(users):
 def newTeam(team):
     t = TEAMS(**team)
     return asdict(t)
+
+def newUniverse(universe):
+    nu = UNIVERSE(**universe)
+    return asdict(nu)
 
 def newSession(session):
     s = SESSIONS(**session)

@@ -29,6 +29,16 @@ class Lobbies(commands.Cog):
     async def cog_check(self, ctx):
         return await main.validate_user(ctx)
 
+    # @commands.command()
+    # async def dal(self, ctx):
+    #     user_query = {"DISNAME": str(ctx.author)}
+    #     if ctx.author.guild_permissions.administrator == True:
+    #         resp = db.deleteAllSessions(user_query)
+    #         await ctx.send(resp)
+    #     else:
+    #         await ctx.send(m.ADMIN_ONLY_COMMAND)
+
+
     @commands.command()
     async def createlobby(self, ctx, matchtype, *args):
         game_name = " ".join([*args])
@@ -475,6 +485,8 @@ class Lobbies(commands.Cog):
                 await ctx.send(m.ADD_A_GAME)
         else:
             await ctx.send(m.GAME_UNAVAILABLE)
+
+
         
 
 
@@ -484,13 +496,3 @@ def setup(bot):
     bot.add_cog(Lobbies(bot))
 
 
-# ''' Delete All Sessions '''
-# @bot.command()
-# @commands.check(validate_user)
-# async def dal(ctx):
-#    user_query = {"DISNAME": str(ctx.author)}
-#    if ctx.author.guild_permissions.administrator == True:
-#       resp = db.deleteAllSessions(user_query)
-#       await ctx.send(resp)
-#    else:
-#       await ctx.send(m.ADMIN_ONLY_COMMAND)

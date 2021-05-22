@@ -74,8 +74,8 @@ class CrownUnlimited(commands.Cog):
                 o_accuracy = o['ACC']
                 o_passive = o['PASS'][0]
                 o_speed = o['SPD']
-                o_show = o['SHOW']
-                o_title_show = otitle['SHOW']
+                o_universe = o['UNIVERSE']
+                o_title_universe = otitle['UNIVERSE']
                 o_title_passive = otitle['ABILITIES'][0]
                 o_vul = False
                 user1 = await self.bot.fetch_user(o_DID)
@@ -101,8 +101,8 @@ class CrownUnlimited(commands.Cog):
                 t_accuracy = t['ACC']
                 t_passive = t['PASS'][0]
                 t_speed = t['SPD']
-                t_show = t['SHOW']
-                t_title_show = ttitle['SHOW']
+                t_universe = t['UNIVERSE']
+                t_title_universe = ttitle['UNIVERSE']
                 t_title_passive = ttitle['ABILITIES'][0]
                 t_vul = False
                 user2 = await self.bot.fetch_user(t_DID)
@@ -111,7 +111,7 @@ class CrownUnlimited(commands.Cog):
                 ################################################################################
 
                 # Player 1 Passive Config
-                if (o_show == o_title_show) or (o_title_show == "Unbound"):
+                if (o_universe == o_title_universe) or (o_title_universe == "Unbound"):
                     o_title_passive_bool = True
                 
                 # Player 1 Focus & Resolve
@@ -188,7 +188,7 @@ class CrownUnlimited(commands.Cog):
 
 
                 # Player 2 Passive Config
-                if (t_show == t_title_show) or (t_title_show == "Unbound"):
+                if (t_universe == t_title_universe) or (t_title_universe == "Unbound"):
                     t_title_passive_bool = True
                 
                 # Player 1 Card Passive
@@ -303,7 +303,7 @@ class CrownUnlimited(commands.Cog):
                             turn = 1
                         else:
 
-                            # SHOW CARD
+                            # UNIVERSE CARD
                             player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                             await ctx.send(file=player_1_card)
                             await ctx.send(f"`{t_card}` has {round(t_health)} health. What move will you use, {user1.mention}?")
@@ -437,7 +437,7 @@ class CrownUnlimited(commands.Cog):
                             turn=0
                         else:
 
-                            # SHOW CARD
+                            # UNIVERSE CARD
                             player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus)
                             await ctx.send(file=player_2_card)
                             await ctx.send(f"`{o_card}` has {round(o_health)} health. What move will you use, {user2.mention}?")
