@@ -809,17 +809,11 @@ class CrownUnlimited(commands.Cog):
         # End the match
         if o_health <= 0:
             # await ctx.send(f":zap: {user2.mention} you win the match!")
-            uid = t_DID
-            tuser = await self.bot.fetch_user(uid)
             wintime = time.asctime()
             h_playtime = int(wintime[11:13])
             m_playtime = int(wintime[14:16])
             s_playtime = int(wintime[17:19])
             gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
-
-            ouid = sowner['DID']
-            sownerctx = await self.bot.fetch_user(ouid)
-            response = await score(sownerctx, tuser)
 
             embedVar = discord.Embed(title=f":zap: `{t_card}` scores {response} and wins the match!", description=f"Match concluded in {turn_total} turns!", colour=0x1abc9c)
             embedVar.set_author(name=f"{o_card} lost!\n{end_message}", icon_url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236432/PCG%20LOGOS%20AND%20RESOURCES/PCGBot_1.png")
