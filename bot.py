@@ -46,7 +46,7 @@ if config('ENV') == "production":
    bot = commands.Bot(command_prefix="#")
 else:
    # TEST
-   bot = commands.Bot(command_prefix=">")
+   bot = commands.Bot(command_prefix=".")
 
 bot.remove_command("help")
 
@@ -111,12 +111,22 @@ async def r(ctx):
    user = {'DISNAME': disname, 'NAME': name, 'DID' : str(ctx.author.id), 'AVATAR': str(ctx.author.avatar_url)}
    response = db.createUsers(data.newUser(user))
    if response:
+
+      embedVar = discord.Embed(title=f"Welcome to Party Chat Gaming!", colour=0xe91e63)
+      embedVar.set_author(name="The home of Crown Unlimited")
+      embedVar.add_field(name="First Command", value="`#vault` to check your equipped `card`, `title` and `arm`")
+      embedVar.add_field(name="Check This Out", value="`#shop` to purchase your starting `card`, `title` and `arm`")
+      embedVar.add_field(name="First Battle", value="`#senpaibattle` to start tutorial on Crown Unlimited")
+      embedVar.add_field(name="What's Next?", value="`#help` to inquire all potential commands and capabilites of the bot")
+      embedVar.set_footer(text="#senpai will start tutorial on overall bot capabilities")
+      await ctx.send(embed=embedVar)
+
       vault = db.queryVault({'OWNER': disname})
       if vault:
          await ctx.send(m.VAULT_RECOVERED, delete_after=5)
       else:
          vault = db.createVault(data.newVault({'OWNER' : disname}))
-         await ctx.send(m.USER_HAS_REGISTERED, delete_after=5)
+         # await ctx.send(m.USER_HAS_REGISTERED, delete_after=5)
    else:
       await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=3)  
 
@@ -186,9 +196,6 @@ async def curse(amount, user):
 @commands.check(validate_user)
 async def addfield(ctx, collection, new_field, field_type):
    if ctx.author.guild_permissions.administrator == True:
-      str_type = ''
-      list_type = []
-      int_type = 0
 
       if field_type == 'string':
          field_type = ''
@@ -196,6 +203,8 @@ async def addfield(ctx, collection, new_field, field_type):
          field_type = 0
       elif field_type == 'list':
          field_type = []
+      elif field_type == 'bool':
+         field_type = False
       
       if collection == 'cards':
          response = db.updateManyCards({'$set': {new_field: field_type}})
