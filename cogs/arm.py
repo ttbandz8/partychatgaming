@@ -47,11 +47,21 @@ class Arm(commands.Cog):
         currentBalance = vault['BALANCE']
         cost = 0
         mintedArm = ""
+        stock = 0
+        newstock = 0
+        armInStock = False
+        checkout = True
         for arm in shop:
 
             if arm_name == arm['ARM']:
-                mintedArm = arm['ARM']
-                cost = arm['PRICE']
+                if stock == arm['STOCK']:
+                    checkout = armInStock
+                else:
+                    armInStock = True
+                    mintedArm = arm['ARM']
+                    cost = arm['PRICE']
+                    stock = arm['STOCK']
+                    newstock = stock - 1
 
         if bool(mintedArm):
             if mintedArm in vault['ARMS']:
@@ -63,10 +73,16 @@ class Arm(commands.Cog):
                     await ctx.send("You have an insufficent Balance")
                 else:
                     await main.curse(cost, str(ctx.author))
+                    arm_query = {'ARM' : str(mintedArm)}
+                    armInventory = db.queryArm(arm_query)
+                    update_query = {"$set": {"STOCK": newstock}} 
+                    response = db.updateArm(armInventory, update_query)
                     response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'ARMS': str(arm_name)}})
-                    await ctx.send(m.PURCHASE_COMPLETE)
-        else:
+                    await ctx.send(m.PURCHASE_COMPLETE_1 + f"`{newstock}` `{mintedArm}` ARMS left in the Shop!")
+        elif checkout == True:
             await ctx.send(m.ARM_DOESNT_EXIST)
+        else:
+            await ctx.send(m.ARM_OUT_OF_STOCK)
 
     @commands.command()
     async def updatearm(self, ctx, *args):
