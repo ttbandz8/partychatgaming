@@ -48,11 +48,21 @@ class Cards(commands.Cog):
         currentBalance = vault['BALANCE']
         cost = 0
         mintedCard = ""
+        stock = 0
+        newstock = 0
+        cardInStock = False
+        checkout = True
         for card in shop:
             if card_name == card['NAME']:
-                mintedCard = card['NAME']
-                cost = card['PRICE']
-
+                if stock == card['STOCK']:
+                    checkout = cardInStock
+                else:        
+                    cardInStock == True           
+                    mintedCard = card['NAME']
+                    cost = card['PRICE']
+                    stock = card['STOCK']
+                    newstock = stock - 1
+                    
 
         if bool(mintedCard):
             if mintedCard in vault['CARDS']:
@@ -64,10 +74,16 @@ class Cards(commands.Cog):
                     await ctx.send("You have an insufficent Balance")
                 else:
                     await main.curse(cost, str(ctx.author))
+                    card_query = {'NAME' : str(mintedCard)}
+                    cardInventory = db.queryCard(card_query)
+                    update_query = {"$set": {"STOCK": newstock}} 
+                    response = db.updateCard(cardInventory, update_query)
                     response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(card_name)}})
-                    await ctx.send(m.PURCHASE_COMPLETE)
-        else:
+                    await ctx.send(m.PURCHASE_COMPLETE_1 + f"`{newstock}` `{mintedCard}` CARDS left in the Shop!")
+        elif checkout == True:
             await ctx.send(m.CARD_DOESNT_EXIST)
+        else:
+            await ctx.send(m.CARD_OUT_OF_STOCK)
 
     @commands.command()
     async def updatecard(self, ctx, *args):

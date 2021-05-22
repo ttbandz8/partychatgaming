@@ -47,11 +47,21 @@ class Titles(commands.Cog):
         currentBalance = vault['BALANCE']
         cost = 0
         mintedTitle = ""
+        stock = 0
+        newstock = 0
+        titleInStock = False
+        checkout = True
         for title in shop:
 
             if title_name == title['TITLE']:
-                mintedTitle = title['TITLE']
-                cost = title['PRICE']
+                if stock == title['STOCK']:
+                    checkout = titleInStock
+                else:
+                    titleInStock = True
+                    mintedTitle = title['TITLE']
+                    cost = title['PRICE']
+                    stock = title['STOCK']
+                    newstock = stock - 1
 
         if bool(mintedTitle):
             if mintedTitle in vault['TITLES']:
@@ -63,10 +73,16 @@ class Titles(commands.Cog):
                     await ctx.send("You have an insufficent Balance")
                 else:
                     await main.curse(cost, str(ctx.author))
+                    title_query = {'TITLE' : str(mintedTitle)}
+                    titleInventory = db.queryTitle(title_query)
+                    update_query = {"$set": {"STOCK": newstock}} 
+                    response = db.updateTitle(titleInventory, update_query)
                     response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'TITLES': str(title_name)}})
-                    await ctx.send(m.PURCHASE_COMPLETE)
-        else:
+                    await ctx.send(m.PURCHASE_COMPLETE_1 + f"`{newstock}` `{mintedTitle}` TITLES left in the Shop!")
+        elif checkout == True:
             await ctx.send(m.TITLE_DOESNT_EXIST)
+        else:
+            await ctx.send(m.TITLE_OUT_OF_STOCK)
 
     @commands.command()
     async def updatetitle(self, ctx, *args):

@@ -223,7 +223,7 @@ def queryCard(query):
 
 def updateCard(query, new_value):
     try:
-        cardexists = card_exists({'PATH': query['PATH']})
+        cardexists = card_exists({'NAME': query['NAME']})
         if cardexists:
             cards_col.update_one(query, new_value)
             return True
