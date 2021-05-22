@@ -69,7 +69,7 @@ class Gods(commands.Cog):
             await ctx.send(m.ADMIN_ONLY_COMMAND)
 
     @commands.command()
-    async def godsi(self, ctx, *participant: User):
+    async def godsinvite(self, ctx, *participant: User):
         if ctx.author.guild_permissions.administrator == True:
             gods_query = {'AVAILABLE': True}
             gods = db.queryGods(gods_query)
@@ -175,7 +175,7 @@ class Gods(commands.Cog):
             print(m.ADMIN_ONLY_COMMAND)
 
     @commands.command()
-    async def rgods(self, ctx):
+    async def registergods(self, ctx):
         gods_query = {'REGISTRATION': True}
         gods_response = db.queryGods(gods_query)
         if gods_response:

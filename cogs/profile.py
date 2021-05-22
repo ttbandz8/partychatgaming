@@ -13,6 +13,7 @@ from PIL import Image, ImageFont, ImageDraw
 import requests
 from collections import ChainMap
 import DiscordUtils
+from .crownunlimited import showcard
 
 emojis = ['👍', '👎']
 
@@ -63,48 +64,44 @@ class Profile(commands.Cog):
     async def flex(self, ctx):
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
+        card = db.queryCard({'NAME':str(d['CARD'])})
+        if card:
+            o_card = card['NAME']
+            o_card_path=card['PATH']
+            o_max_health = card['HLT']
+            o_health = card['HLT']
+            o_stamina = card['STAM']
+            o_max_stamina = card['STAM']
+            o_moveset = card['MOVESET']
+            o_attack = card['ATK']
+            o_defense = card['DEF']
+            o_type = card['TYPE']
+            o_accuracy = card['ACC']
+            o_passive = card['PASS'][0]
+            o_speed = card['SPD']
+            o_show = card['UNIVERSE']
+            o_collection = card['COLLECTION']
+            resolved = False
+            focused = False
+            title = {'TITLE': 'CARD PREVIEW'}
+            card_file = showcard(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, title, focused)
 
-        if d:
-            card = db.queryCard({'NAME': d['CARD']})
-            name = d['DISNAME'].split("#",1)[0]
-            games = d['GAMES']
-            ign = d['IGN']
-            team = d['TEAM']
-            title = d['TITLE']
-            avatar = d['AVATAR']
-            matches = d['MATCHES']
-            tournament_wins = d['TOURNAMENT_WINS']
+            passive_name = list(o_passive.keys())[0]
+            passive_num = list(o_passive.values())[0]
+            passive_type = list(o_passive.values())[1]
 
+            embedVar = discord.Embed(title=f"{o_card}".format(self), description=f"{o_card} from {o_show} is currently my primary card.", colour=000000)
+            # embedVar.set_image(url=card_file)
+            embedVar.add_field(name="Health", value=f"{o_max_health}")
+            embedVar.add_field(name="Stamina", value=f"{o_max_stamina}")
+            embedVar.add_field(name="Attack", value=f"{o_attack}")
+            embedVar.add_field(name="Defense", value=f"{o_defense}")
+            embedVar.add_field(name="Speed", value=f"{o_speed}")
+            embedVar.add_field(name="Unique Passive", value=f"`{passive_name}: Increases {passive_type} by {passive_num}`", inline=False)
 
-            matches_to_string = dict(ChainMap(*matches))
-            ign_to_string = dict(ChainMap(*ign))
+            await ctx.send(embed=embedVar)
 
-            game_text = '\n'.join(str(x) for x in games)
-            titles_text = ' '.join(str(x) for x in title)
-            matches_text = "\n".join(f'{k}: {"/".join([str(int) for int in v])}' for k,v in matches_to_string.items())
-
-            
-            img = Image.open(requests.get(card['PATH'], stream=True).raw)
-
-            draw = ImageDraw.Draw(img)
-            header = ImageFont.truetype("KomikaTitle-Paint.ttf", 60)
-            tournament_wins_font = ImageFont.truetype("RobotoCondensed-Bold.ttf", 35)
-            p = ImageFont.truetype("Roboto-Bold.ttf", 25)
-
-            profile_pic = Image.open(requests.get(d['AVATAR'], stream=True).raw)
-            profile_pic_resized = profile_pic.resize((120, 120), resample=0)
-            img.paste(profile_pic_resized, (1045, 30))
-            draw.text((95,45), name, (255, 255, 255), font=header, align="left")
-            draw.text((5,65), str(tournament_wins), (255, 255, 255), font=tournament_wins_font, align="center")
-            draw.text((60, 320), game_text, (255, 255, 255), font=p, align="left")
-            draw.text((368, 320), team, (255, 255, 255), font=p, align="center")
-            draw.text((635, 320), titles_text, (255, 255, 255), font=p, align="center")
-            draw.text((1040, 320), matches_text, (255, 255, 255), font=p, align="center")
-
-            img.save("text.png")
-
-            await ctx.send(file=discord.File("text.png"))
-
+            await ctx.send(file=card_file)
         else:
             await ctx.send(m.USER_NOT_REGISTERED, delete_after=3)
 
@@ -120,12 +117,14 @@ class Profile(commands.Cog):
             balance = vault['BALANCE']
             cards = vault['CARDS']
             titles = vault['TITLES']
+            arms = vault['ARMS']
 
             cards_broken_up = np.array_split(cards, 6)
             titles_broken_up = np.array_split(titles, 6)
+            arms_broken_up = np.array_split(arms, 6)
 
             if len(cards) < 25:
-                embedVar = discord.Embed(title= f":triangular_flag_on_post: " + f"{name}".format(self) +"\n" + f" :coin:{'{:,}'.format(balance)}", description=":bank: Your Party Chat Gaming Vault™️", colour=000000)
+                embedVar = discord.Embed(title= f":triangular_flag_on_post: " + f"{name}".format(self) +"\n" + f" :coin:{'{:,}'.format(balance)}", description="`#updatecard name` -  Select Your Card\n`#updatetitle name` - Select Your Title\n`#updatearm name` - Select Your Arm", colour=0x7289da)
                 embedVar.set_thumbnail(url=avatar)
                 # embedVar.add_field(name="Balance" + " :fireworks:", value=f":coin:{balance}")
                 if bool(cards):
@@ -135,11 +134,14 @@ class Profile(commands.Cog):
                 
                 if bool(titles):
                     embedVar.add_field(name="Titles" + " :fireworks:", value="\n".join(titles))
+
+                if bool(arms):
+                    embedVar.add_field(name="Arms" + " :fireworks:", value="\n".join(arms))
                 await ctx.send(embed=embedVar)
             else:
                 embed_list = []
                 for i in range(0, len(titles_broken_up)):
-                    globals()['embedVar%s' % i] = discord.Embed(title= f":triangular_flag_on_post: " + f"{name}".format(self) +"\n" + f" :coin:{'{:,}'.format(balance)}", description=":bank: Your Party Chat Gaming Vault™️", colour=000000)
+                    globals()['embedVar%s' % i] = discord.Embed(title= f":triangular_flag_on_post: " + f"{name}".format(self) +"\n" + f" :coin:{'{:,}'.format(balance)}", description="`#updatecard name` -  Select Your Card\n`#updatetitle name` - Select Your Title\n`#updatearm name` - Select Your Arm", colour=000000)
                     globals()['embedVar%s' % i].set_thumbnail(url=avatar)
                     # embedVar.add_field(name="Balance" + " :fireworks:", value=f":coin:{balance}")
                     if bool(cards):
@@ -149,6 +151,9 @@ class Profile(commands.Cog):
                     
                     if bool(titles):
                         globals()['embedVar%s' % i].add_field(name="Titles" + " :fireworks:", value="\n".join(titles_broken_up[i]))
+
+                    if bool(arms):
+                        globals()['embedVar%s' % i].add_field(name="Arms" + " :fireworks:", value="\n".join(arms_broken_up[i]))
                     embed_list.append(globals()['embedVar%s' % i])
 
                 paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
@@ -182,6 +187,14 @@ class Profile(commands.Cog):
                 if title['TITLE'] not in vault['TITLES']:
                     titles.append({title['TITLE']: title['PRICE']})
 
+        arm_resp = db.queryShopArms()
+        arms = []
+        unavailable_arms = []
+        for arm in arm_resp:
+            if arm['PRICE'] != 0 and arm['PRICE'] < (vault['BALANCE'] + 1000):
+                if arm['ARM'] not in vault['ARMS']:
+                    arms.append({arm['ARM']: arm['PRICE']})
+
         
         cards_to_str = dict(ChainMap(*cards))
         n = dict(sorted(cards_to_str.items(), key=lambda item: item[1]))
@@ -189,21 +202,30 @@ class Profile(commands.Cog):
         cards_list_array = cards_sorted_list.split("\n")
         
         # Upon adding more cards, be sure it increate the number below
-        cards_broken_up = np.array_split(cards_list_array, 7)
+        cards_broken_up = np.array_split(cards_list_array, 5)
 
         # Upon adding more cards, be sure it increate the number below
         titles_to_str = dict(ChainMap(*titles))
         n = dict(sorted(titles_to_str.items(), key=lambda item: item[1]))
         titles_sorted_list = "\n".join(f'{k} : ' +  f" :coin:{'{:,}'.format(v)}"  for k,v in n.items())
         titles_list_array = titles_sorted_list.split("\n")
-        titles_broken_up = np.array_split(titles_list_array, 7)
+        titles_broken_up = np.array_split(titles_list_array, 5)
+
+        # Upon adding more cards, be sure it increate the number below
+        arms_to_str = dict(ChainMap(*arms))
+        n = dict(sorted(arms_to_str.items(), key=lambda item: item[1]))
+        arms_sorted_list = "\n".join(f'{k} : ' +  f" :coin:{'{:,}'.format(v)}"  for k,v in n.items())
+        arms_list_array = arms_sorted_list.split("\n")
+        arms_broken_up = np.array_split(arms_list_array, 5)
         
         embed_list = []
         for i in range(0, len(titles_broken_up)):
-            globals()['embedVar%s' % i] = discord.Embed(title=f":shopping_cart: Flex Shop", description="To preview cards, use the #vc card command. " + "\n" + "You will unlock more purchasable items as you save and earn more gold. ", colour=000000, value='Page 1')
+            globals()['embedVar%s' % i] = discord.Embed(title=f":shopping_cart: Flex Shop", description="`#viewcard card` - View Cards\n`#viewtitle title` - View Title Stats\n`#viewarm arm` - View Arm Stats\n`#buycard` - Buy Card\n`#buytitle title` - Buy Title\n`#buyarm arm` - Buy Arm", colour=0x7289da, value='Page 1')
             globals()['embedVar%s' % i].set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236723/PCG%20LOGOS%20AND%20RESOURCES/Party_Chat_Shop.png")
             globals()['embedVar%s' % i].add_field(name=":shopping_bags: Available Cards", value="\n".join(cards_broken_up[i]))
             globals()['embedVar%s' % i].add_field(name=":shopping_bags: Available Titles", value="\n".join(titles_broken_up[i]))
+            globals()['embedVar%s' % i].add_field(name=":shopping_bags: Available Arms", value="\n".join(arms_broken_up[i]))
+            globals()['embedVar%s' % i].set_footer(text="Stock updated every day")
             embed_list.append(globals()['embedVar%s' % i])
 
         paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)

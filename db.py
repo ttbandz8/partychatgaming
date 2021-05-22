@@ -20,6 +20,9 @@ tournaments_col = db["TOURNAMENTS"]
 cards_col = db["CARDS"]
 titles_col = db["TITLES"]
 gods_col = db["GODS"]
+arm_col = db["ARM"]
+universe_col = db['UNIVERSE']
+boss_col = db['BOSS']
 
 vault_col =db["VAULT"]
 
@@ -55,6 +58,10 @@ def vault_exist(data):
             return False
     else:
         return False
+
+def updateManyVaults(new_value):
+    vault_col.update_many({}, new_value)
+    return True
 
 
 '''New Vault'''
@@ -221,7 +228,7 @@ def queryCard(query):
 
 def updateCard(query, new_value):
     try:
-        cardexists = card_exists({'PATH': query['PATH']})
+        cardexists = card_exists({'NAME': query['NAME']})
         if cardexists:
             cards_col.update_one(query, new_value)
             return True
@@ -229,6 +236,11 @@ def updateCard(query, new_value):
             return False
     except:
         return False
+
+def updateManyCards(new_value):
+    cards_col.update_many({}, new_value)
+    return True
+
 
 def deleteCard(card):
     try:
@@ -276,6 +288,10 @@ def updateTitle(query, new_value):
     except:
         return False
 
+def updateManyTitles(new_value):
+    titles_col.update_many({}, new_value)
+    return True
+
 def deleteTitle(title):
     try:
         titleexists = title_exists({'TITLE': query['TITLE']})
@@ -286,6 +302,14 @@ def deleteTitle(title):
             return False
     except:
         return False
+
+def deleteAllTitles(user_query):
+    exists = user_exists({'DISNAME': user_query['DISNAME']})
+    if exists:
+        titles_col.delete_many({})
+        return 'All Titles Deleted'
+    else:
+        return 'Unable to Delete All Titles'
 
 def queryAllTitles():
     data = titles_col.find()
@@ -302,6 +326,191 @@ def queryTournamentTitles():
 def queryShopTitles():
     data = titles_col.find({'TOURNAMENT_REQUIREMENTS': 0})
     return data 
+
+
+    ''' ARM '''
+def arm_exists(data):
+    collection_exists = col_exists("ARM")
+    if collection_exists:
+        arm_does_exist = arm_col.find_one(data)
+        if arm_does_exist:
+            return True
+        else:
+            return False
+    else:
+        return False
+
+def createArm(arm):
+    try:
+        armexists = arm_exists({'ARM': arm['ARM']})
+        if armexists:
+            return "ARM already exists."
+        else:
+            arm_col.insert_one(arm)
+            return "New ARM created."
+    except:
+        return "Cannot create ARM."
+
+def updateArm(query, new_value):
+    try:
+        armexists = arm_exists({'ARM': query['ARM']})
+        if armexists:
+            arm_col.update_one(query, new_value)
+            return True
+        else:
+            return False
+    except:
+        return False
+
+def updateManyArms(new_value):
+    arm_col.update_many({}, new_value)
+    return True
+
+def deleteArm(query):
+    try:
+        armexists = arm_exists({'ARM': query['ARM']})
+        if armexists:
+            arm_col.delete_one(query)
+            return True
+        else:
+            return False
+    except:
+        return False
+
+def queryAllArms():
+    data = titles_col.find()
+    return data
+
+def queryArm(query):
+    data = arm_col.find_one(query)
+    return data
+
+def queryTournamentArms():
+    data = arm_col.find({'TOURNAMENT_REQUIREMENTS': {'$gt': 0}})
+    return data
+
+def queryShopArms():
+    data = arm_col.find({'TOURNAMENT_REQUIREMENTS': 0})
+    return data 
+
+
+
+''' UNIVERSE '''
+def universe_exists(data):
+    collection_exists = col_exists("UNIVERSE")
+    if collection_exists:
+        universe_does_exist = universe_col.find_one(data)
+        if universe_does_exist:
+            return True
+        else:
+            return False
+    else:
+        return False
+
+def updateManyUniverses(new_value):
+    universe_col.update_many({}, new_value)
+    return True
+
+def createUniverse(universe):
+    try:
+        universeexists = universe_exists({'TITLE': universe['TITLE']})
+        if universeexists:
+            return "Universe already exists."
+        else:
+            universe_col.insert_one(universe)
+            return "New Universe created."
+    except:
+        return "Cannot create Universe."
+
+def updateUniverse(query, new_value):
+    try:
+        universeexists = universe_exists({'TITLE': query['TITLE']})
+        if universeexists:
+            universe_col.update_one(query, new_value)
+            return True
+        else:
+            return False
+    except:
+        return False
+
+def deleteUniverse(query):
+    try:
+        universeexists = universe_exists({'TITLE': query['TITLE']})
+        if universeexists:
+            universe_col.delete_one(query)
+            return True
+        else:
+            return False
+    except:
+        return False
+
+def queryAllUniverse():
+    data = universe_col.find()
+    return data
+
+def queryUniverse(query):
+    data = universe_col.find_one(query)
+    return data
+
+
+''' BOSS '''
+def boss_exists(data):
+    collection_exists = col_exists("BOSS")
+    if collection_exists:
+        boss_does_exist = boss_col.find_one(data)
+        if boss_does_exist:
+            return True
+        else:
+            return False
+    else:
+        return False
+
+def updateManyBosses(new_value):
+    boss_col.update_many({}, new_value)
+    return True
+
+def createBoss(boss):
+    try:
+        bossexists = boss_exists({'NAME': boss['NAME']})
+        if bossexists:
+            return "Boss already exists."
+        else:
+            boss_col.insert_one(boss)
+            return "New Boss created."
+    except:
+        return "Cannot create Boss."
+
+def updateBoss(query, new_value):
+    try:
+        bossexists = boss_exists({'NAME': query['NAME']})
+        if bossexists:
+            boss_col.update_one(query, new_value)
+            return True
+        else:
+            return False
+    except:
+        return False
+
+def deleteBoss(query):
+    try:
+        bossexists = boss_exists({'NAME': query['NAME']})
+        if bossexists:
+            boss_col.delete_one(query)
+            return True
+        else:
+            return False
+    except:
+        return False
+
+def queryAllBosses():
+    data = boss_col.find()
+    return data
+
+def queryBoss(query):
+    data = boss_col.find_one(query)
+    return data
+
+
 
 '''Query User'''
 def queryUser(user):
@@ -366,6 +575,10 @@ def updateUserNoFilter(query, new_value):
     else:
         return "Update failed. "
 
+def updateManyUsers(new_value):
+    users_col.update_many({}, new_value)
+    return True
+
 
 
 ''' TEAMS '''
@@ -379,6 +592,10 @@ def team_exists(data):
             return False
     else:
         return False
+
+def updateManyTeams(new_value):
+    teams_col.update_many({}, new_value)
+    return True
 
 def queryTeam(team):
     try:
@@ -492,6 +709,10 @@ def game_exists(game):
             return False
     else:
         return False
+
+def updateManyGames(new_value):
+    games_col.update_many({}, new_value)
+    return True
 
 
 

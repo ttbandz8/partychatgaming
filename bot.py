@@ -1,3 +1,4 @@
+from dataclasses import field
 from discord import player, team
 import db
 import time
@@ -45,7 +46,7 @@ if config('ENV') == "production":
    bot = commands.Bot(command_prefix="#")
 else:
    # TEST
-   bot = commands.Bot(command_prefix=">")
+   bot = commands.Bot(command_prefix=".")
 
 bot.remove_command("help")
 
@@ -110,18 +111,28 @@ async def r(ctx):
    user = {'DISNAME': disname, 'NAME': name, 'DID' : str(ctx.author.id), 'AVATAR': str(ctx.author.avatar_url)}
    response = db.createUsers(data.newUser(user))
    if response:
+
+      embedVar = discord.Embed(title=f"Welcome to Party Chat Gaming!", colour=0xe91e63)
+      embedVar.set_author(name="The home of Crown Unlimited")
+      embedVar.add_field(name="#vault", value="Check your equipped `card`, `title` and `arm`")
+      embedVar.add_field(name="#shop", value="Purchase your starting `card`, `title` and `arm`")
+      embedVar.add_field(name="#senpaibattlee", value="Start tutorial on Crown Unlimited")
+      embedVar.add_field(name="#help", value="Inquire all potential commands and capabilites of the bot")
+      embedVar.set_footer(text="#senpai will start tutorial on overall bot capabilities")
+      await ctx.send(embed=embedVar)
+
       vault = db.queryVault({'OWNER': disname})
       if vault:
          await ctx.send(m.VAULT_RECOVERED, delete_after=5)
       else:
          vault = db.createVault(data.newVault({'OWNER' : disname}))
-         await ctx.send(m.USER_HAS_REGISTERED, delete_after=5)
+         # await ctx.send(m.USER_HAS_REGISTERED, delete_after=5)
    else:
       await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=3)  
 
 @bot.command()
 @commands.check(validate_user)
-async def iby(ctx, args1, user: User):
+async def vs(ctx, args1, user: User):
 
    aliases = [x for x in db.query_all_games() for x in x['ALIASES']]
    game = {}
@@ -180,6 +191,48 @@ async def curse(amount, user):
          db.updateVaultNoFilter(vault, update_query)
       else:
          print("cant find vault")
+
+@bot.command()
+@commands.check(validate_user)
+async def addfield(ctx, collection, new_field, field_type):
+   if ctx.author.guild_permissions.administrator == True:
+
+      if field_type == 'string':
+         field_type = ''
+      elif field_type == 'int':
+         field_type = 0
+      elif field_type == 'list':
+         field_type = []
+      elif field_type == 'bool':
+         field_type = False
+      
+      if collection == 'cards':
+         response = db.updateManyCards({'$set': {new_field: field_type}})
+      elif collection == 'titles':
+         response = db.updateManyTitles({'$set': {new_field: field_type}})
+      elif collection == 'vaults':
+         response = db.updateManyVaults({'$set': {new_field: field_type}})
+      elif collection == 'users':
+         response = db.updateManyUsers({'$set': {new_field: field_type}})
+      elif collection == 'universe':
+         response = db.updateManyUniverses({'$set': {new_field: field_type}})
+   else:
+      print(m.ADMIN_ONLY_COMMAND)
+
+@bot.command()
+async def test(ctx):
+   number = 10
+   while number >= 0:
+      await ctx.send(f"Number is {number}. Still not 0!")
+
+      def check(msg):
+         return msg.author == ctx.author and msg.channel == ctx.channel
+      try:
+         msg = await bot.wait_for("message", check=check)
+         number = number - int(msg.content)
+      except:
+         await ctx.send('Did not work')
+   await ctx.send("Number is 0!")
 
 if config('ENV') == "production":
    DISCORD_TOKEN = config('DISCORD_TOKEN_TEST')

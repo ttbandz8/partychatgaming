@@ -28,7 +28,7 @@ class Teams(commands.Cog):
         return await main.validate_user(ctx)
 
     @commands.command()
-    async def cteam(self, ctx, args1, *args):
+    async def createteam(self, ctx, args1, *args):
         game_query = {'ALIASES': args1}
         game = db.queryGame(game_query)['GAME']
         team_name = " ".join([*args])
@@ -48,7 +48,7 @@ class Teams(commands.Cog):
             print("Team not created. ")
 
     @commands.command()
-    async def att(self, ctx, user1: User):
+    async def addtoteam(self, ctx, user1: User):
         owner_profile = db.queryUser({'DISNAME': str(ctx.author)})
         team_profile = db.queryTeam({'TNAME': owner_profile['TEAM']})
 
@@ -120,7 +120,7 @@ class Teams(commands.Cog):
                 await ctx.send(m.OWNER_ONLY_COMMAND, delete_after=5)
 
     @commands.command()
-    async def dtm(self, ctx, user1: User):
+    async def deletemember(self, ctx, user1: User):
         owner_profile = db.queryUser({'DISNAME': str(ctx.author)})
         team_profile = db.queryTeam({'TNAME': owner_profile['TEAM']})
         if team_profile:
@@ -147,7 +147,7 @@ class Teams(commands.Cog):
             await ctx.send(m.TEAM_DOESNT_EXIST, delete_after=5)
 
     @commands.command()
-    async def lteam(self, ctx):
+    async def leaveteam(self, ctx):
         member_profile = db.queryUser({'DISNAME': str(ctx.author)})
         team_profile = db.queryTeam({'TNAME': member_profile['TEAM']})
         if team_profile:
@@ -173,7 +173,7 @@ class Teams(commands.Cog):
 
 
     @commands.command()
-    async def dt(self, ctx, *args):
+    async def deleteteam(self, ctx, *args):
         team_name = " ".join([*args])
         team_query = {'OWNER': str(ctx.author), 'TNAME': team_name}
         team = db.queryTeam(team_query)
@@ -203,10 +203,10 @@ class Teams(commands.Cog):
             await ctx.send(m.TEAM_DOESNT_EXIST, delete_after=5)
 
     @commands.command()
-    async def agt(self, ctx, *args):
+    async def addtoteam(self, ctx, *args):
         owner = db.queryUser({'DISNAME': str(ctx.author)})
         team = db.queryTeam({'TNAME': owner['TEAM']})
-        print(team)
+ 
         alias = " ".join([*args]).lower()
         if team:
             if team['OWNER'] == owner['DISNAME']:
@@ -215,10 +215,14 @@ class Teams(commands.Cog):
                     game_query = {'ALIASES': alias}
                     game = db.queryGame(game_query)
                     if game:
-                        title = game['GAME']    
-                        query_to_update_game = {"$push": {"GAMES": title}}
-                        resp = db.updateTeam(team, query_to_update_game)
-                        await ctx.send(resp)
+                        title = game['GAME']
+                        for games in team['GAMES']:
+                            if games == title:
+                                await ctx.send(m.TEAM_ALREADY_PLAYS)
+                            else: 
+                                query_to_update_game = {"$push": {"GAMES": title}}
+                                resp = db.updateTeam(team, query_to_update_game)
+                                await ctx.send(resp)
                 else:
                     await ctx.send(m.GAME_UNAVAILABLE)
             else:
