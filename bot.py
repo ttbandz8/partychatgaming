@@ -214,7 +214,7 @@ async def addfield(ctx, collection, new_field, field_type):
          response = db.updateManyVaults({'$set': {new_field: field_type}})
       elif collection == 'users':
          response = db.updateManyUsers({'$set': {new_field: field_type}})
-      elif collection == 'universes':
+      elif collection == 'universe':
          response = db.updateManyUniverses({'$set': {new_field: field_type}})
    else:
       print(m.ADMIN_ONLY_COMMAND)
