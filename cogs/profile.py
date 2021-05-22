@@ -79,7 +79,7 @@ class Profile(commands.Cog):
             o_accuracy = card['ACC']
             o_passive = card['PASS'][0]
             o_speed = card['SPD']
-            o_show = card['SHOW']
+            o_show = card['UNIVERSE']
             o_collection = card['COLLECTION']
             resolved = False
             focused = False
