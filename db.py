@@ -21,6 +21,7 @@ cards_col = db["CARDS"]
 titles_col = db["TITLES"]
 gods_col = db["GODS"]
 arm_col = db["ARM"]
+universe_col = db['UNIVERSE']
 
 vault_col =db["VAULT"]
 
@@ -373,6 +374,63 @@ def queryTournamentArms():
 def queryShopArms():
     data = arm_col.find({'TOURNAMENT_REQUIREMENTS': 0})
     return data 
+
+
+
+''' UNIVERSE '''
+def universe_exists(data):
+    collection_exists = col_exists("UNIVERSE")
+    if collection_exists:
+        universe_does_exist = universe_col.find_one(data)
+        if universe_does_exist:
+            return True
+        else:
+            return False
+    else:
+        return False
+
+def createUniverse(universe):
+    try:
+        universeexists = universe_exists({'TITLE': universe['TITLE']})
+        if universeexists:
+            return "Universe already exists."
+        else:
+            universe_col.insert_one(universe)
+            return "New Universe created."
+    except:
+        return "Cannot create Universe."
+
+def updateUniverse(query, new_value):
+    try:
+        universeexists = universe_exists({'TITLE': query['TITLE']})
+        if universeexists:
+            universe_col.update_one(query, new_value)
+            return True
+        else:
+            return False
+    except:
+        return False
+
+def deleteUniverse(query):
+    try:
+        universeexists = universe_exists({'TITLE': query['TITLE']})
+        if universeexists:
+            universe_col.delete_one(query)
+            return True
+        else:
+            return False
+    except:
+        return False
+
+def queryAllUniverse():
+    data = universe_col.find()
+    return data
+
+def queryUniverse(query):
+    data = universe_col.find_one(query)
+    return data
+
+
 
 '''Query User'''
 def queryUser(user):

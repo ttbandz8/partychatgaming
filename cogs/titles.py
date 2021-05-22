@@ -31,7 +31,7 @@ class Titles(commands.Cog):
             title = " ".join([*args])
             title_query = {'TITLE': str(title), 'TOURNAMENT_REQUIREMENTS': int(tournament), 'PRICE': int(price)}
             added = db.createTitle(data.newTitle(title_query))
-            await ctx.send(added, delete_after=3)
+            await ctx.send(added)
         else:
             print(m.ADMIN_ONLY_COMMAND)
 
@@ -86,7 +86,7 @@ class Titles(commands.Cog):
                 response = db.updateUserNoFilter(user_query, {'$set': {'TITLE': str(title_name)}})
                 await ctx.send(response)
             else:
-                await ctx.send(m.USER_DOESNT_HAVE_THE_Title, delete_after=5)
+                await ctx.send(m.USER_DOESNT_HAVE_THE_Title)
         else:
 
             # Check tourney wins
@@ -98,7 +98,7 @@ class Titles(commands.Cog):
                     response = db.updateUserNoFilter(user_query, {'$set': {'TITLE': str(title_name)}})
                     await ctx.send(response)
                 else:
-                    await ctx.send(m.USER_DOESNT_HAVE_THE_Title, delete_after=5)
+                    await ctx.send(m.USER_DOESNT_HAVE_THE_Title)
             else:
                 return "Unable to update Title."
 
@@ -108,7 +108,8 @@ class Titles(commands.Cog):
         title = db.queryTitle({'TITLE': str(title_name)})
         if title:
             title_title = title['TITLE']
-            title_show = title['SHOW']
+            title_show = title['UNIVERSE']
+            title_img = db.queryUniverse({'TITLE': title_show['TITLE']})['PATH']
             title_passive = title['ABILITIES'][0]
                 # Title Passive
             o_title_passive_type = list(title_passive.keys())[0]
@@ -130,7 +131,7 @@ class Titles(commands.Cog):
                 message=f"{title_title} is an offensive title"
 
             embedVar = discord.Embed(title=f"{title_title}".format(self), description=f"{message}", colour=000000)
-
+            embedVar.set_thumbnail(url=title_img)
             embedVar.add_field(name="Unique Passive", value=f"`Increases {o_title_passive_type} by {o_title_passive_value}`", inline=False)
 
             await ctx.send(embed=embedVar)
