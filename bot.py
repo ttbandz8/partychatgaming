@@ -45,7 +45,7 @@ if config('ENV') == "production":
    bot = commands.Bot(command_prefix="#")
 else:
    # TEST
-   bot = commands.Bot(command_prefix=">")
+   bot = commands.Bot(command_prefix=".")
 
 bot.remove_command("help")
 
