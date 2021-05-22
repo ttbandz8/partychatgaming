@@ -126,7 +126,7 @@ class Titles(commands.Cog):
             title_title = title['TITLE']
             title_show = title['UNIVERSE']
             if title_show != 'Unbound':
-                title_img = db.queryUniverse({'TITLE': title_show['TITLE']})['PATH']
+                title_img = db.queryUniverse({'TITLE': title_show})['PATH']
             title_passive = title['ABILITIES'][0]
                 # Title Passive
             o_title_passive_type = list(title_passive.keys())[0]

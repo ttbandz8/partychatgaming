@@ -1035,10 +1035,11 @@ class CrownUnlimited(commands.Cog):
                                     #Resolve Check and Calculation
                                     if not o_used_resolve and o_used_focus:
 
-                                        if botActive and not o_used_resolve:                    
+                                        if botActive:                    
                                             embedVar = discord.Embed(title=f"You are Resolved", description=f"Entering `Resolved State` sacrifices a turn to power up even greater and regain `Stamina`!", colour=0xe91e63)
                                             embedVar.add_field(name="Strategy", value="You sacrifice `Defense` to greatly increase `Attack` in your `Resolved` state. Use it when you need to secure an advantage.")
                                             embedVar.set_footer(text="A poorly planned `Resolve` could cost you the match.")
+                                            await ctx.send(embed=embedVar)
                                             
 
                                         #fortitude or luck is based on health  
@@ -1057,12 +1058,14 @@ class CrownUnlimited(commands.Cog):
                                         o_defense = round(o_defense - o_resolve_defense)
                                         o_used_resolve = True 
 
-                                        embedVar = discord.Embed(title=f"{o_card} strengthened his resolve!", colour=embed_color_o)
+                                        embedVar = discord.Embed(title=f"{o_card} strengthened resolve!", colour=embed_color_o)
                                         await ctx.send(embed=embedVar)
                                         turn_total= turn_total + 1
                                         turn=1
                                     else:
-                                        await ctx.send(m.CANNOT_USE_RESOLVE)
+                                        emessage = m.CANNOT_USE_RESOLVE
+                                        embedVar = discord.Embed(title=emessage, description=f"Entering `Resolved State` sacrifices a turn to power up even greater and regain `Stamina`!", colour=0xe91e63)
+                                        await ctx.send(embed=embedVar)
                                         turn=0
 
                                 if int(msg.content) !=5:
@@ -1109,10 +1112,14 @@ class CrownUnlimited(commands.Cog):
                                             turn_total= turn_total + 1
                                             turn=1
                                     else:
-                                        await ctx.send(m.NOT_ENOUGH_STAMINA)
+                                        emessage = m.NOT_ENOUGH_STAMINA
+                                        embedVar = discord.Embed(title=emessage, description=f"Use abilities to Increase `STAM` or enter `FOCUS STATE`!", colour=0xe91e63)
+                                        await ctx.send(embed=embedVar)
                                         turn=0
                             except:
-                                await ctx.send('Did not work')
+                                emessage = m.DID_NOT_WORK
+                                embedVar = discord.Embed(title=emessage, description=f"Try Again", colour=0xe91e63)
+                                await ctx.send(embed=embedVar)
                     #PLayer 2 Turn Start
                     elif turn == 1:
                         
@@ -1124,7 +1131,6 @@ class CrownUnlimited(commands.Cog):
                         elif t_health <= (t_max_health * .75):
                             embed_color_t=0xf1c40f
                         else:
-                            print("Health is high")
                             embed_color_t = 0x2ecc71
 
                         #Focus
@@ -1228,6 +1234,9 @@ class CrownUnlimited(commands.Cog):
                                             turn_total= turn_total + 1
                                             turn=0
                                         else:
+                                            emessage = m.CANNOT_USE_RESOLVE
+                                            embedVar = discord.Embed(title=emessage, description=f"Entering `Resolved State` sacrifices a turn to power up even greater and regain `Stamina`!", colour=0xe91e63)
+                                            await ctx.send(embed=embedVar)
                                             await ctx.send(m.CANNOT_USE_RESOLVE)
                                             turn=1
 
@@ -1274,9 +1283,14 @@ class CrownUnlimited(commands.Cog):
                                                 turn=0
 
                                         else:
-                                            await ctx.send(m.NOT_ENOUGH_STAMINA)
+                                            emessage = m.NOT_ENOUGH_STAMINA
+                                            embedVar = discord.Embed(title=emessage, description=f"Use abilities to Increase `STAM` or enter `FOCUS STATE`!", colour=0xe91e63)
+                                            await ctx.send(embed=embedVar)
                                             turn = 1
                                 except:
+                                    emessage = m.DID_NOT_WORK
+                                    embedVar = discord.Embed(title=emessage, description=f"Try Again", colour=0xe91e63)
+                                    await ctx.send(embed=embedVar)
                                     await ctx.send('Did not work')
                             #Play Bot
                             else:
@@ -1291,6 +1305,7 @@ class CrownUnlimited(commands.Cog):
                                 await ctx.send(embed=embedVar)
                                 aiMove = 0
                                 
+
                                 if o_stamina == 0:
                                     aiMove = 1
                                 elif t_stamina >= 90 and (t_health >= o_health):
@@ -1298,9 +1313,9 @@ class CrownUnlimited(commands.Cog):
                                 elif t_stamina >= 90:
                                     aiMove = 4
                                 elif t_stamina >= 80 and (t_health >= o_health):
-                                    aiMove = 4
+                                    aiMove = 1
                                 elif t_stamina >= 80:
-                                    aiMove = 2
+                                    aiMove = 3
                                 elif t_stamina >= 70 and (t_health >= o_health):
                                     aiMove = 4
                                 elif t_stamina >= 70:
@@ -1308,10 +1323,12 @@ class CrownUnlimited(commands.Cog):
                                 elif t_stamina >= 60 and (t_health >= o_health):
                                     aiMove = 1
                                 elif t_stamina >= 60:
-                                    if t_used_resolve == False:
+                                    if t_used_resolve == False and t_used_focus:
                                         aiMove = 5
-                                    else:
+                                    elif t_used_focus == False:
                                         aiMove = 2
+                                    else:
+                                        aiMove = 1 
                                 elif t_stamina >= 50 and (t_health >= o_health):
                                     if t_stamina >= o_stamina:
                                         aiMove = 4
@@ -1334,7 +1351,8 @@ class CrownUnlimited(commands.Cog):
                                 elif t_stamina >= 10:
                                     aiMove = 1
                                 else:
-                                    aiMove = 1
+                                    aiMove = 0
+                                
 
                                 if int(aiMove) == 0:
                                     t_health=0
@@ -1373,7 +1391,7 @@ class CrownUnlimited(commands.Cog):
                                         await ctx.send(m.CANNOT_USE_RESOLVE)
                                         turn=1
 
-                                if int(msg.content) !=5:
+                                if int(aiMove) !=5:
                                     # If you have enough stamina for move, use it
                                     if dmg['CAN_USE_MOVE']:
 
@@ -1444,6 +1462,12 @@ class CrownUnlimited(commands.Cog):
                     else: 
                         embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                     await ctx.send(embed=embedVar)
+                    if botActive:                    
+                        embedVar = discord.Embed(title=f"PLAY AGAIN", description=f"Don't Worry! Losing is apart of the game. Use the #end command to `END` the tutorial lobby OR use #start to `PLAY AGAIN`", colour=0xe74c3c)
+                        embedVar.set_author(name=f"You Lost...")
+                        embedVar.add_field(name="Tips!", value="Equiping stronger `TITLES` and `ARMS` will make you character tougher in a fight!")
+                        embedVar.set_footer(text="The #shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
+                        await ctx.send(embed=embedVar)
 
                 elif t_health <=0:
                     uid = o_DID
@@ -1465,9 +1489,14 @@ class CrownUnlimited(commands.Cog):
                         embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                     else: 
                         embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
-                    embedVar.set_footer(text=f"Play again? {gameClock}")
                     await ctx.send(embed=embedVar)
-        
+                    if botActive:                    
+                        embedVar = discord.Embed(title=f"VICTORY", description=f"Victories earn `ITEMS` ! Use the #end command to `END` the tutorial lobby\nOR use #start to `PLAY AGAIN`", colour=0xe91e63)
+                        embedVar.set_author(name=f"Congratulations You Beat Senpai!")
+                        embedVar.add_field(name="Tips!", value="Equiping stronger `TITLES` and `ARMS` will make you character tougher in a fight!")
+                        embedVar.set_footer(text="The #shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
+                        await ctx.send(embed=embedVar)
+
         else:
             await ctx.send(m.SESSION_DOES_NOT_EXIST)
 
