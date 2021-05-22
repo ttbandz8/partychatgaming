@@ -31,7 +31,7 @@ class Cards(commands.Cog):
     async def nc(self, ctx, path: str, tournament: int, price: int, *args):
         if ctx.author.guild_permissions.administrator == True:
             name = " ".join([*args])
-            card_query = {'PATH': str(path), 'NAME': str(name), 'TOURNAMENT_REQUIREMENTS': int(tournament),'PRICE': int(price)}
+            card_query = {'PATH': str(path), 'RPATH': str(path), 'NAME': str(name), 'TOURNAMENT_REQUIREMENTS': int(tournament),'PRICE': int(price)}
             added = db.createCard(data.newCard(card_query))
             await ctx.send(added, delete_after=3)
         else:
@@ -184,7 +184,7 @@ class Cards(commands.Cog):
                 message = f"{o_card} is a defensive card. "
                 tip="Equipping offensive titles and arms would help boost killability"              
 
-            embedVar = discord.Embed(title=f"{o_card}".format(self), description=f"`{message}`", colour=000000)
+            embedVar = discord.Embed(title=f"{o_card}".format(self), colour=000000)
             if o_show != "Unbound":
                 embedVar.set_thumbnail(url=show_img)
             embedVar.add_field(name="Health", value=f"`{o_max_health}`")
