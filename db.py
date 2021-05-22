@@ -58,6 +58,10 @@ def vault_exist(data):
     else:
         return False
 
+def updateManyVaults(new_value):
+    vault_col.update_many({}, new_value)
+    return True
+
 
 '''New Vault'''
 def createVault(vault):
@@ -232,6 +236,11 @@ def updateCard(query, new_value):
     except:
         return False
 
+def updateManyCards(new_value):
+    cards_col.update_many({}, new_value)
+    return True
+
+
 def deleteCard(card):
     try:
         cardexists = card_exists({'PATH': query['PATH']})
@@ -277,6 +286,10 @@ def updateTitle(query, new_value):
             return False
     except:
         return False
+
+def updateManyTitles(new_value):
+    titles_col.update_many({}, new_value)
+    return True
 
 def deleteTitle(title):
     try:
@@ -348,6 +361,10 @@ def updateArm(query, new_value):
     except:
         return False
 
+def updateManyArms(new_value):
+    arm_col.update_many({}, new_value)
+    return True
+
 def deleteArm(query):
     try:
         armexists = arm_exists({'ARM': query['ARM']})
@@ -388,6 +405,10 @@ def universe_exists(data):
             return False
     else:
         return False
+
+def updateManyUniverses(new_value):
+    universe_col.update_many({}, new_value)
+    return True
 
 def createUniverse(universe):
     try:
@@ -495,6 +516,10 @@ def updateUserNoFilter(query, new_value):
     else:
         return "Update failed. "
 
+def updateManyUsers(new_value):
+    users_col.update_many({}, new_value)
+    return True
+
 
 
 ''' TEAMS '''
@@ -508,6 +533,10 @@ def team_exists(data):
             return False
     else:
         return False
+
+def updateManyTeams(new_value):
+    teams_col.update_many({}, new_value)
+    return True
 
 def queryTeam(team):
     try:
@@ -621,6 +650,10 @@ def game_exists(game):
             return False
     else:
         return False
+
+def updateManyGames(new_value):
+    games_col.update_many({}, new_value)
+    return True
 
 
 

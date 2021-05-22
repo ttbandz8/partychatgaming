@@ -531,6 +531,8 @@ class Lobbies(commands.Cog):
                 session = db.createSession(data.newSession(session_query))
                 resp = db.joinSession(session_query, join_query)
                 await ctx.send(resp)
+                embedVar = discord.Embed(title=f"Use the #start command to start the tutorial match", colour=0xe91e63)
+                await ctx.send(embed=embedVar)
 
                 # except:
                 #     await ctx.send(m.INVITE_NOT_ACCEPTED)  

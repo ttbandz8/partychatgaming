@@ -923,6 +923,14 @@ class CrownUnlimited(commands.Cog):
                 while (o_health > 0) and (t_health > 0):
                     #Player 1 Turn Start
                     if turn == 0:
+
+                        # Tutorial Instructions
+                        if turn_total == 0 and botActive:                    
+                            embedVar = discord.Embed(title=f"Welcome to `Crown Unlimited`!", description=f"Follow the instructions to learn how to play Crown Unlimited", colour=0xe91e63)
+                            embedVar.add_field(name="How do you play this game?", value="The point of the game is to win the game, duh!\nTo do this, you need to select moves in a strategic order to give you the advantage to secure the win!")
+                            embedVar.set_footer(text="Select a move to get started. Moves will drain your `Stamina` quickly.\n`When your Stamina depletes to 0 your character will Focus`")
+                            await ctx.send(embed=embedVar)
+
                         
 
                         if o_health <= (o_max_health * .25):
@@ -941,6 +949,11 @@ class CrownUnlimited(commands.Cog):
                             embed_color_o = 0x2ecc71
 
                         if o_stamina <= 0:
+                            if botActive and not o_used_focus:                    
+                                embedVar = discord.Embed(title=f"You've entered `Focus State`!", description=f"Entering `Focus State` sacrifices a turn to power up and regain `Stamina`!", colour=0xe91e63)
+                                embedVar.add_field(name="Strategy", value="Pay attention to your oppononets `STAM` bar. If they are close to entering `Focus State`, you will have the ability to strike twice if you play your cards right!")
+                                embedVar.set_footer(text="After you entered focus state once, a transformation is possible by strengthening your `Resolve`!")
+                                await ctx.send(embed=embedVar)
                             #fortitude or luck is based on health  
                             fortitude = 0.0
                             low = o_health - (o_health*.90)
@@ -1021,6 +1034,13 @@ class CrownUnlimited(commands.Cog):
 
                                     #Resolve Check and Calculation
                                     if not o_used_resolve and o_used_focus:
+
+                                        if botActive and not o_used_resolve:                    
+                                            embedVar = discord.Embed(title=f"You are Resolved", description=f"Entering `Resolved State` sacrifices a turn to power up even greater and regain `Stamina`!", colour=0xe91e63)
+                                            embedVar.add_field(name="Strategy", value="You sacrifice `Defense` to greatly increase `Attack` in your `Resolved` state. Use it when you need to secure an advantage.")
+                                            embedVar.set_footer(text="A poorly planned `Resolve` could cost you the match.")
+                                            
+
                                         #fortitude or luck is based on health  
                                         fortitude = 0.0
                                         low = o_health - (o_health * .75)
@@ -1398,7 +1418,8 @@ class CrownUnlimited(commands.Cog):
                                     else:
                                         await ctx.send(m.NOT_ENOUGH_STAMINA)
                                         turn = 1
-                            
+                if botActive:
+                    end_message="Use the #end command to end the tutorial lobby"
                 # End the match
                 if o_health <= 0:
                     # await ctx.send(f":zap: {user2.mention} you win the match!")
@@ -1415,7 +1436,7 @@ class CrownUnlimited(commands.Cog):
                     response = await score(sownerctx, tuser)
 
                     embedVar = discord.Embed(title=f":zap: `{t_card}` scores {response} and wins the match!", description=f"Match concluded in {turn_total} turns!", colour=0x1abc9c)
-                    embedVar.set_author(name=f"{o_card} lost! ", icon_url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236432/PCG%20LOGOS%20AND%20RESOURCES/PCGBot_1.png")
+                    embedVar.set_author(name=f"{o_card} lost!\n{end_message}", icon_url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236432/PCG%20LOGOS%20AND%20RESOURCES/PCGBot_1.png")
                     if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
                         embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[2]} Seconds.")
                     elif int(gameClock[0]) == 0:
@@ -1437,14 +1458,14 @@ class CrownUnlimited(commands.Cog):
                     response = await score(sownerctx, ouser)
 
                     embedVar = discord.Embed(title=f":zap: `{o_card}` {response} and wins the match!", description=f"Match concluded in {turn_total} turns!", colour=0xe91e63)
-                    embedVar.set_author(name=f"{t_card} lost! ", icon_url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236432/PCG%20LOGOS%20AND%20RESOURCES/PCGBot_1.png")
+                    embedVar.set_author(name=f"{t_card} lost!\n{end_message}", icon_url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236432/PCG%20LOGOS%20AND%20RESOURCES/PCGBot_1.png")
                     if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
                         embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[2]} Seconds.")
                     elif int(gameClock[0]) == 0:
                         embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                     else: 
                         embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
-                    embedVar.set_footer(text=f"Play again? {playtime}")
+                    embedVar.set_footer(text=f"Play again? {gameClock}")
                     await ctx.send(embed=embedVar)
         
         else:

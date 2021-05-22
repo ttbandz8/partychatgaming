@@ -20,6 +20,7 @@ class USER():
     TOURNAMENT_WINS: int = field(default_factory=lambda: 0)
     # TOURNAMENT_LOSSES: int = field(default_factory=lambda: 0)
     AVAILABLE: bool = field(default_factory=lambda: True)
+    CROWN_TALES: list[str] = field(default_factory=lambda: [''])
     TIMESTAMP: str = now
 
 
@@ -114,6 +115,7 @@ class ARM():
 class UNIVERSE():
     TITLE: str
     PATH: str = field(default_factory=lambda: '')
+    CROWN_TALES: list[str] = field(default_factory=lambda: [''])
     TIMESTAMP: str = now
 
 @dataclass(frozen=True, order=True) 
