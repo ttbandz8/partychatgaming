@@ -10,7 +10,7 @@ class USER():
     DID: str 
     AVATAR: list[str] = field(default_factory=lambda: [''])
     IGN: list[str] = field(default_factory=lambda: [{'DEFAULT': 'PCG'}])
-    GAMES: list[str] = field(default_factory=lambda: ['PCG'])
+    GAMES: list[str] = field(default_factory=lambda: ['Crown Unlimited'])
     TEAM: str = field(default_factory=lambda: 'PCG')
     TITLE: str = field(default_factory=lambda: 'Starter')
     CARD: str = field(default_factory=lambda: "Chunin Naruto")

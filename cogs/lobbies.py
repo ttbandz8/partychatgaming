@@ -452,7 +452,7 @@ class Lobbies(commands.Cog):
             card = user['CARD']
             title = user['TITLE']
             if name in user['GAMES']:
-                await main.DM(ctx, user1, f"{ctx.author.mention}" + f" has challeneged you to {name}")
+                await main.DM(ctx, user1, f"{ctx.author.mention}" + f" has challenged you to {name}")
                 accept = await ctx.send(f"{user1.mention} are you ready to battle {ctx.author.mention}? :fire:")
                 for emoji in emojis:
                     await accept.add_reaction(emoji)

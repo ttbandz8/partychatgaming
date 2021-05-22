@@ -11,7 +11,7 @@ SESSION_JOINED="User has joined the lobby.  "
 SESSION_DOES_NOT_EXIST="Lobby not detected. "
 
 TOURNEY_DOES_NOT_EXIST="Tournament does not exist. "
-ALREADY_IN_TOURNEY="You're' already registred for the tournament. "
+ALREADY_IN_TOURNEY="You're' already registered for the tournament. "
 
 CARD_DOESNT_EXIST="CARD does not exist in the system. "
 USER_DOESNT_HAVE_THE_CARD="CARD unavailable. "
