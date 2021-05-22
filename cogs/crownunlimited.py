@@ -1886,8 +1886,3 @@ def getTime(hgame, mgame, sgame, hnow, mnow, snow):
             secondsPassed = snow - sgame
     gameTime = str(hoursPassed) + str(minutesPassed) + str(secondsPassed)
     return gameTime
-
-
-
-
-

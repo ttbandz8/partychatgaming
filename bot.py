@@ -114,10 +114,10 @@ async def r(ctx):
 
       embedVar = discord.Embed(title=f"Welcome to Party Chat Gaming!", colour=0xe91e63)
       embedVar.set_author(name="The home of Crown Unlimited")
-      embedVar.add_field(name="First Command", value="`#vault` to check your equipped `card`, `title` and `arm`")
-      embedVar.add_field(name="Check This Out", value="`#shop` to purchase your starting `card`, `title` and `arm`")
-      embedVar.add_field(name="First Battle", value="`#senpaibattle` to start tutorial on Crown Unlimited")
-      embedVar.add_field(name="What's Next?", value="`#help` to inquire all potential commands and capabilites of the bot")
+      embedVar.add_field(name="#vault", value="Check your equipped `card`, `title` and `arm`")
+      embedVar.add_field(name="#shop", value="Purchase your starting `card`, `title` and `arm`")
+      embedVar.add_field(name="#senpaibattlee", value="Start tutorial on Crown Unlimited")
+      embedVar.add_field(name="#help", value="Inquire all potential commands and capabilites of the bot")
       embedVar.set_footer(text="#senpai will start tutorial on overall bot capabilities")
       await ctx.send(embed=embedVar)
 

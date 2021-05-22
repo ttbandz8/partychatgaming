@@ -124,7 +124,7 @@ class Profile(commands.Cog):
             arms_broken_up = np.array_split(arms, 6)
 
             if len(cards) < 25:
-                embedVar = discord.Embed(title= f":triangular_flag_on_post: " + f"{name}".format(self) +"\n" + f" :coin:{'{:,}'.format(balance)}", description=":bank: Your Party Chat Gaming Vault™️", colour=000000)
+                embedVar = discord.Embed(title= f":triangular_flag_on_post: " + f"{name}".format(self) +"\n" + f" :coin:{'{:,}'.format(balance)}", description="`#updatecard name` -  Select Your Card\n`#updatetitle name` - Select Your Title\n`#updatearm name` - Select Your Arm", colour=0x7289da)
                 embedVar.set_thumbnail(url=avatar)
                 # embedVar.add_field(name="Balance" + " :fireworks:", value=f":coin:{balance}")
                 if bool(cards):
@@ -141,7 +141,7 @@ class Profile(commands.Cog):
             else:
                 embed_list = []
                 for i in range(0, len(titles_broken_up)):
-                    globals()['embedVar%s' % i] = discord.Embed(title= f":triangular_flag_on_post: " + f"{name}".format(self) +"\n" + f" :coin:{'{:,}'.format(balance)}", description=":bank: Your Party Chat Gaming Vault™️", colour=000000)
+                    globals()['embedVar%s' % i] = discord.Embed(title= f":triangular_flag_on_post: " + f"{name}".format(self) +"\n" + f" :coin:{'{:,}'.format(balance)}", description="`#updatecard name` -  Select Your Card\n`#updatetitle name` - Select Your Title\n`#updatearm name` - Select Your Arm", colour=000000)
                     globals()['embedVar%s' % i].set_thumbnail(url=avatar)
                     # embedVar.add_field(name="Balance" + " :fireworks:", value=f":coin:{balance}")
                     if bool(cards):
@@ -220,11 +220,12 @@ class Profile(commands.Cog):
         
         embed_list = []
         for i in range(0, len(titles_broken_up)):
-            globals()['embedVar%s' % i] = discord.Embed(title=f":shopping_cart: Flex Shop", description="To preview cards, use the #vc card command. " + "\n" + "You will unlock more purchasable items as you save and earn more gold. ", colour=000000, value='Page 1')
+            globals()['embedVar%s' % i] = discord.Embed(title=f":shopping_cart: Flex Shop", description="`#viewcard card` - View Cards\n`#viewtitle title` - View Title Stats\n`#viewarm arm` - View Arm Stats\n`#buycard` - Buy Card\n`#buytitle title` - Buy Title\n`#buyarm arm` - Buy Arm", colour=0x7289da, value='Page 1')
             globals()['embedVar%s' % i].set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236723/PCG%20LOGOS%20AND%20RESOURCES/Party_Chat_Shop.png")
             globals()['embedVar%s' % i].add_field(name=":shopping_bags: Available Cards", value="\n".join(cards_broken_up[i]))
             globals()['embedVar%s' % i].add_field(name=":shopping_bags: Available Titles", value="\n".join(titles_broken_up[i]))
             globals()['embedVar%s' % i].add_field(name=":shopping_bags: Available Arms", value="\n".join(arms_broken_up[i]))
+            globals()['embedVar%s' % i].set_footer(text="Stock updated every day")
             embed_list.append(globals()['embedVar%s' % i])
 
         paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
