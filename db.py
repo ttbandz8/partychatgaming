@@ -244,7 +244,7 @@ def updateManyCards(new_value):
 
 def deleteCard(card):
     try:
-        cardexists = card_exists({'PATH': query['PATH']})
+        cardexists = card_exists({'PATH': card['PATH']})
         if cardexists:
             cards_col.delete_one(card)
             return True
@@ -294,7 +294,7 @@ def updateManyTitles(new_value):
 
 def deleteTitle(title):
     try:
-        titleexists = title_exists({'TITLE': query['TITLE']})
+        titleexists = title_exists({'TITLE': title['TITLE']})
         if titleexists:
             titles_col.delete_one(title)
             return True
