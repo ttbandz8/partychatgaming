@@ -32,7 +32,7 @@ class CrownUnlimited(commands.Cog):
     
     
     @commands.command()
-    async def bossfight(self, ctx, *args):
+    async def boss(self, ctx, *args):
         bossname = " ".join([*args])
         starttime = time.asctime()
         h_gametime = starttime[11:13]
@@ -806,6 +806,8 @@ class CrownUnlimited(commands.Cog):
                                 turn = 1
         if botActive:
             end_message="Use the #end command to end the tutorial lobby"
+        else:
+            end_message="Try Again"
         # End the match
         if o_health <= 0:
             # await ctx.send(f":zap: {user2.mention} you win the match!")
@@ -815,7 +817,7 @@ class CrownUnlimited(commands.Cog):
             s_playtime = int(wintime[17:19])
             gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
 
-            embedVar = discord.Embed(title=f":zap: `{t_card}` scores {response} and wins the match!", description=f"Match concluded in {turn_total} turns!", colour=0x1abc9c)
+            embedVar = discord.Embed(title=f":zap: `{t_card}` scores and wins the match!", description=f"Match concluded in {turn_total} turns!", colour=0x1abc9c)
             embedVar.set_author(name=f"{o_card} lost!\n{end_message}", icon_url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236432/PCG%20LOGOS%20AND%20RESOURCES/PCGBot_1.png")
             if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
                 embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[2]} Seconds.")
@@ -839,11 +841,8 @@ class CrownUnlimited(commands.Cog):
             m_playtime = int(wintime[14:16])
             s_playtime = int(wintime[17:19])
             gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
-            ouid = sowner['DID']
-            sownerctx = await self.bot.fetch_user(ouid)
-            response = await score(sownerctx, ouser)
 
-            embedVar = discord.Embed(title=f":zap: `{o_card}` {response} and wins the match!", description=f"Match concluded in {turn_total} turns!", colour=0xe91e63)
+            embedVar = discord.Embed(title=f":zap: `{o_card}`defeated the {t_universe} Boss {t_card}!", description=f"Match concluded in {turn_total} turns!", colour=0xe91e63)
             embedVar.set_author(name=f"{t_card} lost!\n{end_message}", icon_url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236432/PCG%20LOGOS%20AND%20RESOURCES/PCGBot_1.png")
             if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
                 embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[2]} Seconds.")
@@ -858,6 +857,11 @@ class CrownUnlimited(commands.Cog):
                 embedVar.add_field(name="Tips!", value="Equiping stronger `TITLES` and `ARMS` will make you character tougher in a fight!")
                 embedVar.set_footer(text="The #shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
                 await ctx.send(embed=embedVar)
+            
+            if t_card not in sowner['BOSS_WINS']:
+                query = {'DISNAME': sowner['DISNAME']}
+                new_query = {'$addToSet': {'BOSS_WINS': t_card}}
+                resp = db.updateUserNoFilter(query, new_query)
 
 
 
@@ -2460,7 +2464,8 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
 
     else:
         # Calculate Damage
-        dmg = (int(ap)*(100/(100+int(op_defense)))) + int(atk)
+        dmg = (int(ap) * int(atk)) / op_defense
+        # dmg = (int(ap)*(100/(100+int(op_defense)))) + int(atk)
         low = dmg - (dmg * .3)
         high = dmg + (dmg * .1)
 
