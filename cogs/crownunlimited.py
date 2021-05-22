@@ -889,11 +889,22 @@ class CrownUnlimited(commands.Cog):
                 eo=0
                 et=0
 
-                start = starting_position(o_speed, t_speed)
-                if start == True:
+                botActive = False
+                tutorialbot = '837538366509154407'
+                userID = t_user['DID']
+                print(userID)
+                if tutorialbot == userID:
+                    botActive = True
+                    await ctx.send(f"Welcome to Bootcamp!")
                     turn = 0
                 else:
-                    turn = 1    
+                    botActive = False
+                    start = starting_position(o_speed, t_speed)
+                    if start == True:
+                        turn = 0
+                    else:
+                        turn = 1
+                    
 
                 # Vulnerability Check
                 if o_type == 0 and t_type == 2:
@@ -907,15 +918,7 @@ class CrownUnlimited(commands.Cog):
                 # Count Turns
                 turn_total = 0
 
-                botActive = False
-                tutorialbot = '837538366509154407'
-                userID = t_user['DID']
-                print(userID)
-                if tutorialbot == userID:
-                    botActive = True
-                    await ctx.send(f"Welcome to Bootcamp!")
-                else:
-                    botActive = False
+                
                 # START TURNS
                 while (o_health > 0) and (t_health > 0):
                     #Player 1 Turn Start
