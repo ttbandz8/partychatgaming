@@ -86,6 +86,7 @@ class CARDS():
     VUL: bool = field(default_factory=lambda: False)
     UNIVERSE: str = field(default_factory=lambda: "Unbound")
     COLLECTION: str = field(default_factory=lambda: "N/A")
+    STOCK: int = field(default_factory=lambda: 5)
 
 @dataclass(frozen=True, order=True) 
 class TITLES():
@@ -96,6 +97,7 @@ class TITLES():
     UNIVERSE: str = field(default_factory=lambda: "Unbound")
     COLLECTION: str = field(default_factory=lambda: "N/A")
     TIMESTAMP: str = now
+    STOCK: int = field(default_factory=lambda: 5)
 
 @dataclass(frozen=True, order=True) 
 class ARM():
@@ -106,6 +108,7 @@ class ARM():
     UNIVERSE: str = field(default_factory=lambda: "Unbound")
     COLLECTION: str = field(default_factory=lambda: "N/A")
     TIMESTAMP: str = now
+    STOCK: int = field(default_factory=lambda: 5)
 
 @dataclass(frozen=True, order=True) 
 class UNIVERSE():
