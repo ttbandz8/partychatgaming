@@ -689,7 +689,12 @@ class CrownUnlimited(commands.Cog):
                         elif t_stamina >= 70:
                             aiMove = 1
                         elif t_stamina >= 60 and (t_health >= o_health):
-                            aiMove = 1
+                            if t_used_resolve == False and t_used_focus:
+                                aiMove = 5
+                            elif t_used_focus == False:
+                                aiMove = 2
+                            else:
+                                aiMove = 1 
                         elif t_stamina >= 60:
                             if t_used_resolve == False and t_used_focus:
                                 aiMove = 5

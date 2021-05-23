@@ -26,7 +26,7 @@ class Titles(commands.Cog):
         return await main.validate_user(ctx)
 
     @commands.command()
-    async def newtitle(self, ctx, tournament: int, price: int, *args):
+    async def nt(self, ctx, tournament: int, price: int, *args):
         if ctx.author.guild_permissions.administrator == True:
             title = " ".join([*args])
             title_query = {'TITLE': str(title), 'TOURNAMENT_REQUIREMENTS': int(tournament), 'PRICE': int(price)}
