@@ -88,6 +88,7 @@ class CARDS():
     UNIVERSE: str = field(default_factory=lambda: "Unbound")
     COLLECTION: str = field(default_factory=lambda: "N/A")
     STOCK: int = field(default_factory=lambda: 5)
+    AVAILABLE: str = field(default_factory=lambda: "")
 
 @dataclass(frozen=True, order=True) 
 class TITLES():
@@ -99,6 +100,7 @@ class TITLES():
     COLLECTION: str = field(default_factory=lambda: "N/A")
     TIMESTAMP: str = now
     STOCK: int = field(default_factory=lambda: 5)
+    AVAILABLE: str = field(default_factory=lambda: "")
 
 @dataclass(frozen=True, order=True) 
 class ARM():
@@ -110,6 +112,7 @@ class ARM():
     COLLECTION: str = field(default_factory=lambda: "N/A")
     TIMESTAMP: str = now
     STOCK: int = field(default_factory=lambda: 5)
+    AVAILABLE: str = field(default_factory=lambda: "")
 
 @dataclass(frozen=True, order=True) 
 class UNIVERSE():
@@ -119,6 +122,7 @@ class UNIVERSE():
     PREREQUISITE: str = field(default_factory=lambda: "")
     UNIVERSE_BOSS: str = field(default_factory=lambda: "")
     TIMESTAMP: str = now
+    AVAILABLE: str = field(default_factory=lambda: "")
 
 @dataclass(frozen=True, order=True) 
 class BOSS():
@@ -130,6 +134,7 @@ class BOSS():
     CARD: str = field(default_factory=lambda: '')
     TIMESTAMP: str = now
     DESCRIPTION: list[str] = field(default_factory=lambda: '')
+    AVAILABLE: str = field(default_factory=lambda: "")
    
 
 @dataclass(frozen=True, order=True) 

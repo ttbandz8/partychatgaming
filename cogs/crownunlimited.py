@@ -809,13 +809,19 @@ class CrownUnlimited(commands.Cog):
   
     @commands.command()
     async def boss(self, ctx, *args):
-        bossname = " ".join([*args])
+        t_available = False
+        universeName = " ".join([*args])
+        universe = db.queryUniverse({'TITLE': str(universeName)})
+        bossname = ''
         starttime = time.asctime()
         h_gametime = starttime[11:13]
         m_gametime = starttime[14:16]
         s_gametime = starttime[17:19]
 
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
+
+
+        bossname = universe['UNIVERSE_BOSS']
         boss = db.queryBoss({'NAME': str(bossname)})
 
 
@@ -859,6 +865,11 @@ class CrownUnlimited(commands.Cog):
 
         # Player 2 Data
         t_user = boss
+        t_available = boss['AVAILABLE']
+        if not t_available:
+            embedVar = discord.Embed(title=f"Boss fight unavailable. ", colour=0xe91e63)
+            await ctx.send(embed=embedVar)
+            return
         tarm = db.queryArm({'ARM': t_user['ARM']})
         tarm_passive = tarm['ABILITIES'][0]
         tarm_name=tarm['ARM']
@@ -866,13 +877,13 @@ class CrownUnlimited(commands.Cog):
         t_card = t['NAME']
         t_card_path=t['PATH']
         t_rcard_path=t['RPATH']
-        t_max_health = t['HLT']
-        t_health = t['HLT']
+        t_max_health = t['HLT'] * 3
+        t_health = t['HLT'] *3
         t_stamina = t['STAM']
         t_max_stamina= t['STAM']
         t_moveset = t['MOVESET']
-        t_attack = t['ATK']
-        t_defense = t['DEF']
+        t_attack = t['ATK'] * 1.5
+        t_defense = t['DEF'] * 1.5
         t_type = t['TYPE']
         t_accuracy = t['ACC']
         t_passive = t['PASS'][0]
@@ -900,6 +911,7 @@ class CrownUnlimited(commands.Cog):
         t_rmessage = t_user['DESCRIPTION'][11]
         t_rebuke = t_user['DESCRIPTION'][12]
         t_concede = t_user['DESCRIPTION'][13]
+        t_wins = t_user['DESCRIPTION'][14]
         
         
         ################################################################################
@@ -923,7 +935,7 @@ class CrownUnlimited(commands.Cog):
 
         # Player 1 Card Passive
         o_card_passive_type = list(o_passive.values())[1]
-        o_card_passive = list(o_passive.values())[0]
+        o_card_passive = list(o_passive.values())[0] * 2
 
         if o_card_passive_type == 'ATK':
             o_attack = o_attack + int(o_card_passive)
@@ -1046,29 +1058,25 @@ class CrownUnlimited(commands.Cog):
             t_vul=True
         
         options = [1,2,3,4,5,0]
-        await ctx.send(f"{user1.mention}: `{o_card}` VS {t_universe} BOSS : `{t_card}` has begun!")
+        
 
         # Count Turns
         turn_total = 0
 
-        
+        await ctx.send(f"{user1.mention}: `{o_card}` VS {t_universe} BOSS : `{t_card}` has begun!")
         # START TURNS
-        while (o_health > 0) and (t_health > 0):
+        while (o_health > 0) and (t_health > 0) and t_available:
+            
             #Player 1 Turn Start
             if turn == 0:
 
                 # Tutorial Instructions
                 if turn_total == 0 and botActive:                    
-                    embedVar = discord.Embed(title=f"Welcome to `Crown Unlimited` `Boss Battles`!", description=f"Bosses are ultra powerful cards that upon defeating them rewards items and :coin:", colour=0xe91e63)
-                    embedVar.add_field(name=f"`{t_card}` Boss of `{t_universe}`", value=f"*{t_description}* ")
-                    embedVar.set_footer(text="Be prepared Bosses have stronger abilties than normal cards")
+                    embedVar = discord.Embed(title=f"`{t_card}` Boss of `{t_universe}`", description=f"*{t_description}*", colour=0xe91e63)
+                    embedVar.add_field(name=f"{t_arena}", value=f"{t_arenades}")
+                    embedVar.add_field(name=f"Entering the {t_arena}",value= f"{t_entrance}", inline=False)
+                    embedVar.set_footer(text=f"{t_card} waits for you to strike....")
                     await ctx.send(embed=embedVar)
-
-                    embedVar2 = discord.Embed(title=f"{t_arena}", description=f"{t_arenades}", colour=0xe91e63)
-                    embedVar2.add_field(name=f"Entering the {t_arena}",value= f"{t_entrance}", inline=False)
-                    embedVar2.set_footer(text=f"{t_card} waits for you to strike....")
-                    await ctx.send(embed=embedVar2)
-
                 
 
                 if o_health <= (o_max_health * .25):
@@ -1172,7 +1180,7 @@ class CrownUnlimited(commands.Cog):
                                 if botActive:                    
                                     embedVar = discord.Embed(title=f"`{t_card}` Snarls", description=f"{t_rebuke}", colour=0xe91e63)
                                     embedVar.add_field(name=f"`{o_card}` Says", value="You have not faced me.")
-                                    embedVar.set_footer(text=f"The {t_card} enrages in anticipation of your next attack!")
+                                    embedVar.set_footer(text=f"{t_card} enrages in anticipation of your next attack!")
                                     await ctx.send(embed=embedVar)
                                     
 
@@ -1522,7 +1530,7 @@ class CrownUnlimited(commands.Cog):
             s_playtime = int(wintime[17:19])
             gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
 
-            embedVar = discord.Embed(title=f":zap: `{t_card}` scores and wins the match!", description=f"Match concluded in {turn_total} turns!", colour=0x1abc9c)
+            embedVar = discord.Embed(title=f":zap: `{t_card}` {t_wins}", description=f"Match concluded in {turn_total} turns!", colour=0x1abc9c)
             embedVar.set_author(name=f"{o_card} lost!\n{end_message}", icon_url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236432/PCG%20LOGOS%20AND%20RESOURCES/PCGBot_1.png")
             if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
                 embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[2]} Seconds.")
@@ -1532,7 +1540,7 @@ class CrownUnlimited(commands.Cog):
                 embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
             await ctx.send(embed=embedVar)
             if botActive:                    
-                embedVar = discord.Embed(title=f"PLAY AGAIN", description=f"Don't Worry! Losing is apart of the game. Use the #end command to `END` the tutorial lobby OR use #start to `PLAY AGAIN`", colour=0xe74c3c)
+                embedVar = discord.Embed(title=f"PLAY AGAIN", description=f"{t_card} was too powerful level up your character and try again...", colour=0xe74c3c)
                 embedVar.set_author(name=f"You Lost...")
                 embedVar.add_field(name="Tips!", value="Equiping stronger `TITLES` and `ARMS` will make you character tougher in a fight!")
                 embedVar.set_footer(text="The #shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
@@ -1557,10 +1565,10 @@ class CrownUnlimited(commands.Cog):
                 embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
             await ctx.send(embed=embedVar)
             if botActive:                    
-                embedVar = discord.Embed(title=f"VICTORY", description=f"Victories earn `ITEMS` ! Use the #end command to `END` the tutorial lobby\nOR use #start to `PLAY AGAIN`", colour=0xe91e63)
-                embedVar.set_author(name=f"Congratulations You Beat Senpai!")
-                embedVar.add_field(name="Tips!", value="Equiping stronger `TITLES` and `ARMS` will make you character tougher in a fight!")
-                embedVar.set_footer(text="The #shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
+                embedVar = discord.Embed(title=f"BOSS DEFEATED", description=f"Boss Victories are added to your player profile! Defeat {t_card} again to earn exotic loot!", colour=0xe91e63)
+                embedVar.set_author(name=f"Congratulations You Defeated {t_card}!")
+                embedVar.add_field(name="Tips!", value=f"Run #lookup {o_user} to view your Boss Souls")
+                embedVar.set_footer(text="Bosses have a chance to drop :coin:, ARMS, TITLES, and even BOSS CARDS:eyes:")
                 await ctx.send(embed=embedVar)
             
             if t_card not in sowner['BOSS_WINS']:
