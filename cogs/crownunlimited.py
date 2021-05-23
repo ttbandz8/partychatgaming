@@ -896,6 +896,7 @@ class CrownUnlimited(commands.Cog):
     
     @commands.command()
     async def boss(self, ctx, *args):
+        t_available = False
         universeName = " ".join([*args])
         universe = db.queryUniverse({'TITLE': str(universeName)})
         bossname = ''
@@ -951,6 +952,7 @@ class CrownUnlimited(commands.Cog):
 
         # Player 2 Data
         t_user = boss
+        t_available = boss['AVAILABLE']
         tarm = db.queryArm({'ARM': t_user['ARM']})
         tarm_passive = tarm['ABILITIES'][0]
         tarm_name=tarm['ARM']
@@ -1139,14 +1141,15 @@ class CrownUnlimited(commands.Cog):
             t_vul=True
         
         options = [1,2,3,4,5,0]
-        await ctx.send(f"{user1.mention}: `{o_card}` VS {t_universe} BOSS : `{t_card}` has begun!")
+        
 
         # Count Turns
         turn_total = 0
 
         
         # START TURNS
-        while (o_health > 0) and (t_health > 0):
+        while (o_health > 0) and (t_health > 0) and t_available:
+            await ctx.send(f"{user1.mention}: `{o_card}` VS {t_universe} BOSS : `{t_card}` has begun!")
             #Player 1 Turn Start
             if turn == 0:
 

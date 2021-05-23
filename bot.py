@@ -43,10 +43,10 @@ client = discord.Client()
 
 if config('ENV') == "production":
    # PRODUCTION
-   bot = commands.Bot(command_prefix="#")
+   bot = commands.Bot(command_prefix=".")
 else:
    # TEST
-   bot = commands.Bot(command_prefix=".")
+   bot = commands.Bot(command_prefix=",")
 
 bot.remove_command("help")
 
