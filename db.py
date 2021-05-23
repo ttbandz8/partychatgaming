@@ -4,10 +4,10 @@ from decouple import config
 
 if config('ENV') == "production":
     # PRODUCTION
-    TOKEN = config('MONGODB_URI')
+    TOKEN = config('MONGOTOKEN_TEST')
 else:
     # TEST
-    TOKEN = config('MONGOTOKEN_TEST')
+    TOKEN = config('MONGODB_URI')
 mongo = pymongo.MongoClient(TOKEN)
 
 db = mongo["PCGTEST"]
