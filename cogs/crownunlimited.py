@@ -69,11 +69,11 @@ class CrownUnlimited(commands.Cog):
         total_legends = len(legends)
         currentopponent = 0
         continued = True
-
+        o = db.queryCard({'NAME': sowner['CARD']})
         #While Still PLaying Universe
         while continued == True:
 
-            o = db.queryCard({'NAME': sowner['CARD']})
+            
             otitle = db.queryTitle({'TITLE': sowner['TITLE']})
             
             t = db.queryCard({'NAME': legends[currentopponent]})

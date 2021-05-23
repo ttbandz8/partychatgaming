@@ -8,7 +8,6 @@ if config('ENV') == "production":
 else:
     # TEST
     use_database = "PCGTEST"
-    
 
 TOKEN = config('MONGOTOKEN_TEST')
 mongo = pymongo.MongoClient(TOKEN)
