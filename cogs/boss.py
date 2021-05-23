@@ -26,10 +26,10 @@ class Boss(commands.Cog):
         return await main.validate_user(ctx)
 
     @commands.command()
-    async def nb(self, ctx, image: str, title: str, arm: str, *args):
+    async def nb(self, ctx, image: str, *args):
         if ctx.author.guild_permissions.administrator == True:
             boss = " ".join([*args])
-            boss_query = {'ARM': str(arm), 'TITLE': str(title), 'NAME': str(boss), 'PATH' : str(image)}
+            boss_query = {'NAME': str(boss), 'PATH' : str(image)}
             added = db.createBoss(data.newBoss(boss_query))
             await ctx.send(added)
         else:
@@ -46,6 +46,19 @@ class Boss(commands.Cog):
             boss_arm = boss['ARM']
             boss_desc = boss['DESCRIPTION']
             boss_pic = boss['PATH']
+
+            arm = db.queryArm({'ARM': boss_arm})
+            arm_passive = arm['ABILITIES'][0]
+            arm_passive_type = list(arm_passive.keys())[0]
+            arm_passive_value = list(arm_passive.values())[0]
+
+            title = db.queryTitle({'TITLE': boss_title})
+            title_passive = title['ABILITIES'][0]
+            title_passive_type = list(title_passive.keys())[0]
+            title_passive_value = list(title_passive.values())[0]
+
+
+
             if boss_show != 'Unbound':
                 boss_show_img = db.queryUniverse({'TITLE': boss_show})['PATH']
             message= boss_desc
@@ -54,7 +67,9 @@ class Boss(commands.Cog):
             if boss_show != "Unbound":
                 embedVar.set_thumbnail(url=boss_show_img)
             embedVar.set_image(url=boss_pic)
-            embedVar.add_field(name="Universe", value=f"{boss_show}", inline=False)
+            embedVar.add_field(name="UNIVERSE", value=f"{boss_show}", inline=False)
+            embedVar.add_field(name="TITLE", value=f"{boss_title}\n`Increases {title_passive_type} by {title_passive_value}`", inline=True)
+            embedVar.add_field(name="ARM", value=f"{boss_arm}\n`Increases {arm_passive_type} by {arm_passive_value}`", inline=True)
 
             await ctx.send(embed=embedVar)
 

@@ -26,7 +26,6 @@ class Cards(commands.Cog):
     async def cog_check(self, ctx):
         return await main.validate_user(ctx)
 
-
     @commands.command()
     async def nc(self, ctx, path: str, tournament: int, price: int, *args):
         if ctx.author.guild_permissions.administrator == True:
@@ -196,7 +195,7 @@ class Cards(commands.Cog):
             embedVar.add_field(name=f"{move1}", value=f"Power: `{move1ap}`", inline=False)
             embedVar.add_field(name=f"{move2}", value=f"Power: `{move2ap}`", inline=False)
             embedVar.add_field(name=f"{move3}", value=f"Power: `{move3ap}`", inline=False)
-
+            embedVar.add_field(name=f"{move4}", value=f"`Enhancer`: Increases `{move4enh} by {move4ap}`", inline=False)
             embedVar.add_field(name="Unique Passive", value=f"`{passive_name}: Increases {passive_type} by {passive_num}`", inline=False)
             embedVar.set_footer(text=f"{tip}")
             await ctx.send(embed=embedVar)

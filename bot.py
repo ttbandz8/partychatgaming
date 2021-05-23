@@ -116,7 +116,7 @@ async def r(ctx):
       embedVar.set_author(name="The home of Crown Unlimited")
       embedVar.add_field(name="#vault", value="Check your equipped `card`, `title` and `arm`")
       embedVar.add_field(name="#shop", value="Purchase your starting `card`, `title` and `arm`")
-      embedVar.add_field(name="#senpaibattlee", value="Start tutorial on Crown Unlimited")
+      embedVar.add_field(name="#senpaibattle", value="Start tutorial on Crown Unlimited")
       embedVar.add_field(name="#help", value="Inquire all potential commands and capabilites of the bot")
       embedVar.set_footer(text="#senpai will start tutorial on overall bot capabilities")
       await ctx.send(embed=embedVar)

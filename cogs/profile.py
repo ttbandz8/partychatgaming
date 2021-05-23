@@ -220,7 +220,7 @@ class Profile(commands.Cog):
         
         embed_list = []
         for i in range(0, len(titles_broken_up)):
-            globals()['embedVar%s' % i] = discord.Embed(title=f":shopping_cart: Flex Shop", description="`#viewcard card` - View Cards\n`#viewtitle title` - View Title Stats\n`#viewarm arm` - View Arm Stats\n`#buycard` - Buy Card\n`#buytitle title` - Buy Title\n`#buyarm arm` - Buy Arm", colour=0x7289da, value='Page 1')
+            globals()['embedVar%s' % i] = discord.Embed(title=f":shopping_cart: Flex Shop", description=f"Current Balance :coin:{vault['BALANCE']}\n`#viewcard card` - View Cards\n`#viewtitle title` - View Title Stats\n`#viewarm arm` - View Arm Stats\n`#buycard` - Buy Card\n`#buytitle title` - Buy Title\n`#buyarm arm` - Buy Arm", colour=0x7289da, value='Page 1')
             globals()['embedVar%s' % i].set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236723/PCG%20LOGOS%20AND%20RESOURCES/Party_Chat_Shop.png")
             globals()['embedVar%s' % i].add_field(name=":shopping_bags: Available Cards", value="\n".join(cards_broken_up[i]))
             globals()['embedVar%s' % i].add_field(name=":shopping_bags: Available Titles", value="\n".join(titles_broken_up[i]))
