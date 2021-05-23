@@ -4,13 +4,18 @@ from decouple import config
 
 if config('ENV') == "production":
     # PRODUCTION
-    TOKEN = config('MONGOTOKEN_TEST')
+    use_database = "PCGPROD"
 else:
     # TEST
-    TOKEN = config('MONGODB_URI')
+    use_database = "PCGTEST"
+    
+
+TOKEN = config('MONGOTOKEN_TEST')
 mongo = pymongo.MongoClient(TOKEN)
 
-db = mongo["PCGTEST"]
+print(use_database)
+
+db = mongo[use_database]
 users_col = db["USERS"]
 teams_col = db["TEAMS"]
 sessions_col = db["SESSIONS"]
