@@ -70,7 +70,6 @@ class CrownUnlimited(commands.Cog):
             t = db.queryCard({'NAME': legends[currentopponent]})
             ttitle = db.queryTitle({'TITLE': 'Starter'})
 
-            print("Looped")
             ####################################################################
             # Player Data
 
@@ -90,7 +89,7 @@ class CrownUnlimited(commands.Cog):
             o_stamina = o['STAM']
             o_max_stamina = o['STAM']
             o_moveset = o['MOVESET']
-            o_attack = o['ATK']
+            o_attack = o['ATK'] + (999)
             o_defense = o['DEF']
             o_type = o['TYPE']
             o_accuracy = o['ACC']
@@ -112,13 +111,13 @@ class CrownUnlimited(commands.Cog):
             t_card = t['NAME']
             t_card_path=t['PATH']
             t_rcard_path=t['RPATH']
-            t_max_health = t['HLT']
-            t_health = t['HLT']
+            t_max_health = t['HLT'] + (4 * currentopponent)
+            t_health = t['HLT'] + (5 * currentopponent)
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
-            t_attack = t['ATK']
-            t_defense = t['DEF']
+            t_attack = t['ATK'] + (9 * currentopponent)
+            t_defense = t['DEF'] + (9 * currentopponent)
             t_type = t['TYPE']
             t_accuracy = t['ACC']
             t_passive = t['PASS'][0]
@@ -865,38 +864,41 @@ class CrownUnlimited(commands.Cog):
                 s_playtime = int(wintime[17:19])
                 gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
 
-                embedVar = discord.Embed(title=f":zap: `{o_card}`defeated the {t_universe} Boss {t_card}!", description=f"Match concluded in {turn_total} turns!", colour=0xe91e63)
-                embedVar.set_author(name=f"{t_card} lost!\n{end_message}", icon_url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236432/PCG%20LOGOS%20AND%20RESOURCES/PCGBot_1.png")
-                if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
-                    embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[2]} Seconds.")
-                elif int(gameClock[0]) == 0:
-                    embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
-                else: 
-                    embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
-                await ctx.send(embed=embedVar)
-                
-                if botActive:                    
-                    embedVar = discord.Embed(title=f"VICTORY", description=f"Victories earn `ITEMS` ! Use the #end command to `END` the tutorial lobby\nOR use #start to `PLAY AGAIN`", colour=0xe91e63)
-                    embedVar.set_author(name=f"Congratulations You Beat Senpai!")
-                    embedVar.add_field(name="Tips!", value="Equiping stronger `TITLES` and `ARMS` will make you character tougher in a fight!")
-                    embedVar.set_footer(text="The #shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
+                if currentopponent != (total_legends - 1):
+                    if botActive:                    
+                        embedVar = discord.Embed(title=f"VICTORY", description=f"{t_card} has been defeated!", colour=0xe91e63)
+                        embedVar.add_field(name="Continue...", value="Continue down the path to beat the Universe!")
+                        embedVar.set_footer(text="The #shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
+                        await ctx.send(embed=embedVar)
+
+                    emojis = ['👍', '👎']
+                    await main.DM(ctx, user1, f"{ctx.author.mention}" + f"would you like to continue?")
+                    accept = await ctx.send(f"{ctx.author.mention} would you like to continue?")
+                    for emoji in emojis:
+                        await accept.add_reaction(emoji)
+
+                    def check(reaction, user):
+                        return user == user1 and str(reaction.emoji) == '👍'
+                    try:
+                        reaction, user = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
+                        currentopponent = currentopponent + 1
+
+                        continued = True
+                    except:
+                        embedVar = discord.Embed(title=f"{m.STORY_ENDED}", colour=0xe91e63)
+                        embedVar.set_footer(text="Use .tales to play again")
+                        await ctx.send(embed=embedVar)
+                        return
+                if t_card == legends[(total_legends - 1)]:
+                    embedVar = discord.Embed(title=f"UNIVERSE CONQUERED", description=f"Universe {universeName} has been conquered", colour=0xe91e63)
+                    embedVar.set_author(name=f"New Universes have been unlocked to explore!")
+                    embedVar.set_footer(text="The #shop has been updated with new CARDS, TITLES and ARMS! ")
+                    upload_query={'DISNAME': str(ctx.author)}
+                    new_upload_query={'$addToSet': {'CROWN_TALES': universeName}}
+                    r=db.updateUserNoFilter(upload_query, new_upload_query)
                     await ctx.send(embed=embedVar)
+                    continued=False
 
-                emojis = ['👍', '👎']
-                await main.DM(ctx, user1, f"{ctx.author.mention}" + f"would you like to continue?")
-                accept = await ctx.send(f"{ctx.author.mention} would you like to continue?")
-                for emoji in emojis:
-                    await accept.add_reaction(emoji)
-
-                def check(reaction, user):
-                    return user == user1 and str(reaction.emoji) == '👍'
-                try:
-                    reaction, user = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
-                    currentopponent = currentopponent + 1
-
-                    continued = True
-                except:
-                    await ctx.send(m.DID_NOT_WORK)  
 
         print("Quit")
  
