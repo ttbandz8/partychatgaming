@@ -116,6 +116,8 @@ class UNIVERSE():
     TITLE: str
     PATH: str = field(default_factory=lambda: '')
     CROWN_TALES: list[str] = field(default_factory=lambda: [''])
+    PREREQUISITE: str = field(default_factory=lambda: "")
+    UNIVERSE_BOSS: str = field(default_factory=lambda: "")
     TIMESTAMP: str = now
 
 @dataclass(frozen=True, order=True) 

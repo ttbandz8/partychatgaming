@@ -65,6 +65,8 @@ class Profile(commands.Cog):
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
         card = db.queryCard({'NAME':str(d['CARD'])})
+        title = db.queryTitle({'TITLE': str(d['TITLE'])})
+        arm = db.queryArm({'ARM': str(d['ARM'])})
         if card:
             o_card = card['NAME']
             o_card_path=card['PATH']
@@ -81,27 +83,69 @@ class Profile(commands.Cog):
             o_speed = card['SPD']
             o_show = card['UNIVERSE']
             o_collection = card['COLLECTION']
+            
+            arm_name = arm['ARM']
+            arm_passive = arm['ABILITIES'][0]
+            arm_passive_type = list(arm_passive.keys())[0]
+            arm_passive_value = list(arm_passive.values())[0]
+            title_name= title['TITLE']
+            title_passive = title['ABILITIES'][0]
+            title_passive_type = list(title_passive.keys())[0]
+            title_passive_value = list(title_passive.values())[0]
+
+            o_1 = o_moveset[0]
+            o_2 = o_moveset[1]
+            o_3 = o_moveset[2]
+            o_enhancer = o_moveset[3]
+            
+            # Move 1
+            move1 = list(o_1.keys())[0]
+            move1ap = list(o_1.values())[0]
+            move1_stamina = list(o_1.values())[1]
+            
+            # Move 2
+            move2 = list(o_2.keys())[0]
+            move2ap = list(o_2.values())[0]
+            move2_stamina = list(o_2.values())[1]
+
+            # Move 3
+            move3 = list(o_3.keys())[0]
+            move3ap = list(o_3.values())[0]
+            move3_stamina = list(o_3.values())[1]
+
+            # Move Enhancer
+            move4 = list(o_enhancer.keys())[0]
+            move4ap = list(o_enhancer.values())[0]
+            move4_stamina = list(o_enhancer.values())[1]
+            move4enh = list(o_enhancer.values())[2]
+
+
             resolved = False
             focused = False
-            title = {'TITLE': 'CARD PREVIEW'}
-            card_file = showcard(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, title, focused)
+            cardtitle = {'TITLE': 'CARD PREVIEW'}
+            card_file = showcard(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, cardtitle, focused)
 
             passive_name = list(o_passive.keys())[0]
             passive_num = list(o_passive.values())[0]
             passive_type = list(o_passive.values())[1]
 
-            embedVar = discord.Embed(title=f"{o_card}".format(self), description=f"{o_card} from {o_show} is currently my primary card.", colour=000000)
-            # embedVar.set_image(url=card_file)
-            embedVar.add_field(name="Health", value=f"{o_max_health}")
-            embedVar.add_field(name="Stamina", value=f"{o_max_stamina}")
-            embedVar.add_field(name="Attack", value=f"{o_attack}")
-            embedVar.add_field(name="Defense", value=f"{o_defense}")
-            embedVar.add_field(name="Speed", value=f"{o_speed}")
+            embedVar = discord.Embed(title=f"{o_card}".format(self), colour=000000)
+            embedVar.add_field(name=f"TITLE", value=f"`{title_name}`: Increase `{title_passive_type}` by `{title_passive_value}`")
+            embedVar.add_field(name=f"ARM", value=f"`{arm_name}`: Increase `{arm_passive_type}` by `{arm_passive_value}`")
+            embedVar.set_image(url=o_card_path)
+            embedVar.add_field(name="Health", value=f"`{o_max_health}`")
+            embedVar.add_field(name="Stamina", value=f"`{o_max_stamina}`")
+            embedVar.add_field(name="Attack", value=f"`{o_attack}`")
+            embedVar.add_field(name="Defense", value=f"`{o_defense}`")
+            embedVar.add_field(name="Speed", value=f"`{o_speed}`")
             embedVar.add_field(name="Unique Passive", value=f"`{passive_name}: Increases {passive_type} by {passive_num}`", inline=False)
+            embedVar.add_field(name=f"{move1}", value=f"Power: `{move1ap}`", inline=False)
+            embedVar.add_field(name=f"{move2}", value=f"Power: `{move2ap}`", inline=False)
+            embedVar.add_field(name=f"{move3}", value=f"Power: `{move3ap}`", inline=False)
+            embedVar.add_field(name=f"{move4}", value=f"`Enhancer`: Increases `{move4enh} by {move4ap}`", inline=False)
+            embedVar.add_field(name="Unique Passive", value=f"`{passive_name}: Increases `{passive_type}` by `{passive_num}`", inline=False)
 
             await ctx.send(embed=embedVar)
-
-            await ctx.send(file=card_file)
         else:
             await ctx.send(m.USER_NOT_REGISTERED, delete_after=3)
 
