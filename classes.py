@@ -127,7 +127,7 @@ class BOSS():
     UNIVERSE: str = field(default_factory=lambda: "Unbound")
     CARD: str = field(default_factory=lambda: '')
     TIMESTAMP: str = now
-    DESCRIPTION: str = field(default_factory=lambda: '')
+    DESCRIPTION: list[str] = field(default_factory=lambda: '')
    
 
 @dataclass(frozen=True, order=True) 

@@ -48,20 +48,8 @@ class CrownUnlimited(commands.Cog):
         total_legends = len(legends)
         currentopponent = 0
         continued = True
-        # opponents = 0
-        # bossIndex = 0
-        # for x in legends:
-        #     opponents = opponents + 1
 
-
-        # currentopponent = 0
-        # wonprevious = False
-        # firstmatch = True
-        # if wonprevious == False:
-        #     currentopponent = currentopponent
-        # else:
-        #     currentopponent = currentopponent + 1
-
+        #While Still PLaying Universe
         while continued == True:
 
             o = db.queryCard({'NAME': sowner['CARD']})
@@ -913,16 +901,11 @@ class CrownUnlimited(commands.Cog):
         h_gametime = starttime[11:13]
         m_gametime = starttime[14:16]
         s_gametime = starttime[17:19]
-        # session_query = {"OWNER": str(ctx.author), "AVAILABLE": True}
-        # session = db.querySession(session_query)
-        # if session:
-        #     if session['GAME'] == 'Crown Unlimited':
-                # Get Session Owner Disname for scoring
+
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
         boss = db.queryBoss({'NAME': str(bossname)})
-        # teams = [x for x in session['TEAMS']]
-        # team_1 = [x for x in teams if x['POSITION'] == 0][0] # position 0
-        # team_2 = [x for x in teams if x['POSITION'] == 1][0] # position 1
+
+
         o = db.queryCard({'NAME': sowner['CARD']})
         otitle = db.queryTitle({'TITLE': sowner['TITLE']})
         
@@ -987,6 +970,24 @@ class CrownUnlimited(commands.Cog):
         t_vul = False
         #user2 = await self.bot.fetch_user(t_DID)
         t_title_passive_bool = False
+
+        ################################################################################
+        ##world Building
+        t_arena = t_user['DESCRIPTION'][0]
+        t_arenades = t_user['DESCRIPTION'][1]
+        t_entrance = t_user['DESCRIPTION'][2]
+        t_description = t_user['DESCRIPTION'][3]
+        t_welcome = t_user['DESCRIPTION'][4]
+        t_feeling = t_user['DESCRIPTION'][5]
+        t_powerup = t_user['DESCRIPTION'][6]
+        t_aura = t_user['DESCRIPTION'][7]
+        t_assault = t_user['DESCRIPTION'][8]
+        t_world = t_user['DESCRIPTION'][9]
+        t_punish = t_user['DESCRIPTION'][10]
+        t_rmessage = t_user['DESCRIPTION'][11]
+        t_rebuke = t_user['DESCRIPTION'][12]
+        t_concede = t_user['DESCRIPTION'][13]
+        
         
         ################################################################################
 
@@ -1145,10 +1146,15 @@ class CrownUnlimited(commands.Cog):
 
                 # Tutorial Instructions
                 if turn_total == 0 and botActive:                    
-                    embedVar = discord.Embed(title=f"Welcome to `Crown Unlimited`!", description=f"Follow the instructions to learn how to play Crown Unlimited", colour=0xe91e63)
-                    embedVar.add_field(name="How do you play this game?", value="The point of the game is to win the game, duh!\nTo do this, you need to select moves in a strategic order to give you the advantage to secure the win!")
-                    embedVar.set_footer(text="Select a move to get started. Moves will drain your `Stamina` quickly.\n`When your Stamina depletes to 0 your character will Focus`")
+                    embedVar = discord.Embed(title=f"Welcome to `Crown Unlimited` `Boss Battles`!", description=f"Bosses are ultra powerful cards that upon defeating them rewards items and :coin:", colour=0xe91e63)
+                    embedVar.add_field(name=f"`{t_card}` Boss of `{t_universe}`", value=f"*{t_description}* ")
+                    embedVar.set_footer(text="Be prepared Bosses have stronger abilties than normal cards")
                     await ctx.send(embed=embedVar)
+
+                    embedVar2 = discord.Embed(title=f"{t_arena}", description=f"{t_arenades}", colour=0xe91e63)
+                    embedVar2.add_field(name=f"Entering the {t_arena}",value= f"{t_entrance}", inline=False)
+                    embedVar2.set_footer(text=f"{t_card} waits for you to strike....")
+                    await ctx.send(embed=embedVar2)
 
                 
 
@@ -1165,9 +1171,9 @@ class CrownUnlimited(commands.Cog):
 
                 if o_stamina <= 0:
                     if botActive and not o_used_focus:                    
-                        embedVar = discord.Embed(title=f"You've entered `Focus State`!", description=f"Entering `Focus State` sacrifices a turn to power up and regain `Stamina`!", colour=0xe91e63)
-                        embedVar.add_field(name="Strategy", value="Pay attention to your oppononets `STAM` bar. If they are close to entering `Focus State`, you will have the ability to strike twice if you play your cards right!")
-                        embedVar.set_footer(text="After you entered focus state once, a transformation is possible by strengthening your `Resolve`!")
+                        embedVar = discord.Embed(title=f"{t_punish}")
+                        embedVar.add_field(name=f"{t_arena}",value= f"{t_world}", inline=False)
+                        embedVar.set_footer(text=f"{t_assault}")
                         await ctx.send(embed=embedVar)
                     #fortitude or luck is based on health  
                     fortitude = 0.0
@@ -1251,9 +1257,9 @@ class CrownUnlimited(commands.Cog):
                             if not o_used_resolve and o_used_focus:
 
                                 if botActive:                    
-                                    embedVar = discord.Embed(title=f"You are Resolved", description=f"Entering `Resolved State` sacrifices a turn to power up even greater and regain `Stamina`!", colour=0xe91e63)
-                                    embedVar.add_field(name="Strategy", value="You sacrifice `Defense` to greatly increase `Attack` in your `Resolved` state. Use it when you need to secure an advantage.")
-                                    embedVar.set_footer(text="A poorly planned `Resolve` could cost you the match.")
+                                    embedVar = discord.Embed(title=f"`{t_card}` Snarls", description=f"{t_rebuke}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"`{o_card}` Says", value="You have not faced me.")
+                                    embedVar.set_footer(text=f"The {t_card} enrages in anticipation of your next attack!")
                                     await ctx.send(embed=embedVar)
                                     
 
@@ -1337,6 +1343,13 @@ class CrownUnlimited(commands.Cog):
                         await ctx.send(embed=embedVar)
             #PLayer 2 Turn Start
             elif turn == 1:
+
+                # Boss Conversation Instructions
+                if turn_total == 1 and botActive:                    
+                    embedVar = discord.Embed(title=f"`{t_card}` Says : ", description=f"{t_welcome}", colour=0xe91e63)
+                    embedVar.add_field(name=f"`{o_card}` Braces: ",value=f"{t_feeling}")
+                    embedVar.set_footer(text=f" The {t_card} begins his assault")
+                    await ctx.send(embed=embedVar)
                 
                 if t_health <= (t_max_health * .25):
                     embed_color_t=0xe74c3c
@@ -1350,6 +1363,12 @@ class CrownUnlimited(commands.Cog):
 
                 #Focus
                 if t_stamina <= 0:
+                    if botActive and not o_used_focus:                    
+                        embedVar = discord.Embed(title=f"`{t_card}` Says ", description=f"{t_powerup}", colour=0xe91e63)
+                        embedVar.add_field(name=f"A great aura starts to envelop `{t_card}` ",value= f"{t_aura}")
+                        embedVar.set_footer(text=f"{t_card} Says: 'Now, are you ready for a real fight?'")
+                        await ctx.send(embed=embedVar)
+
                     fortitude = 0.0
                     low = t_health - (t_health*.90)
                     high = t_health- (t_health*.80)
@@ -1429,6 +1448,7 @@ class CrownUnlimited(commands.Cog):
                                 t_enhancer_used=False
                             elif int(msg.content) == 5:
                                 if not t_used_resolve and t_used_focus:
+
                                     #fortitude or luck is based on health  
                                     fortitude = 0.0
                                     low = t_health - (t_health * .75)
@@ -1616,6 +1636,12 @@ class CrownUnlimited(commands.Cog):
                             t_enhancer_used=False
                         elif int(aiMove) == 5:
                             if not t_used_resolve and t_used_focus:
+
+                                if botActive:                    
+                                    embedVar = discord.Embed(title=f"{t_card} is Resolved", description=f"{t_rmessage}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"{o_card} are you ready?", value="This will not be easy.")
+                                    embedVar.set_footer(text=f"{o_card} take advantage of its current state and end this !")
+                                    await ctx.send(embed=embedVar)
                                 #fortitude or luck is based on health  
                                 fortitude = 0.0
                                 low = t_health - (t_health * .75)
@@ -1722,7 +1748,7 @@ class CrownUnlimited(commands.Cog):
             s_playtime = int(wintime[17:19])
             gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
 
-            embedVar = discord.Embed(title=f":zap: `{o_card}`defeated the {t_universe} Boss {t_card}!", description=f"Match concluded in {turn_total} turns!", colour=0xe91e63)
+            embedVar = discord.Embed(title=f":zap: `{o_card}`defeated the {t_universe} Boss {t_card}!\n{t_concede}", description=f"Match concluded in {turn_total} turns!", colour=0xe91e63)
             embedVar.set_author(name=f"{t_card} lost!\n{end_message}", icon_url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236432/PCG%20LOGOS%20AND%20RESOURCES/PCGBot_1.png")
             if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
                 embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[2]} Seconds.")
