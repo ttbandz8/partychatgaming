@@ -43,10 +43,10 @@ client = discord.Client()
 
 if config('ENV') == "production":
    # PRODUCTION
-   bot = commands.Bot(command_prefix="#")
+   bot = commands.Bot(command_prefix=".")
 else:
    # TEST
-   bot = commands.Bot(command_prefix=".")
+   bot = commands.Bot(command_prefix=",")
 
 bot.remove_command("help")
 
@@ -204,7 +204,7 @@ async def addfield(ctx, collection, new_field, field_type):
       elif field_type == 'list':
          field_type = []
       elif field_type == 'bool':
-         field_type = False
+         field_type = True
       
       if collection == 'cards':
          response = db.updateManyCards({'$set': {new_field: field_type}})
@@ -216,6 +216,8 @@ async def addfield(ctx, collection, new_field, field_type):
          response = db.updateManyUsers({'$set': {new_field: field_type}})
       elif collection == 'universe':
          response = db.updateManyUniverses({'$set': {new_field: field_type}})
+      elif collection == 'boss':
+         response = db.updateManyBosses({'$set': {new_field: field_type}})
    else:
       print(m.ADMIN_ONLY_COMMAND)
 

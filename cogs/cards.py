@@ -186,6 +186,7 @@ class Cards(commands.Cog):
             embedVar = discord.Embed(title=f"{o_card}".format(self), colour=000000)
             if o_show != "Unbound":
                 embedVar.set_thumbnail(url=show_img)
+            embedVar.set_image(url=o_card_path)
             embedVar.add_field(name="Health", value=f"`{o_max_health}`")
             embedVar.add_field(name="Stamina", value=f"`{o_max_stamina}`")
             embedVar.add_field(name="Attack", value=f"`{o_attack}`")
@@ -200,7 +201,6 @@ class Cards(commands.Cog):
             embedVar.set_footer(text=f"{tip}")
             await ctx.send(embed=embedVar)
 
-            await ctx.send(file=card_file)
         else:
             await ctx.send(m.CARD_DOESNT_EXIST, delete_after=3)
 
