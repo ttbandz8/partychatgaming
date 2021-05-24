@@ -89,7 +89,7 @@ class CARDS():
     UNIVERSE: str = field(default_factory=lambda: "Unbound")
     COLLECTION: str = field(default_factory=lambda: "N/A")
     STOCK: int = field(default_factory=lambda: 5)
-    AVAILABLE: str = field(default_factory=lambda: "")
+    AVAILABLE: bool = field(default_factory=lambda: True)
 
 @dataclass(frozen=True, order=True) 
 class TITLES():
@@ -113,7 +113,7 @@ class ARM():
     COLLECTION: str = field(default_factory=lambda: "N/A")
     TIMESTAMP: str = now
     STOCK: int = field(default_factory=lambda: 5)
-    AVAILABLE: str = field(default_factory=lambda: "")
+    AVAILABLE: bool = field(default_factory=lambda: True)
 
 @dataclass(frozen=True, order=True) 
 class UNIVERSE():
@@ -123,7 +123,7 @@ class UNIVERSE():
     PREREQUISITE: str = field(default_factory=lambda: "")
     UNIVERSE_BOSS: str = field(default_factory=lambda: "")
     TIMESTAMP: str = now
-    AVAILABLE: str = field(default_factory=lambda: "")
+    AVAILABLE: bool = field(default_factory=lambda: True)
 
 @dataclass(frozen=True, order=True) 
 class BOSS():
@@ -135,7 +135,7 @@ class BOSS():
     CARD: str = field(default_factory=lambda: '')
     TIMESTAMP: str = now
     DESCRIPTION: list[str] = field(default_factory=lambda: '')
-    AVAILABLE: str = field(default_factory=lambda: "")
+    AVAILABLE: bool = field(default_factory=lambda: True)
    
 
 @dataclass(frozen=True, order=True) 
@@ -172,7 +172,7 @@ class GODS():
 class VAULT():
     OWNER: str
     BALANCE: int = field(default_factory=lambda: 1000)
-    CARDS: list[str] = field(default_factory=lambda: ['Chunin Naruto'])
+    CARDS: list[str] = field(default_factory=lambda: ['Naruto'])
     TITLES: list[str] = field(default_factory=lambda: ['Starter'])
     ARMS: list[str] = field(default_factory=lambda: ['Stock'])
 
