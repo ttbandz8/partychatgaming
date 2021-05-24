@@ -47,8 +47,8 @@ class CrownUnlimited(commands.Cog):
                 
         embedVar = discord.Embed(title=f":crown: CROWN TALES!", description="Select a Universe to explore!", colour=0xe91e63)
         embedVar.add_field(name="Available Universes", value="\n".join(available_universes))
-        await ctx.send(embed=embedVar)
-        accept = await ctx.send(f"{ctx.author.mention} which Universe would you like to explore!")
+        await private_channel.send(embed=embedVar)
+        accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
 
         def check(msg):
             return msg.author == ctx.author and msg.content in available_universes
@@ -67,7 +67,7 @@ class CrownUnlimited(commands.Cog):
             
         except:
             embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", colour=0xe91e63)
-            await ctx.send(embed=embedVar)
+            await private_channel.send(embed=embedVar)
             return
 
         starttime = time.asctime()
@@ -838,6 +838,17 @@ class CrownUnlimited(commands.Cog):
   
     @commands.command()
     async def boss(self, ctx, *args):
+        private_channel = ctx
+        guild = ctx.guild
+        if guild:
+            overwrites = {
+                        guild.default_role: discord.PermissionOverwrite(read_messages=False),
+                        guild.me: discord.PermissionOverwrite(read_messages=True),
+                    ctx.author: discord.PermissionOverwrite(read_messages=True),
+                    }
+            private_channel = await guild.create_text_channel(f'{str(ctx.author)}-tale-run', overwrites=overwrites)
+            await private_channel.send(f'{ctx.author.mention} Good luck!')
+
         t_available = False
         universeName = " ".join([*args])
         universe = db.queryUniverse({'TITLE': str(universeName)})
@@ -897,7 +908,7 @@ class CrownUnlimited(commands.Cog):
         t_available = boss['AVAILABLE']
         if not t_available:
             embedVar = discord.Embed(title=f"Boss fight unavailable. ", colour=0xe91e63)
-            await ctx.send(embed=embedVar)
+            await private_channel.send(embed=embedVar)
             return
         tarm = db.queryArm({'ARM': t_user['ARM']})
         tarm_passive = tarm['ABILITIES'][0]
@@ -1092,7 +1103,7 @@ class CrownUnlimited(commands.Cog):
         # Count Turns
         turn_total = 0
 
-        await ctx.send(f"{user1.mention}: `{o_card}` VS {t_universe} BOSS : `{t_card}` has begun!")
+        await private_channel.send(f"{user1.mention}: `{o_card}` VS {t_universe} BOSS : `{t_card}` has begun!")
         # START TURNS
         while (o_health > 0) and (t_health > 0) and t_available:
             
@@ -1105,7 +1116,7 @@ class CrownUnlimited(commands.Cog):
                     embedVar.add_field(name=f"{t_arena}", value=f"{t_arenades}")
                     embedVar.add_field(name=f"Entering the {t_arena}",value= f"{t_entrance}", inline=False)
                     embedVar.set_footer(text=f"{t_card} waits for you to strike....")
-                    await ctx.send(embed=embedVar)
+                    await private_channel.send(embed=embedVar)
                 
 
                 if o_health <= (o_max_health * .25):
@@ -1124,7 +1135,7 @@ class CrownUnlimited(commands.Cog):
                         embedVar = discord.Embed(title=f"{t_punish}")
                         embedVar.add_field(name=f"{t_arena}",value= f"{t_world}", inline=False)
                         embedVar.set_footer(text=f"{t_assault}")
-                        await ctx.send(embed=embedVar)
+                        await private_channel.send(embed=embedVar)
                     #fortitude or luck is based on health  
                     fortitude = 0.0
                     low = o_health - (o_health*.90)
@@ -1157,43 +1168,53 @@ class CrownUnlimited(commands.Cog):
                     o_used_focus = True
 
                     embedVar = discord.Embed(title=f"{o_card} focused and {healmessage}", description="All stats increased", colour=embed_color_o)
-                    await ctx.send(embed=embedVar)
+                    await private_channel.send(embed=embedVar)
 
                     if messagenumber != 2:
                         if messagenumber == 1:
                             embedVar = discord.Embed(title=f"{o_card} Stamina has recovered!", colour=embed_color_o)
-                            await ctx.send(embed=embedVar)
+                            await private_channel.send(embed=embedVar)
                         else:
                             embedVar = discord.Embed(title=f"{o_card} Stamina has recovered!", colour=embed_color_o)
-                            await ctx.send(embed=embedVar)
+                            await private_channel.send(embed=embedVar)
                     else:
                         embedVar = discord.Embed(title=f"{o_card} Stamina has recovered!", colour=embed_color_o)
-                        await ctx.send(embed=embedVar)
+                        await private_channel.send(embed=embedVar)
                     turn_total= turn_total + 1
                     turn = 1
                 else:
 
                     # UNIVERSE CARD
                     player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
-                    await ctx.send(file=player_1_card)
+                    await private_channel.send(file=player_1_card)
                     embedVar = discord.Embed(title=f"{o_card} What move will you use?", description=f"{t_card} currently has {t_health} health and {t_stamina} stamina.", colour=embed_color_o)
                     if o_used_focus and not o_used_resolve:
                         embedVar.set_author(name="Press 0 to Quit Match. Press 5 to strengthen resolve!")
                     else:
                         embedVar.set_author(name="Press 0 to Quit Match")
                     embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
-                    await ctx.send(embed=embedVar)
+                    await private_channel.send(embed=embedVar)
                     
                     # Make sure user is responding with move
+                    
                     def check(msg):
-                        return msg.author == user1 and msg.channel == ctx.channel and int(msg.content) in options
+                        if private_channel.guild:
+                            return msg.author == user1 and msg.channel == private_channel and int(msg.content) in options
+                        else:
+                            return msg.author == user1 and int(msg.content) in options
+
                     try:
                         msg = await self.bot.wait_for("message",timeout=60.0, check=check)
 
                         # calculate data based on selected move
                         if int(msg.content) == 0:
                             o_health=0
-                            await ctx.send(f"{ctx.author.mention} has fled the battle...")
+                            
+                            if private_channel.guild:
+                                await private_channel.send(f"{ctx.author.mention} has fled the battle...")
+                                await discord.TextChannel.delete(private_channel, reason=None)
+                            else:
+                                await private_channel.send(f"You fled the battle...")
                             return
                         if int(msg.content) == 1:
                             dmg = damage_cal(o_card, o_1, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina)
@@ -1214,7 +1235,7 @@ class CrownUnlimited(commands.Cog):
                                     embedVar = discord.Embed(title=f"`{t_card}` Snarls", description=f"{t_rebuke}", colour=0xe91e63)
                                     embedVar.add_field(name=f"`{o_card}` Says", value="You have not faced me.")
                                     embedVar.set_footer(text=f"{t_card} enrages in anticipation of your next attack!")
-                                    await ctx.send(embed=embedVar)
+                                    await private_channel.send(embed=embedVar)
                                     
 
                                 #fortitude or luck is based on health  
@@ -1234,13 +1255,13 @@ class CrownUnlimited(commands.Cog):
                                 o_used_resolve = True 
 
                                 embedVar = discord.Embed(title=f"{o_card} strengthened resolve!", colour=embed_color_o)
-                                await ctx.send(embed=embedVar)
+                                await private_channel.send(embed=embedVar)
                                 turn_total= turn_total + 1
                                 turn=1
                             else:
                                 emessage = m.CANNOT_USE_RESOLVE
                                 embedVar = discord.Embed(title=emessage, description=f"Entering `Resolved State` sacrifices a turn to power up even greater and regain `Stamina`!", colour=0xe91e63)
-                                await ctx.send(embed=embedVar)
+                                await private_channel.send(embed=embedVar)
                                 turn=0
 
                         if int(msg.content) !=5:
@@ -1266,14 +1287,14 @@ class CrownUnlimited(commands.Cog):
                                     o_stamina = o_stamina - int(dmg['STAMINA_USED'])
 
                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
-                                    await ctx.send(embed=embedVar)
+                                    await private_channel.send(embed=embedVar)
                                     turn_total= turn_total + 1
                                     turn=1
                                 elif dmg['DMG'] == 0:
                                     o_stamina = o_stamina - int(dmg['STAMINA_USED'])
 
                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
-                                    await ctx.send(embed=embedVar)
+                                    await private_channel.send(embed=embedVar)
                                     turn_total= turn_total + 1
                                     turn=1
                                 else:
@@ -1283,18 +1304,19 @@ class CrownUnlimited(commands.Cog):
                                     o_stamina = o_stamina - dmg['STAMINA_USED']
 
                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
-                                    await ctx.send(embed=embedVar)
+                                    await private_channel.send(embed=embedVar)
                                     turn_total= turn_total + 1
                                     turn=1
                             else:
                                 emessage = m.NOT_ENOUGH_STAMINA
                                 embedVar = discord.Embed(title=emessage, description=f"Use abilities to Increase `STAM` or enter `FOCUS STATE`!", colour=0xe91e63)
-                                await ctx.send(embed=embedVar)
+                                await private_channel.send(embed=embedVar)
                                 turn=0
-                    except:
-                        emessage = m.DID_NOT_WORK
-                        embedVar = discord.Embed(title=emessage, description=f"Try Again", colour=0xe91e63)
-                        await ctx.send(embed=embedVar)
+                    except asyncio.TimeoutError:
+                        await private_channel.send(f"{ctx.author.mention} {m.BOSS_ENDED}")
+                        if private_channel.guild:
+                            await discord.TextChannel.delete(private_channel, reason=None)
+                        return
             #PLayer 2 Turn Start
             elif turn == 1:
 
@@ -1303,7 +1325,7 @@ class CrownUnlimited(commands.Cog):
                     embedVar = discord.Embed(title=f"`{t_card}` Says : ", description=f"{t_welcome}", colour=0xe91e63)
                     embedVar.add_field(name=f"`{o_card}` Braces: ",value=f"{t_feeling}")
                     embedVar.set_footer(text=f" The {t_card} begins his assault")
-                    await ctx.send(embed=embedVar)
+                    await private_channel.send(embed=embedVar)
                 
                 if t_health <= (t_max_health * .25):
                     embed_color_t=0xe74c3c
@@ -1321,7 +1343,7 @@ class CrownUnlimited(commands.Cog):
                         embedVar = discord.Embed(title=f"`{t_card}` Says ", description=f"{t_powerup}", colour=0xe91e63)
                         embedVar.add_field(name=f"A great aura starts to envelop `{t_card}` ",value= f"{t_aura}")
                         embedVar.set_footer(text=f"{t_card} Says: 'Now, are you ready for a real fight?'")
-                        await ctx.send(embed=embedVar)
+                        await private_channel.send(embed=embedVar)
 
                     fortitude = 0.0
                     low = t_health - (t_health*.90)
@@ -1354,30 +1376,30 @@ class CrownUnlimited(commands.Cog):
                     t_defense =  t_defense + t_defensecalc
                     t_used_focus=True
                     embedVar = discord.Embed(title=f"{t_card} focused and {healmessage}", description="All stats increased", colour=embed_color_t)
-                    await ctx.send(embed=embedVar)
+                    await private_channel.send(embed=embedVar)
 
                     if messagenumber != 2:
                         if messagenumber == 1:
                             embedVar = discord.Embed(title=f"{t_card} Stamina has recovered", colour=embed_color_t)
-                            await ctx.send(embed=embedVar)
+                            await private_channel.send(embed=embedVar)
                         else:
                             embedVar = discord.Embed(title=f"{t_card} Stamina has recovered", colour=embed_color_t)
-                            await ctx.send(embed=embedVar)
+                            await private_channel.send(embed=embedVar)
                     else:
                         embedVar = discord.Embed(title=f"{t_card} Stamina has recovered", colour=embed_color_t)
-                        await ctx.send(embed=embedVar)
+                        await private_channel.send(embed=embedVar)
                     turn_total= turn_total + 1
                     turn=0
                 else:
                     # UNIVERSE CARD
                     player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus)
-                    await ctx.send(file=player_2_card)
+                    await private_channel.send(file=player_2_card)
 
                     embedVar = discord.Embed(title=f"{t_card} What move will you use?", description=f"{o_card} currently has {o_health} health and {o_stamina} stamina.", colour=embed_color_t)
                     if t_used_focus and not t_used_resolve:
                         embedVar.set_author(name="Press 5 to strengthen resolve!")
                     embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
-                    await ctx.send(embed=embedVar)
+                    await private_channel.send(embed=embedVar)
                     aiMove = 0
                     
 
@@ -1481,7 +1503,7 @@ class CrownUnlimited(commands.Cog):
                                 embedVar = discord.Embed(title=f"{t_card} is Resolved", description=f"{t_rmessage}", colour=0xe91e63)
                                 embedVar.add_field(name=f"{o_card} are you ready?", value="This will not be easy.")
                                 embedVar.set_footer(text=f"{o_card} take advantage of its current state and end this !")
-                                await ctx.send(embed=embedVar)
+                                await private_channel.send(embed=embedVar)
                             #fortitude or luck is based on health  
                             fortitude = 0.0
                             low = t_health - (t_health * .75)
@@ -1498,11 +1520,11 @@ class CrownUnlimited(commands.Cog):
                             t_defense = round(t_defense - t_resolve_defense)
                             t_used_resolve=True
                             embedVar = discord.Embed(title=f"{t_card} strengthened resolve!", colour=embed_color_t)
-                            await ctx.send(embed=embedVar)
+                            await private_channel.send(embed=embedVar)
                             turn_total= turn_total + 1
                             turn=0
                         else:
-                            await ctx.send(m.CANNOT_USE_RESOLVE)
+                            await private_channel.send(m.CANNOT_USE_RESOLVE)
                             turn=1
 
                     if int(aiMove) !=5:
@@ -1527,13 +1549,13 @@ class CrownUnlimited(commands.Cog):
                                     o_stamina = round(o_stamina - dmg['DMG'])
                                 t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                 embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
-                                await ctx.send(embed=embedVar)
+                                await private_channel.send(embed=embedVar)
                                 turn_total= turn_total + 1
                                 turn = 0
                             elif dmg['DMG'] == 0:
                                 t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                 embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
-                                await ctx.send(embed=embedVar)
+                                await private_channel.send(embed=embedVar)
                                 turn_total= turn_total + 1
                                 turn=0
                             else:
@@ -1543,12 +1565,12 @@ class CrownUnlimited(commands.Cog):
                                 t_stamina = t_stamina - int(dmg['STAMINA_USED'])
 
                                 embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
-                                await ctx.send(embed=embedVar)
+                                await private_channel.send(embed=embedVar)
                                 turn_total= turn_total + 1
                                 turn=0
 
                         else:
-                            await ctx.send(m.NOT_ENOUGH_STAMINA)
+                            await private_channel.send(m.NOT_ENOUGH_STAMINA)
                             turn = 1
         if botActive:
             end_message="Use the #end command to end the tutorial lobby"
@@ -1556,7 +1578,7 @@ class CrownUnlimited(commands.Cog):
             end_message="Try Again"
         # End the match
         if o_health <= 0:
-            # await ctx.send(f":zap: {user2.mention} you win the match!")
+            # await private_channel.send(f":zap: {user2.mention} you win the match!")
             wintime = time.asctime()
             h_playtime = int(wintime[11:13])
             m_playtime = int(wintime[14:16])
@@ -1571,13 +1593,16 @@ class CrownUnlimited(commands.Cog):
                 embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
             else: 
                 embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
-            await ctx.send(embed=embedVar)
+            await private_channel.send(embed=embedVar)
             if botActive:                    
                 embedVar = discord.Embed(title=f"PLAY AGAIN", description=f"{t_card} was too powerful level up your character and try again...", colour=0xe74c3c)
                 embedVar.set_author(name=f"You Lost...")
                 embedVar.add_field(name="Tips!", value="Equiping stronger `TITLES` and `ARMS` will make you character tougher in a fight!")
                 embedVar.set_footer(text="The #shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
-                await ctx.send(embed=embedVar)
+                await private_channel.send(embed=embedVar)
+            time.sleep(10)
+            if private_channel.guild:
+                await discord.TextChannel.delete(private_channel, reason=None)
 
         elif t_health <=0:
             uid = o_DID
@@ -1596,19 +1621,25 @@ class CrownUnlimited(commands.Cog):
                 embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
             else: 
                 embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
-            await ctx.send(embed=embedVar)
+            await private_channel.send(embed=embedVar)
             if botActive:                    
                 embedVar = discord.Embed(title=f"BOSS DEFEATED", description=f"Boss Victories are added to your player profile! Defeat {t_card} again to earn exotic loot!", colour=0xe91e63)
                 embedVar.set_author(name=f"Congratulations You Defeated {t_card}!")
                 embedVar.add_field(name="Tips!", value=f"Run #lookup {o_user} to view your Boss Souls")
                 embedVar.set_footer(text="Bosses have a chance to drop :coin:, ARMS, TITLES, and even BOSS CARDS:eyes:")
-                await ctx.send(embed=embedVar)
+                await private_channel.send(embed=embedVar)
             
             if t_card not in sowner['BOSS_WINS']:
                 await bless(1000, str(ctx.author))
                 query = {'DISNAME': sowner['DISNAME']}
                 new_query = {'$addToSet': {'BOSS_WINS': t_card}}
                 resp = db.updateUserNoFilter(query, new_query)
+                time.sleep(10)
+                if private_channel.guild:
+                    await discord.TextChannel.delete(private_channel, reason=None)
+            time.sleep(10)
+            if private_channel.guild:
+                await discord.TextChannel.delete(private_channel, reason=None)
 
 
     #senpai ai Template
