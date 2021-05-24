@@ -231,7 +231,7 @@ class Profile(commands.Cog):
         for card in resp:
             if card['UNIVERSE'] in available_universes:
                 # Don't produce cards you can't afford
-                if card['PRICE'] != 0 and card['PRICE'] < (vault['BALANCE'] + 1000):
+                if card['PRICE'] != 0 and card['PRICE'] < (vault['BALANCE'] + 500):
                     if card['NAME'] not in vault['CARDS']:
                         cards.append({'NAME': card['NAME'], 'PRICE': card['PRICE'], 'UNIVERSE': card['UNIVERSE'], 'STOCK': card['STOCK']})
         
@@ -246,7 +246,7 @@ class Profile(commands.Cog):
         title_text_list = []
         for title in title_resp:
             if title['UNIVERSE'] in available_universes:
-                if title['PRICE'] != 0 and title['PRICE'] < (vault['BALANCE'] + 1000):
+                if title['PRICE'] != 0 and title['PRICE'] < (vault['BALANCE'] + 500):
                     if title['TITLE'] not in vault['TITLES']:
                         titles.append({'TITLE': title['TITLE'], 'PRICE': title['PRICE'], 'UNIVERSE': title['UNIVERSE'], 'STOCK': title['STOCK']})
         for title in titles:
@@ -261,7 +261,7 @@ class Profile(commands.Cog):
         arm_text_list = []
         for arm in arm_resp:
             if arm['UNIVERSE'] in available_universes:
-                if arm['PRICE'] != 0 and arm['PRICE'] < (vault['BALANCE'] + 1000):
+                if arm['PRICE'] != 0 and arm['PRICE'] < (vault['BALANCE'] + 500):
                     if arm['ARM'] not in vault['ARMS']:
                         arms.append({'ARM': arm['ARM'], 'PRICE': arm['PRICE'], 'UNIVERSE': arm['UNIVERSE'], 'STOCK': arm['STOCK']})
         
@@ -283,7 +283,7 @@ class Profile(commands.Cog):
 
         embedVar3 = discord.Embed(title=f":shopping_cart: Arm Shop", description=f"Current Balance :coin:{vault['BALANCE']}\n`#viewarm arm name` - View Arm Stats\n`#buyarm arm name` - Buy Arm", colour=0xf1c40f, value='Page 3')
         embedVar3.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236723/PCG%20LOGOS%20AND%20RESOURCES/Party_Chat_Shop.png")
-        embedVar3.add_field(name=":shopping_bags: Cards", value="\n".join(arm_text_list))
+        embedVar3.add_field(name=":shopping_bags: Arm", value="\n".join(arm_text_list))
         embedVar3.set_footer(text="Stock updated every day")
 
         paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
