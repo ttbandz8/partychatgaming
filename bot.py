@@ -113,7 +113,7 @@ async def r(ctx):
    if response:
 
       embedVar = discord.Embed(title=f"Welcome to Party Chat Gaming!", colour=0xe91e63)
-      embedVar.set_author(name="User .solo to play Crown Unlimited undisturbed. Remember to come back and play with your friends!")
+      embedVar.set_author(name="Use .solo to play Crown Unlimited undisturbed. Remember to come back and play with your friends!")
       embedVar.add_field(name="#vault", value="Check your equipped `card`, `title` and `arm`")
       embedVar.add_field(name="#shop", value="Purchase your starting `card`, `title` and `arm`")
       embedVar.add_field(name="#senpaibattle", value="Start tutorial on Crown Unlimited")
