@@ -111,7 +111,7 @@ class CrownUnlimited(commands.Cog):
             o_stamina = o['STAM']
             o_max_stamina = o['STAM']
             o_moveset = o['MOVESET']
-            o_attack = o['ATK'] + (2 * currentopponent)
+            o_attack = o['ATK'] + (2000 * currentopponent)
             o_defense = o['DEF'] + (3 * currentopponent)
             o_type = o['TYPE']
             o_accuracy = o['ACC']
@@ -788,6 +788,7 @@ class CrownUnlimited(commands.Cog):
                 if private_channel.guild:
                     await discord.TextChannel.delete(private_channel, reason=None)
             elif t_health <=0:
+                
                 uid = o_DID
                 ouser = await self.bot.fetch_user(uid)
                 wintime = time.asctime()
@@ -795,14 +796,14 @@ class CrownUnlimited(commands.Cog):
                 m_playtime = int(wintime[14:16])
                 s_playtime = int(wintime[17:19])
                 gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
+                drop_response = await drops(ctx.author, selected_universe)
                 if currentopponent != (total_legends - 1):
                     if botActive:                    
                         embedVar = discord.Embed(title=f"VICTORY", description=f"{t_card} has been defeated!", colour=0xe91e63)
                         embedVar.add_field(name="Continue...", value="Continue down the path to beat the Universe!")
-                        embedVar.set_footer(text="The #shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
+                        embedVar.add_field(name="Reward", value=f"{drop_response}")
                         await private_channel.send(embed=embedVar)
                     
-                    await bless(5, ctx.author)
 
                     emojis = ['👍', '👎']
                     accept = await private_channel.send(f"{ctx.author.mention} would you like to continue?")
@@ -822,35 +823,13 @@ class CrownUnlimited(commands.Cog):
                             await discord.TextChannel.delete(private_channel, reason=None)
                         return
 
-                        message = ""
-
-                # item_drop = 0 # Miss
-                # card_drop = 7 # Lower Damage
-                # med_hit = 11 # Medium Damage
-                # standard_hit = 19 # Standard Damage
-                # high_hit = 20 # Crit Hit
-                # hit_roll = random.randint(0,20)
-
-                # if hit_roll <= miss_hit:
-                #     true_dmg=0
-                #     message=f'`{move}` used! It misses!'
-                # elif hit_roll <=low_hit and hit_roll > miss_hit:
-                #     true_dmg = round(true_dmg * .75)
-                #     message=f'`{move}` used! It chips for {true_dmg}! :anger:'
-                # elif hit_roll <=med_hit and hit_roll > low_hit:
-                #     true_dmg = round(true_dmg * .85)
-                #     message=f'`{move}` used! It connects for {true_dmg}! :bangbang:'
-                # elif hit_roll <=standard_hit and hit_roll > med_hit:
-                #     true_dmg = round(true_dmg)
-                #     message=f'`{move}` used! It hits for {true_dmg}! :anger_right:'
-                # elif hit_roll == 20:
-                #     true_dmg = round(true_dmg * 2)
-                #     message=f"`{card}` used `{move}`! :boom:   IT CRITICALLY HITS FOR {true_dmg}!! :boom: "
 
                 if t_card == legends[(total_legends - 1)]:
                     embedVar = discord.Embed(title=f"UNIVERSE CONQUERED", description=f"Universe {selected_universe} has been conquered", colour=0xe91e63)
                     embedVar.set_author(name=f"New Universes have been unlocked to explore!")
-                    embedVar.set_footer(text="The #shop has been updated with new CARDS, TITLES and ARMS! ")
+                    embedVar.add_field(name="Reward", value=f"{drop_response}")
+                    embedVar.add_field(name="Additional Reward", value=f"You earned additional rewards in your vault! Take a look.")
+                    embedVar.set_footer(text="The #shop has been updated with new CARDS, TITLES and ARMS!")
                     upload_query={'DISNAME': str(ctx.author)}
                     new_upload_query={'$addToSet': {'CROWN_TALES': selected_universe}}
                     r=db.updateUserNoFilter(upload_query, new_upload_query)
@@ -864,6 +843,7 @@ class CrownUnlimited(commands.Cog):
                     if private_channel.guild:
                         await discord.TextChannel.delete(private_channel, reason=None)
   
+
     @commands.command()
     async def boss(self, ctx, *args):
         private_channel = ctx
@@ -3568,3 +3548,54 @@ async def curse(amount, user):
          db.updateVaultNoFilter(vault, update_query)
       else:
          print("cant find vault")
+
+async def drops(player, universe):
+    all_available_drop_cards = db.queryDropCards(universe)
+    all_available_drop_titles = db.queryDropTitles(universe)
+    all_available_drop_arms = db.queryDropArms(universe)
+    vault_query = {'OWNER' : str(player)}
+
+    cards = []
+    titles = []
+    arms = []
+
+    for card in all_available_drop_cards:
+        cards.append(card['NAME'])
+
+    for title in all_available_drop_titles:
+        titles.append(title['TITLE'])
+
+    for arm in all_available_drop_arms:
+        arms.append(arm['ARM'])
+
+    c = len(cards) - 1
+    t = len(titles) - 1
+    a = len(arms) - 1
+
+    rand_card = random.randint(0, c)
+    rand_title = random.randint(0, t)
+    rand_arm = random.randint(0, a)
+
+    gold_drop = 90 #
+    title_drop = 95 #
+    arm_drop = 98 #
+    card_drop = 100 #
+    
+    drop_rate = random.randint(0,100)
+    print(drop_rate)
+    if drop_rate <= gold_drop:
+        await bless(5, player)
+        return "You earned :coin:5!"
+        print("Gold Drop")
+    elif drop_rate <= title_drop and drop_rate > gold_drop:
+        response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'TITLES': str(titles[rand_title])}})
+        return f"You earned {titles[rand_title]}"
+        print("Item Drop")
+    elif drop_rate <= arm_drop and drop_rate > title_drop:
+        response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'ARMS': str(arms[rand_arm])}})
+        return f"You earned {arms[rand_arm]}"
+        print("Arm Drop")
+    elif drop_rate <= card_drop and drop_rate > arm_drop:
+        response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(cards[rand_card])}})
+        return f"You earned {cards[rand_card]}"
+        print("Card Drop")

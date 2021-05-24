@@ -226,6 +226,10 @@ def altQueryShopCards(args):
     data = cards_col.find({'TOURNAMENT_REQUIREMENTS': 0})
     return data 
 
+def queryDropCards(args):
+    data = cards_col.find({'UNIVERSE': args})
+    return data 
+
 def queryCard(query):
     data = cards_col.find_one(query)
     return data
@@ -323,6 +327,10 @@ def queryTitle(query):
     data = titles_col.find_one(query)
     return data
 
+def queryDropTitles(args):
+    data = titles_col.find({'UNIVERSE': args})
+    return data 
+
 def queryTournamentTitles():
     data = titles_col.find({'TOURNAMENT_REQUIREMENTS': {'$gt': 0}})
     return data
@@ -388,6 +396,10 @@ def queryAllArms():
 def queryArm(query):
     data = arm_col.find_one(query)
     return data
+
+def queryDropArms(args):
+    data = arm_col.find({'UNIVERSE': args})
+    return data 
 
 def queryTournamentArms():
     data = arm_col.find({'TOURNAMENT_REQUIREMENTS': {'$gt': 0}})
