@@ -270,15 +270,6 @@ class Profile(commands.Cog):
                 arm_text_list.append(f"{arm['ARM']}: :coin:{arm['PRICE']} " + f"_{arm['UNIVERSE']}_ **Out Of Stock**")
             else:
                 arm_text_list.append(f"{arm['ARM']}: :coin:{arm['PRICE']} " + f"_{arm['UNIVERSE']}_")
-
-
-
-        # # Upon adding more cards, be sure it increate the number below
-        # arms_to_str = dict(ChainMap(*arms))
-        # n = dict(sorted(arms_to_str.items(), key=lambda item: item[1]))
-        # arms_sorted_list = "\n".join(f'{k} : ' +  f" :coin:{'{:,}'.format(v)}"  for k,v in n.items())
-        # arms_list_array = arms_sorted_list.split("\n")
-        # arms_broken_up = np.array_split(arms_list_array, 5)
         
         embedVar1 = discord.Embed(title=f":shopping_cart: Card Shop", description=f"Current Balance :coin:{vault['BALANCE']}\n`#viewcard card name` - View Cards\n`#buycard card name` - Buy Card", colour=0x2ecc71, value='Page 1')
         embedVar1.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236723/PCG%20LOGOS%20AND%20RESOURCES/Party_Chat_Shop.png")
@@ -293,8 +284,6 @@ class Profile(commands.Cog):
         embedVar3 = discord.Embed(title=f":shopping_cart: Arm Shop", description=f"Current Balance :coin:{vault['BALANCE']}\n`#viewarm arm name` - View Arm Stats\n`#buyarm arm name` - Buy Arm", colour=0xf1c40f, value='Page 3')
         embedVar3.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236723/PCG%20LOGOS%20AND%20RESOURCES/Party_Chat_Shop.png")
         embedVar3.add_field(name=":shopping_bags: Cards", value="\n".join(arm_text_list))
-        # embedVar3.add_field(name=":shopping_bags: Available Titles", value="\n".join(titles_broken_up[i]))
-        # embedVar3.add_field(name=":shopping_bags: Available Arms", value="\n".join(arms_broken_up[i]))
         embedVar3.set_footer(text="Stock updated every day")
 
         paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
