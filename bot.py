@@ -224,6 +224,7 @@ async def curse(amount, user):
 @bot.command()
 @commands.check(validate_user)
 async def solo(ctx):
+   await ctx.send(f"{ctx.author.mention} check your dms. ")
    await DM(ctx, ctx.author, "Continue your Crown Unlimited journey here, undisturbed. All Crown Unlimited commands are functional here. ")
 
 if config('ENV') == "production":
