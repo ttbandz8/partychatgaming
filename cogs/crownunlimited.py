@@ -111,7 +111,7 @@ class CrownUnlimited(commands.Cog):
             o_stamina = o['STAM']
             o_max_stamina = o['STAM']
             o_moveset = o['MOVESET']
-            o_attack = o['ATK'] + (2000 * currentopponent)
+            o_attack = o['ATK'] + (2 * currentopponent)
             o_defense = o['DEF'] + (3 * currentopponent)
             o_type = o['TYPE']
             o_accuracy = o['ACC']
