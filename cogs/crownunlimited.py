@@ -773,7 +773,6 @@ class CrownUnlimited(commands.Cog):
                     await bless(5, ctx.author)
 
                     emojis = ['👍', '👎']
-                    await main.DM(ctx, user1, f"{ctx.author.mention}" + f"would you like to continue?")
                     accept = await ctx.send(f"{ctx.author.mention} would you like to continue?")
                     for emoji in emojis:
                         await accept.add_reaction(emoji)
@@ -3086,9 +3085,6 @@ async def score(owner, user: User):
         reciever = db.queryUser({'DISNAME': str(user)})
         name = reciever['DISNAME']
         message = ":one: You Scored, Don't Let Up :one:"
-        await main.DM(owner, user, message)
-        
-        message = ""
 
         if response:
             message = ":one:"
