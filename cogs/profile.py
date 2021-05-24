@@ -213,64 +213,89 @@ class Profile(commands.Cog):
 
     @commands.command()
     async def shop(self, ctx):
+        all_universes = db.queryAllUniverse()
+        user = db.queryUser({'DISNAME': str(ctx.author)})
+        available_universes = []
+        for uni in all_universes:
+            if uni['PREREQUISITE'] in user['CROWN_TALES']:
+                available_universes.append(uni['TITLE'])
+        
+        # Pull all cards that don't require tournaments
         resp = db.queryShopCards()
+
+        #
         vault_query = {'OWNER' : str(ctx.author)}
         vault = db.altQueryVault(vault_query)
         cards = []
-        unavailable_cards = []
+        card_text_list = []
         for card in resp:
-            if card['PRICE'] != 0 and card['PRICE'] < (vault['BALANCE'] + 1000):
-                if card['NAME'] not in vault['CARDS']:
-                    cards.append({card['NAME']: card['PRICE']})
+            if card['UNIVERSE'] in available_universes:
+                # Don't produce cards you can't afford
+                if card['PRICE'] != 0 and card['PRICE'] < (vault['BALANCE'] + 1000):
+                    if card['NAME'] not in vault['CARDS']:
+                        cards.append({'NAME': card['NAME'], 'PRICE': card['PRICE'], 'UNIVERSE': card['UNIVERSE'], 'STOCK': card['STOCK']})
+        
+        for card in cards:
+            if card['STOCK'] == 0:
+                card_text_list.append(f"{card['NAME']}: :coin:{card['PRICE']} " + f"_{card['UNIVERSE']}_ **Out Of Stock**")
+            else:
+                card_text_list.append(f"{card['NAME']}: :coin:{card['PRICE']} " + f"_{card['UNIVERSE']}_")
 
         title_resp = db.queryShopTitles()
         titles = []
-        unavailable_titles = []
+        title_text_list = []
         for title in title_resp:
-            if title['PRICE'] != 0 and title['PRICE'] < (vault['BALANCE'] + 1000):
-                if title['TITLE'] not in vault['TITLES']:
-                    titles.append({title['TITLE']: title['PRICE']})
-
+            if title['UNIVERSE'] in available_universes:
+                if title['PRICE'] != 0 and title['PRICE'] < (vault['BALANCE'] + 1000):
+                    if title['TITLE'] not in vault['TITLES']:
+                        titles.append({'TITLE': title['TITLE'], 'PRICE': title['PRICE'], 'UNIVERSE': title['UNIVERSE'], 'STOCK': title['STOCK']})
+        for title in titles:
+            if title['STOCK'] == 0:
+                title_text_list.append(f"{title['TITLE']}: :coin:{title['PRICE']} " + f"_{title['UNIVERSE']}_ **Out Of Stock**")
+            else:
+                title_text_list.append(f"{title['TITLE']}: :coin:{title['PRICE']} " + f"_{title['UNIVERSE']}_")
+        
+        
         arm_resp = db.queryShopArms()
         arms = []
-        unavailable_arms = []
+        arm_text_list = []
         for arm in arm_resp:
-            if arm['PRICE'] != 0 and arm['PRICE'] < (vault['BALANCE'] + 1000):
-                if arm['ARM'] not in vault['ARMS']:
-                    arms.append({arm['ARM']: arm['PRICE']})
-
+            if arm['UNIVERSE'] in available_universes:
+                if arm['PRICE'] != 0 and arm['PRICE'] < (vault['BALANCE'] + 1000):
+                    if arm['ARM'] not in vault['ARMS']:
+                        arms.append({'ARM': arm['ARM'], 'PRICE': arm['PRICE'], 'UNIVERSE': arm['UNIVERSE'], 'STOCK': arm['STOCK']})
         
-        cards_to_str = dict(ChainMap(*cards))
-        n = dict(sorted(cards_to_str.items(), key=lambda item: item[1]))
-        cards_sorted_list = "\n".join(f'{k} : ' +  f" :coin:{'{:,}'.format(v)}"  for k,v in n.items())
-        cards_list_array = cards_sorted_list.split("\n")
-        
-        # Upon adding more cards, be sure it increate the number below
-        cards_broken_up = np.array_split(cards_list_array, 5)
+        for arm in arms:
+            if arm['STOCK'] == 0:
+                arm_text_list.append(f"{arm['ARM']}: :coin:{arm['PRICE']} " + f"_{arm['UNIVERSE']}_ **Out Of Stock**")
+            else:
+                arm_text_list.append(f"{arm['ARM']}: :coin:{arm['PRICE']} " + f"_{arm['UNIVERSE']}_")
 
-        # Upon adding more cards, be sure it increate the number below
-        titles_to_str = dict(ChainMap(*titles))
-        n = dict(sorted(titles_to_str.items(), key=lambda item: item[1]))
-        titles_sorted_list = "\n".join(f'{k} : ' +  f" :coin:{'{:,}'.format(v)}"  for k,v in n.items())
-        titles_list_array = titles_sorted_list.split("\n")
-        titles_broken_up = np.array_split(titles_list_array, 5)
 
-        # Upon adding more cards, be sure it increate the number below
-        arms_to_str = dict(ChainMap(*arms))
-        n = dict(sorted(arms_to_str.items(), key=lambda item: item[1]))
-        arms_sorted_list = "\n".join(f'{k} : ' +  f" :coin:{'{:,}'.format(v)}"  for k,v in n.items())
-        arms_list_array = arms_sorted_list.split("\n")
-        arms_broken_up = np.array_split(arms_list_array, 5)
+
+        # # Upon adding more cards, be sure it increate the number below
+        # arms_to_str = dict(ChainMap(*arms))
+        # n = dict(sorted(arms_to_str.items(), key=lambda item: item[1]))
+        # arms_sorted_list = "\n".join(f'{k} : ' +  f" :coin:{'{:,}'.format(v)}"  for k,v in n.items())
+        # arms_list_array = arms_sorted_list.split("\n")
+        # arms_broken_up = np.array_split(arms_list_array, 5)
         
-        embed_list = []
-        for i in range(0, len(titles_broken_up)):
-            globals()['embedVar%s' % i] = discord.Embed(title=f":shopping_cart: Flex Shop", description=f"Current Balance :coin:{vault['BALANCE']}\n`#viewcard card` - View Cards\n`#viewtitle title` - View Title Stats\n`#viewarm arm` - View Arm Stats\n`#buycard` - Buy Card\n`#buytitle title` - Buy Title\n`#buyarm arm` - Buy Arm", colour=0x7289da, value='Page 1')
-            globals()['embedVar%s' % i].set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236723/PCG%20LOGOS%20AND%20RESOURCES/Party_Chat_Shop.png")
-            globals()['embedVar%s' % i].add_field(name=":shopping_bags: Available Cards", value="\n".join(cards_broken_up[i]))
-            globals()['embedVar%s' % i].add_field(name=":shopping_bags: Available Titles", value="\n".join(titles_broken_up[i]))
-            globals()['embedVar%s' % i].add_field(name=":shopping_bags: Available Arms", value="\n".join(arms_broken_up[i]))
-            globals()['embedVar%s' % i].set_footer(text="Stock updated every day")
-            embed_list.append(globals()['embedVar%s' % i])
+        embedVar1 = discord.Embed(title=f":shopping_cart: Card Shop", description=f"Current Balance :coin:{vault['BALANCE']}\n`#viewcard card name` - View Cards\n`#buycard card name` - Buy Card", colour=0x2ecc71, value='Page 1')
+        embedVar1.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236723/PCG%20LOGOS%20AND%20RESOURCES/Party_Chat_Shop.png")
+        embedVar1.add_field(name=":shopping_bags: Cards", value="\n".join(card_text_list))
+        embedVar1.set_footer(text="Stock updated every day")
+
+        embedVar2 = discord.Embed(title=f":shopping_cart: Title Shop", description=f"Current Balance :coin:{vault['BALANCE']}\n`#viewtitle title name` - View Title Stats\n`#buytitle title name` - Buy Title", colour=0x3498db, value='Page 2')
+        embedVar2.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236723/PCG%20LOGOS%20AND%20RESOURCES/Party_Chat_Shop.png")
+        embedVar2.add_field(name=":shopping_bags: Titles", value="\n".join(title_text_list))
+        embedVar2.set_footer(text="Stock updated every day")
+
+        embedVar3 = discord.Embed(title=f":shopping_cart: Arm Shop", description=f"Current Balance :coin:{vault['BALANCE']}\n`#viewarm arm name` - View Arm Stats\n`#buyarm arm name` - Buy Arm", colour=0xf1c40f, value='Page 3')
+        embedVar3.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236723/PCG%20LOGOS%20AND%20RESOURCES/Party_Chat_Shop.png")
+        embedVar3.add_field(name=":shopping_bags: Cards", value="\n".join(arm_text_list))
+        # embedVar3.add_field(name=":shopping_bags: Available Titles", value="\n".join(titles_broken_up[i]))
+        # embedVar3.add_field(name=":shopping_bags: Available Arms", value="\n".join(arms_broken_up[i]))
+        embedVar3.set_footer(text="Stock updated every day")
 
         paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
         paginator.add_reaction('⏮️', "first")
@@ -278,7 +303,7 @@ class Profile(commands.Cog):
         paginator.add_reaction('🔐', "lock")
         paginator.add_reaction('⏩', "next")
         paginator.add_reaction('⏭️', "last")
-        embeds = embed_list
+        embeds = [embedVar1,embedVar2,embedVar3]
         await paginator.run(embeds)
 
 
