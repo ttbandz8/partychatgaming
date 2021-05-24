@@ -373,7 +373,9 @@ class CrownUnlimited(commands.Cog):
                         await ctx.send(file=player_1_card)
                         embedVar = discord.Embed(title=f"{o_card} What move will you use?", description=f"{t_card} currently has {t_health} health and {t_stamina} stamina.", colour=embed_color_o)
                         if o_used_focus and not o_used_resolve:
-                            embedVar.set_author(name="Press 5 to strengthen resolve!")
+                            embedVar.set_author(name="Press 0 to Quit Match. Press 5 to strengthen resolve!")
+                        else:
+                            embedVar.set_author(name="Press 0 to Quit Match")
                         embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
                         await ctx.send(embed=embedVar)
                         
@@ -553,7 +555,9 @@ class CrownUnlimited(commands.Cog):
 
                         embedVar = discord.Embed(title=f"{t_card} What move will you use?", description=f"{o_card} currently has {o_health} health and {o_stamina} stamina.", colour=embed_color_t)
                         if t_used_focus and not t_used_resolve:
-                            embedVar.set_author(name="Press 5 to strengthen resolve!")
+                            embedVar.set_author(name="Press 0 to Quit Match. Press 5 to strengthen resolve!")
+                        else:
+                            embedVar.set_author(name="Press 0 to Quit Match")
                         embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
                         await ctx.send(embed=embedVar)
                         aiMove = 0
@@ -1150,7 +1154,9 @@ class CrownUnlimited(commands.Cog):
                     await ctx.send(file=player_1_card)
                     embedVar = discord.Embed(title=f"{o_card} What move will you use?", description=f"{t_card} currently has {t_health} health and {t_stamina} stamina.", colour=embed_color_o)
                     if o_used_focus and not o_used_resolve:
-                        embedVar.set_author(name="Press 5 to strengthen resolve!")
+                        embedVar.set_author(name="Press 0 to Quit Match. Press 5 to strengthen resolve!")
+                    else:
+                        embedVar.set_author(name="Press 0 to Quit Match")
                     embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
                     await ctx.send(embed=embedVar)
                     
@@ -2546,8 +2552,10 @@ class CrownUnlimited(commands.Cog):
                             await ctx.send(file=player_1_card)
                             embedVar = discord.Embed(title=f"{o_card} What move will you use?", description=f"{t_card} currently has {t_health} health and {t_stamina} stamina.", colour=embed_color_o)
                             if o_used_focus and not o_used_resolve:
-                                embedVar.set_author(name="Press 5 to strengthen resolve!")
-                            embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use 0 to Quit")
+                                embedVar.set_author(name="Press 0 to Quit Match. Press 5 to strengthen resolve!")
+                            else:
+                                embedVar.set_author(name="Press 0 to Quit Match")
+                            embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
                             await ctx.send(embed=embedVar)
                             
                             # Make sure user is responding with move
@@ -2729,8 +2737,10 @@ class CrownUnlimited(commands.Cog):
 
                                 embedVar = discord.Embed(title=f"{t_card} What move will you use?", description=f"{o_card} currently has {o_health} health and {o_stamina} stamina.", colour=embed_color_t)
                                 if t_used_focus and not t_used_resolve:
-                                    embedVar.set_author(name="Press 5 to strengthen resolve!")
-                                embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use 0 to Quit")
+                                    embedVar.set_author(name="Press 0 to Quit Match. Press 5 to strengthen resolve!")
+                                else:
+                                    embedVar.set_author(name="Press 0 to Quit Match")
+                                embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
                                 await ctx.send(embed=embedVar)
                                 # Make sure user is responding with move
                                 def check(msg):
@@ -2839,7 +2849,9 @@ class CrownUnlimited(commands.Cog):
 
                                 embedVar = discord.Embed(title=f"{t_card} What move will you use?", description=f"{o_card} currently has {o_health} health and {o_stamina} stamina.", colour=embed_color_t)
                                 if t_used_focus and not t_used_resolve:
-                                    embedVar.set_author(name="Press 5 to strengthen resolve!")
+                                    embedVar.set_author(name="Press 0 to Quit Match. Press 5 to strengthen resolve!")
+                                else:
+                                    embedVar.set_author(name="Press 0 to Quit Match")
                                 embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
                                 await ctx.send(embed=embedVar)
                                 aiMove = 0

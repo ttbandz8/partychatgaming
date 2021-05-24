@@ -192,54 +192,39 @@ async def curse(amount, user):
       else:
          print("cant find vault")
 
-@bot.command()
-@commands.check(validate_user)
-async def addfield(ctx, collection, new_field, field_type):
-   if ctx.author.guild_permissions.administrator == True:
+# @bot.command()
+# @commands.check(validate_user)
+# async def addfield(ctx, collection, new_field, field_type):
+#    if ctx.author.guild_permissions.administrator == True:
 
-      if field_type == 'string':
-         field_type = ''
-      elif field_type == 'int':
-         field_type = 0
-      elif field_type == 'list':
-         field_type = []
-      elif field_type == 'bool':
-         field_type = False
+#       if field_type == 'string':
+#          field_type = ''
+#       elif field_type == 'int':
+#          field_type = 0
+#       elif field_type == 'list':
+#          field_type = []
+#       elif field_type == 'bool':
+#          field_type = False
       
-      if collection == 'cards':
-         response = db.updateManyCards({'$set': {new_field: field_type}})
-      elif collection == 'titles':
-         response = db.updateManyTitles({'$set': {new_field: field_type}})
-      elif collection == 'vaults':
-         response = db.updateManyVaults({'$set': {new_field: field_type}})
-      elif collection == 'users':
-         response = db.updateManyUsers({'$set': {new_field: field_type}})
-      elif collection == 'universe':
-         response = db.updateManyUniverses({'$set': {new_field: field_type}})
-      elif collection == 'boss':
-         response = db.updateManyBosses({'$set': {new_field: field_type}})
-   else:
-      print(m.ADMIN_ONLY_COMMAND)
+#       if collection == 'cards':
+#          response = db.updateManyCards({'$set': {new_field: field_type}})
+#       elif collection == 'titles':
+#          response = db.updateManyTitles({'$set': {new_field: field_type}})
+#       elif collection == 'vaults':
+#          response = db.updateManyVaults({'$set': {new_field: field_type}})
+#       elif collection == 'users':
+#          response = db.updateManyUsers({'$set': {new_field: field_type}})
+#       elif collection == 'universe':
+#          response = db.updateManyUniverses({'$set': {new_field: field_type}})
+#       elif collection == 'boss':
+#          response = db.updateManyBosses({'$set': {new_field: field_type}})
+#    else:
+#       print(m.ADMIN_ONLY_COMMAND)
 
 @bot.command()
 @commands.check(validate_user)
 async def solo(ctx):
    await DM(ctx, ctx.author, "Continue your Crown Unlimited journey here, undisturbed. All Crown Unlimited commands are functional here. ")
-
-@bot.command()
-async def test(ctx):
-   number = 10
-   while number >= 0:
-      await ctx.send(f"Number is {number}. Still not 0!")
-
-      def check(msg):
-         return msg.author == ctx.author and msg.channel == ctx.channel
-      try:
-         msg = await bot.wait_for("message", check=check)
-         number = number - int(msg.content)
-      except:
-         await ctx.send('Did not work')
-   await ctx.send("Number is 0!")
 
 if config('ENV') == "production":
    DISCORD_TOKEN = config('DISCORD_TOKEN_TEST')
