@@ -821,6 +821,32 @@ class CrownUnlimited(commands.Cog):
                         if private_channel.guild:
                             await discord.TextChannel.delete(private_channel, reason=None)
                         return
+
+                        message = ""
+
+                # item_drop = 0 # Miss
+                # card_drop = 7 # Lower Damage
+                # med_hit = 11 # Medium Damage
+                # standard_hit = 19 # Standard Damage
+                # high_hit = 20 # Crit Hit
+                # hit_roll = random.randint(0,20)
+
+                # if hit_roll <= miss_hit:
+                #     true_dmg=0
+                #     message=f'`{move}` used! It misses!'
+                # elif hit_roll <=low_hit and hit_roll > miss_hit:
+                #     true_dmg = round(true_dmg * .75)
+                #     message=f'`{move}` used! It chips for {true_dmg}! :anger:'
+                # elif hit_roll <=med_hit and hit_roll > low_hit:
+                #     true_dmg = round(true_dmg * .85)
+                #     message=f'`{move}` used! It connects for {true_dmg}! :bangbang:'
+                # elif hit_roll <=standard_hit and hit_roll > med_hit:
+                #     true_dmg = round(true_dmg)
+                #     message=f'`{move}` used! It hits for {true_dmg}! :anger_right:'
+                # elif hit_roll == 20:
+                #     true_dmg = round(true_dmg * 2)
+                #     message=f"`{card}` used `{move}`! :boom:   IT CRITICALLY HITS FOR {true_dmg}!! :boom: "
+
                 if t_card == legends[(total_legends - 1)]:
                     embedVar = discord.Embed(title=f"UNIVERSE CONQUERED", description=f"Universe {selected_universe} has been conquered", colour=0xe91e63)
                     embedVar.set_author(name=f"New Universes have been unlocked to explore!")
