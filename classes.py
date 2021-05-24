@@ -13,7 +13,7 @@ class USER():
     GAMES: list[str] = field(default_factory=lambda: ['Crown Unlimited'])
     TEAM: str = field(default_factory=lambda: 'PCG')
     TITLE: str = field(default_factory=lambda: 'Starter')
-    CARD: str = field(default_factory=lambda: "Chunin Naruto")
+    CARD: str = field(default_factory=lambda: "Naruto")
     HAND: list[str] = field(default_factory=lambda: [''])
     ARM: str = field(default_factory=lambda: "Stock")
     MATCHES: list = field(default_factory=lambda: [{'1V1': [0, 0]}, {'2V2': [0, 0]}, {'3V3': [0, 0]}, {'4V4': [0, 0]}, {'5V5': [0, 0]}])
@@ -55,6 +55,7 @@ class SESSIONS():
     LOSING_TEAM: str = field(default_factory=lambda: 'N/A')
     WINNER: str = field(default_factory=lambda: 'N/A')
     LOSER: str = field(default_factory=lambda: 'N/A')
+    CROWN_UNLIMITED: bool = field(default_factory=lambda: False)
     TIMESTAMP: str = now
 
 @dataclass(frozen=True, order=True)
@@ -88,6 +89,7 @@ class CARDS():
     UNIVERSE: str = field(default_factory=lambda: "Unbound")
     COLLECTION: str = field(default_factory=lambda: "N/A")
     STOCK: int = field(default_factory=lambda: 5)
+    AVAILABLE: bool = field(default_factory=lambda: True)
 
 @dataclass(frozen=True, order=True) 
 class TITLES():
@@ -99,6 +101,7 @@ class TITLES():
     COLLECTION: str = field(default_factory=lambda: "N/A")
     TIMESTAMP: str = now
     STOCK: int = field(default_factory=lambda: 5)
+    AVAILABLE: str = field(default_factory=lambda: "")
 
 @dataclass(frozen=True, order=True) 
 class ARM():
@@ -110,13 +113,17 @@ class ARM():
     COLLECTION: str = field(default_factory=lambda: "N/A")
     TIMESTAMP: str = now
     STOCK: int = field(default_factory=lambda: 5)
+    AVAILABLE: bool = field(default_factory=lambda: True)
 
 @dataclass(frozen=True, order=True) 
 class UNIVERSE():
     TITLE: str
     PATH: str = field(default_factory=lambda: '')
     CROWN_TALES: list[str] = field(default_factory=lambda: [''])
+    PREREQUISITE: str = field(default_factory=lambda: "")
+    UNIVERSE_BOSS: str = field(default_factory=lambda: "")
     TIMESTAMP: str = now
+    AVAILABLE: bool = field(default_factory=lambda: True)
 
 @dataclass(frozen=True, order=True) 
 class BOSS():
@@ -128,6 +135,7 @@ class BOSS():
     CARD: str = field(default_factory=lambda: '')
     TIMESTAMP: str = now
     DESCRIPTION: list[str] = field(default_factory=lambda: '')
+    AVAILABLE: bool = field(default_factory=lambda: True)
    
 
 @dataclass(frozen=True, order=True) 
@@ -164,7 +172,7 @@ class GODS():
 class VAULT():
     OWNER: str
     BALANCE: int = field(default_factory=lambda: 1000)
-    CARDS: list[str] = field(default_factory=lambda: ['Chunin Naruto'])
+    CARDS: list[str] = field(default_factory=lambda: ['Naruto'])
     TITLES: list[str] = field(default_factory=lambda: ['Starter'])
     ARMS: list[str] = field(default_factory=lambda: ['Stock'])
 

@@ -4,13 +4,17 @@ from decouple import config
 
 if config('ENV') == "production":
     # PRODUCTION
-    TOKEN = config('MONGODB_URI')
+    use_database = "PCGPROD"
 else:
     # TEST
-    TOKEN = config('MONGOTOKEN_TEST')
+    use_database = "PCGTEST"
+
+TOKEN = config('MONGOTOKEN_TEST')
 mongo = pymongo.MongoClient(TOKEN)
 
-db = mongo["PCGTEST"]
+print(use_database)
+
+db = mongo[use_database]
 users_col = db["USERS"]
 teams_col = db["TEAMS"]
 sessions_col = db["SESSIONS"]
@@ -222,6 +226,10 @@ def altQueryShopCards(args):
     data = cards_col.find({'TOURNAMENT_REQUIREMENTS': 0})
     return data 
 
+def queryDropCards(args):
+    data = cards_col.find({'UNIVERSE': args})
+    return data 
+
 def queryCard(query):
     data = cards_col.find_one(query)
     return data
@@ -244,7 +252,7 @@ def updateManyCards(new_value):
 
 def deleteCard(card):
     try:
-        cardexists = card_exists({'PATH': query['PATH']})
+        cardexists = card_exists({'PATH': card['PATH']})
         if cardexists:
             cards_col.delete_one(card)
             return True
@@ -294,7 +302,7 @@ def updateManyTitles(new_value):
 
 def deleteTitle(title):
     try:
-        titleexists = title_exists({'TITLE': query['TITLE']})
+        titleexists = title_exists({'TITLE': title['TITLE']})
         if titleexists:
             titles_col.delete_one(title)
             return True
@@ -318,6 +326,10 @@ def queryAllTitles():
 def queryTitle(query):
     data = titles_col.find_one(query)
     return data
+
+def queryDropTitles(args):
+    data = titles_col.find({'UNIVERSE': args})
+    return data 
 
 def queryTournamentTitles():
     data = titles_col.find({'TOURNAMENT_REQUIREMENTS': {'$gt': 0}})
@@ -384,6 +396,10 @@ def queryAllArms():
 def queryArm(query):
     data = arm_col.find_one(query)
     return data
+
+def queryDropArms(args):
+    data = arm_col.find({'UNIVERSE': args})
+    return data 
 
 def queryTournamentArms():
     data = arm_col.find({'TOURNAMENT_REQUIREMENTS': {'$gt': 0}})
@@ -800,22 +816,26 @@ def createSession(session):
     if exists:
         return m.ALREADY_IN_SESSION
     else:
-        if len(session['TEAMS']) == 0:
-            sessions_col.insert_one(session)
-            return "New Lobby has been created"
-        elif session['TOURNAMENT']:
-            sessions_col.insert_one(session)
-            return "New Tournament Session has been created"
-        else:       
-            players_per_team_count = [x for x in session['TEAMS'][0]['TEAM']]
-            print(players_per_team_count)
-            print(session['TYPE'])
-            if session['TYPE'] != len(players_per_team_count):
-
-                return "Team and Session Type do not match. "
-            else:
+        if session['GAME'] == "Crown Unlimited":
+            response = sessions_col.insert_one(session)
+            return response
+        else:
+            if len(session['TEAMS']) == 0:
                 sessions_col.insert_one(session)
-                return "New Session started. "
+                return "New Lobby has been created"
+            elif session['TOURNAMENT']:
+                sessions_col.insert_one(session)
+                return "New Tournament Session has been created"
+            else:       
+                players_per_team_count = [x for x in session['TEAMS'][0]['TEAM']]
+                print(players_per_team_count)
+                print(session['TYPE'])
+                if session['TYPE'] != len(players_per_team_count):
+
+                    return "Team and Session Type do not match. "
+                else:
+                    sessions_col.insert_one(session)
+                    return "New Session started. "
 
 def joinSession(session, query):
     sessionquery = querySession(session)

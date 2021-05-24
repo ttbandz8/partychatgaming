@@ -29,14 +29,14 @@ class Lobbies(commands.Cog):
     async def cog_check(self, ctx):
         return await main.validate_user(ctx)
 
-    # @commands.command()
-    # async def dal(self, ctx):
-    #     user_query = {"DISNAME": str(ctx.author)}
-    #     if ctx.author.guild_permissions.administrator == True:
-    #         resp = db.deleteAllSessions(user_query)
-    #         await ctx.send(resp)
-    #     else:
-    #         await ctx.send(m.ADMIN_ONLY_COMMAND)
+    @commands.command()
+    async def dal(self, ctx):
+        user_query = {"DISNAME": str(ctx.author)}
+        if ctx.author.guild_permissions.administrator == True:
+            resp = db.deleteAllSessions(user_query)
+            await ctx.send(resp)
+        else:
+            await ctx.send(m.ADMIN_ONLY_COMMAND)
 
 
     @commands.command()

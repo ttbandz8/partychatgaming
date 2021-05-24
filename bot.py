@@ -113,7 +113,7 @@ async def r(ctx):
    if response:
 
       embedVar = discord.Embed(title=f"Welcome to Party Chat Gaming!", colour=0xe91e63)
-      embedVar.set_author(name="The home of Crown Unlimited")
+      embedVar.set_author(name="Use .solo to play Crown Unlimited undisturbed. Remember to come back and play with your friends!")
       embedVar.add_field(name="#vault", value="Check your equipped `card`, `title` and `arm`")
       embedVar.add_field(name="#shop", value="Purchase your starting `card`, `title` and `arm`")
       embedVar.add_field(name="#senpaibattle", value="Start tutorial on Crown Unlimited")
@@ -200,7 +200,7 @@ async def addfield(ctx, collection, new_field, field_type):
       if field_type == 'string':
          field_type = ''
       elif field_type == 'int':
-         field_type = 0
+         field_type = 25
       elif field_type == 'list':
          field_type = []
       elif field_type == 'bool':
@@ -216,23 +216,16 @@ async def addfield(ctx, collection, new_field, field_type):
          response = db.updateManyUsers({'$set': {new_field: field_type}})
       elif collection == 'universe':
          response = db.updateManyUniverses({'$set': {new_field: field_type}})
+      elif collection == 'boss':
+         response = db.updateManyBosses({'$set': {new_field: field_type}})
    else:
       print(m.ADMIN_ONLY_COMMAND)
 
 @bot.command()
-async def test(ctx):
-   number = 10
-   while number >= 0:
-      await ctx.send(f"Number is {number}. Still not 0!")
-
-      def check(msg):
-         return msg.author == ctx.author and msg.channel == ctx.channel
-      try:
-         msg = await bot.wait_for("message", check=check)
-         number = number - int(msg.content)
-      except:
-         await ctx.send('Did not work')
-   await ctx.send("Number is 0!")
+@commands.check(validate_user)
+async def solo(ctx):
+   await ctx.send(f"{ctx.author.mention} check your dms. ")
+   await DM(ctx, ctx.author, "Continue your Crown Unlimited journey here, undisturbed. All Crown Unlimited commands are functional here. ")
 
 if config('ENV') == "production":
    DISCORD_TOKEN = config('DISCORD_TOKEN_TEST')
