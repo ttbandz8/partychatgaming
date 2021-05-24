@@ -390,7 +390,10 @@ class CrownUnlimited(commands.Cog):
                             embedVar.set_author(name="Press 0 to Quit Match")
                         embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
                         await private_channel.send(embed=embedVar)
-                        
+                        if not o_used_focus or o_used_resolve:
+                            options = [0,1,2,3,4]
+                        else:
+                            options = [0,1,2,3,4,5]
                         # Make sure user is responding with move
                         def check(msg):
                             if private_channel.guild:
@@ -419,9 +422,8 @@ class CrownUnlimited(commands.Cog):
                             elif int(msg.content) == 4:
                                 o_enhancer_used=True
                                 dmg = damage_cal(o_card, o_enhancer, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina)
-                                o_enhancer_used=False
+                                o_enhancer_used=False    
                             elif int(msg.content) == 5:
-
                                 #Resolve Check and Calculation
                                 if not o_used_resolve and o_used_focus:
 
@@ -454,9 +456,9 @@ class CrownUnlimited(commands.Cog):
                                     turn=1
                                 else:
                                     emessage = m.CANNOT_USE_RESOLVE
-                                    embedVar = discord.Embed(title=emessage, description=f"Entering `Resolved State` sacrifices a turn to power up even greater and regain `Stamina`!", colour=0xe91e63)
+                                    embedVar = discord.Embed(title=emessage, colour=0xe91e63)
                                     await private_channel.send(embed=embedVar)
-                                    turn=0
+                                   
 
                             if int(msg.content) !=5:
                                 # If you have enough stamina for move, use it
@@ -1196,7 +1198,10 @@ class CrownUnlimited(commands.Cog):
                     await private_channel.send(embed=embedVar)
                     
                     # Make sure user is responding with move
-                    
+                    if not o_used_focus or o_used_resolve:
+                        options = [0,1,2,3,4]
+                    else:
+                        options = [0,1,2,3,4,5]
                     def check(msg):
                         if private_channel.guild:
                             return msg.author == user1 and msg.channel == private_channel and int(msg.content) in options
@@ -2616,6 +2621,11 @@ class CrownUnlimited(commands.Cog):
                                 embedVar.set_author(name="Press 0 to Quit Match")
                             embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
                             await ctx.send(embed=embedVar)
+
+                            if not o_used_focus or o_used_resolve:
+                                options = [0,1,2,3,4]
+                            else:
+                                options = [0,1,2,3,4,5]
                             
                             # Make sure user is responding with move
                             def check(msg):
@@ -2802,6 +2812,12 @@ class CrownUnlimited(commands.Cog):
                                     embedVar.set_author(name="Press 0 to Quit Match")
                                 embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
                                 await ctx.send(embed=embedVar)
+
+                                if not t_used_focus or t_used_resolve:
+                                    options = [0,1,2,3,4]
+                                else:
+                                    options = [0,1,2,3,4,5]
+
                                 # Make sure user is responding with move
                                 def check(msg):
                                     return msg.author == user2 and msg.channel == ctx.channel and int(msg.content) in options
