@@ -1032,6 +1032,62 @@ class CrownUnlimited(commands.Cog):
             o_health = o_health + round(int(o_card_passive) + (.10 * t_health))
         elif o_card_passive_type == 'DRAIN':
             o_stamina = o_stamina + int(o_card_passive)
+        elif o_card_passive_type == 'FLOG':
+            o_attack = o_attack + int((.20 *t_defense))
+        elif o_card_passive_type == 'WITHER':
+            o_defense = o_defense + int((.20 *t_defense))
+        elif o_card_passive_type == 'RAGE':
+            o_attack = o_attack + int((.20 * o_defense))
+            o_defense = o_defense - int((.20 *o_attack))
+        elif o_card_passive_type == 'BRACE':            
+            o_defense = o_defense + int((.20 *o_attack))
+            o_attack = o_attack - int((.20 * o_defense))
+        elif o_card_passive_type == 'BZRK':            
+            o_attack = o_attack + int((.10 *o_health))
+            o_health = o_health - int((o_attack))
+        elif o_card_passive_type == 'CRYSTAL':            
+            o_defense = o_defense + int((.10 *o_health))
+            o_health = o_health - int((o_attack))
+        elif o_card_passive_type == 'GROWTH':            
+            o_attack = o_attack + int((.10 * o_max_health))
+            o_defense = o_defense + int((.10 * o_max_health))
+            o_max_health = o_max_health - int((.10 * o_max_health))
+        elif o_card_passive_type == 'STANCE':
+            tempattack = o_attack
+            o_attack = o_defense            
+            o_defense = tempattack
+        elif o_card_passive_type == 'CONFUSE':
+            tempattack = t_attack
+            t_attack = t_defense            
+            t_defense = tempattack
+        elif o_card_passive_type == 'BLINK':
+            o_stamina = o_stamina - 40         
+            t_stamina = t_stamina + 30
+        elif o_card_passive_type == 'SLOW':
+            tempstam = t_stamina + 10 
+            o_stamina = o_stamina - 20      
+            t_stamina = o_stamina
+            o_stamina = tempstam  
+        elif o_card_passive_type == 'HASTE':
+            tempstam = t_stamina - 10    
+            o_stamina = o_stamina + 20      
+            t_stamina = o_stamina 
+            o_stamina = tempstam  
+        elif o_card_passive_type == 'SOULCHAIN':
+            o_stamina = 30
+            t_stamina = 30
+        elif o_card_passive_type == 'FEAR':
+            o_health = o_health - int((.10 * o_health))
+            t_attack = t_attack - int((.10 * o_health))
+            t_defense = t_defense - int((.10 * o_health))
+        elif o_card_passive_type == 'GAMBLE':
+            o_health = 150
+            t_health = 150
+            
+        
+        
+
+            
 
         # Title Passive
         o_title_passive_type = list(o_title_passive.keys())[0]
@@ -1096,6 +1152,57 @@ class CrownUnlimited(commands.Cog):
             t_health = t_health + round(int(t_card_passive) + (.10 * o_health))
         elif t_card_passive_type == 'DRAIN':
             t_stamina = t_stamina + int(t_card_passive)
+        elif t_card_passive_type == 'FLOG':
+            t_attack = t_attack + int((.20 *o_defense))
+        elif t_card_passive_type == 'WITHER':
+            t_defense = t_defense + int((.20 *o_defense))
+        elif t_card_passive_type == 'RAGE':
+            t_attack = t_attack + int((.20 * t_defense))
+            t_defense = t_defense - int((.20 *t_attack))
+        elif t_card_passive_type == 'BRACE':            
+            t_defense = t_defense + int((.20 *t_attack))
+            t_attack = t_attack - int((.20 * t_defense))
+        elif t_card_passive_type == 'BZRK':            
+            t_attack = t_attack + int((.10 *t_health))
+            t_health = t_health - int((t_attack))
+        elif t_card_passive_type == 'CRYSTAL':            
+            t_defense = t_defense + int((.10 *t_health))
+            t_health = t_health - int((t_attack))
+        elif t_card_passive_type == 'GROWTH':            
+            t_attack = t_attack + int((.10 * t_max_health))
+            t_defense = t_defense + int((.10 * t_max_health))
+            t_max_health = t_max_health - int((.10 * t_max_health))
+        elif t_card_passive_type == 'STANCE':
+            tempattack = t_attack
+            t_attack = t_defense            
+            t_defense = tempattack
+        elif t_card_passive_type == 'CONFUSE':
+            tempattack = o_attack
+            o_attack = o_defense            
+            o_defense = tempattack
+        elif t_card_passive_type == 'BLINK':
+            t_stamina = t_stamina - 40         
+            o_stamina = o_stamina + 30
+        elif t_card_passive_type == 'SLOW':
+            tempstam = o_stamina + 10 
+            t_stamina = t_stamina - 20      
+            o_stamina = t_stamina
+            t_stamina = tempstam  
+        elif t_card_passive_type == 'HASTE':
+            tempstam = o_stamina - 10    
+            t_stamina = t_stamina + 20      
+            o_stamina = t_stamina 
+            t_stamina = tempstam  
+        elif t_card_passive_type == 'SOULCHAIN':
+            t_stamina = 30
+            o_stamina = 30
+        elif t_card_passive_type == 'FEAR':
+            t_health = t_health - int((.10 * t_health))
+            o_attack = o_attack - int((.10 * t_health))
+            o_defense = o_defense - int((.10 * t_health))
+        elif t_card_passive_type == 'GAMBLE':
+            t_health = 150
+            o_health = 150
 
         # Title Passive
         t_title_passive_type = list(t_title_passive.keys())[0]
@@ -1246,14 +1353,14 @@ class CrownUnlimited(commands.Cog):
                         if int(msg.content) == 0:
                             o_health=0
                         if int(msg.content) == 1:
-                            dmg = damage_cal(o_card, o_1, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina)
+                            dmg = damage_cal(o_card, o_1, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack)
                         elif int(msg.content) == 2:
-                            dmg = damage_cal(o_card, o_2, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina)
+                            dmg = damage_cal(o_card, o_2, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack)
                         elif int(msg.content) == 3:
-                            dmg = damage_cal(o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina)
+                            dmg = damage_cal(o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack)
                         elif int(msg.content) == 4:
                             o_enhancer_used=True
-                            dmg = damage_cal(o_card, o_enhancer, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina)
+                            dmg = damage_cal(o_card, o_enhancer, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack)
                             o_enhancer_used=False
                         elif int(msg.content) == 5:
 
@@ -1313,6 +1420,57 @@ class CrownUnlimited(commands.Cog):
                                     elif enh_type == 'DRAIN':
                                         o_stamina = round(o_stamina + dmg['DMG'])
                                         t_stamina = round(t_stamina - dmg['DMG'])
+                                    elif enh_type == 'FLOG':
+                                        o_attack = round(o_attack + dmg['DMG'])
+                                    elif enh_type == 'WITHER':
+                                        o_defense = round(o_defense + dmg['DMG'])
+                                    elif enh_type == 'RAGE':
+                                        o_defense = round(o_defense - dmg['DMG'])
+                                        o_attack = round(o_attack + dmg['DMG'])
+                                    elif enh_type == 'BRACE':
+                                        o_defense = round(o_defense + dmg['DMG'])
+                                        o_attack = round(o_attack - dmg['DMG'])
+                                    elif enh_type == 'BZRK':
+                                        o_health = round(o_health - dmg['DMG'])
+                                        o_attack = round(o_attack + dmg['DMG'])
+                                    elif enh_type == 'CRYSTAL':
+                                        o_health = round(o_health - dmg['DMG'])
+                                        o_defense = round(o_defense + dmg['DMG'])
+                                    elif enh_type == 'GROWTH':
+                                        o_max_health = round(o_max_health - dmg['DMG'])
+                                        o_defense = round(o_defense + dmg['DMG'])
+                                        o_attack = round(o_attack + dmg['DMG'])
+                                    elif enh_type == 'STANCE':
+                                        tempattack = dmg['DMG']
+                                        o_attack = o_defense
+                                        o_defense = tempattack
+                                    elif enh_type == 'CONFUSE':
+                                        tempattack = dmg['DMG']
+                                        t_attack = t_defense
+                                        t_defense = tempattack
+                                    elif enh_type == 'BLINK':
+                                        o_stamina = round(o_stamina - dmg['DMG'])
+                                        t_stamina = round(t_stamina + dmg['DMG'] - 10)
+                                    elif enh_type == 'SLOW':
+                                        tempstam = round(t_stamina + dmg['DMG']-10)
+                                        o_stamina = round(o_stamina - dmg['DMG'])
+                                        t_stamina = o_stamina
+                                        o_stamina = tempstam
+                                    elif enh_type == 'HASTE':
+                                        tempstam = round(t_stamina - dmg['DMG']+10)
+                                        o_stamina = round(o_stamina + dmg['DMG'])
+                                        t_stamina = o_stamina
+                                        o_stamina = tempstam                                       
+                                    elif enh_type == 'SOULCHAIN':
+                                        o_stamina = round(dmg['DMG'])
+                                        t_stamina = o_stamina
+                                    elif enh_type == 'GAMBLE':
+                                        o_health = round(dmg['DMG'])
+                                        t_health = o_health
+                                    elif enh_type == 'FEAR':
+                                        o_health = round(o_health - ((dmg['DMG']/100)* o_health))
+                                        t_attack = round(t_attack - ((dmg['DMG']/100)* o_health))
+                                        t_defense = round(t_defense - ((dmg['DMG']/100)* o_health))
                                     o_stamina = o_stamina - int(dmg['STAMINA_USED'])
 
                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
@@ -1629,14 +1787,14 @@ class CrownUnlimited(commands.Cog):
                         if int(aiMove) == 0:
                             t_health=0
                         if int(aiMove) == 1:
-                            dmg = damage_cal(t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina)
+                            dmg = damage_cal(t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack)
                         elif int(aiMove) == 2:
-                            dmg = damage_cal(t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina)
+                            dmg = damage_cal(t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack)
                         elif int(aiMove) == 3:
-                            dmg = damage_cal(t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina)
+                            dmg = damage_cal(t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack)
                         elif int(aiMove) == 4:
                             t_enhancer_used=True
-                            dmg = damage_cal(t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina)
+                            dmg = damage_cal(t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina, t_max_health, o_attack)
                             t_enhancer_used=False
                         elif int(aiMove) == 5:
                             if not t_used_resolve and t_used_focus:
@@ -1689,6 +1847,57 @@ class CrownUnlimited(commands.Cog):
                                     elif enh_type == 'DRAIN':
                                         t_stamina = round(t_stamina + dmg['DMG'])
                                         o_stamina = round(o_stamina - dmg['DMG'])
+                                    elif enh_type == 'FLOG':
+                                        t_attack = round(t_attack + dmg['DMG'])
+                                    elif enh_type == 'WITHER':
+                                        t_defense = round(t_defense + dmg['DMG'])
+                                    elif enh_type == 'RAGE':
+                                        t_defense = round(t_defense - dmg['DMG'])
+                                        t_attack = round(t_attack + dmg['DMG'])
+                                    elif enh_type == 'BRACE':
+                                        t_defense = round(t_defense + dmg['DMG'])
+                                        t_attack = round(t_attack - dmg['DMG'])
+                                    elif enh_type == 'BZRK':
+                                        t_health = round(t_health - dmg['DMG'])
+                                        t_attack = round(t_attack + dmg['DMG'])
+                                    elif enh_type == 'CRYSTAL':
+                                        t_health = round(t_health - dmg['DMG'])
+                                        t_defense = round(t_defense + dmg['DMG'])
+                                    elif enh_type == 'GROWTH':
+                                        t_max_health = round(t_max_health - dmg['DMG'])
+                                        t_defense = round(t_defense + dmg['DMG'])
+                                        t_attack = round(t_attack + dmg['DMG'])
+                                    elif enh_type == 'STANCE':
+                                        tempattack = dmg['DMG']
+                                        t_attack = t_defense
+                                        t_defense = tempattack
+                                    elif enh_type == 'CONFUSE':
+                                        tempattack = dmg['DMG']
+                                        o_attack = o_defense
+                                        o_defense = tempattack
+                                    elif enh_type == 'BLINK':
+                                        t_stamina = round(t_stamina - dmg['DMG'])
+                                        o_stamina = round(o_stamina + dmg['DMG'] - 10)
+                                    elif enh_type == 'SLOW':
+                                        tempstam = round(o_stamina + dmg['DMG']-10)
+                                        t_stamina = round(t_stamina - dmg['DMG'])
+                                        o_stamina = t_stamina
+                                        t_stamina = tempstam
+                                    elif enh_type == 'HASTE':
+                                        tempstam = round(o_stamina - dmg['DMG']+10)
+                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                        o_stamina = t_stamina
+                                        t_stamina = tempstam                                       
+                                    elif enh_type == 'SOULCHAIN':
+                                        t_stamina = round(dmg['DMG'])
+                                        o_stamina = t_stamina
+                                    elif enh_type == 'GAMBLE':
+                                        t_health = round(dmg['DMG'])
+                                        o_health = t_health
+                                    elif enh_type == 'FEAR':
+                                        t_health = round(t_health - ((dmg['DMG']/100)* t_health))
+                                        o_attack = round(o_attack - ((dmg['DMG']/100)* t_health))
+                                        o_defense = round(o_defense - ((dmg['DMG']/100)* t_health))
                                     t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                     await ctx.send(embed=embedVar)
@@ -2528,6 +2737,57 @@ class CrownUnlimited(commands.Cog):
                     o_health = o_health + round(int(o_card_passive) + (.10 * t_health))
                 elif o_card_passive_type == 'DRAIN':
                     o_stamina = o_stamina + int(o_card_passive)
+                elif o_card_passive_type == 'FLOG':
+                    o_attack = o_attack + int((.20 *t_defense))
+                elif o_card_passive_type == 'WITHER':
+                    o_defense = o_defense + int((.20 *t_defense))
+                elif o_card_passive_type == 'RAGE':
+                    o_attack = o_attack + int((.20 * o_defense))
+                    o_defense = o_defense - int((.20 *o_attack))
+                elif o_card_passive_type == 'BRACE':            
+                    o_defense = o_defense + int((.20 *o_attack))
+                    o_attack = o_attack - int((.20 * o_defense))
+                elif o_card_passive_type == 'BZRK':            
+                    o_attack = o_attack + int((.10 *o_health))
+                    o_health = o_health - int((o_attack))
+                elif o_card_passive_type == 'CRYSTAL':            
+                    o_defense = o_defense + int((.10 *o_health))
+                    o_health = o_health - int((o_attack))
+                elif o_card_passive_type == 'GROWTH':            
+                    o_attack = o_attack + int((.10 * o_max_health))
+                    o_defense = o_defense + int((.10 * o_max_health))
+                    o_max_health = o_max_health - int((.10 * o_max_health))
+                elif o_card_passive_type == 'STANCE':
+                    tempattack = o_attack
+                    o_attack = o_defense            
+                    o_defense = tempattack
+                elif o_card_passive_type == 'CONFUSE':
+                    tempattack = t_attack
+                    t_attack = t_defense            
+                    t_defense = tempattack
+                elif o_card_passive_type == 'BLINK':
+                    o_stamina = o_stamina - 40         
+                    t_stamina = t_stamina + 30
+                elif o_card_passive_type == 'SLOW':
+                    tempstam = t_stamina + 10 
+                    o_stamina = o_stamina - 20      
+                    t_stamina = o_stamina
+                    o_stamina = tempstam  
+                elif o_card_passive_type == 'HASTE':
+                    tempstam = t_stamina - 10    
+                    o_stamina = o_stamina + 20      
+                    t_stamina = o_stamina 
+                    o_stamina = tempstam  
+                elif o_card_passive_type == 'SOULCHAIN':
+                    o_stamina = 30
+                    t_stamina = 30
+                elif o_card_passive_type == 'FEAR':
+                    o_health = o_health - int((.10 * o_health))
+                    t_attack = t_attack - int((.10 * o_health))
+                    t_defense = t_defense - int((.10 * o_health))
+                elif o_card_passive_type == 'GAMBLE':
+                    o_health = 150
+                    t_health = 150              
 
                 # Title Passive
                 o_title_passive_type = list(o_title_passive.keys())[0]
@@ -2592,6 +2852,57 @@ class CrownUnlimited(commands.Cog):
                     t_health = t_health + round(int(t_card_passive) + (.10 * o_health))
                 elif t_card_passive_type == 'DRAIN':
                     t_stamina = t_stamina + int(t_card_passive)
+                elif t_card_passive_type == 'FLOG':
+                    t_attack = t_attack + int((.20 *o_defense))
+                elif t_card_passive_type == 'WITHER':
+                    t_defense = t_defense + int((.20 *o_defense))
+                elif t_card_passive_type == 'RAGE':
+                    t_attack = t_attack + int((.20 * t_defense))
+                    t_defense = t_defense - int((.20 *t_attack))
+                elif t_card_passive_type == 'BRACE':            
+                    t_defense = t_defense + int((.20 *t_attack))
+                    t_attack = t_attack - int((.20 * t_defense))
+                elif t_card_passive_type == 'BZRK':            
+                    t_attack = t_attack + int((.10 *t_health))
+                    t_health = t_health - int((t_attack))
+                elif t_card_passive_type == 'CRYSTAL':            
+                    t_defense = t_defense + int((.10 *t_health))
+                    t_health = t_health - int((t_attack))
+                elif t_card_passive_type == 'GROWTH':            
+                    t_attack = t_attack + int((.10 * t_max_health))
+                    t_defense = t_defense + int((.10 * t_max_health))
+                    t_max_health = t_max_health - int((.10 * t_max_health))
+                elif t_card_passive_type == 'STANCE':
+                    tempattack = t_attack
+                    t_attack = t_defense            
+                    t_defense = tempattack
+                elif t_card_passive_type == 'CONFUSE':
+                    tempattack = o_attack
+                    o_attack = o_defense            
+                    o_defense = tempattack
+                elif t_card_passive_type == 'BLINK':
+                    t_stamina = t_stamina - 40         
+                    o_stamina = o_stamina + 30
+                elif t_card_passive_type == 'SLOW':
+                    tempstam = o_stamina + 10 
+                    t_stamina = t_stamina - 20      
+                    o_stamina = t_stamina
+                    t_stamina = tempstam  
+                elif t_card_passive_type == 'HASTE':
+                    tempstam = o_stamina - 10    
+                    t_stamina = t_stamina + 20      
+                    o_stamina = t_stamina 
+                    t_stamina = tempstam  
+                elif t_card_passive_type == 'SOULCHAIN':
+                    t_stamina = 30
+                    o_stamina = 30
+                elif t_card_passive_type == 'FEAR':
+                    t_health = t_health - int((.10 * t_health))
+                    o_attack = o_attack - int((.10 * t_health))
+                    o_defense = o_defense - int((.10 * t_health))
+                elif t_card_passive_type == 'GAMBLE':
+                    t_health = 150
+                    o_health = 150
 
                 # Title Passive
                 t_title_passive_type = list(t_title_passive.keys())[0]
@@ -2759,14 +3070,14 @@ class CrownUnlimited(commands.Cog):
                                 if int(msg.content) == 0:
                                     o_health = 0
                                 if int(msg.content) == 1:
-                                    dmg = damage_cal(o_card, o_1, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina)
+                                    dmg = damage_cal(o_card, o_1, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack)
                                 elif int(msg.content) == 2:
-                                    dmg = damage_cal(o_card, o_2, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina)
+                                    dmg = damage_cal(o_card, o_2, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack)
                                 elif int(msg.content) == 3:
-                                    dmg = damage_cal(o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina)
+                                    dmg = damage_cal(o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack)
                                 elif int(msg.content) == 4:
                                     o_enhancer_used=True
-                                    dmg = damage_cal(o_card, o_enhancer, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina)
+                                    dmg = damage_cal(o_card, o_enhancer, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack)
                                     o_enhancer_used=False
                                 elif int(msg.content) == 5:
 
@@ -2811,6 +3122,7 @@ class CrownUnlimited(commands.Cog):
                                     if dmg['CAN_USE_MOVE']:
                                         if dmg['ENHANCE']:
                                             enh_type= dmg['ENHANCED_TYPE']
+                                            print(enh_type)
                                         
                                             if enh_type == 'ATK':
                                                 o_attack = round(o_attack + dmg['DMG'])
@@ -2826,6 +3138,58 @@ class CrownUnlimited(commands.Cog):
                                             elif enh_type == 'DRAIN':
                                                 o_stamina = round(o_stamina + dmg['DMG'])
                                                 t_stamina = round(t_stamina - dmg['DMG'])
+                                            elif enh_type == 'FLOG':
+                                                o_attack = round(o_attack + dmg['DMG'])
+                                            elif enh_type == 'WITHER':
+                                                o_defense = round(o_defense + dmg['DMG'])
+                                            elif enh_type == 'RAGE':
+                                                o_defense = round(o_defense - dmg['DMG'])
+                                                o_attack = round(o_attack + dmg['DMG'])
+                                            elif enh_type == 'BRACE':
+                                                o_defense = round(o_defense + dmg['DMG'])
+                                                o_attack = round(o_attack - dmg['DMG'])
+                                            elif enh_type == 'BZRK':
+                                                o_health = round(o_health - dmg['DMG'])
+                                                o_attack = round(o_attack + dmg['DMG'])
+                                            elif enh_type == 'CRYSTAL':
+                                                o_health = round(o_health - dmg['DMG'])
+                                                o_defense = round(o_defense + dmg['DMG'])
+                                            elif enh_type == 'GROWTH':
+                                                o_max_health = round(o_max_health - dmg['DMG'])
+                                                o_defense = round(o_defense + dmg['DMG'])
+                                                o_attack = round(o_attack + dmg['DMG'])
+                                            elif enh_type == 'STANCE':
+                                                tempattack = dmg['DMG']
+                                                o_attack = o_defense
+                                                o_defense = tempattack
+                                            elif enh_type == 'CONFUSE':
+                                                tempattack = dmg['DMG']
+                                                t_attack = t_defense
+                                                t_defense = tempattack
+                                            elif enh_type == 'BLINK':
+                                                o_stamina = round(o_stamina - dmg['DMG'])
+                                                t_stamina = round(t_stamina + dmg['DMG'] - 10)
+                                            elif enh_type == 'SLOW':
+                                                tempstam = round(t_stamina + dmg['DMG']-10)
+                                                o_stamina = round(o_stamina - dmg['DMG'])
+                                                t_stamina = o_stamina
+                                                o_stamina = tempstam
+                                            elif enh_type == 'HASTE':
+                                                tempstam = round(t_stamina - dmg['DMG']+10)
+                                                o_stamina = round(o_stamina + dmg['DMG'])
+                                                t_stamina = o_stamina
+                                                o_stamina = tempstam                                       
+                                            elif enh_type == 'SOULCHAIN':
+                                                print("hi soul")
+                                                o_stamina = round(dmg['DMG'])
+                                                t_stamina = o_stamina
+                                            elif enh_type == 'GAMBLE':
+                                                o_health = round(dmg['DMG'])
+                                                t_health = o_health
+                                            elif enh_type == 'FEAR':
+                                                o_health = round(o_health - ((dmg['DMG']/100)* o_health))
+                                                t_attack = round(t_attack - ((dmg['DMG']/100)* o_health))
+                                                t_defense = round(t_defense - ((dmg['DMG']/100)* o_health))
                                             o_stamina = o_stamina - int(dmg['STAMINA_USED'])
 
                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
@@ -2941,14 +3305,14 @@ class CrownUnlimited(commands.Cog):
                                     if int(msg.content) == 0:
                                         t_health = 0
                                     if int(msg.content) == 1:
-                                        dmg = damage_cal(t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina)
+                                        dmg = damage_cal(t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack)
                                     elif int(msg.content) == 2:
-                                        dmg = damage_cal(t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina)
+                                        dmg = damage_cal(t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack)
                                     elif int(msg.content) == 3:
-                                        dmg = damage_cal(t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina)
+                                        dmg = damage_cal(t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack)
                                     elif int(msg.content) == 4:
                                         t_enhancer_used=True
-                                        dmg = damage_cal(t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina)
+                                        dmg = damage_cal(t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina,t_max_health, o_attack)
                                         t_enhancer_used=False
                                     elif int(msg.content) == 5:
                                         if not t_used_resolve and t_used_focus:
@@ -2981,8 +3345,9 @@ class CrownUnlimited(commands.Cog):
                                     if int(msg.content) !=5:
                                         # If you have enough stamina for move, use it
                                         if dmg['CAN_USE_MOVE']:
-
+                                            PRINT("CAN DO MOVE")
                                             if dmg['ENHANCE']:
+                                                print("got enhance")
                                                 enh_type= dmg['ENHANCED_TYPE']
                                                 if enh_type == 'ATK':
                                                     t_attack = round(t_attack + dmg['DMG'])
@@ -2998,6 +3363,58 @@ class CrownUnlimited(commands.Cog):
                                                 elif enh_type == 'DRAIN':
                                                     t_stamina = round(t_stamina + dmg['DMG'])
                                                     o_stamina = round(o_stamina - dmg['DMG'])
+                                                elif enh_type == 'FLOG':
+                                                    t_attack = round(t_attack + dmg['DMG'])
+                                                elif enh_type == 'WITHER':
+                                                    t_defense = round(t_defense + dmg['DMG'])
+                                                elif enh_type == 'RAGE':
+                                                    t_defense = round(t_defense - dmg['DMG'])
+                                                    t_attack = round(t_attack + dmg['DMG'])
+                                                elif enh_type == 'BRACE':
+                                                    t_defense = round(t_defense + dmg['DMG'])
+                                                    t_attack = round(t_attack - dmg['DMG'])
+                                                elif enh_type == 'BZRK':
+                                                    t_health = round(t_health - dmg['DMG'])
+                                                    t_attack = round(t_attack + dmg['DMG'])
+                                                elif enh_type == 'CRYSTAL':
+                                                    t_health = round(t_health - dmg['DMG'])
+                                                    t_defense = round(t_defense + dmg['DMG'])
+                                                elif enh_type == 'GROWTH':
+                                                    t_max_health = round(t_max_health - dmg['DMG'])
+                                                    t_defense = round(t_defense + dmg['DMG'])
+                                                    t_attack = round(t_attack + dmg['DMG'])
+                                                elif enh_type == 'STANCE':
+                                                    tempattack = dmg['DMG']
+                                                    t_attack = t_defense
+                                                    t_defense = tempattack
+                                                elif enh_type == 'CONFUSE':
+                                                    tempattack = dmg['DMG']
+                                                    o_attack = o_defense
+                                                    o_defense = tempattack
+                                                elif enh_type == 'BLINK':
+                                                    t_stamina = round(t_stamina - dmg['DMG'])
+                                                    o_stamina = round(o_stamina + dmg['DMG'] - 10)
+                                                elif enh_type == 'SLOW':
+                                                    tempstam = round(o_stamina + dmg['DMG']-10)
+                                                    t_stamina = round(t_stamina - dmg['DMG'])
+                                                    o_stamina = t_stamina
+                                                    t_stamina = tempstam
+                                                elif enh_type == 'HASTE':
+                                                    tempstam = round(o_stamina - dmg['DMG']+10)
+                                                    t_stamina = round(t_stamina + dmg['DMG'])
+                                                    o_stamina = t_stamina
+                                                    t_stamina = tempstam                                       
+                                                elif enh_type == 'SOULCHAIN':
+                                                    print("hi soul")
+                                                    t_stamina = round(dmg['DMG'])
+                                                    o_stamina = t_stamina
+                                                elif enh_type == 'GAMBLE':
+                                                    t_health = round(dmg['DMG'])
+                                                    o_health = t_health
+                                                elif enh_type == 'FEAR':
+                                                    t_health = round(t_health - ((dmg['DMG']/100)* t_health))
+                                                    o_attack = round(o_attack - ((dmg['DMG']/100)* t_health))
+                                                    o_defense = round(o_defense - ((dmg['DMG']/100)* t_health))
                                                 t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                                 embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                                 await ctx.send(embed=embedVar)
@@ -3123,14 +3540,14 @@ class CrownUnlimited(commands.Cog):
                                 if int(aiMove) == 0:
                                     t_health=0
                                 if int(aiMove) == 1:
-                                    dmg = damage_cal(t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina)
+                                    dmg = damage_cal(t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack)
                                 elif int(aiMove) == 2:
-                                    dmg = damage_cal(t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina)
+                                    dmg = damage_cal(t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack)
                                 elif int(aiMove) == 3:
-                                    dmg = damage_cal(t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina)
+                                    dmg = damage_cal(t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack)
                                 elif int(aiMove) == 4:
                                     t_enhancer_used=True
-                                    dmg = damage_cal(t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina)
+                                    dmg = damage_cal(t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina,t_max_health, o_attack)
                                     t_enhancer_used=False
                                 elif int(aiMove) == 5:
                                     if not t_used_resolve and t_used_focus:
@@ -3177,6 +3594,58 @@ class CrownUnlimited(commands.Cog):
                                             elif enh_type == 'DRAIN':
                                                 t_stamina = round(t_stamina + dmg['DMG'])
                                                 o_stamina = round(o_stamina - dmg['DMG'])
+                                            elif enh_type == 'FLOG':
+                                                t_attack = round(t_attack + dmg['DMG'])
+                                            elif enh_type == 'WITHER':
+                                                t_defense = round(t_defense + dmg['DMG'])
+                                            elif enh_type == 'RAGE':
+                                                t_defense = round(t_defense - dmg['DMG'])
+                                                t_attack = round(t_attack + dmg['DMG'])
+                                            elif enh_type == 'BRACE':
+                                                t_defense = round(t_defense + dmg['DMG'])
+                                                t_attack = round(t_attack - dmg['DMG'])
+                                            elif enh_type == 'BZRK':
+                                                t_health = round(t_health - dmg['DMG'])
+                                                t_attack = round(t_attack + dmg['DMG'])
+                                            elif enh_type == 'CRYSTAL':
+                                                t_health = round(t_health - dmg['DMG'])
+                                                t_defense = round(t_defense + dmg['DMG'])
+                                            elif enh_type == 'GROWTH':
+                                                t_max_health = round(t_max_health - dmg['DMG'])
+                                                t_defense = round(t_defense + dmg['DMG'])
+                                                t_attack = round(t_attack + dmg['DMG'])
+                                            elif enh_type == 'STANCE':
+                                                tempattack = dmg['DMG']
+                                                t_attack = t_defense
+                                                t_defense = tempattack
+                                            elif enh_type == 'CONFUSE':
+                                                tempattack = dmg['DMG']
+                                                o_attack = o_defense
+                                                o_defense = tempattack
+                                            elif enh_type == 'BLINK':
+                                                t_stamina = round(t_stamina - dmg['DMG'])
+                                                o_stamina = round(o_stamina + dmg['DMG'] - 10)
+                                            elif enh_type == 'SLOW':
+                                                tempstam = round(o_stamina + dmg['DMG']-10)
+                                                t_stamina = round(t_stamina - dmg['DMG'])
+                                                o_stamina = t_stamina
+                                                t_stamina = tempstam
+                                            elif enh_type == 'HASTE':
+                                                tempstam = round(o_stamina - dmg['DMG']+10)
+                                                t_stamina = round(t_stamina + dmg['DMG'])
+                                                o_stamina = t_stamina
+                                                t_stamina = tempstam                                       
+                                            elif enh_type == 'SOULCHAIN':
+                                                print("hi soul")
+                                                t_stamina = round(dmg['DMG'])
+                                                o_stamina = t_stamina
+                                            elif enh_type == 'GAMBLE':
+                                                t_health = round(dmg['DMG'])
+                                                o_health = t_health
+                                            elif enh_type == 'FEAR':
+                                                t_health = round(t_health - ((dmg['DMG']/100)* t_health))
+                                                o_attack = round(o_attack - ((dmg['DMG']/100)* t_health))
+                                                o_defense = round(o_defense - ((dmg['DMG']/100)* t_health))
                                             t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                             await ctx.send(embed=embedVar)
@@ -3301,7 +3770,7 @@ def starting_position(o,t):
     else:
         return False
 
-def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamina, enhancer, health, op_health, op_stamina): 
+def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamina, enhancer, health, op_health, op_stamina, maxhealth, op_attack): 
     move = list(ability.keys())[0]
     ap = list(ability.values())[0]
     move_stamina = list(ability.values())[1]
@@ -3322,8 +3791,23 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
     defense = defense
     stam = stamina
     hlt = health
-    lifesteal = op_health
-    drain = op_stamina
+    lifesteal = 0
+    drain = 0
+    growth = 0
+    flog = 0
+    wither = 0
+    brace = 0
+    rage = 0
+    bzrk = 0
+    crystal = 0
+    stance = 0
+    confuse = 0
+    blink = 0
+    slow = 0
+    haste = 0
+    soulchain = 0
+    gamble = 0
+    fear = 0
 
     enh_type=""
     if enhancer:
@@ -3345,6 +3829,51 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
         elif enh == 'DRAIN':
             enh_type='DRAIN'
             drain = ap 
+        elif enh == 'FLOG':
+            enh_type="FLOG"
+            flog = (.10 * op_attack )
+        elif enh == 'WITHER':
+            enh_type="WITHER"
+            wither = (.10 * op_defense )
+        elif enh == 'RAGE':
+            enh_type="RAGE"
+            rage = (.10 * defense )
+        elif enh == 'BRACE':
+            enh_type="BRACE"
+            brace = (.10 * attack )
+        elif enh == 'BZRK':
+            enh_type="BZRK"
+            bzrk = (.50 * health )
+        elif enh == 'CRYSTAL':
+            enh_type="CRYSTAL"
+            crystal = (.50 * health )
+        elif enh == 'GROWTH':
+            enh_type="GROWTH"
+            growth = (.10 * maxhealth )
+        elif enh == 'STANCE':
+            enh_type="STANCE"
+            stance = attack
+        elif enh == 'CONFUSE':
+            enh_type="CONFUSE"
+            confuse = op_attack
+        elif enh == 'BLINK':
+            enh_type="BLINK"
+            blink = ap
+        elif enh == 'SLOW':
+            enh_type="SLOW"
+            slow = ap
+        elif enh == 'HASTE':
+            enh_type="HASTE"
+            haste = ap
+        elif enh == 'FEAR':
+            enh_type="FEAR"
+            fear = ap
+        elif enh == 'SOULCHAIN':
+            enh_type="SOULCHAIN"
+            soulchain = ap
+        elif enh == 'GAMBLE':
+            enh_type="GAMBLE"
+            gamble = ap
 
     #handle different staments for lifesteal and drain
     if enhancer:
@@ -3368,6 +3897,36 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
             enhanced =lifesteal
         elif enh_type == 'DRAIN':
             enhanced = drain
+        elif enh_type == "FLOG":
+            enhanced=flog
+        elif enh_type == "WITHER":
+            enhanced=wither
+        elif enh_type == "RAGE":
+            enhanced=rage
+        elif enh_type == 'BRACE':
+            enhanced =brace
+        elif enh_type == 'BZRK':
+            enhanced = bzrk
+        elif enh_type == "CRYSTAL":
+            enhanced=crystal
+        elif enh_type == "GROWTH":
+            enhanced=growth
+        elif enh_type == "STANCE":
+            enhanced=stance
+        elif enh_type == 'CONFUSE':
+            enhanced =confuse
+        elif enh_type == 'BLINK':
+            enhanced = blink
+        elif enh_type == "SLOW":
+            enhanced=slow
+        elif enh_type == "HASTE":
+            enhanced=haste
+        elif enh_type == "FEAR":
+            enhanced=fear
+        elif enh_type == 'SOULCHAIN':
+            enhanced =soulchain
+        elif enh_type == 'GAMBLE':
+            enhanced = gamble
         
         response = {"DMG": enhanced, "MESSAGE": message, "STAMINA_USED": move_stamina, "CAN_USE_MOVE": can_use_move_flag, "ENHANCED_TYPE": enh_type, "ENHANCE": True}
         return response
