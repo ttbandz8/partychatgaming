@@ -3022,7 +3022,7 @@ class CrownUnlimited(commands.Cog):
                     ouid = sowner['DID']
                     sownerctx = await self.bot.fetch_user(ouid)
                     response = await score(sownerctx, tuser)
-
+                    await curse(3, str(ctx.author))
                     embedVar = discord.Embed(title=f":zap: `{t_card}` scores {response} and wins the match!", description=f"Match concluded in {turn_total} turns!", colour=0x1abc9c)
                     embedVar.set_author(name=f"{o_card} lost!\n{end_message}", icon_url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236432/PCG%20LOGOS%20AND%20RESOURCES/PCGBot_1.png")
                     if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
@@ -3050,7 +3050,7 @@ class CrownUnlimited(commands.Cog):
                     ouid = sowner['DID']
                     sownerctx = await self.bot.fetch_user(ouid)
                     response = await score(sownerctx, ouser)
-
+                    await bless(5, str(ctx.author))
                     embedVar = discord.Embed(title=f":zap: `{o_card}` {response} and wins the match!", description=f"Match concluded in {turn_total} turns!", colour=0xe91e63)
                     embedVar.set_author(name=f"{t_card} lost!\n{end_message}", icon_url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236432/PCG%20LOGOS%20AND%20RESOURCES/PCGBot_1.png")
                     if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:

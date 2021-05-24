@@ -113,7 +113,7 @@ async def r(ctx):
    if response:
 
       embedVar = discord.Embed(title=f"Welcome to Party Chat Gaming!", colour=0xe91e63)
-      embedVar.set_author(name="The home of Crown Unlimited")
+      embedVar.set_author(name="User .solo to play Crown Unlimited undisturbed. Remember to come back and play with your friends!")
       embedVar.add_field(name="#vault", value="Check your equipped `card`, `title` and `arm`")
       embedVar.add_field(name="#shop", value="Purchase your starting `card`, `title` and `arm`")
       embedVar.add_field(name="#senpaibattle", value="Start tutorial on Crown Unlimited")
@@ -220,6 +220,11 @@ async def addfield(ctx, collection, new_field, field_type):
          response = db.updateManyBosses({'$set': {new_field: field_type}})
    else:
       print(m.ADMIN_ONLY_COMMAND)
+
+@bot.command()
+@commands.check(validate_user)
+async def solo(ctx):
+   await DM(ctx, ctx.author, "Continue your Crown Unlimited journey here, undisturbed. All Crown Unlimited commands are functional here. ")
 
 @bot.command()
 async def test(ctx):
