@@ -55,6 +55,7 @@ class SESSIONS():
     LOSING_TEAM: str = field(default_factory=lambda: 'N/A')
     WINNER: str = field(default_factory=lambda: 'N/A')
     LOSER: str = field(default_factory=lambda: 'N/A')
+    CROWN_UNLIMITED: bool = field(default_factory=lambda: False)
     TIMESTAMP: str = now
 
 @dataclass(frozen=True, order=True)

@@ -204,7 +204,7 @@ async def addfield(ctx, collection, new_field, field_type):
       elif field_type == 'list':
          field_type = []
       elif field_type == 'bool':
-         field_type = True
+         field_type = False
       
       if collection == 'cards':
          response = db.updateManyCards({'$set': {new_field: field_type}})

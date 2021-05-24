@@ -17,6 +17,8 @@ import requests
 import random
 from collections import ChainMap
 now = time.asctime()
+import base64
+from io import BytesIO
 
 class CrownUnlimited(commands.Cog):
     def __init__(self, bot):
@@ -69,11 +71,12 @@ class CrownUnlimited(commands.Cog):
         total_legends = len(legends)
         currentopponent = 0
         continued = True
-        o = db.queryCard({'NAME': sowner['CARD']})
-        otitle = db.queryTitle({'TITLE': sowner['TITLE']})
+
         #While Still PLaying Universe
         while continued == True:
 
+            o = db.queryCard({'NAME': sowner['CARD']})
+            otitle = db.queryTitle({'TITLE': sowner['TITLE']})
             
             t = db.queryCard({'NAME': legends[currentopponent]})
             ttitle = db.queryTitle({'TITLE': 'Starter'})
@@ -741,6 +744,7 @@ class CrownUnlimited(commands.Cog):
                 else: 
                     embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                 await ctx.send(embed=embedVar)
+
                 if botActive:                    
                     await curse(5, str(ctx.author))
                     embedVar = discord.Embed(title=f"PLAY AGAIN", description=f"Don't Worry! Losing is apart of the game. Use the #end command to `END` the tutorial lobby OR use #start to `PLAY AGAIN`", colour=0xe74c3c)
@@ -759,14 +763,13 @@ class CrownUnlimited(commands.Cog):
                 m_playtime = int(wintime[14:16])
                 s_playtime = int(wintime[17:19])
                 gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
-
                 if currentopponent != (total_legends - 1):
                     if botActive:                    
                         embedVar = discord.Embed(title=f"VICTORY", description=f"{t_card} has been defeated!", colour=0xe91e63)
                         embedVar.add_field(name="Continue...", value="Continue down the path to beat the Universe!")
                         embedVar.set_footer(text="The #shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
                         await ctx.send(embed=embedVar)
-
+                    
                     await bless(5, ctx.author)
 
                     emojis = ['👍', '👎']
@@ -3296,7 +3299,6 @@ def round_rectangle(size, radius, alpha=55):
     return image
 
 def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focused):
-
     if health <= 0:
         im = Image.open(requests.get(d['PATH'], stream=True).raw)
         im.save("text.png")
@@ -3393,10 +3395,19 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
                 draw.text((82,300), f"3. {move3_text}: 80 STAM",  (255, 255, 255), font=m, align="left")
                 draw.text((82,330), f"4. {move_enhanced_text}: 20 STAM",  (255, 255, 255), font=m, align="left")
                 draw.text((82,550), f"0. Quit.",  (255, 255, 255), font=m, align="left")
+        
 
-        im.save("text.png")
+        # data = io.BytesIO
 
-        return discord.File("text.png")
+        # im.save(data, "PNG")
+
+        # encoded_img_data = base64.b64encode(data.getvalue())
+
+        with BytesIO() as image_binary:
+            im.save(image_binary, "PNG")
+            image_binary.seek(0)
+            # await ctx.send(file=discord.File(fp=image_binary,filename="image.png"))
+            return discord.File(fp=image_binary,filename="image.png")
 
 
 

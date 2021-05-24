@@ -804,22 +804,26 @@ def createSession(session):
     if exists:
         return m.ALREADY_IN_SESSION
     else:
-        if len(session['TEAMS']) == 0:
-            sessions_col.insert_one(session)
-            return "New Lobby has been created"
-        elif session['TOURNAMENT']:
-            sessions_col.insert_one(session)
-            return "New Tournament Session has been created"
-        else:       
-            players_per_team_count = [x for x in session['TEAMS'][0]['TEAM']]
-            print(players_per_team_count)
-            print(session['TYPE'])
-            if session['TYPE'] != len(players_per_team_count):
-
-                return "Team and Session Type do not match. "
-            else:
+        if session['GAME'] == "Crown Unlimited":
+            response = sessions_col.insert_one(session)
+            return response
+        else:
+            if len(session['TEAMS']) == 0:
                 sessions_col.insert_one(session)
-                return "New Session started. "
+                return "New Lobby has been created"
+            elif session['TOURNAMENT']:
+                sessions_col.insert_one(session)
+                return "New Tournament Session has been created"
+            else:       
+                players_per_team_count = [x for x in session['TEAMS'][0]['TEAM']]
+                print(players_per_team_count)
+                print(session['TYPE'])
+                if session['TYPE'] != len(players_per_team_count):
+
+                    return "Team and Session Type do not match. "
+                else:
+                    sessions_col.insert_one(session)
+                    return "New Session started. "
 
 def joinSession(session, query):
     sessionquery = querySession(session)
