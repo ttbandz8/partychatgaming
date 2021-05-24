@@ -36,6 +36,7 @@ class CrownUnlimited(commands.Cog):
 
     @commands.command()
     async def tales(self, ctx):
+        private_channel = ctx
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
         all_universes = db.queryAllUniverse()
         available_universes = []
@@ -53,19 +54,16 @@ class CrownUnlimited(commands.Cog):
             return msg.author == ctx.author and msg.content in available_universes
         try:
             msg = await self.bot.wait_for('message', timeout=30.0, check=check)
-
-            guild = ctx.guild
-
-            overwrites = {
-                        guild.default_role: discord.PermissionOverwrite(read_messages=False),
-                        guild.me: discord.PermissionOverwrite(read_messages=True),
-                    ctx.author: discord.PermissionOverwrite(read_messages=True),
-                    }
-
             selected_universe = msg.content
-
-            private_channel = await guild.create_text_channel(f'{str(ctx.author)}-tale-run', overwrites=overwrites)
-            await private_channel.send(f'{ctx.author.mention} Good luck!')
+            guild = ctx.guild
+            if guild:
+                overwrites = {
+                            guild.default_role: discord.PermissionOverwrite(read_messages=False),
+                            guild.me: discord.PermissionOverwrite(read_messages=True),
+                        ctx.author: discord.PermissionOverwrite(read_messages=True),
+                        }
+                private_channel = await guild.create_text_channel(f'{str(ctx.author)}-tale-run', overwrites=overwrites)
+                await private_channel.send(f'{ctx.author.mention} Good luck!')
             
         except:
             embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", colour=0xe91e63)
@@ -302,6 +300,7 @@ class CrownUnlimited(commands.Cog):
             # Count Turns
             turn_total = 0
 
+
             # START TURNS
             while (o_health > 0) and (t_health > 0):
                 #Player 1 Turn Start
@@ -394,16 +393,22 @@ class CrownUnlimited(commands.Cog):
                         
                         # Make sure user is responding with move
                         def check(msg):
-
-                            return msg.author == user1 and msg.channel == private_channel and int(msg.content) in options
+                            if private_channel.guild:
+                                return msg.author == user1 and msg.channel == private_channel and int(msg.content) in options
+                            else:
+                                return msg.author == user1 and int(msg.content) in options
                         try:
                             msg = await self.bot.wait_for("message",timeout=60.0, check=check)
 
                             # calculate data based on selected move
                             if int(msg.content) == 0:
                                 o_health=0
-                                await private_channel.send(f"{ctx.author.mention} has fled the battle...")
-                                await discord.TextChannel.delete(private_channel, reason=None)
+                        
+                                if private_channel.guild:
+                                    await private_channel.send(f"{ctx.author.mention} has fled the battle...")
+                                    await discord.TextChannel.delete(private_channel, reason=None)
+                                else:
+                                    await private_channel.send(f"You fled the battle...")
                                 return
                             if int(msg.content) == 1:
                                 dmg = damage_cal(o_card, o_1, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina)
@@ -503,7 +508,8 @@ class CrownUnlimited(commands.Cog):
                                     turn=0
                         except asyncio.TimeoutError:
                             await private_channel.send(f"{ctx.author.mention} {m.STORY_ENDED}")
-                            await discord.TextChannel.delete(private_channel, reason=None)
+                            if private_channel.guild:
+                                await discord.TextChannel.delete(private_channel, reason=None)
                             return
                 #PLayer 2 Turn Start
                 elif turn == 1:
@@ -777,7 +783,8 @@ class CrownUnlimited(commands.Cog):
 
                 continued = False
                 time.sleep(10)
-                await discord.TextChannel.delete(private_channel, reason=None)
+                if private_channel.guild:
+                    await discord.TextChannel.delete(private_channel, reason=None)
             elif t_health <=0:
                 uid = o_DID
                 ouser = await self.bot.fetch_user(uid)
@@ -809,7 +816,8 @@ class CrownUnlimited(commands.Cog):
                         continued = True
                     except asyncio.TimeoutError:
                         await private_channel.send(f"{ctx.author.mention} {m.STORY_ENDED}")
-                        await discord.TextChannel.delete(private_channel, reason=None)
+                        if private_channel.guild:
+                            await discord.TextChannel.delete(private_channel, reason=None)
                         return
                 if t_card == legends[(total_legends - 1)]:
                     embedVar = discord.Embed(title=f"UNIVERSE CONQUERED", description=f"Universe {selected_universe} has been conquered", colour=0xe91e63)
@@ -825,13 +833,8 @@ class CrownUnlimited(commands.Cog):
                     await private_channel.send(embed=embedVar)
                     continued=False
                     time.sleep(10)
-                    await discord.TextChannel.delete(private_channel, reason=None)
-                    
-
-
-
-
-        print("Quit")
+                    if private_channel.guild:
+                        await discord.TextChannel.delete(private_channel, reason=None)
   
     @commands.command()
     async def boss(self, ctx, *args):
