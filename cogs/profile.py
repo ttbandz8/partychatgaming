@@ -14,6 +14,7 @@ import requests
 from collections import ChainMap
 import DiscordUtils
 from .crownunlimited import showcard
+import random
 
 emojis = ['👍', '👎']
 
@@ -235,11 +236,15 @@ class Profile(commands.Cog):
                     if card['NAME'] not in vault['CARDS']:
                         cards.append({'NAME': card['NAME'], 'PRICE': card['PRICE'], 'UNIVERSE': card['UNIVERSE'], 'STOCK': card['STOCK']})
         
-        for card in cards:
+        random_cards = random.sample(cards, min(len(cards), 10))
+        for card in random_cards:
             if card['STOCK'] == 0:
                 card_text_list.append(f"{card['NAME']}: :coin:{card['PRICE']} " + f"_{card['UNIVERSE']}_ **Out Of Stock**")
             else:
                 card_text_list.append(f"{card['NAME']}: :coin:{card['PRICE']} " + f"_{card['UNIVERSE']}_")
+
+        
+
 
         title_resp = db.queryShopTitles()
         titles = []
@@ -249,7 +254,9 @@ class Profile(commands.Cog):
                 if title['PRICE'] != 0 and title['PRICE'] < (vault['BALANCE'] + 500) and title['AVAILABLE']:
                     if title['TITLE'] not in vault['TITLES']:
                         titles.append({'TITLE': title['TITLE'], 'PRICE': title['PRICE'], 'UNIVERSE': title['UNIVERSE'], 'STOCK': title['STOCK']})
-        for title in titles:
+
+        random_titles = random.sample(titles, min(len(titles), 10))
+        for title in random_titles:
             if title['STOCK'] == 0:
                 title_text_list.append(f"{title['TITLE']}: :coin:{title['PRICE']} " + f"_{title['UNIVERSE']}_ **Out Of Stock**")
             else:
@@ -264,8 +271,9 @@ class Profile(commands.Cog):
                 if arm['PRICE'] != 0 and arm['PRICE'] < (vault['BALANCE'] + 500) and arm['AVAILABLE']:
                     if arm['ARM'] not in vault['ARMS']:
                         arms.append({'ARM': arm['ARM'], 'PRICE': arm['PRICE'], 'UNIVERSE': arm['UNIVERSE'], 'STOCK': arm['STOCK']})
-        
-        for arm in arms:
+
+        random_arms = random.sample(arms, min(len(arms), 10))
+        for arm in random_arms:
             if arm['STOCK'] == 0:
                 arm_text_list.append(f"{arm['ARM']}: :coin:{arm['PRICE']} " + f"_{arm['UNIVERSE']}_ **Out Of Stock**")
             else:
