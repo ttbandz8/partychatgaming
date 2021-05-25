@@ -231,7 +231,7 @@ class Profile(commands.Cog):
         for card in resp:
             if card['UNIVERSE'] in available_universes:
                 # Don't produce cards you can't afford
-                if card['PRICE'] != 0 and card['PRICE'] < (vault['BALANCE'] + 500):
+                if card['PRICE'] != 0 and card['PRICE'] < (vault['BALANCE'] + 500) and card['AVAILABLE']:
                     if card['NAME'] not in vault['CARDS']:
                         cards.append({'NAME': card['NAME'], 'PRICE': card['PRICE'], 'UNIVERSE': card['UNIVERSE'], 'STOCK': card['STOCK']})
         
@@ -246,7 +246,7 @@ class Profile(commands.Cog):
         title_text_list = []
         for title in title_resp:
             if title['UNIVERSE'] in available_universes:
-                if title['PRICE'] != 0 and title['PRICE'] < (vault['BALANCE'] + 500):
+                if title['PRICE'] != 0 and title['PRICE'] < (vault['BALANCE'] + 500) and title['AVAILABLE']:
                     if title['TITLE'] not in vault['TITLES']:
                         titles.append({'TITLE': title['TITLE'], 'PRICE': title['PRICE'], 'UNIVERSE': title['UNIVERSE'], 'STOCK': title['STOCK']})
         for title in titles:
@@ -261,7 +261,7 @@ class Profile(commands.Cog):
         arm_text_list = []
         for arm in arm_resp:
             if arm['UNIVERSE'] in available_universes:
-                if arm['PRICE'] != 0 and arm['PRICE'] < (vault['BALANCE'] + 500):
+                if arm['PRICE'] != 0 and arm['PRICE'] < (vault['BALANCE'] + 500) and arm['AVAILABLE']:
                     if arm['ARM'] not in vault['ARMS']:
                         arms.append({'ARM': arm['ARM'], 'PRICE': arm['PRICE'], 'UNIVERSE': arm['UNIVERSE'], 'STOCK': arm['STOCK']})
         
