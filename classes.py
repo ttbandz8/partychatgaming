@@ -90,6 +90,8 @@ class CARDS():
     COLLECTION: str = field(default_factory=lambda: "N/A")
     STOCK: int = field(default_factory=lambda: 5)
     AVAILABLE: bool = field(default_factory=lambda: True)
+    BASEATK: int = field(default_factory=lambda: 25)
+    BASEDEF: int = field(default_factory=lambda: 25)
 
 @dataclass(frozen=True, order=True) 
 class TITLES():

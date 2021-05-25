@@ -227,7 +227,7 @@ def altQueryShopCards(args):
     return data 
 
 def queryDropCards(args):
-    data = cards_col.find({'UNIVERSE': args})
+    data = cards_col.find({'UNIVERSE': args, 'AVAILABLE': True})
     return data 
 
 def queryCard(query):
@@ -328,7 +328,7 @@ def queryTitle(query):
     return data
 
 def queryDropTitles(args):
-    data = titles_col.find({'UNIVERSE': args})
+    data = titles_col.find({'UNIVERSE': args, 'AVAILABLE': True})
     return data 
 
 def queryTournamentTitles():
@@ -398,7 +398,7 @@ def queryArm(query):
     return data
 
 def queryDropArms(args):
-    data = arm_col.find({'UNIVERSE': args})
+    data = arm_col.find({'UNIVERSE': args, 'AVAILABLE': True})
     return data 
 
 def queryTournamentArms():
