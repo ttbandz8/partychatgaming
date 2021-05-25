@@ -803,8 +803,8 @@ class CrownUnlimited(commands.Cog):
                     
                     if private_channel.guild:
 
-                        embedVar = discord.Embed(title=f"VICTORY", description=f"The game lasted {turn_total} rounds.", colour=0xe91e63)
-                        embedVar.set_author(name=f"{t_card} has been defeated!\n\n{drop_response}")
+                        embedVar = discord.Embed(title=f"VICTORY", description=f"The game lasted {turn_total} rounds.\n\n{drop_response}", colour=0xe91e63)
+                        embedVar.set_author(name=f"{t_card} has been defeated!\n")
                         embedVar.add_field(name="Continue...", value="Continue down the path to beat the Universe!")
                         await private_channel.send(embed=embedVar)
 
