@@ -3644,12 +3644,12 @@ class CrownUnlimited(commands.Cog):
                                                 o_stamina = round(o_stamina - dmg['DMG'])
                                                 t_stamina = round(t_stamina + dmg['DMG'] - 10)
                                             elif enh_type == 'SLOW':
-                                                tempstam = round(t_stamina + dmg['DMG']-10)
+                                                tempstam = round(t_stamina + dmg['DMG'])
                                                 o_stamina = round(o_stamina - dmg['DMG'])
                                                 t_stamina = o_stamina
                                                 o_stamina = tempstam
                                             elif enh_type == 'HASTE':
-                                                tempstam = round(t_stamina - dmg['DMG']+10)
+                                                tempstam = round(t_stamina - dmg['DMG'])
                                                 o_stamina = round(o_stamina + dmg['DMG'])
                                                 t_stamina = o_stamina
                                                 o_stamina = tempstam                                       
@@ -3885,12 +3885,12 @@ class CrownUnlimited(commands.Cog):
                                                     t_stamina = round(t_stamina - dmg['DMG'])
                                                     o_stamina = round(o_stamina + dmg['DMG'] - 10)
                                                 elif enh_type == 'SLOW':
-                                                    tempstam = round(o_stamina + dmg['DMG']-10)
+                                                    tempstam = round(o_stamina + dmg['DMG'])
                                                     t_stamina = round(t_stamina - dmg['DMG'])
                                                     o_stamina = t_stamina
                                                     t_stamina = tempstam
                                                 elif enh_type == 'HASTE':
-                                                    tempstam = round(o_stamina - dmg['DMG']+10)
+                                                    tempstam = round(o_stamina - dmg['DMG'])
                                                     t_stamina = round(t_stamina + dmg['DMG'])
                                                     o_stamina = t_stamina
                                                     t_stamina = tempstam                                       
@@ -4115,12 +4115,12 @@ class CrownUnlimited(commands.Cog):
                                                 t_stamina = round(t_stamina - dmg['DMG'])
                                                 o_stamina = round(o_stamina + dmg['DMG'] - 10)
                                             elif enh_type == 'SLOW':
-                                                tempstam = round(o_stamina + dmg['DMG']-10)
+                                                tempstam = round(o_stamina + dmg['DMG'])
                                                 t_stamina = round(t_stamina - dmg['DMG'])
                                                 o_stamina = t_stamina
                                                 t_stamina = tempstam
                                             elif enh_type == 'HASTE':
-                                                tempstam = round(o_stamina - dmg['DMG']+10)
+                                                tempstam = round(o_stamina - dmg['DMG'])
                                                 t_stamina = round(t_stamina + dmg['DMG'])
                                                 o_stamina = t_stamina
                                                 t_stamina = tempstam                                       
@@ -4224,7 +4224,7 @@ class CrownUnlimited(commands.Cog):
                         embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                     else: 
                         embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
-                    embedVar.add_field(name="Focus Count", value=f"`{o_card}``: {o_focus_count}\n`{t_card}``: {t_focus_count}")
+                    embedVar.add_field(name="Focus Count", value=f"`{o_card}`: {o_focus_count}\n`{t_card}`: {t_focus_count}")
                     if o_focus_count >= t_focus_count:
                         embedVar.add_field(name="Most Focused", value=f"`{o_card}`")
                     else:
