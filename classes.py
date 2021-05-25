@@ -101,7 +101,7 @@ class TITLES():
     COLLECTION: str = field(default_factory=lambda: "N/A")
     TIMESTAMP: str = now
     STOCK: int = field(default_factory=lambda: 5)
-    AVAILABLE: str = field(default_factory=lambda: "")
+    AVAILABLE: bool = field(default_factory=lambda: True)
 
 @dataclass(frozen=True, order=True) 
 class ARM():
