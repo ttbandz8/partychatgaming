@@ -27,10 +27,10 @@ class Cards(commands.Cog):
         return await main.validate_user(ctx)
 
     @commands.command()
-    async def nc(self, ctx, path: str, tournament: int, price: int, *args):
+    async def nc(self, ctx, path: str, price: int, *args):
         if ctx.author.guild_permissions.administrator == True:
             name = " ".join([*args])
-            card_query = {'PATH': str(path), 'RPATH': str(path), 'NAME': str(name), 'TOURNAMENT_REQUIREMENTS': int(tournament),'PRICE': int(price)}
+            card_query = {'PATH': str(path), 'RPATH': str(path), 'NAME': str(name), 'TOURNAMENT_REQUIREMENTS': 0,'PRICE': int(price)}
             added = db.createCard(data.newCard(card_query))
             await ctx.send(added, delete_after=3)
         else:
