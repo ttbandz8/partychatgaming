@@ -132,7 +132,7 @@ async def r(ctx):
 
 @bot.command()
 @commands.check(validate_user)
-async def vs(ctx, args1, user: User):
+async def vs(ctx, user: User, args1 ):
 
    aliases = [x for x in db.query_all_games() for x in x['ALIASES']]
    game = {}

@@ -434,24 +434,25 @@ class Lobbies(commands.Cog):
     #     await self.add(self,ctx,user)
 
     @commands.command()
-    async def battle(self, ctx, user1: User, *args):
-        game_name = " ".join([*args])
+    async def battle(self, ctx, user1: User):
+        game_name = "Crown Unlimited"
         query = {'ALIASES': game_name.lower()}
         game = db.queryGame(query)
 
         if game:
             name = game['GAME']
             user_query = {'DISNAME': str(ctx.author)}
-            print(user1)
             player2_query = {'DISNAME': str(user1)}
             player2=db.queryUser(player2_query)
 
             card1=player2['CARD']
             title1=player2['TITLE']
+            arm1=player2['ARM']
 
             user = db.queryUser(user_query)
             card = user['CARD']
             title = user['TITLE']
+            arm = user['ARM']
             if name in user['GAMES']:
                 await main.DM(ctx, user1, f"{ctx.author.mention}" + f" has challenged you to {name}")
                 accept = await ctx.send(f"{user1.mention} are you ready to battle {ctx.author.mention}? !!!:fire:")
@@ -461,17 +462,13 @@ class Lobbies(commands.Cog):
                 def check(reaction, user):
                     return user == user1 and str(reaction.emoji) == '👍'
                 try:
-                    reaction, user = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
+                    reaction, user = await self.bot.wait_for('reaction_add', timeout=15.0, check=check)
 
-                    if name == 'Crown Unlimited':
-                        join_query = {"TEAM": [str(user1)], "SCORE": 0, "CARD": card1, "TITLE": title1, "POSITION": 1}
-                    else:
-                        join_query = {"TEAM": [str(user1)], "SCORE": 0, "POSITION": 1}
 
-                    if name == 'Crown Unlimited':
-                        session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 1, "TEAMS": [{"TEAM": [str(ctx.author)], "SCORE": 0, "CARD": card, "TITLE": title, "POSITION": 0}], "AVAILABLE": True}
-                    else:
-                        session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 1, "TEAMS": [{"TEAM": [str(ctx.author)], "SCORE": 0, "POSITION": 0}], "AVAILABLE": True}
+                    join_query = {"TEAM": [str(user1)], "SCORE": 0, "CARD": card1, "TITLE": title1, "ARM": arm, "POSITION": 1}
+
+                    session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 1, "TEAMS": [{"TEAM": [str(ctx.author)], "SCORE": 0, "CARD": card, "TITLE": title, "ARM": arm, "POSITION": 0}], "AVAILABLE": True}
+
 
                     session = db.createSession(data.newSession(session_query))
                     resp = db.joinSession(session_query, join_query)
