@@ -164,51 +164,26 @@ class Profile(commands.Cog):
             titles = vault['TITLES']
             arms = vault['ARMS']
 
-            cards_broken_up = np.array_split(cards, 6)
-            titles_broken_up = np.array_split(titles, 6)
-            arms_broken_up = np.array_split(arms, 6)
+            embedVar1 = discord.Embed(title= f"My Cards\n:coin:{'{:,}'.format(balance)}", description="`#updatecard name` -  Select Your Card", colour=0x7289da)
+            embedVar1.set_thumbnail(url=avatar)
+            embedVar1.add_field(name="Cards" + " :fireworks:", value="\n".join(cards))
 
-            if len(cards) < 25:
-                embedVar = discord.Embed(title= f":triangular_flag_on_post: " + f"{name}".format(self) +"\n" + f" :coin:{'{:,}'.format(balance)}", description="`#updatecard name` -  Select Your Card\n`#updatetitle name` - Select Your Title\n`#updatearm name` - Select Your Arm", colour=0x7289da)
-                embedVar.set_thumbnail(url=avatar)
-                # embedVar.add_field(name="Balance" + " :fireworks:", value=f":coin:{balance}")
-                if bool(cards):
-                    embedVar.add_field(name="Cards" + " :fireworks:", value="\n".join(cards))
-                else:
-                    embedVar.set_footer(text="No Cards available")
-                
-                if bool(titles):
-                    embedVar.add_field(name="Titles" + " :fireworks:", value="\n".join(titles))
+            embedVar2 = discord.Embed(title= f"My Titles\n:coin:{'{:,}'.format(balance)}", description="`#updatetitle name` - Select Your Title", colour=0x7289da)
+            embedVar2.set_thumbnail(url=avatar)
+            embedVar2.add_field(name="Titles" + " :fireworks:", value="\n".join(titles))
 
-                if bool(arms):
-                    embedVar.add_field(name="Arms" + " :fireworks:", value="\n".join(arms))
-                await ctx.send(embed=embedVar)
-            else:
-                embed_list = []
-                for i in range(0, len(titles_broken_up)):
-                    globals()['embedVar%s' % i] = discord.Embed(title= f":triangular_flag_on_post: " + f"{name}".format(self) +"\n" + f" :coin:{'{:,}'.format(balance)}", description="`#updatecard name` -  Select Your Card\n`#updatetitle name` - Select Your Title\n`#updatearm name` - Select Your Arm", colour=000000)
-                    globals()['embedVar%s' % i].set_thumbnail(url=avatar)
-                    # embedVar.add_field(name="Balance" + " :fireworks:", value=f":coin:{balance}")
-                    if bool(cards):
-                        globals()['embedVar%s' % i].add_field(name="Cards" + " :fireworks:", value="\n".join(cards_broken_up[i]))
-                    else:
-                        globals()['embedVar%s' % i].set_footer(text="No Cards available")
-                    
-                    if bool(titles):
-                        globals()['embedVar%s' % i].add_field(name="Titles" + " :fireworks:", value="\n".join(titles_broken_up[i]))
+            embedVar3 = discord.Embed(title= f"My Arms\n:coin:{'{:,}'.format(balance)}", description="`#updatearm name` - Select Your Arm", colour=0x7289da)
+            embedVar3.set_thumbnail(url=avatar)
+            embedVar3.add_field(name="Arms" + " :fireworks:", value="\n".join(arms))
 
-                    if bool(arms):
-                        globals()['embedVar%s' % i].add_field(name="Arms" + " :fireworks:", value="\n".join(arms_broken_up[i]))
-                    embed_list.append(globals()['embedVar%s' % i])
-
-                paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
-                paginator.add_reaction('⏮️', "first")
-                paginator.add_reaction('⏪', "back")
-                paginator.add_reaction('🔐', "lock")
-                paginator.add_reaction('⏩', "next")
-                paginator.add_reaction('⏭️', "last")
-                embeds = embed_list
-                await paginator.run(embeds)
+            paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+            paginator.add_reaction('⏮️', "first")
+            paginator.add_reaction('⏪', "back")
+            paginator.add_reaction('🔐', "lock")
+            paginator.add_reaction('⏩', "next")
+            paginator.add_reaction('⏭️', "last")
+            embeds = [embedVar1, embedVar2, embedVar3]
+            await paginator.run(embeds)
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
 

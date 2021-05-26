@@ -215,15 +215,15 @@ def queryAllCards():
     return data
 
 def queryTournamentCards():
-    data = cards_col.find({'TOURNAMENT_REQUIREMENTS': {'$gt': 0}})
+    data = cards_col.find({'TOURNAMENT_REQUIREMENTS': {'$gt': 0}, 'AVAILABLE': True})
     return data
 
 def queryShopCards():
-    data = cards_col.find({'TOURNAMENT_REQUIREMENTS': 0})
+    data = cards_col.find({'TOURNAMENT_REQUIREMENTS': 0, 'AVAILABLE': True})
     return data 
 
 def altQueryShopCards(args):
-    data = cards_col.find({'TOURNAMENT_REQUIREMENTS': 0})
+    data = cards_col.find({'TOURNAMENT_REQUIREMENTS': 0, 'AVAILABLE': True})
     return data 
 
 def queryDropCards(args):
@@ -332,11 +332,11 @@ def queryDropTitles(args):
     return data 
 
 def queryTournamentTitles():
-    data = titles_col.find({'TOURNAMENT_REQUIREMENTS': {'$gt': 0}})
+    data = titles_col.find({'TOURNAMENT_REQUIREMENTS': {'$gt': 0}, 'AVAILABLE': True})
     return data
 
 def queryShopTitles():
-    data = titles_col.find({'TOURNAMENT_REQUIREMENTS': 0})
+    data = titles_col.find({'TOURNAMENT_REQUIREMENTS': 0, 'AVAILABLE': True})
     return data 
 
 
@@ -402,11 +402,11 @@ def queryDropArms(args):
     return data 
 
 def queryTournamentArms():
-    data = arm_col.find({'TOURNAMENT_REQUIREMENTS': {'$gt': 0}})
+    data = arm_col.find({'TOURNAMENT_REQUIREMENTS': {'$gt': 0}, 'AVAILABLE': True})
     return data
 
 def queryShopArms():
-    data = arm_col.find({'TOURNAMENT_REQUIREMENTS': 0})
+    data = arm_col.find({'TOURNAMENT_REQUIREMENTS': 0, 'AVAILABLE': True})
     return data 
 
 
