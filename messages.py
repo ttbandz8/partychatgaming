@@ -6,7 +6,7 @@ USER_HAS_REGISTERED="User has been registered. "
 OWNER_ONLY_COMMAND="Team Owner only command. "
 USER_ALREADY_ON_TEAM="User is already part of a team. "
 
-ALREADY_IN_SESSION="You're already in the lobby. "
+ALREADY_IN_SESSION="You're already in the lobby. Please use .end to end your lobby before joining another!"
 SESSION_JOINED="User has joined the lobby.  "
 SESSION_DOES_NOT_EXIST="Lobby not detected. "
 

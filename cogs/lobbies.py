@@ -475,7 +475,7 @@ class Lobbies(commands.Cog):
                     await ctx.send(resp)
 
                 except:
-                    await ctx.send(m.INVITE_NOT_ACCEPTED)  
+                    await ctx.send(m.ALREADY_IN_SESSION)  
                     # session_query = {"OWNER": str(ctx.author), "GAME": name, "TYPE": 1, "TEAMS": [], 'AVAILABLE': True}
                     # resp = db.createSession(data.newSession(session_query))
                     # await ctx.send(resp)
