@@ -740,7 +740,7 @@ class CrownUnlimited(commands.Cog):
                         player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                         await private_channel.send(file=player_1_card)
                         embedVar = discord.Embed(title=f"{o_card} What move will you use?", description=f"{t_card} currently has {t_health} health and {t_stamina} stamina.", colour=embed_color_o)
-                        embedVar.add_field(name=f"{o_card} Move List", value=f"1. {omove1_text}\n2. {omove2_text}\n3. {omove3_text}\n4. {omove_enhanced_text}")
+                        embedVar.add_field(name=f"{o_card} Move List", value=f"1. {omove1_text} | 10 STAM\n2. {omove2_text} | 30 STAM\n3. {omove3_text} | 80 STAM\n4. {omove_enhanced_text} | 20 STAM")
                         if o_used_focus and not o_used_resolve:
                             embedVar.set_author(name="Press 0 to Quit Match. Press 5 to strengthen resolve!")
                         else:
@@ -785,11 +785,6 @@ class CrownUnlimited(commands.Cog):
                             elif msg.content == "5":
                                 #Resolve Check and Calculation
                                 if not o_used_resolve and o_used_focus:
-
-                                    if botActive:                    
-                                        embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
-                                        embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
-                                        await private_channel.send(embed=embedVar)
                                         
 
                                     #fortitude or luck is based on health  
@@ -1990,7 +1985,7 @@ class CrownUnlimited(commands.Cog):
                     player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                     await private_channel.send(file=player_1_card)
                     embedVar = discord.Embed(title=f"{o_card} What move will you use?", description=f"{t_card} currently has {t_health} health and {t_stamina} stamina.", colour=embed_color_o)
-                    embedVar.add_field(name=f"{o_card} Move List", value=f"1. {omove1_text}\n2. {omove2_text}\n3. {omove3_text}\n4. {omove_enhanced_text}")
+                    embedVar.add_field(name=f"{o_card} Move List", value=f"1. {omove1_text} | 10 STAM\n2. {omove2_text} | 30 STAM\n3. {omove3_text} | 80 STAM\n4. {omove_enhanced_text} | 20 STAM")
                     if o_used_focus and not o_used_resolve:
                         embedVar.set_author(name="Press 0 to Quit Match. Press 5 to strengthen resolve!")
                     else:
@@ -2024,25 +2019,19 @@ class CrownUnlimited(commands.Cog):
                             return
 
                         if msg.content == "1":
-                            dmg = damage_cal(o_card, o_1, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack)
+                            dmg = damage_cal(o_card, o_1, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description)
                         elif msg.content == "2":
-                            dmg = damage_cal(o_card, o_2, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack)
+                            dmg = damage_cal(o_card, o_2, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description)
                         elif msg.content == "3":
-                            dmg = damage_cal(o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack)
+                            dmg = damage_cal(o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description)
                         elif msg.content == "4":
                             o_enhancer_used=True
-                            dmg = damage_cal(o_card, o_enhancer, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack)
+                            dmg = damage_cal(o_card, o_enhancer, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description)
                             o_enhancer_used=False
                         elif msg.content == "5":
 
                             #Resolve Check and Calculation
                             if not o_used_resolve and o_used_focus:
-
-                                if botActive:                    
-                                    embedVar = discord.Embed(title=f"`{t_card}` Snarls", description=f"{t_rebuke}", colour=0xe91e63)
-                                    embedVar.add_field(name=f"`{o_card}` Says", value="You have not faced me.")
-                                    embedVar.set_footer(text=f"{t_card} enrages in anticipation of your next attack!")
-                                    await private_channel.send(embed=embedVar)
                                     
 
                                 #fortitude or luck is based on health  
@@ -2341,18 +2330,19 @@ class CrownUnlimited(commands.Cog):
                     else:
                         aiMove = 0
                     
+                    boss_special_move_default_msg = " "
 
                     if aiMove == 0:
                         t_health=0
                     elif aiMove == 1:
-                        dmg = damage_cal(t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack)
+                        dmg = damage_cal(t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg)
                     elif aiMove == 2:
-                        dmg = damage_cal(t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack)
+                        dmg = damage_cal(t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg)
                     elif aiMove == 3:
-                        dmg = damage_cal(t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack)
+                        dmg = damage_cal(t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg)
                     elif aiMove == 4:
                         t_enhancer_used=True
-                        dmg = damage_cal(t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina, t_max_health, o_attack)
+                        dmg = damage_cal(t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg)
                         t_enhancer_used=False
                     elif aiMove == 5:
                         if not t_used_resolve and t_used_focus:
@@ -3262,7 +3252,7 @@ class CrownUnlimited(commands.Cog):
                             player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                             await private_channel.send(file=player_1_card)
                             embedVar = discord.Embed(title=f"{o_card} What move will you use?", description=f"{t_card} currently has {t_health} health and {t_stamina} stamina.", colour=embed_color_o)
-                            embedVar.add_field(name=f"{o_card} Move List", value=f"1. {omove1_text}\n2. {omove2_text}\n3. {omove3_text}\n4. {omove_enhanced_text}")
+                            embedVar.add_field(name=f"{o_card} Move List", value=f"1. {omove1_text} | 10 STAM\n2. {omove2_text} | 30 STAM\n3. {omove3_text} | 80 STAM\n4. {omove_enhanced_text} | 20 STAM")
                             if o_used_focus and not o_used_resolve:
                                 embedVar.set_author(name="Press 0 to Quit Match. Press 5 to strengthen resolve!")
                             else:
@@ -3504,7 +3494,7 @@ class CrownUnlimited(commands.Cog):
                                 player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus)
                                 await ctx.send(file=player_2_card)
                                 embedVar = discord.Embed(title=f"{t_card} What move will you use?", description=f"{o_card} currently has {o_health} health and {t_stamina} stamina.", colour=embed_color_t)
-                                embedVar.add_field(name=f"{t_card} Move List", value=f"1. {tmove1_text}\n2. {tmove2_text}\n3. {tmove3_text}\n4. {tmove_enhanced_text}")
+                                embedVar.add_field(name=f"{t_card} Move List", value=f"1. {tmove1_text} | 10 STAM\n2. {tmove2_text} | 30 STAM\n3. {tmove3_text} | 80 STAM\n4. {tmove_enhanced_text} | 20 STAM")
                                 if t_used_focus and not t_used_resolve:
                                     embedVar.set_author(name="Press 0 to Quit Match. Press 5 to strengthen resolve!")
                                 else:
@@ -3759,17 +3749,18 @@ class CrownUnlimited(commands.Cog):
                                     aiMove = 0
                                 
 
+                        
                                 if int(aiMove) == 0:
                                     t_health=0
                                 if int(aiMove) == 1:
-                                    dmg = damage_cal(t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack)
+                                    dmg = damage_cal(t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description)
                                 elif int(aiMove) == 2:
-                                    dmg = damage_cal(t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack)
+                                    dmg = damage_cal(t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description)
                                 elif int(aiMove) == 3:
-                                    dmg = damage_cal(t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack)
+                                    dmg = damage_cal(t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description)
                                 elif int(aiMove) == 4:
                                     t_enhancer_used=True
-                                    dmg = damage_cal(t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina,t_max_health, o_attack)
+                                    dmg = damage_cal(t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina,t_max_health, o_attack, t_special_move_description)
                                     t_enhancer_used=False
                                 elif int(aiMove) == 5:
                                     if not t_used_resolve and t_used_focus:
@@ -3964,7 +3955,7 @@ class CrownUnlimited(commands.Cog):
                         embedVar.add_field(name="Most Focused", value=f"`{t_card}`")
                     await ctx.send(embed=embedVar)
                     if botActive:                    
-                        embedVar = discord.Embed(title=f"VICTORY", description=f"Victories earn `ITEMS` ! Use the #end command to `END` the tutorial lobby\nOR use #start to `PLAY AGAIN`", colour=0xe91e63)
+                        embedVar = discord.Embed(title=f"TUTORIAL COMPLETE", description=f"Victories earn `ITEMS` ! Use the #end command to `END` the tutorial lobby\nOR use #start to `PLAY AGAIN`", colour=0xe91e63)
                         embedVar.set_author(name=f"Congratulations You Beat Senpai!")
                         embedVar.add_field(name="Tips!", value="Equiping stronger `TITLES` and `ARMS` will make you character tougher in a fight!")
                         embedVar.set_footer(text="The #shop is full of strong CARDS, TITLES and ARMS try different combinations! ")

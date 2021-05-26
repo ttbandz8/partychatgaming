@@ -254,17 +254,17 @@ class Profile(commands.Cog):
             else:
                 arm_text_list.append(f"{arm['ARM']}: :coin:{arm['PRICE']} " + f"_{arm['UNIVERSE']}_")
         
-        embedVar1 = discord.Embed(title=f":shopping_cart: Card Shop", description=f"Current Balance :coin:{vault['BALANCE']}\n`#viewcard card name` - View Cards\n`#buycard card name` - Buy Card", colour=0x2ecc71, value='Page 1')
+        embedVar1 = discord.Embed(title=f":shopping_cart: Pop Up Shop", description=f"Current Balance :coin:{vault['BALANCE']}\n`#viewcard card name` - View Cards\n`#buycard card name` - Buy Card", colour=0x2ecc71, value='Page 1')
         embedVar1.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236723/PCG%20LOGOS%20AND%20RESOURCES/Party_Chat_Shop.png")
         embedVar1.add_field(name=":shopping_bags: Cards", value="\n".join(card_text_list))
         embedVar1.set_footer(text="Stock updated every day")
 
-        embedVar2 = discord.Embed(title=f":shopping_cart: Title Shop", description=f"Current Balance :coin:{vault['BALANCE']}\n`#viewtitle title name` - View Title Stats\n`#buytitle title name` - Buy Title", colour=0x3498db, value='Page 2')
+        embedVar2 = discord.Embed(title=f":shopping_cart: Pop Up Shop", description=f"Current Balance :coin:{vault['BALANCE']}\n`#viewtitle title name` - View Title Stats\n`#buytitle title name` - Buy Title", colour=0x3498db, value='Page 2')
         embedVar2.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236723/PCG%20LOGOS%20AND%20RESOURCES/Party_Chat_Shop.png")
         embedVar2.add_field(name=":shopping_bags: Titles", value="\n".join(title_text_list))
         embedVar2.set_footer(text="Stock updated every day")
 
-        embedVar3 = discord.Embed(title=f":shopping_cart: Arm Shop", description=f"Current Balance :coin:{vault['BALANCE']}\n`#viewarm arm name` - View Arm Stats\n`#buyarm arm name` - Buy Arm", colour=0xf1c40f, value='Page 3')
+        embedVar3 = discord.Embed(title=f":shopping_cart: Pop Up Shop", description=f"Current Balance :coin:{vault['BALANCE']}\n`#viewarm arm name` - View Arm Stats\n`#buyarm arm name` - Buy Arm", colour=0xf1c40f, value='Page 3')
         embedVar3.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236723/PCG%20LOGOS%20AND%20RESOURCES/Party_Chat_Shop.png")
         embedVar3.add_field(name=":shopping_bags: Arm", value="\n".join(arm_text_list))
         embedVar3.set_footer(text="Stock updated every day")
