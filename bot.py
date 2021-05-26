@@ -1,5 +1,6 @@
 from dataclasses import field
 from discord import player, team
+from discord.flags import Intents
 import db
 import time
 import classes as data
@@ -39,14 +40,15 @@ handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(me
 logger.addHandler(handler)
 emojis = ['👍', '👎']
 
+intents = discord.Intents.all()
 client = discord.Client()
 
 if config('ENV') == "production":
    # PRODUCTION
-   bot = commands.Bot(command_prefix=".")
+   bot = commands.Bot(command_prefix=".", intents=intents)
 else:
    # TEST
-   bot = commands.Bot(command_prefix=",")
+   bot = commands.Bot(command_prefix=",", intents=intents)
 
 bot.remove_command("help")
 
