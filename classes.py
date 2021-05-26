@@ -92,6 +92,7 @@ class CARDS():
     AVAILABLE: bool = field(default_factory=lambda: True)
     BASEATK: int = field(default_factory=lambda: 25)
     BASEDEF: int = field(default_factory=lambda: 25)
+    DESCRIPTIONS: list[str] = field(default_factory=lambda: [])
 
 @dataclass(frozen=True, order=True) 
 class TITLES():
