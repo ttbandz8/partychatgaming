@@ -727,11 +727,10 @@ class CrownUnlimited(commands.Cog):
                         o_attack = o_attack + o_attackcalc
                         o_defense =  o_defense + o_defensecalc
                         o_used_focus = True
-
-                        if botActive and not o_used_focus:                    
-                            embedVar = discord.Embed(title=f"{o_card.upper()} FOCUSED", description=f"`{o_card} says:`\n{o_focus_description}", colour=0xe91e63)
-                            embedVar.add_field(name=f"{o_card} focused and {healmessage}", value="All stats & stamina increased")
-                            await private_channel.send(embed=embedVar)
+                            
+                        embedVar = discord.Embed(title=f"{o_card.upper()} FOCUSED", description=f"`{o_card} says:`\n{o_focus_description}", colour=0xe91e63)
+                        embedVar.add_field(name=f"{o_card} focused and {healmessage}", value="All stats & stamina increased")
+                        await private_channel.send(embed=embedVar)
 
                         turn_total= turn_total + 1
                         turn = 1
@@ -965,7 +964,9 @@ class CrownUnlimited(commands.Cog):
                         t_attack = t_attack + t_attackcalc
                         t_defense =  t_defense + t_defensecalc
                         t_used_focus=True
-                        embedVar = discord.Embed(title=f"{t_card} focused and {healmessage}", description="All stats & stamina increased", colour=embed_color_t)
+                        
+                        embedVar = discord.Embed(title=f"{t_card.upper()} FOCUSED", description=f"`{t_card} says:`\n{t_focus_description}", colour=0xe91e63)
+                        embedVar.add_field(name=f"{t_card} focused and {healmessage}", value="All stats & stamina increased")
                         await private_channel.send(embed=embedVar)
 
                         turn_total= turn_total + 1
