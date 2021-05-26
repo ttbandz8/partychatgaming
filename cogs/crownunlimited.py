@@ -67,6 +67,7 @@ class CrownUnlimited(commands.Cog):
                         ctx.author: discord.PermissionOverwrite(read_messages=True),
                         }
                 private_channel = await guild.create_text_channel(f'{str(ctx.author)}-tale-run', overwrites=overwrites)
+                await ctx.send(f"{ctx.author.mention} private channel has been opened for you.")
                 await private_channel.send(f'{ctx.author.mention} Good luck!')
             
         except:
@@ -1308,6 +1309,8 @@ class CrownUnlimited(commands.Cog):
                     ctx.author: discord.PermissionOverwrite(read_messages=True),
                     }
             private_channel = await guild.create_text_channel(f'{str(ctx.author)}-boss-fight', overwrites=overwrites)
+            if guild:
+                await ctx.send(f"{ctx.author.mention} private channel has been opened for you.")
             await private_channel.send(f'{ctx.author.mention} Good luck!')
 
         t_available = False
