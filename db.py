@@ -190,13 +190,13 @@ def card_exists(data):
     else:
         return False
 
-def deleteAllCards(user_query):
-    exists = user_exists({'DISNAME': user_query['DISNAME']})
-    if exists:
-        cards_col.delete_many({})
-        return 'All Cards Deleted'
-    else:
-        return 'Unable to Delete All Cards'
+# def deleteAllCards(user_query):
+#     exists = user_exists({'DISNAME': user_query['DISNAME']})
+#     if exists:
+#         cards_col.delete_many({'UNIVERSE': 'Dragon Ball Z'})
+#         return 'All Cards Deleted'
+#     else:
+#         return 'Unable to Delete All Cards'
 
 '''New Card'''
 def createCard(card):
