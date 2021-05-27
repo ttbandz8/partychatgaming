@@ -54,27 +54,56 @@ bot.remove_command("help")
 
 @bot.group(invoke_without_command=True)
 async def help(ctx):
-   em = discord.Embed(title = "Party Chat Gaming Bot Help Page", description = "use #help <command> for extended information on that command.", color = ctx.author.color)
+   avatar="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png"
 
-   em.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png")
-   em.add_field(name = "Player Commands", value =h.PLAYER_COMMANDS , inline=False)
-   em.add_field(name = "Profile Commands", value =h.PROFILE_COMMANDS, inline=False)
-   em.add_field(name = "Senpai:tm: Tutorial Commands", value =h.SENPAI_COMMANDS,inline=False)
-   em.add_field(name = "Lobbies", value =h.LOBBY_COMMANDS,inline=False)
-   em.add_field(name = "Shop", value =h.SHOP_COMMANDS, inline=False)
-   em.add_field(name = "Team", value =h.TEAM_COMMANDS,inline=True)
-   em.add_field(name = "Tournament Types:", value = "\nExhibitions\nKingsGambit\nGodsOfCod",inline=True)
-   em.set_footer(text="Many more cards and titles are available via tournament win only. ")
-   await ctx.send(embed = em)
+
+   embedVar1 = discord.Embed(title= f":video_game:Player Commands:", description=h.PLAYER_COMMANDS, colour=0x7289da)
+   embedVar1.set_thumbnail(url=avatar)
+   embedVar1.add_field(name=":woman_teacher:Senpai:tm: Tutorial Commands:", value=h.SENPAI_COMMANDS)
+   embedVar1.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
+
+   embedVar2 = discord.Embed(title= f":triangular_flag_on_post:Profile Commands:", description=h.PROFILE_COMMANDS, colour=0x7289da)
+   embedVar2.set_thumbnail(url=avatar)
+   embedVar2.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
+
+   embedVar3 = discord.Embed(title= f":crossed_swords:Lobbies:", description=h.LOBBY_COMMANDS, colour=0x7289da)
+   embedVar3.set_thumbnail(url=avatar)
+   embedVar3.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
+
+   embedVar4 = discord.Embed(title= f":crown:Crown Unlimited Player Commands:", description=h.CROWN_UNLIMITED_PLAYER_COMMANDS, colour=0x7289da)
+   embedVar4.set_thumbnail(url=avatar)
+   embedVar4.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
+
+   embedVar5 = discord.Embed(title= f":military_helmet:Teams:", description=h.TEAM_COMMANDS, colour=0x7289da)
+   embedVar5.set_thumbnail(url=avatar)
+   embedVar5.add_field(name=":fireworks:Tournament Types:", value="\n`Exhibitions`\n`KingsGambit`\n`GodsOfCod`")
+   embedVar5.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
+
+   embedVar6 = discord.Embed(title= f":shopping_cart:Pop Up Shop:", description=h.SHOP_COMMANDS, colour=0x7289da)
+   embedVar6.set_thumbnail(url=avatar)
+   embedVar6.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
+
+   embedVar7 = discord.Embed(title= f":crown:Crown Unlimited Game Commands:", description=h.CROWN_UNLIMITED_GAMES, colour=0x7289da)
+   embedVar7.set_thumbnail(url=avatar)
+   embedVar7.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
+
+   paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+   paginator.add_reaction('⏮️', "first")
+   paginator.add_reaction('⏪', "back")
+   paginator.add_reaction('🔐', "lock")
+   paginator.add_reaction('⏩', "next")
+   paginator.add_reaction('⏭️', "last")
+   embeds = [embedVar1, embedVar4, embedVar6, embedVar7, embedVar2, embedVar3, embedVar5]
+   await paginator.run(embeds)
 
 @bot.command()
 async def teamHelp(ctx):
       embedVar = discord.Embed(title=f"Teams!: How To Register!", description="Party Chat Gaming Database™️", colour=000000)
-      embedVar.add_field(name="REGISTRATION!" , value="Type::arrow_right: #cteam codm 'Team Name'")
-      embedVar.add_field(name="INVITE MEMBERS!" , value="Type::arrow_right: #att 'teamname' @user")
-      embedVar.add_field(name="DELETE MEMBERS!" , value="Type::arrow_right: #dtm @user")
-      embedVar.add_field(name="DELETE TEAM" , value="Type::arrow_right: #dteam 'teamname'")
-      embedVar.add_field(name="STILL LOST????" , value="use #help or ask a PCG Member for assistance")
+      embedVar.add_field(name="REGISTRATION!" , value="Type::arrow_right: .cteam codm 'Team Name'")
+      embedVar.add_field(name="INVITE MEMBERS!" , value="Type::arrow_right: .att 'teamname' @user")
+      embedVar.add_field(name="DELETE MEMBERS!" , value="Type::arrow_right: .dtm @user")
+      embedVar.add_field(name="DELETE TEAM" , value="Type::arrow_right: .dteam 'teamname'")
+      embedVar.add_field(name="STILL LOST????" , value="use .help or ask a PCG Member for assistance")
       await ctx.send(embed=embedVar)
 
 async def validate_user(ctx):

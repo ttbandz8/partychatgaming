@@ -203,7 +203,7 @@ class Teams(commands.Cog):
             await ctx.send(m.TEAM_DOESNT_EXIST, delete_after=5)
 
     @commands.command()
-    async def addtoteam(self, ctx, *args):
+    async def addteamgame(self, ctx, *args):
         owner = db.queryUser({'DISNAME': str(ctx.author)})
         team = db.queryTeam({'TNAME': owner['TEAM']})
  

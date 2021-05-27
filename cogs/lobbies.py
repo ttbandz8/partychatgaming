@@ -303,7 +303,7 @@ class Lobbies(commands.Cog):
                 await main.DM(ctx, user, "You Lost. Get back in there!")
                 await ctx.send(f"Competitor " + f"{user.mention}" + " took an L! :eyes:")
 
-    @commands.command()
+    #@commands.command()
     async def add(self, ctx, *user: User):
         if ctx.author.guild_permissions.administrator == True:  
             session_query = {"OWNER": str(ctx.author), "AVAILABLE": True}
