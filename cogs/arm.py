@@ -26,10 +26,10 @@ class Arm(commands.Cog):
         return await main.validate_user(ctx)
 
     @commands.command()
-    async def na(self, ctx, tournament: int, price: int, *args):
+    async def na(self, ctx, *args):
         if ctx.author.guild_permissions.administrator == True:
             arm = " ".join([*args])
-            arm_query = {'ARM': str(arm), 'TOURNAMENT_REQUIREMENTS': int(tournament), 'PRICE': int(price)}
+            arm_query = {'ARM': str(arm), 'TOURNAMENT_REQUIREMENTS': 0, 'PRICE': 500}
             added = db.createArm(data.newArm(arm_query))
             await ctx.send(added)
         else:
