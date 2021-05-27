@@ -1275,7 +1275,7 @@ class CrownUnlimited(commands.Cog):
                         currentopponent = currentopponent + 1
                         continued = True
 
-                if t_card == legends[(total_legends - 1)]:
+                if currentopponent == (total_legends - 1):
                     embedVar = discord.Embed(title=f"UNIVERSE CONQUERED", description=f"Universe {selected_universe} has been conquered\n\n{drop_response}", colour=0xe91e63)
                     embedVar.set_author(name=f"New Universes have been unlocked to explore!")
                     embedVar.add_field(name="Additional Reward", value=f"You earned additional rewards in your vault! Take a look.")
