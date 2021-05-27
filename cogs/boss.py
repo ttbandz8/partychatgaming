@@ -44,7 +44,7 @@ class Boss(commands.Cog):
             boss_show = boss['UNIVERSE']
             boss_title = boss['TITLE']
             boss_arm = boss['ARM']
-            boss_desc = boss['DESCRIPTION']
+            boss_desc = boss['DESCRIPTION'][3]
             boss_pic = boss['PATH']
 
             arm = db.queryArm({'ARM': boss_arm})
