@@ -79,13 +79,30 @@ class Cards(commands.Cog):
                     response = db.updateCard(cardInventory, update_query)
                     response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(card_name)}})
                     await ctx.send(m.PURCHASE_COMPLETE_1 + f"`{newstock}` `{mintedCard}` CARDS left in the Shop!")
+
+                accept = await ctx.send(f"{ctx.author.mention} would you like to equip this card?")
+                emojis = ['👍', '👎']
+                for emoji in emojis:
+                    await accept.add_reaction(emoji)
+
+                def check(reaction, user):
+                    return user == ctx.author and str(reaction.emoji) == '👍'
+                try:
+                    user_query = {'DISNAME': str(ctx.author)}
+                    reaction, user = await self.bot.wait_for('reaction_add', timeout=25.0, check=check)
+                    response = db.updateUserNoFilter(user_query, {'$set': {'CARD': str(card_name)}})
+                    await ctx.send(response)
+                except:
+                    return
+
+
         elif checkout == True:
             await ctx.send(m.CARD_DOESNT_EXIST)
         else:
             await ctx.send(m.CARD_OUT_OF_STOCK)
 
     @commands.command()
-    async def updatecard(self, ctx, *args):
+    async def equipcard(self, ctx, *args):
         card_name = " ".join([*args])
         user_query = {'DISNAME': str(ctx.author)}
         user = db.queryUser(user_query)
@@ -205,14 +222,14 @@ class Cards(commands.Cog):
             await ctx.send(m.CARD_DOESNT_EXIST, delete_after=3)
 
     ''' Delete All Cards '''
-    @commands.command()
-    async def dac(self, ctx):
-        user_query = {"DISNAME": str(ctx.author)}
-        if ctx.author.guild_permissions.administrator == True:
-            resp = db.deleteAllCards(user_query)
-            await ctx.send(resp)
-        else:
-            await ctx.send(m.ADMIN_ONLY_COMMAND)
+    # @commands.command()
+    # async def dac(self, ctx):
+    #     user_query = {"DISNAME": str(ctx.author)}
+    #     if ctx.author.guild_permissions.administrator == True:
+    #         resp = db.deleteAllCards(user_query)
+    #         await ctx.send(resp)
+    #     else:
+    #         await ctx.send(m.ADMIN_ONLY_COMMAND)
 
 def setup(bot):
     bot.add_cog(Cards(bot))

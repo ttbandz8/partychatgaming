@@ -85,7 +85,7 @@ class Titles(commands.Cog):
             await ctx.send(m.TITLE_OUT_OF_STOCK)
 
     @commands.command()
-    async def updatetitle(self, ctx, *args):
+    async def equipitle(self, ctx, *args):
         title_name=" ".join([*args])
         user_query = {'DISNAME': str(ctx.author)}
         user = db.queryUser(user_query)
@@ -158,14 +158,14 @@ class Titles(commands.Cog):
             await ctx.send(m.CARD_DOESNT_EXIST, delete_after=3)
 
     ''' Delete All Titles '''
-    @commands.command()
-    async def dat(self, ctx):
-        user_query = {"DISNAME": str(ctx.author)}
-        if ctx.author.guild_permissions.administrator == True:
-            resp = db.deleteAllTitles(user_query)
-            await ctx.send(resp)
-        else:
-            await ctx.send(m.ADMIN_ONLY_COMMAND)
+    # @commands.command()
+    # async def dat(self, ctx):
+    #     user_query = {"DISNAME": str(ctx.author)}
+    #     if ctx.author.guild_permissions.administrator == True:
+    #         resp = db.deleteAllTitles(user_query)
+    #         await ctx.send(resp)
+    #     else:
+    #         await ctx.send(m.ADMIN_ONLY_COMMAND)
 
 def setup(bot):
     bot.add_cog(Titles(bot))

@@ -85,7 +85,7 @@ class Arm(commands.Cog):
             await ctx.send(m.ARM_OUT_OF_STOCK)
 
     @commands.command()
-    async def updatearm(self, ctx, *args):
+    async def equiparm(self, ctx, *args):
         arm_name=" ".join([*args])
         user_query = {'DISNAME': str(ctx.author)}
         user = db.queryUser(user_query)
