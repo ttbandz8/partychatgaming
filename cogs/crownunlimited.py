@@ -2174,7 +2174,7 @@ class CrownUnlimited(commands.Cog):
                 if turn_total == 1 and botActive:                    
                     embedVar = discord.Embed(title=f"`{t_card}` Says : ", description=f"{t_welcome}", colour=0xe91e63)
                     embedVar.add_field(name=f"`{o_card}` Braces: ",value=f"{t_feeling}")
-                    embedVar.set_footer(text=f" The {t_card} begins his assault")
+                    embedVar.set_footer(text=f"{t_card} begins his assault")
                     await private_channel.send(embed=embedVar)
                 
                 if t_health <= (t_max_health * .25):
