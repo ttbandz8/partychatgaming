@@ -60,7 +60,7 @@ class Profile(commands.Cog):
                 await ctx.send("Invalid command", delete_after=5)
 
     @commands.command()
-    async def flex(self, ctx):
+    async def build(self, ctx):
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
         card = db.queryCard({'NAME':str(d['CARD'])})
