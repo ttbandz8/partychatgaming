@@ -80,20 +80,20 @@ class Cards(commands.Cog):
                     response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(card_name)}})
                     await ctx.send(m.PURCHASE_COMPLETE_1 + f"`{newstock}` `{mintedCard}` CARDS left in the Shop!")
 
-                accept = await ctx.send(f"{ctx.author.mention} would you like to equip this card?")
-                emojis = ['👍', '👎']
-                for emoji in emojis:
-                    await accept.add_reaction(emoji)
+                    accept = await ctx.send(f"{ctx.author.mention} would you like to equip this Card?")
+                    emojis = ['👍', '👎']
+                    for emoji in emojis:
+                        await accept.add_reaction(emoji)
 
-                def check(reaction, user):
-                    return user == ctx.author and str(reaction.emoji) == '👍'
-                try:
-                    user_query = {'DISNAME': str(ctx.author)}
-                    reaction, user = await self.bot.wait_for('reaction_add', timeout=25.0, check=check)
-                    response = db.updateUserNoFilter(user_query, {'$set': {'CARD': str(card_name)}})
-                    await ctx.send(response)
-                except:
-                    return
+                    def check(reaction, user):
+                        return user == ctx.author and str(reaction.emoji) == '👍'
+                    try:
+                        user_query = {'DISNAME': str(ctx.author)}
+                        reaction, user = await self.bot.wait_for('reaction_add', timeout=25.0, check=check)
+                        response = db.updateUserNoFilter(user_query, {'$set': {'CARD': str(card_name)}})
+                        await ctx.send(response)
+                    except:
+                        return
 
 
         elif checkout == True:

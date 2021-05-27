@@ -22,8 +22,6 @@ class Profile(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-
-
     @commands.Cog.listener()
     async def on_ready(self):
         print('Profile Cog is ready!')
@@ -164,17 +162,17 @@ class Profile(commands.Cog):
             titles = vault['TITLES']
             arms = vault['ARMS']
 
-            embedVar1 = discord.Embed(title= f"My Cards\n:coin:{'{:,}'.format(balance)}", description="`.updatecard name` -  Select Your Card", colour=0x7289da)
+            embedVar1 = discord.Embed(title= f"My Cards\n:coin:{'{:,}'.format(balance)}", description="`.updatecard name` -  Select Your Card\n`.viewcard card name` - View Cards", colour=0x7289da)
             embedVar1.set_thumbnail(url=avatar)
-            embedVar1.add_field(name="Cards" + " :fireworks:", value="\n".join(cards))
+            embedVar1.add_field(name="Cards" + " :fireworks:", value=" | ".join(cards))
 
-            embedVar2 = discord.Embed(title= f"My Titles\n:coin:{'{:,}'.format(balance)}", description="`.updatetitle name` - Select Your Title", colour=0x7289da)
+            embedVar2 = discord.Embed(title= f"My Titles\n:coin:{'{:,}'.format(balance)}", description="`.updatetitle name` - Select Your Title\n`.viewtitle title name` - View Title Stats", colour=0x7289da)
             embedVar2.set_thumbnail(url=avatar)
-            embedVar2.add_field(name="Titles" + " :fireworks:", value="\n".join(titles))
+            embedVar2.add_field(name="Titles" + " :fireworks:", value=" | ".join(titles))
 
-            embedVar3 = discord.Embed(title= f"My Arms\n:coin:{'{:,}'.format(balance)}", description="`.updatearm name` - Select Your Arm", colour=0x7289da)
+            embedVar3 = discord.Embed(title= f"My Arms\n:coin:{'{:,}'.format(balance)}", description="`.updatearm name` - Select Your Arm\n`.viewarm arm name` - View Arm Stats", colour=0x7289da)
             embedVar3.set_thumbnail(url=avatar)
-            embedVar3.add_field(name="Arms" + " :fireworks:", value="\n".join(arms))
+            embedVar3.add_field(name="Arms" + " :fireworks:", value=" | ".join(arms))
 
             paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
             paginator.add_reaction('⏮️', "first")
@@ -217,9 +215,6 @@ class Profile(commands.Cog):
                 card_text_list.append(f"{card['NAME']}: :coin:{card['PRICE']} " + f"_{card['UNIVERSE']}_ **Out Of Stock**")
             else:
                 card_text_list.append(f"{card['NAME']}: :coin:{card['PRICE']} " + f"_{card['UNIVERSE']}_")
-
-        
-
 
         title_resp = db.queryShopTitles()
         titles = []
@@ -277,7 +272,6 @@ class Profile(commands.Cog):
         paginator.add_reaction('⏭️', "last")
         embeds = [embedVar1,embedVar2,embedVar3]
         await paginator.run(embeds)
-
 
 def setup(bot):
     bot.add_cog(Profile(bot))

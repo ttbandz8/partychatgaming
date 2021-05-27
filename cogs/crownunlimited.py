@@ -57,7 +57,7 @@ class CrownUnlimited(commands.Cog):
         def check(msg):
             return msg.author == ctx.author and msg.content in available_universes
         try:
-            msg = await self.bot.wait_for('message', timeout=30.0, check=check)
+            msg = await self.bot.wait_for('message', timeout=60.0, check=check)
             selected_universe = msg.content
             guild = ctx.guild
             if guild:
@@ -1255,7 +1255,7 @@ class CrownUnlimited(commands.Cog):
                         def check(reaction, user):
                             return user == user1 and str(reaction.emoji) == '👍'
                         try:
-                            reaction, user = await self.bot.wait_for('reaction_add', timeout=25.0, check=check)
+                            reaction, user = await self.bot.wait_for('reaction_add', timeout=30.0, check=check)
 
                             currentopponent = currentopponent + 1
                             continued = True

@@ -1,3 +1,5 @@
+from os import times
+from time import time
 import discord
 from discord.ext import commands
 import bot as main
@@ -524,18 +526,18 @@ class Lobbies(commands.Cog):
                     session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 1, "TEAMS": [{"TEAM": [str(ctx.author)], "SCORE": 0, "CARD": card, "TITLE": title, "POSITION": 0}], "AVAILABLE": True}
                 else:
                     session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 1, "TEAMS": [{"TEAM": [str(ctx.author)], "SCORE": 0, "POSITION": 0}], "AVAILABLE": True}
+                
+                try:
 
-                session = db.createSession(data.newSession(session_query))
-                resp = db.joinSession(session_query, join_query)
-                await ctx.send(resp)
-                embedVar = discord.Embed(title=f"Use the #start command to start the tutorial match", colour=0xe91e63)
-                await ctx.send(embed=embedVar)
+                    session = db.createSession(data.newSession(session_query))
+                    resp = db.joinSession(session_query, join_query)
+                    await ctx.send(resp)
+                    embedVar = discord.Embed(title=f"Use the #start command to start the tutorial match", colour=0xe91e63)
+                    await ctx.send(embed=embedVar)
 
-                # except:
-                #     await ctx.send(m.INVITE_NOT_ACCEPTED)  
-                    # session_query = {"OWNER": str(ctx.author), "GAME": name, "TYPE": 1, "TEAMS": [], 'AVAILABLE': True}
-                    # resp = db.createSession(data.newSession(session_query))
-                    # await ctx.send(resp)
+                except:
+                    await ctx.send(m.ALREADY_IN_SESSION)   
+                    return
             else:
                 await ctx.send(m.ADD_A_GAME)
         else:
@@ -563,13 +565,6 @@ class Lobbies(commands.Cog):
             if name in user['GAMES']:
                 #await main.DM(ctx, user1, f"{ctx.author.mention}" + f" has challenged you to {name}")
                 await ctx.send(f"{ctx.author.mention} are you ready to battle? !!!:fire:")
-                # for emoji in emojis:
-                #     await accept.add_reaction(emoji)
-
-                # def check(reaction, user):
-                #     return user == user1 and str(reaction.emoji) == '👍'
-                # try:
-                #     reaction, user = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
 
                 if name == 'Crown Unlimited':
                     join_query = {"TEAM": [str(user1)], "SCORE": 0, "CARD": card1, "TITLE": title1, "POSITION": 1}
@@ -580,18 +575,16 @@ class Lobbies(commands.Cog):
                     session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 1, "TEAMS": [{"TEAM": [str(ctx.author)], "SCORE": 0, "CARD": card, "TITLE": title, "POSITION": 0}], "AVAILABLE": True}
                 else:
                     session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 1, "TEAMS": [{"TEAM": [str(ctx.author)], "SCORE": 0, "POSITION": 0}], "AVAILABLE": True}
+                try:
+                    session = db.createSession(data.newSession(session_query))
+                    resp = db.joinSession(session_query, join_query)
+                    await ctx.send(resp)
+                    embedVar = discord.Embed(title=f"Use the #start command to start the tutorial match", colour=0xe91e63)
+                    await ctx.send(embed=embedVar)
 
-                session = db.createSession(data.newSession(session_query))
-                resp = db.joinSession(session_query, join_query)
-                await ctx.send(resp)
-                embedVar = discord.Embed(title=f"Use the #start command to start the tutorial match", colour=0xe91e63)
-                await ctx.send(embed=embedVar)
-
-                # except:
-                #     await ctx.send(m.INVITE_NOT_ACCEPTED)  
-                    # session_query = {"OWNER": str(ctx.author), "GAME": name, "TYPE": 1, "TEAMS": [], 'AVAILABLE': True}
-                    # resp = db.createSession(data.newSession(session_query))
-                    # await ctx.send(resp)
+                except:
+                    await ctx.send(m.ALREADY_IN_SESSION)   
+                    return
             else:
                 await ctx.send(m.ADD_A_GAME)
         else:

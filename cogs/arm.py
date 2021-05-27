@@ -79,6 +79,22 @@ class Arm(commands.Cog):
                     response = db.updateArm(armInventory, update_query)
                     response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'ARMS': str(arm_name)}})
                     await ctx.send(m.PURCHASE_COMPLETE_1 + f"`{newstock}` `{mintedArm}` ARMS left in the Shop!")
+
+                    accept = await ctx.send(f"{ctx.author.mention} would you like to equip this Arm?")
+                    emojis = ['👍', '👎']
+                    for emoji in emojis:
+                        await accept.add_reaction(emoji)
+
+                    def check(reaction, user):
+                        return user == ctx.author and str(reaction.emoji) == '👍'
+                    try:
+                        user_query = {'DISNAME': str(ctx.author)}
+                        reaction, user = await self.bot.wait_for('reaction_add', timeout=25.0, check=check)
+                        response = db.updateUserNoFilter(user_query, {'$set': {'ARM': str(arm_name)}})
+                        await ctx.send(response)
+                    except:
+                        return
+
         elif checkout == True:
             await ctx.send(m.ARM_DOESNT_EXIST)
         else:
