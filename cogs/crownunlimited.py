@@ -1218,10 +1218,10 @@ class CrownUnlimited(commands.Cog):
 
                 if botActive:                    
                     await curse(5, str(ctx.author))
-                    embedVar = discord.Embed(title=f"PLAY AGAIN", description=f"Don't Worry! Losing is apart of the game. Use the #end command to `END` the tutorial lobby OR use #start to `PLAY AGAIN`", colour=0xe74c3c)
+                    embedVar = discord.Embed(title=f"PLAY AGAIN", description=f"Don't Worry! Losing is apart of the game. Use the .end command to `END` the tutorial lobby OR use .start to `PLAY AGAIN`", colour=0xe74c3c)
                     embedVar.set_author(name=f"You Lost...")
                     embedVar.add_field(name="Tips!", value="Equiping stronger `TITLES` and `ARMS` will make you character tougher in a fight!")
-                    embedVar.set_footer(text="The #shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
+                    embedVar.set_footer(text="The .shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
                     await private_channel.send(embed=embedVar)
 
                 continued = False
@@ -1279,7 +1279,7 @@ class CrownUnlimited(commands.Cog):
                     embedVar = discord.Embed(title=f"UNIVERSE CONQUERED", description=f"Universe {selected_universe} has been conquered\n\n{drop_response}", colour=0xe91e63)
                     embedVar.set_author(name=f"New Universes have been unlocked to explore!")
                     embedVar.add_field(name="Additional Reward", value=f"You earned additional rewards in your vault! Take a look.")
-                    embedVar.set_footer(text="The #shop has been updated with new CARDS, TITLES and ARMS!")
+                    embedVar.set_footer(text="The .shop has been updated with new CARDS, TITLES and ARMS!")
                     upload_query={'DISNAME': str(ctx.author)}
                     new_upload_query={'$addToSet': {'CROWN_TALES': selected_universe}}
                     r=db.updateUserNoFilter(upload_query, new_upload_query)
@@ -2502,7 +2502,7 @@ class CrownUnlimited(commands.Cog):
                 embedVar = discord.Embed(title=f"PLAY AGAIN", description=f"{t_card} was too powerful level up your character and try again...", colour=0xe74c3c)
                 embedVar.set_author(name=f"You Lost...")
                 embedVar.add_field(name="Tips!", value="Equiping stronger `TITLES` and `ARMS` will make you character tougher in a fight!")
-                embedVar.set_footer(text="The #shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
+                embedVar.set_footer(text="The .shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
                 await private_channel.send(embed=embedVar)
             time.sleep(60)
             if private_channel.guild:
@@ -2530,7 +2530,7 @@ class CrownUnlimited(commands.Cog):
             if botActive:                    
                 embedVar = discord.Embed(title=f"BOSS DEFEATED", description=f"Boss Victories are added to your player profile! Defeat {t_card} again to earn exotic loot!", colour=0xe91e63)
                 embedVar.set_author(name=f"Congratulations You Defeated {t_card}!")
-                embedVar.add_field(name="Tips!", value=f"Run #lookup to view your Boss Souls")
+                embedVar.add_field(name="Tips!", value=f"Run .lookup to view your Boss Souls")
                 embedVar.set_footer(text="Bosses have a chance to drop :coin:, ARMS, TITLES, and even BOSS CARDS:eyes:")
                 await private_channel.send(embed=embedVar)
             
@@ -3959,7 +3959,7 @@ class CrownUnlimited(commands.Cog):
                         embedVar.add_field(name="Most Focused", value=f"`{t_card}`")
                     await ctx.send(embed=embedVar)
                     if botActive:                    
-                        embedVar = discord.Embed(title=f"TUTORIAL COMPLETE", description=f"Victories earn `ITEMS` ! Use the #end command to `END` the tutorial lobby\nOR use #start to `PLAY AGAIN`", colour=0xe91e63)
+                        embedVar = discord.Embed(title=f"TUTORIAL COMPLETE", description=f"Victories earn `ITEMS` ! Use the .end command to `END` the tutorial lobby\nOR use .start to `PLAY AGAIN`", colour=0xe91e63)
                         embedVar.set_author(name=f"Congratulations You Beat Senpai!")
                         embedVar.add_field(name="Tips!", value="Equiping stronger `TITLES` and `ARMS` will make you character tougher in a fight!")
                         embedVar.set_footer(text="The #shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
