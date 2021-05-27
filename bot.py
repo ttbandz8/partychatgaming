@@ -96,15 +96,15 @@ async def help(ctx):
    embeds = [embedVar1, embedVar4, embedVar6, embedVar7, embedVar2, embedVar3, embedVar5]
    await paginator.run(embeds)
 
-@bot.command()
-async def teamHelp(ctx):
-      embedVar = discord.Embed(title=f"Teams!: How To Register!", description="Party Chat Gaming Database™️", colour=000000)
-      embedVar.add_field(name="REGISTRATION!" , value="Type::arrow_right: .cteam codm 'Team Name'")
-      embedVar.add_field(name="INVITE MEMBERS!" , value="Type::arrow_right: .att 'teamname' @user")
-      embedVar.add_field(name="DELETE MEMBERS!" , value="Type::arrow_right: .dtm @user")
-      embedVar.add_field(name="DELETE TEAM" , value="Type::arrow_right: .dteam 'teamname'")
-      embedVar.add_field(name="STILL LOST????" , value="use .help or ask a PCG Member for assistance")
-      await ctx.send(embed=embedVar)
+# @bot.command()
+# async def teamHelp(ctx):
+#       embedVar = discord.Embed(title=f"Teams!: How To Register!", description="Party Chat Gaming Database™️", colour=000000)
+#       embedVar.add_field(name="REGISTRATION!" , value="Type::arrow_right: .cteam codm 'Team Name'")
+#       embedVar.add_field(name="INVITE MEMBERS!" , value="Type::arrow_right: .att 'teamname' @user")
+#       embedVar.add_field(name="DELETE MEMBERS!" , value="Type::arrow_right: .dtm @user")
+#       embedVar.add_field(name="DELETE TEAM" , value="Type::arrow_right: .dteam 'teamname'")
+#       embedVar.add_field(name="STILL LOST????" , value="use .help or ask a PCG Member for assistance")
+#       await ctx.send(embed=embedVar)
 
 async def validate_user(ctx):
    query = {'DISNAME': str(ctx.author)}
