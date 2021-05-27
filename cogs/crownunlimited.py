@@ -1225,7 +1225,7 @@ class CrownUnlimited(commands.Cog):
                     await private_channel.send(embed=embedVar)
 
                 continued = False
-                time.sleep(10)
+                time.sleep(60)
                 if private_channel.guild:
                     await discord.TextChannel.delete(private_channel, reason=None)
             elif t_health <=0:
@@ -1290,7 +1290,7 @@ class CrownUnlimited(commands.Cog):
                         await private_channel.send(f"You were awarded :coin: 500 for completing the {selected_universe} Tale! ")
                     await private_channel.send(embed=embedVar)
                     continued=False
-                    time.sleep(10)
+                    time.sleep(60)
                     if private_channel.guild:
                         await discord.TextChannel.delete(private_channel, reason=None)
   
