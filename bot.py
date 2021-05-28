@@ -338,6 +338,91 @@ async def trade(ctx, user2: User, *args):
 
 @bot.command()
 @commands.check(validate_user)
+async def sell(ctx, user2: User, *args):
+   p1_trade_item = " ".join([*args])
+   p1_vault = db.queryVault({'OWNER' : str(ctx.author)})
+   p1_cards = p1_vault['CARDS']
+   p1_titles = p1_vault['TITLES']
+   p1_arms = p1_vault['ARMS']
+   p1_balance = p1_vault['BALANCE']
+
+   p2_vault = db.queryVault({'OWNER' : str(user2)})
+   p2_cards = p2_vault['CARDS']
+   p2_titles = p2_vault['TITLES']
+   p2_arms = p2_vault['ARMS']
+   p2_balance = p2_vault['BALANCE']
+   p2_trade_item = ""
+
+   commence = False
+
+   if p1_trade_item in p1_cards and len(p1_cards) == 1:
+      await ctx.send("You cannot sell your only card.")
+   elif p1_trade_item in p1_arms and len(p1_arms) == 1:
+      await ctx.send("You cannot sell your only arm.")
+   elif p1_trade_item in p1_titles and len(p1_titles) == 1:
+      await ctx.send("You cannot sell your only title.")
+   else:
+
+      if p1_trade_item not in p1_cards and p1_trade_item not in p1_titles and p1_trade_item not in p1_arms:
+         await ctx.send("You do not own this item.")
+         return
+      else:
+         await ctx.send(f"{user2.mention} how much are you willing to pay for {ctx.author.mention}'s {p1_trade_item}?")
+
+         def check(msg):
+            return msg.author == user2 and (int(msg.content) - int(p2_balance)) <= 0
+         try:
+            msg = await bot.wait_for('message', timeout=25.0, check=check)
+            p2_trade_item = msg.content
+            commence = True
+         except:
+            await ctx.send("Please, triple check your balance before making a trade. ")
+            return
+
+         if commence:
+            accept = await ctx.send(f"{ctx.author.mention} do you accept {user2.mention}'s offer?")
+            emojis = ['👍', '👎']
+            for emoji in emojis:
+               await accept.add_reaction(emoji)
+
+            def check(reaction, user):
+               return user == ctx.author and str(reaction.emoji) == '👍'
+
+            try:
+               reaction, user = await bot.wait_for('reaction_add', timeout=25.0, check=check)
+
+               if p1_trade_item in p1_arms:
+                  db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'ARMS': str(p1_trade_item)}})
+                  await bless(p2_trade_item, ctx.author)
+                  await ctx.send(f"{p2_trade_item} has been added to {ctx.author.mention}'s balance.")
+               elif p1_trade_item in p1_titles:
+                  db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'TITLES': str(p1_trade_item)}})
+                  await bless(p2_trade_item, ctx.author)
+                  await ctx.send(f"{p2_trade_item} has been added to {ctx.author.mention}'s balance.")
+               elif p1_trade_item in p1_cards:
+                  db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'CARDS': str(p1_trade_item)}})
+                  await bless(p2_trade_item, ctx.author)
+                  await ctx.send(f"{p2_trade_item} has been added to {ctx.author.mention}'s balance.")
+
+
+               if p1_trade_item in p1_arms:
+                  await curse(p2_trade_item, user2)
+                  response = db.updateVaultNoFilter({'OWNER': str(user2)},{'$addToSet':{'ARMS': str(p1_trade_item)}})
+                  await ctx.send(f"{p1_trade_item} has been added to {user2.mention}'s vault: ARMS")
+               elif p1_trade_item in p1_titles:
+                  await curse(p2_trade_item, user2)
+                  response = db.updateVaultNoFilter({'OWNER': str(user2)},{'$addToSet':{'TITLES': str(p1_trade_item)}})
+                  await ctx.send(f"{p1_trade_item} has been added to {user2.mention}'s vault: TITLES")
+               elif p1_trade_item in p1_cards:
+                  await curse(p2_trade_item, user2)
+                  response = db.updateVaultNoFilter({'OWNER': str(user2)},{'$addToSet':{'CARDS': str(p1_trade_item)}})
+                  await ctx.send(f"{p1_trade_item} has been added to {user2.mention}'s vault: CARDS")
+
+            except:
+               await ctx.send("Trade ended. ")
+
+@bot.command()
+@commands.check(validate_user)
 async def addfield(ctx, collection, new_field, field_type):
    if ctx.author.guild_permissions.administrator == True:
 
