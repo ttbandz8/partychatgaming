@@ -883,8 +883,8 @@ class CrownUnlimited(commands.Cog):
                                             t_health = o_health
                                         elif enh_type == 'FEAR':
                                             o_health = round(o_health - ((dmg['DMG']/100)* o_health))
-                                            t_attack = round(t_attack - ((dmg['DMG']/100)* o_health))
-                                            t_defense = round(t_defense - ((dmg['DMG']/100)* o_health))
+                                            t_attack = round(t_attack - ((dmg['DMG']/100)* t_attack))
+                                            t_defense = round(t_defense - ((dmg['DMG']/100)* t_defense))
 
                                         o_stamina = o_stamina - int(dmg['STAMINA_USED'])
 
@@ -1165,9 +1165,9 @@ class CrownUnlimited(commands.Cog):
                                         t_health = round(dmg['DMG'])
                                         o_health = t_health
                                     elif enh_type == 'FEAR':
-                                        t_health = round(t_health - ((dmg['DMG']/100)* t_health))
-                                        o_attack = round(o_attack - ((dmg['DMG']/100)* t_health))
-                                        o_defense = round(o_defense - ((dmg['DMG']/100)* t_health))
+                                        t_health = round(t_health - ((dmg['DMG']/100) * t_health))
+                                        o_attack = round(o_attack - ((dmg['DMG']/100) * o_attack))
+                                        o_defense = round(o_defense - ((dmg['DMG']/100) * o_defense))
                                     t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                     await private_channel.send(embed=embedVar)
@@ -2132,8 +2132,8 @@ class CrownUnlimited(commands.Cog):
                                         t_health = o_health
                                     elif enh_type == 'FEAR':
                                         o_health = round(o_health - ((dmg['DMG']/100)* o_health))
-                                        t_attack = round(t_attack - ((dmg['DMG']/100)* o_health))
-                                        t_defense = round(t_defense - ((dmg['DMG']/100)* o_health))
+                                        t_attack = round(t_attack - ((dmg['DMG']/100)* t_attack))
+                                        t_defense = round(t_defense - ((dmg['DMG']/100)* t_defense))
                                     o_stamina = o_stamina - int(dmg['STAMINA_USED'])
 
                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
@@ -2451,8 +2451,8 @@ class CrownUnlimited(commands.Cog):
                                     o_health = t_health
                                 elif enh_type == 'FEAR':
                                     t_health = round(t_health - ((dmg['DMG']/100)* t_health))
-                                    o_attack = round(o_attack - ((dmg['DMG']/100)* t_health))
-                                    o_defense = round(o_defense - ((dmg['DMG']/100)* t_health))
+                                    o_attack = round(o_attack - ((dmg['DMG']/100)* o_attack))
+                                    o_defense = round(o_defense - ((dmg['DMG']/100)* o_defense))
                                 t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                 embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                 await private_channel.send(embed=embedVar)
@@ -3396,8 +3396,8 @@ class CrownUnlimited(commands.Cog):
                                                 t_health = o_health
                                             elif enh_type == 'FEAR':
                                                 o_health = round(o_health - ((dmg['DMG']/100)* o_health))
-                                                t_attack = round(t_attack - ((dmg['DMG']/100)* o_health))
-                                                t_defense = round(t_defense - ((dmg['DMG']/100)* o_health))
+                                                t_attack = round(t_attack - ((dmg['DMG']/100)* t_attack))
+                                                t_defense = round(t_defense - ((dmg['DMG']/100)* t_defense))
                                             o_stamina = o_stamina - int(dmg['STAMINA_USED'])
                                             
                                             # print("User")
@@ -3636,8 +3636,8 @@ class CrownUnlimited(commands.Cog):
                                                     o_health = t_health
                                                 elif enh_type == 'FEAR':
                                                     t_health = round(t_health - ((dmg['DMG']/100)* t_health))
-                                                    o_attack = round(o_attack - ((dmg['DMG']/100)* t_health))
-                                                    o_defense = round(o_defense - ((dmg['DMG']/100)* t_health))
+                                                    o_attack = round(o_attack - ((dmg['DMG']/100)* o_attack))
+                                                    o_defense = round(o_defense - ((dmg['DMG']/100)* o_defense))
                                                 t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                                 embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                                 await ctx.send(embed=embedVar)
@@ -3860,8 +3860,8 @@ class CrownUnlimited(commands.Cog):
                                                 o_health = t_health
                                             elif enh_type == 'FEAR':
                                                 t_health = round(t_health - ((dmg['DMG']/100)* t_health))
-                                                o_attack = round(o_attack - ((dmg['DMG']/100)* t_health))
-                                                o_defense = round(o_defense - ((dmg['DMG']/100)* t_health))
+                                                o_attack = round(o_attack - ((dmg['DMG']/100)* o_attack))
+                                                o_defense = round(o_defense - ((dmg['DMG']/100)* o_defense))
                                             t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                             # print("Bot")
                                             # print(o_attack)
