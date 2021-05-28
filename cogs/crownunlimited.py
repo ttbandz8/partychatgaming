@@ -1224,14 +1224,14 @@ class CrownUnlimited(commands.Cog):
                     embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                 else: 
                     embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
-                await private_channel.send(embed=embedVar)
+                await ctx.author.send(embed=embedVar)
 
                 if botActive:                    
                     embedVar = discord.Embed(title=f"PLAY AGAIN", description=f"Don't Worry! Losing is apart of the game. Use the .end command to `END` the tutorial lobby OR use .start to `PLAY AGAIN`", colour=0xe74c3c)
                     embedVar.set_author(name=f"You Lost...")
                     embedVar.add_field(name="Tips!", value="Equiping stronger `TITLES` and `ARMS` will make you character tougher in a fight!")
                     embedVar.set_footer(text="The .shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
-                    await private_channel.send(embed=embedVar)
+                    await ctx.author.send(embed=embedVar)
 
                 continued = False
                 if private_channel.guild:
@@ -1277,7 +1277,7 @@ class CrownUnlimited(commands.Cog):
                         embedVar = discord.Embed(title=f"VICTORY", description=f"{t_card} has been defeated!\n\n{drop_response}", colour=0xe91e63)
                         embedVar = set_author(name=f"The match lasted {turn_total} rounds.")
                         embedVar.set_footer(text=f"{o_card} says:\n{o_win_description}")
-                        await private_channel.send(embed=embedVar)
+                        await ctx.author.send(embed=embedVar)
 
                         currentopponent = currentopponent + 1
                         continued = True
