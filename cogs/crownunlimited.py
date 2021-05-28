@@ -4162,8 +4162,8 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
         # Calculate Damage
         dmg = (int(ap) * int(atk)) / op_defense
         # dmg = (int(ap)*(100/(100+int(op_defense)))) + int(atk)
-        low = dmg - (dmg * .05)
-        high = dmg + (dmg * .05)
+        low = dmg - ((dmg * .05) + 10)
+        high = dmg + ((dmg * .05) + 10)
 
         true_dmg = random.randint(int(low), int(high))
         message = ""
