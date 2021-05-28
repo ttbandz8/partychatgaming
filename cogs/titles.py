@@ -103,7 +103,7 @@ class Titles(commands.Cog):
             await ctx.send(m.TITLE_OUT_OF_STOCK)
 
     @commands.command()
-    async def equipitle(self, ctx, *args):
+    async def equiptitle(self, ctx, *args):
         title_name=" ".join([*args])
         user_query = {'DISNAME': str(ctx.author)}
         user = db.queryUser(user_query)
