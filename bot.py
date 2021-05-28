@@ -96,15 +96,44 @@ async def help(ctx):
    embeds = [embedVar1, embedVar4, embedVar6, embedVar7, embedVar2, embedVar3, embedVar5]
    await paginator.run(embeds)
 
-# @bot.command()
-# async def teamHelp(ctx):
-#       embedVar = discord.Embed(title=f"Teams!: How To Register!", description="Party Chat Gaming Database™️", colour=000000)
-#       embedVar.add_field(name="REGISTRATION!" , value="Type::arrow_right: .cteam codm 'Team Name'")
-#       embedVar.add_field(name="INVITE MEMBERS!" , value="Type::arrow_right: .att 'teamname' @user")
-#       embedVar.add_field(name="DELETE MEMBERS!" , value="Type::arrow_right: .dtm @user")
-#       embedVar.add_field(name="DELETE TEAM" , value="Type::arrow_right: .dteam 'teamname'")
-#       embedVar.add_field(name="STILL LOST????" , value="use .help or ask a PCG Member for assistance")
-#       await ctx.send(embed=embedVar)
+@bot.group(invoke_without_command=True)
+async def status(ctx):
+   avatar="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png"
+
+
+   embedVar1 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
+   embedVar1.set_thumbnail(url=avatar)
+   embedVar1.add_field(name="`INCREASES`", value="`ATK` - Increase `ATK`\n\n`DEF` - Increase `DEF`\n\n`HLT` - Increase `HLT`\n\n`STAM` - Increase `STAM`\n\n")
+
+   embedVar2 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
+   embedVar2.set_thumbnail(url=avatar)
+   embedVar2.add_field(name="`STEALS`", value="`FLOG`- `ATK` Steal\n\n`WITHER`- `DEF` Steal\n\n`LIFE` - `LIFE` Steal\n\n`DRAIN` - `STAM` Steal\n\n")
+
+
+   embedVar3 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
+   embedVar3.set_thumbnail(url=avatar)
+   embedVar3.add_field(name="`SACRIFICE`", value="`RAGE` - Decrease `DEF`, Increase `ATK`\n\n`BRACE` - Decrease `ATK`, Increase `DEF`\n\n`BZRK` - Decrease `HLT`,  Increase `ATK`\n\n`CRYSTAL`- Decrease `HLT`, Increase `DEF`\n\n`GROWTH`- Decrease `MAXHLT`, Increase `STATS`\n\n")
+
+   embedVar4 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
+   embedVar4.set_thumbnail(url=avatar)
+   embedVar4.add_field(name="`TRADE`", value="`STANCE` - Swap `ATK` and `DEF`\n\n`CONFUSE` - Swap `OPP ATK` and  `OPP DEF`\n\n")
+
+   embedVar5 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
+   embedVar5.set_thumbnail(url=avatar)
+   embedVar5.add_field(name="`TIME`", value="`BLINK`  - Decrease  `STAM`, Increase `OPP STAM`\n\n`SLOW` - Decrease `STAM`, Swap `OPP STAM`\n\n`HASTE` - Increase `STAM`, Swap `OPP STAM`\n\n")
+
+   embedVar6 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
+   embedVar6.set_thumbnail(url=avatar)
+   embedVar6.add_field(name="`CONTROL`", value="`SOULCHAIN` - Both `PLAYERS` `STAM` = \n\n`GAMBLE` - Both `PLAYERS` `HEALTH` =\n\n`FEAR` - Decrease `HLT`, Decrease `OPP ATK` & `OPP DEF`")
+
+   paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+   paginator.add_reaction('⏮️', "first")
+   paginator.add_reaction('⏪', "back")
+   paginator.add_reaction('🔐', "lock")
+   paginator.add_reaction('⏩', "next")
+   paginator.add_reaction('⏭️', "last")
+   embeds = [embedVar1, embedVar2, embedVar3, embedVar4, embedVar5, embedVar6]
+   await paginator.run(embeds)
 
 async def validate_user(ctx):
    query = {'DISNAME': str(ctx.author)}
