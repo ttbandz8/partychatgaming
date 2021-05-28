@@ -83,6 +83,16 @@ class CrownUnlimited(commands.Cog):
         universe = db.queryUniverse({'TITLE': str(selected_universe)})
         boss = db.queryBoss({'NAME': str(universe['UNIVERSE_BOSS'])})
 
+        opponent_scaling = 0
+        player_scaling = 0
+
+        if universe['PREREQUISITE']:
+            opponent_scaling = 18
+            player_scaling = 5
+        else:
+            opponent_scaling = 6
+            player_scaling = 1
+
         legends = [x for x in universe['CROWN_TALES']]
         total_legends = len(legends)
         currentopponent = 0
@@ -111,13 +121,13 @@ class CrownUnlimited(commands.Cog):
             o_card = o['NAME']
             o_card_path=o['PATH']
             o_rcard_path=o['RPATH']
-            o_max_health = o['HLT']
-            o_health = o['HLT']
+            o_max_health = o['HLT'] + ((5 * currentopponent) + player_scaling)
+            o_health = o['HLT'] + ((5 * currentopponent) + player_scaling)
             o_stamina = o['STAM']
             o_max_stamina = o['STAM']
             o_moveset = o['MOVESET']
-            o_attack = o['ATK'] + (5 * currentopponent)
-            o_defense = o['DEF'] + (7 * currentopponent)
+            o_attack = o['ATK'] + ((5 * currentopponent) + player_scaling)
+            o_defense = o['DEF'] + ((7 * currentopponent) + player_scaling)
             o_type = o['TYPE']
             o_accuracy = o['ACC']
             o_passive = o['PASS'][0]
@@ -155,13 +165,13 @@ class CrownUnlimited(commands.Cog):
             t_card = t['NAME']
             t_card_path=t['PATH']
             t_rcard_path=t['RPATH']
-            t_max_health = t['HLT'] + (18 * currentopponent)
-            t_health = t['HLT'] + (18 * currentopponent)
+            t_max_health = t['HLT'] + ((20 * currentopponent) + opponent_scaling)
+            t_health = t['HLT'] + ((20 * currentopponent) + opponent_scaling)
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
-            t_attack = t['ATK'] + (7 * currentopponent)
-            t_defense = t['DEF'] + (7 * currentopponent)
+            t_attack = t['ATK'] + ((7 * currentopponent) + opponent_scaling)
+            t_defense = t['DEF'] + ((9 * currentopponent + opponent_scaling))
             t_type = t['TYPE']
             t_accuracy = t['ACC']
             t_passive = t['PASS'][0]
@@ -1224,7 +1234,6 @@ class CrownUnlimited(commands.Cog):
                     await private_channel.send(embed=embedVar)
 
                 continued = False
-                time.sleep(60)
                 if private_channel.guild:
                     await discord.TextChannel.delete(private_channel, reason=None)
             elif t_health <=0:
@@ -1254,7 +1263,7 @@ class CrownUnlimited(commands.Cog):
                         def check(reaction, user):
                             return user == user1 and str(reaction.emoji) == '👍'
                         try:
-                            reaction, user = await self.bot.wait_for('reaction_add', timeout=30.0, check=check)
+                            reaction, user = await self.bot.wait_for('reaction_add', timeout=45.0, check=check)
 
                             currentopponent = currentopponent + 1
                             continued = True
@@ -1270,11 +1279,10 @@ class CrownUnlimited(commands.Cog):
                         embedVar.set_footer(text=f"{o_card} says:\n{o_win_description}")
                         await private_channel.send(embed=embedVar)
 
-                        time.sleep(2)
                         currentopponent = currentopponent + 1
                         continued = True
 
-                if currentopponent == (total_legends - 1):
+                if currentopponent == total_legends:
                     embedVar = discord.Embed(title=f"UNIVERSE CONQUERED", description=f"Universe {selected_universe} has been conquered\n\n{drop_response}", colour=0xe91e63)
                     embedVar.set_author(name=f"New Universes have been unlocked to explore!")
                     embedVar.add_field(name="Additional Reward", value=f"You earned additional rewards in your vault! Take a look.")
@@ -1284,12 +1292,13 @@ class CrownUnlimited(commands.Cog):
                     r=db.updateUserNoFilter(upload_query, new_upload_query)
                     if selected_universe in available_universes:
                         await bless(25, ctx.author)
+                        await ctx.author.send(embed=embedVar)
+                        await ctx.author.send(f"You were awarded :coin: 25 for completing the {selected_universe} Tale!")
                     else:
                         await bless(500, ctx.author)
-                        await private_channel.send(f"You were awarded :coin: 500 for completing the {selected_universe} Tale! ")
-                    await private_channel.send(embed=embedVar)
+                        await main.DM(ctx, ctx.author, embed=embedVar)
+                        await ctx.author.send(f"You were awarded :coin: 500 for completing the {selected_universe} Tale! ")
                     continued=False
-                    time.sleep(60)
                     if private_channel.guild:
                         await discord.TextChannel.delete(private_channel, reason=None)
   
@@ -2496,14 +2505,14 @@ class CrownUnlimited(commands.Cog):
                 embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
             else: 
                 embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
-            await private_channel.send(embed=embedVar)
+            await ctx.author.send(embed=embedVar)
             if botActive:                    
                 embedVar = discord.Embed(title=f"PLAY AGAIN", description=f"{t_card} was too powerful level up your character and try again...", colour=0xe74c3c)
                 embedVar.set_author(name=f"You Lost...")
                 embedVar.add_field(name="Tips!", value="Equiping stronger `TITLES` and `ARMS` will make you character tougher in a fight!")
                 embedVar.set_footer(text="The .shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
-                await private_channel.send(embed=embedVar)
-            time.sleep(60)
+                await ctx.author.send(embed=embedVar)
+
             if private_channel.guild:
                 await discord.TextChannel.delete(private_channel, reason=None)
 
@@ -2525,23 +2534,22 @@ class CrownUnlimited(commands.Cog):
                 embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
             else: 
                 embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
-            await private_channel.send(embed=embedVar)
+            await ctx.author.send(embed=embedVar)
+
             if botActive:                    
                 embedVar = discord.Embed(title=f"BOSS DEFEATED", description=f"Boss Victories are added to your player profile! Defeat {t_card} again to earn exotic loot!", colour=0xe91e63)
                 embedVar.set_author(name=f"Congratulations You Defeated {t_card}!")
                 embedVar.add_field(name="Tips!", value=f"Run .lookup to view your Boss Souls")
                 embedVar.set_footer(text="Bosses have a chance to drop :coin:, ARMS, TITLES, and even BOSS CARDS:eyes:")
-                await private_channel.send(embed=embedVar)
+                await ctx.author.send(embed=embedVar)
             
             if t_card not in sowner['BOSS_WINS']:
                 await bless(1000, str(ctx.author))
                 query = {'DISNAME': sowner['DISNAME']}
                 new_query = {'$addToSet': {'BOSS_WINS': t_card}}
                 resp = db.updateUserNoFilter(query, new_query)
-                time.sleep(60)
                 if private_channel.guild:
                     await discord.TextChannel.delete(private_channel, reason=None)
-            time.sleep(60)
             if private_channel.guild:
                 await discord.TextChannel.delete(private_channel, reason=None)
 

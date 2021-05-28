@@ -173,7 +173,7 @@ class Titles(commands.Cog):
             await ctx.send(embed=embedVar)
 
         else:
-            await ctx.send(m.CARD_DOESNT_EXIST, delete_after=3)
+            await ctx.send("That title doesn't exist.", delete_after=3)
 
     ''' Delete All Titles '''
     # @commands.command()
