@@ -3911,6 +3911,7 @@ class CrownUnlimited(commands.Cog):
                     sownerctx = await self.bot.fetch_user(ouid)
                     response = await score(sownerctx, tuser)
                     await curse(3, str(ctx.author))
+                    await bless(8, tuser)
                     embedVar = discord.Embed(title=f":zap: `{t_card}` wins the match! Use .Start to Play again or .End to end the session", description=f"Match concluded in {turn_total} turns\n`{t_card} says:`\n`{t_win_description}`", colour=0x1abc9c)
                     embedVar.set_author(name=f"{o_card} says:\n{o_lose_description}")
                     if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
@@ -3943,7 +3944,7 @@ class CrownUnlimited(commands.Cog):
                     ouid = sowner['DID']
                     sownerctx = await self.bot.fetch_user(ouid)
                     response = await score(sownerctx, ouser)
-                    await bless(10, str(ctx.author))
+                    await bless(8, str(ctx.author))
                     embedVar = discord.Embed(title=f":zap: VICTORY\n`{o_card} says:`\n{o_win_description}\n\n Use .Start to Play again or .End to end the session", description=f"The match lasted {turn_total} turns", colour=0xe91e63)
                     embedVar.set_author(name=f"{t_card} says\n{t_lose_description}")
                     if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
@@ -4162,8 +4163,8 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
         # Calculate Damage
         dmg = (int(ap) * int(atk)) / op_defense
         # dmg = (int(ap)*(100/(100+int(op_defense)))) + int(atk)
-        low = dmg - (dmg * .05)
-        high = dmg + (dmg * .05)
+        low = dmg - ((dmg * .05) + 10)
+        high = dmg + ((dmg * .05) + 10)
 
         true_dmg = random.randint(int(low), int(high))
         message = ""
