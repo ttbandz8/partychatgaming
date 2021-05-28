@@ -4474,7 +4474,7 @@ async def drops(player, universe):
 
     gold_drop = 90 #
     title_drop = 95 #
-    arm_drop = 98 #
+    arm_drop = 99 #
     card_drop = 100 #
     
     drop_rate = random.randint(0,100)
@@ -4490,4 +4490,5 @@ async def drops(player, universe):
         return f"You earned {arms[rand_arm]}!"
     elif drop_rate <= card_drop and drop_rate > arm_drop:
         response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(cards[rand_card])}})
-        return f"You earned {cards[rand_card]}!"
+        await bless(30, player)
+        return f"You earned {cards[rand_card]} + :coin: 30!"
