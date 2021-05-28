@@ -188,7 +188,17 @@ async def r(ctx):
          vault = db.createVault(data.newVault({'OWNER' : disname}))
          # await ctx.send(m.USER_HAS_REGISTERED, delete_after=5)
    else:
-      await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=3)  
+      await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=3) 
+
+@bot.command()
+@commands.check(validate_user)
+async def purge(ctx, amount = 5):
+   if ctx.author.guild_permissions.administrator == True:
+      await ctx.channel.purge(limit=amount)
+      await ctx.send(f"{amount} messages have been purged.")
+   else:
+      print(m.ADMIN_ONLY_COMMAND)
+
 
 @bot.command()
 @commands.check(validate_user)

@@ -60,7 +60,7 @@ class Profile(commands.Cog):
                 await ctx.send("Invalid command", delete_after=5)
 
     @commands.command()
-    async def flex(self, ctx):
+    async def build(self, ctx):
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
         card = db.queryCard({'NAME':str(d['CARD'])})
@@ -162,15 +162,15 @@ class Profile(commands.Cog):
             titles = vault['TITLES']
             arms = vault['ARMS']
 
-            embedVar1 = discord.Embed(title= f"My Cards\n:coin:{'{:,}'.format(balance)}", description="`.updatecard name` -  Select Your Card\n`.viewcard card name` - View Cards", colour=0x7289da)
+            embedVar1 = discord.Embed(title= f"My Cards\n:coin:{'{:,}'.format(balance)}", description="`.equipcard name` -  Select Your Card\n`.viewcard card name` - View Cards", colour=0x7289da)
             embedVar1.set_thumbnail(url=avatar)
             embedVar1.add_field(name="Cards" + " :fireworks:", value=" | ".join(cards))
 
-            embedVar2 = discord.Embed(title= f"My Titles\n:coin:{'{:,}'.format(balance)}", description="`.updatetitle name` - Select Your Title\n`.viewtitle title name` - View Title Stats", colour=0x7289da)
+            embedVar2 = discord.Embed(title= f"My Titles\n:coin:{'{:,}'.format(balance)}", description="`.equiptitle name` - Select Your Title\n`.viewtitle title name` - View Title Stats", colour=0x7289da)
             embedVar2.set_thumbnail(url=avatar)
             embedVar2.add_field(name="Titles" + " :fireworks:", value=" | ".join(titles))
 
-            embedVar3 = discord.Embed(title= f"My Arms\n:coin:{'{:,}'.format(balance)}", description="`.updatearm name` - Select Your Arm\n`.viewarm arm name` - View Arm Stats", colour=0x7289da)
+            embedVar3 = discord.Embed(title= f"My Arms\n:coin:{'{:,}'.format(balance)}", description="`.equiparm name` - Select Your Arm\n`.viewarm arm name` - View Arm Stats", colour=0x7289da)
             embedVar3.set_thumbnail(url=avatar)
             embedVar3.add_field(name="Arms" + " :fireworks:", value=" | ".join(arms))
 

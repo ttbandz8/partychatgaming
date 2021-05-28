@@ -116,8 +116,8 @@ class CrownUnlimited(commands.Cog):
             o_stamina = o['STAM']
             o_max_stamina = o['STAM']
             o_moveset = o['MOVESET']
-            o_attack = o['ATK'] + (2 * currentopponent)
-            o_defense = o['DEF'] + (2 * currentopponent)
+            o_attack = o['ATK'] + (5 * currentopponent)
+            o_defense = o['DEF'] + (7 * currentopponent)
             o_type = o['TYPE']
             o_accuracy = o['ACC']
             o_passive = o['PASS'][0]
@@ -1407,7 +1407,7 @@ class CrownUnlimited(commands.Cog):
         t_max_stamina= t['STAM']
         t_moveset = t['MOVESET']
         t_attack = t['ATK'] * 2
-        t_defense = t['DEF'] * 4
+        t_defense = t['DEF'] * 2
         t_type = t['TYPE']
         t_accuracy = t['ACC']
         t_passive = t['PASS'][0]
@@ -3911,6 +3911,7 @@ class CrownUnlimited(commands.Cog):
                     sownerctx = await self.bot.fetch_user(ouid)
                     response = await score(sownerctx, tuser)
                     await curse(3, str(ctx.author))
+                    await bless(8, tuser)
                     embedVar = discord.Embed(title=f":zap: `{t_card}` wins the match! Use .Start to Play again or .End to end the session", description=f"Match concluded in {turn_total} turns\n`{t_card} says:`\n`{t_win_description}`", colour=0x1abc9c)
                     embedVar.set_author(name=f"{o_card} says:\n{o_lose_description}")
                     if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
@@ -3943,7 +3944,7 @@ class CrownUnlimited(commands.Cog):
                     ouid = sowner['DID']
                     sownerctx = await self.bot.fetch_user(ouid)
                     response = await score(sownerctx, ouser)
-                    await bless(10, str(ctx.author))
+                    await bless(8, str(ctx.author))
                     embedVar = discord.Embed(title=f":zap: VICTORY\n`{o_card} says:`\n{o_win_description}\n\n Use .Start to Play again or .End to end the session", description=f"The match lasted {turn_total} turns", colour=0xe91e63)
                     embedVar.set_author(name=f"{t_card} says\n{t_lose_description}")
                     if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
