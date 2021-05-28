@@ -269,25 +269,27 @@ async def trade(ctx, user2: User, *args):
    p1_cards = p1_vault['CARDS']
    p1_titles = p1_vault['TITLES']
    p1_arms = p1_vault['ARMS']
+   p1_pets = p1_vault['PETS']
    p1_balance = p1_vault['BALANCE']
 
    p2_vault = db.queryVault({'OWNER' : str(user2)})
    p2_cards = p2_vault['CARDS']
    p2_titles = p2_vault['TITLES']
    p2_arms = p2_vault['ARMS']
+   p2_pets = p2_vault['PETS']
    p2_balance = p2_vault['BALANCE']
    p2_trade_item = ""
 
    commence = False
 
-   if p1_trade_item not in p1_cards and p1_trade_item not in p1_titles and p1_trade_item not in p1_arms:
+   if p1_trade_item not in p1_cards and p1_trade_item not in p1_titles and p1_trade_item not in p1_arms and p1_pets not in p1_pets:
       await ctx.send("You do not own this item.")
       return
    else:
       await ctx.send(f"{user2.mention}, what will you trade for {ctx.author.mention}'s {p1_trade_item}?")
 
       def check(msg):
-         return msg.author == user2 and msg.content in p2_cards or msg.content in p2_titles or msg.content in p2_arms and msg.content not in p1_cards and msg.content not in p1_titles and msg.content not in p1_arms
+         return msg.author == user2 and msg.content in p2_cards or msg.content in p2_titles or msg.content in p2_arms or msg.content in p2_pets and msg.content not in p1_cards and msg.content not in p1_titles and msg.content not in p1_arms and msg.content not in p1_pets
       try:
          msg = await bot.wait_for('message', timeout=25.0, check=check)
          p2_trade_item = msg.content
@@ -319,6 +321,10 @@ async def trade(ctx, user2: User, *args):
                db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'CARDS': str(p1_trade_item)}})
                response = db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$addToSet':{'CARDS': str(p2_trade_item)}})
                await ctx.send(f"{p2_trade_item} has been added to {ctx.author.mention}'s vault: CARDS")
+            elif p2_trade_item in p2_pets:
+               db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'PETS': str(p1_trade_item)}})
+               response = db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$addToSet':{'PETS': str(p2_trade_item)}})
+               await ctx.send(f"{p2_trade_item} has been added to {ctx.author.mention}'s vault: PETS")
 
             if p1_trade_item in p1_arms:
                db.updateVaultNoFilter({'OWNER': str(user2)},{'$pull':{'ARMS': str(p2_trade_item)}})
@@ -332,6 +338,10 @@ async def trade(ctx, user2: User, *args):
                db.updateVaultNoFilter({'OWNER': str(user2)},{'$pull':{'CARDS': str(p2_trade_item)}})
                response = db.updateVaultNoFilter({'OWNER': str(user2)},{'$addToSet':{'CARDS': str(p1_trade_item)}})
                await ctx.send(f"{p1_trade_item} has been added to {user2.mention}'s vault: CARDS")
+            elif p1_trade_item in p1_pets:
+               db.updateVaultNoFilter({'OWNER': str(user2)},{'$pull':{'PETS': str(p2_trade_item)}})
+               response = db.updateVaultNoFilter({'OWNER': str(user2)},{'$addToSet':{'PETS': str(p1_trade_item)}})
+               await ctx.send(f"{p1_trade_item} has been added to {user2.mention}'s vault: PETS")
 
          except:
             await ctx.send("Trade ended. ")

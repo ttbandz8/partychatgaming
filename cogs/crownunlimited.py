@@ -2585,7 +2585,10 @@ class CrownUnlimited(commands.Cog):
                 o_user = db.queryUser({'DISNAME': team_1['TEAM'][0]})
                 oarm = db.queryArm({'ARM': o_user['ARM']})
                 oarm_passive = oarm['ABILITIES'][0]
-                oarm_name=oarm['ARM']
+                oarm_name = oarm['ARM']
+                opet = db.queryPet({'PET': o_user['PET']})
+                opet_passive = opet['ABILITIES'][0]
+                opet_name = opet['PET']
                 o_DID = o_user['DID']
                 o_card = o['NAME']
                 o_card_path=o['PATH']
@@ -2629,6 +2632,9 @@ class CrownUnlimited(commands.Cog):
                 tarm = db.queryArm({'ARM': t_user['ARM']})
                 tarm_passive = tarm['ABILITIES'][0]
                 tarm_name=tarm['ARM']
+                tpet = db.queryPet({'PET': t_user['PET']})
+                tpet_passive = tpet['ABILITIES'][0]
+                tpet_name = tpet['PET']
                 t_DID = t_user['DID']
                 t_card = t['NAME']
                 t_card_path=t['PATH']
@@ -2684,7 +2690,9 @@ class CrownUnlimited(commands.Cog):
                 o_2 = o_moveset[1]
                 o_3 = o_moveset[2]
                 o_enhancer = o_moveset[3]
+                o_pet_move = opet_name
                 o_enhancer_used=False
+                o_pet_used=False
 
                 omove1_text = list(o_1.keys())[0]
                 omove2_text = list(o_2.keys())[0]
@@ -3116,7 +3124,9 @@ class CrownUnlimited(commands.Cog):
                 t_2 = t_moveset[1]
                 t_3 = t_moveset[2]
                 t_enhancer = t_moveset[3]
+                t_pet_move = tpet_name
                 t_enhancer_used=False
+                t_pet_used=False
 
                 # Player 1 Focus & Resolve
                 t_focus_count = 0
@@ -3164,7 +3174,8 @@ class CrownUnlimited(commands.Cog):
                     t_vul=True
                 
                 options = [1,2,3,4,5,0]
-                await ctx.send(f"{user1.mention}: `{o_card}` VS {user2.mention}: `{t_card}` has begun!")
+                if opet_name and tpet_name:
+                    await ctx.send(f"{user1.mention}: `{o_card}` and *{opet_name}* VS {user2.mention}: `{t_card}` and *{tpet_name}* has begun!")
 
                 # Count Turns
                 turn_total = 0
@@ -3273,8 +3284,10 @@ class CrownUnlimited(commands.Cog):
 
                             if not o_used_focus or o_used_resolve:
                                 options = ["0","1","2","3","4"]
-                            else:
+                            elif o_used_focus and not o_used_resolve:
                                 options = ["0","1","2","3","4","5"]
+                            else:
+                                options = ["0","1","2","3","4","6"]
                             
                             # Make sure user is responding with move
                             def check(msg):
@@ -3295,7 +3308,7 @@ class CrownUnlimited(commands.Cog):
                                 elif msg.content == "2":
                                     dmg = damage_cal(o_card, o_2, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description)
                                 elif msg.content == "3":
-                                    dmg = damage_cal(o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description)
+                                    dmg = damage_cal(o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_descriptione)
                                 elif msg.content == "4":
                                     o_enhancer_used=True
                                     dmg = damage_cal(o_card, o_enhancer, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description)
@@ -3332,6 +3345,8 @@ class CrownUnlimited(commands.Cog):
                                         embedVar = discord.Embed(title=emessage, description=f"Entering `Resolved State` sacrifices a turn to power up even greater and regain `Stamina`!", colour=0xe91e63)
                                         await ctx.send(embed=embedVar)
                                         turn=0
+
+
 
                                 if msg.content != "5" and msg.content in options:
                                     # If you have enough stamina for move, use it
@@ -4455,11 +4470,13 @@ async def drops(player, universe):
     all_available_drop_cards = db.queryDropCards(universe)
     all_available_drop_titles = db.queryDropTitles(universe)
     all_available_drop_arms = db.queryDropArms(universe)
+    all_available_drop_pets = db.queryDropPets(universe)
     vault_query = {'OWNER' : str(player)}
 
     cards = []
     titles = []
     arms = []
+    pets= []
 
     for card in all_available_drop_cards:
         cards.append(card['NAME'])
@@ -4470,18 +4487,24 @@ async def drops(player, universe):
     for arm in all_available_drop_arms:
         arms.append(arm['ARM'])
 
+    for pet in all_available_drop_pets:
+        pets.append(pet['PET'])
+
     c = len(cards) - 1
     t = len(titles) - 1
     a = len(arms) - 1
+    p = len(pets) - 1
 
     rand_card = random.randint(0, c)
     rand_title = random.randint(0, t)
     rand_arm = random.randint(0, a)
+    rand_pet = random.randint(0, p)
 
     gold_drop = 90 #
     title_drop = 95 #
-    arm_drop = 99 #
+    arm_drop = 98 #
     card_drop = 100 #
+    pet_drop = 99 #
     
     drop_rate = random.randint(0,100)
 
@@ -4494,7 +4517,11 @@ async def drops(player, universe):
     elif drop_rate <= arm_drop and drop_rate > title_drop:
         response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'ARMS': str(arms[rand_arm])}})
         return f"You earned {arms[rand_arm]}!"
-    elif drop_rate <= card_drop and drop_rate > arm_drop:
-        response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(cards[rand_card])}})
+    elif drop_rate <= pet_drop and drop_rate > arm_drop:
+        response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'PETS': str(pets[rand_pet])}})
         await bless(30, player)
-        return f"You earned {cards[rand_card]} + :coin: 30!"
+        return f"You earned {cards[rand_pet]} + :coin: 30!"
+    elif drop_rate <= card_drop and drop_rate > pet_drop:
+            response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(cards[rand_card])}})
+            await bless(30, player)
+            return f"You earned {cards[rand_card]} + :coin: 30!"

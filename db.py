@@ -475,7 +475,7 @@ def queryPet(query):
     data = pet_col.find_one(query)
     return data
 
-def queryDropPet(args):
+def queryDropPets(args):
     data = pet_col.find({'UNIVERSE': args, 'AVAILABLE': True})
     return data 
 

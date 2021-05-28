@@ -52,7 +52,7 @@ class Pet(commands.Cog):
             response = db.updateUserNoFilter(user_query, {'$set': {'PET': str(pet_name)}})
             await ctx.send(response)
         else:
-            await ctx.send(m.USER_DOESNT_HAVE_THE_ARM, delete_after=5)
+            await ctx.send(m.USER_DOESNT_HAVE_THE_PET, delete_after=5)
 
     @commands.command()
     async def viewpet(self, ctx, *args):
@@ -125,7 +125,7 @@ class Pet(commands.Cog):
             await ctx.send(embed=embedVar)
 
         else:
-            await ctx.send(m.ARM_DOESNT_EXIST, delete_after=3)
+            await ctx.send(m.PET_DOESNT_EXIST, delete_after=3)
 
 
 
