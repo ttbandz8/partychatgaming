@@ -2163,7 +2163,7 @@ class CrownUnlimited(commands.Cog):
                                 await private_channel.send(embed=embedVar)
                                 turn=0
                     except asyncio.TimeoutError:
-                        await private_channel.send(f"{ctx.author.mention} {m.STORY_ENDED}")
+                        await private_channel.send(f"{ctx.author.mention}, boss fight has ended.")
                         if private_channel.guild:
                             await discord.TextChannel.delete(private_channel, reason=None)
                         return
@@ -3433,7 +3433,7 @@ class CrownUnlimited(commands.Cog):
                                         await ctx.send(embed=embedVar)
                                         turn=0
                             except asyncio.TimeoutError:
-                                await ctx.send(f"{ctx.author.mention} {m.STORY_ENDED}")
+                                await ctx.send(f"{ctx.author.mention}, the match has ended. ")
                                 return
                     #PLayer 2 Turn Start
                     elif turn == 1:
@@ -3666,7 +3666,7 @@ class CrownUnlimited(commands.Cog):
                                             await ctx.send(embed=embedVar)
                                             turn = 1
                                 except asyncio.TimeoutError:
-                                    await ctx.send(f"{ctx.author.mention} {m.STORY_ENDED}")
+                                    await ctx.send(f"{ctx.author.mention}, the match has ended.")
                                     return
                             #Play Bot
                             else:
@@ -4396,7 +4396,6 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
             image_binary.seek(0)
             # await ctx.send(file=discord.File(fp=image_binary,filename="image.png"))
             return discord.File(fp=image_binary,filename="image.png")
-
 
 
 def setup(bot):
