@@ -151,17 +151,47 @@ class Arm(commands.Cog):
             message=""
 
             if o_arm_passive_type == 'ATK':
-                message=f"{arm_arm} is an offensive arm"
+                message=f"{arm_arm} is an ATK arm"
             elif o_arm_passive_type == 'DEF':
-                message=f"{arm_arm} is a defensive arm"
+                message=f"{arm_arm} is a DEF arm"
             elif o_arm_passive_type == 'STAM':
-                message=f"{arm_arm} is an offensive arm"
+                message=f"{arm_arm} is a STAM arm"
             elif o_arm_passive_type == 'HLT':
-                message=f"{arm_arm} is a defensive arm"
+                message=f"{arm_arm} is a HLT arm"
             elif o_arm_passive_type == 'LIFE':
-                message=f"{arm_arm} is a defensive arm"
+                message=f"{arm_arm} is a LIFE arm"
             elif o_arm_passive_type == 'DRAIN':
-                message=f"{arm_arm} is an offensive arm"
+                message=f"{arm_arm} is an DRAIN arm"
+            elif o_arm_passive_type == 'FLOG':
+                message=f"{arm_arm} is a FLOG arm"
+            elif o_arm_passive_type == 'WITHER':
+                message=f"{arm_arm} is a WITHER arm"
+            elif o_arm_passive_type == 'RAGE':
+                message=f"{arm_arm} is a RAGE arm"
+            elif o_arm_passive_type == 'BRACE':            
+                message=f"{arm_arm} is a BRACE arm"
+            elif o_arm_passive_type == 'BZRK':            
+                message=f"{arm_arm} is a BZRK arm"
+            elif o_arm_passive_type == 'CRYSTAL':            
+                message=f"{arm_arm} is a CRYSTAL arm"
+            elif o_arm_passive_type == 'GROWTH':            
+                message=f"{arm_arm} is a GROWTH arm"
+            elif o_arm_passive_type == 'STANCE':
+                message=f"{arm_arm} is a STANCE arm"
+            elif o_arm_passive_type == 'CONFUSE':
+                message=f"{arm_arm} is a CONFUSE arm"
+            elif o_arm_passive_type == 'BLINK':
+                message=f"{arm_arm} is a BLINK arm"
+            elif o_arm_passive_type == 'SLOW':
+                message=f"{arm_arm} is a SLOW arm"
+            elif o_arm_passive_type == 'HASTE':
+                message=f"{arm_arm} is a HASTE arm" 
+            elif o_arm_passive_type == 'SOULCHAIN':
+                message=f"{arm_arm} is a SOULCHAIN arm"
+            elif o_arm_passive_type == 'FEAR':
+                message=f"{arm_arm} is a FEAR arm"
+            elif o_arm_passive_type == 'GAMBLE':
+                message=f"{arm_arm} is a GAMBLE arm"
 
 
             embedVar = discord.Embed(arm=f"{arm_arm}".format(self), description=f"{message}", colour=000000)

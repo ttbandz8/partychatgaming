@@ -153,17 +153,47 @@ class Titles(commands.Cog):
             message=""
 
             if o_title_passive_type == 'ATK':
-                message=f"{title_title} is an offensive title"
+                message=f"{title_title} is an ATK title"
             elif o_title_passive_type == 'DEF':
-                message=f"{title_title} is a defensive title"
+                message=f"{title_title} is a DEF title"
             elif o_title_passive_type == 'STAM':
-                message=f"{title_title} is an offensive title"
+                message=f"{title_title} is a STAM title"
             elif o_title_passive_type == 'HLT':
-                message=f"{title_title} is a defensive title"
+                message=f"{title_title} is a HLT title"
             elif o_title_passive_type == 'LIFE':
-                message=f"{title_title} is a defensive title"
+                message=f"{title_title} is a LIFE title"
             elif o_title_passive_type == 'DRAIN':
-                message=f"{title_title} is an offensive title"
+                message=f"{title_title} is a DRAIN title"
+            elif o_title_passive_type == 'FLOG':
+                message=f"{title_title} is a FLOG title"
+            elif o_title_passive_type == 'WITHER':
+                message=f"{title_title} is a WITHER title"
+            elif o_title_passive_type == 'RAGE':
+                message=f"{title_title} is a RAGE title"
+            elif o_title_passive_type == 'BRACE':            
+                message=f"{title_title} is a BRACE title"
+            elif o_title_passive_type == 'BZRK':            
+                message=f"{title_title} is a BZRK title"
+            elif o_title_passive_type == 'CRYSTAL':            
+                message=f"{title_title} is a CRYSTAL title"
+            elif o_title_passive_type == 'GROWTH':            
+                message=f"{title_title} is a GROWTH title"
+            elif o_title_passive_type == 'STANCE':
+                message=f"{title_title} is a STANCE title"
+            elif o_title_passive_type == 'CONFUSE':
+                message=f"{title_title} is a CONFUSE title"
+            elif o_title_passive_type == 'BLINK':
+                message=f"{title_title} is a BLINK title"
+            elif o_title_passive_type == 'SLOW':
+                message=f"{title_title} is a SLOW title"
+            elif o_title_passive_type == 'HASTE':
+                message=f"{title_title} is a HASTE title" 
+            elif o_title_passive_type == 'SOULCHAIN':
+                message=f"{title_title} is a SOULCHAIN title"
+            elif o_title_passive_type == 'FEAR':
+                message=f"{title_title} is a FEAR title"
+            elif o_title_passive_type == 'GAMBLE':
+                message=f"{title_title} is a GAMBLE title" 
 
             embedVar = discord.Embed(title=f"{title_title}".format(self), description=f"{message}", colour=000000)
             if title_show != "Unbound":

@@ -16,6 +16,9 @@ class USER():
     CARD: str = field(default_factory=lambda: "Naruto")
     HAND: list[str] = field(default_factory=lambda: [''])
     ARM: str = field(default_factory=lambda: "Stock")
+    PET:str = field(default_factory=lambda: "Doge")
+    PETLVL:int = field(default_factory=lambda: 0)
+    PETXP:int = field(default_factory=lambda: 0)
     MATCHES: list = field(default_factory=lambda: [{'1V1': [0, 0]}, {'2V2': [0, 0]}, {'3V3': [0, 0]}, {'4V4': [0, 0]}, {'5V5': [0, 0]}])
     TOURNAMENT_WINS: int = field(default_factory=lambda: 0)
     # TOURNAMENT_LOSSES: int = field(default_factory=lambda: 0)
@@ -119,6 +122,20 @@ class ARM():
     AVAILABLE: bool = field(default_factory=lambda: True)
 
 @dataclass(frozen=True, order=True) 
+class PET():
+    PET: str
+    PATH: str = field(default_factory=lambda: '')
+    UNIVERSE: str = field(default_factory=lambda: "Unbound")
+    LVL: int = field(default_factory=lambda: 0)
+    ABILITIES: list[str] = field(default_factory=lambda: [{'TYPE': 0}]) 
+    COLLECTION: str = field(default_factory=lambda: "N/A")
+    TIMESTAMP: str = now
+    AVAILABLE: bool = field(default_factory=lambda: True)
+
+
+
+
+@dataclass(frozen=True, order=True) 
 class UNIVERSE():
     TITLE: str
     PATH: str = field(default_factory=lambda: '')
@@ -134,6 +151,7 @@ class BOSS():
     PATH: str = field(default_factory=lambda: '')
     TITLE: str = field(default_factory=lambda: '')
     ARM: str = field(default_factory=lambda: '')
+    PET: str = field(default_factory=lambda: '')
     UNIVERSE: str = field(default_factory=lambda: "Unbound")
     CARD: str = field(default_factory=lambda: '')
     TIMESTAMP: str = now
@@ -178,6 +196,7 @@ class VAULT():
     CARDS: list[str] = field(default_factory=lambda: ['Naruto'])
     TITLES: list[str] = field(default_factory=lambda: ['Starter'])
     ARMS: list[str] = field(default_factory=lambda: ['Stock'])
+    PETS: list[str] = field(default_factory=lambda: ['Doge'])
 
 
 ''' Data Functions'''
@@ -234,3 +253,6 @@ def newVault(vault):
     v = VAULT(**vault)
     return asdict(v)
 
+def newPet(pet):
+    p = PET(**pet)
+    return asdict(p)
