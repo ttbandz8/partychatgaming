@@ -197,6 +197,7 @@ class VAULT():
     TITLES: list[str] = field(default_factory=lambda: ['Starter'])
     ARMS: list[str] = field(default_factory=lambda: ['Stock'])
     PETS: list[str] = field(default_factory=lambda: ['Doge'])
+    
 
 
 ''' Data Functions'''
