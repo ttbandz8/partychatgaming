@@ -1217,7 +1217,6 @@ class CrownUnlimited(commands.Cog):
                 await private_channel.send(embed=embedVar)
 
                 if botActive:                    
-                    await curse(5, str(ctx.author))
                     embedVar = discord.Embed(title=f"PLAY AGAIN", description=f"Don't Worry! Losing is apart of the game. Use the .end command to `END` the tutorial lobby OR use .start to `PLAY AGAIN`", colour=0xe74c3c)
                     embedVar.set_author(name=f"You Lost...")
                     embedVar.add_field(name="Tips!", value="Equiping stronger `TITLES` and `ARMS` will make you character tougher in a fight!")
