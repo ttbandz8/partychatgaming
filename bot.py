@@ -356,7 +356,7 @@ async def addfield(ctx, collection, new_field, field_type):
       elif field_type == 'int':
          field_type = 25
       elif field_type == 'list':
-         field_type = []
+         field_type = [{'NAME': 'Doge', 'LVL': 1, 'EXP': 0, 'Hodl': 20, 'TYPE': 'HLT', 'BOND': 0, 'PATH': "https://res.cloudinary.com/dkcmq8o15/image/upload/v1622221287/Pets/Doge.jpg"}]
       elif field_type == 'bool':
          field_type = True
       

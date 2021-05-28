@@ -170,7 +170,15 @@ class Profile(commands.Cog):
             titles = vault['TITLES']
             arms = vault['ARMS']
             pets = vault['PETS']
-            
+            active_pet = {}
+            pet_names = []
+
+            for pet in pets:
+                print(pet['NAME'])
+                pet_names.append(pet['NAME'])
+                if pet['NAME'] == pet_name:
+                    active_pet = pet
+       
 
             embedVar1 = discord.Embed(title= f"My Cards\n:coin:{'{:,}'.format(balance)}", description="`.equipcard name` -  Select Your Card\n`.viewcard card name` - View Cards", colour=0x7289da)
             embedVar1.set_thumbnail(url=avatar)
@@ -184,9 +192,9 @@ class Profile(commands.Cog):
             embedVar3.set_thumbnail(url=avatar)
             embedVar3.add_field(name="Arms" + " :fireworks:", value=" | ".join(arms))
 
-            embedVar4 = discord.Embed(title= f"Pets:feet:\nLevel {d['PETLVL']}: {d['PET']}-{d['PETXP']}XP", description="`.equippet name` - Select Your Pet\n`.viewpet Pet name` - View Pet Stats", colour=0x7289da)
+            embedVar4 = discord.Embed(title= f"Pets:feet:\nLevel {active_pet['LVL']}: {active_pet['NAME']}-{active_pet['EXP']}XP", description="`.equippet name` - Select Your Pet\n`.viewpet Pet name` - View Pet Stats", colour=0x7289da)
             embedVar4.set_thumbnail(url=avatar)
-            embedVar4.add_field(name="Pets" + " :fireworks:", value=" | ".join(pets))
+            embedVar4.add_field(name="Pets" + " :fireworks:", value=" | ".join(pet_names))
 
             paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
             paginator.add_reaction('⏮️', "first")

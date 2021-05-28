@@ -66,8 +66,9 @@ class Pet(commands.Cog):
                 pet_show_img = db.queryUniverse({'TITLE': pet_show})['PATH']
             pet_passive = pet['ABILITIES'][0]
                 # Pet Passive
-            o_pet_passive_type = list(pet_passive.keys())[0]
+            o_pet_passive_name = list(pet_passive.keys())[0]
             o_pet_passive_value = list(pet_passive.values())[0]
+            o_pet_passive_type = list(pet_passive.values())[2]
 
             message=""
 
@@ -120,7 +121,7 @@ class Pet(commands.Cog):
                 embedVar.set_thumbnail(url=pet_show_img)
             embedVar.set_author(name=pet_pet)
             embedVar.set_image(url=pet_image)
-            embedVar.add_field(name="Unique Passive", value=f"`Increases {o_pet_passive_type} by {o_pet_passive_value}`", inline=False)
+            embedVar.add_field(name="Unique Passive", value=f"`Move {o_pet_passive_name} increases {o_pet_passive_type} by {o_pet_passive_value}`", inline=False)
 
             await ctx.send(embed=embedVar)
 
