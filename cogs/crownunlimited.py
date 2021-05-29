@@ -6523,7 +6523,7 @@ async def dungeondrops(player, universe):
         selected_pet = db.queryPet({'PET': pets[rand_pet]})
         pet_ability_name = list(selected_pet['ABILITIES'][0].keys())[0]
         pet_ability_power = list(selected_pet['ABILITIES'][0].values())[0]
-        pet_ability_type = list(selected_pet['ABILITIES'][0].values())[2]
+        pet_ability_type = list(selected_pet['ABILITIES'][0].values())[1]
 
         response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'PETS': {'NAME': selected_pet['PET'], 'LVL': selected_pet['LVL'], 'EXP': 0, pet_ability_name: int(pet_ability_power), 'TYPE': pet_ability_type, 'BOND': 0, 'PATH': selected_pet['PATH']}}})
         await bless(30, player)
