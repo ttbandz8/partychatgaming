@@ -696,7 +696,7 @@ class CrownUnlimited(commands.Cog):
                 t_vul=True
             
             options = [1,2,3,4,5,0]
-            await private_channel.send(f"{user1.mention}: `{o_card}` VS `{t_card}` has begun!\n{t_universe} Tales Battle")
+            await private_channel.send(f"{user1.mention}: `{o_card}` VS `{t_card}` has begun!\n{t_universe} Dungeon Battle")
 
             # Count Turns
             turn_total = 0
@@ -1399,11 +1399,11 @@ class CrownUnlimited(commands.Cog):
                     if selected_universe in available_universes:
                         await bless(25, ctx.author)
                         await ctx.author.send(embed=embedVar)
-                        await ctx.author.send(f"You were awarded :coin: 25 for completing the {selected_universe} Tale!")
+                        await ctx.author.send(f"You were awarded :coin: 25 for completing the {selected_universe} Dungeon!")
                     else:
                         await bless(500, ctx.author)
                         await main.DM(ctx, ctx.author, embed=embedVar)
-                        await ctx.author.send(f"You were awarded :coin: 500 for completing the {selected_universe} Tale! ")
+                        await ctx.author.send(f"You were awarded :coin: 500 for completing the {selected_universe} Dungeon! ")
                     continued=False
                     if private_channel.guild:
                         await discord.TextChannel.delete(private_channel, reason=None)
