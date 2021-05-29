@@ -66,7 +66,7 @@ class Profile(commands.Cog):
         card = db.queryCard({'NAME':str(d['CARD'])})
         title = db.queryTitle({'TITLE': str(d['TITLE'])})
         arm = db.queryArm({'ARM': str(d['ARM'])})
-        pet = db.queryPet({'PET': str(d['PET'])})
+        vault = db.queryVault({'OWNER': d['DISNAME']})
         if card:
             o_card = card['NAME']
             o_card_path=card['PATH']
@@ -83,7 +83,18 @@ class Profile(commands.Cog):
             o_speed = card['SPD']
             o_show = card['UNIVERSE']
             o_collection = card['COLLECTION']
-            
+
+            pets = vault['PETS']
+            active_pet = {}
+            pet_names = []
+
+            for pet in pets:
+                pet_names.append(pet['NAME'])
+                if pet['NAME'] == d['PET']:
+                    active_pet = pet
+
+            pet_ability_power = list(active_pet.values())[3]
+
             arm_name = arm['ARM']
             arm_passive = arm['ABILITIES'][0]
             arm_passive_type = list(arm_passive.keys())[0]
@@ -92,10 +103,6 @@ class Profile(commands.Cog):
             title_passive = title['ABILITIES'][0]
             title_passive_type = list(title_passive.keys())[0]
             title_passive_value = list(title_passive.values())[0]
-            pet_name= pet['PET']
-            pet_passive = pet['ABILITIES'][0]
-            pet_passive_type = list(pet_passive.keys())[0]
-            pet_passive_value = list(pet_passive.values())[0]
 
             o_1 = o_moveset[0]
             o_2 = o_moveset[1]
@@ -136,14 +143,15 @@ class Profile(commands.Cog):
             embedVar = discord.Embed(title=f"{o_card}".format(self), colour=000000)
             embedVar.add_field(name=f"TITLE", value=f"`{title_name}`: Increase `{title_passive_type}` by `{title_passive_value}`")
             embedVar.add_field(name=f"ARM", value=f"`{arm_name}`: Increase `{arm_passive_type}` by `{arm_passive_value}`")
-            embedVar.add_field(name=f"PET", value=f"`{pet_name}`: Increase `{pet_passive_type}` by `{pet_passive_value}`")
+            embedVar.add_field(name=f"PET", value=f"`{active_pet['NAME']}`: Increase `{active_pet['TYPE']}` by `{pet_ability_power}`")
+            embedVar.set_thumbnail(url=active_pet['PATH'])
             embedVar.set_image(url=o_card_path)
             embedVar.add_field(name="Health", value=f"`{o_max_health}`")
             embedVar.add_field(name="Stamina", value=f"`{o_max_stamina}`")
             embedVar.add_field(name="Attack", value=f"`{o_attack}`")
             embedVar.add_field(name="Defense", value=f"`{o_defense}`")
             embedVar.add_field(name="Speed", value=f"`{o_speed}`")
-            embedVar.add_field(name="Unique Passive", value=f"`{passive_name}`: Increases {passive_type} by {passive_num}`", inline=False)
+            embedVar.add_field(name="Unique Passive", value=f"`{passive_name}`: Increases `{passive_type} by {passive_num}`", inline=False)
             embedVar.add_field(name=f"{move1}", value=f"Power: `{move1ap}`", inline=False)
             embedVar.add_field(name=f"{move2}", value=f"Power: `{move2ap}`", inline=False)
             embedVar.add_field(name=f"{move3}", value=f"Power: `{move3ap}`", inline=False)
@@ -174,7 +182,6 @@ class Profile(commands.Cog):
             pet_names = []
 
             for pet in pets:
-                print(pet['NAME'])
                 pet_names.append(pet['NAME'])
                 if pet['NAME'] == pet_name:
                     active_pet = pet

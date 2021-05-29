@@ -45,14 +45,19 @@ class Pet(commands.Cog):
         vault_query = {'OWNER' : str(ctx.author)}
         vault = db.altQueryVault(vault_query)
 
-        resp = db.queryPet({'PET': str(pet_name)})
+        selected_pet = ""
+
+        for pet in vault['PETS']:
+            if pet_name == pet['NAME']:
+                selected_pet = pet_name
 
         # Do not Check Tourney wins
-        if pet_name in vault['PETS']:
+        if selected_pet:
             response = db.updateUserNoFilter(user_query, {'$set': {'PET': str(pet_name)}})
-            await ctx.send(response)
+            await ctx.send(f"{pet_name} is ready for battle!")
         else:
             await ctx.send(m.USER_DOESNT_HAVE_THE_PET, delete_after=5)
+            return
 
     @commands.command()
     async def viewpet(self, ctx, *args):
