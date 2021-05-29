@@ -442,6 +442,9 @@ class Lookup(commands.Cog):
             avatar = d['AVATAR']
             matches = d['MATCHES']
             tournament_wins = d['TOURNAMENT_WINS']
+            crown_tales = d['CROWN_TALES']
+            dungeons = d['DUNGEONS']
+            pet = d['PET']
 
 
             matches_to_string = dict(ChainMap(*matches))
@@ -451,6 +454,7 @@ class Lookup(commands.Cog):
             embed1.add_field(name="Team" + " :military_helmet:", value=team)
             embed1.add_field(name="Title" + " :crown:", value=' '.join(str(x) for x in titles))
             embed1.add_field(name="Arm" + " :mechanical_arm: ", value=f"{arm}")
+            embed1.add_field(name="Pet" + " :dog:  ", value=f"{pet}")
             embed1.add_field(name="Tournament Wins" + " :fireworks:", value=tournament_wins)
 
             embed2 = discord.Embed(title= f":triangular_flag_on_post: " + f"{name}".format(self), description=":bank: Party Chat Gaming Database™️", colour=000000)
@@ -461,6 +465,13 @@ class Lookup(commands.Cog):
             embed3 = discord.Embed(title= f":triangular_flag_on_post: " + f"{name}".format(self), description=":bank: Party Chat Gaming Database™️", colour=000000)
             embed3.set_thumbnail(url=avatar)
             embed3.add_field(name="Stats" + " :medal:", value="\n".join(f'{k}: {"/".join([str(int) for int in v])}' for k,v in matches_to_string.items()))
+            
+            if crown_tales:
+                embed4 = discord.Embed(title= f":triangular_flag_on_post: " + f"{name}".format(self), description=":bank: Party Chat Gaming Database™️", colour=000000)
+                embed4.set_thumbnail(url=avatar)
+                embed4.add_field(name="Completed Crown Tales" + " :medal:", value="\n".join(crown_tales))
+                if dungeons:
+                    embed4.add_field(name="Completed Crown Dungeons" + " :fire: ", value="\n".join(dungeons))
 
             paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
             paginator.add_reaction('⏮️', "first")
@@ -468,7 +479,7 @@ class Lookup(commands.Cog):
             paginator.add_reaction('🔐', "lock")
             paginator.add_reaction('⏩', "next")
             paginator.add_reaction('⏭️', "last")
-            embeds = [embed1, embed2, embed3]
+            embeds = [embed1, embed2, embed3, embed4]
             await paginator.run(embeds)
         else:
             await ctx.send(m.USER_NOT_REGISTERED)
