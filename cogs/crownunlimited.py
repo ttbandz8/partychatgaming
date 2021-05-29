@@ -86,10 +86,10 @@ class CrownUnlimited(commands.Cog):
         player_scaling = 0
 
         if universe['PREREQUISITE']:
-            opponent_scaling = 40
+            opponent_scaling = 90
             player_scaling = 0
         else:
-            opponent_scaling = 20
+            opponent_scaling = 90
             player_scaling = 0
 
         legends = [x for x in universe['CROWN_TALES']]
@@ -177,13 +177,13 @@ class CrownUnlimited(commands.Cog):
             t_card = t['NAME']
             t_card_path=t['PATH']
             t_rcard_path=t['RPATH']
-            t_max_health = t['HLT'] + ((80 * currentopponent) + opponent_scaling)
-            t_health = t['HLT'] + ((80 * currentopponent) + opponent_scaling)
+            t_max_health = t['HLT'] + ((90 * currentopponent) + opponent_scaling)
+            t_health = t['HLT'] + ((90 * currentopponent) + opponent_scaling)
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
-            t_attack = t['ATK'] + ((40 * currentopponent) + opponent_scaling)
-            t_defense = t['DEF'] + ((40 * currentopponent + opponent_scaling))
+            t_attack = t['ATK'] + ((30 * currentopponent) + opponent_scaling)
+            t_defense = t['DEF'] + ((30 * currentopponent + opponent_scaling))
             t_type = t['TYPE']
             t_accuracy = t['ACC']
             t_passive = t['PASS'][0]
@@ -1506,13 +1506,13 @@ class CrownUnlimited(commands.Cog):
             o_card = o['NAME']
             o_card_path=o['PATH']
             o_rcard_path=o['RPATH']
-            o_max_health = o['HLT'] + ((2 * currentopponent) + player_scaling)
-            o_health = o['HLT'] + ((2 * currentopponent) + player_scaling)
+            o_max_health = o['HLT'] + ((4 * currentopponent) + player_scaling)
+            o_health = o['HLT'] + ((4 * currentopponent) + player_scaling)
             o_stamina = o['STAM']
             o_max_stamina = o['STAM']
             o_moveset = o['MOVESET']
-            o_attack = o['ATK'] + ((3 * currentopponent) + player_scaling)
-            o_defense = o['DEF'] + ((5 * currentopponent) + player_scaling)
+            o_attack = o['ATK'] + ((5 * currentopponent) + player_scaling)
+            o_defense = o['DEF'] + ((7 * currentopponent) + player_scaling)
             o_type = o['TYPE']
             o_accuracy = o['ACC']
             o_passive = o['PASS'][0]
