@@ -777,6 +777,7 @@ class CrownUnlimited(commands.Cog):
                         await private_channel.send(file=player_1_card)
                         embedVar = discord.Embed(title=f"{o_card} What move will you use?", description=f"{t_card} currently has {t_health} health and {t_stamina} stamina.", colour=embed_color_o)
                         embedVar.add_field(name=f"{o_card} Move List", value=f"1. {omove1_text} | 10 STAM\n2. {omove2_text} | 30 STAM\n3. {omove3_text} | 80 STAM\n4. {omove_enhanced_text} | 20 STAM")
+                        embedVar.set_thumbnail(url=opet_image)
                         if o_used_focus and o_used_resolve and not t_pet_used:
                             embedVar.set_author(name="Press 0 to Quit Match. Press 6 to Summon your Pet!")                                    
                         elif o_used_focus and not o_used_resolve:
@@ -936,7 +937,7 @@ class CrownUnlimited(commands.Cog):
 
                                         embedVar = discord.Embed(title=f"{o_card.upper()} Summoned {opet_name}", colour=0xe91e63)
                                         embedVar.add_field(name=f"{opet_name} used {opetmove_text}!", value =f"Enhanced {opet_type}")
-                                        embedVar.set_image(url=opet_image)
+                                        embedVar.set_thumbnail(url=opet_image)
                                         await private_channel.send(embed=embedVar)
                                         turn=0
                                     else:
@@ -1372,7 +1373,6 @@ class CrownUnlimited(commands.Cog):
 
                         embedVar = discord.Embed(title=f"VICTORY\n`{o_card} says:`\n{o_win_description}", description=f"The game lasted {turn_total} rounds.\n\n{drop_response}", colour=0xe91e63)
                         embedVar.set_author(name=f"{t_card} says\n{t_lose_description}")
-                        embedVar.add_field(name="Continue...", value="Continue down the path to beat the Universe!")
                         await private_channel.send(embed=embedVar)
 
                         emojis = ['👍', '👎']
@@ -1477,10 +1477,21 @@ class CrownUnlimited(commands.Cog):
         oarm = db.queryArm({'ARM': o_user['ARM']})
         oarm_passive = oarm['ABILITIES'][0]
         oarm_name=oarm['ARM']
-        opet = db.queryPet({'PET': o_user['PET']})
-        opet_passive = opet['ABILITIES'][0]
-        opet_name = opet['PET']
-        opet_image =opet['PATH']
+
+
+        vault = db.queryVault({'OWNER': str(ctx.author) , 'PETS.NAME': o_user['PET']})
+        opet = {}
+        for pet in vault['PETS']:
+            if o_user['PET'] == pet['NAME']:
+                opet = pet
+
+        opet_passive_type = opet['TYPE']
+        opet_name = opet['NAME']
+        opet_image = opet['PATH']
+        opet_exp = opet['EXP']
+        opet_lvl = opet['LVL']
+
+
         o_DID = o_user['DID']
         o_card = o['NAME']
         o_card_path=o['PATH']
@@ -1597,7 +1608,11 @@ class CrownUnlimited(commands.Cog):
         omove2_text = list(o_2.keys())[0]
         omove3_text = list(o_3.keys())[0]
         omove_enhanced_text = list(o_enhancer.keys())[0]
-        opetmove_text= list(opet_passive.keys())[0]
+
+        opetmove_text= list(opet.keys())[3] # Name of the ability
+        opetmove_ap= list(opet.values())[3] # Ability Power
+
+        opet_move = {str(opetmove_text): int(opetmove_ap), 'STAM': 0, 'TYPE': str(opet_passive_type)}
 
         # Player 1 Card Passive
         o_card_passive_type = list(o_passive.values())[1]
@@ -2031,7 +2046,6 @@ class CrownUnlimited(commands.Cog):
         t_resolve = 60
         t_used_resolve=False
 
-        tpetmove_text= list(tpet_passive.keys())[0]
         
         # Turn iterator
         turn = 0
@@ -2130,6 +2144,7 @@ class CrownUnlimited(commands.Cog):
                     await private_channel.send(file=player_1_card)
                     embedVar = discord.Embed(title=f"{o_card} What move will you use?", description=f"{t_card} currently has {t_health} health and {t_stamina} stamina.", colour=embed_color_o)
                     embedVar.add_field(name=f"{o_card} Move List", value=f"1. {omove1_text} | 10 STAM\n2. {omove2_text} | 30 STAM\n3. {omove3_text} | 80 STAM\n4. {omove_enhanced_text} | 20 STAM")
+                    embedVar.set_thumbnail(url=opet_image)
                     if o_used_focus and o_used_resolve and not t_pet_used:
                         embedVar.set_author(name="Press 0 to Quit Match. Press 6 to Summon your Pet!")                                    
                     elif o_used_focus and not o_used_resolve:
@@ -2166,12 +2181,16 @@ class CrownUnlimited(commands.Cog):
                             return
 
                         if msg.content == "1":
+                            o_pet_used =False
                             dmg = damage_cal(o_card, o_1, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description)
                         elif msg.content == "2":
+                            o_pet_used =False
                             dmg = damage_cal(o_card, o_2, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description)
                         elif msg.content == "3":
+                            o_pet_used =False
                             dmg = damage_cal(o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description)
                         elif msg.content == "4":
+                            o_pet_used =False
                             o_enhancer_used=True
                             dmg = damage_cal(o_card, o_enhancer, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description)
                             o_enhancer_used=False
@@ -2215,11 +2234,83 @@ class CrownUnlimited(commands.Cog):
                                 o_pet_used =True
                                 opet_dmg = dmg['DMG']
                                 opet_type = dmg['ENHANCED_TYPE']
-                                embedVar = discord.Embed(title=f"{o_card.upper()} Summoned {opet_name}", colour=0xe91e63)
-                                embedVar.add_field(name=f"{opet_name} used {opetmove_text}!", value =f"Enhanced {opet_type}")
-                                embedVar.set_image(url=opet_image)
-                                await private_channel.send(embed=embedVar)
-                                turn=0
+                                if dmg['CAN_USE_MOVE']:
+                                    if opet_type == 'ATK':
+                                        o_attack = round(o_attack + dmg['DMG'])
+                                    elif opet_type == 'DEF':
+                                        o_defense = round(o_defense + dmg['DMG'])
+                                    elif opet_type == 'STAM':
+                                        o_stamina = round(o_stamina + dmg['DMG'])
+                                    elif opet_type == 'HLT':
+                                        o_health = round(o_health + dmg['DMG'])
+                                    elif opet_type == 'LIFE':
+                                        o_health = round(o_health + dmg['DMG'])
+                                        t_health = round(t_health - dmg['DMG'])
+                                    elif opet_type == 'DRAIN':
+                                        o_stamina = round(o_stamina + dmg['DMG'])
+                                        t_stamina = round(t_stamina - dmg['DMG'])
+                                    elif opet_type == 'FLOG':
+                                        o_attack = round(o_attack + dmg['DMG'])
+                                    elif opet_type == 'WITHER':
+                                        o_defense = round(o_defense + dmg['DMG'])
+                                    elif opet_type == 'RAGE':
+                                        o_defense = round(o_defense - dmg['DMG'])
+                                        o_attack = round(o_attack + dmg['DMG'])
+                                    elif opet_type == 'BRACE':
+                                        o_defense = round(o_defense + dmg['DMG'])
+                                        o_attack = round(o_attack - dmg['DMG'])
+                                    elif opet_type == 'BZRK':
+                                        o_health = round(o_health - dmg['DMG'])
+                                        o_attack = round(o_attack + (.10 * dmg['DMG']))
+                                    elif opet_type == 'CRYSTAL':
+                                        o_health = round(o_health - dmg['DMG'])
+                                        o_defense = round(o_defense +(.10 * dmg['DMG']))
+                                    elif opet_type == 'GROWTH':
+                                        o_max_health = round(o_max_health - dmg['DMG'])
+                                        o_defense = round(o_defense + dmg['DMG'])
+                                        o_attack = round(o_attack + dmg['DMG'])
+                                    elif opet_type == 'STANCE':
+                                        tempattack = dmg['DMG']
+                                        o_attack = o_defense
+                                        o_defense = tempattack
+                                    elif opet_type == 'CONFUSE':
+                                        tempattack = dmg['DMG']
+                                        t_attack = t_defense
+                                        t_defense = tempattack
+                                    elif opet_type == 'BLINK':
+                                        o_stamina = round(o_stamina - dmg['DMG'])
+                                        t_stamina = round(t_stamina + dmg['DMG'] - 10)
+                                    elif opet_type == 'SLOW':
+                                        tempstam = round(t_stamina + dmg['DMG'])
+                                        o_stamina = round(o_stamina - dmg['DMG'])
+                                        t_stamina = o_stamina
+                                        o_stamina = tempstam
+                                    elif opet_type == 'HASTE':
+                                        tempstam = round(t_stamina - dmg['DMG'])
+                                        o_stamina = round(o_stamina + dmg['DMG'])
+                                        t_stamina = o_stamina
+                                        o_stamina = tempstam                                       
+                                    elif opet_type == 'SOULCHAIN':
+                                        o_stamina = round(dmg['DMG'])
+                                        t_stamina = o_stamina
+                                    elif opet_type == 'GAMBLE':
+                                        o_health = round(dmg['DMG'])
+                                        t_health = o_health
+                                    elif opet_type == 'FEAR':
+                                        o_health = round(o_health - ((dmg['DMG']/100)* o_health))
+                                        t_attack = round(t_attack - ((dmg['DMG']/100)* t_attack))
+                                        t_defense = round(t_defense - ((dmg['DMG']/100)* t_defense))
+
+                                    o_stamina = o_stamina - int(dmg['STAMINA_USED'])
+
+                                    embedVar = discord.Embed(title=f"{o_card.upper()} Summoned {opet_name}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"{opet_name} used {opetmove_text}!", value =f"Enhanced {opet_type}")
+                                    embedVar.set_thumbnail(url=opet_image)
+                                    await private_channel.send(embed=embedVar)
+                                    turn=0
+                                else:
+                                    await private_channel.send(f"{opet_name} needs a turn to rest...")
+                                    turn=0
                             else:
                                 await ctx.send(f"{opet_name} needs a turn to rest...")                                   
 
@@ -3479,6 +3570,7 @@ class CrownUnlimited(commands.Cog):
                             await private_channel.send(file=player_1_card)
                             embedVar = discord.Embed(title=f"{o_card} What move will you use?", description=f"{t_card} currently has {t_health} health and {t_stamina} stamina.", colour=embed_color_o)
                             embedVar.add_field(name=f"{o_card} Move List", value=f"1. {omove1_text} | 10 STAM\n2. {omove2_text} | 30 STAM\n3. {omove3_text} | 80 STAM\n4. {omove_enhanced_text} | 20 STAM")
+                            embedVar.set_thumbnail(url=opet_image)
                             if o_used_focus and o_used_resolve and not t_pet_used:
                                 embedVar.set_author(name="Press 0 to Quit Match. Press 6 to Summon your Pet!")                                    
                             elif o_used_focus and not o_used_resolve:
@@ -3636,7 +3728,7 @@ class CrownUnlimited(commands.Cog):
 
                                             embedVar = discord.Embed(title=f"{o_card.upper()} Summoned {opet_name}", colour=0xe91e63)
                                             embedVar.add_field(name=f"{opet_name} used {opetmove_text}!", value =f"Enhanced {opet_type}")
-                                            embedVar.set_image(url=opet_image)
+                                            embedVar.set_thumbnail(url=opet_image)
                                             await private_channel.send(embed=embedVar)
                                             turn=0
                                         else:
@@ -3814,6 +3906,7 @@ class CrownUnlimited(commands.Cog):
                                 await ctx.send(file=player_2_card)
                                 embedVar = discord.Embed(title=f"{t_card} What move will you use?", description=f"{o_card} currently has {o_health} health and {t_stamina} stamina.", colour=embed_color_t)
                                 embedVar.add_field(name=f"{t_card} Move List", value=f"1. {tmove1_text} | 10 STAM\n2. {tmove2_text} | 30 STAM\n3. {tmove3_text} | 80 STAM\n4. {tmove_enhanced_text} | 20 STAM")
+                                embedVar.set_thumbnail(url=tpet_image)
                                 if t_used_focus and t_used_resolve and not t_pet_used:
                                     embedVar.set_author(name="Press 0 to Quit Match. Press 6 to Summon your Pet!")
                                     
@@ -3969,7 +4062,7 @@ class CrownUnlimited(commands.Cog):
 
                                                 embedVar = discord.Embed(title=f"{t_card.upper()} Summoned {tpet_name}", colour=0xe91e63)
                                                 embedVar.add_field(name=f"{tpet_name} used {tpetmove_text}!", value =f"Enhanced {tpet_type}")
-                                                embedVar.set_image(url=tpet_image)
+                                                embedVar.set_thumbnail(url=tpet_image)
                                                 await private_channel.send(embed=embedVar)
                                                 turn=1
                                             else:
