@@ -195,7 +195,7 @@ class VAULT():
     CARDS: list[str] = field(default_factory=lambda: ['Naruto'])
     TITLES: list[str] = field(default_factory=lambda: ['Starter'])
     ARMS: list[str] = field(default_factory=lambda: ['Stock'])
-    PETS: list[str] = field(default_factory=lambda: [{'NAME': 'Doge', 'LVL': 1, 'EXP': 0, 'MOVE': 20, 'TYPE': 'ATK', 'BOND': 0, 'PATH': "path"}])
+    PETS: list[str] = field(default_factory=lambda: [{'NAME': 'Doge', 'LVL': 1, 'EXP': 0, 'MOVE': 20, 'TYPE': 'ATK', 'BOND': 0, 'PATH': "https://res.cloudinary.com/dkcmq8o15/image/upload/v1622221287/Pets/Doge.jpg"}])
     
 
 
