@@ -1333,7 +1333,7 @@ class CrownUnlimited(commands.Cog):
                 gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
 
                 embedVar = discord.Embed(title=f":zap: `{t_card}` wins the match!", description=f"The game lasted {turn_total} rounds.\n`{t_card} says:`\n`{t_win_description}`", colour=0x1abc9c)
-                embedVar.set_author(name=f"{o_card} says:\n{o_lose_description}")
+                embedVar.set_author(name=f"{o_card} lost!")
                 if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
                     embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[2]} Seconds.")
                 elif int(gameClock[0]) == 0:
@@ -1360,7 +1360,7 @@ class CrownUnlimited(commands.Cog):
                     if private_channel.guild:
 
                         embedVar = discord.Embed(title=f"VICTORY\n`{o_card} says:`\n{o_win_description}", description=f"The game lasted {turn_total} rounds.\n\n{drop_response}", colour=0xe91e63)
-                        embedVar.set_author(name=f"{t_card} says\n{t_lose_description}")
+                        embedVar.set_author(name=f"{t_card} lost!")
                         await private_channel.send(embed=embedVar)
 
                         emojis = ['👍', '👎']
@@ -2706,7 +2706,7 @@ class CrownUnlimited(commands.Cog):
                 gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
 
                 embedVar = discord.Embed(title=f":zap: `{t_card}` wins the match!", description=f"The game lasted {turn_total} rounds.\n`{t_card} says:`\n`{t_win_description}`", colour=0x1abc9c)
-                embedVar.set_author(name=f"{o_card} says:\n{o_lose_description}")
+                embedVar.set_author(name=f"{o_card} lost!")
                 if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
                     embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[2]} Seconds.")
                 elif int(gameClock[0]) == 0:
@@ -2740,7 +2740,7 @@ class CrownUnlimited(commands.Cog):
                     if private_channel.guild:
 
                         embedVar = discord.Embed(title=f"VICTORY\n`{o_card} says:`\n{o_win_description}", description=f"The game lasted {turn_total} rounds.\n\n{drop_response}", colour=0xe91e63)
-                        embedVar.set_author(name=f"{t_card} says\n{t_lose_description}")
+                        embedVar.set_author(name=f"{t_card} lost!")
                         await private_channel.send(embed=embedVar)
 
                         emojis = ['👍', '👎']
@@ -6418,10 +6418,6 @@ async def drops(player, universe):
     for pet in all_available_drop_pets:
         pets.append(pet['PET'])
 
-    print(cards)
-    print(arms)
-    print(titles)
-    print(pets)
     c = len(cards) - 1
     t = len(titles) - 1
     a = len(arms) - 1
@@ -6488,10 +6484,6 @@ async def dungeondrops(player, universe):
     for pet in all_available_drop_pets:
         pets.append(pet['PET'])
 
-    print(cards)
-    print(arms)
-    print(titles)
-    print(pets)
     c = len(cards) - 1
     t = len(titles) - 1
     a = len(arms) - 1
