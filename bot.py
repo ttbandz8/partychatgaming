@@ -172,12 +172,13 @@ async def r(ctx):
    if response:
 
       embedVar = discord.Embed(title=f"Welcome to Party Chat Gaming!", colour=0xe91e63)
-      embedVar.set_author(name="Use .solo to play Crown Unlimited undisturbed. Remember to come back and play with your friends!")
-      embedVar.add_field(name=".vault", value="Check your equipped `card`, `title` and `arm`")
-      embedVar.add_field(name=".shop", value="Purchase your starting `card`, `title` and `arm`")
-      embedVar.add_field(name=".senpaibattle", value="Start tutorial on Crown Unlimited")
-      embedVar.add_field(name=".help", value="Inquire all potential commands and capabilites of the bot")
-      embedVar.set_footer(text=".senpai will start tutorial on overall bot capabilities")
+      embedVar.set_author(name="Use `.solo` to play Crown Unlimited undisturbed. Remember to come back and play with your friends!")
+      embedVar.add_field(name="`.build`", value="Check your equipped `CARD`, `TITLE`, `ARM` and `PET`")
+      embedVar.add_field(name="`.vault`", value="Check your available `CARDS`, `TITLES`, `ARMS` and `PETS`")
+      embedVar.add_field(name="`.shop`", value="Purchase your starting `CARD`, `TITLE` or `ARM`")
+      embedVar.add_field(name="`.senpaibattle`", value="Start tutorial on Crown Unlimited")
+      embedVar.add_field(name="`.help`", value="Inquire all potential commands and capabilites of the bot")
+      embedVar.set_footer(text="`.senpai` will start tutorial on overall bot capabilities")
       await ctx.send(embed=embedVar)
 
       vault = db.queryVault({'OWNER': disname})
