@@ -1394,7 +1394,7 @@ class CrownUnlimited(commands.Cog):
                     embedVar.add_field(name="Additional Reward", value=f"You earned additional rewards in your vault! Take a look.")
                     embedVar.set_footer(text="The .shop has been updated with new CARDS, TITLES and ARMS!")
                     upload_query={'DISNAME': str(ctx.author)}
-                    new_upload_query={'$addToSet': {'CROWN_TALES': selected_universe}}
+                    dungeon_new_upload_query={'$addToSet': {'DUNGEONS': selected_universe}}
                     r=db.updateUserNoFilter(upload_query, new_upload_query)
                     if selected_universe in available_universes:
                         await bless(25, ctx.author)
