@@ -36,8 +36,6 @@ class CrownUnlimited(commands.Cog):
     async def cog_check(self, ctx):
         return await main.validate_user(ctx)
 
-
-
     @commands.command()
     async def dungeon(self, ctx):
         private_channel = ctx
@@ -67,7 +65,7 @@ class CrownUnlimited(commands.Cog):
                             guild.me: discord.PermissionOverwrite(read_messages=True),
                         ctx.author: discord.PermissionOverwrite(read_messages=True),
                         }
-                private_channel = await guild.create_text_channel(f'{str(ctx.author)}-tale-run', overwrites=overwrites)
+                private_channel = await guild.create_text_channel(f'{str(ctx.author)}-DUNGEON-RUN', overwrites=overwrites)
                 await ctx.send(f"{ctx.author.mention} private channel has been opened for you.")
                 await private_channel.send(f'{ctx.author.mention} Good luck!')
             
@@ -1409,7 +1407,6 @@ class CrownUnlimited(commands.Cog):
                     continued=False
                     if private_channel.guild:
                         await discord.TextChannel.delete(private_channel, reason=None)
-
 
     @commands.command()
     async def tales(self, ctx):
@@ -2789,8 +2786,6 @@ class CrownUnlimited(commands.Cog):
                     continued=False
                     if private_channel.guild:
                         await discord.TextChannel.delete(private_channel, reason=None)
-
-
 
     @commands.command()
     async def boss(self, ctx, *args):
@@ -6347,7 +6342,6 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
             # await ctx.send(file=discord.File(fp=image_binary,filename="image.png"))
             return discord.File(fp=image_binary,filename="image.png")
 
-
 def setup(bot):
     bot.add_cog(CrownUnlimited(bot))
 
@@ -6453,12 +6447,11 @@ async def drops(player, universe):
 
         response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'PETS': {'NAME': selected_pet['PET'], 'LVL': selected_pet['LVL'], 'EXP': 0, pet_ability_name: int(pet_ability_power), 'TYPE': pet_ability_type, 'BOND': 0, 'PATH': selected_pet['PATH']}}})
         await bless(30, player)
-        return f"You earned {cards[rand_pet]} + :coin: 30!"
+        return f"You earned {pets[rand_pet]} + :coin: 30!"
     elif drop_rate <= card_drop and drop_rate > pet_drop:
             response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(cards[rand_card])}})
             await bless(30, player)
             return f"You earned {cards[rand_card]} + :coin: 30!"
-
 
 async def dungeondrops(player, universe):
     all_available_drop_cards = db.queryDropCards(universe)
@@ -6496,8 +6489,8 @@ async def dungeondrops(player, universe):
 
     gold_drop = 10 #
     title_drop = 20 #
-    arm_drop = 40 #
-    card_drop = 60 #
+    arm_drop = 70 #
+    card_drop = 80 #
     pet_drop = 100 #
     
     drop_rate = random.randint(0,100)
@@ -6519,7 +6512,7 @@ async def dungeondrops(player, universe):
 
         response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'PETS': {'NAME': selected_pet['PET'], 'LVL': selected_pet['LVL'], 'EXP': 0, pet_ability_name: int(pet_ability_power), 'TYPE': pet_ability_type, 'BOND': 0, 'PATH': selected_pet['PATH']}}})
         await bless(30, player)
-        return f"You earned {cards[rand_pet]} + :coin: 30!"
+        return f"You earned {pets[rand_pet]} + :coin: 30!"
     elif drop_rate <= card_drop and drop_rate > pet_drop:
             response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(cards[rand_card])}})
             await bless(30, player)
