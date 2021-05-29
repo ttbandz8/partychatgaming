@@ -27,7 +27,7 @@ gods_col = db["GODS"]
 arm_col = db["ARM"]
 universe_col = db['UNIVERSE']
 boss_col = db['BOSS']
-
+pet_col = db['PET']
 vault_col =db["VAULT"]
 
 '''Check if Collection Exists'''
@@ -407,6 +407,76 @@ def queryTournamentArms():
 
 def queryShopArms():
     data = arm_col.find({'TOURNAMENT_REQUIREMENTS': 0, 'AVAILABLE': True})
+    return data 
+
+
+''' PETS '''
+def pet_exists(data):
+    collection_exists = col_exists("PET")
+    if collection_exists:
+        pet_does_exist = pet_col.find_one(data)
+        if pet_does_exist:
+            return True
+        else:
+            return False
+    else:
+        return False
+
+def createPet(pet):
+    try:
+        petexists = pet_exists({'PET': pet['PET']})
+        if petexists:
+            return "Pet already exists."
+        else:
+            pet_col.insert_one(pet)
+            return "New Pet created."
+    except:
+        return "Cannot create Pet."
+
+def updatePet(query, new_value):
+    try:
+        petexists = pet_exists({'PET': query['PET']})
+        if petexists:
+            pet_col.update_one(query, new_value)
+            return True
+        else:
+            return False
+    except:
+        return False
+
+def updateManyPets(new_value):
+    pet_col.update_many({}, new_value)
+    return True
+
+def deletePet(pet):
+    try:
+        petexists = pet_exists({'PET': pet['PET']})
+        if petexists:
+            pet_col.delete_one(pet)
+            return True
+        else:
+            return False
+    except:
+        return False
+
+def deleteAllPet(pet_query):
+    exists = pet_exists({'PET': pet_query['PET']})
+    if exists:
+        pet_col.delete_many({})
+        return 'All Pets Deleted'
+    else:
+        return 'Unable to Delete All Pets'
+
+def queryAllPets():
+    data = pet_col.find()
+    return data
+
+def queryPet(query):
+    data = pet_col.find_one(query)
+    return data
+
+def queryDropPets(args):
+    data = pet_col.find({'UNIVERSE': args, 'AVAILABLE': True})
     return data 
 
 

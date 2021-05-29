@@ -269,28 +269,55 @@ async def trade(ctx, user2: User, *args):
    p1_cards = p1_vault['CARDS']
    p1_titles = p1_vault['TITLES']
    p1_arms = p1_vault['ARMS']
+   p1_pets = p1_vault['PETS']
    p1_balance = p1_vault['BALANCE']
+   
+   p1_active_pet = {}
+   p1_pet_names = []
+   for pet in p1_pets:
+         p1_pet_names.append(pet['NAME'])
+         if pet['NAME'] == p1_trade_item:
+            p1_active_pet = pet
+
 
    p2_vault = db.queryVault({'OWNER' : str(user2)})
    p2_cards = p2_vault['CARDS']
    p2_titles = p2_vault['TITLES']
    p2_arms = p2_vault['ARMS']
+   p2_pets = p2_vault['PETS']
    p2_balance = p2_vault['BALANCE']
    p2_trade_item = ""
 
+   p2_pet_names = []
+   for pet in p2_pets:
+         p2_pet_names.append(pet['NAME'])
+
+
    commence = False
 
-   if p1_trade_item not in p1_cards and p1_trade_item not in p1_titles and p1_trade_item not in p1_arms:
+   if p1_trade_item not in p1_cards and p1_trade_item not in p1_titles and p1_trade_item not in p1_arms and p1_trade_item not in p1_pet_names and p1_trade_item not in p2_pet_names:
       await ctx.send("You do not own this item.")
       return
    else:
       await ctx.send(f"{user2.mention}, what will you trade for {ctx.author.mention}'s {p1_trade_item}?")
 
       def check(msg):
-         return msg.author == user2 and msg.content in p2_cards or msg.content in p2_titles or msg.content in p2_arms and msg.content not in p1_cards and msg.content not in p1_titles and msg.content not in p1_arms
+         if p1_trade_item in p1_pet_names:
+            return msg.author == user2 and msg.content in p2_pet_names and msg.content not in p1_cards and msg.content not in p1_titles and msg.content not in p1_arms and msg.content not in p1_pet_names
+         else:
+            return msg.author == user2 and msg.content in p2_cards or msg.content in p2_titles or msg.content in p2_arms or msg.content in p2_pet_names and msg.content not in p1_cards and msg.content not in p1_titles and msg.content not in p1_arms and msg.content not in p1_pet_names
+
       try:
          msg = await bot.wait_for('message', timeout=25.0, check=check)
          p2_trade_item = msg.content
+
+         p2_active_pet = {}
+         p2_pet_names = []
+         for pet in p2_pets:
+               p2_pet_names.append(pet['NAME'])
+               if pet['NAME'] == p2_trade_item:
+                  p2_active_pet = pet
+
          commence = True
       except:
          await ctx.send("Please, triple check your vaults before making a trade. ")
@@ -306,6 +333,9 @@ async def trade(ctx, user2: User, *args):
             return user == ctx.author and str(reaction.emoji) == '👍'
 
          try:
+            print(p2_active_pet)
+            print(p1_active_pet)
+
             reaction, user = await bot.wait_for('reaction_add', timeout=25.0, check=check)
             if p2_trade_item in p2_arms:
                db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'ARMS': str(p1_trade_item)}})
@@ -319,6 +349,11 @@ async def trade(ctx, user2: User, *args):
                db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'CARDS': str(p1_trade_item)}})
                response = db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$addToSet':{'CARDS': str(p2_trade_item)}})
                await ctx.send(f"{p2_trade_item} has been added to {ctx.author.mention}'s vault: CARDS")
+            elif p2_trade_item in p2_pet_names:
+               db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'PETS':{'NAME': str(p1_trade_item)}}})
+               response = db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$addToSet':{'PETS': p2_active_pet}})
+               db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'PET': p2_active_pet['NAME']}})
+               await ctx.send(f"{p2_trade_item} has been added to {ctx.author.mention}'s vault: PETS")
 
             if p1_trade_item in p1_arms:
                db.updateVaultNoFilter({'OWNER': str(user2)},{'$pull':{'ARMS': str(p2_trade_item)}})
@@ -332,6 +367,11 @@ async def trade(ctx, user2: User, *args):
                db.updateVaultNoFilter({'OWNER': str(user2)},{'$pull':{'CARDS': str(p2_trade_item)}})
                response = db.updateVaultNoFilter({'OWNER': str(user2)},{'$addToSet':{'CARDS': str(p1_trade_item)}})
                await ctx.send(f"{p1_trade_item} has been added to {user2.mention}'s vault: CARDS")
+            elif p1_trade_item in p1_pet_names:
+               db.updateVaultNoFilter({'OWNER': str(user2)},{'$pull':{'PETS':{'NAME': str(p2_trade_item)}}})
+               response = db.updateVaultNoFilter({'OWNER': str(user2)},{'$addToSet':{'PETS': p1_active_pet}})
+               db.updateUserNoFilter({'DISNAME': str(user2)}, {'$set': {'PET': p1_active_pet['NAME']}})
+               await ctx.send(f"{p1_trade_item} has been added to {user2.mention}'s vault: PETS")
 
          except:
             await ctx.send("Trade ended. ")
@@ -431,7 +471,7 @@ async def addfield(ctx, collection, new_field, field_type):
       elif field_type == 'int':
          field_type = 25
       elif field_type == 'list':
-         field_type = []
+         field_type = [{'NAME': 'Doge', 'LVL': 1, 'EXP': 0, 'Hodl': 20, 'TYPE': 'HLT', 'BOND': 0, 'PATH': "https://res.cloudinary.com/dkcmq8o15/image/upload/v1622221287/Pets/Doge.jpg"}]
       elif field_type == 'bool':
          field_type = True
       

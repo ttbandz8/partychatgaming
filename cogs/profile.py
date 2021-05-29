@@ -66,6 +66,7 @@ class Profile(commands.Cog):
         card = db.queryCard({'NAME':str(d['CARD'])})
         title = db.queryTitle({'TITLE': str(d['TITLE'])})
         arm = db.queryArm({'ARM': str(d['ARM'])})
+        vault = db.queryVault({'OWNER': d['DISNAME']})
         if card:
             o_card = card['NAME']
             o_card_path=card['PATH']
@@ -82,7 +83,18 @@ class Profile(commands.Cog):
             o_speed = card['SPD']
             o_show = card['UNIVERSE']
             o_collection = card['COLLECTION']
-            
+
+            pets = vault['PETS']
+            active_pet = {}
+            pet_names = []
+
+            for pet in pets:
+                pet_names.append(pet['NAME'])
+                if pet['NAME'] == d['PET']:
+                    active_pet = pet
+
+            pet_ability_power = list(active_pet.values())[3]
+
             arm_name = arm['ARM']
             arm_passive = arm['ABILITIES'][0]
             arm_passive_type = list(arm_passive.keys())[0]
@@ -131,13 +143,15 @@ class Profile(commands.Cog):
             embedVar = discord.Embed(title=f"{o_card}".format(self), colour=000000)
             embedVar.add_field(name=f"TITLE", value=f"`{title_name}`: Increase `{title_passive_type}` by `{title_passive_value}`")
             embedVar.add_field(name=f"ARM", value=f"`{arm_name}`: Increase `{arm_passive_type}` by `{arm_passive_value}`")
+            embedVar.add_field(name=f"PET", value=f"`{active_pet['NAME']}`: Increase `{active_pet['TYPE']}` by `{pet_ability_power}`")
+            embedVar.set_thumbnail(url=active_pet['PATH'])
             embedVar.set_image(url=o_card_path)
             embedVar.add_field(name="Health", value=f"`{o_max_health}`")
             embedVar.add_field(name="Stamina", value=f"`{o_max_stamina}`")
             embedVar.add_field(name="Attack", value=f"`{o_attack}`")
             embedVar.add_field(name="Defense", value=f"`{o_defense}`")
             embedVar.add_field(name="Speed", value=f"`{o_speed}`")
-            embedVar.add_field(name="Unique Passive", value=f"`{passive_name}`: Increases {passive_type} by {passive_num}`", inline=False)
+            embedVar.add_field(name="Unique Passive", value=f"`{passive_name}`: Increases `{passive_type} by {passive_num}`", inline=False)
             embedVar.add_field(name=f"{move1}", value=f"Power: `{move1ap}`", inline=False)
             embedVar.add_field(name=f"{move2}", value=f"Power: `{move2ap}`", inline=False)
             embedVar.add_field(name=f"{move3}", value=f"Power: `{move3ap}`", inline=False)
@@ -152,7 +166,9 @@ class Profile(commands.Cog):
     async def vault(self, ctx):
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
-
+        pet_name = d['PET']
+        pet_query = {'PET': str(pet_name)}
+        p = db.queryPet(pet_query)
         vault = db.queryVault({'OWNER': d['DISNAME']})
         if vault:
             name = d['DISNAME'].split("#",1)[0]
@@ -161,6 +177,15 @@ class Profile(commands.Cog):
             cards = vault['CARDS']
             titles = vault['TITLES']
             arms = vault['ARMS']
+            pets = vault['PETS']
+            active_pet = {}
+            pet_names = []
+
+            for pet in pets:
+                pet_names.append(pet['NAME'])
+                if pet['NAME'] == pet_name:
+                    active_pet = pet
+       
 
             embedVar1 = discord.Embed(title= f"My Cards\n:coin:{'{:,}'.format(balance)}", description="`.equipcard name` -  Select Your Card\n`.viewcard card name` - View Cards", colour=0x7289da)
             embedVar1.set_thumbnail(url=avatar)
@@ -174,13 +199,17 @@ class Profile(commands.Cog):
             embedVar3.set_thumbnail(url=avatar)
             embedVar3.add_field(name="Arms" + " :fireworks:", value=" | ".join(arms))
 
+            embedVar4 = discord.Embed(title= f"Pets:feet:\nLevel {active_pet['LVL']}: {active_pet['NAME']}-{active_pet['EXP']}XP", description="`.equippet name` - Select Your Pet\n`.viewpet Pet name` - View Pet Stats", colour=0x7289da)
+            embedVar4.set_thumbnail(url=avatar)
+            embedVar4.add_field(name="Pets" + " :fireworks:", value=" | ".join(pet_names))
+
             paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
             paginator.add_reaction('⏮️', "first")
             paginator.add_reaction('⏪', "back")
             paginator.add_reaction('🔐', "lock")
             paginator.add_reaction('⏩', "next")
             paginator.add_reaction('⏭️', "last")
-            embeds = [embedVar1, embedVar2, embedVar3]
+            embeds = [embedVar1, embedVar2, embedVar3, embedVar4]
             await paginator.run(embeds)
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})

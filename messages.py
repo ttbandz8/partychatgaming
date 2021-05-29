@@ -24,6 +24,9 @@ TITLE_DOESNT_EXIST="TITLE does not exist in the system. "
 TITLE_OUT_OF_STOCK="TITLE Out Of Stock. Check Back Later for new Inventory!"
 USER_DOESNT_HAVE_THE_Title="TITLE unavailable. "
 
+PET_DOESNT_EXIST="PET does not exist in the system. "
+USER_DOESNT_HAVE_THE_PET="PET unavailable. "
+
 TOO_FEW_PLAYERS_ON_TEAM="Not enough players for the team. "
 TOO_MANY_PLAYERS_ON_TEAM="Too many players for the team. "
 TEAM_ALREADY_PLAYS="Team Already Playing This Game. "
