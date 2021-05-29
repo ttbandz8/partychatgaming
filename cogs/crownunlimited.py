@@ -4901,6 +4901,10 @@ async def drops(player, universe):
     for pet in all_available_drop_pets:
         pets.append(pet['PET'])
 
+    print(cards)
+    print(arms)
+    print(titles)
+    print(pets)
     c = len(cards) - 1
     t = len(titles) - 1
     a = len(arms) - 1
