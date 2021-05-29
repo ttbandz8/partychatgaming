@@ -333,9 +333,6 @@ async def trade(ctx, user2: User, *args):
             return user == ctx.author and str(reaction.emoji) == '👍'
 
          try:
-            print(p2_active_pet)
-            print(p1_active_pet)
-
             reaction, user = await bot.wait_for('reaction_add', timeout=25.0, check=check)
             if p2_trade_item in p2_arms:
                db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'ARMS': str(p1_trade_item)}})
