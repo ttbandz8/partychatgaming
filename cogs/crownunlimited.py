@@ -245,13 +245,13 @@ class CrownUnlimited(commands.Cog):
             t_card = t['NAME']
             t_card_path=t['PATH']
             t_rcard_path=t['RPATH']
-            t_max_health = t['HLT'] # + ((40 * currentopponent) + opponent_scaling + 1000)
-            t_health = t['HLT'] # + ((40 * currentopponent) + opponent_scaling + 1000)
+            t_max_health = t['HLT'] + ((40 * currentopponent) + opponent_scaling + 1000)
+            t_health = t['HLT'] + ((40 * currentopponent) + opponent_scaling + 1000)
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
-            t_attack = t['ATK'] + ((10 * currentopponent) + opponent_scaling + 10)
-            t_defense = t['DEF'] + ((18 * currentopponent) + opponent_scaling + 10)
+            t_attack = t['ATK'] + ((10 * currentopponent) + opponent_scaling + 15)
+            t_defense = t['DEF'] + ((18 * currentopponent) + opponent_scaling + 20)
             t_type = t['TYPE']
             t_accuracy = t['ACC']
             t_passive = t['PASS'][0]
@@ -2476,6 +2476,7 @@ class CrownUnlimited(commands.Cog):
                 s_playtime = int(wintime[17:19])
                 gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
                 await bless(10, ctx.author)
+                await bless(10, user2)
                 drop_response = await drops(ctx.author, selected_universe)
                 if currentopponent != (total_legends - 1):
                     
@@ -2532,8 +2533,6 @@ class CrownUnlimited(commands.Cog):
                     continued=False
                     if private_channel.guild:
                         await discord.TextChannel.delete(private_channel, reason=None)
-
-
 
 
     @commands.command()
