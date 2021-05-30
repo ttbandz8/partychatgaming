@@ -73,7 +73,7 @@ class Pet(commands.Cog):
                 # Pet Passive
             o_pet_passive_name = list(pet_passive.keys())[0]
             o_pet_passive_value = list(pet_passive.values())[0]
-            o_pet_passive_type = list(pet_passive.values())[2]
+            o_pet_passive_type = list(pet_passive.values())[1]
 
             message=""
 

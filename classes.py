@@ -22,6 +22,7 @@ class USER():
     # TOURNAMENT_LOSSES: int = field(default_factory=lambda: 0)
     AVAILABLE: bool = field(default_factory=lambda: True)
     CROWN_TALES: list[str] = field(default_factory=lambda: [""])
+    DUNGEONS: list[str] = field(default_factory=lambda: [""])
     TIMESTAMP: str = now
 
 
