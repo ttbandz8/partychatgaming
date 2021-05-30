@@ -2905,10 +2905,10 @@ class CrownUnlimited(commands.Cog):
         tarm = db.queryArm({'ARM': t_user['ARM']})
         tarm_passive = tarm['ABILITIES'][0]
         tarm_name=tarm['ARM']
-        # tpet = db.queryPet({'PET': t_user['PET']})
-        # tpet_passive = tpet['ABILITIES'][0]
-        # tpet_name = tpet['PET']
-        # tpet_image =tpet['PATH']
+        tpet = db.queryPet({'PET': boss['PET']})
+        tpet_passive = tpet['ABILITIES'][0]
+        tpet_name = tpet['PET']
+        tpet_image =tpet['PATH']
         t_card = t['NAME']
         t_card_path=t['PATH']
         t_rcard_path=t['RPATH']
@@ -2978,6 +2978,11 @@ class CrownUnlimited(commands.Cog):
         opetmove_ap= list(opet.values())[3] # Ability Power
 
         opet_move = {str(opetmove_text): int(opetmove_ap), 'STAM': 0, 'TYPE': str(opet_passive_type)}
+        
+        tpetmove_text = list(tpet_passive.keys())[0]
+        tpetmove_ap = list(tpet_passive.values())[0]
+        tpetmove_type = list(tpet_passive.values())[1]
+        tpet_move = {str(tpetmove_text):int(tpetmove_ap), 'STAM': 0, 'TYPE':tpetmove_type}
 
         # Player 1 Card Passive
         o_card_passive_type = list(o_passive.values())[1]
@@ -3594,7 +3599,7 @@ class CrownUnlimited(commands.Cog):
                                 #Resolve Check and Calculation
                             if o_used_resolve and o_used_focus and not o_pet_used:                                      
                                 o_enhancer_used=True
-                                dmg = damage_cal(o_card, opet_passive, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description)
+                                dmg = damage_cal(o_card, opet_move, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description)
                                 o_enhancer_used=False
                                 o_pet_used =True
                                 opet_dmg = dmg['DMG']
@@ -3869,7 +3874,9 @@ class CrownUnlimited(commands.Cog):
                     await private_channel.send(embed=embedVar)
                     aiMove = 0
                     
-                    if o_stamina == 0:
+                    if t_used_resolve and not t_pet_used:
+                        aiMove = 6 
+                    elif o_stamina == 0:
                         aiMove = 1
                     elif t_stamina >= 160 and (t_health >= o_health):
                         aiMove = 3
@@ -3926,12 +3933,19 @@ class CrownUnlimited(commands.Cog):
                         else:
                             aiMove = 1 
                     elif t_stamina >= 50 and (t_health >= o_health):
-                        if t_stamina >= o_stamina:
-                            aiMove = 4
+                        if t_used_resolve == False and t_used_focus:
+                            aiMove = 5
+                        elif t_used_focus == False:
+                            aiMove = 2
                         else:
-                            aiMove = 1
+                            aiMove = 1 
                     elif t_stamina >= 50:
-                        aiMove = 2
+                        if t_used_resolve == False and t_used_focus:
+                            aiMove = 5
+                        elif t_used_focus == False:
+                            aiMove = 2
+                        else:
+                            aiMove = 1 
                     elif t_stamina >= 40 and (t_health >= o_health):
                         aiMove = 1
                     elif t_stamina >= 40:
@@ -3952,15 +3966,20 @@ class CrownUnlimited(commands.Cog):
                     boss_special_move_default_msg = " "
 
                     if aiMove == 0:
+                        t_pet_used =False
                         t_health=0
                     elif aiMove == 1:
+                        t_pet_used =False
                         dmg = damage_cal(t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg)
                     elif aiMove == 2:
+                        t_pet_used =False
                         dmg = damage_cal(t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg)
                     elif aiMove == 3:
+                        t_pet_used =False
                         dmg = damage_cal(t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg)
                     elif aiMove == 4:
                         t_enhancer_used=True
+                        t_pet_used =False
                         dmg = damage_cal(t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg)
                         t_enhancer_used=False
                     elif aiMove == 5:
@@ -3986,6 +4005,7 @@ class CrownUnlimited(commands.Cog):
                             t_attack = round(t_attack + t_resolve_attack)
                             t_defense = round(t_defense - t_resolve_defense)
                             t_used_resolve = True 
+                            t_pet_used =False
 
                             embedVar = discord.Embed(title=f"{t_card} strengthened resolve!", colour=embed_color_o)
                             await private_channel.send(embed=embedVar)
@@ -3996,10 +4016,95 @@ class CrownUnlimited(commands.Cog):
                             embedVar = discord.Embed(title=emessage, description=f"Entering `Resolved State` sacrifices a turn to power up even greater and regain `Stamina`!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             turn=1
+                    elif aiMove == "6":
+                        #Resolve Check and Calculation
+                        if t_used_resolve and t_used_focus and not t_pet_used:                                      
+                            t_enhancer_used=True
+                            dmg = damage_cal(t_card, tpet_move, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description)
+                            t_enhancer_used=False
+                            t_pet_used =True
+                            tpet_dmg = dmg['DMG']
+                            tpet_type = dmg['ENHANCED_TYPE']
+                            if dmg['CAN_USE_MOVE']:
+                                if tpet_type == 'ATK':
+                                    t_attack = round(t_attack + dmg['DMG'])
+                                elif tpet_type == 'DEF':
+                                    t_defense = round(t_defense + dmg['DMG'])
+                                elif tpet_type == 'STAM':
+                                    t_stamina = round(t_stamina + dmg['DMG'])
+                                elif tpet_type == 'HLT':
+                                    t_health = round(t_health + dmg['DMG'])
+                                elif tpet_type == 'LIFE':
+                                    t_health = round(t_health + dmg['DMG'])
+                                    o_health = round(o_health - dmg['DMG'])
+                                elif tpet_type == 'DRAIN':
+                                    t_stamina = round(t_stamina + dmg['DMG'])
+                                    o_stamina = round(o_stamina - dmg['DMG'])
+                                elif tpet_type == 'FLOG':
+                                    t_attack = round(t_attack + dmg['DMG'])
+                                elif tpet_type == 'WITHER':
+                                    t_defense = round(t_defense + dmg['DMG'])
+                                elif tpet_type == 'RAGE':
+                                    t_defense = round(t_defense - dmg['DMG'])
+                                    t_attack = round(t_attack + dmg['DMG'])
+                                elif tpet_type == 'BRACE':
+                                    t_defense = round(t_defense + dmg['DMG'])
+                                    t_attack = round(t_attack - dmg['DMG'])
+                                elif tpet_type == 'BZRK':
+                                    t_health = round(t_health - dmg['DMG'])
+                                    t_attack = round(t_attack + (.10 * dmg['DMG']))
+                                elif tpet_type == 'CRYSTAL':
+                                    t_health = round(t_health - dmg['DMG'])
+                                    t_defense = round(t_defense + (.10 * dmg['DMG']))
+                                elif tpet_type == 'GROWTH':
+                                    t_max_health = round(t_max_health - dmg['DMG'])
+                                    t_defense = round(t_defense + dmg['DMG'])
+                                    t_attack = round(t_attack + dmg['DMG'])
+                                elif tpet_type == 'STANCE':
+                                    tempattack = dmg['DMG']
+                                    t_attack = t_defense
+                                    t_defense = tempattack
+                                elif tpet_type == 'CONFUSE':
+                                    tempattack = dmg['DMG']
+                                    o_attack = o_defense
+                                    o_defense = tempattack
+                                elif tpet_type == 'BLINK':
+                                    t_stamina = round(t_stamina - dmg['DMG'])
+                                    o_stamina = round(o_stamina + dmg['DMG'] - 10)
+                                elif tpet_type == 'SLOW':
+                                    tempstam = round(o_stamina + dmg['DMG'])
+                                    t_stamina = round(t_stamina - dmg['DMG'])
+                                    o_stamina = t_stamina
+                                    t_stamina = tempstam
+                                elif tpet_type == 'HASTE':
+                                    tempstam = round(o_stamina - dmg['DMG'])
+                                    t_stamina = round(t_stamina + dmg['DMG'])
+                                    o_stamina = t_stamina
+                                    t_stamina = tempstam                                       
+                                elif tpet_type == 'SOULCHAIN':
+                                    t_stamina = round(dmg['DMG'])
+                                    o_stamina = t_stamina
+                                elif tpet_type == 'GAMBLE':
+                                    t_health = round(dmg['DMG'])
+                                    o_health = t_health
+                                elif tpet_type == 'FEAR':
+                                    t_health = round(t_health - ((dmg['DMG']/100)* t_health))
+                                    o_attack = round(o_attack - ((dmg['DMG']/100)* o_attack))
+                                    o_defense = round(o_defense - ((dmg['DMG']/100)* o_defense))
+                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])
 
+                                embedVar = discord.Embed(title=f"{t_card.upper()} Summoned {tpet_name}", colour=0xe91e63)
+                                embedVar.add_field(name=f"{tpet_name} used {tpetmove_text}!", value =f"Enhanced {tpet_type}")
+                                embedVar.set_thumbnail(url=tpet_image)
+                                await private_channel.send(embed=embedVar)
+                                turn=1
+                            else:
+                                await private_channel.send(f"{tpet_name} needs a turn to rest...")
+                                turn=1
+                        else:
+                            await ctx.send(f"{tpet_name} needs a turn to rest...")
 
-
-                    if aiMove != 5:
+                    if aiMove != "5" and aiMove != "6":
                         # If you have enough stamina for move, use it
                         if dmg['CAN_USE_MOVE']:
                             if dmg['ENHANCE']:
