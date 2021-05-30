@@ -1842,10 +1842,10 @@ class CrownUnlimited(commands.Cog):
                                 dmg = damage_cal(c_card, c_1, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina, c_max_health, t_attack, c_special_move_description)
                             elif msg.content == "2":
                                 c_pet_used =False
-                                dmg = damage_cal(c_card, c_1, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina, c_max_health, t_attack, c_special_move_description)
+                                dmg = damage_cal(c_card, c_2, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina, c_max_health, t_attack, c_special_move_description)
                             elif msg.content == "3":
                                 c_pet_used =False
-                                dmg = damage_cal(c_card, c_1, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina, c_max_health, t_attack, c_special_move_description)
+                                dmg = damage_cal(c_card, c_3, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina, c_max_health, t_attack, c_special_move_description)
                             elif msg.content == "4":
                                 c_enhancer_used=True
                                 c_pet_used =False
@@ -1969,7 +1969,6 @@ class CrownUnlimited(commands.Cog):
                                         turn=2
                                 else:
                                     await private_channel.send(f"{cpet_name} needs a turn to rest...")   
-
                             elif msg.content == "7":                                
                                 c_enhancer_used=True
                                 dmg = damage_cal(c_card, c_enhancer, c_attack, c_defense, o_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, o_health, o_stamina, c_max_health, o_attack, c_special_move_description)
