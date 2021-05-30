@@ -290,10 +290,10 @@ class CrownUnlimited(commands.Cog):
             c_used_resolve=False
 
             # Companion Moves
-            c_1 = o_moveset[0]
-            c_2 = o_moveset[1]
-            c_3 = o_moveset[2]
-            c_enhancer = o_moveset[3]
+            c_1 = c_moveset[0]
+            c_2 = c_moveset[1]
+            c_3 = c_moveset[2]
+            c_enhancer = c_moveset[3]
             c_enhancer_used=False
             c_pet_used=False
 
@@ -803,29 +803,37 @@ class CrownUnlimited(commands.Cog):
                 tempattack = o_attack - tarm_passive_value
                 o_attack = o_defense  - tarm_passive_value           
                 o_defense = tempattack
+                c_defense = tempattack
             elif tarm_passive_type == 'BLINK':
                 t_stamina = t_stamina - tarm_passive_value         
                 o_stamina = o_stamina + tarm_passive_value
+                c_stamina = c_stamina + tarm_passive_value
             elif tarm_passive_type == 'SLOW':
                 tempstam = o_stamina + tarm_passive_value 
                 t_stamina = t_stamina - tarm_passive_value      
                 o_stamina = t_stamina
+                c_stamina = t_stamina
                 t_stamina = tempstam  
             elif tarm_passive_type == 'HASTE':
                 tempstam = o_stamina - tarm_passive_value    
                 t_stamina = t_stamina + tarm_passive_value      
-                o_stamina = t_stamina 
+                o_stamina = t_stamina
+                c_stamina = t_stamina 
                 t_stamina = tempstam  
             elif tarm_passive_type == 'SOULCHAIN':
                 t_stamina = tarm_passive_value
                 o_stamina = tarm_passive_value
+                c_stamina = tarm_passive_value
             elif tarm_passive_type == 'FEAR':
                 t_health = t_health - int((.10 * tarm_passive_value))
                 o_attack = o_attack - int((.10 * tarm_passive_value))
                 o_defense = o_defense - int((.10 * tarm_passive_value))
+                c_attack = c_attack - int((.10 * tarm_passive_value))
+                c_defense = c_defense - int((.10 * tarm_passive_value))
             elif tarm_passive_type == 'GAMBLE':
                 t_health = 150
                 o_health = 150
+                c_health = 150
 
 
             # Player 2 Passive Config
@@ -880,29 +888,38 @@ class CrownUnlimited(commands.Cog):
                 tempattack = o_attack - t_card_passive
                 o_attack = o_defense  - t_card_passive          
                 o_defense = tempattack
+                c_attack = c_defense  - t_card_passive          
+                c_defense = tempattack
             elif t_card_passive_type == 'BLINK':
                 t_stamina = t_stamina - t_card_passive         
                 o_stamina = o_stamina + t_card_passive - 10
+                c_stamina = c_stamina + t_card_passive - 10
             elif t_card_passive_type == 'SLOW':
                 tempstam = o_stamina + t_card_passive 
                 t_stamina = t_stamina - (2 * t_card_passive)     
                 o_stamina = t_stamina
+                c_stamina = t_stamina
                 t_stamina = tempstam  
             elif t_card_passive_type == 'HASTE':
                 tempstam = o_stamina - t_card_passive    
                 t_stamina = t_stamina + (2 * t_card_passive)      
                 o_stamina = t_stamina 
+                c_stamina = t_stamina
                 t_stamina = tempstam  
             elif t_card_passive_type == 'SOULCHAIN':
                 t_stamina = t_card_passive
                 o_stamina = t_card_passive
+                c_stamina = t_card_passive
             elif t_card_passive_type == 'FEAR':
                 t_health = t_health - int((t_card_passive/1000 * t_health))
                 o_attack = o_attack - int((t_card_passive/1000 * t_health))
                 o_defense = o_defense - int((t_card_passive/1000 * t_health))
+                c_attack = c_attack - int((t_card_passive/1000 * t_health))
+                c_defense = c_defense - int((t_card_passive/1000 * t_health))
             elif t_card_passive_type == 'GAMBLE':
                 t_health = 150
                 o_health = 150
+                c_health = 150
 
             # Title Passive
             t_title_passive_type = list(t_title_passive.keys())[0]
@@ -949,29 +966,38 @@ class CrownUnlimited(commands.Cog):
                     tempattack = o_attack - t_title_passive_value
                     o_attack = o_defense  - t_title_passive_value           
                     o_defense = tempattack
+                    c_attack = c_defense  - t_title_passive_value           
+                    c_defense = tempattack
                 elif t_title_passive_type == 'BLINK':
                     t_stamina = t_stamina - t_title_passive_value         
                     o_stamina = o_stamina + t_title_passive_value
+                    c_stamina = c_stamina + t_title_passive_value
                 elif t_title_passive_type == 'SLOW':
                     tempstam = o_stamina + t_title_passive_value 
                     t_stamina = t_stamina - t_title_passive_value      
                     o_stamina = t_stamina
+                    c_stamina = t_stamina
                     t_stamina = tempstam  
                 elif t_title_passive_type == 'HASTE':
                     tempstam = o_stamina - t_title_passive_value    
                     t_stamina = t_stamina + t_title_passive_value      
                     o_stamina = t_stamina 
+                    c_stamina = t_stamina
                     t_stamina = tempstam  
                 elif t_title_passive_type == 'SOULCHAIN':
                     t_stamina = t_title_passive_value
                     o_stamina = t_title_passive_value
+                    c_stamina = t_title_passive_value
                 elif t_title_passive_type == 'FEAR':
                     t_health = t_health - int((.10 * t_title_passive_value))
                     o_attack = o_attack - int((.10 * t_title_passive_value))
                     o_defense = o_defense - int((.10 * t_title_passive_value))
+                    c_attack = c_attack - int((.10 * t_title_passive_value))
+                    c_defense = c_defense - int((.10 * t_title_passive_value))
                 elif t_title_passive_type == 'GAMBLE':
                     t_health = 150
                     o_health = 150
+                    c_health = 150
 
 
             # Player 2 Moves
@@ -1316,8 +1342,8 @@ class CrownUnlimited(commands.Cog):
                                         o_health = c_health
                                     elif comp_enh == 'FEAR':
                                         c_health = round(c_health - ((dmg['DMG']/100)* c_health))
-                                        o_attack = round(o_attack - ((dmg['DMG']/100)* o_attack))
-                                        o_defense = round(o_defense - ((dmg['DMG']/100)* o_defense))
+                                        t_attack = round(t_attack - ((dmg['DMG']/100)* t_attack))
+                                        t_defense = round(t_defense - ((dmg['DMG']/100)* t_defense))
 
                                     o_stamina = o_stamina - int(dmg['STAMINA_USED'])
 
@@ -1946,7 +1972,7 @@ class CrownUnlimited(commands.Cog):
 
                             elif msg.content == "7":                                
                                 c_enhancer_used=True
-                                dmg = damage_cal(c_card, cpet_move, c_attack, c_defense, o_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, o_health, o_stamina, c_max_health, o_attack, c_special_move_description)
+                                dmg = damage_cal(c_card, c_enhancer, c_attack, c_defense, o_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, o_health, o_stamina, c_max_health, o_attack, c_special_move_description)
                                 c_enhancer_used=False
                                 cdmg = dmg['DMG']
                                 cenh_type = dmg['ENHANCED_TYPE']
@@ -2014,13 +2040,13 @@ class CrownUnlimited(commands.Cog):
                                         c_health = o_health
                                     elif cenh_type == 'FEAR':
                                         o_health = round(o_health - ((dmg['DMG']/100)* o_health))
-                                        c_attack = round(c_attack - ((dmg['DMG']/100)* c_attack))
-                                        c_defense = round(c_defense - ((dmg['DMG']/100)* c_defense))
+                                        t_attack = round(t_attack - ((dmg['DMG']/100)* t_attack))
+                                        t_defense = round(t_defense - ((dmg['DMG']/100)* t_defense))
 
                                     c_stamina = c_stamina - int(dmg['STAMINA_USED'])
 
                                     embedVar = discord.Embed(title=f"{c_card.upper()} ASSISTED {o_card.upper()}", colour=0xe91e63)
-                                    embedVar.add_field(name=f"{o_card} used {omove_enhanced_text}!", value =f"Enhanced {cenh_type}")
+                                    embedVar.add_field(name=f"{c_card} used {cmove_enhanced_text}!", value =f"Enhanced {cenh_type}")
                                     await private_channel.send(embed=embedVar)
                                     turn=3
                                 else:
