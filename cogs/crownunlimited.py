@@ -40,6 +40,7 @@ class CrownUnlimited(commands.Cog):
     async def dungeon(self, ctx):
         private_channel = ctx
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
+        completed_dungeons = sowner['DUNGEONS']
         all_universes = db.queryAllUniverse()
         available_universes = []
         selected_universe = ""
@@ -47,8 +48,10 @@ class CrownUnlimited(commands.Cog):
             if uni['PREREQUISITE'] in sowner['CROWN_TALES']:
                 available_universes.append(uni['TITLE'])
                 
-        embedVar = discord.Embed(title=f":crown: CROWN TALES!", description="Select a Universe to explore!", colour=0xe91e63)
+        embedVar = discord.Embed(title=f":fire: CROWN DUNGEONS!", description="Select a Universe!", colour=0xe91e63)
         embedVar.add_field(name="Available Universes", value="\n".join(available_universes))
+        if completed_dungeons:
+            embedVar.add_field(name="Completed Universes", value="\n".join(completed_dungeons))
         embedVar.set_footer(text="Earn drops from the Universes you explore. Conquering Universes unlocks more worlds!")
         await private_channel.send(embed=embedVar)
         accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
@@ -1412,6 +1415,7 @@ class CrownUnlimited(commands.Cog):
     async def tales(self, ctx):
         private_channel = ctx
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
+        completed_crown_tales = sowner['CROWN_TALES']
         all_universes = db.queryAllUniverse()
         available_universes = []
         selected_universe = ""
@@ -1421,6 +1425,8 @@ class CrownUnlimited(commands.Cog):
                 
         embedVar = discord.Embed(title=f":crown: CROWN TALES!", description="Select a Universe to explore!", colour=0xe91e63)
         embedVar.add_field(name="Available Universes", value="\n".join(available_universes))
+        if completed_crown_tales:
+            embedVar.add_field(name="Completed Universes", value="\n".join(completed_crown_tales))
         embedVar.set_footer(text="Earn drops from the Universes you explore. Conquering Universes unlocks more worlds!")
         await private_channel.send(embed=embedVar)
         accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
@@ -1478,11 +1484,7 @@ class CrownUnlimited(commands.Cog):
             t = db.queryCard({'NAME': legends[currentopponent]})
             ttitle = db.queryTitle({'TITLE': 'Starter'})
 
-            ####################################################################
-            # Player Data
-
-
-
+            #################################################################### PLAYER DATA
             # Player 1 Data
             o_user = sowner
             oarm = db.queryArm({'ARM': o_user['ARM']})
@@ -1506,13 +1508,13 @@ class CrownUnlimited(commands.Cog):
             o_card = o['NAME']
             o_card_path=o['PATH']
             o_rcard_path=o['RPATH']
-            o_max_health = o['HLT'] + ((4 * currentopponent) + player_scaling)
-            o_health = o['HLT'] + ((4 * currentopponent) + player_scaling)
+            o_max_health = o['HLT'] # + ((2 * currentopponent) + player_scaling)
+            o_health = o['HLT'] # + ((4 * currentopponent) + player_scaling)
             o_stamina = o['STAM']
             o_max_stamina = o['STAM']
             o_moveset = o['MOVESET']
-            o_attack = o['ATK'] + ((5 * currentopponent) + player_scaling)
-            o_defense = o['DEF'] + ((7 * currentopponent) + player_scaling)
+            o_attack = o['ATK'] + ((2 * currentopponent) + player_scaling)
+            o_defense = o['DEF'] + ((2 * currentopponent) + player_scaling)
             o_type = o['TYPE']
             o_accuracy = o['ACC']
             o_passive = o['PASS'][0]
@@ -1888,8 +1890,6 @@ class CrownUnlimited(commands.Cog):
             elif tarm_passive_type == 'GAMBLE':
                 t_health = 150
                 o_health = 150
-
-            
 
 
             # Player 2 Passive Config
@@ -6422,13 +6422,13 @@ async def drops(player, universe):
     rand_arm = random.randint(0, a)
     rand_pet = random.randint(0, p)
 
-    gold_drop = 146 #
-    title_drop = 147 #
-    arm_drop = 148 #
-    card_drop = 150 #
-    pet_drop = 149 #
-    
-    drop_rate = random.randint(0,150)
+    gold_drop = 179 #
+    title_drop = 180 #
+    arm_drop = 185 #
+    pet_drop = 191 #
+    card_drop = 200 #
+
+    drop_rate = random.randint(0,200)
 
     if drop_rate <= gold_drop:
         await bless(10, player)
@@ -6487,16 +6487,16 @@ async def dungeondrops(player, universe):
     rand_arm = random.randint(0, a)
     rand_pet = random.randint(0, p)
 
-    gold_drop = 169 #
-    title_drop = 170 #
-    arm_drop = 119 #
-    card_drop = 120 #
-    pet_drop = 150 #
-    
-    drop_rate = random.randint(0,150)
+    gold_drop = 185 #
+    title_drop = 189 #
+    arm_drop = 190 #
+    pet_drop = 195 #
+    card_drop = 200 #
+
+    drop_rate = random.randint(0,200)
 
     if drop_rate <= gold_drop:
-        await bless(10, player)
+        await bless(30, player)
         return f"You earned :coin: 10!"
     elif drop_rate <= title_drop and drop_rate > gold_drop:
         response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'TITLES': str(titles[rand_title])}})
@@ -6511,9 +6511,9 @@ async def dungeondrops(player, universe):
         pet_ability_type = list(selected_pet['ABILITIES'][0].values())[1]
 
         response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'PETS': {'NAME': selected_pet['PET'], 'LVL': selected_pet['LVL'], 'EXP': 0, pet_ability_name: int(pet_ability_power), 'TYPE': pet_ability_type, 'BOND': 0, 'PATH': selected_pet['PATH']}}})
-        await bless(30, player)
+        await bless(50, player)
         return f"You earned {pets[rand_pet]} + :coin: 30!"
     elif drop_rate <= card_drop and drop_rate > pet_drop:
             response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(cards[rand_card])}})
-            await bless(30, player)
+            await bless(50, player)
             return f"You earned {cards[rand_card]} + :coin: 30!"

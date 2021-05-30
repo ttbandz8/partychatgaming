@@ -198,7 +198,7 @@ class Profile(commands.Cog):
             embedVar3.set_thumbnail(url=avatar)
             embedVar3.add_field(name="Arms" + " :fireworks:", value=" | ".join(arms))
 
-            embedVar4 = discord.Embed(title= f"Pets:feet:\nLevel {active_pet['LVL']}: {active_pet['NAME']}-{active_pet['EXP']}XP", description="`.equippet name` - Select Your Pet\n`.viewpet Pet name` - View Pet Stats", colour=0x7289da)
+            embedVar4 = discord.Embed(title="Pets", description="`.equippet name` - Select Your Pet\n`.viewpet Pet name` - View Pet Stats", colour=0x7289da)
             embedVar4.set_thumbnail(url=avatar)
             embedVar4.add_field(name="Pets" + " :fireworks:", value=" | ".join(pet_names))
 
