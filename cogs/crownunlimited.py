@@ -2476,7 +2476,7 @@ class CrownUnlimited(commands.Cog):
                 s_playtime = int(wintime[17:19])
                 gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
                 await bless(10, ctx.author)
-                await bless(10, user2)
+                await bless(10, user)
                 drop_response = await drops(ctx.author, selected_universe)
                 if currentopponent != (total_legends - 1):
                     
@@ -4973,7 +4973,7 @@ class CrownUnlimited(commands.Cog):
                 s_playtime = int(wintime[17:19])
                 gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
                 await bless(20, ctx.author)
-                await bless(20, user2)
+                await bless(20, user)
                 drop_response = await drops(ctx.author, selected_universe)
                 if currentopponent != (total_legends - 1):
                     
