@@ -134,6 +134,46 @@ async def status(ctx):
    embeds = [embedVar1, embedVar2, embedVar3, embedVar4, embedVar5, embedVar6]
    await paginator.run(embeds)
 
+
+@bot.group(invoke_without_command=True)
+async def crownhelp(ctx):
+   avatar="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png"
+
+
+   embedVar1 = discord.Embed(title= f":crown:Welcome To Crown Unlimited!:",colour=0x7289da)
+   embedVar1.set_thumbnail(url=avatar)
+   embedVar1.add_field(name="Mechanics!", value="Crown Unlimited is a card game featuring universes from your favorite series!\n\nThe game has a Multiplayer and Single Player Mode!\n\nSingle Player also includes Boss Battles and Server Raids!\n\nWe Will Tall about TAP in the next page!\n\n")
+
+   embedVar2 = discord.Embed(title= f":crown:Remember TAP:",colour=0x7289da)
+   embedVar2.set_thumbnail(url=avatar)
+   embedVar2.add_field(name="`TAP - Titles, Arms, Pets!`", value="Equip your character with Titles, Arms and Pets!\n\nTitles and Arms are equiipment to modifiy your character prior to battle!\n\nTake advantage of your Item passives to gain tactical advantage!\n\nBring Pets into battle! Earn pets by completing Single Player .tales!\n\n")
+
+
+   embedVar3 = discord.Embed(title= f":crown:ENHANCE Modes:",colour=0x7289da)
+   embedVar3.set_thumbnail(url=avatar)
+   embedVar3.add_field(name="`Single Player`", value=".tales ! Tales are singleplayer adventures where you traverse through your favorite universes as characters from various worlds!\n\n/boss\n\n`BZRK` - Decrease `HLT`,  Increase `ATK`\n\n`CRYSTAL`- Decrease `HLT`, Increase `DEF`\n\n`GROWTH`- Decrease `MAXHLT`, Increase `STATS`\n\n")
+
+   embedVar4 = discord.Embed(title= f":crown:ENHANCE Sets:",colour=0x7289da)
+   embedVar4.set_thumbnail(url=avatar)
+   embedVar4.add_field(name="`TRADE`", value="`STANCE` - Swap `ATK` and `DEF`\n\n`CONFUSE` - Swap `OPP ATK` and  `OPP DEF`\n\n")
+
+   embedVar5 = discord.Embed(title= f":crown:ENHANCE Sets:",colour=0x7289da)
+   embedVar5.set_thumbnail(url=avatar)
+   embedVar5.add_field(name="`TIME`", value="`BLINK`  - Decrease  `STAM`, Increase `OPP STAM`\n\n`SLOW` - Decrease `STAM`, Swap `OPP STAM`\n\n`HASTE` - Increase `STAM`, Swap `OPP STAM`\n\n")
+
+   embedVar6 = discord.Embed(title= f":crown:ENHANCE Sets:",colour=0x7289da)
+   embedVar6.set_thumbnail(url=avatar)
+   embedVar6.add_field(name="`CONTROL`", value="`SOULCHAIN` - Both `PLAYERS` `STAM` = \n\n`GAMBLE` - Both `PLAYERS` `HEALTH` =\n\n`FEAR` - Decrease `HLT`, Decrease `OPP ATK` & `OPP DEF`")
+
+   paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+   paginator.add_reaction('⏮️', "first")
+   paginator.add_reaction('⏪', "back")
+   paginator.add_reaction('🔐', "lock")
+   paginator.add_reaction('⏩', "next")
+   paginator.add_reaction('⏭️', "last")
+   embeds = [embedVar1, embedVar2, embedVar3, embedVar4, embedVar5, embedVar6]
+   await paginator.run(embeds)
+
 async def validate_user(ctx):
    query = {'DISNAME': str(ctx.author)}
    valid = db.queryUser(query)

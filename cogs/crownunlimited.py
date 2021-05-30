@@ -1,3 +1,4 @@
+from partychatgaming.classes import BOSS
 from cogs.lobbies import Lobbies
 import time
 from re import T
@@ -1530,6 +1531,9 @@ class CrownUnlimited(commands.Cog):
             o_win_description = "Too easy. Come back when you're truly prepared."
             o_lose_description = "I can't believe I lost..."
 
+
+
+
         # Player 2 Data
         t_user = boss
         t_available = boss['AVAILABLE']
@@ -1540,7 +1544,7 @@ class CrownUnlimited(commands.Cog):
         tarm = db.queryArm({'ARM': t_user['ARM']})
         tarm_passive = tarm['ABILITIES'][0]
         tarm_name=tarm['ARM']
-        tpet = db.queryPet({'PET': t_user['PET']})
+        tpet = db.queryPet({'PET': boss['PET']})
         tpet_passive = tpet['ABILITIES'][0]
         tpet_name = tpet['PET']
         tpet_image =tpet['PATH']
