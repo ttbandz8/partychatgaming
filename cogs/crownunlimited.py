@@ -245,13 +245,13 @@ class CrownUnlimited(commands.Cog):
             t_card = t['NAME']
             t_card_path=t['PATH']
             t_rcard_path=t['RPATH']
-            t_max_health = t['HLT'] + ((40 * currentopponent) + opponent_scaling)
-            t_health = t['HLT'] + ((40 * currentopponent) + opponent_scaling)
+            t_max_health = t['HLT'] + ((40 * currentopponent) + opponent_scaling + 1000)
+            t_health = t['HLT'] + ((40 * currentopponent) + opponent_scaling + 1000)
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
-            t_attack = t['ATK'] + ((10 * currentopponent) + opponent_scaling)
-            t_defense = t['DEF'] + ((18 * currentopponent + opponent_scaling))
+            t_attack = t['ATK'] + ((10 * currentopponent) + opponent_scaling + 10)
+            t_defense = t['DEF'] + ((18 * currentopponent) + opponent_scaling + 10)
             t_type = t['TYPE']
             t_accuracy = t['ACC']
             t_passive = t['PASS'][0]
@@ -1077,7 +1077,7 @@ class CrownUnlimited(commands.Cog):
                         player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                         await private_channel.send(file=player_1_card)
                         embedVar = discord.Embed(title=f"{o_card} What move will you use?", description=f"{t_card} currently has {t_health} health and {t_stamina} stamina.", colour=embed_color_o)
-                        embedVar.add_field(name=f"{o_card} Move List", value=f"1. {omove1_text} | 10 STAM\n2. {omove2_text} | 30 STAM\n3. {omove3_text} | 80 STAM\n4. {omove_enhanced_text} | 20 STAM")
+                        embedVar.add_field(name=f"{o_card} Move List", value=f"1. {omove1_text} | 10 STAM\n2. {omove2_text} | 30 STAM\n3. {omove3_text} | 80 STAM\n4. {omove_enhanced_text} | 20 STAM\n7. Assist {c_card} with Enhancer | 20 STAM")
                         embedVar.set_thumbnail(url=opet_image)
                         if o_used_focus and o_used_resolve and not t_pet_used:
                             embedVar.set_author(name="Press 0 to Quit Match. Press 6 to Summon your Pet!")                                    
@@ -1692,7 +1692,7 @@ class CrownUnlimited(commands.Cog):
                         companion = showcard(c, c_max_health, c_health, c_max_stamina, c_stamina, c_used_resolve, ctitle, c_used_focus)
                         await private_channel.send(file=companion)
                         embedVar = discord.Embed(title=f"{c_card} What move will you use?", description=f"{t_card} currently has {t_health} health and {t_stamina} stamina.\n{o_card} currently has {o_health} health and {o_stamina} stamina.", colour=embed_color_c)
-                        embedVar.add_field(name=f"{c_card} Move List", value=f"1. {cmove1_text} | 10 STAM\n2. {cmove2_text} | 30 STAM\n3. {cmove3_text} | 80 STAM\n4. {cmove_enhanced_text} | 20 STAM")
+                        embedVar.add_field(name=f"{c_card} Move List", value=f"1. {cmove1_text} | 10 STAM\n2. {cmove2_text} | 30 STAM\n3. {cmove3_text} | 80 STAM\n4. {cmove_enhanced_text} | 20 STAM\n7. Assist {o_card} with Enhancer | 20 STAM")
                         embedVar.set_thumbnail(url=cpet_image)
                         if c_used_focus and c_used_resolve and not t_pet_used:
                             embedVar.set_author(name="Press 0 to Quit Match. Press 6 to Summon your Pet!")                                    
@@ -2284,12 +2284,13 @@ class CrownUnlimited(commands.Cog):
                 m_playtime = int(wintime[14:16])
                 s_playtime = int(wintime[17:19])
                 gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
+                await bless(10, ctx.author)
                 drop_response = await drops(ctx.author, selected_universe)
                 if currentopponent != (total_legends - 1):
                     
                     if private_channel.guild:
 
-                        embedVar = discord.Embed(title=f"VICTORY\n`{o_card} says:`\n{o_win_description}", description=f"The game lasted {turn_total} rounds.\n\n{drop_response}", colour=0xe91e63)
+                        embedVar = discord.Embed(title=f"VICTORY\n`{o_card} says:`\n{o_win_description}", description=f"The game lasted {turn_total} rounds.\n\n{drop_response}\n{c_card} earned :coin: 10", colour=0xe91e63)
                         embedVar.set_author(name=f"{t_card} lost!")
                         await private_channel.send(embed=embedVar)
 
@@ -2330,6 +2331,7 @@ class CrownUnlimited(commands.Cog):
                     r=db.updateUserNoFilter(upload_query, new_upload_query)
                     if selected_universe in available_universes:
                         await bless(25, ctx.author)
+                        await bless(25, user2)
                         await ctx.author.send(embed=embedVar)
                         await ctx.author.send(f"You were awarded :coin: 25 for completing the {selected_universe} Tale!")
                     else:
