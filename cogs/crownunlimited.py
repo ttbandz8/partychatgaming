@@ -25,21 +25,22 @@ class CrownUnlimited(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+
+
     @commands.Cog.listener()
     async def on_ready(self):
         print('Crown Unlimited Cog is ready!')
 
+
+
     async def cog_check(self, ctx):
         return await main.validate_user(ctx)
 
-<<<<<<< HEAD
-=======
     async def companion(user):
         user_data = db.queryUser({'DISNAME': str(user)})
         companion = user_data['DISNAME']
         return companion
 
->>>>>>> feature/discord
     @commands.command()
     async def ctales(self, ctx, user: User):
         private_channel = ctx
@@ -55,11 +56,8 @@ class CrownUnlimited(commands.Cog):
                 
         embedVar = discord.Embed(title=f":crown: CROWN TALES CO-OP!", description="Select a Universe to explore!", colour=0xe91e63)
         embedVar.add_field(name="Available Universes", value="\n".join(available_universes))
-<<<<<<< HEAD
-=======
         # if completed_crown_tales:
         #     embedVar.add_field(name="Completed Universes", value="\n".join(completed_crown_tales))
->>>>>>> feature/discord
         embedVar.set_footer(text="Earn drops from the Universes you explore. Conquering Universes unlocks more worlds!\nEnjoy Co-op!")
         await private_channel.send(embed=embedVar)
         accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
@@ -255,13 +253,13 @@ class CrownUnlimited(commands.Cog):
             t_card = t['NAME']
             t_card_path=t['PATH']
             t_rcard_path=t['RPATH']
-            t_max_health = t['HLT'] + ((20 * currentopponent) + opponent_scaling + 1000)
-            t_health = t['HLT'] + ((20 * currentopponent) + opponent_scaling + 1000)
+            t_max_health = t['HLT'] + ((40 * currentopponent) + opponent_scaling + 1000)
+            t_health = t['HLT'] + ((40 * currentopponent) + opponent_scaling + 1000)
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
-            t_attack = t['ATK'] + ((5 * currentopponent) + opponent_scaling)
-            t_defense = t['DEF'] + ((5 * currentopponent) + opponent_scaling)
+            t_attack = t['ATK'] + ((10 * currentopponent) + opponent_scaling + 15)
+            t_defense = t['DEF'] + ((18 * currentopponent) + opponent_scaling + 20)
             t_type = t['TYPE']
             t_accuracy = t['ACC']
             t_passive = t['PASS'][0]
@@ -2495,24 +2493,11 @@ class CrownUnlimited(commands.Cog):
                     
                     if private_channel.guild:
 
-<<<<<<< HEAD
-                        embedVar = discord.Embed(title=f"VICTORY\n`{o_card} says:`\n{o_win_description}", description=f"The game lasted {turn_total} rounds.\n\n{drop_response}\n{c_card} earned :coin: 5", colour=0xe91e63)
-=======
                         embedVar = discord.Embed(title=f"VICTORY\n`{o_card} says:`\n{o_win_description}", description=f"The game lasted {turn_total} rounds.\n\n{drop_response}\n{c_user['NAME']} earned :coin: 10", colour=0xe91e63)
->>>>>>> ef1405675b0d5b75daa066b452a69ee24963dc5f
                         embedVar.set_author(name=f"{t_card} lost!")
                         await private_channel.send(embed=embedVar)
 
                         emojis = ['👍', '👎']
-<<<<<<< HEAD
-                        accept = await private_channel.send(f"{ctx.author.mention} would you like to continue?")
-
-                        def check(msg):
-                            return msg.author == ctx.author and msg.mentions
-                        try:
-                            msg = await self.bot.wait_for('message', timeout=45.0, check=check)
-                            tester = msg.mentions[0].name + "#" + msg.mentions[0].discriminator
-=======
                         accept = await private_channel.send(f"Congratulations {ctx.author.mention}!\n{user.mention} will you continue assisting {ctx.author.mention} through the co-op tale?")
                         for emoji in emojis:
                             await accept.add_reaction(emoji)
@@ -2521,7 +2506,6 @@ class CrownUnlimited(commands.Cog):
                             return user == user1 and str(reaction.emoji) == '👍'
                         try:
                             reaction, user1 = await self.bot.wait_for('reaction_add', timeout=45.0, check=check)
->>>>>>> ef1405675b0d5b75daa066b452a69ee24963dc5f
 
                             # Keep this as user (although maybe it only works a few times)
                             # OR instead of user make it tester since tester is updated every time the match ends since user has to re @ each time
@@ -2581,11 +2565,8 @@ class CrownUnlimited(commands.Cog):
                 
         embedVar = discord.Embed(title=f":crown: CROWN DUNGEONS CO-OP!", description="Select a Universe to explore!", colour=0xe91e63)
         embedVar.add_field(name="Available Universes", value="\n".join(available_universes))
-<<<<<<< HEAD
-=======
         # if completed_crown_tales:
         #     embedVar.add_field(name="Completed Universes", value="\n".join(completed_crown_tales))
->>>>>>> feature/discord
         embedVar.set_footer(text="Earn drops from the Universes you explore. Conquering Universes unlocks more worlds!\nEnjoy Co-op!")
         await private_channel.send(embed=embedVar)
         accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
@@ -2639,12 +2620,8 @@ class CrownUnlimited(commands.Cog):
 
         #While Still PLaying Universe
         while continued == True:
-<<<<<<< HEAD
-            
-=======
             companion = db.queryUser({'DISNAME': str(user)})
 
->>>>>>> ef1405675b0d5b75daa066b452a69ee24963dc5f
             o = db.queryCard({'NAME': sowner['CARD']})
             otitle = db.queryTitle({'TITLE': sowner['TITLE']})
             
@@ -5086,11 +5063,8 @@ class CrownUnlimited(commands.Cog):
                 
         embedVar = discord.Embed(title=f":fire: CROWN DUNGEONS!", description="Select a Universe!", colour=0xe91e63)
         embedVar.add_field(name="Available Universes", value="\n".join(available_universes))
-<<<<<<< HEAD
-=======
         # if completed_dungeons:
         #     embedVar.add_field(name="Completed Universes", value="\n".join(completed_dungeons))
->>>>>>> feature/discord
         embedVar.set_footer(text="Earn drops from the Universes you explore. Conquering Universes unlocks more worlds!")
         await private_channel.send(embed=embedVar)
         accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
@@ -6464,11 +6438,8 @@ class CrownUnlimited(commands.Cog):
                 
         embedVar = discord.Embed(title=f":crown: CROWN TALES!", description="Select a Universe to explore!", colour=0xe91e63)
         embedVar.add_field(name="Available Universes", value="\n".join(available_universes))
-<<<<<<< HEAD
-=======
         # if completed_crown_tales:
         #     embedVar.add_field(name="Completed Universes", value="\n".join(completed_crown_tales))
->>>>>>> feature/discord
         embedVar.set_footer(text="Earn drops from the Universes you explore. Conquering Universes unlocks more worlds!")
         await private_channel.send(embed=embedVar)
         accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
@@ -11259,8 +11230,8 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
         true_dmg = random.randint(int(low), int(high))
         message = ""
 
-        miss_hit = 1 # Miss
-        low_hit = 3 # Lower Damage
+        miss_hit = 3 # Miss
+        low_hit = 7 # Lower Damage
         med_hit = 11 # Medium Damage
         standard_hit = 19 # Standard Damage
         high_hit = 20 # Crit Hit
