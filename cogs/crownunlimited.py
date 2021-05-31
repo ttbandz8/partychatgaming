@@ -108,6 +108,7 @@ class CrownUnlimited(commands.Cog):
 
         #While Still PLaying Universe
         while continued == True:
+            companion = db.queryUser({'DISNAME': str(user)})
 
             o = db.queryCard({'NAME': sowner['CARD']})
             otitle = db.queryTitle({'TITLE': sowner['TITLE']})
@@ -2482,19 +2483,19 @@ class CrownUnlimited(commands.Cog):
                     
                     if private_channel.guild:
 
-                        embedVar = discord.Embed(title=f"VICTORY\n`{o_card} says:`\n{o_win_description}", description=f"The game lasted {turn_total} rounds.\n\n{drop_response}\n{c_card} earned :coin: 10", colour=0xe91e63)
+                        embedVar = discord.Embed(title=f"VICTORY\n`{o_card} says:`\n{o_win_description}", description=f"The game lasted {turn_total} rounds.\n\n{drop_response}\n{c_user['NAME']} earned :coin: 10", colour=0xe91e63)
                         embedVar.set_author(name=f"{t_card} lost!")
                         await private_channel.send(embed=embedVar)
 
                         emojis = ['👍', '👎']
-                        accept = await private_channel.send(f"{ctx.author.mention} would you like to continue?")
+                        accept = await private_channel.send(f"Congratulations {ctx.author.mention}!\n{user.mention} will you continue assisting {ctx.author.mention} through the co-op tale?")
                         for emoji in emojis:
                             await accept.add_reaction(emoji)
 
-                        def check(reaction, user):
+                        def check(reaction, user1):
                             return user == user1 and str(reaction.emoji) == '👍'
                         try:
-                            reaction, user = await self.bot.wait_for('reaction_add', timeout=45.0, check=check)
+                            reaction, user1 = await self.bot.wait_for('reaction_add', timeout=45.0, check=check)
 
                             currentopponent = currentopponent + 1
                             continued = True
@@ -2570,7 +2571,7 @@ class CrownUnlimited(commands.Cog):
                             user: discord.PermissionOverwrite(read_messages=True),
                         }
 
-                private_channel = await guild.create_text_channel(f'{str(ctx.author)}&{str(user)}-co-dungeon-run', overwrites=overwrites)
+                private_channel = await guild.create_text_channel(f'{str(ctx.author)}&{user}-co-tale-run', overwrites=overwrites)
                 await ctx.send(f"{ctx.author.mention} & {user.mention} private channel has been opened for you.")
                 await private_channel.send(f'{ctx.author.mention} Good luck!')
             
@@ -2604,6 +2605,7 @@ class CrownUnlimited(commands.Cog):
 
         #While Still PLaying Universe
         while continued == True:
+            companion = db.queryUser({'DISNAME': str(user)})
 
             o = db.queryCard({'NAME': sowner['CARD']})
             otitle = db.queryTitle({'TITLE': sowner['TITLE']})
@@ -2637,8 +2639,8 @@ class CrownUnlimited(commands.Cog):
             o_card = o['NAME']
             o_card_path=o['PATH']
             o_rcard_path=o['RPATH']
-            o_max_health = o['HLT'] + ((2 * currentopponent) + player_scaling)
-            o_health = o['HLT'] + ((4 * currentopponent) + player_scaling)
+            o_max_health = o['HLT'] # + ((2 * currentopponent) + player_scaling)
+            o_health = o['HLT'] # + ((4 * currentopponent) + player_scaling)
             o_stamina = o['STAM']
             o_max_stamina = o['STAM']
             o_moveset = o['MOVESET']
@@ -2698,8 +2700,8 @@ class CrownUnlimited(commands.Cog):
             c_card = c['NAME']
             c_card_path=c['PATH']
             c_rcard_path= c['RPATH']
-            c_max_health = c['HLT'] + ((2 * currentopponent) + player_scaling)
-            c_health = c['HLT'] + ((4 * currentopponent) + player_scaling)
+            c_max_health = c['HLT'] # + ((2 * currentopponent) + player_scaling)
+            c_health = c['HLT'] # + ((4 * currentopponent) + player_scaling)
             c_stamina = c['STAM']
             c_max_stamina = c['STAM']
             c_moveset = c['MOVESET']
@@ -2741,13 +2743,13 @@ class CrownUnlimited(commands.Cog):
             t_card = t['NAME']
             t_card_path=t['PATH']
             t_rcard_path=t['RPATH']
-            t_max_health = t['HLT']  + ((40 * currentopponent) + opponent_scaling + 1800)
-            t_health = t['HLT']  + ((40 * currentopponent) + opponent_scaling + 1800)
+            t_max_health = t['HLT'] + ((80 * currentopponent) + opponent_scaling + 1000) 
+            t_health = t['HLT'] + ((80 * currentopponent) + opponent_scaling + 1000)
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
-            t_attack = t['ATK'] + ((10 * currentopponent) + opponent_scaling + 30)
-            t_defense = t['DEF'] + ((18 * currentopponent) + opponent_scaling + 30)
+            t_attack = t['ATK'] + ((20 * currentopponent) + opponent_scaling + 15)
+            t_defense = t['DEF'] + ((30 * currentopponent) + opponent_scaling + 20)
             t_type = t['TYPE']
             t_accuracy = t['ACC']
             t_passive = t['PASS'][0]
@@ -4941,8 +4943,7 @@ class CrownUnlimited(commands.Cog):
                 m_playtime = int(wintime[14:16])
                 s_playtime = int(wintime[17:19])
                 gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
-                await curse(30, ctx.author)
-                await curse(30, user2)
+
                 embedVar = discord.Embed(title=f":zap: `{t_card}` wins the match!", description=f"The game lasted {turn_total} rounds.\n`{t_card} says:`\n`{t_win_description}`", colour=0x1abc9c)
                 embedVar.set_author(name=f"{o_card} & {c_card} lost!")
                 if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
@@ -4974,24 +4975,24 @@ class CrownUnlimited(commands.Cog):
                 gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
                 await bless(20, ctx.author)
                 await bless(20, user)
-                drop_response = await drops(ctx.author, selected_universe)
+                drop_response = await dungeondrops(ctx.author, selected_universe)
                 if currentopponent != (total_legends - 1):
                     
                     if private_channel.guild:
 
-                        embedVar = discord.Embed(title=f"VICTORY\n`{o_card} says:`\n{o_win_description}", description=f"The game lasted {turn_total} rounds.\n\n{drop_response}\n{c_card} earned :coin: 20", colour=0xe91e63)
+                        embedVar = discord.Embed(title=f"VICTORY\n`{o_card} says:`\n{o_win_description}", description=f"The game lasted {turn_total} rounds.\n\n{drop_response}\n{c_user['NAME']} earned :coin: 10", colour=0xe91e63)
                         embedVar.set_author(name=f"{t_card} lost!")
                         await private_channel.send(embed=embedVar)
 
                         emojis = ['👍', '👎']
-                        accept = await private_channel.send(f"{ctx.author.mention} would you like to continue?")
+                        accept = await private_channel.send(f"Congratulations {ctx.author.mention}!\n{user.mention} will you continue assisting {ctx.author.mention} through the co-op Dungeon?")
                         for emoji in emojis:
                             await accept.add_reaction(emoji)
 
-                        def check(reaction, user):
+                        def check(reaction, user1):
                             return user == user1 and str(reaction.emoji) == '👍'
                         try:
-                            reaction, user = await self.bot.wait_for('reaction_add', timeout=45.0, check=check)
+                            reaction, user1 = await self.bot.wait_for('reaction_add', timeout=45.0, check=check)
 
                             currentopponent = currentopponent + 1
                             continued = True
@@ -5011,24 +5012,27 @@ class CrownUnlimited(commands.Cog):
                         continued = True
 
                 if currentopponent == (total_legends - 1):
-                    embedVar = discord.Embed(title=f"UNIVERSE DUNGEON CONQUERED", description=f"Universe {selected_universe} has been conquered\n\n{drop_response}", colour=0xe91e63)
+                    embedVar = discord.Embed(title=f"DUNGEON CONQUERED", description=f"Universe {selected_universe} has been conquered\n\n{drop_response}", colour=0xe91e63)
+                    embedVar.set_author(name=f"New Universes have been unlocked to explore!")
+                    embedVar.add_field(name="Additional Reward", value=f"You earned additional rewards in your vault! Take a look.")
                     embedVar.set_footer(text="The .shop has been updated with new CARDS, TITLES and ARMS!")
                     upload_query={'DISNAME': str(ctx.author)}
-                    new_upload_query={'$addToSet': {'DUNGEONS': selected_universe}}
+                    new_upload_query={'$addToSet': {'CROWN_TALES': selected_universe}}
                     r=db.updateUserNoFilter(upload_query, new_upload_query)
                     if selected_universe in available_universes:
-                        await bless(120, ctx.author)
-                        await bless(120, user2)
+                        await bless(125, ctx.author)
+                        await bless(125, user2)
                         await ctx.author.send(embed=embedVar)
-                        await ctx.author.send(f"You were awarded :coin: 25 for completing the {selected_universe} Tale!")
+                        await ctx.author.send(f"You were awarded :coin: 125 for completing the {selected_universe} Dungeon!")
                     else:
                         await bless(800, ctx.author)
-                        await bless(400, user2)
                         await main.DM(ctx, ctx.author, embed=embedVar)
-                        await ctx.author.send(f"You were awarded :coin: 500 for completing the {selected_universe} Tale! ")
+                        await ctx.author.send(f"You were awarded :coin: 800 for completing the {selected_universe} Dungeon! ")
                     continued=False
                     if private_channel.guild:
                         await discord.TextChannel.delete(private_channel, reason=None)
+
+
 
     @commands.command()
     async def dungeon(self, ctx):

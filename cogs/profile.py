@@ -245,38 +245,38 @@ class Profile(commands.Cog):
    
 
         
-            # embedVar = discord.Embed(title=f"{name}'s `Build Deck` Load Menu", description=f" What Preset would you like?")
-            # embedVar.set_author(name="Press 0 to close Menu. Press 1, 2 or 3 to load a preset.")
-            # embedVar.add_field(name=f"Preset 1:{preset1_title} {preset1_card}", value=f"Card: {preset1_card}\nTitle: {preset1_title}\nArm: {preset1_arm}\nPet: {preset1_pet}", inline=False)
-            # embedVar.add_field(name=f"Preset 2:{preset2_title} {preset2_card}", value=f"Card: {preset2_card}\nTitle: {preset2_title}\nArm: {preset2_arm}\nPet: {preset2_pet}", inline=False)
-            # embedVar.add_field(name=f"Preset 3:{preset3_title} {preset3_card}", value=f"Card: {preset3_card}\nTitle: {preset3_title}\nArm: {preset3_arm}\nPet: {preset3_pet}", inline=False)
-            # embedVar.set_footer(text="Type Preset # to update current build!")
-            # await ctx.send(embed=embedVar)
+            embedVar = discord.Embed(title=f"{name}'s `Build Deck` Load Menu", description=f" What Preset would you like?")
+            embedVar.set_author(name="Press 0 to close Menu. Press 1, 2 or 3 to load a preset.")
+            embedVar.add_field(name=f"Preset 1:{preset1_title} {preset1_card}", value=f"Card: {preset1_card}\nTitle: {preset1_title}\nArm: {preset1_arm}\nPet: {preset1_pet}", inline=False)
+            embedVar.add_field(name=f"Preset 2:{preset2_title} {preset2_card}", value=f"Card: {preset2_card}\nTitle: {preset2_title}\nArm: {preset2_arm}\nPet: {preset2_pet}", inline=False)
+            embedVar.add_field(name=f"Preset 3:{preset3_title} {preset3_card}", value=f"Card: {preset3_card}\nTitle: {preset3_title}\nArm: {preset3_arm}\nPet: {preset3_pet}", inline=False)
+            embedVar.set_footer(text="Type Preset # to update current build!")
+            await ctx.send(embed=embedVar)
 
-            embedVar2 = discord.Embed(title= f"BUILD :one:: {preset1_title} {preset1_card}", description=f"CARD: {preset1_card}\nTITLE: {preset1_title}\nARM: {preset1_arm}\nPET: {preset1_pet}", colour=0x7289da)
-            embedVar2.set_thumbnail(url=avatar)
-            embedVar2.set_footer(text="Press 0 to close Menu. Press 1 to LOAD this BUILD.")
+            # embedVar2 = discord.Embed(title= f"BUILD :one:: {preset1_title} {preset1_card}", description=f"CARD: {preset1_card}\nTITLE: {preset1_title}\nARM: {preset1_arm}\nPET: {preset1_pet}", colour=0x7289da)
+            # embedVar2.set_thumbnail(url=avatar)
+            # embedVar2.set_footer(text="Press 0 to close Menu. Press 1 to LOAD this BUILD.")
 
-            embedVar3 = discord.Embed(title= f"BUILD :two:: {preset2_title} {preset2_card}", description=f"CARD: {preset2_card}\nTITLE: {preset2_title}\nARM: {preset2_arm}\nPET: {preset2_pet}", colour=0x7289da)
-            embedVar3.set_thumbnail(url=avatar)
-            embedVar3.set_footer(text="Press 0 to close Menu.` Press 2 to LOAD this BUILD.")
+            # embedVar3 = discord.Embed(title= f"BUILD :two:: {preset2_title} {preset2_card}", description=f"CARD: {preset2_card}\nTITLE: {preset2_title}\nARM: {preset2_arm}\nPET: {preset2_pet}", colour=0x7289da)
+            # embedVar3.set_thumbnail(url=avatar)
+            # embedVar3.set_footer(text="Press 0 to close Menu.` Press 2 to LOAD this BUILD.")
 
-            embedVar4 = discord.Embed(title= f"BUILD :three:: {preset3_title} {preset3_card}", description=f"CARD: {preset3_card}\nTITLE: {preset3_title}\nARM: {preset3_arm}\nPET: {preset3_pet}", colour=0x7289da)
-            embedVar4.set_thumbnail(url=avatar)
-            embedVar4.set_footer(text="Press 0 to close Menu. Press 3 to LOAD this BUILD.")
+            # embedVar4 = discord.Embed(title= f"BUILD :three:: {preset3_title} {preset3_card}", description=f"CARD: {preset3_card}\nTITLE: {preset3_title}\nARM: {preset3_arm}\nPET: {preset3_pet}", colour=0x7289da)
+            # embedVar4.set_thumbnail(url=avatar)
+            # embedVar4.set_footer(text="Press 0 to close Menu. Press 3 to LOAD this BUILD.")
 
-            embedVar5 = discord.Embed(title= f"{name}'s Build `LOAD` Menu", description="This is the LOAD menu\nUse .savebuild to SAVE your current build to a preset slot!", colour=0x7289da)
-            embedVar5.set_thumbnail(url=avatar)
-            embedVar5.set_footer(text="Press 0 to close Menu. Press 1, 2 or 3 to LOAD a preset.")
+            # embedVar5 = discord.Embed(title= f"{name}'s Build `LOAD` Menu", description="This is the LOAD menu\nUse .savebuild to SAVE your current build to a preset slot!", colour=0x7289da)
+            # embedVar5.set_thumbnail(url=avatar)
+            # embedVar5.set_footer(text="Press 0 to close Menu. Press 1, 2 or 3 to LOAD a preset.")
 
-            paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
-            paginator.add_reaction('⏮️', "first")
-            paginator.add_reaction('⏪', "back")
-            paginator.add_reaction('🔐', "lock")
-            paginator.add_reaction('⏩', "next")
-            paginator.add_reaction('⏭️', "last")
-            embeds = [embedVar2, embedVar3, embedVar4, embedVar5]
-            await paginator.run(embeds)
+            # paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+            # paginator.add_reaction('⏮️', "first")
+            # paginator.add_reaction('⏪', "back")
+            # paginator.add_reaction('🔐', "lock")
+            # paginator.add_reaction('⏩', "next")
+            # paginator.add_reaction('⏭️', "last")
+            # embeds = [embedVar2, embedVar3, embedVar4, embedVar5]
+            # await paginator.run(embeds)
 
             options =["0","1","2","3","4"]
 
@@ -343,39 +343,39 @@ class Profile(commands.Cog):
    
 
         
-            # embedVar = discord.Embed(title=f"{name}'s Build Deck Save Menu", description=f" Replace a `Preset` to `Save` your current `Build`!\n")
-            # embedVar.set_author(name="Press 0 to close Menu. Press 1, 2 or 3 to overwrite preset.")
-            # embedVar.add_field(name=f"Current Build:`{current_title} {current_card}`", value=f"Card: `{current_card}`\nTitle: `{current_title}`\nArm: `{current_arm}`\nPet: `{current_pet}`", inline=False)
-            # embedVar.add_field(name=f"Preset 1:{preset1_title} {preset1_card}", value=f"Card: {preset1_card}\nTitle: {preset1_title}\nArm: {preset1_arm}\nPet: {preset1_pet}", inline=False)
-            # embedVar.add_field(name=f"Preset 2:{preset2_title} {preset2_card}", value=f"Card: {preset2_card}\nTitle: {preset2_title}\nArm: {preset2_arm}\nPet: {preset2_pet}", inline=False)
-            # embedVar.add_field(name=f"Preset 3:{preset3_title} {preset3_card}", value=f"Card: {preset3_card}\nTitle: {preset3_title}\nArm: {preset3_arm}\nPet: {preset3_pet}", inline=False)
-            # embedVar.set_footer(text="Type Preset # to update current build!")
-            # await ctx.send(embed=embedVar)
+            embedVar = discord.Embed(title=f"{name}'s Build Deck Save Menu", description=f" Replace a `Preset` to `Save` your current `Build`!\n")
+            embedVar.set_author(name="Press 0 to close Menu. Press 1, 2 or 3 to overwrite preset.")
+            embedVar.add_field(name=f"Current Build:`{current_title} {current_card}`", value=f"Card: `{current_card}`\nTitle: `{current_title}`\nArm: `{current_arm}`\nPet: `{current_pet}`", inline=False)
+            embedVar.add_field(name=f"Preset 1:{preset1_title} {preset1_card}", value=f"Card: {preset1_card}\nTitle: {preset1_title}\nArm: {preset1_arm}\nPet: {preset1_pet}", inline=False)
+            embedVar.add_field(name=f"Preset 2:{preset2_title} {preset2_card}", value=f"Card: {preset2_card}\nTitle: {preset2_title}\nArm: {preset2_arm}\nPet: {preset2_pet}", inline=False)
+            embedVar.add_field(name=f"Preset 3:{preset3_title} {preset3_card}", value=f"Card: {preset3_card}\nTitle: {preset3_title}\nArm: {preset3_arm}\nPet: {preset3_pet}", inline=False)
+            embedVar.set_footer(text="Type Preset # to update current build!")
+            await ctx.send(embed=embedVar)
 
-            embedVar2 = discord.Embed(title= f"BUILD :one:: {preset1_title} {preset1_card}", description=f"CARD: {preset1_card}\TITLE: {preset1_title}\ARM: {preset1_arm}\PET: {preset1_pet}", colour=0x7289da)
-            embedVar2.set_thumbnail(url=avatar)
-            embedVar2.set_footer(text="Press 0 to close Menu. Press 1 to OVERWRITE THIS PRESET.")
+            # embedVar2 = discord.Embed(title= f"BUILD :one:: {preset1_title} {preset1_card}", description=f"CARD: {preset1_card}\TITLE: {preset1_title}\ARM: {preset1_arm}\PET: {preset1_pet}", colour=0x7289da)
+            # embedVar2.set_thumbnail(url=avatar)
+            # embedVar2.set_footer(text="Press 0 to close Menu. Press 1 to OVERWRITE THIS PRESET.")
 
-            embedVar3 = discord.Embed(title= f"BUILD :two:: {preset2_title} {preset2_card}", description=f"CARD: {preset2_card}\TITLE: {preset2_title}\ARM: {preset2_arm}\PET: {preset2_pet}", colour=0x7289da)
-            embedVar3.set_thumbnail(url=avatar)
-            embedVar3.set_footer(text="Press 0 to close Menu.` Press 2  to OVERWRITE THIS PRESET.")
+            # embedVar3 = discord.Embed(title= f"BUILD :two:: {preset2_title} {preset2_card}", description=f"CARD: {preset2_card}\TITLE: {preset2_title}\ARM: {preset2_arm}\PET: {preset2_pet}", colour=0x7289da)
+            # embedVar3.set_thumbnail(url=avatar)
+            # embedVar3.set_footer(text="Press 0 to close Menu.` Press 2  to OVERWRITE THIS PRESET.")
 
-            embedVar4 = discord.Embed(title= f"BUILD :three:: {preset3_title} {preset3_card}", description=f"CARD: {preset3_card}\TITLE: {preset3_title}\ARM: {preset3_arm}\PET: {preset3_pet}", colour=0x7289da)
-            embedVar4.set_thumbnail(url=avatar)
-            embedVar4.set_footer(text="Press 0 to close Menu. Press 3 to OVERWRITE THIS PRESET.")
+            # embedVar4 = discord.Embed(title= f"BUILD :three:: {preset3_title} {preset3_card}", description=f"CARD: {preset3_card}\TITLE: {preset3_title}\ARM: {preset3_arm}\PET: {preset3_pet}", colour=0x7289da)
+            # embedVar4.set_thumbnail(url=avatar)
+            # embedVar4.set_footer(text="Press 0 to close Menu. Press 3 to OVERWRITE THIS PRESET.")
 
-            embedVar5 = discord.Embed(title= f"{name}'s Build `SAVE` Menu", description="This is the SAVE menu\nUse .viewdeck to LOAD BUILDS !", colour=0x7289da)
-            embedVar5.set_thumbnail(url=avatar)
-            embedVar5.set_footer(text="Press 0 to close Menu. Press 1, 2 or 3 to SAVE a preset.")
+            # embedVar5 = discord.Embed(title= f"{name}'s Build `SAVE` Menu", description="This is the SAVE menu\nUse .viewdeck to LOAD BUILDS !", colour=0x7289da)
+            # embedVar5.set_thumbnail(url=avatar)
+            # embedVar5.set_footer(text="Press 0 to close Menu. Press 1, 2 or 3 to SAVE a preset.")
 
-            paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
-            paginator.add_reaction('⏮️', "first")
-            paginator.add_reaction('⏪', "back")
-            paginator.add_reaction('🔐', "lock")
-            paginator.add_reaction('⏩', "next")
-            paginator.add_reaction('⏭️', "last")
-            embeds = [embedVar2, embedVar3, embedVar4, embedVar5]
-            await paginator.run(embeds)
+            # paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+            # paginator.add_reaction('⏮️', "first")
+            # paginator.add_reaction('⏪', "back")
+            # paginator.add_reaction('🔐', "lock")
+            # paginator.add_reaction('⏩', "next")
+            # paginator.add_reaction('⏭️', "last")
+            # embeds = [embedVar2, embedVar3, embedVar4, embedVar5]
+            # await paginator.run(embeds)
 
             options =["0","1","2","3"]
 
