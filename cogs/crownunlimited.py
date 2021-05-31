@@ -2760,8 +2760,8 @@ class CrownUnlimited(commands.Cog):
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
-            t_attack = t['ATK'] + ((20 * currentopponent) + opponent_scaling + 45)
-            t_defense = t['DEF'] + ((30 * currentopponent) + opponent_scaling + 80)
+            t_attack = t['ATK'] + ((29 * currentopponent) + opponent_scaling)
+            t_defense = t['DEF'] + ((40 * currentopponent) + opponent_scaling)
             t_type = t['TYPE']
             t_accuracy = t['ACC']
             t_passive = t['PASS'][0]
@@ -7821,8 +7821,8 @@ class CrownUnlimited(commands.Cog):
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
-            t_attack = t['ATK'] + ((20 * currentopponent) + opponent_scaling + 25)
-            t_defense = t['DEF'] + ((20 * currentopponent + opponent_scaling) + 45)
+            t_attack = t['ATK'] + ((40 * currentopponent) + opponent_scaling)
+            t_defense = t['DEF'] + ((30 * currentopponent + opponent_scaling))
             t_type = t['TYPE']
             t_accuracy = t['ACC']
             t_passive = t['PASS'][0]
@@ -9187,8 +9187,8 @@ class CrownUnlimited(commands.Cog):
             t_card = t['NAME']
             t_card_path=t['PATH']
             t_rcard_path=t['RPATH']
-            t_max_health = t['HLT'] + ((20 * currentopponent) + opponent_scaling)
-            t_health = t['HLT'] + ((20 * currentopponent) + opponent_scaling)
+            t_max_health = t['HLT'] + ((25 * currentopponent) + opponent_scaling)
+            t_health = t['HLT'] + ((25 * currentopponent) + opponent_scaling)
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
