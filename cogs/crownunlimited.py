@@ -256,7 +256,7 @@ class CrownUnlimited(commands.Cog):
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
             t_attack = t['ATK'] + ((10 * currentopponent) + opponent_scaling + 15)
-            t_defense = t['DEF'] + ((18 * currentopponent) + opponent_scaling + 20)
+            t_defense = t['DEF'] + ((18 * currentopponent) + opponent_scaling + 50)
             t_type = t['TYPE']
             t_accuracy = t['ACC']
             t_passive = t['PASS'][0]
@@ -2755,13 +2755,13 @@ class CrownUnlimited(commands.Cog):
             t_card = t['NAME']
             t_card_path=t['PATH']
             t_rcard_path=t['RPATH']
-            t_max_health = t['HLT'] + ((80 * currentopponent) + opponent_scaling + 1000) 
-            t_health = t['HLT'] + ((80 * currentopponent) + opponent_scaling + 1000)
+            t_max_health = t['HLT'] + ((80 * currentopponent) + opponent_scaling + 1800) 
+            t_health = t['HLT'] + ((80 * currentopponent) + opponent_scaling + 1800)
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
-            t_attack = t['ATK'] + ((20 * currentopponent) + opponent_scaling + 15)
-            t_defense = t['DEF'] + ((30 * currentopponent) + opponent_scaling + 20)
+            t_attack = t['ATK'] + ((20 * currentopponent) + opponent_scaling + 45)
+            t_defense = t['DEF'] + ((30 * currentopponent) + opponent_scaling + 80)
             t_type = t['TYPE']
             t_accuracy = t['ACC']
             t_passive = t['PASS'][0]
@@ -5420,12 +5420,12 @@ class CrownUnlimited(commands.Cog):
             elif c_title_passive_type == 'BLINK':
                 c_stamina = c_stamina - c_title_passive_value         
                 t_stamina = t_stamina + c_title_passive_value
-            elif o_title_passive_type == 'SLOW':
+            elif c_title_passive_type == 'SLOW':
                 tempstam = t_stamina + c_title_passive_value 
                 c_stamina = c_stamina - c_title_passive_value      
                 t_stamina = c_stamina
                 c_stamina = tempstam  
-            elif o_title_passive_type == 'HASTE':
+            elif c_title_passive_type == 'HASTE':
                 tempstam = t_stamina - c_title_passive_value    
                 c_stamina = c_stamina + c_title_passive_value      
                 t_stamina = c_stamina 
@@ -5437,7 +5437,7 @@ class CrownUnlimited(commands.Cog):
                 c_health = c_health - int((.10 * c_title_passive_value))
                 t_attack = t_attack - int((.10 * c_title_passive_value))
                 t_defense = t_defense - int((.10 * c_title_passive_value))
-            elif t_title_passive_type == 'GAMBLE':
+            elif c_title_passive_type == 'GAMBLE':
                 t_health = 150
                 c_health = 150
 
@@ -5449,22 +5449,22 @@ class CrownUnlimited(commands.Cog):
             c_attack = c_attack + int(carm_passive_value)
         elif carm_passive_type == 'DEF':
             c_defense = c_defense + int(carm_passive_value)
-        elif oarm_passive_type == 'STAM':
+        elif carm_passive_type == 'STAM':
             c_stamina = c_stamina + int(carm_passive_value)
-        elif oarm_passive_type == 'HLT':
+        elif carm_passive_type == 'HLT':
             c_health = c_health + int(carm_passive_value)
         elif carm_passive_type == 'LIFE':
             c_health = c_health + round(int(carm_passive_value) + (.10 * t_health))
-        elif oarm_passive_type == 'DRAIN':
+        elif carm_passive_type == 'DRAIN':
             c_stamina = c_stamina + int(carm_passive_value)
         elif carm_passive_type == 'FLOG':
             c_attack = c_attack + int((.20 *carm_passive_value))
-        elif oarm_passive_type == 'WITHER':
+        elif carm_passive_type == 'WITHER':
             c_defense = c_defense + int((.20 *carm_passive_value))
         elif carm_passive_type == 'RAGE':
             c_attack = c_attack + int((.20 * carm_passive_value))
             c_defense = c_defense - int((.20 *carm_passive_value))
-        elif oarm_passive_type == 'BRACE':            
+        elif carm_passive_type == 'BRACE':            
             c_defense = c_defense + int((.20 *carm_passive_value))
             c_attack = c_attack - int((.20 * carm_passive_value))
         elif carm_passive_type == 'BZRK':            
@@ -5477,7 +5477,7 @@ class CrownUnlimited(commands.Cog):
             c_attack = c_attack + int((.10 * carm_passive_value))
             c_defense = c_defense + int((.10 * carm_passive_value))
             c_max_health = c_max_health - int((.10 * carm_passive_value))
-        elif oarm_passive_type == 'STANCE':
+        elif carm_passive_type == 'STANCE':
             tempattack = c_attack + carm_passive_value
             c_attack = c_defense  + carm_passive_value         
             c_defense = tempattack
@@ -5485,27 +5485,27 @@ class CrownUnlimited(commands.Cog):
             tempattack = c_attack - carm_passive_value
             t_attack = t_defense  - carm_passive_value           
             t_defense = tempattack
-        elif oarm_passive_type == 'BLINK':
+        elif carm_passive_type == 'BLINK':
             c_stamina = c_stamina - carm_passive_value         
             t_stamina = t_stamina + carm_passive_value
-        elif oarm_passive_type == 'SLOW':
+        elif carm_passive_type == 'SLOW':
             tempstam = t_stamina + carm_passive_value 
             c_stamina = c_stamina - carm_passive_value      
             t_stamina = c_stamina
             c_stamina = tempstam  
-        elif oarm_passive_type == 'HASTE':
+        elif carm_passive_type == 'HASTE':
             tempstam = t_stamina - carm_passive_value    
             c_stamina = c_stamina + carm_passive_value      
             t_stamina = c_stamina 
             c_stamina = tempstam  
-        elif oarm_passive_type == 'SOULCHAIN':
+        elif carm_passive_type == 'SOULCHAIN':
             c_stamina = carm_passive_value
             t_stamina = carm_passive_value
         elif carm_passive_type == 'FEAR':
             c_health = c_health - int((.10 * carm_passive_value))
             t_attack = t_attack - int((.10 * carm_passive_value))
             t_defense = t_defense - int((.10 * carm_passive_value))
-        elif tarm_passive_type == 'GAMBLE':
+        elif carm_passive_type == 'GAMBLE':
             t_health = 150
             c_health = 150
 
@@ -5678,7 +5678,7 @@ class CrownUnlimited(commands.Cog):
                 o_health = o_health - int((.10 * o_title_passive_value))
                 t_attack = t_attack - int((.10 * o_title_passive_value))
                 t_defense = t_defense - int((.10 * o_title_passive_value))
-            elif t_title_passive_type == 'GAMBLE':
+            elif o_title_passive_type == 'GAMBLE':
                 t_health = 150
                 o_health = 150
 
@@ -5746,7 +5746,7 @@ class CrownUnlimited(commands.Cog):
             o_health = o_health - int((.10 * oarm_passive_value))
             t_attack = t_attack - int((.10 * oarm_passive_value))
             t_defense = t_defense - int((.10 * oarm_passive_value))
-        elif tarm_passive_type == 'GAMBLE':
+        elif oarm_passive_type == 'GAMBLE':
             t_health = 150
             o_health = 150
 
@@ -8016,7 +8016,7 @@ class CrownUnlimited(commands.Cog):
                     o_health = o_health - int((.10 * o_title_passive_value))
                     t_attack = t_attack - int((.10 * o_title_passive_value))
                     t_defense = t_defense - int((.10 * o_title_passive_value))
-                elif t_title_passive_type == 'GAMBLE':
+                elif o_title_passive_type == 'GAMBLE':
                     t_health = 150
                     o_health = 150
 
@@ -9018,7 +9018,7 @@ class CrownUnlimited(commands.Cog):
                                 await discord.TextChannel.delete(private_channel, reason=None)
                             return
                     else:
-
+ 
                         embedVar = discord.Embed(title=f"VICTORY", description=f"{t_card} has been defeated!\n\n{drop_response}", colour=0xe91e63)
                         embedVar.set_author(name=f"The match lasted {turn_total} rounds.")
                         embedVar.set_footer(text=f"{o_card} says:\n{o_win_description}")
@@ -9387,7 +9387,7 @@ class CrownUnlimited(commands.Cog):
                     o_health = o_health - int((.10 * o_title_passive_value))
                     t_attack = t_attack - int((.10 * o_title_passive_value))
                     t_defense = t_defense - int((.10 * o_title_passive_value))
-                elif t_title_passive_type == 'GAMBLE':
+                elif o_title_passive_type == 'GAMBLE':
                     t_health = 150
                     o_health = 150
 
@@ -9455,7 +9455,7 @@ class CrownUnlimited(commands.Cog):
                 o_health = o_health - int((.10 * oarm_passive_value))
                 t_attack = t_attack - int((.10 * oarm_passive_value))
                 t_defense = t_defense - int((.10 * oarm_passive_value))
-            elif tarm_passive_type == 'GAMBLE':
+            elif oarm_passive_type == 'GAMBLE':
                 t_health = 150
                 o_health = 150
 
@@ -10753,7 +10753,7 @@ class CrownUnlimited(commands.Cog):
                 o_health = o_health - int((.10 * o_title_passive_value))
                 t_attack = t_attack - int((.10 * o_title_passive_value))
                 t_defense = t_defense - int((.10 * o_title_passive_value))
-            elif t_title_passive_type == 'GAMBLE':
+            elif o_title_passive_type == 'GAMBLE':
                 t_health = 150
                 o_health = 150
 
@@ -10821,7 +10821,7 @@ class CrownUnlimited(commands.Cog):
             o_health = o_health - int((.10 * oarm_passive_value))
             t_attack = t_attack - int((.10 * oarm_passive_value))
             t_defense = t_defense - int((.10 * oarm_passive_value))
-        elif tarm_passive_type == 'GAMBLE':
+        elif oarm_passive_type == 'GAMBLE':
             t_health = 150
             o_health = 150
 
