@@ -2586,7 +2586,7 @@ class CrownUnlimited(commands.Cog):
                             user: discord.PermissionOverwrite(read_messages=True),
                         }
 
-                private_channel = await guild.create_text_channel(f'{str(ctx.author)}&{user}-co-dungeon-run', overwrites=overwrites)
+                private_channel = await guild.create_text_channel(f'{str(ctx.author)}&{user}-co-tale-run', overwrites=overwrites)
                 await ctx.send(f"{ctx.author.mention} & {user.mention} private channel has been opened for you.")
                 await private_channel.send(f'{ctx.author.mention} Good luck!')
             
@@ -5048,6 +5048,7 @@ class CrownUnlimited(commands.Cog):
                         await discord.TextChannel.delete(private_channel, reason=None)
 
 
+<<<<<<< HEAD
     @commands.command()
     async def cbossfight(self, ctx, user: User, *args):
         companion = db.queryUser({'DISNAME': str(user)})
@@ -7677,6 +7678,8 @@ class CrownUnlimited(commands.Cog):
                 await discord.TextChannel.delete(private_channel, reason=None)
 
 
+=======
+>>>>>>> 9b138e32a49e0183089d1edae82a1982c9f5987a
 
     @commands.command()
     async def dungeon(self, ctx):
