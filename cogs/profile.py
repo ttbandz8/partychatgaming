@@ -264,11 +264,7 @@ class Profile(commands.Cog):
             # embedVar4.set_thumbnail(url=avatar)
             # embedVar4.set_footer(text="Press 0 to close Menu. Press 3 to LOAD this BUILD.")
 
-<<<<<<< HEAD
-            # embedVar5 = discord.Embed(title= f"{name}'s Build `LOAD` Menu", description="This is the LOAD menu\nUse .savedeck to SAVE your current build to a preset slot!", colour=0x7289da)
-=======
             # embedVar5 = discord.Embed(title= f"{name}'s Build `LOAD` Menu", description="This is the LOAD menu\nUse .savebuild to SAVE your current build to a preset slot!", colour=0x7289da)
->>>>>>> ef1405675b0d5b75daa066b452a69ee24963dc5f
             # embedVar5.set_thumbnail(url=avatar)
             # embedVar5.set_footer(text="Press 0 to close Menu. Press 1, 2 or 3 to LOAD a preset.")
 
@@ -356,21 +352,6 @@ class Profile(commands.Cog):
             embedVar.add_field(name=f"Preset 3:{preset3_title} {preset3_card}", value=f"Card: {preset3_card}\nTitle: {preset3_title}\nArm: {preset3_arm}\nPet: {preset3_pet}", inline=False)
             embedVar.set_footer(text="Type Preset # to update current build!")
             await ctx.send(embed=embedVar)
-<<<<<<< HEAD
-
-            # embedVar2 = discord.Embed(title= f"BUILD :one:: {preset1_title} {preset1_card}", description=f"CARD: {preset1_card}\nTITLE: {preset1_title}\nARM: {preset1_arm}\nPET: {preset1_pet}", colour=0x7289da)
-            # embedVar2.set_thumbnail(url=avatar)
-            # embedVar2.set_footer(text="Press 0 to close Menu. Press 1 to OVERWRITE THIS PRESET.")
-
-            # embedVar3 = discord.Embed(title= f"BUILD :two:: {preset2_title} {preset2_card}", description=f"CARD: {preset2_card}\nTITLE: {preset2_title}\nARM: {preset2_arm}\nPET: {preset2_pet}", colour=0x7289da)
-            # embedVar3.set_thumbnail(url=avatar)
-            # embedVar3.set_footer(text="Press 0 to close Menu.` Press 2  to OVERWRITE THIS PRESET.")
-
-            # embedVar4 = discord.Embed(title= f"BUILD :three:: {preset3_title} {preset3_card}", description=f"CARD: {preset3_card}\nTITLE: {preset3_title}\nARM: {preset3_arm}\nPET: {preset3_pet}", colour=0x7289da)
-            # embedVar4.set_thumbnail(url=avatar)
-            # embedVar4.set_footer(text="Press 0 to close Menu. Press 3 to OVERWRITE THIS PRESET.")
-
-=======
 
             # embedVar2 = discord.Embed(title= f"BUILD :one:: {preset1_title} {preset1_card}", description=f"CARD: {preset1_card}\TITLE: {preset1_title}\ARM: {preset1_arm}\PET: {preset1_pet}", colour=0x7289da)
             # embedVar2.set_thumbnail(url=avatar)
@@ -384,7 +365,6 @@ class Profile(commands.Cog):
             # embedVar4.set_thumbnail(url=avatar)
             # embedVar4.set_footer(text="Press 0 to close Menu. Press 3 to OVERWRITE THIS PRESET.")
 
->>>>>>> ef1405675b0d5b75daa066b452a69ee24963dc5f
             # embedVar5 = discord.Embed(title= f"{name}'s Build `SAVE` Menu", description="This is the SAVE menu\nUse .viewdeck to LOAD BUILDS !", colour=0x7289da)
             # embedVar5.set_thumbnail(url=avatar)
             # embedVar5.set_footer(text="Press 0 to close Menu. Press 1, 2 or 3 to SAVE a preset.")
