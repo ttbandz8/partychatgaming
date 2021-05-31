@@ -5049,7 +5049,7 @@ class CrownUnlimited(commands.Cog):
 
 
     @commands.command()
-    async def cboss(self, ctx, user: User, *args):
+    async def cbossfight(self, ctx, user: User, *args):
         companion = db.queryUser({'DISNAME': str(user)})
         private_channel = ctx
         if not args:
