@@ -42,7 +42,7 @@ class CrownUnlimited(commands.Cog):
         return companion
 
     @commands.command()
-    async def ctales(self, ctx, user: User):Wild becuas
+    async def ctales(self, ctx, user: User):
         private_channel = ctx
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
         companion = db.queryUser({'DISNAME': str(user)})
