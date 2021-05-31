@@ -691,7 +691,7 @@ class CrownUnlimited(commands.Cog):
                     o_health = o_health - int((.10 * o_title_passive_value))
                     t_attack = t_attack - int((.10 * o_title_passive_value))
                     t_defense = t_defense - int((.10 * o_title_passive_value))
-                elif t_title_passive_type == 'GAMBLE':
+                elif o_title_passive_type == 'GAMBLE':
                     t_health = 150
                     o_health = 150
 
