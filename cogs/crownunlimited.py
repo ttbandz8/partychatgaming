@@ -5047,10 +5047,8 @@ class CrownUnlimited(commands.Cog):
                     if private_channel.guild:
                         await discord.TextChannel.delete(private_channel, reason=None)
 
-
-<<<<<<< HEAD
     @commands.command()
-    async def cbossfight(self, ctx, user: User, *args):
+    async def cboss(self, ctx, user: User, *args):
         companion = db.queryUser({'DISNAME': str(user)})
         private_channel = ctx
         if not args:
@@ -7676,10 +7674,6 @@ class CrownUnlimited(commands.Cog):
                     await discord.TextChannel.delete(private_channel, reason=None)
             if private_channel.guild:
                 await discord.TextChannel.delete(private_channel, reason=None)
-
-
-=======
->>>>>>> 9b138e32a49e0183089d1edae82a1982c9f5987a
 
     @commands.command()
     async def dungeon(self, ctx):
