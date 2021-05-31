@@ -261,7 +261,7 @@ class Profile(commands.Cog):
             embedVar3.set_thumbnail(url=avatar)
             embedVar3.set_footer(text="Press 0 to close Menu.` Press 2 to LOAD this BUILD.")
 
-            embedVar4 = discord.Embed(title= f"BUILD three:: {preset3_title} {preset3_card}", description=f"CARD: {preset3_card}\nTITLE: {preset3_title}\nARM: {preset3_arm}\nPET: {preset3_pet}", colour=0x7289da)
+            embedVar4 = discord.Embed(title= f"BUILD :three:: {preset3_title} {preset3_card}", description=f"CARD: {preset3_card}\nTITLE: {preset3_title}\nARM: {preset3_arm}\nPET: {preset3_pet}", colour=0x7289da)
             embedVar4.set_thumbnail(url=avatar)
             embedVar4.set_footer(text="Press 0 to close Menu. Press 3 to LOAD this BUILD.")
 
@@ -360,7 +360,7 @@ class Profile(commands.Cog):
             embedVar3.set_thumbnail(url=avatar)
             embedVar3.set_footer(text="Press 0 to close Menu.` Press 2  to OVERWRITE THIS PRESET.")
 
-            embedVar4 = discord.Embed(title= f"BUILD three:: {preset3_title} {preset3_card}", description=f"CARD: {preset3_card}\TITLE: {preset3_title}\ARM: {preset3_arm}\PET: {preset3_pet}", colour=0x7289da)
+            embedVar4 = discord.Embed(title= f"BUILD :three:: {preset3_title} {preset3_card}", description=f"CARD: {preset3_card}\TITLE: {preset3_title}\ARM: {preset3_arm}\PET: {preset3_pet}", colour=0x7289da)
             embedVar4.set_thumbnail(url=avatar)
             embedVar4.set_footer(text="Press 0 to close Menu. Press 3 to OVERWRITE THIS PRESET.")
 
