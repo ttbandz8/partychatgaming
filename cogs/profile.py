@@ -156,6 +156,7 @@ class Profile(commands.Cog):
             embedVar.add_field(name=f"{move3}", value=f"Power: `{move3ap}`", inline=False)
             embedVar.add_field(name=f"{move4}", value=f"`Enhancer`: Increases `{move4enh} by {move4ap}`", inline=False)
             embedVar.add_field(name="Unique Passive", value=f"`{passive_name}`: Increases `{passive_type} by {passive_num}`", inline=False)
+            embedVar.set_footer(text=f".status - Enhancement Menu")
 
             await ctx.send(embed=embedVar)
         else:
@@ -210,6 +211,220 @@ class Profile(commands.Cog):
             paginator.add_reaction('⏭️', "last")
             embeds = [embedVar1, embedVar2, embedVar3, embedVar4]
             await paginator.run(embeds)
+        else:
+            newVault = db.createVault({'OWNER': d['DISNAME']})
+
+    @commands.command()
+    async def viewdeck(self, ctx):
+        query = {'DISNAME': str(ctx.author)}
+        d = db.queryUser(query)
+        vault_query = {'OWNER': d['DISNAME']}
+        vault = db.queryVault(vault_query)
+        if vault:
+            name = d['DISNAME'].split("#",1)[0]
+            avatar = d['AVATAR']
+            cards = vault['CARDS']
+            titles = vault['TITLES']
+            deck = vault['DECK']
+            
+            preset1_card = list(deck[0].values())[0]
+            preset1_title = list(deck[0].values())[1]
+            preset1_arm = list(deck[0].values())[2]
+            preset1_pet = list(deck[0].values())[3]
+
+            preset2_card = list(deck[1].values())[0]
+            preset2_title = list(deck[1].values())[1]
+            preset2_arm = list(deck[1].values())[2]
+            preset2_pet = list(deck[1].values())[3]
+
+            preset3_card = list(deck[2].values())[0]
+            preset3_title = list(deck[2].values())[1]
+            preset3_arm = list(deck[2].values())[2]
+            preset3_pet = list(deck[2].values())[3]    
+   
+
+        
+            embedVar = discord.Embed(title=f"{name}'s `Build Deck` Load Menu", description=f" What Preset would you like?")
+            embedVar.set_author(name="Press 0 to close Menu. Press 1, 2 or 3 to load a preset.")
+            embedVar.add_field(name=f"Preset 1:{preset1_title} {preset1_card}", value=f"Card: {preset1_card}\nTitle: {preset1_title}\nArm: {preset1_arm}\nPet: {preset1_pet}", inline=False)
+            embedVar.add_field(name=f"Preset 2:{preset2_title} {preset2_card}", value=f"Card: {preset2_card}\nTitle: {preset2_title}\nArm: {preset2_arm}\nPet: {preset2_pet}", inline=False)
+            embedVar.add_field(name=f"Preset 3:{preset3_title} {preset3_card}", value=f"Card: {preset3_card}\nTitle: {preset3_title}\nArm: {preset3_arm}\nPet: {preset3_pet}", inline=False)
+            embedVar.set_footer(text="Type Preset # to update current build!")
+            await ctx.send(embed=embedVar)
+
+            # embedVar2 = discord.Embed(title= f"BUILD :one:: {preset1_title} {preset1_card}", description=f"CARD: {preset1_card}\nTITLE: {preset1_title}\nARM: {preset1_arm}\nPET: {preset1_pet}", colour=0x7289da)
+            # embedVar2.set_thumbnail(url=avatar)
+            # embedVar2.set_footer(text="Press 0 to close Menu. Press 1 to LOAD this BUILD.")
+
+            # embedVar3 = discord.Embed(title= f"BUILD :two:: {preset2_title} {preset2_card}", description=f"CARD: {preset2_card}\nTITLE: {preset2_title}\nARM: {preset2_arm}\nPET: {preset2_pet}", colour=0x7289da)
+            # embedVar3.set_thumbnail(url=avatar)
+            # embedVar3.set_footer(text="Press 0 to close Menu.` Press 2 to LOAD this BUILD.")
+
+            # embedVar4 = discord.Embed(title= f"BUILD :three:: {preset3_title} {preset3_card}", description=f"CARD: {preset3_card}\nTITLE: {preset3_title}\nARM: {preset3_arm}\nPET: {preset3_pet}", colour=0x7289da)
+            # embedVar4.set_thumbnail(url=avatar)
+            # embedVar4.set_footer(text="Press 0 to close Menu. Press 3 to LOAD this BUILD.")
+
+<<<<<<< HEAD
+            # embedVar5 = discord.Embed(title= f"{name}'s Build `LOAD` Menu", description="This is the LOAD menu\nUse .savedeck to SAVE your current build to a preset slot!", colour=0x7289da)
+=======
+            # embedVar5 = discord.Embed(title= f"{name}'s Build `LOAD` Menu", description="This is the LOAD menu\nUse .savebuild to SAVE your current build to a preset slot!", colour=0x7289da)
+>>>>>>> ef1405675b0d5b75daa066b452a69ee24963dc5f
+            # embedVar5.set_thumbnail(url=avatar)
+            # embedVar5.set_footer(text="Press 0 to close Menu. Press 1, 2 or 3 to LOAD a preset.")
+
+            # paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+            # paginator.add_reaction('⏮️', "first")
+            # paginator.add_reaction('⏪', "back")
+            # paginator.add_reaction('🔐', "lock")
+            # paginator.add_reaction('⏩', "next")
+            # paginator.add_reaction('⏭️', "last")
+            # embeds = [embedVar2, embedVar3, embedVar4, embedVar5]
+            # await paginator.run(embeds)
+
+            options =["0","1","2","3","4"]
+
+            def check(msg):
+                return msg.author == ctx.author and msg.content in options
+            try:
+                msg = await self.bot.wait_for("message",timeout=15, check=check)
+
+                if msg.content == "0":
+                    await ctx.send(f"{ctx.author.mention}, No change has been made")
+                    return
+                elif msg.content == "1":
+                    response = db.updateUserNoFilter(query, {'$set': {'CARD': str(preset1_card), 'TITLE': str(preset1_title),'ARM': str(preset1_arm), 'PET': str(preset1_pet)}})
+                    await ctx.send(response)
+                    return
+                elif msg.content == "2":
+                    response = db.updateUserNoFilter(query, {'$set': {'CARD': str(preset2_card), 'TITLE': str(preset2_title),'ARM': str(preset2_arm), 'PET': str(preset2_pet)}})
+                    await ctx.send(response)
+                    return
+                elif msg.content == "3":
+                    response = db.updateUserNoFilter(query, {'$set': {'CARD': str(preset3_card), 'TITLE': str(preset3_title),'ARM': str(preset3_arm), 'PET': str(preset3_pet)}})
+                    await ctx.send(response)
+                    return
+                else:
+                    print("Bad selection")    
+            except:
+                await ctx.send(f"{ctx.author.mention}, No change has been made")
+                return
+        else:
+            newVault = db.createVault({'OWNER': d['DISNAME']})
+
+    @commands.command()
+    async def savedeck(self, ctx):
+        query = {'DISNAME': str(ctx.author)}
+        d = db.queryUser(query)
+        vault_query = {'OWNER': d['DISNAME']}
+        vault = db.queryVault(vault_query)
+        if vault:
+            name = d['DISNAME'].split("#",1)[0]
+            avatar = d['AVATAR']
+            cards = vault['CARDS']
+            titles = vault['TITLES']
+            deck = vault['DECK']
+
+
+            current_card = d['CARD']
+            current_title = d['TITLE']
+            current_arm= d['ARM']
+            current_pet = d['PET']
+
+            
+            preset1_card = list(deck[0].values())[0]
+            preset1_title = list(deck[0].values())[1]
+            preset1_arm = list(deck[0].values())[2]
+            preset1_pet = list(deck[0].values())[3]
+
+            preset2_card = list(deck[1].values())[0]
+            preset2_title = list(deck[1].values())[1]
+            preset2_arm = list(deck[1].values())[2]
+            preset2_pet = list(deck[1].values())[3]
+
+            preset3_card = list(deck[2].values())[0]
+            preset3_title = list(deck[2].values())[1]
+            preset3_arm = list(deck[2].values())[2]
+            preset3_pet = list(deck[2].values())[3]    
+   
+
+        
+            embedVar = discord.Embed(title=f"{name}'s Build Deck Save Menu", description=f" Replace a `Preset` to `Save` your current `Build`!\n")
+            embedVar.set_author(name="Press 0 to close Menu. Press 1, 2 or 3 to overwrite preset.")
+            embedVar.add_field(name=f"Current Build:`{current_title} {current_card}`", value=f"Card: `{current_card}`\nTitle: `{current_title}`\nArm: `{current_arm}`\nPet: `{current_pet}`", inline=False)
+            embedVar.add_field(name=f"Preset 1:{preset1_title} {preset1_card}", value=f"Card: {preset1_card}\nTitle: {preset1_title}\nArm: {preset1_arm}\nPet: {preset1_pet}", inline=False)
+            embedVar.add_field(name=f"Preset 2:{preset2_title} {preset2_card}", value=f"Card: {preset2_card}\nTitle: {preset2_title}\nArm: {preset2_arm}\nPet: {preset2_pet}", inline=False)
+            embedVar.add_field(name=f"Preset 3:{preset3_title} {preset3_card}", value=f"Card: {preset3_card}\nTitle: {preset3_title}\nArm: {preset3_arm}\nPet: {preset3_pet}", inline=False)
+            embedVar.set_footer(text="Type Preset # to update current build!")
+            await ctx.send(embed=embedVar)
+<<<<<<< HEAD
+
+            # embedVar2 = discord.Embed(title= f"BUILD :one:: {preset1_title} {preset1_card}", description=f"CARD: {preset1_card}\nTITLE: {preset1_title}\nARM: {preset1_arm}\nPET: {preset1_pet}", colour=0x7289da)
+            # embedVar2.set_thumbnail(url=avatar)
+            # embedVar2.set_footer(text="Press 0 to close Menu. Press 1 to OVERWRITE THIS PRESET.")
+
+            # embedVar3 = discord.Embed(title= f"BUILD :two:: {preset2_title} {preset2_card}", description=f"CARD: {preset2_card}\nTITLE: {preset2_title}\nARM: {preset2_arm}\nPET: {preset2_pet}", colour=0x7289da)
+            # embedVar3.set_thumbnail(url=avatar)
+            # embedVar3.set_footer(text="Press 0 to close Menu.` Press 2  to OVERWRITE THIS PRESET.")
+
+            # embedVar4 = discord.Embed(title= f"BUILD :three:: {preset3_title} {preset3_card}", description=f"CARD: {preset3_card}\nTITLE: {preset3_title}\nARM: {preset3_arm}\nPET: {preset3_pet}", colour=0x7289da)
+            # embedVar4.set_thumbnail(url=avatar)
+            # embedVar4.set_footer(text="Press 0 to close Menu. Press 3 to OVERWRITE THIS PRESET.")
+
+=======
+
+            # embedVar2 = discord.Embed(title= f"BUILD :one:: {preset1_title} {preset1_card}", description=f"CARD: {preset1_card}\TITLE: {preset1_title}\ARM: {preset1_arm}\PET: {preset1_pet}", colour=0x7289da)
+            # embedVar2.set_thumbnail(url=avatar)
+            # embedVar2.set_footer(text="Press 0 to close Menu. Press 1 to OVERWRITE THIS PRESET.")
+
+            # embedVar3 = discord.Embed(title= f"BUILD :two:: {preset2_title} {preset2_card}", description=f"CARD: {preset2_card}\TITLE: {preset2_title}\ARM: {preset2_arm}\PET: {preset2_pet}", colour=0x7289da)
+            # embedVar3.set_thumbnail(url=avatar)
+            # embedVar3.set_footer(text="Press 0 to close Menu.` Press 2  to OVERWRITE THIS PRESET.")
+
+            # embedVar4 = discord.Embed(title= f"BUILD :three:: {preset3_title} {preset3_card}", description=f"CARD: {preset3_card}\TITLE: {preset3_title}\ARM: {preset3_arm}\PET: {preset3_pet}", colour=0x7289da)
+            # embedVar4.set_thumbnail(url=avatar)
+            # embedVar4.set_footer(text="Press 0 to close Menu. Press 3 to OVERWRITE THIS PRESET.")
+
+>>>>>>> ef1405675b0d5b75daa066b452a69ee24963dc5f
+            # embedVar5 = discord.Embed(title= f"{name}'s Build `SAVE` Menu", description="This is the SAVE menu\nUse .viewdeck to LOAD BUILDS !", colour=0x7289da)
+            # embedVar5.set_thumbnail(url=avatar)
+            # embedVar5.set_footer(text="Press 0 to close Menu. Press 1, 2 or 3 to SAVE a preset.")
+
+            # paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+            # paginator.add_reaction('⏮️', "first")
+            # paginator.add_reaction('⏪', "back")
+            # paginator.add_reaction('🔐', "lock")
+            # paginator.add_reaction('⏩', "next")
+            # paginator.add_reaction('⏭️', "last")
+            # embeds = [embedVar2, embedVar3, embedVar4, embedVar5]
+            # await paginator.run(embeds)
+
+            options =["0","1","2","3"]
+
+            def check(msg):
+                return msg.author == ctx.author and msg.content in options or msg.content == "0"
+            try:
+                msg = await self.bot.wait_for("message",timeout=15, check=check)
+
+                if msg.content == "0":
+                    await ctx.send(f"{ctx.author.mention}, No change has been made")
+                    return
+                elif msg.content == "1":
+                    response = db.updateVaultNoFilter(vault_query, {'$set': {'DECK.0.CARD' :str(current_card), 'DECK.0.TITLE': str(current_title),'DECK.0.ARM': str(current_arm), 'DECK.0.PET': str(current_pet)}})
+                    await ctx.send(response)
+                    return
+                elif msg.content == "2":
+                    response = db.updateVaultNoFilter(vault_query, {'$set': {'DECK.1.CARD' :str(current_card), 'DECK.1.TITLE': str(current_title),'DECK.1.ARM': str(current_arm), 'DECK.1.PET': str(current_pet)}})
+                    await ctx.send(response)
+                    return
+                elif msg.content == "3":
+                    response = db.updateVaultNoFilter(vault_query, {'$set': {'DECK.2.CARD' :str(current_card), 'DECK.2.TITLE': str(current_title),'DECK.2.ARM': str(current_arm), 'DECK.2.PET': str(current_pet)}})
+                    await ctx.send(response)
+                    return
+                else:
+                    print("Bad selection")    
+            except:
+                await ctx.send(f"{ctx.author.mention}, No change has been made")
+                return
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
 

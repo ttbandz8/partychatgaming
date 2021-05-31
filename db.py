@@ -227,7 +227,11 @@ def altQueryShopCards(args):
     return data 
 
 def queryDropCards(args):
-    data = cards_col.find({'UNIVERSE': args, 'AVAILABLE': True})
+    data = cards_col.find({'UNIVERSE': args, 'EXCLUSIVE': False, 'AVAILABLE': True})
+    return data 
+
+def queryExclusiveDropCards(args):
+    data = cards_col.find({'UNIVERSE': args, 'EXCLUSIVE': True, 'AVAILABLE': True})
     return data 
 
 def queryCard(query):
@@ -328,7 +332,11 @@ def queryTitle(query):
     return data
 
 def queryDropTitles(args):
-    data = titles_col.find({'UNIVERSE': args, 'AVAILABLE': True})
+    data = titles_col.find({'UNIVERSE': args, 'EXCLUSIVE': False, 'AVAILABLE': True})
+    return data 
+
+def queryExclusiveDropTitles(args):
+    data = titles_col.find({'UNIVERSE': args, 'EXCLUSIVE': True, 'AVAILABLE': True})
     return data 
 
 def queryTournamentTitles():
@@ -398,7 +406,11 @@ def queryArm(query):
     return data
 
 def queryDropArms(args):
-    data = arm_col.find({'UNIVERSE': args, 'AVAILABLE': True})
+    data = arm_col.find({'UNIVERSE': args, 'EXCLUSIVE': False, 'AVAILABLE': True})
+    return data 
+
+def queryExclusiveDropArms(args):
+    data = arm_col.find({'UNIVERSE': args, 'EXCLUSIVE': True, 'AVAILABLE': True})
     return data 
 
 def queryTournamentArms():
@@ -476,9 +488,12 @@ def queryPet(query):
     return data
 
 def queryDropPets(args):
-    data = pet_col.find({'UNIVERSE': args, 'AVAILABLE': True})
+    data = pet_col.find({'UNIVERSE': args,  'EXCLUSIVE': False,  'AVAILABLE': True})
     return data 
 
+def queryExclusiveDropPets(args):
+    data = pet_col.find({'UNIVERSE': args, 'EXCLUSIVE': True, 'AVAILABLE': True})
+    return data 
 
 
 ''' UNIVERSE '''
