@@ -2493,24 +2493,11 @@ class CrownUnlimited(commands.Cog):
                     
                     if private_channel.guild:
 
-<<<<<<< HEAD
-                        embedVar = discord.Embed(title=f"VICTORY\n`{o_card} says:`\n{o_win_description}", description=f"The game lasted {turn_total} rounds.\n\n{drop_response}\n{c_card} earned :coin: 5", colour=0xe91e63)
-=======
                         embedVar = discord.Embed(title=f"VICTORY\n`{o_card} says:`\n{o_win_description}", description=f"The game lasted {turn_total} rounds.\n\n{drop_response}\n{c_user['NAME']} earned :coin: 10", colour=0xe91e63)
->>>>>>> ef1405675b0d5b75daa066b452a69ee24963dc5f
                         embedVar.set_author(name=f"{t_card} lost!")
                         await private_channel.send(embed=embedVar)
 
                         emojis = ['👍', '👎']
-<<<<<<< HEAD
-                        accept = await private_channel.send(f"{ctx.author.mention} would you like to continue?")
-
-                        def check(msg):
-                            return msg.author == ctx.author and msg.mentions
-                        try:
-                            msg = await self.bot.wait_for('message', timeout=45.0, check=check)
-                            tester = msg.mentions[0].name + "#" + msg.mentions[0].discriminator
-=======
                         accept = await private_channel.send(f"Congratulations {ctx.author.mention}!\n{user.mention} will you continue assisting {ctx.author.mention} through the co-op tale?")
                         for emoji in emojis:
                             await accept.add_reaction(emoji)
@@ -2519,7 +2506,6 @@ class CrownUnlimited(commands.Cog):
                             return user == user1 and str(reaction.emoji) == '👍'
                         try:
                             reaction, user1 = await self.bot.wait_for('reaction_add', timeout=45.0, check=check)
->>>>>>> ef1405675b0d5b75daa066b452a69ee24963dc5f
 
                             # Keep this as user (although maybe it only works a few times)
                             # OR instead of user make it tester since tester is updated every time the match ends since user has to re @ each time
@@ -2634,12 +2620,8 @@ class CrownUnlimited(commands.Cog):
 
         #While Still PLaying Universe
         while continued == True:
-<<<<<<< HEAD
-            
-=======
             companion = db.queryUser({'DISNAME': str(user)})
 
->>>>>>> ef1405675b0d5b75daa066b452a69ee24963dc5f
             o = db.queryCard({'NAME': sowner['CARD']})
             otitle = db.queryTitle({'TITLE': sowner['TITLE']})
             
