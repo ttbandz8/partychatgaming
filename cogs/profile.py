@@ -156,6 +156,7 @@ class Profile(commands.Cog):
             embedVar.add_field(name=f"{move3}", value=f"Power: `{move3ap}`", inline=False)
             embedVar.add_field(name=f"{move4}", value=f"`Enhancer`: Increases `{move4enh} by {move4ap}`", inline=False)
             embedVar.add_field(name="Unique Passive", value=f"`{passive_name}`: Increases `{passive_type} by {passive_num}`", inline=False)
+            embedVar.set_footer(text=f".status - Enhancement Menu")
 
             await ctx.send(embed=embedVar)
         else:
@@ -282,7 +283,7 @@ class Profile(commands.Cog):
             def check(msg):
                 return msg.author == ctx.author and msg.content in options
             try:
-                msg = await self.bot.wait_for("message",timeout=20.0, check=check)
+                msg = await self.bot.wait_for("message",timeout=10.0, check=check)
 
                 if msg.content == "0":
                     await ctx.send(f"{ctx.author.mention}, No change has been made")
@@ -306,7 +307,7 @@ class Profile(commands.Cog):
 
 
     @commands.command()
-    async def savebuild(self, ctx):
+    async def savedeck(self, ctx):
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
         vault_query = {'OWNER': d['DISNAME']}
@@ -381,7 +382,7 @@ class Profile(commands.Cog):
             def check(msg):
                 return msg.author == ctx.author and msg.content in options or msg.content == "0"
             try:
-                msg = await self.bot.wait_for("message",timeout=20.0, check=check)
+                msg = await self.bot.wait_for("message",timeout=10.0, check=check)
 
                 if msg.content == "0":
                     await ctx.send(f"{ctx.author.mention}, No change has been made")

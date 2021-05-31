@@ -60,31 +60,38 @@ async def help(ctx):
    embedVar1 = discord.Embed(title= f":video_game:Player Commands:", description=h.PLAYER_COMMANDS, colour=0x7289da)
    embedVar1.set_thumbnail(url=avatar)
    embedVar1.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
+   embedVar1.set_footer(text=f".senpai - Text Bot Tutorial")
 
    embedVar2 = discord.Embed(title= f":triangular_flag_on_post:Profile Commands:", description=h.PROFILE_COMMANDS, colour=0x7289da)
    embedVar2.set_thumbnail(url=avatar)
    embedVar2.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
+   embedVar2.set_footer(text=f".senpai - Text Bot Tutorial")
 
    embedVar3 = discord.Embed(title= f":crossed_swords:Lobbies:", description=h.LOBBY_COMMANDS, colour=0x7289da)
    embedVar3.set_thumbnail(url=avatar)
    embedVar3.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
+   embedVar3.set_footer(text=f".senpai - Text Bot Tutorial")
 
    embedVar4 = discord.Embed(title= f":crown:Crown Unlimited Player Commands:", description=h.CROWN_UNLIMITED_PLAYER_COMMANDS, colour=0x7289da)
    embedVar4.set_thumbnail(url=avatar)
    embedVar4.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
+   embedVar4.set_footer(text=f".senpai - Text Bot Tutorial")
 
    embedVar5 = discord.Embed(title= f":military_helmet:Teams:", description=h.TEAM_COMMANDS, colour=0x7289da)
    embedVar5.set_thumbnail(url=avatar)
    embedVar5.add_field(name=":fireworks:Tournament Types:", value="\n`Exhibitions`\n`KingsGambit`\n`GodsOfCod`")
    embedVar5.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
+   embedVar5.set_footer(text=f".senpai - Text Bot Tutorial")
 
    embedVar6 = discord.Embed(title= f":shopping_cart:Pop Up Shop:", description=h.SHOP_COMMANDS, colour=0x7289da)
    embedVar6.set_thumbnail(url=avatar)
    embedVar6.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
+   embedVar6.set_footer(text=f".senpai - Text Bot Tutorial")
 
    embedVar7 = discord.Embed(title= f":crown:Crown Unlimited Game Commands:", description=h.CROWN_UNLIMITED_GAMES, colour=0x7289da)
    embedVar7.set_thumbnail(url=avatar)
    embedVar7.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
+   embedVar7.set_footer(text=f".senpai - Text Bot Tutorial")
 
    paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
    paginator.add_reaction('⏮️', "first")
@@ -103,27 +110,33 @@ async def status(ctx):
    embedVar1 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
    embedVar1.set_thumbnail(url=avatar)
    embedVar1.add_field(name="`INCREASES`", value="`ATK` - Increase `ATK`\n\n`DEF` - Increase `DEF`\n\n`HLT` - Increase `HLT`\n\n`STAM` - Increase `STAM`\n\n")
+   embedVar1.set_footer(text=f".help - Bot Help")
 
    embedVar2 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
    embedVar2.set_thumbnail(url=avatar)
    embedVar2.add_field(name="`STEALS`", value="`FLOG`- `ATK` Steal\n\n`WITHER`- `DEF` Steal\n\n`LIFE` - `LIFE` Steal\n\n`DRAIN` - `STAM` Steal\n\n")
+   embedVar2.set_footer(text=f".help - Bot Help")
 
 
    embedVar3 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
    embedVar3.set_thumbnail(url=avatar)
    embedVar3.add_field(name="`SACRIFICE`", value="`RAGE` - Decrease `DEF`, Increase `ATK`\n\n`BRACE` - Decrease `ATK`, Increase `DEF`\n\n`BZRK` - Decrease `HLT`,  Increase `ATK`\n\n`CRYSTAL`- Decrease `HLT`, Increase `DEF`\n\n`GROWTH`- Decrease `MAXHLT`, Increase `STATS`\n\n")
+   embedVar3.set_footer(text=f".help - Bot Help")
 
    embedVar4 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
    embedVar4.set_thumbnail(url=avatar)
    embedVar4.add_field(name="`TRADE`", value="`STANCE` - Swap `ATK` and `DEF`\n\n`CONFUSE` - Swap `OPP ATK` and  `OPP DEF`\n\n")
+   embedVar4.set_footer(text=f".help - Bot Help")
 
    embedVar5 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
    embedVar5.set_thumbnail(url=avatar)
    embedVar5.add_field(name="`TIME`", value="`BLINK`  - Decrease  `STAM`, Increase `OPP STAM`\n\n`SLOW` - Decrease `STAM`, Swap `OPP STAM`\n\n`HASTE` - Increase `STAM`, Swap `OPP STAM`\n\n")
+   embedVar5.set_footer(text=f".help - Bot Help")
 
    embedVar6 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
    embedVar6.set_thumbnail(url=avatar)
    embedVar6.add_field(name="`CONTROL`", value="`SOULCHAIN` - Both `PLAYERS` `STAM` = \n\n`GAMBLE` - Both `PLAYERS` `HEALTH` =\n\n`FEAR` - Decrease `HLT`, Decrease `OPP ATK` & `OPP DEF`")
+   embedVar6.set_footer(text=f".help - Bot Help")
 
    paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
    paginator.add_reaction('⏮️', "first")
