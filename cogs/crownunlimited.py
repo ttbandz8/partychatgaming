@@ -250,13 +250,13 @@ class CrownUnlimited(commands.Cog):
             t_card = t['NAME']
             t_card_path=t['PATH']
             t_rcard_path=t['RPATH']
-            t_max_health = t['HLT'] + (80 * currentopponent) + 1000
-            t_health = t['HLT'] + (80 * currentopponent) + 1000
+            t_max_health = t['HLT'] + (100 * currentopponent) + 500 + opponent_scaling
+            t_health = t['HLT'] + (100 * currentopponent) + 500 + opponent_scaling
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
-            t_attack = t['ATK'] + (15 * currentopponent) + 15
-            t_defense = t['DEF'] + (15 * currentopponent) + 15
+            t_attack = t['ATK'] + (15 * currentopponent) + 15 + opponent_scaling
+            t_defense = t['DEF'] + (15 * currentopponent) + 15 + opponent_scaling
             t_type = t['TYPE']
             t_accuracy = t['ACC']
             t_passive = t['PASS'][0]
@@ -2766,13 +2766,13 @@ class CrownUnlimited(commands.Cog):
             t_card = t['NAME']
             t_card_path=t['PATH']
             t_rcard_path=t['RPATH']
-            t_max_health = t['HLT'] + (100 * currentopponent) + 2000
-            t_health = t['HLT'] + (100 * currentopponent) + 2000
+            t_max_health = t['HLT'] + (100 * currentopponent) + 1000 + opponent_scaling
+            t_health = t['HLT'] + (100 * currentopponent) + 1000 + opponent_scaling
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
-            t_attack = t['ATK'] + (20 * currentopponent)
-            t_defense = t['DEF'] + (15 * currentopponent)
+            t_attack = t['ATK'] + (20 * currentopponent) + opponent_scaling
+            t_defense = t['DEF'] + (15 * currentopponent) + opponent_scaling
             t_type = t['TYPE']
             t_accuracy = t['ACC']
             t_passive = t['PASS'][0]
@@ -10381,7 +10381,6 @@ class CrownUnlimited(commands.Cog):
                         if int(aiMove) !=5:
                             # If you have enough stamina for move, use it
                             if dmg['CAN_USE_MOVE']:
-
                                 if dmg['ENHANCE']:
                                     enh_type= dmg['ENHANCED_TYPE']
                                     if enh_type == 'ATK':
@@ -10403,7 +10402,7 @@ class CrownUnlimited(commands.Cog):
                                         o_attack = round(o_attack - dmg['DMG'])
                                     elif enh_type == 'WITHER':
                                         t_defense = round(t_defense + dmg['DMG'])
-                                        o_defense = round(o_defense  dmg['DMG'])
+                                        o_defense = round(o_defense - dmg['DMG'])
                                     elif enh_type == 'RAGE':
                                         t_defense = round(t_defense - dmg['DMG'])
                                         t_attack = round(t_attack + dmg['DMG'])
@@ -14011,7 +14010,7 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
         defensepower = op_defense
         dmg = ((attackpower * (100 * (100 / defensepower))) * .001) + int(ap)
         # dmg = (int(ap)*(100/(100+int(op_defense)))) + int(atk)
-        low = dmg - (dmg * .)
+        low = dmg - (dmg * .20)
         high = dmg + (dmg * .05)
 
         true_dmg = random.randint(int(low), int(high))
