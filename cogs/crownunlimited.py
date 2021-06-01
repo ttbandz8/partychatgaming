@@ -374,15 +374,15 @@ class CrownUnlimited(commands.Cog):
                 t_stamina = c_stamina 
                 c_stamina = tempstam  
             elif c_card_passive_type == 'SOULCHAIN':
-                c_stamina = 30
-                t_stamina = 30
+                c_stamina = c_card_passive
+                t_stamina = c_card_passive
             elif c_card_passive_type == 'FEAR':
                 c_health = c_health - int((.10 * c_health))
                 t_attack = t_attack - int((.10 * c_health))
                 t_defense = t_defense - int((.10 * c_health))
             elif c_card_passive_type == 'GAMBLE':
-                c_health = 150
-                t_health = 150
+                c_health = c_card_passive
+                t_health = c_card_passive
   
             # Title Passive
             c_title_passive_type = list(c_title_passive.keys())[0]
@@ -518,8 +518,8 @@ class CrownUnlimited(commands.Cog):
                 t_attack = t_attack - int((.10 * carm_passive_value))
                 t_defense = t_defense - int((.10 * carm_passive_value))
             elif carm_passive_type == 'GAMBLE':
-                t_health = 150
-                c_health = 150
+                t_health = carm_passive_value
+                c_health = carm_passive_value
 
             ################################################################################
 

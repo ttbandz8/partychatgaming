@@ -252,6 +252,15 @@ async def purge(ctx, amount = 5):
    else:
       print(m.ADMIN_ONLY_COMMAND)
 
+@bot.command()
+@commands.check(validate_user)
+async def fix(ctx, user: User):
+   if ctx.author.guild_permissions.administrator == True:
+      response = db.updateUserNoFilter({'DISNAME': str(user)}, {'$set': {'AVAILABLE': True}})
+      await ctx.send(f"{user.mention} is fixed. ")
+   else:
+      print(m.ADMIN_ONLY_COMMAND)
+
 
 @bot.command()
 @commands.check(validate_user)

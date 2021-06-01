@@ -188,19 +188,19 @@ class Profile(commands.Cog):
        
 
             embedVar1 = discord.Embed(title= f"My Cards\n:coin:{'{:,}'.format(balance)}", description="`.equipcard name` -  Select Your Card\n`.viewcard card name` - View Cards", colour=0x7289da)
-            embedVar1.set_thumbnail(url=avatar)
+            # embedVar1.set_thumbnail(url=avatar)
             embedVar1.add_field(name="Cards" + " :fireworks:", value=" | ".join(cards))
 
             embedVar2 = discord.Embed(title= f"My Titles\n:coin:{'{:,}'.format(balance)}", description="`.equiptitle name` - Select Your Title\n`.viewtitle title name` - View Title Stats", colour=0x7289da)
-            embedVar2.set_thumbnail(url=avatar)
+            # embedVar2.set_thumbnail(url=avatar)
             embedVar2.add_field(name="Titles" + " :fireworks:", value=" | ".join(titles))
 
             embedVar3 = discord.Embed(title= f"My Arms\n:coin:{'{:,}'.format(balance)}", description="`.equiparm name` - Select Your Arm\n`.viewarm arm name` - View Arm Stats", colour=0x7289da)
-            embedVar3.set_thumbnail(url=avatar)
+            # embedVar3.set_thumbnail(url=avatar)
             embedVar3.add_field(name="Arms" + " :fireworks:", value=" | ".join(arms))
 
             embedVar4 = discord.Embed(title="Pets", description="`.equippet name` - Select Your Pet\n`.viewpet Pet name` - View Pet Stats", colour=0x7289da)
-            embedVar4.set_thumbnail(url=avatar)
+            # embedVar4.set_thumbnail(url=avatar)
             embedVar4.add_field(name="Pets" + " :fireworks:", value=" | ".join(pet_names))
 
             paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
@@ -251,31 +251,6 @@ class Profile(commands.Cog):
             embedVar.add_field(name=f"Preset 3:{preset3_title} {preset3_card} and {preset3_pet}", value=f"Card: {preset3_card}\nTitle: {preset3_title}\nArm: {preset3_arm}\nPet: {preset3_pet}", inline=False)
             embedVar.set_footer(text="Type Preset # to update current build!")
             await ctx.send(embed=embedVar)
-
-            # embedVar2 = discord.Embed(title= f"BUILD :one:: {preset1_title} {preset1_card}", description=f"CARD: {preset1_card}\nTITLE: {preset1_title}\nARM: {preset1_arm}\nPET: {preset1_pet}", colour=0x7289da)
-            # embedVar2.set_thumbnail(url=avatar)
-            # embedVar2.set_footer(text="Press 0 to close Menu. Press 1 to LOAD this BUILD.")
-
-            # embedVar3 = discord.Embed(title= f"BUILD :two:: {preset2_title} {preset2_card}", description=f"CARD: {preset2_card}\nTITLE: {preset2_title}\nARM: {preset2_arm}\nPET: {preset2_pet}", colour=0x7289da)
-            # embedVar3.set_thumbnail(url=avatar)
-            # embedVar3.set_footer(text="Press 0 to close Menu.` Press 2 to LOAD this BUILD.")
-
-            # embedVar4 = discord.Embed(title= f"BUILD :three:: {preset3_title} {preset3_card}", description=f"CARD: {preset3_card}\nTITLE: {preset3_title}\nARM: {preset3_arm}\nPET: {preset3_pet}", colour=0x7289da)
-            # embedVar4.set_thumbnail(url=avatar)
-            # embedVar4.set_footer(text="Press 0 to close Menu. Press 3 to LOAD this BUILD.")
-
-            # embedVar5 = discord.Embed(title= f"{name}'s Build `LOAD` Menu", description="This is the LOAD menu\nUse .savebuild to SAVE your current build to a preset slot!", colour=0x7289da)
-            # embedVar5.set_thumbnail(url=avatar)
-            # embedVar5.set_footer(text="Press 0 to close Menu. Press 1, 2 or 3 to LOAD a preset.")
-
-            # paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
-            # paginator.add_reaction('⏮️', "first")
-            # paginator.add_reaction('⏪', "back")
-            # paginator.add_reaction('🔐', "lock")
-            # paginator.add_reaction('⏩', "next")
-            # paginator.add_reaction('⏭️', "last")
-            # embeds = [embedVar2, embedVar3, embedVar4, embedVar5]
-            # await paginator.run(embeds)
 
             options =["0","1","2","3","4"]
 
@@ -352,31 +327,6 @@ class Profile(commands.Cog):
             embedVar.add_field(name=f"Preset 3:{preset3_title} {preset3_card} and {preset3_pet}", value=f"Card: {preset3_card}\nTitle: {preset3_title}\nArm: {preset3_arm}\nPet: {preset3_pet}", inline=False)
             embedVar.set_footer(text="Type Preset # to update current build!")
             await ctx.send(embed=embedVar)
-
-            # embedVar2 = discord.Embed(title= f"BUILD :one:: {preset1_title} {preset1_card}", description=f"CARD: {preset1_card}\TITLE: {preset1_title}\ARM: {preset1_arm}\PET: {preset1_pet}", colour=0x7289da)
-            # embedVar2.set_thumbnail(url=avatar)
-            # embedVar2.set_footer(text="Press 0 to close Menu. Press 1 to OVERWRITE THIS PRESET.")
-
-            # embedVar3 = discord.Embed(title= f"BUILD :two:: {preset2_title} {preset2_card}", description=f"CARD: {preset2_card}\TITLE: {preset2_title}\ARM: {preset2_arm}\PET: {preset2_pet}", colour=0x7289da)
-            # embedVar3.set_thumbnail(url=avatar)
-            # embedVar3.set_footer(text="Press 0 to close Menu.` Press 2  to OVERWRITE THIS PRESET.")
-
-            # embedVar4 = discord.Embed(title= f"BUILD :three:: {preset3_title} {preset3_card}", description=f"CARD: {preset3_card}\TITLE: {preset3_title}\ARM: {preset3_arm}\PET: {preset3_pet}", colour=0x7289da)
-            # embedVar4.set_thumbnail(url=avatar)
-            # embedVar4.set_footer(text="Press 0 to close Menu. Press 3 to OVERWRITE THIS PRESET.")
-
-            # embedVar5 = discord.Embed(title= f"{name}'s Build `SAVE` Menu", description="This is the SAVE menu\nUse .viewdeck to LOAD BUILDS !", colour=0x7289da)
-            # embedVar5.set_thumbnail(url=avatar)
-            # embedVar5.set_footer(text="Press 0 to close Menu. Press 1, 2 or 3 to SAVE a preset.")
-
-            # paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
-            # paginator.add_reaction('⏮️', "first")
-            # paginator.add_reaction('⏪', "back")
-            # paginator.add_reaction('🔐', "lock")
-            # paginator.add_reaction('⏩', "next")
-            # paginator.add_reaction('⏭️', "last")
-            # embeds = [embedVar2, embedVar3, embedVar4, embedVar5]
-            # await paginator.run(embeds)
 
             options =["0","1","2","3"]
 
@@ -473,17 +423,17 @@ class Profile(commands.Cog):
                 arm_text_list.append(f"{arm['ARM']}: :coin:{arm['PRICE']} " + f"_{arm['UNIVERSE']}_")
         
         embedVar1 = discord.Embed(title=f":shopping_cart: Pop Up Shop", description=f"Current Balance :coin:{vault['BALANCE']}\n`.viewcard card name` - View Cards\n`.buycard card name` - Buy Card", colour=0x2ecc71, value='Page 1')
-        embedVar1.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236723/PCG%20LOGOS%20AND%20RESOURCES/Party_Chat_Shop.png")
+        # embedVar1.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236723/PCG%20LOGOS%20AND%20RESOURCES/Party_Chat_Shop.png")
         embedVar1.add_field(name=":shopping_bags: Cards", value="\n".join(card_text_list))
         embedVar1.set_footer(text="Stock updated every day")
 
         embedVar2 = discord.Embed(title=f":shopping_cart: Pop Up Shop", description=f"Current Balance :coin:{vault['BALANCE']}\n`.viewtitle title name` - View Title Stats\n`.buytitle title name` - Buy Title", colour=0x3498db, value='Page 2')
-        embedVar2.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236723/PCG%20LOGOS%20AND%20RESOURCES/Party_Chat_Shop.png")
+        # embedVar2.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236723/PCG%20LOGOS%20AND%20RESOURCES/Party_Chat_Shop.png")
         embedVar2.add_field(name=":shopping_bags: Titles", value="\n".join(title_text_list))
         embedVar2.set_footer(text="Stock updated every day")
 
         embedVar3 = discord.Embed(title=f":shopping_cart: Pop Up Shop", description=f"Current Balance :coin:{vault['BALANCE']}\n`.viewarm arm name` - View Arm Stats\n`.buyarm arm name` - Buy Arm", colour=0xf1c40f, value='Page 3')
-        embedVar3.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236723/PCG%20LOGOS%20AND%20RESOURCES/Party_Chat_Shop.png")
+        # embedVar3.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236723/PCG%20LOGOS%20AND%20RESOURCES/Party_Chat_Shop.png")
         embedVar3.add_field(name=":shopping_bags: Arm", value="\n".join(arm_text_list))
         embedVar3.set_footer(text="Stock updated every day")
 
