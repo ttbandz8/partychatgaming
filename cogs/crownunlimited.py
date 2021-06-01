@@ -13923,10 +13923,10 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
             brace = (.10 * attack )
         elif enh == 'BZRK':
             enh_type="BZRK"
-            bzrk = (.50 * health )
+            bzrk = (.20 * health )
         elif enh == 'CRYSTAL':
             enh_type="CRYSTAL"
-            crystal = (.50 * health )
+            crystal = (.20 * health )
         elif enh == 'GROWTH':
             enh_type="GROWTH"
             growth = (.05 * maxhealth )
