@@ -13846,17 +13846,20 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
 
     else:
         # Calculate Damage
-        dmg = (int(ap) * int(atk)) / op_defense
+        # dmg = ((int(ap) + int(atk)) / op_defense) * (.50 * int(ap))
+        attackpower = (int(atk))
+        defensepower = op_defense
+        dmg = ((attackpower * (100 * (100 / defensepower))) * .001) + int(ap)
         # dmg = (int(ap)*(100/(100+int(op_defense)))) + int(atk)
-        low = dmg - (dmg * .05)
+        low = dmg - (dmg * .20)
         high = dmg + (dmg * .05)
 
         true_dmg = random.randint(int(low), int(high))
         message = ""
 
         miss_hit = 1 # Miss
-        low_hit = 7 # Lower Damage
-        med_hit = 11 # Medium Damage
+        low_hit = 6 # Lower Damage
+        med_hit = 9 # Medium Damage
         standard_hit = 19 # Standard Damage
         high_hit = 20 # Crit Hit
         hit_roll = random.randint(0,20)
@@ -13869,7 +13872,7 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
             true_dmg = round(true_dmg * .75)
             message=f'`{move}` used! It chips for {true_dmg}! :anger:'
         elif hit_roll <=med_hit and hit_roll > low_hit:
-            true_dmg = round(true_dmg * .85)
+            true_dmg = round(true_dmg * .90)
             message=f'`{move}` used! It connects for {true_dmg}! :bangbang:'
         elif hit_roll <=standard_hit and hit_roll > med_hit:
             true_dmg = round(true_dmg)

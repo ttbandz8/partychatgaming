@@ -246,9 +246,9 @@ class Profile(commands.Cog):
         
             embedVar = discord.Embed(title=f"{name}'s `Build Deck` Load Menu", description=f" What Preset would you like?")
             embedVar.set_author(name="Press 0 to close Menu. Press 1, 2 or 3 to load a preset.")
-            embedVar.add_field(name=f"Preset 1:{preset1_title} {preset1_card}", value=f"Card: {preset1_card}\nTitle: {preset1_title}\nArm: {preset1_arm}\nPet: {preset1_pet}", inline=False)
-            embedVar.add_field(name=f"Preset 2:{preset2_title} {preset2_card}", value=f"Card: {preset2_card}\nTitle: {preset2_title}\nArm: {preset2_arm}\nPet: {preset2_pet}", inline=False)
-            embedVar.add_field(name=f"Preset 3:{preset3_title} {preset3_card}", value=f"Card: {preset3_card}\nTitle: {preset3_title}\nArm: {preset3_arm}\nPet: {preset3_pet}", inline=False)
+            embedVar.add_field(name=f"Preset 1:{preset1_title} {preset1_card} and {preset1_pet}", value=f"Card: {preset1_card}\nTitle: {preset1_title}\nArm: {preset1_arm}\nPet: {preset1_pet}", inline=False)
+            embedVar.add_field(name=f"Preset 2:{preset2_title} {preset2_card} and {preset2_pet}", value=f"Card: {preset2_card}\nTitle: {preset2_title}\nArm: {preset2_arm}\nPet: {preset2_pet}", inline=False)
+            embedVar.add_field(name=f"Preset 3:{preset3_title} {preset3_card} and {preset3_pet}", value=f"Card: {preset3_card}\nTitle: {preset3_title}\nArm: {preset3_arm}\nPet: {preset3_pet}", inline=False)
             embedVar.set_footer(text="Type Preset # to update current build!")
             await ctx.send(embed=embedVar)
 
@@ -346,10 +346,10 @@ class Profile(commands.Cog):
         
             embedVar = discord.Embed(title=f"{name}'s Build Deck Save Menu", description=f" Replace a `Preset` to `Save` your current `Build`!\n")
             embedVar.set_author(name="Press 0 to close Menu. Press 1, 2 or 3 to overwrite preset.")
-            embedVar.add_field(name=f"Current Build:`{current_title} {current_card}`", value=f"Card: `{current_card}`\nTitle: `{current_title}`\nArm: `{current_arm}`\nPet: `{current_pet}`", inline=False)
-            embedVar.add_field(name=f"Preset 1:{preset1_title} {preset1_card}", value=f"Card: {preset1_card}\nTitle: {preset1_title}\nArm: {preset1_arm}\nPet: {preset1_pet}", inline=False)
-            embedVar.add_field(name=f"Preset 2:{preset2_title} {preset2_card}", value=f"Card: {preset2_card}\nTitle: {preset2_title}\nArm: {preset2_arm}\nPet: {preset2_pet}", inline=False)
-            embedVar.add_field(name=f"Preset 3:{preset3_title} {preset3_card}", value=f"Card: {preset3_card}\nTitle: {preset3_title}\nArm: {preset3_arm}\nPet: {preset3_pet}", inline=False)
+            embedVar.add_field(name=f"Current Build:`{current_title} {current_card}` and `{current_pet}`", value=f"Card: `{current_card}`\nTitle: `{current_title}`\nArm: `{current_arm}`\nPet: `{current_pet}`", inline=False)
+            embedVar.add_field(name=f"Preset 1:{preset1_title} {preset1_card} and {preset1_pet}", value=f"Card: {preset1_card}\nTitle: {preset1_title}\nArm: {preset1_arm}\nPet: {preset1_pet}", inline=False)
+            embedVar.add_field(name=f"Preset 2:{preset2_title} {preset2_card} and {preset2_pet}", value=f"Card: {preset2_card}\nTitle: {preset2_title}\nArm: {preset2_arm}\nPet: {preset2_pet}", inline=False)
+            embedVar.add_field(name=f"Preset 3:{preset3_title} {preset3_card} and {preset3_pet}", value=f"Card: {preset3_card}\nTitle: {preset3_title}\nArm: {preset3_arm}\nPet: {preset3_pet}", inline=False)
             embedVar.set_footer(text="Type Preset # to update current build!")
             await ctx.send(embed=embedVar)
 
