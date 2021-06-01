@@ -161,7 +161,7 @@ class BOSS():
     TIMESTAMP: str = now
     DESCRIPTION: list[str] = field(default_factory=lambda: '')
     AVAILABLE: bool = field(default_factory=lambda: True)
-    PET: list[str] = field(default_factory=lambda: [{'NAME': 'Chick', 'LVL': 1, 'EXP': 0, 'Glare': 20, 'TYPE': 'HLT', 'BOND': 0, 'PATH': "https://res.cloudinary.com/dkcmq8o15/image/upload/v1622307902/Pets/chick.jpg"}])
+    PET: list[str] = field(default_factory=lambda: [{'NAME': 'Chick', 'LVL': 1, 'EXP': 0, 'Glare': 5, 'TYPE': 'HLT', 'BOND': 0, 'PATH': "https://res.cloudinary.com/dkcmq8o15/image/upload/v1622307902/Pets/chick.jpg"}])
    
 
 @dataclass(frozen=True, order=True) 
