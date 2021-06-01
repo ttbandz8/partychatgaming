@@ -14074,7 +14074,7 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
         defensepower = op_defense
         dmg = ((attackpower * (100 * (100 / defensepower))) * .001) + int(ap)
         # dmg = (int(ap)*(100/(100+int(op_defense)))) + int(atk)
-        low = dmg - (dmg * .20)
+        low = dmg - (dmg * .50)
         high = dmg + (dmg * .05)
 
         true_dmg = random.randint(int(low), int(high))
