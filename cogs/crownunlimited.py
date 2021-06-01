@@ -5292,13 +5292,13 @@ class CrownUnlimited(commands.Cog):
         t_card = t['NAME']
         t_card_path=t['PATH']
         t_rcard_path=t['RPATH']
-        t_max_health = t['HLT'] * 3
-        t_health = t['HLT'] *3
+        t_max_health = t['HLT'] * 4
+        t_health = t['HLT'] *4
         t_stamina = t['STAM']
         t_max_stamina= t['STAM']
         t_moveset = t['MOVESET']
-        t_attack = t['ATK'] * 2
-        t_defense = t['DEF'] * 2
+        t_attack = t['ATK'] * 3
+        t_defense = t['DEF'] * 3
         t_type = t['TYPE']
         t_accuracy = t['ACC']
         t_passive = t['PASS'][0]
@@ -5428,7 +5428,7 @@ class CrownUnlimited(commands.Cog):
             t_defense = t_defense - int((.10 * c_health))
         elif c_card_passive_type == 'GAMBLE':
             c_health = c_card_passive
-            t_health = c_card_passive
+            t_health = c_card_passive * 4
 
         # Title Passive
         c_title_passive_type = list(c_title_passive.keys())[0]
@@ -5496,7 +5496,7 @@ class CrownUnlimited(commands.Cog):
                 t_attack = t_attack - int((.10 * c_title_passive_value))
                 t_defense = t_defense - int((.10 * c_title_passive_value))
             elif c_title_passive_type == 'GAMBLE':
-                t_health = c_title_passive_value
+                t_health = c_title_passive_value * 4
                 c_health = c_title_passive_value
 
         # Arm Passive Player 1
@@ -5564,7 +5564,7 @@ class CrownUnlimited(commands.Cog):
             t_attack = t_attack - int((.10 * carm_passive_value))
             t_defense = t_defense - int((.10 * carm_passive_value))
         elif carm_passive_type == 'GAMBLE':
-            t_health = carm_passive_value
+            t_health = carm_passive_value * 4
             c_health = carm_passive_value
 
 
@@ -5605,7 +5605,7 @@ class CrownUnlimited(commands.Cog):
 
         # Player 1 Card Passive
         o_card_passive_type = list(o_passive.values())[1]
-        o_card_passive = list(o_passive.values())[0] * 2
+        o_card_passive = list(o_passive.values())[0]
 
         if o_card_passive_type == 'ATK':
             o_attack = o_attack + int(o_card_passive)
@@ -5669,7 +5669,7 @@ class CrownUnlimited(commands.Cog):
             t_defense = t_defense - int((.10 * o_health))
         elif o_card_passive_type == 'GAMBLE':
             o_health = o_card_passive
-            t_health = o_card_passive
+            t_health = o_card_passive * 4
 
         # Title Passive
         o_title_passive_type = list(o_title_passive.keys())[0]
@@ -5737,7 +5737,7 @@ class CrownUnlimited(commands.Cog):
                 t_attack = t_attack - int((.10 * o_title_passive_value))
                 t_defense = t_defense - int((.10 * o_title_passive_value))
             elif o_title_passive_type == 'GAMBLE':
-                t_health = o_title_passive_value
+                t_health = o_title_passive_value * 4
                 o_health = o_title_passive_value
 
         # Arm Passive Player 1
@@ -5805,7 +5805,7 @@ class CrownUnlimited(commands.Cog):
             t_attack = t_attack - int((.10 * oarm_passive_value))
             t_defense = t_defense - int((.10 * oarm_passive_value))
         elif oarm_passive_type == 'GAMBLE':
-            t_health = oarm_passive_value
+            t_health = oarm_passive_value * 4
             o_health = oarm_passive_value
 
         # Arm Passive Player 2
@@ -7665,10 +7665,10 @@ class CrownUnlimited(commands.Cog):
                                 embedVar.add_field(name=f"{tpet_name} used {tpetmove_text}!", value =f"Enhanced {tpet_type}")
                                 embedVar.set_thumbnail(url=tpet_image)
                                 await private_channel.send(embed=embedVar)
-                                turn=0
+                                turn=3
                             else:
                                 await private_channel.send(f"{tpet_name} needs a turn to rest...")
-                                turn=0
+                                turn=3
                         else:
                             await ctx.send(f"{tpet_name} needs a turn to rest...")
 
@@ -10835,7 +10835,7 @@ class CrownUnlimited(commands.Cog):
 
         # Player 1 Card Passive
         o_card_passive_type = list(o_passive.values())[1]
-        o_card_passive = list(o_passive.values())[0] * 2
+        o_card_passive = list(o_passive.values())[0]
 
         if o_card_passive_type == 'ATK':
             o_attack = o_attack + int(o_card_passive)
