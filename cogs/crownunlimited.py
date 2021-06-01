@@ -13911,25 +13911,25 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
             drain = ap 
         elif enh == 'FLOG':
             enh_type="FLOG"
-            flog = (.10 * op_attack )
+            flog = ((ap/100) * op_attack )
         elif enh == 'WITHER':
             enh_type="WITHER"
-            wither = (.10 * op_defense )
+            wither = ((ap/100) * op_defense )
         elif enh == 'RAGE':
             enh_type="RAGE"
-            rage = (.10 * defense )
+            rage = ((ap/100)* defense )
         elif enh == 'BRACE':
             enh_type="BRACE"
-            brace = (.10 * attack )
+            brace = ((ap/100) * attack )
         elif enh == 'BZRK':
             enh_type="BZRK"
-            bzrk = (.20 * health )
+            bzrk = ((ap/100) * health )
         elif enh == 'CRYSTAL':
             enh_type="CRYSTAL"
-            crystal = (.20 * health )
+            crystal = ((ap/100) * health )
         elif enh == 'GROWTH':
             enh_type="GROWTH"
-            growth = (.05 * maxhealth )
+            growth = ((ap/100) * maxhealth )
         elif enh == 'STANCE':
             enh_type="STANCE"
             stance = attack
