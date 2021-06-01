@@ -128,7 +128,7 @@ class CrownUnlimited(commands.Cog):
             ctitle = db.queryTitle({'TITLE': companion['TITLE']})
             
             t = db.queryCard({'NAME': legends[currentopponent]})
-            ttitle = db.queryTitle({'TITLE': 'Starter'})
+            ttitle = db.queryTitle({'TITLE': universe['UTITLE']})
 
             #################################################################### PLAYER DATA
             # Player 1 Data
@@ -252,7 +252,7 @@ class CrownUnlimited(commands.Cog):
 
             # Player 2 Data
             t_user = boss
-            tarm = db.queryArm({'ARM': 'Stock'})
+            tarm = db.queryArm({'ARM': universe['UARM']})
             tarm_passive = tarm['ABILITIES'][0]
             tarm_name=tarm['ARM']
             t_card = t['NAME']
@@ -2660,7 +2660,7 @@ class CrownUnlimited(commands.Cog):
             otitle = db.queryTitle({'TITLE': sowner['TITLE']})
             
             t = db.queryCard({'NAME': legends[currentopponent]})
-            ttitle = db.queryTitle({'TITLE': 'Starter'})
+            ttitle = db.queryTitle({'TITLE': universe['DTITLE']})
 
             c = db.queryCard({'NAME': companion['CARD']})
             ctitle = db.queryTitle({'TITLE': companion['TITLE']})
@@ -2786,7 +2786,7 @@ class CrownUnlimited(commands.Cog):
 
             # Player 2 Data
             t_user = boss
-            tarm = db.queryArm({'ARM': 'Stock'})
+            tarm = db.queryArm({'ARM': universe['DARM']})
             tarm_passive = tarm['ABILITIES'][0]
             tarm_name=tarm['ARM']
             t_card = t['NAME']
@@ -7929,7 +7929,7 @@ class CrownUnlimited(commands.Cog):
             otitle = db.queryTitle({'TITLE': sowner['TITLE']})
             
             t = db.queryCard({'NAME': legends[currentopponent]})
-            ttitle = db.queryTitle({'TITLE': 'Starter'})
+            ttitle = db.queryTitle({'TITLE': universe['DTITLE']})
 
             ####################################################################
             # Player Data
@@ -7996,7 +7996,7 @@ class CrownUnlimited(commands.Cog):
 
             # Player 2 Data
             t_user = boss
-            tarm = db.queryArm({'ARM': 'Stock'})
+            tarm = db.queryArm({'ARM': universe['DARM']})
             tarm_passive = tarm['ABILITIES'][0]
             tarm_name=tarm['ARM']
             t_card = t['NAME']
@@ -9257,11 +9257,15 @@ class CrownUnlimited(commands.Cog):
         completed_crown_tales = sowner['CROWN_TALES']
         all_universes = db.queryAllUniverse()
         available_universes = []
+
         selected_universe = ""
         for uni in all_universes:
             if uni['PREREQUISITE'] in sowner['CROWN_TALES']:
                 available_universes.append(uni['TITLE'])
-                
+
+        
+
+
         embedVar = discord.Embed(title=f":crown: CROWN TALES!", description="Select a Universe to explore!", colour=0xe91e63)
         embedVar.add_field(name="Available Universes", value="\n".join(available_universes))
         if len(completed_crown_tales) > 1:
@@ -9322,7 +9326,7 @@ class CrownUnlimited(commands.Cog):
             otitle = db.queryTitle({'TITLE': sowner['TITLE']})
             
             t = db.queryCard({'NAME': legends[currentopponent]})
-            ttitle = db.queryTitle({'TITLE': 'Starter'})
+            ttitle = db.queryTitle({'TITLE': universe['UTITLE']})
 
             #################################################################### PLAYER DATA
             # Player 1 Data
@@ -9385,7 +9389,7 @@ class CrownUnlimited(commands.Cog):
 
             # Player 2 Data
             t_user = boss
-            tarm = db.queryArm({'ARM': 'Stock'})
+            tarm = db.queryArm({'ARM': universe['UARM']})
             tarm_passive = tarm['ABILITIES'][0]
             tarm_name=tarm['ARM']
             t_card = t['NAME']
