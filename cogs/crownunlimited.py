@@ -89,6 +89,7 @@ class CrownUnlimited(commands.Cog):
                 await private_channel.send(f'{ctx.author.mention} Good luck!')
             
         except:
+            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
             embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", colour=0xe91e63)
             await private_channel.send(embed=embedVar)
             return
@@ -2623,6 +2624,7 @@ class CrownUnlimited(commands.Cog):
                 await private_channel.send(f'{ctx.author.mention} Good luck!')
             
         except:
+            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
             embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", colour=0xe91e63)
             await private_channel.send(embed=embedVar)
             return
@@ -7893,6 +7895,7 @@ class CrownUnlimited(commands.Cog):
                 await private_channel.send(f'{ctx.author.mention} Good luck!')
             
         except:
+            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
             embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", colour=0xe91e63)
             await private_channel.send(embed=embedVar)
             return
@@ -9285,6 +9288,7 @@ class CrownUnlimited(commands.Cog):
                 await private_channel.send(f'{ctx.author.mention} Good luck!')
             
         except:
+            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
             embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", colour=0xe91e63)
             await private_channel.send(embed=embedVar)
             return
