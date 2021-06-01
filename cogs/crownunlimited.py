@@ -52,6 +52,7 @@ class CrownUnlimited(commands.Cog):
             await private_channel.send(m.ALREADY_IN_TALES)
             return
 
+
         companion = db.queryUser({'DISNAME': str(user)})
         completed_crown_tales = sowner['CROWN_TALES']
         all_universes = db.queryAllUniverse()
