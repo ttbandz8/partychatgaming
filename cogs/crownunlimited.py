@@ -2670,7 +2670,7 @@ class CrownUnlimited(commands.Cog):
             o_card = o['NAME']
             o_card_path=o['PATH']
             o_rcard_path=o['RPATH']
-            o_max_health = o['HLT'] - (5  * currentopponent)
+            o_max_health = o['HLT'] - (20  * currentopponent)
             o_health = o['HLT']
             o_stamina = o['STAM']
             o_max_stamina = o['STAM']
@@ -2731,7 +2731,7 @@ class CrownUnlimited(commands.Cog):
             c_card = c['NAME']
             c_card_path=c['PATH']
             c_rcard_path= c['RPATH']
-            c_max_health = c['HLT'] - (5 * currentopponent)
+            c_max_health = c['HLT'] - (20 * currentopponent)
             c_health = c['HLT'] 
             c_stamina = c['STAM']
             c_max_stamina = c['STAM']
@@ -2774,8 +2774,8 @@ class CrownUnlimited(commands.Cog):
             t_card = t['NAME']
             t_card_path=t['PATH']
             t_rcard_path=t['RPATH']
-            t_max_health = t['HLT'] + (100 * currentopponent) + 1000 + opponent_scaling
-            t_health = t['HLT'] + (100 * currentopponent) + 1000 + opponent_scaling
+            t_max_health = t['HLT'] + (100 * currentopponent) + 1500 + opponent_scaling
+            t_health = t['HLT'] + (100 * currentopponent) + 1500 + opponent_scaling
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
@@ -7924,7 +7924,7 @@ class CrownUnlimited(commands.Cog):
             o_card = o['NAME']
             o_card_path=o['PATH']
             o_rcard_path=o['RPATH']
-            o_max_health = o['HLT'] - (5 * currentopponent)
+            o_max_health = o['HLT'] - (20 * currentopponent)
             o_health = o['HLT'] 
             o_stamina = o['STAM']
             o_max_stamina = o['STAM']
@@ -7967,8 +7967,8 @@ class CrownUnlimited(commands.Cog):
             t_card = t['NAME']
             t_card_path=t['PATH']
             t_rcard_path=t['RPATH']
-            t_max_health = t['HLT'] + (100 * currentopponent) + opponent_scaling + 500
-            t_health = t['HLT'] + (100 * currentopponent) + opponent_scaling + 500
+            t_max_health = t['HLT'] + (100 * currentopponent) + opponent_scaling + 1000
+            t_health = t['HLT'] + (100 * currentopponent) + opponent_scaling + 1000
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
@@ -14397,13 +14397,13 @@ async def dungeondrops(player, universe):
     rand_arm = random.randint(0, a)
     rand_pet = random.randint(0, p)
 
-    gold_drop = 238 #
-    title_drop = 239 #
-    arm_drop = 240 #
-    pet_drop = 241 #
-    card_drop = 250 #
+    gold_drop = 239 #
+    title_drop = 240 #
+    arm_drop = 270 #
+    pet_drop = 290 #
+    card_drop = 300 #
 
-    drop_rate = random.randint(0,250)
+    drop_rate = random.randint(0,300)
 
     if drop_rate <= gold_drop:
         await bless(30, player)
