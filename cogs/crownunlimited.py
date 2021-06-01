@@ -469,22 +469,22 @@ class CrownUnlimited(commands.Cog):
                 c_attack = c_attack + int(carm_passive_value)
             elif carm_passive_type == 'DEF':
                 c_defense = c_defense + int(carm_passive_value)
-            elif oarm_passive_type == 'STAM':
+            elif carm_passive_type == 'STAM':
                 c_stamina = c_stamina + int(carm_passive_value)
-            elif oarm_passive_type == 'HLT':
+            elif carm_passive_type == 'HLT':
                 c_health = c_health + int(carm_passive_value)
             elif carm_passive_type == 'LIFE':
                 c_health = c_health + round(int(carm_passive_value) + (.10 * t_health))
-            elif oarm_passive_type == 'DRAIN':
+            elif carm_passive_type == 'DRAIN':
                 c_stamina = c_stamina + int(carm_passive_value)
             elif carm_passive_type == 'FLOG':
                 c_attack = c_attack + int((.20 *carm_passive_value))
-            elif oarm_passive_type == 'WITHER':
+            elif carm_passive_type == 'WITHER':
                 c_defense = c_defense + int((.20 *carm_passive_value))
             elif carm_passive_type == 'RAGE':
                 c_attack = c_attack + int((.20 * carm_passive_value))
                 c_defense = c_defense - int((.20 *carm_passive_value))
-            elif oarm_passive_type == 'BRACE':            
+            elif carm_passive_type == 'BRACE':            
                 c_defense = c_defense + int((.20 *carm_passive_value))
                 c_attack = c_attack - int((.20 * carm_passive_value))
             elif carm_passive_type == 'BZRK':            
@@ -497,7 +497,7 @@ class CrownUnlimited(commands.Cog):
                 c_attack = c_attack + int((.10 * carm_passive_value))
                 c_defense = c_defense + int((.10 * carm_passive_value))
                 c_max_health = c_max_health - int((.10 * carm_passive_value))
-            elif oarm_passive_type == 'STANCE':
+            elif carm_passive_type == 'STANCE':
                 tempattack = c_attack + carm_passive_value
                 c_attack = c_defense  + carm_passive_value         
                 c_defense = tempattack
