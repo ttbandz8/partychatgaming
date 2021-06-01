@@ -109,10 +109,7 @@ class TITLES():
     STOCK: int = field(default_factory=lambda: 5)
     AVAILABLE: bool = field(default_factory=lambda: True)
     EXCLUSIVE: bool = field(default_factory=lambda: False)
-    UTITLE: str = field(default_factory=lambda: "Starter")
-    UARM: str = field(default_factory=lambda: "Stock")
-    DTITLE: str = field(default_factory=lambda: "Starter")
-    DARM: str = field(default_factory=lambda: "Stock")
+
 
 @dataclass(frozen=True, order=True) 
 class ARM():
@@ -152,6 +149,10 @@ class UNIVERSE():
     UNIVERSE_BOSS: str = field(default_factory=lambda: "")
     TIMESTAMP: str = now
     AVAILABLE: bool = field(default_factory=lambda: True)
+    UTITLE: str = field(default_factory=lambda: "Starter")
+    UARM: str = field(default_factory=lambda: "Stock")
+    DTITLE: str = field(default_factory=lambda: "Starter")
+    DARM: str = field(default_factory=lambda: "Stock")
 
 @dataclass(frozen=True, order=True) 
 class BOSS():
