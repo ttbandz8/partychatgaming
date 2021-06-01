@@ -45,6 +45,13 @@ class CrownUnlimited(commands.Cog):
     async def ctales(self, ctx, user: User):
         private_channel = ctx
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
+
+        if sowner['AVAILABLE']:
+            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': False}})
+        else:
+            await private_channel.send(m.ALREADY_IN_TALES)
+            return
+
         companion = db.queryUser({'DISNAME': str(user)})
         completed_crown_tales = sowner['CROWN_TALES']
         all_universes = db.queryAllUniverse()
@@ -56,8 +63,8 @@ class CrownUnlimited(commands.Cog):
                 
         embedVar = discord.Embed(title=f":crown: CROWN TALES CO-OP!", description="Select a Universe to explore!", colour=0xe91e63)
         embedVar.add_field(name="Available Universes", value="\n".join(available_universes))
-        # if completed_crown_tales:
-        #     embedVar.add_field(name="Completed Universes", value="\n".join(completed_crown_tales))
+        if len(completed_crown_tales) > 1:
+            embedVar.add_field(name="Completed Universes", value="\n".join(completed_crown_tales))
         embedVar.set_footer(text="Earn drops from the Universes you explore. Conquering Universes unlocks more worlds!\nEnjoy Co-op!")
         await private_channel.send(embed=embedVar)
         accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
@@ -1141,8 +1148,10 @@ class CrownUnlimited(commands.Cog):
                         
                                 if private_channel.guild:
                                     await private_channel.send(f"{ctx.author.mention} has fled the battle...")
+                                    db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                                     await discord.TextChannel.delete(private_channel, reason=None)
                                 else:
+                                    db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                                     await private_channel.send(f"You fled the battle...")
                                 return
                             if msg.content == "1":
@@ -1464,6 +1473,7 @@ class CrownUnlimited(commands.Cog):
                             await private_channel.send(f"{ctx.author.mention} {m.STORY_ENDED}")
                             if private_channel.guild:
                                 await discord.TextChannel.delete(private_channel, reason=None)
+                            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                             return
 
                 #Opponent Turn Start
@@ -1838,8 +1848,10 @@ class CrownUnlimited(commands.Cog):
                         
                                 if private_channel.guild:
                                     await private_channel.send(f"{user2.mention} has fled the battle...")
+                                    db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                                     await discord.TextChannel.delete(private_channel, reason=None)
                                 else:
+                                    db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                                     await private_channel.send(f"You fled the battle...")
                                 return
                             if msg.content == "1":
@@ -2159,6 +2171,7 @@ class CrownUnlimited(commands.Cog):
                                     await private_channel.send(embed=embedVar)
                                     turn=2
                         except asyncio.TimeoutError:
+                            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                             await private_channel.send(f"{ctx.author.mention} {m.STORY_ENDED}")
                             if private_channel.guild:
                                 await discord.TextChannel.delete(private_channel, reason=None)
@@ -2467,7 +2480,7 @@ class CrownUnlimited(commands.Cog):
                     embedVar.add_field(name="Tips!", value="Equiping stronger `TITLES` and `ARMS` will make you character tougher in a fight!")
                     embedVar.set_footer(text="The .shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
                     await ctx.author.send(embed=embedVar)
-
+                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                 continued = False
                 if private_channel.guild:
                     await discord.TextChannel.delete(private_channel, reason=None)
@@ -2502,7 +2515,7 @@ class CrownUnlimited(commands.Cog):
                         def check(reaction, user1):
                             return user == user1 and str(reaction.emoji) == '👍'
                         try:
-                            reaction, user1 = await self.bot.wait_for('reaction_add', timeout=45.0, check=check)
+                            reaction, user1 = await self.bot.wait_for('reaction_add', timeout=15.0, check=check)
 
                             # Keep this as user (although maybe it only works a few times)
                             # OR instead of user make it tester since tester is updated every time the match ends since user has to re @ each time
@@ -2542,6 +2555,7 @@ class CrownUnlimited(commands.Cog):
                         await bless(500, ctx.author)
                         await main.DM(ctx, ctx.author, embed=embedVar)
                         await ctx.author.send(f"You were awarded :coin: 500 for completing the {selected_universe} Tale! ")
+                    db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                     continued=False
                     if private_channel.guild:
                         await discord.TextChannel.delete(private_channel, reason=None)
@@ -2551,6 +2565,12 @@ class CrownUnlimited(commands.Cog):
         private_channel = ctx
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
         companion = db.queryUser({'DISNAME': str(user)})
+
+        if sowner['AVAILABLE']:
+            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': False}})
+        else:
+            await private_channel.send(m.ALREADY_IN_TALES)
+            return
 
         completed_crown_tales = sowner['CROWN_TALES']
         all_universes = db.queryAllUniverse()
@@ -2562,8 +2582,8 @@ class CrownUnlimited(commands.Cog):
                 
         embedVar = discord.Embed(title=f":crown: CROWN DUNGEONS CO-OP!", description="Select a Universe to explore!", colour=0xe91e63)
         embedVar.add_field(name="Available Universes", value="\n".join(available_universes))
-        # if completed_crown_tales:
-        #     embedVar.add_field(name="Completed Universes", value="\n".join(completed_crown_tales))
+        if len(completed_crown_tales) > 1:
+            embedVar.add_field(name="Completed Universes", value="\n".join(completed_crown_tales))
         embedVar.set_footer(text="Earn drops from the Universes you explore. Conquering Universes unlocks more worlds!\nEnjoy Co-op!")
         await private_channel.send(embed=embedVar)
         accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
@@ -3646,8 +3666,10 @@ class CrownUnlimited(commands.Cog):
                         
                                 if private_channel.guild:
                                     await private_channel.send(f"{ctx.author.mention} has fled the battle...")
+                                    db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                                     await discord.TextChannel.delete(private_channel, reason=None)
                                 else:
+                                    db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                                     await private_channel.send(f"You fled the battle...")
                                 return
                             if msg.content == "1":
@@ -3966,6 +3988,7 @@ class CrownUnlimited(commands.Cog):
                                     await private_channel.send(embed=embedVar)
                                     turn=0
                         except asyncio.TimeoutError:
+                            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                             await private_channel.send(f"{ctx.author.mention} {m.STORY_ENDED}")
                             if private_channel.guild:
                                 await discord.TextChannel.delete(private_channel, reason=None)
@@ -4343,8 +4366,10 @@ class CrownUnlimited(commands.Cog):
                         
                                 if private_channel.guild:
                                     await private_channel.send(f"{user2.mention} has fled the battle...")
+                                    db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                                     await discord.TextChannel.delete(private_channel, reason=None)
                                 else:
+                                    db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                                     await private_channel.send(f"You fled the battle...")
                                 return
                             if msg.content == "1":
@@ -4664,6 +4689,7 @@ class CrownUnlimited(commands.Cog):
                                     await private_channel.send(embed=embedVar)
                                     turn=2
                         except asyncio.TimeoutError:
+                            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                             await private_channel.send(f"{ctx.author.mention} {m.STORY_ENDED}")
                             if private_channel.guild:
                                 await discord.TextChannel.delete(private_channel, reason=None)
@@ -4976,6 +5002,9 @@ class CrownUnlimited(commands.Cog):
                 continued = False
                 if private_channel.guild:
                     await discord.TextChannel.delete(private_channel, reason=None)
+
+                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+
             elif t_health <=0:
                 
                 uid = o_DID
@@ -5043,15 +5072,21 @@ class CrownUnlimited(commands.Cog):
                     continued=False
                     if private_channel.guild:
                         await discord.TextChannel.delete(private_channel, reason=None)
-
+                    db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
 
     @commands.command()
     async def cboss(self, ctx, user: User, *args):
         companion = db.queryUser({'DISNAME': str(user)})
+        sowner = db.queryUser({'DISNAME': str(ctx.author)})
         private_channel = ctx
         if not args:
             return await ctx.send("Include Boss Universe")
 
+        if sowner['AVAILABLE']:
+            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': False}})
+        else:
+            await private_channel.send(m.ALREADY_IN_TALES)
+            return
         
         guild = ctx.guild
 
@@ -6112,8 +6147,10 @@ class CrownUnlimited(commands.Cog):
                     
                             if private_channel.guild:
                                 await private_channel.send(f"{ctx.author.mention} has fled the battle...")
+                                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                                 await discord.TextChannel.delete(private_channel, reason=None)
                             else:
+                                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                                 await private_channel.send(f"You fled the battle...")
                             return
 
@@ -6351,6 +6388,7 @@ class CrownUnlimited(commands.Cog):
                                 await private_channel.send(embed=embedVar)
                                 turn=0
                     except asyncio.TimeoutError:
+                        db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                         await private_channel.send(f"{ctx.author.mention}, boss fight has ended.")
                         if private_channel.guild:
                             await discord.TextChannel.delete(private_channel, reason=None)
@@ -6866,8 +6904,10 @@ class CrownUnlimited(commands.Cog):
                     
                             if private_channel.guild:
                                 await private_channel.send(f"{user2.mention} has fled the battle...")
+                                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                                 await discord.TextChannel.delete(private_channel, reason=None)
                             else:
+                                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                                 await private_channel.send(f"You fled the battle...")
                             return
                         if msg.content == "1":
@@ -7187,6 +7227,7 @@ class CrownUnlimited(commands.Cog):
                                 await private_channel.send(embed=embedVar)
                                 turn=2
                     except asyncio.TimeoutError:
+                        db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                         await private_channel.send(f"{ctx.author.mention} {m.STORY_ENDED}")
                         if private_channel.guild:
                             await discord.TextChannel.delete(private_channel, reason=None)
@@ -7634,6 +7675,8 @@ class CrownUnlimited(commands.Cog):
             if private_channel.guild:
                 await discord.TextChannel.delete(private_channel, reason=None)
 
+            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+
         elif t_health <=0:
             uid = o_DID
             ouser = await self.bot.fetch_user(uid)
@@ -7673,10 +7716,19 @@ class CrownUnlimited(commands.Cog):
             if private_channel.guild:
                 await discord.TextChannel.delete(private_channel, reason=None)
 
+            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+
     @commands.command()
     async def dungeon(self, ctx):
         private_channel = ctx
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
+
+        if sowner['AVAILABLE']:
+            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': False}})
+        else:
+            await private_channel.send(m.ALREADY_IN_TALES)
+            return
+
         completed_dungeons = sowner['DUNGEONS']
         all_universes = db.queryAllUniverse()
         available_universes = []
@@ -7687,8 +7739,8 @@ class CrownUnlimited(commands.Cog):
                 
         embedVar = discord.Embed(title=f":fire: CROWN DUNGEONS!", description="Select a Universe!", colour=0xe91e63)
         embedVar.add_field(name="Available Universes", value="\n".join(available_universes))
-        # if completed_dungeons:
-        #     embedVar.add_field(name="Completed Universes", value="\n".join(completed_dungeons))
+        if len(completed_dungeons) > 1:
+            embedVar.add_field(name="Completed Universes", value="\n".join(completed_dungeons))
         embedVar.set_footer(text="Earn drops from the Universes you explore. Conquering Universes unlocks more worlds!")
         await private_channel.send(embed=embedVar)
         accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
@@ -8443,7 +8495,9 @@ class CrownUnlimited(commands.Cog):
                                 if private_channel.guild:
                                     await private_channel.send(f"{ctx.author.mention} has fled the battle...")
                                     await discord.TextChannel.delete(private_channel, reason=None)
+                                    db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                                 else:
+                                    db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                                     await private_channel.send(f"You fled the battle...")
                                 return
                             if msg.content == "1":
@@ -8680,6 +8734,7 @@ class CrownUnlimited(commands.Cog):
                                     await private_channel.send(embed=embedVar)
                                     turn=0
                         except asyncio.TimeoutError:
+                            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                             await private_channel.send(f"{ctx.author.mention} {m.STORY_ENDED}")
                             if private_channel.guild:
                                 await discord.TextChannel.delete(private_channel, reason=None)
@@ -8979,7 +9034,7 @@ class CrownUnlimited(commands.Cog):
                 else: 
                     embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                 await ctx.author.send(embed=embedVar)
-
+                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                 continued = False
                 if private_channel.guild:
                     await discord.TextChannel.delete(private_channel, reason=None)
@@ -9014,6 +9069,7 @@ class CrownUnlimited(commands.Cog):
                             currentopponent = currentopponent + 1
                             continued = True
                         except asyncio.TimeoutError:
+                            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                             await private_channel.send(f"{ctx.author.mention} {m.STORY_ENDED}")
                             if private_channel.guild:
                                 await discord.TextChannel.delete(private_channel, reason=None)
@@ -9040,10 +9096,12 @@ class CrownUnlimited(commands.Cog):
                         await bless(50, ctx.author)
                         await ctx.author.send(embed=embedVar)
                         await ctx.author.send(f"You were awarded :coin: 50 for completing the {selected_universe} Dungeon!")
+                        db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                     else:
                         await bless(800, ctx.author)
                         await main.DM(ctx, ctx.author, embed=embedVar)
                         await ctx.author.send(f"You were awarded :coin: 800 for completing the {selected_universe} Dungeon! ")
+                        db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                     continued=False
                     if private_channel.guild:
                         await discord.TextChannel.delete(private_channel, reason=None)
@@ -9052,6 +9110,13 @@ class CrownUnlimited(commands.Cog):
     async def tales(self, ctx):
         private_channel = ctx
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
+
+        if sowner['AVAILABLE']:
+            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': False}})
+        else:
+            await private_channel.send(m.ALREADY_IN_TALES)
+            return
+
         completed_crown_tales = sowner['CROWN_TALES']
         all_universes = db.queryAllUniverse()
         available_universes = []
@@ -9062,8 +9127,8 @@ class CrownUnlimited(commands.Cog):
                 
         embedVar = discord.Embed(title=f":crown: CROWN TALES!", description="Select a Universe to explore!", colour=0xe91e63)
         embedVar.add_field(name="Available Universes", value="\n".join(available_universes))
-        # if completed_crown_tales:
-        #     embedVar.add_field(name="Completed Universes", value="\n".join(completed_crown_tales))
+        if len(completed_crown_tales) > 1:
+            embedVar.add_field(name="Completed Universes", value="\n".join(completed_crown_tales))
         embedVar.set_footer(text="Earn drops from the Universes you explore. Conquering Universes unlocks more worlds!")
         await private_channel.send(embed=embedVar)
         accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
@@ -9811,8 +9876,10 @@ class CrownUnlimited(commands.Cog):
                         
                                 if private_channel.guild:
                                     await private_channel.send(f"{ctx.author.mention} has fled the battle...")
+                                    db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                                     await discord.TextChannel.delete(private_channel, reason=None)
                                 else:
+                                    db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                                     await private_channel.send(f"You fled the battle...")
                                 return
                             if msg.content == "1":
@@ -10049,6 +10116,7 @@ class CrownUnlimited(commands.Cog):
                                     await private_channel.send(embed=embedVar)
                                     turn=0
                         except asyncio.TimeoutError:
+                            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                             await private_channel.send(f"{ctx.author.mention} {m.STORY_ENDED}")
                             if private_channel.guild:
                                 await discord.TextChannel.delete(private_channel, reason=None)
@@ -10356,6 +10424,7 @@ class CrownUnlimited(commands.Cog):
                     embedVar.set_footer(text="The .shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
                     await ctx.author.send(embed=embedVar)
 
+                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                 continued = False
                 if private_channel.guild:
                     await discord.TextChannel.delete(private_channel, reason=None)
@@ -10385,11 +10454,12 @@ class CrownUnlimited(commands.Cog):
                         def check(reaction, user):
                             return user == user1 and str(reaction.emoji) == '👍'
                         try:
-                            reaction, user = await self.bot.wait_for('reaction_add', timeout=45.0, check=check)
+                            reaction, user = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
 
                             currentopponent = currentopponent + 1
                             continued = True
                         except asyncio.TimeoutError:
+                            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                             await private_channel.send(f"{ctx.author.mention} {m.STORY_ENDED}")
                             if private_channel.guild:
                                 await discord.TextChannel.delete(private_channel, reason=None)
@@ -10420,6 +10490,8 @@ class CrownUnlimited(commands.Cog):
                         await bless(500, ctx.author)
                         await main.DM(ctx, ctx.author, embed=embedVar)
                         await ctx.author.send(f"You were awarded :coin: 500 for completing the {selected_universe} Tale! ")
+
+                    db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                     continued=False
                     if private_channel.guild:
                         await discord.TextChannel.delete(private_channel, reason=None)
@@ -10429,6 +10501,12 @@ class CrownUnlimited(commands.Cog):
         private_channel = ctx
         if not args:
             return await ctx.send("Include Boss Universe")
+
+        if sowner['AVAILABLE']:
+            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': False}})
+        else:
+            await private_channel.send(m.ALREADY_IN_TALES)
+            return
 
         
         guild = ctx.guild
@@ -11182,9 +11260,12 @@ class CrownUnlimited(commands.Cog):
                     
                             if private_channel.guild:
                                 await private_channel.send(f"{ctx.author.mention} has fled the battle...")
+                                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                                 await discord.TextChannel.delete(private_channel, reason=None)
                             else:
                                 await private_channel.send(f"You fled the battle...")
+                                return
+                                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                             return
 
                         if msg.content == "1":
@@ -11421,6 +11502,7 @@ class CrownUnlimited(commands.Cog):
                                 await private_channel.send(embed=embedVar)
                                 turn=0
                     except asyncio.TimeoutError:
+                        db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                         await private_channel.send(f"{ctx.author.mention}, boss fight has ended.")
                         if private_channel.guild:
                             await discord.TextChannel.delete(private_channel, reason=None)
@@ -11865,6 +11947,8 @@ class CrownUnlimited(commands.Cog):
             if private_channel.guild:
                 await discord.TextChannel.delete(private_channel, reason=None)
 
+            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+
         elif t_health <=0:
             uid = o_DID
             ouser = await self.bot.fetch_user(uid)
@@ -11901,6 +11985,8 @@ class CrownUnlimited(commands.Cog):
                     await discord.TextChannel.delete(private_channel, reason=None)
             if private_channel.guild:
                 await discord.TextChannel.delete(private_channel, reason=None)
+
+            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
 
     @commands.command()
     async def start(self, ctx):
