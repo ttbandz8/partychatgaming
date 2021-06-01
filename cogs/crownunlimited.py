@@ -2580,7 +2580,7 @@ class CrownUnlimited(commands.Cog):
     async def cdungeon(self, ctx, user: User):
         private_channel = ctx
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
-
+    
         if sowner['AVAILABLE']:
             response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': False}})
         else:
@@ -7855,13 +7855,12 @@ class CrownUnlimited(commands.Cog):
     async def dungeon(self, ctx):
         private_channel = ctx
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
-
+        completed_crown_tales = sowner['CROWN_TALES']
         if sowner['AVAILABLE']:
             response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': False}})
         else:
             await private_channel.send(m.ALREADY_IN_TALES)
             return
-
         completed_dungeons = sowner['DUNGEONS']
         all_universes = db.queryAllUniverse()
         available_universes = []
@@ -7881,7 +7880,7 @@ class CrownUnlimited(commands.Cog):
         def check(msg):
             return msg.author == ctx.author and msg.content in available_universes
         try:
-            msg = await self.bot.wait_for('message', timeout=60.0, check=check)
+            msg = await self.bot.wait_for('message', timeout=15.0, check=check)
             selected_universe = msg.content
             guild = ctx.guild
             if guild:
