@@ -45,6 +45,14 @@ class CrownUnlimited(commands.Cog):
     async def ctales(self, ctx, user: User):
         private_channel = ctx
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
+
+        if sowner['AVAILABLE']:
+            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': False}})
+        else:
+            await private_channel.send(m.ALREADY_IN_TALES)
+            return
+
+
         companion = db.queryUser({'DISNAME': str(user)})
         completed_crown_tales = sowner['CROWN_TALES']
         all_universes = db.queryAllUniverse()
@@ -56,8 +64,8 @@ class CrownUnlimited(commands.Cog):
                 
         embedVar = discord.Embed(title=f":crown: CROWN TALES CO-OP!", description="Select a Universe to explore!", colour=0xe91e63)
         embedVar.add_field(name="Available Universes", value="\n".join(available_universes))
-        # if completed_crown_tales:
-        #     embedVar.add_field(name="Completed Universes", value="\n".join(completed_crown_tales))
+        if len(completed_crown_tales) > 1:
+            embedVar.add_field(name="Completed Universes", value="\n".join(completed_crown_tales))
         embedVar.set_footer(text="Earn drops from the Universes you explore. Conquering Universes unlocks more worlds!\nEnjoy Co-op!")
         await private_channel.send(embed=embedVar)
         accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
@@ -98,10 +106,10 @@ class CrownUnlimited(commands.Cog):
         player_scaling = 0
 
         if universe['PREREQUISITE']:
-            opponent_scaling = 60
+            opponent_scaling = 150
             player_scaling = 5
         else:
-            opponent_scaling = 40
+            opponent_scaling = 70
             player_scaling = 1
 
         legends = [x for x in universe['CROWN_TALES']]
@@ -2573,8 +2581,8 @@ class CrownUnlimited(commands.Cog):
                 
         embedVar = discord.Embed(title=f":crown: CROWN DUNGEONS CO-OP!", description="Select a Universe to explore!", colour=0xe91e63)
         embedVar.add_field(name="Available Universes", value="\n".join(available_universes))
-        # if completed_crown_tales:
-        #     embedVar.add_field(name="Completed Universes", value="\n".join(completed_crown_tales))
+        if len(completed_crown_tales) > 1:
+            embedVar.add_field(name="Completed Universes", value="\n".join(completed_crown_tales))
         embedVar.set_footer(text="Earn drops from the Universes you explore. Conquering Universes unlocks more worlds!\nEnjoy Co-op!")
         await private_channel.send(embed=embedVar)
         accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
@@ -2615,10 +2623,10 @@ class CrownUnlimited(commands.Cog):
         player_scaling = 0
 
         if universe['PREREQUISITE']:
-            opponent_scaling = 60
+            opponent_scaling = 250
             player_scaling = 5
         else:
-            opponent_scaling = 40
+            opponent_scaling = 250
             player_scaling = 1
 
         legends = [x for x in universe['CROWN_TALES']]
@@ -7829,8 +7837,8 @@ class CrownUnlimited(commands.Cog):
                 
         embedVar = discord.Embed(title=f":fire: CROWN DUNGEONS!", description="Select a Universe!", colour=0xe91e63)
         embedVar.add_field(name="Available Universes", value="\n".join(available_universes))
-        # if completed_dungeons:
-        #     embedVar.add_field(name="Completed Universes", value="\n".join(completed_dungeons))
+        if len(completed_crown_tales) > 1:
+            embedVar.add_field(name="Completed Universes", value="\n".join(completed_crown_tales))
         embedVar.set_footer(text="Earn drops from the Universes you explore. Conquering Universes unlocks more worlds!")
         await private_channel.send(embed=embedVar)
         accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
@@ -7868,10 +7876,10 @@ class CrownUnlimited(commands.Cog):
         player_scaling = 0
 
         if universe['PREREQUISITE']:
-            opponent_scaling = 90
+            opponent_scaling = 200
             player_scaling = 0
         else:
-            opponent_scaling = 90
+            opponent_scaling = 200
             player_scaling = 0
 
         legends = [x for x in universe['CROWN_TALES']]
@@ -7959,13 +7967,13 @@ class CrownUnlimited(commands.Cog):
             t_card = t['NAME']
             t_card_path=t['PATH']
             t_rcard_path=t['RPATH']
-            t_max_health = t['HLT'] + (100 * currentopponent)
-            t_health = t['HLT'] + (100 * currentopponent)
+            t_max_health = t['HLT'] + (100 * currentopponent) + opponent_scaling
+            t_health = t['HLT'] + (100 * currentopponent) + opponent_scaling
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
-            t_attack = t['ATK'] + (15 * currentopponent)
-            t_defense = t['DEF'] + (10 * currentopponent)
+            t_attack = t['ATK'] + (15 * currentopponent) + opponent_scaling
+            t_defense = t['DEF'] + (10 * currentopponent) + opponent_scaling
             t_type = t['TYPE']
             t_accuracy = t['ACC']
             t_passive = t['PASS'][0]
@@ -9208,8 +9216,8 @@ class CrownUnlimited(commands.Cog):
                 
         embedVar = discord.Embed(title=f":crown: CROWN TALES!", description="Select a Universe to explore!", colour=0xe91e63)
         embedVar.add_field(name="Available Universes", value="\n".join(available_universes))
-        # if completed_crown_tales:
-        #     embedVar.add_field(name="Completed Universes", value="\n".join(completed_crown_tales))
+        if len(completed_crown_tales) > 1:
+            embedVar.add_field(name="Completed Universes", value="\n".join(completed_crown_tales))
         embedVar.set_footer(text="Earn drops from the Universes you explore. Conquering Universes unlocks more worlds!")
         await private_channel.send(embed=embedVar)
         accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
@@ -9247,10 +9255,10 @@ class CrownUnlimited(commands.Cog):
         player_scaling = 0
 
         if universe['PREREQUISITE']:
-            opponent_scaling = 18
+            opponent_scaling = 30
             player_scaling = 5
         else:
-            opponent_scaling = 6
+            opponent_scaling = 20
             player_scaling = 1
 
         legends = [x for x in universe['CROWN_TALES']]
@@ -9339,8 +9347,8 @@ class CrownUnlimited(commands.Cog):
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
-            t_attack = t['ATK'] + (10 * currentopponent)
-            t_defense = t['DEF'] + (5 * currentopponent)
+            t_attack = t['ATK'] + (10 * currentopponent) + opponent_scaling
+            t_defense = t['DEF'] + (5 * currentopponent) + opponent_scaling
             t_type = t['TYPE']
             t_accuracy = t['ACC']
             t_passive = t['PASS'][0]
