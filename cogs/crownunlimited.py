@@ -12589,8 +12589,8 @@ class CrownUnlimited(commands.Cog):
                         t_attack = t_attack - int((.10 * o_title_passive_value))
                         t_defense = t_defense - int((.10 * o_title_passive_value))
                     elif t_title_passive_type == 'GAMBLE':
-                        t_health = 150
-                        o_health = 150
+                        t_health = o_title_passive_value
+                        o_health = o_title_passive_value
 
                 # Arm Passive Player 1
                 oarm_passive_type = list(oarm_passive.keys())[0]
