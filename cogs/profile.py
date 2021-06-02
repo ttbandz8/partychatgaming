@@ -140,7 +140,7 @@ class Profile(commands.Cog):
             passive_num = list(o_passive.values())[0]
             passive_type = list(o_passive.values())[1]
 
-            embedVar = discord.Embed(title=f"{o_card}".format(self), colour=000000)
+            embedVar = discord.Embed(title=f"{title_name} {o_card} and {active_pet['NAME']}:".format(self), colour=000000)
             embedVar.add_field(name=f"TITLE", value=f"`{title_name}`: Increase `{title_passive_type}` by `{title_passive_value}`")
             embedVar.add_field(name=f"ARM", value=f"`{arm_name}`: Increase `{arm_passive_type}` by `{arm_passive_value}`")
             embedVar.add_field(name=f"PET", value=f"`{active_pet['NAME']}`: Increase `{active_pet['TYPE']}` by `{pet_ability_power}`")
