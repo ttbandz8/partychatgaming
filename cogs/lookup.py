@@ -293,7 +293,7 @@ class Lookup(commands.Cog):
 
             await ctx.send(embed=embedVar)
         else:
-            await ctx.send(m.SESSION_DOES_NOT_EXIST, delete_after=5)
+            await ctx.send(m.SESSION_DOES_NOT_EXIST)
 
     @commands.command()
     async def check(self, ctx, user: User):
