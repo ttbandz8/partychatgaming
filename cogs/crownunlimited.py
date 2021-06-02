@@ -52,6 +52,7 @@ class CrownUnlimited(commands.Cog):
             await private_channel.send(m.ALREADY_IN_TALES)
             return
 
+
         companion = db.queryUser({'DISNAME': str(user)})
         completed_crown_tales = sowner['CROWN_TALES']
         all_universes = db.queryAllUniverse()
@@ -89,7 +90,6 @@ class CrownUnlimited(commands.Cog):
                 await private_channel.send(f'{ctx.author.mention} Good luck!')
             
         except:
-            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
             embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", colour=0xe91e63)
             await private_channel.send(embed=embedVar)
             return
@@ -128,7 +128,7 @@ class CrownUnlimited(commands.Cog):
             ctitle = db.queryTitle({'TITLE': companion['TITLE']})
             
             t = db.queryCard({'NAME': legends[currentopponent]})
-            ttitle = db.queryTitle({'TITLE': universe['UTITLE']})
+            ttitle = db.queryTitle({'TITLE': 'Starter'})
 
             #################################################################### PLAYER DATA
             # Player 1 Data
@@ -252,7 +252,7 @@ class CrownUnlimited(commands.Cog):
 
             # Player 2 Data
             t_user = boss
-            tarm = db.queryArm({'ARM': universe['UARM']})
+            tarm = db.queryArm({'ARM': 'Stock'})
             tarm_passive = tarm['ABILITIES'][0]
             tarm_name=tarm['ARM']
             t_card = t['NAME']
@@ -469,22 +469,22 @@ class CrownUnlimited(commands.Cog):
                 c_attack = c_attack + int(carm_passive_value)
             elif carm_passive_type == 'DEF':
                 c_defense = c_defense + int(carm_passive_value)
-            elif carm_passive_type == 'STAM':
+            elif oarm_passive_type == 'STAM':
                 c_stamina = c_stamina + int(carm_passive_value)
-            elif carm_passive_type == 'HLT':
+            elif oarm_passive_type == 'HLT':
                 c_health = c_health + int(carm_passive_value)
             elif carm_passive_type == 'LIFE':
                 c_health = c_health + round(int(carm_passive_value) + (.10 * t_health))
-            elif carm_passive_type == 'DRAIN':
+            elif oarm_passive_type == 'DRAIN':
                 c_stamina = c_stamina + int(carm_passive_value)
             elif carm_passive_type == 'FLOG':
                 c_attack = c_attack + int((.20 *carm_passive_value))
-            elif carm_passive_type == 'WITHER':
+            elif oarm_passive_type == 'WITHER':
                 c_defense = c_defense + int((.20 *carm_passive_value))
             elif carm_passive_type == 'RAGE':
                 c_attack = c_attack + int((.20 * carm_passive_value))
                 c_defense = c_defense - int((.20 *carm_passive_value))
-            elif carm_passive_type == 'BRACE':            
+            elif oarm_passive_type == 'BRACE':            
                 c_defense = c_defense + int((.20 *carm_passive_value))
                 c_attack = c_attack - int((.20 * carm_passive_value))
             elif carm_passive_type == 'BZRK':            
@@ -497,7 +497,7 @@ class CrownUnlimited(commands.Cog):
                 c_attack = c_attack + int((.10 * carm_passive_value))
                 c_defense = c_defense + int((.10 * carm_passive_value))
                 c_max_health = c_max_health - int((.10 * carm_passive_value))
-            elif carm_passive_type == 'STANCE':
+            elif oarm_passive_type == 'STANCE':
                 tempattack = c_attack + carm_passive_value
                 c_attack = c_defense  + carm_passive_value         
                 c_defense = tempattack
@@ -1149,10 +1149,8 @@ class CrownUnlimited(commands.Cog):
                         
                                 if private_channel.guild:
                                     await private_channel.send(f"{ctx.author.mention} has fled the battle...")
-                                    db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                                     await discord.TextChannel.delete(private_channel, reason=None)
                                 else:
-                                    db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                                     await private_channel.send(f"You fled the battle...")
                                 return
                             if msg.content == "1":
@@ -1327,7 +1325,7 @@ class CrownUnlimited(commands.Cog):
                                         c_health = round(c_health - dmg['DMG'])
                                         c_defense = round(c_defense +(.10 * dmg['DMG']))
                                     elif comp_enh == 'GROWTH':
-                                        c_max_health = round(c_max_health - dmg['DMG'])
+                                        c_max_health = round(c_max_health - (c_max_health * dmg['DMG']))
                                         c_defense = round(c_defense + dmg['DMG'])
                                         c_attack = round(c_attack + dmg['DMG'])
                                     elif comp_enh == 'STANCE':
@@ -1411,7 +1409,7 @@ class CrownUnlimited(commands.Cog):
                                             o_health = round(o_health - dmg['DMG'])
                                             o_defense = round(o_defense +(.10 * dmg['DMG']))
                                         elif enh_type == 'GROWTH':
-                                            o_max_health = round(o_max_health - dmg['DMG'])
+                                            o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
                                             o_defense = round(o_defense + dmg['DMG'])
                                             o_attack = round(o_attack + dmg['DMG'])
                                         elif enh_type == 'STANCE':
@@ -1475,7 +1473,6 @@ class CrownUnlimited(commands.Cog):
                                     await private_channel.send(embed=embedVar)
                                     turn=0
                         except asyncio.TimeoutError:
-                            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                             await private_channel.send(f"{ctx.author.mention} {m.STORY_ENDED}")
                             if private_channel.guild:
                                 await discord.TextChannel.delete(private_channel, reason=None)
@@ -1696,7 +1693,7 @@ class CrownUnlimited(commands.Cog):
                                         t_health = round(t_health - dmg['DMG'])
                                         t_defense = round(t_defense + (.10 * dmg['DMG']))
                                     elif enh_type == 'GROWTH':
-                                        t_max_health = round(t_max_health - dmg['DMG'])
+                                        t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
                                         t_defense = round(t_defense + dmg['DMG'])
                                         t_attack = round(t_attack + dmg['DMG'])
                                     elif enh_type == 'STANCE':
@@ -1843,9 +1840,7 @@ class CrownUnlimited(commands.Cog):
                         def check(msg):
                             if private_channel.guild:
                                 return msg.author == user2 and msg.channel == private_channel and msg.content in options
-                                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                             else:
-                                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                                 return msg.author == ctx.author and msg.content in options
                         try:
                             msg = await self.bot.wait_for("message",timeout=120.0, check=check)
@@ -2032,7 +2027,7 @@ class CrownUnlimited(commands.Cog):
                                         o_health = round(o_health - dmg['DMG'])
                                         o_defense = round(o_defense +(.10 * dmg['DMG']))
                                     elif cenh_type == 'GROWTH':
-                                        o_max_health = round(o_max_health - dmg['DMG'])
+                                        o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
                                         o_defense = round(o_defense + dmg['DMG'])
                                         o_attack = round(o_attack + dmg['DMG'])
                                     elif cenh_type == 'STANCE':
@@ -2117,7 +2112,7 @@ class CrownUnlimited(commands.Cog):
                                             c_health = round(c_health - dmg['DMG'])
                                             c_defense = round(c_defense +(.10 * dmg['DMG']))
                                         elif enh_type == 'GROWTH':
-                                            c_max_health = round(c_max_health - dmg['DMG'])
+                                            c_max_health = round(c_max_health - (c_max_health * dmg['DMG']))
                                             c_defense = round(c_defense + dmg['DMG'])
                                             c_attack = round(c_attack + dmg['DMG'])
                                         elif enh_type == 'STANCE':
@@ -2181,7 +2176,6 @@ class CrownUnlimited(commands.Cog):
                                     await private_channel.send(embed=embedVar)
                                     turn=2
                         except asyncio.TimeoutError:
-                            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                             await private_channel.send(f"{ctx.author.mention} {m.STORY_ENDED}")
                             if private_channel.guild:
                                 await discord.TextChannel.delete(private_channel, reason=None)
@@ -2403,7 +2397,7 @@ class CrownUnlimited(commands.Cog):
                                         t_health = round(t_health - dmg['DMG'])
                                         t_defense = round(t_defense + (.10 * dmg['DMG']))
                                     elif enh_type == 'GROWTH':
-                                        t_max_health = round(t_max_health - dmg['DMG'])
+                                        t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
                                         t_defense = round(t_defense + dmg['DMG'])
                                         t_attack = round(t_attack + dmg['DMG'])
                                     elif enh_type == 'STANCE':
@@ -2468,7 +2462,7 @@ class CrownUnlimited(commands.Cog):
             else:
                 end_message="Try Again"
             # End the match
-            if (o_health <= 0 or c_health <= 0):
+            if (o_health <= 0 or c_health <= 0) or (o_max_health <=0 or c_max_health <= 0):
                 # await private_channel.send(f":zap: {user2.mention} you win the match!")
                 wintime = time.asctime()
                 h_playtime = int(wintime[11:13])
@@ -2496,10 +2490,7 @@ class CrownUnlimited(commands.Cog):
                 continued = False
                 if private_channel.guild:
                     await discord.TextChannel.delete(private_channel, reason=None)
-
-                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
-
-            elif t_health <=0:
+            elif t_health <=0 or t_max_health <= 0:
                 
                 uid = o_DID
                 ouser = await self.bot.fetch_user(uid)
@@ -2573,19 +2564,11 @@ class CrownUnlimited(commands.Cog):
                     continued=False
                     if private_channel.guild:
                         await discord.TextChannel.delete(private_channel, reason=None)
-                
-                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
 
     @commands.command()
     async def cdungeon(self, ctx, user: User):
         private_channel = ctx
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
-    
-        if sowner['AVAILABLE']:
-            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': False}})
-        else:
-            await private_channel.send(m.ALREADY_IN_TALES)
-            return
         companion = db.queryUser({'DISNAME': str(user)})
 
         completed_crown_tales = sowner['CROWN_TALES']
@@ -2624,7 +2607,6 @@ class CrownUnlimited(commands.Cog):
                 await private_channel.send(f'{ctx.author.mention} Good luck!')
             
         except:
-            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
             embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", colour=0xe91e63)
             await private_channel.send(embed=embedVar)
             return
@@ -2660,7 +2642,7 @@ class CrownUnlimited(commands.Cog):
             otitle = db.queryTitle({'TITLE': sowner['TITLE']})
             
             t = db.queryCard({'NAME': legends[currentopponent]})
-            ttitle = db.queryTitle({'TITLE': universe['DTITLE']})
+            ttitle = db.queryTitle({'TITLE': 'Starter'})
 
             c = db.queryCard({'NAME': companion['CARD']})
             ctitle = db.queryTitle({'TITLE': companion['TITLE']})
@@ -2786,7 +2768,7 @@ class CrownUnlimited(commands.Cog):
 
             # Player 2 Data
             t_user = boss
-            tarm = db.queryArm({'ARM': universe['DARM']})
+            tarm = db.queryArm({'ARM': 'Stock'})
             tarm_passive = tarm['ABILITIES'][0]
             tarm_name=tarm['ARM']
             t_card = t['NAME']
@@ -2797,8 +2779,8 @@ class CrownUnlimited(commands.Cog):
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
-            t_attack = t['ATK'] + (20 * currentopponent) + opponent_scaling + 40
-            t_defense = t['DEF'] + (15 * currentopponent) + opponent_scaling + 50
+            t_attack = t['ATK'] + (20 * currentopponent) + opponent_scaling
+            t_defense = t['DEF'] + (15 * currentopponent) + opponent_scaling
             t_type = t['TYPE']
             t_accuracy = t['ACC']
             t_passive = t['PASS'][0]
@@ -3003,13 +2985,13 @@ class CrownUnlimited(commands.Cog):
                 c_attack = c_attack + int(carm_passive_value)
             elif carm_passive_type == 'DEF':
                 c_defense = c_defense + int(carm_passive_value)
-            elif carm_passive_type == 'STAM':
+            elif oarm_passive_type == 'STAM':
                 c_stamina = c_stamina + int(carm_passive_value)
-            elif carm_passive_type == 'HLT':
+            elif oarm_passive_type == 'HLT':
                 c_health = c_health + int(carm_passive_value)
             elif carm_passive_type == 'LIFE':
                 c_health = c_health + round(int(carm_passive_value) + (.10 * t_health))
-            elif carm_passive_type == 'DRAIN':
+            elif oarm_passive_type == 'DRAIN':
                 c_stamina = c_stamina + int(carm_passive_value)
             elif carm_passive_type == 'FLOG':
                 c_attack = c_attack + int((.20 *carm_passive_value))
@@ -3031,7 +3013,7 @@ class CrownUnlimited(commands.Cog):
                 c_attack = c_attack + int((.10 * carm_passive_value))
                 c_defense = c_defense + int((.10 * carm_passive_value))
                 c_max_health = c_max_health - int((.10 * carm_passive_value))
-            elif carm_passive_type == 'STANCE':
+            elif oarm_passive_type == 'STANCE':
                 tempattack = c_attack + carm_passive_value
                 c_attack = c_defense  + carm_passive_value         
                 c_defense = tempattack
@@ -3683,10 +3665,8 @@ class CrownUnlimited(commands.Cog):
                         
                                 if private_channel.guild:
                                     await private_channel.send(f"{ctx.author.mention} has fled the battle...")
-                                    db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                                     await discord.TextChannel.delete(private_channel, reason=None)
                                 else:
-                                    db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                                     await private_channel.send(f"You fled the battle...")
                                 return
                             if msg.content == "1":
@@ -3861,7 +3841,7 @@ class CrownUnlimited(commands.Cog):
                                         c_health = round(c_health - dmg['DMG'])
                                         c_defense = round(c_defense +(.10 * dmg['DMG']))
                                     elif comp_enh == 'GROWTH':
-                                        c_max_health = round(c_max_health - dmg['DMG'])
+                                        c_max_health = round(c_max_health - (c_max_health * dmg['DMG']))
                                         c_defense = round(c_defense + dmg['DMG'])
                                         c_attack = round(c_attack + dmg['DMG'])
                                     elif comp_enh == 'STANCE':
@@ -3945,7 +3925,7 @@ class CrownUnlimited(commands.Cog):
                                             o_health = round(o_health - dmg['DMG'])
                                             o_defense = round(o_defense +(.10 * dmg['DMG']))
                                         elif enh_type == 'GROWTH':
-                                            o_max_health = round(o_max_health - dmg['DMG'])
+                                            o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
                                             o_defense = round(o_defense + dmg['DMG'])
                                             o_attack = round(o_attack + dmg['DMG'])
                                         elif enh_type == 'STANCE':
@@ -4009,7 +3989,6 @@ class CrownUnlimited(commands.Cog):
                                     await private_channel.send(embed=embedVar)
                                     turn=0
                         except asyncio.TimeoutError:
-                            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                             await private_channel.send(f"{ctx.author.mention} {m.STORY_ENDED}")
                             if private_channel.guild:
                                 await discord.TextChannel.delete(private_channel, reason=None)
@@ -4230,7 +4209,7 @@ class CrownUnlimited(commands.Cog):
                                         t_health = round(t_health - dmg['DMG'])
                                         t_defense = round(t_defense + (.10 * dmg['DMG']))
                                     elif enh_type == 'GROWTH':
-                                        t_max_health = round(t_max_health - dmg['DMG'])
+                                        t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
                                         t_defense = round(t_defense + dmg['DMG'])
                                         t_attack = round(t_attack + dmg['DMG'])
                                     elif enh_type == 'STANCE':
@@ -4388,10 +4367,8 @@ class CrownUnlimited(commands.Cog):
                         
                                 if private_channel.guild:
                                     await private_channel.send(f"{user2.mention} has fled the battle...")
-                                    db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                                     await discord.TextChannel.delete(private_channel, reason=None)
                                 else:
-                                    db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                                     await private_channel.send(f"You fled the battle...")
                                 return
                             if msg.content == "1":
@@ -4566,7 +4543,7 @@ class CrownUnlimited(commands.Cog):
                                         o_health = round(o_health - dmg['DMG'])
                                         o_defense = round(o_defense +(.10 * dmg['DMG']))
                                     elif cenh_type == 'GROWTH':
-                                        o_max_health = round(o_max_health - dmg['DMG'])
+                                        o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
                                         o_defense = round(o_defense + dmg['DMG'])
                                         o_attack = round(o_attack + dmg['DMG'])
                                     elif cenh_type == 'STANCE':
@@ -4651,7 +4628,7 @@ class CrownUnlimited(commands.Cog):
                                             c_health = round(c_health - dmg['DMG'])
                                             c_defense = round(c_defense +(.10 * dmg['DMG']))
                                         elif enh_type == 'GROWTH':
-                                            c_max_health = round(c_max_health - dmg['DMG'])
+                                            c_max_health = round(c_max_health - (c_max_health * dmg['DMG']))
                                             c_defense = round(c_defense + dmg['DMG'])
                                             c_attack = round(c_attack + dmg['DMG'])
                                         elif enh_type == 'STANCE':
@@ -4715,7 +4692,6 @@ class CrownUnlimited(commands.Cog):
                                     await private_channel.send(embed=embedVar)
                                     turn=2
                         except asyncio.TimeoutError:
-                            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                             await private_channel.send(f"{ctx.author.mention} {m.STORY_ENDED}")
                             if private_channel.guild:
                                 await discord.TextChannel.delete(private_channel, reason=None)
@@ -4937,7 +4913,7 @@ class CrownUnlimited(commands.Cog):
                                         t_health = round(t_health - dmg['DMG'])
                                         t_defense = round(t_defense + (.10 * dmg['DMG']))
                                     elif enh_type == 'GROWTH':
-                                        t_max_health = round(t_max_health - dmg['DMG'])
+                                        t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
                                         t_defense = round(t_defense + dmg['DMG'])
                                         t_attack = round(t_attack + dmg['DMG'])
                                     elif enh_type == 'STANCE':
@@ -5002,7 +4978,7 @@ class CrownUnlimited(commands.Cog):
             else:
                 end_message="Try Again"
             # End the match
-            if (o_health <= 0 or c_health <= 0):
+            if (o_health <= 0 or c_health <= 0) or (o_max_health <= 0 or c_max_health <= 0):
                 # await private_channel.send(f":zap: {user2.mention} you win the match!")
                 wintime = time.asctime()
                 h_playtime = int(wintime[11:13])
@@ -5030,9 +5006,7 @@ class CrownUnlimited(commands.Cog):
                 continued = False
                 if private_channel.guild:
                     await discord.TextChannel.delete(private_channel, reason=None)
-                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
-
-            elif t_health <=0:
+            elif t_health <=0 or t_max_health <= 0:
                 
                 uid = o_DID
                 ouser = await self.bot.fetch_user(uid)
@@ -5099,8 +5073,6 @@ class CrownUnlimited(commands.Cog):
                     continued=False
                     if private_channel.guild:
                         await discord.TextChannel.delete(private_channel, reason=None)
-
-                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
 
     @commands.command()
     async def cboss(self, ctx, user: User, *args):
@@ -6347,7 +6319,7 @@ class CrownUnlimited(commands.Cog):
                                     c_health = round(c_health - dmg['DMG'])
                                     c_defense = round(c_defense +(.10 * dmg['DMG']))
                                 elif comp_enh == 'GROWTH':
-                                    c_max_health = round(c_max_health - dmg['DMG'])
+                                    c_max_health = round(c_max_health - (c_max_health * dmg['DMG']))
                                     c_defense = round(c_defense + dmg['DMG'])
                                     c_attack = round(c_attack + dmg['DMG'])
                                 elif comp_enh == 'STANCE':
@@ -6431,7 +6403,7 @@ class CrownUnlimited(commands.Cog):
                                         o_health = round(o_health - dmg['DMG'])
                                         o_defense = round(o_defense +(.10 * dmg['DMG']))
                                     elif enh_type == 'GROWTH':
-                                        o_max_health = round(o_max_health - dmg['DMG'])
+                                        o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
                                         o_defense = round(o_defense + dmg['DMG'])
                                         o_attack = round(o_attack + dmg['DMG'])
                                     elif enh_type == 'STANCE':
@@ -6859,7 +6831,7 @@ class CrownUnlimited(commands.Cog):
                                     t_health = round(t_health - dmg['DMG'])
                                     t_defense = round(t_defense + (.10 * dmg['DMG']))
                                 elif enh_type == 'GROWTH':
-                                    t_max_health = round(t_max_health - dmg['DMG'])
+                                    t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
                                     t_defense = round(t_defense + dmg['DMG'])
                                     t_attack = round(t_attack + dmg['DMG'])
                                 elif enh_type == 'STANCE':
@@ -7202,7 +7174,7 @@ class CrownUnlimited(commands.Cog):
                                     o_health = round(o_health - dmg['DMG'])
                                     o_defense = round(o_defense +(.10 * dmg['DMG']))
                                 elif cenh_type == 'GROWTH':
-                                    o_max_health = round(o_max_health - dmg['DMG'])
+                                    o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
                                     o_defense = round(o_defense + dmg['DMG'])
                                     o_attack = round(o_attack + dmg['DMG'])
                                 elif cenh_type == 'STANCE':
@@ -7287,7 +7259,7 @@ class CrownUnlimited(commands.Cog):
                                         c_health = round(c_health - dmg['DMG'])
                                         c_defense = round(c_defense +(.10 * dmg['DMG']))
                                     elif enh_type == 'GROWTH':
-                                        c_max_health = round(c_max_health - dmg['DMG'])
+                                        c_max_health = round(c_max_health - (c_max_health * dmg['DMG']))
                                         c_defense = round(c_defense + dmg['DMG'])
                                         c_attack = round(c_attack + dmg['DMG'])
                                     elif enh_type == 'STANCE':
@@ -7675,7 +7647,6 @@ class CrownUnlimited(commands.Cog):
                     if int(aiMove) !=5 and int(aiMove) !=6:
                         # If you have enough stamina for move, use it
                         if dmg['CAN_USE_MOVE']:
-
                             if dmg['ENHANCE']:
                                 enh_type= dmg['ENHANCED_TYPE']
                                 if enh_type == 'ATK':
@@ -7715,7 +7686,7 @@ class CrownUnlimited(commands.Cog):
                                     t_health = round(t_health - dmg['DMG'])
                                     t_defense = round(t_defense + (.10 * dmg['DMG']))
                                 elif enh_type == 'GROWTH':
-                                    t_max_health = round(t_max_health - dmg['DMG'])
+                                    t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
                                     t_defense = round(t_defense + dmg['DMG'])
                                     t_attack = round(t_attack + dmg['DMG'])
                                 elif enh_type == 'STANCE':
@@ -7785,7 +7756,7 @@ class CrownUnlimited(commands.Cog):
                             turn = 0
 
         # End the match
-        if o_health <= 0 or c_health <= 0:
+        if o_health <= 0 or c_health <= 0 or o_max_health <= 0 or c_max_health <= 0:
             # await private_channel.send(f":zap: {user2.mention} you win the match!")
             wintime = time.asctime()
             h_playtime = int(wintime[11:13])
@@ -7812,7 +7783,7 @@ class CrownUnlimited(commands.Cog):
             if private_channel.guild:
                 await discord.TextChannel.delete(private_channel, reason=None)
 
-        elif t_health <=0:
+        elif t_health <=0 or t_max_health <= 0:
             uid = o_DID
             ouser = await self.bot.fetch_user(uid)
             wintime = time.asctime()
@@ -7855,12 +7826,6 @@ class CrownUnlimited(commands.Cog):
     async def dungeon(self, ctx):
         private_channel = ctx
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
-        completed_crown_tales = sowner['CROWN_TALES']
-        if sowner['AVAILABLE']:
-            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': False}})
-        else:
-            await private_channel.send(m.ALREADY_IN_TALES)
-            return
         completed_dungeons = sowner['DUNGEONS']
         all_universes = db.queryAllUniverse()
         available_universes = []
@@ -7880,7 +7845,7 @@ class CrownUnlimited(commands.Cog):
         def check(msg):
             return msg.author == ctx.author and msg.content in available_universes
         try:
-            msg = await self.bot.wait_for('message', timeout=15.0, check=check)
+            msg = await self.bot.wait_for('message', timeout=60.0, check=check)
             selected_universe = msg.content
             guild = ctx.guild
             if guild:
@@ -7894,7 +7859,6 @@ class CrownUnlimited(commands.Cog):
                 await private_channel.send(f'{ctx.author.mention} Good luck!')
             
         except:
-            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
             embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", colour=0xe91e63)
             await private_channel.send(embed=embedVar)
             return
@@ -7929,7 +7893,7 @@ class CrownUnlimited(commands.Cog):
             otitle = db.queryTitle({'TITLE': sowner['TITLE']})
             
             t = db.queryCard({'NAME': legends[currentopponent]})
-            ttitle = db.queryTitle({'TITLE': universe['DTITLE']})
+            ttitle = db.queryTitle({'TITLE': 'Starter'})
 
             ####################################################################
             # Player Data
@@ -7996,7 +7960,7 @@ class CrownUnlimited(commands.Cog):
 
             # Player 2 Data
             t_user = boss
-            tarm = db.queryArm({'ARM': universe['DARM']})
+            tarm = db.queryArm({'ARM': 'Stock'})
             tarm_passive = tarm['ABILITIES'][0]
             tarm_name=tarm['ARM']
             t_card = t['NAME']
@@ -8007,8 +7971,8 @@ class CrownUnlimited(commands.Cog):
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
-            t_attack = t['ATK'] + (15 * currentopponent) + opponent_scaling + 40
-            t_defense = t['DEF'] + (10 * currentopponent) + opponent_scaling + 50
+            t_attack = t['ATK'] + (15 * currentopponent) + opponent_scaling
+            t_defense = t['DEF'] + (10 * currentopponent) + opponent_scaling
             t_type = t['TYPE']
             t_accuracy = t['ACC']
             t_passive = t['PASS'][0]
@@ -8627,10 +8591,8 @@ class CrownUnlimited(commands.Cog):
                         
                                 if private_channel.guild:
                                     await private_channel.send(f"{ctx.author.mention} has fled the battle...")
-                                    db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                                     await discord.TextChannel.delete(private_channel, reason=None)
                                 else:
-                                    db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                                     await private_channel.send(f"You fled the battle...")
                                 return
                             if msg.content == "1":
@@ -8805,7 +8767,7 @@ class CrownUnlimited(commands.Cog):
                                             o_health = round(o_health - dmg['DMG'])
                                             o_defense = round(o_defense +(.10 * dmg['DMG']))
                                         elif enh_type == 'GROWTH':
-                                            o_max_health = round(o_max_health - dmg['DMG'])
+                                            o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
                                             o_defense = round(o_defense + dmg['DMG'])
                                             o_attack = round(o_attack + dmg['DMG'])
                                         elif enh_type == 'STANCE':
@@ -8869,7 +8831,6 @@ class CrownUnlimited(commands.Cog):
                                     await private_channel.send(embed=embedVar)
                                     turn=0
                         except asyncio.TimeoutError:
-                            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                             await private_channel.send(f"{ctx.author.mention} {m.STORY_ENDED}")
                             if private_channel.guild:
                                 await discord.TextChannel.delete(private_channel, reason=None)
@@ -9090,7 +9051,7 @@ class CrownUnlimited(commands.Cog):
                                         t_health = round(t_health - dmg['DMG'])
                                         t_defense = round(t_defense + (.10 * dmg['DMG']))
                                     elif enh_type == 'GROWTH':
-                                        t_max_health = round(t_max_health - dmg['DMG'])
+                                        t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
                                         t_defense = round(t_defense + dmg['DMG'])
                                         t_attack = round(t_attack + dmg['DMG'])
                                     elif enh_type == 'STANCE':
@@ -9154,7 +9115,7 @@ class CrownUnlimited(commands.Cog):
             else:
                 end_message="Try Again"
             # End the match
-            if o_health <= 0:
+            if o_health <= 0 or o_max_health <= 0:
                 # await private_channel.send(f":zap: {user2.mention} you win the match!")
                 wintime = time.asctime()
                 h_playtime = int(wintime[11:13])
@@ -9175,9 +9136,7 @@ class CrownUnlimited(commands.Cog):
                 continued = False
                 if private_channel.guild:
                     await discord.TextChannel.delete(private_channel, reason=None)
-                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
-
-            elif t_health <=0:
+            elif t_health <=0 or t_max_health <= 0:
                 
                 uid = o_DID
                 ouser = await self.bot.fetch_user(uid)
@@ -9242,30 +9201,18 @@ class CrownUnlimited(commands.Cog):
                     if private_channel.guild:
                         await discord.TextChannel.delete(private_channel, reason=None)
 
-                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
-
     @commands.command()
     async def tales(self, ctx):
         private_channel = ctx
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
-
-        if sowner['AVAILABLE']:
-            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': False}})
-        else:
-            await private_channel.send(m.ALREADY_IN_TALES)
-            return
         completed_crown_tales = sowner['CROWN_TALES']
         all_universes = db.queryAllUniverse()
         available_universes = []
-
         selected_universe = ""
         for uni in all_universes:
             if uni['PREREQUISITE'] in sowner['CROWN_TALES']:
                 available_universes.append(uni['TITLE'])
-
-        
-
-
+                
         embedVar = discord.Embed(title=f":crown: CROWN TALES!", description="Select a Universe to explore!", colour=0xe91e63)
         embedVar.add_field(name="Available Universes", value="\n".join(available_universes))
         if len(completed_crown_tales) > 1:
@@ -9291,7 +9238,6 @@ class CrownUnlimited(commands.Cog):
                 await private_channel.send(f'{ctx.author.mention} Good luck!')
             
         except:
-            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
             embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", colour=0xe91e63)
             await private_channel.send(embed=embedVar)
             return
@@ -9326,7 +9272,7 @@ class CrownUnlimited(commands.Cog):
             otitle = db.queryTitle({'TITLE': sowner['TITLE']})
             
             t = db.queryCard({'NAME': legends[currentopponent]})
-            ttitle = db.queryTitle({'TITLE': universe['UTITLE']})
+            ttitle = db.queryTitle({'TITLE': 'Starter'})
 
             #################################################################### PLAYER DATA
             # Player 1 Data
@@ -9389,7 +9335,7 @@ class CrownUnlimited(commands.Cog):
 
             # Player 2 Data
             t_user = boss
-            tarm = db.queryArm({'ARM': universe['UARM']})
+            tarm = db.queryArm({'ARM': 'Stock'})
             tarm_passive = tarm['ABILITIES'][0]
             tarm_name=tarm['ARM']
             t_card = t['NAME']
@@ -10018,10 +9964,8 @@ class CrownUnlimited(commands.Cog):
                         
                                 if private_channel.guild:
                                     await private_channel.send(f"{ctx.author.mention} has fled the battle...")
-                                    db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                                     await discord.TextChannel.delete(private_channel, reason=None)
                                 else:
-                                    db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                                     await private_channel.send(f"You fled the battle...")
                                 return
                             if msg.content == "1":
@@ -10196,7 +10140,7 @@ class CrownUnlimited(commands.Cog):
                                             o_health = round(o_health - dmg['DMG'])
                                             o_defense = round(o_defense +(.10 * dmg['DMG']))
                                         elif enh_type == 'GROWTH':
-                                            o_max_health = round(o_max_health - dmg['DMG'])
+                                            o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
                                             o_defense = round(o_defense + dmg['DMG'])
                                             o_attack = round(o_attack + dmg['DMG'])
                                         elif enh_type == 'STANCE':
@@ -10260,7 +10204,6 @@ class CrownUnlimited(commands.Cog):
                                     await private_channel.send(embed=embedVar)
                                     turn=0
                         except asyncio.TimeoutError:
-                            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                             await private_channel.send(f"{ctx.author.mention} {m.STORY_ENDED}")
                             if private_channel.guild:
                                 await discord.TextChannel.delete(private_channel, reason=None)
@@ -10480,7 +10423,7 @@ class CrownUnlimited(commands.Cog):
                                         t_health = round(t_health - dmg['DMG'])
                                         t_defense = round(t_defense + (.10 * dmg['DMG']))
                                     elif enh_type == 'GROWTH':
-                                        t_max_health = round(t_max_health - dmg['DMG'])
+                                        t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
                                         t_defense = round(t_defense + dmg['DMG'])
                                         t_attack = round(t_attack + dmg['DMG'])
                                     elif enh_type == 'STANCE':
@@ -10544,7 +10487,7 @@ class CrownUnlimited(commands.Cog):
             else:
                 end_message="Try Again"
             # End the match
-            if o_health <= 0:
+            if o_health <= 0 or o_max_health <= 0:
                 # await private_channel.send(f":zap: {user2.mention} you win the match!")
                 wintime = time.asctime()
                 h_playtime = int(wintime[11:13])
@@ -10572,9 +10515,7 @@ class CrownUnlimited(commands.Cog):
                 continued = False
                 if private_channel.guild:
                     await discord.TextChannel.delete(private_channel, reason=None)
-                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
-
-            elif t_health <=0:
+            elif t_health <=0 or t_max_health <= 0:
                 
                 uid = o_DID
                 ouser = await self.bot.fetch_user(uid)
@@ -10638,7 +10579,6 @@ class CrownUnlimited(commands.Cog):
                     continued=False
                     if private_channel.guild:
                         await discord.TextChannel.delete(private_channel, reason=None)
-                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
 
     @commands.command()
     async def boss(self, ctx, *args):
@@ -11576,7 +11516,7 @@ class CrownUnlimited(commands.Cog):
                                         o_health = round(o_health - dmg['DMG'])
                                         o_defense = round(o_defense + dmg['DMG'])
                                     elif enh_type == 'GROWTH':
-                                        o_max_health = round(o_max_health - dmg['DMG'])
+                                        o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
                                         o_defense = round(o_defense + dmg['DMG'])
                                         o_attack = round(o_attack + dmg['DMG'])
                                     elif enh_type == 'STANCE':
@@ -11998,7 +11938,7 @@ class CrownUnlimited(commands.Cog):
                                     t_health = round(t_health - dmg['DMG'])
                                     t_defense = round(t_defense + (.10 * dmg['DMG']))
                                 elif enh_type == 'GROWTH':
-                                    t_max_health = round(t_max_health - dmg['DMG'])
+                                    t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
                                     t_defense = round(t_defense + dmg['DMG'])
                                     t_attack = round(t_attack + dmg['DMG'])
                                 elif enh_type == 'STANCE':
@@ -12058,7 +11998,7 @@ class CrownUnlimited(commands.Cog):
                             await private_channel.send(m.NOT_ENOUGH_STAMINA)
                             turn = 1
         # End the match
-        if o_health <= 0:
+        if o_health <= 0 or o_max_health <= 0:
             # await private_channel.send(f":zap: {user2.mention} you win the match!")
             wintime = time.asctime()
             h_playtime = int(wintime[11:13])
@@ -12085,7 +12025,7 @@ class CrownUnlimited(commands.Cog):
             if private_channel.guild:
                 await discord.TextChannel.delete(private_channel, reason=None)
 
-        elif t_health <=0:
+        elif t_health <=0 or t_max_health <= 0:
             uid = o_DID
             ouser = await self.bot.fetch_user(uid)
             wintime = time.asctime()
@@ -13086,7 +13026,7 @@ class CrownUnlimited(commands.Cog):
                                                 o_health = round(o_health - dmg['DMG'])
                                                 o_defense = round(o_defense +(.10 * dmg['DMG']))
                                             elif enh_type == 'GROWTH':
-                                                o_max_health = round(o_max_health - dmg['DMG'])
+                                                o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
                                                 o_defense = round(o_defense + dmg['DMG'])
                                                 o_attack = round(o_attack + dmg['DMG'])
                                             elif enh_type == 'STANCE':
@@ -13738,7 +13678,7 @@ class CrownUnlimited(commands.Cog):
                                                 t_health = round(t_health - dmg['DMG'])
                                                 t_defense = round(t_defense + (.10 * dmg['DMG']))
                                             elif enh_type == 'GROWTH':
-                                                t_max_health = round(t_max_health - dmg['DMG'])
+                                                t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
                                                 t_defense = round(t_defense + dmg['DMG'])
                                                 t_attack = round(t_attack + dmg['DMG'])
                                             elif enh_type == 'STANCE':
@@ -13807,7 +13747,7 @@ class CrownUnlimited(commands.Cog):
                 else:
                     end_message = "Try Again!"
                 # End the match
-                if o_health <= 0:
+                if o_health <= 0 or o_max_health <= 0:
                     # await ctx.send(f":zap: {user2.mention} you win the match!")
                     uid = t_DID
                     tuser = await self.bot.fetch_user(uid)
@@ -13843,7 +13783,7 @@ class CrownUnlimited(commands.Cog):
                         embedVar.set_footer(text="The #shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
                         await ctx.send(embed=embedVar)
 
-                elif t_health <=0:
+                elif t_health <=0 or t_max_health <= 0:
                     uid = o_DID
                     ouser = await self.bot.fetch_user(uid)
                     wintime = time.asctime()
@@ -13988,7 +13928,7 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
             crystal = ((ap/100) * health )
         elif enh == 'GROWTH':
             enh_type="GROWTH"
-            growth = ((ap/100) * maxhealth )
+            growth = (ap/100)
         elif enh == 'STANCE':
             enh_type="STANCE"
             stance = attack
@@ -14072,20 +14012,29 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
 
     else:
         # Calculate Damage
-        # dmg = ((int(ap) + int(atk)) / op_defense) * (.50 * int(ap))
-        attackpower = (int(atk))
-        defensepower = op_defense
-        dmg = ((attackpower * (100 * (100 / defensepower))) * .001) + int(ap)
-        # dmg = (int(ap)*(100/(100+int(op_defense)))) + int(atk)
-        low = dmg - (dmg * .45)
-        high = dmg + (dmg * .05)
+
+        #dmg = ((int(ap) + int(atk)) / (op_defense + 2) * (.20 * int(ap)))
+        
+        fortitude = ((maxhealth - health) * (2/5))
+        if fortitude <= ap:
+            fortitude = health * (2/5)
+        attackpower = ((int(atk) / 20) * int(ap)) / op_defense
+        modifier = random.randint(7,11)
+        dmg = ((fortitude * attackpower)/100) * modifier
+
+        #dmg = ((attackpower * (100 * (100 / defensepower))) * .001) + int(ap)
+        
+        #dmg = (int(ap)*(100/(100+int(op_defense)))) + int(atk)
+
+        low = dmg - (dmg * .20)
+        high = dmg + (dmg * .10)
 
         true_dmg = random.randint(int(low), int(high))
         message = ""
 
         miss_hit = 1 # Miss
         low_hit = 6 # Lower Damage
-        med_hit = 9 # Medium Damage
+        med_hit = 11 # Medium Damage
         standard_hit = 19 # Standard Damage
         high_hit = 20 # Crit Hit
         hit_roll = random.randint(0,20)
@@ -14095,10 +14044,10 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
             true_dmg=0
             message=f'`{move}` used! It misses!'
         elif hit_roll <=low_hit and hit_roll > miss_hit:
-            true_dmg = round(true_dmg * .75)
+            true_dmg = round(true_dmg * .50)
             message=f'`{move}` used! It chips for {true_dmg}! :anger:'
         elif hit_roll <=med_hit and hit_roll > low_hit:
-            true_dmg = round(true_dmg * .90)
+            true_dmg = round(true_dmg * .75)
             message=f'`{move}` used! It connects for {true_dmg}! :bangbang:'
         elif hit_roll <=standard_hit and hit_roll > med_hit:
             true_dmg = round(true_dmg)
