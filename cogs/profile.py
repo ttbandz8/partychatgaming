@@ -362,7 +362,7 @@ class Profile(commands.Cog):
     async def shop(self, ctx):
         all_universes = db.queryAllUniverse()
         user = db.queryUser({'DISNAME': str(ctx.author)})
-        available_universes = []
+        available_universes = ["Unbound"]
         for uni in all_universes:
             if uni['PREREQUISITE'] in user['CROWN_TALES']:
                 available_universes.append(uni['TITLE'])
