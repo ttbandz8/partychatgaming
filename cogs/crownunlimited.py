@@ -15825,10 +15825,10 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
             true_dmg=0
             message=f'`{move}` used! It misses!'
         elif hit_roll <=low_hit and hit_roll > miss_hit:
-            true_dmg = round(true_dmg * .50)
+            true_dmg = round(true_dmg * .70)
             message=f'`{move}` used! It chips for {true_dmg}! :anger:'
         elif hit_roll <=med_hit and hit_roll > low_hit:
-            true_dmg = round(true_dmg * .75)
+            true_dmg = round(true_dmg * .85)
             message=f'`{move}` used! It connects for {true_dmg}! :bangbang:'
         elif hit_roll <=standard_hit and hit_roll > med_hit:
             true_dmg = round(true_dmg)
