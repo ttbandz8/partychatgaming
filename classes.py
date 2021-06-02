@@ -110,7 +110,6 @@ class TITLES():
     AVAILABLE: bool = field(default_factory=lambda: True)
     EXCLUSIVE: bool = field(default_factory=lambda: False)
 
-
 @dataclass(frozen=True, order=True) 
 class ARM():
     ARM: str
@@ -136,9 +135,6 @@ class PET():
     TIMESTAMP: str = now
     AVAILABLE: bool = field(default_factory=lambda: True)
     EXCLUSIVE: bool = field(default_factory=lambda: False)
-
-
-
 
 @dataclass(frozen=True, order=True) 
 class UNIVERSE():
@@ -168,7 +164,6 @@ class BOSS():
     AVAILABLE: bool = field(default_factory=lambda: True)
     PET: list[str] = field(default_factory=lambda: [{'NAME': 'Chick', 'LVL': 1, 'EXP': 0, 'Glare': 5, 'TYPE': 'HLT', 'BOND': 0, 'PATH': "https://res.cloudinary.com/dkcmq8o15/image/upload/v1622307902/Pets/chick.jpg"}])
    
-
 @dataclass(frozen=True, order=True) 
 class SCORES():
     TOTAL: int
@@ -206,7 +201,7 @@ class VAULT():
     CARDS: list[str] = field(default_factory=lambda: ['Naruto'])
     TITLES: list[str] = field(default_factory=lambda: ['Starter'])
     ARMS: list[str] = field(default_factory=lambda: ['Stock'])
-    PETS: list[str] = field(default_factory=lambda: [{'NAME': 'Chick', 'LVL': 1, 'EXP': 0, 'Glare': 1, 'TYPE': 'FEAR', 'BOND': 0, 'PATH': "https://res.cloudinary.com/dkcmq8o15/image/upload/v1622307902/Pets/chick.jpg"}])
+    PETS: list[str] = field(default_factory=lambda: [{'NAME': 'Chick', 'LVL': 1, 'EXP': 0, 'Heal': 10, 'TYPE': 'HLT', 'BOND': 0, 'PATH': "https://res.cloudinary.com/dkcmq8o15/image/upload/v1622307902/Pets/chick.jpg"}])
     DECK: list[str] = field(default_factory=lambda: [{'CARD': 'Naruto', 'TITLE': 'Starter', 'ARM': 'Stock', 'PET': 'Chick'}, {'CARD': 'Naruto', 'TITLE': 'Starter', 'ARM': 'Stock', 'PET': 'Chick'}, {'CARD': 'Naruto', 'TITLE': 'Starter', 'ARM': 'Stock', 'PET': 'Chick'}])
     
 
