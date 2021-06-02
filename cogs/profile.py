@@ -410,7 +410,7 @@ class Profile(commands.Cog):
         arms = []
         arm_text_list = []
         for arm in arm_resp:
-            if arm['UNIVERSE'] in available_universes:
+            if arm['UNIVERSE'] in available_universes or arm['UNIVERSE'] == 'Unbound':
                 if arm['PRICE'] != 0 and arm['PRICE'] < (vault['BALANCE'] + 500) and arm['AVAILABLE']:
                     if arm['ARM'] not in vault['ARMS']:
                         arms.append({'ARM': arm['ARM'], 'PRICE': arm['PRICE'], 'UNIVERSE': arm['UNIVERSE'], 'STOCK': arm['STOCK']})
