@@ -362,7 +362,7 @@ class Profile(commands.Cog):
     async def shop(self, ctx):
         all_universes = db.queryAllUniverse()
         user = db.queryUser({'DISNAME': str(ctx.author)})
-        available_universes = []
+        available_universes = ["Unbound"]
         for uni in all_universes:
             if uni['PREREQUISITE'] in user['CROWN_TALES']:
                 available_universes.append(uni['TITLE'])
@@ -393,7 +393,7 @@ class Profile(commands.Cog):
         titles = []
         title_text_list = []
         for title in title_resp:
-            if title['UNIVERSE'] in available_universes or title['UNIVERSE'] == 'Unbound':
+            if title['UNIVERSE'] in available_universes:
                 if title['PRICE'] != 0 and title['PRICE'] < (vault['BALANCE'] + 500) and title['AVAILABLE']:
                     if title['TITLE'] not in vault['TITLES']:
                         titles.append({'TITLE': title['TITLE'], 'PRICE': title['PRICE'], 'UNIVERSE': title['UNIVERSE'], 'STOCK': title['STOCK']})
@@ -410,7 +410,7 @@ class Profile(commands.Cog):
         arms = []
         arm_text_list = []
         for arm in arm_resp:
-            if arm['UNIVERSE'] in available_universes or arm['UNIVERSE'] == 'Unbound':
+            if arm['UNIVERSE'] in available_universes:
                 if arm['PRICE'] != 0 and arm['PRICE'] < (vault['BALANCE'] + 500) and arm['AVAILABLE']:
                     if arm['ARM'] not in vault['ARMS']:
                         arms.append({'ARM': arm['ARM'], 'PRICE': arm['PRICE'], 'UNIVERSE': arm['UNIVERSE'], 'STOCK': arm['STOCK']})
