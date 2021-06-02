@@ -2503,7 +2503,7 @@ class CrownUnlimited(commands.Cog):
                 s_playtime = int(wintime[17:19])
                 gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
                 await bless(10, ctx.author)
-                await bless(5, cuser)
+                await bless(10, cuser)
                 drop_response = await drops(ctx.author, selected_universe)
                 if currentopponent != total_legends:
                     
@@ -5015,14 +5015,13 @@ class CrownUnlimited(commands.Cog):
                 m_playtime = int(wintime[14:16])
                 s_playtime = int(wintime[17:19])
                 gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
-                await bless(20, ctx.author)
-                await bless(20, user)
                 drop_response = await dungeondrops(ctx.author, selected_universe)
+                cdrop_response = await dungeondrops(user, selected_universe)
                 if currentopponent != (total_legends - 1):
                     
                     if private_channel.guild:
 
-                        embedVar = discord.Embed(title=f"VICTORY\n`{o_card} says:`\n{o_win_description}", description=f"The game lasted {turn_total} rounds.\n\n{drop_response}\n{c_user['NAME']} earned :coin: 10", colour=0xe91e63)
+                        embedVar = discord.Embed(title=f"VICTORY\n`{o_card} says:`\n{o_win_description}", description=f"The game lasted {turn_total} rounds.\n\n{drop_response}\n{cdrop_response}", colour=0xe91e63)
                         embedVar.set_author(name=f"{t_card} lost!")
                         await private_channel.send(embed=embedVar)
 
@@ -5045,7 +5044,7 @@ class CrownUnlimited(commands.Cog):
                             return
                     else:
 
-                        embedVar = discord.Embed(title=f"VICTORY", description=f"{t_card} has been defeated!\n\n{drop_response}", colour=0xe91e63)
+                        embedVar = discord.Embed(title=f"VICTORY", description=f"{t_card} has been defeated!\n\n{drop_response}\n{cdrop_response}", colour=0xe91e63)
                         embedVar.set_author(name=f"The match lasted {turn_total} rounds.")
                         embedVar.set_footer(text=f"{o_card} says:\n{o_win_description}")
                         await ctx.author.send(embed=embedVar)
@@ -5054,7 +5053,7 @@ class CrownUnlimited(commands.Cog):
                         continued = True
 
                 if currentopponent == (total_legends - 1):
-                    embedVar = discord.Embed(title=f"DUNGEON CONQUERED", description=f"Universe {selected_universe} has been conquered\n\n{drop_response}", colour=0xe91e63)
+                    embedVar = discord.Embed(title=f"DUNGEON CONQUERED", description=f"Universe {selected_universe} has been conquered\n\n{drop_response}\n{cdrop_response}", colour=0xe91e63)
                     embedVar.set_author(name=f"New Universes have been unlocked to explore!")
                     embedVar.add_field(name="Additional Reward", value=f"You earned additional rewards in your vault! Take a look.")
                     embedVar.set_footer(text="The .shop has been updated with new CARDS, TITLES and ARMS!")
