@@ -15685,7 +15685,7 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
             hlt = ap + (.10 * health)
         elif enh == 'LIFE':
             enh_type='LIFE'
-            lifesteal = ap + (.10 * op_health)
+            lifesteal = ap + (.05 * op_health)
         elif enh == 'DRAIN':
             enh_type='DRAIN'
             drain = ap 
