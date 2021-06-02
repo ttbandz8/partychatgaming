@@ -79,10 +79,10 @@ class CARDS():
     TIMESTAMP: str = now
     MOVESET: list[str] = field(default_factory=lambda: [{'MOVE1': 20, "STAM": 10}, {'MOVE2': 50, "STAM": 30}, {'ULTIMATE': 100, "STAM": 80}, {'ENHANCER': 0, "STAM": 20, "TYPE": "TYPE"}])
     RPATH: str = field(default_factory=lambda: "N/A")
-    HLT: int = field(default_factory=lambda: 300)
+    HLT: int = field(default_factory=lambda: 500)
     STAM: int = field(default_factory=lambda: 100) 
-    ATK: int = field(default_factory=lambda: 20)
-    DEF: int = field(default_factory=lambda: 15)
+    ATK: int = field(default_factory=lambda: 25)
+    DEF: int = field(default_factory=lambda: 25)
     TYPE: int = field(default_factory=lambda: 0)
     ACC: float = field(default_factory=lambda: .50)
     PASS: list[str] = field(default_factory=lambda: [{'NAME': 0, 'TYPE': 'TYPE'}])
