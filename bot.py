@@ -408,6 +408,7 @@ async def trade(ctx, user2: User, *args):
             elif p2_trade_item in p2_cards:
                db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'CARDS': str(p1_trade_item)}})
                response = db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$addToSet':{'CARDS': str(p2_trade_item)}})
+               db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'CARD': str(p2_trade_item)}})
                await ctx.send(f"{p2_trade_item} has been added to {ctx.author.mention}'s vault: CARDS")
             elif p2_trade_item in p2_pet_names:
                db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'PETS':{'NAME': str(p1_trade_item)}}})
@@ -426,6 +427,7 @@ async def trade(ctx, user2: User, *args):
             elif p1_trade_item in p1_cards:
                db.updateVaultNoFilter({'OWNER': str(user2)},{'$pull':{'CARDS': str(p2_trade_item)}})
                response = db.updateVaultNoFilter({'OWNER': str(user2)},{'$addToSet':{'CARDS': str(p1_trade_item)}})
+               db.updateUserNoFilter({'DISNAME': str(user2)}, {'$set': {'CARD': str(p1_trade_item)}})
                await ctx.send(f"{p1_trade_item} has been added to {user2.mention}'s vault: CARDS")
             elif p1_trade_item in p1_pet_names:
                db.updateVaultNoFilter({'OWNER': str(user2)},{'$pull':{'PETS':{'NAME': str(p2_trade_item)}}})

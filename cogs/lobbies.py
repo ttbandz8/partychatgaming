@@ -76,6 +76,11 @@ class Lobbies(commands.Cog):
     async def end(self, ctx):
         session_query = {"OWNER": str(ctx.author), "AVAILABLE": True}
         session = db.querySession(session_query)
+
+        if not session:
+            await ctx.send(m.SESSION_DOES_NOT_EXIST)
+            return
+
         teams = [x for x in session['TEAMS']]
         team_1 = teams[0]
         team_2 = teams[1]
