@@ -7835,8 +7835,8 @@ class CrownUnlimited(commands.Cog):
                 
         embedVar = discord.Embed(title=f":fire: CROWN DUNGEONS!", description="Select a Universe!", colour=0xe91e63)
         embedVar.add_field(name="Available Universes", value="\n".join(available_universes))
-        if len(completed_crown_tales) > 1:
-            embedVar.add_field(name="Completed Universes", value="\n".join(completed_crown_tales))
+        if len(completed_dungeons) > 1:
+            embedVar.add_field(name="Completed Universes", value="\n".join(completed_dungeons))
         embedVar.set_footer(text="Earn drops from the Universes you explore. Conquering Universes unlocks more worlds!")
         await private_channel.send(embed=embedVar)
         accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
