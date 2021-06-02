@@ -393,7 +393,7 @@ class Profile(commands.Cog):
         titles = []
         title_text_list = []
         for title in title_resp:
-            if title['UNIVERSE'] in available_universes:
+            if title['UNIVERSE'] in available_universes or title['UNIVERSE'] == 'Unbound':
                 if title['PRICE'] != 0 and title['PRICE'] < (vault['BALANCE'] + 500) and title['AVAILABLE']:
                     if title['TITLE'] not in vault['TITLES']:
                         titles.append({'TITLE': title['TITLE'], 'PRICE': title['PRICE'], 'UNIVERSE': title['UNIVERSE'], 'STOCK': title['STOCK']})
