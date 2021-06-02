@@ -14404,13 +14404,13 @@ async def dungeondrops(player, universe):
     rand_arm = random.randint(0, a)
     rand_pet = random.randint(0, p)
 
-    gold_drop = 239 #
-    title_drop = 240 #
-    arm_drop = 270 #
-    pet_drop = 290 #
-    card_drop = 300 #
+    gold_drop = 339 #
+    title_drop = 340 #
+    arm_drop = 370 #
+    pet_drop = 390 #
+    card_drop = 400 #
 
-    drop_rate = random.randint(0,300)
+    drop_rate = random.randint(0,400)
 
     if drop_rate <= gold_drop:
         await bless(30, player)
