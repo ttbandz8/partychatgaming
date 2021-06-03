@@ -9754,7 +9754,7 @@ class CrownUnlimited(commands.Cog):
                 o_attack = o_attack - int((t_card_passive/1000 * t_health))
                 o_defense = o_defense - int((t_card_passive/1000 * t_health))
             elif t_card_passive_type == 'GAMBLE':
-                t_health = t_card_passive *
+                t_health = t_card_passive * 2
                 o_health = t_card_passive
 
             # Title Passive
