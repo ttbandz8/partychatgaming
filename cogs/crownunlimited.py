@@ -263,8 +263,8 @@ class CrownUnlimited(commands.Cog):
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
-            t_attack = t['ATK'] + (15 * currentopponent) + 15 + opponent_scaling
-            t_defense = t['DEF'] + (15 * currentopponent) + 15 + opponent_scaling
+            t_attack = t['ATK'] + (18 * currentopponent) + 15 + opponent_scaling
+            t_defense = t['DEF'] + (18 * currentopponent) + 15 + opponent_scaling
             t_type = t['TYPE']
             t_accuracy = t['ACC']
             t_passive = t['PASS'][0]
@@ -9297,8 +9297,8 @@ class CrownUnlimited(commands.Cog):
             o_card = o['NAME']
             o_card_path=o['PATH']
             o_rcard_path=o['RPATH']
-            o_max_health = o['HLT']  + (20 * currentopponent)
-            o_health = o['HLT'] + (20 * currentopponent)
+            o_max_health = o['HLT']
+            o_health = o['HLT']
             o_stamina = o['STAM']
             o_max_stamina = o['STAM']
             o_moveset = o['MOVESET']
@@ -9346,7 +9346,7 @@ class CrownUnlimited(commands.Cog):
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
             t_attack = t['ATK'] + (10 * currentopponent) + opponent_scaling
-            t_defense = t['DEF'] + (5 * currentopponent) + opponent_scaling
+            t_defense = t['DEF'] + (10 * currentopponent) + opponent_scaling
             t_type = t['TYPE']
             t_accuracy = t['ACC']
             t_passive = t['PASS'][0]
@@ -9754,7 +9754,7 @@ class CrownUnlimited(commands.Cog):
                 o_attack = o_attack - int((t_card_passive/1000 * t_health))
                 o_defense = o_defense - int((t_card_passive/1000 * t_health))
             elif t_card_passive_type == 'GAMBLE':
-                t_health = t_card_passive *
+                t_health = t_card_passive * 2
                 o_health = t_card_passive
 
             # Title Passive
