@@ -154,8 +154,8 @@ class CrownUnlimited(commands.Cog):
             o_card = o['NAME']
             o_card_path=o['PATH']
             o_rcard_path=o['RPATH']
-            o_max_health = o['HLT'] + (20 * currentopponent)
-            o_health = o['HLT'] + (20 * currentopponent)
+            o_max_health = o['HLT']
+            o_health = o['HLT']
             o_stamina = o['STAM']
             o_max_stamina = o['STAM']
             o_moveset = o['MOVESET']
@@ -215,8 +215,8 @@ class CrownUnlimited(commands.Cog):
             c_card = c['NAME']
             c_card_path=c['PATH']
             c_rcard_path= c['RPATH']
-            c_max_health = c['HLT'] + (20 * currentopponent)
-            c_health = c['HLT'] + (20 * currentopponent)
+            c_max_health = c['HLT']
+            c_health = c['HLT']
             c_stamina = c['STAM']
             c_max_stamina = c['STAM']
             c_moveset = c['MOVESET']
@@ -258,13 +258,13 @@ class CrownUnlimited(commands.Cog):
             t_card = t['NAME']
             t_card_path=t['PATH']
             t_rcard_path=t['RPATH']
-            t_max_health = t['HLT'] + (100 * currentopponent) + 500 + opponent_scaling
-            t_health = t['HLT'] + (100 * currentopponent) + 500 + opponent_scaling
+            t_max_health = t['HLT'] + (100 * currentopponent) + 300 + opponent_scaling
+            t_health = t['HLT'] + (100 * currentopponent) + 300 + opponent_scaling
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
-            t_attack = t['ATK'] + (18 * currentopponent) + 15 + opponent_scaling
-            t_defense = t['DEF'] + (18 * currentopponent) + 15 + opponent_scaling
+            t_attack = t['ATK'] + (18 * currentopponent) + 10 + opponent_scaling
+            t_defense = t['DEF'] + (18 * currentopponent) + 10 + opponent_scaling
             t_type = t['TYPE']
             t_accuracy = t['ACC']
             t_passive = t['PASS'][0]
@@ -2774,13 +2774,13 @@ class CrownUnlimited(commands.Cog):
             t_card = t['NAME']
             t_card_path=t['PATH']
             t_rcard_path=t['RPATH']
-            t_max_health = t['HLT'] + (100 * currentopponent) + 1500 + opponent_scaling
-            t_health = t['HLT'] + (100 * currentopponent) + 1500 + opponent_scaling
+            t_max_health = t['HLT'] + (100 * currentopponent) + 1200 + opponent_scaling
+            t_health = t['HLT'] + (100 * currentopponent) + 1200 + opponent_scaling
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
             t_attack = t['ATK'] + (20 * currentopponent) + opponent_scaling
-            t_defense = t['DEF'] + (15 * currentopponent) + opponent_scaling
+            t_defense = t['DEF'] + (20 * currentopponent) + opponent_scaling
             t_type = t['TYPE']
             t_accuracy = t['ACC']
             t_passive = t['PASS'][0]
@@ -7970,7 +7970,7 @@ class CrownUnlimited(commands.Cog):
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
-            t_attack = t['ATK'] + (15 * currentopponent) + opponent_scaling
+            t_attack = t['ATK'] + (21 * currentopponent) + opponent_scaling
             t_defense = t['DEF'] + (10 * currentopponent) + opponent_scaling
             t_type = t['TYPE']
             t_accuracy = t['ACC']
@@ -9253,10 +9253,10 @@ class CrownUnlimited(commands.Cog):
         player_scaling = 0
 
         if universe['PREREQUISITE']:
-            opponent_scaling = 90
+            opponent_scaling =100
             player_scaling = 5
         else:
-            opponent_scaling = 20
+            opponent_scaling = 35
             player_scaling = 1
 
         legends = [x for x in universe['CROWN_TALES']]
@@ -9345,8 +9345,8 @@ class CrownUnlimited(commands.Cog):
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
-            t_attack = t['ATK'] + (10 * currentopponent) + opponent_scaling
-            t_defense = t['DEF'] + (10 * currentopponent) + opponent_scaling
+            t_attack = t['ATK'] + (13 * currentopponent) + opponent_scaling
+            t_defense = t['DEF'] + (13 * currentopponent) + opponent_scaling
             t_type = t['TYPE']
             t_accuracy = t['ACC']
             t_passive = t['PASS'][0]
