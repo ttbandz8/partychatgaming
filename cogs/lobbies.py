@@ -480,6 +480,7 @@ class Lobbies(commands.Cog):
                     session = db.createSession(data.newSession(session_query))
                     resp = db.joinSession(session_query, join_query)
                     await ctx.send(resp)
+                    message = await ctx.send(f"{ctx.author.mention} use .start to start or .wager `AMOUNT` to start a wager Match!!!:fire:")
 
                 except:
                     await ctx.send(m.ALREADY_IN_SESSION)  

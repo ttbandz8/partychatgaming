@@ -127,7 +127,7 @@ class Pet(commands.Cog):
             embedVar.set_author(name=pet_pet)
             embedVar.set_image(url=pet_image)
             embedVar.add_field(name="Unique Passive", value=f"`Move {o_pet_passive_name} increases {o_pet_passive_type} by {o_pet_passive_value}`", inline=False)
-            embedVar.set_footer(text=f".status - Enhancement Menu")
+            embedVar.set_footer(text=f".enhance - Enhancement Menu")
 
             await ctx.send(embed=embedVar)
 
