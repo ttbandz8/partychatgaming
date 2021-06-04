@@ -155,16 +155,19 @@ async def crownhelp(ctx):
 
    embedVar1 = discord.Embed(title= f":crown:Welcome To Crown Unlimited!:",colour=0x7289da)
    embedVar1.set_thumbnail(url=avatar)
-   embedVar1.add_field(name="Mechanics!", value="Crown Unlimited is a card game featuring universes from your favorite series!\n\nThe game has a Multiplayer and Single Player Mode!\n\nSingle Player also includes Boss Battles and Server Raids!\n\nWe Will Tall about TAP in the next page!\n\n")
+   embedVar1.add_field(name="Mechanics!", value="Crown Unlimited is a card game featuring universes from your favorite series!\n\nThe game has both Multiplayer and Single Player Modes!\n\n")
+
+   embedVar7 = discord.Embed(title= f":crown:Crown Unlimited Basics:",colour=0x7289da)
+   embedVar7.set_thumbnail(url=avatar)
+   embedVar7.add_field(name="`TAP - Titles, Arms, Pets!`", value="Equip your character with Titles, Arms and Pets!\n\nTitles and Arms are equiipment to modifiy your character prior to battle!\n\nTake advantage of your Item passives to gain tactical advantage!\n\nBring Pets into battle! Earn pets by completing Single Player .tales!\n\n")
 
    embedVar2 = discord.Embed(title= f":crown:Remember TAP:",colour=0x7289da)
    embedVar2.set_thumbnail(url=avatar)
    embedVar2.add_field(name="`TAP - Titles, Arms, Pets!`", value="Equip your character with Titles, Arms and Pets!\n\nTitles and Arms are equiipment to modifiy your character prior to battle!\n\nTake advantage of your Item passives to gain tactical advantage!\n\nBring Pets into battle! Earn pets by completing Single Player .tales!\n\n")
 
-
-   embedVar3 = discord.Embed(title= f":crown:ENHANCE Modes:",colour=0x7289da)
+   embedVar3 = discord.Embed(title= f":crown: Game Modes:",colour=0x7289da)
    embedVar3.set_thumbnail(url=avatar)
-   embedVar3.add_field(name="`Single Player`", value=".tales ! Tales are singleplayer adventures where you traverse through your favorite universes as characters from various worlds!\n\n/boss\n\n`BZRK` - Decrease `HLT`,  Increase `ATK`\n\n`CRYSTAL`- Decrease `HLT`, Increase `DEF`\n\n`GROWTH`- Decrease `MAXHLT`, Increase `STATS`\n\n")
+   embedVar3.add_field(name="`Single Player`", value=".tales ! Tales are single player adventures where you traverse through your favorite universes as characters from various worlds!\n\n.dungeon - Dungeons are beefed up versions of tales with better loot and better drop rates !\n\n.boss \n\n`CRYSTAL`- Decrease `HLT`, Increase `DEF`\n\n`GROWTH`- Decrease `MAXHLT`, Increase `STATS`\n\n")
 
    embedVar4 = discord.Embed(title= f":crown:ENHANCE Sets:",colour=0x7289da)
    embedVar4.set_thumbnail(url=avatar)

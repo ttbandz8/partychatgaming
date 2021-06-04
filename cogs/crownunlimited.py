@@ -17495,23 +17495,29 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
 
     #handle different staments for lifesteal and drain
     if enhancer:
-        if enh_type != 'ATK' and enh_type != 'DEF' and enh_type != 'HLT' and enh_type != 'STAM':
-            if enh_type == 'FLOG' or enh_type == 'WITHER' or enh_type == 'DRAIN' or enh_type == 'LIFE':
-                message = f'`{card}` used `{move}`! absorbing `{enh_type}`!'
-            elif enh_type == 'RAGE':
-                message = f'`{card}` used `{move}`! sacrificing defense to `{enh_type}`!'
-            elif enh_type == 'BRACE': 
-                message = f'`{card}` used `{move}`! sacrificing attack to `{enh_type}`!'
-            elif enh_type == 'BZRK' or enh_type == 'CRYSTAL': 
-                message = f'`{card}` used `{move}`! sacrificing health to `{enh_type}`!'
-            elif enh_type == 'GROWTH': 
-                message = f'`{card}` used `{move}`! sacrificing MAX health for `{enh_type}`!'
-            elif enh_type == 'STANCE': 
-                message = f'`{card}` used `{move}`! Changing their `{enh_type}`!'
-            elif enh_type == 'CONFUSE' or enh_type == 'BLINK' or enh_type == 'SLOW' or enh_type == 'HASTE' or enh_type == 'FEAR' or enh_type == 'SOULCHAIN' or enh_type == 'GAMBLE': 
-                message = f'`{card}` used `{move}`! inflicts {enh_type}'
-        else:
+        if enh_type == 'ATK' or enh_type == 'DEF' or enh_type == 'HLT' or enh_type == 'STAM':
             message = f'`{card}` used `{move}`! enhanced `{enh_type}`!'
+        elif  enh_type == 'LIFE':
+            message = f'`{card}` used `{move}`! absorbing `{enh_type}`!'
+        elif  enh_type == 'DRAIN':
+            message = f'`{card}` used `{move}`! Inflicts {enh_type}... absorbing STAM!'
+        elif  enh_type == 'FLOG':
+            message = f'`{card}` used `{move}`! Inflicts {enh_type}... absorbing ATK!'
+        elif  enh_type == 'WITHER':
+            message = f'`{card}` used `{move}`! Inflicts {enh_type}... absorbing DEF!'
+        elif enh_type == 'RAGE':
+            message = f'`{card}` used `{move}`! sacrificing defense to `{enh_type}`!'
+        elif enh_type == 'BRACE': 
+            message = f'`{card}` used `{move}`! sacrificing attack to `{enh_type}`!'
+        elif enh_type == 'BZRK' or enh_type == 'CRYSTAL': 
+            message = f'`{card}` used `{move}`! sacrificing health to `{enh_type}`!'
+        elif enh_type == 'GROWTH': 
+            message = f'`{card}` used `{move}`! sacrificing MAX health for `{enh_type}`!'
+        elif enh_type == 'STANCE': 
+            message = f'`{card}` used `{move}`! Changing their `{enh_type}`!'
+        else: 
+            message = f'`{card}` used `{move}`! inflicts {enh_type}'
+            
         enhanced=0
         if enh_type == "ATK":
             enhanced=atk
