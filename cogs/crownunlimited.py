@@ -9249,11 +9249,7 @@ class CrownUnlimited(commands.Cog):
         player_scaling = 0
 
         if universe['PREREQUISITE']:
-<<<<<<< HEAD
-            opponent_scaling =100
-=======
             opponent_scaling = 50
->>>>>>> feature/discord
             player_scaling = 5
         else:
             opponent_scaling = 35
