@@ -128,7 +128,7 @@ class CrownUnlimited(commands.Cog):
             ctitle = db.queryTitle({'TITLE': companion['TITLE']})
             
             t = db.queryCard({'NAME': legends[currentopponent]})
-            ttitle = db.queryTitle({'TITLE': 'Starter'})
+            ttitle = db.queryTitle({'TITLE': universe['UTITLE']})
 
             #################################################################### PLAYER DATA
             # Player 1 Data
@@ -252,7 +252,7 @@ class CrownUnlimited(commands.Cog):
 
             # Player 2 Data
             t_user = boss
-            tarm = db.queryArm({'ARM': 'Stock'})
+            tarm = db.queryArm({'ARM': universe['UARM']})
             tarm_passive = tarm['ABILITIES'][0]
             tarm_name=tarm['ARM']
             t_card = t['NAME']
@@ -2641,7 +2641,7 @@ class CrownUnlimited(commands.Cog):
             otitle = db.queryTitle({'TITLE': sowner['TITLE']})
             
             t = db.queryCard({'NAME': legends[currentopponent]})
-            ttitle = db.queryTitle({'TITLE': 'Starter'})
+            ttitle = db.queryTitle({'TITLE': universe['DTITLE']})
 
             c = db.queryCard({'NAME': companion['CARD']})
             ctitle = db.queryTitle({'TITLE': companion['TITLE']})
@@ -2767,7 +2767,7 @@ class CrownUnlimited(commands.Cog):
 
             # Player 2 Data
             t_user = boss
-            tarm = db.queryArm({'ARM': 'Stock'})
+            tarm = db.queryArm({'ARM': universe['DARM']})
             tarm_passive = tarm['ABILITIES'][0]
             tarm_name=tarm['ARM']
             t_card = t['NAME']
@@ -7887,14 +7887,12 @@ class CrownUnlimited(commands.Cog):
 
             o = db.queryCard({'NAME': sowner['CARD']})
             otitle = db.queryTitle({'TITLE': sowner['TITLE']})
-            
+
             t = db.queryCard({'NAME': legends[currentopponent]})
-            ttitle = db.queryTitle({'TITLE': 'Starter'})
+            ttitle = db.queryTitle({'TITLE': universe['DTITLE']})
 
             ####################################################################
             # Player Data
-
-
 
             # Player 1 Data
             o_user = sowner
@@ -7956,7 +7954,7 @@ class CrownUnlimited(commands.Cog):
 
             # Player 2 Data
             t_user = boss
-            tarm = db.queryArm({'ARM': 'Stock'})
+            tarm = db.queryArm({'ARM': universe['DARM']})
             tarm_passive = tarm['ABILITIES'][0]
             tarm_name=tarm['ARM']
             t_card = t['NAME']
@@ -9267,7 +9265,7 @@ class CrownUnlimited(commands.Cog):
             otitle = db.queryTitle({'TITLE': sowner['TITLE']})
             
             t = db.queryCard({'NAME': legends[currentopponent]})
-            ttitle = db.queryTitle({'TITLE': 'Starter'})
+            ttitle = db.queryTitle({'TITLE': universe['UTITLE']})
 
             #################################################################### PLAYER DATA
             # Player 1 Data
@@ -9330,7 +9328,7 @@ class CrownUnlimited(commands.Cog):
 
             # Player 2 Data
             t_user = boss
-            tarm = db.queryArm({'ARM': 'Stock'})
+            tarm = db.queryArm({'ARM': universe['UARM']})
             tarm_passive = tarm['ABILITIES'][0]
             tarm_name=tarm['ARM']
             t_card = t['NAME']
