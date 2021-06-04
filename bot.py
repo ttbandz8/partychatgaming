@@ -163,7 +163,7 @@ async def crownhelp(ctx):
 
    embedVar3 = discord.Embed(title= f":crown:CROWN UNLIMITED MECHANICS:",colour=0x7289da)
    embedVar3.set_thumbnail(url=avatar)
-   embedVar3.add_field(name="CROWN UNLIMITED CARDS", value="CARDS - Each CARD comes with 4 Stats, 4 Abilities and 1 Unique Passive.\n\nSTATS : Health(HLT), Stamina(STAM), Attack(ATK), Defense(DEF)\n\nABILITIES : Basic Attack(1), Special Attack(2), Ultimate Move(3) and Enhancer(4)\n\nUNIQUE PASSIVE - Your CARDS unique passive modifies STATS prior to battle\n\nENHANCER - Your Enhancer Modifies STATS during battle.\n\nUse .enhance to view the list of ENHANCERS")
+   embedVar3.add_field(name="CROWN UNLIMITED CARDS", value="CARDS - Each CARD comes with 4 Stats, 4 Abilities and 1 Unique Passive.\n\nSTATS : Health(HLT), Stamina(STAM), Attack(ATK), Defense(DEF)\n\nABILITIES : Basic Attack(1), Special Attack(2)\nUltimate Move(3) and Enhancer(4)\n\nUNIQUE PASSIVE - Your CARDS unique passive modifies STATS prior to battle\n\nENHANCER - Your Enhancer Modifies STATS during battle.\n\nUse .enhance to view the list of ENHANCERS")
 
    embedVar4 = discord.Embed(title= f":crown:CROWN UNLIMITED MECHANICS:",colour=0x7289da)
    embedVar4.set_thumbnail(url=avatar)
