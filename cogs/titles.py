@@ -199,7 +199,7 @@ class Titles(commands.Cog):
             if title_show != "Unbound":
                 embedVar.set_thumbnail(url=title_img)
             embedVar.add_field(name="Unique Passive", value=f"`Increases {o_title_passive_type} by {o_title_passive_value}`", inline=False)
-            embedVar.set_footer(text=f".status - Enhancement Menu")
+            embedVar.set_footer(text=f".enhance - Enhancement Menu")
 
             await ctx.send(embed=embedVar)
 

@@ -215,7 +215,7 @@ class Cards(commands.Cog):
             embedVar.add_field(name=f"{move3}", value=f"Power: `{move3ap}`", inline=False)
             embedVar.add_field(name=f"{move4}", value=f"`Enhancer`: Increases `{move4enh} by {move4ap}`", inline=False)
             embedVar.add_field(name="Unique Passive", value=f"`{passive_name}: Increases {passive_type} by {passive_num}`", inline=False)
-            embedVar.set_footer(text=f"{tip}\n.status - Enhancement Menu")
+            embedVar.set_footer(text=f"{tip}\n.enhance - Enhancement Menu")
             await ctx.send(embed=embedVar)
 
         else:

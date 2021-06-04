@@ -63,9 +63,9 @@ class CrownUnlimited(commands.Cog):
                 available_universes.append(uni['TITLE'])
                 
         embedVar = discord.Embed(title=f":crown: CROWN TALES CO-OP!", description="Select a Universe to explore!", colour=0xe91e63)
-        embedVar.add_field(name="Available Universes", value="\n".join(available_universes))
+        embedVar.add_field(name="Available Universes", value=" | ".join(available_universes))
         if len(completed_crown_tales) > 1:
-            embedVar.add_field(name="Completed Universes", value="\n".join(completed_crown_tales))
+            embedVar.add_field(name="Completed Universes", value="\n".join(completed_crown_tales), inline=False)
         embedVar.set_footer(text="Earn drops from the Universes you explore. Conquering Universes unlocks more worlds!\nEnjoy Co-op!")
         await private_channel.send(embed=embedVar)
         accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
@@ -2580,9 +2580,9 @@ class CrownUnlimited(commands.Cog):
                 available_universes.append(uni['TITLE'])
                 
         embedVar = discord.Embed(title=f":crown: CROWN DUNGEONS CO-OP!", description="Select a Universe to explore!", colour=0xe91e63)
-        embedVar.add_field(name="Available Universes", value="\n".join(available_universes))
+        embedVar.add_field(name="Available Universes", value=" | ".join(available_universes))
         if len(completed_crown_tales) > 1:
-            embedVar.add_field(name="Completed Universes", value="\n".join(completed_crown_tales))
+            embedVar.add_field(name="Completed Universes", value=" | ".join(completed_crown_tales), inline=False)
         embedVar.set_footer(text="Earn drops from the Universes you explore. Conquering Universes unlocks more worlds!\nEnjoy Co-op!")
         await private_channel.send(embed=embedVar)
         accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
@@ -2623,10 +2623,10 @@ class CrownUnlimited(commands.Cog):
         player_scaling = 0
 
         if universe['PREREQUISITE']:
-            opponent_scaling = 200
+            opponent_scaling = 250
             player_scaling = 5
         else:
-            opponent_scaling = 200
+            opponent_scaling = 250
             player_scaling = 1
 
         legends = [x for x in universe['CROWN_TALES']]
@@ -7834,7 +7834,7 @@ class CrownUnlimited(commands.Cog):
                 available_universes.append(uni['TITLE'])
                 
         embedVar = discord.Embed(title=f":fire: CROWN DUNGEONS!", description="Select a Universe!", colour=0xe91e63)
-        embedVar.add_field(name="Available Universes", value="\n".join(available_universes))
+        embedVar.add_field(name="Available Universes", value=" | ".join(available_universes), inline=False)
         if len(completed_dungeons) > 1:
             embedVar.add_field(name="Completed Universes", value="\n".join(completed_dungeons))
         embedVar.set_footer(text="Earn drops from the Universes you explore. Conquering Universes unlocks more worlds!")
@@ -7874,10 +7874,10 @@ class CrownUnlimited(commands.Cog):
         player_scaling = 0
 
         if universe['PREREQUISITE']:
-            opponent_scaling = 130
+            opponent_scaling = 200
             player_scaling = 0
         else:
-            opponent_scaling = 130
+            opponent_scaling = 200
             player_scaling = 0
 
         legends = [x for x in universe['CROWN_TALES']]
@@ -9213,9 +9213,9 @@ class CrownUnlimited(commands.Cog):
                 available_universes.append(uni['TITLE'])
                 
         embedVar = discord.Embed(title=f":crown: CROWN TALES!", description="Select a Universe to explore!", colour=0xe91e63)
-        embedVar.add_field(name="Available Universes", value="\n".join(available_universes))
+        embedVar.add_field(name="Available Universes", value=" | ".join(available_universes))
         if len(completed_crown_tales) > 1:
-            embedVar.add_field(name="Completed Universes", value="\n".join(completed_crown_tales))
+            embedVar.add_field(name="Completed Universes", value=" | ".join(completed_crown_tales), inline=False)
         embedVar.set_footer(text="Earn drops from the Universes you explore. Conquering Universes unlocks more worlds!")
         await private_channel.send(embed=embedVar)
         accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
@@ -17495,23 +17495,29 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
 
     #handle different staments for lifesteal and drain
     if enhancer:
-        if enh_type != 'ATK' or enh_type != 'DEF' or enh_type != 'HLT' or enh_type != 'STAM':
-            if enh_type == 'FLOG' or enh_type == 'WITHER' or enh_type == 'DRAIN' or enh_type == 'LIFE':
-                message = f'`{card}` used `{move}`! absorbing `{enh_type}`!'
-            elif enh_type == 'RAGE':
-                message = f'`{card}` used `{move}`! sacrificing defense to `{enh_type}`!'
-            elif enh_type == 'BRACE': 
-                message = f'`{card}` used `{move}`! sacrificing attack to `{enh_type}`!'
-            elif enh_type == 'BZRK' or enh_type == 'CRYSTAL': 
-                message = f'`{card}` used `{move}`! sacrificing health to `{enh_type}`!'
-            elif enh_type == 'GROWTH': 
-                message = f'`{card}` used `{move}`! sacrificing MAX health for `{enh_type}`!'
-            elif enh_type == 'STANCE': 
-                message = f'`{card}` used `{move}`! Changing their `{enh_type}`!'
-            elif enh_type == 'CONFUSE' or enh_type == 'BLINK' or enh_type == 'SLOW' or enh_type == 'HASTE' or enh_type == 'FEAR' or enh_type == 'SOULCHAIN' or enh_type == 'GAMBLE': 
-                message = f'`{card}` used `{move}`! inflicts {enh_type}'
-        else:
+        if enh_type == 'ATK' or enh_type == 'DEF' or enh_type == 'HLT' or enh_type == 'STAM':
             message = f'`{card}` used `{move}`! enhanced `{enh_type}`!'
+        elif  enh_type == 'LIFE':
+            message = f'`{card}` used `{move}`! absorbing `{enh_type}`!'
+        elif  enh_type == 'DRAIN':
+            message = f'`{card}` used `{move}`! Inflicts {enh_type}... absorbing STAM!'
+        elif  enh_type == 'FLOG':
+            message = f'`{card}` used `{move}`! Inflicts {enh_type}... absorbing ATK!'
+        elif  enh_type == 'WITHER':
+            message = f'`{card}` used `{move}`! Inflicts {enh_type}... absorbing DEF!'
+        elif enh_type == 'RAGE':
+            message = f'`{card}` used `{move}`! sacrificing defense to `{enh_type}`!'
+        elif enh_type == 'BRACE': 
+            message = f'`{card}` used `{move}`! sacrificing attack to `{enh_type}`!'
+        elif enh_type == 'BZRK' or enh_type == 'CRYSTAL': 
+            message = f'`{card}` used `{move}`! sacrificing health to `{enh_type}`!'
+        elif enh_type == 'GROWTH': 
+            message = f'`{card}` used `{move}`! sacrificing MAX health for `{enh_type}`!'
+        elif enh_type == 'STANCE': 
+            message = f'`{card}` used `{move}`! Changing their `{enh_type}`!'
+        else: 
+            message = f'`{card}` used `{move}`! inflicts {enh_type}'
+            
         enhanced=0
         if enh_type == "ATK":
             enhanced=atk
@@ -17741,9 +17747,9 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
         draw.text((82,197), stamina_text, (255, 255, 255), font=s, align="left")
 
         # Character Name
-        draw.text((82,50), d['NAME'], (255, 255, 255), font=header, align="left")
+        draw.text((82,50), d['NAME'], (255, 255, 255), font=header, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
         # Title Name
-        draw.text((85,20), title['TITLE'], (255, 255, 255), font=h, align="left")
+        draw.text((85,20), title['TITLE'], (255, 255, 255), font=h, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
 
         if focused:
                         # side    # vert
