@@ -79,7 +79,7 @@ async def help(ctx):
 
    embedVar5 = discord.Embed(title= f":military_helmet:Teams:", description=h.TEAM_COMMANDS, colour=0x7289da)
    embedVar5.set_thumbnail(url=avatar)
-   embedVar5.add_field(name=":fireworks:Tournament Types:", value="\n`Exhibitions`\n`KingsGambit`\n`GodsOfCod`")
+   embedVar5.add_field(name=":fireworks:Tournament Types:", value="\n`Exhibitions`\n`KingsGambit`\n`GodsOfCrown`")
    embedVar5.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
    embedVar5.set_footer(text=f".senpai - Text Bot Tutorial")
 
@@ -155,7 +155,7 @@ async def crownhelp(ctx):
 
    embedVar1 = discord.Embed(title= f":crown:WELCOME TO CROWN UNLIMITED!:",colour=0x7289da)
    embedVar1.set_thumbnail(url=avatar)
-   embedVar1.add_field(name="Mechanics!", value="Crown Unlimited is a multiplatform card game featuring universes from your favorite series!\n\nThe game has Single Player, Multiplayer and CO-OP!\n\nAdventure with your friends through the CROWN UNLIMITED")
+   embedVar1.add_field(name="About The Game!", value="Crown Unlimited is a multiplatform card game featuring universes from your favorite series!\n\nThe game has Single Player, Multiplayer and CO-OP!\n\nAdventure with your friends through the CROWN UNLIMITED")
 
    embedVar2 = discord.Embed(title= f":crown:ABOUT CROWN UNLIMITED:",colour=0x7289da)
    embedVar2.set_thumbnail(url=avatar)
