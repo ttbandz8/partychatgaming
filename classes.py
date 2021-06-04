@@ -13,8 +13,8 @@ class USER():
     GAMES: list[str] = field(default_factory=lambda: ['Crown Unlimited'])
     TEAM: str = field(default_factory=lambda: 'PCG')
     TITLE: str = field(default_factory=lambda: 'Starter')
-    CARD: str = field(default_factory=lambda: "Naruto")
-    HAND: list[str] = field(default_factory=lambda: [''])
+    CARD: str = field(default_factory=lambda: "Ochaco Uraraka")
+    DECK: list[str] = field(default_factory=lambda: [''])
     ARM: str = field(default_factory=lambda: "Stock")
     PET:str = field(default_factory=lambda: "Chick")
     MATCHES: list = field(default_factory=lambda: [{'1V1': [0, 0]}, {'2V2': [0, 0]}, {'3V3': [0, 0]}, {'4V4': [0, 0]}, {'5V5': [0, 0]}])
@@ -198,11 +198,11 @@ class GODS():
 class VAULT():
     OWNER: str
     BALANCE: int = field(default_factory=lambda: 500)
-    CARDS: list[str] = field(default_factory=lambda: ['Naruto'])
+    CARDS: list[str] = field(default_factory=lambda: ['Ochaco Uraraka','Charmander','Malphite'])
     TITLES: list[str] = field(default_factory=lambda: ['Starter'])
     ARMS: list[str] = field(default_factory=lambda: ['Stock'])
     PETS: list[str] = field(default_factory=lambda: [{'NAME': 'Chick', 'LVL': 1, 'EXP': 0, 'Heal': 10, 'TYPE': 'HLT', 'BOND': 0, 'PATH': "https://res.cloudinary.com/dkcmq8o15/image/upload/v1622307902/Pets/chick.jpg"}])
-    DECK: list[str] = field(default_factory=lambda: [{'CARD': 'Naruto', 'TITLE': 'Starter', 'ARM': 'Stock', 'PET': 'Chick'}, {'CARD': 'Naruto', 'TITLE': 'Starter', 'ARM': 'Stock', 'PET': 'Chick'}, {'CARD': 'Naruto', 'TITLE': 'Starter', 'ARM': 'Stock', 'PET': 'Chick'}])
+    DECK: list[str] = field(default_factory=lambda: [{'CARD': 'Charmander', 'TITLE': 'Starter', 'ARM': 'Stock', 'PET': 'Chick'}, {'CARD': 'Ochaco Uraraka', 'TITLE': 'Starter', 'ARM': 'Stock', 'PET': 'Chick'}, {'CARD': 'Malphite', 'TITLE': 'Starter', 'ARM': 'Stock', 'PET': 'Chick'}])
     
 
 
