@@ -2623,10 +2623,10 @@ class CrownUnlimited(commands.Cog):
         player_scaling = 0
 
         if universe['PREREQUISITE']:
-            opponent_scaling = 200
+            opponent_scaling = 250
             player_scaling = 5
         else:
-            opponent_scaling = 200
+            opponent_scaling = 250
             player_scaling = 1
 
         legends = [x for x in universe['CROWN_TALES']]
@@ -7874,10 +7874,10 @@ class CrownUnlimited(commands.Cog):
         player_scaling = 0
 
         if universe['PREREQUISITE']:
-            opponent_scaling = 130
+            opponent_scaling = 200
             player_scaling = 0
         else:
-            opponent_scaling = 130
+            opponent_scaling = 200
             player_scaling = 0
 
         legends = [x for x in universe['CROWN_TALES']]
@@ -17495,7 +17495,7 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
 
     #handle different staments for lifesteal and drain
     if enhancer:
-        if enh_type != 'ATK' or enh_type != 'DEF' or enh_type != 'HLT' or enh_type != 'STAM':
+        if enh_type != 'ATK' and enh_type != 'DEF' and enh_type != 'HLT' and enh_type != 'STAM':
             if enh_type == 'FLOG' or enh_type == 'WITHER' or enh_type == 'DRAIN' or enh_type == 'LIFE':
                 message = f'`{card}` used `{move}`! absorbing `{enh_type}`!'
             elif enh_type == 'RAGE':
