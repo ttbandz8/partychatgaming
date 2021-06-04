@@ -63,9 +63,9 @@ class CrownUnlimited(commands.Cog):
                 available_universes.append(uni['TITLE'])
                 
         embedVar = discord.Embed(title=f":crown: CROWN TALES CO-OP!", description="Select a Universe to explore!", colour=0xe91e63)
-        embedVar.add_field(name="Available Universes", value="\n".join(available_universes))
+        embedVar.add_field(name="Available Universes", value=" | ".join(available_universes))
         if len(completed_crown_tales) > 1:
-            embedVar.add_field(name="Completed Universes", value="\n".join(completed_crown_tales))
+            embedVar.add_field(name="Completed Universes", value="\n".join(completed_crown_tales), inline=False)
         embedVar.set_footer(text="Earn drops from the Universes you explore. Conquering Universes unlocks more worlds!\nEnjoy Co-op!")
         await private_channel.send(embed=embedVar)
         accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
@@ -2579,9 +2579,9 @@ class CrownUnlimited(commands.Cog):
                 available_universes.append(uni['TITLE'])
                 
         embedVar = discord.Embed(title=f":crown: CROWN DUNGEONS CO-OP!", description="Select a Universe to explore!", colour=0xe91e63)
-        embedVar.add_field(name="Available Universes", value="\n".join(available_universes))
+        embedVar.add_field(name="Available Universes", value=" | ".join(available_universes))
         if len(completed_crown_tales) > 1:
-            embedVar.add_field(name="Completed Universes", value="\n".join(completed_crown_tales))
+            embedVar.add_field(name="Completed Universes", value=" | ".join(completed_crown_tales), inline=False)
         embedVar.set_footer(text="Earn drops from the Universes you explore. Conquering Universes unlocks more worlds!\nEnjoy Co-op!")
         await private_channel.send(embed=embedVar)
         accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
@@ -7831,7 +7831,7 @@ class CrownUnlimited(commands.Cog):
                 available_universes.append(uni['TITLE'])
                 
         embedVar = discord.Embed(title=f":fire: CROWN DUNGEONS!", description="Select a Universe!", colour=0xe91e63)
-        embedVar.add_field(name="Available Universes", value="\n".join(available_universes))
+        embedVar.add_field(name="Available Universes", value=" | ".join(available_universes), inline=False)
         if len(completed_dungeons) > 1:
             embedVar.add_field(name="Completed Universes", value="\n".join(completed_dungeons))
         embedVar.set_footer(text="Earn drops from the Universes you explore. Conquering Universes unlocks more worlds!")
@@ -9209,9 +9209,9 @@ class CrownUnlimited(commands.Cog):
                 available_universes.append(uni['TITLE'])
                 
         embedVar = discord.Embed(title=f":crown: CROWN TALES!", description="Select a Universe to explore!", colour=0xe91e63)
-        embedVar.add_field(name="Available Universes", value="\n".join(available_universes))
+        embedVar.add_field(name="Available Universes", value=" | ".join(available_universes))
         if len(completed_crown_tales) > 1:
-            embedVar.add_field(name="Completed Universes", value="\n".join(completed_crown_tales))
+            embedVar.add_field(name="Completed Universes", value=" | ".join(completed_crown_tales), inline=False)
         embedVar.set_footer(text="Earn drops from the Universes you explore. Conquering Universes unlocks more worlds!")
         await private_channel.send(embed=embedVar)
         accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
@@ -17743,9 +17743,9 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
         draw.text((82,197), stamina_text, (255, 255, 255), font=s, align="left")
 
         # Character Name
-        draw.text((82,50), d['NAME'], (255, 255, 255), font=header, align="left")
+        draw.text((82,50), d['NAME'], (255, 255, 255), font=header, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
         # Title Name
-        draw.text((85,20), title['TITLE'], (255, 255, 255), font=h, align="left")
+        draw.text((85,20), title['TITLE'], (255, 255, 255), font=h, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
 
         if focused:
                         # side    # vert

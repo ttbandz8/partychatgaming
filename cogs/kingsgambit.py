@@ -87,7 +87,6 @@ class Kingsgambit(commands.Cog):
         embedVar.add_field(name="REGISTRATION!" , value="Type::arrow_right: #r")
         embedVar.add_field(name="ADD CODM IGN!" , value="Type::arrow_right: #ag codm 'IGN'")
         embedVar.add_field(name="JOIN KINGS GAMBIT!" , value="Type::arrow_right: #jkg @streamer")
-        embedVar.add_field(name="STREAMER LIST" , value="92Bricks, 𝖆𝖓𝖆𝖙𝖍𝖊𝖇𝖔𝖙シ\nDasinista, Dreamer\nEthwixs, Jah\nKiewiski, Liqxuds\nLust, Newlable\nNoobie, Roc.Bambino")
         embedVar.add_field(name="UPDATE IGN" , value="Type::arrow_right: #uign codm 'IGN'")
         embedVar.add_field(name="STILL LOST????" , value="use #help or ask a PCG Member for assistance")
         await ctx.send(embed=embedVar)
