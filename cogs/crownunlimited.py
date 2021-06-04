@@ -154,13 +154,8 @@ class CrownUnlimited(commands.Cog):
             o_card = o['NAME']
             o_card_path=o['PATH']
             o_rcard_path=o['RPATH']
-<<<<<<< HEAD
             o_max_health = o['HLT']
             o_health = o['HLT']
-=======
-            o_max_health = o['HLT'] 
-            o_health = o['HLT'] 
->>>>>>> feature/discord
             o_stamina = o['STAM']
             o_max_stamina = o['STAM']
             o_moveset = o['MOVESET']
@@ -221,11 +216,7 @@ class CrownUnlimited(commands.Cog):
             c_card_path=c['PATH']
             c_rcard_path= c['RPATH']
             c_max_health = c['HLT']
-<<<<<<< HEAD
             c_health = c['HLT']
-=======
-            c_health = c['HLT'] 
->>>>>>> feature/discord
             c_stamina = c['STAM']
             c_max_stamina = c['STAM']
             c_moveset = c['MOVESET']
@@ -2783,13 +2774,8 @@ class CrownUnlimited(commands.Cog):
             t_card = t['NAME']
             t_card_path=t['PATH']
             t_rcard_path=t['RPATH']
-<<<<<<< HEAD
-            t_max_health = t['HLT'] + (100 * currentopponent) + 1200 + opponent_scaling
-            t_health = t['HLT'] + (100 * currentopponent) + 1200 + opponent_scaling
-=======
-            t_max_health = t['HLT'] + (100 * currentopponent) + opponent_scaling
-            t_health = t['HLT'] + (100 * currentopponent) + opponent_scaling
->>>>>>> feature/discord
+            t_max_health = t['HLT'] + (100 * currentopponent) + 800 + opponent_scaling
+            t_health = t['HLT'] + (100 * currentopponent) + 800 + opponent_scaling
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
