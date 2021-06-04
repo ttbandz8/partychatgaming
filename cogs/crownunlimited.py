@@ -1179,8 +1179,8 @@ class CrownUnlimited(commands.Cog):
                                     fortitude = random.randint(int(low), int(high))
                                     #Resolve Scaling
                                     o_resolve_health = round(fortitude + (.5*o_resolve))
-                                    o_resolve_attack = round(4 * (o_resolve / (.50 * o_attack)))
-                                    o_resolve_defense = round(3 * (o_resolve / (.25 * o_defense)))
+                                    o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                    o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
 
                                     o_stamina = o_stamina + o_resolve
                                     o_health = o_health + o_resolve_health
@@ -1639,8 +1639,8 @@ class CrownUnlimited(commands.Cog):
                                 fortitude = random.randint(int(low), int(high))
                                 #Resolve Scaling
                                 t_resolve_health = round(fortitude + (.5*t_resolve))
-                                t_resolve_attack = round(4 * (t_resolve / (.25 * t_attack)))
-                                t_resolve_defense = round(3 * (t_resolve / (.25 * t_defense)))
+                                t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
 
                                 t_stamina = t_stamina + t_resolve
                                 t_health = t_health + t_resolve_health
@@ -1881,8 +1881,8 @@ class CrownUnlimited(commands.Cog):
                                     fortitude = random.randint(int(low), int(high))
                                     #Resolve Scaling
                                     c_resolve_health = round(fortitude + (.5*c_resolve))
-                                    c_resolve_attack = round(4 * (c_resolve / (.50 * c_attack)))
-                                    c_resolve_defense = round(3 * (c_resolve / (.25 * c_defense)))
+                                    c_resolve_attack = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
+                                    c_resolve_defense = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
 
                                     c_stamina = c_stamina + c_resolve
                                     c_health = c_health + c_resolve_health
@@ -2342,8 +2342,8 @@ class CrownUnlimited(commands.Cog):
                                 fortitude = random.randint(int(low), int(high))
                                 #Resolve Scaling
                                 t_resolve_health = round(fortitude + (.5*t_resolve))
-                                t_resolve_attack = round(4 * (t_resolve / (.25 * t_attack)))
-                                t_resolve_defense = round(3 * (t_resolve / (.25 * t_defense)))
+                                t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
 
                                 t_stamina = t_stamina + t_resolve
                                 t_health = t_health + t_resolve_health
@@ -2357,7 +2357,6 @@ class CrownUnlimited(commands.Cog):
                             else:
                                 await private_channel.send(m.CANNOT_USE_RESOLVE)
                                 turn=1
-
                         if int(aiMove) !=5:
                             # If you have enough stamina for move, use it
                             if dmg['CAN_USE_MOVE']:
@@ -3695,8 +3694,8 @@ class CrownUnlimited(commands.Cog):
                                     fortitude = random.randint(int(low), int(high))
                                     #Resolve Scaling
                                     o_resolve_health = round(fortitude + (.5*o_resolve))
-                                    o_resolve_attack = round(4 * (o_resolve / (.50 * o_attack)))
-                                    o_resolve_defense = round(3 * (o_resolve / (.25 * o_defense)))
+                                    o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                    o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
 
                                     o_stamina = o_stamina + o_resolve
                                     o_health = o_health + o_resolve_health
@@ -4155,8 +4154,8 @@ class CrownUnlimited(commands.Cog):
                                 fortitude = random.randint(int(low), int(high))
                                 #Resolve Scaling
                                 t_resolve_health = round(fortitude + (.5*t_resolve))
-                                t_resolve_attack = round(4 * (t_resolve / (.25 * t_attack)))
-                                t_resolve_defense = round(3 * (t_resolve / (.25 * t_defense)))
+                                t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
 
                                 t_stamina = t_stamina + t_resolve
                                 t_health = t_health + t_resolve_health
@@ -4397,8 +4396,8 @@ class CrownUnlimited(commands.Cog):
                                     fortitude = random.randint(int(low), int(high))
                                     #Resolve Scaling
                                     c_resolve_health = round(fortitude + (.5*c_resolve))
-                                    c_resolve_attack = round(4 * (c_resolve / (.50 * c_attack)))
-                                    c_resolve_defense = round(3 * (c_resolve / (.25 * c_defense)))
+                                    c_resolve_attack = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
+                                    c_resolve_defense = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
 
                                     c_stamina = c_stamina + c_resolve
                                     c_health = c_health + c_resolve_health
@@ -4858,8 +4857,8 @@ class CrownUnlimited(commands.Cog):
                                 fortitude = random.randint(int(low), int(high))
                                 #Resolve Scaling
                                 t_resolve_health = round(fortitude + (.5*t_resolve))
-                                t_resolve_attack = round(4 * (t_resolve / (.25 * t_attack)))
-                                t_resolve_defense = round(3 * (t_resolve / (.25 * t_defense)))
+                                t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
 
                                 t_stamina = t_stamina + t_resolve
                                 t_health = t_health + t_resolve_health
@@ -4971,8 +4970,7 @@ class CrownUnlimited(commands.Cog):
 
                             else:
                                 await private_channel.send(m.NOT_ENOUGH_STAMINA)
-                                turn = 1
-    
+                                turn = 1    
             if botActive:
                 end_message="Use the #end command to end the tutorial lobby"
             else:
@@ -6160,7 +6158,6 @@ class CrownUnlimited(commands.Cog):
                             dmg = damage_cal(o_card, o_enhancer, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description)
                             o_enhancer_used=False
                         elif msg.content == "5":
-
                             #Resolve Check and Calculation
                             if not o_used_resolve and o_used_focus:
                                     
@@ -6172,8 +6169,8 @@ class CrownUnlimited(commands.Cog):
                                 fortitude = random.randint(int(low), int(high))
                                 #Resolve Scaling
                                 o_resolve_health = round(fortitude + (.5*o_resolve))
-                                o_resolve_attack = round(4 * (o_resolve / (.50 * o_attack)))
-                                o_resolve_defense = round(3 * (o_resolve / (.25 * o_defense)))
+                                o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
 
                                 o_stamina = o_stamina + o_resolve
                                 o_health = o_health + o_resolve_health
@@ -6680,8 +6677,8 @@ class CrownUnlimited(commands.Cog):
                             fortitude = random.randint(int(low), int(high))
                             #Resolve Scaling
                             t_resolve_health = round(fortitude + (.5*t_resolve))
-                            t_resolve_attack = round(4 * (t_resolve / (.50 * t_attack)))
-                            t_resolve_defense = round(3 * (t_resolve / (.25 * t_defense)))
+                            t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                            t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
 
                             t_stamina = t_stamina + t_resolve
                             t_health = t_health + t_resolve_health
@@ -7027,8 +7024,8 @@ class CrownUnlimited(commands.Cog):
                                 fortitude = random.randint(int(low), int(high))
                                 #Resolve Scaling
                                 c_resolve_health = round(fortitude + (.5*c_resolve))
-                                c_resolve_attack = round(4 * (c_resolve / (.50 * c_attack)))
-                                c_resolve_defense = round(3 * (c_resolve / (.25 * c_defense)))
+                                c_resolve_attack = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
+                                c_resolve_defense = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
 
                                 c_stamina = c_stamina + c_resolve
                                 c_health = c_health + c_resolve_health
@@ -7536,8 +7533,8 @@ class CrownUnlimited(commands.Cog):
                             fortitude = random.randint(int(low), int(high))
                             #Resolve Scaling
                             t_resolve_health = round(fortitude + (.5*t_resolve))
-                            t_resolve_attack = round(4 * (t_resolve / (.50 * t_attack)))
-                            t_resolve_defense = round(3 * (t_resolve / (.25 * t_defense)))
+                            t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                            t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
 
                             t_stamina = t_stamina + t_resolve
                             t_health = t_health + t_resolve_health
@@ -7877,7 +7874,7 @@ class CrownUnlimited(commands.Cog):
             opponent_scaling = 200
             player_scaling = 0
         else:
-            opponent_scaling = 200
+            opponent_scaling = 110
             player_scaling = 0
 
         legends = [x for x in universe['CROWN_TALES']]
@@ -8620,8 +8617,8 @@ class CrownUnlimited(commands.Cog):
                                     fortitude = random.randint(int(low), int(high))
                                     #Resolve Scaling
                                     o_resolve_health = round(fortitude + (.5*o_resolve))
-                                    o_resolve_attack = round(4 * (o_resolve / (.50 * o_attack)))
-                                    o_resolve_defense = round(3 * (o_resolve / (.25 * o_defense)))
+                                    o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                    o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
 
                                     o_stamina = o_stamina + o_resolve
                                     o_health = o_health + o_resolve_health
@@ -8995,8 +8992,8 @@ class CrownUnlimited(commands.Cog):
                                 fortitude = random.randint(int(low), int(high))
                                 #Resolve Scaling
                                 t_resolve_health = round(fortitude + (.5*t_resolve))
-                                t_resolve_attack = round(4 * (t_resolve / (.25 * t_attack)))
-                                t_resolve_defense = round(3 * (t_resolve / (.25 * t_defense)))
+                                t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
 
                                 t_stamina = t_stamina + t_resolve
                                 t_health = t_health + t_resolve_health
@@ -9010,7 +9007,6 @@ class CrownUnlimited(commands.Cog):
                             else:
                                 await private_channel.send(m.CANNOT_USE_RESOLVE)
                                 turn=1
-
                         if int(aiMove) !=5:
                             # If you have enough stamina for move, use it
                             if dmg['CAN_USE_MOVE']:
@@ -9253,7 +9249,11 @@ class CrownUnlimited(commands.Cog):
         player_scaling = 0
 
         if universe['PREREQUISITE']:
+<<<<<<< HEAD
             opponent_scaling =100
+=======
+            opponent_scaling = 50
+>>>>>>> feature/discord
             player_scaling = 5
         else:
             opponent_scaling = 35
@@ -9993,8 +9993,8 @@ class CrownUnlimited(commands.Cog):
                                     fortitude = random.randint(int(low), int(high))
                                     #Resolve Scaling
                                     o_resolve_health = round(fortitude + (.5*o_resolve))
-                                    o_resolve_attack = round(4 * (o_resolve / (.50 * o_attack)))
-                                    o_resolve_defense = round(3 * (o_resolve / (.25 * o_defense)))
+                                    o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                    o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
 
                                     o_stamina = o_stamina + o_resolve
                                     o_health = o_health + o_resolve_health
@@ -10368,8 +10368,8 @@ class CrownUnlimited(commands.Cog):
                                 fortitude = random.randint(int(low), int(high))
                                 #Resolve Scaling
                                 t_resolve_health = round(fortitude + (.5*t_resolve))
-                                t_resolve_attack = round(4 * (t_resolve / (.25 * t_attack)))
-                                t_resolve_defense = round(3 * (t_resolve / (.25 * t_defense)))
+                                t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
 
                                 t_stamina = t_stamina + t_resolve
                                 t_health = t_health + t_resolve_health
@@ -11369,8 +11369,8 @@ class CrownUnlimited(commands.Cog):
                                 fortitude = random.randint(int(low), int(high))
                                 #Resolve Scaling
                                 o_resolve_health = round(fortitude + (.5*o_resolve))
-                                o_resolve_attack = round(4 * (o_resolve / (.50 * o_attack)))
-                                o_resolve_defense = round(3 * (o_resolve / (.25 * o_defense)))
+                                o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
 
                                 o_stamina = o_stamina + o_resolve
                                 o_health = o_health + o_resolve_health
@@ -11791,8 +11791,8 @@ class CrownUnlimited(commands.Cog):
                             fortitude = random.randint(int(low), int(high))
                             #Resolve Scaling
                             t_resolve_health = round(fortitude + (.5*t_resolve))
-                            t_resolve_attack = round(4 * (t_resolve / (.50 * t_attack)))
-                            t_resolve_defense = round(3 * (t_resolve / (.25 * t_defense)))
+                            t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                            t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
 
                             t_stamina = t_stamina + t_resolve
                             t_health = t_health + t_resolve_health
@@ -12878,8 +12878,8 @@ class CrownUnlimited(commands.Cog):
                                         fortitude = random.randint(int(low), int(high))
                                         #Resolve Scaling
                                         o_resolve_health = round(fortitude + (.5*o_resolve))
-                                        o_resolve_attack = round(4 * (o_resolve / (.50 * o_attack)))
-                                        o_resolve_defense = round(3 * (o_resolve / (.25 * o_defense)))
+                                        o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                        o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
 
                                         o_stamina = o_stamina + o_resolve
                                         o_health = o_health + o_resolve_health
@@ -13212,8 +13212,8 @@ class CrownUnlimited(commands.Cog):
                                             fortitude = random.randint(int(low), int(high))
                                             #Resolve Scaling
                                             t_resolve_health = round(fortitude + (.5*t_resolve))
-                                            t_resolve_attack = round(4 * (t_resolve / (.25 * t_attack)))
-                                            t_resolve_defense = round(3 * (t_resolve / (.25 * t_defense)))
+                                            t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                            t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
 
                                             t_stamina = t_stamina + t_resolve
                                             t_health = t_health + t_resolve_health
@@ -13535,8 +13535,8 @@ class CrownUnlimited(commands.Cog):
                                         fortitude = random.randint(int(low), int(high))
                                         #Resolve Scaling
                                         t_resolve_health = round(fortitude + (.5*t_resolve))
-                                        t_resolve_attack = round(4 * (t_resolve / (.25 * t_attack)))
-                                        t_resolve_defense = round(3 * (t_resolve / (.25 * t_defense)))
+                                        t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                        t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
 
                                         t_stamina = t_stamina + t_resolve
                                         t_health = t_health + t_resolve_health
