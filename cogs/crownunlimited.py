@@ -106,10 +106,10 @@ class CrownUnlimited(commands.Cog):
         player_scaling = 0
 
         if universe['PREREQUISITE']:
-            opponent_scaling = 100
+            opponent_scaling = 30
             player_scaling = 5
         else:
-            opponent_scaling = 50
+            opponent_scaling = 10
             player_scaling = 1
 
         legends = [x for x in universe['CROWN_TALES']]
@@ -263,8 +263,8 @@ class CrownUnlimited(commands.Cog):
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
-            t_attack = t['ATK'] + (18 * currentopponent) + 10 + opponent_scaling
-            t_defense = t['DEF'] + (18 * currentopponent) + 10 + opponent_scaling
+            t_attack = t['ATK'] + (18 * currentopponent) + 2 + opponent_scaling
+            t_defense = t['DEF'] + (18 * currentopponent) + 2 + opponent_scaling
             t_type = t['TYPE']
             t_accuracy = t['ACC']
             t_passive = t['PASS'][0]
@@ -2622,10 +2622,10 @@ class CrownUnlimited(commands.Cog):
         player_scaling = 0
 
         if universe['PREREQUISITE']:
-            opponent_scaling = 250
+            opponent_scaling = 160
             player_scaling = 5
         else:
-            opponent_scaling = 250
+            opponent_scaling = 100
             player_scaling = 1
 
         legends = [x for x in universe['CROWN_TALES']]
@@ -2778,8 +2778,8 @@ class CrownUnlimited(commands.Cog):
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
-            t_attack = t['ATK'] + (20 * currentopponent) + opponent_scaling
-            t_defense = t['DEF'] + (20 * currentopponent) + opponent_scaling
+            t_attack = t['ATK'] + (16 * currentopponent) + opponent_scaling
+            t_defense = t['DEF'] + (16 * currentopponent) + opponent_scaling
             t_type = t['TYPE']
             t_accuracy = t['ACC']
             t_passive = t['PASS'][0]
@@ -7871,10 +7871,10 @@ class CrownUnlimited(commands.Cog):
         player_scaling = 0
 
         if universe['PREREQUISITE']:
-            opponent_scaling = 200
+            opponent_scaling = 150
             player_scaling = 0
         else:
-            opponent_scaling = 110
+            opponent_scaling = 89
             player_scaling = 0
 
         legends = [x for x in universe['CROWN_TALES']]
