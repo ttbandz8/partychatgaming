@@ -13,7 +13,7 @@ class USER():
     GAMES: list[str] = field(default_factory=lambda: ['Crown Unlimited'])
     TEAM: str = field(default_factory=lambda: 'PCG')
     TITLE: str = field(default_factory=lambda: 'Starter')
-    CARD: str = field(default_factory=lambda: "Naruto")
+    CARD: str = field(default_factory=lambda: "Ochaco Uraraka")
     DECK: list[str] = field(default_factory=lambda: [''])
     ARM: str = field(default_factory=lambda: "Stock")
     PET:str = field(default_factory=lambda: "Chick")
