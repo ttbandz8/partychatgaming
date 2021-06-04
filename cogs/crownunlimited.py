@@ -2623,10 +2623,10 @@ class CrownUnlimited(commands.Cog):
         player_scaling = 0
 
         if universe['PREREQUISITE']:
-            opponent_scaling = 250
+            opponent_scaling = 200
             player_scaling = 5
         else:
-            opponent_scaling = 250
+            opponent_scaling = 200
             player_scaling = 1
 
         legends = [x for x in universe['CROWN_TALES']]
@@ -7874,10 +7874,10 @@ class CrownUnlimited(commands.Cog):
         player_scaling = 0
 
         if universe['PREREQUISITE']:
-            opponent_scaling = 200
+            opponent_scaling = 130
             player_scaling = 0
         else:
-            opponent_scaling = 200
+            opponent_scaling = 130
             player_scaling = 0
 
         legends = [x for x in universe['CROWN_TALES']]
