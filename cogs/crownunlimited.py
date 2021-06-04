@@ -9249,7 +9249,7 @@ class CrownUnlimited(commands.Cog):
         player_scaling = 0
 
         if universe['PREREQUISITE']:
-            opponent_scaling = 90
+            opponent_scaling = 50
             player_scaling = 5
         else:
             opponent_scaling = 20
