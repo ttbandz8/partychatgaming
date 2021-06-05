@@ -17943,8 +17943,8 @@ async def drops(player, universe):
     drop_rate = random.randint(0,200)
 
     if drop_rate <= gold_drop:
-        await bless(10, player)
-        return f"You earned :coin: 10!"
+        await bless(25, player)
+        return f"You earned :coin: 25!"
     elif drop_rate <= title_drop and drop_rate > gold_drop:
         response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'TITLES': str(titles[rand_title])}})
         return f"You earned {titles[rand_title]}!"
@@ -17958,12 +17958,12 @@ async def drops(player, universe):
         pet_ability_type = list(selected_pet['ABILITIES'][0].values())[1]
 
         response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'PETS': {'NAME': selected_pet['PET'], 'LVL': selected_pet['LVL'], 'EXP': 0, pet_ability_name: int(pet_ability_power), 'TYPE': pet_ability_type, 'BOND': 0, 'PATH': selected_pet['PATH']}}})
-        await bless(30, player)
-        return f"You earned {pets[rand_pet]} + :coin: 30!"
+        await bless(50, player)
+        return f"You earned {pets[rand_pet]} + :coin: 50!"
     elif drop_rate <= card_drop and drop_rate > pet_drop:
             response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(cards[rand_card])}})
-            await bless(30, player)
-            return f"You earned {cards[rand_card]} + :coin: 30!"
+            await bless(50, player)
+            return f"You earned {cards[rand_card]} + :coin: 50!"
 
 async def dungeondrops(player, universe):
     all_available_drop_cards = db.queryExclusiveDropCards(universe)
@@ -18008,8 +18008,8 @@ async def dungeondrops(player, universe):
     drop_rate = random.randint(0,400)
 
     if drop_rate <= gold_drop:
-        await bless(30, player)
-        return f"You earned :coin: 30!"
+        await bless(60, player)
+        return f"You earned :coin: 60!"
     elif drop_rate <= title_drop and drop_rate > gold_drop:
         response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'TITLES': str(titles[rand_title])}})
         return f"You earned {titles[rand_title]}!"
@@ -18023,9 +18023,9 @@ async def dungeondrops(player, universe):
         pet_ability_type = list(selected_pet['ABILITIES'][0].values())[1]
 
         response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'PETS': {'NAME': selected_pet['PET'], 'LVL': selected_pet['LVL'], 'EXP': 0, pet_ability_name: int(pet_ability_power), 'TYPE': pet_ability_type, 'BOND': 0, 'PATH': selected_pet['PATH']}}})
-        await bless(50, player)
-        return f"You earned {pets[rand_pet]} + :coin: 50!"
+        await bless(80, player)
+        return f"You earned {pets[rand_pet]} + :coin: 80!"
     elif drop_rate <= card_drop and drop_rate > pet_drop:
             response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(cards[rand_card])}})
-            await bless(50, player)
-            return f"You earned {cards[rand_card]} + :coin: 50!"
+            await bless(80, player)
+            return f"You earned {cards[rand_card]} + :coin: 80!"
