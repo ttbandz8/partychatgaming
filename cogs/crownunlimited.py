@@ -7990,7 +7990,7 @@ class CrownUnlimited(commands.Cog):
             elif o_card_passive_type == 'DRAIN':
                 o_stamina = o_stamina + int(o_card_passive)
             elif o_card_passive_type == 'FLOG':
-                o_attack = o_attack + int(((o_card_passive/100) *t_defense))
+                o_attack = o_attack + int(((o_card_passive/100) *t_attack))
             elif o_card_passive_type == 'WITHER':
                 o_defense = o_defense + int(((o_card_passive/100) *t_defense))
             elif o_card_passive_type == 'RAGE':
@@ -8274,9 +8274,9 @@ class CrownUnlimited(commands.Cog):
             elif t_card_passive_type == 'DRAIN':
                 t_stamina = t_stamina + int(t_card_passive)
             elif t_card_passive_type == 'FLOG':
-                t_attack = t_attack + int(((t_card_passive/100)*o_defense))
+                t_attack = t_attack + int(((t_card_passive/100) * o_attack))
             elif t_card_passive_type == 'WITHER':
-                t_defense = t_defense + int((t_card_passive/100) *o_defense)
+                t_defense = t_defense + int((t_card_passive/100) * o_defense)
             elif t_card_passive_type == 'RAGE':
                 t_attack = t_attack + int(((t_card_passive/100) * t_defense))
                 t_defense = t_defense - int(((t_card_passive/100) *t_attack))
@@ -9359,9 +9359,9 @@ class CrownUnlimited(commands.Cog):
             elif o_card_passive_type == 'DRAIN':
                 o_stamina = o_stamina + int(o_card_passive)
             elif o_card_passive_type == 'FLOG':
-                o_attack = o_attack + int(((o_card_passive/100) *t_defense))
+                o_attack = o_attack + int(((o_card_passive/100) * t_attack))
             elif o_card_passive_type == 'WITHER':
-                o_defense = o_defense + int(((o_card_passive/100) *t_defense))
+                o_defense = o_defense + int(((o_card_passive/100) * t_defense))
             elif o_card_passive_type == 'RAGE':
                 o_attack = o_attack + int(((o_card_passive/100) * o_defense))
                 o_defense = o_defense - int(((o_card_passive/100) *o_attack))
@@ -9641,9 +9641,9 @@ class CrownUnlimited(commands.Cog):
             elif t_card_passive_type == 'DRAIN':
                 t_stamina = t_stamina + int(t_card_passive)
             elif t_card_passive_type == 'FLOG':
-                t_attack = t_attack + int(((t_card_passive/100)*o_defense))
+                t_attack = t_attack + int(((t_card_passive/100) * o_attack))
             elif t_card_passive_type == 'WITHER':
-                t_defense = t_defense + int((t_card_passive/100) *o_defense)
+                t_defense = t_defense + int((t_card_passive/100) * o_defense)
             elif t_card_passive_type == 'RAGE':
                 t_attack = t_attack + int(((t_card_passive/100) * t_defense))
                 t_defense = t_defense - int(((t_card_passive/100) *t_attack))
@@ -10727,7 +10727,7 @@ class CrownUnlimited(commands.Cog):
         elif o_card_passive_type == 'DRAIN':
             o_stamina = o_stamina + int(o_card_passive)
         elif o_card_passive_type == 'FLOG':
-            o_attack = o_attack + int(((o_card_passive/100) *t_defense))
+            o_attack = o_attack + int(((o_card_passive/100) *t_attack))
         elif o_card_passive_type == 'WITHER':
             o_defense = o_defense + int(((o_card_passive/100) *t_defense))
         elif o_card_passive_type == 'RAGE':
@@ -12406,7 +12406,7 @@ class CrownUnlimited(commands.Cog):
                 elif o_card_passive_type == 'DRAIN':
                     o_stamina = o_stamina + int(o_card_passive)
                 elif o_card_passive_type == 'FLOG':
-                    o_attack = o_attack + int(((o_card_passive/100) *t_defense))
+                    o_attack = o_attack + int(((o_card_passive/100) * t_attack))
                 elif o_card_passive_type == 'WITHER':
                     o_defense = o_defense + int(((o_card_passive/100) *t_defense))
                 elif o_card_passive_type == 'RAGE':
@@ -13980,9 +13980,9 @@ class CrownUnlimited(commands.Cog):
                 elif t_card_passive_type == 'DRAIN':
                     t_stamina = t_stamina + int(t_card_passive)
                 elif t_card_passive_type == 'FLOG':
-                    t_attack = t_attack + int(((t_card_passive/100)*o_defense))
+                    t_attack = t_attack + int(((t_card_passive/100) * o_attack))
                 elif t_card_passive_type == 'WITHER':
-                    t_defense = t_defense + int((t_card_passive/100) *o_defense)
+                    t_defense = t_defense + int((t_card_passive/100) * o_defense)
                 elif t_card_passive_type == 'RAGE':
                     t_attack = t_attack + int(((t_card_passive/100) * t_defense))
                     t_defense = t_defense - int(((t_card_passive/100) *t_attack))
@@ -14184,9 +14184,9 @@ class CrownUnlimited(commands.Cog):
                 elif o_card_passive_type == 'DRAIN':
                     o_stamina = o_stamina + int(o_card_passive)
                 elif o_card_passive_type == 'FLOG':
-                    o_attack = o_attack + int(((o_card_passive/100) *t_defense))
+                    o_attack = o_attack + int(((o_card_passive/100) * t_attack))
                 elif o_card_passive_type == 'WITHER':
-                    o_defense = o_defense + int(((o_card_passive/100) *t_defense))
+                    o_defense = o_defense + int(((o_card_passive/100) * t_defense))
                 elif o_card_passive_type == 'RAGE':
                     o_attack = o_attack + int(((o_card_passive/100) * o_defense))
                     o_defense = o_defense - int(((o_card_passive/100) *o_attack))
