@@ -147,8 +147,8 @@ async def enhance(ctx):
 `HLT` - Increased Health based on AP Value
 `LIFE` - Lifesteals based on AP Value and 5% of Opponent Health
 `DRAIN` - Steals Opponent Stamina based on AP Value
-`FLOG` - Steals Attack based on AP Percentage
-`WITHER` - Steals Defense based on AP Percentage
+`FLOG` - Steals Attack based on 30% of AP Percentage
+`WITHER` - Steals Defense based on 30% of AP Percentage
 `RAGE` - Gain ATK but Lose DEF based on 50% of AP Percentage Of Your DEF
 `BRAC`E - GAIN DEF but Lose ATK based on 50% AP Percentage Of Your ATK
 `BZRK` - Gain ATK Based on 50% of your  AP Percentage of Your HLT
