@@ -13797,10 +13797,10 @@ class CrownUnlimited(commands.Cog):
                         embedVar.add_field(name="Most Focused", value=f"`{t_card}`")
                     await ctx.send(embed=embedVar)
                     if botActive:                    
-                        embedVar = discord.Embed(title=f"PLAY AGAIN", description=f"Don't Worry! Losing is apart of the game. Use the #end command to `END` the tutorial lobby OR use #start to `PLAY AGAIN`", colour=0xe74c3c)
+                        embedVar = discord.Embed(title=f"PLAY AGAIN", description=f"Don't Worry! Losing is apart of the game. Use the .end command to `END` the tutorial lobby OR use .start to `PLAY AGAIN`", colour=0xe74c3c)
                         embedVar.set_author(name=f"You Lost...")
                         embedVar.add_field(name="Tips!", value="Equiping stronger `TITLES` and `ARMS` will make you character tougher in a fight!")
-                        embedVar.set_footer(text="The #shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
+                        embedVar.set_footer(text="The .shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
                         await ctx.send(embed=embedVar)
 
                 elif t_health <=0 or t_max_health <= 0:
@@ -13833,7 +13833,7 @@ class CrownUnlimited(commands.Cog):
                         embedVar = discord.Embed(title=f"TUTORIAL COMPLETE", description=f"Victories earn `ITEMS` ! Use the .end command to `END` the tutorial lobby\nOR use .start to `PLAY AGAIN`", colour=0xe91e63)
                         embedVar.set_author(name=f"Congratulations You Beat Senpai!")
                         embedVar.add_field(name="Tips!", value="Equiping stronger `TITLES` and `ARMS` will make you character tougher in a fight!")
-                        embedVar.set_footer(text="The #shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
+                        embedVar.set_footer(text="The .shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
                         await ctx.send(embed=embedVar)
 
         else:
