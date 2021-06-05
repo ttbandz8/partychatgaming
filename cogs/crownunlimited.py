@@ -26,7 +26,6 @@ class CrownUnlimited(commands.Cog):
         self.bot = bot
 
 
-
     @commands.Cog.listener()
     async def on_ready(self):
         print('Crown Unlimited Cog is ready!')
@@ -10522,6 +10521,9 @@ class CrownUnlimited(commands.Cog):
                     await ctx.author.send(embed=embedVar)
 
                 continued = False
+
+                response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+
                 if private_channel.guild:
                     await discord.TextChannel.delete(private_channel, reason=None)
             elif t_health <=0 or t_max_health <= 0:
