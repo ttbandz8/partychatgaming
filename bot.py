@@ -138,13 +138,48 @@ async def enhance(ctx):
    embedVar6.add_field(name="`CONTROL`", value="`SOULCHAIN` - Both `PLAYERS` `STAM` = \n\n`GAMBLE` - Both `PLAYERS` `HEALTH` =\n\n`FEAR` - Decrease `HLT`, Decrease `OPP ATK` & `OPP DEF`")
    embedVar6.set_footer(text=f".help - Bot Help")
 
+   embedVar7 = discord.Embed(title= f":trident:ENHANCE DETAILS:",colour=0x7289da)
+   embedVar7.set_thumbnail(url=avatar)
+   embedVar7.add_field(name="Details Page 1", value="""
+`ATK` - AP Percentage Based Attack Increased
+`DEF` - AP Percentage Based Attack Increased
+`STAM` - Increased Stamina based on AP Value
+`HLT` - Increased Health based on AP Value
+`LIFE` - Lifesteals based on AP Value and 5% of Opponent Health
+`DRAIN` - Steals Opponent Stamina based on AP Value
+`FLOG` - Steals Attack based on AP Percentage
+`WITHER` - Steals Defense based on AP Percentage
+`RAGE` - Gain ATK but Lose DEF based on 50% of AP Percentage Of Your DEF
+`BRAC`E - GAIN DEF but Lose ATK based on 50% AP Percentage Of Your ATK
+`BZRK` - Gain ATK Based on 50% of your  AP Percentage of Your HLT
+"""
+   )
+   embedVar7.set_footer(text=f".help - Bot Help")
+
+   embedVar8 = discord.Embed(title= f":trident:ENHANCE DETAILS:",colour=0x7289da)
+   embedVar8.set_thumbnail(url=avatar)
+   embedVar8.add_field(name="Details Page 2", value="""
+`CRYSTAL` - Gain DEF Based on 50% of your AP Percentage Of Your Health
+`GROWTH` - Lower Max Health, Increase Defense and Attack based on 50% of AP Percentage
+`STANCE` - Swaps your ATK and your DEF, and gives you additional DEF based on AP Value
+`CONFUSE` - Swaps ATK and DEF of opponent and saps additional DEF based on AP Value
+`BLINK` - Decreases Your Stamina by AP Value and gives opponent Stamina by AP Value
+`SLOW` - Increases Your Stamina by AP Value, Decreases your Opponent Stamina by AP Value, then swaps your and your opponents Stamina
+`HASTE` - Decreases your opponent Stamina, Increases your stamina, swap your and your opponent stamina
+`SOUL` CHAIN - Make you and your opponent Stamina the same based on AP Value
+`GAMBLE` - Make you and your opponent health the same based on AP Value
+`FEAR` - Lower your Health by AP Percentage, Lower your opponent ATK and DEF by AP Percentage
+"""
+   )
+   embedVar8.set_footer(text=f".help - Bot Help")
+
    paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
    paginator.add_reaction('⏮️', "first")
    paginator.add_reaction('⏪', "back")
    paginator.add_reaction('🔐', "lock")
    paginator.add_reaction('⏩', "next")
    paginator.add_reaction('⏭️', "last")
-   embeds = [embedVar1, embedVar2, embedVar3, embedVar4, embedVar5, embedVar6]
+   embeds = [embedVar1, embedVar2, embedVar3, embedVar4, embedVar5, embedVar6, embedVar7, embedVar8]
    await paginator.run(embeds)
 
 
