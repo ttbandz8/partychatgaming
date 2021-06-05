@@ -17458,9 +17458,15 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
         elif enh_type == "STAM":
             enhanced=stam
         elif enh_type == "HLT":
-            enhanced=hlt
+            if health >= (maxhealth + (.25 * maxhealth):
+                enhanced=0
+            else:
+                enhanced=hlt
         elif enh_type == 'LIFE':
-            enhanced =lifesteal
+            if health >= (maxhealth + (.10 * maxhealth):
+                enhanced=0
+            else:
+                enhanced=lifesteal
         elif enh_type == 'DRAIN':
             enhanced = drain
         elif enh_type == "FLOG":
