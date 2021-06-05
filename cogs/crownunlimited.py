@@ -9265,7 +9265,7 @@ class CrownUnlimited(commands.Cog):
             opponent_scaling = 24
             player_scaling = 5
         else:
-            opponent_scaling = 10
+            opponent_scaling = 3
             player_scaling = 1
 
         legends = [x for x in universe['CROWN_TALES']]
@@ -9354,7 +9354,7 @@ class CrownUnlimited(commands.Cog):
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
-            t_attack = t['ATK'] + (4 * currentopponent) + opponent_scaling
+            t_attack = t['ATK'] + (2 * currentopponent) + opponent_scaling
             t_defense = t['DEF'] + (4 * currentopponent) + opponent_scaling
             t_type = t['TYPE']
             t_accuracy = t['ACC']
