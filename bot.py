@@ -226,7 +226,7 @@ async def crownhelp(ctx):
 
    embedVar10 = discord.Embed(title= f":crown:CROWN UNLIMITED ECONOMY:",colour=0x7289da)
    embedVar10.set_thumbnail(url=avatar)
-   embedVar10.add_field(name="`Multiplayer Modes : ECONOMY`", value="CROWN UNLIMITED features aN in game shop where you can purchase CARDS, TITLES and ARMS.\n\nEarn :coin: competing in Game Modes to buy better ITEMS\n\nSTOCK - Items in the shop have a stock, when they are sold out they become unavailable!\n\nBarter and Trade with other players to purchase sold out items on the Open Market\n\nSELL/TRADE - .sell and .trade will allow you to trade Cards, Titles, Arms and Pets!")
+   embedVar10.add_field(name="`Multiplayer Modes : ECONOMY`", value="CROWN UNLIMITED features an in game shop where you can purchase CARDS, TITLES and ARMS.\n\nEarn :coin: competing in Game Modes to buy better ITEMS\n\nSTOCK - Items in the shop have a stock, when they are sold out they become unavailable!\n\nBarter and Trade with other players to purchase sold out items on the Open Market\n\nSELL/TRADE - .sell and .trade will allow you to trade Cards, Titles, Arms and Pets!")
 
    embedVar12 = discord.Embed(title= f":crown:CROWN UNLIMITED HELP:",colour=0x7289da)
    embedVar12.set_thumbnail(url=avatar)
