@@ -427,7 +427,7 @@ async def trade(ctx, user2: User, *args):
             return msg.author == user2 and msg.content in p2_cards or msg.content in p2_titles or msg.content in p2_arms or msg.content in p2_pet_names and msg.content not in p1_cards and msg.content not in p1_titles and msg.content not in p1_arms and msg.content not in p1_pet_names
 
       try:
-         msg = await bot.wait_for('message', timeout=8.0, check=check)
+         msg = await bot.wait_for('message', timeout=20.0, check=check)
          p2_trade_item = msg.content
 
          p2_active_pet = {}
@@ -547,7 +547,7 @@ async def sell(ctx, user2: User, *args):
                return user == ctx.author and str(reaction.emoji) == '👍'
 
             try:
-               reaction, user = await bot.wait_for('reaction_add', timeout=8.0, check=check)
+               reaction, user = await bot.wait_for('reaction_add', timeout=20.0, check=check)
 
                if p1_trade_item in p1_arms:
                   db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'ARMS': str(p1_trade_item)}})
@@ -626,7 +626,7 @@ async def resell(ctx, *args):
             return user == ctx.author and str(reaction.emoji) == '👍'
 
          try:
-            reaction, user = await bot.wait_for('reaction_add', timeout=8.0, check=check)
+            reaction, user = await bot.wait_for('reaction_add', timeout=20.0, check=check)
 
             if p1_trade_item in p1_arms:
                db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'ARMS': str(p1_trade_item)}})
