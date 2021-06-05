@@ -17381,10 +17381,10 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
             drain = ap 
         elif enh == 'FLOG':
             enh_type="FLOG"
-            flog = ((ap/100) * op_attack )
+            flog = (((ap/3)/100) * op_attack )
         elif enh == 'WITHER':
             enh_type="WITHER"
-            wither = ((ap/100) * op_defense )
+            wither = (((ap/3)/100) * op_defense )
         elif enh == 'RAGE':
             enh_type="RAGE"
             rage = ((ap/100)* defense )
