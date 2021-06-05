@@ -128,7 +128,7 @@ class CrownUnlimited(commands.Cog):
             ctitle = db.queryTitle({'TITLE': companion['TITLE']})
             
             t = db.queryCard({'NAME': legends[currentopponent]})
-            ttitle = db.queryTitle({'TITLE': 'Starter'})
+            ttitle = db.queryTitle({'TITLE': universe['UTITLE']})
 
             #################################################################### PLAYER DATA
             # Player 1 Data
@@ -252,7 +252,7 @@ class CrownUnlimited(commands.Cog):
 
             # Player 2 Data
             t_user = boss
-            tarm = db.queryArm({'ARM': 'Stock'})
+            tarm = db.queryArm({'ARM': universe['UARM']})
             tarm_passive = tarm['ABILITIES'][0]
             tarm_name=tarm['ARM']
             t_card = t['NAME']
@@ -263,8 +263,8 @@ class CrownUnlimited(commands.Cog):
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
-            t_attack = t['ATK'] + (18 * currentopponent) + 15 + opponent_scaling
-            t_defense = t['DEF'] + (18 * currentopponent) + 15 + opponent_scaling
+            t_attack = t['ATK'] + (10 * currentopponent) + opponent_scaling
+            t_defense = t['DEF'] + (11 * currentopponent) + opponent_scaling
             t_type = t['TYPE']
             t_accuracy = t['ACC']
             t_passive = t['PASS'][0]
@@ -2529,7 +2529,7 @@ class CrownUnlimited(commands.Cog):
                     upload_query={'DISNAME': str(ctx.author)}
                     new_upload_query={'$addToSet': {'CROWN_TALES': selected_universe}}
                     r=db.updateUserNoFilter(upload_query, new_upload_query)
-                    if selected_universe in available_universes:
+                    if selected_universe in completed_crown_tales:
                         await bless(25, ctx.author)
                         await bless(25, cuser)
                         await ctx.author.send(embed=embedVar)
@@ -2548,7 +2548,7 @@ class CrownUnlimited(commands.Cog):
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
         companion = db.queryUser({'DISNAME': str(user)})
 
-        completed_crown_tales = sowner['CROWN_TALES']
+        completed_dungeons = sowner['DUNGEONS']
         all_universes = db.queryAllUniverse()
         available_universes = []
         selected_universe = ""
@@ -2558,8 +2558,8 @@ class CrownUnlimited(commands.Cog):
                 
         embedVar = discord.Embed(title=f":crown: CROWN DUNGEONS CO-OP!", description="Select a Universe to explore!", colour=0xe91e63)
         embedVar.add_field(name="Available Universes", value=" | ".join(available_universes))
-        if len(completed_crown_tales) > 1:
-            embedVar.add_field(name="Completed Universes", value=" | ".join(completed_crown_tales), inline=False)
+        if len(completed_dungeons) > 1:
+            embedVar.add_field(name="Completed Universes", value="\n".join(completed_dungeons))
         embedVar.set_footer(text="Earn drops from the Universes you explore. Conquering Universes unlocks more worlds!\nEnjoy Co-op!")
         await private_channel.send(embed=embedVar)
         accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
@@ -2619,7 +2619,7 @@ class CrownUnlimited(commands.Cog):
             otitle = db.queryTitle({'TITLE': sowner['TITLE']})
             
             t = db.queryCard({'NAME': legends[currentopponent]})
-            ttitle = db.queryTitle({'TITLE': 'Starter'})
+            ttitle = db.queryTitle({'TITLE': universe['DTITLE']})
 
             c = db.queryCard({'NAME': companion['CARD']})
             ctitle = db.queryTitle({'TITLE': companion['TITLE']})
@@ -2745,7 +2745,7 @@ class CrownUnlimited(commands.Cog):
 
             # Player 2 Data
             t_user = boss
-            tarm = db.queryArm({'ARM': 'Stock'})
+            tarm = db.queryArm({'ARM': universe['DARM']})
             tarm_passive = tarm['ABILITIES'][0]
             tarm_name=tarm['ARM']
             t_card = t['NAME']
@@ -5012,7 +5012,7 @@ class CrownUnlimited(commands.Cog):
                     upload_query={'DISNAME': str(ctx.author)}
                     new_upload_query={'$addToSet': {'CROWN_TALES': selected_universe}}
                     r=db.updateUserNoFilter(upload_query, new_upload_query)
-                    if selected_universe in available_universes:
+                    if selected_universe in completed_dungeons:
                         await bless(125, ctx.author)
                         await bless(125, user2)
                         await ctx.author.send(embed=embedVar)
@@ -7837,7 +7837,7 @@ class CrownUnlimited(commands.Cog):
             otitle = db.queryTitle({'TITLE': sowner['TITLE']})
             
             t = db.queryCard({'NAME': legends[currentopponent]})
-            ttitle = db.queryTitle({'TITLE': 'Starter'})
+            ttitle = db.queryTitle({'TITLE': universe['DTITLE']})
 
             ####################################################################
             # Player Data
@@ -7904,7 +7904,7 @@ class CrownUnlimited(commands.Cog):
 
             # Player 2 Data
             t_user = boss
-            tarm = db.queryArm({'ARM': 'Stock'})
+            tarm = db.queryArm({'ARM': universe['DARM']})
             tarm_passive = tarm['ABILITIES'][0]
             tarm_name=tarm['ARM']
             t_card = t['NAME']
@@ -9127,12 +9127,12 @@ class CrownUnlimited(commands.Cog):
                     upload_query={'DISNAME': str(ctx.author)}
                     dungeon_new_upload_query={'$addToSet': {'DUNGEONS': selected_universe}}
                     r=db.updateUserNoFilter(upload_query, dungeon_new_upload_query)
-                    if selected_universe in available_universes:
-                        await bless(50, ctx.author)
+                    if selected_universe in completed_dungeons:
+                        await bless(100, ctx.author)
                         await ctx.author.send(embed=embedVar)
                         await ctx.author.send(f"You were awarded :coin: 50 for completing the {selected_universe} Dungeon!")
                     else:
-                        await bless(800, ctx.author)
+                        await bless(1000, ctx.author)
                         await main.DM(ctx, ctx.author, embed=embedVar)
                         await ctx.author.send(f"You were awarded :coin: 800 for completing the {selected_universe} Dungeon! ")
                     continued=False
@@ -9279,13 +9279,13 @@ class CrownUnlimited(commands.Cog):
             t_card = t['NAME']
             t_card_path=t['PATH']
             t_rcard_path=t['RPATH']
-            t_max_health = t['HLT'] + (40 * currentopponent) + (opponent_scaling * 3)
-            t_health = t['HLT'] + (40 * currentopponent) + (opponent_scaling * 3)
+            t_max_health = t['HLT'] + (3 * currentopponent) + (opponent_scaling)
+            t_health = t['HLT'] + (3 * currentopponent) + (opponent_scaling)
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
-            t_attack = t['ATK'] + (10 * currentopponent) + opponent_scaling
-            t_defense = t['DEF'] + (10 * currentopponent) + opponent_scaling
+            t_attack = t['ATK'] + (4 * currentopponent) + opponent_scaling
+            t_defense = t['DEF'] + (4 * currentopponent) + opponent_scaling
             t_type = t['TYPE']
             t_accuracy = t['ACC']
             t_passive = t['PASS'][0]
@@ -10501,8 +10501,8 @@ class CrownUnlimited(commands.Cog):
                     upload_query={'DISNAME': str(ctx.author)}
                     new_upload_query={'$addToSet': {'CROWN_TALES': selected_universe}}
                     r=db.updateUserNoFilter(upload_query, new_upload_query)
-                    if selected_universe in available_universes:
-                        await bless(25, ctx.author)
+                    if selected_universe in completed_crown_tales:
+                        await bless(60, ctx.author)
                         await ctx.author.send(embed=embedVar)
                         await ctx.author.send(f"You were awarded :coin: 25 for completing the {selected_universe} Tale!")
                     else:
@@ -17363,10 +17363,10 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
     if enhancer:
         if enh == 'ATK':
             enh_type="ATK"
-            atk = ap
+            atk = (ap/100)
         elif enh == 'DEF':
             enh_type="DEF"
-            defense = ap
+            defense = (ap/100)
         elif enh == 'STAM':
             enh_type="STAM"
             stam = ap
@@ -17458,12 +17458,12 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
         elif enh_type == "STAM":
             enhanced=stam
         elif enh_type == "HLT":
-            if health >= (maxhealth + (.25 * maxhealth):
+            if health >= (maxhealth + (.25 * maxhealth)):
                 enhanced=0
             else:
                 enhanced=hlt
         elif enh_type == 'LIFE':
-            if health >= (maxhealth + (.10 * maxhealth):
+            if health >= (maxhealth + (.10 * maxhealth)):
                 enhanced=0
             else:
                 enhanced=lifesteal
