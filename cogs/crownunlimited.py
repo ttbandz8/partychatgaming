@@ -862,7 +862,7 @@ class CrownUnlimited(commands.Cog):
             elif t_card_passive_type == 'DRAIN':
                 t_stamina = t_stamina + int(t_card_passive)
             elif t_card_passive_type == 'FLOG':
-                t_attack = t_attack + int(((t_card_passive/100)*o_attack))
+                t_attack = t_attack + int(((t_card_passive/100) * o_attack))
             elif t_card_passive_type == 'WITHER':
                 t_defense = t_defense + int((t_card_passive/100) *o_defense)
             elif t_card_passive_type == 'RAGE':
@@ -931,9 +931,9 @@ class CrownUnlimited(commands.Cog):
                 elif t_title_passive_type == 'DRAIN':
                     t_stamina = t_stamina + int(t_title_passive_value)
                 elif t_title_passive_type == 'FLOG':
-                    t_attack = t_attack + int((.20 *t_title_passive_value))
+                    t_attack = t_attack + int((.20 * t_title_passive_value))
                 elif t_title_passive_type == 'WITHER':
-                    t_defense = t_defense + int((.20 *t_title_passive_value))
+                    t_defense = t_defense + int((.20 * t_title_passive_value))
                 elif t_title_passive_type == 'RAGE':
                     t_attack = t_attack + int((.20 * t_title_passive_value))
                     t_defense = t_defense - int((.20 *t_title_passive_value))
@@ -1204,8 +1204,10 @@ class CrownUnlimited(commands.Cog):
                                             t_stamina = round(t_stamina - dmg['DMG'])
                                         elif opet_type == 'FLOG':
                                             o_attack = round(o_attack + dmg['DMG'])
+                                            t_attack = round (t_attack - dmg['DMG'])
                                         elif opet_type == 'WITHER':
                                             o_defense = round(o_defense + dmg['DMG'])
+                                            t_defense = round (t_defense - dmg['DMG'])
                                         elif opet_type == 'RAGE':
                                             o_defense = round(o_defense - dmg['DMG'])
                                             o_attack = round(o_attack + dmg['DMG'])
@@ -1219,9 +1221,9 @@ class CrownUnlimited(commands.Cog):
                                             o_health = round(o_health - dmg['DMG'])
                                             o_defense = round(o_defense +(.50 * dmg['DMG']))
                                         elif opet_type == 'GROWTH':
-                                            o_max_health = round(o_max_health - dmg['DMG'])
-                                            o_defense = round(o_defense + ( o_defense * dmg['DMG']))
-                                            o_attack = round(o_attack + (o_attack * dmg['DMG']))
+                                            o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
+                                            o_defense = round(o_defense + (o_defense * (.50 * dmg['DMG'])))
+                                            o_attack = round(o_attack + (o_attack * (.50 * dmg['DMG'])))
                                         elif opet_type == 'STANCE':
                                             tempattack = dmg['DMG']
                                             o_attack = o_defense
@@ -1307,8 +1309,8 @@ class CrownUnlimited(commands.Cog):
                                         c_defense = round(c_defense +(.50 * dmg['DMG']))
                                     elif comp_enh == 'GROWTH':
                                         c_max_health = round(c_max_health - (c_max_health * dmg['DMG']))
-                                        c_defense = round(c_defense + (c_defense * dmg['DMG']))
-                                        c_attack = round(c_attack + (c_attack * dmg['DMG']))
+                                        c_defense = round(c_defense + (c_defense * (.50 * dmg['DMG'])))
+                                        c_attack = round(c_attack + (c_attack * (.50 * dmg['DMG'])))
                                     elif comp_enh == 'STANCE':
                                         tempattack = dmg['DMG']
                                         c_attack = c_defense
@@ -1391,8 +1393,8 @@ class CrownUnlimited(commands.Cog):
                                             o_defense = round(o_defense +(.50 * dmg['DMG']))
                                         elif enh_type == 'GROWTH':
                                             o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
-                                            o_defense = round(o_defense + (o_defense * dmg['DMG']))
-                                            o_attack = round(o_attack + (o_attack * dmg['DMG']))
+                                            o_defense = round(o_defense + (o_defense * (.50 * dmg['DMG'])))
+                                            o_attack = round(o_attack + (o_attack * (.50 * dmg['DMG'])))
                                         elif enh_type == 'STANCE':
                                             tempattack = dmg['DMG']
                                             o_attack = o_defense
@@ -1651,7 +1653,7 @@ class CrownUnlimited(commands.Cog):
                                         t_health = round(t_health + dmg['DMG'])
                                     elif enh_type == 'LIFE':
                                         t_health = round(t_health + dmg['DMG'])
-                                        c_health = round(c_health - dmg['DMG'])
+                                        o_health = round(o_health - dmg['DMG'])
                                     elif enh_type == 'DRAIN':
                                         t_stamina = round(t_stamina + dmg['DMG'])
                                         o_stamina = round(o_stamina - dmg['DMG'])
@@ -1675,8 +1677,8 @@ class CrownUnlimited(commands.Cog):
                                         t_defense = round(t_defense + (.50 * dmg['DMG']))
                                     elif enh_type == 'GROWTH':
                                         t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                        t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                        t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                        t_defense = round(t_defense + (t_defense * (.50 * dmg['DMG'])))
+                                        t_attack = round(t_attack + (t_attack * (.50 * dmg['DMG'])))
                                     elif enh_type == 'STANCE':
                                         tempattack = dmg['DMG']
                                         t_attack = t_defense
@@ -1908,8 +1910,10 @@ class CrownUnlimited(commands.Cog):
                                             t_stamina = round(t_stamina - dmg['DMG'])
                                         elif cpet_type == 'FLOG':
                                             c_attack = round(c_attack + dmg['DMG'])
+                                            t_attack = round (t_attack - dmg['DMG'])
                                         elif cpet_type == 'WITHER':
                                             c_defense = round(c_defense + dmg['DMG'])
+                                            t_defense = round (t_defense - dmg['DMG'])
                                         elif cpet_type == 'RAGE':
                                             c_defense = round(c_defense - dmg['DMG'])
                                             c_attack = round(c_attack + dmg['DMG'])
@@ -1923,9 +1927,9 @@ class CrownUnlimited(commands.Cog):
                                             c_health = round(c_health - dmg['DMG'])
                                             c_defense = round(c_defense +(.50 * dmg['DMG']))
                                         elif cpet_type == 'GROWTH':
-                                            c_max_health = round(c_max_health - dmg['DMG'])
-                                            c_defense = round(c_defense + (c_defense * dmg['DMG']))
-                                            c_attack = round(c_attack + (c_attack * dmg['DMG']))
+                                            c_max_health = round(c_max_health - (c_max_health * dmg['DMG']))
+                                            c_defense = round(c_defense + (c_defense * (.50 * dmg['DMG'])))
+                                            c_attack = round(c_attack + (c_attack * (.50 * dmg['DMG'])))
                                         elif cpet_type == 'STANCE':
                                             tempattack = dmg['DMG']
                                             c_attack = c_defense
@@ -2011,8 +2015,8 @@ class CrownUnlimited(commands.Cog):
                                         o_defense = round(o_defense +(.50 * dmg['DMG']))
                                     elif cenh_type == 'GROWTH':
                                         o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
-                                        o_defense = round(o_defense + (o_defense * dmg['DMG']))
-                                        o_attack = round(o_attack + (o_attack * dmg['DMG']))
+                                        o_defense = round(o_defense + (o_defense * (.50 * dmg['DMG'])))
+                                        o_attack = round(o_attack + (o_attack * (.50 * dmg['DMG'])))
                                     elif cenh_type == 'STANCE':
                                         tempattack = dmg['DMG']
                                         o_attack = o_defense
@@ -2096,8 +2100,8 @@ class CrownUnlimited(commands.Cog):
                                             c_defense = round(c_defense +(.50 * dmg['DMG']))
                                         elif enh_type == 'GROWTH':
                                             c_max_health = round(c_max_health - (c_max_health * dmg['DMG']))
-                                            c_defense = round(c_defense + (c_defense * dmg['DMG']))
-                                            c_attack = round(c_attack + (c_attack * dmg['DMG']))
+                                            c_defense = round(c_defense + (c_defense * (.50 * dmg['DMG'])))
+                                            c_attack = round(c_attack + (c_attack * (.50 * dmg['DMG'])))
                                         elif enh_type == 'STANCE':
                                             tempattack = dmg['DMG']
                                             c_attack = c_defense
@@ -2380,8 +2384,8 @@ class CrownUnlimited(commands.Cog):
                                         t_defense = round(t_defense + (.50 * dmg['DMG']))
                                     elif enh_type == 'GROWTH':
                                         t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                        t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                        t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                        t_defense = round(t_defense + (t_defense * (.50 * dmg['DMG'])))
+                                        t_attack = round(t_attack + (t_attack * (.50 * dmg['DMG'])))
                                     elif enh_type == 'STANCE':
                                         tempattack = dmg['DMG']
                                         t_attack = t_defense
@@ -3717,8 +3721,10 @@ class CrownUnlimited(commands.Cog):
                                             t_stamina = round(t_stamina - dmg['DMG'])
                                         elif opet_type == 'FLOG':
                                             o_attack = round(o_attack + dmg['DMG'])
+                                            t_attack = round (t_attack - dmg['DMG'])
                                         elif opet_type == 'WITHER':
                                             o_defense = round(o_defense + dmg['DMG'])
+                                            t_defense = round (t_defense - dmg['DMG'])
                                         elif opet_type == 'RAGE':
                                             o_defense = round(o_defense - dmg['DMG'])
                                             o_attack = round(o_attack + dmg['DMG'])
@@ -3732,9 +3738,9 @@ class CrownUnlimited(commands.Cog):
                                             o_health = round(o_health - dmg['DMG'])
                                             o_defense = round(o_defense + (.50 * dmg['DMG']))
                                         elif opet_type == 'GROWTH':
-                                            o_max_health = round(o_max_health - dmg['DMG'])
-                                            o_defense = round(o_defense + (o_defense * dmg['DMG']))
-                                            o_attack = round(o_attack + (o_attack * dmg['DMG']))
+                                            o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
+                                            o_defense = round(o_defense + (o_defense * (.50 * dmg['DMG'])))
+                                            o_attack = round(o_attack + (o_attack * (.50 * dmg['DMG'])))
                                         elif opet_type == 'STANCE':
                                             tempattack = dmg['DMG']
                                             o_attack = o_defense
@@ -3820,8 +3826,8 @@ class CrownUnlimited(commands.Cog):
                                         c_defense = round(c_defense +(.50 * dmg['DMG']))
                                     elif comp_enh == 'GROWTH':
                                         c_max_health = round(c_max_health - (c_max_health * dmg['DMG']))
-                                        c_defense = round(c_defense + (c_defense * dmg['DMG']))
-                                        c_attack = round(c_attack + (c_attack * dmg['DMG']))
+                                        c_defense = round(c_defense + (c_defense * (.50 * dmg['DMG'])))
+                                        c_attack = round(c_attack + (c_attack * (.50 * dmg['DMG'])))
                                     elif comp_enh == 'STANCE':
                                         tempattack = dmg['DMG']
                                         c_attack = c_defense
@@ -3904,8 +3910,8 @@ class CrownUnlimited(commands.Cog):
                                             o_defense = round(o_defense +(.50 * dmg['DMG']))
                                         elif enh_type == 'GROWTH':
                                             o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
-                                            o_defense = round(o_defense + (o_defense * dmg['DMG']))
-                                            o_attack = round(o_attack + (o_attack * dmg['DMG']))
+                                            o_defense = round(o_defense + (o_defense * (.50 * dmg['DMG'])))
+                                            o_attack = round(o_attack + (o_attack * (.50 * dmg['DMG'])))
                                         elif enh_type == 'STANCE':
                                             tempattack = dmg['DMG']
                                             o_attack = o_defense
@@ -4164,7 +4170,7 @@ class CrownUnlimited(commands.Cog):
                                         t_health = round(t_health + dmg['DMG'])
                                     elif enh_type == 'LIFE':
                                         t_health = round(t_health + dmg['DMG'])
-                                        c_health = round(c_health - dmg['DMG'])
+                                        o_health = round(o_health - dmg['DMG'])
                                     elif enh_type == 'DRAIN':
                                         t_stamina = round(t_stamina + dmg['DMG'])
                                         o_stamina = round(o_stamina - dmg['DMG'])
@@ -4188,8 +4194,8 @@ class CrownUnlimited(commands.Cog):
                                         t_defense = round(t_defense + (.50 * dmg['DMG']))
                                     elif enh_type == 'GROWTH':
                                         t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                        t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                        t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                        t_defense = round(t_defense + (t_defense * (.50 * dmg['DMG'])))
+                                        t_attack = round(t_attack + (t_attack * (.50 * dmg['DMG'])))
                                     elif enh_type == 'STANCE':
                                         tempattack = dmg['DMG']
                                         t_attack = t_defense
@@ -4419,8 +4425,10 @@ class CrownUnlimited(commands.Cog):
                                             t_stamina = round(t_stamina - dmg['DMG'])
                                         elif cpet_type == 'FLOG':
                                             c_attack = round(c_attack + dmg['DMG'])
+                                            t_attack = round (t_attack - dmg['DMG'])
                                         elif cpet_type == 'WITHER':
                                             c_defense = round(c_defense + dmg['DMG'])
+                                            t_defense = round (t_attack - dmg['DMG'])
                                         elif cpet_type == 'RAGE':
                                             c_defense = round(c_defense - dmg['DMG'])
                                             c_attack = round(c_attack + dmg['DMG'])
@@ -4434,9 +4442,9 @@ class CrownUnlimited(commands.Cog):
                                             c_health = round(c_health - dmg['DMG'])
                                             c_defense = round(c_defense +(.50 * dmg['DMG']))
                                         elif cpet_type == 'GROWTH':
-                                            c_max_health = round(c_max_health - dmg['DMG'])
-                                            c_defense = round(c_defense + (c_defense * dmg['DMG']))
-                                            c_attack = round(c_attack + (c_attack *  dmg['DMG']))
+                                            c_max_health = round(c_max_health - (c_max_health * dmg['DMG']))
+                                            c_defense = round(c_defense + (c_defense * (.50 * dmg['DMG'])))
+                                            c_attack = round(c_attack + (c_attack *  (.50 * dmg['DMG'])))
                                         elif cpet_type == 'STANCE':
                                             tempattack = dmg['DMG']
                                             c_attack = c_defense
@@ -4522,8 +4530,8 @@ class CrownUnlimited(commands.Cog):
                                         o_defense = round(o_defense +(.50 * dmg['DMG']))
                                     elif cenh_type == 'GROWTH':
                                         o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
-                                        o_defense = round(o_defense + (o_defense * dmg['DMG']))
-                                        o_attack = round(o_attack + (o_attack * dmg['DMG']))
+                                        o_defense = round(o_defense + (o_defense * (.50 * dmg['DMG'])))
+                                        o_attack = round(o_attack + (o_attack * (.50 * dmg['DMG'])))
                                     elif cenh_type == 'STANCE':
                                         tempattack = dmg['DMG']
                                         o_attack = o_defense
@@ -4607,8 +4615,8 @@ class CrownUnlimited(commands.Cog):
                                             c_defense = round(c_defense +(.50 * dmg['DMG']))
                                         elif enh_type == 'GROWTH':
                                             c_max_health = round(c_max_health - (c_max_health * dmg['DMG']))
-                                            c_defense = round(c_defense + (c_defense * dmg['DMG']))
-                                            c_attack = round(c_attack + (c_attack * dmg['DMG']))
+                                            c_defense = round(c_defense + (c_defense * (.50 * dmg['DMG'])))
+                                            c_attack = round(c_attack + (c_attack * (.50 * dmg['DMG'])))
                                         elif enh_type == 'STANCE':
                                             tempattack = dmg['DMG']
                                             c_attack = c_defense
@@ -4891,8 +4899,8 @@ class CrownUnlimited(commands.Cog):
                                         t_defense = round(t_defense + (.50 * dmg['DMG']))
                                     elif enh_type == 'GROWTH':
                                         t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                        t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                        t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                        t_defense = round(t_defense + (t_defense * (.50 * dmg['DMG'])))
+                                        t_attack = round(t_attack + (t_attack * (.50 * dmg['DMG'])))
                                     elif enh_type == 'STANCE':
                                         tempattack = dmg['DMG']
                                         t_attack = t_defense
@@ -6192,8 +6200,10 @@ class CrownUnlimited(commands.Cog):
                                         t_stamina = round(t_stamina - dmg['DMG'])
                                     elif opet_type == 'FLOG':
                                         o_attack = round(o_attack + dmg['DMG'])
+                                        t_attack = round (t_attack - dmg['DMG'])
                                     elif opet_type == 'WITHER':
                                         o_defense = round(o_defense + dmg['DMG'])
+                                        t_defense = round (t_defense - dmg['DMG'])
                                     elif opet_type == 'RAGE':
                                         o_defense = round(o_defense - dmg['DMG'])
                                         o_attack = round(o_attack + dmg['DMG'])
@@ -6207,9 +6217,9 @@ class CrownUnlimited(commands.Cog):
                                         o_health = round(o_health - dmg['DMG'])
                                         o_defense = round(o_defense +(.10 * dmg['DMG']))
                                     elif opet_type == 'GROWTH':
-                                        o_max_health = round(o_max_health - dmg['DMG'])
-                                        o_defense = round(o_defense + dmg['DMG'])
-                                        o_attack = round(o_attack + dmg['DMG'])
+                                        o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
+                                        o_defense = round(o_defense + (o_defense * (.50 * dmg['DMG'])))
+                                        o_attack = round(o_attack + (o_attack * (.50 * dmg['DMG'])))
                                     elif opet_type == 'STANCE':
                                         tempattack = dmg['DMG']
                                         o_attack = o_defense
@@ -6295,8 +6305,8 @@ class CrownUnlimited(commands.Cog):
                                     c_defense = round(c_defense +(.50 * dmg['DMG']))
                                 elif comp_enh == 'GROWTH':
                                     c_max_health = round(c_max_health - (c_max_health * dmg['DMG']))
-                                    c_defense = round(c_defense + (c_defense * dmg['DMG']))
-                                    c_attack = round(c_attack + (c_attack * dmg['DMG']))
+                                    c_defense = round(c_defense + (c_defense * (.50 * dmg['DMG'])))
+                                    c_attack = round(c_attack + (c_attack * (.50 * dmg['DMG'])))
                                 elif comp_enh == 'STANCE':
                                     tempattack = dmg['DMG']
                                     c_attack = c_defense
@@ -6378,8 +6388,8 @@ class CrownUnlimited(commands.Cog):
                                         o_defense = round(o_defense +(.50 * dmg['DMG']))
                                     elif enh_type == 'GROWTH':
                                         o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
-                                        o_defense = round(o_defense + (o_defense * dmg['DMG']))
-                                        o_attack = round(o_attack + (o_attack * dmg['DMG']))
+                                        o_defense = round(o_defense + (o_defense * (.50 * dmg['DMG'])))
+                                        o_attack = round(o_attack + (o_attack * (.50 * dmg['DMG'])))
                                     elif enh_type == 'STANCE':
                                         tempattack = dmg['DMG']
                                         o_attack = o_defense
@@ -6700,8 +6710,10 @@ class CrownUnlimited(commands.Cog):
                                     o_stamina = round(o_stamina - dmg['DMG'])
                                 elif tpet_type == 'FLOG':
                                     t_attack = round(t_attack + dmg['DMG'])
+                                    o_attack = round (o_attack - dmg['DMG'])
                                 elif tpet_type == 'WITHER':
                                     t_defense = round(t_defense + dmg['DMG'])
+                                    o_defense = round (o_defense - dmg['DMG'])
                                 elif tpet_type == 'RAGE':
                                     t_defense = round(t_defense - dmg['DMG'])
                                     t_attack = round(t_attack + dmg['DMG'])
@@ -6715,9 +6727,9 @@ class CrownUnlimited(commands.Cog):
                                     t_health = round(t_health - dmg['DMG'])
                                     t_defense = round(t_defense + (.50 * dmg['DMG']))
                                 elif tpet_type == 'GROWTH':
-                                    t_max_health = round(t_max_health - dmg['DMG'])
-                                    t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                    t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                    t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
+                                    t_defense = round(t_defense + (t_defense * (.50 * dmg['DMG'])))
+                                    t_attack = round(t_attack + (t_attack * (.50 * dmg['DMG'])))
                                 elif tpet_type == 'STANCE':
                                     tempattack = dmg['DMG']
                                     t_attack = t_defense
@@ -6805,8 +6817,8 @@ class CrownUnlimited(commands.Cog):
                                     t_defense = round(t_defense + (.50 * dmg['DMG']))
                                 elif enh_type == 'GROWTH':
                                     t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                    t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                    t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                    t_defense = round(t_defense + (t_defense * (.50 * dmg['DMG'])))
+                                    t_attack = round(t_attack + (t_attack * (.50 * dmg['DMG'])))
                                 elif enh_type == 'STANCE':
                                     tempattack = dmg['DMG']
                                     t_attack = t_defense
@@ -7045,8 +7057,10 @@ class CrownUnlimited(commands.Cog):
                                         t_stamina = round(t_stamina - dmg['DMG'])
                                     elif cpet_type == 'FLOG':
                                         c_attack = round(c_attack + dmg['DMG'])
+                                        t_attack = round (t_attack - dmg['DMG'])
                                     elif cpet_type == 'WITHER':
                                         c_defense = round(c_defense + dmg['DMG'])
+                                        t_attack = round (t_attack - dmg['DMG'])
                                     elif cpet_type == 'RAGE':
                                         c_defense = round(c_defense - dmg['DMG'])
                                         c_attack = round(c_attack + dmg['DMG'])
@@ -7060,9 +7074,9 @@ class CrownUnlimited(commands.Cog):
                                         c_health = round(c_health - dmg['DMG'])
                                         c_defense = round(c_defense +(.10 * dmg['DMG']))
                                     elif cpet_type == 'GROWTH':
-                                        c_max_health = round(c_max_health - dmg['DMG'])
-                                        c_defense = round(c_defense + dmg['DMG'])
-                                        c_attack = round(c_attack + dmg['DMG'])
+                                        c_max_health = round(c_max_health - (c_max_health * dmg['DMG']))
+                                        c_defense = round(c_defense + (c_defense * (.50 * dmg['DMG'])))
+                                        c_attack = round(c_attack + (c_attack * (.50 * dmg['DMG'])))
                                     elif cpet_type == 'STANCE':
                                         tempattack = dmg['DMG']
                                         c_attack = c_defense
@@ -7148,8 +7162,8 @@ class CrownUnlimited(commands.Cog):
                                     o_defense = round(o_defense +(.50 * dmg['DMG']))
                                 elif cenh_type == 'GROWTH':
                                     o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
-                                    o_defense = round(o_defense + (o_defense * dmg['DMG']))
-                                    o_attack = round(o_attack + (o_attack * dmg['DMG']))
+                                    o_defense = round(o_defense + (o_defense * (.50 * dmg['DMG'])))
+                                    o_attack = round(o_attack + (o_attack * (.50 * dmg['DMG'])))
                                 elif cenh_type == 'STANCE':
                                     tempattack = dmg['DMG']
                                     o_attack = o_defense
@@ -7233,8 +7247,8 @@ class CrownUnlimited(commands.Cog):
                                         c_defense = round(c_defense +(.50 * dmg['DMG']))
                                     elif enh_type == 'GROWTH':
                                         c_max_health = round(c_max_health - (c_max_health * dmg['DMG']))
-                                        c_defense = round(c_defense + (c_defense * dmg['DMG']))
-                                        c_attack = round(c_attack + (c_attack * dmg['DMG']))
+                                        c_defense = round(c_defense + (c_defense * (.50 * dmg['DMG'])))
+                                        c_attack = round(c_attack + (c_attack * (.50 * dmg['DMG'])))
                                     elif enh_type == 'STANCE':
                                         tempattack = dmg['DMG']
                                         c_attack = c_defense
@@ -7555,8 +7569,10 @@ class CrownUnlimited(commands.Cog):
                                     c_stamina = round(c_stamina - dmg['DMG'])
                                 elif tpet_type == 'FLOG':
                                     t_attack = round(t_attack + dmg['DMG'])
+                                    c_attack = round (c_attack - dmg['DMG'])
                                 elif tpet_type == 'WITHER':
                                     t_defense = round(t_defense + dmg['DMG'])
+                                    c_defense = round(c_defense + dmg['DMG'])
                                 elif tpet_type == 'RAGE':
                                     t_defense = round(t_defense - dmg['DMG'])
                                     t_attack = round(t_attack + dmg['DMG'])
@@ -7570,9 +7586,9 @@ class CrownUnlimited(commands.Cog):
                                     t_health = round(t_health - dmg['DMG'])
                                     t_defense = round(t_defense + (.50 * dmg['DMG']))
                                 elif tpet_type == 'GROWTH':
-                                    t_max_health = round(t_max_health - dmg['DMG'])
-                                    t_defense = round(t_defense + (t_defense *  dmg['DMG']))
-                                    t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                    t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
+                                    t_defense = round(t_defense + (t_defense *  (.50 * dmg['DMG'])))
+                                    t_attack = round(t_attack + (t_attack * (.50 * dmg['DMG'])))
                                 elif tpet_type == 'STANCE':
                                     tempattack = dmg['DMG']
                                     t_attack = t_defense
@@ -7660,8 +7676,8 @@ class CrownUnlimited(commands.Cog):
                                     t_defense = round(t_defense + (.50 * dmg['DMG']))
                                 elif enh_type == 'GROWTH':
                                     t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                    t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                    t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                    t_defense = round(t_defense + (t_defense * (.50 * dmg['DMG'])))
+                                    t_attack = round(t_attack + (t_attack * (.50 * dmg['DMG'])))
                                 elif enh_type == 'STANCE':
                                     tempattack = dmg['DMG']
                                     t_attack = t_defense
@@ -8645,8 +8661,10 @@ class CrownUnlimited(commands.Cog):
                                             t_stamina = round(t_stamina - dmg['DMG'])
                                         elif opet_type == 'FLOG':
                                             o_attack = round(o_attack + dmg['DMG'])
+                                            t_attack = round (t_attack - dmg['DMG'])
                                         elif opet_type == 'WITHER':
                                             o_defense = round(o_defense + dmg['DMG'])
+                                            t_defense = round (t_defense - dmg['DMG'])
                                         elif opet_type == 'RAGE':
                                             o_defense = round(o_defense - dmg['DMG'])
                                             o_attack = round(o_attack + dmg['DMG'])
@@ -8660,9 +8678,9 @@ class CrownUnlimited(commands.Cog):
                                             o_health = round(o_health - dmg['DMG'])
                                             o_defense = round(o_defense +(.50 * dmg['DMG']))
                                         elif opet_type == 'GROWTH':
-                                            o_max_health = round(o_max_health - dmg['DMG'])
-                                            o_defense = round(o_defense + (o_defense * dmg['DMG']))
-                                            o_attack = round(o_attack + (o_attack * dmg['DMG']))
+                                            o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
+                                            o_defense = round(o_defense + (o_defense * (.50 * dmg['DMG'])))
+                                            o_attack = round(o_attack + (o_attack * (.50 * dmg['DMG'])))
                                         elif opet_type == 'STANCE':
                                             tempattack = dmg['DMG']
                                             o_attack = o_defense
@@ -8748,8 +8766,8 @@ class CrownUnlimited(commands.Cog):
                                             o_defense = round(o_defense + (.50 * dmg['DMG']))
                                         elif enh_type == 'GROWTH':
                                             o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
-                                            o_defense = round(o_defense + (o_defense * dmg['DMG']))
-                                            o_attack = round(o_attack + (o_attack * dmg['DMG']))
+                                            o_defense = round(o_defense + (o_defense * (.50 * dmg['DMG'])))
+                                            o_attack = round(o_attack + (o_attack * (.50 * dmg['DMG'])))
                                         elif enh_type == 'STANCE':
                                             tempattack = dmg['DMG']
                                             o_attack = o_defense
@@ -9031,8 +9049,8 @@ class CrownUnlimited(commands.Cog):
                                         t_defense = round(t_defense + (.50 * dmg['DMG']))
                                     elif enh_type == 'GROWTH':
                                         t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                        t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                        t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                        t_defense = round(t_defense + (t_defense * (.50 * dmg['DMG'])))
+                                        t_attack = round(t_attack + (t_attack * (.50 * dmg['DMG'])))
                                     elif enh_type == 'STANCE':
                                         tempattack = dmg['DMG']
                                         t_attack = t_defense
@@ -10027,8 +10045,10 @@ class CrownUnlimited(commands.Cog):
                                             t_stamina = round(t_stamina - dmg['DMG'])
                                         elif opet_type == 'FLOG':
                                             o_attack = round(o_attack + dmg['DMG'])
+                                            t_attack = round (t_attack - dmg['DMG'])
                                         elif opet_type == 'WITHER':
                                             o_defense = round(o_defense + dmg['DMG'])
+                                            t_defense = round (t_defense - dmg['DMG'])
                                         elif opet_type == 'RAGE':
                                             o_defense = round(o_defense - dmg['DMG'])
                                             o_attack = round(o_attack + dmg['DMG'])
@@ -10042,9 +10062,9 @@ class CrownUnlimited(commands.Cog):
                                             o_health = round(o_health - dmg['DMG'])
                                             o_defense = round(o_defense + (.50 * dmg['DMG']))
                                         elif opet_type == 'GROWTH':
-                                            o_max_health = round(o_max_health - dmg['DMG'])
-                                            o_defense = round(o_defense + (o_defense * dmg['DMG']))
-                                            o_attack = round(o_attack + (o_attack * dmg['DMG']))
+                                            o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
+                                            o_defense = round(o_defense + (o_defense * (.50 * dmg['DMG'])))
+                                            o_attack = round(o_attack + (o_attack * (.50 * dmg['DMG'])))
                                         elif opet_type == 'STANCE':
                                             tempattack = dmg['DMG']
                                             o_attack = o_defense
@@ -10130,8 +10150,8 @@ class CrownUnlimited(commands.Cog):
                                             o_defense = round(o_defense +(.50 * dmg['DMG']))
                                         elif enh_type == 'GROWTH':
                                             o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
-                                            o_defense = round(o_defense + (o_defense * dmg['DMG']))
-                                            o_attack = round(o_attack + (o_attack * dmg['DMG']))
+                                            o_defense = round(o_defense + (o_defense * (.50 * dmg['DMG'])))
+                                            o_attack = round(o_attack + (o_attack * (.50 * dmg['DMG'])))
                                         elif enh_type == 'STANCE':
                                             tempattack = dmg['DMG']
                                             o_attack = o_defense
@@ -10413,8 +10433,8 @@ class CrownUnlimited(commands.Cog):
                                         t_defense = round(t_defense + (.50 * dmg['DMG']))
                                     elif enh_type == 'GROWTH':
                                         t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                        t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                        t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                        t_defense = round(t_defense + (t_defense * (.50 * dmg['DMG'])))
+                                        t_attack = round(t_attack + (t_attack * (.50 * dmg['DMG'])))
                                     elif enh_type == 'STANCE':
                                         tempattack = dmg['DMG']
                                         t_attack = t_defense
@@ -11406,8 +11426,10 @@ class CrownUnlimited(commands.Cog):
                                         t_stamina = round(t_stamina - dmg['DMG'])
                                     elif opet_type == 'FLOG':
                                         o_attack = round(o_attack + dmg['DMG'])
+                                        t_attack = round (t_attack - dmg['DMG'])
                                     elif opet_type == 'WITHER':
                                         o_defense = round(o_defense + dmg['DMG'])
+                                        t_defense = round (t_defense - dmg['DMG'])
                                     elif opet_type == 'RAGE':
                                         o_defense = round(o_defense - dmg['DMG'])
                                         o_attack = round(o_attack + dmg['DMG'])
@@ -11421,9 +11443,9 @@ class CrownUnlimited(commands.Cog):
                                         o_health = round(o_health - dmg['DMG'])
                                         o_defense = round(o_defense +(.10 * dmg['DMG']))
                                     elif opet_type == 'GROWTH':
-                                        o_max_health = round(o_max_health - dmg['DMG'])
-                                        o_defense = round(o_defense + dmg['DMG'])
-                                        o_attack = round(o_attack + dmg['DMG'])
+                                        o_max_health = round(o_max_health - (o_max_health *  dmg['DMG']))
+                                        o_defense = round(o_defense + (o_defense * (.50 * dmg['DMG'])))
+                                        o_attack = round(o_attack + (o_attack * (.50 * dmg['DMG'])))
                                     elif opet_type == 'STANCE':
                                         tempattack = dmg['DMG']
                                         o_attack = o_defense
@@ -11509,8 +11531,8 @@ class CrownUnlimited(commands.Cog):
                                         o_defense = round(o_defense + dmg['DMG'])
                                     elif enh_type == 'GROWTH':
                                         o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
-                                        o_defense = round(o_defense + dmg['DMG'])
-                                        o_attack = round(o_attack + dmg['DMG'])
+                                        o_defense = round(o_defense + (o_defense * (.50 * dmg['DMG'])))
+                                        o_attack = round(o_attack + (o_attack * (.50 * dmg['DMG'])))
                                     elif enh_type == 'STANCE':
                                         tempattack = dmg['DMG']
                                         o_attack = o_defense
@@ -11829,8 +11851,10 @@ class CrownUnlimited(commands.Cog):
                                     o_stamina = round(o_stamina - dmg['DMG'])
                                 elif tpet_type == 'FLOG':
                                     t_attack = round(t_attack + dmg['DMG'])
+                                    o_attack = round (o_attack - dmg['DMG'])
                                 elif tpet_type == 'WITHER':
                                     t_defense = round(t_defense + dmg['DMG'])
+                                    o_defense = round (o_defense - dmg['DMG'])
                                 elif tpet_type == 'RAGE':
                                     t_defense = round(t_defense - dmg['DMG'])
                                     t_attack = round(t_attack + dmg['DMG'])
@@ -11844,9 +11868,9 @@ class CrownUnlimited(commands.Cog):
                                     t_health = round(t_health - dmg['DMG'])
                                     t_defense = round(t_defense + (.10 * dmg['DMG']))
                                 elif tpet_type == 'GROWTH':
-                                    t_max_health = round(t_max_health - dmg['DMG'])
-                                    t_defense = round(t_defense + dmg['DMG'])
-                                    t_attack = round(t_attack + dmg['DMG'])
+                                    t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
+                                    t_defense = round(t_defense + (t_defense * (.50 * dmg['DMG'])))
+                                    t_attack = round(t_attack + (t_attack * (.50 * dmg['DMG'])))
                                 elif tpet_type == 'STANCE':
                                     tempattack = dmg['DMG']
                                     t_attack = t_defense
@@ -11931,8 +11955,8 @@ class CrownUnlimited(commands.Cog):
                                     t_defense = round(t_defense + (.10 * dmg['DMG']))
                                 elif enh_type == 'GROWTH':
                                     t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                    t_defense = round(t_defense + dmg['DMG'])
-                                    t_attack = round(t_attack + dmg['DMG'])
+                                    t_defense = round(t_defense + (t_defense * (.50 * dmg['DMG'])))
+                                    t_attack = round(t_attack + (t_attack * (.50 * dmg['DMG'])))
                                 elif enh_type == 'STANCE':
                                     tempattack = dmg['DMG']
                                     t_attack = t_defense
@@ -12914,8 +12938,10 @@ class CrownUnlimited(commands.Cog):
                                                 t_stamina = round(t_stamina - dmg['DMG'])
                                             elif opet_type == 'FLOG':
                                                 o_attack = round(o_attack + dmg['DMG'])
+                                                t_attack = round (t_attack - dmg['DMG'])
                                             elif opet_type == 'WITHER':
                                                 o_defense = round(o_defense + dmg['DMG'])
+                                                t_defense = round (t_defense - dmg['DMG'])
                                             elif opet_type == 'RAGE':
                                                 o_defense = round(o_defense - dmg['DMG'])
                                                 o_attack = round(o_attack + dmg['DMG'])
@@ -12929,9 +12955,9 @@ class CrownUnlimited(commands.Cog):
                                                 o_health = round(o_health - dmg['DMG'])
                                                 o_defense = round(o_defense +(.50 * dmg['DMG']))
                                             elif opet_type == 'GROWTH':
-                                                o_max_health = round(o_max_health - dmg['DMG'])
-                                                o_defense = round(o_defense + (o_defense * dmg['DMG']))
-                                                o_attack = round(o_attack + (o_attack * dmg['DMG']))
+                                                o_max_health = round(o_max_health - (o_max_health *  dmg['DMG']))
+                                                o_defense = round(o_defense + (o_defense * (.50 * dmg['DMG'])))
+                                                o_attack = round(o_attack + (o_attack * (.50 * dmg['DMG'])))
                                             elif opet_type == 'STANCE':
                                                 tempattack = dmg['DMG']
                                                 o_attack = o_defense
@@ -13018,8 +13044,8 @@ class CrownUnlimited(commands.Cog):
                                                 o_defense = round(o_defense +(.50 * dmg['DMG']))
                                             elif enh_type == 'GROWTH':
                                                 o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
-                                                o_defense = round(o_defense + (o_defense * dmg['DMG']))
-                                                o_attack = round(o_attack + (o_attack * dmg['DMG']))
+                                                o_defense = round(o_defense + (o_defense * (.50 * dmg['DMG'])))
+                                                o_attack = round(o_attack + (o_attack * (.50 * dmg['DMG'])))
                                             elif enh_type == 'STANCE':
                                                 tempattack = dmg['DMG']
                                                 o_attack = o_defense
@@ -13250,8 +13276,10 @@ class CrownUnlimited(commands.Cog):
                                                     o_stamina = round(o_stamina - dmg['DMG'])
                                                 elif tpet_type == 'FLOG':
                                                     t_attack = round(t_attack + dmg['DMG'])
+                                                    o_attack = round (o_attack - dmg['DMG'])
                                                 elif tpet_type == 'WITHER':
                                                     t_defense = round(t_defense + dmg['DMG'])
+                                                    o_defense = round (o_defense - dmg['DMG'])
                                                 elif tpet_type == 'RAGE':
                                                     t_defense = round(t_defense - dmg['DMG'])
                                                     t_attack = round(t_attack + dmg['DMG'])
@@ -13265,9 +13293,9 @@ class CrownUnlimited(commands.Cog):
                                                     t_health = round(t_health - dmg['DMG'])
                                                     t_defense = round(t_defense + (.50 * dmg['DMG']))
                                                 elif tpet_type == 'GROWTH':
-                                                    t_max_health = round(t_max_health - dmg['DMG'])
-                                                    t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                                    t_attack = round(t_attack + (t_attack *  dmg['DMG']))
+                                                    t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
+                                                    t_defense = round(t_defense + (t_defense * (.50 * dmg['DMG'])))
+                                                    t_attack = round(t_attack + (t_attack *  (.50 * dmg['DMG'])))
                                                 elif tpet_type == 'STANCE':
                                                     tempattack = dmg['DMG']
                                                     t_attack = t_defense
@@ -13352,9 +13380,9 @@ class CrownUnlimited(commands.Cog):
                                                     t_health = round(t_health - dmg['DMG'])
                                                     t_defense = round(t_defense + (.50 * dmg['DMG']))
                                                 elif enh_type == 'GROWTH':
-                                                    t_max_health = round(t_max_health - dmg['DMG'])
-                                                    t_defense = round(t_defense + (t_defense *dmg['DMG']))
-                                                    t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                                    t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
+                                                    t_defense = round(t_defense + (t_defense * (.50 * dmg['DMG'])))
+                                                    t_attack = round(t_attack + (t_attack * (.50 * dmg['DMG'])))
                                                 elif enh_type == 'STANCE':
                                                     tempattack = dmg['DMG']
                                                     t_attack = t_defense
@@ -13568,8 +13596,10 @@ class CrownUnlimited(commands.Cog):
                                                 o_stamina = round(o_stamina - dmg['DMG'])
                                             elif tpet_type == 'FLOG':
                                                 t_attack = round(t_attack + dmg['DMG'])
+                                                o_attack = round (o_attack - dmg['DMG'])
                                             elif tpet_type == 'WITHER':
                                                 t_defense = round(t_defense + dmg['DMG'])
+                                                o_defense = round(o_defense - dmg['DMG'])
                                             elif tpet_type == 'RAGE':
                                                 t_defense = round(t_defense - dmg['DMG'])
                                                 t_attack = round(t_attack + dmg['DMG'])
@@ -13583,9 +13613,9 @@ class CrownUnlimited(commands.Cog):
                                                 t_health = round(t_health - dmg['DMG'])
                                                 t_defense = round(t_defense + (.50 * dmg['DMG']))
                                             elif tpet_type == 'GROWTH':
-                                                t_max_health = round(t_max_health - dmg['DMG'])
-                                                t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                                t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                                t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
+                                                t_defense = round(t_defense + (t_defense * (.50 * dmg['DMG'])))
+                                                t_attack = round(t_attack + (t_attack * (.50 * dmg['DMG'])))
                                             elif tpet_type == 'STANCE':
                                                 tempattack = dmg['DMG']
                                                 t_attack = t_defense
@@ -13669,8 +13699,8 @@ class CrownUnlimited(commands.Cog):
                                                 t_defense = round(t_defense + (.50 * dmg['DMG']))
                                             elif enh_type == 'GROWTH':
                                                 t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                                t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                                t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                                t_defense = round(t_defense + (t_defense * (.50 * dmg['DMG'])))
+                                                t_attack = round(t_attack + (t_attack * (.50 * dmg['DMG'])))
                                             elif enh_type == 'STANCE':
                                                 tempattack = dmg['DMG']
                                                 t_attack = t_defense
@@ -14692,8 +14722,10 @@ class CrownUnlimited(commands.Cog):
                                                 t_stamina = round(t_stamina - dmg['DMG'])
                                             elif opet_type == 'FLOG':
                                                 o_attack = round(o_attack + dmg['DMG'])
+                                                t_attack = round(t_attack - dmg['DMG'])
                                             elif opet_type == 'WITHER':
                                                 o_defense = round(o_defense + dmg['DMG'])
+                                                t_defense = round(t_defense - dmg['DMG'])
                                             elif opet_type == 'RAGE':
                                                 o_defense = round(o_defense - dmg['DMG'])
                                                 o_attack = round(o_attack + dmg['DMG'])
@@ -14707,9 +14739,9 @@ class CrownUnlimited(commands.Cog):
                                                 o_health = round(o_health - dmg['DMG'])
                                                 o_defense = round(o_defense +(.50 * dmg['DMG']))
                                             elif opet_type == 'GROWTH':
-                                                o_max_health = round(o_max_health - dmg['DMG'])
-                                                o_defense = round(o_defense + (o_defense * dmg['DMG']))
-                                                o_attack = round(o_attack + (o_attack * dmg['DMG']))
+                                                o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
+                                                o_defense = round(o_defense + (o_defense * (.50 * dmg['DMG'])))
+                                                o_attack = round(o_attack + (o_attack * (.50 * dmg['DMG'])))
                                             elif opet_type == 'STANCE':
                                                 tempattack = dmg['DMG']
                                                 o_attack = o_defense
@@ -14797,8 +14829,8 @@ class CrownUnlimited(commands.Cog):
                                                 o_defense = round(o_defense +(.50 * dmg['DMG']))
                                             elif enh_type == 'GROWTH':
                                                 o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
-                                                o_defense = round(o_defense + (o_defense * dmg['DMG']))
-                                                o_attack = round(o_attack + (o_attack * dmg['DMG']))
+                                                o_defense = round(o_defense + (o_defense * (.50 * dmg['DMG'])))
+                                                o_attack = round(o_attack + (o_attack * (.50 * dmg['DMG'])))
                                             elif enh_type == 'STANCE':
                                                 tempattack = dmg['DMG']
                                                 o_attack = o_defense
@@ -15029,8 +15061,10 @@ class CrownUnlimited(commands.Cog):
                                                     o_stamina = round(o_stamina - dmg['DMG'])
                                                 elif tpet_type == 'FLOG':
                                                     t_attack = round(t_attack + dmg['DMG'])
+                                                    o_attack = round(o_attack - dmg['DMG'])
                                                 elif tpet_type == 'WITHER':
                                                     t_defense = round(t_defense + dmg['DMG'])
+                                                    o_defense = round(o_defense - dmg['DMG'])
                                                 elif tpet_type == 'RAGE':
                                                     t_defense = round(t_defense - dmg['DMG'])
                                                     t_attack = round(t_attack + dmg['DMG'])
@@ -15044,9 +15078,9 @@ class CrownUnlimited(commands.Cog):
                                                     t_health = round(t_health - dmg['DMG'])
                                                     t_defense = round(t_defense + (.50 * dmg['DMG']))
                                                 elif tpet_type == 'GROWTH':
-                                                    t_max_health = round(t_max_health - dmg['DMG'])
-                                                    t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                                    t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                                    t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
+                                                    t_defense = round(t_defense + (t_defense * (.50 * dmg['DMG'])))
+                                                    t_attack = round(t_attack + (t_attack * (.50 * dmg['DMG'])))
                                                 elif tpet_type == 'STANCE':
                                                     tempattack = dmg['DMG']
                                                     t_attack = t_defense
@@ -15131,9 +15165,9 @@ class CrownUnlimited(commands.Cog):
                                                     t_health = round(t_health - dmg['DMG'])
                                                     t_defense = round(t_defense + (.50 * dmg['DMG']))
                                                 elif enh_type == 'GROWTH':
-                                                    t_max_health = round(t_max_health - dmg['DMG'])
-                                                    t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                                    t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                                    t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
+                                                    t_defense = round(t_defense + (t_defense * (.50 * dmg['DMG'])))
+                                                    t_attack = round(t_attack + (t_attack * (.50 * dmg['DMG'])))
                                                 elif enh_type == 'STANCE':
                                                     tempattack = dmg['DMG']
                                                     t_attack = t_defense
@@ -15347,8 +15381,10 @@ class CrownUnlimited(commands.Cog):
                                                 o_stamina = round(o_stamina - dmg['DMG'])
                                             elif tpet_type == 'FLOG':
                                                 t_attack = round(t_attack + dmg['DMG'])
+                                                o_attack = round(o_attack - dmg['DMG'])
                                             elif tpet_type == 'WITHER':
                                                 t_defense = round(t_defense + dmg['DMG'])
+                                                o_defense = round(o_defense - dmg['DMG'])
                                             elif tpet_type == 'RAGE':
                                                 t_defense = round(t_defense - dmg['DMG'])
                                                 t_attack = round(t_attack + dmg['DMG'])
@@ -15362,9 +15398,9 @@ class CrownUnlimited(commands.Cog):
                                                 t_health = round(t_health - dmg['DMG'])
                                                 t_defense = round(t_defense + (.10 * dmg['DMG']))
                                             elif tpet_type == 'GROWTH':
-                                                t_max_health = round(t_max_health - dmg['DMG'])
-                                                t_defense = round(t_defense + dmg['DMG'])
-                                                t_attack = round(t_attack + dmg['DMG'])
+                                                t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
+                                                t_defense = round(t_defense + (t_defense * (.50 * dmg['DMG'])))
+                                                t_attack = round(t_attack + (t_attack * (.50 * dmg['DMG'])))
                                             elif tpet_type == 'STANCE':
                                                 tempattack = dmg['DMG']
                                                 t_attack = t_defense
@@ -15449,8 +15485,8 @@ class CrownUnlimited(commands.Cog):
                                                 t_defense = round(t_defense + (.10 * dmg['DMG']))
                                             elif enh_type == 'GROWTH':
                                                 t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                                t_defense = round(t_defense + dmg['DMG'])
-                                                t_attack = round(t_attack + dmg['DMG'])
+                                                t_defense = round(t_defense + (t_defense * (.50 * dmg['DMG'])))
+                                                t_attack = round(t_attack + (t_attack * (.50 * dmg['DMG'])))
                                             elif enh_type == 'STANCE':
                                                 tempattack = dmg['DMG']
                                                 t_attack = t_defense
@@ -16450,8 +16486,10 @@ class CrownUnlimited(commands.Cog):
                                                 t_stamina = round(t_stamina - dmg['DMG'])
                                             elif opet_type == 'FLOG':
                                                 o_attack = round(o_attack + dmg['DMG'])
+                                                t_attack = round (t_attack - dmg['DMG'])
                                             elif opet_type == 'WITHER':
                                                 o_defense = round(o_defense + dmg['DMG'])
+                                                t_defense = round (t_defense - dmg['DMG'])
                                             elif opet_type == 'RAGE':
                                                 o_defense = round(o_defense - dmg['DMG'])
                                                 o_attack = round(o_attack + dmg['DMG'])
@@ -16460,14 +16498,14 @@ class CrownUnlimited(commands.Cog):
                                                 o_attack = round(o_attack - dmg['DMG'])
                                             elif opet_type == 'BZRK':
                                                 o_health = round(o_health - dmg['DMG'])
-                                                o_attack = round(o_attack + (.10 * dmg['DMG']))
+                                                o_attack = round(o_attack + (.50 * dmg['DMG']))
                                             elif opet_type == 'CRYSTAL':
                                                 o_health = round(o_health - dmg['DMG'])
-                                                o_defense = round(o_defense +(.10 * dmg['DMG']))
+                                                o_defense = round(o_defense +(.50 * dmg['DMG']))
                                             elif opet_type == 'GROWTH':
-                                                o_max_health = round(o_max_health - dmg['DMG'])
-                                                o_defense = round(o_defense + dmg['DMG'])
-                                                o_attack = round(o_attack + dmg['DMG'])
+                                                o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
+                                                o_defense = round(o_defense + (o_defense * (.50 * dmg['DMG'])))
+                                                o_attack = round(o_attack + (o_attack * (.50 * dmg['DMG'])))
                                             elif opet_type == 'STANCE':
                                                 tempattack = dmg['DMG']
                                                 o_attack = o_defense
@@ -16555,8 +16593,8 @@ class CrownUnlimited(commands.Cog):
                                                 o_defense = round(o_defense +(.10 * dmg['DMG']))
                                             elif enh_type == 'GROWTH':
                                                 o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
-                                                o_defense = round(o_defense + dmg['DMG'])
-                                                o_attack = round(o_attack + dmg['DMG'])
+                                                o_defense = round(o_defense + (o_defense * (.50 * dmg['DMG'])))
+                                                o_attack = round(o_attack + (o_attack *(.50 * dmg['DMG'])))
                                             elif enh_type == 'STANCE':
                                                 tempattack = dmg['DMG']
                                                 o_attack = o_defense
@@ -16787,8 +16825,10 @@ class CrownUnlimited(commands.Cog):
                                                     o_stamina = round(o_stamina - dmg['DMG'])
                                                 elif tpet_type == 'FLOG':
                                                     t_attack = round(t_attack + dmg['DMG'])
+                                                    o_attack = round (o_attack - dmg['DMG'])
                                                 elif tpet_type == 'WITHER':
                                                     t_defense = round(t_defense + dmg['DMG'])
+                                                    o_defense = round (o_defense - dmg['DMG'])
                                                 elif tpet_type == 'RAGE':
                                                     t_defense = round(t_defense - dmg['DMG'])
                                                     t_attack = round(t_attack + dmg['DMG'])
@@ -16802,9 +16842,9 @@ class CrownUnlimited(commands.Cog):
                                                     t_health = round(t_health - dmg['DMG'])
                                                     t_defense = round(t_defense + (.10 * dmg['DMG']))
                                                 elif tpet_type == 'GROWTH':
-                                                    t_max_health = round(t_max_health - dmg['DMG'])
-                                                    t_defense = round(t_defense + dmg['DMG'])
-                                                    t_attack = round(t_attack + dmg['DMG'])
+                                                    t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
+                                                    t_defense = round(t_defense + (t_defense * (.50 * dmg['DMG'])))
+                                                    t_attack = round(t_attack + (t_attack * (.50 * dmg['DMG'])))
                                                 elif tpet_type == 'STANCE':
                                                     tempattack = dmg['DMG']
                                                     t_attack = t_defense
@@ -16889,9 +16929,9 @@ class CrownUnlimited(commands.Cog):
                                                     t_health = round(t_health - dmg['DMG'])
                                                     t_defense = round(t_defense + (.10 * dmg['DMG']))
                                                 elif enh_type == 'GROWTH':
-                                                    t_max_health = round(t_max_health - dmg['DMG'])
-                                                    t_defense = round(t_defense + dmg['DMG'])
-                                                    t_attack = round(t_attack + dmg['DMG'])
+                                                    t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
+                                                    t_defense = round(t_defense + (t_defense * (.50 * dmg['DMG'])))
+                                                    t_attack = round(t_attack + (t_attack * (.50 * dmg['DMG'])))
                                                 elif enh_type == 'STANCE':
                                                     tempattack = dmg['DMG']
                                                     t_attack = t_defense
@@ -17105,8 +17145,10 @@ class CrownUnlimited(commands.Cog):
                                                 o_stamina = round(o_stamina - dmg['DMG'])
                                             elif tpet_type == 'FLOG':
                                                 t_attack = round(t_attack + dmg['DMG'])
+                                                o_attack = round (o_attack - dmg['DMG'])
                                             elif tpet_type == 'WITHER':
                                                 t_defense = round(t_defense + dmg['DMG'])
+                                                o_defense = round (o_defense - dmg['DMG'])
                                             elif tpet_type == 'RAGE':
                                                 t_defense = round(t_defense - dmg['DMG'])
                                                 t_attack = round(t_attack + dmg['DMG'])
@@ -17115,14 +17157,14 @@ class CrownUnlimited(commands.Cog):
                                                 t_attack = round(t_attack - dmg['DMG'])
                                             elif tpet_type == 'BZRK':
                                                 t_health = round(t_health - dmg['DMG'])
-                                                t_attack = round(t_attack + (.10 * dmg['DMG']))
+                                                t_attack = round(t_attack + (.50 * dmg['DMG']))
                                             elif tpet_type == 'CRYSTAL':
                                                 t_health = round(t_health - dmg['DMG'])
-                                                t_defense = round(t_defense + (.10 * dmg['DMG']))
+                                                t_defense = round(t_defense + (.50 * dmg['DMG']))
                                             elif tpet_type == 'GROWTH':
-                                                t_max_health = round(t_max_health - dmg['DMG'])
-                                                t_defense = round(t_defense + dmg['DMG'])
-                                                t_attack = round(t_attack + dmg['DMG'])
+                                                t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
+                                                t_defense = round(t_defense + (t_defense * (.50 * dmg['DMG'])))
+                                                t_attack = round(t_attack + (t_attack * (.50 * dmg['DMG'])))
                                             elif tpet_type == 'STANCE':
                                                 tempattack = dmg['DMG']
                                                 t_attack = t_defense
@@ -17207,8 +17249,8 @@ class CrownUnlimited(commands.Cog):
                                                 t_defense = round(t_defense + (.10 * dmg['DMG']))
                                             elif enh_type == 'GROWTH':
                                                 t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                                t_defense = round(t_defense + dmg['DMG'])
-                                                t_attack = round(t_attack + dmg['DMG'])
+                                                t_defense = round(t_defense + (t_defense * (.50 * dmg['DMG'])))
+                                                t_attack = round(t_attack + (t_attack * (.50 * dmg['DMG'])))
                                             elif enh_type == 'STANCE':
                                                 tempattack = dmg['DMG']
                                                 t_attack = t_defense
