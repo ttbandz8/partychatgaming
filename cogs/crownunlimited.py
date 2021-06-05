@@ -2670,7 +2670,7 @@ class CrownUnlimited(commands.Cog):
             o_card = o['NAME']
             o_card_path=o['PATH']
             o_rcard_path=o['RPATH']
-            o_max_health = o['HLT'] - (20  * currentopponent)
+            o_max_health = o['HLT'] - (7  * currentopponent)
             o_health = o['HLT']
             o_stamina = o['STAM']
             o_max_stamina = o['STAM']
@@ -7920,7 +7920,7 @@ class CrownUnlimited(commands.Cog):
             o_card = o['NAME']
             o_card_path=o['PATH']
             o_rcard_path=o['RPATH']
-            o_max_health = o['HLT'] - (20 * currentopponent)
+            o_max_health = o['HLT'] - (5 * currentopponent)
             o_health = o['HLT'] 
             o_stamina = o['STAM']
             o_max_stamina = o['STAM']
