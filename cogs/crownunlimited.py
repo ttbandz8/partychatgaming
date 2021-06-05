@@ -72,7 +72,7 @@ class CrownUnlimited(commands.Cog):
 
             return msg.author == ctx.author and msg.content in available_universes
         try:
-            msg = await self.bot.wait_for('message', timeout=60.0, check=check)
+            msg = await self.bot.wait_for('message', timeout=30.0, check=check)
             selected_universe = msg.content
             guild = ctx.guild
             if guild:
@@ -1454,6 +1454,7 @@ class CrownUnlimited(commands.Cog):
                                     await private_channel.send(embed=embedVar)
                                     turn=0
                         except asyncio.TimeoutError:
+                            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                             await private_channel.send(f"{ctx.author.mention} {m.STORY_ENDED}")
                             if private_channel.guild:
                                 await discord.TextChannel.delete(private_channel, reason=None)
@@ -2158,6 +2159,7 @@ class CrownUnlimited(commands.Cog):
                                     await private_channel.send(embed=embedVar)
                                     turn=2
                         except asyncio.TimeoutError:
+                            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                             await private_channel.send(f"{ctx.author.mention} {m.STORY_ENDED}")
                             if private_channel.guild:
                                 await discord.TextChannel.delete(private_channel, reason=None)
@@ -2542,13 +2544,14 @@ class CrownUnlimited(commands.Cog):
                         await ctx.author.send(f"You were awarded :coin: 25 for completing the {selected_universe} Tale!")
                     else:
                         await bless(500, ctx.author)
-                        await main.DM(ctx, ctx.author, embed=embedVar)
+                        await ctx.author.send(embed=embedVar)
                         response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                         await ctx.author.send(f"You were awarded :coin: 500 for completing the {selected_universe} Tale! ")
                     continued=False
                     if private_channel.guild:
                         response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                         await discord.TextChannel.delete(private_channel, reason=None)
+                    response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
 
     @commands.command()
     async def cdungeon(self, ctx, user: User):
@@ -3964,6 +3967,7 @@ class CrownUnlimited(commands.Cog):
                                     await private_channel.send(embed=embedVar)
                                     turn=0
                         except asyncio.TimeoutError:
+                            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                             await private_channel.send(f"{ctx.author.mention} {m.STORY_ENDED}")
                             if private_channel.guild:
                                 await discord.TextChannel.delete(private_channel, reason=None)
@@ -4666,6 +4670,7 @@ class CrownUnlimited(commands.Cog):
                                     await private_channel.send(embed=embedVar)
                                     turn=2
                         except asyncio.TimeoutError:
+                            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                             await private_channel.send(f"{ctx.author.mention} {m.STORY_ENDED}")
                             if private_channel.guild:
                                 await discord.TextChannel.delete(private_channel, reason=None)
@@ -5041,7 +5046,7 @@ class CrownUnlimited(commands.Cog):
                         response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                     else:
                         await bless(800, ctx.author)
-                        await main.DM(ctx, ctx.author, embed=embedVar)
+                        await ctx.author.send(embed=embedVar)
                         response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                         await ctx.author.send(f"You were awarded :coin: 800 for completing the {selected_universe} Dungeon! ")
                     continued=False
@@ -7821,7 +7826,7 @@ class CrownUnlimited(commands.Cog):
         def check(msg):
             return msg.author == ctx.author and msg.content in available_universes
         try:
-            msg = await self.bot.wait_for('message', timeout=60.0, check=check)
+            msg = await self.bot.wait_for('message', timeout=30.0, check=check)
             selected_universe = msg.content
             guild = ctx.guild
             if guild:
@@ -8806,6 +8811,7 @@ class CrownUnlimited(commands.Cog):
                                     await private_channel.send(embed=embedVar)
                                     turn=0
                         except asyncio.TimeoutError:
+                            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                             await private_channel.send(f"{ctx.author.mention} {m.STORY_ENDED}")
                             if private_channel.guild:
                                 await discord.TextChannel.delete(private_channel, reason=None)
@@ -9170,7 +9176,7 @@ class CrownUnlimited(commands.Cog):
                         response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                     else:
                         await bless(1000, ctx.author)
-                        await main.DM(ctx, ctx.author, embed=embedVar)
+                        await ctx.author.send(embed=embedVar)
                         response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                         await ctx.author.send(f"You were awarded :coin: 800 for completing the {selected_universe} Dungeon! ")
                     continued=False
@@ -9208,7 +9214,7 @@ class CrownUnlimited(commands.Cog):
         def check(msg):
             return msg.author == ctx.author and msg.content in available_universes
         try:
-            msg = await self.bot.wait_for('message', timeout=60.0, check=check)
+            msg = await self.bot.wait_for('message', timeout=30.0, check=check)
             selected_universe = msg.content
             guild = ctx.guild
             if guild:
@@ -10187,6 +10193,7 @@ class CrownUnlimited(commands.Cog):
                                     await private_channel.send(embed=embedVar)
                                     turn=0
                         except asyncio.TimeoutError:
+                            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                             await private_channel.send(f"{ctx.author.mention} {m.STORY_ENDED}")
                             if private_channel.guild:
                                 await discord.TextChannel.delete(private_channel, reason=None)
@@ -10558,7 +10565,7 @@ class CrownUnlimited(commands.Cog):
                         await ctx.author.send(f"You were awarded :coin: 25 for completing the {selected_universe} Tale!")
                     else:
                         await bless(500, ctx.author)
-                        await main.DM(ctx, ctx.author, embed=embedVar)
+                        await ctx.author.send(embed=embedVar)
                         response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                         await ctx.author.send(f"You were awarded :coin: 500 for completing the {selected_universe} Tale! ")
                     continued=False
