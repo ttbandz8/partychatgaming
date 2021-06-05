@@ -2830,7 +2830,7 @@ class CrownUnlimited(commands.Cog):
             elif c_card_passive_type == 'DRAIN':
                 c_stamina = c_stamina + int(c_card_passive)
             elif c_card_passive_type == 'FLOG':
-                c_attack = c_attack + int(((c_card_passive/100) *t_attack))
+                c_attack = c_attack + int(((c_card_passive/100) * t_attack))
             elif c_card_passive_type == 'WITHER':
                 c_defense = c_defense + int(((c_card_passive/100) *t_defense))
             elif c_card_passive_type == 'RAGE':
