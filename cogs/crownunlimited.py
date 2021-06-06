@@ -17562,7 +17562,7 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
             else:
                 enhanced=hlt
         elif enh_type == 'LIFE':
-            if health >= (maxhealth + (.05 * maxhealth)):
+            if health >= (maxhealth):
                 enhanced=0
             else:
                 enhanced=lifesteal
