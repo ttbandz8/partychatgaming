@@ -697,7 +697,7 @@ async def addfield(ctx, collection, new_field, field_type):
    if ctx.author.guild_permissions.administrator == True:
 
       if field_type == 'string':
-         field_type = ''
+         field_type = ""
       elif field_type == 'int':
          field_type = 25
       elif field_type == 'list':

@@ -331,6 +331,10 @@ def queryAllTitles():
     data = titles_col.find()
     return data
 
+def queryAllTitlesBasedOnUniverses(query):
+    data = titles_col.find(query)
+    return data
+
 def queryTitle(query):
     data = titles_col.find_one(query)
     return data
@@ -402,7 +406,11 @@ def deleteArm(query):
         return False
 
 def queryAllArms():
-    data = titles_col.find()
+    data = arm_col.find()
+    return data
+
+def queryAllArmsBasedOnUniverses(query):
+    data = arm_col.find(query)
     return data
 
 def queryArm(query):
