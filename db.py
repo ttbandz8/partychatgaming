@@ -214,6 +214,10 @@ def queryAllCards():
     data = cards_col.find()
     return data
 
+def queryAllCardsBasedOnUniverse(query):
+    data = cards_col.find(query)
+    return data
+
 def queryTournamentCards():
     data = cards_col.find({'TOURNAMENT_REQUIREMENTS': {'$gt': 0}, 'AVAILABLE': True})
     return data

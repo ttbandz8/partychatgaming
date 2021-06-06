@@ -99,6 +99,14 @@ class CrownUnlimited(commands.Cog):
         s_gametime = starttime[17:19]
 
         universe = db.queryUniverse({'TITLE': str(selected_universe)})
+
+        if not universe['CROWN_TALES']:
+            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+            await ctx.author.send(f"{selected_universe} is not ready to be explored! Check back later!")
+            if private_channel.guild:
+                await discord.TextChannel.delete(private_channel, reason=None)
+            return
+
         boss = db.queryBoss({'NAME': str(universe['UNIVERSE_BOSS'])})
 
         opponent_scaling = 0
@@ -2618,6 +2626,14 @@ class CrownUnlimited(commands.Cog):
         s_gametime = starttime[17:19]
 
         universe = db.queryUniverse({'TITLE': str(selected_universe)})
+
+        if not universe['CROWN_TALES']:
+            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+            await ctx.author.send(f"{selected_universe} is not ready to be explored! Check back later!")
+            if private_channel.guild:
+                await discord.TextChannel.delete(private_channel, reason=None)
+            return
+
         boss = db.queryBoss({'NAME': str(universe['UNIVERSE_BOSS'])})
 
         opponent_scaling = 0
@@ -7867,6 +7883,14 @@ class CrownUnlimited(commands.Cog):
         s_gametime = starttime[17:19]
 
         universe = db.queryUniverse({'TITLE': str(selected_universe)})
+
+        if not universe['CROWN_TALES']:
+            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+            await ctx.author.send(f"{selected_universe} is not ready to be explored! Check back later!")
+            if private_channel.guild:
+                await discord.TextChannel.delete(private_channel, reason=None)
+            return
+
         boss = db.queryBoss({'NAME': str(universe['UNIVERSE_BOSS'])})
 
         opponent_scaling = 0
@@ -9257,6 +9281,15 @@ class CrownUnlimited(commands.Cog):
         s_gametime = starttime[17:19]
 
         universe = db.queryUniverse({'TITLE': str(selected_universe)})
+
+        if not universe['CROWN_TALES']:
+            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+            await ctx.author.send(f"{selected_universe} is not ready to be explored! Check back later!")
+            if private_channel.guild:
+                await discord.TextChannel.delete(private_channel, reason=None)
+            return
+
+
         boss = db.queryBoss({'NAME': str(universe['UNIVERSE_BOSS'])})
 
         opponent_scaling = 0
@@ -17389,6 +17422,33 @@ class CrownUnlimited(commands.Cog):
         else:
             await ctx.send(m.SESSION_DOES_NOT_EXIST)
 
+    @commands.command()
+    async def cards(self, ctx, *args):
+        universe = " ".join([*args])
+        universe_data = db.queryUniverse({'TITLE': str(universe)})
+        user = db.queryUser({'DISNAME': str(ctx.author)})
+        if universe not in user['CROWN_TALES'] and universe_data['PREREQUISITE'] != "":
+            await ctx.send("You have not unlocked this universe!")
+            return
+        list_of_cards = db.queryAllCardsBasedOnUniverse({'UNIVERSE': universe})
+        cards = [x for x in list_of_cards]
+        dungeon_card_details = []
+        tales_card_details = []
+        for card in cards:
+            available = ""
+            if card['AVAILABLE']:
+                available = "🟢"
+            else:
+                available = "🟠"
+            if card['EXCLUSIVE']:
+                dungeon_card_details.append(f"{available} {card['NAME']} _Dungeon Drop_")
+            else:
+                tales_card_details.append(f"{available} {card['NAME']} _Tales Drop_")
+        await ctx.author.send(f"{universe.upper()} CARDS LIST")
+        await ctx.author.send("\n".join(tales_card_details))
+        await ctx.author.send("\n".join(dungeon_card_details))
+        
+
 async def score(owner, user: User):
         session_query = {"OWNER": str(owner), "AVAILABLE": True, "KINGSGAMBIT": False}
         session_data = db.querySession(session_query)
@@ -18027,3 +18087,4 @@ async def dungeondrops(player, universe):
             response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(cards[rand_card])}})
             await bless(50, player)
             return f"You earned {cards[rand_card]} + :coin: 50!"
+

@@ -383,6 +383,8 @@ async def curse(amount, user):
 @bot.command()
 @commands.check(validate_user)
 async def trade(ctx, user2: User, *args):
+   user = db.queryUser({'DISNAME': str(ctx.author)})
+   traded_to = db.queryUser({'DISNAME': str(user2)})
    p1_trade_item = " ".join([*args])
    p1_vault = db.queryVault({'OWNER' : str(ctx.author)})
    p1_cards = p1_vault['CARDS']
@@ -418,6 +420,11 @@ async def trade(ctx, user2: User, *args):
       await ctx.send("You do not own this item.")
       return
    else:
+
+      if (p1_trade_item == user['CARD']) or (p1_trade_item == user['TITLE']) or (p1_trade_item == user['ARM']) or (p1_trade_item == user['PET']):
+            await ctx.send("You cannot trade an equipped item.")
+            return
+
       await ctx.send(f"{user2.mention}, what will you trade for {ctx.author.mention}'s {p1_trade_item}?")
 
       def check(msg):
@@ -436,6 +443,10 @@ async def trade(ctx, user2: User, *args):
                p2_pet_names.append(pet['NAME'])
                if pet['NAME'] == p2_trade_item:
                   p2_active_pet = pet
+
+         if (p2_trade_item == user['CARD']) or (p2_trade_item == user['TITLE']) or (p2_trade_item == user['ARM']) or (p2_trade_item == user['PET']):
+            await ctx.send("You cannot trade an equipped item.")
+            return
 
          commence = True
       except:
@@ -497,6 +508,7 @@ async def trade(ctx, user2: User, *args):
 @bot.command()
 @commands.check(validate_user)
 async def sell(ctx, user2: User, *args):
+   user = db.queryUser({'DISNAME': str(ctx.author)})
    p1_trade_item = " ".join([*args])
    p1_vault = db.queryVault({'OWNER' : str(ctx.author)})
    p1_cards = p1_vault['CARDS']
@@ -537,6 +549,10 @@ async def sell(ctx, user2: User, *args):
    elif p1_trade_item in p2_pet_names:
       await ctx.send(f"{user2.mention} already owns a {p1_trade_item}!.")  
    else:
+
+      if (p1_trade_item == user['CARD']) or (p1_trade_item == user['TITLE']) or (p1_trade_item == user['ARM']) or (p1_trade_item == user['PET']):
+            await ctx.send("You cannot sell an equipped item.")
+            return
 
       if p1_trade_item not in p1_cards and p1_trade_item not in p1_titles and p1_trade_item not in p1_arms and p1_trade_item not in p1_pet_names:
          await ctx.send("You do not own this item.")
