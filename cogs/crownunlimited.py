@@ -17457,6 +17457,25 @@ class CrownUnlimited(commands.Cog):
         await ctx.author.send(f"{universe.upper()} CARDS LIST")
         await ctx.author.send("\n".join(tales_card_details))
         await ctx.author.send("\n".join(dungeon_card_details))
+
+    @commands.command()
+    async def universes(self, ctx):
+        universe_data = db.queryAllUniverse()
+        user = db.queryUser({'DISNAME': str(ctx.author)})
+
+        available_universes = []
+        unavailable_universes = []
+        for uni in universe_data:
+            available = ""
+            if len(uni['CROWN_TALES']) > 2:
+                available = "🟢"
+                available_universes.append(f"{available} {uni['TITLE']}")
+            else:
+                available = "🟠"
+                unavailable_universes.append(f"{available} {uni['TITLE']}")
+        await ctx.author.send("ALL UNIVERSES")
+        await ctx.author.send("\n".join(available_universes))
+        await ctx.author.send("\n".join(unavailable_universes))
         
 
 async def score(owner, user: User):
