@@ -14649,6 +14649,8 @@ class CrownUnlimited(commands.Cog):
                                 # calculate data based on selected move
                                 if msg.content == "0":
                                     o_health = 0
+                                    await curse(wager, str(ctx.author))
+                                    await bless(wager, tuser)
                                     await ctx.send(f"{ctx.author.mention} has fled the battle...")
                                     return
                                 if msg.content == "1":
@@ -14894,6 +14896,8 @@ class CrownUnlimited(commands.Cog):
                                         await ctx.send(embed=embedVar)
                                         turn=0
                             except asyncio.TimeoutError:
+                                await curse(wager, str(ctx.author))
+                                await bless(wager, tuser)
                                 await ctx.send(f"{ctx.author.mention}, the match has ended. ")
                                 return
                     #PLayer 2 Turn Start
@@ -14993,6 +14997,8 @@ class CrownUnlimited(commands.Cog):
                                         uid = t_DID
                                         tuser = await self.bot.fetch_user(uid)
                                         await ctx.send(f"{tuser.mention} has fled the battle...")
+                                        await bless(wager, str(ctx.author))
+                                        await curse(wager, user2)
                                         return
                                     if msg.content == "1":
                                         t_pet_used =False
@@ -15229,6 +15235,8 @@ class CrownUnlimited(commands.Cog):
                                             await ctx.send(embed=embedVar)
                                             turn = 1
                                 except asyncio.TimeoutError:
+                                    await bless(wager, str(ctx.author))
+                                    await curse(wager, user2)
                                     await ctx.send(f"{ctx.author.mention}, the match has ended.")
                                     return
                             #Play Bot
