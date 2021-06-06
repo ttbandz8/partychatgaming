@@ -8270,13 +8270,13 @@ class CrownUnlimited(commands.Cog):
             t_card = t['NAME']
             t_card_path=t['PATH']
             t_rcard_path=t['RPATH']
-            t_max_health = t['HLT'] + (50 * currentopponent) + 220 +  opponent_scaling 
-            t_health = t['HLT'] + (50 * currentopponent) + 220 + opponent_scaling 
+            t_max_health = t['HLT'] + (50 * currentopponent) + 250 +  opponent_scaling 
+            t_health = t['HLT'] + (50 * currentopponent) + 250 + opponent_scaling 
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
             t_attack = t['ATK'] + (4 * currentopponent)
-            t_defense = t['DEF'] + (2 * currentopponent)
+            t_defense = t['DEF'] + (4 * currentopponent)
             t_type = t['TYPE']
             t_accuracy = t['ACC']
             t_passive = t['PASS'][0]
