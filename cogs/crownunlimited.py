@@ -98,6 +98,14 @@ class CrownUnlimited(commands.Cog):
         s_gametime = starttime[17:19]
 
         universe = db.queryUniverse({'TITLE': str(selected_universe)})
+
+        if not universe['CROWN_TALES']:
+            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+            await ctx.author.send(f"{selected_universe} is not ready to be explored! Check back later!")
+            if private_channel.guild:
+                await discord.TextChannel.delete(private_channel, reason=None)
+            return
+
         boss = db.queryBoss({'NAME': str(universe['UNIVERSE_BOSS'])})
 
         opponent_scaling = 0
@@ -350,7 +358,7 @@ class CrownUnlimited(commands.Cog):
                 c_health = c_health - int((c_attack))
             elif c_card_passive_type == 'CRYSTAL':            
                 c_defense = c_defense + int(((c_card_passive/100) *c_health))
-                c_health = c_health - int((c_attack))
+                c_health = c_health - int((c_defense))
             elif c_card_passive_type == 'GROWTH':            
                 c_attack = c_attack + int(((c_card_passive/100) * c_max_health))
                 c_defense = c_defense + int(((c_card_passive/100) * c_max_health))
@@ -585,7 +593,7 @@ class CrownUnlimited(commands.Cog):
                 o_health = o_health - int((o_attack))
             elif o_card_passive_type == 'CRYSTAL':            
                 o_defense = o_defense + int(((o_card_passive/100) *o_health))
-                o_health = o_health - int((o_attack))
+                o_health = o_health - int((o_defense))
             elif o_card_passive_type == 'GROWTH':            
                 o_attack = o_attack + int(((o_card_passive/100) * o_max_health))
                 o_defense = o_defense + int(((o_card_passive/100) * o_max_health))
@@ -875,7 +883,7 @@ class CrownUnlimited(commands.Cog):
                 t_health = t_health - int((t_attack))
             elif t_card_passive_type == 'CRYSTAL':            
                 t_defense = t_defense + int(((t_card_passive/100) *t_health))
-                t_health = t_health - int((t_attack))
+                t_health = t_health - int((t_defense))
             elif t_card_passive_type == 'GROWTH':            
                 t_attack = t_attack + int(((t_card_passive/100) * t_max_health))
                 t_defense = t_defense + int(((t_card_passive/100) * t_max_health))
@@ -2617,6 +2625,14 @@ class CrownUnlimited(commands.Cog):
         s_gametime = starttime[17:19]
 
         universe = db.queryUniverse({'TITLE': str(selected_universe)})
+
+        if not universe['CROWN_TALES']:
+            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+            await ctx.author.send(f"{selected_universe} is not ready to be explored! Check back later!")
+            if private_channel.guild:
+                await discord.TextChannel.delete(private_channel, reason=None)
+            return
+
         boss = db.queryBoss({'NAME': str(universe['UNIVERSE_BOSS'])})
 
         opponent_scaling = 0
@@ -2867,7 +2883,7 @@ class CrownUnlimited(commands.Cog):
                 c_health = c_health - int((c_attack))
             elif c_card_passive_type == 'CRYSTAL':            
                 c_defense = c_defense + int(((c_card_passive/100) *c_health))
-                c_health = c_health - int((c_attack))
+                c_health = c_health - int((c_defense))
             elif c_card_passive_type == 'GROWTH':            
                 c_attack = c_attack + int(((c_card_passive/100) * c_max_health))
                 c_defense = c_defense + int(((c_card_passive/100) * c_max_health))
@@ -3102,7 +3118,7 @@ class CrownUnlimited(commands.Cog):
                 o_health = o_health - int((o_attack))
             elif o_card_passive_type == 'CRYSTAL':            
                 o_defense = o_defense + int(((o_card_passive/100) *o_health))
-                o_health = o_health - int((o_attack))
+                o_health = o_health - int((o_defense))
             elif o_card_passive_type == 'GROWTH':            
                 o_attack = o_attack + int(((o_card_passive/100) * o_max_health))
                 o_defense = o_defense + int(((o_card_passive/100) * o_max_health))
@@ -3392,7 +3408,7 @@ class CrownUnlimited(commands.Cog):
                 t_health = t_health - int((t_attack))
             elif t_card_passive_type == 'CRYSTAL':            
                 t_defense = t_defense + int(((t_card_passive/100) *t_health))
-                t_health = t_health - int((t_attack))
+                t_health = t_health - int((t_defense))
             elif t_card_passive_type == 'GROWTH':            
                 t_attack = t_attack + int(((t_card_passive/100) * t_max_health))
                 t_defense = t_defense + int(((t_card_passive/100) * t_max_health))
@@ -5348,7 +5364,7 @@ class CrownUnlimited(commands.Cog):
             c_health = c_health - int((c_attack))
         elif c_card_passive_type == 'CRYSTAL':            
             c_defense = c_defense + int(((c_card_passive/100) *c_health))
-            c_health = c_health - int((c_attack))
+            c_health = c_health - int((c_defense))
         elif c_card_passive_type == 'GROWTH':            
             c_attack = c_attack + int(((c_card_passive/100) * c_max_health))
             c_defense = c_defense + int(((c_card_passive/100) * c_max_health))
@@ -5589,7 +5605,7 @@ class CrownUnlimited(commands.Cog):
             o_health = o_health - int((o_attack))
         elif o_card_passive_type == 'CRYSTAL':            
             o_defense = o_defense + int(((o_card_passive/100) *o_health))
-            o_health = o_health - int((o_attack))
+            o_health = o_health - int((o_defense))
         elif o_card_passive_type == 'GROWTH':            
             o_attack = o_attack + int(((o_card_passive/100) * o_max_health))
             o_defense = o_defense + int(((o_card_passive/100) * o_max_health))
@@ -5869,7 +5885,7 @@ class CrownUnlimited(commands.Cog):
             t_health = t_health - int((t_attack))
         elif t_card_passive_type == 'CRYSTAL':            
             t_defense = t_defense + int(((t_card_passive/100) *t_health))
-            t_health = t_health - int((t_attack))
+            t_health = t_health - int((t_defense))
         elif t_card_passive_type == 'GROWTH':            
             t_attack = t_attack + int(((t_card_passive/100) * t_max_health))
             t_defense = t_defense + int(((t_card_passive/100) * t_max_health))
@@ -7866,6 +7882,14 @@ class CrownUnlimited(commands.Cog):
         s_gametime = starttime[17:19]
 
         universe = db.queryUniverse({'TITLE': str(selected_universe)})
+
+        if not universe['CROWN_TALES']:
+            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+            await ctx.author.send(f"{selected_universe} is not ready to be explored! Check back later!")
+            if private_channel.guild:
+                await discord.TextChannel.delete(private_channel, reason=None)
+            return
+
         boss = db.queryBoss({'NAME': str(universe['UNIVERSE_BOSS'])})
 
         opponent_scaling = 0
@@ -8057,7 +8081,7 @@ class CrownUnlimited(commands.Cog):
                 o_health = o_health - int((o_attack))
             elif o_card_passive_type == 'CRYSTAL':            
                 o_defense = o_defense + int(((o_card_passive/100) *o_health))
-                o_health = o_health - int((o_attack))
+                o_health = o_health - int((o_defense))
             elif o_card_passive_type == 'GROWTH':            
                 o_attack = o_attack + int(((o_card_passive/100) * o_max_health))
                 o_defense = o_defense + int(((o_card_passive/100) * o_max_health))
@@ -8341,7 +8365,7 @@ class CrownUnlimited(commands.Cog):
                 t_health = t_health - int((t_attack))
             elif t_card_passive_type == 'CRYSTAL':            
                 t_defense = t_defense + int(((t_card_passive/100) *t_health))
-                t_health = t_health - int((t_attack))
+                t_health = t_health - int((t_defense))
             elif t_card_passive_type == 'GROWTH':            
                 t_attack = t_attack + int(((t_card_passive/100) * t_max_health))
                 t_defense = t_defense + int(((t_card_passive/100) * t_max_health))
@@ -9256,6 +9280,15 @@ class CrownUnlimited(commands.Cog):
         s_gametime = starttime[17:19]
 
         universe = db.queryUniverse({'TITLE': str(selected_universe)})
+
+        if not universe['CROWN_TALES']:
+            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+            await ctx.author.send(f"{selected_universe} is not ready to be explored! Check back later!")
+            if private_channel.guild:
+                await discord.TextChannel.delete(private_channel, reason=None)
+            return
+
+
         boss = db.queryBoss({'NAME': str(universe['UNIVERSE_BOSS'])})
 
         opponent_scaling = 0
@@ -9442,8 +9475,8 @@ class CrownUnlimited(commands.Cog):
                 o_attack = o_attack + int(((o_card_passive/100) *o_health))
                 o_health = o_health - int((o_attack))
             elif o_card_passive_type == 'CRYSTAL':            
-                o_defense = o_defense + int(((o_card_passive/100) *o_health))
-                o_health = o_health - int((o_attack))
+                o_defense = o_defense + int(((o_card_passive/100) * o_health))
+                o_health = o_health - int((o_defense))
             elif o_card_passive_type == 'GROWTH':            
                 o_attack = o_attack + int(((o_card_passive/100) * o_max_health))
                 o_defense = o_defense + int(((o_card_passive/100) * o_max_health))
@@ -9725,7 +9758,7 @@ class CrownUnlimited(commands.Cog):
                 t_health = t_health - int((t_attack))
             elif t_card_passive_type == 'CRYSTAL':            
                 t_defense = t_defense + int(((t_card_passive/100) *t_health))
-                t_health = t_health - int((t_attack))
+                t_health = t_health - int((t_defense))
             elif t_card_passive_type == 'GROWTH':            
                 t_attack = t_attack + int(((t_card_passive/100) * t_max_health))
                 t_defense = t_defense + int(((t_card_passive/100) * t_max_health))
@@ -10822,7 +10855,7 @@ class CrownUnlimited(commands.Cog):
             o_health = o_health - int((o_attack))
         elif o_card_passive_type == 'CRYSTAL':            
             o_defense = o_defense + int(((o_card_passive/100) *o_health))
-            o_health = o_health - int((o_attack))
+            o_health = o_health - int((o_defense))
         elif o_card_passive_type == 'GROWTH':            
             o_attack = o_attack + int(((o_card_passive/100) * o_max_health))
             o_defense = o_defense + int(((o_card_passive/100) * o_max_health))
@@ -11102,7 +11135,7 @@ class CrownUnlimited(commands.Cog):
             t_health = t_health - int((t_attack))
         elif t_card_passive_type == 'CRYSTAL':            
             t_defense = t_defense + int(((t_card_passive/100) *t_health))
-            t_health = t_health - int((t_attack))
+            t_health = t_health - int((t_defense))
         elif t_card_passive_type == 'GROWTH':            
             t_attack = t_attack + int(((t_card_passive/100) * t_max_health))
             t_defense = t_defense + int(((t_card_passive/100) * t_max_health))
@@ -12301,7 +12334,7 @@ class CrownUnlimited(commands.Cog):
                     t_health = t_health - int((t_attack))
                 elif t_card_passive_type == 'CRYSTAL':            
                     t_defense = t_defense + int(((t_card_passive/100) *t_health))
-                    t_health = t_health - int((t_attack))
+                    t_health = t_health - int((t_defense))
                 elif t_card_passive_type == 'GROWTH':            
                     t_attack = t_attack + int(((t_card_passive/100) * t_max_health))
                     t_defense = t_defense + int(((t_card_passive/100) * t_max_health))
@@ -17399,6 +17432,33 @@ class CrownUnlimited(commands.Cog):
         else:
             await ctx.send(m.SESSION_DOES_NOT_EXIST)
 
+    @commands.command()
+    async def cards(self, ctx, *args):
+        universe = " ".join([*args])
+        universe_data = db.queryUniverse({'TITLE': str(universe)})
+        user = db.queryUser({'DISNAME': str(ctx.author)})
+        if universe not in user['CROWN_TALES'] and universe_data['PREREQUISITE'] != "":
+            await ctx.send("You have not unlocked this universe!")
+            return
+        list_of_cards = db.queryAllCardsBasedOnUniverse({'UNIVERSE': universe})
+        cards = [x for x in list_of_cards]
+        dungeon_card_details = []
+        tales_card_details = []
+        for card in cards:
+            available = ""
+            if card['AVAILABLE']:
+                available = "🟢"
+            else:
+                available = "🟠"
+            if card['EXCLUSIVE']:
+                dungeon_card_details.append(f"{available} {card['NAME']} _Dungeon Drop_")
+            else:
+                tales_card_details.append(f"{available} {card['NAME']} _Tales Drop_")
+        await ctx.author.send(f"{universe.upper()} CARDS LIST")
+        await ctx.author.send("\n".join(tales_card_details))
+        await ctx.author.send("\n".join(dungeon_card_details))
+        
+
 async def score(owner, user: User):
         session_query = {"OWNER": str(owner), "AVAILABLE": True, "KINGSGAMBIT": False}
         session_data = db.querySession(session_query)
@@ -17572,7 +17632,7 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
             else:
                 enhanced=hlt
         elif enh_type == 'LIFE':
-            if health >= (maxhealth + (.05 * maxhealth)):
+            if health >= (maxhealth):
                 enhanced=0
             else:
                 enhanced=lifesteal
@@ -18035,5 +18095,6 @@ async def dungeondrops(player, universe):
         return f"You earned {pets[rand_pet]} + :coin: 80!"
     elif drop_rate <= card_drop and drop_rate > pet_drop:
             response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(cards[rand_card])}})
-            await bless(80, player)
-            return f"You earned {cards[rand_card]} + :coin: 80!"
+            await bless(50, player)
+            return f"You earned {cards[rand_card]} + :coin: 50!"
+
