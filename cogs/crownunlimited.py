@@ -1039,6 +1039,10 @@ class CrownUnlimited(commands.Cog):
             while ((o_health > 0) and (c_health > 0)) and (t_health > 0):
                 #Player 1 Turn Start
                 if turn == 0:
+                    if o_attack <= 25:
+                        o_attack = 25
+                    if o_defense <= 30:
+                        o_defense = 30
 
                     # Tutorial Instructions
                     if turn_total == 0 and botActive:                    
@@ -1471,6 +1475,10 @@ class CrownUnlimited(commands.Cog):
 
                 #Opponent Turn Start
                 elif turn == 1:
+                    if t_attack <= 25:
+                        t_attack = 25
+                    if t_defense <= 30:
+                        t_defense = 30
                     # o_pet_used = True
                     if t_health <= (t_max_health * .25):
                         embed_color_t=0xe74c3c
@@ -1745,7 +1753,10 @@ class CrownUnlimited(commands.Cog):
 
                 #Companion Turn Start
                 if turn == 2:
-
+                    if c_attack <= 25:
+                        c_attack = 25
+                    if c_defense <= 30:
+                        c_defense = 30
                     # Tutorial Instructions
                     if turn_total == 0 and botActive:                    
                         embedVar = discord.Embed(title=f"MATCH START", description=f"`{c_card} Says:`\n{c_greeting_description}", colour=0xe91e63)
@@ -2178,6 +2189,10 @@ class CrownUnlimited(commands.Cog):
         
                 #Opponent Turn Start
                 elif turn == 3:
+                    if t_attack <= 25:
+                        t_attack = 25
+                    if t_defense <= 30:
+                        t_defense = 30
                     # o_pet_used = True
                     if t_health <= (t_max_health * .25):
                         embed_color_t=0xe74c3c
@@ -3564,7 +3579,10 @@ class CrownUnlimited(commands.Cog):
             while ((o_health > 0) and (c_health > 0)) and (t_health > 0):
                 #Player 1 Turn Start
                 if turn == 0:
-
+                    if o_attack <= 25:
+                        o_attack = 25
+                    if o_defense <= 30:
+                        o_defense = 30
                     # Tutorial Instructions
                     if turn_total == 0 and botActive:                    
                         embedVar = discord.Embed(title=f"MATCH START", description=f"`{o_card} Says:`\n{o_greeting_description}", colour=0xe91e63)
@@ -3996,6 +4014,10 @@ class CrownUnlimited(commands.Cog):
 
                 #Opponent Turn Start
                 elif turn == 1:
+                    if t_attack <= 25:
+                        t_attack = 25
+                    if t_defense <= 30:
+                        t_defense = 30
                     # o_pet_used = True
                     if t_health <= (t_max_health * .25):
                         embed_color_t=0xe74c3c
@@ -4270,7 +4292,10 @@ class CrownUnlimited(commands.Cog):
 
                 #Companion Turn Start
                 if turn == 2:
-
+                    if c_attack <= 25:
+                        c_attack = 25
+                    if c_defense <= 30:
+                        c_defense = 30
                     # Tutorial Instructions
                     if turn_total == 0 and botActive:                    
                         embedVar = discord.Embed(title=f"MATCH START", description=f"`{c_card} Says:`\n{c_greeting_description}", colour=0xe91e63)
@@ -4701,6 +4726,10 @@ class CrownUnlimited(commands.Cog):
         
                 #Opponent Turn Start
                 elif turn == 3:
+                    if t_attack <= 25:
+                        t_attack = 25
+                    if t_defense <= 30:
+                        t_defense = 30
                     # o_pet_used = True
                     if t_health <= (t_max_health * .25):
                         embed_color_t=0xe74c3c
@@ -6039,7 +6068,10 @@ class CrownUnlimited(commands.Cog):
             
             #Player 1 Turn Start
             if turn == 0:
-
+                if o_attack <= 25:
+                    o_attack = 25
+                if o_defense <= 30:
+                    o_defense = 30
                 # Tutorial Instructions
                 if turn_total == 0 and botActive:                    
                     embedVar = discord.Embed(title=f"`{t_card}` Boss of `{t_universe}`", description=f"*{t_description}*", colour=0xe91e63)
@@ -6473,7 +6505,10 @@ class CrownUnlimited(commands.Cog):
            
             #Boss Turn Start
             elif turn == 1:
-
+                if t_attack <= 25:
+                    t_attack = 25
+                if t_defense <= 30:
+                    t_defense = 30
                 # Boss Conversation Instructions
                 if turn_total == 1 and botActive:                    
                     embedVar = discord.Embed(title=f"`{t_card}` Says : ", description=f"{t_welcome}", colour=0xe91e63)
@@ -6902,7 +6937,10 @@ class CrownUnlimited(commands.Cog):
 
             #Companion Turn Start
             elif turn == 2:
-
+                if c_attack <= 25:
+                    c_attack = 25
+                if c_defense <= 30:
+                    c_defense = 30
                 # Tutorial Instructions
                 if turn_total == 0 and botActive:                    
                     embedVar = discord.Embed(title=f"MATCH START", description=f"`{c_card} Says:`\n{c_greeting_description}", colour=0xe91e63)
@@ -7332,6 +7370,10 @@ class CrownUnlimited(commands.Cog):
 
             #Boss Turn Start
             elif turn == 3:
+                if t_attack <= 25:
+                    t_attack = 25
+                if t_defense <= 30:
+                    t_defense = 30
 
                 # Boss Conversation Instructions
                 if turn_total == 1 and botActive:                    
@@ -7979,6 +8021,7 @@ class CrownUnlimited(commands.Cog):
                 o_lose_description = "I can't believe I lost..."
 
 
+
             # Player 2 Data
             t_user = boss
             tarm = db.queryArm({'ARM': universe['DARM']})
@@ -8512,7 +8555,10 @@ class CrownUnlimited(commands.Cog):
             while (o_health > 0) and (t_health > 0):
                 #Player 1 Turn Start
                 if turn == 0:
-
+                    if o_attack <= 25:
+                        o_attack = 25
+                    if o_defense <= 30:
+                        o_defense = 30
                     # Tutorial Instructions
                     if turn_total == 0 and botActive:                    
                         embedVar = discord.Embed(title=f"MATCH START", description=f"`{o_card} Says:`\n{o_greeting_description}", colour=0xe91e63)
@@ -8859,6 +8905,10 @@ class CrownUnlimited(commands.Cog):
                             return
                 #PLayer 2 Turn Start
                 elif turn == 1:
+                    if t_attack <= 25:
+                        t_attack = 25
+                    if t_defense <= 30:
+                        t_defense = 30 
                     # o_pet_used = True
                     if t_health <= (t_max_health * .25):
                         embed_color_t=0xe74c3c
@@ -9905,6 +9955,10 @@ class CrownUnlimited(commands.Cog):
             while (o_health > 0) and (t_health > 0):
                 #Player 1 Turn Start
                 if turn == 0:
+                    if o_attack <= 25:
+                        o_attack = 25
+                    if o_defense <= 30:
+                        o_defense = 30
 
                     # Tutorial Instructions
                     if turn_total == 0 and botActive:                    
@@ -10255,6 +10309,11 @@ class CrownUnlimited(commands.Cog):
                             return
                 #PLayer 2 Turn Start
                 elif turn == 1:
+                    if t_attack <= 25:
+                        t_attack = 25
+                    if t_defense <= 30:
+                        t_defense = 30
+
                     # o_pet_used = True
                     if t_health <= (t_max_health * .25):
                         embed_color_t=0xe74c3c
@@ -11287,6 +11346,10 @@ class CrownUnlimited(commands.Cog):
             
             #Player 1 Turn Start
             if turn == 0:
+                if o_attack <= 25:
+                        o_attack = 25
+                if o_defense <= 30:
+                    o_defense = 30
 
                 # Tutorial Instructions
                 if turn_total == 0 and botActive:                    
@@ -11637,7 +11700,10 @@ class CrownUnlimited(commands.Cog):
                         return
             #PLayer 2 Turn Start
             elif turn == 1:
-
+                if t_attack <= 25:
+                    t_attack = 25
+                if t_defense <= 30:
+                    t_defense = 30
                 # Boss Conversation Instructions
                 if turn_total == 1 and botActive:                    
                     embedVar = discord.Embed(title=f"`{t_card}` Says : ", description=f"{t_welcome}", colour=0xe91e63)
@@ -12782,6 +12848,10 @@ class CrownUnlimited(commands.Cog):
                 while (o_health > 0) and (t_health > 0):
                     #Player 1 Turn Start
                     if turn == 0:
+                        if o_attack <= 25:
+                            o_attack = 25
+                        if o_defense <= 30:
+                            o_defense = 30
 
                         # Tutorial Instructions
                         if turn_total == 0:
@@ -13149,6 +13219,10 @@ class CrownUnlimited(commands.Cog):
                                 return
                     #PLayer 2 Turn Start
                     elif turn == 1:
+                        if t_attack <= 25:
+                            t_attack = 25
+                        if t_defense <= 30:
+                            t_defense = 30
                         if turn_total == 0:
                             embedVar = discord.Embed(title=f"MATCH START", description=f"`{t_card} Says:`\n{t_greeting_description}", colour=0xe91e63)
                             await ctx.send(embed=embedVar) 
@@ -14566,6 +14640,10 @@ class CrownUnlimited(commands.Cog):
                 while (o_health > 0) and (t_health > 0):
                     #Player 1 Turn Start
                     if turn == 0:
+                        if o_attack <= 25:
+                            o_attack = 25
+                        if o_defense <= 30:
+                            o_defense = 30
 
                         # Tutorial Instructions
                         if turn_total == 0:
@@ -14938,6 +15016,10 @@ class CrownUnlimited(commands.Cog):
                                 return
                     #PLayer 2 Turn Start
                     elif turn == 1:
+                        if t_attack <= 25:
+                            t_attack = 25
+                        if t_defense <= 30:
+                            t_defense = 30
                         if turn_total == 0:
                             embedVar = discord.Embed(title=f"MATCH START", description=f"`{t_card} Says:`\n{t_greeting_description}", colour=0xe91e63)
                             await ctx.send(embed=embedVar) 
