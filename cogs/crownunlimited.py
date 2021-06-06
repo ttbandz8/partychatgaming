@@ -10039,7 +10039,10 @@ class CrownUnlimited(commands.Cog):
                                     o_stamina = o_stamina + o_resolve
                                     o_health = o_health + o_resolve_health
                                     o_attack = round(o_attack + o_resolve_attack)
-                                    o_defense = round(o_defense - o_resolve_defense)
+                                    if o_resolve_defense >= o_defense:
+                                        o_defense = 25
+                                    else:
+                                        o_defense = round(o_defense - o_resolve_defense)
                                     o_used_resolve = True 
 
                                     embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
@@ -17437,7 +17440,7 @@ class CrownUnlimited(commands.Cog):
         universe = " ".join([*args])
         universe_data = db.queryUniverse({'TITLE': str(universe)})
         user = db.queryUser({'DISNAME': str(ctx.author)})
-        if universe not in user['CROWN_TALES'] and universe_data['PREREQUISITE'] != "":
+        if universe_data['PREREQUISITE'] not in user['CROWN_TALES'] and universe_data['PREREQUISITE'] != "":
             await ctx.send("You have not unlocked this universe!")
             return
         list_of_cards = db.queryAllCardsBasedOnUniverse({'UNIVERSE': universe})
@@ -17698,7 +17701,7 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
         
         fortitude = ((maxhealth - health) * (2/5))
         if fortitude <= ap:
-            fortitude = health * (2/5)
+            fortitude = health * (2/5) #216
         attackpower = ((int(atk) / 20) * int(ap)) / op_defense
         modifier = random.randint(7,11)
         dmg = ((fortitude * attackpower)/100) * modifier
