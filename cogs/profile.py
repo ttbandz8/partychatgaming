@@ -1,3 +1,4 @@
+from re import T
 import discord
 from discord.ext import commands
 import bot as main
@@ -378,7 +379,7 @@ class Profile(commands.Cog):
         for card in resp:
             if card['UNIVERSE'] in available_universes:
                 # Don't produce cards you can't afford
-                if card['PRICE'] != 0 and card['PRICE'] < (vault['BALANCE'] + 500) and card['AVAILABLE'] and not card['EXCLUSIVE']:
+                if card['PRICE'] != 0 and card['PRICE'] < (vault['BALANCE'] + 500) and card['AVAILABLE'] and card['EXCLUSIVE'] != True:
                     if card['NAME'] not in vault['CARDS']:
                         cards.append({'NAME': card['NAME'], 'PRICE': card['PRICE'], 'UNIVERSE': card['UNIVERSE'], 'STOCK': card['STOCK']})
         
@@ -394,7 +395,7 @@ class Profile(commands.Cog):
         title_text_list = []
         for title in title_resp:
             if title['UNIVERSE'] in available_universes or title['UNIVERSE'] == 'Unbound':
-                if title['PRICE'] != 0 and title['PRICE'] < (vault['BALANCE'] + 500) and title['AVAILABLE']:
+                if title['PRICE'] != 0 and title['PRICE'] < (vault['BALANCE'] + 500) and title['AVAILABLE'] and title['EXCLUSIVE'] != True:
                     if title['TITLE'] not in vault['TITLES']:
                         titles.append({'TITLE': title['TITLE'], 'PRICE': title['PRICE'], 'UNIVERSE': title['UNIVERSE'], 'STOCK': title['STOCK']})
 
@@ -411,7 +412,7 @@ class Profile(commands.Cog):
         arm_text_list = []
         for arm in arm_resp:
             if arm['UNIVERSE'] in available_universes or arm['UNIVERSE'] == 'Unbound':
-                if arm['PRICE'] != 0 and arm['PRICE'] < (vault['BALANCE'] + 500) and arm['AVAILABLE']:
+                if arm['PRICE'] != 0 and arm['PRICE'] < (vault['BALANCE'] + 500) and arm['AVAILABLE'] and arm['EXCLUSIVE'] != True:
                     if arm['ARM'] not in vault['ARMS']:
                         arms.append({'ARM': arm['ARM'], 'PRICE': arm['PRICE'], 'UNIVERSE': arm['UNIVERSE'], 'STOCK': arm['STOCK']})
 
