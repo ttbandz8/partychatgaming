@@ -351,7 +351,7 @@ class CrownUnlimited(commands.Cog):
                 c_health = c_health - int((c_attack))
             elif c_card_passive_type == 'CRYSTAL':            
                 c_defense = c_defense + int(((c_card_passive/100) *c_health))
-                c_health = c_health - int((c_attack))
+                c_health = c_health - int((c_defense))
             elif c_card_passive_type == 'GROWTH':            
                 c_attack = c_attack + int(((c_card_passive/100) * c_max_health))
                 c_defense = c_defense + int(((c_card_passive/100) * c_max_health))
@@ -586,7 +586,7 @@ class CrownUnlimited(commands.Cog):
                 o_health = o_health - int((o_attack))
             elif o_card_passive_type == 'CRYSTAL':            
                 o_defense = o_defense + int(((o_card_passive/100) *o_health))
-                o_health = o_health - int((o_attack))
+                o_health = o_health - int((o_defense))
             elif o_card_passive_type == 'GROWTH':            
                 o_attack = o_attack + int(((o_card_passive/100) * o_max_health))
                 o_defense = o_defense + int(((o_card_passive/100) * o_max_health))
@@ -876,7 +876,7 @@ class CrownUnlimited(commands.Cog):
                 t_health = t_health - int((t_attack))
             elif t_card_passive_type == 'CRYSTAL':            
                 t_defense = t_defense + int(((t_card_passive/100) *t_health))
-                t_health = t_health - int((t_attack))
+                t_health = t_health - int((t_defense))
             elif t_card_passive_type == 'GROWTH':            
                 t_attack = t_attack + int(((t_card_passive/100) * t_max_health))
                 t_defense = t_defense + int(((t_card_passive/100) * t_max_health))
@@ -2868,7 +2868,7 @@ class CrownUnlimited(commands.Cog):
                 c_health = c_health - int((c_attack))
             elif c_card_passive_type == 'CRYSTAL':            
                 c_defense = c_defense + int(((c_card_passive/100) *c_health))
-                c_health = c_health - int((c_attack))
+                c_health = c_health - int((c_defense))
             elif c_card_passive_type == 'GROWTH':            
                 c_attack = c_attack + int(((c_card_passive/100) * c_max_health))
                 c_defense = c_defense + int(((c_card_passive/100) * c_max_health))
@@ -3103,7 +3103,7 @@ class CrownUnlimited(commands.Cog):
                 o_health = o_health - int((o_attack))
             elif o_card_passive_type == 'CRYSTAL':            
                 o_defense = o_defense + int(((o_card_passive/100) *o_health))
-                o_health = o_health - int((o_attack))
+                o_health = o_health - int((o_defense))
             elif o_card_passive_type == 'GROWTH':            
                 o_attack = o_attack + int(((o_card_passive/100) * o_max_health))
                 o_defense = o_defense + int(((o_card_passive/100) * o_max_health))
@@ -3393,7 +3393,7 @@ class CrownUnlimited(commands.Cog):
                 t_health = t_health - int((t_attack))
             elif t_card_passive_type == 'CRYSTAL':            
                 t_defense = t_defense + int(((t_card_passive/100) *t_health))
-                t_health = t_health - int((t_attack))
+                t_health = t_health - int((t_defense))
             elif t_card_passive_type == 'GROWTH':            
                 t_attack = t_attack + int(((t_card_passive/100) * t_max_health))
                 t_defense = t_defense + int(((t_card_passive/100) * t_max_health))
@@ -5349,7 +5349,7 @@ class CrownUnlimited(commands.Cog):
             c_health = c_health - int((c_attack))
         elif c_card_passive_type == 'CRYSTAL':            
             c_defense = c_defense + int(((c_card_passive/100) *c_health))
-            c_health = c_health - int((c_attack))
+            c_health = c_health - int((c_defense))
         elif c_card_passive_type == 'GROWTH':            
             c_attack = c_attack + int(((c_card_passive/100) * c_max_health))
             c_defense = c_defense + int(((c_card_passive/100) * c_max_health))
@@ -5590,7 +5590,7 @@ class CrownUnlimited(commands.Cog):
             o_health = o_health - int((o_attack))
         elif o_card_passive_type == 'CRYSTAL':            
             o_defense = o_defense + int(((o_card_passive/100) *o_health))
-            o_health = o_health - int((o_attack))
+            o_health = o_health - int((o_defense))
         elif o_card_passive_type == 'GROWTH':            
             o_attack = o_attack + int(((o_card_passive/100) * o_max_health))
             o_defense = o_defense + int(((o_card_passive/100) * o_max_health))
@@ -5870,7 +5870,7 @@ class CrownUnlimited(commands.Cog):
             t_health = t_health - int((t_attack))
         elif t_card_passive_type == 'CRYSTAL':            
             t_defense = t_defense + int(((t_card_passive/100) *t_health))
-            t_health = t_health - int((t_attack))
+            t_health = t_health - int((t_defense))
         elif t_card_passive_type == 'GROWTH':            
             t_attack = t_attack + int(((t_card_passive/100) * t_max_health))
             t_defense = t_defense + int(((t_card_passive/100) * t_max_health))
@@ -8058,7 +8058,7 @@ class CrownUnlimited(commands.Cog):
                 o_health = o_health - int((o_attack))
             elif o_card_passive_type == 'CRYSTAL':            
                 o_defense = o_defense + int(((o_card_passive/100) *o_health))
-                o_health = o_health - int((o_attack))
+                o_health = o_health - int((o_defense))
             elif o_card_passive_type == 'GROWTH':            
                 o_attack = o_attack + int(((o_card_passive/100) * o_max_health))
                 o_defense = o_defense + int(((o_card_passive/100) * o_max_health))
@@ -8342,7 +8342,7 @@ class CrownUnlimited(commands.Cog):
                 t_health = t_health - int((t_attack))
             elif t_card_passive_type == 'CRYSTAL':            
                 t_defense = t_defense + int(((t_card_passive/100) *t_health))
-                t_health = t_health - int((t_attack))
+                t_health = t_health - int((t_defense))
             elif t_card_passive_type == 'GROWTH':            
                 t_attack = t_attack + int(((t_card_passive/100) * t_max_health))
                 t_defense = t_defense + int(((t_card_passive/100) * t_max_health))
@@ -9443,8 +9443,8 @@ class CrownUnlimited(commands.Cog):
                 o_attack = o_attack + int(((o_card_passive/100) *o_health))
                 o_health = o_health - int((o_attack))
             elif o_card_passive_type == 'CRYSTAL':            
-                o_defense = o_defense + int(((o_card_passive/100) *o_health))
-                o_health = o_health - int((o_attack))
+                o_defense = o_defense + int(((o_card_passive/100) * o_health))
+                o_health = o_health - int((o_defense))
             elif o_card_passive_type == 'GROWTH':            
                 o_attack = o_attack + int(((o_card_passive/100) * o_max_health))
                 o_defense = o_defense + int(((o_card_passive/100) * o_max_health))
@@ -9726,7 +9726,7 @@ class CrownUnlimited(commands.Cog):
                 t_health = t_health - int((t_attack))
             elif t_card_passive_type == 'CRYSTAL':            
                 t_defense = t_defense + int(((t_card_passive/100) *t_health))
-                t_health = t_health - int((t_attack))
+                t_health = t_health - int((t_defense))
             elif t_card_passive_type == 'GROWTH':            
                 t_attack = t_attack + int(((t_card_passive/100) * t_max_health))
                 t_defense = t_defense + int(((t_card_passive/100) * t_max_health))
@@ -10820,7 +10820,7 @@ class CrownUnlimited(commands.Cog):
             o_health = o_health - int((o_attack))
         elif o_card_passive_type == 'CRYSTAL':            
             o_defense = o_defense + int(((o_card_passive/100) *o_health))
-            o_health = o_health - int((o_attack))
+            o_health = o_health - int((o_defense))
         elif o_card_passive_type == 'GROWTH':            
             o_attack = o_attack + int(((o_card_passive/100) * o_max_health))
             o_defense = o_defense + int(((o_card_passive/100) * o_max_health))
@@ -11100,7 +11100,7 @@ class CrownUnlimited(commands.Cog):
             t_health = t_health - int((t_attack))
         elif t_card_passive_type == 'CRYSTAL':            
             t_defense = t_defense + int(((t_card_passive/100) *t_health))
-            t_health = t_health - int((t_attack))
+            t_health = t_health - int((t_defense))
         elif t_card_passive_type == 'GROWTH':            
             t_attack = t_attack + int(((t_card_passive/100) * t_max_health))
             t_defense = t_defense + int(((t_card_passive/100) * t_max_health))
@@ -12299,7 +12299,7 @@ class CrownUnlimited(commands.Cog):
                     t_health = t_health - int((t_attack))
                 elif t_card_passive_type == 'CRYSTAL':            
                     t_defense = t_defense + int(((t_card_passive/100) *t_health))
-                    t_health = t_health - int((t_attack))
+                    t_health = t_health - int((t_defense))
                 elif t_card_passive_type == 'GROWTH':            
                     t_attack = t_attack + int(((t_card_passive/100) * t_max_health))
                     t_defense = t_defense + int(((t_card_passive/100) * t_max_health))
