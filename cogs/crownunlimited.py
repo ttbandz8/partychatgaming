@@ -8559,6 +8559,8 @@ class CrownUnlimited(commands.Cog):
                         o_attack = 25
                     if o_defense <= 30:
                         o_defense = 30
+                    if o_health >= o_max_health:
+                        o_health = o_max_health
                     # Tutorial Instructions
                     if turn_total == 0 and botActive:                    
                         embedVar = discord.Embed(title=f"MATCH START", description=f"`{o_card} Says:`\n{o_greeting_description}", colour=0xe91e63)
@@ -8908,7 +8910,9 @@ class CrownUnlimited(commands.Cog):
                     if t_attack <= 25:
                         t_attack = 25
                     if t_defense <= 30:
-                        t_defense = 30 
+                        t_defense = 30
+                    if t_health >= t_max_health:
+                        t_health = t_max_health 
                     # o_pet_used = True
                     if t_health <= (t_max_health * .25):
                         embed_color_t=0xe74c3c
@@ -9959,6 +9963,8 @@ class CrownUnlimited(commands.Cog):
                         o_attack = 25
                     if o_defense <= 30:
                         o_defense = 30
+                    if o_health >= o_max_health:
+                        o_health = o_max_health
 
                     # Tutorial Instructions
                     if turn_total == 0 and botActive:                    
@@ -10313,6 +10319,8 @@ class CrownUnlimited(commands.Cog):
                         t_attack = 25
                     if t_defense <= 30:
                         t_defense = 30
+                    if t_health >= t_max_health:
+                        t_health = t_max_health
 
                     # o_pet_used = True
                     if t_health <= (t_max_health * .25):
@@ -11350,6 +11358,8 @@ class CrownUnlimited(commands.Cog):
                         o_attack = 25
                 if o_defense <= 30:
                     o_defense = 30
+                if o_health >= o_max_health:
+                    o_health = o_max_health
 
                 # Tutorial Instructions
                 if turn_total == 0 and botActive:                    
@@ -11704,6 +11714,8 @@ class CrownUnlimited(commands.Cog):
                     t_attack = 25
                 if t_defense <= 30:
                     t_defense = 30
+                if t_health >= t_max_health:
+                    t_health = t_max_health
                 # Boss Conversation Instructions
                 if turn_total == 1 and botActive:                    
                     embedVar = discord.Embed(title=f"`{t_card}` Says : ", description=f"{t_welcome}", colour=0xe91e63)
@@ -12852,6 +12864,8 @@ class CrownUnlimited(commands.Cog):
                             o_attack = 25
                         if o_defense <= 30:
                             o_defense = 30
+                        if o_health >= o_max_health:
+                            o_health = o_max_health
 
                         # Tutorial Instructions
                         if turn_total == 0:
@@ -13223,6 +13237,8 @@ class CrownUnlimited(commands.Cog):
                             t_attack = 25
                         if t_defense <= 30:
                             t_defense = 30
+                        if t_health >= t_max_health:
+                            t_health = t_max_health
                         if turn_total == 0:
                             embedVar = discord.Embed(title=f"MATCH START", description=f"`{t_card} Says:`\n{t_greeting_description}", colour=0xe91e63)
                             await ctx.send(embed=embedVar) 
@@ -14644,6 +14660,8 @@ class CrownUnlimited(commands.Cog):
                             o_attack = 25
                         if o_defense <= 30:
                             o_defense = 30
+                        if o_health >= o_max_health:
+                            o_health = o_max_health
 
                         # Tutorial Instructions
                         if turn_total == 0:
@@ -15020,6 +15038,8 @@ class CrownUnlimited(commands.Cog):
                             t_attack = 25
                         if t_defense <= 30:
                             t_defense = 30
+                        if t_health >= t_max_health:
+                            t_health = t_max_health
                         if turn_total == 0:
                             embedVar = discord.Embed(title=f"MATCH START", description=f"`{t_card} Says:`\n{t_greeting_description}", colour=0xe91e63)
                             await ctx.send(embed=embedVar) 
@@ -17784,7 +17804,7 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
         fortitude = ((maxhealth - health) * (2/5))
         if fortitude <= ap:
             fortitude = health * (2/5) #216
-        attackpower = ((int(atk) / 20) * int(ap)) / op_defense
+        attackpower = ((int(atk) / 20) * int(ap)) / op_defense #5.09
         modifier = random.randint(7,11)
         dmg = ((fortitude * attackpower)/100) * modifier
 
