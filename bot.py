@@ -317,6 +317,11 @@ async def fix(ctx, user: User):
    else:
       print(m.ADMIN_ONLY_COMMAND)
 
+@bot.command(pass_context=True)
+@commands.cooldown(1, 60*60*24, commands.BucketType.user)
+async def dailybonus(ctx):
+   await bless(100, ctx.author)
+   await ctx.send(f"Daily bonus :coin:100 has been applied for {ctx.author.mention}!")
 
 @bot.command()
 @commands.check(validate_user)
@@ -697,7 +702,7 @@ async def addfield(ctx, collection, new_field, field_type):
    if ctx.author.guild_permissions.administrator == True:
 
       if field_type == 'string':
-         field_type = ''
+         field_type = ""
       elif field_type == 'int':
          field_type = 25
       elif field_type == 'list':

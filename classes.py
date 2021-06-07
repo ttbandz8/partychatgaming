@@ -149,6 +149,8 @@ class UNIVERSE():
     UARM: str = field(default_factory=lambda: "Stock")
     DTITLE: str = field(default_factory=lambda: "Starter")
     DARM: str = field(default_factory=lambda: "Stock")
+    UPET: str = field(default_factory=lambda: "")
+    DPET: str = field(default_factory=lambda: "")
 
 @dataclass(frozen=True, order=True) 
 class BOSS():
