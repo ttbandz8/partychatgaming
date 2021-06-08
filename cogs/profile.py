@@ -16,6 +16,7 @@ from collections import ChainMap
 import DiscordUtils
 from .crownunlimited import showcard
 import random
+import textwrap
 
 emojis = ['👍', '👎']
 
@@ -141,22 +142,27 @@ class Profile(commands.Cog):
             passive_num = list(o_passive.values())[0]
             passive_type = list(o_passive.values())[1]
 
-            embedVar = discord.Embed(title=f"{title_name} {o_card} and {active_pet['NAME']}:".format(self), colour=000000)
-            embedVar.add_field(name=f"TITLE", value=f"`{title_name}`: Increase `{title_passive_type}` by `{title_passive_value}`")
-            embedVar.add_field(name=f"ARM", value=f"`{arm_name}`: Increase `{arm_passive_type}` by `{arm_passive_value}`")
-            embedVar.add_field(name=f"PET", value=f"`{active_pet['NAME']}`: Increase `{active_pet['TYPE']}` by `{pet_ability_power}`")
-            # embedVar.set_thumbnail(url=active_pet['PATH'])
-            # embedVar.set_image(url=o_card_path)
-            embedVar.add_field(name="Health", value=f"`{o_max_health}`")
-            embedVar.add_field(name="Stamina", value=f"`{o_max_stamina}`")
-            embedVar.add_field(name="Speed", value=f"`{o_speed}`")            
-            embedVar.add_field(name="Attack", value=f"`{o_attack}`")
-            embedVar.add_field(name="Defense", value=f"`{o_defense}`")
-            embedVar.add_field(name=f"{move1}", value=f"Power: `{move1ap}`", inline=False)
-            embedVar.add_field(name=f"{move2}", value=f"Power: `{move2ap}`", inline=False)
-            embedVar.add_field(name=f"{move3}", value=f"Power: `{move3ap}`", inline=False)
-            embedVar.add_field(name=f"{move4}", value=f"`Enhancer`: Increases `{move4enh} by {move4ap}`", inline=False)
-            embedVar.add_field(name="Unique Passive", value=f"`{passive_name}`: Increases `{passive_type} by {passive_num}`", inline=False)
+            embedVar = discord.Embed(title=f"{title_name} {o_card} & {active_pet['NAME']}:".format(self), description=textwrap.dedent(f"""\
+            **Health:** {o_max_health}
+            **Stamina:** {o_max_stamina}
+            **Attack:** {o_attack}
+            **Defense:** {o_defense}
+            **Speed:** {o_speed}
+            _Title:_ **{title_name}:** {title_passive_type} {title_passive_value}
+            _Arm:_ **{arm_name}:** {arm_passive_type} {arm_passive_value}
+            _Pet:_ {active_pet['TYPE']} {pet_ability_power}
+
+            _**Moveset**_
+            **{move1}:** {move1ap}
+            **{move2}:** {move3ap}
+            **{move3}:** {move3ap}
+            **{move4}:** {move4enh} by {move4ap}
+            _Unique Passive:_ **{passive_name}:** {passive_type} by {passive_num}
+            """)
+            
+            , colour=000000)
+            embedVar.set_thumbnail(url=active_pet['PATH'])
+            embedVar.set_image(url=o_card_path)
             embedVar.set_footer(text=f".enhance - Enhancement Menu")
 
             await ctx.send(embed=embedVar)

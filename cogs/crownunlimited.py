@@ -20,6 +20,7 @@ now = time.asctime()
 import base64
 from io import BytesIO
 import asyncio
+import textwrap
 
 class CrownUnlimited(commands.Cog):
     def __init__(self, bot):
@@ -59,10 +60,20 @@ class CrownUnlimited(commands.Cog):
             if uni['PREREQUISITE'] in sowner['CROWN_TALES']:
                 available_universes.append(uni['TITLE'])
                 
-        embedVar = discord.Embed(title=f":crown: CROWN TALES CO-OP!", description="Select a Universe to explore!", colour=0xe91e63)
-        embedVar.add_field(name="Available Universes", value=" | ".join(available_universes))
         if len(completed_crown_tales) > 1:
-            embedVar.add_field(name="Completed Universes", value="\n".join(completed_crown_tales), inline=False)
+            completed_crown_tales = completed_crown_tales
+        else:
+            completed_crown_tales = ['None yet!']
+        embedVar = discord.Embed(title=f":crown: CROWN TALES!", description=textwrap.dedent(f"""\
+        Explore a Universe!
+
+        **Available Universes:**  
+        {", ".join(available_universes)}
+
+        **Completed Universes:** 
+        {", ".join(completed_crown_tales)}
+        """), colour=0xe91e63) 
+        embedVar.set_footer(text="Earn drops from the Universes you explore. Conquering Universes unlocks more worlds!")
         embedVar.set_footer(text="Earn drops from the Universes you explore. Conquering Universes unlocks more worlds!\nEnjoy Co-op!")
         await private_channel.send(embed=embedVar)
         accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
@@ -1107,8 +1118,19 @@ class CrownUnlimited(commands.Cog):
                         # UNIVERSE CARD
                         player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                         await private_channel.send(file=player_1_card)
-                        embedVar = discord.Embed(title=f"{o_card} What move will you use?", description=f"{t_card} currently has {t_health} health and {t_stamina} stamina.\n{c_card} currently has {c_health} health and {c_stamina} stamina.", colour=embed_color_o)
-                        embedVar.add_field(name=f"{o_card} Move List", value=f"1. {omove1_text} | 10 STAM\n2. {omove2_text} | 30 STAM\n3. {omove3_text} | 80 STAM\n4. {omove_enhanced_text} | 20 STAM\n7. Assist {c_card} with Enhancer | 20 STAM")
+                        embedVar = discord.Embed(title=f"{o_card}, choose your move!", description=textwrap.dedent(f"""\
+                        
+                        **{omove1_text}** 10 Stamina _press 1_
+                        **{omove2_text}** 30 Stamina _press 2_
+                        **{omove3_text}** 80 Stamina _press 3_
+                        **{omove_enhanced_text}** 20 Stamina _press 4_
+                    
+                        **{t_card}:** _Health_ {t_health} / _Stamina_ {t_stamina}
+                        **{c_card}:** _Health_ {c_health} / _Stamina_ {c_stamina} _partner_
+
+                        """) 
+                        
+                        , colour=embed_color_o)
                         embedVar.set_thumbnail(url=opet_image)
                         if o_used_focus and o_used_resolve and not t_pet_used:
                             embedVar.set_author(name="Press 0 to Quit Match. Press 6 to Summon your Pet!")                                    
@@ -1824,8 +1846,19 @@ class CrownUnlimited(commands.Cog):
                         # UNIVERSE CARD
                         companion = showcard(c, c_max_health, c_health, c_max_stamina, c_stamina, c_used_resolve, ctitle, c_used_focus)
                         await private_channel.send(file=companion)
-                        embedVar = discord.Embed(title=f"{c_card} What move will you use?", description=f"{t_card} currently has {t_health} health and {t_stamina} stamina.\n{o_card} currently has {o_health} health and {o_stamina} stamina.", colour=embed_color_c)
-                        embedVar.add_field(name=f"{c_card} Move List", value=f"1. {cmove1_text} | 10 STAM\n2. {cmove2_text} | 30 STAM\n3. {cmove3_text} | 80 STAM\n4. {cmove_enhanced_text} | 20 STAM\n7. Assist {o_card} with Enhancer | 20 STAM")
+                        embedVar = discord.Embed(title=f"{c_card}, choose your move!", description=textwrap.dedent(f"""\
+                        
+                        **{cmove1_text}** 10 Stamina _press 1_
+                        **{cmove2_text}** 30 Stamina _press 2_
+                        **{cmove3_text}** 80 Stamina _press 3_
+                        **{cmove_enhanced_text}** 20 Stamina _press 4_
+                    
+                        **{t_card}:** _Health_ {t_health} / _Stamina_ {t_stamina}
+                        **{o_card}:** _Health_ {o_health} / _Stamina_ {o_stamina} _partner_
+
+                        """) 
+                        
+                        , colour=embed_color_c)
                         embedVar.set_thumbnail(url=cpet_image)
                         if c_used_focus and c_used_resolve and not t_pet_used:
                             embedVar.set_author(name="Press 0 to Quit Match. Press 6 to Summon your Pet!")                                    
@@ -3664,8 +3697,19 @@ class CrownUnlimited(commands.Cog):
                         # UNIVERSE CARD
                         player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                         await private_channel.send(file=player_1_card)
-                        embedVar = discord.Embed(title=f"{o_card} What move will you use?", description=f"{t_card} currently has {t_health} health and {t_stamina} stamina.\n{c_card} currently has {c_health} health and {c_stamina} stamina.", colour=embed_color_o)
-                        embedVar.add_field(name=f"{o_card} Move List", value=f"1. {omove1_text} | 10 STAM\n2. {omove2_text} | 30 STAM\n3. {omove3_text} | 80 STAM\n4. {omove_enhanced_text} | 20 STAM\n7. Assist {c_card} with Enhancer | 20 STAM")
+                        embedVar = discord.Embed(title=f"{o_card}, choose your move!", description=textwrap.dedent(f"""\
+                        
+                        **{omove1_text}** 10 Stamina _press 1_
+                        **{omove2_text}** 30 Stamina _press 2_
+                        **{omove3_text}** 80 Stamina _press 3_
+                        **{omove_enhanced_text}** 20 Stamina _press 4_
+                    
+                        **{t_card}:** _Health_ {t_health} / _Stamina_ {t_stamina}
+                        **{c_card}:** _Health_ {c_health} / _Stamina_ {c_stamina} _partner_
+
+                        """) 
+                        
+                        , colour=embed_color_o)
                         embedVar.set_thumbnail(url=opet_image)
                         if o_used_focus and o_used_resolve and not t_pet_used:
                             embedVar.set_author(name="Press 0 to Quit Match. Press 6 to Summon your Pet!")                                    
@@ -4484,8 +4528,19 @@ class CrownUnlimited(commands.Cog):
                         # UNIVERSE CARD
                         companion = showcard(c, c_max_health, c_health, c_max_stamina, c_stamina, c_used_resolve, ctitle, c_used_focus)
                         await private_channel.send(file=companion)
-                        embedVar = discord.Embed(title=f"{c_card} What move will you use?", description=f"{t_card} currently has {t_health} health and {t_stamina} stamina.\n{o_card} currently has {o_health} health and {o_stamina} stamina.", colour=embed_color_c)
-                        embedVar.add_field(name=f"{c_card} Move List", value=f"1. {cmove1_text} | 10 STAM\n2. {cmove2_text} | 30 STAM\n3. {cmove3_text} | 80 STAM\n4. {cmove_enhanced_text} | 20 STAM\n7. Assist {o_card} with Enhancer | 20 STAM")
+                        embedVar = discord.Embed(title=f"{c_card}, choose your move!", description=textwrap.dedent(f"""\
+                        
+                        **{cmove1_text}** 10 Stamina _press 1_
+                        **{cmove2_text}** 30 Stamina _press 2_
+                        **{cmove3_text}** 80 Stamina _press 3_
+                        **{cmove_enhanced_text}** 20 Stamina _press 4_
+                    
+                        **{t_card}:** _Health_ {t_health} / _Stamina_ {t_stamina}
+                        **{o_card}:** _Health_ {o_health} / _Stamina_ {o_stamina} _partner_
+
+                        """) 
+                        
+                        , colour=embed_color_c)
                         embedVar.set_thumbnail(url=cpet_image)
                         if c_used_focus and c_used_resolve and not t_pet_used:
                             embedVar.set_author(name="Press 0 to Quit Match. Press 6 to Summon your Pet!")                                    
@@ -6369,8 +6424,19 @@ class CrownUnlimited(commands.Cog):
                     # UNIVERSE CARD
                     player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                     await private_channel.send(file=player_1_card)
-                    embedVar = discord.Embed(title=f"{o_card} What move will you use?", description=f"{t_card} currently has {t_health} health and {t_stamina} stamina.", colour=embed_color_o)
-                    embedVar.add_field(name=f"{o_card} Move List", value=f"1. {omove1_text} | 10 STAM\n2. {omove2_text} | 30 STAM\n3. {omove3_text} | 80 STAM\n4. {omove_enhanced_text} | 20 STAM")
+                    embedVar = discord.Embed(title=f"{o_card}, choose your move!", description=textwrap.dedent(f"""\
+                        
+                    **{omove1_text}** 10 Stamina _press 1_
+                    **{omove2_text}** 30 Stamina _press 2_
+                    **{omove3_text}** 80 Stamina _press 3_
+                    **{omove_enhanced_text}** 20 Stamina _press 4_
+                
+                    **{t_card}:** _Health_ {t_health} / _Stamina_ {t_stamina}
+                    **{c_card}:** _Health_ {c_health} / _Stamina_ {c_stamina} _partner_
+
+                    """) 
+                    
+                    , colour=embed_color_o)
                     embedVar.set_thumbnail(url=opet_image)
                     if o_used_focus and o_used_resolve and not t_pet_used:
                         embedVar.set_author(name="Press 0 to Quit Match. Press 6 to Summon your Pet!")                                    
@@ -7236,8 +7302,19 @@ class CrownUnlimited(commands.Cog):
                     # UNIVERSE CARD
                     companion = showcard(c, c_max_health, c_health, c_max_stamina, c_stamina, c_used_resolve, ctitle, c_used_focus)
                     await private_channel.send(file=companion)
-                    embedVar = discord.Embed(title=f"{c_card} What move will you use?", description=f"{t_card} currently has {t_health} health and {t_stamina} stamina.\n{o_card} currently has {o_health} health and {o_stamina} stamina.", colour=embed_color_c)
-                    embedVar.add_field(name=f"{c_card} Move List", value=f"1. {cmove1_text} | 10 STAM\n2. {cmove2_text} | 30 STAM\n3. {cmove3_text} | 80 STAM\n4. {cmove_enhanced_text} | 20 STAM\n7. Assist {o_card} with Enhancer | 20 STAM")
+                    embedVar = discord.Embed(title=f"{c_card}, choose your move!", description=textwrap.dedent(f"""\
+                        
+                    **{cmove1_text}** 10 Stamina _press 1_
+                    **{cmove2_text}** 30 Stamina _press 2_
+                    **{cmove3_text}** 80 Stamina _press 3_
+                    **{cmove_enhanced_text}** 20 Stamina _press 4_
+                
+                    **{t_card}:** _Health_ {t_health} / _Stamina_ {t_stamina}
+                    **{o_card}:** _Health_ {o_health} / _Stamina_ {o_stamina} _partner_
+
+                    """) 
+                    
+                    , colour=embed_color_c)
                     embedVar.set_thumbnail(url=cpet_image)
                     if c_used_focus and c_used_resolve and not t_pet_used:
                         embedVar.set_author(name="Press 0 to Quit Match. Press 6 to Summon your Pet!")                                    
@@ -8863,8 +8940,18 @@ class CrownUnlimited(commands.Cog):
                         # UNIVERSE CARD
                         player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                         await private_channel.send(file=player_1_card)
-                        embedVar = discord.Embed(title=f"{o_card} What move will you use?", description=f"{t_card} currently has {t_health} health and {t_stamina} stamina.", colour=embed_color_o)
-                        embedVar.add_field(name=f"{o_card} Move List", value=f"1. {omove1_text} | 10 STAM\n2. {omove2_text} | 30 STAM\n3. {omove3_text} | 80 STAM\n4. {omove_enhanced_text} | 20 STAM")
+                        embedVar = discord.Embed(title=f"{o_card}, choose your move!", description=textwrap.dedent(f"""\
+                        
+                        **{omove1_text}** 10 Stamina _press 1_
+                        **{omove2_text}** 30 Stamina _press 2_
+                        **{omove3_text}** 80 Stamina _press 3_
+                        **{omove_enhanced_text}** 20 Stamina _press 4_
+                    
+                        **{t_card}:** _Health_ {t_health} / _Stamina_ {t_stamina}
+
+                        """) 
+                        
+                        , colour=embed_color_o)
                         embedVar.set_thumbnail(url=opet_image)
                         if o_used_focus and o_used_resolve and not t_pet_used:
                             embedVar.set_author(name="Press 0 to Quit Match. Press 6 to Summon your Pet!")                                    
@@ -9643,11 +9730,20 @@ class CrownUnlimited(commands.Cog):
         for uni in all_universes:
             if uni['PREREQUISITE'] in sowner['CROWN_TALES']:
                 available_universes.append(uni['TITLE'])
-                
-        embedVar = discord.Embed(title=f":crown: CROWN TALES!", description="Select a Universe to explore!", colour=0xe91e63)
-        embedVar.add_field(name="Available Universes", value=" | ".join(available_universes))
+
         if len(completed_crown_tales) > 1:
-            embedVar.add_field(name="Completed Universes", value=" | ".join(completed_crown_tales), inline=False)
+            completed_crown_tales = completed_crown_tales
+        else:
+            completed_crown_tales = ['None yet!']
+        embedVar = discord.Embed(title=f":crown: CROWN TALES!", description=textwrap.dedent(f"""\
+        Explore a Universe!
+
+        **Available Universes:**  
+        {", ".join(available_universes)}
+
+        **Completed Universes:** 
+        {", ".join(completed_crown_tales)}
+        """), colour=0xe91e63) 
         embedVar.set_footer(text="Earn drops from the Universes you explore. Conquering Universes unlocks more worlds!")
         await private_channel.send(embed=embedVar)
         accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
@@ -10369,8 +10465,18 @@ class CrownUnlimited(commands.Cog):
                         # UNIVERSE CARD
                         player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                         await private_channel.send(file=player_1_card)
-                        embedVar = discord.Embed(title=f"{o_card} What move will you use?", description=f"{t_card} currently has {t_health} health and {t_stamina} stamina.", colour=embed_color_o)
-                        embedVar.add_field(name=f"{o_card} Move List", value=f"1. {omove1_text} | 10 STAM\n2. {omove2_text} | 30 STAM\n3. {omove3_text} | 80 STAM\n4. {omove_enhanced_text} | 20 STAM")
+                        embedVar = discord.Embed(title=f"{o_card}, choose your move!", description=textwrap.dedent(f"""\
+                        
+                        **{omove1_text}** 10 Stamina _press 1_
+                        **{omove2_text}** 30 Stamina _press 2_
+                        **{omove3_text}** 80 Stamina _press 3_
+                        **{omove_enhanced_text}** 20 Stamina _press 4_
+                    
+                        **{t_card}:** _Health_ {t_health} / _Stamina_ {t_stamina}
+
+                        """) 
+                        
+                        , colour=embed_color_o)
                         embedVar.set_thumbnail(url=opet_image)
                         if o_used_focus and o_used_resolve and not t_pet_used:
                             embedVar.set_author(name="Press 0 to Quit Match. Press 6 to Summon your Pet!")                                    
@@ -11770,8 +11876,18 @@ class CrownUnlimited(commands.Cog):
                     # UNIVERSE CARD
                     player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                     await private_channel.send(file=player_1_card)
-                    embedVar = discord.Embed(title=f"{o_card} What move will you use?", description=f"{t_card} currently has {t_health} health and {t_stamina} stamina.", colour=embed_color_o)
-                    embedVar.add_field(name=f"{o_card} Move List", value=f"1. {omove1_text} | 10 STAM\n2. {omove2_text} | 30 STAM\n3. {omove3_text} | 80 STAM\n4. {omove_enhanced_text} | 20 STAM")
+                    embedVar = discord.Embed(title=f"{o_card}, choose your move!", description=textwrap.dedent(f"""\
+                        
+                    **{omove1_text}** 10 Stamina _press 1_
+                    **{omove2_text}** 30 Stamina _press 2_
+                    **{omove3_text}** 80 Stamina _press 3_
+                    **{omove_enhanced_text}** 20 Stamina _press 4_
+                
+                    **{t_card}:** _Health_ {t_health} / _Stamina_ {t_stamina}
+
+                    """) 
+                    
+                    , colour=embed_color_o)
                     embedVar.set_thumbnail(url=opet_image)
                     if o_used_focus and o_used_resolve and not t_pet_used:
                         embedVar.set_author(name="Press 0 to Quit Match. Press 6 to Summon your Pet!")                                    
@@ -13296,8 +13412,18 @@ class CrownUnlimited(commands.Cog):
                             # UNIVERSE CARD
                             player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                             await private_channel.send(file=player_1_card)
-                            embedVar = discord.Embed(title=f"{o_card} What move will you use?", description=f"{t_card} currently has {t_health} health and {t_stamina} stamina.", colour=embed_color_o)
-                            embedVar.add_field(name=f"{o_card} Move List", value=f"1. {omove1_text} | 10 STAM\n2. {omove2_text} | 30 STAM\n3. {omove3_text} | 80 STAM\n4. {omove_enhanced_text} | 20 STAM")
+                            embedVar = discord.Embed(title=f"{o_card}, choose your move!", description=textwrap.dedent(f"""\
+                        
+                            **{omove1_text}** 10 Stamina _press 1_
+                            **{omove2_text}** 30 Stamina _press 2_
+                            **{omove3_text}** 80 Stamina _press 3_
+                            **{omove_enhanced_text}** 20 Stamina _press 4_
+                        
+                            **{t_card}:** _Health_ {t_health} / _Stamina_ {t_stamina}
+
+                            """) 
+                            
+                            , colour=embed_color_o)
                             embedVar.set_thumbnail(url=opet_image)
                             if o_used_focus and o_used_resolve and not t_pet_used:
                                 embedVar.set_author(name="Press 0 to Quit Match. Press 6 to Summon your Pet!")                                    
@@ -13641,8 +13767,20 @@ class CrownUnlimited(commands.Cog):
                                 # UNIVERSE CARD
                                 player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus)
                                 await ctx.send(file=player_2_card)
-                                embedVar = discord.Embed(title=f"{t_card} What move will you use?", description=f"{o_card} currently has {o_health} health and {t_stamina} stamina.", colour=embed_color_t)
-                                embedVar.add_field(name=f"{t_card} Move List", value=f"1. {tmove1_text} | 10 STAM\n2. {tmove2_text} | 30 STAM\n3. {tmove3_text} | 80 STAM\n4. {tmove_enhanced_text} | 20 STAM")
+
+                                embedVar = discord.Embed(title=f"{t_card}, choose your move!", description=textwrap.dedent(f"""\
+                        
+                                **{tmove1_text}** 10 Stamina _press 1_
+                                **{tmove2_text}** 30 Stamina _press 2_
+                                **{tmove3_text}** 80 Stamina _press 3_
+                                **{tmove_enhanced_text}** 20 Stamina _press 4_
+                            
+                                **{o_card}:** _Health_ {o_health} / _Stamina_ {o_stamina}
+
+                                """) 
+                                
+                                , colour=embed_color_t)
+
                                 embedVar.set_thumbnail(url=tpet_image)
                                 if t_used_focus and t_used_resolve and not t_pet_used:
                                     embedVar.set_author(name="Press 0 to Quit Match. Press 6 to Summon your Pet!")
@@ -17999,6 +18137,7 @@ async def score(owner, user: User):
             message = "Score not added. Please, try again. "
 
         return message
+
 
 def starting_position(o,t):
     if o > t:
