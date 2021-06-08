@@ -150,7 +150,7 @@ class Profile(commands.Cog):
             **Speed:** {o_speed}
             _Title:_ **{title_name}:** {title_passive_type} {title_passive_value}
             _Arm:_ **{arm_name}:** {arm_passive_type} {arm_passive_value}
-            _Pet:_ {active_pet['TYPE']} {pet_ability_power}
+            _Pet:_ **{active_pet['NAME']}:** {active_pet['TYPE']} {pet_ability_power}
 
             _**Moveset**_
             **{move1}:** {move1ap}
@@ -194,21 +194,41 @@ class Profile(commands.Cog):
                     active_pet = pet
        
 
-            embedVar1 = discord.Embed(title= f"My Cards\n:coin:{'{:,}'.format(balance)}", description="`.equipcard name` -  Select Your Card\n`.viewcard card name` - View Cards", colour=0x7289da)
+            embedVar1 = discord.Embed(title= f"Cards", description=textwrap.dedent(f"""
+            **Balance**: :coin:{'{:,}'.format(balance)}
+            ***.equipcard card name:***  Equip Card
+            ***.viewcard card name:*** View Cards Details
+            
+            {", ".join(cards)}
+            """), colour=0x7289da)
             # embedVar1.set_thumbnail(url=avatar)
-            embedVar1.add_field(name="Cards" + " :fireworks:", value=" | ".join(cards))
 
-            embedVar2 = discord.Embed(title= f"My Titles\n:coin:{'{:,}'.format(balance)}", description="`.equiptitle name` - Select Your Title\n`.viewtitle title name` - View Title Stats", colour=0x7289da)
+            embedVar2 = discord.Embed(title= f"Titles", description=textwrap.dedent(f"""
+            **Balance**: :coin:{'{:,}'.format(balance)}
+            ***.equiptitle title name:***  Equip Title
+            ***.viewtitle title name:*** View Title Details
+            
+            {", ".join(titles)}
+            """), colour=0x7289da)
             # embedVar2.set_thumbnail(url=avatar)
-            embedVar2.add_field(name="Titles" + " :fireworks:", value=" | ".join(titles))
 
-            embedVar3 = discord.Embed(title= f"My Arms\n:coin:{'{:,}'.format(balance)}", description="`.equiparm name` - Select Your Arm\n`.viewarm arm name` - View Arm Stats", colour=0x7289da)
+            embedVar3 = discord.Embed(title= f"Arms", description=textwrap.dedent(f"""
+            **Balance**: :coin:{'{:,}'.format(balance)}
+            ***.equiparm arm name:***  Equip Arm
+            ***.viewarm arm name:*** View Arm Details
+            
+            {", ".join(arms)}
+            """), colour=0x7289da)
             # embedVar3.set_thumbnail(url=avatar)
-            embedVar3.add_field(name="Arms" + " :fireworks:", value=" | ".join(arms))
-
-            embedVar4 = discord.Embed(title="Pets", description="`.equippet name` - Select Your Pet\n`.viewpet Pet name` - View Pet Stats", colour=0x7289da)
+            
+            embedVar4 = discord.Embed(title= f"Pets", description=textwrap.dedent(f"""
+            **Balance**: :coin:{'{:,}'.format(balance)}
+            ***.equippet pet name:***  Equip Pet
+            ***.viewpet pet name:*** View Pet Details
+            
+            {", ".join(pet_names)}
+            """), colour=0x7289da)
             # embedVar4.set_thumbnail(url=avatar)
-            embedVar4.add_field(name="Pets" + " :fireworks:", value=" | ".join(pet_names))
 
             paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
             paginator.add_reaction('⏮️', "first")
@@ -429,17 +449,29 @@ class Profile(commands.Cog):
             else:
                 arm_text_list.append(f"{arm['ARM']}: :coin:{arm['PRICE']} " + f"_{arm['UNIVERSE']}_")
         
-        embedVar1 = discord.Embed(title=f":shopping_cart: Pop Up Shop", description=f"Current Balance :coin:{vault['BALANCE']}\n`.viewcard card name` - View Cards\n`.buycard card name` - Buy Card", colour=0x2ecc71, value='Page 1')
+        embedVar1 = discord.Embed(title=f":shopping_cart: Pop Up Shop", description=textwrap.dedent(f"""
+        **Balance:** :coin:{vault['BALANCE']}
+        **.viewcard card name:** View Cards
+        **.buycard card name:** Buy Card
+        """), colour=0x2ecc71, value='Page 1')
         # embedVar1.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236723/PCG%20LOGOS%20AND%20RESOURCES/Party_Chat_Shop.png")
         embedVar1.add_field(name=":shopping_bags: Cards", value="\n".join(card_text_list))
         embedVar1.set_footer(text="Stock updated every day")
 
-        embedVar2 = discord.Embed(title=f":shopping_cart: Pop Up Shop", description=f"Current Balance :coin:{vault['BALANCE']}\n`.viewtitle title name` - View Title Stats\n`.buytitle title name` - Buy Title", colour=0x3498db, value='Page 2')
+        embedVar2 = discord.Embed(title=f":shopping_cart: Pop Up Shop", description=textwrap.dedent(f"""
+        **Balance:** :coin:{vault['BALANCE']}
+        **.viewtitle title name:** View Title Stats
+        **.buytitle title name:** Buy Title
+        """), colour=0x3498db, value='Page 2')
         # embedVar2.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236723/PCG%20LOGOS%20AND%20RESOURCES/Party_Chat_Shop.png")
         embedVar2.add_field(name=":shopping_bags: Titles", value="\n".join(title_text_list))
         embedVar2.set_footer(text="Stock updated every day")
 
-        embedVar3 = discord.Embed(title=f":shopping_cart: Pop Up Shop", description=f"Current Balance :coin:{vault['BALANCE']}\n`.viewarm arm name` - View Arm Stats\n`.buyarm arm name` - Buy Arm", colour=0xf1c40f, value='Page 3')
+        embedVar3 = discord.Embed(title=f":shopping_cart: Pop Up Shop", description=textwrap.dedent(f"""
+        **Balance:** :coin:{vault['BALANCE']}
+        **.viewarm arm name:** View Arm Stats
+        **.buyarm arm name** Buy Arm
+        """), colour=0xf1c40f, value='Page 3')
         # embedVar3.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236723/PCG%20LOGOS%20AND%20RESOURCES/Party_Chat_Shop.png")
         embedVar3.add_field(name=":shopping_bags: Arm", value="\n".join(arm_text_list))
         embedVar3.set_footer(text="Stock updated every day")

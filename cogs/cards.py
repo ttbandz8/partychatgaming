@@ -1,3 +1,4 @@
+import textwrap
 import discord
 from discord.ext import commands
 import bot as main
@@ -200,21 +201,24 @@ class Cards(commands.Cog):
                 message = f"{o_card} is a defensive card. "
                 tip="Equipping offensive titles and arms would help boost killability"              
 
-            embedVar = discord.Embed(title=f"{o_card}".format(self), colour=000000)
+            embedVar = discord.Embed(title=f":crown:  {o_card}".format(self), description=textwrap.dedent(f"""
+            **Health:** {o_max_health}
+            **Stamina:** {o_max_stamina}
+            **Atk:** {o_attack}
+            **Def:** {o_defense}
+            **Speed:** {o_speed}
+
+            _**Move List**_
+            **{move1}:** {move1ap}
+            **{move2}:** {move2ap}
+            **{move3}:** {move3ap}
+            **{move4}:** {move4enh} By {move4ap}
+
+            _Unique Passive_ **{passive_name}:** {passive_type} By {passive_num}
+            """), colour=000000)
             if o_show != "Unbound":
                 embedVar.set_thumbnail(url=show_img)
             embedVar.set_image(url=o_card_path)
-            embedVar.add_field(name="Health", value=f"`{o_max_health}`")
-            embedVar.add_field(name="Stamina", value=f"`{o_max_stamina}`")
-            embedVar.add_field(name="Attack", value=f"`{o_attack}`")
-            embedVar.add_field(name="Defense", value=f"`{o_defense}`")
-            embedVar.add_field(name="Speed", value=f"`{o_speed}`")
-
-            embedVar.add_field(name=f"{move1}", value=f"Power: `{move1ap}`", inline=False)
-            embedVar.add_field(name=f"{move2}", value=f"Power: `{move2ap}`", inline=False)
-            embedVar.add_field(name=f"{move3}", value=f"Power: `{move3ap}`", inline=False)
-            embedVar.add_field(name=f"{move4}", value=f"`Enhancer`: Increases `{move4enh} by {move4ap}`", inline=False)
-            embedVar.add_field(name="Unique Passive", value=f"`{passive_name}: Increases {passive_type} by {passive_num}`", inline=False)
             embedVar.set_footer(text=f"{tip}\n.enhance - Enhancement Menu")
             await ctx.send(embed=embedVar)
 
