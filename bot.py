@@ -354,7 +354,7 @@ async def r(ctx):
       2. Uniquely Customize your Builds to match your playstyle
       3. Explore Tales, Dungeons, and Bosses solo, or with your friend!
 
-      **.crownhelp**
+      **.crown**
       Read the Crown Unlimited Manual!
 
       **.senpaibattle**
