@@ -1027,13 +1027,13 @@ class CrownUnlimited(commands.Cog):
                 o_vul=True
             if t_type == 0 and o_type == 2:
                 t_vul=True
-            
+            lineup = f"{currentopponent + 1}/{total_legends}"
             options = [1,2,3,4,5,0]
-            await private_channel.send(f"{user1.mention} {user2.mention}: `{o_card}` & `{c_card}` VS `{t_card}` has begun!\n{t_universe} Co-Op Tales Battle")
+            await private_channel.send(f"{user1.mention} {user2.mention}: `{o_card}` & `{c_card}` VS `{t_card}` has begun! {lineup}\n{t_universe} Co-Op Tales Battle")
 
             # Count Turns
             turn_total = 0
-
+        
 
             # START TURNS
             while ((o_health > 0) and (c_health > 0)) and (t_health > 0):
@@ -3584,9 +3584,9 @@ class CrownUnlimited(commands.Cog):
                 o_vul=True
             if t_type == 0 and o_type == 2:
                 t_vul=True
-            
+            lineup = f"{currentopponent + 1}/{total_legends}"
             options = [1,2,3,4,5,0]
-            await private_channel.send(f"{user1.mention} {user2.mention}: `{o_card}` & `{c_card}` VS `{t_card}` has begun!\n{t_universe} Co-Op Tales Battle")
+            await private_channel.send(f"{user1.mention} {user2.mention}: `{o_card}` & `{c_card}` VS `{t_card}` has begun! {lineup}\n{t_universe} Co-Op Tales Battle")
 
             # Count Turns
             turn_total = 0
@@ -5274,7 +5274,7 @@ class CrownUnlimited(commands.Cog):
                 gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
                 drop_response = await dungeondrops(ctx.author, selected_universe)
                 cdrop_response = await dungeondrops(user, selected_universe)
-                if currentopponent != (total_legends - 1):
+                if currentopponent != (total_legends):
                     
                     if private_channel.guild:
 
@@ -5310,7 +5310,7 @@ class CrownUnlimited(commands.Cog):
                         currentopponent = currentopponent + 1
                         continued = True
 
-                if currentopponent == (total_legends - 1):
+                if currentopponent == (total_legends):
                     embedVar = discord.Embed(title=f"DUNGEON CONQUERED", description=f"Universe {selected_universe} has been conquered\n\n{drop_response}\n{cdrop_response}", colour=0xe91e63)
                     embedVar.set_author(name=f"New Universes have been unlocked to explore!")
                     embedVar.add_field(name="Additional Reward", value=f"You earned additional rewards in your vault! Take a look.")
@@ -8784,9 +8784,9 @@ class CrownUnlimited(commands.Cog):
                 o_vul=True
             if t_type == 0 and o_type == 2:
                 t_vul=True
-            
+            lineup = f"{currentopponent + 1}/{total_legends}"
             options = [1,2,3,4,5,0]
-            await private_channel.send(f"{user1.mention}: `{o_card}` VS `{t_card}` has begun!\n{t_universe} Dungeon Battle")
+            await private_channel.send(f"{user1.mention}: `{o_card}` VS `{t_card}` has begun! {lineup}\n{t_universe} Dungeon Battle")
 
             # Count Turns
             turn_total = 0
@@ -9566,7 +9566,7 @@ class CrownUnlimited(commands.Cog):
                 s_playtime = int(wintime[17:19])
                 gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
                 drop_response = await dungeondrops(ctx.author, selected_universe)
-                if currentopponent != (total_legends - 1):
+                if currentopponent != (total_legends):
                     
                     if private_channel.guild:
 
@@ -9602,7 +9602,7 @@ class CrownUnlimited(commands.Cog):
                         currentopponent = currentopponent + 1
                         continued = True
 
-                if currentopponent == (total_legends - 1):
+                if currentopponent == (total_legends):
                     embedVar = discord.Embed(title=f"UNIVERSE CONQUERED", description=f"Universe {selected_universe} has been conquered\n\n{drop_response}", colour=0xe91e63)
                     embedVar.set_author(name=f"New Universes have been unlocked to explore!")
                     embedVar.add_field(name="Additional Reward", value=f"You earned additional rewards in your vault! Take a look.")
@@ -10289,9 +10289,9 @@ class CrownUnlimited(commands.Cog):
                 o_vul=True
             if t_type == 0 and o_type == 2:
                 t_vul=True
-            
+            lineup = f"{currentopponent + 1}/{total_legends}"
             options = [1,2,3,4,5,0]
-            await private_channel.send(f"{user1.mention}: `{o_card}` VS `{t_card}` has begun!\n{t_universe} Tales Battle")
+            await private_channel.send(f"{user1.mention}: `{o_card}` VS `{t_card}` has begun! {lineup}\n{t_universe} Tales Battle")
 
             # Count Turns
             turn_total = 0
@@ -10981,7 +10981,7 @@ class CrownUnlimited(commands.Cog):
                 s_playtime = int(wintime[17:19])
                 gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
                 drop_response = await drops(ctx.author, selected_universe)
-                if currentopponent != (total_legends - 1):
+                if currentopponent != (total_legends):
                     
                     if private_channel.guild:
 
@@ -11017,7 +11017,7 @@ class CrownUnlimited(commands.Cog):
                         currentopponent = currentopponent + 1
                         continued = True
 
-                if currentopponent == (total_legends - 1):
+                if currentopponent == (total_legends):
                     embedVar = discord.Embed(title=f"UNIVERSE CONQUERED", description=f"Universe {selected_universe} has been conquered\n\n{drop_response}", colour=0xe91e63)
                     embedVar.set_author(name=f"New Universes have been unlocked to explore!")
                     embedVar.add_field(name="Additional Reward", value=f"You earned additional rewards in your vault! Take a look.")
