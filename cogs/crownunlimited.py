@@ -5579,13 +5579,13 @@ class CrownUnlimited(commands.Cog):
         t_card = t['NAME']
         t_card_path=t['PATH']
         t_rcard_path=t['RPATH']
-        t_max_health = t['HLT'] * 4
-        t_health = t['HLT'] *4
+        t_max_health = t['HLT'] * 3
+        t_health = t['HLT'] *3
         t_stamina = t['STAM']
         t_max_stamina= t['STAM']
         t_moveset = t['MOVESET']
-        t_attack = t['ATK'] * 4
-        t_defense = t['DEF'] * 4
+        t_attack = t['ATK'] * 2
+        t_defense = t['DEF'] * 2
         t_type = t['TYPE']
         t_accuracy = t['ACC']
         t_passive = t['PASS'][0]
@@ -8150,7 +8150,7 @@ class CrownUnlimited(commands.Cog):
             m_playtime = int(wintime[14:16])
             s_playtime = int(wintime[17:19])
             gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
-            drop_response = await drops(ctx.author, universeName)
+            drop_response = await bossdrops(ctx.author, universeName)
             await bless(50, str(ctx.author))
             await bless(50, str(user))
             embedVar = discord.Embed(title=f":zap: `{o_card}` and `{c_card}`defeated the {t_universe} Boss {t_card}!\n{t_concede}", description=f"Match concluded in {turn_total} turns!\n\n{drop_response} + :coin: 50!\n\n{c_user['NAME']} got :coin:50!", colour=0xe91e63)
@@ -11270,13 +11270,13 @@ class CrownUnlimited(commands.Cog):
         t_card = t['NAME']
         t_card_path=t['PATH']
         t_rcard_path=t['RPATH']
-        t_max_health = t['HLT'] * 4
-        t_health = t['HLT'] * 4
+        t_max_health = t['HLT'] * 2
+        t_health = t['HLT'] * 2
         t_stamina = t['STAM']
         t_max_stamina= t['STAM']
         t_moveset = t['MOVESET']
-        t_attack = t['ATK'] * 4
-        t_defense = t['DEF'] * 4
+        t_attack = t['ATK'] * 2
+        t_defense = t['DEF'] * 2
         t_type = t['TYPE']
         t_accuracy = t['ACC']
         t_passive = t['PASS'][0]
@@ -12623,7 +12623,7 @@ class CrownUnlimited(commands.Cog):
             m_playtime = int(wintime[14:16])
             s_playtime = int(wintime[17:19])
             gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
-            drop_response = await drops(ctx.author, universeName)
+            drop_response = await bossdrops(ctx.author, universeName)
             await bless(50, str(ctx.author))
             embedVar = discord.Embed(title=f":zap: `{o_card}`defeated the {t_universe} Boss {t_card}!\n{t_concede}", description=f"Match concluded in {turn_total} turns!\n\n{drop_response} + :coin: 50!", colour=0xe91e63)
             embedVar.set_author(name=f"{t_card} lost", icon_url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236432/PCG%20LOGOS%20AND%20RESOURCES/PCGBot_1.png")
@@ -18754,4 +18754,99 @@ async def dungeondrops(player, universe):
             response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(cards[rand_card])}})
             await bless(50, player)
             return f"You earned {cards[rand_card]} + :coin: 50!"
+
+async def bossdrops(player, universe):
+    all_available_drop_cards = db.queryExclusiveDropCards(universe)
+    all_available_drop_titles = db.queryExclusiveDropTitles(universe)
+    all_available_drop_arms = db.queryExclusiveDropArms(universe)
+    all_available_drop_pets = db.queryExclusiveDropPets(universe)
+    boss = db.queryBoss({'UNIVERSE': universe})
+    vault_query = {'OWNER' : str(player)}
+
+    print(boss)
+
+    cards = []
+    titles = []
+    arms = []
+    pets= []
+    boss_title = boss['TITLE']
+    boss_arm = boss['ARM']
+    boss_pet = boss['PET']
+    boss_card = boss['CARD']
+
+    for card in all_available_drop_cards:
+        cards.append(card['NAME'])
+
+    for title in all_available_drop_titles:
+        titles.append(title['TITLE'])
+
+    for arm in all_available_drop_arms:
+        arms.append(arm['ARM'])
+
+    for pet in all_available_drop_pets:
+        pets.append(pet['PET'])
+
+    c = len(cards) - 1
+    t = len(titles) - 1
+    a = len(arms) - 1
+    p = len(pets) - 1
+
+    rand_card = random.randint(0, c)
+    rand_title = random.randint(0, t)
+    rand_arm = random.randint(0, a)
+    rand_pet = random.randint(0, p)
+
+    gold_drop = 339 #
+    title_drop = 340 #
+    arm_drop = 370 #
+    pet_drop = 390 #
+    card_drop = 400 #
+    boss_title_drop = 450#
+    boss_arm_drop = 480#
+    boss_pet_drop = 499#
+    boss_card_drop = 500#
+
+    drop_rate = random.randint(0,500)
+
+    if drop_rate <= gold_drop:
+        await bless(60, player)
+        return f"You earned :coin: 60!"
+    elif drop_rate <= title_drop and drop_rate > gold_drop:
+        response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'TITLES': str(titles[rand_title])}})
+        return f"You earned {titles[rand_title]}!"
+    elif drop_rate <= arm_drop and drop_rate > title_drop:
+        response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'ARMS': str(arms[rand_arm])}})
+        return f"You earned {arms[rand_arm]}!"
+    elif drop_rate <= pet_drop and drop_rate > arm_drop:
+        selected_pet = db.queryPet({'PET': pets[rand_pet]})
+        pet_ability_name = list(selected_pet['ABILITIES'][0].keys())[0]
+        pet_ability_power = list(selected_pet['ABILITIES'][0].values())[0]
+        pet_ability_type = list(selected_pet['ABILITIES'][0].values())[1]
+
+        response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'PETS': {'NAME': selected_pet['PET'], 'LVL': selected_pet['LVL'], 'EXP': 0, pet_ability_name: int(pet_ability_power), 'TYPE': pet_ability_type, 'BOND': 0, 'PATH': selected_pet['PATH']}}})
+        await bless(80, player)
+        return f"You earned {pets[rand_pet]} + :coin: 80!"
+    elif drop_rate <= card_drop and drop_rate > pet_drop:
+            response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(cards[rand_card])}})
+            await bless(50, player)
+            return f"You earned {cards[rand_card]} + :coin: 50!"
+    elif drop_rate <= boss_title_drop and drop_rate > card_drop:
+        response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'TITLES': str(boss_title)}})
+        return f"You earned the Exclusive Boss Title: {boss_title}!"
+    elif drop_rate <= boss_arm_drop and drop_rate > boss_title_drop:
+        response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'ARMS': str(boss_arm)}})
+        return f"You earned the Exclusive Boss Arm:  {boss_arm}!"
+    elif drop_rate <= boss_pet_drop and drop_rate > boss_arm_drop:
+        selected_pet = db.queryPet({'PET': boss['PET']})
+        pet_ability_name = list(selected_pet['ABILITIES'][0].keys())[0]
+        pet_ability_power = list(selected_pet['ABILITIES'][0].values())[0]
+        pet_ability_type = list(selected_pet['ABILITIES'][0].values())[1]
+
+        response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'PETS': {'NAME': selected_pet['PET'], 'LVL': selected_pet['LVL'], 'EXP': 0, pet_ability_name: int(pet_ability_power), 'TYPE': pet_ability_type, 'BOND': 0, 'PATH': selected_pet['PATH']}}})
+        await bless(80, player)
+        return f"You earned the Exclusive Boss Pet:  {boss['PET']} + :coin: 80!"
+    elif drop_rate <= boss_card_drop and drop_rate > boss_pet_drop:
+            response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(boss_card)}})
+            await bless(50, player)
+            return f"You earned the BOSS CARD:  {boss_card} + :coin: 50!"
 
