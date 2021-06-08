@@ -289,6 +289,9 @@ async def crown(ctx):
 
    **Sell & Trade**
    **.sell** and **.trade** will allow you to trade Cards, Titles, Arms and Pets with other players
+
+   **Resell**
+   **.resell item** to sell Cards, Titles, and Arms back to the market
    """) ,colour=0x7289da)
    embedVar8.set_thumbnail(url=avatar)
 
