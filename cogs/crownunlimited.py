@@ -350,6 +350,7 @@ class CrownUnlimited(commands.Cog):
                 c_stamina = o_stamina + int(c_card_passive)
             elif c_card_passive_type == 'HLT':
                 c_max_health = c_health + int(c_card_passive)
+                c_health = c_health + int(c_card_passive)
             elif c_card_passive_type == 'LIFE':
                 c_max_health = c_health + round(int(c_card_passive) + (.10 * t_health))
             elif c_card_passive_type == 'DRAIN':
@@ -419,6 +420,7 @@ class CrownUnlimited(commands.Cog):
                     c_stamina = c_stamina + int(c_title_passive_value)
                 elif c_title_passive_type == 'HLT':
                     c_max_health = c_health + int(c_title_passive_value)
+                    c_health = c_health + int(c_title_passive_value)
                 elif c_title_passive_type == 'LIFE':
                     c_max_health = c_health + round(int(c_title_passive_value) + (.10 * t_health))
                 elif c_title_passive_type == 'DRAIN':
@@ -487,6 +489,7 @@ class CrownUnlimited(commands.Cog):
                 c_stamina = c_stamina + int(carm_passive_value)
             elif carm_passive_type == 'HLT':
                 c_max_health = c_health + int(carm_passive_value)
+                c_health = c_health + int(carm_passive_value)
             elif carm_passive_type == 'LIFE':
                 c_max_health = c_health + round(int(carm_passive_value) + (.10 * t_health))
             elif carm_passive_type == 'DRAIN':
@@ -585,6 +588,7 @@ class CrownUnlimited(commands.Cog):
                 o_stamina = o_stamina + int(o_card_passive)
             elif o_card_passive_type == 'HLT':
                 o_max_health = o_health + int(o_card_passive)
+                o_health = o_health + int(o_card_passive)
             elif o_card_passive_type == 'LIFE':
                 o_max_health = o_health + round(int(o_card_passive) + (.10 * t_health))
             elif o_card_passive_type == 'DRAIN':
@@ -654,6 +658,7 @@ class CrownUnlimited(commands.Cog):
                     o_stamina = o_stamina + int(o_title_passive_value)
                 elif o_title_passive_type == 'HLT':
                     o_max_health = o_health + int(o_title_passive_value)
+                    o_health = o_health + int(o_title_passive_value)
                 elif o_title_passive_type == 'LIFE':
                     o_max_health = o_health + round(int(o_title_passive_value) + (.10 * t_health))
                 elif o_title_passive_type == 'DRAIN':
@@ -722,6 +727,7 @@ class CrownUnlimited(commands.Cog):
                 o_stamina = o_stamina + int(oarm_passive_value)
             elif oarm_passive_type == 'HLT':
                 o_max_health = o_health + int(oarm_passive_value)
+                o_health = o_health + int(oarm_passive_value)
             elif oarm_passive_type == 'LIFE':
                 o_max_health = o_health + round(int(oarm_passive_value) + (.10 * t_health))
             elif oarm_passive_type == 'DRAIN':
@@ -794,6 +800,7 @@ class CrownUnlimited(commands.Cog):
                 t_stamina = t_stamina + int(tarm_passive_value)
             elif tarm_passive_type == 'HLT':
                 t_max_health = t_health + int(tarm_passive_value)
+                t_health = t_health + int(tarm_passive_value)
             elif tarm_passive_type == 'LIFE':
                 t_max_health = t_health + round(int(tarm_passive_value) + (.10 * o_health))
             elif tarm_passive_type == 'DRAIN':
@@ -875,6 +882,7 @@ class CrownUnlimited(commands.Cog):
                 t_stamina = t_stamina + int(t_card_passive)
             elif t_card_passive_type == 'HLT':
                 t_max_health = t_health + int(t_card_passive)
+                t_health = t_health + int(t_card_passive)
             elif t_card_passive_type == 'LIFE':
                 t_max_health = t_health + round(int(t_card_passive) + (.10 * o_health))
             elif t_card_passive_type == 'DRAIN':
@@ -944,6 +952,7 @@ class CrownUnlimited(commands.Cog):
                     t_stamina = t_stamina + int(t_title_passive_value)
                 elif t_title_passive_type == 'HLT':
                     t_max_health = t_health + int(t_title_passive_value)
+                    t_health = t_health + int(t_title_passive_value)
                 elif t_title_passive_type == 'LIFE':
                     t_max_health = t_health + round(int(t_title_passive_value) + (.10 * o_health))
                 elif t_title_passive_type == 'DRAIN':
@@ -1125,8 +1134,8 @@ class CrownUnlimited(commands.Cog):
                         **{omove3_text}** 80 Stamina _press 3_
                         **{omove_enhanced_text}** 20 Stamina _press 4_
                     
-                        **{t_card}:** _Health_ {t_health} / _Stamina_ {t_stamina}
-                        **{c_card}:** _Health_ {c_health} / _Stamina_ {c_stamina} _partner_
+                        **Opponent {t_card}:** _Health_ {t_health} / _Stamina_ {t_stamina}
+                        **Partner {c_card}:** _Health_ {c_health} / _Stamina_ {c_stamina} _partner_
 
                         """) 
                         
@@ -1853,8 +1862,8 @@ class CrownUnlimited(commands.Cog):
                         **{cmove3_text}** 80 Stamina _press 3_
                         **{cmove_enhanced_text}** 20 Stamina _press 4_
                     
-                        **{t_card}:** _Health_ {t_health} / _Stamina_ {t_stamina}
-                        **{o_card}:** _Health_ {o_health} / _Stamina_ {o_stamina} _partner_
+                        **Opponent {t_card}:** _Health_ {t_health} / _Stamina_ {t_stamina}
+                        **Opponent {o_card}:** _Health_ {o_health} / _Stamina_ {o_stamina} _partner_
 
                         """) 
                         
@@ -2929,6 +2938,7 @@ class CrownUnlimited(commands.Cog):
                 c_stamina = o_stamina + int(c_card_passive)
             elif c_card_passive_type == 'HLT':
                 c_max_health = c_health + int(c_card_passive)
+                c_health = c_health + int(c_card_passive)
             elif c_card_passive_type == 'LIFE':
                 c_max_health = c_health + round(int(c_card_passive) + (.10 * t_health))
             elif c_card_passive_type == 'DRAIN':
@@ -2998,6 +3008,7 @@ class CrownUnlimited(commands.Cog):
                     c_stamina = c_stamina + int(c_title_passive_value)
                 elif c_title_passive_type == 'HLT':
                     c_max_health = c_health + int(c_title_passive_value)
+                    c_health = c_health + int(c_title_passive_value)
                 elif c_title_passive_type == 'LIFE':
                     c_max_health = c_health + round(int(c_title_passive_value) + (.10 * t_health))
                 elif c_title_passive_type == 'DRAIN':
@@ -3066,6 +3077,7 @@ class CrownUnlimited(commands.Cog):
                 c_stamina = c_stamina + int(carm_passive_value)
             elif carm_passive_type == 'HLT':
                 c_max_health = c_health + int(carm_passive_value)
+                c_health = c_health + int(carm_passive_value)
             elif carm_passive_type == 'LIFE':
                 c_max_health = c_health + round(int(carm_passive_value) + (.10 * t_health))
             elif carm_passive_type == 'DRAIN':
@@ -3164,6 +3176,7 @@ class CrownUnlimited(commands.Cog):
                 o_stamina = o_stamina + int(o_card_passive)
             elif o_card_passive_type == 'HLT':
                 o_max_health = o_health + int(o_card_passive)
+                o_health = o_health + int(o_card_passive)
             elif o_card_passive_type == 'LIFE':
                 o_max_health = o_health + round(int(o_card_passive) + (.10 * t_health))
             elif o_card_passive_type == 'DRAIN':
@@ -3233,6 +3246,7 @@ class CrownUnlimited(commands.Cog):
                     o_stamina = o_stamina + int(o_title_passive_value)
                 elif o_title_passive_type == 'HLT':
                     o_max_health = o_health + int(o_title_passive_value)
+                    o_health = o_health + int(o_title_passive_value)
                 elif o_title_passive_type == 'LIFE':
                     o_max_health = o_health + round(int(o_title_passive_value) + (.10 * t_health))
                 elif o_title_passive_type == 'DRAIN':
@@ -3301,6 +3315,7 @@ class CrownUnlimited(commands.Cog):
                 o_stamina = o_stamina + int(oarm_passive_value)
             elif oarm_passive_type == 'HLT':
                 o_max_health = o_health + int(oarm_passive_value)
+                o_health = o_health + int(oarm_passive_value)
             elif oarm_passive_type == 'LIFE':
                 o_max_health = o_health + round(int(oarm_passive_value) + (.10 * t_health))
             elif oarm_passive_type == 'DRAIN':
@@ -3373,6 +3388,7 @@ class CrownUnlimited(commands.Cog):
                 t_stamina = t_stamina + int(tarm_passive_value)
             elif tarm_passive_type == 'HLT':
                 t_max_health = t_health + int(tarm_passive_value)
+                t_health = t_health + int(tarm_passive_value)
             elif tarm_passive_type == 'LIFE':
                 t_max_health = t_health + round(int(tarm_passive_value) + (.10 * o_health))
             elif tarm_passive_type == 'DRAIN':
@@ -3454,6 +3470,7 @@ class CrownUnlimited(commands.Cog):
                 t_stamina = t_stamina + int(t_card_passive)
             elif t_card_passive_type == 'HLT':
                 t_max_health = t_health + int(t_card_passive)
+                t_health = t_health + int(t_card_passive)
             elif t_card_passive_type == 'LIFE':
                 t_max_health = t_health + round(int(t_card_passive) + (.10 * o_health))
             elif t_card_passive_type == 'DRAIN':
@@ -3523,6 +3540,7 @@ class CrownUnlimited(commands.Cog):
                     t_stamina = t_stamina + int(t_title_passive_value)
                 elif t_title_passive_type == 'HLT':
                     t_max_health = t_health + int(t_title_passive_value)
+                    t_health = t_health + int(t_title_passive_value)
                 elif t_title_passive_type == 'LIFE':
                     t_max_health = t_health + round(int(t_title_passive_value) + (.10 * o_health))
                 elif t_title_passive_type == 'DRAIN':
@@ -3704,8 +3722,8 @@ class CrownUnlimited(commands.Cog):
                         **{omove3_text}** 80 Stamina _press 3_
                         **{omove_enhanced_text}** 20 Stamina _press 4_
                     
-                        **{t_card}:** _Health_ {t_health} / _Stamina_ {t_stamina}
-                        **{c_card}:** _Health_ {c_health} / _Stamina_ {c_stamina} _partner_
+                        **Opponent {t_card}:** _Health_ {t_health} / _Stamina_ {t_stamina}
+                        **Partner {c_card}:** _Health_ {c_health} / _Stamina_ {c_stamina} _partner_
 
                         """) 
                         
@@ -4535,8 +4553,8 @@ class CrownUnlimited(commands.Cog):
                         **{cmove3_text}** 80 Stamina _press 3_
                         **{cmove_enhanced_text}** 20 Stamina _press 4_
                     
-                        **{t_card}:** _Health_ {t_health} / _Stamina_ {t_stamina}
-                        **{o_card}:** _Health_ {o_health} / _Stamina_ {o_stamina} _partner_
+                        **Opponent {t_card}:** _Health_ {t_health} / _Stamina_ {t_stamina}
+                        **Opponent {o_card}:** _Health_ {o_health} / _Stamina_ {o_stamina} _partner_
 
                         """) 
                         
@@ -5657,6 +5675,7 @@ class CrownUnlimited(commands.Cog):
             c_stamina = o_stamina + int(c_card_passive)
         elif c_card_passive_type == 'HLT':
             c_max_health = c_health + int(c_card_passive)
+            c_health = c_health + int(c_card_passive)
         elif c_card_passive_type == 'LIFE':
             c_max_health = c_health + round(int(c_card_passive) + (.10 * t_health))
         elif c_card_passive_type == 'DRAIN':
@@ -5726,6 +5745,7 @@ class CrownUnlimited(commands.Cog):
                 c_stamina = c_stamina + int(c_title_passive_value)
             elif c_title_passive_type == 'HLT':
                 c_max_health = c_health + int(c_title_passive_value)
+                c_health = c_health + int(c_title_passive_value)
             elif c_title_passive_type == 'LIFE':
                 c_max_health = c_health + round(int(c_title_passive_value) + (.10 * t_health))
             elif c_title_passive_type == 'DRAIN':
@@ -5794,6 +5814,7 @@ class CrownUnlimited(commands.Cog):
             c_stamina = c_stamina + int(carm_passive_value)
         elif carm_passive_type == 'HLT':
             c_max_health = c_health + int(carm_passive_value)
+            c_health = c_health + int(carm_passive_value)
         elif carm_passive_type == 'LIFE':
             c_max_health = c_health + round(int(carm_passive_value) + (.10 * t_health))
         elif carm_passive_type == 'DRAIN':
@@ -5898,6 +5919,7 @@ class CrownUnlimited(commands.Cog):
             o_stamina = o_stamina + int(o_card_passive)
         elif o_card_passive_type == 'HLT':
             o_max_health = o_health + int(o_card_passive)
+            o_health = o_health + int(o_card_passive)
         elif o_card_passive_type == 'LIFE':
             o_max_health = o_health + round(int(o_card_passive) + (.10 * t_health))
         elif o_card_passive_type == 'DRAIN':
@@ -5967,6 +5989,7 @@ class CrownUnlimited(commands.Cog):
                 o_stamina = o_stamina + int(o_title_passive_value)
             elif o_title_passive_type == 'HLT':
                 o_max_health = o_health + int(o_title_passive_value)
+                o_health = o_health + int(o_title_passive_value)
             elif o_title_passive_type == 'LIFE':
                 o_max_health = o_health + round(int(o_title_passive_value) + (.10 * t_health))
             elif o_title_passive_type == 'DRAIN':
@@ -6035,6 +6058,7 @@ class CrownUnlimited(commands.Cog):
             o_stamina = o_stamina + int(oarm_passive_value)
         elif oarm_passive_type == 'HLT':
             o_max_health = o_health + int(oarm_passive_value)
+            o_health = o_health + int(oarm_passive_value)
         elif oarm_passive_type == 'LIFE':
             o_max_health = o_health + round(int(oarm_passive_value) + (.10 * t_health))
         elif oarm_passive_type == 'DRAIN':
@@ -6103,6 +6127,7 @@ class CrownUnlimited(commands.Cog):
             t_stamina = t_stamina + int(tarm_passive_value)
         elif tarm_passive_type == 'HLT':
             t_max_health = t_health + int(tarm_passive_value)
+            t_health = t_health + int(tarm_passive_value)
         elif tarm_passive_type == 'LIFE':
             t_max_health = t_health + round(int(tarm_passive_value) + (.10 * o_health))
         elif tarm_passive_type == 'DRAIN':
@@ -6178,6 +6203,7 @@ class CrownUnlimited(commands.Cog):
             t_stamina = t_stamina + int(t_card_passive)
         elif t_card_passive_type == 'HLT':
             t_max_health = t_health + int(t_card_passive)
+            t_health = t_health + int(t_card_passive)
         elif t_card_passive_type == 'LIFE':
             t_max_health = t_health + round(int(t_card_passive) + (.10 * o_health))
         elif t_card_passive_type == 'DRAIN':
@@ -6247,6 +6273,7 @@ class CrownUnlimited(commands.Cog):
                 t_stamina = t_stamina + int(t_title_passive_value)
             elif t_title_passive_type == 'HLT':
                 t_max_health = t_health + int(t_title_passive_value)
+                t_health = t_health + int(t_title_passive_value)
             elif t_title_passive_type == 'LIFE':
                 t_max_health = t_health + round(int(t_title_passive_value) + (.10 * o_health))
             elif t_title_passive_type == 'DRAIN':
@@ -6431,8 +6458,8 @@ class CrownUnlimited(commands.Cog):
                     **{omove3_text}** 80 Stamina _press 3_
                     **{omove_enhanced_text}** 20 Stamina _press 4_
                 
-                    **{t_card}:** _Health_ {t_health} / _Stamina_ {t_stamina}
-                    **{c_card}:** _Health_ {c_health} / _Stamina_ {c_stamina} _partner_
+                    **Opponent {t_card}:** _Health_ {t_health} / _Stamina_ {t_stamina}
+                    **Partner {c_card}:** _Health_ {c_health} / _Stamina_ {c_stamina} _partner_
 
                     """) 
                     
@@ -7309,8 +7336,8 @@ class CrownUnlimited(commands.Cog):
                     **{cmove3_text}** 80 Stamina _press 3_
                     **{cmove_enhanced_text}** 20 Stamina _press 4_
                 
-                    **{t_card}:** _Health_ {t_health} / _Stamina_ {t_stamina}
-                    **{o_card}:** _Health_ {o_health} / _Stamina_ {o_stamina} _partner_
+                    **Opponent {t_card}:** _Health_ {t_health} / _Stamina_ {t_stamina}
+                    **Opponent {o_card}:** _Health_ {o_health} / _Stamina_ {o_stamina} _partner_
 
                     """) 
                     
@@ -8427,6 +8454,7 @@ class CrownUnlimited(commands.Cog):
                 o_stamina = o_stamina + int(o_card_passive)
             elif o_card_passive_type == 'HLT':
                 o_max_health = o_health + int(o_card_passive)
+                o_health = o_health + int(o_card_passive)
             elif o_card_passive_type == 'LIFE':
                 o_max_health = o_health + round(int(o_card_passive) + (.10 * t_health))
             elif o_card_passive_type == 'DRAIN':
@@ -8496,6 +8524,7 @@ class CrownUnlimited(commands.Cog):
                     o_stamina = o_stamina + int(o_title_passive_value)
                 elif o_title_passive_type == 'HLT':
                     o_max_health = o_health + int(o_title_passive_value)
+                    o_health = o_health + int(o_title_passive_value)
                 elif o_title_passive_type == 'LIFE':
                     o_max_health = o_health + round(int(o_title_passive_value) + (.10 * t_health))
                 elif o_title_passive_type == 'DRAIN':
@@ -8564,6 +8593,7 @@ class CrownUnlimited(commands.Cog):
                 o_stamina = o_stamina + int(oarm_passive_value)
             elif oarm_passive_type == 'HLT':
                 o_max_health = o_health + int(oarm_passive_value)
+                o_health = o_health + int(oarm_passive_value)
             elif oarm_passive_type == 'LIFE':
                 o_max_health = o_health + round(int(oarm_passive_value) + (.10 * t_health))
             elif oarm_passive_type == 'DRAIN':
@@ -8632,6 +8662,7 @@ class CrownUnlimited(commands.Cog):
                 t_stamina = t_stamina + int(tarm_passive_value)
             elif tarm_passive_type == 'HLT':
                 t_max_health = t_health + int(tarm_passive_value)
+                t_health = t_health + int(tarm_passive_value)
             elif tarm_passive_type == 'LIFE':
                 t_max_health = t_health + round(int(tarm_passive_value) + (.10 * o_health))
             elif tarm_passive_type == 'DRAIN':
@@ -8707,6 +8738,7 @@ class CrownUnlimited(commands.Cog):
                 t_stamina = t_stamina + int(t_card_passive)
             elif t_card_passive_type == 'HLT':
                 t_max_health = t_health + int(t_card_passive)
+                t_health = t_health + int(t_card_passive)
             elif t_card_passive_type == 'LIFE':
                 t_max_health = t_health + round(int(t_card_passive) + (.10 * o_health))
             elif t_card_passive_type == 'DRAIN':
@@ -8776,6 +8808,7 @@ class CrownUnlimited(commands.Cog):
                     t_stamina = t_stamina + int(t_title_passive_value)
                 elif t_title_passive_type == 'HLT':
                     t_max_health = t_health + int(t_title_passive_value)
+                    t_health = t_health + int(t_title_passive_value)
                 elif t_title_passive_type == 'LIFE':
                     t_max_health = t_health + round(int(t_title_passive_value) + (.10 * o_health))
                 elif t_title_passive_type == 'DRAIN':
@@ -8947,7 +8980,7 @@ class CrownUnlimited(commands.Cog):
                         **{omove3_text}** 80 Stamina _press 3_
                         **{omove_enhanced_text}** 20 Stamina _press 4_
                     
-                        **{t_card}:** _Health_ {t_health} / _Stamina_ {t_stamina}
+                        **Opponent {t_card}:** _Health_ {t_health} / _Stamina_ {t_stamina}
 
                         """) 
                         
@@ -9953,6 +9986,7 @@ class CrownUnlimited(commands.Cog):
                 o_stamina = o_stamina + int(o_card_passive)
             elif o_card_passive_type == 'HLT':
                 o_max_health = o_health + int(o_card_passive)
+                o_health = o_health + int(o_card_passive)
             elif o_card_passive_type == 'LIFE':
                 o_max_health = o_health + round(int(o_card_passive) + (.10 * t_health))
             elif o_card_passive_type == 'DRAIN':
@@ -10022,6 +10056,7 @@ class CrownUnlimited(commands.Cog):
                     o_stamina = o_stamina + int(o_title_passive_value)
                 elif o_title_passive_type == 'HLT':
                     o_max_health = o_health + int(o_title_passive_value)
+                    o_health = o_health + int(o_title_passive_value)
                 elif o_title_passive_type == 'LIFE':
                     o_max_health = o_health + round(int(o_title_passive_value) + (.10 * t_health))
                 elif o_title_passive_type == 'DRAIN':
@@ -10090,6 +10125,7 @@ class CrownUnlimited(commands.Cog):
                 o_stamina = o_stamina + int(oarm_passive_value)
             elif oarm_passive_type == 'HLT':
                 o_max_health = o_health + int(oarm_passive_value)
+                o_health = o_health + int(oarm_passive_value)
             elif oarm_passive_type == 'LIFE':
                 o_max_health = o_health + round(int(oarm_passive_value) + (.10 * t_health))
             elif oarm_passive_type == 'DRAIN':
@@ -10158,6 +10194,7 @@ class CrownUnlimited(commands.Cog):
                 t_stamina = t_stamina + int(tarm_passive_value)
             elif tarm_passive_type == 'HLT':
                 t_max_health = t_health + int(tarm_passive_value)
+                t_health = t_health + int(tarm_passive_value)
             elif tarm_passive_type == 'LIFE':
                 t_max_health = t_health + round(int(tarm_passive_value) + (.10 * o_health))
             elif tarm_passive_type == 'DRAIN':
@@ -10231,6 +10268,7 @@ class CrownUnlimited(commands.Cog):
                 t_stamina = t_stamina + int(t_card_passive)
             elif t_card_passive_type == 'HLT':
                 t_max_health = t_health + int(t_card_passive)
+                t_health = t_health + int(t_card_passive)
             elif t_card_passive_type == 'LIFE':
                 t_max_health = t_health + round(int(t_card_passive) + (.10 * o_health))
             elif t_card_passive_type == 'DRAIN':
@@ -10300,6 +10338,7 @@ class CrownUnlimited(commands.Cog):
                     t_stamina = t_stamina + int(t_title_passive_value)
                 elif t_title_passive_type == 'HLT':
                     t_max_health = t_health + int(t_title_passive_value)
+                    t_health = t_health + int(t_title_passive_value)
                 elif t_title_passive_type == 'LIFE':
                     t_max_health = t_health + round(int(t_title_passive_value) + (.10 * o_health))
                 elif t_title_passive_type == 'DRAIN':
@@ -10471,8 +10510,8 @@ class CrownUnlimited(commands.Cog):
                         **{omove2_text}** 30 Stamina _press 2_
                         **{omove3_text}** 80 Stamina _press 3_
                         **{omove_enhanced_text}** 20 Stamina _press 4_
-                    
-                        **{t_card}:** _Health_ {t_health} / _Stamina_ {t_stamina}
+                        
+                        **Opponent {t_card}:** _Health_ {t_health} / _Stamina_ {t_stamina}
 
                         """) 
                         
@@ -11354,6 +11393,7 @@ class CrownUnlimited(commands.Cog):
             o_stamina = o_stamina + int(o_card_passive)
         elif o_card_passive_type == 'HLT':
             o_max_health = o_health + int(o_card_passive)
+            o_health = o_health + int(o_card_passive)
         elif o_card_passive_type == 'LIFE':
             o_max_health = o_health + round(int(o_card_passive) + (.10 * t_health))
         elif o_card_passive_type == 'DRAIN':
@@ -11423,6 +11463,7 @@ class CrownUnlimited(commands.Cog):
                 o_stamina = o_stamina + int(o_title_passive_value)
             elif o_title_passive_type == 'HLT':
                 o_max_health = o_health + int(o_title_passive_value)
+                o_health = o_health + int(o_title_passive_value)
             elif o_title_passive_type == 'LIFE':
                 o_max_health = o_health + round(int(o_title_passive_value) + (.10 * t_health))
             elif o_title_passive_type == 'DRAIN':
@@ -11491,6 +11532,7 @@ class CrownUnlimited(commands.Cog):
             o_stamina = o_stamina + int(oarm_passive_value)
         elif oarm_passive_type == 'HLT':
             o_max_health = o_health + int(oarm_passive_value)
+            o_health = o_health + int(oarm_passive_value)
         elif oarm_passive_type == 'LIFE':
             o_max_health = o_health + round(int(oarm_passive_value) + (.10 * t_health))
         elif oarm_passive_type == 'DRAIN':
@@ -11559,6 +11601,7 @@ class CrownUnlimited(commands.Cog):
             t_stamina = t_stamina + int(tarm_passive_value)
         elif tarm_passive_type == 'HLT':
             t_max_health = t_health + int(tarm_passive_value)
+            t_health = t_health + int(tarm_passive_value)
         elif tarm_passive_type == 'LIFE':
             t_max_health = t_health + round(int(tarm_passive_value) + (.10 * o_health))
         elif tarm_passive_type == 'DRAIN':
@@ -11634,6 +11677,7 @@ class CrownUnlimited(commands.Cog):
             t_stamina = t_stamina + int(t_card_passive)
         elif t_card_passive_type == 'HLT':
             t_max_health = t_health + int(t_card_passive)
+            t_health = t_health + int(t_card_passive)
         elif t_card_passive_type == 'LIFE':
             t_max_health = t_health + round(int(t_card_passive) + (.10 * o_health))
         elif t_card_passive_type == 'DRAIN':
@@ -11703,6 +11747,7 @@ class CrownUnlimited(commands.Cog):
                 t_stamina = t_stamina + int(t_title_passive_value)
             elif t_title_passive_type == 'HLT':
                 t_max_health = t_health + int(t_title_passive_value)
+                t_health = t_health + int(t_title_passive_value)
             elif t_title_passive_type == 'LIFE':
                 t_max_health = t_health + round(int(t_title_passive_value) + (.10 * o_health))
             elif t_title_passive_type == 'DRAIN':
@@ -11883,7 +11928,7 @@ class CrownUnlimited(commands.Cog):
                     **{omove3_text}** 80 Stamina _press 3_
                     **{omove_enhanced_text}** 20 Stamina _press 4_
                 
-                    **{t_card}:** _Health_ {t_health} / _Stamina_ {t_stamina}
+                    **Opponent {t_card}:** _Health_ {t_health} / _Stamina_ {t_stamina}
 
                     """) 
                     
@@ -12854,6 +12899,7 @@ class CrownUnlimited(commands.Cog):
                     t_stamina = t_stamina + int(t_card_passive)
                 elif t_card_passive_type == 'HLT':
                     t_max_health = t_health + int(t_card_passive)
+                    t_health = t_health + int(t_card_passive)
                 elif t_card_passive_type == 'LIFE':
                     t_max_health = t_health + round(int(t_card_passive) + (.10 * o_health))
                 elif t_card_passive_type == 'DRAIN':
@@ -12923,6 +12969,7 @@ class CrownUnlimited(commands.Cog):
                         t_stamina = t_stamina + int(t_title_passive_value)
                     elif t_title_passive_type == 'HLT':
                         t_max_health = t_health + int(t_title_passive_value)
+                        t_health = t_health + int(t_title_passive_value)
                     elif t_title_passive_type == 'LIFE':
                         t_max_health = t_health + round(int(t_title_passive_value) + (.10 * o_health))
                     elif t_title_passive_type == 'DRAIN':
@@ -12992,6 +13039,7 @@ class CrownUnlimited(commands.Cog):
                     t_stamina = t_stamina + int(tarm_passive_value)
                 elif tarm_passive_type == 'HLT':
                     t_max_health = t_health + int(tarm_passive_value)
+                    t_health = t_health + int(tarm_passive_value)
                 elif tarm_passive_type == 'LIFE':
                     t_max_health = t_health + round(int(tarm_passive_value) + (.10 * o_health))
                 elif tarm_passive_type == 'DRAIN':
@@ -13058,6 +13106,7 @@ class CrownUnlimited(commands.Cog):
                     o_stamina = o_stamina + int(o_card_passive)
                 elif o_card_passive_type == 'HLT':
                     o_max_health = o_health + int(o_card_passive)
+                    o_health = o_health + int(o_card_passive)
                 elif o_card_passive_type == 'LIFE':
                     o_max_health = o_health + round(int(o_card_passive) + (.10 * t_health))
                 elif o_card_passive_type == 'DRAIN':
@@ -13127,6 +13176,7 @@ class CrownUnlimited(commands.Cog):
                         o_stamina = o_stamina + int(o_title_passive_value)
                     elif o_title_passive_type == 'HLT':
                         o_max_health = o_health + int(o_title_passive_value)
+                        o_health = o_health + int(o_title_passive_value)
                     elif o_title_passive_type == 'LIFE':
                         o_max_health = o_health + round(int(o_title_passive_value) + (.10 * t_health))
                     elif o_title_passive_type == 'DRAIN':
@@ -13195,6 +13245,7 @@ class CrownUnlimited(commands.Cog):
                     o_stamina = o_stamina + int(oarm_passive_value)
                 elif oarm_passive_type == 'HLT':
                     o_max_health = o_health + int(oarm_passive_value)
+                    o_health = o_health + int(oarm_passive_value)
                 elif oarm_passive_type == 'LIFE':
                     o_max_health = o_health + round(int(oarm_passive_value) + (.10 * t_health))
                 elif oarm_passive_type == 'DRAIN':
@@ -13419,7 +13470,7 @@ class CrownUnlimited(commands.Cog):
                             **{omove3_text}** 80 Stamina _press 3_
                             **{omove_enhanced_text}** 20 Stamina _press 4_
                         
-                            **{t_card}:** _Health_ {t_health} / _Stamina_ {t_stamina}
+                            **Opponent {t_card}:** _Health_ {t_health} / _Stamina_ {t_stamina}
 
                             """) 
                             
@@ -13775,7 +13826,7 @@ class CrownUnlimited(commands.Cog):
                                 **{tmove3_text}** 80 Stamina _press 3_
                                 **{tmove_enhanced_text}** 20 Stamina _press 4_
                             
-                                **{o_card}:** _Health_ {o_health} / _Stamina_ {o_stamina}
+                                **Opponent {o_card}:** _Health_ {o_health} / _Stamina_ {o_stamina}
 
                                 """) 
                                 
@@ -14672,6 +14723,7 @@ class CrownUnlimited(commands.Cog):
                     t_stamina = t_stamina + int(t_card_passive)
                 elif t_card_passive_type == 'HLT':
                     t_max_health = t_health + int(t_card_passive)
+                    t_health = t_health + int(t_card_passive)
                 elif t_card_passive_type == 'LIFE':
                     t_max_health = t_health + round(int(t_card_passive) + (.10 * o_health))
                 elif t_card_passive_type == 'DRAIN':
@@ -14741,6 +14793,7 @@ class CrownUnlimited(commands.Cog):
                         t_stamina = t_stamina + int(t_title_passive_value)
                     elif t_title_passive_type == 'HLT':
                         t_max_health = t_health + int(t_title_passive_value)
+                        t_health = t_health + int(t_title_passive_value)
                     elif t_title_passive_type == 'LIFE':
                         t_max_health = t_health + round(int(t_title_passive_value) + (.10 * o_health))
                     elif t_title_passive_type == 'DRAIN':
@@ -14810,6 +14863,7 @@ class CrownUnlimited(commands.Cog):
                     t_stamina = t_stamina + int(tarm_passive_value)
                 elif tarm_passive_type == 'HLT':
                     t_max_health = t_health + int(tarm_passive_value)
+                    t_health = t_health + int(tarm_passive_value)
                 elif tarm_passive_type == 'LIFE':
                     t_max_health = t_health + round(int(tarm_passive_value) + (.10 * o_health))
                 elif tarm_passive_type == 'DRAIN':
@@ -14876,6 +14930,7 @@ class CrownUnlimited(commands.Cog):
                     o_stamina = o_stamina + int(o_card_passive)
                 elif o_card_passive_type == 'HLT':
                     o_max_health = o_health + int(o_card_passive)
+                    o_health = o_health + int(o_card_passive)
                 elif o_card_passive_type == 'LIFE':
                     o_max_health = o_health + round(int(o_card_passive) + (.10 * t_health))
                 elif o_card_passive_type == 'DRAIN':
@@ -14945,6 +15000,7 @@ class CrownUnlimited(commands.Cog):
                         o_stamina = o_stamina + int(o_title_passive_value)
                     elif o_title_passive_type == 'HLT':
                         o_max_health = o_health + int(o_title_passive_value)
+                        o_health = o_health + int(o_title_passive_value)
                     elif o_title_passive_type == 'LIFE':
                         o_max_health = o_health + round(int(o_title_passive_value) + (.10 * t_health))
                     elif o_title_passive_type == 'DRAIN':
@@ -15013,6 +15069,7 @@ class CrownUnlimited(commands.Cog):
                     o_stamina = o_stamina + int(oarm_passive_value)
                 elif oarm_passive_type == 'HLT':
                     o_max_health = o_health + int(oarm_passive_value)
+                    o_health = o_health + int(oarm_passive_value)
                 elif oarm_passive_type == 'LIFE':
                     o_max_health = o_health + round(int(oarm_passive_value) + (.10 * t_health))
                 elif oarm_passive_type == 'DRAIN':
@@ -16456,6 +16513,7 @@ class CrownUnlimited(commands.Cog):
                     t_stamina = t_stamina + int(t_card_passive)
                 elif t_card_passive_type == 'HLT':
                     t_max_health = t_health + int(t_card_passive)
+                    t_health = t_health + int(t_card_passive)
                 elif t_card_passive_type == 'LIFE':
                     t_max_health = t_health + round(int(t_card_passive) + (.10 * o_health))
                 elif t_card_passive_type == 'DRAIN':
@@ -16525,6 +16583,7 @@ class CrownUnlimited(commands.Cog):
                         t_stamina = t_stamina + int(t_title_passive_value)
                     elif t_title_passive_type == 'HLT':
                         t_max_health = t_health + int(t_title_passive_value)
+                        t_health = t_health + int(t_title_passive_value)
                     elif t_title_passive_type == 'LIFE':
                         t_max_health = t_health + round(int(t_title_passive_value) + (.10 * o_health))
                     elif t_title_passive_type == 'DRAIN':
@@ -16594,6 +16653,7 @@ class CrownUnlimited(commands.Cog):
                     t_stamina = t_stamina + int(tarm_passive_value)
                 elif tarm_passive_type == 'HLT':
                     t_max_health = t_health + int(tarm_passive_value)
+                    t_health = t_health + int(tarm_passive_value)
                 elif tarm_passive_type == 'LIFE':
                     t_max_health = t_health + round(int(tarm_passive_value) + (.10 * o_health))
                 elif tarm_passive_type == 'DRAIN':
@@ -16660,6 +16720,7 @@ class CrownUnlimited(commands.Cog):
                     o_stamina = o_stamina + int(o_card_passive)
                 elif o_card_passive_type == 'HLT':
                     o_max_health = o_health + int(o_card_passive)
+                    o_health = o_health + int(o_card_passive)
                 elif o_card_passive_type == 'LIFE':
                     o_max_health = o_health + round(int(o_card_passive) + (.10 * t_health))
                 elif o_card_passive_type == 'DRAIN':
@@ -16729,6 +16790,7 @@ class CrownUnlimited(commands.Cog):
                         o_stamina = o_stamina + int(o_title_passive_value)
                     elif o_title_passive_type == 'HLT':
                         o_max_health = o_health + int(o_title_passive_value)
+                        o_health = o_health + int(o_title_passive_value)
                     elif o_title_passive_type == 'LIFE':
                         o_max_health = o_health + round(int(o_title_passive_value) + (.10 * t_health))
                     elif o_title_passive_type == 'DRAIN':
@@ -16797,6 +16859,7 @@ class CrownUnlimited(commands.Cog):
                     o_stamina = o_stamina + int(oarm_passive_value)
                 elif oarm_passive_type == 'HLT':
                     o_max_health = o_health + int(oarm_passive_value)
+                    o_health = o_health + int(oarm_passive_value)
                 elif oarm_passive_type == 'LIFE':
                     o_max_health = o_health + round(int(oarm_passive_value) + (.10 * t_health))
                 elif oarm_passive_type == 'DRAIN':

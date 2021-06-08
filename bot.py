@@ -22,6 +22,7 @@ import logging
 import requests
 from decouple import config
 from collections import ChainMap
+import textwrap
 
 now = time.asctime()
 
@@ -138,40 +139,159 @@ async def enhance(ctx):
    embedVar6.add_field(name="`CONTROL`", value="`SOULCHAIN` - Both `PLAYERS` `STAM` = \n\n`GAMBLE` - Both `PLAYERS` `HEALTH` =\n\n`FEAR` - Decrease `HLT`, Decrease `OPP ATK` & `OPP DEF`")
    embedVar6.set_footer(text=f".help - Bot Help")
 
-   embedVar7 = discord.Embed(title= f":trident:ENHANCE DETAILS:",colour=0x7289da)
+   embedVar7 = discord.Embed(title= f":trident:ENHANCE DETAILS:", description=textwrap.dedent(f"""
+   **ATK:** AP Percentage Based Attack Increased
+   **DEF:** AP Percentage Based Attack Increased
+   **STAM:** Increased Stamina based on AP Value
+   **HLT:** Increased Health based on AP Value
+   **LIFE:** Lifesteals based on AP Value and 5% of Opponent Health
+   **DRAIN:** Steals Opponent Stamina based on AP Value
+   **FLOG:** Steals Attack based on 30% of AP Percentage
+   **WITHER:** Steals Defense based on 30% of AP Percentage
+   **RAGE:** Gain ATK but Lose DEF based on 50% of AP Percentage Of Your DEF
+   **BRACE:** GAIN DEF but Lose ATK based on 50% AP Percentage Of Your ATK
+   **BZRK:** Gain ATK Based on 50% of your  AP Percentage of Your HLT
+   **CRYSTAL:** Gain DEF Based on 50% of your AP Percentage Of Your Health
+   **GROWTH:** Lower Max Health, Increase Defense and Attack based on 50% of AP Percentage
+   **STANCE:** Swaps your ATK and your DEF, and gives you additional DEF based on AP Value
+   **CONFUSE:** Swaps ATK and DEF of opponent and saps additional DEF based on AP Value
+   **BLINK:** Decreases Your Stamina by AP Value and gives opponent Stamina by AP Value
+   **SLOW:** Increases Your Stamina by AP Value, Decreases your Opponent Stamina by AP Value, then swaps your and your opponents Stamina
+   **HASTE:** Decreases your opponent Stamina, Increases your stamina, swap your and your opponent stamina
+   **SOUL:** CHAIN - Make you and your opponent Stamina the same based on AP Value
+   **GAMBLE:** Make you and your opponent health the same based on AP Value
+   **FEAR:** Lower your Health by AP Percentage, Lower your opponent ATK and DEF by AP Percentage
+   """) ,colour=0x7289da)
    embedVar7.set_thumbnail(url=avatar)
-   embedVar7.add_field(name="Details Page 1", value="""
-`ATK` - AP Percentage Based Attack Increased
-`DEF` - AP Percentage Based Attack Increased
-`STAM` - Increased Stamina based on AP Value
-`HLT` - Increased Health based on AP Value
-`LIFE` - Lifesteals based on AP Value and 5% of Opponent Health
-`DRAIN` - Steals Opponent Stamina based on AP Value
-`FLOG` - Steals Attack based on 30% of AP Percentage
-`WITHER` - Steals Defense based on 30% of AP Percentage
-`RAGE` - Gain ATK but Lose DEF based on 50% of AP Percentage Of Your DEF
-`BRAC`E - GAIN DEF but Lose ATK based on 50% AP Percentage Of Your ATK
-`BZRK` - Gain ATK Based on 50% of your  AP Percentage of Your HLT
-"""
-   )
    embedVar7.set_footer(text=f".help - Bot Help")
 
-   embedVar8 = discord.Embed(title= f":trident:ENHANCE DETAILS:",colour=0x7289da)
+   paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+   paginator.add_reaction('⏮️', "first")
+   paginator.add_reaction('⏪', "back")
+   paginator.add_reaction('🔐', "lock")
+   paginator.add_reaction('⏩', "next")
+   paginator.add_reaction('⏭️', "last")
+   embeds = [embedVar1, embedVar2, embedVar3, embedVar4, embedVar5, embedVar6, embedVar7]
+   await paginator.run(embeds)
+
+
+@bot.group(invoke_without_command=True)
+async def crown(ctx):
+   avatar="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png"
+
+
+   embedVar1 = discord.Embed(title= f":crown: Crown Unlimited",colour=0x7289da)
+   embedVar1.set_thumbnail(url=avatar)
+   embedVar1.add_field(name="About The Game!", value=textwrap.dedent(f"""\
+   Crown Unlimited is a multiplatform card game featuring universes from your favorite series!
+
+   Explore Tales, Dungeons, and Bosses solo, or with your friend!
+   """))
+
+   embedVar2 = discord.Embed(title= f":crown: Getting Started", description=textwrap.dedent(f"""\
+   Each player starts with 3 cards from the 3 Starter Universes to begin their journey.
+
+   The starting universes are _My Hero Academia_, _Kanto Region_, and _League Of Legends_.
+
+   Compete in Single Player and Multiplayer _Tales_, _Dungeons_, and _Bosses_ to earn :coin: to buy and equip better Items and unlock new worlds!
+   """), colour=0x7289da)
+   embedVar2.set_thumbnail(url=avatar)
+
+   embedVar3 = discord.Embed(title= f":crown: Card Mechanics", description=textwrap.dedent(f"""\
+   **Card Stats** 
+   Health (HLT) Stamina (STAM) Attack (ATK) Defense(DEF)
+
+   **Cards have 5 Elements** 
+   3 Abilities
+   1 Enhancer
+   1 Unique Passive
+
+   **Abilities**
+   Abilities inflict damage on the opponent.
+   Each ability has a corresponding number when selecting from the Movelist
+   **1:** Basic Attack _uses 10 stamina_
+   **2:** Special Attack _uses 30 stamina_
+   **3:** Ultimate Attack _uses 80 stamina_
+
+   **Enhancer**
+   Enhancers can either boost your stats or inflict status effects on your opponent. Use .enhance for full list of Enhancers and their effects.
+   **4:** Enhancer
+
+   **Unique Passive**
+   Unique Passives are Enhancers that take effect at the beginning of the game, no player action needed.
+   """), colour=0x7289da)
+   embedVar3.set_thumbnail(url=avatar)
+
+   embedVar4 = discord.Embed(title= f":crown: Titles, Arms, and Pets", description=textwrap.dedent(f"""\
+   **Titles** & **Arms** 
+   Modify your or your opponents stats prior to battle by applying _Enhancers_ at the beginning of the match.
+
+   **Pets**
+   Can assist during battle with an Enhancer
+
+   Mix and Match Titles, Arms and Pet passives to gain tactical advantage!
+   """) ,colour=0x7289da)
+   embedVar4.set_thumbnail(url=avatar)
+
+   embedVar5 = discord.Embed(title= f":crown: Battle Mechanics", description=textwrap.dedent(f"""\
+   Players take turns dealing damage using one of their 3 Abilities
+   
+   Stamina costs are standard across all Cards _check Cards page for details_
+   
+   **Recovery**
+   When Players have used all of their Stamina they enter **Focus State**
+   
+   **Focus State** sacrifices a turn to Level up stats, increase their Stamina to 90, and recover some health.
+
+   The Match is over when a players Health reaches 0
+   """) ,colour=0x7289da)
+   embedVar5.set_thumbnail(url=avatar)
+
+   embedVar6 = discord.Embed(title= f":crown: Focus & Resolve", description=textwrap.dedent(f"""\
+   Players can take advantage of Focus State to recover, as mentioned on the previous page.
+   
+   **Resolve**
+   Once in Focus State players can enter 5 to Resolve!
+   Resolved Characters transform to greatly increase attack and health while sacrificing defense
+   Resolved characters can summon Pets to aid them in battle by entering 6
+
+   **Pet Assistance!**
+   Pet assistance is a free move and can be used each round in addition to a Card Abiltiy!
+   """) ,colour=0x7289da)
+   embedVar6.set_thumbnail(url=avatar)
+
+   embedVar7 = discord.Embed(title= f":crown:CROWN Single Player & Multiplayer", description=textwrap.dedent(f"""\
+   **Single Player**
+   **.tales** Single player adventures where you traverse through your favorite universes as characters from various worlds!
+   **.dungeon** Hard version of tales with better loot and better drop rates!
+   **.boss** End Game battles featuring Iconic Villians from Crown Universes
+
+   **Multiplayer**
+   **.ctales @partner** Take a companion with your through your favorite tales with higher stakes!
+   **.cdungeon @partner** Bring a companion through the darkest dungeons to earn awesome loot together
+   **.cboss @partner** Epic battles between 2 high level companions and 1 Incredible Boss
+   
+   Co-Op must be played in Server
+
+   **PVP**
+   **.battle @player:** Select your Build and Challenge any Crown Unlimited Player to join your Game Lobby
+   **.start:** Starts round against current opponent
+   **.wager number:*** In lobby players can wager :coin:
+   Builds are locked during lobbies, to change your build end the lobby with **.end** 
+   """),colour=0x7289da)
+   embedVar7.set_thumbnail(url=avatar)
+
+   embedVar8 = discord.Embed(title= f":crown: Economy",description=textwrap.dedent(f"""\
+   Crown Unlimited features an in game shop where you can purchase new Cards, Titles, and Arms
+
+   **Stock**
+   Items in the shop have a stock. When they are sold out they become unavailable
+
+   **Sell & Trade**
+   **.sell** and **.trade** will allow you to trade Cards, Titles, Arms and Pets with other players
+   """) ,colour=0x7289da)
    embedVar8.set_thumbnail(url=avatar)
-   embedVar8.add_field(name="Details Page 2", value="""
-`CRYSTAL` - Gain DEF Based on 50% of your AP Percentage Of Your Health
-`GROWTH` - Lower Max Health, Increase Defense and Attack based on 50% of AP Percentage
-`STANCE` - Swaps your ATK and your DEF, and gives you additional DEF based on AP Value
-`CONFUSE` - Swaps ATK and DEF of opponent and saps additional DEF based on AP Value
-`BLINK` - Decreases Your Stamina by AP Value and gives opponent Stamina by AP Value
-`SLOW` - Increases Your Stamina by AP Value, Decreases your Opponent Stamina by AP Value, then swaps your and your opponents Stamina
-`HASTE` - Decreases your opponent Stamina, Increases your stamina, swap your and your opponent stamina
-`SOUL` CHAIN - Make you and your opponent Stamina the same based on AP Value
-`GAMBLE` - Make you and your opponent health the same based on AP Value
-`FEAR` - Lower your Health by AP Percentage, Lower your opponent ATK and DEF by AP Percentage
-"""
-   )
-   embedVar8.set_footer(text=f".help - Bot Help")
+
 
    paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
    paginator.add_reaction('⏮️', "first")
@@ -180,66 +300,6 @@ async def enhance(ctx):
    paginator.add_reaction('⏩', "next")
    paginator.add_reaction('⏭️', "last")
    embeds = [embedVar1, embedVar2, embedVar3, embedVar4, embedVar5, embedVar6, embedVar7, embedVar8]
-   await paginator.run(embeds)
-
-
-@bot.group(invoke_without_command=True)
-async def crownhelp(ctx):
-   avatar="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png"
-
-
-   embedVar1 = discord.Embed(title= f":crown:WELCOME TO CROWN UNLIMITED!:",colour=0x7289da)
-   embedVar1.set_thumbnail(url=avatar)
-   embedVar1.add_field(name="About The Game!", value="Crown Unlimited is a multiplatform card game featuring universes from your favorite series!\n\nThe game has Single Player, Multiplayer and CO-OP!\n\nAdventure with your friends through the CROWN UNLIMITED")
-
-   embedVar2 = discord.Embed(title= f":crown:ABOUT CROWN UNLIMITED:",colour=0x7289da)
-   embedVar2.set_thumbnail(url=avatar)
-   embedVar2.add_field(name="CROWN UNLIMITED", value="Crown Unlimited features over 30 of your favorite Universes from various games and animes!\n\nEach player starts with 3 cards from the 3 `Starter` Universes to begin their journey\n\nCompete in Single Player and Multiplayer to earn :coin: to buy and equip better Items and unlock new worlds!\n\n")
-
-   embedVar3 = discord.Embed(title= f":crown:CROWN UNLIMITED MECHANICS:",colour=0x7289da)
-   embedVar3.set_thumbnail(url=avatar)
-   embedVar3.add_field(name="CROWN UNLIMITED CARDS", value="CARDS - Each CARD comes with 4 Stats, 4 Abilities and 1 Unique Passive.\n\nSTATS : Health(HLT), Stamina(STAM), Attack(ATK), Defense(DEF)\n\nABILITIES : Basic Attack(1), Special Attack(2)\nUltimate Move(3) and Enhancer(4)\n\nUNIQUE PASSIVE - Your CARDS unique passive modifies STATS prior to battle\n\nENHANCER - Your Enhancer Modifies STATS during battle.\n\nUse .enhance to view the list of ENHANCERS")
-
-   embedVar4 = discord.Embed(title= f":crown:CROWN UNLIMITED MECHANICS:",colour=0x7289da)
-   embedVar4.set_thumbnail(url=avatar)
-   embedVar4.add_field(name="`TAP - Titles, Arms, Pets!`", value="Equip your CARD with TITLES, ARMS and PETS!\n\nTITLES and ARMS modifiy STATS prior to battle!\n\nPETS - Can assist during battle with an ENHANCE move!\n\nMix and Match ITEM and PET passives to gain tactical advantage!\n\n")
-
-   embedVar5 = discord.Embed(title= f":crown:CROWN UNLIMITED MECHANICS:",colour=0x7289da)
-   embedVar5.set_thumbnail(url=avatar)
-   embedVar5.add_field(name="`BATTLES - Battle Mechanics`", value="Players take turns doing damage using ones of their 4 ABILITIES and STAMINA\n\nSTAMINA cost are standard across ALL CARDS\nMove (1) - 10 STAM, Move (2) - 30 STAM\nMove (3) - 80 STAM and ENHANCER (4) - 20 STAM\n\nWhen Players have used all of their Stamina (`0`) they enter FOCUS STATE\n\nFOCUS STATE - Focus State sacrifices a turn to Level up STATS and HEAL\n\nThe Round is over when a players HEALTH reaches 0")
-
-   embedVar6 = discord.Embed(title= f":crown:CROWN UNLIMITED MECHANICS:",colour=0x7289da)
-   embedVar6.set_thumbnail(url=avatar)
-   embedVar6.add_field(name="`BATTLES - FOCUS and RESOLVE`", value="Players can take advantage of Focus State to boost STATS and HEAL\n\nOnce in FOCUS STATE players can use (5) to RESOLVE!\n\nRESOLVE - Resolved Characters transform to BOOST ATK and HLT while sacrificing DEF\n\nPET ASSIST - Resolved character can summon PETS to battle with them using (7)\n\nPET ASSIST is a free move and can be used each round with an Abiltiy!")
-
-   embedVar7 = discord.Embed(title= f":crown:CROWN UNLIMITED GAME MODES:",colour=0x7289da)
-   embedVar7.set_thumbnail(url=avatar)
-   embedVar7.add_field(name="`Single Player Modes`", value=".tales - TALES are single player adventures where you traverse through your favorite universes as characters from various worlds!\n\n.dungeon - DUNGEONS are beefed up versions of TALES with better loot and better drop rates !\n\n.boss - BOSSES are End Game level battles featuring Iconic Villians from Crown Universes\n\n.solo - All Single Player features are available in DMS via the .solo command.")
-
-   embedVar8 = discord.Embed(title= f":crown:CROWN UNLIMITED GAME MODES:",colour=0x7289da)
-   embedVar8.set_thumbnail(url=avatar)
-   embedVar8.add_field(name="`Multiplayer Modes : Co-Op`", value=".ctales - Take a COMPANION with your through your favorite TALES with Higher Stakse!\n\n.cdungeon - Co-Op DUNGEONS, bring a COMPANION through the darkest Dungeons to earn Awesome Loot\n\n.cboss - CO-OP BOSSES are epic battles between 2 High Level Companions and 1 Incredible Boss\n\nCo-Op must be played in Server !")
-
-   embedVar9 = discord.Embed(title= f":crown:CROWN UNLIMITED GAME MODES:",colour=0x7289da)
-   embedVar9.set_thumbnail(url=avatar)
-   embedVar9.add_field(name="`Multiplayer Modes : PVP`", value=".battle - Select your BUILD and Challenge any Crown Unlimited Player to join your Game Lobby\n\n.start - Starts round against current opponent\n\n.wager - In Lobby players can wager :coin:\n\nBuilds are locked during lobbies, to change your build end the lobby with .end")
-
-   embedVar10 = discord.Embed(title= f":crown:CROWN UNLIMITED ECONOMY:",colour=0x7289da)
-   embedVar10.set_thumbnail(url=avatar)
-   embedVar10.add_field(name="`Multiplayer Modes : ECONOMY`", value="CROWN UNLIMITED features an in game shop where you can purchase CARDS, TITLES and ARMS.\n\nEarn :coin: competing in Game Modes to buy better ITEMS\n\nSTOCK - Items in the shop have a stock, when they are sold out they become unavailable!\n\nBarter and Trade with other players to purchase sold out items on the Open Market\n\nSELL/TRADE - .sell and .trade will allow you to trade Cards, Titles, Arms and Pets!")
-
-   embedVar12 = discord.Embed(title= f":crown:CROWN UNLIMITED HELP:",colour=0x7289da)
-   embedVar12.set_thumbnail(url=avatar)
-   embedVar12.add_field(name="`Learn Hands On`", value="`.help`  - Brings up Bot Help Page\n\n`.senpaibattle` Start your first CROWN UNLIMTED BATTLE against ME.. Senpai:tm:\n\n`.enhance` - Opens up ENHANCEMENT menu!\n\n")
-
-
-   paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
-   paginator.add_reaction('⏮️', "first")
-   paginator.add_reaction('⏪', "back")
-   paginator.add_reaction('🔐', "lock")
-   paginator.add_reaction('⏩', "next")
-   paginator.add_reaction('⏭️', "last")
-   embeds = [embedVar1, embedVar2, embedVar3, embedVar4, embedVar5, embedVar6, embedVar7, embedVar8, embedVar9, embedVar10, embedVar12]
    await paginator.run(embeds)
 
 async def validate_user(ctx):
@@ -279,16 +339,37 @@ async def r(ctx):
    response = db.createUsers(data.newUser(user))
    if response:
 
-      embedVar = discord.Embed(title=f"Welcome to Party Chat Gaming!", colour=0xe91e63)
-      embedVar.set_author(name="Use `.solo` to play Crown Unlimited undisturbed. Remember to come back and play with your friends!")
-      embedVar.add_field(name="`.build`", value="Check your equipped `CARD`, `TITLE`, `ARM` and `PET`")
-      embedVar.add_field(name="`.vault`", value="Check your available `CARDS`, `TITLES`, `ARMS` and `PETS`")
-      embedVar.add_field(name="`.shop`", value="Purchase your starting `CARD`, `TITLE` or `ARM`")
-      embedVar.add_field(name="`.senpaibattle`", value="Start tutorial on Crown Unlimited")
-      embedVar.add_field(name="`.crownhelp`", value="To Read the CROWN UNLIMITED Manual")
-      embedVar.add_field(name="`.help`", value="Inquire all potential commands and capabilites of the bot")
-      embedVar.set_footer(text="`.senpai` will start tutorial on overall bot capabilities")
-      await ctx.send(embed=embedVar)
+      embedVar = discord.Embed(title=f"Welcome to Party Chat Gaming!", description=textwrap.dedent(f"""
+      The Party Chat Gaming bot is a multipurpose tool for admins and players alike to run and participate in matches and tournaments in some of your favorite games!
+      In addition to the tools for tournaments and more, we offer an incredible gaming experience in Crown Unlimited!_See below for Crown Unlimited Details_
+      
+      **Welcome to Crown Unlimited**!
+      Embark on a journey through Universes filled with characters from your favorite anime and video games! 
+      
+      **3 Easy Steps for Success**
+      1. Collect Cards, Titles, Arms, and Pets
+      2. Uniquely Customize your Builds to match your playstyle
+      3. Explore Tales, Dungeons, and Bosses solo, or with your friend!
+
+      **.crownhelp**
+      Read the Crown Unlimited Manual!
+
+      **.senpaibattle**
+      Start Crown Unlimited Battle Tutorial!
+
+      **.build** Check your current build including your equipped Card, Title, Arm, and Pet
+
+      **.vault** Your vault stores all of your Cards, Titles, Arms and Pets
+
+      **.shop** Purchase new Cards, Titles, and Arms
+
+
+      
+      _Use .solo to play Crown Unlimited undisturbed. Remember to come back and play with your friends!_
+      """), colour=0xe91e63)
+      embedVar.set_footer(text=".help to inquire all potential commands and capabilites of the bot")
+      await ctx.author.send(embed=embedVar)
+      await ctx.send(f"{ctx.author.mention} Welcome! Check your DMs.")
 
       vault = db.queryVault({'OWNER': disname})
       if vault:
@@ -319,7 +400,7 @@ async def fix(ctx, user: User):
 
 @bot.command(pass_context=True)
 @commands.cooldown(1, 60*60*24, commands.BucketType.user)
-async def dailybonus(ctx):
+async def daily(ctx):
    await bless(100, ctx.author)
    await ctx.send(f"Daily bonus :coin:100 has been applied for {ctx.author.mention}!")
 
