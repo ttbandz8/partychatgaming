@@ -185,14 +185,30 @@ class Profile(commands.Cog):
             titles = vault['TITLES']
             arms = vault['ARMS']
             pets = vault['PETS']
+            quests = vault['QUESTS']
             active_pet = {}
             pet_names = []
+
+            quest_messages = []
+            for quest in quests:
+                completed = ""
+                if quest['GOAL'] == quest['WINS']:
+                    completed = "🟢"
+                else:
+                    completed = "🔴"
+
+                quest_messages.append(textwrap.dedent(f"""\
+                Defeat **{quest['OPPONENT']}** {quest['GOAL']} times in {quest['TYPE']} for :coin:{quest['REWARD']}! : {completed}
+                **Current Progress:** {quest['WINS']}/{quest['GOAL']}
+                
+                """))
 
             for pet in pets:
                 pet_names.append(pet['NAME'])
                 if pet['NAME'] == pet_name:
                     active_pet = pet
        
+
 
             embedVar1 = discord.Embed(title= f"Cards", description=textwrap.dedent(f"""
             **Balance**: :coin:{'{:,}'.format(balance)}
@@ -228,6 +244,11 @@ class Profile(commands.Cog):
             
             {", ".join(pet_names)}
             """), colour=0x7289da)
+
+            embedVar5 = discord.Embed(title= f"Quest Board", description=textwrap.dedent(f"""
+            **Balance**: :coin:{'{:,}'.format(balance)}
+            \n{"".join(quest_messages)}
+            """), colour=0x7289da)
             # embedVar4.set_thumbnail(url=avatar)
 
             paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
@@ -236,7 +257,7 @@ class Profile(commands.Cog):
             paginator.add_reaction('🔐', "lock")
             paginator.add_reaction('⏩', "next")
             paginator.add_reaction('⏭️', "last")
-            embeds = [embedVar1, embedVar2, embedVar3, embedVar4]
+            embeds = [embedVar1, embedVar2, embedVar3, embedVar4, embedVar5]
             await paginator.run(embeds)
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})

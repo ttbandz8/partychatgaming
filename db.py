@@ -115,6 +115,13 @@ def deleteVault(vaults):
     except:
         print("Delete Vault failed.")
 
+def updateVault(query, new_value, arrayFilters):
+    exists = vault_exist({'OWNER': query['OWNER']})
+    if exists:
+        update = vault_col.update_one(query, new_value, array_filters=arrayFilters)
+        return True
+    else:
+        return False
 
 '''Update Vault With No Array Filters'''
 def updateVaultNoFilter(query, new_value):

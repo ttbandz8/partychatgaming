@@ -2556,14 +2556,20 @@ class CrownUnlimited(commands.Cog):
                 m_playtime = int(wintime[14:16])
                 s_playtime = int(wintime[17:19])
                 gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
-                await bless(10, ctx.author)
-                await bless(10, cuser)
+
                 drop_response = await drops(ctx.author, selected_universe)
+                cdrop_response = await drops(user, selected_universe)
+                questlogger = await quest(ouser, t_card, "Tales")
+                cquestlogger = await quest(cuser, t_card, "Tales")
+                if questlogger:
+                    await ctx.author.send(questlogger)
+                if cquestlogger:
+                    await user.send(cquestlogger)
                 if currentopponent != total_legends:
                     
                     if private_channel.guild:
 
-                        embedVar = discord.Embed(title=f"VICTORY\n`{o_card} says:`\n{o_win_description}", description=f"The game lasted {turn_total} rounds.\n\n{drop_response}\n{c_user['NAME']} earned :coin: 10", colour=0xe91e63)
+                        embedVar = discord.Embed(title=f"VICTORY\n`{o_card} says:`\n{o_win_description}", description=f"The game lasted {turn_total} rounds.\n\n{drop_response}\n{c_user['NAME']}: {cdrop_response}", colour=0xe91e63)
                         embedVar.set_author(name=f"{t_card} lost!")
                         await private_channel.send(embed=embedVar)
 
@@ -5339,6 +5345,12 @@ class CrownUnlimited(commands.Cog):
                 gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
                 drop_response = await dungeondrops(ctx.author, selected_universe)
                 cdrop_response = await dungeondrops(user, selected_universe)
+                questlogger = await quest(ouser, t_card, "Dungeon")
+                cquestlogger = await quest(user, t_card, "Dungeon")
+                if questlogger:
+                    await ctx.author.send(questlogger)
+                if cquestlogger:
+                    await user.send(cquestlogger)
                 if currentopponent != (total_legends):
                     
                     if private_channel.guild:
@@ -9673,6 +9685,9 @@ class CrownUnlimited(commands.Cog):
                 s_playtime = int(wintime[17:19])
                 gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
                 drop_response = await dungeondrops(ctx.author, selected_universe)
+                questlogger = await quest(ouser, t_card, "Dungeon")
+                if questlogger:
+                    await ctx.author.send(questlogger)
                 if currentopponent != (total_legends):
                     
                     if private_channel.guild:
@@ -9723,7 +9738,7 @@ class CrownUnlimited(commands.Cog):
                         await ctx.author.send(f"You were awarded :coin: 50 for completing the {selected_universe} Dungeon!")
                         response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                     else:
-                        await bless(1000, ctx.author)
+                        await bless(800, ctx.author)
                         await ctx.author.send(embed=embedVar)
                         response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                         await ctx.author.send(f"You were awarded :coin: 800 for completing the {selected_universe} Dungeon! ")
@@ -11111,6 +11126,9 @@ class CrownUnlimited(commands.Cog):
                 s_playtime = int(wintime[17:19])
                 gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
                 drop_response = await drops(ctx.author, selected_universe)
+                questlogger = await quest(ouser, t_card, "Tales")
+                if questlogger:
+                    await ctx.author.send(questlogger)
                 if currentopponent != (total_legends):
                     
                     if private_channel.guild:
@@ -18182,6 +18200,49 @@ async def score(owner, user: User):
 
         return message
 
+async def quest(player, opponent, mode):
+    user_data = db.queryVault({'OWNER': str(player)}) 
+    quest_data = {}
+
+    for quest in user_data['QUESTS']:
+        if opponent == quest['OPPONENT']:
+            quest_data = quest
+    
+    if quest_data == {}:
+        return
+    print(quest_data)
+    completion = quest_data['GOAL'] - (quest_data['WINS'] + 1)
+    
+    if mode == "Dungeon" and quest_data['GOAL'] != quest_data['WINS']:
+        message = "Dungeon Quest progressed!"
+        if completion == 0:
+            await bless(150, player)
+            message = "Dungeon Quest Completed! :coin:150 has been added to your balance."
+
+        query = {'OWNER': str(player)}
+        update_query = {'$inc': {'QUESTS.$[type].' + "WINS": 1}}
+        filter_query = [{'type.' + "OPPONENT": opponent}]
+        resp = db.updateVault(query, update_query, filter_query)
+        return message
+
+    elif mode == "Tales" and quest_data['GOAL'] != quest_data['WINS']:
+        message = "Tales Quest progressed!"
+        if completion == 0:
+            if quest_data['GOAL'] == 5:
+                await bless(125, player)
+                message = "Tales Quest Completed! :coin:125 has been added to your balance."
+            elif quest_data['GOAL'] == 3:
+                await bless(100, player)
+                message = "Tales Quest Completed! :coin:100 has been added to your balance."
+
+        query = {'OWNER': str(player)}
+        update_query = {'$inc': {'QUESTS.$[type].' + "WINS": 1}}
+        filter_query = [{'type.'+ "OPPONENT": opponent}]
+        resp = db.updateVault(query, update_query, filter_query)
+
+        return message
+    else:
+        return False
 
 def starting_position(o,t):
     if o > t:
@@ -18195,11 +18256,6 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
     move_stamina = list(ability.values())[1]
     can_use_move_flag = True
 
-
-    print(attack)
-    print(defense)
-    print(op_attack)
-    print(op_defense)
     enh = ""
     if enhancer:
         enh = list(ability.values())[2]
@@ -18388,13 +18444,13 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
             fortitude = health * (2/5) #216
         attackpower = ((int(atk) / 20) * int(ap)) / op_defense #5.09
         modifier = random.randint(7,11)
-        dmg = ((fortitude * attackpower)/100) * modifier
+        dmg = round(((fortitude * attackpower)/100) * modifier)
 
         #dmg = ((attackpower * (100 * (100 / defensepower))) * .001) + int(ap)
         
         #dmg = (int(ap)*(100/(100+int(op_defense)))) + int(atk)
 
-        low = dmg - (dmg * .20)
+        low = dmg - (dmg * .05)
         high = dmg + (dmg * .10)
 
         true_dmg = random.randint(int(low), int(high))

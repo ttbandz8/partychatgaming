@@ -23,7 +23,7 @@ import requests
 from decouple import config
 from collections import ChainMap
 import textwrap
-
+import random
 now = time.asctime()
 
 '''User must have predefined roles of the games they play before creating users
@@ -404,8 +404,29 @@ async def fix(ctx, user: User):
 @commands.cooldown(1, 60*60*24, commands.BucketType.user)
 async def daily(ctx):
    await bless(100, ctx.author)
-   await ctx.send(f"Daily bonus :coin:100 has been applied for {ctx.author.mention}!")
 
+   user_data = db.queryUser({'DISNAME': str(ctx.author)})
+   user_completed_tales = user_data['CROWN_TALES']
+   universes = db.queryAllUniverse()
+   
+   user_available_opponents = []
+
+   for x in universes:
+      for y in user_completed_tales:
+          if y == x['PREREQUISITE']:
+            user_available_opponents.append(x['CROWN_TALES'])
+
+   opponents = [x for x in user_available_opponents for x in x]
+   oppponent_len = len(opponents)
+   q1 = random.randint(0, oppponent_len)
+   q2 = random.randint(0, oppponent_len)
+   q3 = random.randint(0, oppponent_len)
+
+   quests = [{'OPPONENT': opponents[q1], 'TYPE': 'Tales', 'GOAL': 3, 'WINS': 0, 'REWARD': 100 },{'OPPONENT': opponents[q2], 'TYPE': 'Tales', 'GOAL': 5, 'WINS': 0, 'REWARD': 125 }, {'OPPONENT': opponents[q3], 'TYPE': 'Dungeon', 'GOAL': 3, 'WINS': 0, 'REWARD': 150 }]
+   db.updateVaultNoFilter({'OWNER': str(ctx.author)}, {'$set': {'QUESTS': quests}})
+
+   await ctx.send(f"Daily bonus :coin:100 has been applied for {ctx.author.mention}!\nYour new quests are available on the Quest Board!")
+      
 @bot.command()
 @commands.check(validate_user)
 async def vs(ctx, user: User, args1 ):
