@@ -174,7 +174,6 @@ async def enhance(ctx):
    embeds = [embedVar1, embedVar2, embedVar3, embedVar4, embedVar5, embedVar6, embedVar7]
    await paginator.run(embeds)
 
-
 @bot.group(invoke_without_command=True)
 async def crown(ctx):
    avatar="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png"

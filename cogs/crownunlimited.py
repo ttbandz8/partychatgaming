@@ -1128,17 +1128,15 @@ class CrownUnlimited(commands.Cog):
                         player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                         await private_channel.send(file=player_1_card)
                         embedVar = discord.Embed(title=f"{o_card}, choose your move!", description=textwrap.dedent(f"""\
-                        
+                        **{o_health}/{o_stamina}**
                         **{omove1_text}** 10 Stamina _press 1_
                         **{omove2_text}** 30 Stamina _press 2_
                         **{omove3_text}** 80 Stamina _press 3_
                         **{omove_enhanced_text}** 20 Stamina _press 4_
                     
-                        **Opponent {t_card}:** _Health_ {t_health} / _Stamina_ {t_stamina}
-                        **Partner {c_card}:** _Health_ {c_health} / _Stamina_ {c_stamina} _partner_
-
+                        **{t_card}:** {t_health}/{t_stamina}
+                        **{c_card}:** {c_health}/{c_stamina} _partner_
                         """) 
-                        
                         , colour=embed_color_o)
                         embedVar.set_thumbnail(url=opet_image)
                         if o_used_focus and o_used_resolve and not t_pet_used:
@@ -1856,17 +1854,15 @@ class CrownUnlimited(commands.Cog):
                         companion = showcard(c, c_max_health, c_health, c_max_stamina, c_stamina, c_used_resolve, ctitle, c_used_focus)
                         await private_channel.send(file=companion)
                         embedVar = discord.Embed(title=f"{c_card}, choose your move!", description=textwrap.dedent(f"""\
-                        
+                        **{c_health}/{c_stamina}**
                         **{cmove1_text}** 10 Stamina _press 1_
                         **{cmove2_text}** 30 Stamina _press 2_
                         **{cmove3_text}** 80 Stamina _press 3_
                         **{cmove_enhanced_text}** 20 Stamina _press 4_
                     
-                        **Opponent {t_card}:** _Health_ {t_health} / _Stamina_ {t_stamina}
-                        **Opponent {o_card}:** _Health_ {o_health} / _Stamina_ {o_stamina} _partner_
-
+                        **{t_card}:** {t_health}/{t_stamina}
+                        **{o_card}:** {o_health}/{o_stamina} _partner_
                         """) 
-                        
                         , colour=embed_color_c)
                         embedVar.set_thumbnail(url=cpet_image)
                         if c_used_focus and c_used_resolve and not t_pet_used:
@@ -2859,8 +2855,8 @@ class CrownUnlimited(commands.Cog):
             t_card = t['NAME']
             t_card_path=t['PATH']
             t_rcard_path=t['RPATH']
-            t_max_health = t['HLT'] + (70 * currentopponent) + 600 
-            t_health = t['HLT'] + (70 * currentopponent) + 600 
+            t_max_health = t['HLT'] + (50 * currentopponent) + 300 
+            t_health = t['HLT'] + (50 * currentopponent) + 300 
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
@@ -3716,17 +3712,15 @@ class CrownUnlimited(commands.Cog):
                         player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                         await private_channel.send(file=player_1_card)
                         embedVar = discord.Embed(title=f"{o_card}, choose your move!", description=textwrap.dedent(f"""\
-                        
+                        **{o_health}/{o_stamina}**
                         **{omove1_text}** 10 Stamina _press 1_
                         **{omove2_text}** 30 Stamina _press 2_
                         **{omove3_text}** 80 Stamina _press 3_
                         **{omove_enhanced_text}** 20 Stamina _press 4_
                     
-                        **Opponent {t_card}:** _Health_ {t_health} / _Stamina_ {t_stamina}
-                        **Partner {c_card}:** _Health_ {c_health} / _Stamina_ {c_stamina} _partner_
-
+                        **{t_card}:** {t_health}/{t_stamina}
+                        **{c_card}:** {c_health}/{c_stamina} _partner_
                         """) 
-                        
                         , colour=embed_color_o)
                         embedVar.set_thumbnail(url=opet_image)
                         if o_used_focus and o_used_resolve and not t_pet_used:
@@ -4547,17 +4541,15 @@ class CrownUnlimited(commands.Cog):
                         companion = showcard(c, c_max_health, c_health, c_max_stamina, c_stamina, c_used_resolve, ctitle, c_used_focus)
                         await private_channel.send(file=companion)
                         embedVar = discord.Embed(title=f"{c_card}, choose your move!", description=textwrap.dedent(f"""\
-                        
+                        **{c_health}/{c_stamina}**
                         **{cmove1_text}** 10 Stamina _press 1_
                         **{cmove2_text}** 30 Stamina _press 2_
                         **{cmove3_text}** 80 Stamina _press 3_
                         **{cmove_enhanced_text}** 20 Stamina _press 4_
                     
-                        **Opponent {t_card}:** _Health_ {t_health} / _Stamina_ {t_stamina}
-                        **Opponent {o_card}:** _Health_ {o_health} / _Stamina_ {o_stamina} _partner_
-
+                        **{t_card}:** {t_health}/{t_stamina}
+                        **{o_card}:** {o_health}/{o_stamina} _partner_
                         """) 
-                        
                         , colour=embed_color_c)
                         embedVar.set_thumbnail(url=cpet_image)
                         if c_used_focus and c_used_resolve and not t_pet_used:
@@ -6452,15 +6444,14 @@ class CrownUnlimited(commands.Cog):
                     player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                     await private_channel.send(file=player_1_card)
                     embedVar = discord.Embed(title=f"{o_card}, choose your move!", description=textwrap.dedent(f"""\
-                        
+                    **{o_health}/{o_stamina}**    
                     **{omove1_text}** 10 Stamina _press 1_
                     **{omove2_text}** 30 Stamina _press 2_
                     **{omove3_text}** 80 Stamina _press 3_
                     **{omove_enhanced_text}** 20 Stamina _press 4_
                 
-                    **Opponent {t_card}:** _Health_ {t_health} / _Stamina_ {t_stamina}
-                    **Partner {c_card}:** _Health_ {c_health} / _Stamina_ {c_stamina} _partner_
-
+                    **{t_card}:** {t_health}/{t_stamina}
+                    **{c_card}:** {c_health}/{c_stamina} _partner_
                     """) 
                     
                     , colour=embed_color_o)
@@ -7330,17 +7321,15 @@ class CrownUnlimited(commands.Cog):
                     companion = showcard(c, c_max_health, c_health, c_max_stamina, c_stamina, c_used_resolve, ctitle, c_used_focus)
                     await private_channel.send(file=companion)
                     embedVar = discord.Embed(title=f"{c_card}, choose your move!", description=textwrap.dedent(f"""\
-                        
+                    **{c_health}/{c_stamina}**    
                     **{cmove1_text}** 10 Stamina _press 1_
                     **{cmove2_text}** 30 Stamina _press 2_
                     **{cmove3_text}** 80 Stamina _press 3_
                     **{cmove_enhanced_text}** 20 Stamina _press 4_
                 
-                    **Opponent {t_card}:** _Health_ {t_health} / _Stamina_ {t_stamina}
-                    **Opponent {o_card}:** _Health_ {o_health} / _Stamina_ {o_stamina} _partner_
-
+                    **{t_card}:** {t_health}/{t_stamina}
+                    **{o_card}:** {o_health}/{o_stamina} _partner_
                     """) 
-                    
                     , colour=embed_color_c)
                     embedVar.set_thumbnail(url=cpet_image)
                     if c_used_focus and c_used_resolve and not t_pet_used:
@@ -8374,13 +8363,13 @@ class CrownUnlimited(commands.Cog):
             t_card = t['NAME']
             t_card_path=t['PATH']
             t_rcard_path=t['RPATH']
-            t_max_health = t['HLT'] + (50 * currentopponent) + 550
-            t_health = t['HLT'] + (50 * currentopponent) + 550
+            t_max_health = t['HLT'] + (25 * currentopponent) + 250
+            t_health = t['HLT'] + (25 * currentopponent) + 250
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
             t_attack = t['ATK'] + (13 * currentopponent) + 9
-            t_defense = t['DEF'] + (33 * currentopponent) + 25
+            t_defense = t['DEF'] + (28 * currentopponent) + 20
             t_type = t['TYPE']
             t_accuracy = t['ACC']
             t_passive = t['PASS'][0]
@@ -8974,16 +8963,14 @@ class CrownUnlimited(commands.Cog):
                         player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                         await private_channel.send(file=player_1_card)
                         embedVar = discord.Embed(title=f"{o_card}, choose your move!", description=textwrap.dedent(f"""\
-                        
+                        **{o_health}/{o_stamina}**
                         **{omove1_text}** 10 Stamina _press 1_
                         **{omove2_text}** 30 Stamina _press 2_
                         **{omove3_text}** 80 Stamina _press 3_
                         **{omove_enhanced_text}** 20 Stamina _press 4_
                     
-                        **Opponent {t_card}:** _Health_ {t_health} / _Stamina_ {t_stamina}
-
+                        **{t_card}:** {t_health}/{t_stamina}
                         """) 
-                        
                         , colour=embed_color_o)
                         embedVar.set_thumbnail(url=opet_image)
                         if o_used_focus and o_used_resolve and not t_pet_used:
@@ -10505,16 +10492,14 @@ class CrownUnlimited(commands.Cog):
                         player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                         await private_channel.send(file=player_1_card)
                         embedVar = discord.Embed(title=f"{o_card}, choose your move!", description=textwrap.dedent(f"""\
-                        
+                        **{o_health}/{o_stamina}**
                         **{omove1_text}** 10 Stamina _press 1_
                         **{omove2_text}** 30 Stamina _press 2_
                         **{omove3_text}** 80 Stamina _press 3_
                         **{omove_enhanced_text}** 20 Stamina _press 4_
                         
-                        **Opponent {t_card}:** _Health_ {t_health} / _Stamina_ {t_stamina}
-
+                        **{t_card}:** {t_health}/{t_stamina}
                         """) 
-                        
                         , colour=embed_color_o)
                         embedVar.set_thumbnail(url=opet_image)
                         if o_used_focus and o_used_resolve and not t_pet_used:
@@ -11922,16 +11907,14 @@ class CrownUnlimited(commands.Cog):
                     player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                     await private_channel.send(file=player_1_card)
                     embedVar = discord.Embed(title=f"{o_card}, choose your move!", description=textwrap.dedent(f"""\
-                        
+                    **{o_health}/{o_stamina}**
                     **{omove1_text}** 10 Stamina _press 1_
                     **{omove2_text}** 30 Stamina _press 2_
                     **{omove3_text}** 80 Stamina _press 3_
                     **{omove_enhanced_text}** 20 Stamina _press 4_
                 
-                    **Opponent {t_card}:** _Health_ {t_health} / _Stamina_ {t_stamina}
-
+                    **{t_card}:** {t_health}/{t_stamina}
                     """) 
-                    
                     , colour=embed_color_o)
                     embedVar.set_thumbnail(url=opet_image)
                     if o_used_focus and o_used_resolve and not t_pet_used:
@@ -13464,16 +13447,14 @@ class CrownUnlimited(commands.Cog):
                             player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                             await private_channel.send(file=player_1_card)
                             embedVar = discord.Embed(title=f"{o_card}, choose your move!", description=textwrap.dedent(f"""\
-                        
+                            **{o_health}/{o_stamina}**
                             **{omove1_text}** 10 Stamina _press 1_
                             **{omove2_text}** 30 Stamina _press 2_
                             **{omove3_text}** 80 Stamina _press 3_
                             **{omove_enhanced_text}** 20 Stamina _press 4_
                         
-                            **Opponent {t_card}:** _Health_ {t_health} / _Stamina_ {t_stamina}
-
+                            **{t_card}:** {t_health}/{t_stamina}
                             """) 
-                            
                             , colour=embed_color_o)
                             embedVar.set_thumbnail(url=opet_image)
                             if o_used_focus and o_used_resolve and not t_pet_used:
@@ -18912,4 +18893,3 @@ async def bossdrops(player, universe):
             response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(boss_card)}})
             await bless(50, player)
             return f"You earned the BOSS CARD:  {boss_card} + :coin: 50!"
-
