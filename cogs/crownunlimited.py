@@ -18214,6 +18214,11 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
     move_stamina = list(ability.values())[1]
     can_use_move_flag = True
 
+
+    print(attack)
+    print(defense)
+    print(op_attack)
+    print(op_defense)
     enh = ""
     if enhancer:
         enh = list(ability.values())[2]
