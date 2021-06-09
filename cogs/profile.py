@@ -154,7 +154,7 @@ class Profile(commands.Cog):
 
             _**Moveset**_
             **{move1}:** {move1ap}
-            **{move2}:** {move3ap}
+            **{move2}:** {move2ap}
             **{move3}:** {move3ap}
             **{move4}:** {move4enh} by {move4ap}
             _Unique Passive:_ **{passive_name}:** {passive_type} by {passive_num}
