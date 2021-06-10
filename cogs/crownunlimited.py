@@ -123,7 +123,7 @@ class CrownUnlimited(commands.Cog):
         player_scaling = 0
 
         if universe['PREREQUISITE']:
-            opponent_scaling = 13
+            opponent_scaling = 9
             player_scaling = 5
         else:
             opponent_scaling = 5
@@ -275,8 +275,8 @@ class CrownUnlimited(commands.Cog):
             t_card = t['NAME']
             t_card_path=t['PATH']
             t_rcard_path=t['RPATH']
-            t_max_health = t['HLT'] + (100 * currentopponent) + 130 + opponent_scaling
-            t_health = t['HLT'] + (100 * currentopponent) + 130 + opponent_scaling
+            t_max_health = t['HLT'] + (25 * currentopponent) + 100 + opponent_scaling
+            t_health = t['HLT'] + (25 * currentopponent) + 100 + opponent_scaling
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
@@ -2706,10 +2706,10 @@ class CrownUnlimited(commands.Cog):
         player_scaling = 0
 
         if universe['PREREQUISITE']:
-            opponent_scaling = 80
+            opponent_scaling = 30
             player_scaling = 5
         else:
-            opponent_scaling = 50
+            opponent_scaling = 20
             player_scaling = 1
 
         legends = [x for x in universe['CROWN_TALES']]
@@ -2861,13 +2861,13 @@ class CrownUnlimited(commands.Cog):
             t_card = t['NAME']
             t_card_path=t['PATH']
             t_rcard_path=t['RPATH']
-            t_max_health = t['HLT'] + (50 * currentopponent) + 300 
-            t_health = t['HLT'] + (50 * currentopponent) + 300 
+            t_max_health = t['HLT'] + (36 * currentopponent) + 200 
+            t_health = t['HLT'] + (36 * currentopponent) + 200 
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
-            t_attack = t['ATK'] + (20 * currentopponent) + opponent_scaling
-            t_defense = t['DEF'] + (18 * currentopponent) + opponent_scaling
+            t_attack = t['ATK'] + (10 * currentopponent) + opponent_scaling
+            t_defense = t['DEF'] + (10 * currentopponent) + opponent_scaling
             t_type = t['TYPE']
             t_accuracy = t['ACC']
             t_passive = t['PASS'][0]
@@ -8279,10 +8279,10 @@ class CrownUnlimited(commands.Cog):
         player_scaling = 0
 
         if universe['PREREQUISITE']:
-            opponent_scaling = 30
+            opponent_scaling = 25
             player_scaling = 0
         else:
-            opponent_scaling = 20
+            opponent_scaling = 12
             player_scaling = 0
 
         legends = [x for x in universe['CROWN_TALES']]
@@ -8375,12 +8375,12 @@ class CrownUnlimited(commands.Cog):
             t_card = t['NAME']
             t_card_path=t['PATH']
             t_rcard_path=t['RPATH']
-            t_max_health = t['HLT'] + (25 * currentopponent) + 250
-            t_health = t['HLT'] + (25 * currentopponent) + 250
+            t_max_health = t['HLT'] + (25 * currentopponent) + 180
+            t_health = t['HLT'] + (25 * currentopponent) + 180
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
-            t_attack = t['ATK'] + (13 * currentopponent) + 9
+            t_attack = t['ATK'] + (13 * currentopponent) + 20
             t_defense = t['DEF'] + (28 * currentopponent) + 20
             t_type = t['TYPE']
             t_accuracy = t['ACC']
@@ -9826,7 +9826,7 @@ class CrownUnlimited(commands.Cog):
         player_scaling = 0
 
         if universe['PREREQUISITE']:
-            opponent_scaling = 24
+            opponent_scaling = 8
             player_scaling = 5
         else:
             opponent_scaling = 3
@@ -9918,7 +9918,7 @@ class CrownUnlimited(commands.Cog):
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
-            t_attack = t['ATK'] + (2 * currentopponent)
+            t_attack = t['ATK'] + (2 * currentopponent) + opponent_scaling
             t_defense = t['DEF'] + (2 * currentopponent) + opponent_scaling
             t_type = t['TYPE']
             t_accuracy = t['ACC']
@@ -18251,6 +18251,15 @@ def starting_position(o,t):
         return False
 
 def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamina, enhancer, health, op_health, op_stamina, maxhealth, op_attack, special_description): 
+    if op_defense == 0:
+        op_defense = 25
+    if attack == 0:
+        attack = 25
+    if defense == 0:
+        defense = 25
+    if op_attack == 0:
+        op_attack = 25
+
     move = list(ability.keys())[0]
     ap = list(ability.values())[0]
     move_stamina = list(ability.values())[1]
@@ -18442,7 +18451,8 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
         fortitude = ((maxhealth - health) * (2/5))
         if fortitude <= ap:
             fortitude = health * (2/5) #216
-        attackpower = ((int(atk) / 20) * int(ap)) / op_defense #5.09
+
+        attackpower = round(((int(atk) / 10) * int(ap)) / op_defense) #5.09
         modifier = random.randint(7,11)
         dmg = round(((fortitude * attackpower)/100) * modifier)
 
