@@ -141,7 +141,7 @@ class UNIVERSE():
     TITLE: str
     PATH: str = field(default_factory=lambda: '')
     CROWN_TALES: list[str] = field(default_factory=lambda: [''])
-    PREREQUISITE: str = field(default_factory=lambda: "")
+    PREREQUISITE: str = field(default_factory=lambda: "Deathnote")
     UNIVERSE_BOSS: str = field(default_factory=lambda: "")
     TIMESTAMP: str = now
     AVAILABLE: bool = field(default_factory=lambda: True)
