@@ -18463,7 +18463,7 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
         low = dmg - (dmg * .05)
         high = dmg + (dmg * .10)
 
-        true_dmg = random.randint(int(low), int(high))
+        true_dmg = (random.randint(int(low), int(high))) + 25
         message = ""
 
         miss_hit = 1 # Miss
