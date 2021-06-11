@@ -18636,7 +18636,7 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
             draw.line(((1195, 0), (1195, 800)), fill=(30,144,255), width=10)
             draw.line(((1195, 0), (0, 0)), fill=(30,144,255), width=15)
             draw.line(((0, 600), (1195, 600)), fill=(30,144,255), width=15)
-            draw.text((82,130), "FOCUSED", (30,144,255), font=r, align="left")
+            draw.text((82,130), "FOCUSED", (30,144,255), font=r, stroke_width=2, stroke_fill=(0,0,0), align="left")
 
         if resolved:
                         # side    # vert
@@ -18644,7 +18644,7 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
             draw.line(((1195, 0), (1195, 800)), fill=(255,215,0), width=10)
             draw.line(((1195, 0), (0, 0)), fill=(255,215,0), width=15)
             draw.line(((0, 600), (1195, 600)), fill=(255,215,0), width=15)
-            draw.text((280,130), "RESOLVED", (255,215,0), font=r, align="left")
+            draw.text((280,130), "RESOLVED", (255,215,0), font=r, stroke_width=2, stroke_fill=(0,0,0), align="left")
 
         moveset = d['MOVESET']
         # Player Moves
