@@ -708,7 +708,6 @@ async def sell(ctx, user2: User, *args):
             except:
                await ctx.send("Trade ended. ")
 
-
 @bot.command()
 @commands.check(validate_user)
 async def gift(ctx, user2: User, amount):
@@ -722,7 +721,6 @@ async def gift(ctx, user2: User, amount):
       await curse(int(amount), ctx.author)
       await ctx.send(f":coin:{amount} has been gifted to {user2.mention}.")
       return
-
 
 @bot.command()
 @commands.check(validate_user)
