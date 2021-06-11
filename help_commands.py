@@ -43,12 +43,11 @@ BOT_COMMANDS = textwrap.dedent(f"""\
 """)
 
 CROWN_UNLIMITED_COMMANDS = textwrap.dedent(f"""\
-**CROWN UNLIMITED COMMANDS**
 **.solo**: Play Crown Unlimited In DM
 **.crownhelp**: Crown Unlimited Help Book
 **.build**: View your current build
 **.viewdeck** View your build presets
-**.savedeck preset**: Save your current build as preset
+**.savedeck**: Save your current build as preset
 **.shop**: Open shop
 **.vault**: Open your vault
 
