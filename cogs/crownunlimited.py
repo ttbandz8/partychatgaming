@@ -26,7 +26,6 @@ class CrownUnlimited(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-
     @commands.Cog.listener()
     async def on_ready(self):
         print('Crown Unlimited Cog is ready!')
@@ -931,13 +930,17 @@ class CrownUnlimited(commands.Cog):
             elif t_card_passive_type == 'SOULCHAIN':
                 t_stamina = t_card_passive
                 o_stamina = t_card_passive
+                c_stamina = t_card_passive
             elif t_card_passive_type == 'FEAR':
                 t_health = t_health - int((t_card_passive/1000 * t_health))
                 o_attack = o_attack - int((t_card_passive/1000 * t_health))
                 o_defense = o_defense - int((t_card_passive/1000 * t_health))
+                c_attack = c_attack - int((t_card_passive/1000 * t_health))
+                c_defense = c_defense - int((t_card_passive/1000 * t_health))
             elif t_card_passive_type == 'GAMBLE':
                 t_health = t_card_passive
                 o_health = t_card_passive
+                c_health = t_card_passive
 
             # Title Passive
             t_title_passive_type = list(t_title_passive.keys())[0]
@@ -2534,16 +2537,24 @@ class CrownUnlimited(commands.Cog):
                     embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                 await ctx.author.send(embed=embedVar)
 
-                if botActive:                    
-                    embedVar = discord.Embed(title=f"PLAY AGAIN", description=f"Don't Worry! Losing is apart of the game. Use the .end command to `END` the tutorial lobby OR use .start to `PLAY AGAIN`", colour=0xe74c3c)
-                    embedVar.set_author(name=f"You Lost...")
-                    embedVar.add_field(name="Tips!", value="Equiping stronger `TITLES` and `ARMS` will make you character tougher in a fight!")
-                    embedVar.set_footer(text="The .shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
-                    await ctx.author.send(embed=embedVar)
-                response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
-                continued = False
-                if private_channel.guild:
-                    await discord.TextChannel.delete(private_channel, reason=None)
+                emojis = ['👍', '👎']
+                accept = await private_channel.send(f"{ctx.author.mention} would you like to play again?")
+                for emoji in emojis:
+                    await accept.add_reaction(emoji)
+
+                def check(reaction, user):
+                    return user == user1 and str(reaction.emoji) == '👍'
+                try:
+                    reaction, user = await self.bot.wait_for('reaction_add', timeout=45.0, check=check)
+
+                    currentopponent = 0
+                    continued = True
+                except asyncio.TimeoutError:
+                    continued = False
+                    response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                    if private_channel.guild:
+                        await discord.TextChannel.delete(private_channel, reason=None)
+
             elif t_health <=0 or t_max_health <= 0:
                 
                 uid = o_DID
@@ -3521,13 +3532,17 @@ class CrownUnlimited(commands.Cog):
             elif t_card_passive_type == 'SOULCHAIN':
                 t_stamina = t_card_passive
                 o_stamina = t_card_passive
+                c_stamina = t_card_passive
             elif t_card_passive_type == 'FEAR':
                 t_health = t_health - int((t_card_passive/1000 * t_health))
                 o_attack = o_attack - int((t_card_passive/1000 * t_health))
                 o_defense = o_defense - int((t_card_passive/1000 * t_health))
+                c_attack = o_attack - int((t_card_passive/1000 * t_health))
+                c_defense = o_defense - int((t_card_passive/1000 * t_health))
             elif t_card_passive_type == 'GAMBLE':
                 t_health = t_card_passive
                 o_health = t_card_passive
+                c_health = t_card_passive
 
             # Title Passive
             t_title_passive_type = list(t_title_passive.keys())[0]
@@ -5322,18 +5337,25 @@ class CrownUnlimited(commands.Cog):
                 else: 
                     embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                 await ctx.author.send(embed=embedVar)
+                
+                emojis = ['👍', '👎']
+                accept = await private_channel.send(f"{ctx.author.mention} would you like to play again?")
+                for emoji in emojis:
+                    await accept.add_reaction(emoji)
 
-                if botActive:                    
-                    embedVar = discord.Embed(title=f"PLAY AGAIN", description=f"Don't Worry! Losing is apart of the game. Use the .end command to `END` the tutorial lobby OR use .start to `PLAY AGAIN`", colour=0xe74c3c)
-                    embedVar.set_author(name=f"You Lost...")
-                    embedVar.add_field(name="Tips!", value="Equiping stronger `TITLES` and `ARMS` will make you character tougher in a fight!")
-                    embedVar.set_footer(text="The .shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
-                    await ctx.author.send(embed=embedVar)
-                response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
-                continued = False
-                if private_channel.guild:
+                def check(reaction, user):
+                    return user == user1 and str(reaction.emoji) == '👍'
+                try:
+                    reaction, user = await self.bot.wait_for('reaction_add', timeout=45.0, check=check)
+
+                    currentopponent = 0
+                    continued = True
+                except asyncio.TimeoutError:
+                    continued = False
                     response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
-                    await discord.TextChannel.delete(private_channel, reason=None)
+                    if private_channel.guild:
+                        await discord.TextChannel.delete(private_channel, reason=None)
+
             elif t_health <=0 or t_max_health <= 0:
                 
                 uid = o_DID
@@ -6180,13 +6202,17 @@ class CrownUnlimited(commands.Cog):
         elif tarm_passive_type == 'SOULCHAIN':
             t_stamina = tarm_passive_value
             o_stamina = tarm_passive_value
+            c_stamina = tarm_passive_value
         elif tarm_passive_type == 'FEAR':
             t_health = t_health - int((.10 * tarm_passive_value))
             o_attack = o_attack - int((.10 * tarm_passive_value))
             o_defense = o_defense - int((.10 * tarm_passive_value))
+            c_attack = c_attack - int((.10 * tarm_passive_value))
+            c_defense = c_defense - int((.10 * tarm_passive_value))
         elif tarm_passive_type == 'GAMBLE':
             t_health = tarm_passive_value * 5
             o_health = tarm_passive_value
+            c_health = tarm_passive_value
 
         
 
@@ -6256,13 +6282,17 @@ class CrownUnlimited(commands.Cog):
         elif t_card_passive_type == 'SOULCHAIN':
             t_stamina = t_card_passive
             o_stamina = t_card_passive
+            c_stamina = t_card_passive
         elif t_card_passive_type == 'FEAR':
             t_health = t_health - int((t_card_passive/1000 * t_health))
             o_attack = o_attack - int((t_card_passive/1000 * t_health))
             o_defense = o_defense - int((t_card_passive/1000 * t_health))
+            c_attack = c_attack - int((t_card_passive/1000 * t_health))
+            c_defense = c_defense - int((t_card_passive/1000 * t_health))
         elif t_card_passive_type == 'GAMBLE':
             t_health = t_card_passive
             o_health = t_card_passive
+            c_health = t_card_passive
 
         # Title Passive
         t_title_passive_type = list(t_title_passive.keys())[0]
@@ -6326,13 +6356,17 @@ class CrownUnlimited(commands.Cog):
             elif t_title_passive_type == 'SOULCHAIN':
                 t_stamina = t_title_passive_value
                 o_stamina = t_title_passive_value
+                c_stamina = t_title_passive_value
             elif t_title_passive_type == 'FEAR':
                 t_health = t_health - int((.10 * t_title_passive_value))
                 o_attack = o_attack - int((.10 * t_title_passive_value))
                 o_defense = o_defense - int((.10 * t_title_passive_value))
+                c_attack = c_attack - int((.10 * t_title_passive_value))
+                c_defense = c_defense - int((.10 * t_title_passive_value))
             elif t_title_passive_type == 'GAMBLE':
                 t_health = t_title_passive_value * 5
                 o_health = t_title_passive_value
+                c_health = t_title_passive_value
                     
 
         # Player 2 Moves
@@ -9671,10 +9705,27 @@ class CrownUnlimited(commands.Cog):
                 else: 
                     embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                 await ctx.author.send(embed=embedVar)
-                response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
-                continued = False
-                if private_channel.guild:
-                    await discord.TextChannel.delete(private_channel, reason=None)
+                
+                emojis = ['👍', '👎']
+                accept = await private_channel.send(f"{ctx.author.mention} would you like to play again?")
+                for emoji in emojis:
+                    await accept.add_reaction(emoji)
+
+                def check(reaction, user):
+                    return user == user1 and str(reaction.emoji) == '👍'
+                try:
+                    reaction, user = await self.bot.wait_for('reaction_add', timeout=45.0, check=check)
+
+                    currentopponent = 0
+                    continued = True
+                except asyncio.TimeoutError:
+                    continued = False
+                    response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                    if private_channel.guild:
+                        await discord.TextChannel.delete(private_channel, reason=None)
+
+
+
             elif t_health <=0 or t_max_health <= 0:
                 
                 uid = o_DID
@@ -11103,19 +11154,25 @@ class CrownUnlimited(commands.Cog):
                     embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                 await ctx.author.send(embed=embedVar)
 
-                if botActive:                    
-                    embedVar = discord.Embed(title=f"PLAY AGAIN", description=f"Don't Worry! Losing is apart of the game. Use the .end command to `END` the tutorial lobby OR use .start to `PLAY AGAIN`", colour=0xe74c3c)
-                    embedVar.set_author(name=f"You Lost...")
-                    embedVar.add_field(name="Tips!", value="Equiping stronger `TITLES` and `ARMS` will make you character tougher in a fight!")
-                    embedVar.set_footer(text="The .shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
-                    await ctx.author.send(embed=embedVar)
+                
+                emojis = ['👍', '👎']
+                accept = await private_channel.send(f"{ctx.author.mention} would you like to play again?")
+                for emoji in emojis:
+                    await accept.add_reaction(emoji)
 
-                continued = False
+                def check(reaction, user):
+                    return user == user1 and str(reaction.emoji) == '👍'
+                try:
+                    reaction, user = await self.bot.wait_for('reaction_add', timeout=45.0, check=check)
 
-                response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                    currentopponent = 0
+                    continued = True
+                except asyncio.TimeoutError:
+                    continued = False
+                    response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                    if private_channel.guild:
+                        await discord.TextChannel.delete(private_channel, reason=None)
 
-                if private_channel.guild:
-                    await discord.TextChannel.delete(private_channel, reason=None)
             elif t_health <=0 or t_max_health <= 0:
                 
                 uid = o_DID
