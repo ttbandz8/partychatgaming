@@ -59,17 +59,17 @@ class CrownUnlimited(commands.Cog):
                 available_universes.append(uni['TITLE'])
                 
         embedVar = discord.Embed(title=f":crown: CO-OP Select A Tales Universe", description="\n".join(available_universes), colour=0xe91e63) 
-        embedVar.set_footer(text="Type quit to exit Tales selection")
+        embedVar.set_footer(text="Type Quit to exit Tales selection")
         await private_channel.send(embed=embedVar)
         accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
 
         def check(msg):
 
-            return msg.author == ctx.author and (msg.content in available_universes) or (msg.content == "quit")
+            return msg.author == ctx.author and (msg.content in available_universes) or (msg.content == "Quit")
         try:
             msg = await self.bot.wait_for('message', timeout=30.0, check=check)
 
-            if msg.content == "quit":
+            if msg.content == "Quit":
                 await private_channel.send("Quit Tales selection. ")
                 db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                 return
@@ -2657,17 +2657,17 @@ class CrownUnlimited(commands.Cog):
                 available_universes.append(uni['TITLE'])
                 
         embedVar = discord.Embed(title=f":crown: CO-OP Select A Dungeon", description="\n".join(available_universes), colour=0xe91e63)
-        embedVar.set_footer(text="Type quit to exit Tales selection")
+        embedVar.set_footer(text="Type Quit to exit Tales selection")
         await private_channel.send(embed=embedVar)
         accept = await private_channel.send(f"{ctx.author.mention} which Dungeon would you like to explore, co-op!")
 
         def check(msg):
 
-            return msg.author == ctx.author and (msg.content in available_universes) or (msg.content == "quit") 
+            return msg.author == ctx.author and (msg.content in available_universes) or (msg.content == "Quit") 
         try:
             msg = await self.bot.wait_for('message', timeout=60.0, check=check)
 
-            if msg.content == "quit":
+            if msg.content == "Quit":
                 await private_channel.send("Quit Dungeon selection. ")
                 db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                 return
@@ -8258,16 +8258,16 @@ class CrownUnlimited(commands.Cog):
                 available_universes.append(uni['TITLE'])
                 
         embedVar = discord.Embed(title=f":fire: Select A Dungeon", description="\n".join(available_universes), colour=0xe91e63)
-        embedVar.set_footer(text="Type quit to exit Tales selection")
+        embedVar.set_footer(text="Type Quit to exit Tales selection")
         await private_channel.send(embed=embedVar)
         accept = await private_channel.send(f"{ctx.author.mention} which Dungeon would you like to explore!")
 
         def check(msg):
-            return msg.author == ctx.author and (msg.content in available_universes) or (msg.content == "quit") 
+            return msg.author == ctx.author and (msg.content in available_universes) or (msg.content == "Quit") 
         try:
             msg = await self.bot.wait_for('message', timeout=30.0, check=check)
 
-            if msg.content == "quit":
+            if msg.content == "Quit":
                 await private_channel.send("Quit Dungeon selection. ")
                 db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                 return
@@ -9755,7 +9755,7 @@ class CrownUnlimited(commands.Cog):
                             await accept.add_reaction(emoji)
 
                         def check(reaction, user):
-                            return user == user1 and (str(reaction.emoji) == '👍') or (str(reaction.emoji) == '👎')
+                            return user == user1 and ((str(reaction.emoji) == '👍') or (str(reaction.emoji) == '👎'))
                         try:
                             reaction, user = await self.bot.wait_for('reaction_add', timeout=45.0, check=check)
 
@@ -9827,16 +9827,16 @@ class CrownUnlimited(commands.Cog):
                 available_universes.append(uni['TITLE'])
 
         embedVar = discord.Embed(title=f":crown: Select A Tales Universe", description="\n".join(available_universes), colour=0xe91e63) 
-        embedVar.set_footer(text="Type quit to exit Tales selection")
+        embedVar.set_footer(text="Type Quit to exit Tales selection")
         await private_channel.send(embed=embedVar)
         accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
 
         def check(msg):
-            return msg.author == ctx.author and (msg.content in available_universes) or (msg.content == "quit") 
+            return msg.author == ctx.author and (msg.content in available_universes) or (msg.content == "Quit") 
         try:
             msg = await self.bot.wait_for('message', timeout=30.0, check=check)
 
-            if msg.content == "quit":
+            if msg.content == "Quit":
                 await private_channel.send("Quit Tales selection. ")
                 db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                 return
@@ -11210,10 +11210,10 @@ class CrownUnlimited(commands.Cog):
                             await accept.add_reaction(emoji)
 
                         def check(reaction, user):
-                            return user == user1  (str(reaction.emoji) == '👍') or (str(reaction.emoji) == '👎')
+                            return user == user1 and ((str(reaction.emoji) == '👍') or (str(reaction.emoji) == '👎'))
                         try:
                             reaction, user = await self.bot.wait_for('reaction_add', timeout=45.0, check=check)
-
+                          
                             if str(reaction.emoji) == '👎':
                                 continued = False 
                                 db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
