@@ -51,7 +51,6 @@ class CrownUnlimited(commands.Cog):
 
 
         companion = db.queryUser({'DISNAME': str(user)})
-        completed_crown_tales = sowner['CROWN_TALES']
         all_universes = db.queryAllUniverse()
         available_universes = []
         selected_universe = ""
@@ -59,29 +58,22 @@ class CrownUnlimited(commands.Cog):
             if uni['PREREQUISITE'] in sowner['CROWN_TALES']:
                 available_universes.append(uni['TITLE'])
                 
-        if len(completed_crown_tales) > 1:
-            completed_crown_tales = completed_crown_tales
-        else:
-            completed_crown_tales = ['None yet!']
-        embedVar = discord.Embed(title=f":crown: CROWN TALES!", description=textwrap.dedent(f"""\
-        Explore a Universe!
-
-        **Available Universes:**  
-        {", ".join(available_universes)}
-
-        **Completed Universes:** 
-        {", ".join(completed_crown_tales)}
-        """), colour=0xe91e63) 
-        embedVar.set_footer(text="Earn drops from the Universes you explore. Conquering Universes unlocks more worlds!")
-        embedVar.set_footer(text="Earn drops from the Universes you explore. Conquering Universes unlocks more worlds!\nEnjoy Co-op!")
+        embedVar = discord.Embed(title=f":crown: CO-OP Select A Tales Universe", description="\n".join(available_universes), colour=0xe91e63) 
+        embedVar.set_footer(text="Type quit to exit Tales selection")
         await private_channel.send(embed=embedVar)
         accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
 
         def check(msg):
 
-            return msg.author == ctx.author and msg.content in available_universes
+            return msg.author == ctx.author and (msg.content in available_universes) or (msg.content == "quit")
         try:
             msg = await self.bot.wait_for('message', timeout=30.0, check=check)
+
+            if msg.content == "quit":
+                await private_channel.send("Quit Tales selection. ")
+                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                return
+
             selected_universe = msg.content
             guild = ctx.guild
             if guild:
@@ -2664,19 +2656,22 @@ class CrownUnlimited(commands.Cog):
             if uni['PREREQUISITE'] in sowner['CROWN_TALES']:
                 available_universes.append(uni['TITLE'])
                 
-        embedVar = discord.Embed(title=f":crown: CROWN DUNGEONS CO-OP!", description="Select a Universe to explore!", colour=0xe91e63)
-        embedVar.add_field(name="Available Universes", value=" | ".join(available_universes))
-        if len(completed_dungeons) > 1:
-            embedVar.add_field(name="Completed Universes", value="\n".join(completed_dungeons))
-        embedVar.set_footer(text="Earn drops from the Universes you explore. Conquering Universes unlocks more worlds!\nEnjoy Co-op!")
+        embedVar = discord.Embed(title=f":crown: CO-OP Select A Dungeon", description="\n".join(available_universes), colour=0xe91e63)
+        embedVar.set_footer(text="Type quit to exit Tales selection")
         await private_channel.send(embed=embedVar)
-        accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
+        accept = await private_channel.send(f"{ctx.author.mention} which Dungeon would you like to explore, co-op!")
 
         def check(msg):
 
-            return msg.author == ctx.author and msg.content in available_universes
+            return msg.author == ctx.author and (msg.content in available_universes) or (msg.content == "quit") 
         try:
             msg = await self.bot.wait_for('message', timeout=60.0, check=check)
+
+            if msg.content == "quit":
+                await private_channel.send("Quit Dungeon selection. ")
+                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                return
+
             selected_universe = msg.content
             guild = ctx.guild
             if guild:
@@ -8255,7 +8250,6 @@ class CrownUnlimited(commands.Cog):
             return
 
 
-        completed_dungeons = sowner['DUNGEONS']
         all_universes = db.queryAllUniverse()
         available_universes = []
         selected_universe = ""
@@ -8263,18 +8257,21 @@ class CrownUnlimited(commands.Cog):
             if uni['PREREQUISITE'] in sowner['CROWN_TALES']:
                 available_universes.append(uni['TITLE'])
                 
-        embedVar = discord.Embed(title=f":fire: CROWN DUNGEONS!", description="Select a Universe!", colour=0xe91e63)
-        embedVar.add_field(name="Available Universes", value=" | ".join(available_universes), inline=False)
-        if len(completed_dungeons) > 1:
-            embedVar.add_field(name="Completed Universes", value="\n".join(completed_dungeons))
-        embedVar.set_footer(text="Earn drops from the Universes you explore. Conquering Universes unlocks more worlds!")
+        embedVar = discord.Embed(title=f":fire: Select A Dungeon", description="\n".join(available_universes), colour=0xe91e63)
+        embedVar.set_footer(text="Type quit to exit Tales selection")
         await private_channel.send(embed=embedVar)
-        accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
+        accept = await private_channel.send(f"{ctx.author.mention} which Dungeon would you like to explore!")
 
         def check(msg):
-            return msg.author == ctx.author and msg.content in available_universes
+            return msg.author == ctx.author and (msg.content in available_universes) or (msg.content == "quit") 
         try:
             msg = await self.bot.wait_for('message', timeout=30.0, check=check)
+
+            if msg.content == "quit":
+                await private_channel.send("Quit Dungeon selection. ")
+                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                return
+
             selected_universe = msg.content
             guild = ctx.guild
             if guild:
@@ -9712,9 +9709,16 @@ class CrownUnlimited(commands.Cog):
                     await accept.add_reaction(emoji)
 
                 def check(reaction, user):
-                    return user == user1 and str(reaction.emoji) == '👍'
+                    return user == user1 and (str(reaction.emoji) == '👍') or (str(reaction.emoji) == '👎')
                 try:
                     reaction, user = await self.bot.wait_for('reaction_add', timeout=45.0, check=check)
+
+                    if str(reaction.emoji) == '👎':
+                        continued = False 
+                        db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                        if private_channel.guild:
+                            await discord.TextChannel.delete(private_channel, reason=None)
+                        return
 
                     currentopponent = 0
                     continued = True
@@ -9723,8 +9727,6 @@ class CrownUnlimited(commands.Cog):
                     response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                     if private_channel.guild:
                         await discord.TextChannel.delete(private_channel, reason=None)
-
-
 
             elif t_health <=0 or t_max_health <= 0:
                 
@@ -9753,9 +9755,16 @@ class CrownUnlimited(commands.Cog):
                             await accept.add_reaction(emoji)
 
                         def check(reaction, user):
-                            return user == user1 and str(reaction.emoji) == '👍'
+                            return user == user1 and (str(reaction.emoji) == '👍') or (str(reaction.emoji) == '👎')
                         try:
                             reaction, user = await self.bot.wait_for('reaction_add', timeout=45.0, check=check)
+
+                            if str(reaction.emoji) == '👎':
+                                continued = False 
+                                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                                if private_channel.guild:
+                                    await discord.TextChannel.delete(private_channel, reason=None)
+                                return
 
                             currentopponent = currentopponent + 1
                             continued = True
@@ -9817,27 +9826,21 @@ class CrownUnlimited(commands.Cog):
             if uni['PREREQUISITE'] in sowner['CROWN_TALES']:
                 available_universes.append(uni['TITLE'])
 
-        if len(completed_crown_tales) > 1:
-            completed_crown_tales = completed_crown_tales
-        else:
-            completed_crown_tales = ['None yet!']
-        embedVar = discord.Embed(title=f":crown: CROWN TALES!", description=textwrap.dedent(f"""\
-        Explore a Universe!
-
-        **Available Universes:**  
-        {", ".join(available_universes)}
-
-        **Completed Universes:** 
-        {", ".join(completed_crown_tales)}
-        """), colour=0xe91e63) 
-        embedVar.set_footer(text="Earn drops from the Universes you explore. Conquering Universes unlocks more worlds!")
+        embedVar = discord.Embed(title=f":crown: Select A Tales Universe", description="\n".join(available_universes), colour=0xe91e63) 
+        embedVar.set_footer(text="Type quit to exit Tales selection")
         await private_channel.send(embed=embedVar)
         accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
 
         def check(msg):
-            return msg.author == ctx.author and msg.content in available_universes
+            return msg.author == ctx.author and (msg.content in available_universes) or (msg.content == "quit") 
         try:
             msg = await self.bot.wait_for('message', timeout=30.0, check=check)
+
+            if msg.content == "quit":
+                await private_channel.send("Quit Tales selection. ")
+                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                return
+
             selected_universe = msg.content
             guild = ctx.guild
             if guild:
@@ -11161,9 +11164,16 @@ class CrownUnlimited(commands.Cog):
                     await accept.add_reaction(emoji)
 
                 def check(reaction, user):
-                    return user == user1 and str(reaction.emoji) == '👍'
+                    return user == user1 and (str(reaction.emoji) == '👍') or (str(reaction.emoji) == '👎')
                 try:
                     reaction, user = await self.bot.wait_for('reaction_add', timeout=45.0, check=check)
+
+                    if str(reaction.emoji) == '👎':
+                        continued = False 
+                        db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                        if private_channel.guild:
+                            await discord.TextChannel.delete(private_channel, reason=None)
+                        return
 
                     currentopponent = 0
                     continued = True
@@ -11200,9 +11210,17 @@ class CrownUnlimited(commands.Cog):
                             await accept.add_reaction(emoji)
 
                         def check(reaction, user):
-                            return user == user1 and str(reaction.emoji) == '👍'
+                            return user == user1  (str(reaction.emoji) == '👍') or (str(reaction.emoji) == '👎')
                         try:
                             reaction, user = await self.bot.wait_for('reaction_add', timeout=45.0, check=check)
+
+                            if str(reaction.emoji) == '👎':
+                                continued = False 
+                                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                                if private_channel.guild:
+                                    await discord.TextChannel.delete(private_channel, reason=None)
+                                return
+
 
                             currentopponent = currentopponent + 1
                             continued = True

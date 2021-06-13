@@ -449,6 +449,7 @@ class Lookup(commands.Cog):
 
             matches_to_string = dict(ChainMap(*matches))
             ign_to_string = dict(ChainMap(*ign))
+            print(crown_tales)
             embed1 = discord.Embed(title= f":triangular_flag_on_post: " + f"{name}".format(self), description=":bank: Party Chat Gaming Database™️", colour=000000)
             embed1.set_thumbnail(url=avatar)
             embed1.add_field(name="Team" + " :military_helmet:", value=team)
@@ -466,12 +467,19 @@ class Lookup(commands.Cog):
             embed3.set_thumbnail(url=avatar)
             embed3.add_field(name="Stats" + " :medal:", value="\n".join(f'{k}: {"/".join([str(int) for int in v])}' for k,v in matches_to_string.items()))
             
-            if crown_tales:
+            if len(crown_tales) > 1:
                 embed4 = discord.Embed(title= f":triangular_flag_on_post: " + f"{name}".format(self), description=":bank: Party Chat Gaming Database™️", colour=000000)
                 embed4.set_thumbnail(url=avatar)
                 embed4.add_field(name="Completed Crown Tales" + " :medal:", value="\n".join(crown_tales))
                 if dungeons:
                     embed4.add_field(name="Completed Crown Dungeons" + " :fire: ", value="\n".join(dungeons))
+                else:
+                    embed4.add_field(name="Completed Crown Dungeons" + " :fire: ", value="No Dungeons Completed, yet!")
+            else:
+                embed4 = discord.Embed(title= f":triangular_flag_on_post: " + f"{name}".format(self), description=":bank: Party Chat Gaming Database™️", colour=000000)
+                embed4.set_thumbnail(url=avatar)
+                embed4.add_field(name="Completed Crown Tales" + " :medal:", value="No completed Tales, yet!")
+                embed4.add_field(name="Completed Crown Dungeons" + " :fire: ", value="No Dungeons Completed, yet!")
 
             paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
             paginator.add_reaction('⏮️', "first")
