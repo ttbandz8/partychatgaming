@@ -2586,9 +2586,6 @@ class CrownUnlimited(commands.Cog):
                         try:
                             reaction, user1 = await self.bot.wait_for('reaction_add', timeout=45.0, check=check)
 
-                            # Keep this as user (although maybe it only works a few times)
-                            # OR instead of user make it tester since tester is updated every time the match ends since user has to re @ each time
-                            # Both work for the first 2 matches
                             companion = db.queryUser({'DISNAME': str(user)})
                             currentopponent = currentopponent + 1
                             continued = True
@@ -2623,12 +2620,13 @@ class CrownUnlimited(commands.Cog):
                         await ctx.author.send(embed=embedVar)
                         response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                         await ctx.author.send(f"You were awarded :coin: 25 for completing the {selected_universe} Tale!")
+                        continued=False
                     else:
                         await bless(500, ctx.author)
                         await ctx.author.send(embed=embedVar)
                         response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                         await ctx.author.send(f"You were awarded :coin: 500 for completing the {selected_universe} Tale! ")
-                    continued=False
+                        continued=False
                     if private_channel.guild:
                         response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                         await discord.TextChannel.delete(private_channel, reason=None)
