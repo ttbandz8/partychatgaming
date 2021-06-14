@@ -139,7 +139,7 @@ class Cards(commands.Cog):
     @commands.command()
     async def viewcard(self, ctx, *args):
         card_name = " ".join([*args])
-        card = db.queryCard({'NAME':str(card_name), 'AVAILABLE': True})
+        card = db.queryCard({'NAME':str(card_name)})
         if card:
             o_card = card['NAME']
             o_card_path=card['PATH']

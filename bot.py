@@ -58,42 +58,15 @@ bot.remove_command("help")
 async def help(ctx):
    avatar="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png"
 
-
-   embedVar1 = discord.Embed(title= f":video_game:Player Commands:", description=h.PLAYER_COMMANDS, colour=0x7289da)
+   embedVar1 = discord.Embed(title= f"Bot Commands", description=h.BOT_COMMANDS, colour=0x7289da)
    embedVar1.set_thumbnail(url=avatar)
    embedVar1.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
-   embedVar1.set_footer(text=f".senpai - Text Bot Tutorial")
+   # embedVar1.set_footer(text=f".senpai - Text Bot Tutorial")
 
-   embedVar2 = discord.Embed(title= f":triangular_flag_on_post:Profile Commands:", description=h.PROFILE_COMMANDS, colour=0x7289da)
+   embedVar2 = discord.Embed(title= f"Crown Unlimited Commands", description=h.CROWN_UNLIMITED_COMMANDS, colour=0x7289da)
    embedVar2.set_thumbnail(url=avatar)
    embedVar2.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
-   embedVar2.set_footer(text=f".senpai - Text Bot Tutorial")
-
-   embedVar3 = discord.Embed(title= f":crossed_swords:Lobbies:", description=h.LOBBY_COMMANDS, colour=0x7289da)
-   embedVar3.set_thumbnail(url=avatar)
-   embedVar3.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
-   embedVar3.set_footer(text=f".senpai - Text Bot Tutorial")
-
-   embedVar4 = discord.Embed(title= f":crown:Crown Unlimited Player Commands:", description=h.CROWN_UNLIMITED_PLAYER_COMMANDS, colour=0x7289da)
-   embedVar4.set_thumbnail(url=avatar)
-   embedVar4.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
-   embedVar4.set_footer(text=f".senpai - Text Bot Tutorial")
-
-   embedVar5 = discord.Embed(title= f":military_helmet:Teams:", description=h.TEAM_COMMANDS, colour=0x7289da)
-   embedVar5.set_thumbnail(url=avatar)
-   embedVar5.add_field(name=":fireworks:Tournament Types:", value="\n`Exhibitions`\n`KingsGambit`\n`GodsOfCrown`")
-   embedVar5.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
-   embedVar5.set_footer(text=f".senpai - Text Bot Tutorial")
-
-   embedVar6 = discord.Embed(title= f":shopping_cart:Pop Up Shop:", description=h.SHOP_COMMANDS, colour=0x7289da)
-   embedVar6.set_thumbnail(url=avatar)
-   embedVar6.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
-   embedVar6.set_footer(text=f".senpai - Text Bot Tutorial")
-
-   embedVar7 = discord.Embed(title= f":crown:Crown Unlimited Game Commands:", description=h.CROWN_UNLIMITED_GAMES, colour=0x7289da)
-   embedVar7.set_thumbnail(url=avatar)
-   embedVar7.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
-   embedVar7.set_footer(text=f".senpai - Text Bot Tutorial")
+   # embedVar2.set_footer(text=f".senpai - Text Bot Tutorial")
 
    paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
    paginator.add_reaction('⏮️', "first")
@@ -101,7 +74,7 @@ async def help(ctx):
    paginator.add_reaction('🔐', "lock")
    paginator.add_reaction('⏩', "next")
    paginator.add_reaction('⏭️', "last")
-   embeds = [embedVar1, embedVar4, embedVar6, embedVar7, embedVar2, embedVar3, embedVar5]
+   embeds = [embedVar1, embedVar2]
    await paginator.run(embeds)
 
 @bot.group(invoke_without_command=True)
@@ -741,6 +714,20 @@ async def sell(ctx, user2: User, *args):
 
             except:
                await ctx.send("Trade ended. ")
+
+@bot.command()
+@commands.check(validate_user)
+async def gift(ctx, user2: User, amount):
+   vault = db.queryVault({'OWNER': str(ctx.author)})
+   balance = vault['BALANCE']
+   
+   if balance <= int(amount):
+      await ctx.send("You do not have that amount to gift.")
+   else:
+      await bless(int(amount), user2)
+      await curse(int(amount), ctx.author)
+      await ctx.send(f":coin:{amount} has been gifted to {user2.mention}.")
+      return
 
 @bot.command()
 @commands.check(validate_user)

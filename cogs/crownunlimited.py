@@ -26,7 +26,6 @@ class CrownUnlimited(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-
     @commands.Cog.listener()
     async def on_ready(self):
         print('Crown Unlimited Cog is ready!')
@@ -52,7 +51,6 @@ class CrownUnlimited(commands.Cog):
 
 
         companion = db.queryUser({'DISNAME': str(user)})
-        completed_crown_tales = sowner['CROWN_TALES']
         all_universes = db.queryAllUniverse()
         available_universes = []
         selected_universe = ""
@@ -60,29 +58,22 @@ class CrownUnlimited(commands.Cog):
             if uni['PREREQUISITE'] in sowner['CROWN_TALES']:
                 available_universes.append(uni['TITLE'])
                 
-        if len(completed_crown_tales) > 1:
-            completed_crown_tales = completed_crown_tales
-        else:
-            completed_crown_tales = ['None yet!']
-        embedVar = discord.Embed(title=f":crown: CROWN TALES!", description=textwrap.dedent(f"""\
-        Explore a Universe!
-
-        **Available Universes:**  
-        {", ".join(available_universes)}
-
-        **Completed Universes:** 
-        {", ".join(completed_crown_tales)}
-        """), colour=0xe91e63) 
-        embedVar.set_footer(text="Earn drops from the Universes you explore. Conquering Universes unlocks more worlds!")
-        embedVar.set_footer(text="Earn drops from the Universes you explore. Conquering Universes unlocks more worlds!\nEnjoy Co-op!")
+        embedVar = discord.Embed(title=f":crown: CO-OP Select A Tales Universe", description="\n".join(available_universes), colour=0xe91e63) 
+        embedVar.set_footer(text="Type Quit to exit Tales selection")
         await private_channel.send(embed=embedVar)
         accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
 
         def check(msg):
 
-            return msg.author == ctx.author and msg.content in available_universes
+            return msg.author == ctx.author and (msg.content in available_universes) or (msg.content == "Quit")
         try:
             msg = await self.bot.wait_for('message', timeout=30.0, check=check)
+
+            if msg.content == "Quit":
+                await private_channel.send("Quit Tales selection. ")
+                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                return
+
             selected_universe = msg.content
             guild = ctx.guild
             if guild:
@@ -937,10 +928,13 @@ class CrownUnlimited(commands.Cog):
             elif t_card_passive_type == 'SOULCHAIN':
                 t_stamina = t_card_passive
                 o_stamina = t_card_passive
+                c_stamina = t_card_passive
             elif t_card_passive_type == 'FEAR':
                 t_health = t_health - int((t_card_passive/1000 * t_health))
                 o_attack = o_attack - int((t_card_passive/1000 * t_health))
                 o_defense = o_defense - int((t_card_passive/1000 * t_health))
+                c_attack = c_attack - int((t_card_passive/1000 * t_health))
+                c_defense = c_defense - int((t_card_passive/1000 * t_health))
             elif t_card_passive_type == 'GAMBLE':
                 t_health = t_card_passive
                 o_health = t_card_passive
@@ -2541,16 +2535,24 @@ class CrownUnlimited(commands.Cog):
                     embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                 await ctx.author.send(embed=embedVar)
 
-                if botActive:                    
-                    embedVar = discord.Embed(title=f"PLAY AGAIN", description=f"Don't Worry! Losing is apart of the game. Use the .end command to `END` the tutorial lobby OR use .start to `PLAY AGAIN`", colour=0xe74c3c)
-                    embedVar.set_author(name=f"You Lost...")
-                    embedVar.add_field(name="Tips!", value="Equiping stronger `TITLES` and `ARMS` will make you character tougher in a fight!")
-                    embedVar.set_footer(text="The .shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
-                    await ctx.author.send(embed=embedVar)
-                response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
-                continued = False
-                if private_channel.guild:
-                    await discord.TextChannel.delete(private_channel, reason=None)
+                emojis = ['👍', '👎']
+                accept = await private_channel.send(f"{ctx.author.mention} would you like to play again?")
+                for emoji in emojis:
+                    await accept.add_reaction(emoji)
+
+                def check(reaction, user):
+                    return user == user1 and str(reaction.emoji) == '👍'
+                try:
+                    reaction, user = await self.bot.wait_for('reaction_add', timeout=45.0, check=check)
+
+                    currentopponent = 0
+                    continued = True
+                except asyncio.TimeoutError:
+                    continued = False
+                    response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                    if private_channel.guild:
+                        await discord.TextChannel.delete(private_channel, reason=None)
+
             elif t_health <=0 or t_max_health <= 0:
                 
                 uid = o_DID
@@ -2660,19 +2662,22 @@ class CrownUnlimited(commands.Cog):
             if uni['PREREQUISITE'] in sowner['CROWN_TALES']:
                 available_universes.append(uni['TITLE'])
                 
-        embedVar = discord.Embed(title=f":crown: CROWN DUNGEONS CO-OP!", description="Select a Universe to explore!", colour=0xe91e63)
-        embedVar.add_field(name="Available Universes", value=" | ".join(available_universes))
-        if len(completed_dungeons) > 1:
-            embedVar.add_field(name="Completed Universes", value="\n".join(completed_dungeons))
-        embedVar.set_footer(text="Earn drops from the Universes you explore. Conquering Universes unlocks more worlds!\nEnjoy Co-op!")
+        embedVar = discord.Embed(title=f":crown: CO-OP Select A Dungeon", description="\n".join(available_universes), colour=0xe91e63)
+        embedVar.set_footer(text="Type Quit to exit Tales selection")
         await private_channel.send(embed=embedVar)
-        accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
+        accept = await private_channel.send(f"{ctx.author.mention} which Dungeon would you like to explore, co-op!")
 
         def check(msg):
 
-            return msg.author == ctx.author and msg.content in available_universes
+            return msg.author == ctx.author and (msg.content in available_universes) or (msg.content == "Quit") 
         try:
             msg = await self.bot.wait_for('message', timeout=60.0, check=check)
+
+            if msg.content == "Quit":
+                await private_channel.send("Quit Dungeon selection. ")
+                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                return
+
             selected_universe = msg.content
             guild = ctx.guild
             if guild:
@@ -3534,15 +3539,17 @@ class CrownUnlimited(commands.Cog):
             elif t_card_passive_type == 'SOULCHAIN':
                 t_stamina = t_card_passive
                 o_stamina = t_card_passive
+                c_stamina = t_card_passive
             elif t_card_passive_type == 'FEAR':
                 t_health = t_health - int((t_card_passive/1000 * t_health))
                 o_attack = o_attack - int((t_card_passive/1000 * t_health))
                 o_defense = o_defense - int((t_card_passive/1000 * t_health))
+                c_attack = o_attack - int((t_card_passive/1000 * t_health))
+                c_defense = o_defense - int((t_card_passive/1000 * t_health))
             elif t_card_passive_type == 'GAMBLE':
                 t_health = t_card_passive * 2
                 o_health = t_card_passive
                 c_health = t_card_passive
-
 
             # Title Passive
             t_title_passive_type = list(t_title_passive.keys())[0]
@@ -5337,18 +5344,25 @@ class CrownUnlimited(commands.Cog):
                 else: 
                     embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                 await ctx.author.send(embed=embedVar)
+                
+                emojis = ['👍', '👎']
+                accept = await private_channel.send(f"{ctx.author.mention} would you like to play again?")
+                for emoji in emojis:
+                    await accept.add_reaction(emoji)
 
-                if botActive:                    
-                    embedVar = discord.Embed(title=f"PLAY AGAIN", description=f"Don't Worry! Losing is apart of the game. Use the .end command to `END` the tutorial lobby OR use .start to `PLAY AGAIN`", colour=0xe74c3c)
-                    embedVar.set_author(name=f"You Lost...")
-                    embedVar.add_field(name="Tips!", value="Equiping stronger `TITLES` and `ARMS` will make you character tougher in a fight!")
-                    embedVar.set_footer(text="The .shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
-                    await ctx.author.send(embed=embedVar)
-                response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
-                continued = False
-                if private_channel.guild:
+                def check(reaction, user):
+                    return user == user1 and str(reaction.emoji) == '👍'
+                try:
+                    reaction, user = await self.bot.wait_for('reaction_add', timeout=45.0, check=check)
+
+                    currentopponent = 0
+                    continued = True
+                except asyncio.TimeoutError:
+                    continued = False
                     response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
-                    await discord.TextChannel.delete(private_channel, reason=None)
+                    if private_channel.guild:
+                        await discord.TextChannel.delete(private_channel, reason=None)
+
             elif t_health <=0 or t_max_health <= 0:
                 
                 uid = o_DID
@@ -6201,10 +6215,13 @@ class CrownUnlimited(commands.Cog):
         elif tarm_passive_type == 'SOULCHAIN':
             t_stamina = tarm_passive_value
             o_stamina = tarm_passive_value
+            c_stamina = tarm_passive_value
         elif tarm_passive_type == 'FEAR':
             t_health = t_health - int((.10 * tarm_passive_value))
             o_attack = o_attack - int((.10 * tarm_passive_value))
             o_defense = o_defense - int((.10 * tarm_passive_value))
+            c_attack = c_attack - int((.10 * tarm_passive_value))
+            c_defense = c_defense - int((.10 * tarm_passive_value))
         elif tarm_passive_type == 'GAMBLE':
             t_health = tarm_passive_value * 5
             o_health = tarm_passive_value
@@ -6278,10 +6295,13 @@ class CrownUnlimited(commands.Cog):
         elif t_card_passive_type == 'SOULCHAIN':
             t_stamina = t_card_passive
             o_stamina = t_card_passive
+            c_stamina = t_card_passive
         elif t_card_passive_type == 'FEAR':
             t_health = t_health - int((t_card_passive/1000 * t_health))
             o_attack = o_attack - int((t_card_passive/1000 * t_health))
             o_defense = o_defense - int((t_card_passive/1000 * t_health))
+            c_attack = c_attack - int((t_card_passive/1000 * t_health))
+            c_defense = c_defense - int((t_card_passive/1000 * t_health))
         elif t_card_passive_type == 'GAMBLE':
             t_health = t_card_passive * 5
             o_health = t_card_passive
@@ -6349,10 +6369,13 @@ class CrownUnlimited(commands.Cog):
             elif t_title_passive_type == 'SOULCHAIN':
                 t_stamina = t_title_passive_value
                 o_stamina = t_title_passive_value
+                c_stamina = t_title_passive_value
             elif t_title_passive_type == 'FEAR':
                 t_health = t_health - int((.10 * t_title_passive_value))
                 o_attack = o_attack - int((.10 * t_title_passive_value))
                 o_defense = o_defense - int((.10 * t_title_passive_value))
+                c_attack = c_attack - int((.10 * t_title_passive_value))
+                c_defense = c_defense - int((.10 * t_title_passive_value))
             elif t_title_passive_type == 'GAMBLE':
                 t_health = t_title_passive_value * 5
                 o_health = t_title_passive_value
@@ -8245,7 +8268,6 @@ class CrownUnlimited(commands.Cog):
             return
 
 
-        completed_dungeons = sowner['DUNGEONS']
         all_universes = db.queryAllUniverse()
         available_universes = []
         selected_universe = ""
@@ -8253,18 +8275,21 @@ class CrownUnlimited(commands.Cog):
             if uni['PREREQUISITE'] in sowner['CROWN_TALES']:
                 available_universes.append(uni['TITLE'])
                 
-        embedVar = discord.Embed(title=f":fire: CROWN DUNGEONS!", description="Select a Universe!", colour=0xe91e63)
-        embedVar.add_field(name="Available Universes", value=" | ".join(available_universes), inline=False)
-        if len(completed_dungeons) > 1:
-            embedVar.add_field(name="Completed Universes", value="\n".join(completed_dungeons))
-        embedVar.set_footer(text="Earn drops from the Universes you explore. Conquering Universes unlocks more worlds!")
+        embedVar = discord.Embed(title=f":fire: Select A Dungeon", description="\n".join(available_universes), colour=0xe91e63)
+        embedVar.set_footer(text="Type Quit to exit Tales selection")
         await private_channel.send(embed=embedVar)
-        accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
+        accept = await private_channel.send(f"{ctx.author.mention} which Dungeon would you like to explore!")
 
         def check(msg):
-            return msg.author == ctx.author and msg.content in available_universes
+            return msg.author == ctx.author and (msg.content in available_universes) or (msg.content == "Quit") 
         try:
             msg = await self.bot.wait_for('message', timeout=30.0, check=check)
+
+            if msg.content == "Quit":
+                await private_channel.send("Quit Dungeon selection. ")
+                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                return
+
             selected_universe = msg.content
             guild = ctx.guild
             if guild:
@@ -9695,10 +9720,32 @@ class CrownUnlimited(commands.Cog):
                 else: 
                     embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                 await ctx.author.send(embed=embedVar)
-                response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
-                continued = False
-                if private_channel.guild:
-                    await discord.TextChannel.delete(private_channel, reason=None)
+                
+                emojis = ['👍', '👎']
+                accept = await private_channel.send(f"{ctx.author.mention} would you like to play again?")
+                for emoji in emojis:
+                    await accept.add_reaction(emoji)
+
+                def check(reaction, user):
+                    return user == user1 and (str(reaction.emoji) == '👍') or (str(reaction.emoji) == '👎')
+                try:
+                    reaction, user = await self.bot.wait_for('reaction_add', timeout=45.0, check=check)
+
+                    if str(reaction.emoji) == '👎':
+                        continued = False 
+                        db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                        if private_channel.guild:
+                            await discord.TextChannel.delete(private_channel, reason=None)
+                        return
+
+                    currentopponent = 0
+                    continued = True
+                except asyncio.TimeoutError:
+                    continued = False
+                    response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                    if private_channel.guild:
+                        await discord.TextChannel.delete(private_channel, reason=None)
+
             elif t_health <=0 or t_max_health <= 0:
                 
                 uid = o_DID
@@ -9726,9 +9773,16 @@ class CrownUnlimited(commands.Cog):
                             await accept.add_reaction(emoji)
 
                         def check(reaction, user):
-                            return user == user1 and str(reaction.emoji) == '👍'
+                            return user == user1 and ((str(reaction.emoji) == '👍') or (str(reaction.emoji) == '👎'))
                         try:
                             reaction, user = await self.bot.wait_for('reaction_add', timeout=45.0, check=check)
+
+                            if str(reaction.emoji) == '👎':
+                                continued = False 
+                                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                                if private_channel.guild:
+                                    await discord.TextChannel.delete(private_channel, reason=None)
+                                return
 
                             currentopponent = currentopponent + 1
                             continued = True
@@ -9790,27 +9844,21 @@ class CrownUnlimited(commands.Cog):
             if uni['PREREQUISITE'] in sowner['CROWN_TALES']:
                 available_universes.append(uni['TITLE'])
 
-        if len(completed_crown_tales) > 1:
-            completed_crown_tales = completed_crown_tales
-        else:
-            completed_crown_tales = ['None yet!']
-        embedVar = discord.Embed(title=f":crown: CROWN TALES!", description=textwrap.dedent(f"""\
-        Explore a Universe!
-
-        **Available Universes:**  
-        {", ".join(available_universes)}
-
-        **Completed Universes:** 
-        {", ".join(completed_crown_tales)}
-        """), colour=0xe91e63) 
-        embedVar.set_footer(text="Earn drops from the Universes you explore. Conquering Universes unlocks more worlds!")
+        embedVar = discord.Embed(title=f":crown: Select A Tales Universe", description="\n".join(available_universes), colour=0xe91e63) 
+        embedVar.set_footer(text="Type Quit to exit Tales selection")
         await private_channel.send(embed=embedVar)
         accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
 
         def check(msg):
-            return msg.author == ctx.author and msg.content in available_universes
+            return msg.author == ctx.author and (msg.content in available_universes) or (msg.content == "Quit") 
         try:
             msg = await self.bot.wait_for('message', timeout=30.0, check=check)
+
+            if msg.content == "Quit":
+                await private_channel.send("Quit Tales selection. ")
+                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                return
+
             selected_universe = msg.content
             guild = ctx.guild
             if guild:
@@ -11128,19 +11176,32 @@ class CrownUnlimited(commands.Cog):
                     embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                 await ctx.author.send(embed=embedVar)
 
-                if botActive:                    
-                    embedVar = discord.Embed(title=f"PLAY AGAIN", description=f"Don't Worry! Losing is apart of the game. Use the .end command to `END` the tutorial lobby OR use .start to `PLAY AGAIN`", colour=0xe74c3c)
-                    embedVar.set_author(name=f"You Lost...")
-                    embedVar.add_field(name="Tips!", value="Equiping stronger `TITLES` and `ARMS` will make you character tougher in a fight!")
-                    embedVar.set_footer(text="The .shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
-                    await ctx.author.send(embed=embedVar)
+                
+                emojis = ['👍', '👎']
+                accept = await private_channel.send(f"{ctx.author.mention} would you like to play again?")
+                for emoji in emojis:
+                    await accept.add_reaction(emoji)
 
-                continued = False
+                def check(reaction, user):
+                    return user == user1 and (str(reaction.emoji) == '👍') or (str(reaction.emoji) == '👎')
+                try:
+                    reaction, user = await self.bot.wait_for('reaction_add', timeout=45.0, check=check)
 
-                response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                    if str(reaction.emoji) == '👎':
+                        continued = False 
+                        db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                        if private_channel.guild:
+                            await discord.TextChannel.delete(private_channel, reason=None)
+                        return
 
-                if private_channel.guild:
-                    await discord.TextChannel.delete(private_channel, reason=None)
+                    currentopponent = 0
+                    continued = True
+                except asyncio.TimeoutError:
+                    continued = False
+                    response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                    if private_channel.guild:
+                        await discord.TextChannel.delete(private_channel, reason=None)
+
             elif t_health <=0 or t_max_health <= 0:
                 
                 uid = o_DID
@@ -11168,9 +11229,17 @@ class CrownUnlimited(commands.Cog):
                             await accept.add_reaction(emoji)
 
                         def check(reaction, user):
-                            return user == user1 and str(reaction.emoji) == '👍'
+                            return user == user1 and ((str(reaction.emoji) == '👍') or (str(reaction.emoji) == '👎'))
                         try:
                             reaction, user = await self.bot.wait_for('reaction_add', timeout=45.0, check=check)
+                          
+                            if str(reaction.emoji) == '👎':
+                                continued = False 
+                                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                                if private_channel.guild:
+                                    await discord.TextChannel.delete(private_channel, reason=None)
+                                return
+
 
                             currentopponent = currentopponent + 1
                             continued = True
