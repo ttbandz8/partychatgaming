@@ -2597,7 +2597,6 @@ class CrownUnlimited(commands.Cog):
                             return
                     else:
 
-
                         embedVar = discord.Embed(title=f"VICTORY", description=f"{t_card} has been defeated!\n\n{drop_response}", colour=0xe91e63)
                         embedVar.set_author(name=f"The match lasted {turn_total} rounds.")
                         embedVar.set_footer(text=f"{o_card} says:\n{o_win_description}")

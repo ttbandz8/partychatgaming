@@ -340,7 +340,8 @@ async def r(ctx):
 
 
       
-      _Use .solo to play Crown Unlimited undisturbed. Remember to come back and play with your friends!_
+      Use .solo to play Crown Unlimited undisturbed. Remember to come back and play with your friends!
+      _We do not own the rights to the images used in this game_
       """), colour=0xe91e63)
       embedVar.set_footer(text=".help to inquire all potential commands and capabilites of the bot")
       await ctx.author.send(embed=embedVar)
