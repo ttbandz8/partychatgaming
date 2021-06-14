@@ -1,5 +1,6 @@
 from dataclasses import field
 from discord import player, team
+from discord.ext.commands.errors import CommandOnCooldown
 from discord.flags import Intents
 import db
 import time
@@ -399,6 +400,12 @@ async def fix(ctx, user: User):
       await ctx.send(f"{user.mention} is fixed. ")
    else:
       print(m.ADMIN_ONLY_COMMAND)
+
+@bot.event
+async def daily_error_message(ctx,error):
+   if isinstance(error, commands.CommandOnCooldown): # Checks Cooldown
+      msg = 'You have already claimed your daily. Try again in {:.2f}s'.format(error.retry_after)
+      await ctx.author.send(msg)
 
 @bot.command(pass_context=True)
 @commands.cooldown(1, 60*60*24, commands.BucketType.user)
