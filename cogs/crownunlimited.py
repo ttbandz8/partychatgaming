@@ -5441,41 +5441,72 @@ class CrownUnlimited(commands.Cog):
                         await discord.TextChannel.delete(private_channel, reason=None)
 
     @commands.command()
-    async def cboss(self, ctx, user: User, *args):
+    async def cboss(self, ctx, user: User):
         companion = db.queryUser({'DISNAME': str(user)})
         private_channel = ctx
-        if not args:
-            return await ctx.send("Include Boss Universe")
+        sowner = db.queryUser({'DISNAME': str(ctx.author)})
 
+        if sowner['AVAILABLE']:
+            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': False}})
+        else:
+            await private_channel.send(m.ALREADY_IN_TALES)
+            return
         
-        guild = ctx.guild
+        completed_crown_tales = sowner['CROWN_TALES']
+        all_universes = db.queryAllUniverse()
+        available_universes = []
+        selected_universe = ""
+        for uni in all_universes:
+            if uni['PREREQUISITE'] in sowner['CROWN_TALES']:
+                available_universes.append(uni['TITLE'])
 
-        if guild:
-            overwrites = {
+        embedVar = discord.Embed(title=f":crown: Select A Boss Arena", description="\n".join(available_universes), colour=0xe91e63) 
+        embedVar.set_footer(text="Type Quit to exit Tales selection")
+        await private_channel.send(embed=embedVar)
+        accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
+
+        def check(msg):
+            return msg.author == ctx.author and (msg.content in available_universes) or (msg.content == "Quit") 
+        try:
+            msg = await self.bot.wait_for('message', timeout=30.0, check=check)
+
+            if msg.content == "Quit":
+                await private_channel.send("Quit Boss  selection. ")
+                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                return
+
+            selected_universe = msg.content
+            guild = ctx.guild
+            if guild:
+                overwrites = {
                             guild.default_role: discord.PermissionOverwrite(read_messages=False),
                             guild.me: discord.PermissionOverwrite(read_messages=True),
-                            ctx.author: discord.PermissionOverwrite(read_messages=True),
+                        ctx.author: discord.PermissionOverwrite(read_messages=True),
                             user: discord.PermissionOverwrite(read_messages=True),
                         }
+                private_channel = await guild.create_text_channel(f'{str(ctx.author)}&{user}-boss-fight', overwrites=overwrites)
+                await ctx.send(f"{ctx.author.mention} private channel has been opened for you.")
+                await private_channel.send(f'{ctx.author.mention} Good luck!')
+            
+        except:
+            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+            embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", colour=0xe91e63)
+            await private_channel.send(embed=embedVar)
+            return
 
-            private_channel = await guild.create_text_channel(f'{str(ctx.author)}&{user}-co-tale-run', overwrites=overwrites)
-            await ctx.send(f"{ctx.author.mention} & {user.mention} private channel has been opened for you.")
-            await private_channel.send(f'{ctx.author.mention} Good luck!')
-
-        t_available = False
-        universeName = " ".join([*args])
-        universe = db.queryUniverse({'TITLE': str(universeName)})
-        if not universe:
-            await discord.TextChannel.delete(private_channel, reason=None)
-            return await private_channel.send("Add Boss Universe")
+        universe = db.queryUniverse({'TITLE': str(selected_universe)})
+        if not universe['CROWN_TALES']:
+            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+            await ctx.author.send(f"{selected_universe} Boss Arena not yet available! Check back later!")
+            if private_channel.guild:
+                await discord.TextChannel.delete(private_channel, reason=None)
+            return    
         bossname = ''
 
         starttime = time.asctime()
         h_gametime = starttime[11:13]
         m_gametime = starttime[14:16]
         s_gametime = starttime[17:19]
-
-        sowner = db.queryUser({'DISNAME': str(ctx.author)})
 
         bossname = universe['UNIVERSE_BOSS']
         boss = db.queryBoss({'NAME': str(bossname)})
@@ -8197,7 +8228,7 @@ class CrownUnlimited(commands.Cog):
             m_playtime = int(wintime[14:16])
             s_playtime = int(wintime[17:19])
             gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
-
+            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
             embedVar = discord.Embed(title=f":zap: `{t_card}` Wins...\n{t_wins}", description=f"Match concluded in {turn_total} turns!", colour=0x1abc9c)
             embedVar.set_author(name=f"{o_card} says:\n{o_lose_description}", icon_url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236432/PCG%20LOGOS%20AND%20RESOURCES/PCGBot_1.png")
             if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
@@ -8228,6 +8259,8 @@ class CrownUnlimited(commands.Cog):
             drop_response = await bossdrops(ctx.author, universeName)
             await bless(50, str(ctx.author))
             await bless(50, str(user))
+            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+            response = db.updateUserNoFilter({'DISNAME': str(user)}, {'$set': {'AVAILABLE': True}})
             embedVar = discord.Embed(title=f":zap: `{o_card}` and `{c_card}`defeated the {t_universe} Boss {t_card}!\n{t_concede}", description=f"Match concluded in {turn_total} turns!\n\n{drop_response} + :coin: 50!\n\n{c_user['NAME']} got :coin:50!", colour=0xe91e63)
             embedVar.set_author(name=f"{t_card} lost", icon_url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236432/PCG%20LOGOS%20AND%20RESOURCES/PCGBot_1.png")
             if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
@@ -11284,29 +11317,63 @@ class CrownUnlimited(commands.Cog):
     @commands.command()
     async def boss(self, ctx, *args):
         private_channel = ctx
-        if not args:
-            return await ctx.send("Include Boss Universe")
+        sowner = db.queryUser({'DISNAME': str(ctx.author)})
 
+        if sowner['AVAILABLE']:
+            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': False}})
+        else:
+            await private_channel.send(m.ALREADY_IN_TALES)
+            return
         
-        guild = ctx.guild
+        completed_crown_tales = sowner['CROWN_TALES']
+        all_universes = db.queryAllUniverse()
+        available_universes = []
+        selected_universe = ""
+        for uni in all_universes:
+            if uni['PREREQUISITE'] in sowner['CROWN_TALES']:
+                available_universes.append(uni['TITLE'])
 
-        if guild:
-            overwrites = {
-                        guild.default_role: discord.PermissionOverwrite(read_messages=False),
-                        guild.me: discord.PermissionOverwrite(read_messages=True),
-                    ctx.author: discord.PermissionOverwrite(read_messages=True),
-                    }
-            private_channel = await guild.create_text_channel(f'{str(ctx.author)}-boss-fight', overwrites=overwrites)
+        embedVar = discord.Embed(title=f":crown: Select A Boss Arena", description="\n".join(available_universes), colour=0xe91e63) 
+        embedVar.set_footer(text="Type Quit to exit Tales selection")
+        await private_channel.send(embed=embedVar)
+        accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
+
+        def check(msg):
+            return msg.author == ctx.author and (msg.content in available_universes) or (msg.content == "Quit") 
+        try:
+            msg = await self.bot.wait_for('message', timeout=30.0, check=check)
+
+            if msg.content == "Quit":
+                await private_channel.send("Quit Boss  selection. ")
+                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                return
+
+            selected_universe = msg.content
+            guild = ctx.guild
             if guild:
+                overwrites = {
+                            guild.default_role: discord.PermissionOverwrite(read_messages=False),
+                            guild.me: discord.PermissionOverwrite(read_messages=True),
+                        ctx.author: discord.PermissionOverwrite(read_messages=True),
+                        }
+                private_channel = await guild.create_text_channel(f'{str(ctx.author)}-boss-fight', overwrites=overwrites)
                 await ctx.send(f"{ctx.author.mention} private channel has been opened for you.")
-            await private_channel.send(f'{ctx.author.mention} Good luck!')
+                await private_channel.send(f'{ctx.author.mention} Good luck!')
+            
+        except:
+            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+            embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", colour=0xe91e63)
+            await private_channel.send(embed=embedVar)
+            return
 
-        t_available = False
-        universeName = " ".join([*args])
-        universe = db.queryUniverse({'TITLE': str(universeName)})
-        if not universe:
-            await discord.TextChannel.delete(private_channel, reason=None)
-            return await private_channel.send("Add Boss Universe")
+        universe = db.queryUniverse({'TITLE': str(selected_universe)})
+        if not universe['CROWN_TALES']:
+            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+            await ctx.author.send(f"{selected_universe} Boss Arena not available! Check back later!")
+            if private_channel.guild:
+                await discord.TextChannel.delete(private_channel, reason=None)
+            return
+
         bossname = ''
 
         starttime = time.asctime()
@@ -11314,7 +11381,7 @@ class CrownUnlimited(commands.Cog):
         m_gametime = starttime[14:16]
         s_gametime = starttime[17:19]
 
-        sowner = db.queryUser({'DISNAME': str(ctx.author)})
+        
 
         bossname = universe['UNIVERSE_BOSS']
         boss = db.queryBoss({'NAME': str(bossname)})
@@ -12056,6 +12123,7 @@ class CrownUnlimited(commands.Cog):
                         # calculate data based on selected move
                         if msg.content == "0":
                             o_health=0
+                            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                     
                             if private_channel.guild:
                                 await private_channel.send(f"{ctx.author.mention} has fled the battle...")
@@ -12735,7 +12803,7 @@ class CrownUnlimited(commands.Cog):
             m_playtime = int(wintime[14:16])
             s_playtime = int(wintime[17:19])
             gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
-
+            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
             embedVar = discord.Embed(title=f":zap: `{t_card}` Wins...\n{t_wins}", description=f"Match concluded in {turn_total} turns!", colour=0x1abc9c)
             embedVar.set_author(name=f"{o_card} says:\n{o_lose_description}", icon_url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236432/PCG%20LOGOS%20AND%20RESOURCES/PCGBot_1.png")
             if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
@@ -12765,6 +12833,7 @@ class CrownUnlimited(commands.Cog):
             gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
             drop_response = await bossdrops(ctx.author, universeName)
             await bless(50, str(ctx.author))
+            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
             embedVar = discord.Embed(title=f":zap: `{o_card}`defeated the {t_universe} Boss {t_card}!\n{t_concede}", description=f"Match concluded in {turn_total} turns!\n\n{drop_response} + :coin: 50!", colour=0xe91e63)
             embedVar.set_author(name=f"{t_card} lost", icon_url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236432/PCG%20LOGOS%20AND%20RESOURCES/PCGBot_1.png")
             if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
