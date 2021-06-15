@@ -13,7 +13,7 @@ traits = [{
 },{
     'NAME': 'Digimon',
     'EFFECT': 'Digivolve',
-    'Trait': 'On Focus you Resovle.'
+    'TRAIT': 'On Focus you Resovle.'
 },{
     'NAME': 'Naruto',
     'EFFECT': 'Substitution',
@@ -44,8 +44,8 @@ traits = [{
     'TRAIT': 'On Resolve refill your Health.'
 },{
     'NAME': '7ds',
-    'EFFECT': 'When Opponent focuss your Stamina increases to 110.',
-    'TRAIT': 'On Resolve, use Ult, then Focus.'
+    'EFFECT': 'Increase Power',
+    'TRAIT': 'Gain 110 Mana on Opponent Focus.'
 },{
     'NAME': 'One Punch Man',
     'EFFECT': 'Hero Reinforcement',
