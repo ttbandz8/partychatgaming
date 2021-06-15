@@ -42,15 +42,16 @@ class CrownUnlimited(commands.Cog):
     async def ctales(self, ctx, user: User):
         private_channel = ctx
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
-
+        oteam = sowner['TEAM']
         if sowner['AVAILABLE']:
             response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': False}})
         else:
             await private_channel.send(m.ALREADY_IN_TALES)
             return
 
-
         companion = db.queryUser({'DISNAME': str(user)})
+        cteam = companion['TEAM']
+
         all_universes = db.queryAllUniverse()
         available_universes = []
         selected_universe = ""
@@ -2566,6 +2567,8 @@ class CrownUnlimited(commands.Cog):
                 s_playtime = int(wintime[17:19])
                 gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
 
+                teambank = await blessteam(10, oteam)
+                cteambank = await blessteam(10, cteam)
                 drop_response = await drops(ctx.author, selected_universe)
                 cdrop_response = await drops(user, selected_universe)
                 questlogger = await quest(ouser, t_card, "Tales")
@@ -2644,7 +2647,7 @@ class CrownUnlimited(commands.Cog):
     async def cdungeon(self, ctx, user: User):
         private_channel = ctx
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
-
+        oteam = sowner['TEAM']
         if sowner['AVAILABLE']:
             response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': False}})
         else:
@@ -2732,7 +2735,7 @@ class CrownUnlimited(commands.Cog):
         #While Still PLaying Universe
         while continued == True:
             companion = db.queryUser({'DISNAME': str(user)})
-
+            cteam = companion['TEAM']
             o = db.queryCard({'NAME': sowner['CARD']})
             otitle = db.queryTitle({'TITLE': sowner['TITLE']})
             
@@ -5372,6 +5375,8 @@ class CrownUnlimited(commands.Cog):
                 m_playtime = int(wintime[14:16])
                 s_playtime = int(wintime[17:19])
                 gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
+                teambank = await blessteam(10, oteam)
+                cteambank = await blessteam(10, cteam)
                 drop_response = await dungeondrops(ctx.author, selected_universe)
                 cdrop_response = await dungeondrops(user, selected_universe)
                 questlogger = await quest(ouser, t_card, "Dungeon")
@@ -8260,6 +8265,7 @@ class CrownUnlimited(commands.Cog):
     async def dungeon(self, ctx):
         private_channel = ctx
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
+        oteam = sowner['TEAM']
 
         if sowner['AVAILABLE']:
             response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': False}})
@@ -9756,6 +9762,7 @@ class CrownUnlimited(commands.Cog):
                 s_playtime = int(wintime[17:19])
                 gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
                 drop_response = await dungeondrops(ctx.author, selected_universe)
+                teambank = await blessteam(15, oteam)
                 questlogger = await quest(ouser, t_card, "Dungeon")
                 if questlogger:
                     await ctx.author.send(questlogger)
@@ -9829,7 +9836,8 @@ class CrownUnlimited(commands.Cog):
     async def tales(self, ctx):
         private_channel = ctx
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
-
+        oteam = sowner['TEAM']
+        
         if sowner['AVAILABLE']:
             response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': False}})
         else:
@@ -9844,7 +9852,7 @@ class CrownUnlimited(commands.Cog):
             if uni['PREREQUISITE'] in sowner['CROWN_TALES']:
                 available_universes.append(uni['TITLE'])
 
-        embedVar = discord.Embed(title=f":crown: Select A Tales Universe", description="\n".join(available_universes), colour=0xe91e63) 
+        embedVar = discord.Embed(title=f":crown: Select A Tales Universe", description="\n".join(available_universes), colour=0xe91e63)
         embedVar.set_footer(text="Type Quit to exit Tales selection")
         await private_channel.send(embed=embedVar)
         accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
@@ -9870,7 +9878,7 @@ class CrownUnlimited(commands.Cog):
                 private_channel = await guild.create_text_channel(f'{str(ctx.author)}-tale-run', overwrites=overwrites)
                 await ctx.send(f"{ctx.author.mention} private channel has been opened for you.")
                 await private_channel.send(f'{ctx.author.mention} Good luck!')
-            
+
         except:
             response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
             embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", colour=0xe91e63)
@@ -9890,7 +9898,6 @@ class CrownUnlimited(commands.Cog):
             if private_channel.guild:
                 await discord.TextChannel.delete(private_channel, reason=None)
             return
-
 
         boss = db.queryBoss({'NAME': str(universe['UNIVERSE_BOSS'])})
 
@@ -11211,6 +11218,7 @@ class CrownUnlimited(commands.Cog):
                 m_playtime = int(wintime[14:16])
                 s_playtime = int(wintime[17:19])
                 gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
+                teambank = await blessteam(10, oteam)
                 drop_response = await drops(ctx.author, selected_universe)
                 questlogger = await quest(ouser, t_card, "Tales")
                 if questlogger:
@@ -11287,7 +11295,6 @@ class CrownUnlimited(commands.Cog):
         if not args:
             return await ctx.send("Include Boss Universe")
 
-        
         guild = ctx.guild
 
         if guild:
@@ -11315,7 +11322,7 @@ class CrownUnlimited(commands.Cog):
         s_gametime = starttime[17:19]
 
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
-
+        oteam = sowner['TEAM']
         bossname = universe['UNIVERSE_BOSS']
         boss = db.queryBoss({'NAME': str(bossname)})
 
@@ -12762,6 +12769,7 @@ class CrownUnlimited(commands.Cog):
             h_playtime = int(wintime[11:13])
             m_playtime = int(wintime[14:16])
             s_playtime = int(wintime[17:19])
+            teambank = await blessteam(25, oteam)
             gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
             drop_response = await bossdrops(ctx.author, universeName)
             await bless(50, str(ctx.author))
@@ -18270,7 +18278,6 @@ class CrownUnlimited(commands.Cog):
         await ctx.author.send("\n".join(available_universes))
         await ctx.author.send("\n".join(unavailable_universes))
         
-
 async def score(owner, user: User):
         session_query = {"OWNER": str(owner), "AVAILABLE": True, "KINGSGAMBIT": False}
         session_data = db.querySession(session_query)
@@ -18297,44 +18304,46 @@ async def score(owner, user: User):
 async def quest(player, opponent, mode):
     user_data = db.queryVault({'OWNER': str(player)}) 
     quest_data = {}
+    if user_data['QUESTS']:
+        for quest in user_data['QUESTS']:
+            if opponent == quest['OPPONENT']:
+                quest_data = quest
+        
+        if quest_data == {}:
+            return
+        print(quest_data)
+        completion = quest_data['GOAL'] - (quest_data['WINS'] + 1)
+        
+        if mode == "Dungeon" and quest_data['GOAL'] != quest_data['WINS']:
+            message = "Dungeon Quest progressed!"
+            if completion == 0:
+                await bless(150, player)
+                message = "Dungeon Quest Completed! :coin:150 has been added to your balance."
 
-    for quest in user_data['QUESTS']:
-        if opponent == quest['OPPONENT']:
-            quest_data = quest
-    
-    if quest_data == {}:
-        return
-    print(quest_data)
-    completion = quest_data['GOAL'] - (quest_data['WINS'] + 1)
-    
-    if mode == "Dungeon" and quest_data['GOAL'] != quest_data['WINS']:
-        message = "Dungeon Quest progressed!"
-        if completion == 0:
-            await bless(150, player)
-            message = "Dungeon Quest Completed! :coin:150 has been added to your balance."
+            query = {'OWNER': str(player)}
+            update_query = {'$inc': {'QUESTS.$[type].' + "WINS": 1}}
+            filter_query = [{'type.' + "OPPONENT": opponent}]
+            resp = db.updateVault(query, update_query, filter_query)
+            return message
 
-        query = {'OWNER': str(player)}
-        update_query = {'$inc': {'QUESTS.$[type].' + "WINS": 1}}
-        filter_query = [{'type.' + "OPPONENT": opponent}]
-        resp = db.updateVault(query, update_query, filter_query)
-        return message
+        elif mode == "Tales" and quest_data['GOAL'] != quest_data['WINS']:
+            message = "Tales Quest progressed!"
+            if completion == 0:
+                if quest_data['GOAL'] == 5:
+                    await bless(125, player)
+                    message = "Tales Quest Completed! :coin:125 has been added to your balance."
+                elif quest_data['GOAL'] == 3:
+                    await bless(100, player)
+                    message = "Tales Quest Completed! :coin:100 has been added to your balance."
 
-    elif mode == "Tales" and quest_data['GOAL'] != quest_data['WINS']:
-        message = "Tales Quest progressed!"
-        if completion == 0:
-            if quest_data['GOAL'] == 5:
-                await bless(125, player)
-                message = "Tales Quest Completed! :coin:125 has been added to your balance."
-            elif quest_data['GOAL'] == 3:
-                await bless(100, player)
-                message = "Tales Quest Completed! :coin:100 has been added to your balance."
+            query = {'OWNER': str(player)}
+            update_query = {'$inc': {'QUESTS.$[type].' + "WINS": 1}}
+            filter_query = [{'type.'+ "OPPONENT": opponent}]
+            resp = db.updateVault(query, update_query, filter_query)
 
-        query = {'OWNER': str(player)}
-        update_query = {'$inc': {'QUESTS.$[type].' + "WINS": 1}}
-        filter_query = [{'type.'+ "OPPONENT": opponent}]
-        resp = db.updateVault(query, update_query, filter_query)
-
-        return message
+            return message
+        else:
+            return False
     else:
         return False
 
@@ -18546,7 +18555,7 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
         if fortitude <= ap:
             fortitude = health * (2/5) #216
 
-        attackpower = round(((int(atk) / 25) * int(ap)) / op_defense) #5.09
+        attackpower = round(((int(atk) / 30) * int(ap)) / op_defense) #5.09
         modifier = random.randint(5,10)
         dmg = round(((fortitude * attackpower)/100) * modifier)
 
@@ -18733,6 +18742,8 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
             draw.text((82,130), "FOCUSED", (30,144,255), font=r, stroke_width=2, stroke_fill=(0,0,0), align="left")
 
         if resolved:
+            if d['RNAME'] != "":
+                draw.text((82,50), d['RNAME'], (255, 255, 255), font=header, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
                         # side    # vert
             draw.line(((0, 0), (0, 800)), fill=(255,215,0), width=15)
             draw.line(((1195, 0), (1195, 800)), fill=(255,215,0), width=10)
@@ -18821,6 +18832,17 @@ async def bless(amount, user):
       db.updateVaultNoFilter(vault, update_query)
    else:
       print("cant find vault")
+
+async def blessteam(amount, team):
+   blessAmount = amount
+   posBlessAmount = 0 + abs(int(blessAmount))
+   query = {'TNAME': str(team)}
+   team_data = db.queryTeam(query)
+   if team_data:
+      update_query = {"$inc": {'BANK': posBlessAmount}}
+      db.updateTeam(query, update_query)
+   else:
+      print("Cannot find Team")
 
 async def curse(amount, user):
       curseAmount = amount
