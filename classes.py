@@ -12,6 +12,7 @@ class USER():
     IGN: list[str] = field(default_factory=lambda: [{'DEFAULT': 'PCG'}])
     GAMES: list[str] = field(default_factory=lambda: ['Crown Unlimited'])
     TEAM: str = field(default_factory=lambda: 'PCG')
+    FAMILY: str = field(default_factory=lambda: '')
     TITLE: str = field(default_factory=lambda: 'Starter')
     CARD: str = field(default_factory=lambda: "Ochaco Uraraka")
     DECK: list[str] = field(default_factory=lambda: [''])
@@ -25,19 +26,29 @@ class USER():
     DUNGEONS: list[str] = field(default_factory=lambda: [""])
     TIMESTAMP: str = now
 
-
 @dataclass(frozen=True, order=True)
 class TEAMS():
     OWNER: str
     TNAME: str
     MEMBERS: list
     TOURNAMENT_WINS: int = field(default_factory=lambda: 0)
+    BANK: int = field(default_factory=lambda: 0)
     SCRIM_WINS: int = field(default_factory=lambda: 0)
     SCRIM_LOSSES: int = field(default_factory=lambda: 0)
     GAMES: list[str] = field(default_factory=lambda: ['PCG'])
     LOGO_URL:  str = field(default_factory=lambda: '')
     LOGO_FLAG: bool = field(default_factory=lambda: False)
     BADGES: list[str] = field(default_factory=lambda: ['New Team'])
+    TIMESTAMP: str = now
+
+@dataclass(frozen=True, order=True)
+class FAMILY():
+    HEAD: str = field(default_factory=lambda: '')
+    PARTNER: str = field(default_factory=lambda: '')
+    KIDS: list[str] = field(default_factory=lambda: [])
+    PET: str = field(default_factory=lambda: '')
+    BANK: int = field(default_factory=lambda: 0)
+    HOUSE:str = field(default_factory=lambda: '')
     TIMESTAMP: str = now
 
 @dataclass(frozen=True, order=True)
@@ -79,6 +90,7 @@ class CARDS():
     TIMESTAMP: str = now
     MOVESET: list[str] = field(default_factory=lambda: [{'MOVE1': 20, "STAM": 10}, {'MOVE2': 50, "STAM": 30}, {'ULTIMATE': 100, "STAM": 80}, {'ENHANCER': 0, "STAM": 20, "TYPE": "TYPE"}])
     RPATH: str = field(default_factory=lambda: "N/A")
+    RNAME: str = field(default_factory=lambda: "N/A")
     HLT: int = field(default_factory=lambda: 500)
     STAM: int = field(default_factory=lambda: 100) 
     ATK: int = field(default_factory=lambda: 25)
@@ -235,6 +247,10 @@ def newUser(users):
 def newTeam(team):
     t = TEAMS(**team)
     return asdict(t)
+
+def newFamily(family):
+    f = FAMILY(**family)
+    return asdict(f)
 
 def newUniverse(universe):
     nu = UNIVERSE(**universe)

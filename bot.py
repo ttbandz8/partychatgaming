@@ -1,5 +1,6 @@
 from dataclasses import field
 from discord import player, team
+from discord.ext.commands.errors import CommandOnCooldown
 from discord.flags import Intents
 import db
 import time
@@ -374,6 +375,12 @@ async def fix(ctx, user: User):
    else:
       print(m.ADMIN_ONLY_COMMAND)
 
+@bot.event
+async def daily_error_message(ctx,error):
+   if isinstance(error, commands.CommandOnCooldown): # Checks Cooldown
+      msg = 'You have already claimed your daily. Try again in {:.2f}s'.format(error.retry_after)
+      await ctx.author.send(msg)
+
 @bot.command(pass_context=True)
 @commands.cooldown(1, 60*60*24, commands.BucketType.user)
 async def daily(ctx):
@@ -725,6 +732,51 @@ async def gift(ctx, user2: User, amount):
 
 @bot.command()
 @commands.check(validate_user)
+async def teamgift(ctx, user2: User, amount):
+   user = db.queryUser({'DISNAME': str(ctx.author)})
+   if user['TEAM'] == 'PCG':
+      await ctx.send("You be owner of team to gift from team bank. ")
+      return
+
+   team = db.queryTeam({'TNAME': user['TEAM']})
+
+   if str(user2) not in team['MEMBERS']:
+      await ctx.send("You can only give from bank to team members. ")
+      return
+
+   balance = team['BANK']
+   if balance <= int(amount):
+      await ctx.send("You do not have that amount to give.")
+   else:
+      await bless(int(amount), user2)
+      await curseteam(int(amount), team['TNAME'])
+      await ctx.send(f":coin:{amount} has been gifted to {user2.mention}.")
+      return
+
+async def blessteam(amount, team):
+   blessAmount = amount
+   posBlessAmount = 0 + abs(int(blessAmount))
+   query = {'TNAME': str(team)}
+   team_data = db.queryTeam(query)
+   if team_data:
+      update_query = {"$inc": {'BANK': posBlessAmount}}
+      db.updateTeam(query, update_query)
+   else:
+      print("Cannot find Team")
+
+async def curseteam(amount, team):
+      curseAmount = amount
+      negCurseAmount = 0 - abs(int(curseAmount))
+      query = {'TNAME': str(team)}
+      team_data = db.queryTeam(query)
+      if team_data:
+         update_query = {"$inc": {'BANK': int(negCurseAmount)}}
+         db.updateTeam(query, update_query)
+      else:
+         print("cant find team")
+
+@bot.command()
+@commands.check(validate_user)
 async def resell(ctx, *args):
    user = db.queryUser({'DISNAME': str(ctx.author)})
    p1_trade_item = " ".join([*args])
@@ -796,7 +848,7 @@ async def addfield(ctx, collection, new_field, field_type):
       if field_type == 'string':
          field_type = ""
       elif field_type == 'int':
-         field_type = 25
+         field_type = 0
       elif field_type == 'list':
          field_type = []
       elif field_type == 'bool':
@@ -818,6 +870,8 @@ async def addfield(ctx, collection, new_field, field_type):
          response = db.updateManyArms({'$set': {new_field: field_type}})
       elif collection == 'pets':
          response = db.updateManyPets({'$set': {new_field: field_type}})
+      elif collection == 'teams':
+         response = db.updateManyTeams({'$set': {new_field: field_type}})
    else:
       print(m.ADMIN_ONLY_COMMAND)
 

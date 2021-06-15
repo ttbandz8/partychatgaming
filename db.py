@@ -17,6 +17,7 @@ print(use_database)
 db = mongo[use_database]
 users_col = db["USERS"]
 teams_col = db["TEAMS"]
+family_col = db["FAMILY"]
 sessions_col = db["SESSIONS"]
 games_col = db["GAMES"]
 matches_col = db["MATCHES"]
@@ -38,6 +39,126 @@ def col_exists(col):
     else:
         return False
 
+#########################################################################
+''' FAMILY '''
+def family_exists(data):
+    collection_exists = col_exists("FAMILY")
+    if collection_exists:
+        familyexists = family_col.find_one(data)
+        if familyexists:
+            return True
+        else:
+            return False
+    else:
+        return False
+
+def updateManyFamily(new_value):
+    family_col.update_many({}, new_value)
+    return True
+
+def queryFamily(family):
+    try:
+        exists = family_exists({'HEAD': family['HEAD']})
+        if exists:
+            data = family_col.find_one(family)
+            return data
+        else:
+           return False
+    except:
+        print("Find family failed.")
+
+def updateFamily(query, new_value):
+    try:
+        exists = family_exists({'HEAD': family['HEAD']})
+        if exists:
+            data = family_col.update_one(query, new_value)
+            return data
+        else:
+           return False
+    except:
+        print("Find team failed.")
+
+def queryAllFamily(family):
+    data = family_col.find()
+    return data
+
+def createFamily(family, user):
+    try:
+        find_user = queryUser({'DISNAME': user})
+        if find_user['FAMILY'] and find_user['FAMILY'] != 'PCG':
+            return "User is already part of a Family. "
+        else:
+            exists = family_exists({'HEAD': family['HEAD']})
+            if exists:
+                return "Family already exists."
+            else:
+                print("Inserting new Family.")
+                family_col.insert_one(family)
+
+                # Add Team to User Profile as well
+                query = {'DISNAME': user}
+                new_value = {'$set': {'FAMILY': family['HEAD']}}
+                users_col.update_one(query, new_value)
+                return "Family has been created. "
+    except:
+        return "Cannot create Family."
+
+def deleteFamily(family, user):
+    try:
+        exists = family_exists({'HEAD': family['HEAD']})
+        if exists:
+            family = family_col.find_one(family)
+            if user == family['OWNER']:
+                users_col.update_many({'FAMILY': family['HEAD']}, {'$set': {'FAMILY': ''}})
+                family_col.delete_one({'HEAD': family['HEAD']})
+                return "Family deleted."
+            else:
+                return "This user is not a member of the Family."
+        else:
+            return "Family does not exist."
+
+    except:
+        return "Delete Family failed."
+
+def deleteFamilyMember(query, value, user):
+    try:
+        exists = family_exists({'HEAD': query['FAMILY']})
+        if exists:
+            family = family_col.find_one(query)
+            if user == family['HEAD']:
+                update = family_col.update_one(query, value, upsert=True)
+                # Add Team to User Profile as well
+                query = {'DISNAME': str(user)}
+                new_value = {'$set': {'FAMILY': ''}}
+                users_col.update_one(query, new_value)
+                return "User has been removed from family. "
+            else:
+                return "This user is not a member of the family."
+        else:
+            return "Family does not exist."
+
+    except:
+        print("Delete Team Member failed.")
+
+def addFamilyMember(query, add_to_family_query, user, new_user):
+    exists = family_exists({'HEAD': query['HEAD']})
+    if exists:
+        family = family_col.find_one(query)
+        if user == team['OWNER']:
+            family_col.update_one(query, add_to_family_query, upsert=True)
+
+             # Add Team to User Profile as well
+            query = {'DISNAME': new_user}
+            new_value = {'$set': {'FAMILY': family['HEAD']}}
+            users_col.update_one(query, new_value)
+            return "User added to the Family. "
+        else:
+            return "The Owner of the Family can add new members. "
+    else:
+        return "Cannot add user to the Family."
+
+
+#########################################################################
 '''Check If User Exists'''
 def user_exists(data):
     collection_exists = col_exists("USERS")
@@ -770,7 +891,7 @@ def deleteTeam(team, user):
         if exists:
             team = teams_col.find_one(team)
             if user == team['OWNER']:
-                users_col.update_many({'TEAMS': team['TNAME']}, {'$set': {'TEAMS': ['PCG']}})
+                users_col.update_many({'TEAM': team['TNAME']}, {'$set': {'TEAM': "PCG"}})
                 teams_col.delete_one({'TNAME': team['TNAME']})
                 return "Team deleted."
             else:

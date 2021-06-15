@@ -244,12 +244,15 @@ class Profile(commands.Cog):
             
             {", ".join(pet_names)}
             """), colour=0x7289da)
-
-            embedVar5 = discord.Embed(title= f"Quest Board", description=textwrap.dedent(f"""
-            **Balance**: :coin:{'{:,}'.format(balance)}
-            \n{"".join(quest_messages)}
-            """), colour=0x7289da)
-            # embedVar4.set_thumbnail(url=avatar)
+            if quests:
+                embedVar5 = discord.Embed(title= f"Quest Board", description=textwrap.dedent(f"""
+                **Balance**: :coin:{'{:,}'.format(balance)}
+                \n{"".join(quest_messages)}
+                """), colour=0x7289da)
+                # embedVar4.set_thumbnail(url=avatar)
+            else:
+                embedVar5 = discord.Embed(title= f"Quest Board", description="Use .daily to receive Quests!", colour=0x7289da)
+                # embedVar4.set_thumbnail(url=avatar)
 
             paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
             paginator.add_reaction('⏮️', "first")

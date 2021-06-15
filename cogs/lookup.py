@@ -449,7 +449,7 @@ class Lookup(commands.Cog):
 
             matches_to_string = dict(ChainMap(*matches))
             ign_to_string = dict(ChainMap(*ign))
-            print(crown_tales)
+
             embed1 = discord.Embed(title= f":triangular_flag_on_post: " + f"{name}".format(self), description=":bank: Party Chat Gaming Database™️", colour=000000)
             embed1.set_thumbnail(url=avatar)
             embed1.add_field(name="Team" + " :military_helmet:", value=team)
@@ -508,6 +508,7 @@ class Lookup(commands.Cog):
             scrim_losses = team['SCRIM_LOSSES']
             tournament_wins = team['TOURNAMENT_WINS']
             logo = team['LOGO_URL']
+            balance = team['BANK']
 
             team_list = []
             for members in team['MEMBERS']:
@@ -520,7 +521,7 @@ class Lookup(commands.Cog):
                     team_list.append(f"{members}")
 
 
-            embed1 = discord.Embed(title=f":checkered_flag: {team_name} Team Card".format(self), description=":bank: Party Chat Gaming Database", colour=000000)
+            embed1 = discord.Embed(title=f":checkered_flag: {team_name} Team Card - :coin:{balance}".format(self), description=":bank: Party Chat Gaming Database", colour=000000)
             if team['LOGO_FLAG']:
                 embed1.set_image(url=logo)
             embed1.add_field(name="Owner :man_detective:", value= owner_name.split("#",1)[0], inline=False)
@@ -528,12 +529,12 @@ class Lookup(commands.Cog):
             embed1.add_field(name="Scrim Losses :crossed_swords:", value=scrim_losses)
             embed1.add_field(name="Tournament Wins :fireworks:", value=tournament_wins, inline=False)
             
-            embed2 = discord.Embed(title=f":checkered_flag: {team_name} Team Members".format(self), description=":bank: Party Chat Gaming Database", colour=000000)
+            embed2 = discord.Embed(title=f":checkered_flag: {team_name} Team Members - :coin:{balance}".format(self), description=":bank: Party Chat Gaming Database", colour=000000)
             if team['LOGO_FLAG']:
                 embed2.set_image(url=logo)
             embed2.add_field(name="Members :military_helmet:", value="\n".join(f'{t}'.format(self) for t in team_list), inline=False)
 
-            embed3 = discord.Embed(title=f":checkered_flag: {team_name} Team Members".format(self), description=":bank: Party Chat Gaming Database", colour=000000)
+            embed3 = discord.Embed(title=f":checkered_flag: {team_name} Team Members - :coin:{balance}".format(self), description=":bank: Party Chat Gaming Database", colour=000000)
             if team['LOGO_FLAG']:
                 embed3.set_image(url=logo)
             embed3.add_field(name="Games :video_game:", value="\n".join(games), inline=False)
