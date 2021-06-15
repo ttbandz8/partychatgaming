@@ -1298,7 +1298,7 @@ class CrownUnlimited(commands.Cog):
                                         o_used_resolve = True 
                                         o_pet_used=False
                                         embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
-                                        embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
+                                        embedVar.add_field(name=f"Transformation: Ascension", value="All stats & stamina greatly increased")
                                         await ctx.send(embed=embedVar)
                                         turn_total= turn_total + 1
                                         turn=1
@@ -1964,7 +1964,7 @@ class CrownUnlimited(commands.Cog):
                                     t_used_resolve=True
 
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
-                                    embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
+                                    embedVar.add_field(name=f"Transformation: Ascension", value="All stats & stamina greatly increased")
                                     await ctx.send(embed=embedVar)
                                     turn_total= turn_total + 1
                                     turn=2
@@ -5298,7 +5298,7 @@ class CrownUnlimited(commands.Cog):
                                     t_used_resolve=True
 
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
-                                    embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
+                                    embedVar.add_field(name=f"Transformation: Ascension", value="All stats & stamina greatly increased")
                                     await ctx.send(embed=embedVar)
                                     turn_total= turn_total + 1
                                     turn=2
