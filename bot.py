@@ -25,6 +25,7 @@ from decouple import config
 from collections import ChainMap
 import textwrap
 import random
+import unique_traits as ut
 now = time.asctime()
 
 '''User must have predefined roles of the games they play before creating users
@@ -774,6 +775,18 @@ async def curseteam(amount, team):
          db.updateTeam(query, update_query)
       else:
          print("cant find team")
+
+@bot.command()
+@commands.check(validate_user)
+async def traits(ctx):
+   traits = ut.traits
+   traitmessages = []
+   for trait in traits:
+      traitmessages.append(f"_{trait['NAME']}_\n**{trait['EFFECT']}**: {trait['TRAIT']}\n")
+
+   embedVar = discord.Embed(title="Universe Traits", description="\n".join(traitmessages))
+
+   await ctx.send(embed=embedVar)
 
 @bot.command()
 @commands.check(validate_user)

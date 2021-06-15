@@ -22618,7 +22618,7 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
         if fortitude <= ap:
             fortitude = health * (2/5) #216
 
-        attackpower = round(((int(atk) / 30) * int(ap)) / op_defense) #5.09
+        attackpower = round(((int(atk) / 31) * int(ap)) / op_defense) #5.09
         modifier = random.randint(5,10)
         dmg = round(((fortitude * attackpower)/100) * modifier)
 

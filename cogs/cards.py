@@ -7,6 +7,7 @@ import classes as data
 import messages as m
 import numpy as np
 import help_commands as h
+import unique_traits as ut
 # Converters
 from discord import User
 from discord import Member
@@ -155,13 +156,24 @@ class Cards(commands.Cog):
             o_passive = card['PASS'][0]
             o_speed = card['SPD']
             o_show = card['UNIVERSE']
+            traits = ut.traits
             show_img = db.queryUniverse({'TITLE': o_show})['PATH']
             o_collection = card['COLLECTION']
             resolved = False
             focused = False
             title = {'TITLE': 'CARD PREVIEW'}
             card_file = showcard(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, title, focused)
-
+            mytrait = {}
+            traitmessage = ''
+            for trait in traits:
+                if trait['NAME'] == o_show:
+                    mytrait = trait
+                if o_show == 'Kanto Region' or o_show == 'Johto Region' or o_show == 'Kalos Region' or o_show == 'Unova Region' or o_show == 'Sinnoh Region' or o_show == 'Hoenn Region' or o_show == 'Galar Region' or o_show == 'Alola Region':
+                    if trait['NAME'] == 'Pokemon':
+                        mytrait = trait
+            if mytrait:
+                traitmessage = f"**{mytrait['EFFECT']}**: {mytrait['TRAIT']}"
+            
             passive_name = list(o_passive.keys())[0]
             passive_num = list(o_passive.values())[0]
             passive_type = list(o_passive.values())[1]
@@ -215,6 +227,8 @@ class Cards(commands.Cog):
             **{move4}:** {move4enh} By {move4ap}
 
             _Unique Passive_ **{passive_name}:** {passive_type} By {passive_num}
+
+            {traitmessage}
             """), colour=000000)
             if o_show != "Unbound":
                 embedVar.set_thumbnail(url=show_img)
