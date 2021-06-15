@@ -13,7 +13,7 @@ traits = [{
 },{
     'NAME': 'Digimon',
     'EFFECT': 'Digivolve',
-    'TRAIT': 'On Focus you Resovle.'
+    'TRAIT': 'On Focus you Resolve.'
 },{
     'NAME': 'Naruto',
     'EFFECT': 'Substitution',
