@@ -10420,7 +10420,7 @@ class CrownUnlimited(commands.Cog):
             await private_channel.send(m.ALREADY_IN_TALES)
             return
 
-
+        completed_dungeons = sowner['DUNGEONS']
         all_universes = db.queryAllUniverse()
         available_universes = []
         selected_universe = ""
