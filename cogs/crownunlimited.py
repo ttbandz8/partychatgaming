@@ -163,7 +163,10 @@ class CrownUnlimited(commands.Cog):
             o_card = o['NAME']
             o_card_path=o['PATH']
             o_rcard_path=o['RPATH']
-            o_max_health = o['HLT'] 
+            if o['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= o['HLT']: # Demon Slayer Universal Trait
+                o_max_health = t['HLT']
+            else:                    
+                o_max_health = o['HLT'] 
             o_health = o['HLT'] 
             o_stamina = o['STAM']
             o_max_stamina = o['STAM']
@@ -224,7 +227,10 @@ class CrownUnlimited(commands.Cog):
             c_card = c['NAME']
             c_card_path=c['PATH']
             c_rcard_path= c['RPATH']
-            c_max_health = c['HLT']
+            if c['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= c['HLT']: # Demon Slayer Universal Trait
+                c_max_health = t['HLT']
+            else:                    
+                c_max_health = c['HLT']
             c_health = c['HLT'] 
             c_stamina = c['STAM']
             c_max_stamina = c['STAM']
@@ -267,7 +273,10 @@ class CrownUnlimited(commands.Cog):
             t_card = t['NAME']
             t_card_path=t['PATH']
             t_rcard_path=t['RPATH']
-            t_max_health = t['HLT'] + (25 * currentopponent) + 100 + opponent_scaling
+            if t['UNIVERSE'] == "Demon Slayer" and o_max_health >= t['HLT']: #Demon Slayer Universal Trait
+                t_max_health = o_max_health + (25 * currentopponent) + 100 + opponent_scaling
+            else:                    
+                t_max_health = t['HLT'] + (25 * currentopponent) + 100 + opponent_scaling
             t_health = t['HLT'] + (25 * currentopponent) + 100 + opponent_scaling
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
@@ -1122,8 +1131,63 @@ class CrownUnlimited(commands.Cog):
                         embedVar.add_field(name=f"{o_card} focused and {healmessage}", value="All stats & stamina increased")
                         await private_channel.send(embed=embedVar)
 
-                        turn_total= turn_total + 1
-                        turn = 1
+                        #Resolve Check and Calculation
+                        if not o_used_resolve and o_used_focus and o_universe == "Digimon": # Digimon Universal Trait
+                            embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                            embedVar.add_field(name=f"Transformation: Digivolve", value="All stats & stamina greatly increased")
+                            await ctx.send(embed=embedVar)
+                            #fortitude or luck is based on health  
+                            fortitude = 0.0
+                            low = o_health - (o_health * .75)
+                            high = o_health- (o_health * .66)
+                            fortitude = random.randint(int(low), int(high))
+                            #Resolve Scaling
+                            o_resolve_health = round(fortitude + (.5*o_resolve))
+                            o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                            o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+
+                            o_stamina = o_stamina + o_resolve
+                            o_health = o_health + o_resolve_health
+                            o_attack = round(o_attack + o_resolve_attack)
+                            o_defense = round(o_defense - o_resolve_defense)
+                            o_used_resolve = True 
+                            o_pet_used=False
+
+                            turn_total= turn_total + 1
+                            turn=1
+                        elif o_universe == "League Of Legends":
+                            embedVar = discord.Embed(title=f"Turret Shot hits for 25 DMG!", colour=0xe91e63)
+                            await ctx.send(embed=embedVar)
+                            t_health = round(t_health - 25)
+                            turn_total= turn_total + 1
+                            turn=1
+                        elif o_universe == "Attack On Titan":
+                            embedVar = discord.Embed(title=f"Rally! {o_card} Increased Max Health!", colour=0xe91e63)
+                            await ctx.send(embed=embedVar)
+                            o_max_health = round(o_max_health + 50)
+                            turn_total= turn_total + 1
+                            turn=1
+                        elif o_universe == "Black Clover":
+                            embedVar = discord.Embed(title=f"Mana Zone! {o_card} Increased Stamina!", colour=0xe91e63)
+                            await ctx.send(embed=embedVar)
+                            o_stamina = 110
+                            turn_total= turn_total + 1
+                            turn=1
+                        elif t_universe == "One Punch Man":
+                            embedVar = discord.Embed(title=f"Hero Reinforcements! {t_card} Increased Max Health!", colour=0xe91e63)
+                            await ctx.send(embed=embedVar)
+                            t_max_health = round(t_max_health + 50)
+                            turn_total= turn_total + 1
+                            turn=1
+                        elif t_universe == "7ds":
+                            embedVar = discord.Embed(title=f"Increase Power Level! {t_card} Increased Stamina!", colour=0xe91e63)
+                            await ctx.send(embed=embedVar)
+                            t_stamina = 110
+                            turn_total= turn_total + 1
+                            turn=1
+                        else:
+                            turn_total= turn_total + 1
+                            turn = 1
                     else:
 
                         # UNIVERSE CARD
@@ -1193,35 +1257,151 @@ class CrownUnlimited(commands.Cog):
                                 dmg = damage_cal(o_card, o_enhancer, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description)
                                 o_enhancer_used=False
                             elif msg.content == "5":
-                                #Resolve Check and Calculation
                                 if not o_used_resolve and o_used_focus:
+                                    if o_universe == "My Hero Academia": #My Hero Trait
+                                        #fortitude or luck is based on health  
+                                        fortitude = 0.0
+                                        low = o_health - (o_health * .75)
+                                        high = o_health- (o_health * .66)
+                                        fortitude = random.randint(int(low), int(high))
+                                        #Resolve Scaling
+                                        o_resolve_health = round(fortitude + (.5*o_resolve))
+                                        o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                        o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+
+                                        o_stamina = o_stamina + o_resolve
+                                        o_health = o_health + o_resolve_health
+                                        o_attack = round(o_attack + o_resolve_attack)
+                                        o_defense = round(o_defense - o_resolve_defense)
+                                        o_used_resolve = True 
+                                        o_pet_used=False
+                                        embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Transformation: Plus Ultra", value="All stats & stamina greatly increased")
+                                        await ctx.send(embed=embedVar)
+
+                                        turn_total= turn_total + 1
+                                        turn=0
+                                    elif o_universe == "Bleach": #Bleach Trait
+                                        #fortitude or luck is based on health  
+                                        fortitude = 0.0
+                                        low = o_health - (o_health * .75)
+                                        high = o_health- (o_health * .66)
+                                        fortitude = random.randint(int(low), int(high))
+                                        #Resolve Scaling
+                                        o_resolve_health = round(fortitude + (.5*o_resolve))
+                                        o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                        o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+
+                                        o_stamina = o_stamina + o_resolve
+                                        o_health = o_health + o_resolve_health
+                                        o_attack = round(o_attack + (2 * o_resolve_attack))
+                                        o_defense = round(o_defense - o_resolve_defense)
+                                        o_used_resolve = True 
+                                        o_pet_used=False
+                                        embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
+                                        await ctx.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn=1
+                                    elif o_universe == "God Of War": #God Of War Trait
+                                        #fortitude or luck is based on health  
+                                        fortitude = 0.0
+                                        low = o_health - (o_health * .75)
+                                        high = o_health- (o_health * .66)
+                                        fortitude = random.randint(int(low), int(high))
+                                        #Resolve Scaling
+                                        o_resolve_health = round(fortitude + (.5*o_resolve))
+                                        o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                        o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+
+                                        o_stamina = o_stamina + o_resolve
+                                        o_health = o_max_health
+                                        o_attack = round(o_attack + o_resolve_attack)
+                                        o_defense = round(o_defense - o_resolve_defense)
+                                        o_used_resolve = True 
+                                        o_pet_used=False
+                                        embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Transformation: Ascension", value="All stats & stamina greatly increased")
+                                        await ctx.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn=1
+                                    elif o_universe == "Fate": #Fate Trait
+                                        #fortitude or luck is based on health  
+                                        fortitude = 0.0
+                                        low = o_health - (o_health * .75)
+                                        high = o_health- (o_health * .66)
+                                        fortitude = random.randint(int(low), int(high))
+                                        #Resolve Scaling
+                                        o_resolve_health = round(fortitude + (.5*o_resolve))
+                                        o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                        o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+
+                                        o_stamina = o_stamina + o_resolve
+                                        o_health = o_health + o_resolve_health
+                                        o_attack = round(o_attack + o_resolve_attack)
+                                        o_defense = round(o_defense - o_resolve_defense)
                                         
+                                        embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
+                                        await ctx.send(embed=embedVar)
+                                        dmg = damage_cal(o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description)
+                                        t_health = t_health - dmg['DMG']
+                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
+                                        await ctx.send(embed=embedVar)
+                                        o_stamina = 0
+                                        o_used_resolve = True 
+                                        o_pet_used=False
+                                        turn_total= turn_total + 1
+                                        turn=1
+                                    elif o_universe == "Kanto Region" or o_universe == "Johto Region" or o_universe == "Hoenn Region" or o_universe == "Sinnoh Region" or o_universe == "Kalos Region" or o_universe == "Unova Region" or o_universe == "Alola Region" or o_universe == "Galar Region": # Pokemon Resolves
+                                        #fortitude or luck is based on health  
+                                        fortitude = 0.0
+                                        low = o_health - (o_health * .75)
+                                        high = o_health- (o_health * .66)
+                                        fortitude = random.randint(int(low), int(high))
+                                        #Resolve Scaling
+                                        o_resolve_health = round(fortitude + (.5*o_resolve))
+                                        o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                        o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
 
-                                    #fortitude or luck is based on health  
-                                    fortitude = 0.0
-                                    low = o_health - (o_health * .75)
-                                    high = o_health- (o_health * .66)
-                                    fortitude = random.randint(int(low), int(high))
-                                    #Resolve Scaling
-                                    o_resolve_health = round(fortitude + (.5*o_resolve))
-                                    o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
-                                    o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                        o_stamina = o_stamina + o_resolve
+                                        o_health = o_health + o_resolve_health
+                                        o_attack = round(o_attack + o_resolve_attack)
+                                        o_defense = round(o_defense)
+                                        o_used_resolve = True 
+                                        o_pet_used=False
+                                        embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Transformation: Plus Ultra", value="All stats & stamina greatly increased")
+                                        await ctx.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn=1
+                                    else: # Standard Resolve
+                                        #fortitude or luck is based on health  
+                                        fortitude = 0.0
+                                        low = o_health - (o_health * .75)
+                                        high = o_health- (o_health * .66)
+                                        fortitude = random.randint(int(low), int(high))
+                                        #Resolve Scaling
+                                        o_resolve_health = round(fortitude + (.5*o_resolve))
+                                        o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                        o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
 
-                                    o_stamina = o_stamina + o_resolve
-                                    o_health = o_health + o_resolve_health
-                                    o_attack = round(o_attack + o_resolve_attack)
-                                    o_defense = round(o_defense - o_resolve_defense)
-                                    o_used_resolve = True 
-
-                                    embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
-                                    embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
-                                    await private_channel.send(embed=embedVar)
-                                    turn_total= turn_total + 1
-                                    turn=1
+                                        o_stamina = o_stamina + o_resolve
+                                        o_health = o_health + o_resolve_health
+                                        o_attack = round(o_attack + o_resolve_attack)
+                                        o_defense = round(o_defense - o_resolve_defense)
+                                        o_used_resolve = True 
+                                        o_pet_used=False
+                                        embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
+                                        await ctx.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn=1
                                 else:
                                     emessage = m.CANNOT_USE_RESOLVE
-                                    embedVar = discord.Embed(title=emessage, colour=0xe91e63)
-                                    await private_channel.send(embed=embedVar)
+                                    embedVar = discord.Embed(title=emessage, description=f"Entering `Resolved State` sacrifices a turn to power up even greater and regain `Stamina`!", colour=0xe91e63)
+                                    await ctx.send(embed=embedVar)
+                                    turn=0
                             elif msg.content == "6":
                                     #Resolve Check and Calculation
                                 if o_used_resolve and o_used_focus and not o_pet_used:                                  
@@ -1485,13 +1665,17 @@ class CrownUnlimited(commands.Cog):
                                         turn_total= turn_total + 1
                                         turn=1
                                     else:
-                                        t_health = t_health - dmg['DMG']
+                                        if t_universe == "Naruto" and t_stamina == 0:
+                                            t_health = t_health 
+                                            embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{o_card} attack strikes a log", colour=0xe91e63)
+                                            await ctx.send(embed=embedVar)
+                                        else:
+                                            t_health = t_health - dmg['DMG']
+                                            embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
+                                            await ctx.send(embed=embedVar)
                                         if t_health < 0:
                                             t_health=0
-                                        o_stamina = o_stamina - dmg['STAMINA_USED']
-
-                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
-                                        await private_channel.send(embed=embedVar)
+                                        o_stamina = o_stamina - dmg['STAMINA_USED']                                            
                                         turn_total= turn_total + 1
                                         turn=1
                                 else:
@@ -1563,8 +1747,61 @@ class CrownUnlimited(commands.Cog):
                         embedVar.add_field(name=f"{t_card} focused and {healmessage}", value="All stats & stamina increased")
                         await private_channel.send(embed=embedVar)
 
-                        turn_total= turn_total + 1
-                        turn=2
+                        if not t_used_resolve and t_used_focus and t_universe == "Digimon":  #Digimon Universal Trait
+                            #fortitude or luck is based on health  
+                            fortitude = 0.0
+                            low = t_health - (t_health * .75)
+                            high = t_health- (t_health * .66)
+                            fortitude = random.randint(int(low), int(high))
+                            #Resolve Scaling
+                            t_resolve_health = round(fortitude + (.5*t_resolve))
+                            t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                            t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                            t_stamina = t_stamina + t_resolve
+                            t_health = t_health + t_resolve_health
+                            t_attack = round(t_attack + t_resolve_attack)
+                            t_defense = round(t_defense - t_resolve_defense)
+                            t_used_resolve=True
+
+                            embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                            embedVar.add_field(name=f"Transformation: Digivolve", value="All stats & stamina greatly increased")
+                            await ctx.send(embed=embedVar)
+                            turn_total= turn_total + 1
+                            turn=2
+                        elif t_universe == "League Of Legends":
+                            embedVar = discord.Embed(title=f"Turret Shot hits {o_card} for 25 DMG!", colour=0xe91e63)
+                            await ctx.send(embed=embedVar)
+                            o_health = round(o_health - 25)
+                            turn_total= turn_total + 1
+                            turn=2
+                        elif t_universe == "Attack On Titan":
+                            embedVar = discord.Embed(title=f"Rally!{t_card} Increased Max Health!", colour=0xe91e63)
+                            await ctx.send(embed=embedVar)
+                            t_max_health = round(t_max_health + 50)
+                            turn_total= turn_total + 1
+                            turn=2
+                        elif t_universe == "Black Clover":
+                            embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
+                            await ctx.send(embed=embedVar)
+                            t_stamina = 110
+                            turn_total= turn_total + 1
+                            turn=2
+                        elif o_universe == "One Punch Man":
+                            embedVar = discord.Embed(title=f"Hero Reinforcements! {o_card} Increased Max Health!", colour=0xe91e63)
+                            await ctx.send(embed=embedVar)
+                            o_max_health = round(o_max_health + 50)
+                            turn_total= turn_total + 1
+                            turn=2
+                        elif o_universe == "7ds":
+                            embedVar = discord.Embed(title=f"Increase Power Level! {o_card} Increased Stamina!", colour=0xe91e63)
+                            await ctx.send(embed=embedVar)
+                            o_stamina = 110
+                            turn_total= turn_total + 1
+                            turn=2
+                        else:
+                            turn_total= turn_total + 1
+                            turn=2
                     else:
                         # UNIVERSE CARD
                         player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus)
@@ -1666,25 +1903,144 @@ class CrownUnlimited(commands.Cog):
                             t_enhancer_used=False
                         elif int(aiMove) == 5:
                             if not t_used_resolve and t_used_focus:
-                                #fortitude or luck is based on health  
-                                fortitude = 0.0
-                                low = t_health - (t_health * .75)
-                                high = t_health- (t_health * .66)
-                                fortitude = random.randint(int(low), int(high))
-                                #Resolve Scaling
-                                t_resolve_health = round(fortitude + (.5*t_resolve))
-                                t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
-                                t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                if t_universe == "My Hero Academia": #My hero TRait
+                                        #fortitude or luck is based on health  
+                                        fortitude = 0.0
+                                        low = t_health - (t_health * .75)
+                                        high = t_health- (t_health * .66)
+                                        fortitude = random.randint(int(low), int(high))
+                                        #Resolve Scaling
+                                        t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                        t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                        t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
 
-                                t_stamina = t_stamina + t_resolve
-                                t_health = t_health + t_resolve_health
-                                t_attack = round(t_attack + t_resolve_attack)
-                                t_defense = round(t_defense - t_resolve_defense)
-                                t_used_resolve=True
-                                embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE!", description=f"`{t_card} says:`\n{t_resolve_description}", colour=embed_color_t)
-                                await private_channel.send(embed=embedVar)
-                                turn_total= turn_total + 1
-                                turn=2
+                                        t_stamina = t_stamina + t_resolve
+                                        t_health = t_health + t_resolve_health
+                                        t_attack = round(t_attack + t_resolve_attack)
+                                        t_defense = round(t_defense - t_resolve_defense)
+                                        t_used_resolve=True
+
+                                        embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Transformation: Plus Ultra", value="All stats & stamina greatly increased")
+                                        await ctx.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn=1
+                                elif t_universe == "Bleach": #Bleach Trait
+                                    #fortitude or luck is based on health  
+                                    fortitude = 0.0
+                                    low = t_health - (t_health * .75)
+                                    high = t_health- (t_health * .66)
+                                    fortitude = random.randint(int(low), int(high))
+                                    #Resolve Scaling
+                                    t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                    t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                    t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                    t_stamina = t_stamina + t_resolve
+                                    t_health = t_health + t_resolve_health
+                                    t_attack = round(t_attack + (2 * t_resolve_attack))
+                                    t_defense = round(t_defense - t_resolve_defense)
+                                    t_used_resolve=True
+
+                                    embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
+                                    await ctx.send(embed=embedVar)
+                                    turn_total= turn_total + 1
+                                    turn=2
+                                elif t_universe == "God Of War": #God Of War Trait
+                                    #fortitude or luck is based on health  
+                                    fortitude = 0.0
+                                    low = t_health - (t_health * .75)
+                                    high = t_health- (t_health * .66)
+                                    fortitude = random.randint(int(low), int(high))
+                                    #Resolve Scaling
+                                    t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                    t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                    t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                    t_stamina = t_stamina + t_resolve
+                                    t_health = t_max_health
+                                    t_attack = round(t_attack + t_resolve_attack)
+                                    t_defense = round(t_defense - t_resolve_defense)
+                                    t_used_resolve=True
+
+                                    embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
+                                    await ctx.send(embed=embedVar)
+                                    turn_total= turn_total + 1
+                                    turn=2
+                                elif t_universe == "Fate": #Bleach Trait
+                                    #fortitude or luck is based on health  
+                                    fortitude = 0.0
+                                    low = t_health - (t_health * .75)
+                                    high = t_health- (t_health * .66)
+                                    fortitude = random.randint(int(low), int(high))
+                                    #Resolve Scaling
+                                    t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                    t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                    t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                    t_stamina = t_stamina + t_resolve
+                                    t_health = t_health + t_resolve_health
+                                    t_attack = round(t_attack + t_resolve_attack)
+                                    t_defense = round(t_defense - t_resolve_defense)
+                                    t_used_resolve=True
+                                    
+                                    embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
+                                    await ctx.send(embed=embedVar)
+                                    dmg = damage_cal(t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description)
+                                    t_pet_used =False
+                                    o_health = o_health - int(dmg['DMG'])
+                                    embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                    await ctx.send(embed=embedVar)
+                                    t_stamina = 0
+                                    turn_total= turn_total + 1
+                                    turn=2
+                                elif t_universe == "Kanto Region" or t_universe == "Johto Region" or t_universe == "Hoenn Region" or t_universe == "Sinnoh Region" or t_universe == "Kalos Region" or t_universe == "Unova Region" or t_universe == "Alola Region" or t_universe == "Galar Region": #Pokemon Resolves
+                                    #fortitude or luck is based on health  
+                                    fortitude = 0.0
+                                    low = t_health - (t_health * .75)
+                                    high = t_health- (t_health * .66)
+                                    fortitude = random.randint(int(low), int(high))
+                                    #Resolve Scaling
+                                    t_resolve_health = round(fortitude + (.5*t_resolve))
+                                    t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                    t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                    t_stamina = t_stamina + t_resolve
+                                    t_health = t_health + t_resolve_health
+                                    t_attack = round(t_attack + t_resolve_attack)
+                                    t_defense = round(t_defense)
+                                    t_used_resolve=True
+
+                                    embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation: Evolution", value="All stats & stamina greatly increased")
+                                    await ctx.send(embed=embedVar)
+                                    turn_total= turn_total + 1
+                                    turn=2
+                                else:
+                                    #fortitude or luck is based on health  
+                                    fortitude = 0.0
+                                    low = t_health - (t_health * .75)
+                                    high = t_health- (t_health * .66)
+                                    fortitude = random.randint(int(low), int(high))
+                                    #Resolve Scaling
+                                    t_resolve_health = round(fortitude + (.5*t_resolve))
+                                    t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                    t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                    t_stamina = t_stamina + t_resolve
+                                    t_health = t_health + t_resolve_health
+                                    t_attack = round(t_attack + t_resolve_attack)
+                                    t_defense = round(t_defense - t_resolve_defense)
+                                    t_used_resolve=True
+
+                                    embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
+                                    await ctx.send(embed=embedVar)
+                                    turn_total= turn_total + 1
+                                    turn=2
                             else:
                                 await private_channel.send(m.CANNOT_USE_RESOLVE)
                                 turn=1
@@ -1772,13 +2128,17 @@ class CrownUnlimited(commands.Cog):
                                     turn_total= turn_total + 1
                                     turn=2
                                 else:
-                                    o_health = o_health - int(dmg['DMG'])
+                                    if o_universe == "Naruto" and o_stamina == 0:
+                                        o_health = o_health 
+                                        embedVar = discord.Embed(title=f"{o_card.upper()}: Substitution Jutsu", description=f"{t_card} attack strikes a log", colour=0xe91e63)
+                                        await private_channel.send(embed=embedVar)
+                                    else:
+                                        o_health = o_health - int(dmg['DMG'])
+                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                        await private_channel.send(embed=embedVar)
                                     if o_health < 0:
                                         o_health=0
-                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-
-                                    embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
-                                    await private_channel.send(embed=embedVar)
+                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
                                     turn_total= turn_total + 1
                                     turn=2
 
@@ -1847,9 +2207,62 @@ class CrownUnlimited(commands.Cog):
                         embedVar = discord.Embed(title=f"{c_card.upper()} FOCUSED", description=f"`{c_card} says:`\n{c_focus_description}", colour=0xe91e63)
                         embedVar.add_field(name=f"{c_card} focused and {healmessage}", value="All stats & stamina increased")
                         await private_channel.send(embed=embedVar)
+                        if not c_used_resolve and c_used_focus and c_universe == "Digimon": # Digimon Universal Trait
+                            embedVar = discord.Embed(title=f"{c_card.upper()} STRENGTHENED RESOLVE", description=f"`{c_card} says:`\n{c_resolve_description}", colour=0xe91e63)
+                            embedVar.add_field(name=f"Transformation: Digivolve", value="All stats & stamina greatly increased")
+                            await ctx.send(embed=embedVar)
+                            #fortitude or luck is based on health  
+                            fortitude = 0.0
+                            low = o_health - (o_health * .75)
+                            high = o_health- (o_health * .66)
+                            fortitude = random.randint(int(low), int(high))
+                            #Resolve Scaling
+                            c_resolve_health = round(fortitude + (.5 * c_resolve))
+                            c_resolve_attack = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
+                            c_resolve_defense = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
 
-                        turn_total= turn_total + 1
-                        turn = 3
+                            c_stamina = c_stamina + c_resolve
+                            c_health = c_health + c_resolve_health
+                            c_attack = round(c_attack + c_resolve_attack)
+                            c_defense = round(c_defense - c_resolve_defense)
+                            c_used_resolve = True 
+                            c_pet_used=False
+
+                            turn_total= turn_total + 1
+                            turn=3
+                        elif c_universe == "League Of Legends":
+                            embedVar = discord.Embed(title=f"Turret Shot hits {t_card} for 25 DMG!", colour=0xe91e63)
+                            await ctx.send(embed=embedVar)
+                            t_health = round(t_health - 25)
+                            turn_total= turn_total + 1
+                            turn=3
+                        elif c_universe == "Attack On Titan":
+                            embedVar = discord.Embed(title=f"Rally! {c_card} Increased Max Health!", colour=0xe91e63)
+                            await ctx.send(embed=embedVar)
+                            c_max_health = round(c_max_health + 50)
+                            turn_total= turn_total + 1
+                            turn=3
+                        elif c_universe == "Black Clover":
+                            embedVar = discord.Embed(title=f"Mana Zone! {c_card} Increased Stamina!", colour=0xe91e63)
+                            await ctx.send(embed=embedVar)
+                            c_stamina = 110
+                            turn_total= turn_total + 1
+                            turn=3
+                        elif t_universe == "One Punch Man":
+                            embedVar = discord.Embed(title=f"Hero Reinforcements! {t_card} Increased Max Health!", colour=0xe91e63)
+                            await ctx.send(embed=embedVar)
+                            t_max_health = round(t_max_health + 50)
+                            turn_total= turn_total + 1
+                            turn=3
+                        elif t_universe == "7ds":
+                            embedVar = discord.Embed(title=f"Increase Power Level! {t_card} Increased Stamina!", colour=0xe91e63)
+                            await ctx.send(embed=embedVar)
+                            t_stamina = 110
+                            turn_total= turn_total + 1
+                            turn=3
+                        else:
+                            turn_total= turn_total + 1
+                            turn = 3
                     else:
 
                         # UNIVERSE CARD
@@ -1921,29 +2334,145 @@ class CrownUnlimited(commands.Cog):
                             elif msg.content == "5":
                                 #Resolve Check and Calculation
                                 if not c_used_resolve and c_used_focus:
+                                    if c_universe == "My Hero Academia": #My Hero Trait
+                                        #fortitude or luck is based on health  
+                                        fortitude = 0.0
+                                        low = c_health - (c_health * .75)
+                                        high = c_health- (c_health * .66)
+                                        fortitude = random.randint(int(low), int(high))
+                                        #Resolve Scaling
+                                        c_resolve_health = round(fortitude + (.5 * c_resolve))
+                                        c_resolve_attack = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
+                                        c_resolve_defense = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
+
+                                        c_stamina = c_stamina + c_resolve
+                                        c_health = c_health + c_resolve_health
+                                        c_attack = round(c_attack + c_resolve_attack)
+                                        c_defense = round(c_defense - c_resolve_defense)
+                                        c_used_resolve = True 
+                                        c_pet_used=False
+                                        embedVar = discord.Embed(title=f"{c_card.upper()} STRENGTHENED RESOLVE", description=f"`{c_card} says:`\n{c_resolve_description}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Transformation: Plus Ultra", value="All stats & stamina greatly increased")
+                                        await ctx.send(embed=embedVar)
+
+                                        turn_total= turn_total + 1
+                                        turn=2
+                                    elif c_universe == "Bleach": #Bleach Trait
+                                        #fortitude or luck is based on health  
+                                        fortitude = 0.0
+                                        low = c_health - (c_health * .75)
+                                        high = c_health- (c_health * .66)
+                                        fortitude = random.randint(int(low), int(high))
+                                        #Resolve Scaling
+                                        c_resolve_health = round(fortitude + (.5 * c_resolve))
+                                        c_resolve_attack = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
+                                        c_resolve_defense = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
+
+                                        c_stamina = c_stamina + c_resolve
+                                        c_health = c_health + c_resolve_health
+                                        c_attack = round(c_attack + (2 * c_resolve_attack))
+                                        c_defense = round(c_defense - c_resolve_defense)
+                                        c_used_resolve = True 
+                                        c_pet_used=False
+                                        embedVar = discord.Embed(title=f"{c_card.upper()} STRENGTHENED RESOLVE", description=f"`{c_card} says:`\n{c_resolve_description}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
+                                        await ctx.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn=3
+                                    elif c_universe == "God Of War": #God Of War Trait
+                                        #fortitude or luck is based on health  
+                                        fortitude = 0.0
+                                        low = c_health - (c_health * .75)
+                                        high = c_health - (c_health * .66)
+                                        fortitude = random.randint(int(low), int(high))
+                                        #Resolve Scaling
+                                        c_resolve_health = round(fortitude + (.5*o_resolve))
+                                        c_resolve_attack = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
+                                        c_resolve_defense = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
+
+                                        c_stamina = c_stamina + c_resolve
+                                        c_health = c_max_health
+                                        c_attack = round(c_attack + c_resolve_attack)
+                                        c_defense = round(c_defense - c_resolve_defense)
+                                        c_used_resolve = True 
+                                        c_pet_used=False
+                                        embedVar = discord.Embed(title=f"{c_card.upper()} STRENGTHENED RESOLVE", description=f"`{c_card} says:`\n{c_resolve_description}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Transformation: Ascension", value="All stats & stamina greatly increased")
+                                        await ctx.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn=3
+                                    elif c_universe == "Fate": #Fate Trait
+                                        #fortitude or luck is based on health  
+                                        fortitude = 0.0
+                                        low = c_health - (c_health * .75)
+                                        high = c_health- (c_health * .66)
+                                        fortitude = random.randint(int(low), int(high))
+                                        #Resolve Scaling
+                                        c_resolve_health = round(fortitude + (.5 * c_resolve))
+                                        c_resolve_attack = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
+                                        c_resolve_defense = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
+
+                                        c_stamina = c_stamina + c_resolve
+                                        c_health = c_health + c_resolve_health
+                                        c_attack = round(c_attack + c_resolve_attack)
+                                        c_defense = round(c_defense - c_resolve_defense)
                                         
+                                        embedVar = discord.Embed(title=f"{c_card.upper()} STRENGTHENED RESOLVE", description=f"`{c_card} says:`\n{c_resolve_description}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
+                                        await ctx.send(embed=embedVar)
+                                        dmg = damage_cal(c_card, c_3, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina,c_max_health, t_attack, c_special_move_description)
+                                        t_health = t_health - dmg['DMG']
+                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
+                                        await ctx.send(embed=embedVar)
+                                        c_stamina = 0
+                                        c_used_resolve = True 
+                                        c_pet_used=False
+                                        turn_total= turn_total + 1
+                                        turn=3
+                                    elif c_universe == "Kanto Region" or c_universe == "Johto Region" or c_universe == "Hoenn Region" or c_universe == "Sinnoh Region" or c_universe == "Kalos Region" or c_universe == "Unova Region" or c_universe == "Alola Region" or c_universe == "Galar Region": # Pokemon Resolves
+                                        #fortitude or luck is based on health  
+                                        fortitude = 0.0
+                                        low = c_health - (c_health * .75)
+                                        high = c_health- (c_health * .66)
+                                        fortitude = random.randint(int(low), int(high))
+                                        #Resolve Scaling
+                                        c_resolve_health = round(fortitude + (.5*o_resolve))
+                                        c_resolve_attack = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
+                                        c_resolve_defense = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
 
-                                    #fortitude or luck is based on health  
-                                    fortitude = 0.0
-                                    low = c_health - (c_health * .75)
-                                    high = c_health- (c_health * .66)
-                                    fortitude = random.randint(int(low), int(high))
-                                    #Resolve Scaling
-                                    c_resolve_health = round(fortitude + (.5*c_resolve))
-                                    c_resolve_attack = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
-                                    c_resolve_defense = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
+                                        c_stamina = c_stamina + c_resolve
+                                        c_health = c_health + c_resolve_health
+                                        c_attack = round(c_attack + c_resolve_attack)
+                                        c_defense = round(c_defense)
+                                        c_used_resolve = True 
+                                        c_pet_used=False
+                                        embedVar = discord.Embed(title=f"{c_card.upper()} STRENGTHENED RESOLVE", description=f"`{c_card} says:`\n{c_resolve_description}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Transformation: Plus Ultra", value="All stats & stamina greatly increased")
+                                        await ctx.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn=3
+                                    else: # Standard Resolve
+                                        #fortitude or luck is based on health  
+                                        fortitude = 0.0
+                                        low = c_health - (c_health * .75)
+                                        high = c_health- (c_health * .66)
+                                        fortitude = random.randint(int(low), int(high))
+                                        #Resolve Scaling
+                                        c_resolve_health = round(fortitude + (.5 * c_resolve))
+                                        c_resolve_attack = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
+                                        c_resolve_defense = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
 
-                                    c_stamina = c_stamina + c_resolve
-                                    c_health = c_health + c_resolve_health
-                                    c_attack = round(c_attack + c_resolve_attack)
-                                    c_defense = round(c_defense - c_resolve_defense)
-                                    c_used_resolve = True 
-
-                                    embedVar = discord.Embed(title=f"{c_card.upper()} STRENGTHENED RESOLVE", description=f"`{c_card} says:`\n{c_resolve_description}", colour=0xe91e63)
-                                    embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
-                                    await private_channel.send(embed=embedVar)
-                                    turn_total= turn_total + 1
-                                    turn=3
+                                        c_stamina = c_stamina + c_resolve
+                                        c_health = c_health + c_resolve_health
+                                        c_attack = round(c_attack + c_resolve_attack)
+                                        c_defense = round(c_defense - c_resolve_defense)
+                                        c_used_resolve = True 
+                                        c_pet_used=False
+                                        embedVar = discord.Embed(title=f"{c_card.upper()} STRENGTHENED RESOLVE", description=f"`{c_card} says:`\n{c_resolve_description}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
+                                        await ctx.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn=3
                                 else:
                                     emessage = m.CANNOT_USE_RESOLVE
                                     embedVar = discord.Embed(title=emessage, colour=0xe91e63)
@@ -2212,13 +2741,17 @@ class CrownUnlimited(commands.Cog):
                                         turn_total= turn_total + 1
                                         turn=3
                                     else:
-                                        t_health = t_health - dmg['DMG']
+                                        if t_universe == "Naruto" and t_stamina == 0:
+                                            t_health = t_health 
+                                            embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{c_card} attack strikes a log", colour=0xe91e63)
+                                            await ctx.send(embed=embedVar)
+                                        else:
+                                            t_health = t_health - dmg['DMG']
+                                            embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
+                                            await ctx.send(embed=embedVar)
                                         if t_health < 0:
                                             t_health=0
-                                        c_stamina = c_stamina - dmg['STAMINA_USED']
-
-                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_c)
-                                        await private_channel.send(embed=embedVar)
+                                        c_stamina = c_stamina - dmg['STAMINA_USED']                                            
                                         turn_total= turn_total + 1
                                         turn=3
                                 else:
@@ -2290,8 +2823,61 @@ class CrownUnlimited(commands.Cog):
                         embedVar.add_field(name=f"{t_card} focused and {healmessage}", value="All stats & stamina increased")
                         await private_channel.send(embed=embedVar)
 
-                        turn_total= turn_total + 1
-                        turn=0
+                        if not t_used_resolve and t_used_focus and t_universe == "Digimon":  #Digimon Universal Trait
+                            #fortitude or luck is based on health  
+                            fortitude = 0.0
+                            low = t_health - (t_health * .75)
+                            high = t_health- (t_health * .66)
+                            fortitude = random.randint(int(low), int(high))
+                            #Resolve Scaling
+                            t_resolve_health = round(fortitude + (.5*t_resolve))
+                            t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                            t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                            t_stamina = t_stamina + t_resolve
+                            t_health = t_health + t_resolve_health
+                            t_attack = round(t_attack + t_resolve_attack)
+                            t_defense = round(t_defense - t_resolve_defense)
+                            t_used_resolve=True
+
+                            embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                            embedVar.add_field(name=f"Transformation: Digivolve", value="All stats & stamina greatly increased")
+                            await private_channel.send(embed=embedVar)
+                            turn_total= turn_total + 1
+                            turn=0
+                        elif t_universe == "League Of Legends":
+                            embedVar = discord.Embed(title=f"Turret Shot hits {c_card} for 25 DMG!", colour=0xe91e63)
+                            await ctx.send(embed=embedVar)
+                            c_health = round(c_health - 25)
+                            turn_total= turn_total + 1
+                            turn=0
+                        elif t_universe == "Attack On Titan":
+                            embedVar = discord.Embed(title=f"Rally!{t_card} Increased Max Health!", colour=0xe91e63)
+                            await ctx.send(embed=embedVar)
+                            t_max_health = round(t_max_health + 50)
+                            turn_total= turn_total + 1
+                            turn=0
+                        elif t_universe == "Black Clover":
+                            embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
+                            await ctx.send(embed=embedVar)
+                            t_stamina = 110
+                            turn_total= turn_total + 1
+                            turn=0
+                        elif c_universe == "One Punch Man":
+                            embedVar = discord.Embed(title=f"Hero Reinforcements! {c_card} Increased Max Health!", colour=0xe91e63)
+                            await ctx.send(embed=embedVar)
+                            c_max_health = round(c_max_health + 50)
+                            turn_total= turn_total + 1
+                            turn=0
+                        elif c_universe == "7ds":
+                            embedVar = discord.Embed(title=f"Increase Power Level! {c_card} Increased Stamina!", colour=0xe91e63)
+                            await ctx.send(embed=embedVar)
+                            c_stamina = 110
+                            turn_total= turn_total + 1
+                            turn=0
+                        else:
+                            turn_total= turn_total + 1
+                            turn=0
                     else:
                         # UNIVERSE CARD
                         player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus)
@@ -2393,25 +2979,144 @@ class CrownUnlimited(commands.Cog):
                             t_enhancer_used=False
                         elif int(aiMove) == 5:
                             if not t_used_resolve and t_used_focus:
-                                #fortitude or luck is based on health  
-                                fortitude = 0.0
-                                low = t_health - (t_health * .75)
-                                high = t_health- (t_health * .66)
-                                fortitude = random.randint(int(low), int(high))
-                                #Resolve Scaling
-                                t_resolve_health = round(fortitude + (.5*t_resolve))
-                                t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
-                                t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                if t_universe == "My Hero Academia": #My hero TRait
+                                        #fortitude or luck is based on health  
+                                        fortitude = 0.0
+                                        low = t_health - (t_health * .75)
+                                        high = t_health- (t_health * .66)
+                                        fortitude = random.randint(int(low), int(high))
+                                        #Resolve Scaling
+                                        t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                        t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                        t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
 
-                                t_stamina = t_stamina + t_resolve
-                                t_health = t_health + t_resolve_health
-                                t_attack = round(t_attack + t_resolve_attack)
-                                t_defense = round(t_defense - t_resolve_defense)
-                                t_used_resolve=True
-                                embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE!", description=f"`{t_card} says:`\n{t_resolve_description}", colour=embed_color_t)
-                                await private_channel.send(embed=embedVar)
-                                turn_total= turn_total + 1
-                                turn=0
+                                        t_stamina = t_stamina + t_resolve
+                                        t_health = t_health + t_resolve_health
+                                        t_attack = round(t_attack + t_resolve_attack)
+                                        t_defense = round(t_defense - t_resolve_defense)
+                                        t_used_resolve=True
+
+                                        embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Transformation: Plus Ultra", value="All stats & stamina greatly increased")
+                                        await ctx.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn=3
+                                elif t_universe == "Bleach": #Bleach Trait
+                                    #fortitude or luck is based on health  
+                                    fortitude = 0.0
+                                    low = t_health - (t_health * .75)
+                                    high = t_health- (t_health * .66)
+                                    fortitude = random.randint(int(low), int(high))
+                                    #Resolve Scaling
+                                    t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                    t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                    t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                    t_stamina = t_stamina + t_resolve
+                                    t_health = t_health + t_resolve_health
+                                    t_attack = round(t_attack + (2 * t_resolve_attack))
+                                    t_defense = round(t_defense - t_resolve_defense)
+                                    t_used_resolve=True
+
+                                    embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
+                                    await ctx.send(embed=embedVar)
+                                    turn_total= turn_total + 1
+                                    turn=0
+                                elif t_universe == "God Of War": #God Of War Trait
+                                    #fortitude or luck is based on health  
+                                    fortitude = 0.0
+                                    low = t_health - (t_health * .75)
+                                    high = t_health- (t_health * .66)
+                                    fortitude = random.randint(int(low), int(high))
+                                    #Resolve Scaling
+                                    t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                    t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                    t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                    t_stamina = t_stamina + t_resolve
+                                    t_health = t_max_health
+                                    t_attack = round(t_attack + t_resolve_attack)
+                                    t_defense = round(t_defense - t_resolve_defense)
+                                    t_used_resolve=True
+
+                                    embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
+                                    await ctx.send(embed=embedVar)
+                                    turn_total= turn_total + 1
+                                    turn=0
+                                elif t_universe == "Fate": #Bleach Trait
+                                    #fortitude or luck is based on health  
+                                    fortitude = 0.0
+                                    low = t_health - (t_health * .75)
+                                    high = t_health- (t_health * .66)
+                                    fortitude = random.randint(int(low), int(high))
+                                    #Resolve Scaling
+                                    t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                    t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                    t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                    t_stamina = t_stamina + t_resolve
+                                    t_health = t_health + t_resolve_health
+                                    t_attack = round(t_attack + t_resolve_attack)
+                                    t_defense = round(t_defense - t_resolve_defense)
+                                    t_used_resolve=True
+                                    
+                                    embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
+                                    await ctx.send(embed=embedVar)
+                                    dmg = damage_cal(t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description)
+                                    t_pet_used =False
+                                    o_health = o_health - int(dmg['DMG'])
+                                    embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                    await ctx.send(embed=embedVar)
+                                    t_stamina = 0
+                                    turn_total= turn_total + 1
+                                    turn=0
+                                elif t_universe == "Kanto Region" or t_universe == "Johto Region" or t_universe == "Hoenn Region" or t_universe == "Sinnoh Region" or t_universe == "Kalos Region" or t_universe == "Unova Region" or t_universe == "Alola Region" or t_universe == "Galar Region": #Pokemon Resolves
+                                    #fortitude or luck is based on health  
+                                    fortitude = 0.0
+                                    low = t_health - (t_health * .75)
+                                    high = t_health- (t_health * .66)
+                                    fortitude = random.randint(int(low), int(high))
+                                    #Resolve Scaling
+                                    t_resolve_health = round(fortitude + (.5*t_resolve))
+                                    t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                    t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                    t_stamina = t_stamina + t_resolve
+                                    t_health = t_health + t_resolve_health
+                                    t_attack = round(t_attack + t_resolve_attack)
+                                    t_defense = round(t_defense)
+                                    t_used_resolve=True
+
+                                    embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation: Evolution", value="All stats & stamina greatly increased")
+                                    await ctx.send(embed=embedVar)
+                                    turn_total= turn_total + 1
+                                    turn=0
+                                else:
+                                    #fortitude or luck is based on health  
+                                    fortitude = 0.0
+                                    low = t_health - (t_health * .75)
+                                    high = t_health- (t_health * .66)
+                                    fortitude = random.randint(int(low), int(high))
+                                    #Resolve Scaling
+                                    t_resolve_health = round(fortitude + (.5*t_resolve))
+                                    t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                    t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                    t_stamina = t_stamina + t_resolve
+                                    t_health = t_health + t_resolve_health
+                                    t_attack = round(t_attack + t_resolve_attack)
+                                    t_defense = round(t_defense - t_resolve_defense)
+                                    t_used_resolve=True
+
+                                    embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
+                                    await ctx.send(embed=embedVar)
+                                    turn_total= turn_total + 1
+                                    turn=0
                             else:
                                 await private_channel.send(m.CANNOT_USE_RESOLVE)
                                 turn=1
@@ -2499,13 +3204,17 @@ class CrownUnlimited(commands.Cog):
                                     turn_total= turn_total + 1
                                     turn=0
                                 else:
-                                    c_health = c_health - int(dmg['DMG'])
+                                    if c_universe == "Naruto" and c_stamina == 0:
+                                        c_health = c_health 
+                                        embedVar = discord.Embed(title=f"{c_card.upper()}: Substitution Jutsu", description=f"{t_card} attack strikes a log", colour=0xe91e63)
+                                        await ctx.send(embed=embedVar)
+                                    else:
+                                        c_health = c_health - int(dmg['DMG'])
+                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                        await ctx.send(embed=embedVar)
                                     if c_health < 0:
                                         c_health=0
-                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-
-                                    embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
-                                    await private_channel.send(embed=embedVar)
+                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
                                     turn_total= turn_total + 1
                                     turn=0
 
@@ -2768,7 +3477,10 @@ class CrownUnlimited(commands.Cog):
             o_card = o['NAME']
             o_card_path=o['PATH']
             o_rcard_path=o['RPATH']
-            o_max_health = o['HLT'] - (7  * currentopponent)
+            if o['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= o['HLT']: # Demon Slayer Universal Trait
+                o_max_health = t['HLT'] - (10 * currentopponent)
+            else:                    
+                o_max_health = o['HLT'] - (10 * currentopponent)
             o_health = o['HLT']
             o_stamina = o['STAM']
             o_max_stamina = o['STAM']
@@ -2829,7 +3541,10 @@ class CrownUnlimited(commands.Cog):
             c_card = c['NAME']
             c_card_path=c['PATH']
             c_rcard_path= c['RPATH']
-            c_max_health = c['HLT'] - (20 * currentopponent)
+            if c['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= c['HLT']: # Demon Slayer Universal Trait
+                c_max_health = t['HLT'] - (10 * currentopponent)
+            else:                    
+                c_max_health = c['HLT'] - (10 * currentopponent)
             c_health = c['HLT'] 
             c_stamina = c['STAM']
             c_max_stamina = c['STAM']
@@ -2876,7 +3591,10 @@ class CrownUnlimited(commands.Cog):
             t_card = t['NAME']
             t_card_path=t['PATH']
             t_rcard_path=t['RPATH']
-            t_max_health = t['HLT'] + (36 * currentopponent) + 200 
+            if t['UNIVERSE'] == "Demon Slayer" and o_max_health >= t['HLT']: #Demon Slayer Universal Trait
+                t_max_health = o_max_health + (36 * currentopponent) + 200
+            else:                    
+                t_max_health = t['HLT'] + (36 * currentopponent) + 200
             t_health = t['HLT'] + (36 * currentopponent) + 200 
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
@@ -3735,8 +4453,63 @@ class CrownUnlimited(commands.Cog):
                         embedVar.add_field(name=f"{o_card} focused and {healmessage}", value="All stats & stamina increased")
                         await private_channel.send(embed=embedVar)
 
-                        turn_total= turn_total + 1
-                        turn = 1
+                        #Resolve Check and Calculation
+                        if not o_used_resolve and o_used_focus and o_universe == "Digimon": # Digimon Universal Trait
+                            embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                            embedVar.add_field(name=f"Transformation: Digivolve", value="All stats & stamina greatly increased")
+                            await ctx.send(embed=embedVar)
+                            #fortitude or luck is based on health  
+                            fortitude = 0.0
+                            low = o_health - (o_health * .75)
+                            high = o_health- (o_health * .66)
+                            fortitude = random.randint(int(low), int(high))
+                            #Resolve Scaling
+                            o_resolve_health = round(fortitude + (.5*o_resolve))
+                            o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                            o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+
+                            o_stamina = o_stamina + o_resolve
+                            o_health = o_health + o_resolve_health
+                            o_attack = round(o_attack + o_resolve_attack)
+                            o_defense = round(o_defense - o_resolve_defense)
+                            o_used_resolve = True 
+                            o_pet_used=False
+
+                            turn_total= turn_total + 1
+                            turn=1
+                        elif o_universe == "League Of Legends":
+                            embedVar = discord.Embed(title=f"Turret Shot hits for 25 DMG!", colour=0xe91e63)
+                            await ctx.send(embed=embedVar)
+                            t_health = round(t_health - 25)
+                            turn_total= turn_total + 1
+                            turn=1
+                        elif o_universe == "Attack On Titan":
+                            embedVar = discord.Embed(title=f"Rally! {o_card} Increased Max Health!", colour=0xe91e63)
+                            await ctx.send(embed=embedVar)
+                            o_max_health = round(o_max_health + 50)
+                            turn_total= turn_total + 1
+                            turn=1
+                        elif o_universe == "Black Clover":
+                            embedVar = discord.Embed(title=f"Mana Zone! {o_card} Increased Stamina!", colour=0xe91e63)
+                            await ctx.send(embed=embedVar)
+                            o_stamina = 110
+                            turn_total= turn_total + 1
+                            turn=1
+                        elif t_universe == "One Punch Man":
+                            embedVar = discord.Embed(title=f"Hero Reinforcements! {t_card} Increased Max Health!", colour=0xe91e63)
+                            await ctx.send(embed=embedVar)
+                            t_max_health = round(t_max_health + 50)
+                            turn_total= turn_total + 1
+                            turn=1
+                        elif t_universe == "7ds":
+                            embedVar = discord.Embed(title=f"Increase Power Level! {t_card} Increased Stamina!", colour=0xe91e63)
+                            await ctx.send(embed=embedVar)
+                            t_stamina = 110
+                            turn_total= turn_total + 1
+                            turn=1
+                        else:
+                            turn_total= turn_total + 1
+                            turn = 1
                     else:
 
                         # UNIVERSE CARD
@@ -3808,33 +4581,150 @@ class CrownUnlimited(commands.Cog):
                             elif msg.content == "5":
                                 #Resolve Check and Calculation
                                 if not o_used_resolve and o_used_focus:
+                                    if o_universe == "My Hero Academia": #My Hero Trait
+                                        #fortitude or luck is based on health  
+                                        fortitude = 0.0
+                                        low = o_health - (o_health * .75)
+                                        high = o_health- (o_health * .66)
+                                        fortitude = random.randint(int(low), int(high))
+                                        #Resolve Scaling
+                                        o_resolve_health = round(fortitude + (.5*o_resolve))
+                                        o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                        o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+
+                                        o_stamina = o_stamina + o_resolve
+                                        o_health = o_health + o_resolve_health
+                                        o_attack = round(o_attack + o_resolve_attack)
+                                        o_defense = round(o_defense - o_resolve_defense)
+                                        o_used_resolve = True 
+                                        o_pet_used=False
+                                        embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Transformation: Plus Ultra", value="All stats & stamina greatly increased")
+                                        await ctx.send(embed=embedVar)
+
+                                        turn_total= turn_total + 1
+                                        turn=0
+                                    elif o_universe == "Bleach": #Bleach Trait
+                                        #fortitude or luck is based on health  
+                                        fortitude = 0.0
+                                        low = o_health - (o_health * .75)
+                                        high = o_health- (o_health * .66)
+                                        fortitude = random.randint(int(low), int(high))
+                                        #Resolve Scaling
+                                        o_resolve_health = round(fortitude + (.5*o_resolve))
+                                        o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                        o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+
+                                        o_stamina = o_stamina + o_resolve
+                                        o_health = o_health + o_resolve_health
+                                        o_attack = round(o_attack + (2 * o_resolve_attack))
+                                        o_defense = round(o_defense - o_resolve_defense)
+                                        o_used_resolve = True 
+                                        o_pet_used=False
+                                        embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
+                                        await ctx.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn=1
+                                    elif o_universe == "God Of War": #God Of War Trait
+                                        #fortitude or luck is based on health  
+                                        fortitude = 0.0
+                                        low = o_health - (o_health * .75)
+                                        high = o_health- (o_health * .66)
+                                        fortitude = random.randint(int(low), int(high))
+                                        #Resolve Scaling
+                                        o_resolve_health = round(fortitude + (.5*o_resolve))
+                                        o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                        o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+
+                                        o_stamina = o_stamina + o_resolve
+                                        o_health = o_max_health
+                                        o_attack = round(o_attack + o_resolve_attack)
+                                        o_defense = round(o_defense - o_resolve_defense)
+                                        o_used_resolve = True 
+                                        o_pet_used=False
+                                        embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Transformation: Ascension", value="All stats & stamina greatly increased")
+                                        await ctx.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn=1
+                                    elif o_universe == "Fate": #Fate Trait
+                                        #fortitude or luck is based on health  
+                                        fortitude = 0.0
+                                        low = o_health - (o_health * .75)
+                                        high = o_health- (o_health * .66)
+                                        fortitude = random.randint(int(low), int(high))
+                                        #Resolve Scaling
+                                        o_resolve_health = round(fortitude + (.5*o_resolve))
+                                        o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                        o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+
+                                        o_stamina = o_stamina + o_resolve
+                                        o_health = o_health + o_resolve_health
+                                        o_attack = round(o_attack + o_resolve_attack)
+                                        o_defense = round(o_defense - o_resolve_defense)
                                         
+                                        embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
+                                        await ctx.send(embed=embedVar)
+                                        dmg = damage_cal(o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description)
+                                        t_health = t_health - dmg['DMG']
+                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
+                                        await ctx.send(embed=embedVar)
+                                        o_stamina = 0
+                                        o_used_resolve = True 
+                                        o_pet_used=False
+                                        turn_total= turn_total + 1
+                                        turn=1
+                                    elif o_universe == "Kanto Region" or o_universe == "Johto Region" or o_universe == "Hoenn Region" or o_universe == "Sinnoh Region" or o_universe == "Kalos Region" or o_universe == "Unova Region" or o_universe == "Alola Region" or o_universe == "Galar Region": # Pokemon Resolves
+                                        #fortitude or luck is based on health  
+                                        fortitude = 0.0
+                                        low = o_health - (o_health * .75)
+                                        high = o_health- (o_health * .66)
+                                        fortitude = random.randint(int(low), int(high))
+                                        #Resolve Scaling
+                                        o_resolve_health = round(fortitude + (.5*o_resolve))
+                                        o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                        o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
 
-                                    #fortitude or luck is based on health  
-                                    fortitude = 0.0
-                                    low = o_health - (o_health * .75)
-                                    high = o_health- (o_health * .66)
-                                    fortitude = random.randint(int(low), int(high))
-                                    #Resolve Scaling
-                                    o_resolve_health = round(fortitude + (.5*o_resolve))
-                                    o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
-                                    o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                        o_stamina = o_stamina + o_resolve
+                                        o_health = o_health + o_resolve_health
+                                        o_attack = round(o_attack + o_resolve_attack)
+                                        o_defense = round(o_defense)
+                                        o_used_resolve = True 
+                                        o_pet_used=False
+                                        embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Transformation: Plus Ultra", value="All stats & stamina greatly increased")
+                                        await ctx.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn=1
+                                    else: # Standard Resolve
+                                        #fortitude or luck is based on health  
+                                        fortitude = 0.0
+                                        low = o_health - (o_health * .75)
+                                        high = o_health- (o_health * .66)
+                                        fortitude = random.randint(int(low), int(high))
+                                        #Resolve Scaling
+                                        o_resolve_health = round(fortitude + (.5*o_resolve))
+                                        o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                        o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
 
-                                    o_stamina = o_stamina + o_resolve
-                                    o_health = o_health + o_resolve_health
-                                    o_attack = round(o_attack + o_resolve_attack)
-                                    o_defense = round(o_defense - o_resolve_defense)
-                                    o_used_resolve = True 
-
-                                    embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
-                                    embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
-                                    await private_channel.send(embed=embedVar)
-                                    turn_total= turn_total + 1
-                                    turn=1
+                                        o_stamina = o_stamina + o_resolve
+                                        o_health = o_health + o_resolve_health
+                                        o_attack = round(o_attack + o_resolve_attack)
+                                        o_defense = round(o_defense - o_resolve_defense)
+                                        o_used_resolve = True 
+                                        o_pet_used=False
+                                        embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
+                                        await ctx.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn=1
                                 else:
                                     emessage = m.CANNOT_USE_RESOLVE
-                                    embedVar = discord.Embed(title=emessage, colour=0xe91e63)
-                                    await private_channel.send(embed=embedVar)
+                                    embedVar = discord.Embed(title=emessage, description=f"Entering `Resolved State` sacrifices a turn to power up even greater and regain `Stamina`!", colour=0xe91e63)
+                                    await ctx.send(embed=embedVar)
+                                    turn=0
                             elif msg.content == "6":
                                     #Resolve Check and Calculation
                                 if o_used_resolve and o_used_focus and not o_pet_used:                                  
@@ -4098,13 +4988,17 @@ class CrownUnlimited(commands.Cog):
                                         turn_total= turn_total + 1
                                         turn=1
                                     else:
-                                        t_health = t_health - dmg['DMG']
+                                        if t_universe == "Naruto" and t_stamina == 0:
+                                            t_health = t_health 
+                                            embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{o_card} attack strikes a log", colour=0xe91e63)
+                                            await ctx.send(embed=embedVar)
+                                        else:
+                                            t_health = t_health - dmg['DMG']
+                                            embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
+                                            await ctx.send(embed=embedVar)
                                         if t_health < 0:
                                             t_health=0
-                                        o_stamina = o_stamina - dmg['STAMINA_USED']
-
-                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
-                                        await private_channel.send(embed=embedVar)
+                                        o_stamina = o_stamina - dmg['STAMINA_USED']                                            
                                         turn_total= turn_total + 1
                                         turn=1
                                 else:
@@ -4176,8 +5070,61 @@ class CrownUnlimited(commands.Cog):
                         embedVar.add_field(name=f"{t_card} focused and {healmessage}", value="All stats & stamina increased")
                         await private_channel.send(embed=embedVar)
 
-                        turn_total= turn_total + 1
-                        turn=2
+                        if not t_used_resolve and t_used_focus and t_universe == "Digimon":  #Digimon Universal Trait
+                            #fortitude or luck is based on health  
+                            fortitude = 0.0
+                            low = t_health - (t_health * .75)
+                            high = t_health- (t_health * .66)
+                            fortitude = random.randint(int(low), int(high))
+                            #Resolve Scaling
+                            t_resolve_health = round(fortitude + (.5*t_resolve))
+                            t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                            t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                            t_stamina = t_stamina + t_resolve
+                            t_health = t_health + t_resolve_health
+                            t_attack = round(t_attack + t_resolve_attack)
+                            t_defense = round(t_defense - t_resolve_defense)
+                            t_used_resolve=True
+
+                            embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                            embedVar.add_field(name=f"Transformation: Digivolve", value="All stats & stamina greatly increased")
+                            await ctx.send(embed=embedVar)
+                            turn_total= turn_total + 1
+                            turn=2
+                        elif t_universe == "League Of Legends":
+                            embedVar = discord.Embed(title=f"Turret Shot hits {o_card} for 25 DMG!", colour=0xe91e63)
+                            await ctx.send(embed=embedVar)
+                            o_health = round(o_health - 25)
+                            turn_total= turn_total + 1
+                            turn=2
+                        elif t_universe == "Attack On Titan":
+                            embedVar = discord.Embed(title=f"Rally!{t_card} Increased Max Health!", colour=0xe91e63)
+                            await ctx.send(embed=embedVar)
+                            t_max_health = round(t_max_health + 50)
+                            turn_total= turn_total + 1
+                            turn=2
+                        elif t_universe == "Black Clover":
+                            embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
+                            await ctx.send(embed=embedVar)
+                            t_stamina = 110
+                            turn_total= turn_total + 1
+                            turn=2
+                        elif o_universe == "One Punch Man":
+                            embedVar = discord.Embed(title=f"Hero Reinforcements! {o_card} Increased Max Health!", colour=0xe91e63)
+                            await ctx.send(embed=embedVar)
+                            o_max_health = round(o_max_health + 50)
+                            turn_total= turn_total + 1
+                            turn=2
+                        elif o_universe == "7ds":
+                            embedVar = discord.Embed(title=f"Increase Power Level! {o_card} Increased Stamina!", colour=0xe91e63)
+                            await ctx.send(embed=embedVar)
+                            o_stamina = 110
+                            turn_total= turn_total + 1
+                            turn=2
+                        else:
+                            turn_total= turn_total + 1
+                            turn=2
                     else:
                         # UNIVERSE CARD
                         player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus)
@@ -4292,25 +5239,144 @@ class CrownUnlimited(commands.Cog):
                             t_enhancer_used=False
                         elif int(aiMove) == 5:
                             if not t_used_resolve and t_used_focus:
-                                #fortitude or luck is based on health  
-                                fortitude = 0.0
-                                low = t_health - (t_health * .75)
-                                high = t_health- (t_health * .66)
-                                fortitude = random.randint(int(low), int(high))
-                                #Resolve Scaling
-                                t_resolve_health = round(fortitude + (.5*t_resolve))
-                                t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
-                                t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                if t_universe == "My Hero Academia": #My hero TRait
+                                        #fortitude or luck is based on health  
+                                        fortitude = 0.0
+                                        low = t_health - (t_health * .75)
+                                        high = t_health- (t_health * .66)
+                                        fortitude = random.randint(int(low), int(high))
+                                        #Resolve Scaling
+                                        t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                        t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                        t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
 
-                                t_stamina = t_stamina + t_resolve
-                                t_health = t_health + t_resolve_health
-                                t_attack = round(t_attack + t_resolve_attack)
-                                t_defense = round(t_defense - t_resolve_defense)
-                                t_used_resolve=True
-                                embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE!", description=f"`{t_card} says:`\n{t_resolve_description}", colour=embed_color_t)
-                                await private_channel.send(embed=embedVar)
-                                turn_total= turn_total + 1
-                                turn=2
+                                        t_stamina = t_stamina + t_resolve
+                                        t_health = t_health + t_resolve_health
+                                        t_attack = round(t_attack + t_resolve_attack)
+                                        t_defense = round(t_defense - t_resolve_defense)
+                                        t_used_resolve=True
+
+                                        embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Transformation: Plus Ultra", value="All stats & stamina greatly increased")
+                                        await ctx.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn=1
+                                elif t_universe == "Bleach": #Bleach Trait
+                                    #fortitude or luck is based on health  
+                                    fortitude = 0.0
+                                    low = t_health - (t_health * .75)
+                                    high = t_health- (t_health * .66)
+                                    fortitude = random.randint(int(low), int(high))
+                                    #Resolve Scaling
+                                    t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                    t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                    t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                    t_stamina = t_stamina + t_resolve
+                                    t_health = t_health + t_resolve_health
+                                    t_attack = round(t_attack + (2 * t_resolve_attack))
+                                    t_defense = round(t_defense - t_resolve_defense)
+                                    t_used_resolve=True
+
+                                    embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
+                                    await ctx.send(embed=embedVar)
+                                    turn_total= turn_total + 1
+                                    turn=2
+                                elif t_universe == "God Of War": #God Of War Trait
+                                    #fortitude or luck is based on health  
+                                    fortitude = 0.0
+                                    low = t_health - (t_health * .75)
+                                    high = t_health- (t_health * .66)
+                                    fortitude = random.randint(int(low), int(high))
+                                    #Resolve Scaling
+                                    t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                    t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                    t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                    t_stamina = t_stamina + t_resolve
+                                    t_health = t_max_health
+                                    t_attack = round(t_attack + t_resolve_attack)
+                                    t_defense = round(t_defense - t_resolve_defense)
+                                    t_used_resolve=True
+
+                                    embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
+                                    await ctx.send(embed=embedVar)
+                                    turn_total= turn_total + 1
+                                    turn=2
+                                elif t_universe == "Fate": #Bleach Trait
+                                    #fortitude or luck is based on health  
+                                    fortitude = 0.0
+                                    low = t_health - (t_health * .75)
+                                    high = t_health- (t_health * .66)
+                                    fortitude = random.randint(int(low), int(high))
+                                    #Resolve Scaling
+                                    t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                    t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                    t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                    t_stamina = t_stamina + t_resolve
+                                    t_health = t_health + t_resolve_health
+                                    t_attack = round(t_attack + t_resolve_attack)
+                                    t_defense = round(t_defense - t_resolve_defense)
+                                    t_used_resolve=True
+                                    
+                                    embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
+                                    await ctx.send(embed=embedVar)
+                                    dmg = damage_cal(t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description)
+                                    t_pet_used =False
+                                    o_health = o_health - int(dmg['DMG'])
+                                    embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                    await ctx.send(embed=embedVar)
+                                    t_stamina = 0
+                                    turn_total= turn_total + 1
+                                    turn=2
+                                elif t_universe == "Kanto Region" or t_universe == "Johto Region" or t_universe == "Hoenn Region" or t_universe == "Sinnoh Region" or t_universe == "Kalos Region" or t_universe == "Unova Region" or t_universe == "Alola Region" or t_universe == "Galar Region": #Pokemon Resolves
+                                    #fortitude or luck is based on health  
+                                    fortitude = 0.0
+                                    low = t_health - (t_health * .75)
+                                    high = t_health- (t_health * .66)
+                                    fortitude = random.randint(int(low), int(high))
+                                    #Resolve Scaling
+                                    t_resolve_health = round(fortitude + (.5*t_resolve))
+                                    t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                    t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                    t_stamina = t_stamina + t_resolve
+                                    t_health = t_health + t_resolve_health
+                                    t_attack = round(t_attack + t_resolve_attack)
+                                    t_defense = round(t_defense)
+                                    t_used_resolve=True
+
+                                    embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation: Evolution", value="All stats & stamina greatly increased")
+                                    await ctx.send(embed=embedVar)
+                                    turn_total= turn_total + 1
+                                    turn=2
+                                else:
+                                    #fortitude or luck is based on health  
+                                    fortitude = 0.0
+                                    low = t_health - (t_health * .75)
+                                    high = t_health- (t_health * .66)
+                                    fortitude = random.randint(int(low), int(high))
+                                    #Resolve Scaling
+                                    t_resolve_health = round(fortitude + (.5*t_resolve))
+                                    t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                    t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                    t_stamina = t_stamina + t_resolve
+                                    t_health = t_health + t_resolve_health
+                                    t_attack = round(t_attack + t_resolve_attack)
+                                    t_defense = round(t_defense - t_resolve_defense)
+                                    t_used_resolve=True
+
+                                    embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
+                                    await ctx.send(embed=embedVar)
+                                    turn_total= turn_total + 1
+                                    turn=2
                             else:
                                 await private_channel.send(m.CANNOT_USE_RESOLVE)
                                 turn=1
@@ -4488,13 +5554,17 @@ class CrownUnlimited(commands.Cog):
                                     turn_total= turn_total + 1
                                     turn=2
                                 else:
-                                    o_health = o_health - int(dmg['DMG'])
+                                    if o_universe == "Naruto" and o_stamina == 0:
+                                        o_health = o_health 
+                                        embedVar = discord.Embed(title=f"{o_card.upper()}: Substitution Jutsu", description=f"{t_card} attack strikes a log", colour=0xe91e63)
+                                        await private_channel.send(embed=embedVar)
+                                    else:
+                                        o_health = o_health - int(dmg['DMG'])
+                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                        await private_channel.send(embed=embedVar)
                                     if o_health < 0:
                                         o_health=0
-                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-
-                                    embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
-                                    await private_channel.send(embed=embedVar)
+                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
                                     turn_total= turn_total + 1
                                     turn=2
 
@@ -4563,9 +5633,62 @@ class CrownUnlimited(commands.Cog):
                         embedVar = discord.Embed(title=f"{c_card.upper()} FOCUSED", description=f"`{c_card} says:`\n{c_focus_description}", colour=0xe91e63)
                         embedVar.add_field(name=f"{c_card} focused and {healmessage}", value="All stats & stamina increased")
                         await private_channel.send(embed=embedVar)
+                        if not c_used_resolve and c_used_focus and c_universe == "Digimon": # Digimon Universal Trait
+                            embedVar = discord.Embed(title=f"{c_card.upper()} STRENGTHENED RESOLVE", description=f"`{c_card} says:`\n{c_resolve_description}", colour=0xe91e63)
+                            embedVar.add_field(name=f"Transformation: Digivolve", value="All stats & stamina greatly increased")
+                            await ctx.send(embed=embedVar)
+                            #fortitude or luck is based on health  
+                            fortitude = 0.0
+                            low = o_health - (o_health * .75)
+                            high = o_health- (o_health * .66)
+                            fortitude = random.randint(int(low), int(high))
+                            #Resolve Scaling
+                            c_resolve_health = round(fortitude + (.5 * c_resolve))
+                            c_resolve_attack = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
+                            c_resolve_defense = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
 
-                        turn_total= turn_total + 1
-                        turn = 3
+                            c_stamina = c_stamina + c_resolve
+                            c_health = c_health + c_resolve_health
+                            c_attack = round(c_attack + c_resolve_attack)
+                            c_defense = round(c_defense - c_resolve_defense)
+                            c_used_resolve = True 
+                            c_pet_used=False
+
+                            turn_total= turn_total + 1
+                            turn=3
+                        elif c_universe == "League Of Legends":
+                            embedVar = discord.Embed(title=f"Turret Shot hits {t_card} for 25 DMG!", colour=0xe91e63)
+                            await ctx.send(embed=embedVar)
+                            t_health = round(t_health - 25)
+                            turn_total= turn_total + 1
+                            turn=3
+                        elif c_universe == "Attack On Titan":
+                            embedVar = discord.Embed(title=f"Rally! {c_card} Increased Max Health!", colour=0xe91e63)
+                            await ctx.send(embed=embedVar)
+                            c_max_health = round(c_max_health + 50)
+                            turn_total= turn_total + 1
+                            turn=3
+                        elif c_universe == "Black Clover":
+                            embedVar = discord.Embed(title=f"Mana Zone! {c_card} Increased Stamina!", colour=0xe91e63)
+                            await ctx.send(embed=embedVar)
+                            c_stamina = 110
+                            turn_total= turn_total + 1
+                            turn=3
+                        elif t_universe == "One Punch Man":
+                            embedVar = discord.Embed(title=f"Hero Reinforcements! {t_card} Increased Max Health!", colour=0xe91e63)
+                            await ctx.send(embed=embedVar)
+                            t_max_health = round(t_max_health + 50)
+                            turn_total= turn_total + 1
+                            turn=3
+                        elif t_universe == "7ds":
+                            embedVar = discord.Embed(title=f"Increase Power Level! {t_card} Increased Stamina!", colour=0xe91e63)
+                            await ctx.send(embed=embedVar)
+                            t_stamina = 110
+                            turn_total= turn_total + 1
+                            turn=3
+                        else:
+                            turn_total= turn_total + 1
+                            turn = 3
                     else:
 
                         # UNIVERSE CARD
@@ -4635,29 +5758,145 @@ class CrownUnlimited(commands.Cog):
                             elif msg.content == "5":
                                 #Resolve Check and Calculation
                                 if not c_used_resolve and c_used_focus:
+                                    if c_universe == "My Hero Academia": #My Hero Trait
+                                        #fortitude or luck is based on health  
+                                        fortitude = 0.0
+                                        low = c_health - (c_health * .75)
+                                        high = c_health- (c_health * .66)
+                                        fortitude = random.randint(int(low), int(high))
+                                        #Resolve Scaling
+                                        c_resolve_health = round(fortitude + (.5 * c_resolve))
+                                        c_resolve_attack = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
+                                        c_resolve_defense = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
+
+                                        c_stamina = c_stamina + c_resolve
+                                        c_health = c_health + c_resolve_health
+                                        c_attack = round(c_attack + c_resolve_attack)
+                                        c_defense = round(c_defense - c_resolve_defense)
+                                        c_used_resolve = True 
+                                        c_pet_used=False
+                                        embedVar = discord.Embed(title=f"{c_card.upper()} STRENGTHENED RESOLVE", description=f"`{c_card} says:`\n{c_resolve_description}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Transformation: Plus Ultra", value="All stats & stamina greatly increased")
+                                        await ctx.send(embed=embedVar)
+
+                                        turn_total= turn_total + 1
+                                        turn=2
+                                    elif c_universe == "Bleach": #Bleach Trait
+                                        #fortitude or luck is based on health  
+                                        fortitude = 0.0
+                                        low = c_health - (c_health * .75)
+                                        high = c_health- (c_health * .66)
+                                        fortitude = random.randint(int(low), int(high))
+                                        #Resolve Scaling
+                                        c_resolve_health = round(fortitude + (.5 * c_resolve))
+                                        c_resolve_attack = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
+                                        c_resolve_defense = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
+
+                                        c_stamina = c_stamina + c_resolve
+                                        c_health = c_health + c_resolve_health
+                                        c_attack = round(c_attack + (2 * c_resolve_attack))
+                                        c_defense = round(c_defense - c_resolve_defense)
+                                        c_used_resolve = True 
+                                        c_pet_used=False
+                                        embedVar = discord.Embed(title=f"{c_card.upper()} STRENGTHENED RESOLVE", description=f"`{c_card} says:`\n{c_resolve_description}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
+                                        await ctx.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn=3
+                                    elif c_universe == "God Of War": #God Of War Trait
+                                        #fortitude or luck is based on health  
+                                        fortitude = 0.0
+                                        low = c_health - (c_health * .75)
+                                        high = c_health - (c_health * .66)
+                                        fortitude = random.randint(int(low), int(high))
+                                        #Resolve Scaling
+                                        c_resolve_health = round(fortitude + (.5*o_resolve))
+                                        c_resolve_attack = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
+                                        c_resolve_defense = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
+
+                                        c_stamina = c_stamina + c_resolve
+                                        c_health = c_max_health
+                                        c_attack = round(c_attack + c_resolve_attack)
+                                        c_defense = round(c_defense - c_resolve_defense)
+                                        c_used_resolve = True 
+                                        c_pet_used=False
+                                        embedVar = discord.Embed(title=f"{c_card.upper()} STRENGTHENED RESOLVE", description=f"`{c_card} says:`\n{c_resolve_description}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Transformation: Ascension", value="All stats & stamina greatly increased")
+                                        await ctx.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn=3
+                                    elif c_universe == "Fate": #Fate Trait
+                                        #fortitude or luck is based on health  
+                                        fortitude = 0.0
+                                        low = c_health - (c_health * .75)
+                                        high = c_health- (c_health * .66)
+                                        fortitude = random.randint(int(low), int(high))
+                                        #Resolve Scaling
+                                        c_resolve_health = round(fortitude + (.5 * c_resolve))
+                                        c_resolve_attack = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
+                                        c_resolve_defense = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
+
+                                        c_stamina = c_stamina + c_resolve
+                                        c_health = c_health + c_resolve_health
+                                        c_attack = round(c_attack + c_resolve_attack)
+                                        c_defense = round(c_defense - c_resolve_defense)
                                         
+                                        embedVar = discord.Embed(title=f"{c_card.upper()} STRENGTHENED RESOLVE", description=f"`{c_card} says:`\n{c_resolve_description}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
+                                        await ctx.send(embed=embedVar)
+                                        dmg = damage_cal(c_card, c_3, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina,c_max_health, t_attack, c_special_move_description)
+                                        t_health = t_health - dmg['DMG']
+                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
+                                        await ctx.send(embed=embedVar)
+                                        c_stamina = 0
+                                        c_used_resolve = True 
+                                        c_pet_used=False
+                                        turn_total= turn_total + 1
+                                        turn=3
+                                    elif c_universe == "Kanto Region" or c_universe == "Johto Region" or c_universe == "Hoenn Region" or c_universe == "Sinnoh Region" or c_universe == "Kalos Region" or c_universe == "Unova Region" or c_universe == "Alola Region" or c_universe == "Galar Region": # Pokemon Resolves
+                                        #fortitude or luck is based on health  
+                                        fortitude = 0.0
+                                        low = c_health - (c_health * .75)
+                                        high = c_health- (c_health * .66)
+                                        fortitude = random.randint(int(low), int(high))
+                                        #Resolve Scaling
+                                        c_resolve_health = round(fortitude + (.5*o_resolve))
+                                        c_resolve_attack = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
+                                        c_resolve_defense = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
 
-                                    #fortitude or luck is based on health  
-                                    fortitude = 0.0
-                                    low = c_health - (c_health * .75)
-                                    high = c_health- (c_health * .66)
-                                    fortitude = random.randint(int(low), int(high))
-                                    #Resolve Scaling
-                                    c_resolve_health = round(fortitude + (.5*c_resolve))
-                                    c_resolve_attack = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
-                                    c_resolve_defense = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
+                                        c_stamina = c_stamina + c_resolve
+                                        c_health = c_health + c_resolve_health
+                                        c_attack = round(c_attack + c_resolve_attack)
+                                        c_defense = round(c_defense)
+                                        c_used_resolve = True 
+                                        c_pet_used=False
+                                        embedVar = discord.Embed(title=f"{c_card.upper()} STRENGTHENED RESOLVE", description=f"`{c_card} says:`\n{c_resolve_description}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Transformation: Plus Ultra", value="All stats & stamina greatly increased")
+                                        await ctx.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn=3
+                                    else: # Standard Resolve
+                                        #fortitude or luck is based on health  
+                                        fortitude = 0.0
+                                        low = c_health - (c_health * .75)
+                                        high = c_health- (c_health * .66)
+                                        fortitude = random.randint(int(low), int(high))
+                                        #Resolve Scaling
+                                        c_resolve_health = round(fortitude + (.5 * c_resolve))
+                                        c_resolve_attack = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
+                                        c_resolve_defense = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
 
-                                    c_stamina = c_stamina + c_resolve
-                                    c_health = c_health + c_resolve_health
-                                    c_attack = round(c_attack + c_resolve_attack)
-                                    c_defense = round(c_defense - c_resolve_defense)
-                                    c_used_resolve = True 
-
-                                    embedVar = discord.Embed(title=f"{c_card.upper()} STRENGTHENED RESOLVE", description=f"`{c_card} says:`\n{c_resolve_description}", colour=0xe91e63)
-                                    embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
-                                    await private_channel.send(embed=embedVar)
-                                    turn_total= turn_total + 1
-                                    turn=3
+                                        c_stamina = c_stamina + c_resolve
+                                        c_health = c_health + c_resolve_health
+                                        c_attack = round(c_attack + c_resolve_attack)
+                                        c_defense = round(c_defense - c_resolve_defense)
+                                        c_used_resolve = True 
+                                        c_pet_used=False
+                                        embedVar = discord.Embed(title=f"{c_card.upper()} STRENGTHENED RESOLVE", description=f"`{c_card} says:`\n{c_resolve_description}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
+                                        await ctx.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn=3
                                 else:
                                     emessage = m.CANNOT_USE_RESOLVE
                                     embedVar = discord.Embed(title=emessage, colour=0xe91e63)
@@ -4926,13 +6165,17 @@ class CrownUnlimited(commands.Cog):
                                         turn_total= turn_total + 1
                                         turn=3
                                     else:
-                                        t_health = t_health - dmg['DMG']
+                                        if t_universe == "Naruto" and t_stamina == 0:
+                                            t_health = t_health 
+                                            embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{c_card} attack strikes a log", colour=0xe91e63)
+                                            await ctx.send(embed=embedVar)
+                                        else:
+                                            t_health = t_health - dmg['DMG']
+                                            embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
+                                            await ctx.send(embed=embedVar)
                                         if t_health < 0:
                                             t_health=0
-                                        c_stamina = c_stamina - dmg['STAMINA_USED']
-
-                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_c)
-                                        await private_channel.send(embed=embedVar)
+                                        c_stamina = c_stamina - dmg['STAMINA_USED']                                            
                                         turn_total= turn_total + 1
                                         turn=3
                                 else:
@@ -5004,8 +6247,61 @@ class CrownUnlimited(commands.Cog):
                         embedVar.add_field(name=f"{t_card} focused and {healmessage}", value="All stats & stamina increased")
                         await private_channel.send(embed=embedVar)
 
-                        turn_total= turn_total + 1
-                        turn=0
+                        if not t_used_resolve and t_used_focus and t_universe == "Digimon":  #Digimon Universal Trait
+                            #fortitude or luck is based on health  
+                            fortitude = 0.0
+                            low = t_health - (t_health * .75)
+                            high = t_health- (t_health * .66)
+                            fortitude = random.randint(int(low), int(high))
+                            #Resolve Scaling
+                            t_resolve_health = round(fortitude + (.5*t_resolve))
+                            t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                            t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                            t_stamina = t_stamina + t_resolve
+                            t_health = t_health + t_resolve_health
+                            t_attack = round(t_attack + t_resolve_attack)
+                            t_defense = round(t_defense - t_resolve_defense)
+                            t_used_resolve=True
+
+                            embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                            embedVar.add_field(name=f"Transformation: Digivolve", value="All stats & stamina greatly increased")
+                            await private_channel.send(embed=embedVar)
+                            turn_total= turn_total + 1
+                            turn=0
+                        elif t_universe == "League Of Legends":
+                            embedVar = discord.Embed(title=f"Turret Shot hits {c_card} for 25 DMG!", colour=0xe91e63)
+                            await ctx.send(embed=embedVar)
+                            c_health = round(c_health - 25)
+                            turn_total= turn_total + 1
+                            turn=0
+                        elif t_universe == "Attack On Titan":
+                            embedVar = discord.Embed(title=f"Rally!{t_card} Increased Max Health!", colour=0xe91e63)
+                            await ctx.send(embed=embedVar)
+                            t_max_health = round(t_max_health + 50)
+                            turn_total= turn_total + 1
+                            turn=0
+                        elif t_universe == "Black Clover":
+                            embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
+                            await ctx.send(embed=embedVar)
+                            t_stamina = 110
+                            turn_total= turn_total + 1
+                            turn=0
+                        elif c_universe == "One Punch Man":
+                            embedVar = discord.Embed(title=f"Hero Reinforcements! {c_card} Increased Max Health!", colour=0xe91e63)
+                            await ctx.send(embed=embedVar)
+                            c_max_health = round(c_max_health + 50)
+                            turn_total= turn_total + 1
+                            turn=0
+                        elif c_universe == "7ds":
+                            embedVar = discord.Embed(title=f"Increase Power Level! {c_card} Increased Stamina!", colour=0xe91e63)
+                            await ctx.send(embed=embedVar)
+                            c_stamina = 110
+                            turn_total= turn_total + 1
+                            turn=0
+                        else:
+                            turn_total= turn_total + 1
+                            turn=0
                     else:
                         # UNIVERSE CARD
                         player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus)
@@ -5116,25 +6412,144 @@ class CrownUnlimited(commands.Cog):
                             t_enhancer_used=False
                         elif int(aiMove) == 5:
                             if not t_used_resolve and t_used_focus:
-                                #fortitude or luck is based on health  
-                                fortitude = 0.0
-                                low = t_health - (t_health * .75)
-                                high = t_health- (t_health * .66)
-                                fortitude = random.randint(int(low), int(high))
-                                #Resolve Scaling
-                                t_resolve_health = round(fortitude + (.5*t_resolve))
-                                t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
-                                t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                if t_universe == "My Hero Academia": #My hero TRait
+                                        #fortitude or luck is based on health  
+                                        fortitude = 0.0
+                                        low = t_health - (t_health * .75)
+                                        high = t_health- (t_health * .66)
+                                        fortitude = random.randint(int(low), int(high))
+                                        #Resolve Scaling
+                                        t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                        t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                        t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
 
-                                t_stamina = t_stamina + t_resolve
-                                t_health = t_health + t_resolve_health
-                                t_attack = round(t_attack + t_resolve_attack)
-                                t_defense = round(t_defense - t_resolve_defense)
-                                t_used_resolve=True
-                                embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE!", description=f"`{t_card} says:`\n{t_resolve_description}", colour=embed_color_t)
-                                await private_channel.send(embed=embedVar)
-                                turn_total= turn_total + 1
-                                turn=0
+                                        t_stamina = t_stamina + t_resolve
+                                        t_health = t_health + t_resolve_health
+                                        t_attack = round(t_attack + t_resolve_attack)
+                                        t_defense = round(t_defense - t_resolve_defense)
+                                        t_used_resolve=True
+
+                                        embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Transformation: Plus Ultra", value="All stats & stamina greatly increased")
+                                        await ctx.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn=3
+                                elif t_universe == "Bleach": #Bleach Trait
+                                    #fortitude or luck is based on health  
+                                    fortitude = 0.0
+                                    low = t_health - (t_health * .75)
+                                    high = t_health- (t_health * .66)
+                                    fortitude = random.randint(int(low), int(high))
+                                    #Resolve Scaling
+                                    t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                    t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                    t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                    t_stamina = t_stamina + t_resolve
+                                    t_health = t_health + t_resolve_health
+                                    t_attack = round(t_attack + (2 * t_resolve_attack))
+                                    t_defense = round(t_defense - t_resolve_defense)
+                                    t_used_resolve=True
+
+                                    embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
+                                    await ctx.send(embed=embedVar)
+                                    turn_total= turn_total + 1
+                                    turn=0
+                                elif t_universe == "God Of War": #God Of War Trait
+                                    #fortitude or luck is based on health  
+                                    fortitude = 0.0
+                                    low = t_health - (t_health * .75)
+                                    high = t_health- (t_health * .66)
+                                    fortitude = random.randint(int(low), int(high))
+                                    #Resolve Scaling
+                                    t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                    t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                    t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                    t_stamina = t_stamina + t_resolve
+                                    t_health = t_max_health
+                                    t_attack = round(t_attack + t_resolve_attack)
+                                    t_defense = round(t_defense - t_resolve_defense)
+                                    t_used_resolve=True
+
+                                    embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
+                                    await ctx.send(embed=embedVar)
+                                    turn_total= turn_total + 1
+                                    turn=0
+                                elif t_universe == "Fate": #Bleach Trait
+                                    #fortitude or luck is based on health  
+                                    fortitude = 0.0
+                                    low = t_health - (t_health * .75)
+                                    high = t_health- (t_health * .66)
+                                    fortitude = random.randint(int(low), int(high))
+                                    #Resolve Scaling
+                                    t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                    t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                    t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                    t_stamina = t_stamina + t_resolve
+                                    t_health = t_health + t_resolve_health
+                                    t_attack = round(t_attack + t_resolve_attack)
+                                    t_defense = round(t_defense - t_resolve_defense)
+                                    t_used_resolve=True
+                                    
+                                    embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
+                                    await ctx.send(embed=embedVar)
+                                    dmg = damage_cal(t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description)
+                                    t_pet_used =False
+                                    o_health = o_health - int(dmg['DMG'])
+                                    embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                    await ctx.send(embed=embedVar)
+                                    t_stamina = 0
+                                    turn_total= turn_total + 1
+                                    turn=0
+                                elif t_universe == "Kanto Region" or t_universe == "Johto Region" or t_universe == "Hoenn Region" or t_universe == "Sinnoh Region" or t_universe == "Kalos Region" or t_universe == "Unova Region" or t_universe == "Alola Region" or t_universe == "Galar Region": #Pokemon Resolves
+                                    #fortitude or luck is based on health  
+                                    fortitude = 0.0
+                                    low = t_health - (t_health * .75)
+                                    high = t_health- (t_health * .66)
+                                    fortitude = random.randint(int(low), int(high))
+                                    #Resolve Scaling
+                                    t_resolve_health = round(fortitude + (.5*t_resolve))
+                                    t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                    t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                    t_stamina = t_stamina + t_resolve
+                                    t_health = t_health + t_resolve_health
+                                    t_attack = round(t_attack + t_resolve_attack)
+                                    t_defense = round(t_defense)
+                                    t_used_resolve=True
+
+                                    embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation: Evolution", value="All stats & stamina greatly increased")
+                                    await ctx.send(embed=embedVar)
+                                    turn_total= turn_total + 1
+                                    turn=0
+                                else:
+                                    #fortitude or luck is based on health  
+                                    fortitude = 0.0
+                                    low = t_health - (t_health * .75)
+                                    high = t_health- (t_health * .66)
+                                    fortitude = random.randint(int(low), int(high))
+                                    #Resolve Scaling
+                                    t_resolve_health = round(fortitude + (.5*t_resolve))
+                                    t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                    t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                    t_stamina = t_stamina + t_resolve
+                                    t_health = t_health + t_resolve_health
+                                    t_attack = round(t_attack + t_resolve_attack)
+                                    t_defense = round(t_defense - t_resolve_defense)
+                                    t_used_resolve=True
+
+                                    embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
+                                    await ctx.send(embed=embedVar)
+                                    turn_total= turn_total + 1
+                                    turn=0
                             else:
                                 await private_channel.send(m.CANNOT_USE_RESOLVE)
                                 turn=1
@@ -5312,13 +6727,17 @@ class CrownUnlimited(commands.Cog):
                                     turn_total= turn_total + 1
                                     turn=0
                                 else:
-                                    c_health = c_health - int(dmg['DMG'])
+                                    if c_universe == "Naruto" and c_stamina == 0:
+                                        c_health = c_health 
+                                        embedVar = discord.Embed(title=f"{c_card.upper()}: Substitution Jutsu", description=f"{t_card} attack strikes a log", colour=0xe91e63)
+                                        await ctx.send(embed=embedVar)
+                                    else:
+                                        c_health = c_health - int(dmg['DMG'])
+                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                        await ctx.send(embed=embedVar)
                                     if c_health < 0:
                                         c_health=0
-                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-
-                                    embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
-                                    await private_channel.send(embed=embedVar)
+                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
                                     turn_total= turn_total + 1
                                     turn=0
 
@@ -5446,41 +6865,72 @@ class CrownUnlimited(commands.Cog):
                         await discord.TextChannel.delete(private_channel, reason=None)
 
     @commands.command()
-    async def cboss(self, ctx, user: User, *args):
+    async def cboss(self, ctx, user: User):
         companion = db.queryUser({'DISNAME': str(user)})
         private_channel = ctx
-        if not args:
-            return await ctx.send("Include Boss Universe")
+        sowner = db.queryUser({'DISNAME': str(ctx.author)})
 
+        if sowner['AVAILABLE']:
+            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': False}})
+        else:
+            await private_channel.send(m.ALREADY_IN_TALES)
+            return
         
-        guild = ctx.guild
+        completed_crown_tales = sowner['CROWN_TALES']
+        all_universes = db.queryAllUniverse()
+        available_universes = []
+        selected_universe = ""
+        for uni in all_universes:
+            if uni['PREREQUISITE'] in sowner['CROWN_TALES']:
+                available_universes.append(uni['TITLE'])
 
-        if guild:
-            overwrites = {
+        embedVar = discord.Embed(title=f":crown: Select A Boss Arena", description="\n".join(available_universes), colour=0xe91e63) 
+        embedVar.set_footer(text="Type Quit to exit Tales selection")
+        await private_channel.send(embed=embedVar)
+        accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
+
+        def check(msg):
+            return msg.author == ctx.author and (msg.content in available_universes) or (msg.content == "Quit") 
+        try:
+            msg = await self.bot.wait_for('message', timeout=30.0, check=check)
+
+            if msg.content == "Quit":
+                await private_channel.send("Quit Boss  selection. ")
+                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                return
+
+            selected_universe = msg.content
+            guild = ctx.guild
+            if guild:
+                overwrites = {
                             guild.default_role: discord.PermissionOverwrite(read_messages=False),
                             guild.me: discord.PermissionOverwrite(read_messages=True),
-                            ctx.author: discord.PermissionOverwrite(read_messages=True),
+                        ctx.author: discord.PermissionOverwrite(read_messages=True),
                             user: discord.PermissionOverwrite(read_messages=True),
                         }
+                private_channel = await guild.create_text_channel(f'{str(ctx.author)}&{user}-boss-fight', overwrites=overwrites)
+                await ctx.send(f"{ctx.author.mention} private channel has been opened for you.")
+                await private_channel.send(f'{ctx.author.mention} Good luck!')
+            
+        except:
+            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+            embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", colour=0xe91e63)
+            await private_channel.send(embed=embedVar)
+            return
 
-            private_channel = await guild.create_text_channel(f'{str(ctx.author)}&{user}-co-tale-run', overwrites=overwrites)
-            await ctx.send(f"{ctx.author.mention} & {user.mention} private channel has been opened for you.")
-            await private_channel.send(f'{ctx.author.mention} Good luck!')
-
-        t_available = False
-        universeName = " ".join([*args])
-        universe = db.queryUniverse({'TITLE': str(universeName)})
-        if not universe:
-            await discord.TextChannel.delete(private_channel, reason=None)
-            return await private_channel.send("Add Boss Universe")
+        universe = db.queryUniverse({'TITLE': str(selected_universe)})
+        if not universe['CROWN_TALES']:
+            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+            await ctx.author.send(f"{selected_universe} Boss Arena not yet available! Check back later!")
+            if private_channel.guild:
+                await discord.TextChannel.delete(private_channel, reason=None)
+            return    
         bossname = ''
 
         starttime = time.asctime()
         h_gametime = starttime[11:13]
         m_gametime = starttime[14:16]
         s_gametime = starttime[17:19]
-
-        sowner = db.queryUser({'DISNAME': str(ctx.author)})
 
         bossname = universe['UNIVERSE_BOSS']
         boss = db.queryBoss({'NAME': str(bossname)})
@@ -5524,7 +6974,10 @@ class CrownUnlimited(commands.Cog):
         o_card = o['NAME']
         o_card_path=o['PATH']
         o_rcard_path=o['RPATH']
-        o_max_health = o['HLT']
+        if o['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= o['HLT']: # Demon Slayer Universal Trait
+            o_max_health = t['HLT']
+        else:                    
+            o_max_health = o['HLT']
         o_health = o['HLT']
         o_stamina = o['STAM']
         o_max_stamina = o['STAM']
@@ -5583,7 +7036,10 @@ class CrownUnlimited(commands.Cog):
         c_card = c['NAME']
         c_card_path=c['PATH']
         c_rcard_path= c['RPATH']
-        c_max_health = c['HLT'] 
+        if c['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= c['HLT']: # Demon Slayer Universal Trait
+            c_max_health = t['HLT']
+        else:                    
+            c_max_health = c['HLT']
         c_health = c['HLT'] 
         c_stamina = c['STAM']
         c_max_stamina = c['STAM']
@@ -5635,7 +7091,10 @@ class CrownUnlimited(commands.Cog):
         t_card = t['NAME']
         t_card_path=t['PATH']
         t_rcard_path=t['RPATH']
-        t_max_health = t['HLT'] * 3
+        if t['UNIVERSE'] == "Demon Slayer" and o_max_health >= t['HLT']: #Demon Slayer Universal Trait
+            t_max_health = o_max_health * 3
+        else:                    
+            t_max_health = t['HLT'] * 3
         t_health = t['HLT'] *3
         t_stamina = t['STAM']
         t_max_stamina= t['STAM']
@@ -6500,8 +7959,63 @@ class CrownUnlimited(commands.Cog):
                     embedVar = discord.Embed(title=f"{o_card.upper()} FOCUSED", description=f"`{o_card} says:`\n{o_focus_description}", colour=0xe91e63)
                     embedVar.add_field(name=f"{o_card} focused and {healmessage}", value="All stats & stamina increased")
                     await private_channel.send(embed=embedVar)
-                    turn_total= turn_total + 1
-                    turn = 1
+                    #Resolve Check and Calculation
+                    if not o_used_resolve and o_used_focus and o_universe == "Digimon": # Digimon Universal Trait
+                        embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                        embedVar.add_field(name=f"Transformation: Digivolve", value="All stats & stamina greatly increased")
+                        await ctx.send(embed=embedVar)
+                        #fortitude or luck is based on health  
+                        fortitude = 0.0
+                        low = o_health - (o_health * .75)
+                        high = o_health- (o_health * .66)
+                        fortitude = random.randint(int(low), int(high))
+                        #Resolve Scaling
+                        o_resolve_health = round(fortitude + (.5*o_resolve))
+                        o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                        o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+
+                        o_stamina = o_stamina + o_resolve
+                        o_health = o_health + o_resolve_health
+                        o_attack = round(o_attack + o_resolve_attack)
+                        o_defense = round(o_defense - o_resolve_defense)
+                        o_used_resolve = True 
+                        o_pet_used=False
+
+                        turn_total= turn_total + 1
+                        turn=1
+                    elif o_universe == "League Of Legends":
+                        embedVar = discord.Embed(title=f"Turret Shot hits for 25 DMG!", colour=0xe91e63)
+                        await ctx.send(embed=embedVar)
+                        t_health = round(t_health - 25)
+                        turn_total= turn_total + 1
+                        turn=1
+                    elif o_universe == "Attack On Titan":
+                        embedVar = discord.Embed(title=f"Rally! {o_card} Increased Max Health!", colour=0xe91e63)
+                        await ctx.send(embed=embedVar)
+                        o_max_health = round(o_max_health + 50)
+                        turn_total= turn_total + 1
+                        turn=1
+                    elif o_universe == "Black Clover":
+                        embedVar = discord.Embed(title=f"Mana Zone! {o_card} Increased Stamina!", colour=0xe91e63)
+                        await ctx.send(embed=embedVar)
+                        o_stamina = 110
+                        turn_total= turn_total + 1
+                        turn=1
+                    elif t_universe == "One Punch Man":
+                        embedVar = discord.Embed(title=f"Hero Reinforcements! {t_card} Increased Max Health!", colour=0xe91e63)
+                        await ctx.send(embed=embedVar)
+                        t_max_health = round(t_max_health + 50)
+                        turn_total= turn_total + 1
+                        turn=1
+                    elif t_universe == "7ds":
+                        embedVar = discord.Embed(title=f"Increase Power Level! {t_card} Increased Stamina!", colour=0xe91e63)
+                        await ctx.send(embed=embedVar)
+                        t_stamina = 110
+                        turn_total= turn_total + 1
+                        turn=1
+                    else:
+                        turn_total= turn_total + 1
+                        turn = 1
                 else:
 
                     # UNIVERSE CARD
@@ -6572,33 +8086,150 @@ class CrownUnlimited(commands.Cog):
                         elif msg.content == "5":
                             #Resolve Check and Calculation
                             if not o_used_resolve and o_used_focus:
+                                if o_universe == "My Hero Academia": #My Hero Trait
+                                    #fortitude or luck is based on health  
+                                    fortitude = 0.0
+                                    low = o_health - (o_health * .75)
+                                    high = o_health- (o_health * .66)
+                                    fortitude = random.randint(int(low), int(high))
+                                    #Resolve Scaling
+                                    o_resolve_health = round(fortitude + (.5*o_resolve))
+                                    o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                    o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+
+                                    o_stamina = o_stamina + o_resolve
+                                    o_health = o_health + o_resolve_health
+                                    o_attack = round(o_attack + o_resolve_attack)
+                                    o_defense = round(o_defense - o_resolve_defense)
+                                    o_used_resolve = True 
+                                    o_pet_used=False
+                                    embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation: Plus Ultra", value="All stats & stamina greatly increased")
+                                    await ctx.send(embed=embedVar)
+
+                                    turn_total= turn_total + 1
+                                    turn=0
+                                elif o_universe == "Bleach": #Bleach Trait
+                                    #fortitude or luck is based on health  
+                                    fortitude = 0.0
+                                    low = o_health - (o_health * .75)
+                                    high = o_health- (o_health * .66)
+                                    fortitude = random.randint(int(low), int(high))
+                                    #Resolve Scaling
+                                    o_resolve_health = round(fortitude + (.5*o_resolve))
+                                    o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                    o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+
+                                    o_stamina = o_stamina + o_resolve
+                                    o_health = o_health + o_resolve_health
+                                    o_attack = round(o_attack + (2 * o_resolve_attack))
+                                    o_defense = round(o_defense - o_resolve_defense)
+                                    o_used_resolve = True 
+                                    o_pet_used=False
+                                    embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
+                                    await ctx.send(embed=embedVar)
+                                    turn_total= turn_total + 1
+                                    turn=1
+                                elif o_universe == "God Of War": #God Of War Trait
+                                    #fortitude or luck is based on health  
+                                    fortitude = 0.0
+                                    low = o_health - (o_health * .75)
+                                    high = o_health- (o_health * .66)
+                                    fortitude = random.randint(int(low), int(high))
+                                    #Resolve Scaling
+                                    o_resolve_health = round(fortitude + (.5*o_resolve))
+                                    o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                    o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+
+                                    o_stamina = o_stamina + o_resolve
+                                    o_health = o_max_health
+                                    o_attack = round(o_attack + o_resolve_attack)
+                                    o_defense = round(o_defense - o_resolve_defense)
+                                    o_used_resolve = True 
+                                    o_pet_used=False
+                                    embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation: Ascension", value="All stats & stamina greatly increased")
+                                    await ctx.send(embed=embedVar)
+                                    turn_total= turn_total + 1
+                                    turn=1
+                                elif o_universe == "Fate": #Fate Trait
+                                    #fortitude or luck is based on health  
+                                    fortitude = 0.0
+                                    low = o_health - (o_health * .75)
+                                    high = o_health- (o_health * .66)
+                                    fortitude = random.randint(int(low), int(high))
+                                    #Resolve Scaling
+                                    o_resolve_health = round(fortitude + (.5*o_resolve))
+                                    o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                    o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+
+                                    o_stamina = o_stamina + o_resolve
+                                    o_health = o_health + o_resolve_health
+                                    o_attack = round(o_attack + o_resolve_attack)
+                                    o_defense = round(o_defense - o_resolve_defense)
                                     
+                                    embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
+                                    await ctx.send(embed=embedVar)
+                                    dmg = damage_cal(o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description)
+                                    t_health = t_health - dmg['DMG']
+                                    embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
+                                    await ctx.send(embed=embedVar)
+                                    o_stamina = 0
+                                    o_used_resolve = True 
+                                    o_pet_used=False
+                                    turn_total= turn_total + 1
+                                    turn=1
+                                elif o_universe == "Kanto Region" or o_universe == "Johto Region" or o_universe == "Hoenn Region" or o_universe == "Sinnoh Region" or o_universe == "Kalos Region" or o_universe == "Unova Region" or o_universe == "Alola Region" or o_universe == "Galar Region": # Pokemon Resolves
+                                    #fortitude or luck is based on health  
+                                    fortitude = 0.0
+                                    low = o_health - (o_health * .75)
+                                    high = o_health- (o_health * .66)
+                                    fortitude = random.randint(int(low), int(high))
+                                    #Resolve Scaling
+                                    o_resolve_health = round(fortitude + (.5*o_resolve))
+                                    o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                    o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
 
-                                #fortitude or luck is based on health  
-                                fortitude = 0.0
-                                low = o_health - (o_health * .75)
-                                high = o_health- (o_health * .66)
-                                fortitude = random.randint(int(low), int(high))
-                                #Resolve Scaling
-                                o_resolve_health = round(fortitude + (.5*o_resolve))
-                                o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
-                                o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                    o_stamina = o_stamina + o_resolve
+                                    o_health = o_health + o_resolve_health
+                                    o_attack = round(o_attack + o_resolve_attack)
+                                    o_defense = round(o_defense)
+                                    o_used_resolve = True 
+                                    o_pet_used=False
+                                    embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation: Plus Ultra", value="All stats & stamina greatly increased")
+                                    await ctx.send(embed=embedVar)
+                                    turn_total= turn_total + 1
+                                    turn=1
+                                else: # Standard Resolve
+                                    #fortitude or luck is based on health  
+                                    fortitude = 0.0
+                                    low = o_health - (o_health * .75)
+                                    high = o_health- (o_health * .66)
+                                    fortitude = random.randint(int(low), int(high))
+                                    #Resolve Scaling
+                                    o_resolve_health = round(fortitude + (.5*o_resolve))
+                                    o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                    o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
 
-                                o_stamina = o_stamina + o_resolve
-                                o_health = o_health + o_resolve_health
-                                o_attack = round(o_attack + o_resolve_attack)
-                                o_defense = round(o_defense - o_resolve_defense)
-                                o_used_resolve = True
-
-                                embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
-                                embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
-                                await private_channel.send(embed=embedVar)
-                                turn_total= turn_total + 1
-                                turn=1
+                                    o_stamina = o_stamina + o_resolve
+                                    o_health = o_health + o_resolve_health
+                                    o_attack = round(o_attack + o_resolve_attack)
+                                    o_defense = round(o_defense - o_resolve_defense)
+                                    o_used_resolve = True 
+                                    o_pet_used=False
+                                    embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
+                                    await ctx.send(embed=embedVar)
+                                    turn_total= turn_total + 1
+                                    turn=1
                             else:
                                 emessage = m.CANNOT_USE_RESOLVE
-                                embedVar = discord.Embed(title=emessage, colour=0xe91e63)
-                                await private_channel.send(embed=embedVar)
+                                embedVar = discord.Embed(title=emessage, description=f"Entering `Resolved State` sacrifices a turn to power up even greater and regain `Stamina`!", colour=0xe91e63)
+                                await ctx.send(embed=embedVar)
+                                turn=0
                         elif msg.content == "6":
                                 #Resolve Check and Calculation
                             if o_used_resolve and o_used_focus and not o_pet_used:                                      
@@ -6861,13 +8492,17 @@ class CrownUnlimited(commands.Cog):
                                     turn_total= turn_total + 1
                                     turn=1
                                 else:
-                                    t_health = t_health - dmg['DMG']
+                                    if t_universe == "Naruto" and t_stamina == 0:
+                                        t_health = t_health 
+                                        embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{o_card} attack strikes a log", colour=0xe91e63)
+                                        await ctx.send(embed=embedVar)
+                                    else:
+                                        t_health = t_health - dmg['DMG']
+                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
+                                        await ctx.send(embed=embedVar)
                                     if t_health < 0:
                                         t_health=0
-                                    o_stamina = o_stamina - dmg['STAMINA_USED']
-
-                                    embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
-                                    await private_channel.send(embed=embedVar)
+                                    o_stamina = o_stamina - dmg['STAMINA_USED']                                            
                                     turn_total= turn_total + 1
                                     turn=1
                             else:
@@ -6957,8 +8592,61 @@ class CrownUnlimited(commands.Cog):
                     else:
                         embedVar = discord.Embed(title=f"{t_card} Stamina has recovered", colour=embed_color_t)
                         await private_channel.send(embed=embedVar)
-                    turn_total= turn_total + 1
-                    turn=2
+                    if not t_used_resolve and t_used_focus and t_universe == "Digimon":  #Digimon Universal Trait
+                        #fortitude or luck is based on health  
+                        fortitude = 0.0
+                        low = t_health - (t_health * .75)
+                        high = t_health- (t_health * .66)
+                        fortitude = random.randint(int(low), int(high))
+                        #Resolve Scaling
+                        t_resolve_health = round(fortitude + (.5*t_resolve))
+                        t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                        t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                        t_stamina = t_stamina + t_resolve
+                        t_health = t_health + t_resolve_health
+                        t_attack = round(t_attack + t_resolve_attack)
+                        t_defense = round(t_defense - t_resolve_defense)
+                        t_used_resolve=True
+
+                        embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                        embedVar.add_field(name=f"Transformation: Digivolve", value="All stats & stamina greatly increased")
+                        await ctx.send(embed=embedVar)
+                        turn_total= turn_total + 1
+                        turn=2
+                    elif t_universe == "League Of Legends":
+                        embedVar = discord.Embed(title=f"Turret Shot hits {o_card} for 25 DMG!", colour=0xe91e63)
+                        await ctx.send(embed=embedVar)
+                        o_health = round(o_health - 25)
+                        turn_total= turn_total + 1
+                        turn=2
+                    elif t_universe == "Attack On Titan":
+                        embedVar = discord.Embed(title=f"Rally!{t_card} Increased Max Health!", colour=0xe91e63)
+                        await ctx.send(embed=embedVar)
+                        t_max_health = round(t_max_health + 50)
+                        turn_total= turn_total + 1
+                        turn=2
+                    elif t_universe == "Black Clover":
+                        embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
+                        await ctx.send(embed=embedVar)
+                        t_stamina = 110
+                        turn_total= turn_total + 1
+                        turn=2
+                    elif o_universe == "One Punch Man":
+                        embedVar = discord.Embed(title=f"Hero Reinforcements! {o_card} Increased Max Health!", colour=0xe91e63)
+                        await ctx.send(embed=embedVar)
+                        o_max_health = round(o_max_health + 50)
+                        turn_total= turn_total + 1
+                        turn=2
+                    elif o_universe == "7ds":
+                        embedVar = discord.Embed(title=f"Increase Power Level! {o_card} Increased Stamina!", colour=0xe91e63)
+                        await ctx.send(embed=embedVar)
+                        o_stamina = 110
+                        turn_total= turn_total + 1
+                        turn=2
+                    else:
+                        turn_total= turn_total + 1
+                        turn=2
                 #Play Bot
                 else:
                     # UNIVERSE CARD
@@ -7082,33 +8770,144 @@ class CrownUnlimited(commands.Cog):
                         t_enhancer_used=False
                     elif aiMove == 5:
                         if not t_used_resolve and t_used_focus:
+                            if t_universe == "My Hero Academia": #My hero TRait
+                                    #fortitude or luck is based on health  
+                                    fortitude = 0.0
+                                    low = t_health - (t_health * .75)
+                                    high = t_health- (t_health * .66)
+                                    fortitude = random.randint(int(low), int(high))
+                                    #Resolve Scaling
+                                    t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                    t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                    t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
 
-                            if botActive:                    
-                                embedVar = discord.Embed(title=f"`{t_card}` Resolved!", description=f"{t_rmessage}", colour=0xe91e63)
-                                embedVar.set_footer(text=f"{o_card} this will not be easy...")
-                                await private_channel.send(embed=embedVar)
+                                    t_stamina = t_stamina + t_resolve
+                                    t_health = t_health + t_resolve_health
+                                    t_attack = round(t_attack + t_resolve_attack)
+                                    t_defense = round(t_defense - t_resolve_defense)
+                                    t_used_resolve=True
+
+                                    embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation: Plus Ultra", value="All stats & stamina greatly increased")
+                                    await ctx.send(embed=embedVar)
+                                    turn_total= turn_total + 1
+                                    turn=1
+                            elif t_universe == "Bleach": #Bleach Trait
+                                #fortitude or luck is based on health  
+                                fortitude = 0.0
+                                low = t_health - (t_health * .75)
+                                high = t_health- (t_health * .66)
+                                fortitude = random.randint(int(low), int(high))
+                                #Resolve Scaling
+                                t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                t_stamina = t_stamina + t_resolve
+                                t_health = t_health + t_resolve_health
+                                t_attack = round(t_attack + (2 * t_resolve_attack))
+                                t_defense = round(t_defense - t_resolve_defense)
+                                t_used_resolve=True
+
+                                embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
+                                await ctx.send(embed=embedVar)
+                                turn_total= turn_total + 1
+                                turn=2
+                            elif t_universe == "God Of War": #God Of War Trait
+                                #fortitude or luck is based on health  
+                                fortitude = 0.0
+                                low = t_health - (t_health * .75)
+                                high = t_health- (t_health * .66)
+                                fortitude = random.randint(int(low), int(high))
+                                #Resolve Scaling
+                                t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                t_stamina = t_stamina + t_resolve
+                                t_health = t_max_health
+                                t_attack = round(t_attack + t_resolve_attack)
+                                t_defense = round(t_defense - t_resolve_defense)
+                                t_used_resolve=True
+
+                                embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
+                                await ctx.send(embed=embedVar)
+                                turn_total= turn_total + 1
+                                turn=2
+                            elif t_universe == "Fate": #Bleach Trait
+                                #fortitude or luck is based on health  
+                                fortitude = 0.0
+                                low = t_health - (t_health * .75)
+                                high = t_health- (t_health * .66)
+                                fortitude = random.randint(int(low), int(high))
+                                #Resolve Scaling
+                                t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                t_stamina = t_stamina + t_resolve
+                                t_health = t_health + t_resolve_health
+                                t_attack = round(t_attack + t_resolve_attack)
+                                t_defense = round(t_defense - t_resolve_defense)
+                                t_used_resolve=True
                                 
-                            #fortitude or luck is based on health  
-                            fortitude = 0.
-                            low = t_health - (t_health * .75)
-                            high = t_health- (t_health * .66)
-                            fortitude = random.randint(int(low), int(high))
-                            #Resolve Scaling
-                            t_resolve_health = round(fortitude + (.5*t_resolve))
-                            t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
-                            t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
+                                await ctx.send(embed=embedVar)
+                                dmg = damage_cal(t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description)
+                                t_pet_used =False
+                                o_health = o_health - int(dmg['DMG'])
+                                embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                await ctx.send(embed=embedVar)
+                                t_stamina = 0
+                                turn_total= turn_total + 1
+                                turn=2
+                            elif t_universe == "Kanto Region" or t_universe == "Johto Region" or t_universe == "Hoenn Region" or t_universe == "Sinnoh Region" or t_universe == "Kalos Region" or t_universe == "Unova Region" or t_universe == "Alola Region" or t_universe == "Galar Region": #Pokemon Resolves
+                                #fortitude or luck is based on health  
+                                fortitude = 0.0
+                                low = t_health - (t_health * .75)
+                                high = t_health- (t_health * .66)
+                                fortitude = random.randint(int(low), int(high))
+                                #Resolve Scaling
+                                t_resolve_health = round(fortitude + (.5*t_resolve))
+                                t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
 
-                            t_stamina = t_stamina + t_resolve
-                            t_health = t_health + t_resolve_health
-                            t_attack = round(t_attack + t_resolve_attack)
-                            t_defense = round(t_defense - t_resolve_defense)
-                            t_used_resolve = True 
-                            t_pet_used =False
+                                t_stamina = t_stamina + t_resolve
+                                t_health = t_health + t_resolve_health
+                                t_attack = round(t_attack + t_resolve_attack)
+                                t_defense = round(t_defense)
+                                t_used_resolve=True
 
-                            embedVar = discord.Embed(title=f"{t_card} strengthened resolve!", colour=embed_color_o)
-                            await private_channel.send(embed=embedVar)
-                            turn_total= turn_total + 1
-                            turn=2
+                                embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                embedVar.add_field(name=f"Transformation: Evolution", value="All stats & stamina greatly increased")
+                                await ctx.send(embed=embedVar)
+                                turn_total= turn_total + 1
+                                turn=2
+                            else:
+                                #fortitude or luck is based on health  
+                                fortitude = 0.0
+                                low = t_health - (t_health * .75)
+                                high = t_health- (t_health * .66)
+                                fortitude = random.randint(int(low), int(high))
+                                #Resolve Scaling
+                                t_resolve_health = round(fortitude + (.5*t_resolve))
+                                t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                t_stamina = t_stamina + t_resolve
+                                t_health = t_health + t_resolve_health
+                                t_attack = round(t_attack + t_resolve_attack)
+                                t_defense = round(t_defense - t_resolve_defense)
+                                t_used_resolve=True
+
+                                embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
+                                await ctx.send(embed=embedVar)
+                                turn_total= turn_total + 1
+                                turn=2
                         else:
                             emessage = m.CANNOT_USE_RESOLVE
                             embedVar = discord.Embed(title=emessage, description=f"Entering `Resolved State` sacrifices a turn to power up even greater and regain `Stamina`!", colour=0xe91e63)
@@ -7301,13 +9100,17 @@ class CrownUnlimited(commands.Cog):
                                 turn_total= turn_total + 1
                                 turn=2
                             else:
-                                o_health = o_health - int(dmg['DMG'])
+                                if o_universe == "Naruto" and o_stamina == 0:
+                                    o_health = o_health 
+                                    embedVar = discord.Embed(title=f"{o_card.upper()}: Substitution Jutsu", description=f"{t_card} attack strikes a log", colour=0xe91e63)
+                                    await ctx.send(embed=embedVar)
+                                else:
+                                    o_health = o_health - int(dmg['DMG'])
+                                    embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                    await ctx.send(embed=embedVar)
                                 if o_health < 0:
                                     o_health=0
-                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-
-                                embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
-                                await private_channel.send(embed=embedVar)
+                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
                                 turn_total= turn_total + 1
                                 turn=2
 
@@ -7376,9 +9179,63 @@ class CrownUnlimited(commands.Cog):
                     embedVar = discord.Embed(title=f"{c_card.upper()} FOCUSED", description=f"`{c_card} says:`\n{c_focus_description}", colour=0xe91e63)
                     embedVar.add_field(name=f"{c_card} focused and {healmessage}", value="All stats & stamina increased")
                     await private_channel.send(embed=embedVar)
+                    #Resolve Check and Calculation
+                    if not c_used_resolve and c_used_focus and c_universe == "Digimon": # Digimon Universal Trait
+                        embedVar = discord.Embed(title=f"{c_card.upper()} STRENGTHENED RESOLVE", description=f"`{c_card} says:`\n{c_resolve_description}", colour=0xe91e63)
+                        embedVar.add_field(name=f"Transformation: Digivolve", value="All stats & stamina greatly increased")
+                        await ctx.send(embed=embedVar)
+                        #fortitude or luck is based on health  
+                        fortitude = 0.0
+                        low = o_health - (o_health * .75)
+                        high = o_health- (o_health * .66)
+                        fortitude = random.randint(int(low), int(high))
+                        #Resolve Scaling
+                        c_resolve_health = round(fortitude + (.5 * c_resolve))
+                        c_resolve_attack = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
+                        c_resolve_defense = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
 
-                    turn_total= turn_total + 1
-                    turn = 3
+                        c_stamina = c_stamina + c_resolve
+                        c_health = c_health + c_resolve_health
+                        c_attack = round(c_attack + c_resolve_attack)
+                        c_defense = round(c_defense - c_resolve_defense)
+                        c_used_resolve = True 
+                        c_pet_used=False
+
+                        turn_total= turn_total + 1
+                        turn=3
+                    elif c_universe == "League Of Legends":
+                        embedVar = discord.Embed(title=f"Turret Shot hits {t_card} for 25 DMG!", colour=0xe91e63)
+                        await ctx.send(embed=embedVar)
+                        t_health = round(t_health - 25)
+                        turn_total= turn_total + 1
+                        turn=3
+                    elif c_universe == "Attack On Titan":
+                        embedVar = discord.Embed(title=f"Rally! {c_card} Increased Max Health!", colour=0xe91e63)
+                        await ctx.send(embed=embedVar)
+                        c_max_health = round(c_max_health + 50)
+                        turn_total= turn_total + 1
+                        turn=3
+                    elif c_universe == "Black Clover":
+                        embedVar = discord.Embed(title=f"Mana Zone! {c_card} Increased Stamina!", colour=0xe91e63)
+                        await ctx.send(embed=embedVar)
+                        c_stamina = 110
+                        turn_total= turn_total + 1
+                        turn=3
+                    elif t_universe == "One Punch Man":
+                        embedVar = discord.Embed(title=f"Hero Reinforcements! {t_card} Increased Max Health!", colour=0xe91e63)
+                        await ctx.send(embed=embedVar)
+                        t_max_health = round(t_max_health + 50)
+                        turn_total= turn_total + 1
+                        turn=3
+                    elif t_universe == "7ds":
+                        embedVar = discord.Embed(title=f"Increase Power Level! {t_card} Increased Stamina!", colour=0xe91e63)
+                        await ctx.send(embed=embedVar)
+                        t_stamina = 110
+                        turn_total= turn_total + 1
+                        turn=3
+                    else:
+                        turn_total= turn_total + 1
+                        turn = 3
                 else:
 
                     # UNIVERSE CARD
@@ -7448,29 +9305,145 @@ class CrownUnlimited(commands.Cog):
                         elif msg.content == "5":
                             #Resolve Check and Calculation
                             if not c_used_resolve and c_used_focus:
+                                if c_universe == "My Hero Academia": #My Hero Trait
+                                    #fortitude or luck is based on health  
+                                    fortitude = 0.0
+                                    low = c_health - (c_health * .75)
+                                    high = c_health- (c_health * .66)
+                                    fortitude = random.randint(int(low), int(high))
+                                    #Resolve Scaling
+                                    c_resolve_health = round(fortitude + (.5 * c_resolve))
+                                    c_resolve_attack = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
+                                    c_resolve_defense = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
+
+                                    c_stamina = c_stamina + c_resolve
+                                    c_health = c_health + c_resolve_health
+                                    c_attack = round(c_attack + c_resolve_attack)
+                                    c_defense = round(c_defense - c_resolve_defense)
+                                    c_used_resolve = True 
+                                    c_pet_used=False
+                                    embedVar = discord.Embed(title=f"{c_card.upper()} STRENGTHENED RESOLVE", description=f"`{c_card} says:`\n{c_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation: Plus Ultra", value="All stats & stamina greatly increased")
+                                    await ctx.send(embed=embedVar)
+
+                                    turn_total= turn_total + 1
+                                    turn=2
+                                elif c_universe == "Bleach": #Bleach Trait
+                                    #fortitude or luck is based on health  
+                                    fortitude = 0.0
+                                    low = c_health - (c_health * .75)
+                                    high = c_health- (c_health * .66)
+                                    fortitude = random.randint(int(low), int(high))
+                                    #Resolve Scaling
+                                    c_resolve_health = round(fortitude + (.5 * c_resolve))
+                                    c_resolve_attack = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
+                                    c_resolve_defense = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
+
+                                    c_stamina = c_stamina + c_resolve
+                                    c_health = c_health + c_resolve_health
+                                    c_attack = round(c_attack + (2 * c_resolve_attack))
+                                    c_defense = round(c_defense - c_resolve_defense)
+                                    c_used_resolve = True 
+                                    c_pet_used=False
+                                    embedVar = discord.Embed(title=f"{c_card.upper()} STRENGTHENED RESOLVE", description=f"`{c_card} says:`\n{c_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
+                                    await ctx.send(embed=embedVar)
+                                    turn_total= turn_total + 1
+                                    turn=3
+                                elif c_universe == "God Of War": #God Of War Trait
+                                    #fortitude or luck is based on health  
+                                    fortitude = 0.0
+                                    low = c_health - (c_health * .75)
+                                    high = c_health - (c_health * .66)
+                                    fortitude = random.randint(int(low), int(high))
+                                    #Resolve Scaling
+                                    c_resolve_health = round(fortitude + (.5*o_resolve))
+                                    c_resolve_attack = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
+                                    c_resolve_defense = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
+
+                                    c_stamina = c_stamina + c_resolve
+                                    c_health = c_max_health
+                                    c_attack = round(c_attack + c_resolve_attack)
+                                    c_defense = round(c_defense - c_resolve_defense)
+                                    c_used_resolve = True 
+                                    c_pet_used=False
+                                    embedVar = discord.Embed(title=f"{c_card.upper()} STRENGTHENED RESOLVE", description=f"`{c_card} says:`\n{c_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation: Ascension", value="All stats & stamina greatly increased")
+                                    await ctx.send(embed=embedVar)
+                                    turn_total= turn_total + 1
+                                    turn=3
+                                elif c_universe == "Fate": #Fate Trait
+                                    #fortitude or luck is based on health  
+                                    fortitude = 0.0
+                                    low = c_health - (c_health * .75)
+                                    high = c_health- (c_health * .66)
+                                    fortitude = random.randint(int(low), int(high))
+                                    #Resolve Scaling
+                                    c_resolve_health = round(fortitude + (.5 * c_resolve))
+                                    c_resolve_attack = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
+                                    c_resolve_defense = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
+
+                                    c_stamina = c_stamina + c_resolve
+                                    c_health = c_health + c_resolve_health
+                                    c_attack = round(c_attack + c_resolve_attack)
+                                    c_defense = round(c_defense - c_resolve_defense)
                                     
+                                    embedVar = discord.Embed(title=f"{c_card.upper()} STRENGTHENED RESOLVE", description=f"`{c_card} says:`\n{c_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
+                                    await ctx.send(embed=embedVar)
+                                    dmg = damage_cal(c_card, c_3, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina,c_max_health, t_attack, c_special_move_description)
+                                    t_health = t_health - dmg['DMG']
+                                    embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
+                                    await ctx.send(embed=embedVar)
+                                    c_stamina = 0
+                                    c_used_resolve = True 
+                                    c_pet_used=False
+                                    turn_total= turn_total + 1
+                                    turn=3
+                                elif c_universe == "Kanto Region" or c_universe == "Johto Region" or c_universe == "Hoenn Region" or c_universe == "Sinnoh Region" or c_universe == "Kalos Region" or c_universe == "Unova Region" or c_universe == "Alola Region" or c_universe == "Galar Region": # Pokemon Resolves
+                                    #fortitude or luck is based on health  
+                                    fortitude = 0.0
+                                    low = c_health - (c_health * .75)
+                                    high = c_health- (c_health * .66)
+                                    fortitude = random.randint(int(low), int(high))
+                                    #Resolve Scaling
+                                    c_resolve_health = round(fortitude + (.5*o_resolve))
+                                    c_resolve_attack = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
+                                    c_resolve_defense = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
 
-                                #fortitude or luck is based on health  
-                                fortitude = 0.0
-                                low = c_health - (c_health * .75)
-                                high = c_health- (c_health * .66)
-                                fortitude = random.randint(int(low), int(high))
-                                #Resolve Scaling
-                                c_resolve_health = round(fortitude + (.5*c_resolve))
-                                c_resolve_attack = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
-                                c_resolve_defense = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
+                                    c_stamina = c_stamina + c_resolve
+                                    c_health = c_health + c_resolve_health
+                                    c_attack = round(c_attack + c_resolve_attack)
+                                    c_defense = round(c_defense)
+                                    c_used_resolve = True 
+                                    c_pet_used=False
+                                    embedVar = discord.Embed(title=f"{c_card.upper()} STRENGTHENED RESOLVE", description=f"`{c_card} says:`\n{c_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation: Plus Ultra", value="All stats & stamina greatly increased")
+                                    await ctx.send(embed=embedVar)
+                                    turn_total= turn_total + 1
+                                    turn=3
+                                else: # Standard Resolve
+                                    #fortitude or luck is based on health  
+                                    fortitude = 0.0
+                                    low = c_health - (c_health * .75)
+                                    high = c_health- (c_health * .66)
+                                    fortitude = random.randint(int(low), int(high))
+                                    #Resolve Scaling
+                                    c_resolve_health = round(fortitude + (.5 * c_resolve))
+                                    c_resolve_attack = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
+                                    c_resolve_defense = round((.30 * c_defense) * (c_resolve / (.50 * c_defense)))
 
-                                c_stamina = c_stamina + c_resolve
-                                c_health = c_health + c_resolve_health
-                                c_attack = round(c_attack + c_resolve_attack)
-                                c_defense = round(c_defense - c_resolve_defense)
-                                c_used_resolve = True 
-
-                                embedVar = discord.Embed(title=f"{c_card.upper()} STRENGTHENED RESOLVE", description=f"`{c_card} says:`\n{c_resolve_description}", colour=0xe91e63)
-                                embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
-                                await private_channel.send(embed=embedVar)
-                                turn_total= turn_total + 1
-                                turn=3
+                                    c_stamina = c_stamina + c_resolve
+                                    c_health = c_health + c_resolve_health
+                                    c_attack = round(c_attack + c_resolve_attack)
+                                    c_defense = round(c_defense - c_resolve_defense)
+                                    c_used_resolve = True 
+                                    c_pet_used=False
+                                    embedVar = discord.Embed(title=f"{c_card.upper()} STRENGTHENED RESOLVE", description=f"`{c_card} says:`\n{c_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
+                                    await ctx.send(embed=embedVar)
+                                    turn_total= turn_total + 1
+                                    turn=3
                             else:
                                 emessage = m.CANNOT_USE_RESOLVE
                                 embedVar = discord.Embed(title=emessage, colour=0xe91e63)
@@ -7739,13 +9712,17 @@ class CrownUnlimited(commands.Cog):
                                     turn_total= turn_total + 1
                                     turn=3
                                 else:
-                                    t_health = t_health - dmg['DMG']
+                                    if t_universe == "Naruto" and t_stamina == 0:
+                                        t_health = t_health 
+                                        embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{c_card} attack strikes a log", colour=0xe91e63)
+                                        await ctx.send(embed=embedVar)
+                                    else:
+                                        t_health = t_health - dmg['DMG']
+                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
+                                        await ctx.send(embed=embedVar)
                                     if t_health < 0:
                                         t_health=0
-                                    c_stamina = c_stamina - dmg['STAMINA_USED']
-
-                                    embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_c)
-                                    await private_channel.send(embed=embedVar)
+                                    c_stamina = c_stamina - dmg['STAMINA_USED']                                            
                                     turn_total= turn_total + 1
                                     turn=3
                             else:
@@ -7836,8 +9813,61 @@ class CrownUnlimited(commands.Cog):
                     else:
                         embedVar = discord.Embed(title=f"{t_card} Stamina has recovered", colour=embed_color_t)
                         await private_channel.send(embed=embedVar)
-                    turn_total= turn_total + 1
-                    turn=0
+                    if not t_used_resolve and t_used_focus and t_universe == "Digimon":  #Digimon Universal Trait
+                        #fortitude or luck is based on health  
+                        fortitude = 0.0
+                        low = t_health - (t_health * .75)
+                        high = t_health- (t_health * .66)
+                        fortitude = random.randint(int(low), int(high))
+                        #Resolve Scaling
+                        t_resolve_health = round(fortitude + (.5*t_resolve))
+                        t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                        t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                        t_stamina = t_stamina + t_resolve
+                        t_health = t_health + t_resolve_health
+                        t_attack = round(t_attack + t_resolve_attack)
+                        t_defense = round(t_defense - t_resolve_defense)
+                        t_used_resolve=True
+
+                        embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                        embedVar.add_field(name=f"Transformation: Digivolve", value="All stats & stamina greatly increased")
+                        await ctx.send(embed=embedVar)
+                        turn_total= turn_total + 1
+                        turn=0
+                    elif t_universe == "League Of Legends":
+                        embedVar = discord.Embed(title=f"Turret Shot hits {c_card} for 25 DMG!", colour=0xe91e63)
+                        await ctx.send(embed=embedVar)
+                        c_health = round(c_health - 25)
+                        turn_total= turn_total + 1
+                        turn=0
+                    elif t_universe == "Attack On Titan":
+                        embedVar = discord.Embed(title=f"Rally!{t_card} Increased Max Health!", colour=0xe91e63)
+                        await ctx.send(embed=embedVar)
+                        t_max_health = round(t_max_health + 50)
+                        turn_total= turn_total + 1
+                        turn=0
+                    elif t_universe == "Black Clover":
+                        embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
+                        await ctx.send(embed=embedVar)
+                        t_stamina = 110
+                        turn_total= turn_total + 1
+                        turn=0
+                    elif c_universe == "One Punch Man":
+                        embedVar = discord.Embed(title=f"Hero Reinforcements! {c_card} Increased Max Health!", colour=0xe91e63)
+                        await ctx.send(embed=embedVar)
+                        c_max_health = round(c_max_health + 50)
+                        turn_total= turn_total + 1
+                        turn=0
+                    elif c_universe == "7ds":
+                        embedVar = discord.Embed(title=f"Increase Power Level! {c_card} Increased Stamina!", colour=0xe91e63)
+                        await ctx.send(embed=embedVar)
+                        c_stamina = 110
+                        turn_total= turn_total + 1
+                        turn=0
+                    else:
+                        turn_total= turn_total + 1
+                        turn=0
                 #Play Bot
                 else:
                     # UNIVERSE CARD
@@ -7961,33 +9991,144 @@ class CrownUnlimited(commands.Cog):
                         t_enhancer_used=False
                     elif aiMove == 5:
                         if not t_used_resolve and t_used_focus:
+                            if t_universe == "My Hero Academia": #My hero TRait
+                                    #fortitude or luck is based on health  
+                                    fortitude = 0.0
+                                    low = t_health - (t_health * .75)
+                                    high = t_health- (t_health * .66)
+                                    fortitude = random.randint(int(low), int(high))
+                                    #Resolve Scaling
+                                    t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                    t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                    t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
 
-                            if botActive:                    
-                                embedVar = discord.Embed(title=f"`{t_card}` Resolved!", description=f"{t_rmessage}", colour=0xe91e63)
-                                embedVar.set_footer(text=f"{o_card} this will not be easy...")
-                                await private_channel.send(embed=embedVar)
+                                    t_stamina = t_stamina + t_resolve
+                                    t_health = t_health + t_resolve_health
+                                    t_attack = round(t_attack + t_resolve_attack)
+                                    t_defense = round(t_defense - t_resolve_defense)
+                                    t_used_resolve=True
+
+                                    embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation: Plus Ultra", value="All stats & stamina greatly increased")
+                                    await ctx.send(embed=embedVar)
+                                    turn_total= turn_total + 1
+                                    turn=3
+                            elif t_universe == "Bleach": #Bleach Trait
+                                #fortitude or luck is based on health  
+                                fortitude = 0.0
+                                low = t_health - (t_health * .75)
+                                high = t_health- (t_health * .66)
+                                fortitude = random.randint(int(low), int(high))
+                                #Resolve Scaling
+                                t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                t_stamina = t_stamina + t_resolve
+                                t_health = t_health + t_resolve_health
+                                t_attack = round(t_attack + (2 * t_resolve_attack))
+                                t_defense = round(t_defense - t_resolve_defense)
+                                t_used_resolve=True
+
+                                embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
+                                await ctx.send(embed=embedVar)
+                                turn_total= turn_total + 1
+                                turn=0
+                            elif t_universe == "God Of War": #God Of War Trait
+                                #fortitude or luck is based on health  
+                                fortitude = 0.0
+                                low = t_health - (t_health * .75)
+                                high = t_health- (t_health * .66)
+                                fortitude = random.randint(int(low), int(high))
+                                #Resolve Scaling
+                                t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                t_stamina = t_stamina + t_resolve
+                                t_health = t_max_health
+                                t_attack = round(t_attack + t_resolve_attack)
+                                t_defense = round(t_defense - t_resolve_defense)
+                                t_used_resolve=True
+
+                                embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
+                                await ctx.send(embed=embedVar)
+                                turn_total= turn_total + 1
+                                turn=0
+                            elif t_universe == "Fate": #Bleach Trait
+                                #fortitude or luck is based on health  
+                                fortitude = 0.0
+                                low = t_health - (t_health * .75)
+                                high = t_health- (t_health * .66)
+                                fortitude = random.randint(int(low), int(high))
+                                #Resolve Scaling
+                                t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                t_stamina = t_stamina + t_resolve
+                                t_health = t_health + t_resolve_health
+                                t_attack = round(t_attack + t_resolve_attack)
+                                t_defense = round(t_defense - t_resolve_defense)
+                                t_used_resolve=True
                                 
-                            #fortitude or luck is based on health  
-                            fortitude = 0.
-                            low = t_health - (t_health * .75)
-                            high = t_health- (t_health * .66)
-                            fortitude = random.randint(int(low), int(high))
-                            #Resolve Scaling
-                            t_resolve_health = round(fortitude + (.5*t_resolve))
-                            t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
-                            t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
+                                await ctx.send(embed=embedVar)
+                                dmg = damage_cal(t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description)
+                                t_pet_used =False
+                                o_health = o_health - int(dmg['DMG'])
+                                embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                await ctx.send(embed=embedVar)
+                                t_stamina = 0
+                                turn_total= turn_total + 1
+                                turn=0
+                            elif t_universe == "Kanto Region" or t_universe == "Johto Region" or t_universe == "Hoenn Region" or t_universe == "Sinnoh Region" or t_universe == "Kalos Region" or t_universe == "Unova Region" or t_universe == "Alola Region" or t_universe == "Galar Region": #Pokemon Resolves
+                                #fortitude or luck is based on health  
+                                fortitude = 0.0
+                                low = t_health - (t_health * .75)
+                                high = t_health- (t_health * .66)
+                                fortitude = random.randint(int(low), int(high))
+                                #Resolve Scaling
+                                t_resolve_health = round(fortitude + (.5*t_resolve))
+                                t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
 
-                            t_stamina = t_stamina + t_resolve
-                            t_health = t_health + t_resolve_health
-                            t_attack = round(t_attack + t_resolve_attack)
-                            t_defense = round(t_defense - t_resolve_defense)
-                            t_used_resolve = True 
-                            t_pet_used =False
+                                t_stamina = t_stamina + t_resolve
+                                t_health = t_health + t_resolve_health
+                                t_attack = round(t_attack + t_resolve_attack)
+                                t_defense = round(t_defense)
+                                t_used_resolve=True
 
-                            embedVar = discord.Embed(title=f"{t_card} strengthened resolve!", colour=embed_color_o)
-                            await private_channel.send(embed=embedVar)
-                            turn_total= turn_total + 1
-                            turn=0
+                                embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                embedVar.add_field(name=f"Transformation: Evolution", value="All stats & stamina greatly increased")
+                                await ctx.send(embed=embedVar)
+                                turn_total= turn_total + 1
+                                turn=0
+                            else:
+                                #fortitude or luck is based on health  
+                                fortitude = 0.0
+                                low = t_health - (t_health * .75)
+                                high = t_health- (t_health * .66)
+                                fortitude = random.randint(int(low), int(high))
+                                #Resolve Scaling
+                                t_resolve_health = round(fortitude + (.5*t_resolve))
+                                t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                t_stamina = t_stamina + t_resolve
+                                t_health = t_health + t_resolve_health
+                                t_attack = round(t_attack + t_resolve_attack)
+                                t_defense = round(t_defense - t_resolve_defense)
+                                t_used_resolve=True
+
+                                embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
+                                await ctx.send(embed=embedVar)
+                                turn_total= turn_total + 1
+                                turn=0
                         else:
                             emessage = m.CANNOT_USE_RESOLVE
                             embedVar = discord.Embed(title=emessage, description=f"Entering `Resolved State` sacrifices a turn to power up even greater and regain `Stamina`!", colour=0xe91e63)
@@ -8180,13 +10321,17 @@ class CrownUnlimited(commands.Cog):
                                 turn_total= turn_total + 1
                                 turn=0
                             else:
-                                c_health = c_health - int(dmg['DMG'])
+                                if c_universe == "Naruto" and c_stamina == 0:
+                                    c_health = c_health 
+                                    embedVar = discord.Embed(title=f"{c_card.upper()}: Substitution Jutsu", description=f"{t_card} attack strikes a log", colour=0xe91e63)
+                                    await ctx.send(embed=embedVar)
+                                else:
+                                    c_health = c_health - int(dmg['DMG'])
+                                    embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                    await ctx.send(embed=embedVar)
                                 if c_health < 0:
                                     c_health=0
-                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-
-                                embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
-                                await private_channel.send(embed=embedVar)
+                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
                                 turn_total= turn_total + 1
                                 turn=0
 
@@ -8202,7 +10347,7 @@ class CrownUnlimited(commands.Cog):
             m_playtime = int(wintime[14:16])
             s_playtime = int(wintime[17:19])
             gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
-
+            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
             embedVar = discord.Embed(title=f":zap: `{t_card}` Wins...\n{t_wins}", description=f"Match concluded in {turn_total} turns!", colour=0x1abc9c)
             embedVar.set_author(name=f"{o_card} says:\n{o_lose_description}", icon_url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236432/PCG%20LOGOS%20AND%20RESOURCES/PCGBot_1.png")
             if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
@@ -8233,6 +10378,8 @@ class CrownUnlimited(commands.Cog):
             drop_response = await bossdrops(ctx.author, universeName)
             await bless(50, str(ctx.author))
             await bless(50, str(user))
+            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+            response = db.updateUserNoFilter({'DISNAME': str(user)}, {'$set': {'AVAILABLE': True}})
             embedVar = discord.Embed(title=f":zap: `{o_card}` and `{c_card}`defeated the {t_universe} Boss {t_card}!\n{t_concede}", description=f"Match concluded in {turn_total} turns!\n\n{drop_response} + :coin: 50!\n\n{c_user['NAME']} got :coin:50!", colour=0xe91e63)
             embedVar.set_author(name=f"{t_card} lost", icon_url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236432/PCG%20LOGOS%20AND%20RESOURCES/PCGBot_1.png")
             if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
@@ -8382,7 +10529,10 @@ class CrownUnlimited(commands.Cog):
             o_card = o['NAME']
             o_card_path=o['PATH']
             o_rcard_path=o['RPATH']
-            o_max_health = o['HLT'] - (10 * currentopponent)
+            if o['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= o['HLT']: # Demon Slayer Universal Trait
+                o_max_health = t['HLT'] - (10 * currentopponent)
+            else:                    
+                o_max_health = o['HLT'] - (10 * currentopponent)
             o_health = o['HLT'] 
             o_stamina = o['STAM']
             o_max_stamina = o['STAM']
@@ -8430,7 +10580,10 @@ class CrownUnlimited(commands.Cog):
             t_card = t['NAME']
             t_card_path=t['PATH']
             t_rcard_path=t['RPATH']
-            t_max_health = t['HLT'] + (25 * currentopponent) + 180
+            if t['UNIVERSE'] == "Demon Slayer" and o_max_health >= t['HLT']: #Demon Slayer Universal Trait
+                t_max_health = o_max_health + (25 * currentopponent) + 180
+            else:                    
+                t_max_health = t['HLT'] + (25 * currentopponent) + 180
             t_health = t['HLT'] + (25 * currentopponent) + 180
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
@@ -9022,8 +11175,63 @@ class CrownUnlimited(commands.Cog):
                         embedVar.add_field(name=f"{o_card} focused and {healmessage}", value="All stats & stamina increased")
                         await private_channel.send(embed=embedVar)
 
-                        turn_total= turn_total + 1
-                        turn = 1
+                        #Resolve Check and Calculation
+                        if not o_used_resolve and o_used_focus and o_universe == "Digimon": # Digimon Universal Trait
+                            embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                            embedVar.add_field(name=f"Transformation: Digivolve", value="All stats & stamina greatly increased")
+                            await ctx.send(embed=embedVar)
+                            #fortitude or luck is based on health  
+                            fortitude = 0.0
+                            low = o_health - (o_health * .75)
+                            high = o_health- (o_health * .66)
+                            fortitude = random.randint(int(low), int(high))
+                            #Resolve Scaling
+                            o_resolve_health = round(fortitude + (.5*o_resolve))
+                            o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                            o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+
+                            o_stamina = o_stamina + o_resolve
+                            o_health = o_health + o_resolve_health
+                            o_attack = round(o_attack + o_resolve_attack)
+                            o_defense = round(o_defense - o_resolve_defense)
+                            o_used_resolve = True 
+                            o_pet_used=False
+
+                            turn_total= turn_total + 1
+                            turn=1
+                        elif o_universe == "League Of Legends":
+                            embedVar = discord.Embed(title=f"Turret Shot hits for 25 DMG!", colour=0xe91e63)
+                            await ctx.send(embed=embedVar)
+                            t_health = round(t_health - 25)
+                            turn_total= turn_total + 1
+                            turn=1
+                        elif o_universe == "Attack On Titan":
+                            embedVar = discord.Embed(title=f"Rally! {o_card} Increased Max Health!", colour=0xe91e63)
+                            await ctx.send(embed=embedVar)
+                            o_max_health = round(o_max_health + 50)
+                            turn_total= turn_total + 1
+                            turn=1
+                        elif o_universe == "Black Clover":
+                            embedVar = discord.Embed(title=f"Mana Zone! {o_card} Increased Stamina!", colour=0xe91e63)
+                            await ctx.send(embed=embedVar)
+                            o_stamina = 110
+                            turn_total= turn_total + 1
+                            turn=1
+                        elif t_universe == "One Punch Man":
+                            embedVar = discord.Embed(title=f"Hero Reinforcements! {t_card} Increased Max Health!", colour=0xe91e63)
+                            await ctx.send(embed=embedVar)
+                            t_max_health = round(t_max_health + 50)
+                            turn_total= turn_total + 1
+                            turn=1
+                        elif t_universe == "7ds":
+                            embedVar = discord.Embed(title=f"Increase Power Level! {t_card} Increased Stamina!", colour=0xe91e63)
+                            await ctx.send(embed=embedVar)
+                            t_stamina = 110
+                            turn_total= turn_total + 1
+                            turn=1
+                        else:
+                            turn_total= turn_total + 1
+                            turn = 1
                     else:
 
                         # UNIVERSE CARD
@@ -9092,35 +11300,152 @@ class CrownUnlimited(commands.Cog):
                                 dmg = damage_cal(o_card, o_enhancer, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description)
                                 o_enhancer_used=False
                             elif msg.content == "5":
-                                #Resolve Check and Calculation
+                                #fortitude or luck is based on health  
                                 if not o_used_resolve and o_used_focus:
+                                    if o_universe == "My Hero Academia": #My Hero Trait
+                                        #fortitude or luck is based on health  
+                                        fortitude = 0.0
+                                        low = o_health - (o_health * .75)
+                                        high = o_health- (o_health * .66)
+                                        fortitude = random.randint(int(low), int(high))
+                                        #Resolve Scaling
+                                        o_resolve_health = round(fortitude + (.5*o_resolve))
+                                        o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                        o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+
+                                        o_stamina = o_stamina + o_resolve
+                                        o_health = o_health + o_resolve_health
+                                        o_attack = round(o_attack + o_resolve_attack)
+                                        o_defense = round(o_defense - o_resolve_defense)
+                                        o_used_resolve = True 
+                                        o_pet_used=False
+                                        embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Transformation: Plus Ultra", value="All stats & stamina greatly increased")
+                                        await ctx.send(embed=embedVar)
+
+                                        turn_total= turn_total + 1
+                                        turn=0
+                                    elif o_universe == "Bleach": #Bleach Trait
+                                        #fortitude or luck is based on health  
+                                        fortitude = 0.0
+                                        low = o_health - (o_health * .75)
+                                        high = o_health- (o_health * .66)
+                                        fortitude = random.randint(int(low), int(high))
+                                        #Resolve Scaling
+                                        o_resolve_health = round(fortitude + (.5*o_resolve))
+                                        o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                        o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+
+                                        o_stamina = o_stamina + o_resolve
+                                        o_health = o_health + o_resolve_health
+                                        o_attack = round(o_attack + (2 * o_resolve_attack))
+                                        o_defense = round(o_defense - o_resolve_defense)
+                                        o_used_resolve = True 
+                                        o_pet_used=False
+                                        embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
+                                        await ctx.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn=1
+                                    elif o_universe == "God Of War": #God Of War Trait
+                                        #fortitude or luck is based on health  
+                                        fortitude = 0.0
+                                        low = o_health - (o_health * .75)
+                                        high = o_health- (o_health * .66)
+                                        fortitude = random.randint(int(low), int(high))
+                                        #Resolve Scaling
+                                        o_resolve_health = round(fortitude + (.5*o_resolve))
+                                        o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                        o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+
+                                        o_stamina = o_stamina + o_resolve
+                                        o_health = o_max_health
+                                        o_attack = round(o_attack + o_resolve_attack)
+                                        o_defense = round(o_defense - o_resolve_defense)
+                                        o_used_resolve = True 
+                                        o_pet_used=False
+                                        embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Transformation: Ascension", value="All stats & stamina greatly increased")
+                                        await ctx.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn=1
+                                    elif o_universe == "Fate": #Fate Trait
+                                        #fortitude or luck is based on health  
+                                        fortitude = 0.0
+                                        low = o_health - (o_health * .75)
+                                        high = o_health- (o_health * .66)
+                                        fortitude = random.randint(int(low), int(high))
+                                        #Resolve Scaling
+                                        o_resolve_health = round(fortitude + (.5*o_resolve))
+                                        o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                        o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+
+                                        o_stamina = o_stamina + o_resolve
+                                        o_health = o_health + o_resolve_health
+                                        o_attack = round(o_attack + o_resolve_attack)
+                                        o_defense = round(o_defense - o_resolve_defense)
                                         
+                                        embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
+                                        await ctx.send(embed=embedVar)
+                                        dmg = damage_cal(o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description)
+                                        t_health = t_health - dmg['DMG']
+                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
+                                        await ctx.send(embed=embedVar)
+                                        o_stamina = 0
+                                        o_used_resolve = True 
+                                        o_pet_used=False
+                                        turn_total= turn_total + 1
+                                        turn=1
+                                    elif o_universe == "Kanto Region" or o_universe == "Johto Region" or o_universe == "Hoenn Region" or o_universe == "Sinnoh Region" or o_universe == "Kalos Region" or o_universe == "Unova Region" or o_universe == "Alola Region" or o_universe == "Galar Region": # Pokemon Resolves
+                                        #fortitude or luck is based on health  
+                                        fortitude = 0.0
+                                        low = o_health - (o_health * .75)
+                                        high = o_health- (o_health * .66)
+                                        fortitude = random.randint(int(low), int(high))
+                                        #Resolve Scaling
+                                        o_resolve_health = round(fortitude + (.5*o_resolve))
+                                        o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                        o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
 
-                                    #fortitude or luck is based on health  
-                                    fortitude = 0.0
-                                    low = o_health - (o_health * .75)
-                                    high = o_health- (o_health * .66)
-                                    fortitude = random.randint(int(low), int(high))
-                                    #Resolve Scaling
-                                    o_resolve_health = round(fortitude + (.5*o_resolve))
-                                    o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
-                                    o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                        o_stamina = o_stamina + o_resolve
+                                        o_health = o_health + o_resolve_health
+                                        o_attack = round(o_attack + o_resolve_attack)
+                                        o_defense = round(o_defense)
+                                        o_used_resolve = True 
+                                        o_pet_used=False
+                                        embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Transformation: Plus Ultra", value="All stats & stamina greatly increased")
+                                        await ctx.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn=1
+                                    else: # Standard Resolve
+                                        #fortitude or luck is based on health  
+                                        fortitude = 0.0
+                                        low = o_health - (o_health * .75)
+                                        high = o_health- (o_health * .66)
+                                        fortitude = random.randint(int(low), int(high))
+                                        #Resolve Scaling
+                                        o_resolve_health = round(fortitude + (.5*o_resolve))
+                                        o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                        o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
 
-                                    o_stamina = o_stamina + o_resolve
-                                    o_health = o_health + o_resolve_health
-                                    o_attack = round(o_attack + o_resolve_attack)
-                                    o_defense = round(o_defense - o_resolve_defense)
-                                    o_used_resolve = True 
-
-                                    embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
-                                    embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
-                                    await private_channel.send(embed=embedVar)
-                                    turn_total= turn_total + 1
-                                    turn=1
+                                        o_stamina = o_stamina + o_resolve
+                                        o_health = o_health + o_resolve_health
+                                        o_attack = round(o_attack + o_resolve_attack)
+                                        o_defense = round(o_defense - o_resolve_defense)
+                                        o_used_resolve = True 
+                                        o_pet_used=False
+                                        embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
+                                        await ctx.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn=1
                                 else:
                                     emessage = m.CANNOT_USE_RESOLVE
-                                    embedVar = discord.Embed(title=emessage, colour=0xe91e63)
-                                    await private_channel.send(embed=embedVar)
+                                    embedVar = discord.Embed(title=emessage, description=f"Entering `Resolved State` sacrifices a turn to power up even greater and regain `Stamina`!", colour=0xe91e63)
+                                    await ctx.send(embed=embedVar)
+                                    turn=0
                             elif msg.content == "6":
                                     #Resolve Check and Calculation
                                 if o_used_resolve and o_used_focus and not o_pet_used:                                  
@@ -9300,13 +11625,17 @@ class CrownUnlimited(commands.Cog):
                                         turn_total= turn_total + 1
                                         turn=1
                                     else:
-                                        t_health = t_health - dmg['DMG']
+                                        if t_universe == "Naruto" and t_stamina == 0:
+                                            t_health = t_health 
+                                            embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{o_card} attack strikes a log", colour=0xe91e63)
+                                            await ctx.send(embed=embedVar)
+                                        else:
+                                            t_health = t_health - dmg['DMG']
+                                            embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
+                                            await ctx.send(embed=embedVar)
                                         if t_health < 0:
                                             t_health=0
-                                        o_stamina = o_stamina - dmg['STAMINA_USED']
-
-                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
-                                        await private_channel.send(embed=embedVar)
+                                        o_stamina = o_stamina - dmg['STAMINA_USED']                                            
                                         turn_total= turn_total + 1
                                         turn=1
                                 else:
@@ -9377,9 +11706,61 @@ class CrownUnlimited(commands.Cog):
                         embedVar = discord.Embed(title=f"{t_card.upper()} FOCUSED", description=f"`{t_card} says:`\n{t_focus_description}", colour=0xe91e63)
                         embedVar.add_field(name=f"{t_card} focused and {healmessage}", value="All stats & stamina increased")
                         await private_channel.send(embed=embedVar)
+                        if not t_used_resolve and t_used_focus and t_universe == "Digimon":  #Digimon Universal Trait
+                            #fortitude or luck is based on health  
+                            fortitude = 0.0
+                            low = t_health - (t_health * .75)
+                            high = t_health- (t_health * .66)
+                            fortitude = random.randint(int(low), int(high))
+                            #Resolve Scaling
+                            t_resolve_health = round(fortitude + (.5*t_resolve))
+                            t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                            t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
 
-                        turn_total= turn_total + 1
-                        turn=0
+                            t_stamina = t_stamina + t_resolve
+                            t_health = t_health + t_resolve_health
+                            t_attack = round(t_attack + t_resolve_attack)
+                            t_defense = round(t_defense - t_resolve_defense)
+                            t_used_resolve=True
+
+                            embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                            embedVar.add_field(name=f"Transformation: Digivolve", value="All stats & stamina greatly increased")
+                            await private_channel.send(embed=embedVar)
+                            turn_total= turn_total + 1
+                            turn=0
+                        elif t_universe == "League Of Legends":
+                            embedVar = discord.Embed(title=f"Turret Shot hits {o_card} for 25 DMG!", colour=0xe91e63)
+                            await private_channel.send(embed=embedVar)
+                            o_health = round(o_health - 25)
+                            turn_total= turn_total + 1
+                            turn=0
+                        elif t_universe == "Attack On Titan":
+                            embedVar = discord.Embed(title=f"Rally!{t_card} Increased Max Health!", colour=0xe91e63)
+                            await private_channel.send(embed=embedVar)
+                            t_max_health = round(t_max_health + 50)
+                            turn_total= turn_total + 1
+                            turn=0
+                        elif t_universe == "Black Clover":
+                            embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
+                            await private_channel.send(embed=embedVar)
+                            t_stamina = 110
+                            turn_total= turn_total + 1
+                            turn=0
+                        elif o_universe == "One Punch Man":
+                            embedVar = discord.Embed(title=f"Hero Reinforcements! {o_card} Increased Max Health!", colour=0xe91e63)
+                            await private_channel.send(embed=embedVar)
+                            o_max_health = round(o_max_health + 50)
+                            turn_total= turn_total + 1
+                            turn=0
+                        elif o_universe == "7ds":
+                            embedVar = discord.Embed(title=f"Increase Power Level! {o_card} Increased Stamina!", colour=0xe91e63)
+                            await private_channel.send(embed=embedVar)
+                            o_stamina = 110
+                            turn_total= turn_total + 1
+                            turn=0
+                        else:
+                            turn_total= turn_total + 1
+                            turn=0
                     else:
                         # UNIVERSE CARD
                         player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus)
@@ -9494,25 +11875,144 @@ class CrownUnlimited(commands.Cog):
                             t_enhancer_used=False
                         elif int(aiMove) == 5:
                             if not t_used_resolve and t_used_focus:
-                                #fortitude or luck is based on health  
-                                fortitude = 0.0
-                                low = t_health - (t_health * .75)
-                                high = t_health- (t_health * .66)
-                                fortitude = random.randint(int(low), int(high))
-                                #Resolve Scaling
-                                t_resolve_health = round(fortitude + (.5*t_resolve))
-                                t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
-                                t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                if t_universe == "My Hero Academia": #My hero TRait
+                                        #fortitude or luck is based on health  
+                                        fortitude = 0.0
+                                        low = t_health - (t_health * .75)
+                                        high = t_health- (t_health * .66)
+                                        fortitude = random.randint(int(low), int(high))
+                                        #Resolve Scaling
+                                        t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                        t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                        t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
 
-                                t_stamina = t_stamina + t_resolve
-                                t_health = t_health + t_resolve_health
-                                t_attack = round(t_attack + t_resolve_attack)
-                                t_defense = round(t_defense - t_resolve_defense)
-                                t_used_resolve=True
-                                embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE!", description=f"`{t_card} says:`\n{t_resolve_description}", colour=embed_color_t)
-                                await private_channel.send(embed=embedVar)
-                                turn_total= turn_total + 1
-                                turn=0
+                                        t_stamina = t_stamina + t_resolve
+                                        t_health = t_health + t_resolve_health
+                                        t_attack = round(t_attack + t_resolve_attack)
+                                        t_defense = round(t_defense - t_resolve_defense)
+                                        t_used_resolve=True
+
+                                        embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Transformation: Plus Ultra", value="All stats & stamina greatly increased")
+                                        await private_channel.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn=1
+                                elif t_universe == "Bleach": #Bleach Trait
+                                    #fortitude or luck is based on health  
+                                    fortitude = 0.0
+                                    low = t_health - (t_health * .75)
+                                    high = t_health- (t_health * .66)
+                                    fortitude = random.randint(int(low), int(high))
+                                    #Resolve Scaling
+                                    t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                    t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                    t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                    t_stamina = t_stamina + t_resolve
+                                    t_health = t_health + t_resolve_health
+                                    t_attack = round(t_attack + (2 * t_resolve_attack))
+                                    t_defense = round(t_defense - t_resolve_defense)
+                                    t_used_resolve=True
+
+                                    embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
+                                    await private_channel.send(embed=embedVar)
+                                    turn_total= turn_total + 1
+                                    turn=0
+                                elif t_universe == "God Of War": #God Of War Trait
+                                    #fortitude or luck is based on health  
+                                    fortitude = 0.0
+                                    low = t_health - (t_health * .75)
+                                    high = t_health- (t_health * .66)
+                                    fortitude = random.randint(int(low), int(high))
+                                    #Resolve Scaling
+                                    t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                    t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                    t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                    t_stamina = t_stamina + t_resolve
+                                    t_health = t_max_health
+                                    t_attack = round(t_attack + t_resolve_attack)
+                                    t_defense = round(t_defense - t_resolve_defense)
+                                    t_used_resolve=True
+
+                                    embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
+                                    await private_channel.send(embed=embedVar)
+                                    turn_total= turn_total + 1
+                                    turn=0
+                                elif t_universe == "Fate": #Bleach Trait
+                                    #fortitude or luck is based on health  
+                                    fortitude = 0.0
+                                    low = t_health - (t_health * .75)
+                                    high = t_health- (t_health * .66)
+                                    fortitude = random.randint(int(low), int(high))
+                                    #Resolve Scaling
+                                    t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                    t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                    t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                    t_stamina = t_stamina + t_resolve
+                                    t_health = t_health + t_resolve_health
+                                    t_attack = round(t_attack + t_resolve_attack)
+                                    t_defense = round(t_defense - t_resolve_defense)
+                                    t_used_resolve=True
+                                    
+                                    embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
+                                    await private_channel.send(embed=embedVar)
+                                    dmg = damage_cal(t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description)
+                                    t_pet_used =False
+                                    o_health = o_health - int(dmg['DMG'])
+                                    embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                    await private_channel.send(embed=embedVar)
+                                    t_stamina = 0
+                                    turn_total= turn_total + 1
+                                    turn=0
+                                elif t_universe == "Kanto Region" or t_universe == "Johto Region" or t_universe == "Hoenn Region" or t_universe == "Sinnoh Region" or t_universe == "Kalos Region" or t_universe == "Unova Region" or t_universe == "Alola Region" or t_universe == "Galar Region": #Pokemon Resolves
+                                    #fortitude or luck is based on health  
+                                    fortitude = 0.0
+                                    low = t_health - (t_health * .75)
+                                    high = t_health- (t_health * .66)
+                                    fortitude = random.randint(int(low), int(high))
+                                    #Resolve Scaling
+                                    t_resolve_health = round(fortitude + (.5*t_resolve))
+                                    t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                    t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                    t_stamina = t_stamina + t_resolve
+                                    t_health = t_health + t_resolve_health
+                                    t_attack = round(t_attack + t_resolve_attack)
+                                    t_defense = round(t_defense)
+                                    t_used_resolve=True
+
+                                    embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation: Evolution", value="All stats & stamina greatly increased")
+                                    await private_channel.send(embed=embedVar)
+                                    turn_total= turn_total + 1
+                                    turn=0
+                                else:
+                                    #fortitude or luck is based on health  
+                                    fortitude = 0.0
+                                    low = t_health - (t_health * .75)
+                                    high = t_health- (t_health * .66)
+                                    fortitude = random.randint(int(low), int(high))
+                                    #Resolve Scaling
+                                    t_resolve_health = round(fortitude + (.5*t_resolve))
+                                    t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                    t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                    t_stamina = t_stamina + t_resolve
+                                    t_health = t_health + t_resolve_health
+                                    t_attack = round(t_attack + t_resolve_attack)
+                                    t_defense = round(t_defense - t_resolve_defense)
+                                    t_used_resolve=True
+
+                                    embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
+                                    await private_channel.send(embed=embedVar)
+                                    turn_total= turn_total + 1
+                                    turn=0
                             else:
                                 await private_channel.send(m.CANNOT_USE_RESOLVE)
                                 turn=1
@@ -9691,13 +12191,17 @@ class CrownUnlimited(commands.Cog):
                                     turn_total= turn_total + 1
                                     turn=0
                                 else:
-                                    o_health = o_health - int(dmg['DMG'])
+                                    if o_universe == "Naruto" and o_stamina == 0:
+                                        o_health = o_health 
+                                        embedVar = discord.Embed(title=f"{o_card.upper()}: Substitution Jutsu", description=f"{t_card} attack strikes a log", colour=0xe91e63)
+                                        await private_channel.send(embed=embedVar)
+                                    else:
+                                        o_health = o_health - int(dmg['DMG'])
+                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                        await private_channel.send(embed=embedVar)
                                     if o_health < 0:
                                         o_health=0
-                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-
-                                    embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
-                                    await private_channel.send(embed=embedVar)
+                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
                                     turn_total= turn_total + 1
                                     turn=0
 
@@ -9949,7 +12453,10 @@ class CrownUnlimited(commands.Cog):
             o_card = o['NAME']
             o_card_path=o['PATH']
             o_rcard_path=o['RPATH']
-            o_max_health = o['HLT']
+            if o['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= o['HLT']: # Demon Slayer Universal Trait
+                o_max_health = t['HLT']
+            else:                    
+                o_max_health = o['HLT']
             o_health = o['HLT']
             o_stamina = o['STAM']
             o_max_stamina = o['STAM']
@@ -9992,7 +12499,10 @@ class CrownUnlimited(commands.Cog):
             t_card = t['NAME']
             t_card_path=t['PATH']
             t_rcard_path=t['RPATH']
-            t_max_health = t['HLT'] + (3 * currentopponent)
+            if t['UNIVERSE'] == "Demon Slayer" and o_max_health >= t['HLT']: #Demon Slayer Universal Trait
+                t_max_health = o_max_health + (3 * currentopponent)
+            else:                    
+                t_max_health = t['HLT'] + (3 * currentopponent)
             t_health = t['HLT'] + (3 * currentopponent)
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
@@ -10579,8 +13089,63 @@ class CrownUnlimited(commands.Cog):
                         embedVar.add_field(name=f"{o_card} focused and {healmessage}", value="All stats & stamina increased")
                         await private_channel.send(embed=embedVar)
 
-                        turn_total= turn_total + 1
-                        turn = 1
+                        #Resolve Check and Calculation
+                        if not o_used_resolve and o_used_focus and o_universe == "Digimon": # Digimon Universal Trait
+                            embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                            embedVar.add_field(name=f"Transformation: Digivolve", value="All stats & stamina greatly increased")
+                            await private_channel.send(embed=embedVar)
+                            #fortitude or luck is based on health  
+                            fortitude = 0.0
+                            low = o_health - (o_health * .75)
+                            high = o_health- (o_health * .66)
+                            fortitude = random.randint(int(low), int(high))
+                            #Resolve Scaling
+                            o_resolve_health = round(fortitude + (.5*o_resolve))
+                            o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                            o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+
+                            o_stamina = o_stamina + o_resolve
+                            o_health = o_health + o_resolve_health
+                            o_attack = round(o_attack + o_resolve_attack)
+                            o_defense = round(o_defense - o_resolve_defense)
+                            o_used_resolve = True 
+                            o_pet_used=False
+
+                            turn_total= turn_total + 1
+                            turn=1
+                        elif o_universe == "League Of Legends":
+                            embedVar = discord.Embed(title=f"Turret Shot hits {t_card} for 25 DMG!", colour=0xe91e63)
+                            await private_channel.send(embed=embedVar)
+                            t_health = round(t_health - 25)
+                            turn_total= turn_total + 1
+                            turn=1
+                        elif o_universe == "Attack On Titan":
+                            embedVar = discord.Embed(title=f"Rally! {o_card} Increased Max Health!", colour=0xe91e63)
+                            await private_channel.send(embed=embedVar)
+                            o_max_health = round(o_max_health + 50)
+                            turn_total= turn_total + 1
+                            turn=1
+                        elif o_universe == "Black Clover":
+                            embedVar = discord.Embed(title=f"Mana Zone! {o_card} Increased Stamina!", colour=0xe91e63)
+                            await private_channel.send(embed=embedVar)
+                            o_stamina = 110
+                            turn_total= turn_total + 1
+                            turn=1
+                        elif t_universe == "One Punch Man":
+                            embedVar = discord.Embed(title=f"Hero Reinforcements! {t_card} Increased Max Health!", colour=0xe91e63)
+                            await private_channel.send(embed=embedVar)
+                            t_max_health = round(t_max_health + 50)
+                            turn_total= turn_total + 1
+                            turn=1
+                        elif t_universe == "7ds":
+                            embedVar = discord.Embed(title=f"Increase Power Level! {t_card} Increased Stamina!", colour=0xe91e63)
+                            await private_channel.send(embed=embedVar)
+                            t_stamina = 110
+                            turn_total= turn_total + 1
+                            turn=1
+                        else:
+                            turn_total= turn_total + 1
+                            turn = 1
                     else:
 
                         # UNIVERSE CARD
@@ -10651,36 +13216,150 @@ class CrownUnlimited(commands.Cog):
                             elif msg.content == "5":
                                 #Resolve Check and Calculation
                                 if not o_used_resolve and o_used_focus:
-                                        
+                                    if o_universe == "My Hero Academia": #My Hero Trait
+                                        #fortitude or luck is based on health  
+                                        fortitude = 0.0
+                                        low = o_health - (o_health * .75)
+                                        high = o_health- (o_health * .66)
+                                        fortitude = random.randint(int(low), int(high))
+                                        #Resolve Scaling
+                                        o_resolve_health = round(fortitude + (.5*o_resolve))
+                                        o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                        o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
 
-                                    #fortitude or luck is based on health  
-                                    fortitude = 0.0
-                                    low = o_health - (o_health * .75)
-                                    high = o_health- (o_health * .66)
-                                    fortitude = random.randint(int(low), int(high))
-                                    #Resolve Scaling
-                                    o_resolve_health = round(fortitude + (.5*o_resolve))
-                                    o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
-                                    o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
-
-                                    o_stamina = o_stamina + o_resolve
-                                    o_health = o_health + o_resolve_health
-                                    o_attack = round(o_attack + o_resolve_attack)
-                                    if o_resolve_defense >= o_defense:
-                                        o_defense = 25
-                                    else:
+                                        o_stamina = o_stamina + o_resolve
+                                        o_health = o_health + o_resolve_health
+                                        o_attack = round(o_attack + o_resolve_attack)
                                         o_defense = round(o_defense - o_resolve_defense)
-                                    o_used_resolve = True 
+                                        o_used_resolve = True 
+                                        o_pet_used=False
+                                        embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Transformation: Plus Ultra", value="All stats & stamina greatly increased")
+                                        await private_channel.send(embed=embedVar)
 
-                                    embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
-                                    embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
-                                    await private_channel.send(embed=embedVar)
-                                    turn_total= turn_total + 1
-                                    turn=1
+                                        turn_total= turn_total + 1
+                                        turn=0
+                                    elif o_universe == "Bleach": #Bleach Trait
+                                        #fortitude or luck is based on health  
+                                        fortitude = 0.0
+                                        low = o_health - (o_health * .75)
+                                        high = o_health- (o_health * .66)
+                                        fortitude = random.randint(int(low), int(high))
+                                        #Resolve Scaling
+                                        o_resolve_health = round(fortitude + (.5*o_resolve))
+                                        o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                        o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+
+                                        o_stamina = o_stamina + o_resolve
+                                        o_health = o_health + o_resolve_health
+                                        o_attack = round(o_attack + (2 * o_resolve_attack))
+                                        o_defense = round(o_defense - o_resolve_defense)
+                                        o_used_resolve = True 
+                                        o_pet_used=False
+                                        embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
+                                        await private_channel.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn=1
+                                    elif o_universe == "God Of War": #God Of War Trait
+                                        #fortitude or luck is based on health  
+                                        fortitude = 0.0
+                                        low = o_health - (o_health * .75)
+                                        high = o_health- (o_health * .66)
+                                        fortitude = random.randint(int(low), int(high))
+                                        #Resolve Scaling
+                                        o_resolve_health = round(fortitude + (.5*o_resolve))
+                                        o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                        o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+
+                                        o_stamina = o_stamina + o_resolve
+                                        o_health = o_max_health
+                                        o_attack = round(o_attack + o_resolve_attack)
+                                        o_defense = round(o_defense - o_resolve_defense)
+                                        o_used_resolve = True 
+                                        o_pet_used=False
+                                        embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Transformation: Ascension", value="All stats & stamina greatly increased")
+                                        await private_channel.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn=1
+                                    elif o_universe == "Fate": #Fate Trait
+                                        #fortitude or luck is based on health  
+                                        fortitude = 0.0
+                                        low = o_health - (o_health * .75)
+                                        high = o_health- (o_health * .66)
+                                        fortitude = random.randint(int(low), int(high))
+                                        #Resolve Scaling
+                                        o_resolve_health = round(fortitude + (.5*o_resolve))
+                                        o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                        o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+
+                                        o_stamina = o_stamina + o_resolve
+                                        o_health = o_health + o_resolve_health
+                                        o_attack = round(o_attack + o_resolve_attack)
+                                        o_defense = round(o_defense - o_resolve_defense)
+                                        
+                                        embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
+                                        await private_channel.send(embed=embedVar)
+                                        dmg = damage_cal(o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description)
+                                        t_health = t_health - dmg['DMG']
+                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
+                                        await private_channel.send(embed=embedVar)
+                                        o_stamina = 0
+                                        o_used_resolve = True 
+                                        o_pet_used=False
+                                        turn_total= turn_total + 1
+                                        turn=1
+                                    elif o_universe == "Kanto Region" or o_universe == "Johto Region" or o_universe == "Hoenn Region" or o_universe == "Sinnoh Region" or o_universe == "Kalos Region" or o_universe == "Unova Region" or o_universe == "Alola Region" or o_universe == "Galar Region": # Pokemon Resolves
+                                        #fortitude or luck is based on health  
+                                        fortitude = 0.0
+                                        low = o_health - (o_health * .75)
+                                        high = o_health- (o_health * .66)
+                                        fortitude = random.randint(int(low), int(high))
+                                        #Resolve Scaling
+                                        o_resolve_health = round(fortitude + (.5*o_resolve))
+                                        o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                        o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+
+                                        o_stamina = o_stamina + o_resolve
+                                        o_health = o_health + o_resolve_health
+                                        o_attack = round(o_attack + o_resolve_attack)
+                                        o_defense = round(o_defense)
+                                        o_used_resolve = True 
+                                        o_pet_used=False
+                                        embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Transformation: Plus Ultra", value="All stats & stamina greatly increased")
+                                        await private_channel.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn=1
+                                    else: # Standard Resolve
+                                        #fortitude or luck is based on health  
+                                        fortitude = 0.0
+                                        low = o_health - (o_health * .75)
+                                        high = o_health- (o_health * .66)
+                                        fortitude = random.randint(int(low), int(high))
+                                        #Resolve Scaling
+                                        o_resolve_health = round(fortitude + (.5*o_resolve))
+                                        o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                        o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+
+                                        o_stamina = o_stamina + o_resolve
+                                        o_health = o_health + o_resolve_health
+                                        o_attack = round(o_attack + o_resolve_attack)
+                                        o_defense = round(o_defense - o_resolve_defense)
+                                        o_used_resolve = True 
+                                        o_pet_used=False
+                                        embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
+                                        await private_channel.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn=1
                                 else:
                                     emessage = m.CANNOT_USE_RESOLVE
-                                    embedVar = discord.Embed(title=emessage, colour=0xe91e63)
-                                    await private_channel.send(embed=embedVar)
+                                    embedVar = discord.Embed(title=emessage, description=f"Entering `Resolved State` sacrifices a turn to power up even greater and regain `Stamina`!", colour=0xe91e63)
+                                    await ctx.send(embed=embedVar)
+                                    turn=0
                             elif msg.content == "6":
                                     #Resolve Check and Calculation
                                 if o_used_resolve and o_used_focus and not o_pet_used:                                  
@@ -10860,13 +13539,17 @@ class CrownUnlimited(commands.Cog):
                                         turn_total= turn_total + 1
                                         turn=1
                                     else:
-                                        t_health = t_health - dmg['DMG']
+                                        if t_universe == "Naruto" and t_stamina == 0:
+                                            t_health = t_health 
+                                            embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{o_card} attack strikes a log", colour=0xe91e63)
+                                            await private_channel.send(embed=embedVar)
+                                        else:
+                                            t_health = t_health - dmg['DMG']
+                                            embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
+                                            await private_channel.send(embed=embedVar)
                                         if t_health < 0:
                                             t_health=0
-                                        o_stamina = o_stamina - dmg['STAMINA_USED']
-
-                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
-                                        await private_channel.send(embed=embedVar)
+                                        o_stamina = o_stamina - dmg['STAMINA_USED']                                            
                                         turn_total= turn_total + 1
                                         turn=1
                                 else:
@@ -10937,9 +13620,61 @@ class CrownUnlimited(commands.Cog):
                         embedVar = discord.Embed(title=f"{t_card.upper()} FOCUSED", description=f"`{t_card} says:`\n{t_focus_description}", colour=0xe91e63)
                         embedVar.add_field(name=f"{t_card} focused and {healmessage}", value="All stats & stamina increased")
                         await private_channel.send(embed=embedVar)
+                        if not t_used_resolve and t_used_focus and t_universe == "Digimon":  #Digimon Universal Trait
+                            #fortitude or luck is based on health  
+                            fortitude = 0.0
+                            low = t_health - (t_health * .75)
+                            high = t_health- (t_health * .66)
+                            fortitude = random.randint(int(low), int(high))
+                            #Resolve Scaling
+                            t_resolve_health = round(fortitude + (.5*t_resolve))
+                            t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                            t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
 
-                        turn_total= turn_total + 1
-                        turn=0
+                            t_stamina = t_stamina + t_resolve
+                            t_health = t_health + t_resolve_health
+                            t_attack = round(t_attack + t_resolve_attack)
+                            t_defense = round(t_defense - t_resolve_defense)
+                            t_used_resolve=True
+
+                            embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                            embedVar.add_field(name=f"Transformation: Digivolve", value="All stats & stamina greatly increased")
+                            await private_channel.send(embed=embedVar)
+                            turn_total= turn_total + 1
+                            turn=0
+                        elif t_universe == "League Of Legends":
+                            embedVar = discord.Embed(title=f"Turret Shot hits {o_card} for 25 DMG!", colour=0xe91e63)
+                            await private_channel.send(embed=embedVar)
+                            o_health = round(o_health - 25)
+                            turn_total= turn_total + 1
+                            turn=0
+                        elif t_universe == "Attack On Titan":
+                            embedVar = discord.Embed(title=f"Rally!{t_card} Increased Max Health!", colour=0xe91e63)
+                            await private_channel.send(embed=embedVar)
+                            t_max_health = round(t_max_health + 50)
+                            turn_total= turn_total + 1
+                            turn=0
+                        elif t_universe == "Black Clover":
+                            embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
+                            await private_channel.send(embed=embedVar)
+                            t_stamina = 110
+                            turn_total= turn_total + 1
+                            turn=0
+                        elif o_universe == "One Punch Man":
+                            embedVar = discord.Embed(title=f"Hero Reinforcements! {o_card} Increased Max Health!", colour=0xe91e63)
+                            await private_channel.send(embed=embedVar)
+                            o_max_health = round(o_max_health + 50)
+                            turn_total= turn_total + 1
+                            turn=0
+                        elif o_universe == "7ds":
+                            embedVar = discord.Embed(title=f"Increase Power Level! {o_card} Increased Stamina!", colour=0xe91e63)
+                            await private_channel.send(embed=embedVar)
+                            o_stamina = 110
+                            turn_total= turn_total + 1
+                            turn=0
+                        else:
+                            turn_total= turn_total + 1
+                            turn=0
                     else:
                         # UNIVERSE CARD
                         player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus)
@@ -11041,25 +13776,144 @@ class CrownUnlimited(commands.Cog):
                             t_enhancer_used=False
                         elif int(aiMove) == 5:
                             if not t_used_resolve and t_used_focus:
-                                #fortitude or luck is based on health  
-                                fortitude = 0.0
-                                low = t_health - (t_health * .75)
-                                high = t_health- (t_health * .66)
-                                fortitude = random.randint(int(low), int(high))
-                                #Resolve Scaling
-                                t_resolve_health = round(fortitude + (.5*t_resolve))
-                                t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
-                                t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                if t_universe == "My Hero Academia": #My hero TRait
+                                        #fortitude or luck is based on health  
+                                        fortitude = 0.0
+                                        low = t_health - (t_health * .75)
+                                        high = t_health- (t_health * .66)
+                                        fortitude = random.randint(int(low), int(high))
+                                        #Resolve Scaling
+                                        t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                        t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                        t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
 
-                                t_stamina = t_stamina + t_resolve
-                                t_health = t_health + t_resolve_health
-                                t_attack = round(t_attack + t_resolve_attack)
-                                t_defense = round(t_defense - t_resolve_defense)
-                                t_used_resolve=True
-                                embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE!", description=f"`{t_card} says:`\n{t_resolve_description}", colour=embed_color_t)
-                                await private_channel.send(embed=embedVar)
-                                turn_total= turn_total + 1
-                                turn=0
+                                        t_stamina = t_stamina + t_resolve
+                                        t_health = t_health + t_resolve_health
+                                        t_attack = round(t_attack + t_resolve_attack)
+                                        t_defense = round(t_defense - t_resolve_defense)
+                                        t_used_resolve=True
+
+                                        embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Transformation: Plus Ultra", value="All stats & stamina greatly increased")
+                                        await private_channel.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn=1
+                                elif t_universe == "Bleach": #Bleach Trait
+                                    #fortitude or luck is based on health  
+                                    fortitude = 0.0
+                                    low = t_health - (t_health * .75)
+                                    high = t_health- (t_health * .66)
+                                    fortitude = random.randint(int(low), int(high))
+                                    #Resolve Scaling
+                                    t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                    t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                    t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                    t_stamina = t_stamina + t_resolve
+                                    t_health = t_health + t_resolve_health
+                                    t_attack = round(t_attack + (2 * t_resolve_attack))
+                                    t_defense = round(t_defense - t_resolve_defense)
+                                    t_used_resolve=True
+
+                                    embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
+                                    await private_channel.send(embed=embedVar)
+                                    turn_total= turn_total + 1
+                                    turn=0
+                                elif t_universe == "God Of War": #God Of War Trait
+                                    #fortitude or luck is based on health  
+                                    fortitude = 0.0
+                                    low = t_health - (t_health * .75)
+                                    high = t_health- (t_health * .66)
+                                    fortitude = random.randint(int(low), int(high))
+                                    #Resolve Scaling
+                                    t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                    t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                    t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                    t_stamina = t_stamina + t_resolve
+                                    t_health = t_max_health
+                                    t_attack = round(t_attack + t_resolve_attack)
+                                    t_defense = round(t_defense - t_resolve_defense)
+                                    t_used_resolve=True
+
+                                    embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
+                                    await private_channel.send(embed=embedVar)
+                                    turn_total= turn_total + 1
+                                    turn=0
+                                elif t_universe == "Fate": #Bleach Trait
+                                    #fortitude or luck is based on health  
+                                    fortitude = 0.0
+                                    low = t_health - (t_health * .75)
+                                    high = t_health- (t_health * .66)
+                                    fortitude = random.randint(int(low), int(high))
+                                    #Resolve Scaling
+                                    t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                    t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                    t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                    t_stamina = t_stamina + t_resolve
+                                    t_health = t_health + t_resolve_health
+                                    t_attack = round(t_attack + t_resolve_attack)
+                                    t_defense = round(t_defense - t_resolve_defense)
+                                    t_used_resolve=True
+                                    
+                                    embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
+                                    await private_channel.send(embed=embedVar)
+                                    dmg = damage_cal(t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description)
+                                    t_pet_used =False
+                                    o_health = o_health - int(dmg['DMG'])
+                                    embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                    await private_channel.send(embed=embedVar)
+                                    t_stamina = 0
+                                    turn_total= turn_total + 1
+                                    turn=0
+                                elif t_universe == "Kanto Region" or t_universe == "Johto Region" or t_universe == "Hoenn Region" or t_universe == "Sinnoh Region" or t_universe == "Kalos Region" or t_universe == "Unova Region" or t_universe == "Alola Region" or t_universe == "Galar Region": #Pokemon Resolves
+                                    #fortitude or luck is based on health  
+                                    fortitude = 0.0
+                                    low = t_health - (t_health * .75)
+                                    high = t_health- (t_health * .66)
+                                    fortitude = random.randint(int(low), int(high))
+                                    #Resolve Scaling
+                                    t_resolve_health = round(fortitude + (.5*t_resolve))
+                                    t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                    t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                    t_stamina = t_stamina + t_resolve
+                                    t_health = t_health + t_resolve_health
+                                    t_attack = round(t_attack + t_resolve_attack)
+                                    t_defense = round(t_defense)
+                                    t_used_resolve=True
+
+                                    embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation: Evolution", value="All stats & stamina greatly increased")
+                                    await private_channel.send(embed=embedVar)
+                                    turn_total= turn_total + 1
+                                    turn=0
+                                else:
+                                    #fortitude or luck is based on health  
+                                    fortitude = 0.0
+                                    low = t_health - (t_health * .75)
+                                    high = t_health- (t_health * .66)
+                                    fortitude = random.randint(int(low), int(high))
+                                    #Resolve Scaling
+                                    t_resolve_health = round(fortitude + (.5*t_resolve))
+                                    t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                    t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                    t_stamina = t_stamina + t_resolve
+                                    t_health = t_health + t_resolve_health
+                                    t_attack = round(t_attack + t_resolve_attack)
+                                    t_defense = round(t_defense - t_resolve_defense)
+                                    t_used_resolve=True
+
+                                    embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
+                                    await private_channel.send(embed=embedVar)
+                                    turn_total= turn_total + 1
+                                    turn=0
                             else:
                                 await private_channel.send(m.CANNOT_USE_RESOLVE)
                                 turn=1
@@ -11147,13 +14001,17 @@ class CrownUnlimited(commands.Cog):
                                     turn_total= turn_total + 1
                                     turn=0
                                 else:
-                                    o_health = o_health - int(dmg['DMG'])
+                                    if o_universe == "Naruto" and o_stamina == 0:
+                                        o_health = o_health 
+                                        embedVar = discord.Embed(title=f"{o_card.upper()}: Substitution Jutsu", description=f"{t_card} attack strikes a log", colour=0xe91e63)
+                                        await private_channel.send(embed=embedVar)
+                                    else:
+                                        o_health = o_health - int(dmg['DMG'])
+                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                        await private_channel.send(embed=embedVar)
                                     if o_health < 0:
                                         o_health=0
-                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-
-                                    embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
-                                    await private_channel.send(embed=embedVar)
+                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
                                     turn_total= turn_total + 1
                                     turn=0
 
@@ -11292,28 +14150,63 @@ class CrownUnlimited(commands.Cog):
     @commands.command()
     async def boss(self, ctx, *args):
         private_channel = ctx
-        if not args:
-            return await ctx.send("Include Boss Universe")
+        sowner = db.queryUser({'DISNAME': str(ctx.author)})
 
-        guild = ctx.guild
+        if sowner['AVAILABLE']:
+            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': False}})
+        else:
+            await private_channel.send(m.ALREADY_IN_TALES)
+            return
+        
+        completed_crown_tales = sowner['CROWN_TALES']
+        all_universes = db.queryAllUniverse()
+        available_universes = []
+        selected_universe = ""
+        for uni in all_universes:
+            if uni['PREREQUISITE'] in sowner['CROWN_TALES']:
+                available_universes.append(uni['TITLE'])
 
-        if guild:
-            overwrites = {
-                        guild.default_role: discord.PermissionOverwrite(read_messages=False),
-                        guild.me: discord.PermissionOverwrite(read_messages=True),
-                    ctx.author: discord.PermissionOverwrite(read_messages=True),
-                    }
-            private_channel = await guild.create_text_channel(f'{str(ctx.author)}-boss-fight', overwrites=overwrites)
+        embedVar = discord.Embed(title=f":crown: Select A Boss Arena", description="\n".join(available_universes), colour=0xe91e63) 
+        embedVar.set_footer(text="Type Quit to exit Tales selection")
+        await private_channel.send(embed=embedVar)
+        accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
+
+        def check(msg):
+            return msg.author == ctx.author and (msg.content in available_universes) or (msg.content == "Quit") 
+        try:
+            msg = await self.bot.wait_for('message', timeout=30.0, check=check)
+
+            if msg.content == "Quit":
+                await private_channel.send("Quit Boss  selection. ")
+                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                return
+
+            selected_universe = msg.content
+            guild = ctx.guild
             if guild:
+                overwrites = {
+                            guild.default_role: discord.PermissionOverwrite(read_messages=False),
+                            guild.me: discord.PermissionOverwrite(read_messages=True),
+                        ctx.author: discord.PermissionOverwrite(read_messages=True),
+                        }
+                private_channel = await guild.create_text_channel(f'{str(ctx.author)}-boss-fight', overwrites=overwrites)
                 await ctx.send(f"{ctx.author.mention} private channel has been opened for you.")
-            await private_channel.send(f'{ctx.author.mention} Good luck!')
+                await private_channel.send(f'{ctx.author.mention} Good luck!')
+            
+        except:
+            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+            embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", colour=0xe91e63)
+            await private_channel.send(embed=embedVar)
+            return
 
-        t_available = False
-        universeName = " ".join([*args])
-        universe = db.queryUniverse({'TITLE': str(universeName)})
-        if not universe:
-            await discord.TextChannel.delete(private_channel, reason=None)
-            return await private_channel.send("Add Boss Universe")
+        universe = db.queryUniverse({'TITLE': str(selected_universe)})
+        if not universe['CROWN_TALES']:
+            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+            await ctx.author.send(f"{selected_universe} Boss Arena not available! Check back later!")
+            if private_channel.guild:
+                await discord.TextChannel.delete(private_channel, reason=None)
+            return
+
         bossname = ''
 
         starttime = time.asctime()
@@ -11321,7 +14214,6 @@ class CrownUnlimited(commands.Cog):
         m_gametime = starttime[14:16]
         s_gametime = starttime[17:19]
 
-        sowner = db.queryUser({'DISNAME': str(ctx.author)})
         oteam = sowner['TEAM']
         bossname = universe['UNIVERSE_BOSS']
         boss = db.queryBoss({'NAME': str(bossname)})
@@ -11362,7 +14254,10 @@ class CrownUnlimited(commands.Cog):
         o_card = o['NAME']
         o_card_path=o['PATH']
         o_rcard_path=o['RPATH']
-        o_max_health = o['HLT']
+        if o['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= o['HLT']: # Demon Slayer Universal Trait
+            o_max_health = t['HLT']
+        else:                    
+            o_max_health = o['HLT']
         o_health = o['HLT']
         o_stamina = o['STAM']
         o_max_stamina = o['STAM']
@@ -11413,7 +14308,10 @@ class CrownUnlimited(commands.Cog):
         t_card = t['NAME']
         t_card_path=t['PATH']
         t_rcard_path=t['RPATH']
-        t_max_health = t['HLT'] * 2
+        if t['UNIVERSE'] == "Demon Slayer" and o_max_health >= t['HLT']: #Demon Slayer Universal Trait
+            t_max_health = o_max_health * 2
+        else:                    
+            t_max_health = t['HLT'] * 2
         t_health = t['HLT'] * 2
         t_stamina = t['STAM']
         t_max_stamina= t['STAM']
@@ -12018,8 +14916,63 @@ class CrownUnlimited(commands.Cog):
                     embedVar = discord.Embed(title=f"{o_card.upper()} FOCUSED", description=f"`{o_card} says:`\n{o_focus_description}", colour=0xe91e63)
                     embedVar.add_field(name=f"{o_card} focused and {healmessage}", value="All stats & stamina increased")
                     await private_channel.send(embed=embedVar)
-                    turn_total= turn_total + 1
-                    turn = 1
+                    #Resolve Check and Calculation
+                    if not o_used_resolve and o_used_focus and o_universe == "Digimon": # Digimon Universal Trait
+                        embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                        embedVar.add_field(name=f"Transformation: Digivolve", value="All stats & stamina greatly increased")
+                        await ctx.send(embed=embedVar)
+                        #fortitude or luck is based on health  
+                        fortitude = 0.0
+                        low = o_health - (o_health * .75)
+                        high = o_health- (o_health * .66)
+                        fortitude = random.randint(int(low), int(high))
+                        #Resolve Scaling
+                        o_resolve_health = round(fortitude + (.5*o_resolve))
+                        o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                        o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+
+                        o_stamina = o_stamina + o_resolve
+                        o_health = o_health + o_resolve_health
+                        o_attack = round(o_attack + o_resolve_attack)
+                        o_defense = round(o_defense - o_resolve_defense)
+                        o_used_resolve = True 
+                        o_pet_used=False
+
+                        turn_total= turn_total + 1
+                        turn=1
+                    elif o_universe == "League Of Legends":
+                        embedVar = discord.Embed(title=f"Turret Shot hits for 25 DMG!", colour=0xe91e63)
+                        await ctx.send(embed=embedVar)
+                        t_health = round(t_health - 25)
+                        turn_total= turn_total + 1
+                        turn=1
+                    elif o_universe == "Attack On Titan":
+                        embedVar = discord.Embed(title=f"Rally! {o_card} Increased Max Health!", colour=0xe91e63)
+                        await ctx.send(embed=embedVar)
+                        o_max_health = round(o_max_health + 50)
+                        turn_total= turn_total + 1
+                        turn=1
+                    elif o_universe == "Black Clover":
+                        embedVar = discord.Embed(title=f"Mana Zone! {o_card} Increased Stamina!", colour=0xe91e63)
+                        await ctx.send(embed=embedVar)
+                        o_stamina = 110
+                        turn_total= turn_total + 1
+                        turn=1
+                    elif t_universe == "One Punch Man":
+                        embedVar = discord.Embed(title=f"Hero Reinforcements! {t_card} Increased Max Health!", colour=0xe91e63)
+                        await ctx.send(embed=embedVar)
+                        t_max_health = round(t_max_health + 50)
+                        turn_total= turn_total + 1
+                        turn=1
+                    elif t_universe == "7ds":
+                        embedVar = discord.Embed(title=f"Increase Power Level! {t_card} Increased Stamina!", colour=0xe91e63)
+                        await ctx.send(embed=embedVar)
+                        t_stamina = 110
+                        turn_total= turn_total + 1
+                        turn=1
+                    else:
+                        turn_total= turn_total + 1
+                        turn = 1
                 else:
 
                     # UNIVERSE CARD
@@ -12063,6 +15016,7 @@ class CrownUnlimited(commands.Cog):
                         # calculate data based on selected move
                         if msg.content == "0":
                             o_health=0
+                            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                     
                             if private_channel.guild:
                                 await private_channel.send(f"{ctx.author.mention} has fled the battle...")
@@ -12089,33 +15043,150 @@ class CrownUnlimited(commands.Cog):
 
                             #Resolve Check and Calculation
                             if not o_used_resolve and o_used_focus:
+                                if o_universe == "My Hero Academia": #My Hero Trait
+                                    #fortitude or luck is based on health  
+                                    fortitude = 0.0
+                                    low = o_health - (o_health * .75)
+                                    high = o_health- (o_health * .66)
+                                    fortitude = random.randint(int(low), int(high))
+                                    #Resolve Scaling
+                                    o_resolve_health = round(fortitude + (.5*o_resolve))
+                                    o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                    o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+
+                                    o_stamina = o_stamina + o_resolve
+                                    o_health = o_health + o_resolve_health
+                                    o_attack = round(o_attack + o_resolve_attack)
+                                    o_defense = round(o_defense - o_resolve_defense)
+                                    o_used_resolve = True 
+                                    o_pet_used=False
+                                    embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation: Plus Ultra", value="All stats & stamina greatly increased")
+                                    await ctx.send(embed=embedVar)
+
+                                    turn_total= turn_total + 1
+                                    turn=0
+                                elif o_universe == "Bleach": #Bleach Trait
+                                    #fortitude or luck is based on health  
+                                    fortitude = 0.0
+                                    low = o_health - (o_health * .75)
+                                    high = o_health- (o_health * .66)
+                                    fortitude = random.randint(int(low), int(high))
+                                    #Resolve Scaling
+                                    o_resolve_health = round(fortitude + (.5*o_resolve))
+                                    o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                    o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+
+                                    o_stamina = o_stamina + o_resolve
+                                    o_health = o_health + o_resolve_health
+                                    o_attack = round(o_attack + (2 * o_resolve_attack))
+                                    o_defense = round(o_defense - o_resolve_defense)
+                                    o_used_resolve = True 
+                                    o_pet_used=False
+                                    embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
+                                    await ctx.send(embed=embedVar)
+                                    turn_total= turn_total + 1
+                                    turn=1
+                                elif o_universe == "God Of War": #God Of War Trait
+                                    #fortitude or luck is based on health  
+                                    fortitude = 0.0
+                                    low = o_health - (o_health * .75)
+                                    high = o_health- (o_health * .66)
+                                    fortitude = random.randint(int(low), int(high))
+                                    #Resolve Scaling
+                                    o_resolve_health = round(fortitude + (.5*o_resolve))
+                                    o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                    o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+
+                                    o_stamina = o_stamina + o_resolve
+                                    o_health = o_max_health
+                                    o_attack = round(o_attack + o_resolve_attack)
+                                    o_defense = round(o_defense - o_resolve_defense)
+                                    o_used_resolve = True 
+                                    o_pet_used=False
+                                    embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation: Ascension", value="All stats & stamina greatly increased")
+                                    await ctx.send(embed=embedVar)
+                                    turn_total= turn_total + 1
+                                    turn=1
+                                elif o_universe == "Fate": #Fate Trait
+                                    #fortitude or luck is based on health  
+                                    fortitude = 0.0
+                                    low = o_health - (o_health * .75)
+                                    high = o_health- (o_health * .66)
+                                    fortitude = random.randint(int(low), int(high))
+                                    #Resolve Scaling
+                                    o_resolve_health = round(fortitude + (.5*o_resolve))
+                                    o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                    o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+
+                                    o_stamina = o_stamina + o_resolve
+                                    o_health = o_health + o_resolve_health
+                                    o_attack = round(o_attack + o_resolve_attack)
+                                    o_defense = round(o_defense - o_resolve_defense)
                                     
+                                    embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
+                                    await ctx.send(embed=embedVar)
+                                    dmg = damage_cal(o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description)
+                                    t_health = t_health - dmg['DMG']
+                                    embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
+                                    await ctx.send(embed=embedVar)
+                                    o_stamina = 0
+                                    o_used_resolve = True 
+                                    o_pet_used=False
+                                    turn_total= turn_total + 1
+                                    turn=1
+                                elif o_universe == "Kanto Region" or o_universe == "Johto Region" or o_universe == "Hoenn Region" or o_universe == "Sinnoh Region" or o_universe == "Kalos Region" or o_universe == "Unova Region" or o_universe == "Alola Region" or o_universe == "Galar Region": # Pokemon Resolves
+                                    #fortitude or luck is based on health  
+                                    fortitude = 0.0
+                                    low = o_health - (o_health * .75)
+                                    high = o_health- (o_health * .66)
+                                    fortitude = random.randint(int(low), int(high))
+                                    #Resolve Scaling
+                                    o_resolve_health = round(fortitude + (.5*o_resolve))
+                                    o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                    o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
 
-                                #fortitude or luck is based on health  
-                                fortitude = 0.0
-                                low = o_health - (o_health * .75)
-                                high = o_health- (o_health * .66)
-                                fortitude = random.randint(int(low), int(high))
-                                #Resolve Scaling
-                                o_resolve_health = round(fortitude + (.5*o_resolve))
-                                o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
-                                o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                    o_stamina = o_stamina + o_resolve
+                                    o_health = o_health + o_resolve_health
+                                    o_attack = round(o_attack + o_resolve_attack)
+                                    o_defense = round(o_defense)
+                                    o_used_resolve = True 
+                                    o_pet_used=False
+                                    embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation: Plus Ultra", value="All stats & stamina greatly increased")
+                                    await ctx.send(embed=embedVar)
+                                    turn_total= turn_total + 1
+                                    turn=1
+                                else: # Standard Resolve
+                                    #fortitude or luck is based on health  
+                                    fortitude = 0.0
+                                    low = o_health - (o_health * .75)
+                                    high = o_health- (o_health * .66)
+                                    fortitude = random.randint(int(low), int(high))
+                                    #Resolve Scaling
+                                    o_resolve_health = round(fortitude + (.5*o_resolve))
+                                    o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                    o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
 
-                                o_stamina = o_stamina + o_resolve
-                                o_health = o_health + o_resolve_health
-                                o_attack = round(o_attack + o_resolve_attack)
-                                o_defense = round(o_defense - o_resolve_defense)
-                                o_used_resolve = True
-
-                                embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
-                                embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
-                                await private_channel.send(embed=embedVar)
-                                turn_total= turn_total + 1
-                                turn=1
+                                    o_stamina = o_stamina + o_resolve
+                                    o_health = o_health + o_resolve_health
+                                    o_attack = round(o_attack + o_resolve_attack)
+                                    o_defense = round(o_defense - o_resolve_defense)
+                                    o_used_resolve = True 
+                                    o_pet_used=False
+                                    embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
+                                    await ctx.send(embed=embedVar)
+                                    turn_total= turn_total + 1
+                                    turn=1
                             else:
                                 emessage = m.CANNOT_USE_RESOLVE
-                                embedVar = discord.Embed(title=emessage, colour=0xe91e63)
-                                await private_channel.send(embed=embedVar)
+                                embedVar = discord.Embed(title=emessage, description=f"Entering `Resolved State` sacrifices a turn to power up even greater and regain `Stamina`!", colour=0xe91e63)
+                                await ctx.send(embed=embedVar)
+                                turn=0
                         elif msg.content == "6":
                                 #Resolve Check and Calculation
                             if o_used_resolve and o_used_focus and not o_pet_used:                                      
@@ -12294,13 +15365,17 @@ class CrownUnlimited(commands.Cog):
                                     turn_total= turn_total + 1
                                     turn=1
                                 else:
-                                    t_health = t_health - dmg['DMG']
+                                    if t_universe == "Naruto" and t_stamina == 0:
+                                        t_health = t_health 
+                                        embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{o_card} attack strikes a log", colour=0xe91e63)
+                                        await ctx.send(embed=embedVar)
+                                    else:
+                                        t_health = t_health - dmg['DMG']
+                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
+                                        await ctx.send(embed=embedVar)
                                     if t_health < 0:
                                         t_health=0
-                                    o_stamina = o_stamina - dmg['STAMINA_USED']
-
-                                    embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
-                                    await private_channel.send(embed=embedVar)
+                                    o_stamina = o_stamina - dmg['STAMINA_USED']                                            
                                     turn_total= turn_total + 1
                                     turn=1
                             else:
@@ -12389,8 +15464,61 @@ class CrownUnlimited(commands.Cog):
                     else:
                         embedVar = discord.Embed(title=f"{t_card} Stamina has recovered", colour=embed_color_t)
                         await private_channel.send(embed=embedVar)
-                    turn_total= turn_total + 1
-                    turn=0
+                    if not t_used_resolve and t_used_focus and t_universe == "Digimon":  #Digimon Universal Trait
+                        #fortitude or luck is based on health  
+                        fortitude = 0.0
+                        low = t_health - (t_health * .75)
+                        high = t_health- (t_health * .66)
+                        fortitude = random.randint(int(low), int(high))
+                        #Resolve Scaling
+                        t_resolve_health = round(fortitude + (.5*t_resolve))
+                        t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                        t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                        t_stamina = t_stamina + t_resolve
+                        t_health = t_health + t_resolve_health
+                        t_attack = round(t_attack + t_resolve_attack)
+                        t_defense = round(t_defense - t_resolve_defense)
+                        t_used_resolve=True
+
+                        embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                        embedVar.add_field(name=f"Transformation: Digivolve", value="All stats & stamina greatly increased")
+                        await ctx.send(embed=embedVar)
+                        turn_total= turn_total + 1
+                        turn=0
+                    elif t_universe == "League Of Legends":
+                        embedVar = discord.Embed(title=f"Turret Shot hits {o_card} for 25 DMG!", colour=0xe91e63)
+                        await ctx.send(embed=embedVar)
+                        o_health = round(o_health - 25)
+                        turn_total= turn_total + 1
+                        turn=0
+                    elif t_universe == "Attack On Titan":
+                        embedVar = discord.Embed(title=f"Rally!{t_card} Increased Max Health!", colour=0xe91e63)
+                        await ctx.send(embed=embedVar)
+                        t_max_health = round(t_max_health + 50)
+                        turn_total= turn_total + 1
+                        turn=0
+                    elif t_universe == "Black Clover":
+                        embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
+                        await ctx.send(embed=embedVar)
+                        t_stamina = 110
+                        turn_total= turn_total + 1
+                        turn=0
+                    elif o_universe == "One Punch Man":
+                        embedVar = discord.Embed(title=f"Hero Reinforcements! {o_card} Increased Max Health!", colour=0xe91e63)
+                        await ctx.send(embed=embedVar)
+                        o_max_health = round(o_max_health + 50)
+                        turn_total= turn_total + 1
+                        turn=0
+                    elif o_universe == "7ds":
+                        embedVar = discord.Embed(title=f"Increase Power Level! {o_card} Increased Stamina!", colour=0xe91e63)
+                        await ctx.send(embed=embedVar)
+                        o_stamina = 110
+                        turn_total= turn_total + 1
+                        turn=0
+                    else:
+                        turn_total= turn_total + 1
+                        turn=0
                 #Play Bot
                 else:
                     # UNIVERSE CARD
@@ -12514,33 +15642,144 @@ class CrownUnlimited(commands.Cog):
                         t_enhancer_used=False
                     elif aiMove == 5:
                         if not t_used_resolve and t_used_focus:
+                            if t_universe == "My Hero Academia": #My hero TRait
+                                    #fortitude or luck is based on health  
+                                    fortitude = 0.0
+                                    low = t_health - (t_health * .75)
+                                    high = t_health- (t_health * .66)
+                                    fortitude = random.randint(int(low), int(high))
+                                    #Resolve Scaling
+                                    t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                    t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                    t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
 
-                            if botActive:                    
-                                embedVar = discord.Embed(title=f"`{t_card}` Resolved!", description=f"{t_rmessage}", colour=0xe91e63)
-                                embedVar.set_footer(text=f"{o_card} this will not be easy...")
-                                await private_channel.send(embed=embedVar)
+                                    t_stamina = t_stamina + t_resolve
+                                    t_health = t_health + t_resolve_health
+                                    t_attack = round(t_attack + t_resolve_attack)
+                                    t_defense = round(t_defense - t_resolve_defense)
+                                    t_used_resolve=True
+
+                                    embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation: Plus Ultra", value="All stats & stamina greatly increased")
+                                    await ctx.send(embed=embedVar)
+                                    turn_total= turn_total + 1
+                                    turn=1
+                            elif t_universe == "Bleach": #Bleach Trait
+                                #fortitude or luck is based on health  
+                                fortitude = 0.0
+                                low = t_health - (t_health * .75)
+                                high = t_health- (t_health * .66)
+                                fortitude = random.randint(int(low), int(high))
+                                #Resolve Scaling
+                                t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                t_stamina = t_stamina + t_resolve
+                                t_health = t_health + t_resolve_health
+                                t_attack = round(t_attack + (2 * t_resolve_attack))
+                                t_defense = round(t_defense - t_resolve_defense)
+                                t_used_resolve=True
+
+                                embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
+                                await ctx.send(embed=embedVar)
+                                turn_total= turn_total + 1
+                                turn=0
+                            elif t_universe == "God Of War": #God Of War Trait
+                                #fortitude or luck is based on health  
+                                fortitude = 0.0
+                                low = t_health - (t_health * .75)
+                                high = t_health- (t_health * .66)
+                                fortitude = random.randint(int(low), int(high))
+                                #Resolve Scaling
+                                t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                t_stamina = t_stamina + t_resolve
+                                t_health = t_max_health
+                                t_attack = round(t_attack + t_resolve_attack)
+                                t_defense = round(t_defense - t_resolve_defense)
+                                t_used_resolve=True
+
+                                embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
+                                await ctx.send(embed=embedVar)
+                                turn_total= turn_total + 1
+                                turn=0
+                            elif t_universe == "Fate": #Bleach Trait
+                                #fortitude or luck is based on health  
+                                fortitude = 0.0
+                                low = t_health - (t_health * .75)
+                                high = t_health- (t_health * .66)
+                                fortitude = random.randint(int(low), int(high))
+                                #Resolve Scaling
+                                t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                t_stamina = t_stamina + t_resolve
+                                t_health = t_health + t_resolve_health
+                                t_attack = round(t_attack + t_resolve_attack)
+                                t_defense = round(t_defense - t_resolve_defense)
+                                t_used_resolve=True
                                 
-                            #fortitude or luck is based on health  
-                            fortitude = 0.
-                            low = t_health - (t_health * .75)
-                            high = t_health- (t_health * .66)
-                            fortitude = random.randint(int(low), int(high))
-                            #Resolve Scaling
-                            t_resolve_health = round(fortitude + (.5*t_resolve))
-                            t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
-                            t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
+                                await ctx.send(embed=embedVar)
+                                dmg = damage_cal(t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description)
+                                t_pet_used =False
+                                o_health = o_health - int(dmg['DMG'])
+                                embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                await ctx.send(embed=embedVar)
+                                t_stamina = 0
+                                turn_total= turn_total + 1
+                                turn=0
+                            elif t_universe == "Kanto Region" or t_universe == "Johto Region" or t_universe == "Hoenn Region" or t_universe == "Sinnoh Region" or t_universe == "Kalos Region" or t_universe == "Unova Region" or t_universe == "Alola Region" or t_universe == "Galar Region": #Pokemon Resolves
+                                #fortitude or luck is based on health  
+                                fortitude = 0.0
+                                low = t_health - (t_health * .75)
+                                high = t_health- (t_health * .66)
+                                fortitude = random.randint(int(low), int(high))
+                                #Resolve Scaling
+                                t_resolve_health = round(fortitude + (.5*t_resolve))
+                                t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
 
-                            t_stamina = t_stamina + t_resolve
-                            t_health = t_health + t_resolve_health
-                            t_attack = round(t_attack + t_resolve_attack)
-                            t_defense = round(t_defense - t_resolve_defense)
-                            t_used_resolve = True 
-                            t_pet_used =False
+                                t_stamina = t_stamina + t_resolve
+                                t_health = t_health + t_resolve_health
+                                t_attack = round(t_attack + t_resolve_attack)
+                                t_defense = round(t_defense)
+                                t_used_resolve=True
 
-                            embedVar = discord.Embed(title=f"{t_card} strengthened resolve!", colour=embed_color_o)
-                            await private_channel.send(embed=embedVar)
-                            turn_total= turn_total + 1
-                            turn=0
+                                embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                embedVar.add_field(name=f"Transformation: Evolution", value="All stats & stamina greatly increased")
+                                await ctx.send(embed=embedVar)
+                                turn_total= turn_total + 1
+                                turn=0
+                            else:
+                                #fortitude or luck is based on health  
+                                fortitude = 0.0
+                                low = t_health - (t_health * .75)
+                                high = t_health- (t_health * .66)
+                                fortitude = random.randint(int(low), int(high))
+                                #Resolve Scaling
+                                t_resolve_health = round(fortitude + (.5*t_resolve))
+                                t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                t_stamina = t_stamina + t_resolve
+                                t_health = t_health + t_resolve_health
+                                t_attack = round(t_attack + t_resolve_attack)
+                                t_defense = round(t_defense - t_resolve_defense)
+                                t_used_resolve=True
+
+                                embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
+                                await ctx.send(embed=embedVar)
+                                turn_total= turn_total + 1
+                                turn=0
                         else:
                             emessage = m.CANNOT_USE_RESOLVE
                             embedVar = discord.Embed(title=emessage, description=f"Entering `Resolved State` sacrifices a turn to power up even greater and regain `Stamina`!", colour=0xe91e63)
@@ -12721,13 +15960,17 @@ class CrownUnlimited(commands.Cog):
                                 turn_total= turn_total + 1
                                 turn=0
                             else:
-                                o_health = o_health - int(dmg['DMG'])
+                                if o_universe == "Naruto" and o_stamina == 0:
+                                    o_health = o_health 
+                                    embedVar = discord.Embed(title=f"{o_card.upper()}: Substitution Jutsu", description=f"{t_card} attack strikes a log", colour=0xe91e63)
+                                    await ctx.send(embed=embedVar)
+                                else:
+                                    o_health = o_health - int(dmg['DMG'])
+                                    embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                    await ctx.send(embed=embedVar)
                                 if o_health < 0:
                                     o_health=0
-                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-
-                                embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
-                                await private_channel.send(embed=embedVar)
+                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
                                 turn_total= turn_total + 1
                                 turn=0
 
@@ -12742,7 +15985,7 @@ class CrownUnlimited(commands.Cog):
             m_playtime = int(wintime[14:16])
             s_playtime = int(wintime[17:19])
             gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
-
+            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
             embedVar = discord.Embed(title=f":zap: `{t_card}` Wins...\n{t_wins}", description=f"Match concluded in {turn_total} turns!", colour=0x1abc9c)
             embedVar.set_author(name=f"{o_card} says:\n{o_lose_description}", icon_url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236432/PCG%20LOGOS%20AND%20RESOURCES/PCGBot_1.png")
             if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
@@ -12773,6 +16016,7 @@ class CrownUnlimited(commands.Cog):
             gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
             drop_response = await bossdrops(ctx.author, universeName)
             await bless(50, str(ctx.author))
+            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
             embedVar = discord.Embed(title=f":zap: `{o_card}`defeated the {t_universe} Boss {t_card}!\n{t_concede}", description=f"Match concluded in {turn_total} turns!\n\n{drop_response} + :coin: 50!", colour=0xe91e63)
             embedVar.set_author(name=f"{t_card} lost", icon_url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236432/PCG%20LOGOS%20AND%20RESOURCES/PCGBot_1.png")
             if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
@@ -12850,7 +16094,10 @@ class CrownUnlimited(commands.Cog):
                 o_card = o['NAME']
                 o_card_path=o['PATH']
                 o_rcard_path=o['RPATH']
-                o_max_health = o['HLT']
+                if o['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= o['HLT']: # Demon Slayer Universal Trait
+                    o_max_health = t['HLT']
+                else:                    
+                    o_max_health = o['HLT']
                 o_health = o['HLT']
                 o_stamina = o['STAM']
                 o_max_stamina = o['STAM']
@@ -12889,7 +16136,6 @@ class CrownUnlimited(commands.Cog):
                 tarm = db.queryArm({'ARM': t_user['ARM']})
                 tarm_passive = tarm['ABILITIES'][0]
                 tarm_name=tarm['ARM']
-                print(t_user['DISNAME'])
                 tvault = db.queryVault({'OWNER': str(t_user['DISNAME'])})
                 
                 tpet = {}
@@ -12907,7 +16153,10 @@ class CrownUnlimited(commands.Cog):
                 t_card = t['NAME']
                 t_card_path=t['PATH']
                 t_rcard_path=t['RPATH']
-                t_max_health = t['HLT']
+                if t['UNIVERSE'] == "Demon Slayer" and o_max_health >= t['HLT']: #Demon Slayer Universal Trait
+                    t_max_health = o_max_health
+                else:                    
+                    t_max_health = t['HLT']
                 t_health = t['HLT']
                 t_stamina = t['STAM']
                 t_max_stamina= t['STAM']
@@ -13510,6 +16759,7 @@ class CrownUnlimited(commands.Cog):
                                 embedVar.add_field(name="Strategy", value="Pay attention to your oppononets `STAM` bar. If they are close to entering `Focus State`, you will have the ability to strike twice if you play your cards right!")
                                 embedVar.set_footer(text="After you entered focus state once, a transformation is possible by strengthening your `Resolve`!")
                                 await ctx.send(embed=embedVar)
+                            #Universal Trait
                             #fortitude or luck is based on health  
                             fortitude = 0.0
                             low = o_health - (o_health*.90)
@@ -13559,8 +16809,63 @@ class CrownUnlimited(commands.Cog):
                                 embedVar = discord.Embed(title=f"{o_card.upper()} FOCUSED", description=f"`{o_card} says:`\n{o_focus_description}", colour=0xe91e63)
                                 embedVar.add_field(name=f"{o_card} focused and {healmessage}", value="All stats & stamina increased")
                                 await ctx.send(embed=embedVar)
-                            turn_total= turn_total + 1
-                            turn = 1
+                            #Resolve Check and Calculation
+                            if not o_used_resolve and o_used_focus and o_universe == "Digimon": # Digimon Universal Trait
+                                embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                                embedVar.add_field(name=f"Transformation: Digivolve", value="All stats & stamina greatly increased")
+                                await ctx.send(embed=embedVar)
+                                #fortitude or luck is based on health  
+                                fortitude = 0.0
+                                low = o_health - (o_health * .75)
+                                high = o_health- (o_health * .66)
+                                fortitude = random.randint(int(low), int(high))
+                                #Resolve Scaling
+                                o_resolve_health = round(fortitude + (.5*o_resolve))
+                                o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+
+                                o_stamina = o_stamina + o_resolve
+                                o_health = o_health + o_resolve_health
+                                o_attack = round(o_attack + o_resolve_attack)
+                                o_defense = round(o_defense - o_resolve_defense)
+                                o_used_resolve = True 
+                                o_pet_used=False
+
+                                turn_total= turn_total + 1
+                                turn=1
+                            elif o_universe == "League Of Legends":
+                                embedVar = discord.Embed(title=f"Turret Shot hits for 25 DMG!", colour=0xe91e63)
+                                await ctx.send(embed=embedVar)
+                                t_health = round(t_health - 25)
+                                turn_total= turn_total + 1
+                                turn=1
+                            elif o_universe == "Attack On Titan":
+                                embedVar = discord.Embed(title=f"Rally! {o_card} Increased Max Health!", colour=0xe91e63)
+                                await ctx.send(embed=embedVar)
+                                o_max_health = round(o_max_health + 50)
+                                turn_total= turn_total + 1
+                                turn=1
+                            elif o_universe == "Black Clover":
+                                embedVar = discord.Embed(title=f"Mana Zone! {o_card} Increased Stamina!", colour=0xe91e63)
+                                await ctx.send(embed=embedVar)
+                                o_stamina = 110
+                                turn_total= turn_total + 1
+                                turn=1
+                            elif t_universe == "One Punch Man":
+                                embedVar = discord.Embed(title=f"Hero Reinforcements! {t_card} Increased Max Health!", colour=0xe91e63)
+                                await ctx.send(embed=embedVar)
+                                t_max_health = round(t_max_health + 50)
+                                turn_total= turn_total + 1
+                                turn=1
+                            elif t_universe == "7ds":
+                                embedVar = discord.Embed(title=f"Increase Power Level! {t_card} Increased Stamina!", colour=0xe91e63)
+                                await ctx.send(embed=embedVar)
+                                t_stamina = 110
+                                turn_total= turn_total + 1
+                                turn=1
+                            else:
+                                turn_total= turn_total + 1
+                                turn = 1
                         else:
 
                             # UNIVERSE CARD
@@ -13622,33 +16927,147 @@ class CrownUnlimited(commands.Cog):
                                     o_pet_used=False
                                     o_enhancer_used=False
                                 elif msg.content == "5":
-
                                     #Resolve Check and Calculation
                                     if not o_used_resolve and o_used_focus:
-                                        embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
-                                        embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
-                                        await ctx.send(embed=embedVar)
+                                        if o_universe == "My Hero Academia": #My Hero Trait
+                                            #fortitude or luck is based on health  
+                                            fortitude = 0.0
+                                            low = o_health - (o_health * .75)
+                                            high = o_health- (o_health * .66)
+                                            fortitude = random.randint(int(low), int(high))
+                                            #Resolve Scaling
+                                            o_resolve_health = round(fortitude + (.5*o_resolve))
+                                            o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                            o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+
+                                            o_stamina = o_stamina + o_resolve
+                                            o_health = o_health + o_resolve_health
+                                            o_attack = round(o_attack + o_resolve_attack)
+                                            o_defense = round(o_defense - o_resolve_defense)
+                                            o_used_resolve = True 
+                                            o_pet_used=False
+                                            embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                                            embedVar.add_field(name=f"Transformation: Plus Ultra", value="All stats & stamina greatly increased")
+                                            await ctx.send(embed=embedVar)
+
+                                            turn_total= turn_total + 1
+                                            turn=0
+                                        elif o_universe == "Bleach": #Bleach Trait
+                                            #fortitude or luck is based on health  
+                                            fortitude = 0.0
+                                            low = o_health - (o_health * .75)
+                                            high = o_health- (o_health * .66)
+                                            fortitude = random.randint(int(low), int(high))
+                                            #Resolve Scaling
+                                            o_resolve_health = round(fortitude + (.5*o_resolve))
+                                            o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                            o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+
+                                            o_stamina = o_stamina + o_resolve
+                                            o_health = o_health + o_resolve_health
+                                            o_attack = round(o_attack + (2 * o_resolve_attack))
+                                            o_defense = round(o_defense - o_resolve_defense)
+                                            o_used_resolve = True 
+                                            o_pet_used=False
+                                            embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                                            embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
+                                            await ctx.send(embed=embedVar)
+                                            turn_total= turn_total + 1
+                                            turn=1
+                                        elif o_universe == "God Of War": #God Of War Trait
+                                            #fortitude or luck is based on health  
+                                            fortitude = 0.0
+                                            low = o_health - (o_health * .75)
+                                            high = o_health- (o_health * .66)
+                                            fortitude = random.randint(int(low), int(high))
+                                            #Resolve Scaling
+                                            o_resolve_health = round(fortitude + (.5*o_resolve))
+                                            o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                            o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+
+                                            o_stamina = o_stamina + o_resolve
+                                            o_health = o_max_health
+                                            o_attack = round(o_attack + o_resolve_attack)
+                                            o_defense = round(o_defense - o_resolve_defense)
+                                            o_used_resolve = True 
+                                            o_pet_used=False
+                                            embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                                            embedVar.add_field(name=f"Transformation: Ascension", value="All stats & stamina greatly increased")
+                                            await ctx.send(embed=embedVar)
+                                            turn_total= turn_total + 1
+                                            turn=1
+                                        elif o_universe == "Fate": #Fate Trait
+                                            #fortitude or luck is based on health  
+                                            fortitude = 0.0
+                                            low = o_health - (o_health * .75)
+                                            high = o_health- (o_health * .66)
+                                            fortitude = random.randint(int(low), int(high))
+                                            #Resolve Scaling
+                                            o_resolve_health = round(fortitude + (.5*o_resolve))
+                                            o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                            o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+
+                                            o_stamina = o_stamina + o_resolve
+                                            o_health = o_health + o_resolve_health
+                                            o_attack = round(o_attack + o_resolve_attack)
+                                            o_defense = round(o_defense - o_resolve_defense)
                                             
+                                            embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                                            embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
+                                            await ctx.send(embed=embedVar)
+                                            dmg = damage_cal(o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description)
+                                            t_health = t_health - dmg['DMG']
+                                            embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
+                                            await ctx.send(embed=embedVar)
+                                            o_stamina = 0
+                                            o_used_resolve = True 
+                                            o_pet_used=False
+                                            turn_total= turn_total + 1
+                                            turn=1
+                                        elif o_universe == "Kanto Region" or o_universe == "Johto Region" or o_universe == "Hoenn Region" or o_universe == "Sinnoh Region" or o_universe == "Kalos Region" or o_universe == "Unova Region" or o_universe == "Alola Region" or o_universe == "Galar Region": # Pokemon Resolves
+                                            #fortitude or luck is based on health  
+                                            fortitude = 0.0
+                                            low = o_health - (o_health * .75)
+                                            high = o_health- (o_health * .66)
+                                            fortitude = random.randint(int(low), int(high))
+                                            #Resolve Scaling
+                                            o_resolve_health = round(fortitude + (.5*o_resolve))
+                                            o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                            o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
 
-                                        #fortitude or luck is based on health  
-                                        fortitude = 0.0
-                                        low = o_health - (o_health * .75)
-                                        high = o_health- (o_health * .66)
-                                        fortitude = random.randint(int(low), int(high))
-                                        #Resolve Scaling
-                                        o_resolve_health = round(fortitude + (.5*o_resolve))
-                                        o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
-                                        o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                            o_stamina = o_stamina + o_resolve
+                                            o_health = o_health + o_resolve_health
+                                            o_attack = round(o_attack + o_resolve_attack)
+                                            o_defense = round(o_defense)
+                                            o_used_resolve = True 
+                                            o_pet_used=False
+                                            embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                                            embedVar.add_field(name=f"Transformation: Plus Ultra", value="All stats & stamina greatly increased")
+                                            await ctx.send(embed=embedVar)
+                                            turn_total= turn_total + 1
+                                            turn=1
+                                        else: # Standard Resolve
+                                            #fortitude or luck is based on health  
+                                            fortitude = 0.0
+                                            low = o_health - (o_health * .75)
+                                            high = o_health- (o_health * .66)
+                                            fortitude = random.randint(int(low), int(high))
+                                            #Resolve Scaling
+                                            o_resolve_health = round(fortitude + (.5*o_resolve))
+                                            o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                            o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
 
-                                        o_stamina = o_stamina + o_resolve
-                                        o_health = o_health + o_resolve_health
-                                        o_attack = round(o_attack + o_resolve_attack)
-                                        o_defense = round(o_defense - o_resolve_defense)
-                                        o_used_resolve = True 
-                                        o_pet_used=False
-
-                                        turn_total= turn_total + 1
-                                        turn=1
+                                            o_stamina = o_stamina + o_resolve
+                                            o_health = o_health + o_resolve_health
+                                            o_attack = round(o_attack + o_resolve_attack)
+                                            o_defense = round(o_defense - o_resolve_defense)
+                                            o_used_resolve = True 
+                                            o_pet_used=False
+                                            embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                                            embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
+                                            await ctx.send(embed=embedVar)
+                                            turn_total= turn_total + 1
+                                            turn=1
                                     else:
                                         emessage = m.CANNOT_USE_RESOLVE
                                         embedVar = discord.Embed(title=emessage, description=f"Entering `Resolved State` sacrifices a turn to power up even greater and regain `Stamina`!", colour=0xe91e63)
@@ -13834,13 +17253,17 @@ class CrownUnlimited(commands.Cog):
                                             turn_total= turn_total + 1
                                             turn=1
                                         else:
-                                            t_health = t_health - dmg['DMG']
+                                            if t_universe == "Naruto" and t_stamina == 0:
+                                                t_health = t_health 
+                                                embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{o_card} attack strikes a log", colour=0xe91e63)
+                                                await ctx.send(embed=embedVar)
+                                            else:
+                                                t_health = t_health - dmg['DMG']
+                                                embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
+                                                await ctx.send(embed=embedVar)
                                             if t_health < 0:
                                                 t_health=0
-                                            o_stamina = o_stamina - dmg['STAMINA_USED']
-
-                                            embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
-                                            await ctx.send(embed=embedVar)
+                                            o_stamina = o_stamina - dmg['STAMINA_USED']                                            
                                             turn_total= turn_total + 1
                                             turn=1
                                     else:
@@ -13909,9 +17332,61 @@ class CrownUnlimited(commands.Cog):
                             embedVar = discord.Embed(title=f"{t_card.upper()} FOCUSED", description=f"`{t_card} says:`\n{t_focus_description}", colour=0xe91e63)
                             embedVar.add_field(name=f"{t_card} focused and {healmessage}", value="All stats & stamina increased")
                             await ctx.send(embed=embedVar)
+                            if not t_used_resolve and t_used_focus and t_universe == "Digimon":  #Digimon Universal Trait
+                                #fortitude or luck is based on health  
+                                fortitude = 0.0
+                                low = t_health - (t_health * .75)
+                                high = t_health- (t_health * .66)
+                                fortitude = random.randint(int(low), int(high))
+                                #Resolve Scaling
+                                t_resolve_health = round(fortitude + (.5*t_resolve))
+                                t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
 
-                            turn_total= turn_total + 1
-                            turn=0
+                                t_stamina = t_stamina + t_resolve
+                                t_health = t_health + t_resolve_health
+                                t_attack = round(t_attack + t_resolve_attack)
+                                t_defense = round(t_defense - t_resolve_defense)
+                                t_used_resolve=True
+
+                                embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                embedVar.add_field(name=f"Transformation: Digivolve", value="All stats & stamina greatly increased")
+                                await ctx.send(embed=embedVar)
+                                turn_total= turn_total + 1
+                                turn=0
+                            elif t_universe == "League Of Legends":
+                                embedVar = discord.Embed(title=f"Turret Shot hits {o_card} for 25 DMG!", colour=0xe91e63)
+                                await ctx.send(embed=embedVar)
+                                o_health = round(o_health - 25)
+                                turn_total= turn_total + 1
+                                turn=0
+                            elif t_universe == "Attack On Titan":
+                                embedVar = discord.Embed(title=f"Rally!{t_card} Increased Max Health!", colour=0xe91e63)
+                                await ctx.send(embed=embedVar)
+                                t_max_health = round(t_max_health + 50)
+                                turn_total= turn_total + 1
+                                turn=0
+                            elif t_universe == "Black Clover":
+                                embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
+                                await ctx.send(embed=embedVar)
+                                t_stamina = 110
+                                turn_total= turn_total + 1
+                                turn=0
+                            elif o_universe == "One Punch Man":
+                                embedVar = discord.Embed(title=f"Hero Reinforcements! {o_card} Increased Max Health!", colour=0xe91e63)
+                                await ctx.send(embed=embedVar)
+                                o_max_health = round(o_max_health + 50)
+                                turn_total= turn_total + 1
+                                turn=0
+                            elif o_universe == "7ds":
+                                embedVar = discord.Embed(title=f"Increase Power Level! {o_card} Increased Stamina!", colour=0xe91e63)
+                                await ctx.send(embed=embedVar)
+                                o_stamina = 110
+                                turn_total= turn_total + 1
+                                turn=0
+                            else:
+                                turn_total= turn_total + 1
+                                turn=0
                         else:
                             #Check If Playing Bot
                             if botActive != True:
@@ -13983,27 +17458,144 @@ class CrownUnlimited(commands.Cog):
                                         t_enhancer_used=False
                                     elif msg.content == "5":
                                         if not t_used_resolve and t_used_focus:
-                                            #fortitude or luck is based on health  
-                                            fortitude = 0.0
-                                            low = t_health - (t_health * .75)
-                                            high = t_health- (t_health * .66)
-                                            fortitude = random.randint(int(low), int(high))
-                                            #Resolve Scaling
-                                            t_resolve_health = round(fortitude + (.5*t_resolve))
-                                            t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
-                                            t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                            if t_universe == "My Hero Academia": #My hero TRait
+                                                #fortitude or luck is based on health  
+                                                fortitude = 0.0
+                                                low = t_health - (t_health * .75)
+                                                high = t_health- (t_health * .66)
+                                                fortitude = random.randint(int(low), int(high))
+                                                #Resolve Scaling
+                                                t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                                t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                                t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
 
-                                            t_stamina = t_stamina + t_resolve
-                                            t_health = t_health + t_resolve_health
-                                            t_attack = round(t_attack + t_resolve_attack)
-                                            t_defense = round(t_defense - t_resolve_defense)
-                                            t_used_resolve=True
+                                                t_stamina = t_stamina + t_resolve
+                                                t_health = t_health + t_resolve_health
+                                                t_attack = round(t_attack + t_resolve_attack)
+                                                t_defense = round(t_defense - t_resolve_defense)
+                                                t_used_resolve=True
 
-                                            embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
-                                            embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
-                                            await ctx.send(embed=embedVar)
-                                            turn_total= turn_total + 1
-                                            turn=0
+                                                embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                                embedVar.add_field(name=f"Transformation: Plus Ultra", value="All stats & stamina greatly increased")
+                                                await ctx.send(embed=embedVar)
+                                                turn_total= turn_total + 1
+                                                turn=1
+                                            elif t_universe == "Bleach": #Bleach Trait
+                                                #fortitude or luck is based on health  
+                                                fortitude = 0.0
+                                                low = t_health - (t_health * .75)
+                                                high = t_health- (t_health * .66)
+                                                fortitude = random.randint(int(low), int(high))
+                                                #Resolve Scaling
+                                                t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                                t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                                t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                                t_stamina = t_stamina + t_resolve
+                                                t_health = t_health + t_resolve_health
+                                                t_attack = round(t_attack + (2 * t_resolve_attack))
+                                                t_defense = round(t_defense - t_resolve_defense)
+                                                t_used_resolve=True
+
+                                                embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                                embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
+                                                await ctx.send(embed=embedVar)
+                                                turn_total= turn_total + 1
+                                                turn=0
+                                            elif t_universe == "God Of War": #God Of War Trait
+                                                #fortitude or luck is based on health  
+                                                fortitude = 0.0
+                                                low = t_health - (t_health * .75)
+                                                high = t_health- (t_health * .66)
+                                                fortitude = random.randint(int(low), int(high))
+                                                #Resolve Scaling
+                                                t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                                t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                                t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                                t_stamina = t_stamina + t_resolve
+                                                t_health = t_max_health
+                                                t_attack = round(t_attack + t_resolve_attack)
+                                                t_defense = round(t_defense - t_resolve_defense)
+                                                t_used_resolve=True
+
+                                                embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                                embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
+                                                await ctx.send(embed=embedVar)
+                                                turn_total= turn_total + 1
+                                                turn=0
+                                            elif t_universe == "Fate": #Bleach Trait
+                                                #fortitude or luck is based on health  
+                                                fortitude = 0.0
+                                                low = t_health - (t_health * .75)
+                                                high = t_health- (t_health * .66)
+                                                fortitude = random.randint(int(low), int(high))
+                                                #Resolve Scaling
+                                                t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                                t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                                t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                                t_stamina = t_stamina + t_resolve
+                                                t_health = t_health + t_resolve_health
+                                                t_attack = round(t_attack + t_resolve_attack)
+                                                t_defense = round(t_defense - t_resolve_defense)
+                                                t_used_resolve=True
+                                                
+                                                embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                                embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
+                                                await ctx.send(embed=embedVar)
+                                                dmg = damage_cal(t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description)
+                                                t_pet_used =False
+                                                o_health = o_health - int(dmg['DMG'])
+                                                embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                                await ctx.send(embed=embedVar)
+                                                t_stamina = 0
+                                                turn_total= turn_total + 1
+                                                turn=0
+                                            elif t_universe == "Kanto Region" or t_universe == "Johto Region" or t_universe == "Hoenn Region" or t_universe == "Sinnoh Region" or t_universe == "Kalos Region" or t_universe == "Unova Region" or t_universe == "Alola Region" or t_universe == "Galar Region": #Pokemon Resolves
+                                                #fortitude or luck is based on health  
+                                                fortitude = 0.0
+                                                low = t_health - (t_health * .75)
+                                                high = t_health- (t_health * .66)
+                                                fortitude = random.randint(int(low), int(high))
+                                                #Resolve Scaling
+                                                t_resolve_health = round(fortitude + (.5*t_resolve))
+                                                t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                                t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                                t_stamina = t_stamina + t_resolve
+                                                t_health = t_health + t_resolve_health
+                                                t_attack = round(t_attack + t_resolve_attack)
+                                                t_defense = round(t_defense)
+                                                t_used_resolve=True
+
+                                                embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                                embedVar.add_field(name=f"Transformation: Evolution", value="All stats & stamina greatly increased")
+                                                await ctx.send(embed=embedVar)
+                                                turn_total= turn_total + 1
+                                                turn=0
+                                            else:
+                                                #fortitude or luck is based on health  
+                                                fortitude = 0.0
+                                                low = t_health - (t_health * .75)
+                                                high = t_health- (t_health * .66)
+                                                fortitude = random.randint(int(low), int(high))
+                                                #Resolve Scaling
+                                                t_resolve_health = round(fortitude + (.5*t_resolve))
+                                                t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                                t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                                t_stamina = t_stamina + t_resolve
+                                                t_health = t_health + t_resolve_health
+                                                t_attack = round(t_attack + t_resolve_attack)
+                                                t_defense = round(t_defense - t_resolve_defense)
+                                                t_used_resolve=True
+
+                                                embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                                embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
+                                                await ctx.send(embed=embedVar)
+                                                turn_total= turn_total + 1
+                                                turn=0
                                         else:
                                             emessage = m.CANNOT_USE_RESOLVE
                                             embedVar = discord.Embed(title=emessage, colour=0xe91e63)
@@ -14186,13 +17778,17 @@ class CrownUnlimited(commands.Cog):
                                                 turn_total= turn_total + 1
                                                 turn=0
                                             else:
-                                                o_health = o_health - int(dmg['DMG'])
+                                                if o_universe == "Naruto" and o_stamina == 0:
+                                                    o_health = o_health 
+                                                    embedVar = discord.Embed(title=f"{o_card.upper()}: Substitution Jutsu", description=f"{t_card} attack strikes a log", colour=0xe91e63)
+                                                    await ctx.send(embed=embedVar)
+                                                else:
+                                                    o_health = o_health - int(dmg['DMG'])
+                                                    embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                                    await ctx.send(embed=embedVar)
                                                 if o_health < 0:
                                                     o_health=0
-                                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-
-                                                embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
-                                                await ctx.send(embed=embedVar)
+                                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
                                                 turn_total= turn_total + 1
                                                 turn=0
 
@@ -14308,25 +17904,144 @@ class CrownUnlimited(commands.Cog):
                                     t_enhancer_used=False
                                 elif int(aiMove) == 5:
                                     if not t_used_resolve and t_used_focus:
-                                        #fortitude or luck is based on health  
-                                        fortitude = 0.0
-                                        low = t_health - (t_health * .75)
-                                        high = t_health- (t_health * .66)
-                                        fortitude = random.randint(int(low), int(high))
-                                        #Resolve Scaling
-                                        t_resolve_health = round(fortitude + (.5*t_resolve))
-                                        t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
-                                        t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                        if t_universe == "My Hero Academia": #My hero TRait
+                                                #fortitude or luck is based on health  
+                                                fortitude = 0.0
+                                                low = t_health - (t_health * .75)
+                                                high = t_health- (t_health * .66)
+                                                fortitude = random.randint(int(low), int(high))
+                                                #Resolve Scaling
+                                                t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                                t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                                t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
 
-                                        t_stamina = t_stamina + t_resolve
-                                        t_health = t_health + t_resolve_health
-                                        t_attack = round(t_attack + t_resolve_attack)
-                                        t_defense = round(t_defense - t_resolve_defense)
-                                        t_used_resolve=True
-                                        embedVar = discord.Embed(title=f"{t_card} strengthened resolve!", colour=embed_color_t)
-                                        await ctx.send(embed=embedVar)
-                                        turn_total= turn_total + 1
-                                        turn=0
+                                                t_stamina = t_stamina + t_resolve
+                                                t_health = t_health + t_resolve_health
+                                                t_attack = round(t_attack + t_resolve_attack)
+                                                t_defense = round(t_defense - t_resolve_defense)
+                                                t_used_resolve=True
+
+                                                embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                                embedVar.add_field(name=f"Transformation: Plus Ultra", value="All stats & stamina greatly increased")
+                                                await ctx.send(embed=embedVar)
+                                                turn_total= turn_total + 1
+                                                turn=1
+                                        elif t_universe == "Bleach": #Bleach Trait
+                                            #fortitude or luck is based on health  
+                                            fortitude = 0.0
+                                            low = t_health - (t_health * .75)
+                                            high = t_health- (t_health * .66)
+                                            fortitude = random.randint(int(low), int(high))
+                                            #Resolve Scaling
+                                            t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                            t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                            t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                            t_stamina = t_stamina + t_resolve
+                                            t_health = t_health + t_resolve_health
+                                            t_attack = round(t_attack + (2 * t_resolve_attack))
+                                            t_defense = round(t_defense - t_resolve_defense)
+                                            t_used_resolve=True
+
+                                            embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                            embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
+                                            await ctx.send(embed=embedVar)
+                                            turn_total= turn_total + 1
+                                            turn=0
+                                        elif t_universe == "God Of War": #God Of War Trait
+                                            #fortitude or luck is based on health  
+                                            fortitude = 0.0
+                                            low = t_health - (t_health * .75)
+                                            high = t_health- (t_health * .66)
+                                            fortitude = random.randint(int(low), int(high))
+                                            #Resolve Scaling
+                                            t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                            t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                            t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                            t_stamina = t_stamina + t_resolve
+                                            t_health = t_max_health
+                                            t_attack = round(t_attack + t_resolve_attack)
+                                            t_defense = round(t_defense - t_resolve_defense)
+                                            t_used_resolve=True
+
+                                            embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                            embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
+                                            await ctx.send(embed=embedVar)
+                                            turn_total= turn_total + 1
+                                            turn=0
+                                        elif t_universe == "Fate": #Bleach Trait
+                                            #fortitude or luck is based on health  
+                                            fortitude = 0.0
+                                            low = t_health - (t_health * .75)
+                                            high = t_health- (t_health * .66)
+                                            fortitude = random.randint(int(low), int(high))
+                                            #Resolve Scaling
+                                            t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                            t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                            t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                            t_stamina = t_stamina + t_resolve
+                                            t_health = t_health + t_resolve_health
+                                            t_attack = round(t_attack + t_resolve_attack)
+                                            t_defense = round(t_defense - t_resolve_defense)
+                                            t_used_resolve=True
+                                            
+                                            embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                            embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
+                                            await ctx.send(embed=embedVar)
+                                            dmg = damage_cal(t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description)
+                                            t_pet_used =False
+                                            o_health = o_health - int(dmg['DMG'])
+                                            embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                            await ctx.send(embed=embedVar)
+                                            t_stamina = 0
+                                            turn_total= turn_total + 1
+                                            turn=0
+                                        elif t_universe == "Kanto Region" or t_universe == "Johto Region" or t_universe == "Hoenn Region" or t_universe == "Sinnoh Region" or t_universe == "Kalos Region" or t_universe == "Unova Region" or t_universe == "Alola Region" or t_universe == "Galar Region": #Pokemon Resolves
+                                            #fortitude or luck is based on health  
+                                            fortitude = 0.0
+                                            low = t_health - (t_health * .75)
+                                            high = t_health- (t_health * .66)
+                                            fortitude = random.randint(int(low), int(high))
+                                            #Resolve Scaling
+                                            t_resolve_health = round(fortitude + (.5*t_resolve))
+                                            t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                            t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                            t_stamina = t_stamina + t_resolve
+                                            t_health = t_health + t_resolve_health
+                                            t_attack = round(t_attack + t_resolve_attack)
+                                            t_defense = round(t_defense)
+                                            t_used_resolve=True
+
+                                            embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                            embedVar.add_field(name=f"Transformation: Evolution", value="All stats & stamina greatly increased")
+                                            await ctx.send(embed=embedVar)
+                                            turn_total= turn_total + 1
+                                            turn=0
+                                        else:
+                                            #fortitude or luck is based on health  
+                                            fortitude = 0.0
+                                            low = t_health - (t_health * .75)
+                                            high = t_health- (t_health * .66)
+                                            fortitude = random.randint(int(low), int(high))
+                                            #Resolve Scaling
+                                            t_resolve_health = round(fortitude + (.5*t_resolve))
+                                            t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                            t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                            t_stamina = t_stamina + t_resolve
+                                            t_health = t_health + t_resolve_health
+                                            t_attack = round(t_attack + t_resolve_attack)
+                                            t_defense = round(t_defense - t_resolve_defense)
+                                            t_used_resolve=True
+
+                                            embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                            embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
+                                            await ctx.send(embed=embedVar)
+                                            turn_total= turn_total + 1
+                                            turn=0
                                     else:
                                         await ctx.send(m.CANNOT_USE_RESOLVE)
                                         turn=1
@@ -14509,13 +18224,17 @@ class CrownUnlimited(commands.Cog):
                                             turn_total= turn_total + 1
                                             turn=0
                                         else:
-                                            o_health = o_health - int(dmg['DMG'])
+                                            if o_universe == "Naruto" and o_stamina == 0:
+                                                o_health = o_health 
+                                                embedVar = discord.Embed(title=f"{o_card.upper()}: Substitution Jutsu", description=f"{t_card} attack strikes a log", colour=0xe91e63)
+                                                await ctx.send(embed=embedVar)
+                                            else:
+                                                o_health = o_health - int(dmg['DMG'])
+                                                embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                                await ctx.send(embed=embedVar)
                                             if o_health < 0:
                                                 o_health=0
-                                            t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-
-                                            embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
-                                            await ctx.send(embed=embedVar)
+                                            t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
                                             turn_total= turn_total + 1
                                             turn=0
 
@@ -15381,8 +19100,63 @@ class CrownUnlimited(commands.Cog):
                                 embedVar = discord.Embed(title=f"{o_card.upper()} FOCUSED", description=f"`{o_card} says:`\n{o_focus_description}", colour=0xe91e63)
                                 embedVar.add_field(name=f"{o_card} focused and {healmessage}", value="All stats & stamina increased")
                                 await ctx.send(embed=embedVar)
-                            turn_total= turn_total + 1
-                            turn = 1
+                            #Resolve Check and Calculation
+                            if not o_used_resolve and o_used_focus and o_universe == "Digimon": # Digimon Universal Trait
+                                embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                                embedVar.add_field(name=f"Transformation: Digivolve", value="All stats & stamina greatly increased")
+                                await ctx.send(embed=embedVar)
+                                #fortitude or luck is based on health  
+                                fortitude = 0.0
+                                low = o_health - (o_health * .75)
+                                high = o_health- (o_health * .66)
+                                fortitude = random.randint(int(low), int(high))
+                                #Resolve Scaling
+                                o_resolve_health = round(fortitude + (.5*o_resolve))
+                                o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+
+                                o_stamina = o_stamina + o_resolve
+                                o_health = o_health + o_resolve_health
+                                o_attack = round(o_attack + o_resolve_attack)
+                                o_defense = round(o_defense - o_resolve_defense)
+                                o_used_resolve = True 
+                                o_pet_used=False
+
+                                turn_total= turn_total + 1
+                                turn=1
+                            elif o_universe == "League Of Legends":
+                                embedVar = discord.Embed(title=f"Turret Shot hits for 25 DMG!", colour=0xe91e63)
+                                await ctx.send(embed=embedVar)
+                                t_health = round(t_health - 25)
+                                turn_total= turn_total + 1
+                                turn=1
+                            elif o_universe == "Attack On Titan":
+                                embedVar = discord.Embed(title=f"Rally! {o_card} Increased Max Health!", colour=0xe91e63)
+                                await ctx.send(embed=embedVar)
+                                o_max_health = round(o_max_health + 50)
+                                turn_total= turn_total + 1
+                                turn=1
+                            elif o_universe == "Black Clover":
+                                embedVar = discord.Embed(title=f"Mana Zone! {o_card} Increased Stamina!", colour=0xe91e63)
+                                await ctx.send(embed=embedVar)
+                                o_stamina = 110
+                                turn_total= turn_total + 1
+                                turn=1
+                            elif t_universe == "One Punch Man":
+                                embedVar = discord.Embed(title=f"Hero Reinforcements! {t_card} Increased Max Health!", colour=0xe91e63)
+                                await ctx.send(embed=embedVar)
+                                t_max_health = round(t_max_health + 50)
+                                turn_total= turn_total + 1
+                                turn=1
+                            elif t_universe == "7ds":
+                                embedVar = discord.Embed(title=f"Increase Power Level! {t_card} Increased Stamina!", colour=0xe91e63)
+                                await ctx.send(embed=embedVar)
+                                t_stamina = 110
+                                turn_total= turn_total + 1
+                                turn=1
+                            else:
+                                turn_total= turn_total + 1
+                                turn = 1
                         else:
 
                             # UNIVERSE CARD
@@ -15438,33 +19212,147 @@ class CrownUnlimited(commands.Cog):
                                     o_pet_used=False
                                     o_enhancer_used=False
                                 elif msg.content == "5":
-
                                     #Resolve Check and Calculation
                                     if not o_used_resolve and o_used_focus:
-                                        embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
-                                        embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
-                                        await ctx.send(embed=embedVar)
+                                        if o_universe == "My Hero Academia": #My Hero Trait
+                                            #fortitude or luck is based on health  
+                                            fortitude = 0.0
+                                            low = o_health - (o_health * .75)
+                                            high = o_health- (o_health * .66)
+                                            fortitude = random.randint(int(low), int(high))
+                                            #Resolve Scaling
+                                            o_resolve_health = round(fortitude + (.5*o_resolve))
+                                            o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                            o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+
+                                            o_stamina = o_stamina + o_resolve
+                                            o_health = o_health + o_resolve_health
+                                            o_attack = round(o_attack + o_resolve_attack)
+                                            o_defense = round(o_defense - o_resolve_defense)
+                                            o_used_resolve = True 
+                                            o_pet_used=False
+                                            embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                                            embedVar.add_field(name=f"Transformation: Plus Ultra", value="All stats & stamina greatly increased")
+                                            await ctx.send(embed=embedVar)
+
+                                            turn_total= turn_total + 1
+                                            turn=0
+                                        elif o_universe == "Bleach": #Bleach Trait
+                                            #fortitude or luck is based on health  
+                                            fortitude = 0.0
+                                            low = o_health - (o_health * .75)
+                                            high = o_health- (o_health * .66)
+                                            fortitude = random.randint(int(low), int(high))
+                                            #Resolve Scaling
+                                            o_resolve_health = round(fortitude + (.5*o_resolve))
+                                            o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                            o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+
+                                            o_stamina = o_stamina + o_resolve
+                                            o_health = o_health + o_resolve_health
+                                            o_attack = round(o_attack + (2 * o_resolve_attack))
+                                            o_defense = round(o_defense - o_resolve_defense)
+                                            o_used_resolve = True 
+                                            o_pet_used=False
+                                            embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                                            embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
+                                            await ctx.send(embed=embedVar)
+                                            turn_total= turn_total + 1
+                                            turn=1
+                                        elif o_universe == "God Of War": #God Of War Trait
+                                            #fortitude or luck is based on health  
+                                            fortitude = 0.0
+                                            low = o_health - (o_health * .75)
+                                            high = o_health- (o_health * .66)
+                                            fortitude = random.randint(int(low), int(high))
+                                            #Resolve Scaling
+                                            o_resolve_health = round(fortitude + (.5*o_resolve))
+                                            o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                            o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+
+                                            o_stamina = o_stamina + o_resolve
+                                            o_health = o_max_health
+                                            o_attack = round(o_attack + o_resolve_attack)
+                                            o_defense = round(o_defense - o_resolve_defense)
+                                            o_used_resolve = True 
+                                            o_pet_used=False
+                                            embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                                            embedVar.add_field(name=f"Transformation: Ascension", value="All stats & stamina greatly increased")
+                                            await ctx.send(embed=embedVar)
+                                            turn_total= turn_total + 1
+                                            turn=1
+                                        elif o_universe == "Fate": #Fate Trait
+                                            #fortitude or luck is based on health  
+                                            fortitude = 0.0
+                                            low = o_health - (o_health * .75)
+                                            high = o_health- (o_health * .66)
+                                            fortitude = random.randint(int(low), int(high))
+                                            #Resolve Scaling
+                                            o_resolve_health = round(fortitude + (.5*o_resolve))
+                                            o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                            o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+
+                                            o_stamina = o_stamina + o_resolve
+                                            o_health = o_health + o_resolve_health
+                                            o_attack = round(o_attack + o_resolve_attack)
+                                            o_defense = round(o_defense - o_resolve_defense)
                                             
+                                            embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                                            embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
+                                            await ctx.send(embed=embedVar)
+                                            dmg = damage_cal(o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description)
+                                            t_health = t_health - dmg['DMG']
+                                            embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
+                                            await ctx.send(embed=embedVar)
+                                            o_stamina = 0
+                                            o_used_resolve = True 
+                                            o_pet_used=False
+                                            turn_total= turn_total + 1
+                                            turn=1
+                                        elif o_universe == "Kanto Region" or o_universe == "Johto Region" or o_universe == "Hoenn Region" or o_universe == "Sinnoh Region" or o_universe == "Kalos Region" or o_universe == "Unova Region" or o_universe == "Alola Region" or o_universe == "Galar Region": # Pokemon Resolves
+                                            #fortitude or luck is based on health  
+                                            fortitude = 0.0
+                                            low = o_health - (o_health * .75)
+                                            high = o_health- (o_health * .66)
+                                            fortitude = random.randint(int(low), int(high))
+                                            #Resolve Scaling
+                                            o_resolve_health = round(fortitude + (.5*o_resolve))
+                                            o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                            o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
 
-                                        #fortitude or luck is based on health  
-                                        fortitude = 0.0
-                                        low = o_health - (o_health * .75)
-                                        high = o_health- (o_health * .66)
-                                        fortitude = random.randint(int(low), int(high))
-                                        #Resolve Scaling
-                                        o_resolve_health = round(fortitude + (.5*o_resolve))
-                                        o_resolve_attack = round(4 * (o_resolve / (.50 * o_attack)))
-                                        o_resolve_defense = round(3 * (o_resolve / (.25 * o_defense)))
+                                            o_stamina = o_stamina + o_resolve
+                                            o_health = o_health + o_resolve_health
+                                            o_attack = round(o_attack + o_resolve_attack)
+                                            o_defense = round(o_defense)
+                                            o_used_resolve = True 
+                                            o_pet_used=False
+                                            embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                                            embedVar.add_field(name=f"Transformation: Plus Ultra", value="All stats & stamina greatly increased")
+                                            await ctx.send(embed=embedVar)
+                                            turn_total= turn_total + 1
+                                            turn=1
+                                        else: # Standard Resolve
+                                            #fortitude or luck is based on health  
+                                            fortitude = 0.0
+                                            low = o_health - (o_health * .75)
+                                            high = o_health- (o_health * .66)
+                                            fortitude = random.randint(int(low), int(high))
+                                            #Resolve Scaling
+                                            o_resolve_health = round(fortitude + (.5*o_resolve))
+                                            o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
+                                            o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
 
-                                        o_stamina = o_stamina + o_resolve
-                                        o_health = o_health + o_resolve_health
-                                        o_attack = round(o_attack + o_resolve_attack)
-                                        o_defense = round(o_defense - o_resolve_defense)
-                                        o_used_resolve = True 
-                                        o_pet_used=False
-
-                                        turn_total= turn_total + 1
-                                        turn=1
+                                            o_stamina = o_stamina + o_resolve
+                                            o_health = o_health + o_resolve_health
+                                            o_attack = round(o_attack + o_resolve_attack)
+                                            o_defense = round(o_defense - o_resolve_defense)
+                                            o_used_resolve = True 
+                                            o_pet_used=False
+                                            embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
+                                            embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
+                                            await ctx.send(embed=embedVar)
+                                            turn_total= turn_total + 1
+                                            turn=1
                                     else:
                                         emessage = m.CANNOT_USE_RESOLVE
                                         embedVar = discord.Embed(title=emessage, description=f"Entering `Resolved State` sacrifices a turn to power up even greater and regain `Stamina`!", colour=0xe91e63)
@@ -15651,13 +19539,17 @@ class CrownUnlimited(commands.Cog):
                                             turn_total= turn_total + 1
                                             turn=1
                                         else:
-                                            t_health = t_health - dmg['DMG']
+                                            if t_universe == "Naruto" and t_stamina == 0:
+                                                t_health = t_health 
+                                                embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{o_card} attack strikes a log", colour=0xe91e63)
+                                                await ctx.send(embed=embedVar)
+                                            else:
+                                                t_health = t_health - dmg['DMG']
+                                                embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
+                                                await ctx.send(embed=embedVar)
                                             if t_health < 0:
                                                 t_health=0
-                                            o_stamina = o_stamina - dmg['STAMINA_USED']
-
-                                            embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
-                                            await ctx.send(embed=embedVar)
+                                            o_stamina = o_stamina - dmg['STAMINA_USED']                                            
                                             turn_total= turn_total + 1
                                             turn=1
                                     else:
@@ -15729,8 +19621,61 @@ class CrownUnlimited(commands.Cog):
                             embedVar.add_field(name=f"{t_card} focused and {healmessage}", value="All stats & stamina increased")
                             await ctx.send(embed=embedVar)
 
-                            turn_total= turn_total + 1
-                            turn=0
+                            if not t_used_resolve and t_used_focus and t_universe == "Digimon":  #Digimon Universal Trait
+                                #fortitude or luck is based on health  
+                                fortitude = 0.0
+                                low = t_health - (t_health * .75)
+                                high = t_health- (t_health * .66)
+                                fortitude = random.randint(int(low), int(high))
+                                #Resolve Scaling
+                                t_resolve_health = round(fortitude + (.5*t_resolve))
+                                t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                t_stamina = t_stamina + t_resolve
+                                t_health = t_health + t_resolve_health
+                                t_attack = round(t_attack + t_resolve_attack)
+                                t_defense = round(t_defense - t_resolve_defense)
+                                t_used_resolve=True
+
+                                embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                embedVar.add_field(name=f"Transformation: Digivolve", value="All stats & stamina greatly increased")
+                                await ctx.send(embed=embedVar)
+                                turn_total= turn_total + 1
+                                turn=0
+                            elif t_universe == "League Of Legends":
+                                embedVar = discord.Embed(title=f"Turret Shot hits {o_card} for 25 DMG!", colour=0xe91e63)
+                                await ctx.send(embed=embedVar)
+                                o_health = round(o_health - 25)
+                                turn_total= turn_total + 1
+                                turn=0
+                            elif t_universe == "Attack On Titan":
+                                embedVar = discord.Embed(title=f"Rally!{t_card} Increased Max Health!", colour=0xe91e63)
+                                await ctx.send(embed=embedVar)
+                                t_max_health = round(t_max_health + 50)
+                                turn_total= turn_total + 1
+                                turn=0
+                            elif t_universe == "Black Clover":
+                                embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
+                                await ctx.send(embed=embedVar)
+                                t_stamina = 110
+                                turn_total= turn_total + 1
+                                turn=0
+                            elif o_universe == "One Punch Man":
+                                embedVar = discord.Embed(title=f"Hero Reinforcements! {o_card} Increased Max Health!", colour=0xe91e63)
+                                await ctx.send(embed=embedVar)
+                                o_max_health = round(o_max_health + 50)
+                                turn_total= turn_total + 1
+                                turn=0
+                            elif o_universe == "7ds":
+                                embedVar = discord.Embed(title=f"Increase Power Level! {o_card} Increased Stamina!", colour=0xe91e63)
+                                await ctx.send(embed=embedVar)
+                                o_stamina = 110
+                                turn_total= turn_total + 1
+                                turn=0
+                            else:
+                                turn_total= turn_total + 1
+                                turn=0
                         else:
                             #Check If Playing Bot
                             if botActive != True:
@@ -15792,27 +19737,144 @@ class CrownUnlimited(commands.Cog):
                                         t_enhancer_used=False
                                     elif msg.content == "5":
                                         if not t_used_resolve and t_used_focus:
-                                            #fortitude or luck is based on health  
-                                            fortitude = 0.0
-                                            low = t_health - (t_health * .75)
-                                            high = t_health- (t_health * .66)
-                                            fortitude = random.randint(int(low), int(high))
-                                            #Resolve Scaling
-                                            t_resolve_health = round(fortitude + (.5*t_resolve))
-                                            t_resolve_attack = round(4 * (t_resolve / (.25 * t_attack)))
-                                            t_resolve_defense = round(3 * (t_resolve / (.25 * t_defense)))
+                                            if t_universe == "My Hero Academia": #My hero TRait
+                                                #fortitude or luck is based on health  
+                                                fortitude = 0.0
+                                                low = t_health - (t_health * .75)
+                                                high = t_health- (t_health * .66)
+                                                fortitude = random.randint(int(low), int(high))
+                                                #Resolve Scaling
+                                                t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                                t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                                t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
 
-                                            t_stamina = t_stamina + t_resolve
-                                            t_health = t_health + t_resolve_health
-                                            t_attack = round(t_attack + t_resolve_attack)
-                                            t_defense = round(t_defense - t_resolve_defense)
-                                            t_used_resolve=True
+                                                t_stamina = t_stamina + t_resolve
+                                                t_health = t_health + t_resolve_health
+                                                t_attack = round(t_attack + t_resolve_attack)
+                                                t_defense = round(t_defense - t_resolve_defense)
+                                                t_used_resolve=True
 
-                                            embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
-                                            embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
-                                            await ctx.send(embed=embedVar)
-                                            turn_total= turn_total + 1
-                                            turn=0
+                                                embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                                embedVar.add_field(name=f"Transformation: Plus Ultra", value="All stats & stamina greatly increased")
+                                                await ctx.send(embed=embedVar)
+                                                turn_total= turn_total + 1
+                                                turn=1
+                                            elif t_universe == "Bleach": #Bleach Trait
+                                                #fortitude or luck is based on health  
+                                                fortitude = 0.0
+                                                low = t_health - (t_health * .75)
+                                                high = t_health- (t_health * .66)
+                                                fortitude = random.randint(int(low), int(high))
+                                                #Resolve Scaling
+                                                t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                                t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                                t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                                t_stamina = t_stamina + t_resolve
+                                                t_health = t_health + t_resolve_health
+                                                t_attack = round(t_attack + (2 * t_resolve_attack))
+                                                t_defense = round(t_defense - t_resolve_defense)
+                                                t_used_resolve=True
+
+                                                embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                                embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
+                                                await ctx.send(embed=embedVar)
+                                                turn_total= turn_total + 1
+                                                turn=0
+                                            elif t_universe == "God Of War": #God Of War Trait
+                                                #fortitude or luck is based on health  
+                                                fortitude = 0.0
+                                                low = t_health - (t_health * .75)
+                                                high = t_health- (t_health * .66)
+                                                fortitude = random.randint(int(low), int(high))
+                                                #Resolve Scaling
+                                                t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                                t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                                t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                                t_stamina = t_stamina + t_resolve
+                                                t_health = t_max_health
+                                                t_attack = round(t_attack + t_resolve_attack)
+                                                t_defense = round(t_defense - t_resolve_defense)
+                                                t_used_resolve=True
+
+                                                embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                                embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
+                                                await ctx.send(embed=embedVar)
+                                                turn_total= turn_total + 1
+                                                turn=0
+                                            elif t_universe == "Fate": #Bleach Trait
+                                                #fortitude or luck is based on health  
+                                                fortitude = 0.0
+                                                low = t_health - (t_health * .75)
+                                                high = t_health- (t_health * .66)
+                                                fortitude = random.randint(int(low), int(high))
+                                                #Resolve Scaling
+                                                t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                                t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                                t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                                t_stamina = t_stamina + t_resolve
+                                                t_health = t_health + t_resolve_health
+                                                t_attack = round(t_attack + t_resolve_attack)
+                                                t_defense = round(t_defense - t_resolve_defense)
+                                                t_used_resolve=True
+                                                
+                                                embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                                embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
+                                                await ctx.send(embed=embedVar)
+                                                dmg = damage_cal(t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description)
+                                                t_pet_used =False
+                                                o_health = o_health - int(dmg['DMG'])
+                                                embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                                await ctx.send(embed=embedVar)
+                                                t_stamina = 0
+                                                turn_total= turn_total + 1
+                                                turn=0
+                                            elif t_universe == "Kanto Region" or t_universe == "Johto Region" or t_universe == "Hoenn Region" or t_universe == "Sinnoh Region" or t_universe == "Kalos Region" or t_universe == "Unova Region" or t_universe == "Alola Region" or t_universe == "Galar Region": #Pokemon Resolves
+                                                #fortitude or luck is based on health  
+                                                fortitude = 0.0
+                                                low = t_health - (t_health * .75)
+                                                high = t_health- (t_health * .66)
+                                                fortitude = random.randint(int(low), int(high))
+                                                #Resolve Scaling
+                                                t_resolve_health = round(fortitude + (.5*t_resolve))
+                                                t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                                t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                                t_stamina = t_stamina + t_resolve
+                                                t_health = t_health + t_resolve_health
+                                                t_attack = round(t_attack + t_resolve_attack)
+                                                t_defense = round(t_defense)
+                                                t_used_resolve=True
+
+                                                embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                                embedVar.add_field(name=f"Transformation: Evolution", value="All stats & stamina greatly increased")
+                                                await ctx.send(embed=embedVar)
+                                                turn_total= turn_total + 1
+                                                turn=0
+                                            else:
+                                                #fortitude or luck is based on health  
+                                                fortitude = 0.0
+                                                low = t_health - (t_health * .75)
+                                                high = t_health- (t_health * .66)
+                                                fortitude = random.randint(int(low), int(high))
+                                                #Resolve Scaling
+                                                t_resolve_health = round(fortitude + (.5*t_resolve))
+                                                t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                                t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+
+                                                t_stamina = t_stamina + t_resolve
+                                                t_health = t_health + t_resolve_health
+                                                t_attack = round(t_attack + t_resolve_attack)
+                                                t_defense = round(t_defense - t_resolve_defense)
+                                                t_used_resolve=True
+
+                                                embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                                embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
+                                                await ctx.send(embed=embedVar)
+                                                turn_total= turn_total + 1
+                                                turn=0
                                         else:
                                             emessage = m.CANNOT_USE_RESOLVE
                                             embedVar = discord.Embed(title=emessage, colour=0xe91e63)
@@ -15995,13 +20057,17 @@ class CrownUnlimited(commands.Cog):
                                                 turn_total= turn_total + 1
                                                 turn=0
                                             else:
-                                                o_health = o_health - int(dmg['DMG'])
+                                                if o_universe == "Naruto" and o_stamina == 0:
+                                                    o_health = o_health 
+                                                    embedVar = discord.Embed(title=f"{o_card.upper()}: Substitution Jutsu", description=f"{t_card} attack strikes a log", colour=0xe91e63)
+                                                    await ctx.send(embed=embedVar)
+                                                else:
+                                                    o_health = o_health - int(dmg['DMG'])
+                                                    embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                                    await ctx.send(embed=embedVar)
                                                 if o_health < 0:
                                                     o_health=0
-                                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-
-                                                embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
-                                                await ctx.send(embed=embedVar)
+                                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
                                                 turn_total= turn_total + 1
                                                 turn=0
 
