@@ -7,6 +7,7 @@ import classes as data
 import messages as m
 import numpy as np
 import help_commands as h
+import unique_traits as ut
 # Converters
 from discord import User
 from discord import Member
@@ -85,6 +86,17 @@ class Profile(commands.Cog):
             o_speed = card['SPD']
             o_show = card['UNIVERSE']
             o_collection = card['COLLECTION']
+            traits = ut.traits
+            mytrait = {}
+            traitmessage = ''
+            for trait in traits:
+                if trait['NAME'] == o_show:
+                    mytrait = trait
+                if o_show == 'Kanto Region' or o_show == 'Johto Region' or o_show == 'Kalos Region' or o_show == 'Unova Region' or o_show == 'Sinnoh Region' or o_show == 'Hoenn Region' or o_show == 'Galar Region' or o_show == 'Alola Region':
+                    if trait['NAME'] == 'Pokemon':
+                        mytrait = trait
+            if mytrait:
+                traitmessage = f"**{mytrait['EFFECT']}**: {mytrait['TRAIT']}"
 
             pets = vault['PETS']
             active_pet = {}
@@ -157,7 +169,10 @@ class Profile(commands.Cog):
             **{move2}:** {move2ap}
             **{move3}:** {move3ap}
             **{move4}:** {move4enh} by {move4ap}
+            
             _Unique Passive:_ **{passive_name}:** {passive_type} by {passive_num}
+
+            {traitmessage}
             """)
             
             , colour=000000)
