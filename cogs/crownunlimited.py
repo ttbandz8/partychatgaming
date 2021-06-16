@@ -56,7 +56,7 @@ class CrownUnlimited(commands.Cog):
         available_universes = []
         selected_universe = ""
         for uni in all_universes:
-            if uni['PREREQUISITE'] in sowner['CROWN_TALES']:
+            if uni['PREREQUISITE'] in sowner['CROWN_TALES'] and uni['HAS_CROWN_TALES'] == True:
                 available_universes.append(uni['TITLE'])
                 
         embedVar = discord.Embed(title=f":crown: CO-OP Select A Tales Universe", description="\n".join(available_universes), colour=0xe91e63) 
@@ -3366,7 +3366,7 @@ class CrownUnlimited(commands.Cog):
         available_universes = []
         selected_universe = ""
         for uni in all_universes:
-            if uni['PREREQUISITE'] in sowner['CROWN_TALES']:
+            if uni['PREREQUISITE'] in sowner['CROWN_TALES'] and uni['HAS_CROWN_TALES'] == True:
                 available_universes.append(uni['TITLE'])
                 
         embedVar = discord.Embed(title=f":crown: CO-OP Select A Dungeon", description="\n".join(available_universes), colour=0xe91e63)
@@ -10418,7 +10418,7 @@ class CrownUnlimited(commands.Cog):
         available_universes = []
         selected_universe = ""
         for uni in all_universes:
-            if uni['PREREQUISITE'] in sowner['CROWN_TALES']:
+            if uni['PREREQUISITE'] in sowner['CROWN_TALES'] and uni['HAS_CROWN_TALES'] == True:
                 available_universes.append(uni['TITLE'])
                 
         embedVar = discord.Embed(title=f":fire: Select A Dungeon", description="\n".join(available_universes), colour=0xe91e63)
@@ -12345,7 +12345,7 @@ class CrownUnlimited(commands.Cog):
         available_universes = []
         selected_universe = ""
         for uni in all_universes:
-            if uni['PREREQUISITE'] in sowner['CROWN_TALES']:
+            if uni['PREREQUISITE'] in sowner['CROWN_TALES'] and uni['HAS_CROWN_TALES'] == True:
                 available_universes.append(uni['TITLE'])
 
         embedVar = discord.Embed(title=f":crown: Select A Tales Universe", description="\n".join(available_universes), colour=0xe91e63)

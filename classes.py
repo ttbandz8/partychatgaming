@@ -155,6 +155,7 @@ class UNIVERSE():
     CROWN_TALES: list[str] = field(default_factory=lambda: [''])
     PREREQUISITE: str = field(default_factory=lambda: "Deathnote")
     UNIVERSE_BOSS: str = field(default_factory=lambda: "")
+    HAS_CROWN_TALES: bool = field(default_factory=lambda: False)
     TIMESTAMP: str = now
     AVAILABLE: bool = field(default_factory=lambda: True)
     UTITLE: str = field(default_factory=lambda: "Starter")
