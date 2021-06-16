@@ -86,8 +86,7 @@ class CrownUnlimited(commands.Cog):
                         }
 
                 private_channel = await guild.create_text_channel(f'{str(ctx.author)}&{user}-co-tale-run', overwrites=overwrites)
-                await ctx.send(f"{ctx.author.mention} & {user.mention} private channel has been opened for you.")
-                await private_channel.send(f'{ctx.author.mention} Good luck!')
+                await ctx.send(f"{ctx.author.mention} & {user.mention} private channel has been opened for you. Good luck!")
             
         except:
             embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", colour=0xe91e63)
@@ -1060,7 +1059,6 @@ class CrownUnlimited(commands.Cog):
                 t_vul=True
             lineup = f"{currentopponent + 1}/{total_legends}"
             options = [1,2,3,4,5,0]
-            await private_channel.send(f"{user1.mention} {user2.mention}: `{o_card}` & `{c_card}` VS `{t_card}` has begun! {lineup}\n{t_universe} Co-Op Tales Battle")
 
             # Count Turns
             turn_total = 0
@@ -1078,8 +1076,9 @@ class CrownUnlimited(commands.Cog):
                         o_health = o_max_health
 
                     # Tutorial Instructions
-                    if turn_total == 0 and botActive:                    
-                        embedVar = discord.Embed(title=f"MATCH START", description=f"`{o_card} Says:`\n{o_greeting_description}", colour=0xe91e63)
+                    if turn_total == 0 and botActive:     
+                        await private_channel.send(f"{ctx.author.mention}{user.mention}")                 
+                        embedVar = discord.Embed(title=f"`{o_card}` & `{c_card}` VS `{t_card}` has begun! {lineup}\n{t_universe} Co-Op Tales Battle", description=f"`{o_card} Says:`\n{o_greeting_description}", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
 
                     
@@ -3400,8 +3399,7 @@ class CrownUnlimited(commands.Cog):
                         }
 
                 private_channel = await guild.create_text_channel(f'{str(ctx.author)}&{user}-co-tale-run', overwrites=overwrites)
-                await ctx.send(f"{ctx.author.mention} & {user.mention} private channel has been opened for you.")
-                await private_channel.send(f'{ctx.author.mention} Good luck!')
+                await ctx.send(f"{ctx.author.mention} & {user.mention} private channel has been opened for you. Good luck!")
             
         except:
             embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", colour=0xe91e63)
@@ -4381,7 +4379,6 @@ class CrownUnlimited(commands.Cog):
                 t_vul=True
             lineup = f"{currentopponent + 1}/{total_legends}"
             options = [1,2,3,4,5,0]
-            await private_channel.send(f"{user1.mention} {user2.mention}: `{o_card}` & `{c_card}` VS `{t_card}` has begun! {lineup}\n{t_universe} Co-Op Tales Battle")
 
             # Count Turns
             turn_total = 0
@@ -4399,8 +4396,9 @@ class CrownUnlimited(commands.Cog):
                         o_health = o_max_health
 
                     # Tutorial Instructions
-                    if turn_total == 0 and botActive:                    
-                        embedVar = discord.Embed(title=f"MATCH START", description=f"`{o_card} Says:`\n{o_greeting_description}", colour=0xe91e63)
+                    if turn_total == 0 and botActive:
+                        await private_channel.send(f"{ctx.author.mention}{user.mention}")                   
+                        embedVar = discord.Embed(title=f"`{o_card}` & `{c_card}` VS `{t_card}` has begun! {lineup}\n{t_universe} Co-Op Tales Battle", description=f"`{o_card} Says:`\n{o_greeting_description}", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
 
                     
@@ -4477,11 +4475,7 @@ class CrownUnlimited(commands.Cog):
                             turn_total= turn_total + 1
                             turn=1
                         elif o_universe == "League Of Legends":
-<<<<<<< HEAD
-                            embedVar = discord.Embed(title=f"Turret Shot hits {t_card} for 25 DMG!", colour=0xe91e63)
-=======
                             embedVar = discord.Embed(title=f"Turret Shot hits for 25 DMG!", colour=0xe91e63)
->>>>>>> 54e69566484b285c7f46ceaff95aed9b631cfdc9
                             await private_channel.send(embed=embedVar)
                             t_health = round(t_health - 25)
                             turn_total= turn_total + 1
@@ -6912,8 +6906,7 @@ class CrownUnlimited(commands.Cog):
                             user: discord.PermissionOverwrite(read_messages=True),
                         }
                 private_channel = await guild.create_text_channel(f'{str(ctx.author)}&{user}-boss-fight', overwrites=overwrites)
-                await ctx.send(f"{ctx.author.mention} private channel has been opened for you.")
-                await private_channel.send(f'{ctx.author.mention} Good luck!')
+                await ctx.send(f"{ctx.author.mention} private channel has been opened for you. Good luck!")
             
         except:
             response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
@@ -7987,11 +7980,7 @@ class CrownUnlimited(commands.Cog):
                         turn_total= turn_total + 1
                         turn=1
                     elif o_universe == "League Of Legends":
-<<<<<<< HEAD
-                        embedVar = discord.Embed(title=f"Turret Shot hits {t_card}for 25 DMG!", colour=0xe91e63)
-=======
                         embedVar = discord.Embed(title=f"Turret Shot hits for 25 DMG!", colour=0xe91e63)
->>>>>>> 54e69566484b285c7f46ceaff95aed9b631cfdc9
                         await private_channel.send(embed=embedVar)
                         t_health = round(t_health - 25)
                         turn_total= turn_total + 1
@@ -10459,8 +10448,7 @@ class CrownUnlimited(commands.Cog):
                         ctx.author: discord.PermissionOverwrite(read_messages=True),
                         }
                 private_channel = await guild.create_text_channel(f'{str(ctx.author)}-DUNGEON-RUN', overwrites=overwrites)
-                await private_channel.send(f"{ctx.author.mention} private channel has been opened for you.")
-                await private_channel.send(f'{ctx.author.mention} Good luck!')
+                await ctx.send(f"{ctx.author.mention} private channel has been opened for you. Good luck!")
             
         except:
             response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
@@ -11112,7 +11100,6 @@ class CrownUnlimited(commands.Cog):
                 t_vul=True
             lineup = f"{currentopponent + 1}/{total_legends}"
             options = [1,2,3,4,5,0]
-            await private_channel.send(f"{user1.mention}: `{o_card}` VS `{t_card}` has begun! {lineup}\n{t_universe} Dungeon Battle")
 
             # Count Turns
             turn_total = 0
@@ -11129,8 +11116,9 @@ class CrownUnlimited(commands.Cog):
                     if o_health >= o_max_health:
                         o_health = o_max_health
                     # Tutorial Instructions
-                    if turn_total == 0 and botActive:                    
-                        embedVar = discord.Embed(title=f"MATCH START", description=f"`{o_card} Says:`\n{o_greeting_description}", colour=0xe91e63)
+                    if turn_total == 0 and botActive:
+                        await private_channel.send(f"{ctx.author.mention}")                
+                        embedVar = discord.Embed(title=f"`{o_card}` VS `{t_card}` has begun! {lineup}\n{t_universe} Dungeon Battle", description=f"`{o_card} Says:`\n{o_greeting_description}", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
 
                     
@@ -12387,8 +12375,7 @@ class CrownUnlimited(commands.Cog):
                         ctx.author: discord.PermissionOverwrite(read_messages=True),
                         }
                 private_channel = await guild.create_text_channel(f'{str(ctx.author)}-tale-run', overwrites=overwrites)
-                await private_channel.send(f"{ctx.author.mention} private channel has been opened for you.")
-                await private_channel.send(f'{ctx.author.mention} Good luck!')
+                await ctx.send(f"{ctx.author.mention} private channel has been opened for you. Good luck!")
 
         except:
             response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
@@ -13025,11 +13012,9 @@ class CrownUnlimited(commands.Cog):
                 t_vul=True
             lineup = f"{currentopponent + 1}/{total_legends}"
             options = [1,2,3,4,5,0]
-            await private_channel.send(f"{user1.mention}: `{o_card}` VS `{t_card}` has begun! {lineup}\n{t_universe} Tales Battle")
 
             # Count Turns
             turn_total = 0
-
 
             # START TURNS
             while (o_health > 0) and (t_health > 0):
@@ -13043,8 +13028,9 @@ class CrownUnlimited(commands.Cog):
                         o_health = o_max_health
 
                     # Tutorial Instructions
-                    if turn_total == 0 and botActive:                    
-                        embedVar = discord.Embed(title=f"MATCH START", description=f"`{o_card} Says:`\n{o_greeting_description}", colour=0xe91e63)
+                    if turn_total == 0 and botActive:
+                        await private_channel.send(f"{ctx.author.mention}")                    
+                        embedVar = discord.Embed(title=f"`{o_card}` VS `{t_card}` has begun! {lineup}\n{t_universe} Tales Battle", description=f"`{o_card} Says:`\n{o_greeting_description}", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
 
                     
@@ -14948,13 +14934,8 @@ class CrownUnlimited(commands.Cog):
                         turn_total= turn_total + 1
                         turn=1
                     elif o_universe == "League Of Legends":
-<<<<<<< HEAD
-                        embedVar = discord.Embed(title=f"Turret Shot hits {t_card} for 25 DMG!", colour=0xe91e63)
-                        await ctx.send(embed=embedVar)
-=======
                         embedVar = discord.Embed(title=f"Turret Shot hits for 25 DMG!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
->>>>>>> 54e69566484b285c7f46ceaff95aed9b631cfdc9
                         t_health = round(t_health - 25)
                         turn_total= turn_total + 1
                         turn=1

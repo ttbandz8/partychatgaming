@@ -308,13 +308,18 @@ class Profile(commands.Cog):
             preset3_arm = list(deck[2].values())[2]
             preset3_pet = list(deck[2].values())[3]    
    
-
+            listed_options = [f"**Preset 1**: {preset1_title} {preset1_card} and {preset1_pet}\n**Card**: {preset1_card}\n**Title**: {preset1_title}\n**Arm**: {preset1_arm}\n**Pet**: {preset1_pet}\n\n", 
+            f"**Preset 2**: {preset2_title} {preset2_card} and {preset2_pet}\n**Card**: {preset2_card}\n**Title**: {preset2_title}\n**Arm**: {preset2_arm}\n**Pet**: {preset2_pet}\n\n", 
+            f"**Preset 3**: {preset3_title} {preset3_card} and {preset3_pet}\n**Card**: {preset3_card}\n**Title**: {preset3_title}\n**Arm**: {preset3_arm}\n**Pet**: {preset3_pet}\n\n"]
         
-            embedVar = discord.Embed(title=f"{name}'s `Build Deck` Load Menu", description=f" What Preset would you like?")
-            embedVar.set_author(name="Press 0 to close Menu. Press 1, 2 or 3 to load a preset.")
-            embedVar.add_field(name=f"Preset 1:{preset1_title} {preset1_card} and {preset1_pet}", value=f"Card: {preset1_card}\nTitle: {preset1_title}\nArm: {preset1_arm}\nPet: {preset1_pet}", inline=False)
-            embedVar.add_field(name=f"Preset 2:{preset2_title} {preset2_card} and {preset2_pet}", value=f"Card: {preset2_card}\nTitle: {preset2_title}\nArm: {preset2_arm}\nPet: {preset2_pet}", inline=False)
-            embedVar.add_field(name=f"Preset 3:{preset3_title} {preset3_card} and {preset3_pet}", value=f"Card: {preset3_card}\nTitle: {preset3_title}\nArm: {preset3_arm}\nPet: {preset3_pet}", inline=False)
+            embedVar = discord.Embed(title="What Preset would you like?", description=textwrap.dedent(f"""
+            {"".join(listed_options)}
+            """))
+            embedVar.set_author(name="Press 0 to close Menu.\nPress 1, 2 or 3 to load a preset.")
+            embedVar.set_thumbnail(url=avatar)
+            # embedVar.add_field(name=f"Preset 1:{preset1_title} {preset1_card} and {preset1_pet}", value=f"Card: {preset1_card}\nTitle: {preset1_title}\nArm: {preset1_arm}\nPet: {preset1_pet}", inline=False)
+            # embedVar.add_field(name=f"Preset 2:{preset2_title} {preset2_card} and {preset2_pet}", value=f"Card: {preset2_card}\nTitle: {preset2_title}\nArm: {preset2_arm}\nPet: {preset2_pet}", inline=False)
+            # embedVar.add_field(name=f"Preset 3:{preset3_title} {preset3_card} and {preset3_pet}", value=f"Card: {preset3_card}\nTitle: {preset3_title}\nArm: {preset3_arm}\nPet: {preset3_pet}", inline=False)
             embedVar.set_footer(text="Type Preset # to update current build!")
             await ctx.send(embed=embedVar)
 
@@ -323,7 +328,7 @@ class Profile(commands.Cog):
             def check(msg):
                 return msg.author == ctx.author and msg.content in options
             try:
-                msg = await self.bot.wait_for("message",timeout=15, check=check)
+                msg = await self.bot.wait_for("message",timeout=20, check=check)
 
                 if msg.content == "0":
                     await ctx.send(f"{ctx.author.mention}, No change has been made")
@@ -383,14 +388,19 @@ class Profile(commands.Cog):
             preset3_arm = list(deck[2].values())[2]
             preset3_pet = list(deck[2].values())[3]    
    
-
+            listed_options = [f"**Current Build**: {current_title} {current_card} & {current_pet}\n**Card**: {current_card}\n**Title**: {current_title}\n**Arm**: {current_arm}\n**Pet**: {current_pet}\n\n",
+            f"**Preset 1**: {preset1_title} {preset1_card} & {preset1_pet}\n**Card**: {preset1_card}\n**Title**: {preset1_title}\n**Arm**: {preset1_arm}\n**Pet**: {preset1_pet}\n\n", 
+            f"**Preset 2**: {preset2_title} {preset2_card} & {preset2_pet}\n**Card**: {preset2_card}\n**Title**: {preset2_title}\n**Arm**: {preset2_arm}\n**Pet**: {preset2_pet}\n\n", 
+            f"**Preset 3**: {preset3_title} {preset3_card} & {preset3_pet}\n**Card**: {preset3_card}\n**Title**: {preset3_title}\n**Arm**: {preset3_arm}\n**Pet**: {preset3_pet}\n\n"]
         
-            embedVar = discord.Embed(title=f"{name}'s Build Deck Save Menu", description=f" Replace a `Preset` to `Save` your current `Build`!\n")
-            embedVar.set_author(name="Press 0 to close Menu. Press 1, 2 or 3 to overwrite preset.")
-            embedVar.add_field(name=f"Current Build:`{current_title} {current_card}` and `{current_pet}`", value=f"Card: `{current_card}`\nTitle: `{current_title}`\nArm: `{current_arm}`\nPet: `{current_pet}`", inline=False)
-            embedVar.add_field(name=f"Preset 1:{preset1_title} {preset1_card} and {preset1_pet}", value=f"Card: {preset1_card}\nTitle: {preset1_title}\nArm: {preset1_arm}\nPet: {preset1_pet}", inline=False)
-            embedVar.add_field(name=f"Preset 2:{preset2_title} {preset2_card} and {preset2_pet}", value=f"Card: {preset2_card}\nTitle: {preset2_title}\nArm: {preset2_arm}\nPet: {preset2_pet}", inline=False)
-            embedVar.add_field(name=f"Preset 3:{preset3_title} {preset3_card} and {preset3_pet}", value=f"Card: {preset3_card}\nTitle: {preset3_title}\nArm: {preset3_arm}\nPet: {preset3_pet}", inline=False)
+            embedVar = discord.Embed(title=f"Save Current Build", description=textwrap.dedent(f"""
+            {"".join(listed_options)}
+            """))
+            embedVar.set_author(name="Press 0 to close Menu.\nPress 1, 2 or 3 to overwrite preset.")
+            # embedVar.add_field(name=f"Current Build:`{current_title} {current_card}` and `{current_pet}`", value=f"", inline=False)
+            # embedVar.add_field(name=f"Preset 1:{preset1_title} {preset1_card} and {preset1_pet}", value=f"Card: {preset1_card}\nTitle: {preset1_title}\nArm: {preset1_arm}\nPet: {preset1_pet}", inline=False)
+            # embedVar.add_field(name=f"Preset 2:{preset2_title} {preset2_card} and {preset2_pet}", value=f"Card: {preset2_card}\nTitle: {preset2_title}\nArm: {preset2_arm}\nPet: {preset2_pet}", inline=False)
+            # embedVar.add_field(name=f"Preset 3:{preset3_title} {preset3_card} and {preset3_pet}", value=f"Card: {preset3_card}\nTitle: {preset3_title}\nArm: {preset3_arm}\nPet: {preset3_pet}", inline=False)
             embedVar.set_footer(text="Type Preset # to update current build!")
             await ctx.send(embed=embedVar)
 
@@ -399,7 +409,7 @@ class Profile(commands.Cog):
             def check(msg):
                 return msg.author == ctx.author and msg.content in options or msg.content == "0"
             try:
-                msg = await self.bot.wait_for("message",timeout=15, check=check)
+                msg = await self.bot.wait_for("message",timeout=20, check=check)
 
                 if msg.content == "0":
                     await ctx.send(f"{ctx.author.mention}, No change has been made")
