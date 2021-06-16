@@ -273,10 +273,10 @@ class CrownUnlimited(commands.Cog):
             t_card_path=t['PATH']
             t_rcard_path=t['RPATH']
             if t['UNIVERSE'] == "Demon Slayer" and o_max_health >= t['HLT']: #Demon Slayer Universal Trait
-                t_max_health = o_max_health + (25 * currentopponent) + 100 + opponent_scaling
+                t_max_health = o_max_health + (25 * currentopponent) + 50 + opponent_scaling
             else:                    
-                t_max_health = t['HLT'] + (25 * currentopponent) + 100 + opponent_scaling
-            t_health = t['HLT'] + (25 * currentopponent) + 100 + opponent_scaling
+                t_max_health = t['HLT'] + (25 * currentopponent) + 50 + opponent_scaling
+            t_health = t['HLT'] + (25 * currentopponent) + 50 + opponent_scaling
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
@@ -22785,7 +22785,8 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
         draw.text((82,197), stamina_text, (255, 255, 255), font=s, align="left")
 
         # Character Name
-        draw.text((82,50), d['NAME'], (255, 255, 255), font=header, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
+        if not resolved:
+            draw.text((82,50), d['NAME'], (255, 255, 255), font=header, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
         # Title Name
         draw.text((85,20), title['TITLE'], (255, 255, 255), font=h, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
 
@@ -22806,6 +22807,7 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
             draw.line(((1195, 0), (0, 0)), fill=(255,215,0), width=15)
             draw.line(((0, 600), (1195, 600)), fill=(255,215,0), width=15)
             draw.text((280,130), "RESOLVED", (255,215,0), font=r, stroke_width=2, stroke_fill=(0,0,0), align="left")
+
 
         moveset = d['MOVESET']
         # Player Moves
