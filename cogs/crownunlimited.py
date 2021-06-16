@@ -11198,31 +11198,31 @@ class CrownUnlimited(commands.Cog):
                             turn=1
                         elif o_universe == "League Of Legends":
                             embedVar = discord.Embed(title=f"Turret Shot hits for 25 DMG!", colour=0xe91e63)
-                            await ctx.send(embed=embedVar)
+                            await private_channel.send(embed=embedVar)
                             t_health = round(t_health - 25)
                             turn_total= turn_total + 1
                             turn=1
                         elif o_universe == "Attack On Titan":
                             embedVar = discord.Embed(title=f"Rally! {o_card} Increased Max Health!", colour=0xe91e63)
-                            await ctx.send(embed=embedVar)
+                            await private_channel.send(embed=embedVar)
                             o_max_health = round(o_max_health + 50)
                             turn_total= turn_total + 1
                             turn=1
                         elif o_universe == "Black Clover":
                             embedVar = discord.Embed(title=f"Mana Zone! {o_card} Increased Stamina!", colour=0xe91e63)
-                            await ctx.send(embed=embedVar)
+                            await private_channel.send(embed=embedVar)
                             o_stamina = 110
                             turn_total= turn_total + 1
                             turn=1
                         elif t_universe == "One Punch Man":
                             embedVar = discord.Embed(title=f"Hero Reinforcements! {t_card} Increased Max Health!", colour=0xe91e63)
-                            await ctx.send(embed=embedVar)
+                            await private_channel.send(embed=embedVar)
                             t_max_health = round(t_max_health + 50)
                             turn_total= turn_total + 1
                             turn=1
                         elif t_universe == "7ds":
                             embedVar = discord.Embed(title=f"Increase Power Level! {t_card} Increased Stamina!", colour=0xe91e63)
-                            await ctx.send(embed=embedVar)
+                            await private_channel.send(embed=embedVar)
                             t_stamina = 110
                             turn_total= turn_total + 1
                             turn=1
@@ -11318,7 +11318,7 @@ class CrownUnlimited(commands.Cog):
                                         o_pet_used=False
                                         embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
                                         embedVar.add_field(name=f"Transformation: Plus Ultra", value="All stats & stamina greatly increased")
-                                        await ctx.send(embed=embedVar)
+                                        await private_channel.send(embed=embedVar)
 
                                         turn_total= turn_total + 1
                                         turn=0
@@ -11341,7 +11341,7 @@ class CrownUnlimited(commands.Cog):
                                         o_pet_used=False
                                         embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
                                         embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
-                                        await ctx.send(embed=embedVar)
+                                        await private_channel.send(embed=embedVar)
                                         turn_total= turn_total + 1
                                         turn=1
                                     elif o_universe == "God Of War": #God Of War Trait
@@ -11363,7 +11363,7 @@ class CrownUnlimited(commands.Cog):
                                         o_pet_used=False
                                         embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
                                         embedVar.add_field(name=f"Transformation: Ascension", value="All stats & stamina greatly increased")
-                                        await ctx.send(embed=embedVar)
+                                        await private_channel.send(embed=embedVar)
                                         turn_total= turn_total + 1
                                         turn=1
                                     elif o_universe == "Fate": #Fate Trait
@@ -11384,11 +11384,11 @@ class CrownUnlimited(commands.Cog):
                                         
                                         embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
                                         embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
-                                        await ctx.send(embed=embedVar)
+                                        await private_channel.send(embed=embedVar)
                                         dmg = damage_cal(o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description)
                                         t_health = t_health - dmg['DMG']
                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
-                                        await ctx.send(embed=embedVar)
+                                        await private_channel.send(embed=embedVar)
                                         o_stamina = 0
                                         o_used_resolve = True 
                                         o_pet_used=False
@@ -11413,7 +11413,7 @@ class CrownUnlimited(commands.Cog):
                                         o_pet_used=False
                                         embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
                                         embedVar.add_field(name=f"Transformation: Plus Ultra", value="All stats & stamina greatly increased")
-                                        await ctx.send(embed=embedVar)
+                                        await private_channel.send(embed=embedVar)
                                         turn_total= turn_total + 1
                                         turn=1
                                     else: # Standard Resolve
@@ -11435,7 +11435,7 @@ class CrownUnlimited(commands.Cog):
                                         o_pet_used=False
                                         embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
                                         embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
-                                        await ctx.send(embed=embedVar)
+                                        await private_channel.send(embed=embedVar)
                                         turn_total= turn_total + 1
                                         turn=1
                                 else:
@@ -11625,11 +11625,11 @@ class CrownUnlimited(commands.Cog):
                                         if t_universe == "Naruto" and t_stamina == 0:
                                             t_health = t_health 
                                             embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{o_card} attack strikes a log", colour=0xe91e63)
-                                            await ctx.send(embed=embedVar)
+                                            await private_channel.send(embed=embedVar)
                                         else:
                                             t_health = t_health - dmg['DMG']
                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
-                                            await ctx.send(embed=embedVar)
+                                            await private_channel.send(embed=embedVar)
                                         if t_health < 0:
                                             t_health=0
                                         o_stamina = o_stamina - dmg['STAMINA_USED']                                            

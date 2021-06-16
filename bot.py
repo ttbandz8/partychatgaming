@@ -736,7 +736,7 @@ async def gift(ctx, user2: User, amount):
 async def teamgift(ctx, user2: User, amount):
    user = db.queryUser({'DISNAME': str(ctx.author)})
    if user['TEAM'] == 'PCG':
-      await ctx.send("You be owner of team to gift from team bank. ")
+      await ctx.send("You must be owner of team to gift from team bank. ")
       return
 
    team = db.queryTeam({'TNAME': user['TEAM']})
