@@ -3424,7 +3424,7 @@ class CrownUnlimited(commands.Cog):
         player_scaling = 0
 
         if universe['PREREQUISITE']:
-            opponent_scaling = 30
+            opponent_scaling = 25
             player_scaling = 5
         else:
             opponent_scaling = 20
@@ -3586,10 +3586,10 @@ class CrownUnlimited(commands.Cog):
             t_card_path=t['PATH']
             t_rcard_path=t['RPATH']
             if t['UNIVERSE'] == "Demon Slayer" and o_max_health >= t['HLT']: #Demon Slayer Universal Trait
-                t_max_health = o_max_health + (36 * currentopponent) + 200
+                t_max_health = o_max_health + (36 * currentopponent) + 260
             else:                    
-                t_max_health = t['HLT'] + (36 * currentopponent) + 200
-            t_health = t['HLT'] + (36 * currentopponent) + 200 
+                t_max_health = t['HLT'] + (36 * currentopponent) + 260
+            t_health = t['HLT'] + (36 * currentopponent) + 260 
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
@@ -10473,7 +10473,7 @@ class CrownUnlimited(commands.Cog):
         player_scaling = 0
 
         if universe['PREREQUISITE']:
-            opponent_scaling = 25
+            opponent_scaling = 16
             player_scaling = 0
         else:
             opponent_scaling = 12
@@ -10580,8 +10580,8 @@ class CrownUnlimited(commands.Cog):
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
-            t_attack = t['ATK'] + (13 * currentopponent) + 20
-            t_defense = t['DEF'] + (28 * currentopponent) + 20
+            t_attack = t['ATK'] + (13 * currentopponent) + 15
+            t_defense = t['DEF'] + (20 * currentopponent) + 15
             t_type = t['TYPE']
             t_accuracy = t['ACC']
             t_passive = t['PASS'][0]
@@ -12542,7 +12542,7 @@ class CrownUnlimited(commands.Cog):
             o_1 = o_moveset[0]
             o_2 = o_moveset[1]
             o_3 = o_moveset[2]
-            o_enhancer = o_moveset[3]
+            o_enhancer = o_moveset[3] 
             o_enhancer_used=False
             o_pet_used=False
 
@@ -22611,8 +22611,8 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
         if fortitude <= ap:
             fortitude = health * (2/5) #216
 
-        attackpower = round(((int(atk) / 31) * int(ap)) / op_defense) #5.09
-        modifier = random.randint(5,10)
+        attackpower = round(((int(atk) / 29) * int(ap)) / op_defense) #5.09
+        modifier = random.randint(6,10)
         dmg = round(((fortitude * attackpower)/100) * modifier)
 
         #dmg = ((attackpower * (100 * (100 / defensepower))) * .001) + int(ap)
