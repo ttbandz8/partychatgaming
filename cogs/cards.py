@@ -153,6 +153,7 @@ class Cards(commands.Cog):
     async def viewcard(self, ctx, *args):
         card_name = " ".join([*args])
         card = db.queryCard({'NAME':str(card_name)})
+
         if card:
             o_card = card['NAME']
             o_card_path=card['PATH']
@@ -174,6 +175,11 @@ class Cards(commands.Cog):
             resolved = False
             focused = False
             title = {'TITLE': 'CARD PREVIEW'}
+
+            if o_show == "Unbound":
+                await ctx.send("You cannot view this card at this time. ")
+                return 
+
             card_file = showcard(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, title, focused)
             mytrait = {}
             traitmessage = ''

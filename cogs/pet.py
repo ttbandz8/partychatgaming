@@ -67,6 +67,11 @@ class Pet(commands.Cog):
             pet_pet = pet['PET']
             pet_show = pet['UNIVERSE']
             pet_image = pet['PATH']
+
+            if pet_show == "Unbound":
+                await ctx.send("You cannot view this pet at this time. ")
+                return 
+
             if pet_show != 'Unbound':
                 pet_show_img = db.queryUniverse({'TITLE': pet_show})['PATH']
             pet_passive = pet['ABILITIES'][0]

@@ -142,6 +142,7 @@ class CrownUnlimited(commands.Cog):
             # Player 1 Data
             o_user = sowner
             oarm = db.queryArm({'ARM': o_user['ARM']})
+            oarm_universe=oarm['UNIVERSE']
             oarm_passive = oarm['ABILITIES'][0]
             oarm_name=oarm['ARM']
 
@@ -206,6 +207,7 @@ class CrownUnlimited(commands.Cog):
              # Player 1 Data
             c_user = companion
             carm = db.queryArm({'ARM': c_user['ARM']})
+            carm_universe=carm['UNIVERSE']
             carm_passive = carm['ABILITIES'][0]
             carm_name=carm['ARM']
 
@@ -307,6 +309,25 @@ class CrownUnlimited(commands.Cog):
                 t_special_move_description = "Take this!"
                 t_win_description = "Too easy. Come back when you're truly prepared."
                 t_lose_description = "I can't believe I lost..."
+
+
+            if (oarm_universe == o_universe) and (o_title_universe == o_universe):
+                o_attack = o_attack + 20
+                o_defense = o_defense + 20
+                o_max_health = o_max_health + 100
+                o_health = o_health + 100
+            
+            if (tarm_universe == t_universe) and (t_title_universe == t_universe):
+                t_attack = t_attack + 20
+                t_defense = t_defense + 20
+                t_max_health = t_max_health + 100
+                t_health = = t_health + 100
+
+            if (carm_universe == c_universe) and (c_title_universe == c_universe):
+                c_attack = c_attack + 20
+                c_defense = c_defense + 20
+                c_max_health = c_max_health + 100
+                c_health = = c_health + 100
 
 
             # Companion Passive Config
@@ -3500,6 +3521,7 @@ class CrownUnlimited(commands.Cog):
             # Player 1 Data
             o_user = sowner
             oarm = db.queryArm({'ARM': o_user['ARM']})
+            oarm_universe=oarm['UNIVERSE']
             oarm_passive = oarm['ABILITIES'][0]
             oarm_name=oarm['ARM']
 
@@ -3564,6 +3586,7 @@ class CrownUnlimited(commands.Cog):
              # Player 1 Data
             c_user = companion
             carm = db.queryArm({'ARM': c_user['ARM']})
+            carm_universe=carm['UNIVERSE']
             carm_passive = carm['ABILITIES'][0]
             carm_name=carm['ARM']
 
@@ -3670,6 +3693,24 @@ class CrownUnlimited(commands.Cog):
                 t_win_description = "Too easy. Come back when you're truly prepared."
                 t_lose_description = "I can't believe I lost..."
 
+
+            if (oarm_universe == o_universe) and (o_title_universe == o_universe):
+                o_attack = o_attack + 20
+                o_defense = o_defense + 20
+                o_max_health = o_max_health + 100
+                o_health = o_health + 100
+            
+            if (tarm_universe == t_universe) and (t_title_universe == t_universe):
+                t_attack = t_attack + 20
+                t_defense = t_defense + 20
+                t_max_health = t_max_health + 100
+                t_health = = t_health + 100
+
+            if (carm_universe == c_universe) and (c_title_universe == c_universe):
+                c_attack = c_attack + 20
+                c_defense = c_defense + 20
+                c_max_health = c_max_health + 100
+                c_health = = c_health + 100
 
             # Companion Passive Config
             if (c_universe == c_title_universe) or (c_title_universe == "Unbound"):
@@ -7044,6 +7085,7 @@ class CrownUnlimited(commands.Cog):
         # Player 1 Data
         o_user = sowner
         oarm = db.queryArm({'ARM': o_user['ARM']})
+        oarm_universe=oarm['UNIVERSE']
         oarm_passive = oarm['ABILITIES'][0]
         oarm_name=oarm['ARM']
 
@@ -7107,6 +7149,7 @@ class CrownUnlimited(commands.Cog):
         # Player 2 Data
         c_user = companion
         carm = db.queryArm({'ARM': c_user['ARM']})
+        carm_universe=carm['UNIVERSE']
         carm_passive = carm['ABILITIES'][0]
         carm_name=carm['ARM']
 
@@ -7173,6 +7216,7 @@ class CrownUnlimited(commands.Cog):
             await private_channel.send(embed=embedVar)
             return
         tarm = db.queryArm({'ARM': t_user['ARM']})
+        tarm_universe=tarm['UNIVERSE']
         tarm_passive = tarm['ABILITIES'][0]
         tarm_name=tarm['ARM']
         tpet = db.queryPet({'PET': boss['PET']})
@@ -7223,6 +7267,25 @@ class CrownUnlimited(commands.Cog):
         
         
         ################################################################################
+
+        if (oarm_universe == o_universe) and (o_title_universe == o_universe):
+            o_attack = o_attack + 20
+            o_defense = o_defense + 20
+            o_max_health = o_max_health + 100
+            o_health = o_health + 100
+        
+        if (tarm_universe == t_universe) and (t_title_universe == t_universe):
+            t_attack = t_attack + 20
+            t_defense = t_defense + 20
+            t_max_health = t_max_health + 100
+            t_health = = t_health + 100
+
+        if (carm_universe == c_universe) and (c_title_universe == c_universe):
+            c_attack = c_attack + 20
+            c_defense = c_defense + 20
+            c_max_health = c_max_health + 100
+            c_health = = c_health + 100
+
         # Companion Passive Config
         if (c_universe == c_title_universe) or (c_title_universe == "Unbound"):
             c_title_passive_bool = True
@@ -10629,6 +10692,7 @@ class CrownUnlimited(commands.Cog):
             # Player 1 Data
             o_user = sowner
             oarm = db.queryArm({'ARM': o_user['ARM']})
+            oarm_universe=oarm['UNIVERSE']
             oarm_passive = oarm['ABILITIES'][0]
             oarm_name=oarm['ARM']
 
@@ -10737,6 +10801,18 @@ class CrownUnlimited(commands.Cog):
                 t_lose_description = "I can't believe I lost..."
 
             ################################################################################
+
+            if (oarm_universe == o_universe) and (o_title_universe == o_universe):
+                o_attack = o_attack + 20
+                o_defense = o_defense + 20
+                o_max_health = o_max_health + 100
+                o_health = o_health + 100
+            
+            if (tarm_universe == t_universe) and (t_title_universe == t_universe):
+                t_attack = t_attack + 20
+                t_defense = t_defense + 20
+                t_max_health = t_max_health + 100
+                t_health = = t_health + 100
 
             # Player 1 Passive Config
             if (o_universe == o_title_universe) or (o_title_universe == "Unbound"):
@@ -12577,6 +12653,7 @@ class CrownUnlimited(commands.Cog):
             # Player 1 Data
             o_user = sowner
             oarm = db.queryArm({'ARM': o_user['ARM']})
+            oarm_universe=oarm['UNIVERSE']
             oarm_passive = oarm['ABILITIES'][0]
             oarm_name=oarm['ARM']
 
@@ -12680,6 +12757,18 @@ class CrownUnlimited(commands.Cog):
                 t_lose_description = "I can't believe I lost..."
 
             ################################################################################
+
+            if (oarm_universe == o_universe) and (o_title_universe == o_universe):
+                o_attack = o_attack + 20
+                o_defense = o_defense + 20
+                o_max_health = o_max_health + 100
+                o_health = o_health + 100
+            
+            if (tarm_universe == t_universe) and (t_title_universe == t_universe):
+                t_attack = t_attack + 20
+                t_defense = t_defense + 20
+                t_max_health = t_max_health + 100
+                t_health = = t_health + 100
 
             # Player 1 Passive Config
             if (o_universe == o_title_universe) or (o_title_universe == "Unbound"):
@@ -13000,7 +13089,7 @@ class CrownUnlimited(commands.Cog):
             # Player 2 Passive Config
             if (t_universe == t_title_universe) or (t_title_universe == "Unbound"):
                 t_title_passive_bool = True
-            
+
             # Player 1 Card Passive
             t_card_passive_type = list(t_passive.values())[1]
             t_card_passive = list(t_passive.values())[0]
@@ -14401,6 +14490,7 @@ class CrownUnlimited(commands.Cog):
         # Player 1 Data
         o_user = sowner
         oarm = db.queryArm({'ARM': o_user['ARM']})
+        oarm_universe=oarm['UNIVERSE']
         oarm_passive = oarm['ABILITIES'][0]
         oarm_name=oarm['ARM']
 
@@ -14467,6 +14557,7 @@ class CrownUnlimited(commands.Cog):
             await private_channel.send(embed=embedVar)
             return
         tarm = db.queryArm({'ARM': t_user['ARM']})
+        tarm_universe=tarm['UNIVERSE']
         tarm_passive = tarm['ABILITIES'][0]
         tarm_name=tarm['ARM']
         tpet = db.queryPet({'PET': boss['PET']})
@@ -14517,6 +14608,18 @@ class CrownUnlimited(commands.Cog):
         
         
         ################################################################################
+
+        if (oarm_universe == o_universe) and (o_title_universe == o_universe):
+            o_attack = o_attack + 20
+            o_defense = o_defense + 20
+            o_max_health = o_max_health + 100
+            o_health = o_health + 100
+                
+        if (tarm_universe == t_universe) and (t_title_universe == t_universe):
+            t_attack = t_attack + 20
+            t_defense = t_defense + 20
+            t_max_health = t_max_health + 100
+            t_health = = t_health + 100
 
         # Player 1 Passive Config
         if (o_universe == o_title_universe) or (o_title_universe == "Unbound"):
@@ -16267,6 +16370,7 @@ class CrownUnlimited(commands.Cog):
                 # Player 1 Data
                 o_user = db.queryUser({'DISNAME': team_1['TEAM'][0]})
                 oarm = db.queryArm({'ARM': o_user['ARM']})
+                oarm_universe=oarm['UNIVERSE']
                 oarm_passive = oarm['ABILITIES'][0]
                 oarm_name = oarm['ARM']
 
@@ -16326,6 +16430,7 @@ class CrownUnlimited(commands.Cog):
                 # Player 2 Data
                 t_user = db.queryUser({'DISNAME': team_2['TEAM'][0]})
                 tarm = db.queryArm({'ARM': t_user['ARM']})
+                tarm_universe=tarm['UNIVERSE']
                 tarm_passive = tarm['ABILITIES'][0]
                 tarm_name=tarm['ARM']
                 tvault = db.queryVault({'OWNER': str(t_user['DISNAME'])})
@@ -16382,6 +16487,18 @@ class CrownUnlimited(commands.Cog):
                     t_win_description = "Too easy. Come back when you're truly prepared."
                     t_lose_description = "I can't believe I lost..."
                 ################################################################################
+
+                if (oarm_universe == o_universe) and (o_title_universe == o_universe):
+                    o_attack = o_attack + 20
+                    o_defense = o_defense + 20
+                    o_max_health = o_max_health + 100
+                    o_health = o_health + 100
+                
+                if (tarm_universe == t_universe) and (t_title_universe == t_universe):
+                    t_attack = t_attack + 20
+                    t_defense = t_defense + 20
+                    t_max_health = t_max_health + 100
+                    t_health = = t_health + 100
 
                 # Player 1 Passive Config
                 if (o_universe == o_title_universe) or (o_title_universe == "Unbound"):
@@ -18550,6 +18667,7 @@ class CrownUnlimited(commands.Cog):
                 # Player 1 Data
                 o_user = db.queryUser({'DISNAME': team_1['TEAM'][0]})
                 oarm = db.queryArm({'ARM': o_user['ARM']})
+                oarm_universe=oarm['UNIVERSE']
                 oarm_passive = oarm['ABILITIES'][0]
                 oarm_name = oarm['ARM']
 
@@ -18606,6 +18724,7 @@ class CrownUnlimited(commands.Cog):
                 # Player 2 Data
                 t_user = db.queryUser({'DISNAME': team_2['TEAM'][0]})
                 tarm = db.queryArm({'ARM': t_user['ARM']})
+                tarm_universe=tarm['UNIVERSE']
                 tarm_passive = tarm['ABILITIES'][0]
                 tarm_name=tarm['ARM']
                 tvault = db.queryVault({'OWNER': str(t_user['DISNAME'])})
@@ -18659,6 +18778,18 @@ class CrownUnlimited(commands.Cog):
                     t_win_description = "Too easy. Come back when you're truly prepared."
                     t_lose_description = "I can't believe I lost..."
                 ################################################################################
+
+                if (oarm_universe == o_universe) and (o_title_universe == o_universe):
+                    o_attack = o_attack + 20
+                    o_defense = o_defense + 20
+                    o_max_health = o_max_health + 100
+                    o_health = o_health + 100
+                
+                if (tarm_universe == t_universe) and (t_title_universe == t_universe):
+                    t_attack = t_attack + 20
+                    t_defense = t_defense + 20
+                    t_max_health = t_max_health + 100
+                    t_health = = t_health + 100
 
                 # Check if Wager is ok!
                 if int(obalance) < int(wager):
@@ -20729,6 +20860,7 @@ class CrownUnlimited(commands.Cog):
                 # Player 1 Data
                 o_user = db.queryUser({'DISNAME': team_1['TEAM'][0]})
                 oarm = db.queryArm({'ARM': o_user['ARM']})
+                oarm_universe=oarm['UNIVERSE']
                 oarm_passive = oarm['ABILITIES'][0]
                 oarm_name = oarm['ARM']
 
@@ -20785,6 +20917,7 @@ class CrownUnlimited(commands.Cog):
                 # Player 2 Data
                 t_user = db.queryUser({'DISNAME': team_2['TEAM'][0]})
                 tarm = db.queryArm({'ARM': t_user['ARM']})
+                tarm_universe=tarm['UNIVERSE']
                 tarm_passive = tarm['ABILITIES'][0]
                 tarm_name=tarm['ARM']
                 print(t_user['DISNAME'])
