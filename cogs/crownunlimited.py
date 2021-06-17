@@ -321,13 +321,13 @@ class CrownUnlimited(commands.Cog):
                 t_attack = t_attack + 20
                 t_defense = t_defense + 20
                 t_max_health = t_max_health + 100
-                t_health = = t_health + 100
+                t_health = t_health + 100
 
             if (carm_universe == c_universe) and (c_title_universe == c_universe):
                 c_attack = c_attack + 20
                 c_defense = c_defense + 20
                 c_max_health = c_max_health + 100
-                c_health = = c_health + 100
+                c_health = c_health + 100
 
 
             # Companion Passive Config
@@ -3704,13 +3704,13 @@ class CrownUnlimited(commands.Cog):
                 t_attack = t_attack + 20
                 t_defense = t_defense + 20
                 t_max_health = t_max_health + 100
-                t_health = = t_health + 100
+                t_health = t_health + 100
 
             if (carm_universe == c_universe) and (c_title_universe == c_universe):
                 c_attack = c_attack + 20
                 c_defense = c_defense + 20
                 c_max_health = c_max_health + 100
-                c_health = = c_health + 100
+                c_health = c_health + 100
 
             # Companion Passive Config
             if (c_universe == c_title_universe) or (c_title_universe == "Unbound"):
@@ -7278,13 +7278,13 @@ class CrownUnlimited(commands.Cog):
             t_attack = t_attack + 20
             t_defense = t_defense + 20
             t_max_health = t_max_health + 100
-            t_health = = t_health + 100
+            t_health = t_health + 100
 
         if (carm_universe == c_universe) and (c_title_universe == c_universe):
             c_attack = c_attack + 20
             c_defense = c_defense + 20
             c_max_health = c_max_health + 100
-            c_health = = c_health + 100
+            c_health = c_health + 100
 
         # Companion Passive Config
         if (c_universe == c_title_universe) or (c_title_universe == "Unbound"):
@@ -10812,7 +10812,7 @@ class CrownUnlimited(commands.Cog):
                 t_attack = t_attack + 20
                 t_defense = t_defense + 20
                 t_max_health = t_max_health + 100
-                t_health = = t_health + 100
+                t_health = t_health + 100
 
             # Player 1 Passive Config
             if (o_universe == o_title_universe) or (o_title_universe == "Unbound"):
@@ -12768,7 +12768,7 @@ class CrownUnlimited(commands.Cog):
                 t_attack = t_attack + 20
                 t_defense = t_defense + 20
                 t_max_health = t_max_health + 100
-                t_health = = t_health + 100
+                t_health = t_health + 100
 
             # Player 1 Passive Config
             if (o_universe == o_title_universe) or (o_title_universe == "Unbound"):
@@ -14619,7 +14619,7 @@ class CrownUnlimited(commands.Cog):
             t_attack = t_attack + 20
             t_defense = t_defense + 20
             t_max_health = t_max_health + 100
-            t_health = = t_health + 100
+            t_health = t_health + 100
 
         # Player 1 Passive Config
         if (o_universe == o_title_universe) or (o_title_universe == "Unbound"):
@@ -16498,7 +16498,7 @@ class CrownUnlimited(commands.Cog):
                     t_attack = t_attack + 20
                     t_defense = t_defense + 20
                     t_max_health = t_max_health + 100
-                    t_health = = t_health + 100
+                    t_health = t_health + 100
 
                 # Player 1 Passive Config
                 if (o_universe == o_title_universe) or (o_title_universe == "Unbound"):
@@ -18789,7 +18789,7 @@ class CrownUnlimited(commands.Cog):
                     t_attack = t_attack + 20
                     t_defense = t_defense + 20
                     t_max_health = t_max_health + 100
-                    t_health = = t_health + 100
+                    t_health = t_health + 100
 
                 # Check if Wager is ok!
                 if int(obalance) < int(wager):
