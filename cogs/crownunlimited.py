@@ -22787,9 +22787,6 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
         # Character Name
         if not resolved:
             draw.text((82,50), d['NAME'], (255, 255, 255), font=header, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
-        else:
-            if d['RNAME'] != "N/A":
-                draw.text((82,50), d['RNAME'], (255, 255, 255), font=header, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
 
         # Title Name
         draw.text((85,20), title['TITLE'], (255, 255, 255), font=h, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
@@ -22803,8 +22800,10 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
             draw.text((82,130), "FOCUSED", (30,144,255), font=r, stroke_width=2, stroke_fill=(0,0,0), align="left")
 
         if resolved:
-            if d['RNAME'] != "N/A":
+            if d['RNAME'] != "N/A" and d['RNAME'] != "":
                 draw.text((82,50), d['RNAME'], (255, 255, 255), font=header, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
+            else:
+                draw.text((82,50), d['NAME'], (255, 255, 255), font=header, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
                         # side    # vert
             draw.line(((0, 0), (0, 800)), fill=(255,215,0), width=15)
             draw.line(((1195, 0), (1195, 800)), fill=(255,215,0), width=10)
