@@ -50,4 +50,8 @@ traits = [{
     'NAME': 'One Punch Man',
     'EFFECT': 'Hero Reinforcement',
     'TRAIT': 'When Opponent Focuses, your Health increases by 50.'
+},{
+    'NAME': 'Solo Leveling',
+    'EFFECT': 'Rulers Authority',
+    'TRAIT': 'When you focus, opponent loses (8 + turn count) defense'
 }]

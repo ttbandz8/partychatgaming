@@ -1182,13 +1182,13 @@ class CrownUnlimited(commands.Cog):
                         elif o_universe == "League Of Legends":
                             embedVar = discord.Embed(title=f"Turret Shot hits for 25 DMG!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            t_health = round(t_health - 25)
+                            t_health = round(t_health - 30)
                             turn_total= turn_total + 1
                             turn=1
                         elif o_universe == "Solo Leveling":
                             embedVar = discord.Embed(title=f"Ruler's Authority... Opponent loses {15 + turn} DEF!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            t_defense = round(t_defense - (15 - turn))
+                            t_defense = round(t_defense - (8 - turn))
                             turn_total= turn_total + 1
                             turn=1
                         elif o_universe == "Attack On Titan":
@@ -1802,13 +1802,13 @@ class CrownUnlimited(commands.Cog):
                         elif t_universe == "League Of Legends":
                             embedVar = discord.Embed(title=f"Turret Shot hits {o_card} for 25 DMG!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            o_health = round(o_health - 25)
+                            o_health = round(o_health - 30)
                             turn_total= turn_total + 1
                             turn=2
                         elif t_universe == "Solo Leveling":
                             embedVar = discord.Embed(title=f"Ruler's Authority... {o_card} loses {15 + turn} DEF!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            o_defense = round(o_defense - (15 - turn))
+                            o_defense = round(t_defense - (8 - turn))
                             turn_total= turn_total + 1
                             turn=2
                         elif t_universe == "Attack On Titan":
@@ -2269,13 +2269,13 @@ class CrownUnlimited(commands.Cog):
                         elif c_universe == "League Of Legends":
                             embedVar = discord.Embed(title=f"Turret Shot hits {t_card} for 25 DMG!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            t_health = round(t_health - 25)
+                            t_health = round(t_health - 30)
                             turn_total= turn_total + 1
                             turn=3
                         elif c_universe == "Solo Leveling":
                             embedVar = discord.Embed(title=f"Ruler's Authority... {t_card} loses {15 + turn} DEF!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            t_defense = round(t_defense - (15 - turn))
+                            t_defense = round(t_defense - (8 - turn))
                             turn_total= turn_total + 1
                             turn=3
                         elif c_universe == "Attack On Titan":
@@ -2890,13 +2890,13 @@ class CrownUnlimited(commands.Cog):
                         elif t_universe == "League Of Legends":
                             embedVar = discord.Embed(title=f"Turret Shot hits {c_card} for 25 DMG!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            c_health = round(c_health - 25)
+                            c_health = round(c_health - 30)
                             turn_total= turn_total + 1
                             turn=0
                         elif t_universe == "Solo Leveling":
                             embedVar = discord.Embed(title=f"Ruler's Authority... {c_card} loses {15 + turn} DEF!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            c_defense = round(c_defense - (15 - turn))
+                            c_defense = round(t_defense - (8 - turn))
                             turn_total= turn_total + 1
                             turn=0
                         elif t_universe == "Attack On Titan":
@@ -3293,11 +3293,11 @@ class CrownUnlimited(commands.Cog):
                 await ctx.author.send(embed=embedVar)
 
                 emojis = ['👍', '👎']
-                accept = await private_channel.send(f"{ctx.author.mention} would you like to play again?")
+                accept = await private_channel.send(f"{user.mention} will you play again with {ctx.author.mention}?")
                 for emoji in emojis:
                     await accept.add_reaction(emoji)
 
-                def check(reaction, user):
+                def check(reaction, user1):
                     return user == user1 and str(reaction.emoji) == '👍'
                 try:
                     reaction, user = await self.bot.wait_for('reaction_add', timeout=45.0, check=check)
@@ -4548,13 +4548,13 @@ class CrownUnlimited(commands.Cog):
                         elif o_universe == "League Of Legends":
                             embedVar = discord.Embed(title=f"Turret Shot hits for 25 DMG!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            t_health = round(t_health - 25)
+                            t_health = round(t_health - 30)
                             turn_total= turn_total + 1
                             turn=1
                         elif o_universe == "Solo Leveling":
                             embedVar = discord.Embed(title=f"Ruler's Authority... Opponent loses {15 + turn} DEF!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            t_defense = round(t_defense - (15 - turn))
+                            t_defense = round(t_defense - (8 - turn))
                             turn_total= turn_total + 1
                             turn=1
                         elif o_universe == "Attack On Titan":
@@ -5169,13 +5169,13 @@ class CrownUnlimited(commands.Cog):
                         elif c_universe == "League Of Legends":
                             embedVar = discord.Embed(title=f"Turret Shot hits {t_card} for 25 DMG!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            t_health = round(t_health - 25)
+                            t_health = round(t_health - 30)
                             turn_total= turn_total + 1
                             turn=2
                         elif c_universe == "Solo Leveling":
                             embedVar = discord.Embed(title=f"Ruler's Authority... {t_card} loses {15 + turn} DEF!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            t_defense = round(t_defense - (15 - turn))
+                            t_defense = round(t_defense - (8 - turn))
                             turn_total= turn_total + 1
                             turn=2
                         elif t_universe == "Attack On Titan":
@@ -5739,13 +5739,13 @@ class CrownUnlimited(commands.Cog):
                         elif c_universe == "League Of Legends":
                             embedVar = discord.Embed(title=f"Turret Shot hits {t_card} for 25 DMG!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            t_health = round(t_health - 25)
+                            t_health = round(t_health - 30)
                             turn_total= turn_total + 1
                             turn=3
                         elif c_universe == "Solo Leveling":
                             embedVar = discord.Embed(title=f"Ruler's Authority... {t_card} loses {15 + turn} DEF!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            t_defense = round(t_defense - (15 - turn))
+                            t_defense = round(t_defense - (8 - turn))
                             turn_total= turn_total + 1
                             turn=3
                         elif c_universe == "Attack On Titan":
@@ -6358,13 +6358,13 @@ class CrownUnlimited(commands.Cog):
                         elif t_universe == "League Of Legends":
                             embedVar = discord.Embed(title=f"Turret Shot hits {c_card} for 25 DMG!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            c_health = round(c_health - 25)
+                            c_health = round(c_health - 30)
                             turn_total= turn_total + 1
                             turn=0
                         elif t_universe == "Solo Leveling":
                             embedVar = discord.Embed(title=f"Ruler's Authority... {c_card} loses {15 + turn} DEF!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            c_defense = round(c_defense - (15 - turn))
+                            c_defense = round(t_defense - (8 - turn))
                             turn_total= turn_total + 1
                             turn=0
                         elif t_universe == "Attack On Titan":
@@ -6860,12 +6860,12 @@ class CrownUnlimited(commands.Cog):
                 await ctx.author.send(embed=embedVar)
                 
                 emojis = ['👍', '👎']
-                accept = await private_channel.send(f"{ctx.author.mention} would you like to play again?")
+                accept = await private_channel.send(f"{user.mention} will you play again with {ctx.author.mention}?")
                 for emoji in emojis:
                     await accept.add_reaction(emoji)
 
-                def check(reaction, user):
-                    return user == user1 and str(reaction.emoji) == '👍'
+                def check(reaction, user1):
+                    return user == user1 and (str(reaction.emoji) == '👍') or (str(reaction.emoji) == '👎')
                 try:
                     reaction, user = await self.bot.wait_for('reaction_add', timeout=45.0, check=check)
 
@@ -8101,13 +8101,13 @@ class CrownUnlimited(commands.Cog):
                     elif o_universe == "League Of Legends":
                         embedVar = discord.Embed(title=f"Turret Shot hits for 25 DMG!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
-                        t_health = round(t_health - 25)
+                        t_health = round(t_health - 30)
                         turn_total= turn_total + 1
                         turn=1
                     elif o_universe == "Solo Leveling":
                         embedVar = discord.Embed(title=f"Ruler's Authority... Opponent loses {15 + turn} DEF!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
-                        t_defense = round(t_defense - (15 - turn))
+                        t_defense = round(t_defense - (8 - turn))
                         turn_total= turn_total + 1
                         turn=1
                     elif o_universe == "Attack On Titan":
@@ -8714,7 +8714,7 @@ class CrownUnlimited(commands.Cog):
                         embedVar = discord.Embed(title=f"{t_card} Stamina has recovered", colour=embed_color_t)
                         await private_channel.send(embed=embedVar)
                     if not t_used_resolve and t_used_focus and t_universe == "Digimon":  #Digimon Universal Trait
-                        #fortitude or luck is based on health  
+                        #fortitude or luck is based on health
                         fortitude = 0.0
                         low = t_health - (t_health * .75)
                         high = t_health- (t_health * .66)
@@ -8738,7 +8738,7 @@ class CrownUnlimited(commands.Cog):
                     elif t_universe == "League Of Legends":
                         embedVar = discord.Embed(title=f"Turret Shot hits {o_card} for 25 DMG!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
-                        o_health = round(o_health - 25)
+                        o_health = round(o_health - 30)
                         turn_total= turn_total + 1
                         turn=2
                     elif t_universe == "Attack On Titan":
@@ -9327,7 +9327,7 @@ class CrownUnlimited(commands.Cog):
                     elif c_universe == "League Of Legends":
                         embedVar = discord.Embed(title=f"Turret Shot hits {t_card} for 25 DMG!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
-                        t_health = round(t_health - 25)
+                        t_health = round(t_health - 30)
                         turn_total= turn_total + 1
                         turn=3
                     elif c_universe == "Attack On Titan":
@@ -9959,7 +9959,7 @@ class CrownUnlimited(commands.Cog):
                     elif t_universe == "League Of Legends":
                         embedVar = discord.Embed(title=f"Turret Shot hits {c_card} for 25 DMG!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
-                        c_health = round(c_health - 25)
+                        c_health = round(c_health - 30)
                         turn_total= turn_total + 1
                         turn=0
                     elif t_universe == "Attack On Titan":
@@ -11335,13 +11335,13 @@ class CrownUnlimited(commands.Cog):
                         elif o_universe == "League Of Legends":
                             embedVar = discord.Embed(title=f"Turret Shot hits {t_card} for 25 DMG!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            t_health = round(t_health - 25)
+                            t_health = round(t_health - 30)
                             turn_total= turn_total + 1
                             turn=1
                         elif o_universe == "Solo Leveling":
                             embedVar = discord.Embed(title=f"Ruler's Authority... {t_card} loses {15 + turn} DEF!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            t_defense = round(t_defense - (15 - turn))
+                            t_defense = round(t_defense - (8 - turn))
                             turn_total= turn_total + 1
                             turn=1
                         elif o_universe == "Attack On Titan":
@@ -11870,13 +11870,13 @@ class CrownUnlimited(commands.Cog):
                         elif t_universe == "League Of Legends":
                             embedVar = discord.Embed(title=f"Turret Shot hits {o_card} for 25 DMG!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            o_health = round(o_health - 25)
+                            o_health = round(o_health - 30)
                             turn_total= turn_total + 1
                             turn=0
                         elif t_universe == "Solo Leveling":
                             embedVar = discord.Embed(title=f"Ruler's Authority... {o_card} loses {15 + turn} DEF!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            o_defense = round(o_defense - (15 - turn))
+                            o_defense = round(t_defense - (8 - turn))
                             turn_total= turn_total + 1
                             turn=0
                         elif t_universe == "Attack On Titan":
@@ -13272,13 +13272,13 @@ class CrownUnlimited(commands.Cog):
                         elif o_universe == "League Of Legends":
                             embedVar = discord.Embed(title=f"Turret Shot hits {t_card} for 25 DMG!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            t_health = round(t_health - 25)
+                            t_health = round(t_health - 30)
                             turn_total= turn_total + 1
                             turn=1
                         elif o_universe == "Solo Leveling":
                             embedVar = discord.Embed(title=f"Ruler's Authority... {t_card} loses {15 + turn} DEF!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            t_defense = round(t_defense - (15 - turn))
+                            t_defense = round(t_defense - (8 - turn))
                             turn_total= turn_total + 1
                             turn=1
                         elif o_universe == "Attack On Titan":
@@ -13807,13 +13807,13 @@ class CrownUnlimited(commands.Cog):
                         elif t_universe == "League Of Legends":
                             embedVar = discord.Embed(title=f"Turret Shot hits {o_card} for 25 DMG!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            o_health = round(o_health - 25)
+                            o_health = round(o_health - 30)
                             turn_total= turn_total + 1
                             turn=0
                         elif t_universe == "Solo Leveling":
                             embedVar = discord.Embed(title=f"Ruler's Authority... {o_card} loses {15 + turn} DEF!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            o_defense = round(o_defense - (15 - turn))
+                            o_defense = round(t_defense - (8 - turn))
                             turn_total= turn_total + 1
                             turn=0
                         elif t_universe == "Attack On Titan":
@@ -15123,13 +15123,13 @@ class CrownUnlimited(commands.Cog):
                     elif o_universe == "League Of Legends":
                         embedVar = discord.Embed(title=f"Turret Shot hits for 25 DMG!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
-                        t_health = round(t_health - 25)
+                        t_health = round(t_health - 30)
                         turn_total= turn_total + 1
                         turn=1
                     elif o_universe == "Solo Leveling":
                         embedVar = discord.Embed(title=f"Ruler's Authority... Opponent loses {15 + turn} DEF!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
-                        t_defense = round(t_defense - (15 - turn))
+                        t_defense = round(t_defense - (8 - turn))
                         turn_total= turn_total + 1
                         turn=1
                     elif o_universe == "Attack On Titan":
@@ -15675,13 +15675,13 @@ class CrownUnlimited(commands.Cog):
                     elif t_universe == "League Of Legends":
                         embedVar = discord.Embed(title=f"Turret Shot hits {o_card} for 25 DMG!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
-                        o_health = round(o_health - 25)
+                        o_health = round(o_health - 30)
                         turn_total= turn_total + 1
                         turn=0
                     elif t_universe == "Solo Leveling":
                         embedVar = discord.Embed(title=f"Ruler's Authority... {o_card} loses {15 + turn} DEF!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
-                        o_defense = round(o_defense - (15 - turn))
+                        o_defense = round(t_defense - (8 - turn))
                         turn_total= turn_total + 1
                         turn=0
                     elif t_universe == "Attack On Titan":
@@ -17039,7 +17039,7 @@ class CrownUnlimited(commands.Cog):
                             elif o_universe == "League Of Legends":
                                 embedVar = discord.Embed(title=f"Turret Shot hits for 25 DMG!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
-                                t_health = round(t_health - 25)
+                                t_health = round(t_health - 30)
                                 turn_total= turn_total + 1
                                 turn=1
                             elif o_universe == "Attack On Titan":
@@ -17558,7 +17558,7 @@ class CrownUnlimited(commands.Cog):
                             elif t_universe == "League Of Legends":
                                 embedVar = discord.Embed(title=f"Turret Shot hits {o_card} for 25 DMG!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
-                                o_health = round(o_health - 25)
+                                o_health = round(o_health - 30)
                                 turn_total= turn_total + 1
                                 turn=0
                             elif t_universe == "Attack On Titan":
@@ -19339,7 +19339,7 @@ class CrownUnlimited(commands.Cog):
                             elif o_universe == "League Of Legends":
                                 embedVar = discord.Embed(title=f"Turret Shot hits for 25 DMG!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
-                                t_health = round(t_health - 25)
+                                t_health = round(t_health - 30)
                                 turn_total= turn_total + 1
                                 turn=1
                             elif o_universe == "Attack On Titan":
@@ -19866,7 +19866,7 @@ class CrownUnlimited(commands.Cog):
                             elif t_universe == "League Of Legends":
                                 embedVar = discord.Embed(title=f"Turret Shot hits {o_card} for 25 DMG!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
-                                o_health = round(o_health - 25)
+                                o_health = round(o_health - 30)
                                 turn_total= turn_total + 1
                                 turn=0
                             elif t_universe == "Attack On Titan":
@@ -22486,9 +22486,9 @@ class CrownUnlimited(commands.Cog):
             else:
                 available = "🟠"
             if card['EXCLUSIVE']:
-                dungeon_card_details.append(f"{available} {card['NAME']} _Dungeon Drop_")
+                dungeon_card_details.append(f"{available} **{card['NAME']}:** _D_")
             else:
-                tales_card_details.append(f"{available} {card['NAME']}: :coin:{card['PRICE']} _Tales Drop_")
+                tales_card_details.append(f"{available} **{card['NAME']}**: :coin:{card['PRICE']} _T_")
         await ctx.author.send(f"{universe.upper()} CARDS LIST")
         await ctx.author.send("\n".join(tales_card_details))
         await ctx.author.send("\n".join(dungeon_card_details))
@@ -22597,10 +22597,9 @@ async def quest(player, opponent, mode):
         
         if quest_data == {}:
             return
-        print(quest_data)
         completion = quest_data['GOAL'] - (quest_data['WINS'] + 1)
         
-        if mode == "Dungeon" and quest_data['GOAL'] != quest_data['WINS']:
+        if quest_data['TYPE'] == "Dungeon" and quest_data['GOAL'] != quest_data['WINS']:
             message = "Dungeon Quest progressed!"
             if completion == 0:
                 await bless(150, player)
@@ -22612,7 +22611,7 @@ async def quest(player, opponent, mode):
             resp = db.updateVault(query, update_query, filter_query)
             return message
 
-        elif mode == "Tales" and quest_data['GOAL'] != quest_data['WINS']:
+        elif quest_data['TYPE'] == "Tales" and quest_data['GOAL'] != quest_data['WINS']:
             message = "Tales Quest progressed!"
             if completion == 0:
                 if quest_data['GOAL'] == 5:
@@ -22841,8 +22840,8 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
         if fortitude <= ap:
             fortitude = health * (2/5) #216
 
-        attackpower = round(((int(atk) / 29) * int(ap)) / op_defense) #5.09
-        modifier = random.randint(6,10)
+        attackpower = round(((int(atk) / 30) * int(ap)) / op_defense) #5.09
+        modifier = random.randint(6,11)
         dmg = round(((fortitude * attackpower)/100) * modifier)
 
         #dmg = ((attackpower * (100 * (100 / defensepower))) * .001) + int(ap)

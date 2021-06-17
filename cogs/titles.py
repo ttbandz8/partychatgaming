@@ -44,6 +44,18 @@ class Titles(commands.Cog):
         shop = db.queryShopTitles()
         titles = []
 
+        check_title = db.queryTitle({'TITLE' : str(title_name)})
+        if check_title:
+            all_universes = db.queryAllUniverse()
+            user = db.queryUser({'DISNAME': str(ctx.author)})
+            available_universes = []
+            for uni in all_universes:
+                if uni['PREREQUISITE'] in user['CROWN_TALES']:
+                    available_universes.append(uni['TITLE'])
+            if check_title['UNIVERSE'] not in available_universes:
+                await ctx.send("You cannot purchase titles from Universes you haven't unlocked.")
+                return
+
         currentBalance = vault['BALANCE']
         cost = 0
         mintedTitle = ""
