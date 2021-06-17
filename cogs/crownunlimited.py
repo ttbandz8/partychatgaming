@@ -3722,7 +3722,7 @@ class CrownUnlimited(commands.Cog):
                 t_defense = t_defense - int((c_card_passive/1000 * c_health))
             elif c_card_passive_type == 'GAMBLE':
                 c_health = c_card_passive
-                t_health = c_card_passive * 1.5
+                t_health = c_card_passive * 2
                 o_health = c_card_passive            
    
             # Title Passive
@@ -3792,7 +3792,7 @@ class CrownUnlimited(commands.Cog):
                     t_attack = t_attack - int((.25 * c_title_passive_value))
                     t_defense = t_defense - int((.25 * c_title_passive_value))
                 elif c_title_passive_type == 'GAMBLE':
-                    t_health = c_title_passive_value * 1.5
+                    t_health = c_title_passive_value * 2
                     c_health = c_title_passive_value
                     o_health = c_title_passive_value
 
@@ -3862,7 +3862,7 @@ class CrownUnlimited(commands.Cog):
                 t_attack = t_attack - int((.25 * carm_passive_value))
                 t_defense = t_defense - int((.25 * carm_passive_value))
             elif carm_passive_type == 'GAMBLE':
-                t_health = carm_passive_value * 1.5
+                t_health = carm_passive_value * 2
                 c_health = carm_passive_value
                 o_health = carm_passive_value
 
@@ -3963,7 +3963,7 @@ class CrownUnlimited(commands.Cog):
                 t_defense = t_defense - int((o_card_passive/1000 * o_health))
             elif o_card_passive_type == 'GAMBLE':
                 o_health = o_card_passive
-                t_health = o_card_passive * 1.5
+                t_health = o_card_passive * 2  
                 c_health = o_card_passive              
 
             # Title Passive
@@ -4033,7 +4033,7 @@ class CrownUnlimited(commands.Cog):
                     t_attack = t_attack - int((.25 * o_title_passive_value))
                     t_defense = t_defense - int((.25 * o_title_passive_value))
                 elif o_title_passive_type == 'GAMBLE':
-                    t_health = o_title_passive_value * 1.5
+                    t_health = o_title_passive_value * 2
                     o_health = o_title_passive_value
                     c_health = o_title_passive_value
 
@@ -4103,7 +4103,7 @@ class CrownUnlimited(commands.Cog):
                 t_attack = t_attack - int((.25 * oarm_passive_value))
                 t_defense = t_defense - int((.25 * oarm_passive_value))
             elif oarm_passive_type == 'GAMBLE':
-                t_health = oarm_passive_value * 1.5
+                t_health = oarm_passive_value * 2
                 o_health = oarm_passive_value
                 c_health = oarm_passive_value
 
@@ -4184,7 +4184,7 @@ class CrownUnlimited(commands.Cog):
                 c_attack = c_attack - int((.25 * tarm_passive_value))
                 c_defense = c_defense - int((.25 * tarm_passive_value))
             elif tarm_passive_type == 'GAMBLE':
-                t_health = tarm_passive_value * 1.5
+                t_health = tarm_passive_value * 2
                 o_health = tarm_passive_value
                 c_health = tarm_passive_value
 
@@ -4262,7 +4262,7 @@ class CrownUnlimited(commands.Cog):
                 c_attack = o_attack - int((t_card_passive/1000 * t_health))
                 c_defense = o_defense - int((t_card_passive/1000 * t_health))
             elif t_card_passive_type == 'GAMBLE':
-                t_health = t_card_passive * 1.5
+                t_health = t_card_passive * 2
                 o_health = t_card_passive
                 c_health = t_card_passive
 
@@ -4341,7 +4341,7 @@ class CrownUnlimited(commands.Cog):
                     c_attack = c_attack - int((.10 * t_title_passive_value))
                     c_defense = c_defense - int((.10 * t_title_passive_value))
                 elif t_title_passive_type == 'GAMBLE':
-                    t_health = t_title_passive_value * 1.5
+                    t_health = t_title_passive_value * 2
                     o_health = t_title_passive_value
                     c_health = t_title_passive_value
 
@@ -10710,7 +10710,7 @@ class CrownUnlimited(commands.Cog):
                 t_defense = t_defense - int((o_card_passive/1000 * o_health))
             elif o_card_passive_type == 'GAMBLE':
                 o_health = o_card_passive
-                t_health = o_card_passive * 1.5         
+                t_health = o_card_passive * 2           
 
             # Title Passive
             o_title_passive_type = list(o_title_passive.keys())[0]
@@ -10779,7 +10779,7 @@ class CrownUnlimited(commands.Cog):
                     t_attack = t_attack - int((.25 * o_title_passive_value))
                     t_defense = t_defense - int((.25 * o_title_passive_value))
                 elif o_title_passive_type == 'GAMBLE':
-                    t_health = o_title_passive_value * 1.5
+                    t_health = o_title_passive_value * 2
                     o_health = o_title_passive_value
 
             # Arm Passive Player 1
@@ -10848,7 +10848,7 @@ class CrownUnlimited(commands.Cog):
                 t_attack = t_attack - int((.25 * oarm_passive_value))
                 t_defense = t_defense - int((.25 * oarm_passive_value))
             elif oarm_passive_type == 'GAMBLE':
-                t_health = oarm_passive_value * 1.5
+                t_health = oarm_passive_value * 2
                 o_health = oarm_passive_value
 
             # Arm Passive Player 2
@@ -10917,7 +10917,7 @@ class CrownUnlimited(commands.Cog):
                 o_attack = o_attack - int((.25 * tarm_passive_value))
                 o_defense = o_defense - int((.25 * tarm_passive_value))
             elif tarm_passive_type == 'GAMBLE':
-                t_health = tarm_passive_value * 1.5
+                t_health = tarm_passive_value * 2
                 o_health = tarm_passive_value
 
             
@@ -10993,7 +10993,7 @@ class CrownUnlimited(commands.Cog):
                 o_attack = o_attack - int((t_card_passive/1000 * t_health))
                 o_defense = o_defense - int((t_card_passive/1000 * t_health))
             elif t_card_passive_type == 'GAMBLE':
-                t_health = t_card_passive * 1.5
+                t_health = t_card_passive * 2
                 o_health = t_card_passive
 
             # Title Passive
@@ -11063,7 +11063,7 @@ class CrownUnlimited(commands.Cog):
                     o_attack = o_attack - int((.10 * t_title_passive_value))
                     o_defense = o_defense - int((.10 * t_title_passive_value))
                 elif t_title_passive_type == 'GAMBLE':
-                    t_health = t_title_passive_value * 1.5
+                    t_health = t_title_passive_value * 2
                     o_health = t_title_passive_value
 
 
