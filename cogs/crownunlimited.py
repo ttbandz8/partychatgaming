@@ -13314,7 +13314,7 @@ class CrownUnlimited(commands.Cog):
                         player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                         await private_channel.send(file=player_1_card)
                         embedVar = discord.Embed(title=f"{o_card}, choose your move!", description=textwrap.dedent(f"""\
-                        **{o_health}/{o_stamina}** ATK {o_attack} /  DEF {o_defense}
+                        **{o_health}/{o_stamina}**
                         **{omove1_text}** 10 Stamina _press 1_
                         **{omove2_text}** 30 Stamina _press 2_
                         **{omove3_text}** 80 Stamina _press 3_
