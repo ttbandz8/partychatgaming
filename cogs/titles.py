@@ -155,9 +155,6 @@ class Titles(commands.Cog):
         if title:
             title_title = title['TITLE']
             title_show = title['UNIVERSE']
-            if title_show == "Unbound":
-                await ctx.send("You cannot view this title at this time. ")
-                return 
 
             if title_show != 'Unbound':
                 title_img = db.queryUniverse({'TITLE': title_show})['PATH']

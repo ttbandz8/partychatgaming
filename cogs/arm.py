@@ -154,10 +154,6 @@ class Arm(commands.Cog):
             arm_arm = arm['ARM']
             arm_show = arm['UNIVERSE']
 
-            if arm_show == "Unbound":
-                await ctx.send("You cannot view this arm at this time. ")
-                return 
-
             if arm_show != 'Unbound':
                 arm_show_img = db.queryUniverse({'TITLE': arm_show})['PATH']
             arm_passive = arm['ABILITIES'][0]
