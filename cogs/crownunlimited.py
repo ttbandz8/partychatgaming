@@ -269,6 +269,7 @@ class CrownUnlimited(commands.Cog):
             # Player 2 Data
             t_user = boss
             tarm = db.queryArm({'ARM': universe['UARM']})
+            tarm_universe = tarm['UNIVERSE']
             tarm_passive = tarm['ABILITIES'][0]
             tarm_name=tarm['ARM']
             t_card = t['NAME']
@@ -3648,6 +3649,7 @@ class CrownUnlimited(commands.Cog):
             # Player 2 Data
             t_user = boss
             tarm = db.queryArm({'ARM': universe['DARM']})
+            tarm_universe = tarm['UNIVERSE']
             tpet = db.queryPet({'PET': universe['DPET']})
             tpet_passive = tpet['ABILITIES'][0]
             tpet_name = tpet['PET']
@@ -10755,6 +10757,7 @@ class CrownUnlimited(commands.Cog):
             # Player 2 Data
             t_user = boss
             tarm = db.queryArm({'ARM': universe['DARM']})
+            tarm_universe = tarm['UNIVERSE']
             tpet = db.queryPet({'PET': universe['DPET']})
             tpet_passive = tpet['ABILITIES'][0]
             tpet_name = tpet['PET']
@@ -12715,6 +12718,7 @@ class CrownUnlimited(commands.Cog):
             # Player 2 Data
             t_user = boss
             tarm = db.queryArm({'ARM': universe['UARM']})
+            tarm_universe = tarm['UNIVERSE']
             tarm_passive = tarm['ABILITIES'][0]
             tarm_name=tarm['ARM'] 
             t_card = t['NAME']
