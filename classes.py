@@ -103,7 +103,7 @@ class CARDS():
     UNIVERSE: str = field(default_factory=lambda: "Unbound")
     COLLECTION: str = field(default_factory=lambda: "N/A")
     STOCK: int = field(default_factory=lambda: 5)
-    AVAILABLE: bool = field(default_factory=lambda: True)
+    AVAILABLE: bool = field(default_factory=lambda: False)
     BASEATK: int = field(default_factory=lambda: 25)
     BASEDEF: int = field(default_factory=lambda: 25)
     DESCRIPTIONS: list[str] = field(default_factory=lambda: [])
@@ -119,7 +119,7 @@ class TITLES():
     COLLECTION: str = field(default_factory=lambda: "N/A")
     TIMESTAMP: str = now
     STOCK: int = field(default_factory=lambda: 5)
-    AVAILABLE: bool = field(default_factory=lambda: True)
+    AVAILABLE: bool = field(default_factory=lambda: False)
     EXCLUSIVE: bool = field(default_factory=lambda: False)
 
 @dataclass(frozen=True, order=True) 
@@ -132,7 +132,7 @@ class ARM():
     COLLECTION: str = field(default_factory=lambda: "N/A")
     TIMESTAMP: str = now
     STOCK: int = field(default_factory=lambda: 5)
-    AVAILABLE: bool = field(default_factory=lambda: True)
+    AVAILABLE: bool = field(default_factory=lambda: False)
     EXCLUSIVE: bool = field(default_factory=lambda: False)
 
 @dataclass(frozen=True, order=True) 
