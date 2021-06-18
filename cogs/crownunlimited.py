@@ -22690,6 +22690,7 @@ class CrownUnlimited(commands.Cog):
 
     @commands.command()
     async def pets(self, ctx, *args):
+        
         universe = " ".join([*args])
         universe_data = db.queryUniverse({'TITLE': str(universe)})
         user = db.queryUser({'DISNAME': str(ctx.author)})
