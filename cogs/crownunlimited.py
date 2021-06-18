@@ -3348,7 +3348,7 @@ class CrownUnlimited(commands.Cog):
                 teambank = await blessteam(10, oteam)
                 cteambank = await blessteam(10, cteam)
                 drop_response = await drops(ctx.author, selected_universe, currentopponent)
-                cdrop_response = await drops(user, selected_universe, turn)
+                cdrop_response = await drops(user, selected_universe, currentopponent)
                 questlogger = await quest(ouser, t_card, "Tales")
                 cquestlogger = await quest(cuser, t_card, "Tales")
                 if questlogger:
@@ -6932,7 +6932,7 @@ class CrownUnlimited(commands.Cog):
                 teambank = await blessteam(10, oteam)
                 cteambank = await blessteam(10, cteam)
                 drop_response = await dungeondrops(ctx.author, selected_universe, currentopponent)
-                cdrop_response = await dungeondrops(user, selected_universe, turn)
+                cdrop_response = await dungeondrops(user, selected_universe, currentopponent)
                 questlogger = await quest(ouser, t_card, "Dungeon")
                 cquestlogger = await quest(user, t_card, "Dungeon")
                 if questlogger:
