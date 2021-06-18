@@ -22618,10 +22618,12 @@ class CrownUnlimited(commands.Cog):
         tales_card_details = []
         for card in cards:
             available = ""
-            if card['AVAILABLE']:
-                available = "🟢"
+            if card['AVAILABLE'] and card['EXCLUSIVE']:
+                available = ":purple_circle:"
+            elif card['AVAILABLE']:
+                available = ":green_circle:"
             else:
-                available = "🟠"
+                available = ":red_circle:"
             if card['EXCLUSIVE']:
                 dungeon_card_details.append(f"{available} **{card['NAME']}:** _D_")
             else:
@@ -22644,14 +22646,16 @@ class CrownUnlimited(commands.Cog):
         tales_titles_details = []
         for title in titles:
             available = ""
-            if title['AVAILABLE']:
-                available = "🟢"
+            if title['AVAILABLE'] and title['EXCLUSIVE']:
+                available = ":purple_circle:"
+            elif title['AVAILABLE']:
+                available = ":green_circle:"
             else:
-                available = "🟠"
+                available = ":red_circle:"
             if title['EXCLUSIVE']:
-                dungeon_titles_details.append(f"{available} {title['TITLE']} _Dungeon Drop_")
+                dungeon_titles_details.append(f"{available} {title['TITLE']} _D_")
             else:
-                tales_titles_details.append(f"{available} {title['TITLE']}: :coin:{title['PRICE']} _Tales Drop_")
+                tales_titles_details.append(f"{available} {title['TITLE']}: :coin:{title['PRICE']} _T_")
         await ctx.author.send(f"{universe.upper()} TITLE LIST")
         await ctx.author.send("\n".join(tales_titles_details))
         await ctx.author.send("\n".join(dungeon_titles_details))
@@ -22675,14 +22679,43 @@ class CrownUnlimited(commands.Cog):
             elif arm['AVAILABLE']:
                 available = ":green_circle:"
             else:
-                available = "🟠"
+                available = ":red_circle:"
             if arm['EXCLUSIVE']:
-                dungeon_arms_details.append(f"{available} {arm['ARM']} _Dungeon Drop_")
+                dungeon_arms_details.append(f"{available} {arm['ARM']} _D_")
             else:
-                tales_arms_details.append(f"{available} {arm['ARM']}: :coin:{arm['PRICE']} _Tales Drop_")
+                tales_arms_details.append(f"{available} {arm['ARM']}: :coin:{arm['PRICE']} _T_")
         await ctx.author.send(f"{universe.upper()} ARM LIST")
         await ctx.author.send("\n".join(tales_arms_details))
         await ctx.author.send("\n".join(dungeon_arms_details))
+
+    @commands.command()
+    async def pets(self, ctx, *args):
+        
+        universe = " ".join([*args])
+        universe_data = db.queryUniverse({'TITLE': str(universe)})
+        user = db.queryUser({'DISNAME': str(ctx.author)})
+        if universe_data['PREREQUISITE'] not in user['CROWN_TALES'] and universe_data['PREREQUISITE'] != "":
+            await ctx.send("You have not unlocked this universe!")
+            return
+        list_of_pets = db.queryAllPetsBasedOnUniverses({'UNIVERSE': universe})
+        pets = [x for x in list_of_pets]
+        dungeon_pets_details = []
+        tales_pets_details = []
+        for pet in pets:
+            available = ""
+            if pet['AVAILABLE'] and pet['EXCLUSIVE'] :
+                available = ":purple_circle:"
+            elif pet['AVAILABLE']:             
+                available = ":green_circle:"
+            else:
+                available = ":red_circle:"
+            if pet['EXCLUSIVE']:
+                dungeon_pets_details.append(f"{available} {pet['PET']} _D_")
+            else:
+                tales_pets_details.append(f"{available} {pet['PET']} _T_")
+        await ctx.author.send(f"{universe.upper()} PET LIST")
+        await ctx.author.send("\n".join(tales_pets_details))
+        await ctx.author.send("\n".join(dungeon_pets_details))
 
     @commands.command()
     async def universes(self, ctx):
