@@ -23510,4 +23510,3 @@ async def bossdrops(player, universe):
     elif drop_rate <= boss_card_drop and drop_rate > boss_pet_drop:
             response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(boss_card)}})
             await bless(50, player)
-            return f"You earned the BOSS CARD:  {boss_card} + :coin: 50!"
