@@ -22683,6 +22683,38 @@ class CrownUnlimited(commands.Cog):
         await ctx.author.send("\n".join(dungeon_arms_details))
 
     @commands.command()
+<<<<<<< HEAD
+=======
+    async def pets(self, ctx, *args):
+        
+        universe = " ".join([*args])
+        universe_data = db.queryUniverse({'TITLE': str(universe)})
+        user = db.queryUser({'DISNAME': str(ctx.author)})
+        if universe_data['PREREQUISITE'] not in user['CROWN_TALES'] and universe_data['PREREQUISITE'] != "":
+            await ctx.send("You have not unlocked this universe!")
+            return
+        list_of_pets = db.queryAllPetsBasedOnUniverses({'UNIVERSE': universe})
+        pets = [x for x in list_of_pets]
+        dungeon_pets_details = []
+        tales_pets_details = []
+        for pet in pets:
+            available = ""
+            if pet['AVAILABLE'] and pet['EXCLUSIVE'] :
+                available = ":purple_circle:"
+            elif pet['AVAILABLE']:             
+                available = ":green_circle:"
+            else:
+                available = ":red_circle:"
+            if pet['EXCLUSIVE']:
+                dungeon_pets_details.append(f"{available} {pet['PET']} _Dungeon Drop_")
+            else:
+                tales_pets_details.append(f"{available} {pet['PET']} _Tales Drop_")
+        await ctx.author.send(f"{universe.upper()} PET LIST")
+        await ctx.author.send("\n".join(tales_pets_details))
+        await ctx.author.send("\n".join(dungeon_pets_details))
+
+    @commands.command()
+>>>>>>> feature/discord
     async def universes(self, ctx):
         universe_data = db.queryAllUniverse()
         user = db.queryUser({'DISNAME': str(ctx.author)})
