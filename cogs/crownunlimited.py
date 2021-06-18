@@ -1210,7 +1210,7 @@ class CrownUnlimited(commands.Cog):
                         elif o_universe == "Solo Leveling":
                             embedVar = discord.Embed(title=f"Ruler's Authority... Opponent loses {15 + turn} DEF!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            t_defense = round(t_defense - (8 - turn))
+                            t_defense = round(t_defense - (10 - turn))
                             turn_total= turn_total + 1
                             turn=1
                         elif o_universe == "Attack On Titan":
@@ -1830,7 +1830,7 @@ class CrownUnlimited(commands.Cog):
                         elif t_universe == "Solo Leveling":
                             embedVar = discord.Embed(title=f"Ruler's Authority... {o_card} loses {15 + turn} DEF!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            o_defense = round(t_defense - (8 - turn))
+                            o_defense = round(o_defense - (10 - turn))
                             turn_total= turn_total + 1
                             turn=2
                         elif t_universe == "Attack On Titan":
@@ -2297,7 +2297,7 @@ class CrownUnlimited(commands.Cog):
                         elif c_universe == "Solo Leveling":
                             embedVar = discord.Embed(title=f"Ruler's Authority... {t_card} loses {15 + turn} DEF!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            t_defense = round(t_defense - (8 - turn))
+                            t_defense = round(t_defense - (10 - turn))
                             turn_total= turn_total + 1
                             turn=3
                         elif c_universe == "Attack On Titan":
@@ -2918,7 +2918,7 @@ class CrownUnlimited(commands.Cog):
                         elif t_universe == "Solo Leveling":
                             embedVar = discord.Embed(title=f"Ruler's Authority... {c_card} loses {15 + turn} DEF!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            c_defense = round(t_defense - (8 - turn))
+                            c_defense = round(c_defense - (10 - turn))
                             turn_total= turn_total + 1
                             turn=0
                         elif t_universe == "Attack On Titan":
@@ -3347,8 +3347,8 @@ class CrownUnlimited(commands.Cog):
 
                 teambank = await blessteam(10, oteam)
                 cteambank = await blessteam(10, cteam)
-                drop_response = await drops(ctx.author, selected_universe)
-                cdrop_response = await drops(user, selected_universe)
+                drop_response = await drops(ctx.author, selected_universe, turn)
+                cdrop_response = await drops(user, selected_universe, turn)
                 questlogger = await quest(ouser, t_card, "Tales")
                 cquestlogger = await quest(cuser, t_card, "Tales")
                 if questlogger:
@@ -4597,7 +4597,7 @@ class CrownUnlimited(commands.Cog):
                         elif o_universe == "Solo Leveling":
                             embedVar = discord.Embed(title=f"Ruler's Authority... Opponent loses {15 + turn} DEF!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            t_defense = round(t_defense - (8 - turn))
+                            t_defense = round(t_defense - (10 - turn))
                             turn_total= turn_total + 1
                             turn=1
                         elif o_universe == "Attack On Titan":
@@ -5218,7 +5218,7 @@ class CrownUnlimited(commands.Cog):
                         elif c_universe == "Solo Leveling":
                             embedVar = discord.Embed(title=f"Ruler's Authority... {t_card} loses {15 + turn} DEF!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            t_defense = round(t_defense - (8 - turn))
+                            t_defense = round(t_defense - (10 - turn))
                             turn_total= turn_total + 1
                             turn=2
                         elif t_universe == "Attack On Titan":
@@ -5788,7 +5788,7 @@ class CrownUnlimited(commands.Cog):
                         elif c_universe == "Solo Leveling":
                             embedVar = discord.Embed(title=f"Ruler's Authority... {t_card} loses {15 + turn} DEF!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            t_defense = round(t_defense - (8 - turn))
+                            t_defense = round(t_defense - (10 - turn))
                             turn_total= turn_total + 1
                             turn=3
                         elif c_universe == "Attack On Titan":
@@ -6407,7 +6407,7 @@ class CrownUnlimited(commands.Cog):
                         elif t_universe == "Solo Leveling":
                             embedVar = discord.Embed(title=f"Ruler's Authority... {c_card} loses {15 + turn} DEF!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            c_defense = round(t_defense - (8 - turn))
+                            c_defense = round(c_defense - (10 - turn))
                             turn_total= turn_total + 1
                             turn=0
                         elif t_universe == "Attack On Titan":
@@ -6931,8 +6931,8 @@ class CrownUnlimited(commands.Cog):
                 gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
                 teambank = await blessteam(10, oteam)
                 cteambank = await blessteam(10, cteam)
-                drop_response = await dungeondrops(ctx.author, selected_universe)
-                cdrop_response = await dungeondrops(user, selected_universe)
+                drop_response = await dungeondrops(ctx.author, selected_universe, turn)
+                cdrop_response = await dungeondrops(user, selected_universe, turn)
                 questlogger = await quest(ouser, t_card, "Dungeon")
                 cquestlogger = await quest(user, t_card, "Dungeon")
                 if questlogger:
@@ -8172,7 +8172,7 @@ class CrownUnlimited(commands.Cog):
                     elif o_universe == "Solo Leveling":
                         embedVar = discord.Embed(title=f"Ruler's Authority... Opponent loses {15 + turn} DEF!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
-                        t_defense = round(t_defense - (8 - turn))
+                        t_defense = round(t_defense - (10 - turn))
                         turn_total= turn_total + 1
                         turn=1
                     elif o_universe == "Attack On Titan":
@@ -11420,7 +11420,7 @@ class CrownUnlimited(commands.Cog):
                         elif o_universe == "Solo Leveling":
                             embedVar = discord.Embed(title=f"Ruler's Authority... {t_card} loses {15 + turn} DEF!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            t_defense = round(t_defense - (8 - turn))
+                            t_defense = round(t_defense - (10 - turn))
                             turn_total= turn_total + 1
                             turn=1
                         elif o_universe == "Attack On Titan":
@@ -11955,7 +11955,7 @@ class CrownUnlimited(commands.Cog):
                         elif t_universe == "Solo Leveling":
                             embedVar = discord.Embed(title=f"Ruler's Authority... {o_card} loses {15 + turn} DEF!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            o_defense = round(t_defense - (8 - turn))
+                            o_defense = round(o_defense - (10 - turn))
                             turn_total= turn_total + 1
                             turn=0
                         elif t_universe == "Attack On Titan":
@@ -12489,7 +12489,7 @@ class CrownUnlimited(commands.Cog):
                 m_playtime = int(wintime[14:16])
                 s_playtime = int(wintime[17:19])
                 gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
-                drop_response = await dungeondrops(ctx.author, selected_universe)
+                drop_response = await dungeondrops(ctx.author, selected_universe, turn)
                 teambank = await blessteam(15, oteam)
                 questlogger = await quest(ouser, t_card, "Dungeon")
                 if questlogger:
@@ -13371,7 +13371,7 @@ class CrownUnlimited(commands.Cog):
                         elif o_universe == "Solo Leveling":
                             embedVar = discord.Embed(title=f"Ruler's Authority... {t_card} loses {15 + turn} DEF!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            t_defense = round(t_defense - (8 - turn))
+                            t_defense = round(t_defense - (10 - turn))
                             turn_total= turn_total + 1
                             turn=1
                         elif o_universe == "Attack On Titan":
@@ -13906,7 +13906,7 @@ class CrownUnlimited(commands.Cog):
                         elif t_universe == "Solo Leveling":
                             embedVar = discord.Embed(title=f"Ruler's Authority... {o_card} loses {15 + turn} DEF!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            o_defense = round(t_defense - (8 - turn))
+                            o_defense = round(o_defense - (10 - turn))
                             turn_total= turn_total + 1
                             turn=0
                         elif t_universe == "Attack On Titan":
@@ -14338,7 +14338,7 @@ class CrownUnlimited(commands.Cog):
                 s_playtime = int(wintime[17:19])
                 gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
                 teambank = await blessteam(10, oteam)
-                drop_response = await drops(ctx.author, selected_universe)
+                drop_response = await drops(ctx.author, selected_universe, turn)
                 questlogger = await quest(ouser, t_card, "Tales")
                 if questlogger:
                     await ctx.author.send(questlogger)
@@ -15236,7 +15236,7 @@ class CrownUnlimited(commands.Cog):
                     elif o_universe == "Solo Leveling":
                         embedVar = discord.Embed(title=f"Ruler's Authority... Opponent loses {15 + turn} DEF!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
-                        t_defense = round(t_defense - (8 - turn))
+                        t_defense = round(t_defense - (10 - turn))
                         turn_total= turn_total + 1
                         turn=1
                     elif o_universe == "Attack On Titan":
@@ -15788,7 +15788,7 @@ class CrownUnlimited(commands.Cog):
                     elif t_universe == "Solo Leveling":
                         embedVar = discord.Embed(title=f"Ruler's Authority... {o_card} loses {15 + turn} DEF!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
-                        o_defense = round(t_defense - (8 - turn))
+                        o_defense = round(o_defense - (10 - turn))
                         turn_total= turn_total + 1
                         turn=0
                     elif t_universe == "Attack On Titan":
@@ -22852,10 +22852,10 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
             wither = round(((ap/3)/100) * op_defense )
         elif enh == 'RAGE':
             enh_type="RAGE"
-            rage = round((ap/100) * defense )
+            rage = round(((ap/3)/100) * defense )
         elif enh == 'BRACE':
             enh_type="BRACE"
-            brace = round((ap/100) * attack )
+            brace = round(((ap/3)/100) * attack )
         elif enh == 'BZRK':
             enh_type="BZRK"
             bzrk = round(((ap/3)/100) * health)
@@ -23283,7 +23283,7 @@ async def curse(amount, user):
       else:
          print("cant find vault")
 
-async def drops(player, universe):
+async def drops(player, universe, matchcount):
     all_available_drop_cards = db.queryDropCards(universe)
     all_available_drop_titles = db.queryDropTitles(universe)
     all_available_drop_arms = db.queryDropArms(universe)
@@ -23326,8 +23326,9 @@ async def drops(player, universe):
     drop_rate = random.randint(0,200)
 
     if drop_rate <= gold_drop:
-        await bless(25, player)
-        return f"You earned :coin: 25!"
+        bless_amount = 25 + (5 * matchcount)
+        await bless(bless_amount, player)
+        return f"You earned :coin: **{bless_amount}**!"
     elif drop_rate <= title_drop and drop_rate > gold_drop:
         response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'TITLES': str(titles[rand_title])}})
         return f"You earned _Title:_ **{titles[rand_title]}**!"
@@ -23348,7 +23349,7 @@ async def drops(player, universe):
             await bless(50, player)
             return f"You earned _Card:_ **{cards[rand_card]}** + :coin: 50!"
 
-async def dungeondrops(player, universe):
+async def dungeondrops(player, universe, matchcount):
     all_available_drop_cards = db.queryExclusiveDropCards(universe)
     all_available_drop_titles = db.queryExclusiveDropTitles(universe)
     all_available_drop_arms = db.queryExclusiveDropArms(universe)
@@ -23391,8 +23392,9 @@ async def dungeondrops(player, universe):
     drop_rate = random.randint(0,400)
 
     if drop_rate <= gold_drop:
-        await bless(60, player)
-        return f"You earned :coin: 60!"
+        bless_amount = 60 + (5 * matchcount)
+        await bless(bless_amount, player)
+        return f"You earned :coin: **{bless_amount}**!"
     elif drop_rate <= title_drop and drop_rate > gold_drop:
         response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'TITLES': str(titles[rand_title])}})
         return f"You earned _Title:_ **{titles[rand_title]}**!"

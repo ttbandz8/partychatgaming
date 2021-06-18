@@ -446,6 +446,16 @@ class Lookup(commands.Cog):
             dungeons = d['DUNGEONS']
             pet = d['PET']
 
+            crown_list = []
+            for crown in crown_tales:
+                if crown != "":
+                    crown_list.append(crown)
+            
+            dungeon_list = []
+            for dungeon in dungeon_list:
+                if dungeon != "":
+                    dungeon_list.append(dungeon)
+
 
             matches_to_string = dict(ChainMap(*matches))
             ign_to_string = dict(ChainMap(*ign))
@@ -467,12 +477,12 @@ class Lookup(commands.Cog):
             embed3.set_thumbnail(url=avatar)
             embed3.add_field(name="Stats" + " :medal:", value="\n".join(f'{k}: {"/".join([str(int) for int in v])}' for k,v in matches_to_string.items()))
             
-            if len(crown_tales) > 1:
+            if crown_list:
                 embed4 = discord.Embed(title= f":triangular_flag_on_post: " + f"{name}".format(self), description=":bank: Party Chat Gaming Database™️", colour=000000)
                 embed4.set_thumbnail(url=avatar)
-                embed4.add_field(name="Completed Crown Tales" + " :medal:", value="\n".join(crown_tales))
-                if dungeons:
-                    embed4.add_field(name="Completed Crown Dungeons" + " :fire: ", value="\n".join(dungeons))
+                embed4.add_field(name="Completed Crown Tales" + " :medal:", value="\n".join(crown_list))
+                if dungeon_list:
+                    embed4.add_field(name="Completed Crown Dungeons" + " :fire: ", value="\n".join(dungeon_list))
                 else:
                     embed4.add_field(name="Completed Crown Dungeons" + " :fire: ", value="No Dungeons Completed, yet!")
             else:
