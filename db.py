@@ -635,6 +635,10 @@ def queryExclusiveDropPets(args):
     data = pet_col.find({'UNIVERSE': args, 'EXCLUSIVE': True, 'AVAILABLE': True})
     return data 
 
+def queryAllPetsBasedOnUniverses(query):
+    data = pet_col.find(query)
+    return data
+
 
 ''' UNIVERSE '''
 def universe_exists(data):
