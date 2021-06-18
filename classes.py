@@ -103,7 +103,7 @@ class CARDS():
     UNIVERSE: str = field(default_factory=lambda: "Unbound")
     COLLECTION: str = field(default_factory=lambda: "N/A")
     STOCK: int = field(default_factory=lambda: 5)
-    AVAILABLE: bool = field(default_factory=lambda: True)
+    AVAILABLE: bool = field(default_factory=lambda: False)
     BASEATK: int = field(default_factory=lambda: 25)
     BASEDEF: int = field(default_factory=lambda: 25)
     DESCRIPTIONS: list[str] = field(default_factory=lambda: [])
@@ -119,7 +119,7 @@ class TITLES():
     COLLECTION: str = field(default_factory=lambda: "N/A")
     TIMESTAMP: str = now
     STOCK: int = field(default_factory=lambda: 5)
-    AVAILABLE: bool = field(default_factory=lambda: True)
+    AVAILABLE: bool = field(default_factory=lambda: False)
     EXCLUSIVE: bool = field(default_factory=lambda: False)
 
 @dataclass(frozen=True, order=True) 
@@ -132,7 +132,7 @@ class ARM():
     COLLECTION: str = field(default_factory=lambda: "N/A")
     TIMESTAMP: str = now
     STOCK: int = field(default_factory=lambda: 5)
-    AVAILABLE: bool = field(default_factory=lambda: True)
+    AVAILABLE: bool = field(default_factory=lambda: False)
     EXCLUSIVE: bool = field(default_factory=lambda: False)
 
 @dataclass(frozen=True, order=True) 
@@ -155,6 +155,7 @@ class UNIVERSE():
     CROWN_TALES: list[str] = field(default_factory=lambda: [''])
     PREREQUISITE: str = field(default_factory=lambda: "Deathnote")
     UNIVERSE_BOSS: str = field(default_factory=lambda: "")
+    HAS_CROWN_TALES: bool = field(default_factory=lambda: False)
     TIMESTAMP: str = now
     AVAILABLE: bool = field(default_factory=lambda: True)
     UTITLE: str = field(default_factory=lambda: "Starter")
@@ -211,7 +212,7 @@ class GODS():
 @dataclass(frozen=True, order=True)
 class VAULT():
     OWNER: str
-    BALANCE: int = field(default_factory=lambda: 500)
+    BALANCE: int = field(default_factory=lambda: 1200)
     CARDS: list[str] = field(default_factory=lambda: ['Ochaco Uraraka','Charmander','Malphite'])
     TITLES: list[str] = field(default_factory=lambda: ['Starter'])
     ARMS: list[str] = field(default_factory=lambda: ['Stock'])

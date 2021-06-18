@@ -46,6 +46,18 @@ class Cards(commands.Cog):
         shop = db.queryShopCards()
         cards = []
 
+        check_card = db.queryCard({'NAME' : str(card_name)})
+        if check_card:
+            all_universes = db.queryAllUniverse()
+            user = db.queryUser({'DISNAME': str(ctx.author)})
+            available_universes = []
+            for uni in all_universes:
+                if uni['PREREQUISITE'] in user['CROWN_TALES']:
+                    available_universes.append(uni['TITLE'])
+            if check_card['UNIVERSE'] not in available_universes:
+                await ctx.send("You cannot purchase cards from Universes you haven't unlocked.")
+                return
+
         currentBalance = vault['BALANCE']
         cost = 0
         mintedCard = ""
@@ -141,6 +153,7 @@ class Cards(commands.Cog):
     async def viewcard(self, ctx, *args):
         card_name = " ".join([*args])
         card = db.queryCard({'NAME':str(card_name)})
+
         if card:
             o_card = card['NAME']
             o_card_path=card['PATH']
@@ -162,6 +175,11 @@ class Cards(commands.Cog):
             resolved = False
             focused = False
             title = {'TITLE': 'CARD PREVIEW'}
+
+            if o_show == "Unbound":
+                await ctx.send("You cannot view this card at this time. ")
+                return 
+
             card_file = showcard(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, title, focused)
             mytrait = {}
             traitmessage = ''
