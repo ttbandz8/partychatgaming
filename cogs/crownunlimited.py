@@ -163,6 +163,7 @@ class CrownUnlimited(commands.Cog):
 
             o_DID = o_user['DID']
             o_card = o['NAME']
+            o_gif = o['GIF']
             o_card_path=o['PATH']
             o_rcard_path=o['RPATH']
             if o['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= o['HLT']: # Demon Slayer Universal Trait
@@ -228,6 +229,7 @@ class CrownUnlimited(commands.Cog):
 
             c_DID = c_user['DID']
             c_card = c['NAME']
+            c_gif = c['GIF']
             c_card_path=c['PATH']
             c_rcard_path= c['RPATH']
             if c['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= c['HLT']: # Demon Slayer Universal Trait
@@ -275,6 +277,7 @@ class CrownUnlimited(commands.Cog):
             tarm_passive = tarm['ABILITIES'][0]
             tarm_name=tarm['ARM']
             t_card = t['NAME']
+            t_gif = t['GIF']
             t_card_path=t['PATH']
             t_rcard_path=t['RPATH']
             if t['UNIVERSE'] == "Demon Slayer" and o_max_health >= t['HLT']: #Demon Slayer Universal Trait
@@ -1311,6 +1314,8 @@ class CrownUnlimited(commands.Cog):
                             elif msg.content == "3":
                                 o_pet_used =False
                                 dmg = damage_cal(o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description)
+                                if o_gif != "N/A":
+                                    await private_channel.send(f"{o_gif}")
                             elif msg.content == "4":
                                 o_enhancer_used=True
                                 o_pet_used =False
@@ -1969,6 +1974,8 @@ class CrownUnlimited(commands.Cog):
                             dmg = damage_cal(t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description)
                         elif int(aiMove) == 3:
                             dmg = damage_cal(t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description)
+                            if t_gif != "N/A":
+                                    await private_channel.send(f"{t_gif}")
                         elif int(aiMove) == 4:
                             t_enhancer_used=True
                             dmg = damage_cal(t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina, t_max_health, o_attack, t_special_move_description)
@@ -2410,6 +2417,8 @@ class CrownUnlimited(commands.Cog):
                             elif msg.content == "3":
                                 c_pet_used =False
                                 dmg = damage_cal(c_card, c_3, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina, c_max_health, t_attack, c_special_move_description)
+                                if c_gif != "N/A":
+                                    await private_channel.send(f"{c_gif}")
                             elif msg.content == "4":
                                 c_enhancer_used=True
                                 c_pet_used =False
@@ -3069,6 +3078,8 @@ class CrownUnlimited(commands.Cog):
                             dmg = damage_cal(t_card, t_2, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description)
                         elif int(aiMove) == 3:
                             dmg = damage_cal(t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description)
+                            if t_gif != "N/A":
+                                    await private_channel.send(f"{t_gif}")
                         elif int(aiMove) == 4:
                             t_enhancer_used=True
                             dmg = damage_cal(t_card, t_enhancer, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,c_health, c_stamina, t_max_health, c_attack, t_special_move_description)
@@ -3567,6 +3578,7 @@ class CrownUnlimited(commands.Cog):
 
             o_DID = o_user['DID']
             o_card = o['NAME']
+            o_gif = o['GIF']
             o_card_path=o['PATH']
             o_rcard_path=o['RPATH']
             if o['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= o['HLT']: # Demon Slayer Universal Trait
@@ -3632,6 +3644,7 @@ class CrownUnlimited(commands.Cog):
 
             c_DID = c_user['DID']
             c_card = c['NAME']
+            c_gif = c['GIF']
             c_card_path=c['PATH']
             c_rcard_path= c['RPATH']
             if c['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= c['HLT']: # Demon Slayer Universal Trait
@@ -3683,6 +3696,7 @@ class CrownUnlimited(commands.Cog):
             tarm_passive = tarm['ABILITIES'][0]
             tarm_name=tarm['ARM']
             t_card = t['NAME']
+            t_gif = t['GIF']
             t_card_path=t['PATH']
             t_rcard_path=t['RPATH']
             if t['UNIVERSE'] == "Demon Slayer" and o_max_health >= t['HLT']: #Demon Slayer Universal Trait
@@ -4722,6 +4736,8 @@ class CrownUnlimited(commands.Cog):
                             elif msg.content == "3":
                                 o_pet_used =False
                                 dmg = damage_cal(o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description)
+                                if o_gif != "N/A":
+                                    await private_channel.send(f"{o_gif}")
                             elif msg.content == "4":
                                 o_enhancer_used=True
                                 o_pet_used =False
@@ -5393,6 +5409,8 @@ class CrownUnlimited(commands.Cog):
                         elif int(aiMove) == 3:
                             t_pet_used =False
                             dmg = damage_cal(t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description)
+                            if t_gif != "N/A":
+                                    await private_channel.send(f"{t_gif}")
                         elif int(aiMove) == 4:
                             t_pet_used =False
                             t_enhancer_used=True
@@ -5923,6 +5941,8 @@ class CrownUnlimited(commands.Cog):
                             elif msg.content == "3":
                                 c_pet_used =False
                                 dmg = damage_cal(c_card, c_3, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina, c_max_health, t_attack, c_special_move_description)
+                                if c_gif != "N/A":
+                                    await private_channel.send(f"{c_gif}")
                             elif msg.content == "4":
                                 c_enhancer_used=True
                                 c_pet_used =False
@@ -6591,6 +6611,8 @@ class CrownUnlimited(commands.Cog):
                             dmg = damage_cal(t_card, t_2, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description)
                         elif int(aiMove) == 3:
                             dmg = damage_cal(t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description)
+                            if t_gif != "N/A":
+                                    await private_channel.send(f"{t_gif}")
                         elif int(aiMove) == 4:
                             t_enhancer_used=True
                             dmg = damage_cal(t_card, t_enhancer, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,c_health, c_stamina, t_max_health, c_attack, t_special_move_description)
@@ -7157,6 +7179,7 @@ class CrownUnlimited(commands.Cog):
 
         o_DID = o_user['DID']
         o_card = o['NAME']
+        o_gif = o['GIF']
         o_card_path=o['PATH']
         o_rcard_path=o['RPATH']
         if o['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= o['HLT']: # Demon Slayer Universal Trait
@@ -7220,6 +7243,7 @@ class CrownUnlimited(commands.Cog):
 
         c_DID = c_user['DID']
         c_card = c['NAME']
+        c_gif = c['GIF']
         c_card_path=c['PATH']
         c_rcard_path= c['RPATH']
         if c['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= c['HLT']: # Demon Slayer Universal Trait
@@ -7276,6 +7300,7 @@ class CrownUnlimited(commands.Cog):
         tpet_name = tpet['PET']
         tpet_image =tpet['PATH']
         t_card = t['NAME']
+        t_gif = t['GIF']
         t_card_path=t['PATH']
         t_rcard_path=t['RPATH']
         if t['UNIVERSE'] == "Demon Slayer" and o_max_health >= t['HLT']: #Demon Slayer Universal Trait
@@ -10787,6 +10812,7 @@ class CrownUnlimited(commands.Cog):
 
             o_DID = o_user['DID']
             o_card = o['NAME']
+            o_gif = o['GIF']
             o_card_path=o['PATH']
             o_rcard_path=o['RPATH']
             if o['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= o['HLT']: # Demon Slayer Universal Trait
@@ -10839,6 +10865,7 @@ class CrownUnlimited(commands.Cog):
             tarm_passive = tarm['ABILITIES'][0]
             tarm_name=tarm['ARM']
             t_card = t['NAME']
+            t_gif = t['GIF']
             t_card_path=t['PATH']
             t_rcard_path=t['RPATH']
             if t['UNIVERSE'] == "Demon Slayer" and o_max_health >= t['HLT']: #Demon Slayer Universal Trait
@@ -11592,6 +11619,8 @@ class CrownUnlimited(commands.Cog):
                             elif msg.content == "3":
                                 o_pet_used =False
                                 dmg = damage_cal(o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description)
+                                if o_gif != "N/A":
+                                    await private_channel.send(f"{o_gif}")
                             elif msg.content == "4":
                                 o_enhancer_used=True
                                 o_pet_used =False
@@ -12179,6 +12208,8 @@ class CrownUnlimited(commands.Cog):
                         elif int(aiMove) == 3:
                             t_pet_used =False
                             dmg = damage_cal(t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description)
+                            if t_gif != "N/A":
+                                    await private_channel.send(f"{t_gif}")
                         elif int(aiMove) == 4:
                             t_enhancer_used=True
                             dmg = damage_cal(t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina, t_max_health, o_attack, t_special_move_description)
@@ -12764,6 +12795,7 @@ class CrownUnlimited(commands.Cog):
 
             o_DID = o_user['DID']
             o_card = o['NAME']
+            o_gif = o['GIF']
             o_card_path=o['PATH']
             o_rcard_path=o['RPATH']
             if o['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= o['HLT']: # Demon Slayer Universal Trait
@@ -12811,6 +12843,7 @@ class CrownUnlimited(commands.Cog):
             tarm_passive = tarm['ABILITIES'][0]
             tarm_name=tarm['ARM'] 
             t_card = t['NAME']
+            t_gif = t['GIF']
             t_card_path=t['PATH']
             t_rcard_path=t['RPATH']
             if t['UNIVERSE'] == "Demon Slayer" and o_max_health >= t['HLT']: #Demon Slayer Universal Trait
@@ -13558,6 +13591,8 @@ class CrownUnlimited(commands.Cog):
                             elif msg.content == "3":
                                 o_pet_used =False
                                 dmg = damage_cal(o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description)
+                                if o_gif != "N/A":
+                                    await private_channel.send(f"{o_gif}")
                             elif msg.content == "4":
                                 o_enhancer_used=True
                                 o_pet_used =False
@@ -14132,6 +14167,8 @@ class CrownUnlimited(commands.Cog):
                             dmg = damage_cal(t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description)
                         elif int(aiMove) == 3:
                             dmg = damage_cal(t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description)
+                            if t_gif != "N/A":
+                                    await private_channel.send(f"{t_gif}")
                         elif int(aiMove) == 4:
                             t_enhancer_used=True
                             dmg = damage_cal(t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina, t_max_health, o_attack, t_special_move_description)
@@ -14618,6 +14655,7 @@ class CrownUnlimited(commands.Cog):
 
         o_DID = o_user['DID']
         o_card = o['NAME']
+        o_gif = o['GIF']
         o_card_path=o['PATH']
         o_rcard_path=o['RPATH']
         if o['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= o['HLT']: # Demon Slayer Universal Trait
@@ -14673,6 +14711,7 @@ class CrownUnlimited(commands.Cog):
         tpet_name = tpet['PET']
         tpet_image =tpet['PATH']
         t_card = t['NAME']
+        t_gif = t['GIF']
         t_card_path=t['PATH']
         t_rcard_path=t['RPATH']
         if t['UNIVERSE'] == "Demon Slayer" and o_max_health >= t['HLT']: #Demon Slayer Universal Trait
@@ -16502,6 +16541,7 @@ class CrownUnlimited(commands.Cog):
 
                 o_DID = o_user['DID']
                 o_card = o['NAME']
+                o_gif = o['GIF']
                 o_card_path=o['PATH']
                 o_rcard_path=o['RPATH']
                 if o['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= o['HLT']: # Demon Slayer Universal Trait
@@ -16562,6 +16602,7 @@ class CrownUnlimited(commands.Cog):
                 
                 t_DID = t_user['DID']
                 t_card = t['NAME']
+                t_gif = t['GIF']
                 t_card_path=t['PATH']
                 t_rcard_path=t['RPATH']
                 if t['UNIVERSE'] == "Demon Slayer" and o_max_health >= t['HLT']: #Demon Slayer Universal Trait
@@ -18811,6 +18852,7 @@ class CrownUnlimited(commands.Cog):
                 obalance = vault['BALANCE']
                 o_DID = o_user['DID']
                 o_card = o['NAME']
+                o_gif = o['GIF']
                 o_card_path=o['PATH']
                 o_rcard_path=o['RPATH']
                 o_max_health = o['HLT']
@@ -18868,6 +18910,7 @@ class CrownUnlimited(commands.Cog):
                 tbalance = tvault['BALANCE']
                 t_DID = t_user['DID']
                 t_card = t['NAME']
+                t_gif = t['GIF']
                 t_card_path=t['PATH']
                 t_rcard_path=t['RPATH']
                 t_max_health = t['HLT']
@@ -21016,6 +21059,7 @@ class CrownUnlimited(commands.Cog):
 
                 o_DID = o_user['DID']
                 o_card = o['NAME']
+                o_gif = o['GIF']
                 o_card_path=o['PATH']
                 o_rcard_path=o['RPATH']
                 o_max_health = o['HLT']
@@ -21074,6 +21118,7 @@ class CrownUnlimited(commands.Cog):
                 
                 t_DID = t_user['DID']
                 t_card = t['NAME']
+                t_gif = t['GIF']
                 t_card_path=t['PATH']
                 t_rcard_path=t['RPATH']
                 t_max_health = t['HLT']
