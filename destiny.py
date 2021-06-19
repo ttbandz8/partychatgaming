@@ -148,5 +148,175 @@ destiny = [
         "EARN": "Charizard",
         "COMPLETED": False,
         "UNIVERSE": "Kanto Region"
-    },        
+    },
+    {
+        "NAME": "Mercy Mercy Mercy",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Armageddemon",
+        "USE_CARDS": ["Omnimon"],
+        "EARN": "Omnimon Merciful Mode",
+        "COMPLETED": False,
+        "UNIVERSE": "Digimon"
+    },
+    {
+        "NAME": "Digidestined Duo",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Diaboromon",
+        "USE_CARDS": ["Metal Greymon"],
+        "EARN": "Omnimon",
+        "COMPLETED": False,
+        "UNIVERSE": "Digimon"
+    },  
+    {
+        "NAME": "Digidestined Duo",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Diaboromon",
+        "USE_CARDS": ["Metal Garurumon"],
+        "EARN": "Omnimon",
+        "COMPLETED": False,
+        "UNIVERSE": "Digimon"
+    },       
+    {
+        "NAME": "Hunter Or Hunter",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Kindred",
+        "USE_CARDS": ["Akali"],
+        "EARN": "Kindred",
+        "COMPLETED": False,
+        "UNIVERSE": "League Of Legends"
+    },
+    {
+        "NAME": "My Queen",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Ashe",
+        "USE_CARDS": ["Braum"],
+        "EARN": "Ashe",
+        "COMPLETED": False,
+        "UNIVERSE": "League Of Legends"
+    },
+    {
+        "NAME": "Demacian Duo",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Lux",
+        "USE_CARDS": ["Garen"],
+        "EARN": "Lux",
+        "COMPLETED": False,
+        "UNIVERSE": "League Of Legends"
+    },
+    {
+        "NAME": "Proven Hero",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Lord Boros",
+        "USE_CARDS": ["Saitama"],
+        "EARN": "One Punch Man",
+        "COMPLETED": False,
+        "UNIVERSE": "One Punch Man"
+    },
+    {
+        "NAME": "This is the House of Evolution?",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Carnage Kabuto",
+        "USE_CARDS": ["Saitama"],
+        "EARN": "Carnage Kabuto",
+        "COMPLETED": False,
+        "UNIVERSE": "One Punch Man"
+    },
+    {
+        "NAME": "Never Give Up",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Deep Sea King",
+        "USE_CARDS": ["Mumen Rider"],
+        "EARN": "Puri Puri Prisoner",
+        "COMPLETED": False,
+        "UNIVERSE": "One Punch Man"
+    },
+    {
+        "NAME": "Angel ☆ Style",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Deep Sea King",
+        "USE_CARDS": ["Puri Puri Prisoner"],
+        "EARN": "Puri Puri Prisoner",
+        "COMPLETED": False,
+        "UNIVERSE": "One Punch Man"
+    },
+    {
+        "NAME": "One Punch Intro",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Vaccine Man",
+        "USE_CARDS": ["Saitama"],
+        "EARN": "Vaccine Man",
+        "COMPLETED": False,
+        "UNIVERSE": "One Punch Man"
+    },
+    {
+        "NAME": "Failed Invasion",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Lord Boros",
+        "USE_CARDS": ["One Punch Man"],
+        "EARN": "Lord Boros",
+        "COMPLETED": False,
+        "UNIVERSE": "One Punch Man"
+    },
+    {
+        "NAME": "Silver Fang Savior",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Melzargard",
+        "USE_CARDS": ["Metal Bat"],
+        "EARN": "Bang",
+        "COMPLETED": False,
+        "UNIVERSE": "One Punch Man"
+    },
+    {
+        "NAME": "Stolen Heart",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Melzargard",
+        "USE_CARDS": ["Bang"],
+        "EARN": "Melzargard",
+        "COMPLETED": False,
+        "UNIVERSE": "One Punch Man"
+    },
+    {
+        "NAME": "Failed Invasion",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Lord Boros",
+        "USE_CARDS": ["One Punch Man"],
+        "EARN": "Lord Boros",
+        "COMPLETED": False,
+        "UNIVERSE": "One Punch Man"
+    },
+    {
+        "NAME": "Erotic Asphyxiation",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Mosquito Girl",
+        "USE_CARDS": ["Genos"],
+        "EARN": "Saitama",
+        "COMPLETED": False,
+        "UNIVERSE": "One Punch Man"
+    },
+    {
+        "NAME": "Erotic Obliteration",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Mosquito Girl",
+        "USE_CARDS": ["Saitama"],
+        "EARN": "Mosquito Girl",
+        "COMPLETED": False,
+        "UNIVERSE": "One Punch Man"
+    },
 ]
