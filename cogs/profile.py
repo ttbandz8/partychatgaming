@@ -201,8 +201,17 @@ class Profile(commands.Cog):
             arms = vault['ARMS']
             pets = vault['PETS']
             quests = vault['QUESTS']
+            destiny = vault['DESTINY']
             active_pet = {}
             pet_names = []
+
+            destiny_messages = []
+            for d in destiny:
+                if not d['COMPLETED']:
+                    destiny_messages.append(textwrap.dedent(f"""\
+                    **{d["NAME"]}**
+                    Defeat **{d['DEFEAT']}** with **{" ".join(d['USE_CARDS'])}** | **Current Progress:** {d['WINS']}/{d['REQUIRED']}
+                    """))
 
             quest_messages = []
             for quest in quests:
@@ -211,12 +220,13 @@ class Profile(commands.Cog):
                     completed = "🟢"
                 else:
                     completed = "🔴"
-
                 quest_messages.append(textwrap.dedent(f"""\
                 Defeat **{quest['OPPONENT']}** {quest['GOAL']} times in {quest['TYPE']} for :coin:{quest['REWARD']}! : {completed}
                 **Current Progress:** {quest['WINS']}/{quest['GOAL']}
                 
                 """))
+
+
 
             for pet in pets:
                 pet_names.append(pet['NAME'])
@@ -269,13 +279,23 @@ class Profile(commands.Cog):
                 embedVar5 = discord.Embed(title= f"Quest Board", description="Use .daily to receive Quests!", colour=0x7289da)
                 # embedVar4.set_thumbnail(url=avatar)
 
+            if destiny_messages:
+                embedVar6 = discord.Embed(title= f"Destiny Board", description=textwrap.dedent(f"""
+                **Balance**: :coin:{'{:,}'.format(balance)}
+                \n{"".join(destiny_messages)}
+                """), colour=0x7289da)
+                # embedVar4.set_thumbnail(url=avatar)
+            else:
+                embedVar6 = discord.Embed(title= f"Destiny Board", description="No Destiny Lines available at this time!", colour=0x7289da)
+                # embedVar4.set_thumbnail(url=avatar)
+
             paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
             paginator.add_reaction('⏮️', "first")
             paginator.add_reaction('⏪', "back")
             paginator.add_reaction('🔐', "lock")
             paginator.add_reaction('⏩', "next")
             paginator.add_reaction('⏭️', "last")
-            embeds = [embedVar1, embedVar2, embedVar3, embedVar4, embedVar5]
+            embeds = [embedVar1, embedVar2, embedVar3, embedVar4, embedVar5, embedVar6]
             await paginator.run(embeds)
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})

@@ -8,6 +8,7 @@ import messages as m
 import numpy as np
 import help_commands as h
 import unique_traits as ut
+import destiny as d
 # Converters
 from discord import User
 from discord import Member
@@ -43,6 +44,10 @@ class Cards(commands.Cog):
         card_name = " ".join([*args])
         vault_query = {'OWNER' : str(ctx.author)}
         vault = db.altQueryVault(vault_query)
+        owned_destinies = []
+        for destiny in vault['DESTINY']:
+            owned_destinies.append(destiny['NAME'])
+
         shop = db.queryShopCards()
         cards = []
 
@@ -56,6 +61,9 @@ class Cards(commands.Cog):
                     available_universes.append(uni['TITLE'])
             if check_card['UNIVERSE'] not in available_universes:
                 await ctx.send("You cannot purchase cards from Universes you haven't unlocked.")
+                return
+            if check_card['HAS_COLLECTION']:
+                await ctx.send("This card can not be purchased.")
                 return
 
         currentBalance = vault['BALANCE']
@@ -93,6 +101,11 @@ class Cards(commands.Cog):
                     response = db.updateCard(cardInventory, update_query)
                     response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(card_name)}})
                     await ctx.send(m.PURCHASE_COMPLETE_1 + f"`{newstock}` `{mintedCard}` CARDS left in the Shop!")
+                    
+                    for destiny in d.destiny:
+                        if card_name in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
+                            db.updateVaultNoFilter(vault_query,{'$addToSet':{'DESTINY': destiny}})
+                            await ctx.send(f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.")
 
                     accept = await ctx.send(f"{ctx.author.mention} would you like to equip this Card?")
                     emojis = ['👍', '👎']
