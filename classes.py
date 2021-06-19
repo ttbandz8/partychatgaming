@@ -102,6 +102,7 @@ class CARDS():
     VUL: bool = field(default_factory=lambda: False)
     UNIVERSE: str = field(default_factory=lambda: "Unbound")
     COLLECTION: str = field(default_factory=lambda: "N/A")
+    HAS_COLLECTION: bool = field(default_factory=lambda: False)
     STOCK: int = field(default_factory=lambda: 5)
     AVAILABLE: bool = field(default_factory=lambda: False)
     BASEATK: int = field(default_factory=lambda: 25)
@@ -219,7 +220,7 @@ class VAULT():
     PETS: list[str] = field(default_factory=lambda: [{'NAME': 'Chick', 'LVL': 1, 'EXP': 0, 'Heal': 10, 'TYPE': 'HLT', 'BOND': 0, 'PATH': "https://res.cloudinary.com/dkcmq8o15/image/upload/v1622307902/Pets/chick.jpg"}])
     DECK: list[str] = field(default_factory=lambda: [{'CARD': 'Charmander', 'TITLE': 'Starter', 'ARM': 'Stock', 'PET': 'Chick'}, {'CARD': 'Ochaco Uraraka', 'TITLE': 'Starter', 'ARM': 'Stock', 'PET': 'Chick'}, {'CARD': 'Malphite', 'TITLE': 'Starter', 'ARM': 'Stock', 'PET': 'Chick'}])
     QUESTS: list[str] = field(default_factory=lambda: [])
-
+    DESTINY: list[str] = field(default_factory=lambda: [])
 
 ''' Data Functions'''
 def newCard(card):

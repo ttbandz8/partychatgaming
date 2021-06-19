@@ -1,3 +1,4 @@
+from discord import message
 from cogs.lobbies import Lobbies
 import time
 from re import T
@@ -6,6 +7,7 @@ from discord.ext import commands
 import bot as main
 import db
 import classes as data
+import destiny as d
 import messages as m
 import numpy as np
 import help_commands as h
@@ -278,8 +280,8 @@ class CrownUnlimited(commands.Cog):
             if t['UNIVERSE'] == "Demon Slayer" and o_max_health >= t['HLT']: #Demon Slayer Universal Trait
                 t_max_health = o_max_health + (25 * currentopponent) + 50 + opponent_scaling
             else:                    
-                t_max_health = t['HLT'] + (25 * currentopponent) + 50 + opponent_scaling
-            t_health = t['HLT'] + (25 * currentopponent) + 50 + opponent_scaling
+                t_max_health = t['HLT'] + (13 * currentopponent) + 50 + opponent_scaling
+            t_health = t['HLT'] + (13 * currentopponent) + 50 + opponent_scaling
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
@@ -12492,6 +12494,9 @@ class CrownUnlimited(commands.Cog):
                 drop_response = await dungeondrops(ctx.author, selected_universe, currentopponent)
                 teambank = await blessteam(15, oteam)
                 questlogger = await quest(ouser, t_card, "Dungeon")
+                destinylogger = await destiny(ouser, t_card, "Dungeon")
+                if destinylogger:
+                    await ctx.author.send(destinylogger)
                 if questlogger:
                     await ctx.author.send(questlogger)
                 if currentopponent != (total_legends):
@@ -14340,6 +14345,9 @@ class CrownUnlimited(commands.Cog):
                 teambank = await blessteam(10, oteam)
                 drop_response = await drops(ctx.author, selected_universe, currentopponent)
                 questlogger = await quest(ouser, t_card, "Tales")
+                destinylogger = await destiny(ouser, t_card, "Tales")
+                if destinylogger:
+                    await ctx.author.send(destinylogger)
                 if questlogger:
                     await ctx.author.send(questlogger)
                 if currentopponent != (total_legends):
@@ -22620,13 +22628,13 @@ class CrownUnlimited(commands.Cog):
             available = ""
             if card['AVAILABLE'] and card['EXCLUSIVE']:
                 available = ":purple_circle:"
-            elif card['AVAILABLE']:
+            elif card['AVAILABLE'] and not card['HAS_COLLECTION']:
                 available = ":green_circle:"
             else:
-                available = ":red_circle:"
-            if card['EXCLUSIVE']:
+                available = "🟠"
+            if card['EXCLUSIVE'] and not card['HAS_COLLECTION']:
                 dungeon_card_details.append(f"{available} **{card['NAME']}:** _D_")
-            else:
+            elif not card['HAS_COLLECTION']:
                 tales_card_details.append(f"{available} **{card['NAME']}**: :coin:{card['PRICE']} _T_")
         await ctx.author.send(f"{universe.upper()} CARDS LIST")
         await ctx.author.send("\n".join(tales_card_details))
@@ -22803,6 +22811,57 @@ async def quest(player, opponent, mode):
             return False
     else:
         return False
+
+async def destiny(player, opponent, mode):
+    vault = db.queryVault({'OWNER': str(player)}) 
+    user = db.queryUser({"DISNAME": str(player)})
+    vault_query = {'OWNER' : str(player)}
+    message = ""
+    if vault['DESTINY']:
+        #TALES
+        for destiny in vault['DESTINY']:
+            if user['CARD'] in destiny['USE_CARDS'] and opponent == destiny['DEFEAT'] and mode == "Tales":
+                message = f"Secured a win toward **{destiny['NAME']}**. Keep it up!"
+                completion = destiny['REQUIRED'] - (destiny['WINS'] + 1)
+                
+                if completion == 0:
+                    response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(destiny['EARN'])}})
+                    message = f"**{destiny['NAME']}** completed! **{destiny['EARN']}** has been added to your vault!"
+                    query = {'OWNER': str(player)}
+                    update_query = {'$inc': {'DESTINY.$[type].' + "WINS": 1}, '$set': {'DESTINY.$[type].' + "COMPLETED": True}}
+                    filter_query = [{'type.'+ "DEFEAT": opponent}]
+                    resp = db.updateVault(query, update_query, filter_query)
+                    return message
+        
+                query = {'OWNER': str(player)}
+                update_query = {'$inc': {'DESTINY.$[type].' + "WINS": 1}}
+                filter_query = [{'type.'+ "DEFEAT": opponent}]
+                resp = db.updateVault(query, update_query, filter_query)
+                return message
+        
+        #Dungeon
+        for destiny in vault['DESTINY']:
+            if user['CARD'] in destiny['USE_CARDS'] and opponent == destiny['DEFEAT'] and mode == "Dungeon":
+                message = f"Secured a win toward **{destiny['NAME']}**. Keep it up!"
+                completion = destiny['REQUIRED'] - (destiny['WINS'] + 3)
+                
+                if completion <= 0:
+                    response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(destiny['EARN'])}})
+                    message = f"**{destiny['NAME']}** completed! **{destiny['EARN']}** has been added to your vault!"
+                    query = {'OWNER': str(player)}
+                    update_query = {'$inc': {'DESTINY.$[type].' + "WINS": 3}, '$set': {'DESTINY.$[type].' + "COMPLETED": True}}
+                    filter_query = [{'type.'+ "DEFEAT": opponent}]
+                    resp = db.updateVault(query, update_query, filter_query)
+                    return message
+
+                query = {'OWNER': str(player)}
+                update_query = {'$inc': {'DESTINY.$[type].' + "WINS": 3}}
+                filter_query = [{'type.'+ "DEFEAT": opponent}]
+                resp = db.updateVault(query, update_query, filter_query)
+                return message
+    else:
+        return False
+
 
 def starting_position(o,t):
     if o > t:
@@ -23187,7 +23246,10 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
 
         # Character Name
         if not resolved:
-            draw.text((82,50), d['NAME'], (255, 255, 255), font=header, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
+            if d["HAS_COLLECTION"]:
+                draw.text((82,50), d['NAME'], (255,215,0), font=header, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
+            else:
+                draw.text((82,50), d['NAME'], (255, 255, 255), font=header, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
 
         # Title Name
         draw.text((85,20), title['TITLE'], (255, 255, 255), font=h, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
@@ -23202,9 +23264,18 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
 
         if resolved:
             if d['RNAME'] != "N/A" and d['RNAME'] != "":
-                draw.text((82,50), d['RNAME'], (255, 255, 255), font=header, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
+                if d["HAS_COLLECTION"]:
+                    draw.text((82,50), d['RNAME'], (255,215,0), font=header, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
+                else:
+                    if d["HAS_COLLECTION"]:
+                        draw.text((82,50), d['RNAME'], (255,215,0), font=header, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
+                    else:
+                         draw.text((82,50), d['NAME'], (255, 255, 255), font=header, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
             else:
-                draw.text((82,50), d['NAME'], (255, 255, 255), font=header, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
+                if d["HAS_COLLECTION"]:
+                    draw.text((82,50), d['NAME'], (255,215,0), font=header, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
+                else:
+                    draw.text((82,50), d['NAME'], (255, 255, 255), font=header, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
                         # side    # vert
             draw.line(((0, 0), (0, 800)), fill=(255,215,0), width=15)
             draw.line(((1195, 0), (1195, 800)), fill=(255,215,0), width=10)
@@ -23324,6 +23395,10 @@ async def drops(player, universe, matchcount):
     all_available_drop_arms = db.queryDropArms(universe)
     all_available_drop_pets = db.queryDropPets(universe)
     vault_query = {'OWNER' : str(player)}
+    vault = db.queryVault(vault_query)
+    owned_destinies = []
+    for destiny in vault['DESTINY']:
+        owned_destinies.append(destiny['NAME'])
 
     cards = []
     titles = []
@@ -23381,6 +23456,12 @@ async def drops(player, universe, matchcount):
         return f"You earned _Pet:_ **{pets[rand_pet]}** + :coin: 50!"
     elif drop_rate <= card_drop and drop_rate > pet_drop:
             response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(cards[rand_card])}})
+
+            for destiny in d.destiny:
+                if cards[rand_card] in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
+                    db.updateVaultNoFilter(vault_query,{'$addToSet':{'DESTINY': destiny}})
+                    await ctx.send(f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.")
+
             await bless(50, player)
             return f"You earned _Card:_ **{cards[rand_card]}** + :coin: 50!"
 
@@ -23390,6 +23471,10 @@ async def dungeondrops(player, universe, matchcount):
     all_available_drop_arms = db.queryExclusiveDropArms(universe)
     all_available_drop_pets = db.queryExclusiveDropPets(universe)
     vault_query = {'OWNER' : str(player)}
+    vault = db.queryVault(vault_query)
+    owned_destinies = []
+    for destiny in vault['DESTINY']:
+        owned_destinies.append(destiny['NAME'])
 
     cards = []
     titles = []
@@ -23447,6 +23532,12 @@ async def dungeondrops(player, universe, matchcount):
         return f"You earned _Pet:_ **{pets[rand_pet]}** + :coin: 80!"
     elif drop_rate <= card_drop and drop_rate > pet_drop:
             response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(cards[rand_card])}})
+            
+            for destiny in d.destiny:
+                if cards[rand_card] in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
+                    db.updateVaultNoFilter(vault_query,{'$addToSet':{'DESTINY': destiny}})
+                    await ctx.send(f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.")
+
             await bless(80, player)
             return f"You earned _Card:_ **{cards[rand_card]}** + :coin: 80!"
 
@@ -23457,8 +23548,6 @@ async def bossdrops(player, universe):
     all_available_drop_pets = db.queryExclusiveDropPets(universe)
     boss = db.queryBoss({'UNIVERSE': universe})
     vault_query = {'OWNER' : str(player)}
-
-    print(boss)
 
     cards = []
     titles = []

@@ -351,7 +351,7 @@ def queryTournamentCards():
     return data
 
 def queryShopCards():
-    data = cards_col.find({'TOURNAMENT_REQUIREMENTS': 0, 'AVAILABLE': True})
+    data = cards_col.find({'TOURNAMENT_REQUIREMENTS': 0, 'AVAILABLE': True, 'HAS_COLLECTION': False})
     return data 
 
 def altQueryShopCards(args):

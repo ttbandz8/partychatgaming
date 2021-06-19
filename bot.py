@@ -13,7 +13,7 @@ from discord.ext import commands
 from PIL import Image, ImageFont, ImageDraw
 import numpy as np
 import help_commands as h
-
+import destiny as d
 # Converters
 from discord import User
 from discord import Member
@@ -483,6 +483,9 @@ async def trade(ctx, user2: User, *args):
    p1_arms = p1_vault['ARMS']
    p1_pets = p1_vault['PETS']
    p1_balance = p1_vault['BALANCE']
+   p1_owned_destinies = []
+   for destiny in p1_vault['DESTINY']:
+      p1_owned_destinies.append(destiny['NAME'])
    
    p1_active_pet = {}
    p1_pet_names = []
@@ -499,6 +502,9 @@ async def trade(ctx, user2: User, *args):
    p2_pets = p2_vault['PETS']
    p2_balance = p2_vault['BALANCE']
    p2_trade_item = ""
+   p2_owned_destinies = []
+   for destiny in p2_vault['DESTINY']:
+      p2_owned_destinies.append(destiny['NAME'])
 
    p2_pet_names = []
    for pet in p2_pets:
@@ -566,6 +572,12 @@ async def trade(ctx, user2: User, *args):
             elif p2_trade_item in p2_cards:
                db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'CARDS': str(p1_trade_item)}})
                response = db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$addToSet':{'CARDS': str(p2_trade_item)}})
+
+               for destiny in d.destiny:
+                  if p2_trade_item in destiny["USE_CARDS"] and destiny['NAME'] not in p1_owned_destinies:
+                     db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$addToSet':{'DESTINY': destiny}})
+                     await ctx.send(f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.")
+
                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'CARD': str(p2_trade_item)}})
                await ctx.send(f"{p2_trade_item} has been added to {ctx.author.mention}'s vault: CARDS")
             elif p2_trade_item in p2_pet_names:
@@ -585,6 +597,12 @@ async def trade(ctx, user2: User, *args):
             elif p1_trade_item in p1_cards:
                db.updateVaultNoFilter({'OWNER': str(user2)},{'$pull':{'CARDS': str(p2_trade_item)}})
                response = db.updateVaultNoFilter({'OWNER': str(user2)},{'$addToSet':{'CARDS': str(p1_trade_item)}})
+
+               for destiny in d.destiny:
+                  if p1_trade_item in destiny["USE_CARDS"] and destiny['NAME'] not in p2_owned_destinies:
+                     db.updateVaultNoFilter({'OWNER': str(user2)},{'$addToSet':{'DESTINY': destiny}})
+                     await ctx.send(f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.")
+
                db.updateUserNoFilter({'DISNAME': str(user2)}, {'$set': {'CARD': str(p1_trade_item)}})
                await ctx.send(f"{p1_trade_item} has been added to {user2.mention}'s vault: CARDS")
             elif p1_trade_item in p1_pet_names:
@@ -608,6 +626,7 @@ async def sell(ctx, user2: User, *args):
    p1_pets = p1_vault['PETS']
    p1_balance = p1_vault['BALANCE']
    
+   
    p1_active_pet = {}
    p1_pet_names = []
    for pet in p1_pets:
@@ -622,6 +641,9 @@ async def sell(ctx, user2: User, *args):
    p2_pets = p2_vault['PETS']
    p2_balance = p2_vault['BALANCE']
    p2_trade_item = ""
+   owned_destinies = []
+   for destiny in p2_vault['DESTINY']:
+      owned_destinies.append(destiny['NAME'])
 
    p2_pet_names = []
    for pet in p2_pets:
@@ -654,7 +676,7 @@ async def sell(ctx, user2: User, *args):
          def check(msg):
             return msg.author == user2 and (int(msg.content) - int(p2_balance)) <= 0
          try:
-            msg = await bot.wait_for('message', timeout=8.0, check=check)
+            msg = await bot.wait_for('message', timeout=15.0, check=check)
             p2_trade_item = msg.content
             commence = True
          except:
@@ -702,6 +724,12 @@ async def sell(ctx, user2: User, *args):
                elif p1_trade_item in p1_cards:
                   await curse(p2_trade_item, user2)
                   response = db.updateVaultNoFilter({'OWNER': str(user2)},{'$addToSet':{'CARDS': str(p1_trade_item)}})
+
+                  for destiny in d.destiny:
+                     if p1_trade_item in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
+                        db.updateVaultNoFilter({'OWNER': str(user2)},{'$addToSet':{'DESTINY': destiny}})
+                        await ctx.send(f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.")
+
                   await ctx.send(f"{p1_trade_item} has been added to {user2.mention}'s vault: CARDS")
                elif p1_trade_item in p1_pet_names:
                   await curse(p2_trade_item, user2)
@@ -826,7 +854,7 @@ async def resell(ctx, *args):
             await ctx.send("You cannot resell an equipped item.")
             return
 
-         accept = await ctx.send(f"{ctx.author.mention} are you willing to resell {p1_trade_item} for :coin: {sell_price}?")
+         accept = await ctx.send(f"{ctx.author.mention} are you willing to resell {p1_trade_item} for :coin: {round(sell_price)}?")
          emojis = ['👍', '👎']
          for emoji in emojis:
             await accept.add_reaction(emoji)
@@ -840,15 +868,15 @@ async def resell(ctx, *args):
             if p1_trade_item in p1_arms:
                db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'ARMS': str(p1_trade_item)}})
                await bless(sell_price, ctx.author)
-               await ctx.send(f"{p1_trade_item} has been resold for :coin: {sell_price}.")
+               await ctx.send(f"{p1_trade_item} has been resold for :coin: {round(sell_price)}.")
             elif p1_trade_item in p1_titles:
                db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'TITLES': str(p1_trade_item)}})
                await bless(sell_price, ctx.author)
-               await ctx.send(f"{p1_trade_item} has been resold for :coin: {sell_price}.")
+               await ctx.send(f"{p1_trade_item} has been resold for :coin: {round(sell_price)}.")
             elif p1_trade_item in p1_cards:
                db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'CARDS': str(p1_trade_item)}})
                await bless(sell_price, ctx.author)
-               await ctx.send(f"{p1_trade_item} has been resold for :coin: {sell_price}.")
+               await ctx.send(f"{p1_trade_item} has been resold for :coin: {round(sell_price)}.")
 
          except:
             await ctx.send("Resell ended. ")
