@@ -91,6 +91,7 @@ class CARDS():
     MOVESET: list[str] = field(default_factory=lambda: [{'MOVE1': 20, "STAM": 10}, {'MOVE2': 50, "STAM": 30}, {'ULTIMATE': 100, "STAM": 80}, {'ENHANCER': 0, "STAM": 20, "TYPE": "TYPE"}])
     RPATH: str = field(default_factory=lambda: "N/A")
     RNAME: str = field(default_factory=lambda: "N/A")
+    GIF: str = field(default_factory=lambda: "N/A")
     HLT: int = field(default_factory=lambda: 500)
     STAM: int = field(default_factory=lambda: 100) 
     ATK: int = field(default_factory=lambda: 25)

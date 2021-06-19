@@ -308,55 +308,55 @@ for filename in os.listdir('./cogs'):
 async def on_ready():
    print('Bot is ready! ')
 
-@bot.command()
-async def r(ctx):
-   disname = str(ctx.author)
-   name = disname.split("#",1)[0]
-   user = {'DISNAME': disname, 'NAME': name, 'DID' : str(ctx.author.id), 'AVATAR': str(ctx.author.avatar_url)}
-   response = db.createUsers(data.newUser(user))
-   if response:
+# @bot.command()
+# async def r(ctx):
+#    disname = str(ctx.author)
+#    name = disname.split("#",1)[0]
+#    user = {'DISNAME': disname, 'NAME': name, 'DID' : str(ctx.author.id), 'AVATAR': str(ctx.author.avatar_url)}
+#    response = db.createUsers(data.newUser(user))
+#    if response:
 
-      embedVar = discord.Embed(title=f"Welcome to Party Chat Gaming!", description=textwrap.dedent(f"""
-      The Party Chat Gaming bot is a multipurpose tool for admins and players alike to run and participate in matches and tournaments in some of your favorite games!
-      In addition to the tools for tournaments and more, we offer an incredible gaming experience in Crown Unlimited!_See below for Crown Unlimited Details_
+#       embedVar = discord.Embed(title=f"Welcome to Party Chat Gaming!", description=textwrap.dedent(f"""
+#       The Party Chat Gaming bot is a multipurpose tool for admins and players alike to run and participate in matches and tournaments in some of your favorite games!
+#       In addition to the tools for tournaments and more, we offer an incredible gaming experience in Crown Unlimited!_See below for Crown Unlimited Details_
       
-      **Welcome to Crown Unlimited**!
-      Embark on a journey through Universes filled with characters from your favorite anime and video games! 
+#       **Welcome to Crown Unlimited**!
+#       Embark on a journey through Universes filled with characters from your favorite anime and video games! 
       
-      **3 Easy Steps for Success**
-      1. Collect Cards, Titles, Arms, and Pets
-      2. Uniquely Customize your Builds to match your playstyle
-      3. Explore Tales, Dungeons, and Bosses solo, or with your friend!
+#       **3 Easy Steps for Success**
+#       1. Collect Cards, Titles, Arms, and Pets
+#       2. Uniquely Customize your Builds to match your playstyle
+#       3. Explore Tales, Dungeons, and Bosses solo, or with your friend!
 
-      **.crown**
-      Read the Crown Unlimited Manual!
+#       **.crown**
+#       Read the Crown Unlimited Manual!
 
-      **.senpaibattle**
-      Start Crown Unlimited Battle Tutorial!
+#       **.senpaibattle**
+#       Start Crown Unlimited Battle Tutorial!
 
-      **.build** Check your current build including your equipped Card, Title, Arm, and Pet
+#       **.build** Check your current build including your equipped Card, Title, Arm, and Pet
 
-      **.vault** Your vault stores all of your Cards, Titles, Arms and Pets
+#       **.vault** Your vault stores all of your Cards, Titles, Arms and Pets
 
-      **.shop** Purchase new Cards, Titles, and Arms
+#       **.shop** Purchase new Cards, Titles, and Arms
 
 
       
-      Use .solo to play Crown Unlimited undisturbed. Remember to come back and play with your friends!
-      _We do not own the rights to the images used in this game_
-      """), colour=0xe91e63)
-      embedVar.set_footer(text=".help to inquire all potential commands and capabilites of the bot")
-      await ctx.author.send(embed=embedVar)
-      await ctx.send(f"{ctx.author.mention} Welcome! Check your DMs.")
+#       Use .solo to play Crown Unlimited undisturbed. Remember to come back and play with your friends!
+#       _We do not own the rights to the images used in this game. This is a beta of an experimental bot for the purposes of growing our coding talents and skill._
+#       """), colour=0xe91e63)
+#       embedVar.set_footer(text=".help to inquire all potential commands and capabilites of the bot")
+#       await ctx.author.send(embed=embedVar)
+#       await ctx.send(f"{ctx.author.mention} Welcome! Check your DMs.")
 
-      vault = db.queryVault({'OWNER': disname})
-      if vault:
-         await ctx.send(m.VAULT_RECOVERED, delete_after=5)
-      else:
-         vault = db.createVault(data.newVault({'OWNER' : disname}))
-         # await ctx.send(m.USER_HAS_REGISTERED, delete_after=5)
-   else:
-      await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=3) 
+#       vault = db.queryVault({'OWNER': disname})
+#       if vault:
+#          await ctx.send(m.VAULT_RECOVERED, delete_after=5)
+#       else:
+#          vault = db.createVault(data.newVault({'OWNER' : disname}))
+#          # await ctx.send(m.USER_HAS_REGISTERED, delete_after=5)
+#    else:
+#       await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=3) 
 
 @bot.command()
 @commands.check(validate_user)
@@ -887,7 +887,7 @@ async def addfield(ctx, collection, new_field, field_type):
    if ctx.author.guild_permissions.administrator == True:
 
       if field_type == 'string':
-         field_type = ""
+         field_type = "N/A"
       elif field_type == 'int':
          field_type = 0
       elif field_type == 'list':
