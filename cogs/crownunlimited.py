@@ -22696,6 +22696,16 @@ class CrownUnlimited(commands.Cog):
         await ctx.author.send("\n".join(tales_arms_details))
         await ctx.author.send("\n".join(dungeon_arms_details))
 
+    # @commands.command()
+    # async def destinies(self, ctx, *args):
+    #     universe = " ".join([*args])
+    #     universe_data = db.queryUniverse({'TITLE': str(universe)})
+    #     user = db.queryUser({'DISNAME': str(ctx.author)})
+    #     if universe_data['PREREQUISITE'] not in user['CROWN_TALES'] and universe_data['PREREQUISITE'] != "":
+    #         await ctx.send("You have not unlocked this universe!")
+    #         return
+        
+
     @commands.command()
     async def pets(self, ctx, *args):
         
