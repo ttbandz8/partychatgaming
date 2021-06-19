@@ -6,6 +6,7 @@ destiny = [
         "DEFEAT": "Itachi",
         "USE_CARDS": ["Sasuke"],
         "EARN": "Awakened Itachi",
-        "COMPLETED": False
+        "COMPLETED": False,
+        "UNIVERSE": "Naruto"
     }
 ]
