@@ -22696,14 +22696,26 @@ class CrownUnlimited(commands.Cog):
         await ctx.author.send("\n".join(tales_arms_details))
         await ctx.author.send("\n".join(dungeon_arms_details))
 
-    # @commands.command()
-    # async def destinies(self, ctx, *args):
-    #     universe = " ".join([*args])
-    #     universe_data = db.queryUniverse({'TITLE': str(universe)})
-    #     user = db.queryUser({'DISNAME': str(ctx.author)})
-    #     if universe_data['PREREQUISITE'] not in user['CROWN_TALES'] and universe_data['PREREQUISITE'] != "":
-    #         await ctx.send("You have not unlocked this universe!")
-    #         return
+    @commands.command()
+    async def destinies(self, ctx, *args):
+        universe = " ".join([*args])
+        universe_data = db.queryUniverse({'TITLE': str(universe)})
+        user = db.queryUser({'DISNAME': str(ctx.author)})
+        if universe_data['PREREQUISITE'] not in user['CROWN_TALES'] and universe_data['PREREQUISITE'] != "":
+            await ctx.send("You have not unlocked this universe!")
+            return
+
+        destinies = []
+        for destiny in d.destiny:
+            if destiny["UNIVERSE"] == universe:
+                destinies.append(destiny)
+        
+        destiny_details = []
+        for de in destinies:
+            destiny_details.append(f"**{de['NAME']}**\nDefeat {de['DEFEAT']} with {' '.join(de['USE_CARDS'])} {str(de['REQUIRED'])} times: Unlock **{de['EARN']}**")
+
+        await ctx.author.send(f"{universe.upper()} DESTINY LIST")
+        await ctx.author.send("\n".join(destiny_details))
         
 
     @commands.command()
