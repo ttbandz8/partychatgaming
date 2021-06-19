@@ -53,5 +53,9 @@ traits = [{
 },{
     'NAME': 'Solo Leveling',
     'EFFECT': 'Rulers Authority',
-    'TRAIT': 'When you focus, opponent loses (8 + turn count) defense'
+    'TRAIT': 'When you focus, opponent loses (15 + turn count) defense'
+},{
+    'NAME': 'Souls',
+    'EFFECT': 'Combo Recognition',
+    'TRAIT': 'When your opponent focus, gain (15 + turn count) attack'
 }]
