@@ -22795,20 +22795,26 @@ class CrownUnlimited(commands.Cog):
         cards = [x for x in list_of_cards]
         dungeon_card_details = []
         tales_card_details = []
+        destiny_card_details = []
         for card in cards:
             available = ""
             if card['AVAILABLE'] and card['EXCLUSIVE']:
                 available = ":purple_circle:"
             elif card['AVAILABLE'] and not card['HAS_COLLECTION']:
                 available = ":green_circle:"
+            elif card['HAS_COLLECTION']:
+                available = ":blue_circle:"
             else:
                 available = "🟠"
             if card['EXCLUSIVE'] and not card['HAS_COLLECTION']:
                 dungeon_card_details.append(f"{available} **{card['NAME']}:** _D_")
             elif not card['HAS_COLLECTION']:
                 tales_card_details.append(f"{available} **{card['NAME']}**: :coin:{card['PRICE']} _T_")
+            elif card['HAS_COLLECTION']:
+                destiny_card_details.append(f"{available} **{card['NAME']}**: :coin:{card['PRICE']} _T_")
         await ctx.author.send(f"{universe.upper()} CARDS LIST")
         await ctx.author.send("\n".join(tales_card_details))
+        await ctx.author.send("\n".join(destiny_card_details))
         await ctx.author.send("\n".join(dungeon_card_details))
     
     @commands.command()
