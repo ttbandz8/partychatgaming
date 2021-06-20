@@ -444,7 +444,7 @@ destiny = [
         "WINS": 0,
         "REQUIRED": 25,
         "DEFEAT": "Diaboromon",
-        "USE_CARDS": ["Metal Garurumon"],
+        "USE_CARDS": ["Weregarurumon"],
         "EARN": "Omnimon",
         "COMPLETED": False,
         "UNIVERSE": "Digimon"
