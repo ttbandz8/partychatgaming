@@ -4,7 +4,7 @@ destiny = [
         "WINS": 0,
         "REQUIRED": 25,
         "DEFEAT": "Soul Of Cinder",
-        "USE_CARDS": ["Hollow Knight"],
+        "USE_CARDS": ["Rekindled"],
         "EARN": "Soul Of Cinder",
         "COMPLETED": False,
         "UNIVERSE": "Souls"
@@ -14,8 +14,168 @@ destiny = [
         "WINS": 0,
         "REQUIRED": 25,
         "DEFEAT": "Nameless King",
-        "USE_CARDS": ["Hollow Knight"],
+        "USE_CARDS": ["Rekindled"],
         "EARN": "Nameless King",
+        "COMPLETED": False,
+        "UNIVERSE": "Souls"
+    },
+    {
+        "NAME": "Wyvern Ride",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Ancient Wyvern",
+        "USE_CARDS": ["Rekindled"],
+        "EARN": "Ancient Wyvern",
+        "COMPLETED": False,
+        "UNIVERSE": "Souls"
+    },
+    {
+        "NAME": "Rumble In The Boreal Valley",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Vordt Of The Boreal Valley",
+        "USE_CARDS": ["Hollow Knight"],
+        "EARN": "Vordt Of The Boreal Valley",
+        "COMPLETED": False,
+        "UNIVERSE": "Souls"
+    },
+    {
+        "NAME": "Championship Bout",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Iudex Gundyr",
+        "USE_CARDS": ["Hollow Wanderer"],
+        "EARN": "Iudex Gundyr",
+        "COMPLETED": False,
+        "UNIVERSE": "Souls"
+    },
+    {
+        "NAME": "Lumberjack Attack",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Curse Rotted Greatwood",
+        "USE_CARDS": ["Hollow Berserker"],
+        "EARN": "Curse Rotted Greatwood",
+        "COMPLETED": False,
+        "UNIVERSE": "Souls"
+    },
+    {
+        "NAME": "Wise Old Sage",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Cystal Sage",
+        "USE_CARDS": ["Hollow Cleric"],
+        "EARN": "Cystal Sage",
+        "COMPLETED": False,
+        "UNIVERSE": "Souls"
+    },
+    {
+        "NAME": "Who Watches The Watchers?",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Abyss Watchers",
+        "USE_CARDS": ["Hollow Garrison"],
+        "EARN": "Abyss Watchers",
+        "COMPLETED": False,
+        "UNIVERSE": "Souls"
+    },
+    {
+        "NAME": "Bellows Of The Deep",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Deacons Of The Deep",
+        "USE_CARDS": ["Hollow Knight"],
+        "EARN": "Deacons Of The Deep",
+        "COMPLETED": False,
+        "UNIVERSE": "Souls"
+    },
+    {
+        "NAME": "Skeleton King",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "High Lord Wolnir",
+        "USE_CARDS": ["Hollow Wanderer"],
+        "EARN": "High Lord Wolnir",
+        "COMPLETED": False,
+        "UNIVERSE": "Souls"
+    },
+    {
+        "NAME": "To Hell And Back Again",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Old Demon King",
+        "USE_CARDS": ["Hollow Berserker"],
+        "EARN": "Old Demon King",
+        "COMPLETED": False,
+        "UNIVERSE": "Souls"
+    },
+    {
+        "NAME": "A New Church",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Pontiff Sulyvahn",
+        "USE_CARDS": ["Hollow Cleric"],
+        "EARN": "Pontiff Sulyvahn",
+        "COMPLETED": False,
+        "UNIVERSE": "Souls"
+    },
+    {
+        "NAME": "Giant Pain In The Yhorm",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Yhorm The Giant",
+        "USE_CARDS": ["Hollow Garrison"],
+        "EARN": "Yhorm The Giant",
+        "COMPLETED": False,
+        "UNIVERSE": "Souls"
+    },
+    {
+        "NAME": "The Great Devour",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Aldrich Devourer Of Gods",
+        "USE_CARDS": ["Hollow Archer"],
+        "EARN": "Aldrich Devourer Of Gods",
+        "COMPLETED": False,
+        "UNIVERSE": "Souls"
+    },
+    {
+        "NAME": "Prom Night",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Dancer Of The Boreal Valley",
+        "USE_CARDS": ["Hollow Wanderer"],
+        "EARN": "Dancer Of The Boreal Valley",
+        "COMPLETED": False,
+        "UNIVERSE": "Souls"
+    },
+    {
+        "NAME": "Slayer Of... Butterflies?",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Dragonslayer Armour",
+        "USE_CARDS": ["Hollow Knight"],
+        "EARN": "Dragonslayer Armour",
+        "COMPLETED": False,
+        "UNIVERSE": "Souls"
+    },
+    {
+        "NAME": "Blind Fury",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Oceiros The Consumed King",
+        "USE_CARDS": ["Hollow Sorcerer"],
+        "EARN": "Oceiros The Consumed King",
+        "COMPLETED": False,
+        "UNIVERSE": "Souls"
+    },
+    {
+        "NAME": "Brotherly Love",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Lothric Younger Prince",
+        "USE_CARDS": ["Hollow Cleric"],
+        "EARN": "Lothric Younger Prince",
         "COMPLETED": False,
         "UNIVERSE": "Souls"
     },
@@ -76,6 +236,26 @@ destiny = [
         "DEFEAT": "Female Titan",
         "USE_CARDS": ["Captain Levi"],
         "EARN": "Female Titan",
+        "COMPLETED": False,
+        "UNIVERSE": "Attack On Titan"
+    },
+    {
+        "NAME": "Strike The Nape!",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Beast Titan",
+        "USE_CARDS": ["Captain Levi"],
+        "EARN": "Beast Titan",
+        "COMPLETED": False,
+        "UNIVERSE": "Attack On Titan"
+    },
+    {
+        "NAME": "Split Personality",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Armored Titan",
+        "USE_CARDS": ["Reiner"],
+        "EARN": "Armored Titan",
         "COMPLETED": False,
         "UNIVERSE": "Attack On Titan"
     },
@@ -240,6 +420,16 @@ destiny = [
         "UNIVERSE": "Digimon"
     },
     {
+        "NAME": "Seraphs Embrace",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Ordinemon",
+        "USE_CARDS": ["Omnimon Merciful Mode"],
+        "EARN": "Ordinemon",
+        "COMPLETED": False,
+        "UNIVERSE": "Digimon"
+    },
+    {
         "NAME": "Digidestined Duo",
         "WINS": 0,
         "REQUIRED": 25,
@@ -258,11 +448,101 @@ destiny = [
         "EARN": "Omnimon",
         "COMPLETED": False,
         "UNIVERSE": "Digimon"
-    },       
+    }, 
+    {
+        "NAME": "Digidestined Saviors",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Diaboromon",
+        "USE_CARDS": ["Omnimon"],
+        "EARN": "Diaboromon",
+        "COMPLETED": False,
+        "UNIVERSE": "Digimon"
+    }, 
+    {
+        "NAME": "Super Digivolution: Greymon",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Chrysalimon",
+        "USE_CARDS": ["Agumon"],
+        "EARN": "Metal Greymon",
+        "COMPLETED": False,
+        "UNIVERSE": "Digimon"
+    },
+    {
+        "NAME": "Super Digivolution: Garurumon",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Chrysalimon",
+        "USE_CARDS": ["Gabumon"],
+        "EARN": "Weregarurumon",
+        "COMPLETED": False,
+        "UNIVERSE": "Digimon"
+    },  
+    {
+        "NAME": "Super Digivolution: Togemon",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Chrysalimon",
+        "USE_CARDS": ["Palmon"],
+        "EARN": "Lillymon",
+        "COMPLETED": False,
+        "UNIVERSE": "Digimon"
+    },
+    {
+        "NAME": "Super Digivolution: Kabuterimon",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Chrysalimon",
+        "USE_CARDS": ["Tentomon"],
+        "EARN": "Megakabuterimon",
+        "COMPLETED": False,
+        "UNIVERSE": "Digimon"
+    },
+    {
+        "NAME": "Super Digivolution: Pegasusmon",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Chrysalimon",
+        "USE_CARDS": ["Patamon"],
+        "EARN": "Magnaangemon",
+        "COMPLETED": False,
+        "UNIVERSE": "Digimon"
+    },    
+    {
+        "NAME": "Super Digivolution: Ikkakumon",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Chrysalimon",
+        "USE_CARDS": ["Gomamon"],
+        "EARN": "Zudomon",
+        "COMPLETED": False,
+        "UNIVERSE": "Digimon"
+    },
+    {
+        "NAME": "Super Digivolution: Angewoman",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Chrysalimon",
+        "USE_CARDS": ["Gatomon"],
+        "EARN": "Magnadramon",
+        "COMPLETED": False,
+        "UNIVERSE": "Digimon"
+    },    
+    {
+        "NAME": "Super Digivolution: Birdramon",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Chrysalimon",
+        "USE_CARDS": ["Biyomon"],
+        "EARN": "Garudamon",
+        "COMPLETED": False,
+        "UNIVERSE": "Digimon"
+    },   
     {
         "NAME": "Hunter Or Hunter",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 15,
         "DEFEAT": "Kindred",
         "USE_CARDS": ["Akali"],
         "EARN": "Kindred",
@@ -272,7 +552,7 @@ destiny = [
     {
         "NAME": "My Queen",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 10,
         "DEFEAT": "Ashe",
         "USE_CARDS": ["Braum"],
         "EARN": "Ashe",
@@ -282,7 +562,7 @@ destiny = [
     {
         "NAME": "Demacian Duo",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 10,
         "DEFEAT": "Lux",
         "USE_CARDS": ["Garen"],
         "EARN": "Lux",
@@ -302,7 +582,7 @@ destiny = [
     {
         "NAME": "This is the House of Evolution?",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 10,
         "DEFEAT": "Carnage Kabuto",
         "USE_CARDS": ["Saitama"],
         "EARN": "Carnage Kabuto",
@@ -312,7 +592,7 @@ destiny = [
     {
         "NAME": "Never Give Up",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 10,
         "DEFEAT": "Deep Sea King",
         "USE_CARDS": ["Mumen Rider"],
         "EARN": "Puri Puri Prisoner",
@@ -322,7 +602,7 @@ destiny = [
     {
         "NAME": "Angel ☆ Style",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 15,
         "DEFEAT": "Deep Sea King",
         "USE_CARDS": ["Puri Puri Prisoner"],
         "EARN": "Puri Puri Prisoner",
@@ -332,7 +612,7 @@ destiny = [
     {
         "NAME": "One Punch Intro",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 10,
         "DEFEAT": "Vaccine Man",
         "USE_CARDS": ["Saitama"],
         "EARN": "Vaccine Man",
@@ -352,7 +632,7 @@ destiny = [
     {
         "NAME": "Silver Fang Savior",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 15,
         "DEFEAT": "Melzargard",
         "USE_CARDS": ["Metal Bat"],
         "EARN": "Bang",
@@ -372,7 +652,7 @@ destiny = [
     {
         "NAME": "Erotic Asphyxiation",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 15,
         "DEFEAT": "Mosquito Girl",
         "USE_CARDS": ["Genos"],
         "EARN": "Saitama",
@@ -382,7 +662,7 @@ destiny = [
     {
         "NAME": "Erotic Obliteration",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 20,
         "DEFEAT": "Mosquito Girl",
         "USE_CARDS": ["Saitama"],
         "EARN": "Mosquito Girl",
@@ -420,7 +700,7 @@ destiny = [
         "UNIVERSE": "God Of War"
     },
     {
-        "NAME": "A New God Is Born",
+        "NAME": "The Old Gods And The New",
         "WINS": 0,
         "REQUIRED": 5,
         "DEFEAT": "Ares",

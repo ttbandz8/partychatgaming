@@ -215,11 +215,11 @@ class GODS():
 class VAULT():
     OWNER: str
     BALANCE: int = field(default_factory=lambda: 1200)
-    CARDS: list[str] = field(default_factory=lambda: ['Ochaco Uraraka','Ash Ketchum','Garen'])
+    CARDS: list[str] = field(default_factory=lambda: ['Ochaco Uraraka','Eevee','Garen'])
     TITLES: list[str] = field(default_factory=lambda: ['Starter'])
     ARMS: list[str] = field(default_factory=lambda: ['Stock'])
     PETS: list[str] = field(default_factory=lambda: [{'NAME': 'Chick', 'LVL': 1, 'EXP': 0, 'Heal': 10, 'TYPE': 'HLT', 'BOND': 0, 'PATH': "https://res.cloudinary.com/dkcmq8o15/image/upload/v1622307902/Pets/chick.jpg"}])
-    DECK: list[str] = field(default_factory=lambda: [{'CARD': 'Ash Ketchum', 'TITLE': 'Starter', 'ARM': 'Stock', 'PET': 'Chick'}, {'CARD': 'Ochaco Uraraka', 'TITLE': 'Starter', 'ARM': 'Stock', 'PET': 'Chick'}, {'CARD': 'Garen', 'TITLE': 'Starter', 'ARM': 'Stock', 'PET': 'Chick'}])
+    DECK: list[str] = field(default_factory=lambda: [{'CARD': 'Eevee', 'TITLE': 'Starter', 'ARM': 'Stock', 'PET': 'Chick'}, {'CARD': 'Ochaco Uraraka', 'TITLE': 'Starter', 'ARM': 'Stock', 'PET': 'Chick'}, {'CARD': 'Garen', 'TITLE': 'Starter', 'ARM': 'Stock', 'PET': 'Chick'}])
     QUESTS: list[str] = field(default_factory=lambda: [])
     DESTINY: list[str] = field(default_factory=lambda: [])
 
