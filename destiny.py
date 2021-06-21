@@ -288,7 +288,7 @@ destiny = [
         "EARN": "Meliodas",
         "COMPLETED": False,
         "UNIVERSE": "7ds"
-    },
+    },{
         "NAME": "Fairy King Fatale",
         "WINS": 0,
         "REQUIRED": 20,
@@ -298,7 +298,7 @@ destiny = [
         "COMPLETED": False,
         "UNIVERSE": "7ds"
     },
-    },
+    {
         "NAME": "Dancing Giants",
         "WINS": 0,
         "REQUIRED": 20,
