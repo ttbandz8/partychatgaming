@@ -23063,6 +23063,9 @@ async def destiny(player, opponent, mode):
     vault = db.queryVault({'OWNER': str(player)}) 
     user = db.queryUser({"DISNAME": str(player)})
     vault_query = {'OWNER' : str(player)}
+    owned_destinies = []
+    for destiny in vault['DESTINY']:
+        owned_destinies.append(destiny['NAME'])
     message = ""
     if vault['DESTINY']:
         #TALES
@@ -23078,7 +23081,12 @@ async def destiny(player, opponent, mode):
                     update_query = {'$inc': {'DESTINY.$[type].' + "WINS": 1}, '$set': {'DESTINY.$[type].' + "COMPLETED": True}}
                     filter_query = [{'type.'+ "DEFEAT": opponent}]
                     resp = db.updateVault(query, update_query, filter_query)
-                    return message
+
+                    for dest in d.destiny:
+                        if destiny['EARN'] in dest["USE_CARDS"] and dest['NAME'] not in owned_destinies:
+                            db.updateVaultNoFilter(vault_query,{'$addToSet':{'DESTINY': dest}})
+                            message =  f"**DESTINY AWAITS!**\n**{dest['NAME']}** has been added to your vault."
+                            return message
         
                 query = {'OWNER': str(player)}
                 update_query = {'$inc': {'DESTINY.$[type].' + "WINS": 1}}
