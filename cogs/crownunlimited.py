@@ -22814,8 +22814,8 @@ class CrownUnlimited(commands.Cog):
                 destiny_card_details.append(f"{available} **{card['NAME']}**: :coin:{card['PRICE']} _T_")
         await ctx.author.send(f"{universe.upper()} CARDS LIST")
         await ctx.author.send("\n".join(tales_card_details))
-        await ctx.author.send("\n".join(destiny_card_details))
         await ctx.author.send("\n".join(dungeon_card_details))
+        await ctx.author.send("\n".join(destiny_card_details))
     
     @commands.command()
     async def titles(self, ctx, *args):

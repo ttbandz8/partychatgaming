@@ -190,6 +190,16 @@ destiny = [
         "UNIVERSE": "Naruto"
     },
     {
+        "NAME": "Stolen Shifter",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Beast Titan",
+        "USE_CARDS": ["Lady Ymir"],
+        "EARN": "Jaw Titan",
+        "COMPLETED": False,
+        "UNIVERSE": "Attack On Titan"
+    },
+    {
         "NAME": "Eternal Lovers",
         "WINS": 0,
         "REQUIRED": 25,
@@ -266,6 +276,45 @@ destiny = [
         "DEFEAT": "Zeldris",
         "USE_CARDS": ["Meliodas"],
         "EARN": "Zeldris",
+        "COMPLETED": False,
+        "UNIVERSE": "7ds"
+    },
+    {
+        "NAME": "Bloody Bros",
+        "WINS": 0,
+        "REQUIRED": 20,
+        "DEFEAT": "Meliodas",
+        "USE_CARDS": ["Ban"],
+        "EARN": "Meliodas",
+        "COMPLETED": False,
+        "UNIVERSE": "7ds"
+    },
+        "NAME": "Fairy King Fatale",
+        "WINS": 0,
+        "REQUIRED": 20,
+        "DEFEAT": "Gloxinia",
+        "USE_CARDS": ["King"],
+        "EARN": "Gloxinia",
+        "COMPLETED": False,
+        "UNIVERSE": "7ds"
+    },
+    },
+        "NAME": "Dancing Giants",
+        "WINS": 0,
+        "REQUIRED": 20,
+        "DEFEAT": "Drole",
+        "USE_CARDS": ["Diane"],
+        "EARN": "Drole",
+        "COMPLETED": False,
+        "UNIVERSE": "7ds"
+    },
+    {
+        "NAME": "Lovers Quarrel",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "King",
+        "USE_CARDS": ["Diane"],
+        "EARN": "King",
         "COMPLETED": False,
         "UNIVERSE": "7ds"
     },
@@ -742,10 +791,20 @@ destiny = [
     {
         "NAME": "Fear No Gorgon Boy",
         "WINS": 0,
-        "REQUIRED": 50,
+        "REQUIRED": 40,
         "DEFEAT": "Medusa",
         "USE_CARDS": ["Atreus"],
         "EARN": "Medusa",
+        "COMPLETED": False,
+        "UNIVERSE": "God Of War"
+    },
+    {
+        "NAME": "Go Back To Your Daddy....Boy",
+        "WINS": 0,
+        "REQUIRED": 50,
+        "DEFEAT": "God Of War",
+        "USE_CARDS": ["Baldur"],
+        "EARN": "Zeus",
         "COMPLETED": False,
         "UNIVERSE": "God Of War"
     },
