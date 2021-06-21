@@ -1213,9 +1213,9 @@ class CrownUnlimited(commands.Cog):
                             turn_total= turn_total + 1
                             turn=1
                         elif o_universe == "Solo Leveling":
-                            embedVar = discord.Embed(title=f"Ruler's Authority... Opponent loses {15 + turn} DEF!", colour=0xe91e63)
+                            embedVar = discord.Embed(title=f"Ruler's Authority... Opponent loses {15 + turn_total} DEF!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            t_defense = round(t_defense - (10 - turn))
+                            t_defense = round(t_defense - (15 - turn_total))
                             turn_total= turn_total + 1
                             turn=1
                         elif o_universe == "Attack On Titan":
@@ -1243,9 +1243,9 @@ class CrownUnlimited(commands.Cog):
                             turn_total= turn_total + 1
                             turn=1
                         elif t_universe == "Souls":
-                            embedVar = discord.Embed(title=f"Combo Recognition! {t_card} Increased Attack by {15 + turn}!", colour=0xe91e63)
-                            await ctx.send(embed=embedVar)
-                            t_attack = round(t_attack + (15 + turn))
+                            embedVar = discord.Embed(title=f"Combo Recognition! {t_card} Increased Attack by {15 + turn_total}!", colour=0xe91e63)
+                            await private_channel.send(embed=embedVar)
+                            t_attack = round(t_attack + (15 + turn_total))
                             turn_total= turn_total + 1
                             turn=1
                         else:
@@ -1841,9 +1841,9 @@ class CrownUnlimited(commands.Cog):
                             turn_total= turn_total + 1
                             turn=2
                         elif t_universe == "Solo Leveling":
-                            embedVar = discord.Embed(title=f"Ruler's Authority... {o_card} loses {15 + turn} DEF!", colour=0xe91e63)
+                            embedVar = discord.Embed(title=f"Ruler's Authority... {o_card} loses {15 + turn_total} DEF!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            o_defense = round(o_defense - (10 - turn))
+                            o_defense = round(o_defense - (10 - turn_total))
                             turn_total= turn_total + 1
                             turn=2
                         elif t_universe == "Attack On Titan":
@@ -1871,9 +1871,9 @@ class CrownUnlimited(commands.Cog):
                             turn_total= turn_total + 1
                             turn=2
                         elif o_universe == "Souls":
-                            embedVar = discord.Embed(title=f"Combo Recognition! {o_card} Increased ATK by {15 + turn}!", colour=0xe91e63)
+                            embedVar = discord.Embed(title=f"Combo Recognition! {o_card} Increased ATK by {15 + turn_total}!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            o_attack = round(o_attack + (15 + turn))
+                            o_attack = round(o_attack + (15 + turn_total))
                             turn_total= turn_total + 1
                             turn=2
                         else:
@@ -2316,9 +2316,9 @@ class CrownUnlimited(commands.Cog):
                             turn_total= turn_total + 1
                             turn=3
                         elif c_universe == "Solo Leveling":
-                            embedVar = discord.Embed(title=f"Ruler's Authority... {t_card} loses {15 + turn} DEF!", colour=0xe91e63)
+                            embedVar = discord.Embed(title=f"Ruler's Authority... {t_card} loses {15 + turn_total} DEF!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            t_defense = round(t_defense - (10 - turn))
+                            t_defense = round(t_defense - (15 - turn_total))
                             turn_total= turn_total + 1
                             turn=3
                         elif c_universe == "Attack On Titan":
@@ -2346,9 +2346,9 @@ class CrownUnlimited(commands.Cog):
                             turn_total= turn_total + 1
                             turn=3
                         elif t_universe == "Souls":
-                            embedVar = discord.Embed(title=f"Combo Recognition! {t_card} Increased Attack by {15 + turn}!", colour=0xe91e63)
-                            await ctx.send(embed=embedVar)
-                            t_attack = round(t_attack + (15 + turn))
+                            embedVar = discord.Embed(title=f"Combo Recognition! {t_card} Increased Attack by {15 + turn_total}!", colour=0xe91e63)
+                            await private_channel.send(embed=embedVar)
+                            t_attack = round(t_attack + (15 + turn_total))
                             turn_total= turn_total + 1
                             turn=3
                         else:
@@ -2945,9 +2945,9 @@ class CrownUnlimited(commands.Cog):
                             turn_total= turn_total + 1
                             turn=0
                         elif t_universe == "Solo Leveling":
-                            embedVar = discord.Embed(title=f"Ruler's Authority... {c_card} loses {15 + turn} DEF!", colour=0xe91e63)
+                            embedVar = discord.Embed(title=f"Ruler's Authority... {c_card} loses {15 + turn_total} DEF!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            c_defense = round(c_defense - (10 - turn))
+                            c_defense = round(c_defense - (15 - turn_total))
                             turn_total= turn_total + 1
                             turn=0
                         elif t_universe == "Attack On Titan":
@@ -2975,9 +2975,9 @@ class CrownUnlimited(commands.Cog):
                             turn_total= turn_total + 1
                             turn=0
                         elif c_universe == "Souls":
-                            embedVar = discord.Embed(title=f"Combo Recognition! {c_card} Increased ATK by {15 + turn}!", colour=0xe91e63)
+                            embedVar = discord.Embed(title=f"Combo Recognition! {c_card} Increased ATK by {15 + turn_total}!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            c_attack = round(c_attack + (15 + turn))
+                            c_attack = round(c_attack + (15 + turn_total))
                             turn_total= turn_total + 1
                             turn=0
                         else:
@@ -4635,9 +4635,9 @@ class CrownUnlimited(commands.Cog):
                             turn_total= turn_total + 1
                             turn=1
                         elif o_universe == "Solo Leveling":
-                            embedVar = discord.Embed(title=f"Ruler's Authority... Opponent loses {15 + turn} DEF!", colour=0xe91e63)
+                            embedVar = discord.Embed(title=f"Ruler's Authority... Opponent loses {15 + turn_total} DEF!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            t_defense = round(t_defense - (10 - turn))
+                            t_defense = round(t_defense - (15 - turn_total))
                             turn_total= turn_total + 1
                             turn=1
                         elif o_universe == "Attack On Titan":
@@ -4665,9 +4665,9 @@ class CrownUnlimited(commands.Cog):
                             turn_total= turn_total + 1
                             turn=1
                         elif t_universe == "Souls":
-                            embedVar = discord.Embed(title=f"Combo Recognition! {t_card} Increased Attack by {15 + turn}!", colour=0xe91e63)
-                            await ctx.send(embed=embedVar)
-                            t_attack = round(t_attack + (15 + turn))
+                            embedVar = discord.Embed(title=f"Combo Recognition! {t_card} Increased Attack by {15 + turn_total}!", colour=0xe91e63)
+                            await private_channel.send(embed=embedVar)
+                            t_attack = round(t_attack + (15 + turn_total))
                             turn_total= turn_total + 1
                             turn=1
                         else:
@@ -5264,9 +5264,9 @@ class CrownUnlimited(commands.Cog):
                             turn_total= turn_total + 1
                             turn=2
                         elif c_universe == "Solo Leveling":
-                            embedVar = discord.Embed(title=f"Ruler's Authority... {t_card} loses {15 + turn} DEF!", colour=0xe91e63)
+                            embedVar = discord.Embed(title=f"Ruler's Authority... {t_card} loses {15 + turn_total} DEF!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            t_defense = round(t_defense - (10 - turn))
+                            t_defense = round(t_defense - (15 - turn_total))
                             turn_total= turn_total + 1
                             turn=2
                         elif t_universe == "Attack On Titan":
@@ -5294,9 +5294,9 @@ class CrownUnlimited(commands.Cog):
                             turn_total= turn_total + 1
                             turn=2
                         elif o_universe == "Souls":
-                            embedVar = discord.Embed(title=f"Combo Recognition! {o_card} Increased ATK by {15 + turn}!", colour=0xe91e63)
+                            embedVar = discord.Embed(title=f"Combo Recognition! {o_card} Increased ATK by {15 + turn_total}!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            o_attack = round(o_attack + (15 + turn))
+                            o_attack = round(o_attack + (15 + turn_total))
                             turn_total= turn_total + 1
                             turn=2
                         else:
@@ -5842,9 +5842,9 @@ class CrownUnlimited(commands.Cog):
                             turn_total= turn_total + 1
                             turn=3
                         elif c_universe == "Solo Leveling":
-                            embedVar = discord.Embed(title=f"Ruler's Authority... {t_card} loses {15 + turn} DEF!", colour=0xe91e63)
+                            embedVar = discord.Embed(title=f"Ruler's Authority... {t_card} loses {15 + turn_total} DEF!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            t_defense = round(t_defense - (10 - turn))
+                            t_defense = round(t_defense - (15 - turn))
                             turn_total= turn_total + 1
                             turn=3
                         elif c_universe == "Attack On Titan":
@@ -5872,9 +5872,9 @@ class CrownUnlimited(commands.Cog):
                             turn_total= turn_total + 1
                             turn=3
                         elif t_universe == "Souls":
-                            embedVar = discord.Embed(title=f"Combo Recognition! {t_card} Increased Attack by {15 + turn}!", colour=0xe91e63)
-                            await ctx.send(embed=embedVar)
-                            t_attack = round(t_attack + (15 + turn))
+                            embedVar = discord.Embed(title=f"Combo Recognition! {t_card} Increased Attack by {15 + turn_total}!", colour=0xe91e63)
+                            await private_channel.send(embed=embedVar)
+                            t_attack = round(t_attack + (15 + turn_total))
                             turn_total= turn_total + 1
                             turn=3
                         else:
@@ -6469,9 +6469,9 @@ class CrownUnlimited(commands.Cog):
                             turn_total= turn_total + 1
                             turn=0
                         elif t_universe == "Solo Leveling":
-                            embedVar = discord.Embed(title=f"Ruler's Authority... {c_card} loses {15 + turn} DEF!", colour=0xe91e63)
+                            embedVar = discord.Embed(title=f"Ruler's Authority... {c_card} loses {15 + turn_total} DEF!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            c_defense = round(c_defense - (10 - turn))
+                            c_defense = round(c_defense - (15 - turn_total))
                             turn_total= turn_total + 1
                             turn=0
                         elif t_universe == "Attack On Titan":
@@ -6499,9 +6499,9 @@ class CrownUnlimited(commands.Cog):
                             turn_total= turn_total + 1
                             turn=0
                         elif c_universe == "Souls":
-                            embedVar = discord.Embed(title=f"Combo Recognition! {c_card} Increased ATK by {15 + turn}!", colour=0xe91e63)
+                            embedVar = discord.Embed(title=f"Combo Recognition! {c_card} Increased ATK by {15 + turn_total}!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            c_attack = round(c_attack + (15 + turn))
+                            c_attack = round(c_attack + (15 + turn_total))
                             turn_total= turn_total + 1
                             turn=0
                         else:
@@ -8245,9 +8245,9 @@ class CrownUnlimited(commands.Cog):
                         turn_total= turn_total + 1
                         turn=1
                     elif o_universe == "Solo Leveling":
-                        embedVar = discord.Embed(title=f"Ruler's Authority... Opponent loses {15 + turn} DEF!", colour=0xe91e63)
+                        embedVar = discord.Embed(title=f"Ruler's Authority... Opponent loses {15 + turn_total} DEF!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
-                        t_defense = round(t_defense - (10 - turn))
+                        t_defense = round(t_defense - (15 - turn_total))
                         turn_total= turn_total + 1
                         turn=1
                     elif o_universe == "Attack On Titan":
@@ -8275,9 +8275,9 @@ class CrownUnlimited(commands.Cog):
                         turn_total= turn_total + 1
                         turn=1
                     elif t_universe == "Souls":
-                        embedVar = discord.Embed(title=f"Combo Recognition! {t_card} Increased Attack by {15 + turn}!", colour=0xe91e63)
-                        await ctx.send(embed=embedVar)
-                        t_attack = round(t_attack + (15 + turn))
+                        embedVar = discord.Embed(title=f"Combo Recognition! {t_card} Increased Attack by {15 + turn_total}!", colour=0xe91e63)
+                        await private_channel.send(embed=embedVar)
+                        t_attack = round(t_attack + (15 + turn_total))
                         turn_total= turn_total + 1
                         turn=1
                     else:
@@ -8887,6 +8887,12 @@ class CrownUnlimited(commands.Cog):
                         o_health = round(o_health - 30)
                         turn_total= turn_total + 1
                         turn=2
+                    elif t_universe == "Solo Leveling":
+                        embedVar = discord.Embed(title=f"Ruler's Authority... {o_card} loses {15 + turn_total} DEF!", colour=0xe91e63)
+                        await private_channel.send(embed=embedVar)
+                        o_defense = round(o_defense - (15 - turn))
+                        turn_total= turn_total + 1
+                        turn=2
                     elif t_universe == "Attack On Titan":
                         embedVar = discord.Embed(title=f"Rally!{t_card} Increased Max Health!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
@@ -8912,9 +8918,9 @@ class CrownUnlimited(commands.Cog):
                         turn_total= turn_total + 1
                         turn=2
                     elif o_universe == "Souls":
-                        embedVar = discord.Embed(title=f"Combo Recognition! {o_card} Increased ATK by {15 + turn}!", colour=0xe91e63)
+                        embedVar = discord.Embed(title=f"Combo Recognition! {o_card} Increased ATK by {15 + turn_total}!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
-                        o_attack = round(o_attack + (15 + turn))
+                        o_attack = round(o_attack + (15 + turn_total))
                         turn_total= turn_total + 1
                         turn=2
                     else:
@@ -9482,6 +9488,12 @@ class CrownUnlimited(commands.Cog):
                         t_health = round(t_health - 30)
                         turn_total= turn_total + 1
                         turn=3
+                    elif c_universe == "Solo Leveling":
+                        embedVar = discord.Embed(title=f"Ruler's Authority... Opponent loses {15 + turn_total} DEF!", colour=0xe91e63)
+                        await private_channel.send(embed=embedVar)
+                        t_defense = round(t_defense - (15 - turn_total))
+                        turn_total= turn_total + 1
+                        turn=3
                     elif c_universe == "Attack On Titan":
                         embedVar = discord.Embed(title=f"Rally! {c_card} Increased Max Health!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
@@ -9507,9 +9519,9 @@ class CrownUnlimited(commands.Cog):
                         turn_total= turn_total + 1
                         turn=3
                     elif t_universe == "Souls":
-                        embedVar = discord.Embed(title=f"Combo Recognition! {t_card} Increased Attack by {15 + turn}!", colour=0xe91e63)
-                        await ctx.send(embed=embedVar)
-                        t_attack = round(t_attack + (15 + turn))
+                        embedVar = discord.Embed(title=f"Combo Recognition! {t_card} Increased Attack by {15 + turn_total}!", colour=0xe91e63)
+                        await private_channel.send(embed=embedVar)
+                        t_attack = round(t_attack + (15 + turn_total))
                         turn_total= turn_total + 1
                         turn=3
                     else:
@@ -10120,6 +10132,12 @@ class CrownUnlimited(commands.Cog):
                         c_health = round(c_health - 30)
                         turn_total= turn_total + 1
                         turn=0
+                    elif t_universe == "Solo Leveling":
+                        embedVar = discord.Embed(title=f"Ruler's Authority... {c_card} loses {15 + turn_total} DEF!", colour=0xe91e63)
+                        await private_channel.send(embed=embedVar)
+                        c_defense = round(c_defense - (15 - turn))
+                        turn_total= turn_total + 1
+                        turn=0
                     elif t_universe == "Attack On Titan":
                         embedVar = discord.Embed(title=f"Rally!{t_card} Increased Max Health!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
@@ -10145,9 +10163,9 @@ class CrownUnlimited(commands.Cog):
                         turn_total= turn_total + 1
                         turn=0
                     elif c_universe == "Souls":
-                        embedVar = discord.Embed(title=f"Combo Recognition! {c_card} Increased ATK by {15 + turn}!", colour=0xe91e63)
+                        embedVar = discord.Embed(title=f"Combo Recognition! {c_card} Increased ATK by {15 + turn_total}!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
-                        c_attack = round(c_attack + (15 + turn))
+                        c_attack = round(c_attack + (15 + turn_total))
                         turn_total= turn_total + 1
                         turn=0
                     else:
@@ -11519,9 +11537,9 @@ class CrownUnlimited(commands.Cog):
                             turn_total= turn_total + 1
                             turn=1
                         elif o_universe == "Solo Leveling":
-                            embedVar = discord.Embed(title=f"Ruler's Authority... {t_card} loses {15 + turn} DEF!", colour=0xe91e63)
+                            embedVar = discord.Embed(title=f"Ruler's Authority... {t_card} loses {15 + turn_total} DEF!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            t_defense = round(t_defense - (10 - turn))
+                            t_defense = round(t_defense - (15 - turn_total))
                             turn_total= turn_total + 1
                             turn=1
                         elif o_universe == "Attack On Titan":
@@ -11549,8 +11567,8 @@ class CrownUnlimited(commands.Cog):
                             turn_total= turn_total + 1
                             turn=1
                         elif t_universe == "Souls":
-                            embedVar = discord.Embed(title=f"Combo Recognition! {t_card} Increased Attack by {15 + turn}!", colour=0xe91e63)
-                            await ctx.send(embed=embedVar)
+                            embedVar = discord.Embed(title=f"Combo Recognition! {t_card} Increased Attack by {15 + turn_total}!", colour=0xe91e63)
+                            await private_channel.send(embed=embedVar)
                             t_attack = round(t_attack + (15 + turn_total))
                             turn_total= turn_total + 1
                             turn=1
@@ -12062,9 +12080,9 @@ class CrownUnlimited(commands.Cog):
                             turn_total= turn_total + 1
                             turn=0
                         elif t_universe == "Solo Leveling":
-                            embedVar = discord.Embed(title=f"Ruler's Authority... {o_card} loses {15 + turn} DEF!", colour=0xe91e63)
+                            embedVar = discord.Embed(title=f"Ruler's Authority... {o_card} loses {15 + turn_total} DEF!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            o_defense = round(o_defense - (10 - turn))
+                            o_defense = round(o_defense - (15 - turn))
                             turn_total= turn_total + 1
                             turn=0
                         elif t_universe == "Attack On Titan":
@@ -12092,7 +12110,7 @@ class CrownUnlimited(commands.Cog):
                             turn_total= turn_total + 1
                             turn=0
                         elif o_universe == "Souls":
-                            embedVar = discord.Embed(title=f"Combo Recognition! {o_card} Increased ATK by {15 + turn}!", colour=0xe91e63)
+                            embedVar = discord.Embed(title=f"Combo Recognition! {o_card} Increased ATK by {15 + turn_total}!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             o_attack = round(o_attack + (15 + turn))
                             turn_total= turn_total + 1
@@ -13491,9 +13509,9 @@ class CrownUnlimited(commands.Cog):
                             turn_total= turn_total + 1
                             turn=1
                         elif o_universe == "Solo Leveling":
-                            embedVar = discord.Embed(title=f"Ruler's Authority... {t_card} loses {15 + turn} DEF!", colour=0xe91e63)
+                            embedVar = discord.Embed(title=f"Ruler's Authority... {t_card} loses {15 + turn_total} DEF!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            t_defense = round(t_defense - (10 - turn))
+                            t_defense = round(t_defense - (15 - turn_total))
                             turn_total= turn_total + 1
                             turn=1
                         elif o_universe == "Attack On Titan":
@@ -13521,9 +13539,9 @@ class CrownUnlimited(commands.Cog):
                             turn_total= turn_total + 1
                             turn=1
                         elif t_universe == "Souls":
-                            embedVar = discord.Embed(title=f"Combo Recognition! {t_card} Increased ATK by {15 + turn}!", colour=0xe91e63)
-                            await ctx.send(embed=embedVar)
-                            t_attack = round(t_attack + (15 + turn))
+                            embedVar = discord.Embed(title=f"Combo Recognition! {t_card} Increased ATK by {15 + turn_total}!", colour=0xe91e63)
+                            await private_channel.send(embed=embedVar)
+                            t_attack = round(t_attack + (15 + turn_total))
                             turn_total= turn_total + 1
                             turn=1
                         else:
@@ -14034,9 +14052,9 @@ class CrownUnlimited(commands.Cog):
                             turn_total= turn_total + 1
                             turn=0
                         elif t_universe == "Solo Leveling":
-                            embedVar = discord.Embed(title=f"Ruler's Authority... {o_card} loses {15 + turn} DEF!", colour=0xe91e63)
+                            embedVar = discord.Embed(title=f"Ruler's Authority... {o_card} loses {15 + turn_total} DEF!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            o_defense = round(o_defense - (10 - turn))
+                            o_defense = round(o_defense - (15 - turn_total))
                             turn_total= turn_total + 1
                             turn=0
                         elif t_universe == "Attack On Titan":
@@ -14064,9 +14082,9 @@ class CrownUnlimited(commands.Cog):
                             turn_total= turn_total + 1
                             turn=0
                         elif o_universe == "Souls":
-                            embedVar = discord.Embed(title=f"Combo Recognition! {o_card} Increased ATK by {15 + turn}!", colour=0xe91e63)
+                            embedVar = discord.Embed(title=f"Combo Recognition! {o_card} Increased ATK by {15 + turn_total}!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            o_attack = round(o_attack + (15 + turn))
+                            o_attack = round(o_attack + (15 + turn_total))
                             turn_total= turn_total + 1
                             turn=0
                         else:
@@ -15377,9 +15395,9 @@ class CrownUnlimited(commands.Cog):
                         turn_total= turn_total + 1
                         turn=1
                     elif o_universe == "Solo Leveling":
-                        embedVar = discord.Embed(title=f"Ruler's Authority... Opponent loses {15 + turn} DEF!", colour=0xe91e63)
+                        embedVar = discord.Embed(title=f"Ruler's Authority... Opponent loses {15 + turn_total} DEF!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
-                        t_defense = round(t_defense - (10 - turn))
+                        t_defense = round(t_defense - (15 - turn_total))
                         turn_total= turn_total + 1
                         turn=1
                     elif o_universe == "Attack On Titan":
@@ -15407,8 +15425,8 @@ class CrownUnlimited(commands.Cog):
                         turn_total= turn_total + 1
                         turn=1
                     elif t_universe == "Souls":
-                        embedVar = discord.Embed(title=f"Combo Recognition! {t_card} Increased Attack by {15 + turn}!", colour=0xe91e63)
-                        await ctx.send(embed=embedVar)
+                        embedVar = discord.Embed(title=f"Combo Recognition! {t_card} Increased Attack by {15 + turn_total}!", colour=0xe91e63)
+                        await private_channel.send(embed=embedVar)
                         t_attack = round(t_attack + (15 + turn_total))
                         turn_total= turn_total + 1
                         turn=1
@@ -15935,9 +15953,9 @@ class CrownUnlimited(commands.Cog):
                         turn_total= turn_total + 1
                         turn=0
                     elif t_universe == "Solo Leveling":
-                        embedVar = discord.Embed(title=f"Ruler's Authority... {o_card} loses {15 + turn} DEF!", colour=0xe91e63)
+                        embedVar = discord.Embed(title=f"Ruler's Authority... {o_card} loses {15 + turn_total} DEF!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
-                        o_defense = round(o_defense - (10 - turn))
+                        o_defense = round(o_defense - (15 - turn_total))
                         turn_total= turn_total + 1
                         turn=0
                     elif t_universe == "Attack On Titan":
@@ -15962,6 +15980,12 @@ class CrownUnlimited(commands.Cog):
                         embedVar = discord.Embed(title=f"Increase Power Level! {o_card} Increased Stamina!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         o_stamina = 110
+                        turn_total= turn_total + 1
+                        turn=0
+                    elif o_universe == "Souls":
+                        embedVar = discord.Embed(title=f"Combo Recognition! {o_card} Increased ATK by {15 + turn_total}!", colour=0xe91e63)
+                        await private_channel.send(embed=embedVar)
+                        o_attack = round(o_attack + (15 + turn_total))
                         turn_total= turn_total + 1
                         turn=0
                     else:
@@ -17320,6 +17344,12 @@ class CrownUnlimited(commands.Cog):
                                 o_max_health = round(o_max_health + 50)
                                 turn_total= turn_total + 1
                                 turn=1
+                            elif o_universe == "Solo Leveling":
+                                embedVar = discord.Embed(title=f"Ruler's Authority... Opponent loses {15 + turn_total} DEF!", colour=0xe91e63)
+                                await ctx.send(embed=embedVar)
+                                t_defense = round(t_defense - (15 - turn_total))
+                                turn_total= turn_total + 1
+                                turn=1
                             elif o_universe == "Black Clover":
                                 embedVar = discord.Embed(title=f"Mana Zone! {o_card} Increased Stamina!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
@@ -17339,9 +17369,9 @@ class CrownUnlimited(commands.Cog):
                                 turn_total= turn_total + 1
                                 turn=1
                             elif t_universe == "Souls":
-                                embedVar = discord.Embed(title=f"Combo Recognition! {t_card} Increased Attack by {15 + turn}!", colour=0xe91e63)
+                                embedVar = discord.Embed(title=f"Combo Recognition! {t_card} Increased Attack by {15 + turn_total}!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
-                                t_attack = round(t_attack + (15 + turn))
+                                t_attack = round(t_attack + (15 + turn_total))
                                 turn_total= turn_total + 1
                                 turn=1
                             else:
@@ -17839,6 +17869,12 @@ class CrownUnlimited(commands.Cog):
                                 o_health = round(o_health - 30)
                                 turn_total= turn_total + 1
                                 turn=0
+                            elif t_universe == "Solo Leveling":
+                                embedVar = discord.Embed(title=f"Ruler's Authority... {o_card} loses {15 + turn_total} DEF!", colour=0xe91e63)
+                                await ctx.send(embed=embedVar)
+                                o_defense = round(o_defense - (15 - turn_total))
+                                turn_total= turn_total + 1
+                                turn=0
                             elif t_universe == "Attack On Titan":
                                 embedVar = discord.Embed(title=f"Rally!{t_card} Increased Max Health!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
@@ -17864,9 +17900,9 @@ class CrownUnlimited(commands.Cog):
                                 turn_total= turn_total + 1
                                 turn=0
                             elif o_universe == "Souls":
-                                embedVar = discord.Embed(title=f"Combo Recognition! {o_card} Increased ATK by {15 + turn}!", colour=0xe91e63)
-                                await private_channel.send(embed=embedVar)
-                                o_attack = round(o_attack + (15 + turn))
+                                embedVar = discord.Embed(title=f"Combo Recognition! {o_card} Increased ATK by {15 + turn_total}!", colour=0xe91e63)
+                                await ctx.send(embed=embedVar)
+                                o_attack = round(o_attack + (15 + turn_total))
                                 turn_total= turn_total + 1
                                 turn=0
                             else:
@@ -19642,6 +19678,12 @@ class CrownUnlimited(commands.Cog):
                                 t_health = round(t_health - 30)
                                 turn_total= turn_total + 1
                                 turn=1
+                            elif o_universe == "Solo Leveling":
+                                embedVar = discord.Embed(title=f"Ruler's Authority... Opponent loses {15 + turn_total} DEF!", colour=0xe91e63)
+                                await ctx.send(embed=embedVar)
+                                t_defense = round(t_defense - (15 - turn_total))
+                                turn_total= turn_total + 1
+                                turn=1
                             elif o_universe == "Attack On Titan":
                                 embedVar = discord.Embed(title=f"Rally! {o_card} Increased Max Health!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
@@ -19667,7 +19709,7 @@ class CrownUnlimited(commands.Cog):
                                 turn_total= turn_total + 1
                                 turn=1
                             elif t_universe == "Souls":
-                                embedVar = discord.Embed(title=f"Combo Recognition! {t_card} Increased Attack by {15 + turn}!", colour=0xe91e63)
+                                embedVar = discord.Embed(title=f"Combo Recognition! {t_card} Increased Attack by {15 + turn_total}!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
                                 t_attack = round(t_attack + (15 + turn_total))
                                 turn_total= turn_total + 1
@@ -20175,6 +20217,12 @@ class CrownUnlimited(commands.Cog):
                                 o_health = round(o_health - 30)
                                 turn_total= turn_total + 1
                                 turn=0
+                            elif t_universe == "Solo Leveling":
+                                embedVar = discord.Embed(title=f"Ruler's Authority... {o_card} loses {15 + turn_total} DEF!", colour=0xe91e63)
+                                await ctx.send(embed=embedVar)
+                                o_defense = round(o_defense - (15 - turn_total))
+                                turn_total= turn_total + 1
+                                turn=0
                             elif t_universe == "Attack On Titan":
                                 embedVar = discord.Embed(title=f"Rally!{t_card} Increased Max Health!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
@@ -20200,9 +20248,9 @@ class CrownUnlimited(commands.Cog):
                                 turn_total= turn_total + 1
                                 turn=0
                             elif o_universe == "Souls":
-                                embedVar = discord.Embed(title=f"Combo Recognition! {o_card} Increased ATK by {15 + turn}!", colour=0xe91e63)
-                                await private_channel.send(embed=embedVar)
-                                o_attack = round(o_attack + (15 + turn))
+                                embedVar = discord.Embed(title=f"Combo Recognition! {o_card} Increased ATK by {15 + turn_total}!", colour=0xe91e63)
+                                await ctx.send(embed=embedVar)
+                                o_attack = round(o_attack + (15 + turn_total))
                                 turn_total= turn_total + 1
                                 turn=0
                             else:
