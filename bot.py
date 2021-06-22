@@ -336,8 +336,6 @@ async def on_ready():
 
 #       **.build** Check your current build including your equipped Card, Title, Arm, and Pet
 
-#       **.vault** Your vault stores all of your Cards, Titles, Arms and Pets
-
 #       **.shop** Purchase new Cards, Titles, and Arms
 
 

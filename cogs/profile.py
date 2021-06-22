@@ -524,7 +524,102 @@ class Profile(commands.Cog):
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
     @commands.command()
-    async def viewdeck(self, ctx):
+    async def destiny(self, ctx):
+        query = {'DISNAME': str(ctx.author)}
+        d = db.queryUser(query)
+        vault = db.queryVault({'OWNER': d['DISNAME']})
+        if not vault['DESTINY']:
+            await ctx.send("No Destiny Lines available at this time!")
+            return
+        if vault:
+            name = d['DISNAME'].split("#",1)[0]
+            avatar = d['AVATAR']
+            balance = vault['BALANCE']
+            destiny = vault['DESTINY']
+
+            destiny_messages = []
+            for d in destiny:
+                if not d['COMPLETED']:
+                    destiny_messages.append(textwrap.dedent(f"""\
+                    **{d["NAME"]}**
+                    Defeat **{d['DEFEAT']}** with **{" ".join(d['USE_CARDS'])}** | **Current Progress:** {d['WINS']}/{d['REQUIRED']}
+                    """))
+
+            if not destiny_messages:
+                await ctx.send("No Destiny Lines available at this time!")
+                return
+            # Adding to array until divisible by 10
+            while len(destiny_messages) % 10 != 0:
+                destiny_messages.append("")
+
+            # Check if divisible by 10, then start to split evenly
+            if len(destiny_messages) % 10 == 0:
+                first_digit = int(str(len(destiny_messages))[:1])
+                destinies_broken_up = np.array_split(destiny_messages, first_digit)
+            
+            # If it's not an array greater than 10, show paginationless embed
+            if len(destiny_messages) < 10:
+                embedVar = discord.Embed(title= f"Destiny Lines\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(destiny_messages), colour=0x7289da)
+                embedVar.set_thumbnail(url=avatar)
+                # embedVar.set_footer(text=f".equippet pet name: Equip Pet\n.viewpet pet name: View Pet Details")
+                await ctx.send(embed=embedVar)
+
+            embed_list = []
+            for i in range(0, len(destinies_broken_up)):
+                globals()['embedVar%s' % i] = discord.Embed(title= f"Destiny Lines\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(destinies_broken_up[i]), colour=0x7289da)
+                globals()['embedVar%s' % i].set_thumbnail(url=avatar)
+                # globals()['embedVar%s' % i].set_footer(text=f"{total_pets} Total Pets\n.equippet pet name: Equip Pet\n.viewpet pet name: View Pet Details")
+                embed_list.append(globals()['embedVar%s' % i])
+
+            paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+            paginator.add_reaction('⏮️', "first")
+            paginator.add_reaction('⏪', "back")
+            paginator.add_reaction('🔐', "lock")
+            paginator.add_reaction('⏩', "next")
+            paginator.add_reaction('⏭️', "last")
+            embeds = embed_list
+            await paginator.run(embeds)
+        else:
+            newVault = db.createVault({'OWNER': d['DISNAME']})
+
+    @commands.command()
+    async def quests(self, ctx):
+        query = {'DISNAME': str(ctx.author)}
+        d = db.queryUser(query)
+        vault = db.queryVault({'OWNER': d['DISNAME']})
+        if not vault['DESTINY']:
+            await ctx.send("No Destiny Lines available at this time!")
+            return
+        if vault:
+            name = d['DISNAME'].split("#",1)[0]
+            avatar = d['AVATAR']
+            balance = vault['BALANCE']
+            quests = vault['QUESTS']
+
+            quest_messages = []
+            for quest in quests:
+                completed = ""
+                if quest['GOAL'] == quest['WINS']:
+                    completed = "🟢"
+                else:
+                    completed = "🔴"
+                quest_messages.append(textwrap.dedent(f"""\
+                Defeat **{quest['OPPONENT']}** {quest['GOAL']} times in {quest['TYPE']} for :coin:{quest['REWARD']}! : {completed}
+                **Current Progress:** {quest['WINS']}/{quest['GOAL']}
+                
+                """))
+            
+            embedVar = discord.Embed(title= f"Quest Board", description=textwrap.dedent(f"""
+                **Balance**: :coin:{'{:,}'.format(balance)}
+                \n{"".join(quest_messages)}
+                """), colour=0x7289da)
+            await ctx.send(embed=embedVar)
+            
+        else:
+            newVault = db.createVault({'OWNER': d['DISNAME']})
+
+    @commands.command()
+    async def deck(self, ctx):
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
         vault_query = {'OWNER': d['DISNAME']}

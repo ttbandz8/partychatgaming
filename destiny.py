@@ -1404,9 +1404,239 @@ destiny = [
         "WINS": 0,
         "REQUIRED": 25,
         "DEFEAT": "Manaphy",
-        "USE_CARDS": ["ASh Ketchum"],
+        "USE_CARDS": ["Ash Ketchum"],
         "EARN": "Manaphy",
         "COMPLETED": False,
         "UNIVERSE": "Sinnoh Region"
+    },
+    {
+        "NAME": "Ishvalan War",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Envy",
+        "USE_CARDS": ["Edward Elric"],
+        "EARN": "Scar",
+        "COMPLETED": False,
+        "UNIVERSE": "Crown Rift Awakening"
+    },
+    {
+        "NAME": "Save Eri",
+        "WINS": 0,
+        "REQUIRED": 20,
+        "DEFEAT": "Overhaul",
+        "USE_CARDS": ["Mirio"],
+        "EARN": "Overhaul",
+        "COMPLETED": False,
+        "UNIVERSE": "My Hero Academia"
+    },
+    {
+        "NAME": "Mustangs Revenge",
+        "WINS": 0,
+        "REQUIRED": 20,
+        "DEFEAT": "Lust",
+        "USE_CARDS": ["Alphonse Elric"],
+        "EARN": "Roy Mustang",
+        "COMPLETED": False,
+        "UNIVERSE": "Crown Rift Awakening"
+    },
+    {
+        "NAME": "Sibling Rivalry",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Dabi",
+        "USE_CARDS": ["Todoroki"],
+        "EARN": "Dabi",
+        "COMPLETED": False,
+        "UNIVERSE": "My Hero Academia"
+    },
+    {
+        "NAME": "Deku vs Kacchan",
+        "WINS": 0,
+        "REQUIRED": 8,
+        "DEFEAT": "Bakugo",
+        "USE_CARDS": ["Deku"],
+        "EARN": "Bakugo",
+        "COMPLETED": False,
+        "UNIVERSE": "My Hero Academia"
+    },
+    {
+        "NAME": "Sinners Protege",
+        "WINS": 0,
+        "REQUIRED": 20,
+        "DEFEAT": "All For One",
+        "USE_CARDS": ["Shigiraki"],
+        "EARN": "All For One",
+        "COMPLETED": False,
+        "UNIVERSE": "My Hero Academia"
+    },
+    {
+        "NAME": "Grandon of the Seventh",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Shigiraki",
+        "USE_CARDS": ["Nana Shimura"],
+        "EARN": "Shigiraki",
+        "COMPLETED": False,
+        "UNIVERSE": "My Hero Academia"
+    },
+    {
+        "NAME": "OFA Bakugo",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "All Might",
+        "USE_CARDS": ["Bakugo"],
+        "EARN": "OFA Bakugo",
+        "COMPLETED": False,
+        "UNIVERSE": "My Hero Academia"
+    },
+    {
+        "NAME": "Otsutsuki Bloodline",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Kaguya",
+        "USE_CARDS": ["Boruto"],
+        "EARN": "Avenger Boruto",
+        "COMPLETED": False,
+        "UNIVERSE": "Naruto"
+    },
+    {
+        "NAME": "The Wandering Ninja",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Mangekyo Sasuke",
+        "USE_CARDS": ["Bjuu Naruto"],
+        "EARN": "Hobo Sasuke",
+        "COMPLETED": False,
+        "UNIVERSE": "Naruto"
+    },
+    {
+        "NAME": "You Let Rin Die",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Obito",
+        "USE_CARDS": ["Kakashi"],
+        "EARN": "Awakened Obito",
+        "COMPLETED": False,
+        "UNIVERSE": "Naruto"
+    },
+    {
+        "NAME": "Uchiha Retribution",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Itachi",
+        "USE_CARDS": ["Mangekyo Sasuke"],
+        "EARN": "Awakened Itachi",
+        "COMPLETED": False,
+        "UNIVERSE": "Naruto"
+    },
+    {
+        "NAME": "The Reanimated Rivalry",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Madara",
+        "USE_CARDS": ["The 1st"],
+        "EARN": "Madara",
+        "COMPLETED": False,
+        "UNIVERSE": "Naruto"
+    },
+    {
+        "NAME": "Protect Rin",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Kakashi",
+        "USE_CARDS": ["Awakened Obito"],
+        "EARN": "Broken Kakashi",
+        "COMPLETED": False,
+        "UNIVERSE": "Naruto"
+    },
+    {
+        "NAME": "The Hollow Within",
+        "WINS": 0,
+        "REQUIRED": 20,
+        "DEFEAT": "Hollow Ichigo",
+        "USE_CARDS": ["Ichigo"],
+        "EARN": "Vasto Lorde",
+        "COMPLETED": False,
+        "UNIVERSE": "Bleach"
+    },
+    {
+        "NAME": "Final Mugetsu",
+        "WINS": 0,
+        "REQUIRED": 20,
+        "DEFEAT": "Vasto Lorde",
+        "USE_CARDS": ["Ichigo"],
+        "EARN": "Mugetsu",
+        "COMPLETED": False,
+        "UNIVERSE": "Bleach"
+    },
+    {
+        "NAME": "The First Kenpachi",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Captain Unohana",
+        "USE_CARDS": ["Captain Kenpachi"],
+        "EARN": "Captain Unohana",
+        "COMPLETED": False,
+        "UNIVERSE": "Bleach"
+    },
+    {
+        "NAME": "The Black Bull",
+        "WINS": 0,
+        "REQUIRED": 20,
+        "DEFEAT": "Julius Nova Chrono",
+        "USE_CARDS": ["Yami Sukehiro"],
+        "EARN": "Julius Nova Chrono",
+        "COMPLETED": False,
+        "UNIVERSE": "Black Clover"
+    },
+    {
+        "NAME": "Vaude Rivalry",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Langris",
+        "USE_CARDS": ["Finral"],
+        "EARN": "Langris",
+        "COMPLETED": False,
+        "UNIVERSE": "Black Clover"
+    },
+    {
+        "NAME": "Mothers Revenge",
+        "WINS": 0,
+        "REQUIRED": 20,
+        "DEFEAT": "Vanica Zogratis",
+        "USE_CARDS": ["Noelle Silva"],
+        "EARN": "Vanica Zogratis",
+        "COMPLETED": False,
+        "UNIVERSE": "Black Clover"
+    },
+    {
+        "NAME": "The Invisible Mentor",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Hand Demon",
+        "USE_CARDS": ["Tanjiro Kamado"],
+        "EARN": "Sabito",
+        "COMPLETED": False,
+        "UNIVERSE": "Demon Slayer"
+    },
+    {
+        "NAME": "For Nezukuo",
+        "WINS": 0,
+        "REQUIRED": 40,
+        "DEFEAT": "Muzan Kibutsuji",
+        "USE_CARDS": ["Tanjiro Kamado"],
+        "EARN": "Muzan Kibutsuji",
+        "COMPLETED": False,
+        "UNIVERSE": "Demon Slayer"
+    },
+    {
+        "NAME": "Masters Awakening",
+        "WINS": 0,
+        "REQUIRED": 35,
+        "DEFEAT": "Muzaka",
+        "USE_CARDS": ["Franky"],
+        "EARN": "Cadis Etrama Di Raizel",
+        "COMPLETED": False,
+        "UNIVERSE": "Crown Rift Awakening"
     },
 ]
