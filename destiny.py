@@ -710,6 +710,36 @@ destiny = [
         "UNIVERSE": "League Of Legends"
     },
     {
+        "NAME": "Battle With The Butcher",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Renekton",
+        "USE_CARDS": ["Sivir"],
+        "EARN": "Renekton",
+        "COMPLETED": False,
+        "UNIVERSE": "League Of Legends"
+    },
+    {
+        "NAME": "The Ancient Battle",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Nasus",
+        "USE_CARDS": ["Renekton"],
+        "EARN": "Nasus",
+        "COMPLETED": False,
+        "UNIVERSE": "League Of Legends"
+    },
+    {
+        "NAME": "Battle On The Mountain",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Pantheon",
+        "USE_CARDS": ["Taric"],
+        "EARN": "Pantheon",
+        "COMPLETED": False,
+        "UNIVERSE": "League Of Legends"
+    },
+    {
         "NAME": "Proven Hero",
         "WINS": 0,
         "REQUIRED": 25,
