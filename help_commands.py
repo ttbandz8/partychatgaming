@@ -54,7 +54,7 @@ CROWN_UNLIMITED_COMMANDS = textwrap.dedent(f"""\
 **.avault**: Open your list of Arms
 **.pvault**: Open your list of Pets
 **.destiny**: Open your list of Destiny Lines
-**.quests**: Open your list of Quests
+**.quest**: Open your list of Quests
 **.deck**: View your Presets
 **.savedeck**: Save your Build as Preset
 
