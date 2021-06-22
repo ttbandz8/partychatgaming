@@ -25,7 +25,7 @@ class USER():
     CROWN_TALES: list[str] = field(default_factory=lambda: [""])
     DUNGEONS: list[str] = field(default_factory=lambda: [""])
     REFERRED: bool = field(default_factory=lambda: False)
-    REFERRER:str = field(default_factory=lambda: "")
+    REFERRER:str = field(default_factory=lambda: "N/A")
     TIMESTAMP: str = now
 
 @dataclass(frozen=True, order=True)
