@@ -620,6 +620,96 @@ destiny = [
         "UNIVERSE": "League Of Legends"
     },
     {
+        "NAME": "Warring Kingdoms",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Darius",
+        "USE_CARDS": ["Garen"],
+        "EARN": "Darius",
+        "COMPLETED": False,
+        "UNIVERSE": "League Of Legends"
+    },
+    {
+        "NAME": "Guardian Mountain",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Shen",
+        "USE_CARDS": ["Malphite"],
+        "EARN": "Shen",
+        "COMPLETED": False,
+        "UNIVERSE": "League Of Legends"
+    },
+    {
+        "NAME": "Apprentice Assasin",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Akali",
+        "USE_CARDS": ["Shen"],
+        "EARN": "Akali",
+        "COMPLETED": False,
+        "UNIVERSE": "League Of Legends"
+    },
+    {
+        "NAME": "Demacian Matriach",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Fiora",
+        "USE_CARDS": ["Lux"],
+        "EARN": "Fiora",
+        "COMPLETED": False,
+        "UNIVERSE": "League Of Legends"
+    },
+    {
+        "NAME": "Help The Bear!",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Volibear",
+        "USE_CARDS": ["Ashe"],
+        "EARN": "Volibear",
+        "COMPLETED": False,
+        "UNIVERSE": "League Of Legends"
+    },
+    {
+        "NAME": "The Chain Warden",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Kalista",
+        "USE_CARDS": ["Thresh"],
+        "EARN": "Kalista",
+        "COMPLETED": False,
+        "UNIVERSE": "League Of Legends"
+    },
+    {
+        "NAME": "The Shadow Of War",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Hecarim",
+        "USE_CARDS": ["Kalista"],
+        "EARN": "Hecarim",
+        "COMPLETED": False,
+        "UNIVERSE": "League Of Legends"
+    },
+    {
+        "NAME": "Viegos Warpath",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Azir",
+        "USE_CARDS": ["Hecarim"],
+        "EARN": "Azir",
+        "COMPLETED": False,
+        "UNIVERSE": "League Of Legends"
+    },
+    {
+        "NAME": "Battle Of The Undead Kings",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Viego",
+        "USE_CARDS": ["Azir"],
+        "EARN": "Viego",
+        "COMPLETED": False,
+        "UNIVERSE": "League Of Legends"
+    },
+    {
         "NAME": "Proven Hero",
         "WINS": 0,
         "REQUIRED": 25,

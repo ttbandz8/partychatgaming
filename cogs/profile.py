@@ -792,7 +792,7 @@ class Profile(commands.Cog):
         for card in resp:
             if card['UNIVERSE'] in available_universes:
                 # Don't produce cards you can't afford
-                if card['PRICE'] != 0 and card['PRICE'] < (vault['BALANCE'] + 500) and card['AVAILABLE'] and card['EXCLUSIVE'] != True:
+                if card['PRICE'] != 0 and card['PRICE'] < (vault['BALANCE'] + 1500) and card['AVAILABLE'] and card['EXCLUSIVE'] != True:
                     if card['NAME'] not in vault['CARDS']:
                         cards.append({'NAME': card['NAME'], 'PRICE': card['PRICE'], 'UNIVERSE': card['UNIVERSE'], 'STOCK': card['STOCK']})
         
