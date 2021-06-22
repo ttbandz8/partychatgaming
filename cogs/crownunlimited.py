@@ -116,10 +116,10 @@ class CrownUnlimited(commands.Cog):
         player_scaling = 0
 
         if universe['PREREQUISITE']:
-            opponent_scaling = 11
+            opponent_scaling = 8
             player_scaling = 5
         else:
-            opponent_scaling = 8
+            opponent_scaling = 1
             player_scaling = 1
 
         legends = [x for x in universe['CROWN_TALES']]
@@ -281,10 +281,10 @@ class CrownUnlimited(commands.Cog):
             t_card_path=t['PATH']
             t_rcard_path=t['RPATH']
             if t['UNIVERSE'] == "Demon Slayer" and o_max_health >= t['HLT']: #Demon Slayer Universal Trait
-                t_max_health = o_max_health + (25 * currentopponent) + 50 + opponent_scaling
+                t_max_health = o_max_health + (25 * currentopponent) + 10 + opponent_scaling
             else:                    
-                t_max_health = t['HLT'] + (13 * currentopponent) + 50 + opponent_scaling
-            t_health = t['HLT'] + (13 * currentopponent) + 50 + opponent_scaling
+                t_max_health = t['HLT'] + (13 * currentopponent) + 10 + opponent_scaling
+            t_health = t['HLT'] + (13 * currentopponent) + 10 + opponent_scaling
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
@@ -3532,10 +3532,10 @@ class CrownUnlimited(commands.Cog):
         player_scaling = 0
 
         if universe['PREREQUISITE']:
-            opponent_scaling = 28
+            opponent_scaling = 16
             player_scaling = 5
         else:
-            opponent_scaling = 23
+            opponent_scaling = 12
             player_scaling = 1
 
         legends = [x for x in universe['CROWN_TALES']]
@@ -10765,10 +10765,10 @@ class CrownUnlimited(commands.Cog):
         player_scaling = 0
 
         if universe['PREREQUISITE']:
-            opponent_scaling = 16
+            opponent_scaling = 12
             player_scaling = 0
         else:
-            opponent_scaling = 12
+            opponent_scaling = 8
             player_scaling = 0
 
         legends = [x for x in universe['CROWN_TALES']]
@@ -10876,8 +10876,8 @@ class CrownUnlimited(commands.Cog):
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
-            t_attack = t['ATK'] + (5 * currentopponent) + 15
-            t_defense = t['DEF'] + (7 * currentopponent) + 15
+            t_attack = t['ATK'] + (5 * currentopponent) + 12
+            t_defense = t['DEF'] + (5 * currentopponent) + 12
             t_type = t['TYPE']
             t_accuracy = t['ACC']
             t_passive = t['PASS'][0]
@@ -12755,7 +12755,7 @@ class CrownUnlimited(commands.Cog):
             opponent_scaling = 8
             player_scaling = 5
         else:
-            opponent_scaling = 3
+            opponent_scaling = 2
             player_scaling = 1
 
         legends = [x for x in universe['CROWN_TALES']]
