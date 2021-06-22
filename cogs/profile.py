@@ -184,26 +184,358 @@ class Profile(commands.Cog):
         else:
             await ctx.send(m.USER_NOT_REGISTERED, delete_after=3)
 
+    # @commands.command()
+    # async def vault(self, ctx):
+    #     query = {'DISNAME': str(ctx.author)}
+    #     d = db.queryUser(query)
+    #     pet_name = d['PET']
+    #     pet_query = {'PET': str(pet_name)}
+    #     p = db.queryPet(pet_query)
+    #     vault = db.queryVault({'OWNER': d['DISNAME']})
+    #     if vault:
+    #         name = d['DISNAME'].split("#",1)[0]
+    #         avatar = d['AVATAR']
+    #         balance = vault['BALANCE']
+    #         cards = vault['CARDS']
+    #         titles = vault['TITLES']
+    #         arms = vault['ARMS']
+    #         pets = vault['PETS']
+    #         quests = vault['QUESTS']
+    #         destiny = vault['DESTINY']
+    #         active_pet = {}
+    #         pet_names = []
+
+    #         destiny_messages = []
+    #         for d in destiny:
+    #             if not d['COMPLETED']:
+    #                 destiny_messages.append(textwrap.dedent(f"""\
+    #                 **{d["NAME"]}**
+    #                 Defeat **{d['DEFEAT']}** with **{" ".join(d['USE_CARDS'])}** | **Current Progress:** {d['WINS']}/{d['REQUIRED']}
+    #                 """))
+
+    #         quest_messages = []
+    #         for quest in quests:
+    #             completed = ""
+    #             if quest['GOAL'] == quest['WINS']:
+    #                 completed = "🟢"
+    #             else:
+    #                 completed = "🔴"
+    #             quest_messages.append(textwrap.dedent(f"""\
+    #             Defeat **{quest['OPPONENT']}** {quest['GOAL']} times in {quest['TYPE']} for :coin:{quest['REWARD']}! : {completed}
+    #             **Current Progress:** {quest['WINS']}/{quest['GOAL']}
+                
+    #             """))
+
+
+
+    #         for pet in pets:
+    #             pet_names.append(pet['NAME'])
+    #             if pet['NAME'] == pet_name:
+    #                 active_pet = pet
+       
+
+
+    #         embedVar1 = discord.Embed(title= f"Cards", description=textwrap.dedent(f"""
+    #         **Balance**: :coin:{'{:,}'.format(balance)}
+    #         ***.equipcard card name:***  Equip Card
+    #         ***.viewcard card name:*** View Cards Details
+            
+    #         {", ".join(cards)}
+    #         """), colour=0x7289da)
+    #         # embedVar1.set_thumbnail(url=avatar)
+
+    #         embedVar2 = discord.Embed(title= f"Titles", description=textwrap.dedent(f"""
+    #         **Balance**: :coin:{'{:,}'.format(balance)}
+    #         ***.equiptitle title name:***  Equip Title
+    #         ***.viewtitle title name:*** View Title Details
+            
+    #         {", ".join(titles)}
+    #         """), colour=0x7289da)
+    #         # embedVar2.set_thumbnail(url=avatar)
+
+    #         embedVar3 = discord.Embed(title= f"Arms", description=textwrap.dedent(f"""
+    #         **Balance**: :coin:{'{:,}'.format(balance)}
+    #         ***.equiparm arm name:***  Equip Arm
+    #         ***.viewarm arm name:*** View Arm Details
+            
+    #         {", ".join(arms)}
+    #         """), colour=0x7289da)
+    #         # embedVar3.set_thumbnail(url=avatar)
+            
+    #         embedVar4 = discord.Embed(title= f"Pets", description=textwrap.dedent(f"""
+    #         **Balance**: :coin:{'{:,}'.format(balance)}
+    #         ***.equippet pet name:***  Equip Pet
+    #         ***.viewpet pet name:*** View Pet Details
+            
+    #         {", ".join(pet_names)}
+    #         """), colour=0x7289da)
+    #         if quests:
+    #             embedVar5 = discord.Embed(title= f"Quest Board", description=textwrap.dedent(f"""
+    #             **Balance**: :coin:{'{:,}'.format(balance)}
+    #             \n{"".join(quest_messages)}
+    #             """), colour=0x7289da)
+    #             # embedVar4.set_thumbnail(url=avatar)
+    #         else:
+    #             embedVar5 = discord.Embed(title= f"Quest Board", description="Use .daily to receive Quests!", colour=0x7289da)
+    #             # embedVar4.set_thumbnail(url=avatar)
+
+    #         if destiny_messages:
+    #             embedVar6 = discord.Embed(title= f"Destiny Board", description=textwrap.dedent(f"""
+    #             **Balance**: :coin:{'{:,}'.format(balance)}
+    #             \n{"".join(destiny_messages)}
+    #             """), colour=0x7289da)
+    #             # embedVar4.set_thumbnail(url=avatar)
+    #         else:
+    #             embedVar6 = discord.Embed(title= f"Destiny Board", description="No Destiny Lines available at this time!", colour=0x7289da)
+    #             # embedVar4.set_thumbnail(url=avatar)
+
+    #         paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+    #         paginator.add_reaction('⏮️', "first")
+    #         paginator.add_reaction('⏪', "back")
+    #         paginator.add_reaction('🔐', "lock")
+    #         paginator.add_reaction('⏩', "next")
+    #         paginator.add_reaction('⏭️', "last")
+    #         embeds = [embedVar1, embedVar2, embedVar3, embedVar4, embedVar5, embedVar6]
+    #         await paginator.run(embeds)
+    #     else:
+    #         newVault = db.createVault({'OWNER': d['DISNAME']})
+
     @commands.command()
-    async def vault(self, ctx):
+    async def cvault(self, ctx):
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
-        pet_name = d['PET']
-        pet_query = {'PET': str(pet_name)}
-        p = db.queryPet(pet_query)
         vault = db.queryVault({'OWNER': d['DISNAME']})
         if vault:
             name = d['DISNAME'].split("#",1)[0]
             avatar = d['AVATAR']
             balance = vault['BALANCE']
-            cards = vault['CARDS']
-            titles = vault['TITLES']
-            arms = vault['ARMS']
-            pets = vault['PETS']
-            quests = vault['QUESTS']
+            cards_list = vault['CARDS']
+            total_cards = len(cards_list)
+            cards=[]
+
+            for card in cards_list:
+                resp = db.queryCard({"NAME": str(card)})
+                cards.append(textwrap.dedent(f"""
+                **{resp['NAME']}**
+                **HLT:** {resp['HLT']} **ATK:** {resp['ATK']} **DEF:** {resp['DEF']}
+                **Universe:** {resp['UNIVERSE']}"""))
+
+            # Adding to array until divisible by 10
+            while len(cards) % 10 != 0:
+                cards.append("")
+            # Check if divisible by 10, then start to split evenly
+            if len(cards) % 10 == 0:
+                first_digit = int(str(len(cards))[:1])
+                cards_broken_up = np.array_split(cards, first_digit)
+            
+            # If it's not an array greater than 10, show paginationless embed
+            if len(cards) < 10:
+                embedVar = discord.Embed(title= f"Cards\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(cards), colour=0x7289da)
+                embedVar.set_thumbnail(url=avatar)
+                embedVar.set_footer(text=f".equipcard card name: Equip Card\n.viewcard card name: View Cards Details")
+                await ctx.send(embed=embedVar)
+
+            embed_list = []
+            for i in range(0, len(cards_broken_up)):
+                globals()['embedVar%s' % i] = discord.Embed(title= f"Cards\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(cards_broken_up[i]), colour=0x7289da)
+                globals()['embedVar%s' % i].set_thumbnail(url=avatar)
+                globals()['embedVar%s' % i].set_footer(text=f"{total_cards} Total Cards\n.equipcard card name: Equip Card\n.viewcard card name: View Cards Details")
+                embed_list.append(globals()['embedVar%s' % i])
+
+            paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+            paginator.add_reaction('⏮️', "first")
+            paginator.add_reaction('⏪', "back")
+            paginator.add_reaction('🔐', "lock")
+            paginator.add_reaction('⏩', "next")
+            paginator.add_reaction('⏭️', "last")
+            embeds = embed_list
+            await paginator.run(embeds)
+        else:
+            newVault = db.createVault({'OWNER': d['DISNAME']})
+
+    @commands.command()
+    async def tvault(self, ctx):
+        query = {'DISNAME': str(ctx.author)}
+        d = db.queryUser(query)
+        vault = db.queryVault({'OWNER': d['DISNAME']})
+        if vault:
+            name = d['DISNAME'].split("#",1)[0]
+            avatar = d['AVATAR']
+            balance = vault['BALANCE']
+            titles_list = vault['TITLES']
+            total_titles = len(titles_list)
+            titles=[]
+
+            for title in titles_list:
+                resp = db.queryTitle({"TITLE": str(title)})
+                title_passive = resp['ABILITIES'][0]
+                title_passive_type = list(title_passive.keys())[0]
+                title_passive_value = list(title_passive.values())[0]
+                titles.append(textwrap.dedent(f"""
+                **{resp['TITLE']}**
+                **{title_passive_type}:** {title_passive_value}
+                **Universe:** {resp['UNIVERSE']}"""))
+
+            # Adding to array until divisible by 10
+            while len(titles) % 10 != 0:
+                titles.append("")
+            # Check if divisible by 10, then start to split evenly
+            if len(titles) % 10 == 0:
+                first_digit = int(str(len(titles))[:1])
+                titles_broken_up = np.array_split(titles, first_digit)
+            
+            # If it's not an array greater than 10, show paginationless embed
+            if len(titles) < 10:
+                embedVar = discord.Embed(title= f"Titles\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(titles), colour=0x7289da)
+                embedVar.set_thumbnail(url=avatar)
+                embedVar.set_footer(text=f".equiptitle title name: Equip Title\n.viewtitle title name: View Title Details")
+                await ctx.send(embed=embedVar)
+
+            embed_list = []
+            for i in range(0, len(titles_broken_up)):
+                globals()['embedVar%s' % i] = discord.Embed(title= f"Titles\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(titles_broken_up[i]), colour=0x7289da)
+                globals()['embedVar%s' % i].set_thumbnail(url=avatar)
+                globals()['embedVar%s' % i].set_footer(text=f"{total_titles} Total Titles\n.equiptitle title name: Equip Title\n.viewtitle title name: View Title Details")
+                embed_list.append(globals()['embedVar%s' % i])
+
+            paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+            paginator.add_reaction('⏮️', "first")
+            paginator.add_reaction('⏪', "back")
+            paginator.add_reaction('🔐', "lock")
+            paginator.add_reaction('⏩', "next")
+            paginator.add_reaction('⏭️', "last")
+            embeds = embed_list
+            await paginator.run(embeds)
+        else:
+            newVault = db.createVault({'OWNER': d['DISNAME']})
+
+    @commands.command()
+    async def avault(self, ctx):
+        query = {'DISNAME': str(ctx.author)}
+        d = db.queryUser(query)
+        vault = db.queryVault({'OWNER': d['DISNAME']})
+        if vault:
+            name = d['DISNAME'].split("#",1)[0]
+            avatar = d['AVATAR']
+            balance = vault['BALANCE']
+            arms_list = vault['ARMS']
+            total_arms = len(arms_list)
+
+            arms=[]
+
+            for arm in arms_list:
+                resp = db.queryArm({"ARM": str(arm)})
+                arm_passive = resp['ABILITIES'][0]
+                arm_passive_type = list(arm_passive.keys())[0]
+                arm_passive_value = list(arm_passive.values())[0]
+                arms.append(textwrap.dedent(f"""
+                **{resp['ARM']}**
+                **{arm_passive_type}:** {arm_passive_value}
+                **Universe:** {resp['UNIVERSE']}"""))
+
+            # Adding to array until divisible by 10
+            while len(arms) % 10 != 0:
+                arms.append("")
+            # Check if divisible by 10, then start to split evenly
+            if len(arms) % 10 == 0:
+                first_digit = int(str(len(arms))[:1])
+                arms_broken_up = np.array_split(arms, first_digit)
+            
+            # If it's not an array greater than 10, show paginationless embed
+            if len(arms) < 10:
+                embedVar = discord.Embed(title= f"Arms\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(arms), colour=0x7289da)
+                embedVar.set_thumbnail(url=avatar)
+                embedVar.set_footer(text=f".equiparm arm name: Equip Arm\n.viewarm arm name: View Arm Details")
+                await ctx.send(embed=embedVar)
+
+            embed_list = []
+            for i in range(0, len(arms_broken_up)):
+                globals()['embedVar%s' % i] = discord.Embed(title= f"Arms\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(arms_broken_up[i]), colour=0x7289da)
+                globals()['embedVar%s' % i].set_thumbnail(url=avatar)
+                globals()['embedVar%s' % i].set_footer(text=f"{total_arms} Total Arms\n.equiparm arm name: Equip Arm\n.viewarm arm name: View Arm Details")
+                embed_list.append(globals()['embedVar%s' % i])
+
+            paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+            paginator.add_reaction('⏮️', "first")
+            paginator.add_reaction('⏪', "back")
+            paginator.add_reaction('🔐', "lock")
+            paginator.add_reaction('⏩', "next")
+            paginator.add_reaction('⏭️', "last")
+            embeds = embed_list
+            await paginator.run(embeds)
+        else:
+            newVault = db.createVault({'OWNER': d['DISNAME']})
+
+    @commands.command()
+    async def pvault(self, ctx):
+        query = {'DISNAME': str(ctx.author)}
+        d = db.queryUser(query)
+        vault = db.queryVault({'OWNER': d['DISNAME']})
+        if vault:
+            name = d['DISNAME'].split("#",1)[0]
+            avatar = d['AVATAR']
+            balance = vault['BALANCE']
+            pets_list = vault['PETS']
+
+            total_pets = len(pets_list)
+
+            pets=[]
+
+            for pet in pets_list:
+                pet_ability = list(pet.keys())[3]
+                pet_ability_power = list(pet.values())[3]
+                pets.append(textwrap.dedent(f"""
+                **{pet['NAME']}**
+                **{pet_ability}:** {pet_ability_power}
+                **Type:** {pet['TYPE']}"""))
+
+            # Adding to array until divisible by 10
+            while len(pets) % 10 != 0:
+                pets.append("")
+
+            # Check if divisible by 10, then start to split evenly
+            if len(pets) % 10 == 0:
+                first_digit = int(str(len(pets))[:1])
+                pets_broken_up = np.array_split(pets, first_digit)
+            
+            # If it's not an array greater than 10, show paginationless embed
+            if len(pets) < 10:
+                embedVar = discord.Embed(title= f"Pets\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(pets), colour=0x7289da)
+                embedVar.set_thumbnail(url=avatar)
+                embedVar.set_footer(text=f".equippet pet name: Equip Pet\n.viewpet pet name: View Pet Details")
+                await ctx.send(embed=embedVar)
+
+            embed_list = []
+            for i in range(0, len(pets_broken_up)):
+                globals()['embedVar%s' % i] = discord.Embed(title= f"Pets\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(pets_broken_up[i]), colour=0x7289da)
+                globals()['embedVar%s' % i].set_thumbnail(url=avatar)
+                globals()['embedVar%s' % i].set_footer(text=f"{total_pets} Total Pets\n.equippet pet name: Equip Pet\n.viewpet pet name: View Pet Details")
+                embed_list.append(globals()['embedVar%s' % i])
+
+            paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+            paginator.add_reaction('⏮️', "first")
+            paginator.add_reaction('⏪', "back")
+            paginator.add_reaction('🔐', "lock")
+            paginator.add_reaction('⏩', "next")
+            paginator.add_reaction('⏭️', "last")
+            embeds = embed_list
+            await paginator.run(embeds)
+        else:
+            newVault = db.createVault({'OWNER': d['DISNAME']})
+
+    @commands.command()
+    async def destiny(self, ctx):
+        query = {'DISNAME': str(ctx.author)}
+        d = db.queryUser(query)
+        vault = db.queryVault({'OWNER': d['DISNAME']})
+        if not vault['DESTINY']:
+            await ctx.send("No Destiny Lines available at this time!")
+            return
+        if vault:
+            name = d['DISNAME'].split("#",1)[0]
+            avatar = d['AVATAR']
+            balance = vault['BALANCE']
             destiny = vault['DESTINY']
-            active_pet = {}
-            pet_names = []
 
             destiny_messages = []
             for d in destiny:
@@ -212,6 +544,57 @@ class Profile(commands.Cog):
                     **{d["NAME"]}**
                     Defeat **{d['DEFEAT']}** with **{" ".join(d['USE_CARDS'])}** | **Current Progress:** {d['WINS']}/{d['REQUIRED']}
                     """))
+
+            if not destiny_messages:
+                await ctx.send("No Destiny Lines available at this time!")
+                return
+            # Adding to array until divisible by 10
+            while len(destiny_messages) % 10 != 0:
+                destiny_messages.append("")
+
+            # Check if divisible by 10, then start to split evenly
+            if len(destiny_messages) % 10 == 0:
+                first_digit = int(str(len(destiny_messages))[:1])
+                destinies_broken_up = np.array_split(destiny_messages, first_digit)
+            
+            # If it's not an array greater than 10, show paginationless embed
+            if len(destiny_messages) < 10:
+                embedVar = discord.Embed(title= f"Destiny Lines\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(destiny_messages), colour=0x7289da)
+                embedVar.set_thumbnail(url=avatar)
+                # embedVar.set_footer(text=f".equippet pet name: Equip Pet\n.viewpet pet name: View Pet Details")
+                await ctx.send(embed=embedVar)
+
+            embed_list = []
+            for i in range(0, len(destinies_broken_up)):
+                globals()['embedVar%s' % i] = discord.Embed(title= f"Destiny Lines\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(destinies_broken_up[i]), colour=0x7289da)
+                globals()['embedVar%s' % i].set_thumbnail(url=avatar)
+                # globals()['embedVar%s' % i].set_footer(text=f"{total_pets} Total Pets\n.equippet pet name: Equip Pet\n.viewpet pet name: View Pet Details")
+                embed_list.append(globals()['embedVar%s' % i])
+
+            paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+            paginator.add_reaction('⏮️', "first")
+            paginator.add_reaction('⏪', "back")
+            paginator.add_reaction('🔐', "lock")
+            paginator.add_reaction('⏩', "next")
+            paginator.add_reaction('⏭️', "last")
+            embeds = embed_list
+            await paginator.run(embeds)
+        else:
+            newVault = db.createVault({'OWNER': d['DISNAME']})
+
+    @commands.command()
+    async def quests(self, ctx):
+        query = {'DISNAME': str(ctx.author)}
+        d = db.queryUser(query)
+        vault = db.queryVault({'OWNER': d['DISNAME']})
+        if not vault['DESTINY']:
+            await ctx.send("No Destiny Lines available at this time!")
+            return
+        if vault:
+            name = d['DISNAME'].split("#",1)[0]
+            avatar = d['AVATAR']
+            balance = vault['BALANCE']
+            quests = vault['QUESTS']
 
             quest_messages = []
             for quest in quests:
@@ -225,83 +608,18 @@ class Profile(commands.Cog):
                 **Current Progress:** {quest['WINS']}/{quest['GOAL']}
                 
                 """))
-
-
-
-            for pet in pets:
-                pet_names.append(pet['NAME'])
-                if pet['NAME'] == pet_name:
-                    active_pet = pet
-       
-
-
-            embedVar1 = discord.Embed(title= f"Cards", description=textwrap.dedent(f"""
-            **Balance**: :coin:{'{:,}'.format(balance)}
-            ***.equipcard card name:***  Equip Card
-            ***.viewcard card name:*** View Cards Details
             
-            {", ".join(cards)}
-            """), colour=0x7289da)
-            # embedVar1.set_thumbnail(url=avatar)
-
-            embedVar2 = discord.Embed(title= f"Titles", description=textwrap.dedent(f"""
-            **Balance**: :coin:{'{:,}'.format(balance)}
-            ***.equiptitle title name:***  Equip Title
-            ***.viewtitle title name:*** View Title Details
-            
-            {", ".join(titles)}
-            """), colour=0x7289da)
-            # embedVar2.set_thumbnail(url=avatar)
-
-            embedVar3 = discord.Embed(title= f"Arms", description=textwrap.dedent(f"""
-            **Balance**: :coin:{'{:,}'.format(balance)}
-            ***.equiparm arm name:***  Equip Arm
-            ***.viewarm arm name:*** View Arm Details
-            
-            {", ".join(arms)}
-            """), colour=0x7289da)
-            # embedVar3.set_thumbnail(url=avatar)
-            
-            embedVar4 = discord.Embed(title= f"Pets", description=textwrap.dedent(f"""
-            **Balance**: :coin:{'{:,}'.format(balance)}
-            ***.equippet pet name:***  Equip Pet
-            ***.viewpet pet name:*** View Pet Details
-            
-            {", ".join(pet_names)}
-            """), colour=0x7289da)
-            if quests:
-                embedVar5 = discord.Embed(title= f"Quest Board", description=textwrap.dedent(f"""
+            embedVar = discord.Embed(title= f"Quest Board", description=textwrap.dedent(f"""
                 **Balance**: :coin:{'{:,}'.format(balance)}
                 \n{"".join(quest_messages)}
                 """), colour=0x7289da)
-                # embedVar4.set_thumbnail(url=avatar)
-            else:
-                embedVar5 = discord.Embed(title= f"Quest Board", description="Use .daily to receive Quests!", colour=0x7289da)
-                # embedVar4.set_thumbnail(url=avatar)
-
-            if destiny_messages:
-                embedVar6 = discord.Embed(title= f"Destiny Board", description=textwrap.dedent(f"""
-                **Balance**: :coin:{'{:,}'.format(balance)}
-                \n{"".join(destiny_messages)}
-                """), colour=0x7289da)
-                # embedVar4.set_thumbnail(url=avatar)
-            else:
-                embedVar6 = discord.Embed(title= f"Destiny Board", description="No Destiny Lines available at this time!", colour=0x7289da)
-                # embedVar4.set_thumbnail(url=avatar)
-
-            paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
-            paginator.add_reaction('⏮️', "first")
-            paginator.add_reaction('⏪', "back")
-            paginator.add_reaction('🔐', "lock")
-            paginator.add_reaction('⏩', "next")
-            paginator.add_reaction('⏭️', "last")
-            embeds = [embedVar1, embedVar2, embedVar3, embedVar4, embedVar5, embedVar6]
-            await paginator.run(embeds)
+            await ctx.send(embed=embedVar)
+            
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
     @commands.command()
-    async def viewdeck(self, ctx):
+    async def deck(self, ctx):
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
         vault_query = {'OWNER': d['DISNAME']}

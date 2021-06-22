@@ -49,7 +49,14 @@ CROWN_UNLIMITED_COMMANDS = textwrap.dedent(f"""\
 **.viewdeck** View your build presets
 **.savedeck**: Save your current build as preset
 **.shop**: Open shop
-**.vault**: Open your vault
+**.cvault**: Open your list of Cards
+**.tvault**: Open your list of Titles
+**.avault**: Open your list of Arms
+**.pvault**: Open your list of Pets
+**.destiny**: Open your list of Destiny Lines
+**.quests**: Open your list of Quests
+**.deck**: View your Presets
+**.savedeck**: Save your Build as Preset
 
 **Card Commands**
 **.viewcard**: Preview Card 

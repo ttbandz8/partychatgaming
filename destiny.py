@@ -190,6 +190,16 @@ destiny = [
         "UNIVERSE": "Naruto"
     },
     {
+        "NAME": "Stolen Shifter",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Beast Titan",
+        "USE_CARDS": ["Lady Ymir"],
+        "EARN": "Jaw Titan",
+        "COMPLETED": False,
+        "UNIVERSE": "Attack On Titan"
+    },
+    {
         "NAME": "Eternal Lovers",
         "WINS": 0,
         "REQUIRED": 25,
@@ -266,6 +276,46 @@ destiny = [
         "DEFEAT": "Zeldris",
         "USE_CARDS": ["Meliodas"],
         "EARN": "Zeldris",
+        "COMPLETED": False,
+        "UNIVERSE": "7ds"
+    },
+    {
+        "NAME": "Bloody Bros",
+        "WINS": 0,
+        "REQUIRED": 20,
+        "DEFEAT": "Meliodas",
+        "USE_CARDS": ["Ban"],
+        "EARN": "Meliodas",
+        "COMPLETED": False,
+        "UNIVERSE": "7ds"
+    },
+    {
+        "NAME": "Fairy King Fatale",
+        "WINS": 0,
+        "REQUIRED": 20,
+        "DEFEAT": "Gloxinia",
+        "USE_CARDS": ["King"],
+        "EARN": "Gloxinia",
+        "COMPLETED": False,
+        "UNIVERSE": "7ds"
+    },
+    {
+        "NAME": "Dancing Giants",
+        "WINS": 0,
+        "REQUIRED": 20,
+        "DEFEAT": "Drole",
+        "USE_CARDS": ["Diane"],
+        "EARN": "Drole",
+        "COMPLETED": False,
+        "UNIVERSE": "7ds"
+    },
+    {
+        "NAME": "Lovers Quarrel",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "King",
+        "USE_CARDS": ["Diane"],
+        "EARN": "King",
         "COMPLETED": False,
         "UNIVERSE": "7ds"
     },
@@ -444,7 +494,7 @@ destiny = [
         "WINS": 0,
         "REQUIRED": 25,
         "DEFEAT": "Diaboromon",
-        "USE_CARDS": ["Metal Garurumon"],
+        "USE_CARDS": ["Weregarurumon"],
         "EARN": "Omnimon",
         "COMPLETED": False,
         "UNIVERSE": "Digimon"
@@ -742,11 +792,851 @@ destiny = [
     {
         "NAME": "Fear No Gorgon Boy",
         "WINS": 0,
-        "REQUIRED": 50,
+        "REQUIRED": 40,
         "DEFEAT": "Medusa",
         "USE_CARDS": ["Atreus"],
         "EARN": "Medusa",
         "COMPLETED": False,
         "UNIVERSE": "God Of War"
+    },
+    {
+        "NAME": "Go Back To Your Daddy....Boy",
+        "WINS": 0,
+        "REQUIRED": 50,
+        "DEFEAT": "God Of War",
+        "USE_CARDS": ["Baldur"],
+        "EARN": "Zeus",
+        "COMPLETED": False,
+        "UNIVERSE": "God Of War"
+    },
+    {
+        "NAME": "Typlosion Evolution",
+        "WINS": 0,
+        "REQUIRED": 20,
+        "DEFEAT": "Typlosion",
+        "USE_CARDS": ["Cyndaquil"],
+        "EARN": "Typlosion",
+        "COMPLETED": False,
+        "UNIVERSE": "Johto Region"
+    },
+    {
+        "NAME": "Feraligtr Evolution",
+        "WINS": 0,
+        "REQUIRED": 20,
+        "DEFEAT": "Feraligtr",
+        "USE_CARDS": ["Totodile"],
+        "EARN": "Feraligtr",
+        "COMPLETED": False,
+        "UNIVERSE": "Johto Region"
+    },
+    {
+        "NAME": "Meganium Evolution",
+        "WINS": 0,
+        "REQUIRED": 20,
+        "DEFEAT": "Meganium",
+        "USE_CARDS": ["Chikorita"],
+        "EARN": "Meganium",
+        "COMPLETED": False,
+        "UNIVERSE": "Johto Region"
+    },
+    {
+        "NAME": "Gotta Catch 'Em All: Cyndaquil",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Cyndaquil",
+        "USE_CARDS": ["Ash Ketchum"],
+        "EARN": "Cyndaquil",
+        "COMPLETED": False,
+        "UNIVERSE": "Johto Region"
+    },
+    {
+        "NAME": "Gotta Catch 'Em All: Totodile",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Totodile",
+        "USE_CARDS": ["Ash Ketchum"],
+        "EARN": "Totodile",
+        "COMPLETED": False,
+        "UNIVERSE": "Johto Region"
+    },
+    {
+        "NAME": "Gotta Catch 'Em All: Chikorita",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Chikorita",
+        "USE_CARDS": ["Ash Ketchum"],
+        "EARN": "Chikorita",
+        "COMPLETED": False,
+        "UNIVERSE": "Johto Region"
+    },
+    {
+        "NAME": "Gotta Catch 'Em All: Suicune",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Suicune",
+        "USE_CARDS": ["Ash Ketchum"],
+        "EARN": "Suicune",
+        "COMPLETED": False,
+        "UNIVERSE": "Johto Region"
+    },
+    {
+        "NAME": "Gotta Catch 'Em All: Raikou",
+        "WINS": 0,
+        "REQUIRED": 30,
+        "DEFEAT": "Raikou",
+        "USE_CARDS": ["Ash Ketchum"],
+        "EARN": "Raikou",
+        "COMPLETED": False,
+        "UNIVERSE": "Johto Region"
+    },
+    {
+        "NAME": "Gotta Catch 'Em All: Entei",
+        "WINS": 0,
+        "REQUIRED": 35,
+        "DEFEAT": "Entei",
+        "USE_CARDS": ["Ash Ketchum"],
+        "EARN": "Entei",
+        "COMPLETED": False,
+        "UNIVERSE": "Johto Region"
+    },
+    {
+        "NAME": "Gotta Catch 'Em All: Lugia",
+        "WINS": 0,
+        "REQUIRED": 50,
+        "DEFEAT": "Lugia",
+        "USE_CARDS": ["Ash Ketchum"],
+        "EARN": "Lugia",
+        "COMPLETED": False,
+        "UNIVERSE": "Johto Region"
+    },
+    {
+        "NAME": "Misty's Baby",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Togepi",
+        "USE_CARDS": ["Misty"],
+        "EARN": "Togepi",
+        "COMPLETED": False,
+        "UNIVERSE": "Johto Region"
+    },
+    {
+        "NAME": "Cerulean Gym Battle",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Misty",
+        "USE_CARDS": ["Ash Ketchum"],
+        "EARN": "Misty",
+        "COMPLETED": False,
+        "UNIVERSE": "Johto Region"
+    },
+    {
+        "NAME": "Pewter Gym Battle",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Brock",
+        "USE_CARDS": ["Ash Ketchum"],
+        "EARN": "Brock",
+        "COMPLETED": False,
+        "UNIVERSE": "Hoenn Region"
+    },
+    {
+        "NAME": "New Allies",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Team Rocket",
+        "USE_CARDS": ["Ash Ketchum"],
+        "EARN": "May",
+        "COMPLETED": False,
+        "UNIVERSE": "Hoenn Region"
+    },
+    {
+        "NAME": "Save Pikachu",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Team Rocket",
+        "USE_CARDS": ["May"],
+        "EARN": "Team Rocket",
+        "COMPLETED": False,
+        "UNIVERSE": "Hoenn Region"
+    },
+    {
+        "NAME": "Blaziken Evolution",
+        "WINS": 0,
+        "REQUIRED": 20,
+        "DEFEAT": "Blaziken",
+        "USE_CARDS": ["Torchic"],
+        "EARN": "Blaziken",
+        "COMPLETED": False,
+        "UNIVERSE": "Hoenn Region"
+    },
+    {
+        "NAME": "Swampert Evolution",
+        "WINS": 0,
+        "REQUIRED": 20,
+        "DEFEAT": "Swampert",
+        "USE_CARDS": ["Mudkip"],
+        "EARN": "Swampert",
+        "COMPLETED": False,
+        "UNIVERSE": "Hoenn Region"
+    },
+    {
+        "NAME": "Sceptile Evolution",
+        "WINS": 0,
+        "REQUIRED": 20,
+        "DEFEAT": "Sceptile",
+        "USE_CARDS": ["Treecko"],
+        "EARN": "Sceptile",
+        "COMPLETED": False,
+        "UNIVERSE": "Hoenn Region"
+    },
+    {
+        "NAME": "Wailord Evolution",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Wailord",
+        "USE_CARDS": ["Wailmer"],
+        "EARN": "Wailord",
+        "COMPLETED": False,
+        "UNIVERSE": "Hoenn Region"
+    },
+    {
+        "NAME": "Dustox Evolution",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Dustox",
+        "USE_CARDS": ["Wurmple"],
+        "EARN": "Dustox",
+        "COMPLETED": False,
+        "UNIVERSE": "Hoenn Region"
+    },
+    {
+        "NAME": "Gotta Catch 'Em All: Beautifly",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Beautifly",
+        "USE_CARDS": ["May"],
+        "EARN": "Beautifly",
+        "COMPLETED": False,
+        "UNIVERSE": "Hoenn Region"
+    },
+    {
+        "NAME": "Gotta Catch 'Em All: Torchic",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Torchic",
+        "USE_CARDS": ["May"],
+        "EARN": "Torchic",
+        "COMPLETED": False,
+        "UNIVERSE": "Hoenn Region"
+    },
+    {
+        "NAME": "Gotta Catch 'Em All: Mudkip",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Mudkip",
+        "USE_CARDS": ["Brock"],
+        "EARN": "Mudkip",
+        "COMPLETED": False,
+        "UNIVERSE": "Hoenn Region"
+    },
+    {
+        "NAME": "Gotta Catch 'Em All: Treecko",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Treecko",
+        "USE_CARDS": ["Ash Ketchum"],
+        "EARN": "Treecko",
+        "COMPLETED": False,
+        "UNIVERSE": "Hoenn Region"
+    },
+    {
+        "NAME": "Expand The Land",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Groudon",
+        "USE_CARDS": ["Team Magma"],
+        "EARN": "Groudon",
+        "COMPLETED": False,
+        "UNIVERSE": "Hoenn Region"
+    },
+    {
+        "NAME": "Unleash The Sea",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Kyogre",
+        "USE_CARDS": ["Team Aqua"],
+        "EARN": "Kyogre",
+        "COMPLETED": False,
+        "UNIVERSE": "Hoenn Region"
+    },
+    {
+        "NAME": "Team Rocket Strikes Again",
+        "WINS": 0,
+        "REQUIRED": 30,
+        "DEFEAT": "Rayquaza",
+        "USE_CARDS": ["Team Rocket"],
+        "EARN": "Rayquaza",
+        "COMPLETED": False,
+        "UNIVERSE": "Hoenn Region"
+    },
+    {
+        "NAME": "Defend The Planet",
+        "WINS": 0,
+        "REQUIRED": 40,
+        "DEFEAT": "Deoxys Normal Forme",
+        "USE_CARDS": ["Rayquaza"],
+        "EARN": "Deoxys Normal Forme",
+        "COMPLETED": False,
+        "UNIVERSE": "Hoenn Region"
+    },
+    {
+        "NAME": "Shapeshifter: Attack Forme",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Deoxys Attack Forme",
+        "USE_CARDS": ["Deoxys Normal Forme"],
+        "EARN": "Deoxys Attack Forme",
+        "COMPLETED": False,
+        "UNIVERSE": "Hoenn Region"
+    },
+    {
+        "NAME": "Shapeshifter: Shield Forme",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Deoxys Shield Forme",
+        "USE_CARDS": ["Deoxys Normal Forme"],
+        "EARN": "Deoxys Shield Forme",
+        "COMPLETED": False,
+        "UNIVERSE": "Hoenn Region"
+    },
+    {
+        "NAME": "Shapeshifter: Speed Forme",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Deoxys Speed Forme",
+        "USE_CARDS": ["Deoxys Normal Forme"],
+        "EARN": "Deoxys Speed Forme",
+        "COMPLETED": False,
+        "UNIVERSE": "Hoenn Region"
+    },
+    {
+        "NAME": "A Hot New Enemy",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Team Magma",
+        "USE_CARDS": ["May"],
+        "EARN": "Team Magma",
+        "COMPLETED": False,
+        "UNIVERSE": "Hoenn Region"
+    },
+    {
+        "NAME": "A Slippery New Foe",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Team Aqua",
+        "USE_CARDS": ["May"],
+        "EARN": "Team Aqua",
+        "COMPLETED": False,
+        "UNIVERSE": "Hoenn Region"
+    },
+    {
+        "NAME": "Sky Lord",
+        "WINS": 0,
+        "REQUIRED": 50,
+        "DEFEAT": "Deoxys Invasion",
+        "USE_CARDS": ["Rayquaza"],
+        "EARN": "Deoxys Invasion",
+        "COMPLETED": False,
+        "UNIVERSE": "Hoenn Region"
+    },
+    {
+        "NAME": "Lets Coordinate!",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Dawn",
+        "USE_CARDS": ["Ash Ketchum"],
+        "EARN": "Dawn",
+        "COMPLETED": False,
+        "UNIVERSE": "Sinnoh Region"
+    },
+    {
+        "NAME": "New Enemies",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Team Galactic",
+        "USE_CARDS": ["Ash Ketchum"],
+        "EARN": "Team Galactic",
+        "COMPLETED": False,
+        "UNIVERSE": "Sinnoh Region"
+    },
+    {
+        "NAME": "Slow Darkrai!",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Darkrai",
+        "USE_CARDS": ["Ask Ketchum"],
+        "EARN": "Cressalia",
+        "COMPLETED": False,
+        "UNIVERSE": "Sinnoh Region"
+    },
+    {
+        "NAME": "Stop Darkrai!",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Darkrai",
+        "USE_CARDS": ["Cressalia"],
+        "EARN": "Darkrai",
+        "COMPLETED": False,
+        "UNIVERSE": "Sinnoh Region"
+    },
+    {
+        "NAME": "Infernape Evolution",
+        "WINS": 0,
+        "REQUIRED": 20,
+        "DEFEAT": "Infernape",
+        "USE_CARDS": ["Chimchar"],
+        "EARN": "Infernape",
+        "COMPLETED": False,
+        "UNIVERSE": "Sinnoh Region"
+    },
+    {
+        "NAME": "Empoleon Evolution",
+        "WINS": 0,
+        "REQUIRED": 20,
+        "DEFEAT": "Empoleon",
+        "USE_CARDS": ["Piplup"],
+        "EARN": "Empoleon",
+        "COMPLETED": False,
+        "UNIVERSE": "Sinnoh Region"
+    },
+    {
+        "NAME": "Torterra Evolution",
+        "WINS": 0,
+        "REQUIRED": 20,
+        "DEFEAT": "Torterra",
+        "USE_CARDS": ["Turtwig"],
+        "EARN": "Torterra",
+        "COMPLETED": False,
+        "UNIVERSE": "Sinnoh Region"
+    },
+    {
+        "NAME": "Staraptor Evolution",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Staraptor",
+        "USE_CARDS": ["Starly"],
+        "EARN": "Staraptor",
+        "COMPLETED": False,
+        "UNIVERSE": "Sinnoh Region"
+    },
+    {
+        "NAME": "Milotic Evolution",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Milotic",
+        "USE_CARDS": ["Feebas"],
+        "EARN": "Milotic",
+        "COMPLETED": False,
+        "UNIVERSE": "Sinnoh Region"
+    },
+    {
+        "NAME": "Gotta Catch 'Em All: Starly",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Starly",
+        "USE_CARDS": ["Ash Ketchum"],
+        "EARN": "Starly",
+        "COMPLETED": False,
+        "UNIVERSE": "Sinnoh Region"
+    },
+    {
+        "NAME": "Gotta Catch 'Em All: Luxray",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Luxray",
+        "USE_CARDS": ["Ash Ketchum"],
+        "EARN": "Luxray",
+        "COMPLETED": False,
+        "UNIVERSE": "Sinnoh Region"
+    },
+    {
+        "NAME": "Gotta Catch 'Em All: Chimchar",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Chimchar",
+        "USE_CARDS": ["Ash Ketchum"],
+        "EARN": "Chimchar",
+        "COMPLETED": False,
+        "UNIVERSE": "Sinnoh Region"
+    },
+    {
+        "NAME": "Gotta Catch 'Em All: Piplup",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Piplup",
+        "USE_CARDS": ["Dawn"],
+        "EARN": "Piplup",
+        "COMPLETED": False,
+        "UNIVERSE": "Sinnoh Region"
+    },
+    {
+        "NAME": "Gotta Catch 'Em All: Turtwig",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Turtwig",
+        "USE_CARDS": ["Ash Ketchum"],
+        "EARN": "Turtwig",
+        "COMPLETED": False,
+        "UNIVERSE": "Sinnoh Region"
+    },
+    {
+        "NAME": "Gotta Catch 'Em All: Lucario",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Lucario",
+        "USE_CARDS": ["Ash Ketchum"],
+        "EARN": "Lucario",
+        "COMPLETED": False,
+        "UNIVERSE": "Sinnoh Region"
+    },
+    {
+        "NAME": "Only A Matter Of Time",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Dialga",
+        "USE_CARDS": ["Team Galactic"],
+        "EARN": "Dialga",
+        "COMPLETED": False,
+        "UNIVERSE": "Sinnoh Region"
+    },
+    {
+        "NAME": "We Need A Little Space",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Palkia",
+        "USE_CARDS": ["Team Galactic"],
+        "EARN": "Palkia",
+        "COMPLETED": False,
+        "UNIVERSE": "Sinnoh Region"
+    },
+    {
+        "NAME": "Anti-Matter Apocalypse",
+        "WINS": 0,
+        "REQUIRED": 30,
+        "DEFEAT": "Giratina",
+        "USE_CARDS": ["Ash Ketchum"],
+        "EARN": "Giratina",
+        "COMPLETED": False,
+        "UNIVERSE": "Sinnoh Region"
+    },
+    {
+        "NAME": "Fallen Angel Strikes",
+        "WINS": 0,
+        "REQUIRED": 40,
+        "DEFEAT": "Arceus",
+        "USE_CARDS": ["Giratina"],
+        "EARN": "Arceus",
+        "COMPLETED": False,
+        "UNIVERSE": "Sinnoh Region"
+    },
+    {
+        "NAME": "Sleeping Giant",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Regigigas",
+        "USE_CARDS": ["Regice"],
+        "EARN": "Regigigas",
+        "COMPLETED": False,
+        "UNIVERSE": "Sinnoh Region"
+    },
+    {
+        "NAME": "Sleeping Giant",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Regigigas",
+        "USE_CARDS": ["Regirock"],
+        "EARN": "Regigigas",
+        "COMPLETED": False,
+        "UNIVERSE": "Sinnoh Region"
+    },
+    {
+        "NAME": "Sleeping Giant",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Regigigas",
+        "USE_CARDS": ["Registeel"],
+        "EARN": "Regigigas",
+        "COMPLETED": False,
+        "UNIVERSE": "Sinnoh Region"
+    },
+    {
+        "NAME": "Bringer Of Knowledge",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Uxie",
+        "USE_CARDS": ["Brock"],
+        "EARN": "Uxie",
+        "COMPLETED": False,
+        "UNIVERSE": "Sinnoh Region"
+    },
+    {
+        "NAME": "Bringer Of Willpower",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Azelf",
+        "USE_CARDS": ["Ash Ketchum"],
+        "EARN": "Azelf",
+        "COMPLETED": False,
+        "UNIVERSE": "Sinnoh Region"
+    },
+    {
+        "NAME": "Bringer Of Emotion",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Mesprit",
+        "USE_CARDS": ["Dawn"],
+        "EARN": "Mesprit",
+        "COMPLETED": False,
+        "UNIVERSE": "Sinnoh Region"
+    },
+    {
+        "NAME": "The Birds And The Manaphys",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Manaphy",
+        "USE_CARDS": ["Ash Ketchum"],
+        "EARN": "Manaphy",
+        "COMPLETED": False,
+        "UNIVERSE": "Sinnoh Region"
+    },
+    {
+        "NAME": "Ishvalan War",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Envy",
+        "USE_CARDS": ["Edward Elric"],
+        "EARN": "Scar",
+        "COMPLETED": False,
+        "UNIVERSE": "Crown Rift Awakening"
+    },
+    {
+        "NAME": "Save Eri",
+        "WINS": 0,
+        "REQUIRED": 20,
+        "DEFEAT": "Overhaul",
+        "USE_CARDS": ["Mirio"],
+        "EARN": "Overhaul",
+        "COMPLETED": False,
+        "UNIVERSE": "My Hero Academia"
+    },
+    {
+        "NAME": "Mustangs Revenge",
+        "WINS": 0,
+        "REQUIRED": 20,
+        "DEFEAT": "Lust",
+        "USE_CARDS": ["Alphonse Elric"],
+        "EARN": "Roy Mustang",
+        "COMPLETED": False,
+        "UNIVERSE": "Crown Rift Awakening"
+    },
+    {
+        "NAME": "Sibling Rivalry",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Dabi",
+        "USE_CARDS": ["Todoroki"],
+        "EARN": "Dabi",
+        "COMPLETED": False,
+        "UNIVERSE": "My Hero Academia"
+    },
+    {
+        "NAME": "Deku vs Kacchan",
+        "WINS": 0,
+        "REQUIRED": 8,
+        "DEFEAT": "Bakugo",
+        "USE_CARDS": ["Deku"],
+        "EARN": "Bakugo",
+        "COMPLETED": False,
+        "UNIVERSE": "My Hero Academia"
+    },
+    {
+        "NAME": "Sinners Protege",
+        "WINS": 0,
+        "REQUIRED": 20,
+        "DEFEAT": "All For One",
+        "USE_CARDS": ["Shigiraki"],
+        "EARN": "All For One",
+        "COMPLETED": False,
+        "UNIVERSE": "My Hero Academia"
+    },
+    {
+        "NAME": "Grandon of the Seventh",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Shigiraki",
+        "USE_CARDS": ["Nana Shimura"],
+        "EARN": "Shigiraki",
+        "COMPLETED": False,
+        "UNIVERSE": "My Hero Academia"
+    },
+    {
+        "NAME": "OFA Bakugo",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "All Might",
+        "USE_CARDS": ["Bakugo"],
+        "EARN": "OFA Bakugo",
+        "COMPLETED": False,
+        "UNIVERSE": "My Hero Academia"
+    },
+    {
+        "NAME": "Otsutsuki Bloodline",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Kaguya",
+        "USE_CARDS": ["Boruto"],
+        "EARN": "Avenger Boruto",
+        "COMPLETED": False,
+        "UNIVERSE": "Naruto"
+    },
+    {
+        "NAME": "The Wandering Ninja",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Mangekyo Sasuke",
+        "USE_CARDS": ["Bjuu Naruto"],
+        "EARN": "Hobo Sasuke",
+        "COMPLETED": False,
+        "UNIVERSE": "Naruto"
+    },
+    {
+        "NAME": "You Let Rin Die",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Obito",
+        "USE_CARDS": ["Kakashi"],
+        "EARN": "Awakened Obito",
+        "COMPLETED": False,
+        "UNIVERSE": "Naruto"
+    },
+    {
+        "NAME": "Uchiha Retribution",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Itachi",
+        "USE_CARDS": ["Mangekyo Sasuke"],
+        "EARN": "Awakened Itachi",
+        "COMPLETED": False,
+        "UNIVERSE": "Naruto"
+    },
+    {
+        "NAME": "The Reanimated Rivalry",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Madara",
+        "USE_CARDS": ["The 1st"],
+        "EARN": "Madara",
+        "COMPLETED": False,
+        "UNIVERSE": "Naruto"
+    },
+    {
+        "NAME": "Protect Rin",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Kakashi",
+        "USE_CARDS": ["Awakened Obito"],
+        "EARN": "Broken Kakashi",
+        "COMPLETED": False,
+        "UNIVERSE": "Naruto"
+    },
+    {
+        "NAME": "The Hollow Within",
+        "WINS": 0,
+        "REQUIRED": 20,
+        "DEFEAT": "Hollow Ichigo",
+        "USE_CARDS": ["Ichigo"],
+        "EARN": "Vasto Lorde",
+        "COMPLETED": False,
+        "UNIVERSE": "Bleach"
+    },
+    {
+        "NAME": "Final Mugetsu",
+        "WINS": 0,
+        "REQUIRED": 20,
+        "DEFEAT": "Vasto Lorde",
+        "USE_CARDS": ["Ichigo"],
+        "EARN": "Mugetsu",
+        "COMPLETED": False,
+        "UNIVERSE": "Bleach"
+    },
+    {
+        "NAME": "The First Kenpachi",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Captain Unohana",
+        "USE_CARDS": ["Captain Kenpachi"],
+        "EARN": "Captain Unohana",
+        "COMPLETED": False,
+        "UNIVERSE": "Bleach"
+    },
+    {
+        "NAME": "The Black Bull",
+        "WINS": 0,
+        "REQUIRED": 20,
+        "DEFEAT": "Julius Nova Chrono",
+        "USE_CARDS": ["Yami Sukehiro"],
+        "EARN": "Julius Nova Chrono",
+        "COMPLETED": False,
+        "UNIVERSE": "Black Clover"
+    },
+    {
+        "NAME": "Vaude Rivalry",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Langris",
+        "USE_CARDS": ["Finral"],
+        "EARN": "Langris",
+        "COMPLETED": False,
+        "UNIVERSE": "Black Clover"
+    },
+    {
+        "NAME": "Mothers Revenge",
+        "WINS": 0,
+        "REQUIRED": 20,
+        "DEFEAT": "Vanica Zogratis",
+        "USE_CARDS": ["Noelle Silva"],
+        "EARN": "Vanica Zogratis",
+        "COMPLETED": False,
+        "UNIVERSE": "Black Clover"
+    },
+    {
+        "NAME": "The Invisible Mentor",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Hand Demon",
+        "USE_CARDS": ["Tanjiro Kamado"],
+        "EARN": "Sabito",
+        "COMPLETED": False,
+        "UNIVERSE": "Demon Slayer"
+    },
+    {
+        "NAME": "For Nezukuo",
+        "WINS": 0,
+        "REQUIRED": 40,
+        "DEFEAT": "Muzan Kibutsuji",
+        "USE_CARDS": ["Tanjiro Kamado"],
+        "EARN": "Muzan Kibutsuji",
+        "COMPLETED": False,
+        "UNIVERSE": "Demon Slayer"
+    },
+    {
+        "NAME": "Masters Awakening",
+        "WINS": 0,
+        "REQUIRED": 35,
+        "DEFEAT": "Muzaka",
+        "USE_CARDS": ["Franky"],
+        "EARN": "Cadis Etrama Di Raizel",
+        "COMPLETED": False,
+        "UNIVERSE": "Crown Rift Awakening"
     },
 ]

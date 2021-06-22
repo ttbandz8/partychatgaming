@@ -214,7 +214,7 @@ class GODS():
 @dataclass(frozen=True, order=True)
 class VAULT():
     OWNER: str
-    BALANCE: int = field(default_factory=lambda: 1200)
+    BALANCE: int = field(default_factory=lambda: 1500)
     CARDS: list[str] = field(default_factory=lambda: ['Ochaco Uraraka','Eevee','Garen'])
     TITLES: list[str] = field(default_factory=lambda: ['Starter'])
     ARMS: list[str] = field(default_factory=lambda: ['Stock'])
