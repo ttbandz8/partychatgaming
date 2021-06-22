@@ -43,18 +43,20 @@ BOT_COMMANDS = textwrap.dedent(f"""\
 """)
 
 CROWN_UNLIMITED_COMMANDS = textwrap.dedent(f"""\
+**PROFILE COMMANDS**
 **.solo**: Play Crown Unlimited In DM
 **.crownhelp**: Crown Unlimited Help Book
 **.build**: View your current build
 **.viewdeck** View your build presets
 **.savedeck**: Save your current build as preset
 **.shop**: Open shop
+**.bal**: View Balance
 **.cvault**: Open your list of Cards
 **.tvault**: Open your list of Titles
 **.avault**: Open your list of Arms
 **.pvault**: Open your list of Pets
 **.destiny**: Open your list of Destiny Lines
-**.quests**: Open your list of Quests
+**.quest**: Open your list of Quests
 **.deck**: View your Presets
 **.savedeck**: Save your Build as Preset
 

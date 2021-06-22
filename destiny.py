@@ -1627,7 +1627,9 @@ destiny = [
         "USE_CARDS": ["Tengen Toppa Gurren Lagann"],
         "EARN": "Anti Spiral",
         "COMPLETED": False,
-        "UNIVERSE": "Crown Rift Slayers"
+        "UNIVERSE": "Crown Rift Slayers",
+    },
+    {
         "NAME": "Ishvalan War",
         "WINS": 0,
         "REQUIRED": 15,
