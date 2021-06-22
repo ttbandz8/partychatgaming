@@ -1404,9 +1404,109 @@ destiny = [
         "WINS": 0,
         "REQUIRED": 25,
         "DEFEAT": "Manaphy",
-        "USE_CARDS": ["ASh Ketchum"],
+        "USE_CARDS": ["Ash Ketchum"],
         "EARN": "Manaphy",
         "COMPLETED": False,
         "UNIVERSE": "Sinnoh Region"
+    },
+    {
+        "NAME": "Through The Heavens",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Kamina",
+        "USE_CARDS": ["Young Simon"],
+        "EARN": "Kamina",
+        "COMPLETED": False,
+        "UNIVERSE": "Crown Rift Slayers"
+    },
+    {
+        "NAME": "Dad Was Right",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Viral",
+        "USE_CARDS": ["Kamina"],
+        "EARN": "Gurenn",
+        "COMPLETED": False,
+        "UNIVERSE": "Crown Rift Slayers"
+    },
+    {
+        "NAME": "Team Gurenn Lagann",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Viral",
+        "USE_CARDS": ["Gurenn"],
+        "EARN": "Gurenn Lagann",
+        "COMPLETED": False,
+        "UNIVERSE": "Crown Rift Slayers"
+    },
+    {
+        "NAME": "Hunted Humans",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Viral",
+        "USE_CARDS": ["Gurenn Lagann"],
+        "EARN": "Viral",
+        "COMPLETED": False,
+        "UNIVERSE": "Crown Rift Slayers"
+    },
+    {
+        "NAME": "Parenting",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Spiral King",
+        "USE_CARDS": ["Young Simon"],
+        "EARN": "Nia",
+        "COMPLETED": False,
+        "UNIVERSE": "Crown Rift Slayers"
+    },
+    {
+        "NAME": "Free Humanity",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Spiral King",
+        "USE_CARDS": ["Gurenn"],
+        "EARN": "Spiral King",
+        "COMPLETED": False,
+        "UNIVERSE": "Crown Rift Slayers"
+    },
+    {
+        "NAME": "Family Feud",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Spiral King",
+        "USE_CARDS": ["Nia"],
+        "EARN": "Adult Simon",
+        "COMPLETED": False,
+        "UNIVERSE": "Crown Rift Slayers"
+    },
+    {
+        "NAME": "Pierce The Heavens",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Anti Spiral",
+        "USE_CARDS": ["Gurren Lagann"],
+        "EARN": "Tengen Toppa Gurren Lagann",
+        "COMPLETED": False,
+        "UNIVERSE": "Crown Rift Slayers"
+    },
+    {
+        "NAME": "Fallen Leader",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Kamina",
+        "USE_CARDS": ["Viral"],
+        "EARN": "Teppelin",
+        "COMPLETED": False,
+        "UNIVERSE": "Crown Rift Slayers"
+    },
+    {
+        "NAME": "Spiral War",
+        "WINS": 0,
+        "REQUIRED": 30,
+        "DEFEAT": "Anti Spiral",
+        "USE_CARDS": ["Tengen Toppa Gurren Lagann"],
+        "EARN": "Anti Spiral",
+        "COMPLETED": False,
+        "UNIVERSE": "Crown Rift Slayers"
     },
 ]
