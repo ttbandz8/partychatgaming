@@ -184,122 +184,6 @@ class Profile(commands.Cog):
         else:
             await ctx.send(m.USER_NOT_REGISTERED, delete_after=3)
 
-    # @commands.command()
-    # async def vault(self, ctx):
-    #     query = {'DISNAME': str(ctx.author)}
-    #     d = db.queryUser(query)
-    #     pet_name = d['PET']
-    #     pet_query = {'PET': str(pet_name)}
-    #     p = db.queryPet(pet_query)
-    #     vault = db.queryVault({'OWNER': d['DISNAME']})
-    #     if vault:
-    #         name = d['DISNAME'].split("#",1)[0]
-    #         avatar = d['AVATAR']
-    #         balance = vault['BALANCE']
-    #         cards = vault['CARDS']
-    #         titles = vault['TITLES']
-    #         arms = vault['ARMS']
-    #         pets = vault['PETS']
-    #         quests = vault['QUESTS']
-    #         destiny = vault['DESTINY']
-    #         active_pet = {}
-    #         pet_names = []
-
-    #         destiny_messages = []
-    #         for d in destiny:
-    #             if not d['COMPLETED']:
-    #                 destiny_messages.append(textwrap.dedent(f"""\
-    #                 **{d["NAME"]}**
-    #                 Defeat **{d['DEFEAT']}** with **{" ".join(d['USE_CARDS'])}** | **Current Progress:** {d['WINS']}/{d['REQUIRED']}
-    #                 """))
-
-    #         quest_messages = []
-    #         for quest in quests:
-    #             completed = ""
-    #             if quest['GOAL'] == quest['WINS']:
-    #                 completed = "🟢"
-    #             else:
-    #                 completed = "🔴"
-    #             quest_messages.append(textwrap.dedent(f"""\
-    #             Defeat **{quest['OPPONENT']}** {quest['GOAL']} times in {quest['TYPE']} for :coin:{quest['REWARD']}! : {completed}
-    #             **Current Progress:** {quest['WINS']}/{quest['GOAL']}
-                
-    #             """))
-
-
-
-    #         for pet in pets:
-    #             pet_names.append(pet['NAME'])
-    #             if pet['NAME'] == pet_name:
-    #                 active_pet = pet
-       
-
-
-    #         embedVar1 = discord.Embed(title= f"Cards", description=textwrap.dedent(f"""
-    #         **Balance**: :coin:{'{:,}'.format(balance)}
-    #         ***.equipcard card name:***  Equip Card
-    #         ***.viewcard card name:*** View Cards Details
-            
-    #         {", ".join(cards)}
-    #         """), colour=0x7289da)
-    #         # embedVar1.set_thumbnail(url=avatar)
-
-    #         embedVar2 = discord.Embed(title= f"Titles", description=textwrap.dedent(f"""
-    #         **Balance**: :coin:{'{:,}'.format(balance)}
-    #         ***.equiptitle title name:***  Equip Title
-    #         ***.viewtitle title name:*** View Title Details
-            
-    #         {", ".join(titles)}
-    #         """), colour=0x7289da)
-    #         # embedVar2.set_thumbnail(url=avatar)
-
-    #         embedVar3 = discord.Embed(title= f"Arms", description=textwrap.dedent(f"""
-    #         **Balance**: :coin:{'{:,}'.format(balance)}
-    #         ***.equiparm arm name:***  Equip Arm
-    #         ***.viewarm arm name:*** View Arm Details
-            
-    #         {", ".join(arms)}
-    #         """), colour=0x7289da)
-    #         # embedVar3.set_thumbnail(url=avatar)
-            
-    #         embedVar4 = discord.Embed(title= f"Pets", description=textwrap.dedent(f"""
-    #         **Balance**: :coin:{'{:,}'.format(balance)}
-    #         ***.equippet pet name:***  Equip Pet
-    #         ***.viewpet pet name:*** View Pet Details
-            
-    #         {", ".join(pet_names)}
-    #         """), colour=0x7289da)
-    #         if quests:
-    #             embedVar5 = discord.Embed(title= f"Quest Board", description=textwrap.dedent(f"""
-    #             **Balance**: :coin:{'{:,}'.format(balance)}
-    #             \n{"".join(quest_messages)}
-    #             """), colour=0x7289da)
-    #             # embedVar4.set_thumbnail(url=avatar)
-    #         else:
-    #             embedVar5 = discord.Embed(title= f"Quest Board", description="Use .daily to receive Quests!", colour=0x7289da)
-    #             # embedVar4.set_thumbnail(url=avatar)
-
-    #         if destiny_messages:
-    #             embedVar6 = discord.Embed(title= f"Destiny Board", description=textwrap.dedent(f"""
-    #             **Balance**: :coin:{'{:,}'.format(balance)}
-    #             \n{"".join(destiny_messages)}
-    #             """), colour=0x7289da)
-    #             # embedVar4.set_thumbnail(url=avatar)
-    #         else:
-    #             embedVar6 = discord.Embed(title= f"Destiny Board", description="No Destiny Lines available at this time!", colour=0x7289da)
-    #             # embedVar4.set_thumbnail(url=avatar)
-
-    #         paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
-    #         paginator.add_reaction('⏮️', "first")
-    #         paginator.add_reaction('⏪', "back")
-    #         paginator.add_reaction('🔐', "lock")
-    #         paginator.add_reaction('⏩', "next")
-    #         paginator.add_reaction('⏭️', "last")
-    #         embeds = [embedVar1, embedVar2, embedVar3, embedVar4, embedVar5, embedVar6]
-    #         await paginator.run(embeds)
-    #     else:
-    #         newVault = db.createVault({'OWNER': d['DISNAME']})
-
     @commands.command()
     async def cvault(self, ctx):
         query = {'DISNAME': str(ctx.author)}
@@ -583,7 +467,7 @@ class Profile(commands.Cog):
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
     @commands.command()
-    async def quests(self, ctx):
+    async def quest(self, ctx):
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
         vault = db.queryVault({'OWNER': d['DISNAME']})
@@ -615,6 +499,22 @@ class Profile(commands.Cog):
                 """), colour=0x7289da)
             await ctx.send(embed=embedVar)
             
+        else:
+            newVault = db.createVault({'OWNER': d['DISNAME']})
+
+    @commands.command()
+    async def bal(self, ctx):
+        query = {'DISNAME': str(ctx.author)}
+        d = db.queryUser(query)
+        vault = db.queryVault({'OWNER': d['DISNAME']})
+        if vault:
+            name = d['DISNAME'].split("#",1)[0]
+            avatar = d['AVATAR']
+            balance = vault['BALANCE']
+
+            embedVar = discord.Embed(title= f":coin:{'{:,}'.format(balance)}", colour=0x7289da)
+
+            await ctx.send(embed=embedVar)
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
@@ -792,7 +692,7 @@ class Profile(commands.Cog):
         for card in resp:
             if card['UNIVERSE'] in available_universes:
                 # Don't produce cards you can't afford
-                if card['PRICE'] != 0 and card['PRICE'] < (vault['BALANCE'] + 500) and card['AVAILABLE'] and card['EXCLUSIVE'] != True and card['UNIVERSE'] != 'Unbound':
+                if card['PRICE'] != 0 and card['PRICE'] < (vault['BALANCE'] + 1500) and card['AVAILABLE'] and card['EXCLUSIVE'] != True:
                     if card['NAME'] not in vault['CARDS']:
                         cards.append({'NAME': card['NAME'], 'PRICE': card['PRICE'], 'UNIVERSE': card['UNIVERSE'], 'STOCK': card['STOCK']})
         
@@ -808,7 +708,7 @@ class Profile(commands.Cog):
         title_text_list = []
         for title in title_resp:
             if title['UNIVERSE'] in available_universes or title['UNIVERSE'] == 'Unbound':
-                if title['PRICE'] != 0 and title['PRICE'] < (vault['BALANCE'] + 500) and title['AVAILABLE'] and title['EXCLUSIVE'] != True:
+                if title['PRICE'] != 0 and title['PRICE'] < (vault['BALANCE'] + 1500) and title['AVAILABLE'] and title['EXCLUSIVE'] != True:
                     if title['TITLE'] not in vault['TITLES']:
                         titles.append({'TITLE': title['TITLE'], 'PRICE': title['PRICE'], 'UNIVERSE': title['UNIVERSE'], 'STOCK': title['STOCK']})
 
@@ -825,7 +725,7 @@ class Profile(commands.Cog):
         arm_text_list = []
         for arm in arm_resp:
             if arm['UNIVERSE'] in available_universes or arm['UNIVERSE'] == 'Unbound':
-                if arm['PRICE'] != 0 and arm['PRICE'] < (vault['BALANCE'] + 500) and arm['AVAILABLE'] and arm['EXCLUSIVE'] != True:
+                if arm['PRICE'] != 0 and arm['PRICE'] < (vault['BALANCE'] + 1500) and arm['AVAILABLE'] and arm['EXCLUSIVE'] != True:
                     if arm['ARM'] not in vault['ARMS']:
                         arms.append({'ARM': arm['ARM'], 'PRICE': arm['PRICE'], 'UNIVERSE': arm['UNIVERSE'], 'STOCK': arm['STOCK']})
 
