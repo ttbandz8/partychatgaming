@@ -471,8 +471,8 @@ class Profile(commands.Cog):
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
         vault = db.queryVault({'OWNER': d['DISNAME']})
-        if not vault['DESTINY']:
-            await ctx.send("No Destiny Lines available at this time!")
+        if not vault['QUESTS']:
+            await ctx.send("No Quests available at this time!")
             return
         if vault:
             name = d['DISNAME'].split("#",1)[0]
