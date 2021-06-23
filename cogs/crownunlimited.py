@@ -23731,14 +23731,14 @@ async def dungeondrops(player, universe, matchcount):
         return f"You earned _Pet:_ **{pets[rand_pet]}** + :coin: 80!"
     elif drop_rate <= card_drop and drop_rate > pet_drop:
             response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(cards[rand_card])}})
-            
+            message = ""
             for destiny in d.destiny:
                 if cards[rand_card] in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
                     db.updateVaultNoFilter(vault_query,{'$addToSet':{'DESTINY': destiny}})
-                    await ctx.send(f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.")
+                    message = f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault."
 
             await bless(80, player)
-            return f"You earned _Card:_ **{cards[rand_card]}** + :coin: 80!"
+            return f"You earned _Card:_ **{cards[rand_card]}** + :coin: 80!\n{message}"
 
 async def bossdrops(player, universe):
     all_available_drop_cards = db.queryExclusiveDropCards(universe)
