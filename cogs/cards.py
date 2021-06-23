@@ -53,6 +53,9 @@ class Cards(commands.Cog):
 
         check_card = db.queryCard({'NAME' : str(card_name)})
         if check_card:
+            if check_card['UNIVERSE'] == 'Unbound':
+                await ctx.send("You cannot purchase this card.")
+                return
             all_universes = db.queryAllUniverse()
             user = db.queryUser({'DISNAME': str(ctx.author)})
             available_universes = []

@@ -116,10 +116,10 @@ class CrownUnlimited(commands.Cog):
         player_scaling = 0
 
         if universe['PREREQUISITE']:
-            opponent_scaling = 11
+            opponent_scaling = 8
             player_scaling = 5
         else:
-            opponent_scaling = 8
+            opponent_scaling = 1
             player_scaling = 1
 
         legends = [x for x in universe['CROWN_TALES']]
@@ -281,10 +281,10 @@ class CrownUnlimited(commands.Cog):
             t_card_path=t['PATH']
             t_rcard_path=t['RPATH']
             if t['UNIVERSE'] == "Demon Slayer" and o_max_health >= t['HLT']: #Demon Slayer Universal Trait
-                t_max_health = o_max_health + (25 * currentopponent) + 50 + opponent_scaling
+                t_max_health = o_max_health + (25 * currentopponent) + 10 + opponent_scaling
             else:                    
-                t_max_health = t['HLT'] + (13 * currentopponent) + 50 + opponent_scaling
-            t_health = t['HLT'] + (13 * currentopponent) + 50 + opponent_scaling
+                t_max_health = t['HLT'] + (13 * currentopponent) + 10 + opponent_scaling
+            t_health = t['HLT'] + (13 * currentopponent) + 10 + opponent_scaling
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
@@ -3385,7 +3385,7 @@ class CrownUnlimited(commands.Cog):
                 teambank = await blessteam(10, oteam)
                 cteambank = await blessteam(10, cteam)
                 drop_response = await drops(ctx.author, selected_universe, currentopponent)
-                cdrop_response = await drops(user, selected_universe, turn)
+                cdrop_response = await drops(user, selected_universe, currentopponent)
                 questlogger = await quest(ouser, t_card, "Tales")
                 cquestlogger = await quest(cuser, t_card, "Tales")
                 if questlogger:
@@ -3532,10 +3532,10 @@ class CrownUnlimited(commands.Cog):
         player_scaling = 0
 
         if universe['PREREQUISITE']:
-            opponent_scaling = 28
+            opponent_scaling = 16
             player_scaling = 5
         else:
-            opponent_scaling = 23
+            opponent_scaling = 12
             player_scaling = 1
 
         legends = [x for x in universe['CROWN_TALES']]
@@ -7004,7 +7004,7 @@ class CrownUnlimited(commands.Cog):
                 teambank = await blessteam(10, oteam)
                 cteambank = await blessteam(10, cteam)
                 drop_response = await dungeondrops(ctx.author, selected_universe, currentopponent)
-                cdrop_response = await dungeondrops(user, selected_universe, turn)
+                cdrop_response = await dungeondrops(user, selected_universe, currentopponent)
                 questlogger = await quest(ouser, t_card, "Dungeon")
                 cquestlogger = await quest(user, t_card, "Dungeon")
                 if questlogger:
@@ -10765,10 +10765,10 @@ class CrownUnlimited(commands.Cog):
         player_scaling = 0
 
         if universe['PREREQUISITE']:
-            opponent_scaling = 16
+            opponent_scaling = 12
             player_scaling = 0
         else:
-            opponent_scaling = 12
+            opponent_scaling = 8
             player_scaling = 0
 
         legends = [x for x in universe['CROWN_TALES']]
@@ -10876,8 +10876,8 @@ class CrownUnlimited(commands.Cog):
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
-            t_attack = t['ATK'] + (5 * currentopponent) + 15
-            t_defense = t['DEF'] + (7 * currentopponent) + 15
+            t_attack = t['ATK'] + (5 * currentopponent) + 12
+            t_defense = t['DEF'] + (5 * currentopponent) + 12
             t_type = t['TYPE']
             t_accuracy = t['ACC']
             t_passive = t['PASS'][0]
@@ -12755,7 +12755,7 @@ class CrownUnlimited(commands.Cog):
             opponent_scaling = 8
             player_scaling = 5
         else:
-            opponent_scaling = 3
+            opponent_scaling = 2
             player_scaling = 1
 
         legends = [x for x in universe['CROWN_TALES']]
@@ -22838,9 +22838,9 @@ class CrownUnlimited(commands.Cog):
             else:
                 available = ":red_circle:"
             if title['EXCLUSIVE']:
-                dungeon_titles_details.append(f"{available} {title['TITLE']} _Dungeon Drop_")
+                dungeon_titles_details.append(f"{available} {title['TITLE']} _D_")
             else:
-                tales_titles_details.append(f"{available} {title['TITLE']}: :coin:{title['PRICE']} _Tales Drop_")
+                tales_titles_details.append(f"{available} {title['TITLE']}: :coin:{title['PRICE']} _T_")
         await ctx.author.send(f"{universe.upper()} TITLE LIST")
         await ctx.author.send("\n".join(tales_titles_details))
         await ctx.author.send("\n".join(dungeon_titles_details))
@@ -22866,9 +22866,9 @@ class CrownUnlimited(commands.Cog):
             else:
                 available = ":red_circle:"
             if arm['EXCLUSIVE']:
-                dungeon_arms_details.append(f"{available} {arm['ARM']} _Dungeon Drop_")
+                dungeon_arms_details.append(f"{available} {arm['ARM']} _D_")
             else:
-                tales_arms_details.append(f"{available} {arm['ARM']}: :coin:{arm['PRICE']} _Tales Drop_")
+                tales_arms_details.append(f"{available} {arm['ARM']}: :coin:{arm['PRICE']} _T_")
         await ctx.author.send(f"{universe.upper()} ARM LIST")
         await ctx.author.send("\n".join(tales_arms_details))
         await ctx.author.send("\n".join(dungeon_arms_details))
@@ -22917,9 +22917,9 @@ class CrownUnlimited(commands.Cog):
             else:
                 available = ":red_circle:"
             if pet['EXCLUSIVE']:
-                dungeon_pets_details.append(f"{available} {pet['PET']} _Dungeon Drop_")
+                dungeon_pets_details.append(f"{available} {pet['PET']} _D_")
             else:
-                tales_pets_details.append(f"{available} {pet['PET']} _Tales Drop_")
+                tales_pets_details.append(f"{available} {pet['PET']} _T_")
         await ctx.author.send(f"{universe.upper()} PET LIST")
         await ctx.author.send("\n".join(tales_pets_details))
         await ctx.author.send("\n".join(dungeon_pets_details))
@@ -23655,14 +23655,14 @@ async def drops(player, universe, matchcount):
         return f"You earned _Pet:_ **{pets[rand_pet]}** + :coin: 50!"
     elif drop_rate <= card_drop and drop_rate > pet_drop:
             response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(cards[rand_card])}})
-
+            message = ""
             for destiny in d.destiny:
                 if cards[rand_card] in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
                     db.updateVaultNoFilter(vault_query,{'$addToSet':{'DESTINY': destiny}})
-                    await ctx.send(f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.")
+                    message = f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault."
 
             await bless(50, player)
-            return f"You earned _Card:_ **{cards[rand_card]}** + :coin: 50!"
+            return f"You earned _Card:_ **{cards[rand_card]}** + :coin: 50!\n{message}"
 
 async def dungeondrops(player, universe, matchcount):
     all_available_drop_cards = db.queryExclusiveDropCards(universe)
@@ -23731,14 +23731,14 @@ async def dungeondrops(player, universe, matchcount):
         return f"You earned _Pet:_ **{pets[rand_pet]}** + :coin: 80!"
     elif drop_rate <= card_drop and drop_rate > pet_drop:
             response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(cards[rand_card])}})
-            
+            message = ""
             for destiny in d.destiny:
                 if cards[rand_card] in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
                     db.updateVaultNoFilter(vault_query,{'$addToSet':{'DESTINY': destiny}})
-                    await ctx.send(f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.")
+                    message = f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault."
 
             await bless(80, player)
-            return f"You earned _Card:_ **{cards[rand_card]}** + :coin: 80!"
+            return f"You earned _Card:_ **{cards[rand_card]}** + :coin: 80!\n{message}"
 
 async def bossdrops(player, universe):
     all_available_drop_cards = db.queryExclusiveDropCards(universe)
