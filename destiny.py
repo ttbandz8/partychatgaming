@@ -352,7 +352,7 @@ destiny = [
     {
         "NAME": "Charizard Evolution",
         "WINS": 0,
-        "REQUIRED": 20,
+        "REQUIRED": 10,
         "DEFEAT": "Charizard",
         "USE_CARDS": ["Charmander"],
         "EARN": "Charizard",
@@ -362,7 +362,7 @@ destiny = [
     {
         "NAME": "Blastoise Evolution",
         "WINS": 0,
-        "REQUIRED": 20,
+        "REQUIRED": 10,
         "DEFEAT": "Blastoise",
         "USE_CARDS": ["Squirtle"],
         "EARN": "Blastoise",
@@ -372,7 +372,7 @@ destiny = [
     {
         "NAME": "Venusaur Evolution",
         "WINS": 0,
-        "REQUIRED": 20,
+        "REQUIRED": 10,
         "DEFEAT": "Venusaur",
         "USE_CARDS": ["Bulbasaur"],
         "EARN": "Charizard",
@@ -392,7 +392,7 @@ destiny = [
     {
         "NAME": "Gotta Catch 'Em All: Squirtle",
         "WINS": 0,
-        "REQUIRED": 10,
+        "REQUIRED": 5,
         "DEFEAT": "Squirtle",
         "USE_CARDS": ["Ash Ketchum"],
         "EARN": "Squirtle",
@@ -402,7 +402,7 @@ destiny = [
     {
         "NAME": "Gotta Catch 'Em All: Bulbasaur",
         "WINS": 0,
-        "REQUIRED": 15,
+        "REQUIRED": 5,
         "DEFEAT": "Bulbasaur",
         "USE_CARDS": ["Ash Ketchum"],
         "EARN": "Bulbasaur",
@@ -442,7 +442,7 @@ destiny = [
     {
         "NAME": "Gotta Catch 'Em All: Ho-Oh",
         "WINS": 0,
-        "REQUIRED": 50,
+        "REQUIRED": 30,
         "DEFEAT": "Ho-Oh",
         "USE_CARDS": ["Ash Ketchum"],
         "EARN": "Ho-Oh",
@@ -592,7 +592,7 @@ destiny = [
     {
         "NAME": "Hunter Or Hunter",
         "WINS": 0,
-        "REQUIRED": 15,
+        "REQUIRED": 13,
         "DEFEAT": "Kindred",
         "USE_CARDS": ["Akali"],
         "EARN": "Kindred",
@@ -602,7 +602,7 @@ destiny = [
     {
         "NAME": "My Queen",
         "WINS": 0,
-        "REQUIRED": 10,
+        "REQUIRED": 5,
         "DEFEAT": "Ashe",
         "USE_CARDS": ["Braum"],
         "EARN": "Ashe",
@@ -632,7 +632,7 @@ destiny = [
     {
         "NAME": "Guardian Mountain",
         "WINS": 0,
-        "REQUIRED": 10,
+        "REQUIRED": 5,
         "DEFEAT": "Shen",
         "USE_CARDS": ["Malphite"],
         "EARN": "Shen",
@@ -642,7 +642,7 @@ destiny = [
     {
         "NAME": "Apprentice Assasin",
         "WINS": 0,
-        "REQUIRED": 15,
+        "REQUIRED": 10,
         "DEFEAT": "Akali",
         "USE_CARDS": ["Shen"],
         "EARN": "Akali",
@@ -692,7 +692,7 @@ destiny = [
     {
         "NAME": "Viegos Warpath",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 15,
         "DEFEAT": "Azir",
         "USE_CARDS": ["Hecarim"],
         "EARN": "Azir",
@@ -712,7 +712,7 @@ destiny = [
     {
         "NAME": "Battle With The Butcher",
         "WINS": 0,
-        "REQUIRED": 15,
+        "REQUIRED": 10,
         "DEFEAT": "Renekton",
         "USE_CARDS": ["Sivir"],
         "EARN": "Renekton",
@@ -932,7 +932,7 @@ destiny = [
     {
         "NAME": "Typlosion Evolution",
         "WINS": 0,
-        "REQUIRED": 20,
+        "REQUIRED": 10,
         "DEFEAT": "Typlosion",
         "USE_CARDS": ["Cyndaquil"],
         "EARN": "Typlosion",
@@ -942,7 +942,7 @@ destiny = [
     {
         "NAME": "Feraligtr Evolution",
         "WINS": 0,
-        "REQUIRED": 20,
+        "REQUIRED": 10,
         "DEFEAT": "Feraligtr",
         "USE_CARDS": ["Totodile"],
         "EARN": "Feraligtr",
@@ -952,7 +952,7 @@ destiny = [
     {
         "NAME": "Meganium Evolution",
         "WINS": 0,
-        "REQUIRED": 20,
+        "REQUIRED": 10,
         "DEFEAT": "Meganium",
         "USE_CARDS": ["Chikorita"],
         "EARN": "Meganium",
@@ -972,7 +972,7 @@ destiny = [
     {
         "NAME": "Gotta Catch 'Em All: Totodile",
         "WINS": 0,
-        "REQUIRED": 10,
+        "REQUIRED": 5,
         "DEFEAT": "Totodile",
         "USE_CARDS": ["Ash Ketchum"],
         "EARN": "Totodile",
@@ -982,7 +982,7 @@ destiny = [
     {
         "NAME": "Gotta Catch 'Em All: Chikorita",
         "WINS": 0,
-        "REQUIRED": 15,
+        "REQUIRED": 5,
         "DEFEAT": "Chikorita",
         "USE_CARDS": ["Ash Ketchum"],
         "EARN": "Chikorita",
@@ -1002,7 +1002,7 @@ destiny = [
     {
         "NAME": "Gotta Catch 'Em All: Raikou",
         "WINS": 0,
-        "REQUIRED": 30,
+        "REQUIRED": 25,
         "DEFEAT": "Raikou",
         "USE_CARDS": ["Ash Ketchum"],
         "EARN": "Raikou",
@@ -1012,7 +1012,7 @@ destiny = [
     {
         "NAME": "Gotta Catch 'Em All: Entei",
         "WINS": 0,
-        "REQUIRED": 35,
+        "REQUIRED": 25,
         "DEFEAT": "Entei",
         "USE_CARDS": ["Ash Ketchum"],
         "EARN": "Entei",
@@ -1022,7 +1022,7 @@ destiny = [
     {
         "NAME": "Gotta Catch 'Em All: Lugia",
         "WINS": 0,
-        "REQUIRED": 50,
+        "REQUIRED": 30,
         "DEFEAT": "Lugia",
         "USE_CARDS": ["Ash Ketchum"],
         "EARN": "Lugia",
@@ -1032,7 +1032,7 @@ destiny = [
     {
         "NAME": "Misty's Baby",
         "WINS": 0,
-        "REQUIRED": 15,
+        "REQUIRED": 5,
         "DEFEAT": "Togepi",
         "USE_CARDS": ["Misty"],
         "EARN": "Togepi",
@@ -1072,7 +1072,7 @@ destiny = [
     {
         "NAME": "Save Pikachu",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 10,
         "DEFEAT": "Team Rocket",
         "USE_CARDS": ["May"],
         "EARN": "Team Rocket",
@@ -1082,7 +1082,7 @@ destiny = [
     {
         "NAME": "Blaziken Evolution",
         "WINS": 0,
-        "REQUIRED": 20,
+        "REQUIRED": 10,
         "DEFEAT": "Blaziken",
         "USE_CARDS": ["Torchic"],
         "EARN": "Blaziken",
@@ -1092,7 +1092,7 @@ destiny = [
     {
         "NAME": "Swampert Evolution",
         "WINS": 0,
-        "REQUIRED": 20,
+        "REQUIRED": 10,
         "DEFEAT": "Swampert",
         "USE_CARDS": ["Mudkip"],
         "EARN": "Swampert",
@@ -1102,7 +1102,7 @@ destiny = [
     {
         "NAME": "Sceptile Evolution",
         "WINS": 0,
-        "REQUIRED": 20,
+        "REQUIRED": 10,
         "DEFEAT": "Sceptile",
         "USE_CARDS": ["Treecko"],
         "EARN": "Sceptile",
@@ -1112,7 +1112,7 @@ destiny = [
     {
         "NAME": "Wailord Evolution",
         "WINS": 0,
-        "REQUIRED": 15,
+        "REQUIRED": 10,
         "DEFEAT": "Wailord",
         "USE_CARDS": ["Wailmer"],
         "EARN": "Wailord",
@@ -1122,7 +1122,7 @@ destiny = [
     {
         "NAME": "Dustox Evolution",
         "WINS": 0,
-        "REQUIRED": 15,
+        "REQUIRED": 10,
         "DEFEAT": "Dustox",
         "USE_CARDS": ["Wurmple"],
         "EARN": "Dustox",
