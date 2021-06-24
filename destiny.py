@@ -1653,7 +1653,7 @@ destiny = [
         "NAME": "The Broken Hero",
         "WINS": 0,
         "REQUIRED": 10,
-        "DEFEAT": "One For All",
+        "DEFEAT": "All For One",
         "USE_CARDS": ["Deku"],
         "EARN": "Broken Deku",
         "COMPLETED": False,
