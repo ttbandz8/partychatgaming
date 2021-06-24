@@ -168,9 +168,9 @@ class Profile(commands.Cog):
                 hlt_buff = f" / **{o_max_health + 100}**"
                 message = "_Universe Buff Applied_"
                 if o_destiny:
-                    atk_buff = f" / **{o_attack + 30}**"
-                    def_buff = f" / **{o_defense + 30}**"
-                    hlt_buff = f" / **{o_max_health + 200}**"
+                    atk_buff = f" / **{o_attack + 25}**"
+                    def_buff = f" / **{o_defense + 25}**"
+                    hlt_buff = f" / **{o_max_health + 150}**"
                     message = "_Destiny Buff Applied_"
 
             embedVar = discord.Embed(title=f"{title_name} {o_card} & {active_pet['NAME']}:".format(self), description=textwrap.dedent(f"""\
