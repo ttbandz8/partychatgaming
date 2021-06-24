@@ -193,6 +193,7 @@ async def crown(ctx):
 
    **Unique Passive**
    Unique Passives are Enhancers that take effect at the beginning of the game, no player action needed.
+
    """), colour=0x7289da)
    embedVar3.set_thumbnail(url=avatar)
 
@@ -204,6 +205,11 @@ async def crown(ctx):
    Can assist during battle with an Enhancer
 
    Mix and Match Titles, Arms and Pet passives to gain tactical advantage!
+
+   Match Your Titles and Arms to your Card Universe To gain the **Universe Buff**
+   **Universe Buff** + 100 Health , 20 ATK & 20 DEF
+
+   **Destiny Buff** Destiny Cards gain an additional + 50 Health, 5 ATK and 5 DEF
    """) ,colour=0x7289da)
    embedVar4.set_thumbnail(url=avatar)
 

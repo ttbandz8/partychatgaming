@@ -375,7 +375,7 @@ destiny = [
         "REQUIRED": 10,
         "DEFEAT": "Venusaur",
         "USE_CARDS": ["Bulbasaur"],
-        "EARN": "Charizard",
+        "EARN": "Venusaur",
         "COMPLETED": False,
         "UNIVERSE": "Kanto Region"
     },
