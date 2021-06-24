@@ -402,7 +402,7 @@ async def daily(ctx):
    q2 = random.randint(0, oppponent_len)
    q3 = random.randint(0, oppponent_len)
 
-   quests = [{'OPPONENT': opponents[q1], 'TYPE': 'Tales', 'GOAL': 3, 'WINS': 0, 'REWARD': 100 },{'OPPONENT': opponents[q2], 'TYPE': 'Tales', 'GOAL': 5, 'WINS': 0, 'REWARD': 125 }, {'OPPONENT': opponents[q3], 'TYPE': 'Dungeon', 'GOAL': 3, 'WINS': 0, 'REWARD': 150 }]
+   quests = [{'OPPONENT': opponents[q1], 'TYPE': 'Tales', 'GOAL': 3, 'WINS': 0, 'REWARD': 100 },{'OPPONENT': opponents[q2], 'TYPE': 'Tales', 'GOAL': 5, 'WINS': 0, 'REWARD': 150 }, {'OPPONENT': opponents[q3], 'TYPE': 'Dungeon', 'GOAL': 3, 'WINS': 0, 'REWARD': 350 }]
    db.updateVaultNoFilter({'OWNER': str(ctx.author)}, {'$set': {'QUESTS': quests}})
 
    await ctx.send(f"Daily bonus :coin:100 has been applied for {ctx.author.mention}!\nYour new quests are available on the Quest Board!")
