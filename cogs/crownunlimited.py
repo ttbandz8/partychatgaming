@@ -23089,8 +23089,9 @@ async def quest(player, opponent, mode):
         if quest_data == {}:
             return
         completion = quest_data['GOAL'] - (quest_data['WINS'] + 1)
-        
-        if quest_data['TYPE'] == "Dungeon" and quest_data['GOAL'] != quest_data['WINS']:
+    
+        print(completion)
+        if str(mode) == "Dungeon" and quest_data['TYPE'] == "Dungeon" and completion >= 0:
             message = "Dungeon Quest progressed!"
             if completion == 0:
                 await bless(150, player)
@@ -23102,7 +23103,7 @@ async def quest(player, opponent, mode):
             resp = db.updateVault(query, update_query, filter_query)
             return message
 
-        elif quest_data['TYPE'] == "Tales" and quest_data['GOAL'] != quest_data['WINS']:
+        elif str(mode) == "Tales" and quest_data['TYPE'] == "Tales" and completion >= 0:
             message = "Tales Quest progressed!"
             if completion == 0:
                 if quest_data['GOAL'] == 5:
