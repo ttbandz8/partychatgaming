@@ -775,7 +775,7 @@ destiny = [
         "REQUIRED": 15,
         "DEFEAT": "Deep Sea King",
         "USE_CARDS": ["Puri Puri Prisoner"],
-        "EARN": "Puri Puri Prisoner",
+        "EARN": "Deep Sea King",
         "COMPLETED": False,
         "UNIVERSE": "One Punch Man"
     },
