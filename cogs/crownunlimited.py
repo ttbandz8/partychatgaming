@@ -164,6 +164,7 @@ class CrownUnlimited(commands.Cog):
             o_DID = o_user['DID']
             o_card = o['NAME']
             o_gif = o['GIF']
+            o_destiny = o['HAS_COLLECTION']
             o_card_path=o['PATH']
             o_rcard_path=o['RPATH']
             if o['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= o['HLT']: # Demon Slayer Universal Trait
@@ -230,6 +231,7 @@ class CrownUnlimited(commands.Cog):
             c_DID = c_user['DID']
             c_card = c['NAME']
             c_gif = c['GIF']
+            c_destiny = c['HAS_COLLECTION']
             c_card_path=c['PATH']
             c_rcard_path= c['RPATH']
             if c['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= c['HLT']: # Demon Slayer Universal Trait
@@ -274,6 +276,7 @@ class CrownUnlimited(commands.Cog):
             t_user = boss
             tarm = db.queryArm({'ARM': universe['UARM']})
             tarm_universe = tarm['UNIVERSE']
+            t_destiny = t['HAS_COLLECTION']
             tarm_passive = tarm['ABILITIES'][0]
             tarm_name=tarm['ARM']
             t_card = t['NAME']
@@ -322,18 +325,33 @@ class CrownUnlimited(commands.Cog):
                 o_defense = o_defense + 20
                 o_max_health = o_max_health + 100
                 o_health = o_health + 100
+                if o_destiny:
+                    o_attack = o_attack + 5
+                    o_defense = o_defense + 5
+                    o_max_health = o_max_health + 50
+                    o_health = o_health + 50
             
             if (tarm_universe == t_universe) and (t_title_universe == t_universe):
                 t_attack = t_attack + 20
                 t_defense = t_defense + 20
                 t_max_health = t_max_health + 100
                 t_health = t_health + 100
+                if t_destiny:
+                    t_attack = t_attack + 5
+                    t_defense = t_defense + 5
+                    t_max_health = t_max_health + 50
+                    t_health = t_health + 50
 
             if (carm_universe == c_universe) and (c_title_universe == c_universe):
                 c_attack = c_attack + 20
                 c_defense = c_defense + 20
                 c_max_health = c_max_health + 100
                 c_health = c_health + 100
+                if c_destiny:
+                    c_attack = c_attack + 5
+                    c_defense = c_defense + 5
+                    c_max_health = c_max_health +  50
+                    c_health = c_health + 50
 
 
             # Companion Passive Config
@@ -3579,6 +3597,7 @@ class CrownUnlimited(commands.Cog):
             o_DID = o_user['DID']
             o_card = o['NAME']
             o_gif = o['GIF']
+            o_destiny = o['HAS_COLLECTION']
             o_card_path=o['PATH']
             o_rcard_path=o['RPATH']
             if o['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= o['HLT']: # Demon Slayer Universal Trait
@@ -3645,6 +3664,7 @@ class CrownUnlimited(commands.Cog):
             c_DID = c_user['DID']
             c_card = c['NAME']
             c_gif = c['GIF']
+            c_destiny = c['HAS_COLLECTION']            
             c_card_path=c['PATH']
             c_rcard_path= c['RPATH']
             if c['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= c['HLT']: # Demon Slayer Universal Trait
@@ -3689,6 +3709,7 @@ class CrownUnlimited(commands.Cog):
             t_user = boss
             tarm = db.queryArm({'ARM': universe['DARM']})
             tarm_universe = tarm['UNIVERSE']
+            t_destiny = t['HAS_COLLECTION']
             tpet = db.queryPet({'PET': universe['DPET']})
             tpet_passive = tpet['ABILITIES'][0]
             tpet_name = tpet['PET']
@@ -3741,18 +3762,33 @@ class CrownUnlimited(commands.Cog):
                 o_defense = o_defense + 20
                 o_max_health = o_max_health + 100
                 o_health = o_health + 100
+                if o_destiny:
+                    o_attack = o_attack + 5
+                    o_defense = o_defense + 5
+                    o_max_health = o_max_health + 50
+                    o_health = o_health + 50
             
             if (tarm_universe == t_universe) and (t_title_universe == t_universe):
                 t_attack = t_attack + 20
                 t_defense = t_defense + 20
                 t_max_health = t_max_health + 100
                 t_health = t_health + 100
+                if t_destiny:
+                    t_attack = t_attack + 5
+                    t_defense = t_defense + 5
+                    t_max_health = t_max_health + 50
+                    t_health = t_health + 50
 
             if (carm_universe == c_universe) and (c_title_universe == c_universe):
                 c_attack = c_attack + 20
                 c_defense = c_defense + 20
                 c_max_health = c_max_health + 100
                 c_health = c_health + 100
+                if c_destiny:
+                    c_attack = c_attack + 5
+                    c_defense = c_defense + 5
+                    c_max_health = c_max_health +  50
+                    c_health = c_health + 50
 
             # Companion Passive Config
             if (c_universe == c_title_universe) or (c_title_universe == "Unbound"):
@@ -7244,6 +7280,7 @@ class CrownUnlimited(commands.Cog):
         c_DID = c_user['DID']
         c_card = c['NAME']
         c_gif = c['GIF']
+        c_destiny = c['HAS_COLLECTION']
         c_card_path=c['PATH']
         c_rcard_path= c['RPATH']
         if c['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= c['HLT']: # Demon Slayer Universal Trait
@@ -7350,18 +7387,33 @@ class CrownUnlimited(commands.Cog):
             o_defense = o_defense + 20
             o_max_health = o_max_health + 100
             o_health = o_health + 100
+            if o_destiny:
+                o_attack = o_attack + 5
+                o_defense = o_defense + 5
+                o_max_health = o_max_health + 50
+                o_health = o_health + 50
         
         if (tarm_universe == t_universe) and (t_title_universe == t_universe):
             t_attack = t_attack + 20
             t_defense = t_defense + 20
             t_max_health = t_max_health + 100
             t_health = t_health + 100
+            if t_destiny:
+                t_attack = t_attack + 5
+                t_defense = t_defense + 5
+                t_max_health = t_max_health + 50
+                t_health = t_health + 50
 
         if (carm_universe == c_universe) and (c_title_universe == c_universe):
             c_attack = c_attack + 20
             c_defense = c_defense + 20
             c_max_health = c_max_health + 100
             c_health = c_health + 100
+            if c_destiny:
+                c_attack = c_attack + 5
+                c_defense = c_defense + 5
+                c_max_health = c_max_health +  50
+                c_health = c_health + 50
 
         # Companion Passive Config
         if (c_universe == c_title_universe) or (c_title_universe == "Unbound"):
@@ -10813,6 +10865,7 @@ class CrownUnlimited(commands.Cog):
             o_DID = o_user['DID']
             o_card = o['NAME']
             o_gif = o['GIF']
+            o_destiny = o['HAS_COLLECTION']
             o_card_path=o['PATH']
             o_rcard_path=o['RPATH']
             if o['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= o['HLT']: # Demon Slayer Universal Trait
@@ -10858,6 +10911,7 @@ class CrownUnlimited(commands.Cog):
             t_user = boss
             tarm = db.queryArm({'ARM': universe['DARM']})
             tarm_universe = tarm['UNIVERSE']
+            t_destiny = t['HAS_COLLECTION']
             tpet = db.queryPet({'PET': universe['DPET']})
             tpet_passive = tpet['ABILITIES'][0]
             tpet_name = tpet['PET']
@@ -10911,12 +10965,22 @@ class CrownUnlimited(commands.Cog):
                 o_defense = o_defense + 20
                 o_max_health = o_max_health + 100
                 o_health = o_health + 100
+                if o_destiny:
+                    o_attack = o_attack + 5
+                    o_defense = o_defense + 5
+                    o_max_health = o_max_health + 50
+                    o_health = o_health + 50
             
             if (tarm_universe == t_universe) and (t_title_universe == t_universe):
                 t_attack = t_attack + 20
                 t_defense = t_defense + 20
                 t_max_health = t_max_health + 100
                 t_health = t_health + 100
+                if t_destiny:
+                    t_attack = t_attack + 5
+                    t_defense = t_defense + 5
+                    t_max_health = t_max_health + 50
+                    t_health = t_health + 50
 
             # Player 1 Passive Config
             if (o_universe == o_title_universe) or (o_title_universe == "Unbound"):
@@ -12796,6 +12860,7 @@ class CrownUnlimited(commands.Cog):
             o_DID = o_user['DID']
             o_card = o['NAME']
             o_gif = o['GIF']
+            o_destiny = o['HAS_COLLECTION']
             o_card_path=o['PATH']
             o_rcard_path=o['RPATH']
             if o['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= o['HLT']: # Demon Slayer Universal Trait
@@ -12840,6 +12905,7 @@ class CrownUnlimited(commands.Cog):
             t_user = boss
             tarm = db.queryArm({'ARM': universe['UARM']})
             tarm_universe = tarm['UNIVERSE']
+            t_destiny = t['HAS_COLLECTION']
             tarm_passive = tarm['ABILITIES'][0]
             tarm_name=tarm['ARM'] 
             t_card = t['NAME']
@@ -12889,12 +12955,22 @@ class CrownUnlimited(commands.Cog):
                 o_defense = o_defense + 20
                 o_max_health = o_max_health + 100
                 o_health = o_health + 100
+                if o_destiny:
+                    o_attack = o_attack + 5
+                    o_defense = o_defense + 5
+                    o_max_health = o_max_health + 50
+                    o_health = o_health + 50
             
             if (tarm_universe == t_universe) and (t_title_universe == t_universe):
                 t_attack = t_attack + 20
                 t_defense = t_defense + 20
                 t_max_health = t_max_health + 100
                 t_health = t_health + 100
+                if t_destiny:
+                    t_attack = t_attack + 5
+                    t_defense = t_defense + 5
+                    t_max_health = t_max_health + 50
+                    t_health = t_health + 50
 
             # Player 1 Passive Config
             if (o_universe == o_title_universe) or (o_title_universe == "Unbound"):
@@ -14761,12 +14837,22 @@ class CrownUnlimited(commands.Cog):
             o_defense = o_defense + 20
             o_max_health = o_max_health + 100
             o_health = o_health + 100
+            if o_destiny:
+                o_attack = o_attack + 5
+                o_defense = o_defense + 5
+                o_max_health = o_max_health + 50
+                o_health = o_health + 50
                 
         if (tarm_universe == t_universe) and (t_title_universe == t_universe):
             t_attack = t_attack + 20
             t_defense = t_defense + 20
             t_max_health = t_max_health + 100
             t_health = t_health + 100
+            if t_destiny:
+                t_attack = t_attack + 5
+                t_defense = t_defense + 5
+                t_max_health = t_max_health + 50
+                t_health = t_health + 50
 
         # Player 1 Passive Config
         if (o_universe == o_title_universe) or (o_title_universe == "Unbound"):
@@ -16542,6 +16628,7 @@ class CrownUnlimited(commands.Cog):
                 o_DID = o_user['DID']
                 o_card = o['NAME']
                 o_gif = o['GIF']
+                o_destiny = o['HAS_COLLECTION']
                 o_card_path=o['PATH']
                 o_rcard_path=o['RPATH']
                 if o['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= o['HLT']: # Demon Slayer Universal Trait
@@ -16603,6 +16690,7 @@ class CrownUnlimited(commands.Cog):
                 t_DID = t_user['DID']
                 t_card = t['NAME']
                 t_gif = t['GIF']
+                t_destiny = t['HAS_COLLECTION']
                 t_card_path=t['PATH']
                 t_rcard_path=t['RPATH']
                 if t['UNIVERSE'] == "Demon Slayer" and o_max_health >= t['HLT']: #Demon Slayer Universal Trait
@@ -16648,12 +16736,22 @@ class CrownUnlimited(commands.Cog):
                     o_defense = o_defense + 20
                     o_max_health = o_max_health + 100
                     o_health = o_health + 100
+                    if o_destiny:
+                        o_attack = o_attack + 5
+                        o_defense = o_defense + 5
+                        o_max_health = o_max_health + 50
+                        o_health = o_health + 50
                 
                 if (tarm_universe == t_universe) and (t_title_universe == t_universe):
                     t_attack = t_attack + 20
                     t_defense = t_defense + 20
                     t_max_health = t_max_health + 100
                     t_health = t_health + 100
+                    if t_destiny:
+                        t_attack = t_attack + 5
+                        t_defense = t_defense + 5
+                        t_max_health = t_max_health + 50
+                        t_health = t_health + 50
 
                 # Player 1 Passive Config
                 if (o_universe == o_title_universe) or (o_title_universe == "Unbound"):
@@ -18853,6 +18951,7 @@ class CrownUnlimited(commands.Cog):
                 o_DID = o_user['DID']
                 o_card = o['NAME']
                 o_gif = o['GIF']
+                o_destiny = o['HAS_COLLECTION']
                 o_card_path=o['PATH']
                 o_rcard_path=o['RPATH']
                 o_max_health = o['HLT']
@@ -18911,6 +19010,7 @@ class CrownUnlimited(commands.Cog):
                 t_DID = t_user['DID']
                 t_card = t['NAME']
                 t_gif = t['GIF']
+                t_destiny = t['HAS_COLLECTION']
                 t_card_path=t['PATH']
                 t_rcard_path=t['RPATH']
                 t_max_health = t['HLT']
@@ -18953,12 +19053,22 @@ class CrownUnlimited(commands.Cog):
                     o_defense = o_defense + 20
                     o_max_health = o_max_health + 100
                     o_health = o_health + 100
+                    if o_destiny:
+                        o_attack = o_attack + 5
+                        o_defense = o_defense + 5
+                        o_max_health = o_max_health + 50
+                        o_health = o_health + 50
                 
                 if (tarm_universe == t_universe) and (t_title_universe == t_universe):
                     t_attack = t_attack + 20
                     t_defense = t_defense + 20
                     t_max_health = t_max_health + 100
                     t_health = t_health + 100
+                    if t_destiny:
+                        t_attack = t_attack + 5
+                        t_defense = t_defense + 5
+                        t_max_health = t_max_health + 50
+                        t_health = t_health + 50
 
                 # Check if Wager is ok!
                 if int(obalance) < int(wager):
@@ -21060,6 +21170,7 @@ class CrownUnlimited(commands.Cog):
                 o_DID = o_user['DID']
                 o_card = o['NAME']
                 o_gif = o['GIF']
+                o_destiny = o['HAS_COLLECTION']
                 o_card_path=o['PATH']
                 o_rcard_path=o['RPATH']
                 o_max_health = o['HLT']
@@ -21119,6 +21230,7 @@ class CrownUnlimited(commands.Cog):
                 t_DID = t_user['DID']
                 t_card = t['NAME']
                 t_gif = t['GIF']
+                t_destiny = t['HAS_COLLECTION']
                 t_card_path=t['PATH']
                 t_rcard_path=t['RPATH']
                 t_max_health = t['HLT']
