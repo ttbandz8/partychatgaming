@@ -71,6 +71,8 @@ class Profile(commands.Cog):
         arm = db.queryArm({'ARM': str(d['ARM'])})
         vault = db.queryVault({'OWNER': d['DISNAME']})
         if card:
+            oarm_universe = arm['UNIVERSE']
+            o_title_universe = title['UNIVERSE']
             o_card = card['NAME']
             o_card_path=card['PATH']
             o_max_health = card['HLT']
@@ -86,6 +88,7 @@ class Profile(commands.Cog):
             o_speed = card['SPD']
             o_show = card['UNIVERSE']
             o_collection = card['COLLECTION']
+            o_destiny = card['HAS_COLLECTION']
             traits = ut.traits
             mytrait = {}
             traitmessage = ''
@@ -154,12 +157,29 @@ class Profile(commands.Cog):
             passive_num = list(o_passive.values())[0]
             passive_type = list(o_passive.values())[1]
 
+
+            atk_buff = ""
+            def_buff = ""
+            hlt_buff = ""
+            message = ""
+            if (oarm_universe == o_show) and (o_title_universe == o_show):
+                atk_buff = f" / **{o_attack + 20}**"
+                def_buff = f" / **{o_defense + 20}**"
+                hlt_buff = f" / **{o_max_health + 100}**"
+                message = "_Universe Buff Applied_"
+                if o_destiny:
+                    atk_buff = f" / **{o_attack + 30}**"
+                    def_buff = f" / **{o_defense + 30}**"
+                    hlt_buff = f" / **{o_max_health + 200}**"
+                    message = "_Destiny Buff Applied_"
+
             embedVar = discord.Embed(title=f"{title_name} {o_card} & {active_pet['NAME']}:".format(self), description=textwrap.dedent(f"""\
-            **Health:** {o_max_health}
-            **Stamina:** {o_max_stamina}
-            **Attack:** {o_attack}
-            **Defense:** {o_defense}
+            {message}
+            **Health:** {o_max_health} {hlt_buff}
+            **Attack:** {o_attack} {atk_buff}
+            **Defense:** {o_defense} {def_buff}
             **Speed:** {o_speed}
+            **Stamina:** {o_max_stamina}
             _Title:_ **{title_name}:** {title_passive_type} {title_passive_value}
             _Arm:_ **{arm_name}:** {arm_passive_type} {arm_passive_value}
             _Pet:_ **{active_pet['NAME']}:** {active_pet['TYPE']} {pet_ability_power}
