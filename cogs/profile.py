@@ -545,6 +545,19 @@ class Profile(commands.Cog):
         vault_query = {'OWNER': d['DISNAME']}
         vault = db.queryVault(vault_query)
         if vault:
+            ownedcards = []
+            ownedtitles = []
+            ownedarms = []
+            ownedpets = []
+            for cards in vault['CARDS']:
+                ownedcards.append(cards)
+            for titles in vault['TITLES']:
+                ownedtitles.append(titles)
+            for arms in vault['ARMS']:
+                ownedarms.append(arms)
+            for pets in vault['PETS']:
+                ownedpets.append(pets['NAME'])
+
             name = d['DISNAME'].split("#",1)[0]
             avatar = d['AVATAR']
             cards = vault['CARDS']
@@ -592,17 +605,77 @@ class Profile(commands.Cog):
                     await ctx.send(f"{ctx.author.mention}, No change has been made")
                     return
                 elif msg.content == "1":
-                    response = db.updateUserNoFilter(query, {'$set': {'CARD': str(preset1_card), 'TITLE': str(preset1_title),'ARM': str(preset1_arm), 'PET': str(preset1_pet)}})
-                    await ctx.send(response)
-                    return
+                    for card in ownedcards :                     
+                        if preset1_card in ownedcards:
+                            for title in ownedtitles:
+                                if preset1_title in ownedtitles:
+                                    for arm in ownedarms:
+                                        if preset1_arm in ownedarms:
+                                            for pet in ownedpets:
+                                                if preset1_pet in ownedpets:
+                                                    response = db.updateUserNoFilter(query, {'$set': {'CARD': str(preset1_card), 'TITLE': str(preset1_title),'ARM': str(preset1_arm), 'PET': str(preset1_pet)}})
+                                                    await ctx.send(response)
+                                                    return
+                                                else:
+                                                    await ctx.send(f"{ctx.author.mention}, You No Longer Own {preset1_pet}")
+                                                    return
+                                        else:
+                                            await ctx.send(f"{ctx.author.mention}, You No Longer Own {preset1_arm}")
+                                            return
+                                else:
+                                    await ctx.send(f"{ctx.author.mention}, You No Longer Own {preset1_title}")
+                                    return
+                        else:
+                            await ctx.send(f"{ctx.author.mention}, You No Longer Own {preset1_card}")
+                            return
                 elif msg.content == "2":
-                    response = db.updateUserNoFilter(query, {'$set': {'CARD': str(preset2_card), 'TITLE': str(preset2_title),'ARM': str(preset2_arm), 'PET': str(preset2_pet)}})
-                    await ctx.send(response)
-                    return
+                    for card in ownedcards :                     
+                        if preset2_card in ownedcards:
+                            for title in ownedtitles:
+                                if preset2_title in ownedtitles:
+                                    for arm in ownedarms:
+                                        if preset2_arm in ownedarms:
+                                            for pet in ownedpets:
+                                                if preset2_pet in ownedpets:
+                                                    response = db.updateUserNoFilter(query, {'$set': {'CARD': str(preset2_card), 'TITLE': str(preset2_title),'ARM': str(preset2_arm), 'PET': str(preset2_pet)}})
+                                                    await ctx.send(response)
+                                                    return
+                                                else:
+                                                    await ctx.send(f"{ctx.author.mention}, You No Longer Own {preset2_pet}")
+                                                    return
+                                        else:
+                                            await ctx.send(f"{ctx.author.mention}, You No Longer Own {preset2_arm}")
+                                            return
+                                else:
+                                    await ctx.send(f"{ctx.author.mention}, You No Longer Own {preset2_title}")
+                                    return
+                        else:
+                            await ctx.send(f"{ctx.author.mention}, You No Longer Own {preset2_card}")
+                            return
                 elif msg.content == "3":
-                    response = db.updateUserNoFilter(query, {'$set': {'CARD': str(preset3_card), 'TITLE': str(preset3_title),'ARM': str(preset3_arm), 'PET': str(preset3_pet)}})
-                    await ctx.send(response)
-                    return
+                    for card in ownedcards :                     
+                        if preset3_card in ownedcards:
+                            for title in ownedtitles:
+                                if preset3_title in ownedtitles:
+                                    for arm in ownedarms:
+                                        if preset3_arm in ownedarms:
+                                            for pet in ownedpets:
+                                                if preset3_pet in ownedpets:
+                                                    response = db.updateUserNoFilter(query, {'$set': {'CARD': str(preset3_card), 'TITLE': str(preset3_title),'ARM': str(preset3_arm), 'PET': str(preset3_pet)}})
+                                                    await ctx.send(response)
+                                                    return
+                                                else:
+                                                    await ctx.send(f"{ctx.author.mention}, You No Longer Own {preset3_pet}")
+                                                    return
+                                        else:
+                                            await ctx.send(f"{ctx.author.mention}, You No Longer Own {preset3_arm}")
+                                            return
+                                else:
+                                    await ctx.send(f"{ctx.author.mention}, You No Longer Own {preset3_title}")
+                                    return
+                        else:
+                            await ctx.send(f"{ctx.author.mention}, You No Longer Own {preset3_card}")
+                            return
                 else:
                     print("Bad selection")    
             except:
