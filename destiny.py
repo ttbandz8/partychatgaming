@@ -1642,10 +1642,20 @@ destiny = [
     {
         "NAME": "Save Eri",
         "WINS": 0,
-        "REQUIRED": 20,
+        "REQUIRED": 10,
         "DEFEAT": "Overhaul",
         "USE_CARDS": ["Mirio"],
         "EARN": "Overhaul",
+        "COMPLETED": False,
+        "UNIVERSE": "My Hero Academia"
+    },
+    {
+        "NAME": "The Broken Hero",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "One For All",
+        "USE_CARDS": ["Deku"],
+        "EARN": "Broken Deku",
         "COMPLETED": False,
         "UNIVERSE": "My Hero Academia"
     },
