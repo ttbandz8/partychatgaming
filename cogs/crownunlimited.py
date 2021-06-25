@@ -10976,6 +10976,18 @@ class CrownUnlimited(commands.Cog):
                 t_win_description = "Too easy. Come back when you're truly prepared."
                 t_lose_description = "I can't believe I lost..."
 
+            if o_card == "Ash Ketchum" and t_universe == "Johto Region":
+                o_health = round(o_health + 150)
+                o_attack = round(o_attack + 50)
+                o_defense = round(o_defense + 50)
+            elif o_card == "Ash Ketchum" and t_universe == "Hoenn Region":
+                o_health = round(o_health + 200)
+                o_attack = round(o_attack + 75)
+                o_defense = round(o_defense + 75)
+            elif o_card == "Ash Ketchum" and t_universe == "Sinnoh Region":
+                o_health = round(o_health + 300)
+                o_attack = round(o_attack + 100)
+                o_defense = round(o_defense + 100)
             ################################################################################
 
             if (oarm_universe == o_universe) and (o_title_universe == o_universe):
@@ -12965,6 +12977,20 @@ class CrownUnlimited(commands.Cog):
                 t_special_move_description = "Take this!"
                 t_win_description = "Too easy. Come back when you're truly prepared."
                 t_lose_description = "I can't believe I lost..."
+
+
+            if o_card == "Ash Ketchum" and t_universe == "Johto Region":
+                o_health = round(o_health + 100)
+                o_attack = round(o_attack + 50)
+                o_defense = round(o_defense + 50)
+            elif o_card == "Ash Ketchum" and t_universe == "Hoenn Region":
+                o_health = round(o_health + 150)
+                o_attack = round(o_attack + 75)
+                o_defense = round(o_defense + 75)
+            elif o_card == "Ash Ketchum" and t_universe == "Sinnoh Region":
+                o_health = round(o_health + 200)
+                o_attack = round(o_attack + 100)
+                o_defense = round(o_defense + 100)
 
             ################################################################################
 
@@ -23231,7 +23257,6 @@ async def destiny(player, opponent, mode):
                 return message
     else:
         return False
-
 
 def starting_position(o,t):
     if o > t:
