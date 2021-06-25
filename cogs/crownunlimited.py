@@ -23486,7 +23486,7 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
         message = ""
 
         miss_hit = 1 # Miss
-        low_hit = 6 # Lower Damage
+        low_hit = 4 # Lower Damage
         med_hit = 11 # Medium Damage
         standard_hit = 19 # Standard Damage
         high_hit = 20 # Crit Hit
