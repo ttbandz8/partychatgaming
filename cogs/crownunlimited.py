@@ -3503,7 +3503,7 @@ class CrownUnlimited(commands.Cog):
             available_universes.append(uni)
         if len(available_universes) == 1 and "" in available_universes:
             await private_channel.send("No available Dungeons for you at this time!")
-            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': False}})
+            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
             return
                 
         embedVar = discord.Embed(title=f":crown: CO-OP Select A Dungeon", description="\n".join(available_universes), colour=0xe91e63)
@@ -7146,7 +7146,7 @@ class CrownUnlimited(commands.Cog):
             available_universes.append(uni)
         if len(available_universes) == 1 and "" in available_universes:
             await private_channel.send("No available Bosses for you at this time!")
-            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': False}})
+            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
             return
 
         embedVar = discord.Embed(title=f":crown: Select A Boss Arena", description="\n".join(available_universes), colour=0xe91e63) 
@@ -10806,7 +10806,7 @@ class CrownUnlimited(commands.Cog):
             available_universes.append(uni)
         if len(available_universes) == 1 and "" in available_universes:
             await private_channel.send("No available Dungeons for you at this time!")
-            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': False}})
+            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
             return
 
         embedVar = discord.Embed(title=f":fire: Select A Dungeon", description="\n".join(available_universes), colour=0xe91e63)
@@ -14715,7 +14715,7 @@ class CrownUnlimited(commands.Cog):
             available_universes.append(uni)
         if len(available_universes) == 1 and "" in available_universes:
             await private_channel.send("No available Bosses for you at this time!")
-            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': False}})
+            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
             return
 
         embedVar = discord.Embed(title=f":crown: Select A Boss Arena", description="\n".join(available_universes), colour=0xe91e63) 
