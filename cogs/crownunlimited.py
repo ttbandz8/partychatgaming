@@ -5447,6 +5447,8 @@ class CrownUnlimited(commands.Cog):
                             aiMove = 6 
                         elif o_stamina == 0:
                             aiMove = 1
+                        elif t_health <= (.50 * t_max_health) and t_used_resolve == False and t_used_focus:
+                            aiMove = 5
                         elif t_stamina >= 160 and (t_health >= o_health):
                             aiMove = 3
                         elif t_stamina >= 160:
@@ -9185,6 +9187,8 @@ class CrownUnlimited(commands.Cog):
                         aiMove = 6 
                     elif o_stamina == 0:
                         aiMove = 1
+                    elif t_health <= (.50 * t_max_health) and t_used_resolve == False and t_used_focus:
+                        aiMove = 5
                     elif t_stamina >= 160 and (t_health >= o_health):
                         aiMove = 3
                     elif t_stamina >= 160:
@@ -12471,6 +12475,8 @@ class CrownUnlimited(commands.Cog):
                             aiMove = 6 
                         elif o_stamina == 0:
                             aiMove = 1
+                        elif t_health <= (.50 * t_max_health) and t_used_resolve == False and t_used_focus:
+                            aiMove = 5
                         elif t_stamina >= 160 and (t_health >= o_health):
                             aiMove = 3
                         elif t_stamina >= 160:
@@ -12723,7 +12729,7 @@ class CrownUnlimited(commands.Cog):
                             #Resolve Check and Calculation
                             if t_used_resolve and t_used_focus and not t_pet_used:                                      
                                 t_enhancer_used=True
-                                dmg = damage_cal(t_card, tpet_move, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                                dmg = damage_cal(t_card, tpet_move, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
                                 t_enhancer_used=False
                                 t_pet_used =True
                                 tpet_dmg = dmg['DMG']
@@ -14499,6 +14505,8 @@ class CrownUnlimited(commands.Cog):
                         
                         if o_stamina == 0:
                             aiMove = 1
+                        elif t_health <= (.50 * t_max_health) and t_used_resolve == False and t_used_focus:
+                            aiMove = 5
                         elif t_stamina >= 160 and (t_health >= o_health):
                             aiMove = 3
                         elif t_stamina >= 160:
@@ -16447,6 +16455,8 @@ class CrownUnlimited(commands.Cog):
                         aiMove = 6 
                     elif o_stamina == 0:
                         aiMove = 1
+                    elif t_health <= (.50 * t_max_health) and t_used_resolve == False and t_used_focus:
+                            aiMove = 5
                     elif t_stamina >= 160 and (t_health >= o_health):
                         aiMove = 3
                     elif t_stamina >= 160:
@@ -18610,7 +18620,7 @@ class CrownUnlimited(commands.Cog):
                                         #Resolve Check and Calculation
                                         if t_used_resolve and t_used_focus and not t_pet_used:                                      
                                             t_enhancer_used=True
-                                            dmg = damage_cal(t_card, tpet_move, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                                            dmg = damage_cal(t_card, tpet_move, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
                                             t_enhancer_used=False
                                             t_pet_used =True
                                             tpet_dmg = dmg['DMG']
@@ -18832,6 +18842,8 @@ class CrownUnlimited(commands.Cog):
                                     aiMove = 6
                                 elif o_stamina == 0:
                                     aiMove = 1
+                                elif t_health <= (.50 * t_max_health) and t_used_resolve == False and t_used_focus:
+                                    aiMove = 5
                                 elif t_stamina >= 160 and (t_health >= o_health):
                                     aiMove = 3
                                 elif t_stamina >= 160:
@@ -19069,7 +19081,7 @@ class CrownUnlimited(commands.Cog):
                                     #Resolve Check and Calculation
                                     if t_used_resolve and t_used_focus and not t_pet_used:                                      
                                         t_enhancer_used=True
-                                        dmg = damage_cal(t_card, tpet_move, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                                        dmg = damage_cal(t_card, tpet_move, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
                                         t_enhancer_used=False
                                         t_pet_used =True
                                         tpet_dmg = dmg['DMG']
@@ -21009,7 +21021,7 @@ class CrownUnlimited(commands.Cog):
                                         #Resolve Check and Calculation
                                         if t_used_resolve and t_used_focus and not t_pet_used:                                      
                                             t_enhancer_used=True
-                                            dmg = damage_cal(t_card, tpet_move, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                                            dmg = damage_cal(t_card, tpet_move, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
                                             t_enhancer_used=False
                                             t_pet_used =True
                                             tpet_dmg = dmg['DMG']
@@ -21233,6 +21245,8 @@ class CrownUnlimited(commands.Cog):
                                     aiMove = 6
                                 elif o_stamina == 0:
                                     aiMove = 1
+                                elif t_health <= (.50 * t_max_health) and t_used_resolve == False and t_used_focus:
+                                    aiMove = 5
                                 elif t_stamina >= 160 and (t_health >= o_health):
                                     aiMove = 3
                                 elif t_stamina >= 160:
@@ -21351,7 +21365,7 @@ class CrownUnlimited(commands.Cog):
                                     #Resolve Check and Calculation
                                     if t_used_resolve and t_used_focus and not t_pet_used:                                      
                                         t_enhancer_used=True
-                                        dmg = damage_cal(t_card, tpet_move, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                                        dmg = damage_cal(t_card, tpet_move, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
                                         t_enhancer_used=False
                                         t_pet_used =True
                                         tpet_dmg = dmg['DMG']
