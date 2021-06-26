@@ -3374,10 +3374,17 @@ class CrownUnlimited(commands.Cog):
                 for emoji in emojis:
                     await accept.add_reaction(emoji)
 
-                def check(reaction, user1):
-                    return user == user1 and str(reaction.emoji) == '👍'
+                def check(reaction, user):
+                    return user1 == user and (str(reaction.emoji) == '👍') or (str(reaction.emoji) == '👎')
                 try:
-                    reaction, user = await self.bot.wait_for('reaction_add', timeout=45.0, check=check)
+                    reaction, user1 = await self.bot.wait_for('reaction_add', timeout=45.0, check=check)
+
+                    if str(reaction.emoji) == '👎':
+                        continued = False 
+                        db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                        if private_channel.guild:
+                            await discord.TextChannel.delete(private_channel, reason=None)
+                        return
 
                     currentopponent = 0
                     continued = True
@@ -6879,7 +6886,7 @@ class CrownUnlimited(commands.Cog):
                                     embedVar.add_field(name=f"{tpet_name} used {tpetmove_text}!", value =f"Enhanced {tpet_type}")
                                     embedVar.set_thumbnail(url=tpet_image)
                                     await private_channel.send(embed=embedVar)
-                                    turn=1
+                                    turn=3
                                 else:
                                     await private_channel.send(f"{tpet_name} needs a turn to rest...")
                                     turn=1
@@ -7015,11 +7022,18 @@ class CrownUnlimited(commands.Cog):
                 for emoji in emojis:
                     await accept.add_reaction(emoji)
 
-                def check(reaction, user1):
-                    return user == user1 and (str(reaction.emoji) == '👍') or (str(reaction.emoji) == '👎')
+                def check(reaction, user):
+                    return user1 == user and (str(reaction.emoji) == '👍') or (str(reaction.emoji) == '👎')
                 try:
-                    reaction, user = await self.bot.wait_for('reaction_add', timeout=45.0, check=check)
+                    reaction, user1 = await self.bot.wait_for('reaction_add', timeout=45.0, check=check)
 
+                    if str(reaction.emoji) == '👎':
+                        continued = False 
+                        db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                        if private_channel.guild:
+                            await discord.TextChannel.delete(private_channel, reason=None)
+                        return
+                        
                     currentopponent = 0
                     continued = True
                 except asyncio.TimeoutError:
