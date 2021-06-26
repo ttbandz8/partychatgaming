@@ -3375,9 +3375,9 @@ class CrownUnlimited(commands.Cog):
                     await accept.add_reaction(emoji)
 
                 def check(reaction, user):
-                    return user1 == user and (str(reaction.emoji) == '👍') or (str(reaction.emoji) == '👎')
+                    return user == user2 and (str(reaction.emoji) == '👍') or (str(reaction.emoji) == '👎')
                 try:
-                    reaction, user1 = await self.bot.wait_for('reaction_add', timeout=45.0, check=check)
+                    reaction, user2 = await self.bot.wait_for('reaction_add', timeout=45.0, check=check)
 
                     if str(reaction.emoji) == '👎':
                         continued = False 
@@ -3503,6 +3503,7 @@ class CrownUnlimited(commands.Cog):
             available_universes.append(uni)
         if len(available_universes) == 1 and "" in available_universes:
             await private_channel.send("No available Dungeons for you at this time!")
+            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': False}})
             return
                 
         embedVar = discord.Embed(title=f":crown: CO-OP Select A Dungeon", description="\n".join(available_universes), colour=0xe91e63)
@@ -5971,7 +5972,7 @@ class CrownUnlimited(commands.Cog):
                             # calculate data based on selected move
                             if msg.content == "0":
                                 c_health=0
-                        
+                                response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                                 if private_channel.guild:
                                     await private_channel.send(f"{user2.mention} has fled the battle...")
                                     await discord.TextChannel.delete(private_channel, reason=None)
@@ -7026,9 +7027,9 @@ class CrownUnlimited(commands.Cog):
                     await accept.add_reaction(emoji)
 
                 def check(reaction, user):
-                    return user1 == user and (str(reaction.emoji) == '👍') or (str(reaction.emoji) == '👎')
+                    return user == user2 and (str(reaction.emoji) == '👍') or (str(reaction.emoji) == '👎')
                 try:
-                    reaction, user1 = await self.bot.wait_for('reaction_add', timeout=45.0, check=check)
+                    reaction, user2 = await self.bot.wait_for('reaction_add', timeout=45.0, check=check)
 
                     if str(reaction.emoji) == '👎':
                         continued = False 
@@ -7137,15 +7138,19 @@ class CrownUnlimited(commands.Cog):
             return
         
         completed_crown_tales = sowner['CROWN_TALES']
+        completed_dungeons = sowner['DUNGEONS']
         all_universes = db.queryAllUniverse()
         available_universes = []
         selected_universe = ""
-        for uni in all_universes:
-            if uni['PREREQUISITE'] in sowner['CROWN_TALES']:
-                available_universes.append(uni['TITLE'])
+        for uni in completed_dungeons:
+            available_universes.append(uni)
+        if len(available_universes) == 1 and "" in available_universes:
+            await private_channel.send("No available Bosses for you at this time!")
+            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': False}})
+            return
 
         embedVar = discord.Embed(title=f":crown: Select A Boss Arena", description="\n".join(available_universes), colour=0xe91e63) 
-        embedVar.set_footer(text="Type Quit to exit Tales selection")
+        embedVar.set_footer(text="Type Quit to exit Boss selection")
         await private_channel.send(embed=embedVar)
         accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
 
@@ -10801,6 +10806,7 @@ class CrownUnlimited(commands.Cog):
             available_universes.append(uni)
         if len(available_universes) == 1 and "" in available_universes:
             await private_channel.send("No available Dungeons for you at this time!")
+            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': False}})
             return
 
         embedVar = discord.Embed(title=f":fire: Select A Dungeon", description="\n".join(available_universes), colour=0xe91e63)
@@ -14690,7 +14696,7 @@ class CrownUnlimited(commands.Cog):
                         await discord.TextChannel.delete(private_channel, reason=None)
 
     @commands.command()
-    async def boss(self, ctx, *args):
+    async def boss(self, ctx):
         private_channel = ctx
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
 
@@ -14701,12 +14707,16 @@ class CrownUnlimited(commands.Cog):
             return
         
         completed_crown_tales = sowner['CROWN_TALES']
+        completed_dungeons = sowner['DUNGEONS']
         all_universes = db.queryAllUniverse()
         available_universes = []
         selected_universe = ""
-        for uni in all_universes:
-            if uni['PREREQUISITE'] in sowner['CROWN_TALES']:
-                available_universes.append(uni['TITLE'])
+        for uni in completed_dungeons:
+            available_universes.append(uni)
+        if len(available_universes) == 1 and "" in available_universes:
+            await private_channel.send("No available Bosses for you at this time!")
+            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': False}})
+            return
 
         embedVar = discord.Embed(title=f":crown: Select A Boss Arena", description="\n".join(available_universes), colour=0xe91e63) 
         embedVar.set_footer(text="Type Quit to exit Tales selection")
