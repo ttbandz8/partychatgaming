@@ -3488,15 +3488,18 @@ class CrownUnlimited(commands.Cog):
         companion = db.queryUser({'DISNAME': str(user)})
 
         completed_dungeons = sowner['DUNGEONS']
+        completed_crown_tales = sowner['CROWN_TALES']
         all_universes = db.queryAllUniverse()
         available_universes = []
         selected_universe = ""
-        for uni in all_universes:
-            if uni['PREREQUISITE'] in sowner['CROWN_TALES'] and uni['HAS_CROWN_TALES'] == True:
-                available_universes.append(uni['TITLE'])
+        for uni in completed_crown_tales:
+            available_universes.append(uni)
+        if len(available_universes) == 1 and "" in available_universes:
+            await private_channel.send("No available Dungeons for you at this time!")
+            return
                 
         embedVar = discord.Embed(title=f":crown: CO-OP Select A Dungeon", description="\n".join(available_universes), colour=0xe91e63)
-        embedVar.set_footer(text="Type Quit to exit Tales selection")
+        embedVar.set_footer(text="Type Quit to exit Dungeon selection")
         await private_channel.send(embed=embedVar)
         accept = await private_channel.send(f"{ctx.author.mention} which Dungeon would you like to explore, co-op!")
 
@@ -10776,15 +10779,18 @@ class CrownUnlimited(commands.Cog):
             return
 
         completed_dungeons = sowner['DUNGEONS']
+        completed_crown_tales = sowner['CROWN_TALES']
         all_universes = db.queryAllUniverse()
         available_universes = []
         selected_universe = ""
-        for uni in all_universes:
-            if uni['PREREQUISITE'] in sowner['CROWN_TALES'] and uni['HAS_CROWN_TALES'] == True:
-                available_universes.append(uni['TITLE'])
-                
+        for uni in completed_crown_tales:
+            available_universes.append(uni)
+        if len(available_universes) == 1 and "" in available_universes:
+            await private_channel.send("No available Dungeons for you at this time!")
+            return
+
         embedVar = discord.Embed(title=f":fire: Select A Dungeon", description="\n".join(available_universes), colour=0xe91e63)
-        embedVar.set_footer(text="Type Quit to exit Tales selection")
+        embedVar.set_footer(text="Type Quit to exit Dungeon selection")
         await private_channel.send(embed=embedVar)
         accept = await private_channel.send(f"{ctx.author.mention} which Dungeon would you like to explore!")
 
