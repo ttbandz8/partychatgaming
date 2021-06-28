@@ -280,7 +280,7 @@ class CrownUnlimited(commands.Cog):
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
-            t_attack = t['ATK'] + (2 * currentopponent) + opponent_scaling
+            t_attack = t['ATK']
             t_defense = t['DEF'] + (2 * currentopponent) + opponent_scaling
             t_type = t['TYPE']
             t_accuracy = t['ACC']
@@ -341,22 +341,6 @@ class CrownUnlimited(commands.Cog):
                     c_defense = c_defense + 5
                     c_max_health = c_max_health +  50
                     c_health = c_health + 50
-
-
-            if o['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= o['HLT']: # Demon Slayer Universal Trait
-                o_max_health = t['HLT']
-            else:                    
-                o_max_health = o['HLT']
-
-            if t['UNIVERSE'] == "Demon Slayer" and o_max_health >= t['HLT']: #Demon Slayer Universal Trait
-                t_max_health = o_max_health + (13 * currentopponent) + 10 + opponent_scaling
-            else:                    
-                t_max_health = t['HLT'] + (13 * currentopponent) + 10 + opponent_scaling
-
-            if c['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= c['HLT']: # Demon Slayer Universal Trait
-                c_max_health = t['HLT']
-            else:                    
-                c_max_health = c['HLT']
 
             # Companion Passive Config
             if (c_universe == c_title_universe) or (c_title_universe == "Unbound"):
@@ -1137,6 +1121,20 @@ class CrownUnlimited(commands.Cog):
             # Count Turns
             turn_total = 0
         
+            if o['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= o['HLT']: # Demon Slayer Universal Trait
+                o_max_health = t['HLT']
+            else:                    
+                o_max_health = o['HLT']
+
+            if t['UNIVERSE'] == "Demon Slayer" and o_max_health >= t['HLT']: #Demon Slayer Universal Trait
+                t_max_health = o_max_health + (13 * currentopponent) + 10 + opponent_scaling
+            else:                    
+                t_max_health = t['HLT'] + (13 * currentopponent) + 10 + opponent_scaling
+
+            if c['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= c['HLT']: # Demon Slayer Universal Trait
+                c_max_health = t['HLT']
+            else:                    
+                c_max_health = c['HLT']
 
             # START TURNS
             while ((o_health > 0) and (c_health > 0)) and (t_health > 0):
@@ -3858,22 +3856,6 @@ class CrownUnlimited(commands.Cog):
                     c_max_health = c_max_health +  50
                     c_health = c_health + 50
 
-
-            if o['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= o['HLT']: # Demon Slayer Universal Trait
-                o_max_health = t['HLT'] - (10 * currentopponent)
-            else:                    
-                o_max_health = o['HLT'] - (10 * currentopponent)
-
-            if t['UNIVERSE'] == "Demon Slayer" and o_max_health >= t['HLT']: #Demon Slayer Universal Trait
-                t_max_health = o_max_health + (20 * currentopponent) + 200
-            else:                    
-                t_max_health = t['HLT'] + (20 * currentopponent) + 200
-
-            if c['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= c['HLT']: # Demon Slayer Universal Trait
-                c_max_health = t['HLT'] - (10 * currentopponent)
-            else:                    
-                c_max_health = c['HLT'] - (10 * currentopponent)
-
             
             # Companion Passive Config
             if (c_universe == c_title_universe) or (c_title_universe == "Unbound"):
@@ -4658,6 +4640,20 @@ class CrownUnlimited(commands.Cog):
             # Count Turns
             turn_total = 0
 
+            if o['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= o['HLT']: # Demon Slayer Universal Trait
+                o_max_health = t['HLT'] - (10 * currentopponent)
+            else:                    
+                o_max_health = o['HLT'] - (10 * currentopponent)
+
+            if t['UNIVERSE'] == "Demon Slayer" and o_max_health >= t['HLT']: #Demon Slayer Universal Trait
+                t_max_health = o_max_health + (20 * currentopponent) + 200
+            else:                    
+                t_max_health = t['HLT'] + (20 * currentopponent) + 200
+
+            if c['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= c['HLT']: # Demon Slayer Universal Trait
+                c_max_health = t['HLT'] - (10 * currentopponent)
+            else:                    
+                c_max_health = c['HLT'] - (10 * currentopponent)
 
             # START TURNS
             while ((o_health > 0) and (c_health > 0)) and (t_health > 0):
@@ -11210,8 +11206,8 @@ class CrownUnlimited(commands.Cog):
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
-            t_attack = t['ATK'] + (5 * currentopponent) + 12
-            t_defense = t['DEF'] + (5 * currentopponent) + 12
+            t_attack = t['ATK'] + (5 * currentopponent) + 8
+            t_defense = t['DEF'] + (5 * currentopponent) + 8
             t_type = t['TYPE']
             t_accuracy = t['ACC']
             t_passive = t['PASS'][0]
@@ -11237,16 +11233,6 @@ class CrownUnlimited(commands.Cog):
                 t_special_move_description = "Take this!"
                 t_win_description = "Too easy. Come back when you're truly prepared."
                 t_lose_description = "I can't believe I lost..."
-
-            if o['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= o['HLT']: # Demon Slayer Universal Trait
-                o_max_health = t['HLT'] - (10 * currentopponent)
-            else:                    
-                o_max_health = o['HLT'] - (10 * currentopponent)
-
-            if t['UNIVERSE'] == "Demon Slayer" and o_max_health >= t['HLT']: #Demon Slayer Universal Trait
-                t_max_health = o_max_health + (25 * currentopponent) + 180
-            else:                    
-                t_max_health = t['HLT'] + (25 * currentopponent) + 180
 
             if o_card == "Ash Ketchum" and t_universe == "Johto Region":
                 o_health = round(o_health + 150)
@@ -11788,6 +11774,15 @@ class CrownUnlimited(commands.Cog):
             # Count Turns
             turn_total = 0
 
+            if o['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= o['HLT']: # Demon Slayer Universal Trait
+                o_max_health = t['HLT'] - (10 * currentopponent)
+            else:                    
+                o_max_health = o['HLT'] - (10 * currentopponent)
+
+            if t['UNIVERSE'] == "Demon Slayer" and o_max_health >= t['HLT']: #Demon Slayer Universal Trait
+                t_max_health = o_max_health + (25 * currentopponent) + 180
+            else:                    
+                t_max_health = t['HLT'] + (25 * currentopponent) + 180
 
             # START TURNS
             while (o_health > 0) and (t_health > 0):
@@ -13249,7 +13244,7 @@ class CrownUnlimited(commands.Cog):
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
-            t_attack = t['ATK'] + (2 * currentopponent) + opponent_scaling
+            t_attack = t['ATK']
             t_defense = t['DEF'] + (2 * currentopponent) + opponent_scaling
             t_type = t['TYPE']
             t_accuracy = t['ACC']
@@ -13276,16 +13271,6 @@ class CrownUnlimited(commands.Cog):
                 t_special_move_description = "Take this!"
                 t_win_description = "Too easy. Come back when you're truly prepared."
                 t_lose_description = "I can't believe I lost..."
-
-            if o['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= o['HLT']: # Demon Slayer Universal Trait
-                o_max_health = t['HLT']
-            else:                    
-                o_max_health = o['HLT']
-
-            if t['UNIVERSE'] == "Demon Slayer" and o_max_health >= t['HLT']: #Demon Slayer Universal Trait
-                t_max_health = o_max_health + (3 * currentopponent)
-            else:                    
-                t_max_health = t['HLT'] + (3 * currentopponent)
 
             if o_card == "Ash Ketchum" and t_universe == "Johto Region":
                 o_health = round(o_health + 100)
@@ -13821,6 +13806,15 @@ class CrownUnlimited(commands.Cog):
 
             # Count Turns
             turn_total = 0
+            if o['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= o['HLT']: # Demon Slayer Universal Trait
+                o_max_health = t['HLT']
+            else:                    
+                o_max_health = o['HLT']
+
+            if t['UNIVERSE'] == "Demon Slayer" and o_max_health >= t['HLT']: #Demon Slayer Universal Trait
+                t_max_health = o_max_health + (3 * currentopponent)
+            else:                    
+                t_max_health = t['HLT'] + (3 * currentopponent)
 
             # START TURNS
             while (o_health > 0) and (t_health > 0):
