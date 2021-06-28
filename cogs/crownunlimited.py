@@ -18550,7 +18550,7 @@ class CrownUnlimited(commands.Cog):
                                     elif msg.content == "4":
                                         t_enhancer_used=True
                                         t_pet_used =False
-                                        dmg = damage_cal(t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina,t_max_health, o_attack, t_special_move_description)
+                                        dmg = damage_cal(t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
                                         t_enhancer_used=False
                                     elif msg.content == "5":
                                         if not t_used_resolve and t_used_focus:
