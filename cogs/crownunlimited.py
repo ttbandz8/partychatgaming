@@ -1567,9 +1567,10 @@ class CrownUnlimited(commands.Cog):
                                         elif opet_type == 'BLAST':
                                             t_health = round(t_health - dmg['DMG'])
                                         elif opet_type == 'CREATION':
+                                            o_max_health = round(o_max_health + dmg['DMG'])
                                             o_health = round(o_health + dmg['DMG'])
                                         elif opet_type == 'DESTRUCTION':
-                                            t_health = round(t_health - dmg['DMG'])
+                                            t_max_health = round(t_max_health - dmg['DMG'])
 
                                         o_stamina = o_stamina - int(dmg['STAMINA_USED'])
 
@@ -1662,9 +1663,10 @@ class CrownUnlimited(commands.Cog):
                                     elif comp_enh == 'BLAST':
                                         t_health = round(t_health - dmg['DMG'])
                                     elif comp_enh == 'CREATION':
+                                        c_max_health = round(c_max_health + dmg['DMG'])
                                         c_health = round(c_health + dmg['DMG'])
                                     elif comp_enh == 'DESTRUCTION':
-                                        t_health = round(t_health - dmg['DMG'])
+                                        t_max_health = round(t_max_health - dmg['DMG'])
 
                                     o_stamina = o_stamina - int(dmg['STAMINA_USED'])
 
@@ -1754,9 +1756,10 @@ class CrownUnlimited(commands.Cog):
                                         elif enh_type == 'BLAST':
                                             t_health = round(t_health - dmg['DMG'])
                                         elif enh_type == 'CREATION':
+                                            o_max_health = round(o_max_health + dmg['DMG'])
                                             o_health = round(o_health + dmg['DMG'])
                                         elif enh_type == 'DESTRUCTION':
-                                            t_health = round(t_health - dmg['DMG'])
+                                            t_max_health = round(t_health - dmg['DMG'])
 
                                         o_stamina = o_stamina - int(dmg['STAMINA_USED'])
 
@@ -2242,9 +2245,10 @@ class CrownUnlimited(commands.Cog):
                                     elif enh_type == 'BLAST':
                                         o_health = round(o_health - dmg['DMG'])
                                     elif enh_type == 'CREATION':
+                                        t_max_health = round(t_max_health + dmg['DMG'])
                                         t_health = round(t_health + dmg['DMG'])
                                     elif enh_type == 'DESTRUCTION':
-                                        o_health = round(o_health - dmg['DMG'])
+                                        o_max_health = round(o_max_health - dmg['DMG'])
                                     t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                     await private_channel.send(embed=embedVar)
@@ -2702,9 +2706,10 @@ class CrownUnlimited(commands.Cog):
                                         elif cpet_type == 'BLAST':
                                             t_health = round(t_health - dmg['DMG'])
                                         elif cpet_type == 'CREATION':
+                                            c_max_health = round(c_max_health + dmg['DMG'])
                                             c_health = round(c_health + dmg['DMG'])
                                         elif cpet_type == 'DESTRUCTION':
-                                            t_health = round(t_health - dmg['DMG'])
+                                            t_max_health = round(t_max_health - dmg['DMG'])
 
                                         c_stamina = c_stamina - int(dmg['STAMINA_USED'])
 
@@ -2797,9 +2802,10 @@ class CrownUnlimited(commands.Cog):
                                     elif cenh_type == 'BLAST':
                                         t_health = round(t_health - dmg['DMG'])
                                     elif cenh_type == 'CREATION':
+                                        o_max_health = round(o_max_health + dmg['DMG'])
                                         o_health = round(o_health + dmg['DMG'])
                                     elif enh_type == 'DESTRUCTION':
-                                        cenh_type = round(t_health - dmg['DMG'])
+                                        t_max_health = round(t_max_health - dmg['DMG'])
 
                                     c_stamina = c_stamina - int(dmg['STAMINA_USED'])
 
@@ -2890,9 +2896,10 @@ class CrownUnlimited(commands.Cog):
                                         elif enh_type == 'BLAST':
                                             t_health = round(t_health - dmg['DMG'])
                                         elif enh_type == 'CREATION':
+                                            c_max_health = round(c_max_health + dmg['DMG'])
                                             c_health = round(c_health + dmg['DMG'])
                                         elif enh_type == 'DESTRUCTION':
-                                            t_health = round(t_health - dmg['DMG'])
+                                            t_max_health = round(t_health - dmg['DMG'])
 
                                         c_stamina = c_stamina - int(dmg['STAMINA_USED'])
 
@@ -3378,9 +3385,10 @@ class CrownUnlimited(commands.Cog):
                                     elif enh_type == 'BLAST':
                                         c_health = round(c_health - dmg['DMG'])
                                     elif enh_type == 'CREATION':
+                                        t_max_health = round(t_max_health + dmg['DMG'])
                                         t_health = round(t_health + dmg['DMG'])
                                     elif enh_type == 'DESTRUCTION':
-                                        c_health = round(c_health - dmg['DMG'])
+                                        c_max_health = round(c_max_health - dmg['DMG'])
                                     t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                     await private_channel.send(embed=embedVar)
@@ -5083,9 +5091,10 @@ class CrownUnlimited(commands.Cog):
                                         elif opet_type == 'BLAST':
                                             t_health = round(t_health - dmg['DMG'])
                                         elif opet_type == 'CREATION':
+                                            o_max_health = round(o_max_health + dmg['DMG'])
                                             o_health = round(o_health + dmg['DMG'])
                                         elif opet_type == 'DESTRUCTION':
-                                            t_health = round(t_health - dmg['DMG'])
+                                            t_max_health = round(t_max_health - dmg['DMG'])
 
                                         o_stamina = o_stamina - int(dmg['STAMINA_USED'])
 
@@ -5178,9 +5187,10 @@ class CrownUnlimited(commands.Cog):
                                     elif comp_enh == 'BLAST':
                                         t_health = round(t_health - dmg['DMG'])
                                     elif comp_enh == 'CREATION':
+                                        c_max_health = round(c_max_health + dmg['DMG'])
                                         c_health = round(c_health + dmg['DMG'])
                                     elif comp_enh == 'DESTRUCTION':
-                                        t_health = round(t_health - dmg['DMG'])
+                                        t_max_health = round(t_max_health - dmg['DMG'])
 
                                     o_stamina = o_stamina - int(dmg['STAMINA_USED'])
 
@@ -5270,9 +5280,10 @@ class CrownUnlimited(commands.Cog):
                                         elif enh_type == 'BLAST':
                                             t_health = round(t_health - dmg['DMG'])
                                         elif enh_type == 'CREATION':
+                                            o_max_health = round(o_max_health + dmg['DMG'])
                                             o_health = round(o_health + dmg['DMG'])
                                         elif enh_type == 'DESTRUCTION':
-                                            t_health = round(t_health - dmg['DMG'])
+                                            t_max_health = round(t_health - dmg['DMG'])
 
                                         o_stamina = o_stamina - int(dmg['STAMINA_USED'])
 
@@ -5778,9 +5789,10 @@ class CrownUnlimited(commands.Cog):
                                     elif tpet_type == 'BLAST':
                                         o_health = round(o_health - dmg['DMG'])
                                     elif tpet_type == 'CREATION':
+                                        t_max_health = round(t_max_health + dmg['DMG'])
                                         t_health = round(t_health + dmg['DMG'])
                                     elif tpet_type == 'DESTRUCTION':
-                                        o_health = round(o_health - dmg['DMG'])
+                                        o_max_health = round(o_max_health - dmg['DMG'])
                                     t_stamina = t_stamina - int(dmg['STAMINA_USED'])
 
                                     embedVar = discord.Embed(title=f"{t_card.upper()} Summoned {tpet_name}", colour=0xe91e63)
@@ -5871,9 +5883,10 @@ class CrownUnlimited(commands.Cog):
                                     elif enh_type == 'BLAST':
                                         o_health = round(o_health - dmg['DMG'])
                                     elif enh_type == 'CREATION':
+                                        t_max_health = round(t_max_health + dmg['DMG'])
                                         t_health = round(t_health + dmg['DMG'])
                                     elif enh_type == 'DESTRUCTION':
-                                        o_health = round(o_health - dmg['DMG'])
+                                        o_max_health = round(o_max_health - dmg['DMG'])
                                     t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                     await private_channel.send(embed=embedVar)
@@ -6329,9 +6342,10 @@ class CrownUnlimited(commands.Cog):
                                         elif cpet_type == 'BLAST':
                                             t_health = round(t_health - dmg['DMG'])
                                         elif cpet_type == 'CREATION':
+                                            c_max_health = round(c_max_health + dmg['DMG'])
                                             c_health = round(c_health + dmg['DMG'])
                                         elif cpet_type == 'DESTRUCTION':
-                                            t_health = round(t_health - dmg['DMG'])
+                                            t_max_health = round(t_max_health - dmg['DMG'])
 
                                         c_stamina = c_stamina - int(dmg['STAMINA_USED'])
 
@@ -6424,9 +6438,10 @@ class CrownUnlimited(commands.Cog):
                                     elif cenh_type == 'BLAST':
                                         t_health = round(t_health - dmg['DMG'])
                                     elif cenh_type == 'CREATION':
+                                        o_max_health = round(o_max_health + dmg['DMG'])
                                         o_health = round(o_health + dmg['DMG'])
                                     elif enh_type == 'DESTRUCTION':
-                                        cenh_type = round(t_health - dmg['DMG'])
+                                        t_max_health = round(t_max_health - dmg['DMG'])
 
                                     c_stamina = c_stamina - int(dmg['STAMINA_USED'])
 
@@ -6517,9 +6532,10 @@ class CrownUnlimited(commands.Cog):
                                         elif enh_type == 'BLAST':
                                             t_health = round(t_health - dmg['DMG'])
                                         elif enh_type == 'CREATION':
-                                            c_health = round(o_health + dmg['DMG'])
+                                            c_max_health = round(c_max_health + dmg['DMG'])
+                                            c_health = round(c_health + dmg['DMG'])
                                         elif enh_type == 'DESTRUCTION':
-                                            t_health = round(t_health - dmg['DMG'])
+                                            t_max_health = round(t_health - dmg['DMG'])
 
                                         c_stamina = c_stamina - int(dmg['STAMINA_USED'])
 
@@ -7019,9 +7035,10 @@ class CrownUnlimited(commands.Cog):
                                     elif tpet_type == 'BLAST':
                                         c_health = round(c_health - dmg['DMG'])
                                     elif tpet_type == 'CREATION':
+                                        t_max_health = round(t_max_health + dmg['DMG'])
                                         t_health = round(t_health + dmg['DMG'])
                                     elif tpet_type == 'DESTRUCTION':
-                                        c_health = round(c_health - dmg['DMG'])
+                                        c_max_health = round(c_max_health - dmg['DMG'])
                                     t_stamina = t_stamina - int(dmg['STAMINA_USED'])
 
                                     embedVar = discord.Embed(title=f"{t_card.upper()} Summoned {tpet_name}", colour=0xe91e63)
@@ -7112,9 +7129,10 @@ class CrownUnlimited(commands.Cog):
                                     elif enh_type == 'BLAST':
                                         c_health = round(c_health - dmg['DMG'])
                                     elif enh_type == 'CREATION':
-                                        t_health = round(o_health + dmg['DMG'])
+                                        t_max_health = round(t_max_health + dmg['DMG'])
+                                        t_health = round(t_health + dmg['DMG'])
                                     elif enh_type == 'DESTRUCTION':
-                                        c_health = round(c_health - dmg['DMG'])
+                                        c_max_health = round(c_max_health - dmg['DMG'])
                                     t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                     await private_channel.send(embed=embedVar)
@@ -8799,9 +8817,10 @@ class CrownUnlimited(commands.Cog):
                                     elif opet_type == 'BLAST':
                                         t_health = round(t_health - dmg['DMG'])
                                     elif opet_type == 'CREATION':
+                                        o_max_health = round(o_max_health + dmg['DMG'])
                                         o_health = round(o_health + dmg['DMG'])
                                     elif opet_type == 'DESTRUCTION':
-                                        t_health = round(t_health - dmg['DMG'])
+                                        t_max_health = round(t_max_health - dmg['DMG'])
 
                                     o_stamina = o_stamina - int(dmg['STAMINA_USED'])
 
@@ -8894,9 +8913,10 @@ class CrownUnlimited(commands.Cog):
                                 elif comp_enh == 'BLAST':
                                     t_health = round(t_health - dmg['DMG'])
                                 elif comp_enh == 'CREATION':
+                                    c_max_health = round(c_max_health + dmg['DMG'])
                                     c_health = round(c_health + dmg['DMG'])
                                 elif comp_enh == 'DESTRUCTION':
-                                    t_health = round(t_health - dmg['DMG'])
+                                    t_max_health = round(t_max_health - dmg['DMG'])
 
                                 o_stamina = o_stamina - int(dmg['STAMINA_USED'])
 
@@ -8985,9 +9005,10 @@ class CrownUnlimited(commands.Cog):
                                     elif enh_type == 'BLAST':
                                         t_health = round(t_health - dmg['DMG'])
                                     elif enh_type == 'CREATION':
+                                        o_max_health = round(o_max_health + dmg['DMG'])
                                         o_health = round(o_health + dmg['DMG'])
                                     elif enh_type == 'DESTRUCTION':
-                                        t_health = round(t_health - dmg['DMG'])
+                                        t_max_health = round(t_max_health - dmg['DMG'])
 
                                     o_stamina = o_stamina - int(dmg['STAMINA_USED'])
 
@@ -9520,9 +9541,10 @@ class CrownUnlimited(commands.Cog):
                                 elif tpet_type == 'BLAST':
                                     o_health = round(o_health - dmg['DMG'])
                                 elif tpet_type == 'CREATION':
+                                    t_max_health = round(t_max_health + dmg['DMG'])
                                     t_health = round(t_health + dmg['DMG'])
                                 elif tpet_type == 'DESTRUCTION':
-                                    o_health = round(o_health - dmg['DMG'])
+                                    o_max_health = round(o_max_health - dmg['DMG'])
                                 t_stamina = t_stamina - int(dmg['STAMINA_USED'])
 
                                 embedVar = discord.Embed(title=f"{t_card.upper()} Summoned {tpet_name}", colour=0xe91e63)
@@ -9626,9 +9648,10 @@ class CrownUnlimited(commands.Cog):
                                 elif enh_type == 'BLAST':
                                     o_health = round(o_health - dmg['DMG'])
                                 elif enh_type == 'CREATION':
+                                    t_max_health = round(t_max_health + dmg['DMG'])
                                     t_health = round(t_health + dmg['DMG'])
                                 elif enh_type == 'DESTRUCTION':
-                                    o_health = round(o_health - dmg['DMG'])
+                                    o_max_health = round(o_max_health - dmg['DMG'])
                                 t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                 embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                 await private_channel.send(embed=embedVar)
@@ -10083,9 +10106,10 @@ class CrownUnlimited(commands.Cog):
                                     elif cpet_type == 'BLAST':
                                         t_health = round(t_health - dmg['DMG'])
                                     elif cpet_type == 'CREATION':
+                                        c_max_health = round(c_max_health + dmg['DMG'])
                                         c_health = round(c_health + dmg['DMG'])
                                     elif cpet_type == 'DESTRUCTION':
-                                        t_health = round(t_health - dmg['DMG'])
+                                        t_max_health = round(t_max_health - dmg['DMG'])
 
                                     c_stamina = c_stamina - int(dmg['STAMINA_USED'])
 
@@ -10178,9 +10202,10 @@ class CrownUnlimited(commands.Cog):
                                 elif cenh_type == 'BLAST':
                                     t_health = round(t_health - dmg['DMG'])
                                 elif cenh_type == 'CREATION':
+                                    o_max_health = round(o_max_health + dmg['DMG'])
                                     o_health = round(o_health + dmg['DMG'])
                                 elif enh_type == 'DESTRUCTION':
-                                    cenh_type = round(t_health - dmg['DMG'])
+                                    t_max_health = round(t_max_health - dmg['DMG'])
 
                                 c_stamina = c_stamina - int(dmg['STAMINA_USED'])
 
@@ -10271,9 +10296,10 @@ class CrownUnlimited(commands.Cog):
                                     elif enh_type == 'BLAST':
                                         t_health = round(t_health - dmg['DMG'])
                                     elif enh_type == 'CREATION':
+                                        c_max_health = round(c_max_health + dmg['DMG'])
                                         c_health = round(c_health + dmg['DMG'])
                                     elif enh_type == 'DESTRUCTION':
-                                        t_health = round(t_health - dmg['DMG'])
+                                        t_max_health = round(t_max_health - dmg['DMG'])
                                     
 
                                     c_stamina = c_stamina - int(dmg['STAMINA_USED'])
@@ -10806,9 +10832,10 @@ class CrownUnlimited(commands.Cog):
                                 elif tpet_type == 'BLAST':
                                     c_health = round(c_health - dmg['DMG'])
                                 elif tpet_type == 'CREATION':
+                                    t_max_health = round(t_max_health + dmg['DMG'])
                                     t_health = round(t_health + dmg['DMG'])
                                 elif tpet_type == 'DESTRUCTION':
-                                    c_health = round(c_health - dmg['DMG'])
+                                    c_max_health = round(c_max_health - dmg['DMG'])
                                 t_stamina = t_stamina - int(dmg['STAMINA_USED'])
 
                                 embedVar = discord.Embed(title=f"{t_card.upper()} Summoned {tpet_name}", colour=0xe91e63)
@@ -10912,9 +10939,10 @@ class CrownUnlimited(commands.Cog):
                                 elif enh_type == 'BLAST':
                                     c_health = round(c_health - dmg['DMG'])
                                 elif enh_type == 'CREATION':
+                                    t_max_health = round(t_max_health + dmg['DMG'])
                                     t_health = round(t_health + dmg['DMG'])
                                 elif enh_type == 'DESTRUCTION':
-                                    c_health = round(c_health - dmg['DMG'])
+                                    c_max_health = round(c_max_health - dmg['DMG'])
                                 t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                 embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                 await private_channel.send(embed=embedVar)
@@ -12204,9 +12232,10 @@ class CrownUnlimited(commands.Cog):
                                         elif opet_type == 'BLAST':
                                             t_health = round(t_health - dmg['DMG'])
                                         elif opet_type == 'CREATION':
+                                            o_max_health = round(o_max_health + dmg['DMG'])
                                             o_health = round(o_health + dmg['DMG'])
                                         elif opet_type == 'DESTRUCTION':
-                                            t_health = round(t_health - dmg['DMG'])
+                                            t_max_health = round(t_max_health - dmg['DMG'])
 
                                         o_stamina = o_stamina - int(dmg['STAMINA_USED'])
 
@@ -12299,9 +12328,10 @@ class CrownUnlimited(commands.Cog):
                                         elif enh_type == 'BLAST':
                                             t_health = round(t_health - dmg['DMG'])
                                         elif enh_type == 'CREATION':
+                                            o_max_health = round(o_max_health + dmg['DMG'])
                                             o_health = round(o_health + dmg['DMG'])
                                         elif enh_type == 'DESTRUCTION':
-                                            t_health = round(t_health - dmg['DMG'])
+                                            t_max_health = round(t_health - dmg['DMG'])
 
                                         o_stamina = o_stamina - int(dmg['STAMINA_USED'])
 
@@ -12807,9 +12837,10 @@ class CrownUnlimited(commands.Cog):
                                     elif tpet_type == 'BLAST':
                                         o_health = round(o_health - dmg['DMG'])
                                     elif tpet_type == 'CREATION':
+                                        t_max_health = round(t_max_health + dmg['DMG'])
                                         t_health = round(t_health + dmg['DMG'])
                                     elif tpet_type == 'DESTRUCTION':
-                                        o_health = round(o_health - dmg['DMG'])
+                                        o_max_health = round(o_max_health - dmg['DMG'])
                                     t_stamina = t_stamina - int(dmg['STAMINA_USED'])
 
                                     embedVar = discord.Embed(title=f"{t_card.upper()} Summoned {tpet_name}", colour=0xe91e63)
@@ -12900,9 +12931,10 @@ class CrownUnlimited(commands.Cog):
                                     elif enh_type == 'BLAST':
                                         o_health = round(o_health - dmg['DMG'])
                                     elif enh_type == 'CREATION':
+                                        t_max_health = round(t_max_health + dmg['DMG'])
                                         t_health = round(t_health + dmg['DMG'])
                                     elif enh_type == 'DESTRUCTION':
-                                        o_health = round(o_health - dmg['DMG'])
+                                        o_max_health = round(o_max_health - dmg['DMG'])
                                     t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                     await private_channel.send(embed=embedVar)
@@ -14236,9 +14268,10 @@ class CrownUnlimited(commands.Cog):
                                         elif opet_type == 'BLAST':
                                             t_health = round(t_health - dmg['DMG'])
                                         elif opet_type == 'CREATION':
+                                            o_max_health = round(o_max_health + dmg['DMG'])
                                             o_health = round(o_health + dmg['DMG'])
                                         elif opet_type == 'DESTRUCTION':
-                                            t_health = round(t_health - dmg['DMG'])
+                                            t_max_health = round(t_max_health - dmg['DMG'])
 
                                         o_stamina = o_stamina - int(dmg['STAMINA_USED'])
 
@@ -14331,9 +14364,10 @@ class CrownUnlimited(commands.Cog):
                                         elif enh_type == 'BLAST':
                                             t_health = round(t_health - dmg['DMG'])
                                         elif enh_type == 'CREATION':
+                                            o_max_health = round(o_max_health + dmg['DMG'])
                                             o_health = round(o_health + dmg['DMG'])
                                         elif enh_type == 'DESTRUCTION':
-                                            t_health = round(t_health - dmg['DMG'])
+                                            t_max_health = round(t_health - dmg['DMG'])
 
                                         o_stamina = o_stamina - int(dmg['STAMINA_USED'])
 
@@ -14820,9 +14854,10 @@ class CrownUnlimited(commands.Cog):
                                     elif enh_type == 'BLAST':
                                         o_health = round(o_health - dmg['DMG'])
                                     elif enh_type == 'CREATION':
+                                        t_max_health = round(t_max_health + dmg['DMG'])
                                         t_health = round(t_health + dmg['DMG'])
                                     elif enh_type == 'DESTRUCTION':
-                                        o_health = round(o_health - dmg['DMG'])
+                                        o_max_health = round(o_max_health - dmg['DMG'])
                                     t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                     await private_channel.send(embed=embedVar)
@@ -16160,9 +16195,10 @@ class CrownUnlimited(commands.Cog):
                                     elif opet_type == 'BLAST':
                                         t_health = round(t_health - dmg['DMG'])
                                     elif opet_type == 'CREATION':
+                                        o_max_health = round(o_max_health + dmg['DMG'])
                                         o_health = round(o_health + dmg['DMG'])
                                     elif opet_type == 'DESTRUCTION':
-                                        t_health = round(t_health - dmg['DMG'])
+                                        t_max_health = round(t_max_health - dmg['DMG'])
 
                                     o_stamina = o_stamina - int(dmg['STAMINA_USED'])
 
@@ -16255,9 +16291,10 @@ class CrownUnlimited(commands.Cog):
                                     elif enh_type == 'BLAST':
                                         t_health = round(t_health - dmg['DMG'])
                                     elif enh_type == 'CREATION':
+                                        o_max_health = round(o_max_health + dmg['DMG'])
                                         o_health = round(o_health + dmg['DMG'])
                                     elif enh_type == 'DESTRUCTION':
-                                        t_health = round(t_health - dmg['DMG'])
+                                        t_max_health = round(t_max_health - dmg['DMG'])
                                     o_stamina = o_stamina - int(dmg['STAMINA_USED'])
 
                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
@@ -16788,9 +16825,10 @@ class CrownUnlimited(commands.Cog):
                                 elif tpet_type == 'BLAST':
                                     o_health = round(o_health - dmg['DMG'])
                                 elif tpet_type == 'CREATION':
+                                    t_max_health = round(t_max_health + dmg['DMG'])
                                     t_health = round(t_health + dmg['DMG'])
                                 elif tpet_type == 'DESTRUCTION':
-                                    o_health = round(o_health - dmg['DMG'])
+                                    o_max_health = round(o_max_health - dmg['DMG'])
                                 t_stamina = t_stamina - int(dmg['STAMINA_USED'])
 
                                 embedVar = discord.Embed(title=f"{t_card.upper()} Summoned {tpet_name}", colour=0xe91e63)
@@ -16882,9 +16920,10 @@ class CrownUnlimited(commands.Cog):
                                 elif enh_type == 'BLAST':
                                     o_health = round(o_health - dmg['DMG'])
                                 elif enh_type == 'CREATION':
+                                    t_max_health = round(t_max_health + dmg['DMG'])
                                     t_health = round(t_health + dmg['DMG'])
                                 elif enh_type == 'DESTRUCTION':
-                                    o_health = round(o_health - dmg['DMG'])
+                                    o_max_health = round(o_max_health - dmg['DMG'])
                                 t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                 embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                 await private_channel.send(embed=embedVar)
@@ -18143,9 +18182,10 @@ class CrownUnlimited(commands.Cog):
                                             elif opet_type == 'BLAST':
                                                 t_health = round(t_health - dmg['DMG'])
                                             elif opet_type == 'CREATION':
+                                                o_max_health = round(o_max_health + dmg['DMG'])
                                                 o_health = round(o_health + dmg['DMG'])
                                             elif opet_type == 'DESTRUCTION':
-                                                t_health = round(t_health - dmg['DMG'])
+                                                t_max_health = round(t_max_health - dmg['DMG'])
 
                                             o_stamina = o_stamina - int(dmg['STAMINA_USED'])
 
@@ -18237,9 +18277,10 @@ class CrownUnlimited(commands.Cog):
                                             elif enh_type == 'BLAST':
                                                 t_health = round(t_health - dmg['DMG'])
                                             elif enh_type == 'CREATION':
+                                                o_max_health = round(o_max_health + dmg['DMG'])
                                                 o_health = round(o_health + dmg['DMG'])
                                             elif enh_type == 'DESTRUCTION':
-                                                t_health = round(t_health - dmg['DMG'])
+                                                t_max_health = round(t_max_health - dmg['DMG'])
                                             o_stamina = o_stamina - int(dmg['STAMINA_USED'])
                                             
 
@@ -18698,9 +18739,10 @@ class CrownUnlimited(commands.Cog):
                                                 elif tpet_type == 'BLAST':
                                                     o_health = round(o_health - dmg['DMG'])
                                                 elif tpet_type == 'CREATION':
+                                                    t_max_health = round(t_max_health + dmg['DMG'])
                                                     t_health = round(t_health + dmg['DMG'])
                                                 elif tpet_type == 'DESTRUCTION':
-                                                    o_health = round(o_health - dmg['DMG'])
+                                                    o_max_health = round(o_max_health - dmg['DMG'])
                                                 t_stamina = t_stamina - int(dmg['STAMINA_USED'])
 
                                                 embedVar = discord.Embed(title=f"{t_card.upper()} Summoned {tpet_name}", colour=0xe91e63)
@@ -18793,9 +18835,10 @@ class CrownUnlimited(commands.Cog):
                                                 elif enh_type == 'BLAST':
                                                     o_health = round(o_health - dmg['DMG'])
                                                 elif enh_type == 'CREATION':
+                                                    t_max_health = round(t_max_health + dmg['DMG'])
                                                     t_health = round(t_health + dmg['DMG'])
                                                 elif enh_type == 'DESTRUCTION':
-                                                    o_health = round(o_health - dmg['DMG'])
+                                                    o_max_health = round(o_max_health - dmg['DMG'])
                                                 t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                                 embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                                 await ctx.send(embed=embedVar)
@@ -19159,9 +19202,10 @@ class CrownUnlimited(commands.Cog):
                                             elif tpet_type == 'BLAST':
                                                 o_health = round(o_health - dmg['DMG'])
                                             elif tpet_type == 'CREATION':
+                                                t_max_health = round(t_max_health + dmg['DMG'])
                                                 t_health = round(t_health + dmg['DMG'])
                                             elif tpet_type == 'DESTRUCTION':
-                                                o_health = round(o_health - dmg['DMG'])
+                                                o_max_health = round(o_max_health - dmg['DMG'])
                                             t_stamina = t_stamina - int(dmg['STAMINA_USED'])
 
                                             embedVar = discord.Embed(title=f"{t_card.upper()} Summoned {tpet_name}", colour=0xe91e63)
@@ -19252,9 +19296,10 @@ class CrownUnlimited(commands.Cog):
                                             elif enh_type == 'BLAST':
                                                 o_health = round(o_health - dmg['DMG'])
                                             elif enh_type == 'CREATION':
+                                                t_max_health = round(t_max_health + dmg['DMG'])
                                                 t_health = round(t_health + dmg['DMG'])
                                             elif enh_type == 'DESTRUCTION':
-                                                o_health = round(o_health - dmg['DMG'])
+                                                o_max_health = round(o_max_health - dmg['DMG'])
                                             t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                             # print("Bot")
                                             # print(o_attack)
@@ -20547,9 +20592,10 @@ class CrownUnlimited(commands.Cog):
                                             elif opet_type == 'BLAST':
                                                 t_health = round(t_health - dmg['DMG'])
                                             elif opet_type == 'CREATION':
+                                                o_max_health = round(o_max_health + dmg['DMG'])
                                                 o_health = round(o_health + dmg['DMG'])
                                             elif opet_type == 'DESTRUCTION':
-                                                t_health = round(t_health - dmg['DMG'])
+                                                t_max_health = round(t_max_health - dmg['DMG'])
 
                                             o_stamina = o_stamina - int(dmg['STAMINA_USED'])
 
@@ -20644,9 +20690,10 @@ class CrownUnlimited(commands.Cog):
                                             elif enh_type == 'BLAST':
                                                 t_health = round(t_health - dmg['DMG'])
                                             elif enh_type == 'CREATION':
+                                                o_max_health = round(o_max_health + dmg['DMG'])
                                                 o_health = round(o_health + dmg['DMG'])
                                             elif enh_type == 'DESTRUCTION':
-                                                t_health = round(t_health - dmg['DMG'])
+                                                t_max_health = round(t_max_health - dmg['DMG'])
                                             
                                             o_stamina = o_stamina - int(dmg['STAMINA_USED'])
                                             
@@ -21099,9 +21146,10 @@ class CrownUnlimited(commands.Cog):
                                                 elif tpet_type == 'BLAST':
                                                     o_health = round(o_health - dmg['DMG'])
                                                 elif tpet_type == 'CREATION':
+                                                    t_max_health = round(t_max_health + dmg['DMG'])
                                                     t_health = round(t_health + dmg['DMG'])
                                                 elif tpet_type == 'DESTRUCTION':
-                                                    o_health = round(o_health - dmg['DMG'])
+                                                    o_max_health = round(o_max_health - dmg['DMG'])
                                                 t_stamina = t_stamina - int(dmg['STAMINA_USED'])
 
                                                 embedVar = discord.Embed(title=f"{t_card.upper()} Summoned {tpet_name}", colour=0xe91e63)
@@ -21194,9 +21242,10 @@ class CrownUnlimited(commands.Cog):
                                                 elif enh_type == 'BLAST':
                                                     o_health = round(o_health - dmg['DMG'])
                                                 elif enh_type == 'CREATION':
+                                                    t_max_health = round(t_max_health + dmg['DMG'])
                                                     t_health = round(t_health + dmg['DMG'])
                                                 elif enh_type == 'DESTRUCTION':
-                                                    o_health = round(o_health - dmg['DMG'])
+                                                    o_max_health = round(o_max_health - dmg['DMG'])
                                                 t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                                 embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                                 await ctx.send(embed=embedVar)
@@ -21443,9 +21492,10 @@ class CrownUnlimited(commands.Cog):
                                             elif tpet_type == 'BLAST':
                                                 o_health = round(o_health - dmg['DMG'])
                                             elif tpet_type == 'CREATION':
+                                                t_max_health = round(t_max_health + dmg['DMG'])
                                                 t_health = round(t_health + dmg['DMG'])
                                             elif tpet_type == 'DESTRUCTION':
-                                                o_health = round(o_health - dmg['DMG'])
+                                                o_max_health = round(o_max_health - dmg['DMG'])
                                             t_stamina = t_stamina - int(dmg['STAMINA_USED'])
 
                                             embedVar = discord.Embed(title=f"{t_card.upper()} Summoned {tpet_name}", colour=0xe91e63)
@@ -21537,9 +21587,10 @@ class CrownUnlimited(commands.Cog):
                                             elif enh_type == 'BLAST':
                                                 o_health = round(o_health - dmg['DMG'])
                                             elif enh_type == 'CREATION':
+                                                t_max_health = round(t_max_health + dmg['DMG'])
                                                 t_health = round(t_health + dmg['DMG'])
                                             elif enh_type == 'DESTRUCTION':
-                                                o_health = round(o_health - dmg['DMG'])
+                                                o_max_health = round(o_max_health - dmg['DMG'])
                                             t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                             # print("Bot")
                                             # print(o_attack)
