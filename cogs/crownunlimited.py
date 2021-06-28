@@ -21754,7 +21754,6 @@ class CrownUnlimited(commands.Cog):
         else:
             await ctx.send(m.SESSION_DOES_NOT_EXIST)
 
-
     @commands.command()
     async def cards(self, ctx, *args):
         universe = " ".join([*args])
