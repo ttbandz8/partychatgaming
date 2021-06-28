@@ -11210,8 +11210,8 @@ class CrownUnlimited(commands.Cog):
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
-            t_attack = t['ATK'] + (5 * currentopponent) + 8
-            t_defense = t['DEF'] + (5 * currentopponent) + 8
+            t_attack = t['ATK'] + (6 * currentopponent) + 10
+            t_defense = t['DEF'] + (6 * currentopponent) + 10
             t_type = t['TYPE']
             t_accuracy = t['ACC']
             t_passive = t['PASS'][0]
@@ -13152,11 +13152,11 @@ class CrownUnlimited(commands.Cog):
         player_scaling = 0
 
         if universe['PREREQUISITE']:
-            opponent_scaling = 8
+            opponent_scaling = 15
             player_scaling = 5
         else:
-            opponent_scaling = 2
-            player_scaling = 1
+            opponent_scaling = 10
+            player_scaling = 3
 
         legends = [x for x in universe['CROWN_TALES']]
         total_legends = len(legends)
@@ -13245,12 +13245,12 @@ class CrownUnlimited(commands.Cog):
             t_card_path=t['PATH']
             t_rcard_path=t['RPATH']
             
-            t_health = t['HLT'] + (3 * currentopponent)
+            t_health = t['HLT'] + (5 * currentopponent)
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
             t_attack = t['ATK']
-            t_defense = t['DEF'] + (2 * currentopponent) + opponent_scaling
+            t_defense = t['DEF'] + (6 * currentopponent)
             t_type = t['TYPE']
             t_accuracy = t['ACC']
             t_passive = t['PASS'][0]
@@ -21839,7 +21839,7 @@ class CrownUnlimited(commands.Cog):
         unavailable_universes = []
         for uni in universe_data:
             available = ""
-            if len(uni['CROWN_TALES']) > 2:
+            if len(uni['CROWN_TALES']) > 1:
                 available = "🟢"
                 available_universes.append(f"{available} {uni['TITLE']}")
             else:
