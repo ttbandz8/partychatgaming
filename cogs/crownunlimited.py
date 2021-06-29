@@ -22268,7 +22268,7 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
             if turn == 0:
                 enhanced = ap
             else:
-                enhanced = ap / turn * ap
+                enhanced = ap / turn
         elif enh_type == 'BLAST':
             if turn == 0:
                 enhanced = ap
@@ -22278,7 +22278,7 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
             if turn == 0:
                 enhanced = ap
             else:
-                enhanced = ap / turn * ap
+                enhanced = ap / turn 
         elif enh_type == 'DESTRUCTION':
             if turn == 0:
                 enhanced = ap
