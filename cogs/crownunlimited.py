@@ -159,6 +159,7 @@ class CrownUnlimited(commands.Cog):
             opet_image = opet['PATH']
             opet_exp = opet['EXP']
             opet_lvl = opet['LVL']
+            opet_bond = opet['BOND']
             
 
             o_DID = o_user['DID']
@@ -222,6 +223,7 @@ class CrownUnlimited(commands.Cog):
             cpet_image = cpet['PATH']
             cpet_exp = cpet['EXP']
             cpet_lvl = cpet['LVL']
+            cpet_bond = cpet['BOND']
             
 
             c_DID = c_user['DID']
@@ -384,9 +386,9 @@ class CrownUnlimited(commands.Cog):
             cmove_enhanced_text = list(c_enhancer.keys())[0]
 
             cpetmove_text= list(cpet.keys())[3] # Name of the ability
-            cpetmove_ap= list(cpet.values())[3] # Ability Power
+            cpetmove_ap= (cpet_bond * cpet_lvl) + list(cpet.values())[3] # Ability Power
 
-            cpet_move = {str(cpetmove_text): int(cpetmove_ap), 'STAM': 0, 'TYPE': str(cpet_passive_type)}
+            cpet_move = {str(cpetmove_text): int(cpetmove_ap), 'STAM': 15, 'TYPE': str(cpet_passive_type)}
 
             # Player 1 Card Passive
             c_card_passive_type = list(c_passive.values())[1]
@@ -632,9 +634,9 @@ class CrownUnlimited(commands.Cog):
             omove_enhanced_text = list(o_enhancer.keys())[0]
 
             opetmove_text= list(opet.keys())[3] # Name of the ability
-            opetmove_ap= list(opet.values())[3] # Ability Power
+            opetmove_ap= (opet_bond * opet_lvl) + list(opet.values())[3] # Ability Power
 
-            opet_move = {str(opetmove_text): int(opetmove_ap), 'STAM': 0, 'TYPE': str(opet_passive_type)}
+            opet_move = {str(opetmove_text): int(opetmove_ap), 'STAM': 15, 'TYPE': str(opet_passive_type)}
 
             # Player 1 Card Passive
             o_card_passive_type = list(o_passive.values())[1]
@@ -3682,6 +3684,7 @@ class CrownUnlimited(commands.Cog):
             opet_image = opet['PATH']
             opet_exp = opet['EXP']
             opet_lvl = opet['LVL']
+            opet_bond = opet['BOND']
             
 
             o_DID = o_user['DID']
@@ -3746,6 +3749,7 @@ class CrownUnlimited(commands.Cog):
             cpet_image = cpet['PATH']
             cpet_exp = cpet['EXP']
             cpet_lvl = cpet['LVL']
+            cpet_bond = cpet['BOND']
             
 
             c_DID = c_user['DID']
@@ -3908,7 +3912,7 @@ class CrownUnlimited(commands.Cog):
             tpetmove_text = list(tpet_passive.keys())[0]
             tpetmove_ap = list(tpet_passive.values())[0]
             tpetmove_type = list(tpet_passive.values())[1]
-            tpet_move = {str(tpetmove_text):int(tpetmove_ap), 'STAM': 0, 'TYPE':tpetmove_type}
+            tpet_move = {str(tpetmove_text):int(tpetmove_ap), 'STAM': 15, 'TYPE':tpetmove_type}
 
             cmove1_text = list(c_1.keys())[0]
             cmove2_text = list(c_2.keys())[0]
@@ -3916,9 +3920,9 @@ class CrownUnlimited(commands.Cog):
             cmove_enhanced_text = list(c_enhancer.keys())[0]
 
             cpetmove_text= list(cpet.keys())[3] # Name of the ability
-            cpetmove_ap= list(cpet.values())[3] # Ability Power
+            cpetmove_ap= (cpet_bond * cpet_lvl) + list(cpet.values())[3] # Ability Power
 
-            cpet_move = {str(cpetmove_text): int(cpetmove_ap), 'STAM': 0, 'TYPE': str(cpet_passive_type)}
+            cpet_move = {str(cpetmove_text): int(cpetmove_ap), 'STAM': 15, 'TYPE': str(cpet_passive_type)}
 
             # Player 1 Card Passive
             c_card_passive_type = list(c_passive.values())[1]
@@ -4163,9 +4167,9 @@ class CrownUnlimited(commands.Cog):
             omove_enhanced_text = list(o_enhancer.keys())[0]
 
             opetmove_text= list(opet.keys())[3] # Name of the ability
-            opetmove_ap= list(opet.values())[3] # Ability Power
+            opetmove_ap= (opet_bond * opet_lvl) + list(opet.values())[3] # Ability Power
 
-            opet_move = {str(opetmove_text): int(opetmove_ap), 'STAM': 0, 'TYPE': str(opet_passive_type)}
+            opet_move = {str(opetmove_text): int(opetmove_ap), 'STAM': 15, 'TYPE': str(opet_passive_type)}
 
             # Player 1 Card Passive
             o_card_passive_type = list(o_passive.values())[1]
@@ -7412,6 +7416,7 @@ class CrownUnlimited(commands.Cog):
         opet_image = opet['PATH']
         opet_exp = opet['EXP']
         opet_lvl = opet['LVL']
+        opet_bond = opet['BOND']
 
 
         o_DID = o_user['DID']
@@ -7472,6 +7477,7 @@ class CrownUnlimited(commands.Cog):
         cpet_image = cpet['PATH']
         cpet_exp = cpet['EXP']
         cpet_lvl = cpet['LVL']
+        cpet_bond = cpet['BOND']
         
 
         c_DID = c_user['DID']
@@ -7647,9 +7653,9 @@ class CrownUnlimited(commands.Cog):
         cmove_enhanced_text = list(c_enhancer.keys())[0]
 
         cpetmove_text= list(cpet.keys())[3] # Name of the ability
-        cpetmove_ap= list(cpet.values())[3] # Ability Power
+        cpetmove_ap= (cpet_bond * cpet_lvl) + list(cpet.values())[3] # Ability Power
 
-        cpet_move = {str(cpetmove_text): int(cpetmove_ap), 'STAM': 0, 'TYPE': str(cpet_passive_type)}
+        cpet_move = {str(cpetmove_text): int(cpetmove_ap), 'STAM': 15, 'TYPE': str(cpet_passive_type)}
 
         # Player 1 Card Passive
         c_card_passive_type = list(c_passive.values())[1]
@@ -7895,14 +7901,14 @@ class CrownUnlimited(commands.Cog):
         omove_enhanced_text = list(o_enhancer.keys())[0]
 
         opetmove_text= list(opet.keys())[3] # Name of the ability
-        opetmove_ap= list(opet.values())[3] # Ability Power
+        opetmove_ap= (opet_bond * opet_lvl) + list(opet.values())[3] # Ability Power
 
-        opet_move = {str(opetmove_text): int(opetmove_ap), 'STAM': 0, 'TYPE': str(opet_passive_type)}
+        opet_move = {str(opetmove_text): int(opetmove_ap), 'STAM': 15, 'TYPE': str(opet_passive_type)}
         
         tpetmove_text = list(tpet_passive.keys())[0]
         tpetmove_ap = list(tpet_passive.values())[0]
         tpetmove_type = list(tpet_passive.values())[1]
-        tpet_move = {str(tpetmove_text):int(tpetmove_ap), 'STAM': 0, 'TYPE':tpetmove_type}
+        tpet_move = {str(tpetmove_text):int(tpetmove_ap), 'STAM': 15, 'TYPE':tpetmove_type}
 
         # Player 1 Card Passive
         o_card_passive_type = list(o_passive.values())[1]
@@ -11185,6 +11191,7 @@ class CrownUnlimited(commands.Cog):
             opet_image = opet['PATH']
             opet_exp = opet['EXP']
             opet_lvl = opet['LVL']
+            opet_bond = opet['BOND']
             
 
             o_DID = o_user['DID']
@@ -11348,14 +11355,14 @@ class CrownUnlimited(commands.Cog):
             omove_enhanced_text = list(o_enhancer.keys())[0]
 
             opetmove_text= list(opet.keys())[3] # Name of the ability
-            opetmove_ap= list(opet.values())[3] # Ability Power
+            opetmove_ap= (opet_bond * opet_lvl) + list(opet.values())[3] # Ability Power
 
-            opet_move = {str(opetmove_text): int(opetmove_ap), 'STAM': 0, 'TYPE': str(opet_passive_type)}
+            opet_move = {str(opetmove_text): int(opetmove_ap), 'STAM': 15, 'TYPE': str(opet_passive_type)}
 
             tpetmove_text = list(tpet_passive.keys())[0]
             tpetmove_ap = list(tpet_passive.values())[0]
             tpetmove_type = list(tpet_passive.values())[1]
-            tpet_move = {str(tpetmove_text):int(tpetmove_ap), 'STAM': 0, 'TYPE':tpetmove_type}
+            tpet_move = {str(tpetmove_text):int(tpetmove_ap), 'STAM': 15, 'TYPE':tpetmove_type}
 
             # Player 1 Card Passive
             o_card_passive_type = list(o_passive.values())[1]
@@ -13236,6 +13243,7 @@ class CrownUnlimited(commands.Cog):
             opet_image = opet['PATH']
             opet_exp = opet['EXP']
             opet_lvl = opet['LVL']
+            opet_bond = opet['BOND']
             
 
             o_DID = o_user['DID']
@@ -13395,9 +13403,9 @@ class CrownUnlimited(commands.Cog):
             omove_enhanced_text = list(o_enhancer.keys())[0]
 
             opetmove_text= list(opet.keys())[3] # Name of the ability
-            opetmove_ap= list(opet.values())[3] # Ability Power
+            opetmove_ap = (opet_bond * opet_lvl) + list(opet.values())[3] # Ability Power
 
-            opet_move = {str(opetmove_text): int(opetmove_ap), 'STAM': 0, 'TYPE': str(opet_passive_type)}
+            opet_move = {str(opetmove_text): int(opetmove_ap), 'STAM': 15, 'TYPE': str(opet_passive_type)}
 
             # Player 1 Card Passive
             o_card_passive_type = list(o_passive.values())[1]
@@ -15160,6 +15168,7 @@ class CrownUnlimited(commands.Cog):
         opet_image = opet['PATH']
         opet_exp = opet['EXP']
         opet_lvl = opet['LVL']
+        opet_bond = opet['BOND']
 
 
         o_DID = o_user['DID']
@@ -15318,14 +15327,14 @@ class CrownUnlimited(commands.Cog):
         omove_enhanced_text = list(o_enhancer.keys())[0]
 
         opetmove_text= list(opet.keys())[3] # Name of the ability
-        opetmove_ap= list(opet.values())[3] # Ability Power
+        opetmove_ap= (opet_bond * opet_lvl) + list(opet.values())[3] # Ability Power
 
-        opet_move = {str(opetmove_text): int(opetmove_ap), 'STAM': 0, 'TYPE': str(opet_passive_type)}
+        opet_move = {str(opetmove_text): int(opetmove_ap), 'STAM': 15, 'TYPE': str(opet_passive_type)}
         
         tpetmove_text = list(tpet_passive.keys())[0]
         tpetmove_ap = list(tpet_passive.values())[0]
         tpetmove_type = list(tpet_passive.values())[1]
-        tpet_move = {str(tpetmove_text):int(tpetmove_ap), 'STAM': 0, 'TYPE':tpetmove_type}
+        tpet_move = {str(tpetmove_text):int(tpetmove_ap), 'STAM': 15, 'TYPE':tpetmove_type}
 
         # Player 1 Card Passive
         o_card_passive_type = list(o_passive.values())[1]
@@ -17109,6 +17118,7 @@ class CrownUnlimited(commands.Cog):
                 opet_image = opet['PATH']
                 opet_exp = opet['EXP']
                 opet_lvl = opet['LVL']
+                opet_bond = opet['BOND']
 
                 o_DID = o_user['DID']
                 o_card = o['NAME']
@@ -17167,6 +17177,7 @@ class CrownUnlimited(commands.Cog):
                 tpet_image = tpet['PATH']
                 tpet_exp = tpet['EXP']
                 tpet_lvl = tpet['LVL']
+                tpet_bond = tpet['BOND']
                 
                 t_DID = t_user['DID']
                 t_card = t['NAME']
@@ -17276,9 +17287,9 @@ class CrownUnlimited(commands.Cog):
 
                 # Pet
                 opetmove_text= list(opet.keys())[3] # Name of the ability
-                opetmove_ap= list(opet.values())[3] # Ability Power
+                opetmove_ap= (opet_bond * opet_lvl) + list(opet.values())[3] # Ability Power
 
-                opet_move = {str(opetmove_text): int(opetmove_ap), 'STAM': 0, 'TYPE': str(opet_passive_type)}
+                opet_move = {str(opetmove_text): int(opetmove_ap), 'STAM': 15, 'TYPE': str(opet_passive_type)}
 
 
 
@@ -17292,10 +17303,10 @@ class CrownUnlimited(commands.Cog):
 
                 # TPet
                 tpetmove_text= list(tpet.keys())[3] # Name of the ability
-                tpetmove_ap= list(tpet.values())[3] # Ability Power
+                tpetmove_ap= (tpet_bond * tpet_lvl) + list(tpet.values())[3] # Ability Power
                 # tpetmove_type= list(tpet.values())[4]
 
-                tpet_move = {str(tpetmove_text): int(tpetmove_ap), 'STAM': 0, 'TYPE': str(tpet_passive_type)}
+                tpet_move = {str(tpetmove_text): int(tpetmove_ap), 'STAM': 15, 'TYPE': str(tpet_passive_type)}
 
                 if t_card_passive_type == 'ATK':
                     t_attack = t_attack + int(t_card_passive)
@@ -19513,6 +19524,7 @@ class CrownUnlimited(commands.Cog):
                 opet_image = opet['PATH']
                 opet_exp = opet['EXP']
                 opet_lvl = opet['LVL']
+                opet_bond = opet['BOND']
                 obalance = vault['BALANCE']
                 o_DID = o_user['DID']
                 o_card = o['NAME']
@@ -19572,6 +19584,7 @@ class CrownUnlimited(commands.Cog):
                 tpet_image = tpet['PATH']
                 tpet_exp = tpet['EXP']
                 tpet_lvl = tpet['LVL']
+                tpet_bond = tpet['BOND']
                 tbalance = tvault['BALANCE']
                 t_DID = t_user['DID']
                 t_card = t['NAME']
@@ -19705,9 +19718,9 @@ class CrownUnlimited(commands.Cog):
 
                 # Pet
                 opetmove_text= list(opet.keys())[3] # Name of the ability
-                opetmove_ap= list(opet.values())[3] # Ability Power
+                opetmove_ap= (opet_bond * opet_lvl) + list(opet.values())[3] # Ability Power
 
-                opet_move = {str(opetmove_text): int(opetmove_ap), 'STAM': 0, 'TYPE': str(opet_passive_type)}
+                opet_move = {str(opetmove_text): int(opetmove_ap), 'STAM': 15, 'TYPE': str(opet_passive_type)}
 
 
 
@@ -19721,10 +19734,10 @@ class CrownUnlimited(commands.Cog):
 
                 # TPet
                 tpetmove_text= list(tpet.keys())[3] # Name of the ability
-                tpetmove_ap= list(tpet.values())[3] # Ability Power
+                tpetmove_ap= (tpet_bond * tpet_lvl) + list(tpet.values())[3] # Ability Power
                 # tpetmove_type= list(tpet.values())[4]
 
-                tpet_move = {str(tpetmove_text): int(tpetmove_ap), 'STAM': 0, 'TYPE': str(tpet_passive_type)}
+                tpet_move = {str(tpetmove_text): int(tpetmove_ap), 'STAM': 15, 'TYPE': str(tpet_passive_type)}
 
                 if t_card_passive_type == 'ATK':
                     t_attack = t_attack + int(t_card_passive)
@@ -22083,8 +22096,6 @@ async def petlevel(pet, player):
     bondexp = petinfo['BONDEXP']
     bond_req = ((petmove_ap * 5) * (bond + 1))
 
-    print(bond_req)
-
     if lvl < 10:
         # Non Level Up Code
         if exp < (lvl_req - 1):
@@ -22117,7 +22128,6 @@ async def petlevel(pet, player):
             filter_query = [{'type.'+ "NAME": str(pet)}]
             response = db.updateVault(query, update_query, filter_query)
             
-
 def starting_position(o,t):
     if o > t:
         return True
