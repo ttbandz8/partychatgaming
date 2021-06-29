@@ -58,4 +58,12 @@ traits = [{
     'NAME': 'Souls',
     'EFFECT': 'Combo Recognition',
     'TRAIT': 'When your opponent focus, gain (15 + turn count) attack'
+},{
+    'NAME': 'Crown Rift Slayers',
+    'EFFECT': 'Follow Up Attack',
+    'TRAIT': 'If you miss, you connect'
+},{
+    'NAME': 'Crown Rift Awakening',
+    'EFFECT': 'Blood Awakening',
+    'TRAIT': 'Your crits do 2.5x Damage'
 }]
