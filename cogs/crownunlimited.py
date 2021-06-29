@@ -1330,19 +1330,19 @@ class CrownUnlimited(commands.Cog):
                                 return
                             if msg.content == "1":
                                 o_pet_used =False
-                                dmg = damage_cal(o_card, o_1, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total)
+                                dmg = damage_cal(o_universe, o_card, o_1, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total)
                             elif msg.content == "2":
                                 o_pet_used =False
-                                dmg = damage_cal(o_card, o_2, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total)
+                                dmg = damage_cal(o_universe, o_card, o_2, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total)
                             elif msg.content == "3":
                                 o_pet_used =False
-                                dmg = damage_cal(o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total)
+                                dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total)
                                 if o_gif != "N/A":
                                     await private_channel.send(f"{o_gif}")
                             elif msg.content == "4":
                                 o_enhancer_used=True
                                 o_pet_used =False
-                                dmg = damage_cal(o_card, o_enhancer, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total)
+                                dmg = damage_cal(o_universe, o_card, o_enhancer, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total)
                                 o_enhancer_used=False
                             elif msg.content == "5":
                                 if not o_used_resolve and o_used_focus:
@@ -1432,7 +1432,7 @@ class CrownUnlimited(commands.Cog):
                                         embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
                                         embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
                                         await private_channel.send(embed=embedVar)
-                                        dmg = damage_cal(o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
+                                        dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
                                         t_health = t_health - dmg['DMG']
                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
                                         await private_channel.send(embed=embedVar)
@@ -1494,7 +1494,7 @@ class CrownUnlimited(commands.Cog):
                                     #Resolve Check and Calculation
                                 if o_used_resolve and o_used_focus and not o_pet_used:                                  
                                     o_enhancer_used=True
-                                    dmg = damage_cal(o_card, opet_move, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
+                                    dmg = damage_cal(o_universe, o_card, opet_move, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
                                     o_enhancer_used=False
                                     o_pet_used =True
                                     opet_dmg = dmg['DMG']
@@ -1591,7 +1591,7 @@ class CrownUnlimited(commands.Cog):
                                     await private_channel.send(f"{opet_name} needs a turn to rest...")                                   
                             elif msg.content == "7":                                
                                 o_enhancer_used=True
-                                dmg = damage_cal(o_card, o_enhancer, o_attack, o_defense, c_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, c_health, c_stamina, o_max_health, c_attack, o_special_move_description, turn_total)
+                                dmg = damage_cal(o_universe, o_card, o_enhancer, o_attack, o_defense, c_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, c_health, c_stamina, o_max_health, c_attack, o_special_move_description, turn_total)
                                 o_enhancer_used=False
                                 comp_dmg = dmg['DMG']
                                 comp_enh = dmg['ENHANCED_TYPE']
@@ -2019,16 +2019,16 @@ class CrownUnlimited(commands.Cog):
                         if int(aiMove) == 0:
                             t_health=0
                         if int(aiMove) == 1:
-                            dmg = damage_cal(t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                            dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
                         elif int(aiMove) == 2:
-                            dmg = damage_cal(t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                            dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
                         elif int(aiMove) == 3:
-                            dmg = damage_cal(t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                            dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
                             if t_gif != "N/A":
                                     await private_channel.send(f"{t_gif}")
                         elif int(aiMove) == 4:
                             t_enhancer_used=True
-                            dmg = damage_cal(t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                            dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
                             t_enhancer_used=False
                         elif int(aiMove) == 5:
                             if not t_used_resolve and t_used_focus:
@@ -2118,7 +2118,7 @@ class CrownUnlimited(commands.Cog):
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
                                     await private_channel.send(embed=embedVar)
-                                    dmg = damage_cal(t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
+                                    dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
                                     t_pet_used =False
                                     o_health = o_health - int(dmg['DMG'])
                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
@@ -2469,19 +2469,19 @@ class CrownUnlimited(commands.Cog):
                                 return
                             if msg.content == "1":
                                 c_pet_used =False
-                                dmg = damage_cal(c_card, c_1, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina, c_max_health, t_attack, c_special_move_description, turn_total)
+                                dmg = damage_cal(c_universe, c_card, c_1, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina, c_max_health, t_attack, c_special_move_description, turn_total)
                             elif msg.content == "2":
                                 c_pet_used =False
-                                dmg = damage_cal(c_card, c_2, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina, c_max_health, t_attack, c_special_move_description, turn_total)
+                                dmg = damage_cal(c_universe, c_card, c_2, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina, c_max_health, t_attack, c_special_move_description, turn_total)
                             elif msg.content == "3":
                                 c_pet_used =False
-                                dmg = damage_cal(c_card, c_3, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina, c_max_health, t_attack, c_special_move_description, turn_total)
+                                dmg = damage_cal(c_universe, c_card, c_3, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina, c_max_health, t_attack, c_special_move_description, turn_total)
                                 if c_gif != "N/A":
                                     await private_channel.send(f"{c_gif}")
                             elif msg.content == "4":
                                 c_enhancer_used=True
                                 c_pet_used =False
-                                dmg = damage_cal(c_card, c_enhancer, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina, c_max_health, t_attack, c_special_move_description, turn_total)
+                                dmg = damage_cal(c_universe, c_card, c_enhancer, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina, c_max_health, t_attack, c_special_move_description, turn_total)
                                 c_enhancer_used=False
                             elif msg.content == "5":
                                 #Resolve Check and Calculation
@@ -2572,7 +2572,7 @@ class CrownUnlimited(commands.Cog):
                                         embedVar = discord.Embed(title=f"{c_card.upper()} STRENGTHENED RESOLVE", description=f"`{c_card} says:`\n{c_resolve_description}", colour=0xe91e63)
                                         embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
                                         await private_channel.send(embed=embedVar)
-                                        dmg = damage_cal(c_card, c_3, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina,c_max_health, t_attack, c_special_move_description, turn_total)
+                                        dmg = damage_cal(c_universe, c_card, c_3, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina,c_max_health, t_attack, c_special_move_description, turn_total)
                                         t_health = t_health - dmg['DMG']
                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
                                         await private_channel.send(embed=embedVar)
@@ -2633,7 +2633,7 @@ class CrownUnlimited(commands.Cog):
                                     #Resolve Check and Calculation
                                 if c_used_resolve and c_used_focus and not c_pet_used:                                  
                                     c_enhancer_used=True
-                                    dmg = damage_cal(c_card, cpet_move, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina, c_max_health, t_attack, c_special_move_description, turn_total)
+                                    dmg = damage_cal(c_universe, c_card, cpet_move, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina, c_max_health, t_attack, c_special_move_description, turn_total)
                                     c_enhancer_used=False
                                     c_pet_used =True
                                     cpet_dmg = dmg['DMG']
@@ -2730,7 +2730,7 @@ class CrownUnlimited(commands.Cog):
                                     await private_channel.send(f"{cpet_name} needs a turn to rest...")   
                             elif msg.content == "7":                                
                                 c_enhancer_used=True
-                                dmg = damage_cal(c_card, c_enhancer, c_attack, c_defense, o_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, o_health, o_stamina, c_max_health, o_attack, c_special_move_description)
+                                dmg = damage_cal(c_universe, c_card, c_enhancer, c_attack, c_defense, o_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, o_health, o_stamina, c_max_health, o_attack, c_special_move_description)
                                 c_enhancer_used=False
                                 cdmg = dmg['DMG']
                                 cenh_type = dmg['ENHANCED_TYPE']
@@ -3159,16 +3159,16 @@ class CrownUnlimited(commands.Cog):
                         if int(aiMove) == 0:
                             t_health=0
                         if int(aiMove) == 1:
-                            dmg = damage_cal(t_card, t_1, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description)
+                            dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description)
                         elif int(aiMove) == 2:
-                            dmg = damage_cal(t_card, t_2, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description)
+                            dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description)
                         elif int(aiMove) == 3:
-                            dmg = damage_cal(t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description)
+                            dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description)
                             if t_gif != "N/A":
                                     await private_channel.send(f"{t_gif}")
                         elif int(aiMove) == 4:
                             t_enhancer_used=True
-                            dmg = damage_cal(t_card, t_enhancer, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,c_health, c_stamina, t_max_health, c_attack, t_special_move_description)
+                            dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,c_health, c_stamina, t_max_health, c_attack, t_special_move_description)
                             t_enhancer_used=False
                         elif int(aiMove) == 5:
                             if not t_used_resolve and t_used_focus:
@@ -3258,7 +3258,7 @@ class CrownUnlimited(commands.Cog):
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
                                     await private_channel.send(embed=embedVar)
-                                    dmg = damage_cal(t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
+                                    dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
                                     t_pet_used =False
                                     o_health = o_health - int(dmg['DMG'])
                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
@@ -4859,19 +4859,19 @@ class CrownUnlimited(commands.Cog):
                                 return
                             if msg.content == "1":
                                 o_pet_used =False
-                                dmg = damage_cal(o_card, o_1, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total)
+                                dmg = damage_cal(o_universe, o_card, o_1, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total)
                             elif msg.content == "2":
                                 o_pet_used =False
-                                dmg = damage_cal(o_card, o_2, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total)
+                                dmg = damage_cal(o_universe, o_card, o_2, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total)
                             elif msg.content == "3":
                                 o_pet_used =False
-                                dmg = damage_cal(o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total)
+                                dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total)
                                 if o_gif != "N/A":
                                     await private_channel.send(f"{o_gif}")
                             elif msg.content == "4":
                                 o_enhancer_used=True
                                 o_pet_used =False
-                                dmg = damage_cal(o_card, o_enhancer, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total)
+                                dmg = damage_cal(o_universe, o_card, o_enhancer, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total)
                                 o_enhancer_used=False
                             elif msg.content == "5":
                                 #Resolve Check and Calculation
@@ -4962,7 +4962,7 @@ class CrownUnlimited(commands.Cog):
                                         embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
                                         embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
                                         await private_channel.send(embed=embedVar)
-                                        dmg = damage_cal(o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
+                                        dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
                                         t_health = t_health - dmg['DMG']
                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
                                         await private_channel.send(embed=embedVar)
@@ -5024,7 +5024,7 @@ class CrownUnlimited(commands.Cog):
                                     #Resolve Check and Calculation
                                 if o_used_resolve and o_used_focus and not o_pet_used:                                  
                                     o_enhancer_used=True
-                                    dmg = damage_cal(o_card, opet_move, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
+                                    dmg = damage_cal(o_universe, o_card, opet_move, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
                                     o_enhancer_used=False
                                     o_pet_used =True
                                     opet_dmg = dmg['DMG']
@@ -5121,7 +5121,7 @@ class CrownUnlimited(commands.Cog):
                                     await private_channel.send(f"{opet_name} needs a turn to rest...")                                   
                             elif msg.content == "7":                                
                                 o_enhancer_used=True
-                                dmg = damage_cal(o_card, o_enhancer, o_attack, o_defense, c_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, c_health, c_stamina, o_max_health, c_attack, o_special_move_description, turn_total)
+                                dmg = damage_cal(o_universe, o_card, o_enhancer, o_attack, o_defense, c_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, c_health, c_stamina, o_max_health, c_attack, o_special_move_description, turn_total)
                                 o_enhancer_used=False
                                 comp_dmg = dmg['DMG']
                                 comp_enh = dmg['ENHANCED_TYPE']
@@ -5561,19 +5561,19 @@ class CrownUnlimited(commands.Cog):
                             t_health=0
                         if int(aiMove) == 1:
                             t_pet_used =False
-                            dmg = damage_cal(t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                            dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
                         elif int(aiMove) == 2:
                             t_pet_used =False
-                            dmg = damage_cal(t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                            dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
                         elif int(aiMove) == 3:
                             t_pet_used =False
-                            dmg = damage_cal(t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                            dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
                             if t_gif != "N/A":
                                     await private_channel.send(f"{t_gif}")
                         elif int(aiMove) == 4:
                             t_pet_used =False
                             t_enhancer_used=True
-                            dmg = damage_cal(t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                            dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
                             t_enhancer_used=False
                         elif int(aiMove) == 5:
                             if not t_used_resolve and t_used_focus:
@@ -5663,7 +5663,7 @@ class CrownUnlimited(commands.Cog):
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
                                     await private_channel.send(embed=embedVar)
-                                    dmg = damage_cal(t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
+                                    dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
                                     t_pet_used =False
                                     o_health = o_health - int(dmg['DMG'])
                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
@@ -5722,7 +5722,7 @@ class CrownUnlimited(commands.Cog):
                             #Resolve Check and Calculation
                             if t_used_resolve and t_used_focus and not t_pet_used:                                      
                                 t_enhancer_used=True
-                                dmg = damage_cal(t_card, tpet_move, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                                dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
                                 t_enhancer_used=False
                                 t_pet_used =True
                                 tpet_dmg = dmg['DMG']
@@ -6111,19 +6111,19 @@ class CrownUnlimited(commands.Cog):
                                 return
                             if msg.content == "1":
                                 c_pet_used =False
-                                dmg = damage_cal(c_card, c_1, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina, c_max_health, t_attack, c_special_move_description, turn_total)
+                                dmg = damage_cal(c_universe, c_card, c_1, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina, c_max_health, t_attack, c_special_move_description, turn_total)
                             elif msg.content == "2":
                                 c_pet_used =False
-                                dmg = damage_cal(c_card, c_2, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina, c_max_health, t_attack, c_special_move_description, turn_total)
+                                dmg = damage_cal(c_universe, c_card, c_2, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina, c_max_health, t_attack, c_special_move_description, turn_total)
                             elif msg.content == "3":
                                 c_pet_used =False
-                                dmg = damage_cal(c_card, c_3, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina, c_max_health, t_attack, c_special_move_description, turn_total)
+                                dmg = damage_cal(c_universe, c_card, c_3, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina, c_max_health, t_attack, c_special_move_description, turn_total)
                                 if c_gif != "N/A":
                                     await private_channel.send(f"{c_gif}")
                             elif msg.content == "4":
                                 c_enhancer_used=True
                                 c_pet_used =False
-                                dmg = damage_cal(c_card, c_enhancer, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina, c_max_health, t_attack, c_special_move_description, turn_total)
+                                dmg = damage_cal(c_universe, c_card, c_enhancer, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina, c_max_health, t_attack, c_special_move_description, turn_total)
                                 c_enhancer_used=False
                             elif msg.content == "5":
                                 #Resolve Check and Calculation
@@ -6214,7 +6214,7 @@ class CrownUnlimited(commands.Cog):
                                         embedVar = discord.Embed(title=f"{c_card.upper()} STRENGTHENED RESOLVE", description=f"`{c_card} says:`\n{c_resolve_description}", colour=0xe91e63)
                                         embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
                                         await private_channel.send(embed=embedVar)
-                                        dmg = damage_cal(c_card, c_3, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina,c_max_health, t_attack, c_special_move_description, turn_total)
+                                        dmg = damage_cal(c_universe, c_card, c_3, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina,c_max_health, t_attack, c_special_move_description, turn_total)
                                         t_health = t_health - dmg['DMG']
                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
                                         await private_channel.send(embed=embedVar)
@@ -6275,7 +6275,7 @@ class CrownUnlimited(commands.Cog):
                                     #Resolve Check and Calculation
                                 if c_used_resolve and c_used_focus and not c_pet_used:                                  
                                     c_enhancer_used=True
-                                    dmg = damage_cal(c_card, cpet_move, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina, c_max_health, t_attack, c_special_move_description, turn_total)
+                                    dmg = damage_cal(c_universe, c_card, cpet_move, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina, c_max_health, t_attack, c_special_move_description, turn_total)
                                     c_enhancer_used=False
                                     c_pet_used =True
                                     cpet_dmg = dmg['DMG']
@@ -6372,7 +6372,7 @@ class CrownUnlimited(commands.Cog):
                                     await private_channel.send(f"{cpet_name} needs a turn to rest...")   
                             elif msg.content == "7":                                
                                 c_enhancer_used=True
-                                dmg = damage_cal(c_card, c_enhancer, c_attack, c_defense, o_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, o_health, o_stamina, c_max_health, o_attack, c_special_move_description)
+                                dmg = damage_cal(c_universe, c_card, c_enhancer, c_attack, c_defense, o_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, o_health, o_stamina, c_max_health, o_attack, c_special_move_description)
                                 c_enhancer_used=False
                                 cdmg = dmg['DMG']
                                 cenh_type = dmg['ENHANCED_TYPE']
@@ -6810,16 +6810,16 @@ class CrownUnlimited(commands.Cog):
                         if int(aiMove) == 0:
                             t_health=0
                         if int(aiMove) == 1:
-                            dmg = damage_cal(t_card, t_1, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description)
+                            dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description)
                         elif int(aiMove) == 2:
-                            dmg = damage_cal(t_card, t_2, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description)
+                            dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description)
                         elif int(aiMove) == 3:
-                            dmg = damage_cal(t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description)
+                            dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description)
                             if t_gif != "N/A":
                                     await private_channel.send(f"{t_gif}")
                         elif int(aiMove) == 4:
                             t_enhancer_used=True
-                            dmg = damage_cal(t_card, t_enhancer, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,c_health, c_stamina, t_max_health, c_attack, t_special_move_description)
+                            dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,c_health, c_stamina, t_max_health, c_attack, t_special_move_description)
                             t_enhancer_used=False
                         elif int(aiMove) == 5:
                             if not t_used_resolve and t_used_focus:
@@ -6909,7 +6909,7 @@ class CrownUnlimited(commands.Cog):
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
                                     await private_channel.send(embed=embedVar)
-                                    dmg = damage_cal(t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
+                                    dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
                                     t_pet_used =False
                                     o_health = o_health - int(dmg['DMG'])
                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
@@ -6968,7 +6968,7 @@ class CrownUnlimited(commands.Cog):
                             #Resolve Check and Calculation
                             if t_used_resolve and t_used_focus and not t_pet_used:                                      
                                 t_enhancer_used=True
-                                dmg = damage_cal(t_card, tpet_move, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description)
+                                dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description)
                                 t_enhancer_used=False
                                 t_pet_used =True
                                 tpet_dmg = dmg['DMG']
@@ -8594,17 +8594,17 @@ class CrownUnlimited(commands.Cog):
 
                         if msg.content == "1":
                             o_pet_used =False
-                            dmg = damage_cal(o_card, o_1, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
+                            dmg = damage_cal(o_universe, o_card, o_1, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
                         elif msg.content == "2":
                             o_pet_used =False
-                            dmg = damage_cal(o_card, o_2, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
+                            dmg = damage_cal(o_universe, o_card, o_2, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
                         elif msg.content == "3":
                             o_pet_used =False
-                            dmg = damage_cal(o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
+                            dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
                         elif msg.content == "4":
                             o_pet_used =False
                             o_enhancer_used=True
-                            dmg = damage_cal(o_card, o_enhancer, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
+                            dmg = damage_cal(o_universe, o_card, o_enhancer, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
                             o_enhancer_used=False
                         elif msg.content == "5":
                             #Resolve Check and Calculation
@@ -8695,7 +8695,7 @@ class CrownUnlimited(commands.Cog):
                                     embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
                                     await private_channel.send(embed=embedVar)
-                                    dmg = damage_cal(o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
+                                    dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
                                     t_health = t_health - dmg['DMG']
                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
                                     await private_channel.send(embed=embedVar)
@@ -8757,7 +8757,7 @@ class CrownUnlimited(commands.Cog):
                                 #Resolve Check and Calculation
                             if o_used_resolve and o_used_focus and not o_pet_used:                                      
                                 o_enhancer_used=True
-                                dmg = damage_cal(o_card, opet_move, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
+                                dmg = damage_cal(o_universe, o_card, opet_move, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
                                 o_enhancer_used=False
                                 o_pet_used =True
                                 opet_dmg = dmg['DMG']
@@ -8854,7 +8854,7 @@ class CrownUnlimited(commands.Cog):
                                 await private_channel.send(f"{opet_name} needs a turn to rest...")                                   
                         elif msg.content == "7":                                
                             o_enhancer_used=True
-                            dmg = damage_cal(o_card, o_enhancer, o_attack, o_defense, c_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, c_health, c_stamina, o_max_health, c_attack, o_special_move_description, turn_total)
+                            dmg = damage_cal(o_universe, o_card, o_enhancer, o_attack, o_defense, c_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, c_health, c_stamina, o_max_health, c_attack, o_special_move_description, turn_total)
                             o_enhancer_used=False
                             comp_dmg = dmg['DMG']
                             comp_enh = dmg['ENHANCED_TYPE']
@@ -9320,17 +9320,17 @@ class CrownUnlimited(commands.Cog):
                         t_health=0
                     elif aiMove == 1:
                         t_pet_used =False
-                        dmg = damage_cal(t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                        dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
                     elif aiMove == 2:
                         t_pet_used =False
-                        dmg = damage_cal(t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                        dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
                     elif aiMove == 3:
                         t_pet_used =False
-                        dmg = damage_cal(t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                        dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
                     elif aiMove == 4:
                         t_enhancer_used=True
                         t_pet_used =False
-                        dmg = damage_cal(t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                        dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
                         t_enhancer_used=False
                     elif aiMove == 5:
                         if not t_used_resolve and t_used_focus:
@@ -9420,7 +9420,7 @@ class CrownUnlimited(commands.Cog):
                                 embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                 embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
                                 await private_channel.send(embed=embedVar)
-                                dmg = damage_cal(t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
+                                dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
                                 t_pet_used =False
                                 o_health = o_health - int(dmg['DMG'])
                                 embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
@@ -9481,7 +9481,7 @@ class CrownUnlimited(commands.Cog):
                         #Resolve Check and Calculation
                         if t_used_resolve and t_used_focus and not t_pet_used:                                      
                             t_enhancer_used=True
-                            dmg = damage_cal(t_card, tpet_move, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                            dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
                             t_enhancer_used=False
                             t_pet_used =True
                             tpet_dmg = dmg['DMG']
@@ -9884,17 +9884,17 @@ class CrownUnlimited(commands.Cog):
                             return
                         if msg.content == "1":
                             c_pet_used =False
-                            dmg = damage_cal(c_card, c_1, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina, c_max_health, t_attack, c_special_move_description, turn_total)
+                            dmg = damage_cal(c_universe, c_card, c_1, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina, c_max_health, t_attack, c_special_move_description, turn_total)
                         elif msg.content == "2":
                             c_pet_used =False
-                            dmg = damage_cal(c_card, c_2, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina, c_max_health, t_attack, c_special_move_description, turn_total)
+                            dmg = damage_cal(c_universe, c_card, c_2, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina, c_max_health, t_attack, c_special_move_description, turn_total)
                         elif msg.content == "3":
                             c_pet_used =False
-                            dmg = damage_cal(c_card, c_3, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina, c_max_health, t_attack, c_special_move_description, turn_total)
+                            dmg = damage_cal(c_universe, c_card, c_3, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina, c_max_health, t_attack, c_special_move_description, turn_total)
                         elif msg.content == "4":
                             c_enhancer_used=True
                             c_pet_used =False
-                            dmg = damage_cal(c_card, c_enhancer, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina, c_max_health, t_attack, c_special_move_description, turn_total)
+                            dmg = damage_cal(c_universe, c_card, c_enhancer, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina, c_max_health, t_attack, c_special_move_description, turn_total)
                             c_enhancer_used=False
                         elif msg.content == "5":
                             #Resolve Check and Calculation
@@ -9985,7 +9985,7 @@ class CrownUnlimited(commands.Cog):
                                     embedVar = discord.Embed(title=f"{c_card.upper()} STRENGTHENED RESOLVE", description=f"`{c_card} says:`\n{c_resolve_description}", colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
                                     await private_channel.send(embed=embedVar)
-                                    dmg = damage_cal(c_card, c_3, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina,c_max_health, t_attack, c_special_move_description, turn_total)
+                                    dmg = damage_cal(c_universe, c_card, c_3, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina,c_max_health, t_attack, c_special_move_description, turn_total)
                                     t_health = t_health - dmg['DMG']
                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
                                     await private_channel.send(embed=embedVar)
@@ -10046,7 +10046,7 @@ class CrownUnlimited(commands.Cog):
                                 #Resolve Check and Calculation
                             if c_used_resolve and c_used_focus and not c_pet_used:                                  
                                 c_enhancer_used=True
-                                dmg = damage_cal(c_card, cpet_move, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina, c_max_health, t_attack, c_special_move_description, turn_total)
+                                dmg = damage_cal(c_universe, c_card, cpet_move, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina, c_max_health, t_attack, c_special_move_description, turn_total)
                                 c_enhancer_used=False
                                 c_pet_used =True
                                 cpet_dmg = dmg['DMG']
@@ -10143,7 +10143,7 @@ class CrownUnlimited(commands.Cog):
                                 await private_channel.send(f"{cpet_name} needs a turn to rest...")   
                         elif msg.content == "7":                                
                             c_enhancer_used=True
-                            dmg = damage_cal(c_card, c_enhancer, c_attack, c_defense, o_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, o_health, o_stamina, c_max_health, o_attack, c_special_move_description)
+                            dmg = damage_cal(c_universe, c_card, c_enhancer, c_attack, c_defense, o_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, o_health, o_stamina, c_max_health, o_attack, c_special_move_description)
                             c_enhancer_used=False
                             cdmg = dmg['DMG']
                             cenh_type = dmg['ENHANCED_TYPE']
@@ -10611,17 +10611,17 @@ class CrownUnlimited(commands.Cog):
                         t_health=0
                     elif aiMove == 1:
                         t_pet_used =False
-                        dmg = damage_cal(t_card, t_1, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg)
+                        dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg)
                     elif aiMove == 2:
                         t_pet_used =False
-                        dmg = damage_cal(t_card, t_2, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg)
+                        dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg)
                     elif aiMove == 3:
                         t_pet_used =False
-                        dmg = damage_cal(t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg)
+                        dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg)
                     elif aiMove == 4:
                         t_enhancer_used=True
                         t_pet_used =False
-                        dmg = damage_cal(t_card, t_enhancer, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg)
+                        dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg)
                         t_enhancer_used=False
                     elif aiMove == 5:
                         if not t_used_resolve and t_used_focus:
@@ -10711,7 +10711,7 @@ class CrownUnlimited(commands.Cog):
                                 embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                 embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
                                 await private_channel.send(embed=embedVar)
-                                dmg = damage_cal(t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
+                                dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
                                 t_pet_used =False
                                 o_health = o_health - int(dmg['DMG'])
                                 embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
@@ -10772,7 +10772,7 @@ class CrownUnlimited(commands.Cog):
                         #Resolve Check and Calculation
                         if t_used_resolve and t_used_focus and not t_pet_used:                                      
                             t_enhancer_used=True
-                            dmg = damage_cal(t_card, tpet_move, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg)
+                            dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg)
                             t_enhancer_used=False
                             t_pet_used =True
                             tpet_dmg = dmg['DMG']
@@ -12012,19 +12012,19 @@ class CrownUnlimited(commands.Cog):
                                 return
                             if msg.content == "1":
                                 o_pet_used =False
-                                dmg = damage_cal(o_card, o_1, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total)
+                                dmg = damage_cal(o_universe, o_card, o_1, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total)
                             elif msg.content == "2":
                                 o_pet_used =False
-                                dmg = damage_cal(o_card, o_2, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total)
+                                dmg = damage_cal(o_universe, o_card, o_2, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total)
                             elif msg.content == "3":
                                 o_pet_used =False
-                                dmg = damage_cal(o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total)
+                                dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total)
                                 if o_gif != "N/A":
                                     await private_channel.send(f"{o_gif}")
                             elif msg.content == "4":
                                 o_enhancer_used=True
                                 o_pet_used =False
-                                dmg = damage_cal(o_card, o_enhancer, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total)
+                                dmg = damage_cal(o_universe, o_card, o_enhancer, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total)
                                 o_enhancer_used=False
                             elif msg.content == "5":
                                 #fortitude or luck is based on health  
@@ -12115,7 +12115,7 @@ class CrownUnlimited(commands.Cog):
                                         embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
                                         embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
                                         await private_channel.send(embed=embedVar)
-                                        dmg = damage_cal(o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
+                                        dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
                                         t_health = t_health - dmg['DMG']
                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
                                         await private_channel.send(embed=embedVar)
@@ -12177,7 +12177,7 @@ class CrownUnlimited(commands.Cog):
                                     #Resolve Check and Calculation
                                 if o_used_resolve and o_used_focus and not o_pet_used:                                  
                                     o_enhancer_used=True
-                                    dmg = damage_cal(o_card, opet_move, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
+                                    dmg = damage_cal(o_universe, o_card, opet_move, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
                                     o_enhancer_used=False
                                     o_pet_used =True
                                     opet_dmg = dmg['DMG']
@@ -12621,18 +12621,18 @@ class CrownUnlimited(commands.Cog):
                             t_health=0
                         if int(aiMove) == 1:
                             t_pet_used =False
-                            dmg = damage_cal(t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                            dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
                         elif int(aiMove) == 2:
                             t_pet_used =False
-                            dmg = damage_cal(t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                            dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
                         elif int(aiMove) == 3:
                             t_pet_used =False
-                            dmg = damage_cal(t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                            dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
                             if t_gif != "N/A":
                                     await private_channel.send(f"{t_gif}")
                         elif int(aiMove) == 4:
                             t_enhancer_used=True
-                            dmg = damage_cal(t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                            dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
                             t_enhancer_used=False
                         elif int(aiMove) == 5:
                             if not t_used_resolve and t_used_focus:
@@ -12722,7 +12722,7 @@ class CrownUnlimited(commands.Cog):
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
                                     await private_channel.send(embed=embedVar)
-                                    dmg = damage_cal(t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
+                                    dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
                                     t_pet_used =False
                                     o_health = o_health - int(dmg['DMG'])
                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
@@ -12782,7 +12782,7 @@ class CrownUnlimited(commands.Cog):
                             #Resolve Check and Calculation
                             if t_used_resolve and t_used_focus and not t_pet_used:                                      
                                 t_enhancer_used=True
-                                dmg = damage_cal(t_card, tpet_move, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                                dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
                                 t_enhancer_used=False
                                 t_pet_used =True
                                 tpet_dmg = dmg['DMG']
@@ -14052,19 +14052,19 @@ class CrownUnlimited(commands.Cog):
                                 return
                             if msg.content == "1":
                                 o_pet_used =False
-                                dmg = damage_cal(o_card, o_1, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total)
+                                dmg = damage_cal(o_universe, o_card, o_1, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total)
                             elif msg.content == "2":
                                 o_pet_used =False
-                                dmg = damage_cal(o_card, o_2, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total)
+                                dmg = damage_cal(o_universe, o_card, o_2, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total)
                             elif msg.content == "3":
                                 o_pet_used =False
-                                dmg = damage_cal(o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total)
+                                dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total)
                                 if o_gif != "N/A":
                                     await private_channel.send(f"{o_gif}")
                             elif msg.content == "4":
                                 o_enhancer_used=True
                                 o_pet_used =False
-                                dmg = damage_cal(o_card, o_enhancer, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total)
+                                dmg = damage_cal(o_universe, o_card, o_enhancer, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total)
                                 o_enhancer_used=False
                             elif msg.content == "5":
                                 #Resolve Check and Calculation
@@ -14155,7 +14155,7 @@ class CrownUnlimited(commands.Cog):
                                         embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
                                         embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
                                         await private_channel.send(embed=embedVar)
-                                        dmg = damage_cal(o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
+                                        dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
                                         t_health = t_health - dmg['DMG']
                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
                                         await private_channel.send(embed=embedVar)
@@ -14217,7 +14217,7 @@ class CrownUnlimited(commands.Cog):
                                     #Resolve Check and Calculation
                                 if o_used_resolve and o_used_focus and not o_pet_used:                                  
                                     o_enhancer_used=True
-                                    dmg = damage_cal(o_card, opet_move, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
+                                    dmg = damage_cal(o_universe, o_card, opet_move, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
                                     o_enhancer_used=False
                                     o_pet_used =True
                                     opet_dmg = dmg['DMG']
@@ -14650,16 +14650,16 @@ class CrownUnlimited(commands.Cog):
                         if int(aiMove) == 0:
                             t_health=0
                         if int(aiMove) == 1:
-                            dmg = damage_cal(t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                            dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
                         elif int(aiMove) == 2:
-                            dmg = damage_cal(t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                            dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
                         elif int(aiMove) == 3:
-                            dmg = damage_cal(t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                            dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
                             if t_gif != "N/A":
                                     await private_channel.send(f"{t_gif}")
                         elif int(aiMove) == 4:
                             t_enhancer_used=True
-                            dmg = damage_cal(t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                            dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
                             t_enhancer_used=False
                         elif int(aiMove) == 5:
                             if not t_used_resolve and t_used_focus:
@@ -14749,7 +14749,7 @@ class CrownUnlimited(commands.Cog):
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
                                     await private_channel.send(embed=embedVar)
-                                    dmg = damage_cal(t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
+                                    dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
                                     t_pet_used =False
                                     o_health = o_health - int(dmg['DMG'])
                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
@@ -15987,17 +15987,17 @@ class CrownUnlimited(commands.Cog):
 
                         if msg.content == "1":
                             o_pet_used =False
-                            dmg = damage_cal(o_card, o_1, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
+                            dmg = damage_cal(o_universe, o_card, o_1, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
                         elif msg.content == "2":
                             o_pet_used =False
-                            dmg = damage_cal(o_card, o_2, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
+                            dmg = damage_cal(o_universe, o_card, o_2, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
                         elif msg.content == "3":
                             o_pet_used =False
-                            dmg = damage_cal(o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
+                            dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
                         elif msg.content == "4":
                             o_pet_used =False
                             o_enhancer_used=True
-                            dmg = damage_cal(o_card, o_enhancer, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
+                            dmg = damage_cal(o_universe, o_card, o_enhancer, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
                             o_enhancer_used=False
                         elif msg.content == "5":
 
@@ -16089,7 +16089,7 @@ class CrownUnlimited(commands.Cog):
                                     embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
                                     await private_channel.send(embed=embedVar)
-                                    dmg = damage_cal(o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
+                                    dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
                                     t_health = t_health - dmg['DMG']
                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
                                     await private_channel.send(embed=embedVar)
@@ -16151,7 +16151,7 @@ class CrownUnlimited(commands.Cog):
                                 #Resolve Check and Calculation
                             if o_used_resolve and o_used_focus and not o_pet_used:                                      
                                 o_enhancer_used=True
-                                dmg = damage_cal(o_card, opet_move, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
+                                dmg = damage_cal(o_universe, o_card, opet_move, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
                                 o_enhancer_used=False
                                 o_pet_used =True
                                 opet_dmg = dmg['DMG']
@@ -16620,17 +16620,17 @@ class CrownUnlimited(commands.Cog):
                         t_health=0
                     elif aiMove == 1:
                         t_pet_used =False
-                        dmg = damage_cal(t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                        dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
                     elif aiMove == 2:
                         t_pet_used =False
-                        dmg = damage_cal(t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                        dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
                     elif aiMove == 3:
                         t_pet_used =False
-                        dmg = damage_cal(t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                        dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
                     elif aiMove == 4:
                         t_enhancer_used=True
                         t_pet_used =False
-                        dmg = damage_cal(t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                        dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
                         t_enhancer_used=False
                     elif aiMove == 5:
                         if not t_used_resolve and t_used_focus:
@@ -16720,7 +16720,7 @@ class CrownUnlimited(commands.Cog):
                                 embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                 embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
                                 await private_channel.send(embed=embedVar)
-                                dmg = damage_cal(t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
+                                dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
                                 t_pet_used =False
                                 o_health = o_health - int(dmg['DMG'])
                                 embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
@@ -16781,7 +16781,7 @@ class CrownUnlimited(commands.Cog):
                         #Resolve Check and Calculation
                         if t_used_resolve and t_used_focus and not t_pet_used:                                      
                             t_enhancer_used=True
-                            dmg = damage_cal(t_card, tpet_move, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                            dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
                             t_enhancer_used=False
                             t_pet_used =True
                             tpet_dmg = dmg['DMG']
@@ -17981,17 +17981,17 @@ class CrownUnlimited(commands.Cog):
                                     await ctx.send(f"{ctx.author.mention} has fled the battle...")
                                     return
                                 if msg.content == "1":
-                                    dmg = damage_cal(o_card, o_1, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
+                                    dmg = damage_cal(o_universe, o_card, o_1, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
                                     o_pet_used=False
                                 elif msg.content == "2":
-                                    dmg = damage_cal(o_card, o_2, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
+                                    dmg = damage_cal(o_universe, o_card, o_2, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
                                     o_pet_used=False
                                 elif msg.content == "3":
-                                    dmg = damage_cal(o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
+                                    dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
                                     o_pet_used=False
                                 elif msg.content == "4":
                                     o_enhancer_used=True
-                                    dmg = damage_cal(o_card, o_enhancer, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
+                                    dmg = damage_cal(o_universe, o_card, o_enhancer, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
                                     o_pet_used=False
                                     o_enhancer_used=False
                                 elif msg.content == "5":
@@ -18083,7 +18083,7 @@ class CrownUnlimited(commands.Cog):
                                             embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
                                             embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
                                             await ctx.send(embed=embedVar)
-                                            dmg = damage_cal(o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
+                                            dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
                                             t_health = t_health - dmg['DMG']
                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
                                             await ctx.send(embed=embedVar)
@@ -18145,7 +18145,7 @@ class CrownUnlimited(commands.Cog):
                                      #Resolve Check and Calculation
                                     if o_used_resolve and o_used_focus and not o_pet_used:                                      
                                         o_enhancer_used=True
-                                        dmg = damage_cal(o_card, opet_move, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
+                                        dmg = damage_cal(o_universe, o_card, opet_move, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
                                         o_enhancer_used=False
                                         o_pet_used =True
                                         opet_dmg = dmg['DMG']
@@ -18540,17 +18540,17 @@ class CrownUnlimited(commands.Cog):
                                         return
                                     if msg.content == "1":
                                         t_pet_used =False
-                                        dmg = damage_cal(t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
+                                        dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
                                     elif msg.content == "2":
                                         t_pet_used =False
-                                        dmg = damage_cal(t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
+                                        dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
                                     elif msg.content == "3":
                                         t_pet_used =False
-                                        dmg = damage_cal(t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
+                                        dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
                                     elif msg.content == "4":
                                         t_enhancer_used=True
                                         t_pet_used =False
-                                        dmg = damage_cal(t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
+                                        dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
                                         t_enhancer_used=False
                                     elif msg.content == "5":
                                         if not t_used_resolve and t_used_focus:
@@ -18640,7 +18640,7 @@ class CrownUnlimited(commands.Cog):
                                                 embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                                 embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
                                                 await ctx.send(embed=embedVar)
-                                                dmg = damage_cal(t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
+                                                dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
                                                 t_pet_used =False
                                                 o_health = o_health - int(dmg['DMG'])
                                                 embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
@@ -18702,7 +18702,7 @@ class CrownUnlimited(commands.Cog):
                                         #Resolve Check and Calculation
                                         if t_used_resolve and t_used_focus and not t_pet_used:                                      
                                             t_enhancer_used=True
-                                            dmg = damage_cal(t_card, tpet_move, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                                            dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
                                             t_enhancer_used=False
                                             t_pet_used =True
                                             tpet_dmg = dmg['DMG']
@@ -19009,14 +19009,14 @@ class CrownUnlimited(commands.Cog):
                                 if int(aiMove) == 0:
                                     t_health=0
                                 if int(aiMove) == 1:
-                                    dmg = damage_cal(t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
+                                    dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
                                 elif int(aiMove) == 2:
-                                    dmg = damage_cal(t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
+                                    dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
                                 elif int(aiMove) == 3:
-                                    dmg = damage_cal(t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
+                                    dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
                                 elif int(aiMove) == 4:
                                     t_enhancer_used=True
-                                    dmg = damage_cal(t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina,t_max_health, o_attack, t_special_move_description)
+                                    dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina,t_max_health, o_attack, t_special_move_description)
                                     t_enhancer_used=False
                                 elif int(aiMove) == 5:
                                     if not t_used_resolve and t_used_focus:
@@ -19106,7 +19106,7 @@ class CrownUnlimited(commands.Cog):
                                             embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                             embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
                                             await ctx.send(embed=embedVar)
-                                            dmg = damage_cal(t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
+                                            dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
                                             t_pet_used =False
                                             o_health = o_health - int(dmg['DMG'])
                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
@@ -19165,7 +19165,7 @@ class CrownUnlimited(commands.Cog):
                                     #Resolve Check and Calculation
                                     if t_used_resolve and t_used_focus and not t_pet_used:                                      
                                         t_enhancer_used=True
-                                        dmg = damage_cal(t_card, tpet_move, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                                        dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
                                         t_enhancer_used=False
                                         t_pet_used =True
                                         tpet_dmg = dmg['DMG']
@@ -20405,17 +20405,17 @@ class CrownUnlimited(commands.Cog):
                                     await ctx.send(f"{ctx.author.mention} has fled the battle...")
                                     return
                                 if msg.content == "1":
-                                    dmg = damage_cal(o_card, o_1, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
+                                    dmg = damage_cal(o_universe, o_card, o_1, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
                                     o_pet_used=False
                                 elif msg.content == "2":
-                                    dmg = damage_cal(o_card, o_2, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
+                                    dmg = damage_cal(o_universe, o_card, o_2, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
                                     o_pet_used=False
                                 elif msg.content == "3":
-                                    dmg = damage_cal(o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
+                                    dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
                                     o_pet_used=False
                                 elif msg.content == "4":
                                     o_enhancer_used=True
-                                    dmg = damage_cal(o_card, o_enhancer, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
+                                    dmg = damage_cal(o_universe, o_card, o_enhancer, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
                                     o_pet_used=False
                                     o_enhancer_used=False
                                 elif msg.content == "5":
@@ -20507,7 +20507,7 @@ class CrownUnlimited(commands.Cog):
                                             embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
                                             embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
                                             await ctx.send(embed=embedVar)
-                                            dmg = damage_cal(o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
+                                            dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
                                             t_health = t_health - dmg['DMG']
                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
                                             await ctx.send(embed=embedVar)
@@ -20569,7 +20569,7 @@ class CrownUnlimited(commands.Cog):
                                      #Resolve Check and Calculation
                                     if o_used_resolve and o_used_focus and not o_pet_used:                                      
                                         o_enhancer_used=True
-                                        dmg = damage_cal(o_card, opet_move, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
+                                        dmg = damage_cal(o_universe, o_card, opet_move, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
                                         o_enhancer_used=False
                                         o_pet_used =True
                                         opet_dmg = dmg['DMG']
@@ -20961,17 +20961,17 @@ class CrownUnlimited(commands.Cog):
                                         return
                                     if msg.content == "1":
                                         t_pet_used =False
-                                        dmg = damage_cal(t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
+                                        dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
                                     elif msg.content == "2":
                                         t_pet_used =False
-                                        dmg = damage_cal(t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
+                                        dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
                                     elif msg.content == "3":
                                         t_pet_used =False
-                                        dmg = damage_cal(t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
+                                        dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
                                     elif msg.content == "4":
                                         t_enhancer_used=True
                                         t_pet_used =False
-                                        dmg = damage_cal(t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
+                                        dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
                                         t_enhancer_used=False
                                     elif msg.content == "5":
                                         if not t_used_resolve and t_used_focus:
@@ -21061,7 +21061,7 @@ class CrownUnlimited(commands.Cog):
                                                 embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                                 embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
                                                 await ctx.send(embed=embedVar)
-                                                dmg = damage_cal(t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
+                                                dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
                                                 t_pet_used =False
                                                 o_health = o_health - int(dmg['DMG'])
                                                 embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
@@ -21123,7 +21123,7 @@ class CrownUnlimited(commands.Cog):
                                         #Resolve Check and Calculation
                                         if t_used_resolve and t_used_focus and not t_pet_used:                                      
                                             t_enhancer_used=True
-                                            dmg = damage_cal(t_card, tpet_move, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                                            dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
                                             t_enhancer_used=False
                                             t_pet_used =True
                                             tpet_dmg = dmg['DMG']
@@ -21432,14 +21432,14 @@ class CrownUnlimited(commands.Cog):
                                 if int(aiMove) == 0:
                                     t_health=0
                                 if int(aiMove) == 1:
-                                    dmg = damage_cal(t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
+                                    dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
                                 elif int(aiMove) == 2:
-                                    dmg = damage_cal(t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
+                                    dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
                                 elif int(aiMove) == 3:
-                                    dmg = damage_cal(t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
+                                    dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
                                 elif int(aiMove) == 4:
                                     t_enhancer_used=True
-                                    dmg = damage_cal(t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina,t_max_health, o_attack, t_special_move_description)
+                                    dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina,t_max_health, o_attack, t_special_move_description)
                                     t_enhancer_used=False
                                 elif int(aiMove) == 5:
                                     if not t_used_resolve and t_used_focus:
@@ -21469,7 +21469,7 @@ class CrownUnlimited(commands.Cog):
                                     #Resolve Check and Calculation
                                     if t_used_resolve and t_used_focus and not t_pet_used:                                      
                                         t_enhancer_used=True
-                                        dmg = damage_cal(t_card, tpet_move, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                                        dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
                                         t_enhancer_used=False
                                         t_pet_used =True
                                         tpet_dmg = dmg['DMG']
@@ -22054,7 +22054,7 @@ def starting_position(o,t):
     else:
         return False
 
-def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamina, enhancer, health, op_health, op_stamina, maxhealth, op_attack, special_description, turn): 
+def damage_cal(universe, card, ability, attack, defense, op_defense, vul, accuracy, stamina, enhancer, health, op_health, op_stamina, maxhealth, op_attack, special_description, turn): 
     if op_defense == 0:
         op_defense = 25
     if attack == 0:
@@ -22327,7 +22327,7 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
         if hit_roll <= miss_hit:
             true_dmg=0
             message=f'`{move}` used! It misses!'
-            if card['UNIVERSE'] == 'Crown Rift Slayers':
+            if universe == 'Crown Rift Slayers':
                 true_dmg = round(true_dmg * .85)
                 message=f'`{move}` used Twice! The first strike misses but second connects for {true_dmg}! :bangbang:'
         elif hit_roll <=low_hit and hit_roll > miss_hit:
@@ -22342,7 +22342,7 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
         elif hit_roll == 20:
             true_dmg = round(true_dmg * 2)
             message=f"`{card}` used `{move}`! :boom:   IT CRITICALLY HITS FOR {true_dmg}!! :boom: "
-            if card['UNIVERSE'] == 'Crown Rift Awakening':
+            if universe == 'Crown Rift Awakening':
                 true_dmg = round(true_dmg * 2.5)
                 message=f"`{card}` used `{move}`! :boom:   IT MORTALLY WOUNDS FOR {true_dmg}!! :boom: "
             
