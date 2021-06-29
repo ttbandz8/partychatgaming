@@ -22269,7 +22269,7 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
             if turn == 0:
                 enhanced = ap
             else:
-                enhanced = ap / turn * ap
+                enhanced = ap / turn
         elif enh_type == 'BLAST':
             if turn == 0:
                 enhanced = ap
@@ -22279,12 +22279,16 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
             if turn == 0:
                 enhanced = ap
             else:
-                enhanced = ap / turn
+                enhanced = ap / turn 
         elif enh_type == 'DESTRUCTION':
             if turn == 0:
                 enhanced = ap
             else:
                 enhanced = ap * turn
+            if enhanced > op_health:
+                message = f'**{card}** used **{move}**! Opponent has been reduced.'
+                enhanced = op_health - 1
+
         
         response = {"DMG": enhanced, "MESSAGE": message, "STAMINA_USED": move_stamina, "CAN_USE_MOVE": can_use_move_flag, "ENHANCED_TYPE": enh_type, "ENHANCE": True}
         return response
@@ -22313,7 +22317,7 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
         message = ""
 
         miss_hit = 1 # Miss
-        low_hit = 4 # Lower Damage
+        low_hit = 2 # Lower Damage
         med_hit = 11 # Medium Damage
         standard_hit = 19 # Standard Damage
         high_hit = 20 # Crit Hit
