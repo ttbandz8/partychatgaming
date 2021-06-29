@@ -136,6 +136,10 @@ async def enhance(ctx):
    **SOUL:** CHAIN - Make you and your opponent Stamina the same based on AP Value
    **GAMBLE:** Make you and your opponent health the same based on AP Value
    **FEAR:** Lower your Health by AP Percentage, Lower your opponent ATK and DEF by AP Percentage
+   **WAVE:** Deals AP * Turn Count Damage to Opponent that decreases as the Turn Count increases
+   **BLAST:** Deals AP * Turn Count Damage to Opponent that increases as the Turn Count increases
+   **CREATION:** Increases AP * Turn Count Max Health & Health that decreases as the Turn Count increases
+   **DESTRUCTION:** Decreases AP * Turn Count Max Health that increases as the Turn Count increases
    """) ,colour=0x7289da)
    embedVar7.set_thumbnail(url=avatar)
    embedVar7.set_footer(text=f".help - Bot Help")
