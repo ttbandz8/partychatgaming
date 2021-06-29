@@ -22397,11 +22397,11 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, vul, accura
         message = ""
 
         miss_hit = 1 # Miss
-        low_hit = 4 # Lower Damage
-        med_hit = 8 # Medium Damage
-        standard_hit = 13 # Standard Damage
+        low_hit = 7 # Lower Damage
+        med_hit = 11 # Medium Damage
+        standard_hit = 19 # Standard Damage
         high_hit = 20 # Crit Hit
-        hit_roll = random.randint(0,25)
+        hit_roll = random.randint(0,20)
 
 
         if hit_roll <= miss_hit:
@@ -22419,7 +22419,7 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, vul, accura
         elif hit_roll <=standard_hit and hit_roll > med_hit:
             true_dmg = round(true_dmg)
             message=f'`{move}` used! It hits for {true_dmg}! :anger_right:'
-        elif hit_roll >= 20:
+        elif hit_roll == 20:
             true_dmg = round(true_dmg * 2)
             message=f"`{card}` used `{move}`! :boom:   IT CRITICALLY HITS FOR {true_dmg}!! :boom: "
             if universe == 'Crown Rift Awakening':
