@@ -40,7 +40,6 @@ class CrownUnlimited(commands.Cog):
         companion = user_data['DISNAME']
         return companion
 
-
     @commands.command()
     async def ctales(self, ctx, user: User):
         private_channel = ctx
@@ -1170,7 +1169,7 @@ class CrownUnlimited(commands.Cog):
                     else:
                         embed_color_o = 0x2ecc71
 
-                    if o_stamina < 10:
+                    if o_stamina <= 0:
                         #fortitude or luck is based on health  
                         fortitude = 0.0
                         low = o_health - (o_health*.90)
@@ -1826,7 +1825,7 @@ class CrownUnlimited(commands.Cog):
                         embed_color_t = 0x2ecc71
 
                     #Focus
-                    if t_stamina < 10:
+                    if t_stamina <= 0:
                         # o_pet_used = True
                         fortitude = 0.0
                         low = t_health - (t_health*.90)
@@ -2311,7 +2310,7 @@ class CrownUnlimited(commands.Cog):
                     else:
                         embed_color_c = 0x2ecc71
 
-                    if c_stamina < 10:
+                    if c_stamina <= 0:
                         #fortitude or luck is based on health  
                         fortitude = 0.0
                         low = c_health - (c_health*.90)
@@ -2966,7 +2965,7 @@ class CrownUnlimited(commands.Cog):
                         embed_color_t = 0x2ecc71
 
                     #Focus
-                    if t_stamina < 10:
+                    if t_stamina <= 0:
                         # o_pet_used = True
                         fortitude = 0.0
                         low = t_health - (t_health*.90)
@@ -3491,6 +3490,8 @@ class CrownUnlimited(commands.Cog):
                 cdrop_response = await drops(user, selected_universe, currentopponent)
                 questlogger = await quest(ouser, t_card, "Tales")
                 cquestlogger = await quest(cuser, t_card, "Tales")
+                petlogger = await petlevel(opet_name, ouser)
+                cpetlogger = await petlevel(cpet_name, user)
                 if questlogger:
                     await ctx.author.send(questlogger)
                 if cquestlogger:
@@ -3557,7 +3558,6 @@ class CrownUnlimited(commands.Cog):
                         response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                         await discord.TextChannel.delete(private_channel, reason=None)
                     response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
-
 
     @commands.command()
     async def cdungeon(self, ctx, user: User):
@@ -4700,7 +4700,7 @@ class CrownUnlimited(commands.Cog):
                     else:
                         embed_color_o = 0x2ecc71
 
-                    if o_stamina < 10:
+                    if o_stamina <= 0:
                         #fortitude or luck is based on health  
                         fortitude = 0.0
                         low = o_health - (o_health*.90)
@@ -5357,7 +5357,7 @@ class CrownUnlimited(commands.Cog):
                         embed_color_t = 0x2ecc71
 
                     #Focus
-                    if t_stamina < 10:
+                    if t_stamina <= 0:
                         # o_pet_used = True
                         fortitude = 0.0
                         low = t_health - (t_health*.90)
@@ -5956,7 +5956,7 @@ class CrownUnlimited(commands.Cog):
                     else:
                         embed_color_c = 0x2ecc71
 
-                    if c_stamina < 10:
+                    if c_stamina <= 0:
                         #fortitude or luck is based on health  
                         fortitude = 0.0
                         low = c_health - (c_health*.90)
@@ -6609,7 +6609,7 @@ class CrownUnlimited(commands.Cog):
                         embed_color_t = 0x2ecc71
 
                     #Focus
-                    if t_stamina < 10:
+                    if t_stamina <= 0:
                         # o_pet_used = True
                         fortitude = 0.0
                         low = t_health - (t_health*.90)
@@ -7238,6 +7238,8 @@ class CrownUnlimited(commands.Cog):
                 cdrop_response = await dungeondrops(user, selected_universe, currentopponent)
                 questlogger = await quest(ouser, t_card, "Dungeon")
                 cquestlogger = await quest(user, t_card, "Dungeon")
+                petlogger = await petlevel(opet_name, ouser)
+                cpetlogger = await petlevel(cpet_name, user)
                 if questlogger:
                     await ctx.author.send(questlogger)
                 if cquestlogger:
@@ -7301,7 +7303,6 @@ class CrownUnlimited(commands.Cog):
                     if private_channel.guild:
                         response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                         await discord.TextChannel.delete(private_channel, reason=None)
-
 
     @commands.command()
     async def cboss(self, ctx, user: User):
@@ -8433,7 +8434,7 @@ class CrownUnlimited(commands.Cog):
                 else:
                     embed_color_o = 0x2ecc71
 
-                if o_stamina < 10:
+                if o_stamina <= 0:
                     if botActive and not o_used_focus:                    
                         embedVar = discord.Embed(title=f"{t_punish}")
                         embedVar.add_field(name=f"{t_arena}",value= f"{t_world}", inline=False)
@@ -9095,7 +9096,7 @@ class CrownUnlimited(commands.Cog):
                     embed_color_t = 0x2ecc71
 
                 #Focus
-                if t_stamina < 10:
+                if t_stamina <= 0:
                     if botActive and not o_used_focus:                    
                         embedVar = discord.Embed(title=f"`{t_card}` Enters Focus State", description=f"{t_powerup}", colour=0xe91e63)
                         embedVar.add_field(name=f"A great aura starts to envelop `{t_card}` ",value= f"{t_aura}")
@@ -9729,7 +9730,7 @@ class CrownUnlimited(commands.Cog):
                 else:
                     embed_color_c = 0x2ecc71
 
-                if c_stamina < 10:
+                if c_stamina <= 0:
                     #fortitude or luck is based on health  
                     fortitude = 0.0
                     low = c_health - (c_health*.90)
@@ -10388,7 +10389,7 @@ class CrownUnlimited(commands.Cog):
                     embed_color_t = 0x2ecc71
 
                 #Focus
-                if t_stamina < 10:
+                if t_stamina <= 0:
                     if botActive and not o_used_focus:                    
                         embedVar = discord.Embed(title=f"`{t_card}` Enters Focus State", description=f"{t_powerup}", colour=0xe91e63)
                         embedVar.add_field(name=f"A great aura starts to envelop `{t_card}` ",value= f"{t_aura}")
@@ -11033,6 +11034,8 @@ class CrownUnlimited(commands.Cog):
             drop_response = await bossdrops(ctx.author, universeName)
             await bless(50, str(ctx.author))
             await bless(50, str(user))
+            petlogger = await petlevel(opet_name, ouser)
+            cpetlogger = await petlevel(cpet_name, user)
             response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
             response = db.updateUserNoFilter({'DISNAME': str(user)}, {'$set': {'AVAILABLE': True}})
             embedVar = discord.Embed(title=f":zap: `{o_card}` and `{c_card}`defeated the {t_universe} Boss {t_card}!\n{t_concede}", description=f"Match concluded in {turn_total} turns!\n\n{drop_response} + :coin: 50!\n\n{c_user['NAME']} got :coin:50!", colour=0xe91e63)
@@ -11062,7 +11065,6 @@ class CrownUnlimited(commands.Cog):
                     await discord.TextChannel.delete(private_channel, reason=None)
             if private_channel.guild:
                 await discord.TextChannel.delete(private_channel, reason=None)
-
 
     @commands.command()
     async def dungeon(self, ctx):
@@ -11856,7 +11858,7 @@ class CrownUnlimited(commands.Cog):
                     else:
                         embed_color_o = 0x2ecc71
 
-                    if o_stamina < 10:
+                    if o_stamina <= 0:
                         #fortitude or luck is based on health  
                         fortitude = 0.0
                         low = o_health - (o_health*.90)
@@ -12419,7 +12421,7 @@ class CrownUnlimited(commands.Cog):
                         embed_color_t = 0x2ecc71
 
                     #Focus
-                    if t_stamina < 10:
+                    if t_stamina <= 0:
                         # o_pet_used = True
                         fortitude = 0.0
                         low = t_health - (t_health*.90)
@@ -13052,6 +13054,7 @@ class CrownUnlimited(commands.Cog):
                 teambank = await blessteam(15, oteam)
                 questlogger = await quest(ouser, t_card, "Dungeon")
                 destinylogger = await destiny(ouser, t_card, "Dungeon")
+                petlogger = await petlevel(opet_name, ouser)
                 if destinylogger:
                     await ctx.author.send(destinylogger)
                 if questlogger:
@@ -13121,7 +13124,6 @@ class CrownUnlimited(commands.Cog):
                     if private_channel.guild:
                         response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                         await discord.TextChannel.delete(private_channel, reason=None)
-
 
     @commands.command()
     async def tales(self, ctx):
@@ -13897,7 +13899,7 @@ class CrownUnlimited(commands.Cog):
                     else:
                         embed_color_o = 0x2ecc71
 
-                    if o_stamina < 10:
+                    if o_stamina <= 0:
                         #fortitude or luck is based on health  
                         fortitude = 0.0
                         low = o_health - (o_health*.90)
@@ -14460,7 +14462,7 @@ class CrownUnlimited(commands.Cog):
                         embed_color_t = 0x2ecc71
 
                     #Focus
-                    if t_stamina < 10:
+                    if t_stamina <= 0:
                         # o_pet_used = True
                         fortitude = 0.0
                         low = t_health - (t_health*.90)
@@ -14981,6 +14983,7 @@ class CrownUnlimited(commands.Cog):
                 drop_response = await drops(ctx.author, selected_universe, currentopponent)
                 questlogger = await quest(ouser, t_card, "Tales")
                 destinylogger = await destiny(ouser, t_card, "Tales")
+                petlogger = await petlevel(opet_name, ouser)
                 if destinylogger:
                     await ctx.author.send(destinylogger)
                 if questlogger:
@@ -15050,7 +15053,6 @@ class CrownUnlimited(commands.Cog):
                     continued=False
                     if private_channel.guild:
                         await discord.TextChannel.delete(private_channel, reason=None)
-
 
     @commands.command()
     async def boss(self, ctx):
@@ -15830,7 +15832,7 @@ class CrownUnlimited(commands.Cog):
                 else:
                     embed_color_o = 0x2ecc71
 
-                if o_stamina < 10:
+                if o_stamina <= 0:
                     if botActive and not o_used_focus:                    
                         embedVar = discord.Embed(title=f"{t_punish}")
                         embedVar.add_field(name=f"{t_arena}",value= f"{t_world}", inline=False)
@@ -16398,7 +16400,7 @@ class CrownUnlimited(commands.Cog):
                     embed_color_t = 0x2ecc71
 
                 #Focus
-                if t_stamina < 10:
+                if t_stamina <= 0:
                     if botActive and not o_used_focus:                    
                         embedVar = discord.Embed(title=f"`{t_card}` Enters Focus State", description=f"{t_powerup}", colour=0xe91e63)
                         embedVar.add_field(name=f"A great aura starts to envelop `{t_card}` ",value= f"{t_aura}")
@@ -17031,6 +17033,7 @@ class CrownUnlimited(commands.Cog):
             teambank = await blessteam(25, oteam)
             gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
             drop_response = await bossdrops(ctx.author, universeName)
+            petlogger = await petlevel(opet_name, ouser)
             await bless(50, str(ctx.author))
             response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
             embedVar = discord.Embed(title=f":zap: `{o_card}`defeated the {t_universe} Boss {t_card}!\n{t_concede}", description=f"Match concluded in {turn_total} turns!\n\n{drop_response} + :coin: 50!", colour=0xe91e63)
@@ -17059,7 +17062,6 @@ class CrownUnlimited(commands.Cog):
                     await discord.TextChannel.delete(private_channel, reason=None)
             if private_channel.guild:
                 await discord.TextChannel.delete(private_channel, reason=None)
-
 
     @commands.command()
     async def start(self, ctx):
@@ -17815,7 +17817,7 @@ class CrownUnlimited(commands.Cog):
                         else:
                             embed_color_o = 0x2ecc71
 
-                        if o_stamina < 10:
+                        if o_stamina <= 0:
                             o_focus_count = o_focus_count + 1
                             if botActive and not o_used_focus:                    
                                 embedVar = discord.Embed(title=f"You've entered `Focus State`!", description=f"Entering `Focus State` sacrifices a turn to power up and regain `Stamina`!", colour=0xe91e63)
@@ -18390,7 +18392,7 @@ class CrownUnlimited(commands.Cog):
                             embed_color_t = 0x2ecc71
 
                         #Focus
-                        if t_stamina < 10:
+                        if t_stamina <= 0:
                             t_focus_count = t_focus_count + 1
                             fortitude = 0.0
                             low = t_health - (t_health*.90)
@@ -19465,7 +19467,6 @@ class CrownUnlimited(commands.Cog):
         else:
             await ctx.send(m.SESSION_DOES_NOT_EXIST)
 
-
     @commands.command()
     async def wager(self, ctx, wager: int):
         private_channel = ctx
@@ -20245,7 +20246,7 @@ class CrownUnlimited(commands.Cog):
                         else:
                             embed_color_o = 0x2ecc71
 
-                        if o_stamina < 10:
+                        if o_stamina <= 0:
                             o_focus_count = o_focus_count + 1
                             if botActive and not o_used_focus:                    
                                 embedVar = discord.Embed(title=f"You've entered `Focus State`!", description=f"Entering `Focus State` sacrifices a turn to power up and regain `Stamina`!", colour=0xe91e63)
@@ -20827,7 +20828,7 @@ class CrownUnlimited(commands.Cog):
                             embed_color_t = 0x2ecc71
 
                         #Focus
-                        if t_stamina < 10:
+                        if t_stamina <= 0:
                             t_focus_count = t_focus_count + 1
                             fortitude = 0.0
                             low = t_health - (t_health*.90)
@@ -21805,8 +21806,7 @@ class CrownUnlimited(commands.Cog):
         await ctx.author.send("\n".join(tales_card_details))
         await ctx.author.send("\n".join(dungeon_card_details))
         await ctx.author.send("\n".join(destiny_card_details))
-
-
+    
     @commands.command()
     async def titles(self, ctx, *args):
         universe = " ".join([*args])
@@ -21834,7 +21834,6 @@ class CrownUnlimited(commands.Cog):
         await ctx.author.send(f"{universe.upper()} TITLE LIST")
         await ctx.author.send("\n".join(tales_titles_details))
         await ctx.author.send("\n".join(dungeon_titles_details))
-
 
     @commands.command()
     async def arms(self, ctx, *args):
@@ -21864,7 +21863,6 @@ class CrownUnlimited(commands.Cog):
         await ctx.author.send("\n".join(tales_arms_details))
         await ctx.author.send("\n".join(dungeon_arms_details))
 
-
     @commands.command()
     async def destinies(self, ctx, *args):
         universe = " ".join([*args])
@@ -21885,7 +21883,7 @@ class CrownUnlimited(commands.Cog):
 
         await ctx.author.send(f"{universe.upper()} DESTINY LIST")
         await ctx.author.send("\n".join(destiny_details))
-        
+
     @commands.command()
     async def pets(self, ctx, *args):
         
@@ -22067,6 +22065,58 @@ async def destiny(player, opponent, mode):
                 return message
     else:
         return False
+
+async def petlevel(pet, player):
+    vault = db.queryVault({'OWNER': str(player)})
+    petinfo = {}
+    for x in vault['PETS']:
+        if x['NAME'] == str(pet):
+            petinfo = x
+    
+    lvl = petinfo['LVL'] # To Level Up -(lvl * 10 = xp required)
+    lvl_req = lvl * 10
+    exp = petinfo['EXP']
+    petmove_text = list(petinfo.keys())[3] # Name of the ability
+    petmove_ap = list(petinfo.values())[3] # Ability Power
+    petmove_type = petinfo['TYPE']
+    bond = petinfo['BOND']
+    bondexp = petinfo['BONDEXP']
+    bond_req = ((petmove_ap * 5) * (bond + 1))
+
+    print(bond_req)
+
+    if lvl < 10:
+        # Non Level Up Code
+        if exp < (lvl_req - 1):
+            query = {'OWNER': str(player)}
+            update_query = {'$inc': {'PETS.$[type].' + "EXP": 1}}
+            filter_query = [{'type.'+ "NAME": str(pet)}]
+            response = db.updateVault(query, update_query, filter_query)
+            
+        # Level Up Code
+        if exp >= (lvl_req - 1):
+            query = {'OWNER': str(player)}
+            update_query = {'$set': {'PETS.$[type].' + "EXP": 0}, '$inc': {'PETS.$[type].' + "LVL": 1}}
+            filter_query = [{'type.'+ "NAME": str(pet)}]
+            response = db.updateVault(query, update_query, filter_query)
+            
+
+    if bond < 3:
+        # Non Bond Level Up Code
+        if bondexp < (bond_req - 1):
+            query = {'OWNER': str(player)}
+            update_query = {'$inc': {'PETS.$[type].' + "BONDEXP": 1}}
+            filter_query = [{'type.'+ "NAME": str(pet)}]
+            response = db.updateVault(query, update_query, filter_query)
+            
+
+        # Bond Level Up Code
+        if bondexp >= (bond_req - 1):
+            query = {'OWNER': str(player)}
+            update_query = {'$set': {'PETS.$[type].' + "BONDEXP": 0}, '$inc': {'PETS.$[type].' + "BOND": 1}}
+            filter_query = [{'type.'+ "NAME": str(pet)}]
+            response = db.updateVault(query, update_query, filter_query)
+            
 
 def starting_position(o,t):
     if o > t:
@@ -22709,7 +22759,7 @@ async def drops(player, universe, matchcount):
         pet_ability_power = list(selected_pet['ABILITIES'][0].values())[0]
         pet_ability_type = list(selected_pet['ABILITIES'][0].values())[1]
 
-        response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'PETS': {'NAME': selected_pet['PET'], 'LVL': selected_pet['LVL'], 'EXP': 0, pet_ability_name: int(pet_ability_power), 'TYPE': pet_ability_type, 'BOND': 0, 'PATH': selected_pet['PATH']}}})
+        response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'PETS': {'NAME': selected_pet['PET'], 'LVL': selected_pet['LVL'], 'EXP': 0, pet_ability_name: int(pet_ability_power), 'TYPE': pet_ability_type, 'BOND': 0, 'BONDEXP': 0, 'PATH': selected_pet['PATH']}}})
         await bless(50, player)
         return f"You earned _Pet:_ **{pets[rand_pet]}** + :coin: 50!"
     elif drop_rate <= card_drop and drop_rate > pet_drop:
@@ -22785,7 +22835,7 @@ async def dungeondrops(player, universe, matchcount):
         pet_ability_power = list(selected_pet['ABILITIES'][0].values())[0]
         pet_ability_type = list(selected_pet['ABILITIES'][0].values())[1]
 
-        response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'PETS': {'NAME': selected_pet['PET'], 'LVL': selected_pet['LVL'], 'EXP': 0, pet_ability_name: int(pet_ability_power), 'TYPE': pet_ability_type, 'BOND': 0, 'PATH': selected_pet['PATH']}}})
+        response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'PETS': {'NAME': selected_pet['PET'], 'LVL': selected_pet['LVL'], 'EXP': 0, pet_ability_name: int(pet_ability_power), 'TYPE': pet_ability_type, 'BOND': 0, 'BONDEXP': 0, 'PATH': selected_pet['PATH']}}})
         await bless(80, player)
         return f"You earned _Pet:_ **{pets[rand_pet]}** + :coin: 80!"
     elif drop_rate <= card_drop and drop_rate > pet_drop:
@@ -22884,7 +22934,7 @@ async def bossdrops(player, universe):
         pet_ability_power = list(selected_pet['ABILITIES'][0].values())[0]
         pet_ability_type = list(selected_pet['ABILITIES'][0].values())[1]
 
-        response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'PETS': {'NAME': selected_pet['PET'], 'LVL': selected_pet['LVL'], 'EXP': 0, pet_ability_name: int(pet_ability_power), 'TYPE': pet_ability_type, 'BOND': 0, 'PATH': selected_pet['PATH']}}})
+        response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'PETS': {'NAME': selected_pet['PET'], 'LVL': selected_pet['LVL'], 'EXP': 0, pet_ability_name: int(pet_ability_power), 'TYPE': pet_ability_type, 'BOND': 0, 'BONDEXP': 0, 'PATH': selected_pet['PATH']}}})
         await bless(80, player)
         return f"You earned the Exclusive Boss Pet:  {boss['PET']} + :coin: 80!"
     elif drop_rate <= boss_card_drop and drop_rate > boss_pet_drop:

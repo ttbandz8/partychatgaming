@@ -384,12 +384,19 @@ class Profile(commands.Cog):
             total_pets = len(pets_list)
 
             pets=[]
-
+            bond_message = ""
+            lvl_message = ""
             for pet in pets_list:
+                if pet['BOND'] == 3:
+                    bond_message = ":star2:"
+                
+                if pet['LVL'] == 10:
+                    lvl_message = ":star:"
+
                 pet_ability = list(pet.keys())[3]
                 pet_ability_power = list(pet.values())[3]
                 pets.append(textwrap.dedent(f"""
-                **{pet['NAME']}**
+                **{pet['NAME']}** | _B_ **{pet['BOND']}** {bond_message} / _L_ **{pet['LVL']}**
                 **{pet_ability}:** {pet_ability_power}
                 **Type:** {pet['TYPE']}"""))
 
