@@ -21875,7 +21875,6 @@ class CrownUnlimited(commands.Cog):
         await ctx.author.send(f"{universe.upper()} DESTINY LIST")
         await ctx.author.send("\n".join(destiny_details))
         
-
     @commands.command()
     async def pets(self, ctx, *args):
         
