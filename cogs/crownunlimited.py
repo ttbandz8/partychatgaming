@@ -1171,7 +1171,7 @@ class CrownUnlimited(commands.Cog):
                     else:
                         embed_color_o = 0x2ecc71
 
-                    if o_stamina <= 0:
+                    if o_stamina < 10:
                         #fortitude or luck is based on health  
                         fortitude = 0.0
                         low = o_health - (o_health*.90)
@@ -1827,7 +1827,7 @@ class CrownUnlimited(commands.Cog):
                         embed_color_t = 0x2ecc71
 
                     #Focus
-                    if t_stamina <= 0:
+                    if t_stamina < 10:
                         # o_pet_used = True
                         fortitude = 0.0
                         low = t_health - (t_health*.90)
@@ -2967,7 +2967,7 @@ class CrownUnlimited(commands.Cog):
                         embed_color_t = 0x2ecc71
 
                     #Focus
-                    if t_stamina <= 0:
+                    if t_stamina < 10:
                         # o_pet_used = True
                         fortitude = 0.0
                         low = t_health - (t_health*.90)
@@ -4704,7 +4704,7 @@ class CrownUnlimited(commands.Cog):
                     else:
                         embed_color_o = 0x2ecc71
 
-                    if o_stamina <= 0:
+                    if o_stamina < 10:
                         #fortitude or luck is based on health  
                         fortitude = 0.0
                         low = o_health - (o_health*.90)
@@ -5361,7 +5361,7 @@ class CrownUnlimited(commands.Cog):
                         embed_color_t = 0x2ecc71
 
                     #Focus
-                    if t_stamina <= 0:
+                    if t_stamina < 10:
                         # o_pet_used = True
                         fortitude = 0.0
                         low = t_health - (t_health*.90)
@@ -6613,7 +6613,7 @@ class CrownUnlimited(commands.Cog):
                         embed_color_t = 0x2ecc71
 
                     #Focus
-                    if t_stamina <= 0:
+                    if t_stamina < 10:
                         # o_pet_used = True
                         fortitude = 0.0
                         low = t_health - (t_health*.90)
@@ -8440,7 +8440,7 @@ class CrownUnlimited(commands.Cog):
                 else:
                     embed_color_o = 0x2ecc71
 
-                if o_stamina <= 0:
+                if o_stamina < 10:
                     if botActive and not o_used_focus:                    
                         embedVar = discord.Embed(title=f"{t_punish}")
                         embedVar.add_field(name=f"{t_arena}",value= f"{t_world}", inline=False)
@@ -9102,7 +9102,7 @@ class CrownUnlimited(commands.Cog):
                     embed_color_t = 0x2ecc71
 
                 #Focus
-                if t_stamina <= 0:
+                if t_stamina < 10:
                     if botActive and not o_used_focus:                    
                         embedVar = discord.Embed(title=f"`{t_card}` Enters Focus State", description=f"{t_powerup}", colour=0xe91e63)
                         embedVar.add_field(name=f"A great aura starts to envelop `{t_card}` ",value= f"{t_aura}")
@@ -10395,7 +10395,7 @@ class CrownUnlimited(commands.Cog):
                     embed_color_t = 0x2ecc71
 
                 #Focus
-                if t_stamina <= 0:
+                if t_stamina < 10:
                     if botActive and not o_used_focus:                    
                         embedVar = discord.Embed(title=f"`{t_card}` Enters Focus State", description=f"{t_powerup}", colour=0xe91e63)
                         embedVar.add_field(name=f"A great aura starts to envelop `{t_card}` ",value= f"{t_aura}")
@@ -11865,7 +11865,7 @@ class CrownUnlimited(commands.Cog):
                     else:
                         embed_color_o = 0x2ecc71
 
-                    if o_stamina <= 0:
+                    if o_stamina < 10:
                         #fortitude or luck is based on health  
                         fortitude = 0.0
                         low = o_health - (o_health*.90)
@@ -12428,7 +12428,7 @@ class CrownUnlimited(commands.Cog):
                         embed_color_t = 0x2ecc71
 
                     #Focus
-                    if t_stamina <= 0:
+                    if t_stamina < 10:
                         # o_pet_used = True
                         fortitude = 0.0
                         low = t_health - (t_health*.90)
@@ -13907,7 +13907,7 @@ class CrownUnlimited(commands.Cog):
                     else:
                         embed_color_o = 0x2ecc71
 
-                    if o_stamina <= 0:
+                    if o_stamina < 10:
                         #fortitude or luck is based on health  
                         fortitude = 0.0
                         low = o_health - (o_health*.90)
@@ -14470,7 +14470,7 @@ class CrownUnlimited(commands.Cog):
                         embed_color_t = 0x2ecc71
 
                     #Focus
-                    if t_stamina <= 0:
+                    if t_stamina < 10:
                         # o_pet_used = True
                         fortitude = 0.0
                         low = t_health - (t_health*.90)
@@ -15841,7 +15841,7 @@ class CrownUnlimited(commands.Cog):
                 else:
                     embed_color_o = 0x2ecc71
 
-                if o_stamina <= 0:
+                if o_stamina < 10:
                     if botActive and not o_used_focus:                    
                         embedVar = discord.Embed(title=f"{t_punish}")
                         embedVar.add_field(name=f"{t_arena}",value= f"{t_world}", inline=False)
@@ -16409,7 +16409,7 @@ class CrownUnlimited(commands.Cog):
                     embed_color_t = 0x2ecc71
 
                 #Focus
-                if t_stamina <= 0:
+                if t_stamina < 10:
                     if botActive and not o_used_focus:                    
                         embedVar = discord.Embed(title=f"`{t_card}` Enters Focus State", description=f"{t_powerup}", colour=0xe91e63)
                         embedVar.add_field(name=f"A great aura starts to envelop `{t_card}` ",value= f"{t_aura}")
@@ -17828,7 +17828,7 @@ class CrownUnlimited(commands.Cog):
                         else:
                             embed_color_o = 0x2ecc71
 
-                        if o_stamina <= 0:
+                        if o_stamina < 10:
                             o_focus_count = o_focus_count + 1
                             if botActive and not o_used_focus:                    
                                 embedVar = discord.Embed(title=f"You've entered `Focus State`!", description=f"Entering `Focus State` sacrifices a turn to power up and regain `Stamina`!", colour=0xe91e63)
@@ -18403,7 +18403,7 @@ class CrownUnlimited(commands.Cog):
                             embed_color_t = 0x2ecc71
 
                         #Focus
-                        if t_stamina <= 0:
+                        if t_stamina < 10:
                             t_focus_count = t_focus_count + 1
                             fortitude = 0.0
                             low = t_health - (t_health*.90)
@@ -20259,7 +20259,7 @@ class CrownUnlimited(commands.Cog):
                         else:
                             embed_color_o = 0x2ecc71
 
-                        if o_stamina <= 0:
+                        if o_stamina < 10:
                             o_focus_count = o_focus_count + 1
                             if botActive and not o_used_focus:                    
                                 embedVar = discord.Embed(title=f"You've entered `Focus State`!", description=f"Entering `Focus State` sacrifices a turn to power up and regain `Stamina`!", colour=0xe91e63)
@@ -20841,7 +20841,7 @@ class CrownUnlimited(commands.Cog):
                             embed_color_t = 0x2ecc71
 
                         #Focus
-                        if t_stamina <= 0:
+                        if t_stamina < 10:
                             t_focus_count = t_focus_count + 1
                             fortitude = 0.0
                             low = t_health - (t_health*.90)
