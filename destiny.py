@@ -22,7 +22,7 @@ destiny = [
     {
         "NAME": "Wyvern Ride",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 20,
         "DEFEAT": "Ancient Wyvern",
         "USE_CARDS": ["Rekindled"],
         "EARN": "Ancient Wyvern",
@@ -32,7 +32,7 @@ destiny = [
     {
         "NAME": "Rumble In The Boreal Valley",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 10,
         "DEFEAT": "Vordt Of The Boreal Valley",
         "USE_CARDS": ["Hollow Knight"],
         "EARN": "Vordt Of The Boreal Valley",
@@ -42,7 +42,7 @@ destiny = [
     {
         "NAME": "Championship Bout",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 10,
         "DEFEAT": "Iudex Gundyr",
         "USE_CARDS": ["Hollow Wanderer"],
         "EARN": "Iudex Gundyr",
@@ -52,7 +52,7 @@ destiny = [
     {
         "NAME": "Lumberjack Attack",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 10,
         "DEFEAT": "Curse Rotted Greatwood",
         "USE_CARDS": ["Hollow Berserker"],
         "EARN": "Curse Rotted Greatwood",
@@ -62,7 +62,7 @@ destiny = [
     {
         "NAME": "Wise Old Sage",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 10,
         "DEFEAT": "Cystal Sage",
         "USE_CARDS": ["Hollow Cleric"],
         "EARN": "Cystal Sage",
@@ -72,7 +72,7 @@ destiny = [
     {
         "NAME": "Who Watches The Watchers?",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 10,
         "DEFEAT": "Abyss Watchers",
         "USE_CARDS": ["Hollow Garrison"],
         "EARN": "Abyss Watchers",
@@ -82,7 +82,7 @@ destiny = [
     {
         "NAME": "Bellows Of The Deep",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 10,
         "DEFEAT": "Deacons Of The Deep",
         "USE_CARDS": ["Hollow Knight"],
         "EARN": "Deacons Of The Deep",
@@ -92,7 +92,7 @@ destiny = [
     {
         "NAME": "Skeleton King",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 10,
         "DEFEAT": "High Lord Wolnir",
         "USE_CARDS": ["Hollow Wanderer"],
         "EARN": "High Lord Wolnir",
@@ -102,7 +102,7 @@ destiny = [
     {
         "NAME": "To Hell And Back Again",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 10,
         "DEFEAT": "Old Demon King",
         "USE_CARDS": ["Hollow Berserker"],
         "EARN": "Old Demon King",
@@ -112,7 +112,7 @@ destiny = [
     {
         "NAME": "A New Church",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 10,
         "DEFEAT": "Pontiff Sulyvahn",
         "USE_CARDS": ["Hollow Cleric"],
         "EARN": "Pontiff Sulyvahn",
@@ -122,7 +122,7 @@ destiny = [
     {
         "NAME": "Giant Pain In The Yhorm",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 10,
         "DEFEAT": "Yhorm The Giant",
         "USE_CARDS": ["Hollow Garrison"],
         "EARN": "Yhorm The Giant",
@@ -132,7 +132,7 @@ destiny = [
     {
         "NAME": "The Great Devour",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 10,
         "DEFEAT": "Aldrich Devourer Of Gods",
         "USE_CARDS": ["Hollow Archer"],
         "EARN": "Aldrich Devourer Of Gods",
@@ -142,7 +142,7 @@ destiny = [
     {
         "NAME": "Prom Night",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 10,
         "DEFEAT": "Dancer Of The Boreal Valley",
         "USE_CARDS": ["Hollow Wanderer"],
         "EARN": "Dancer Of The Boreal Valley",
@@ -152,7 +152,7 @@ destiny = [
     {
         "NAME": "Slayer Of... Butterflies?",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 10,
         "DEFEAT": "Dragonslayer Armour",
         "USE_CARDS": ["Hollow Knight"],
         "EARN": "Dragonslayer Armour",
@@ -162,7 +162,7 @@ destiny = [
     {
         "NAME": "Blind Fury",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 10,
         "DEFEAT": "Oceiros The Consumed King",
         "USE_CARDS": ["Hollow Sorcerer"],
         "EARN": "Oceiros The Consumed King",
@@ -172,7 +172,7 @@ destiny = [
     {
         "NAME": "Brotherly Love",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 10,
         "DEFEAT": "Lothric Younger Prince",
         "USE_CARDS": ["Hollow Cleric"],
         "EARN": "Lothric Younger Prince",
@@ -202,7 +202,7 @@ destiny = [
     {
         "NAME": "Eternal Lovers",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 10,
         "DEFEAT": "Founding Titan",
         "USE_CARDS": ["Mikasa"],
         "EARN": "Founding Titan",
@@ -212,7 +212,7 @@ destiny = [
     {
         "NAME": "Declaration Of War",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 10,
         "DEFEAT": "Jaw Titan",
         "USE_CARDS": ["Attack Titan"], 
         "EARN": "Warhammer Titan",
@@ -222,7 +222,7 @@ destiny = [
     {
         "NAME": "A New Commander",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 10,
         "DEFEAT": "Colossal Titan",
         "USE_CARDS": ["Captain Erwin"],
         "EARN": "Colossal Titan",
@@ -232,7 +232,7 @@ destiny = [
     {
         "NAME": "Reveal The Coordinate",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 10,
         "DEFEAT": "Armored Titan",
         "USE_CARDS": ["Eren Jaeger"],
         "EARN": "Attack Titan",
@@ -242,7 +242,7 @@ destiny = [
     {
         "NAME": "Among Us",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 10,
         "DEFEAT": "Female Titan",
         "USE_CARDS": ["Captain Levi"],
         "EARN": "Female Titan",
@@ -252,7 +252,7 @@ destiny = [
     {
         "NAME": "Strike The Nape!",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 10,
         "DEFEAT": "Beast Titan",
         "USE_CARDS": ["Captain Levi"],
         "EARN": "Beast Titan",
@@ -262,7 +262,7 @@ destiny = [
     {
         "NAME": "Split Personality",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 10,
         "DEFEAT": "Armored Titan",
         "USE_CARDS": ["Reiner"],
         "EARN": "Armored Titan",
@@ -272,7 +272,7 @@ destiny = [
     {
         "NAME": "Dueling Demon Princes",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 20,
         "DEFEAT": "Zeldris",
         "USE_CARDS": ["Meliodas"],
         "EARN": "Zeldris",
@@ -282,7 +282,7 @@ destiny = [
     {
         "NAME": "Bloody Bros",
         "WINS": 0,
-        "REQUIRED": 20,
+        "REQUIRED": 10,
         "DEFEAT": "Meliodas",
         "USE_CARDS": ["Ban"],
         "EARN": "Meliodas",
@@ -292,7 +292,7 @@ destiny = [
     {
         "NAME": "Fairy King Fatale",
         "WINS": 0,
-        "REQUIRED": 20,
+        "REQUIRED": 10,
         "DEFEAT": "Gloxinia",
         "USE_CARDS": ["King"],
         "EARN": "Gloxinia",
@@ -302,7 +302,7 @@ destiny = [
     {
         "NAME": "Dancing Giants",
         "WINS": 0,
-        "REQUIRED": 20,
+        "REQUIRED": 10,
         "DEFEAT": "Drole",
         "USE_CARDS": ["Diane"],
         "EARN": "Drole",
@@ -312,7 +312,7 @@ destiny = [
     {
         "NAME": "Lovers Quarrel",
         "WINS": 0,
-        "REQUIRED": 10,
+        "REQUIRED": 5,
         "DEFEAT": "King",
         "USE_CARDS": ["Diane"],
         "EARN": "King",
@@ -322,7 +322,7 @@ destiny = [
     {
         "NAME": "Sunshine",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 20,
         "DEFEAT": "Escanor",
         "USE_CARDS": ["Meliodas"],
         "EARN": "Escanor",
@@ -332,7 +332,7 @@ destiny = [
     {
         "NAME": "Gowthers Sin",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 10,
         "DEFEAT": "Estarossa",
         "USE_CARDS": ["Gowther"],
         "EARN": "Estarossa",
@@ -412,7 +412,7 @@ destiny = [
     {
         "NAME": "Gotta Catch 'Em All: Articuno",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 15,
         "DEFEAT": "Articuno",
         "USE_CARDS": ["Ash Ketchum"],
         "EARN": "Articuno",
@@ -422,7 +422,7 @@ destiny = [
     {
         "NAME": "Gotta Catch 'Em All: Moltres",
         "WINS": 0,
-        "REQUIRED": 30,
+        "REQUIRED": 15,
         "DEFEAT": "Moltres",
         "USE_CARDS": ["Ash Ketchum"],
         "EARN": "Moltres",
@@ -432,7 +432,7 @@ destiny = [
     {
         "NAME": "Gotta Catch 'Em All: Zapdos",
         "WINS": 0,
-        "REQUIRED": 35,
+        "REQUIRED": 15,
         "DEFEAT": "Zapdos",
         "USE_CARDS": ["Ash Ketchum"],
         "EARN": "Zapdos",
@@ -442,7 +442,7 @@ destiny = [
     {
         "NAME": "Gotta Catch 'Em All: Ho-Oh",
         "WINS": 0,
-        "REQUIRED": 30,
+        "REQUIRED": 25,
         "DEFEAT": "Ho-Oh",
         "USE_CARDS": ["Ash Ketchum"],
         "EARN": "Ho-Oh",
@@ -452,7 +452,7 @@ destiny = [
     {
         "NAME": "Viridian Forest Caterpie",
         "WINS": 0,
-        "REQUIRED": 15,
+        "REQUIRED": 5,
         "DEFEAT": "Butterfree",
         "USE_CARDS": ["Caterpie"],
         "EARN": "Butterfree",
@@ -482,7 +482,7 @@ destiny = [
     {
         "NAME": "Digidestined Duo",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 10,
         "DEFEAT": "Diaboromon",
         "USE_CARDS": ["Metal Greymon"],
         "EARN": "Omnimon",
@@ -492,7 +492,7 @@ destiny = [
     {
         "NAME": "Digidestined Duo",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 10,
         "DEFEAT": "Diaboromon",
         "USE_CARDS": ["Weregarurumon"],
         "EARN": "Omnimon",
@@ -502,7 +502,7 @@ destiny = [
     {
         "NAME": "Digidestined Saviors",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 10,
         "DEFEAT": "Diaboromon",
         "USE_CARDS": ["Omnimon"],
         "EARN": "Diaboromon",
@@ -592,7 +592,7 @@ destiny = [
     {
         "NAME": "Hunter Or Hunter",
         "WINS": 0,
-        "REQUIRED": 13,
+        "REQUIRED": 10,
         "DEFEAT": "Kindred",
         "USE_CARDS": ["Akali"],
         "EARN": "Kindred",
@@ -622,7 +622,7 @@ destiny = [
     {
         "NAME": "Warring Kingdoms",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 10,
         "DEFEAT": "Darius",
         "USE_CARDS": ["Garen"],
         "EARN": "Darius",
@@ -652,7 +652,7 @@ destiny = [
     {
         "NAME": "Demacian Matriach",
         "WINS": 0,
-        "REQUIRED": 15,
+        "REQUIRED": 10,
         "DEFEAT": "Fiora",
         "USE_CARDS": ["Lux"],
         "EARN": "Fiora",
@@ -662,7 +662,7 @@ destiny = [
     {
         "NAME": "Help The Bear!",
         "WINS": 0,
-        "REQUIRED": 15,
+        "REQUIRED": 10,
         "DEFEAT": "Volibear",
         "USE_CARDS": ["Ashe"],
         "EARN": "Volibear",
@@ -692,7 +692,7 @@ destiny = [
     {
         "NAME": "Viegos Warpath",
         "WINS": 0,
-        "REQUIRED": 15,
+        "REQUIRED": 10,
         "DEFEAT": "Azir",
         "USE_CARDS": ["Hecarim"],
         "EARN": "Azir",
@@ -722,7 +722,7 @@ destiny = [
     {
         "NAME": "The Ancient Battle",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 10,
         "DEFEAT": "Nasus",
         "USE_CARDS": ["Renekton"],
         "EARN": "Nasus",
@@ -742,7 +742,7 @@ destiny = [
     {
         "NAME": "Proven Hero",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 10,
         "DEFEAT": "Lord Boros",
         "USE_CARDS": ["Saitama"],
         "EARN": "One Punch Man",
@@ -762,7 +762,7 @@ destiny = [
     {
         "NAME": "Never Give Up",
         "WINS": 0,
-        "REQUIRED": 10,
+        "REQUIRED": 5,
         "DEFEAT": "Deep Sea King",
         "USE_CARDS": ["Mumen Rider"],
         "EARN": "Puri Puri Prisoner",
@@ -772,7 +772,7 @@ destiny = [
     {
         "NAME": "Angel ☆ Style",
         "WINS": 0,
-        "REQUIRED": 15,
+        "REQUIRED": 10,
         "DEFEAT": "Deep Sea King",
         "USE_CARDS": ["Puri Puri Prisoner"],
         "EARN": "Deep Sea King",
@@ -802,7 +802,7 @@ destiny = [
     {
         "NAME": "Silver Fang Savior",
         "WINS": 0,
-        "REQUIRED": 15,
+        "REQUIRED": 10,
         "DEFEAT": "Melzargard",
         "USE_CARDS": ["Metal Bat"],
         "EARN": "Bang",
@@ -812,7 +812,7 @@ destiny = [
     {
         "NAME": "Stolen Heart",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 10,
         "DEFEAT": "Melzargard",
         "USE_CARDS": ["Bang"],
         "EARN": "Melzargard",
@@ -822,7 +822,7 @@ destiny = [
     {
         "NAME": "Erotic Asphyxiation",
         "WINS": 0,
-        "REQUIRED": 15,
+        "REQUIRED": 10,
         "DEFEAT": "Mosquito Girl",
         "USE_CARDS": ["Genos"],
         "EARN": "Saitama",
@@ -832,7 +832,7 @@ destiny = [
     {
         "NAME": "Erotic Obliteration",
         "WINS": 0,
-        "REQUIRED": 20,
+        "REQUIRED": 10,
         "DEFEAT": "Mosquito Girl",
         "USE_CARDS": ["Saitama"],
         "EARN": "Mosquito Girl",
@@ -902,7 +902,7 @@ destiny = [
     {
         "NAME": "Another Pantheon To Conquer",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 15,
         "DEFEAT": "Baldur",
         "USE_CARDS": ["Kratos And Atreus"],
         "EARN": "Baldur",
@@ -912,7 +912,7 @@ destiny = [
     {
         "NAME": "Fear No Gorgon Boy",
         "WINS": 0,
-        "REQUIRED": 40,
+        "REQUIRED": 30,
         "DEFEAT": "Medusa",
         "USE_CARDS": ["Atreus"],
         "EARN": "Medusa",
@@ -992,7 +992,7 @@ destiny = [
     {
         "NAME": "Gotta Catch 'Em All: Suicune",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 15,
         "DEFEAT": "Suicune",
         "USE_CARDS": ["Ash Ketchum"],
         "EARN": "Suicune",
@@ -1002,7 +1002,7 @@ destiny = [
     {
         "NAME": "Gotta Catch 'Em All: Raikou",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 15,
         "DEFEAT": "Raikou",
         "USE_CARDS": ["Ash Ketchum"],
         "EARN": "Raikou",
@@ -1012,7 +1012,7 @@ destiny = [
     {
         "NAME": "Gotta Catch 'Em All: Entei",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 15,
         "DEFEAT": "Entei",
         "USE_CARDS": ["Ash Ketchum"],
         "EARN": "Entei",
@@ -1022,7 +1022,7 @@ destiny = [
     {
         "NAME": "Gotta Catch 'Em All: Lugia",
         "WINS": 0,
-        "REQUIRED": 30,
+        "REQUIRED": 25,
         "DEFEAT": "Lugia",
         "USE_CARDS": ["Ash Ketchum"],
         "EARN": "Lugia",
@@ -1172,7 +1172,7 @@ destiny = [
     {
         "NAME": "Expand The Land",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 10,
         "DEFEAT": "Groudon",
         "USE_CARDS": ["Team Magma"],
         "EARN": "Groudon",
@@ -1182,7 +1182,7 @@ destiny = [
     {
         "NAME": "Unleash The Sea",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 10,
         "DEFEAT": "Kyogre",
         "USE_CARDS": ["Team Aqua"],
         "EARN": "Kyogre",
@@ -1192,7 +1192,7 @@ destiny = [
     {
         "NAME": "Team Rocket Strikes Again",
         "WINS": 0,
-        "REQUIRED": 30,
+        "REQUIRED": 15,
         "DEFEAT": "Rayquaza",
         "USE_CARDS": ["Team Rocket"],
         "EARN": "Rayquaza",
@@ -1202,7 +1202,7 @@ destiny = [
     {
         "NAME": "Defend The Planet",
         "WINS": 0,
-        "REQUIRED": 40,
+        "REQUIRED": 25,
         "DEFEAT": "Deoxys Normal Forme",
         "USE_CARDS": ["Rayquaza"],
         "EARN": "Deoxys Normal Forme",
@@ -1242,7 +1242,7 @@ destiny = [
     {
         "NAME": "A Hot New Enemy",
         "WINS": 0,
-        "REQUIRED": 15,
+        "REQUIRED": 10,
         "DEFEAT": "Team Magma",
         "USE_CARDS": ["May"],
         "EARN": "Team Magma",
@@ -1252,7 +1252,7 @@ destiny = [
     {
         "NAME": "A Slippery New Foe",
         "WINS": 0,
-        "REQUIRED": 15,
+        "REQUIRED": 10,
         "DEFEAT": "Team Aqua",
         "USE_CARDS": ["May"],
         "EARN": "Team Aqua",
@@ -1282,7 +1282,7 @@ destiny = [
     {
         "NAME": "New Enemies",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 10,
         "DEFEAT": "Team Galactic",
         "USE_CARDS": ["Ash Ketchum"],
         "EARN": "Team Galactic",
@@ -1292,7 +1292,7 @@ destiny = [
     {
         "NAME": "Slow Darkrai!",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 10,
         "DEFEAT": "Darkrai",
         "USE_CARDS": ["Ask Ketchum"],
         "EARN": "Cressalia",
@@ -1302,7 +1302,7 @@ destiny = [
     {
         "NAME": "Stop Darkrai!",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 10,
         "DEFEAT": "Darkrai",
         "USE_CARDS": ["Cressalia"],
         "EARN": "Darkrai",
@@ -1312,7 +1312,7 @@ destiny = [
     {
         "NAME": "Infernape Evolution",
         "WINS": 0,
-        "REQUIRED": 20,
+        "REQUIRED": 10,
         "DEFEAT": "Infernape",
         "USE_CARDS": ["Chimchar"],
         "EARN": "Infernape",
@@ -1322,7 +1322,7 @@ destiny = [
     {
         "NAME": "Empoleon Evolution",
         "WINS": 0,
-        "REQUIRED": 20,
+        "REQUIRED": 10,
         "DEFEAT": "Empoleon",
         "USE_CARDS": ["Piplup"],
         "EARN": "Empoleon",
@@ -1332,7 +1332,7 @@ destiny = [
     {
         "NAME": "Torterra Evolution",
         "WINS": 0,
-        "REQUIRED": 20,
+        "REQUIRED": 10,
         "DEFEAT": "Torterra",
         "USE_CARDS": ["Turtwig"],
         "EARN": "Torterra",
@@ -1342,7 +1342,7 @@ destiny = [
     {
         "NAME": "Staraptor Evolution",
         "WINS": 0,
-        "REQUIRED": 15,
+        "REQUIRED": 10,
         "DEFEAT": "Staraptor",
         "USE_CARDS": ["Starly"],
         "EARN": "Staraptor",
@@ -1352,7 +1352,7 @@ destiny = [
     {
         "NAME": "Milotic Evolution",
         "WINS": 0,
-        "REQUIRED": 15,
+        "REQUIRED": 10,
         "DEFEAT": "Milotic",
         "USE_CARDS": ["Feebas"],
         "EARN": "Milotic",
@@ -1372,7 +1372,7 @@ destiny = [
     {
         "NAME": "Gotta Catch 'Em All: Luxray",
         "WINS": 0,
-        "REQUIRED": 15,
+        "REQUIRED": 10,
         "DEFEAT": "Luxray",
         "USE_CARDS": ["Ash Ketchum"],
         "EARN": "Luxray",
@@ -1422,7 +1422,7 @@ destiny = [
     {
         "NAME": "Only A Matter Of Time",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 20,
         "DEFEAT": "Dialga",
         "USE_CARDS": ["Team Galactic"],
         "EARN": "Dialga",
@@ -1432,7 +1432,7 @@ destiny = [
     {
         "NAME": "We Need A Little Space",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 20,
         "DEFEAT": "Palkia",
         "USE_CARDS": ["Team Galactic"],
         "EARN": "Palkia",
@@ -1442,7 +1442,7 @@ destiny = [
     {
         "NAME": "Anti-Matter Apocalypse",
         "WINS": 0,
-        "REQUIRED": 30,
+        "REQUIRED": 25,
         "DEFEAT": "Giratina",
         "USE_CARDS": ["Ash Ketchum"],
         "EARN": "Giratina",
@@ -1452,7 +1452,7 @@ destiny = [
     {
         "NAME": "Fallen Angel Strikes",
         "WINS": 0,
-        "REQUIRED": 40,
+        "REQUIRED": 30,
         "DEFEAT": "Arceus",
         "USE_CARDS": ["Giratina"],
         "EARN": "Arceus",
@@ -1462,7 +1462,7 @@ destiny = [
     {
         "NAME": "Sleeping Giant",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 10,
         "DEFEAT": "Regigigas",
         "USE_CARDS": ["Regice"],
         "EARN": "Regigigas",
@@ -1472,7 +1472,7 @@ destiny = [
     {
         "NAME": "Sleeping Giant",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 10,
         "DEFEAT": "Regigigas",
         "USE_CARDS": ["Regirock"],
         "EARN": "Regigigas",
@@ -1482,7 +1482,7 @@ destiny = [
     {
         "NAME": "Sleeping Giant",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 10,
         "DEFEAT": "Regigigas",
         "USE_CARDS": ["Registeel"],
         "EARN": "Regigigas",
@@ -1612,7 +1612,7 @@ destiny = [
     {
         "NAME": "Fallen Leader",
         "WINS": 0,
-        "REQUIRED": 25,
+        "REQUIRED": 10,
         "DEFEAT": "Kamina",
         "USE_CARDS": ["Viral"],
         "EARN": "Teppelin",
@@ -1622,7 +1622,7 @@ destiny = [
     {
         "NAME": "Spiral War",
         "WINS": 0,
-        "REQUIRED": 30,
+        "REQUIRED": 25,
         "DEFEAT": "Anti Spiral",
         "USE_CARDS": ["Tengen Toppa Gurren Lagann"],
         "EARN": "Anti Spiral",
