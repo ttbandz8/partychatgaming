@@ -22326,6 +22326,9 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
         if hit_roll <= miss_hit:
             true_dmg=0
             message=f'`{move}` used! It misses!'
+            if card['UNIVERSE'] == 'Crown Rift Slayers':
+                true_dmg = round(true_dmg * .85)
+                message=f'`{move}` used Twice! The first strike misses but second connects for {true_dmg}! :bangbang:'
         elif hit_roll <=low_hit and hit_roll > miss_hit:
             true_dmg = round(true_dmg * .70)
             message=f'`{move}` used! It chips for {true_dmg}! :anger:'
@@ -22338,6 +22341,10 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
         elif hit_roll == 20:
             true_dmg = round(true_dmg * 2)
             message=f"`{card}` used `{move}`! :boom:   IT CRITICALLY HITS FOR {true_dmg}!! :boom: "
+            if card['UNIVERSE'] == 'Crown Rift Awakening':
+                true_dmg = round(true_dmg * 2.5)
+                message=f"`{card}` used `{move}`! :boom:   IT MORTALLY WOUNDS FOR {true_dmg}!! :boom: "
+            
 
         if move_stamina == 80:
             message = f"{special_description}\n" + message 
