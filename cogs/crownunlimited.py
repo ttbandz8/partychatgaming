@@ -40,6 +40,7 @@ class CrownUnlimited(commands.Cog):
         companion = user_data['DISNAME']
         return companion
 
+
     @commands.command()
     async def ctales(self, ctx, user: User):
         private_channel = ctx
@@ -1169,7 +1170,7 @@ class CrownUnlimited(commands.Cog):
                     else:
                         embed_color_o = 0x2ecc71
 
-                    if o_stamina <= 0:
+                    if o_stamina < 10:
                         #fortitude or luck is based on health  
                         fortitude = 0.0
                         low = o_health - (o_health*.90)
@@ -1825,7 +1826,7 @@ class CrownUnlimited(commands.Cog):
                         embed_color_t = 0x2ecc71
 
                     #Focus
-                    if t_stamina <= 0:
+                    if t_stamina < 10:
                         # o_pet_used = True
                         fortitude = 0.0
                         low = t_health - (t_health*.90)
@@ -2310,7 +2311,7 @@ class CrownUnlimited(commands.Cog):
                     else:
                         embed_color_c = 0x2ecc71
 
-                    if c_stamina <= 0:
+                    if c_stamina < 10:
                         #fortitude or luck is based on health  
                         fortitude = 0.0
                         low = c_health - (c_health*.90)
@@ -2965,7 +2966,7 @@ class CrownUnlimited(commands.Cog):
                         embed_color_t = 0x2ecc71
 
                     #Focus
-                    if t_stamina <= 0:
+                    if t_stamina < 10:
                         # o_pet_used = True
                         fortitude = 0.0
                         low = t_health - (t_health*.90)
@@ -3556,6 +3557,7 @@ class CrownUnlimited(commands.Cog):
                         response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                         await discord.TextChannel.delete(private_channel, reason=None)
                     response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+
 
     @commands.command()
     async def cdungeon(self, ctx, user: User):
@@ -4698,7 +4700,7 @@ class CrownUnlimited(commands.Cog):
                     else:
                         embed_color_o = 0x2ecc71
 
-                    if o_stamina <= 0:
+                    if o_stamina < 10:
                         #fortitude or luck is based on health  
                         fortitude = 0.0
                         low = o_health - (o_health*.90)
@@ -5355,7 +5357,7 @@ class CrownUnlimited(commands.Cog):
                         embed_color_t = 0x2ecc71
 
                     #Focus
-                    if t_stamina <= 0:
+                    if t_stamina < 10:
                         # o_pet_used = True
                         fortitude = 0.0
                         low = t_health - (t_health*.90)
@@ -5954,7 +5956,7 @@ class CrownUnlimited(commands.Cog):
                     else:
                         embed_color_c = 0x2ecc71
 
-                    if c_stamina <= 0:
+                    if c_stamina < 10:
                         #fortitude or luck is based on health  
                         fortitude = 0.0
                         low = c_health - (c_health*.90)
@@ -6607,7 +6609,7 @@ class CrownUnlimited(commands.Cog):
                         embed_color_t = 0x2ecc71
 
                     #Focus
-                    if t_stamina <= 0:
+                    if t_stamina < 10:
                         # o_pet_used = True
                         fortitude = 0.0
                         low = t_health - (t_health*.90)
@@ -7299,6 +7301,7 @@ class CrownUnlimited(commands.Cog):
                     if private_channel.guild:
                         response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                         await discord.TextChannel.delete(private_channel, reason=None)
+
 
     @commands.command()
     async def cboss(self, ctx, user: User):
@@ -8430,7 +8433,7 @@ class CrownUnlimited(commands.Cog):
                 else:
                     embed_color_o = 0x2ecc71
 
-                if o_stamina <= 0:
+                if o_stamina < 10:
                     if botActive and not o_used_focus:                    
                         embedVar = discord.Embed(title=f"{t_punish}")
                         embedVar.add_field(name=f"{t_arena}",value= f"{t_world}", inline=False)
@@ -9092,7 +9095,7 @@ class CrownUnlimited(commands.Cog):
                     embed_color_t = 0x2ecc71
 
                 #Focus
-                if t_stamina <= 0:
+                if t_stamina < 10:
                     if botActive and not o_used_focus:                    
                         embedVar = discord.Embed(title=f"`{t_card}` Enters Focus State", description=f"{t_powerup}", colour=0xe91e63)
                         embedVar.add_field(name=f"A great aura starts to envelop `{t_card}` ",value= f"{t_aura}")
@@ -9726,7 +9729,7 @@ class CrownUnlimited(commands.Cog):
                 else:
                     embed_color_c = 0x2ecc71
 
-                if c_stamina <= 0:
+                if c_stamina < 10:
                     #fortitude or luck is based on health  
                     fortitude = 0.0
                     low = c_health - (c_health*.90)
@@ -10385,7 +10388,7 @@ class CrownUnlimited(commands.Cog):
                     embed_color_t = 0x2ecc71
 
                 #Focus
-                if t_stamina <= 0:
+                if t_stamina < 10:
                     if botActive and not o_used_focus:                    
                         embedVar = discord.Embed(title=f"`{t_card}` Enters Focus State", description=f"{t_powerup}", colour=0xe91e63)
                         embedVar.add_field(name=f"A great aura starts to envelop `{t_card}` ",value= f"{t_aura}")
@@ -11059,6 +11062,7 @@ class CrownUnlimited(commands.Cog):
                     await discord.TextChannel.delete(private_channel, reason=None)
             if private_channel.guild:
                 await discord.TextChannel.delete(private_channel, reason=None)
+
 
     @commands.command()
     async def dungeon(self, ctx):
@@ -11852,7 +11856,7 @@ class CrownUnlimited(commands.Cog):
                     else:
                         embed_color_o = 0x2ecc71
 
-                    if o_stamina <= 0:
+                    if o_stamina < 10:
                         #fortitude or luck is based on health  
                         fortitude = 0.0
                         low = o_health - (o_health*.90)
@@ -12415,7 +12419,7 @@ class CrownUnlimited(commands.Cog):
                         embed_color_t = 0x2ecc71
 
                     #Focus
-                    if t_stamina <= 0:
+                    if t_stamina < 10:
                         # o_pet_used = True
                         fortitude = 0.0
                         low = t_health - (t_health*.90)
@@ -13117,6 +13121,7 @@ class CrownUnlimited(commands.Cog):
                     if private_channel.guild:
                         response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                         await discord.TextChannel.delete(private_channel, reason=None)
+
 
     @commands.command()
     async def tales(self, ctx):
@@ -13892,7 +13897,7 @@ class CrownUnlimited(commands.Cog):
                     else:
                         embed_color_o = 0x2ecc71
 
-                    if o_stamina <= 0:
+                    if o_stamina < 10:
                         #fortitude or luck is based on health  
                         fortitude = 0.0
                         low = o_health - (o_health*.90)
@@ -14455,7 +14460,7 @@ class CrownUnlimited(commands.Cog):
                         embed_color_t = 0x2ecc71
 
                     #Focus
-                    if t_stamina <= 0:
+                    if t_stamina < 10:
                         # o_pet_used = True
                         fortitude = 0.0
                         low = t_health - (t_health*.90)
@@ -15045,6 +15050,7 @@ class CrownUnlimited(commands.Cog):
                     continued=False
                     if private_channel.guild:
                         await discord.TextChannel.delete(private_channel, reason=None)
+
 
     @commands.command()
     async def boss(self, ctx):
@@ -15824,7 +15830,7 @@ class CrownUnlimited(commands.Cog):
                 else:
                     embed_color_o = 0x2ecc71
 
-                if o_stamina <= 0:
+                if o_stamina < 10:
                     if botActive and not o_used_focus:                    
                         embedVar = discord.Embed(title=f"{t_punish}")
                         embedVar.add_field(name=f"{t_arena}",value= f"{t_world}", inline=False)
@@ -16392,7 +16398,7 @@ class CrownUnlimited(commands.Cog):
                     embed_color_t = 0x2ecc71
 
                 #Focus
-                if t_stamina <= 0:
+                if t_stamina < 10:
                     if botActive and not o_used_focus:                    
                         embedVar = discord.Embed(title=f"`{t_card}` Enters Focus State", description=f"{t_powerup}", colour=0xe91e63)
                         embedVar.add_field(name=f"A great aura starts to envelop `{t_card}` ",value= f"{t_aura}")
@@ -17053,6 +17059,7 @@ class CrownUnlimited(commands.Cog):
                     await discord.TextChannel.delete(private_channel, reason=None)
             if private_channel.guild:
                 await discord.TextChannel.delete(private_channel, reason=None)
+
 
     @commands.command()
     async def start(self, ctx):
@@ -17808,7 +17815,7 @@ class CrownUnlimited(commands.Cog):
                         else:
                             embed_color_o = 0x2ecc71
 
-                        if o_stamina <= 0:
+                        if o_stamina < 10:
                             o_focus_count = o_focus_count + 1
                             if botActive and not o_used_focus:                    
                                 embedVar = discord.Embed(title=f"You've entered `Focus State`!", description=f"Entering `Focus State` sacrifices a turn to power up and regain `Stamina`!", colour=0xe91e63)
@@ -18383,7 +18390,7 @@ class CrownUnlimited(commands.Cog):
                             embed_color_t = 0x2ecc71
 
                         #Focus
-                        if t_stamina <= 0:
+                        if t_stamina < 10:
                             t_focus_count = t_focus_count + 1
                             fortitude = 0.0
                             low = t_health - (t_health*.90)
@@ -19458,6 +19465,7 @@ class CrownUnlimited(commands.Cog):
         else:
             await ctx.send(m.SESSION_DOES_NOT_EXIST)
 
+
     @commands.command()
     async def wager(self, ctx, wager: int):
         private_channel = ctx
@@ -20237,7 +20245,7 @@ class CrownUnlimited(commands.Cog):
                         else:
                             embed_color_o = 0x2ecc71
 
-                        if o_stamina <= 0:
+                        if o_stamina < 10:
                             o_focus_count = o_focus_count + 1
                             if botActive and not o_used_focus:                    
                                 embedVar = discord.Embed(title=f"You've entered `Focus State`!", description=f"Entering `Focus State` sacrifices a turn to power up and regain `Stamina`!", colour=0xe91e63)
@@ -20819,7 +20827,7 @@ class CrownUnlimited(commands.Cog):
                             embed_color_t = 0x2ecc71
 
                         #Focus
-                        if t_stamina <= 0:
+                        if t_stamina < 10:
                             t_focus_count = t_focus_count + 1
                             fortitude = 0.0
                             low = t_health - (t_health*.90)
@@ -21797,7 +21805,8 @@ class CrownUnlimited(commands.Cog):
         await ctx.author.send("\n".join(tales_card_details))
         await ctx.author.send("\n".join(dungeon_card_details))
         await ctx.author.send("\n".join(destiny_card_details))
-    
+
+
     @commands.command()
     async def titles(self, ctx, *args):
         universe = " ".join([*args])
@@ -21826,6 +21835,7 @@ class CrownUnlimited(commands.Cog):
         await ctx.author.send("\n".join(tales_titles_details))
         await ctx.author.send("\n".join(dungeon_titles_details))
 
+
     @commands.command()
     async def arms(self, ctx, *args):
         universe = " ".join([*args])
@@ -21853,6 +21863,7 @@ class CrownUnlimited(commands.Cog):
         await ctx.author.send(f"{universe.upper()} ARM LIST")
         await ctx.author.send("\n".join(tales_arms_details))
         await ctx.author.send("\n".join(dungeon_arms_details))
+
 
     @commands.command()
     async def destinies(self, ctx, *args):
