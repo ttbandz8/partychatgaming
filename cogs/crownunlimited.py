@@ -14656,7 +14656,7 @@ class CrownUnlimited(commands.Cog):
                         elif int(aiMove) == 3:
                             dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
                             if t_gif != "N/A":
-                                    await private_channel.send(f"{t_gif}")
+                                await private_channel.send(f"{t_gif}")
                         elif int(aiMove) == 4:
                             t_enhancer_used=True
                             dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
@@ -17989,6 +17989,8 @@ class CrownUnlimited(commands.Cog):
                                 elif msg.content == "3":
                                     dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
                                     o_pet_used=False
+                                    if o_gif != "N/A":
+                                        await private_channel.send(f"{o_gif}")
                                 elif msg.content == "4":
                                     o_enhancer_used=True
                                     dmg = damage_cal(o_universe, o_card, o_enhancer, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
@@ -18547,6 +18549,8 @@ class CrownUnlimited(commands.Cog):
                                     elif msg.content == "3":
                                         t_pet_used =False
                                         dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
+                                        if t_gif != "N/A":
+                                            await private_channel.send(f"{t_gif}")
                                     elif msg.content == "4":
                                         t_enhancer_used=True
                                         t_pet_used =False
@@ -19014,6 +19018,8 @@ class CrownUnlimited(commands.Cog):
                                     dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
                                 elif int(aiMove) == 3:
                                     dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
+                                    if t_gif != "N/A":
+                                        await private_channel.send(f"{t_gif}")
                                 elif int(aiMove) == 4:
                                     t_enhancer_used=True
                                     dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina,t_max_health, o_attack, t_special_move_description)
@@ -20413,6 +20419,8 @@ class CrownUnlimited(commands.Cog):
                                 elif msg.content == "3":
                                     dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
                                     o_pet_used=False
+                                    if o_gif != "N/A":
+                                        await private_channel.send(f"{o_gif}")
                                 elif msg.content == "4":
                                     o_enhancer_used=True
                                     dmg = damage_cal(o_universe, o_card, o_enhancer, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
@@ -20968,6 +20976,8 @@ class CrownUnlimited(commands.Cog):
                                     elif msg.content == "3":
                                         t_pet_used =False
                                         dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
+                                        if t_gif != "N/A":
+                                            await private_channel.send(f"{t_gif}")
                                     elif msg.content == "4":
                                         t_enhancer_used=True
                                         t_pet_used =False
