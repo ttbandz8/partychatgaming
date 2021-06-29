@@ -22284,6 +22284,10 @@ def damage_cal(card, ability, attack, defense, op_defense, vul, accuracy, stamin
                 enhanced = ap
             else:
                 enhanced = ap * turn
+            if op_health - enhanced = 0:
+                message = f'`{card}` used `{move}`! Their opponent has been reduced.'
+                enhanced = op_health - 1
+
         
         response = {"DMG": enhanced, "MESSAGE": message, "STAMINA_USED": move_stamina, "CAN_USE_MOVE": can_use_move_flag, "ENHANCED_TYPE": enh_type, "ENHANCE": True}
         return response
