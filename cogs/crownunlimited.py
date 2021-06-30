@@ -44,7 +44,9 @@ class CrownUnlimited(commands.Cog):
     async def ctales(self, ctx, user: User):
         private_channel = ctx
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
+        cowner = db.queryUser({'DISNAME': str(user)})
         oteam = sowner['TEAM']
+        cteam = cowner['TEAM']
         if sowner['AVAILABLE']:
             response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': False}})
         else:
@@ -362,6 +364,10 @@ class CrownUnlimited(commands.Cog):
                     c_max_health = c_max_health +  50
                     c_health = c_health + 50
 
+            if oteam == cteam:
+                o_defense = o_defense + 10
+                c_defense = c_defense + 10
+             
             # Companion Passive Config
             if (c_universe == c_title_universe) or (c_title_universe == "Unbound"):
                 c_title_passive_bool = True
@@ -2312,7 +2318,7 @@ class CrownUnlimited(commands.Cog):
                     else:
                         embed_color_c = 0x2ecc71
 
-                    if c_stamina <= 0:
+                    if c_stamina < 10:
                         #fortitude or luck is based on health  
                         fortitude = 0.0
                         low = c_health - (c_health*.90)
@@ -3890,6 +3896,9 @@ class CrownUnlimited(commands.Cog):
                     c_max_health = c_max_health +  50
                     c_health = c_health + 50
 
+            if oteam == cteam:
+                o_defense = o_defense + 10
+                c_defense = c_defense + 10
             
             # Companion Passive Config
             if (c_universe == c_title_universe) or (c_title_universe == "Unbound"):
@@ -5960,7 +5969,7 @@ class CrownUnlimited(commands.Cog):
                     else:
                         embed_color_c = 0x2ecc71
 
-                    if c_stamina <= 0:
+                    if c_stamina < 10:
                         #fortitude or luck is based on health  
                         fortitude = 0.0
                         low = c_health - (c_health*.90)
@@ -7629,6 +7638,9 @@ class CrownUnlimited(commands.Cog):
                 c_max_health = c_max_health +  50
                 c_health = c_health + 50
 
+        if oteam == cteam:
+            o_defense = o_defense + 10
+            c_defense = c_defense + 10
         # Companion Passive Config
         if (c_universe == c_title_universe) or (c_title_universe == "Unbound"):
             c_title_passive_bool = True
@@ -9736,7 +9748,7 @@ class CrownUnlimited(commands.Cog):
                 else:
                     embed_color_c = 0x2ecc71
 
-                if c_stamina <= 0:
+                if c_stamina < 10:
                     #fortitude or luck is based on health  
                     fortitude = 0.0
                     low = c_health - (c_health*.90)

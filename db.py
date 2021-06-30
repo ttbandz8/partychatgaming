@@ -157,7 +157,6 @@ def addFamilyMember(query, add_to_family_query, user, new_user):
     else:
         return "Cannot add user to the Family."
 
-
 #########################################################################
 '''Check If User Exists'''
 def user_exists(data):
