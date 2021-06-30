@@ -51,8 +51,10 @@ class Matches(commands.Cog):
             arm_dungeon_matches = []
             arm_boss_matches = []
             arm_pvp_matches = []
+            most_played = []
 
             for matches in response:
+                most_played.append(matches['PLAYER'])
                 if matches['UNIVERSE_TYPE'] == "Tales":
                     title_tales_matches.append(matches['TITLE'])
                     arm_tales_matches.append(matches['ARM'])
@@ -68,20 +70,8 @@ class Matches(commands.Cog):
                     title_pvp_matches.append(matches['TITLE'])
                     arm_pvp_matches.append(matches['ARM'])
             
-            # arm_tales_matches = []
-            # arm_dungeon_matches = []
-            # arm_boss_matches = []
-            # arm_pvp_matches = []
-            # for matches in response:
-            #     if matches['UNIVERSE_TYPE'] == "Tales":
-            #         arm_tales_matches.append(matches['ARM'])
-            #     if matches['UNIVERSE_TYPE'] == "Dungeon":
-            #         arm_tales_matches.append(matches['ARM'])
-            #     if matches['UNIVERSE_TYPE'] == "Boss":
-            #         arm_tales_matches.append(matches['ARM'])
-            #     if matches['UNIVERSE_TYPE'] == "PVP":
-            #         arm_tales_matches.append(matches['ARM'])
-                    
+            card_main = most_frequent(most_played)
+
             if title_tales_matches and arm_tales_matches:
                 tale_title = most_frequent(title_tales_matches)
                 tale_arm = most_frequent(arm_tales_matches)
@@ -134,22 +124,22 @@ class Matches(commands.Cog):
                 _Not enough data for analysis_
                 """)
             
-            embedVar = discord.Embed(title=f"{name} | _Crown Stats_".format(self), description=textwrap.dedent(f"""\
-            **Tales Stats:**
-            {tale_message}
+            embedVar = discord.Embed(title=f":crown: {name} | _Crown Analysis_".format(self), description=textwrap.dedent(f"""\
+**Card Master**
+{card_main}
 
-            **Dungeon Stats:**
-            {dungeon_message}
+**Tales Stats:**
+{tale_message}
 
-            **Boss Stats:**
-            {boss_message}
+**Dungeon Stats:**
+{dungeon_message}
 
-            **Pvp Stats:**
-            {pvp_message}
+**Boss Stats:**
+{boss_message}
 
-            """)
-            
-            , colour=000000)
+**Pvp Stats:**
+{pvp_message}
+            """), colour=000000)
             embedVar.set_image(url=path)
             # embedVar.set_footer(text=f".enhance - Enhancement Menu")
             await ctx.send(embed=embedVar)
