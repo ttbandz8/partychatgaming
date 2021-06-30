@@ -176,7 +176,7 @@ def updateManyMatches(new_value):
 
 def queryMatch(matches):
     try:
-        exists = matches_exists({'NAME': matches['NAME']})
+        exists = matches_exists({'CARD': matches['CARD']})
         if exists:
             data = matches_col.find_one(matches)
             return data
@@ -185,9 +185,9 @@ def queryMatch(matches):
     except:
         print("Find family failed.")
 
-def queryManyMatch(matches):
+def queryManyMatches(matches):
     try:
-        exists = matches_exists({'NAME': matches['NAME']})
+        exists = matches_exists({'CARD': matches['CARD']})
         if exists:
             data = matches_col.find(matches)
             return data

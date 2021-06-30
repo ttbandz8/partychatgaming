@@ -3491,7 +3491,8 @@ class CrownUnlimited(commands.Cog):
                 m_playtime = int(wintime[14:16])
                 s_playtime = int(wintime[17:19])
                 gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
-
+                match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']), str(oarm['ARM']), str(selected_universe), "Tales", o['EXCLUSIVE'])
+                match = await savematch(str(user), str(c_card), str(c_card_path), str(ctitle['TITLE']), str(carm['ARM']), str(selected_universe), "Tales", c['EXCLUSIVE'])
                 teambank = await blessteam(10, oteam)
                 cteambank = await blessteam(10, cteam)
                 drop_response = await drops(ctx.author, selected_universe, currentopponent)
@@ -7249,6 +7250,8 @@ class CrownUnlimited(commands.Cog):
                 cteambank = await blessteam(10, cteam)
                 drop_response = await dungeondrops(ctx.author, selected_universe, currentopponent)
                 cdrop_response = await dungeondrops(user, selected_universe, currentopponent)
+                match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']), str(oarm['ARM']), str(selected_universe), "Dungeon", o['EXCLUSIVE'])
+                cmatch = await savematch(str(user), str(c_card), str(c_card_path), str(ctitle['TITLE']), str(carm['ARM']), str(selected_universe), "Dungeon", c['EXCLUSIVE'])
                 questlogger = await quest(ouser, t_card, "Dungeon")
                 cquestlogger = await quest(user, t_card, "Dungeon")
                 petlogger = await petlevel(opet_name, ouser)
@@ -11050,6 +11053,9 @@ class CrownUnlimited(commands.Cog):
             s_playtime = int(wintime[17:19])
             gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
             drop_response = await bossdrops(ctx.author, universeName)
+            match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']), str(oarm['ARM']), "N/A", "Boss", o['EXCLUSIVE'])
+            cmatch = await savematch(str(user), str(c_card), str(c_card_path), str(ctitle['TITLE']), str(carm['ARM']), "N/A", "Boss", c['EXCLUSIVE'])
+            
             await bless(50, str(ctx.author))
             await bless(50, str(user))
             petlogger = await petlevel(opet_name, ouser)
@@ -13074,6 +13080,7 @@ class CrownUnlimited(commands.Cog):
                 questlogger = await quest(ouser, t_card, "Dungeon")
                 destinylogger = await destiny(ouser, t_card, "Dungeon")
                 petlogger = await petlevel(opet_name, ouser)
+                match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']), str(oarm['ARM']), str(selected_universe), "Dungeon", o['EXCLUSIVE'])
                 if destinylogger:
                     await ctx.author.send(destinylogger)
                 if questlogger:
@@ -15004,12 +15011,13 @@ class CrownUnlimited(commands.Cog):
                 questlogger = await quest(ouser, t_card, "Tales")
                 destinylogger = await destiny(ouser, t_card, "Tales")
                 petlogger = await petlevel(opet_name, ouser)
+                match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']), str(oarm['ARM']), str(selected_universe), "Tales", o['EXCLUSIVE'])
                 if destinylogger:
                     await ctx.author.send(destinylogger)
                 if questlogger:
                     await ctx.author.send(questlogger)
                 if currentopponent != (total_legends):
-                    
+                
                     if private_channel.guild:
 
                         embedVar = discord.Embed(title=f"VICTORY\n`{o_card} says:`\n{o_win_description}", description=f"The game lasted {turn_total} rounds.\n\n{drop_response}", colour=0xe91e63)
@@ -17055,6 +17063,7 @@ class CrownUnlimited(commands.Cog):
             gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
             drop_response = await bossdrops(ctx.author, universeName)
             petlogger = await petlevel(opet_name, ouser)
+            match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']), str(oarm['ARM']), "N/A", "Boss", o['EXCLUSIVE'])
             await bless(50, str(ctx.author))
             response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
             embedVar = discord.Embed(title=f":zap: `{o_card}`defeated the {t_universe} Boss {t_card}!\n{t_concede}", description=f"Match concluded in {turn_total} turns!\n\n{drop_response} + :coin: 50!", colour=0xe91e63)
@@ -19427,7 +19436,7 @@ class CrownUnlimited(commands.Cog):
                     m_playtime = int(wintime[14:16])
                     s_playtime = int(wintime[17:19])
                     gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
-
+                    match = await savematch(str(tuser), str(t_card), str(t_card_path), str(ttitle['TITLE']), str(tarm['ARM']), "N/A", "PVP", o['EXCLUSIVE'])
                     ouid = sowner['DID']
                     sownerctx = await self.bot.fetch_user(ouid)
                     response = await score(sownerctx, tuser)
@@ -19466,6 +19475,7 @@ class CrownUnlimited(commands.Cog):
                     sownerctx = await self.bot.fetch_user(ouid)
                     response = await score(sownerctx, ouser)
                     await bless(8, str(ctx.author))
+                    match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']), str(oarm['ARM']), "N/A", "PVP", o['EXCLUSIVE'])
                     embedVar = discord.Embed(title=f":zap: VICTORY\n`{o_card} says:`\n{o_win_description}\n\n Use .Start to Play again or .End to end the session", description=f"The match lasted {turn_total} turns", colour=0xe91e63)
                     embedVar.set_author(name=f"{t_card} says\n{t_lose_description}")
                     if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
@@ -22140,8 +22150,10 @@ async def petlevel(pet, player):
             filter_query = [{'type.'+ "NAME": str(pet)}]
             response = db.updateVault(query, update_query, filter_query)
 
-async def savematch(player, health, stamina, attack, defense, )
-
+async def savematch(player, card, path, title, arm, universe, universe_type, exclusive):
+    matchquery = {'PLAYER': player, 'CARD': card, 'PATH': path, 'TITLE': title, 'ARM': arm, 'UNIVERSE': universe, 'UNIVERSE_TYPE': universe_type, 'EXCLUSIVE': exclusive}
+    save_match = db.createMatch(data.newMatch(matchquery))
+    
 def starting_position(o,t):
     if o > t:
         return True
