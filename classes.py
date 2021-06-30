@@ -80,7 +80,6 @@ class MATCHES():
     STAM: int = field(default_factory=lambda: 100) 
     ATK: int = field(default_factory=lambda: 25)
     DEF: int = field(default_factory=lambda: 25)
-    TYPE: int = field(default_factory=lambda: 0)
     PASS: list[str] = field(default_factory=lambda: [{'NAME': 0, 'TYPE': 'TYPE'}])
     TITLE: str = field(default_factory=lambda: "N/A")
     ARM: str = field(default_factory=lambda: "N/A")
