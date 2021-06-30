@@ -22127,7 +22127,7 @@ async def petlevel(pet, player):
             update_query = {'$set': {'PETS.$[type].' + "BONDEXP": 0}, '$inc': {'PETS.$[type].' + "BOND": 1}}
             filter_query = [{'type.'+ "NAME": str(pet)}]
             response = db.updateVault(query, update_query, filter_query)
-            
+
 def starting_position(o,t):
     if o > t:
         return True
@@ -22489,7 +22489,6 @@ def stamina_bar(size, radius, alpha=255):
     image = image.resize(size, Image.ANTIALIAS)  # Smooth the corners
 
     return image
-
 #default bar
 def round_rectangle(size, radius, alpha=55):
     factor = 5  # Factor to increase the image size that I can later antialiaze the corners
