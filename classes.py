@@ -73,6 +73,23 @@ class SESSIONS():
     CROWN_UNLIMITED: bool = field(default_factory=lambda: False)
     TIMESTAMP: str = now
 
+@dataclass(frozen=True, order=True) 
+class MATCHES():
+    PLAYER: str
+    HLT: int = field(default_factory=lambda: 500)
+    STAM: int = field(default_factory=lambda: 100) 
+    ATK: int = field(default_factory=lambda: 25)
+    DEF: int = field(default_factory=lambda: 25)
+    TYPE: int = field(default_factory=lambda: 0)
+    PASS: list[str] = field(default_factory=lambda: [{'NAME': 0, 'TYPE': 'TYPE'}])
+    TITLE: str = field(default_factory=lambda: "N/A")
+    ARM: str = field(default_factory=lambda: "N/A")
+    SPD: float = field(default_factory=lambda: .50)
+    UNIVERSE: str = field(default_factory=lambda: "Unbound")
+    EXCLUSIVE: bool = field(default_factory=lambda: False)
+    TIMESTAMP: str = now
+
+
 @dataclass(frozen=True, order=True)
 class TOURNAMENTS():
     OWNER: str
@@ -286,3 +303,7 @@ def newVault(vault):
 def newPet(pet):
     p = PET(**pet)
     return asdict(p)
+
+def newMatch(match):
+    m = MATCHES(**match)
+    return asdict(m)

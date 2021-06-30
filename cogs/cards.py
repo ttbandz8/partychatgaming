@@ -173,6 +173,8 @@ class Cards(commands.Cog):
         if card:
             o_card = card['NAME']
             o_card_path=card['PATH']
+            o_price=card['PRICE']
+            o_exclusive = card['EXCLUSIVE']
             o_max_health = card['HLT']
             o_health = card['HLT']
             o_stamina = card['STAM']
@@ -185,6 +187,7 @@ class Cards(commands.Cog):
             o_passive = card['PASS'][0]
             o_speed = card['SPD']
             o_show = card['UNIVERSE']
+            o_has_collection = card['HAS_COLLECTION']
             traits = ut.traits
             show_img = db.queryUniverse({'TITLE': o_show})['PATH']
             o_collection = card['COLLECTION']
@@ -195,6 +198,12 @@ class Cards(commands.Cog):
             if o_show == "Unbound":
                 await ctx.send("You cannot view this card at this time. ")
                 return 
+            
+            price_message ="" 
+            if o_exclusive or o_has_collection:
+                price_message = "_Priceless_"
+            else:
+                price_message = f":coin: {o_price}"
 
             card_file = showcard(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, title, focused)
             mytrait = {}
@@ -247,7 +256,7 @@ class Cards(commands.Cog):
                 message = f"{o_card} is a defensive card. "
                 tip="Equipping offensive titles and arms would help boost killability"              
 
-            embedVar = discord.Embed(title=f":crown:  {o_card}".format(self), description=textwrap.dedent(f"""
+            embedVar = discord.Embed(title=f":crown:  {o_card}\n{price_message}".format(self), description=textwrap.dedent(f"""
             **Health:** {o_max_health}
             **Stamina:** {o_max_stamina}
             **Atk:** {o_attack}

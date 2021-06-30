@@ -110,7 +110,18 @@ class Profile(commands.Cog):
                 if pet['NAME'] == d['PET']:
                     active_pet = pet
 
-            pet_ability_power = list(active_pet.values())[3]
+            power = list(active_pet.values())[3]
+            pet_ability_power = (active_pet['BOND'] * active_pet['LVL']) + power
+            bond = active_pet['BOND']
+            lvl = active_pet['LVL']
+
+            bond_message = ""
+            lvl_message = ""
+            if bond == 3:
+                bond_message = ":star2:"
+            
+            if lvl == 10:
+                lvl_message = ":star:"
 
             arm_name = arm['ARM']
             arm_passive = arm['ABILITIES'][0]
@@ -183,6 +194,7 @@ class Profile(commands.Cog):
             _Title:_ **{title_name}:** {title_passive_type} {title_passive_value}
             _Arm:_ **{arm_name}:** {arm_passive_type} {arm_passive_value}
             _Pet:_ **{active_pet['NAME']}:** {active_pet['TYPE']} {pet_ability_power}
+            _Pet Level:_ _B_ **{bond}** {bond_message} / _L_ **{lvl}**
 
             _**Moveset**_
             **{move1}:** {move1ap}
@@ -387,17 +399,19 @@ class Profile(commands.Cog):
             bond_message = ""
             lvl_message = ""
             for pet in pets_list:
+                #cpetmove_ap= (cpet_bond * cpet_lvl) + list(cpet.values())[3] # Ability Power
                 if pet['BOND'] == 3:
                     bond_message = ":star2:"
                 
                 if pet['LVL'] == 10:
                     lvl_message = ":star:"
-
+                
                 pet_ability = list(pet.keys())[3]
                 pet_ability_power = list(pet.values())[3]
+                power = (pet['BOND'] * pet['LVL']) + pet_ability_power
                 pets.append(textwrap.dedent(f"""
                 **{pet['NAME']}** | _B_ **{pet['BOND']}** {bond_message} / _L_ **{pet['LVL']}**
-                **{pet_ability}:** {pet_ability_power}
+                **{pet_ability}:** {power}
                 **Type:** {pet['TYPE']}"""))
 
             # Adding to array until divisible by 10

@@ -500,7 +500,9 @@ async def trade(ctx, user2: User, *args):
    for pet in p1_pets:
          p1_pet_names.append(pet['NAME'])
          if pet['NAME'] == p1_trade_item:
-            p1_active_pet = pet
+            pet_ability = list(pet.keys())[3]
+            pet_ability_power = list(pet.values())[3]
+            p1_active_pet = {'NAME': pet['NAME'], 'LVL': pet['LVL'], 'EXP': pet['EXP'], pet_ability: pet_ability_power, 'TYPE': pet['TYPE'], 'BOND': 0, 'BONDEXP': 0, 'PATH': pet['PATH']}
 
 
    p2_vault = db.queryVault({'OWNER' : str(user2)})
@@ -547,7 +549,9 @@ async def trade(ctx, user2: User, *args):
          for pet in p2_pets:
                p2_pet_names.append(pet['NAME'])
                if pet['NAME'] == p2_trade_item:
-                  p2_active_pet = pet
+                  pet_ability = list(pet.keys())[3]
+                  pet_ability_power = list(pet.values())[3]
+                  p2_active_pet = {'NAME': pet['NAME'], 'LVL': pet['LVL'], 'EXP': pet['EXP'], pet_ability: pet_ability_power, 'TYPE': pet['TYPE'], 'BOND': 0, 'BONDEXP': 0, 'PATH': pet['PATH']}
 
          if (p2_trade_item == user['CARD']) or (p2_trade_item == user['TITLE']) or (p2_trade_item == user['ARM']) or (p2_trade_item == user['PET']):
             await ctx.send("You cannot trade an equipped item.")
@@ -640,7 +644,9 @@ async def sell(ctx, user2: User, *args):
    for pet in p1_pets:
          p1_pet_names.append(pet['NAME'])
          if pet['NAME'] == p1_trade_item:
-            p1_active_pet = pet
+            pet_ability = list(pet.keys())[3]
+            pet_ability_power = list(pet.values())[3]
+            p1_active_pet = {'NAME': pet['NAME'], 'LVL': pet['LVL'], 'EXP': pet['EXP'], pet_ability: pet_ability_power, 'TYPE': pet['TYPE'], 'BOND': 0, 'BONDEXP': 0, 'PATH': pet['PATH']}
 
    p2_vault = db.queryVault({'OWNER' : str(user2)})
    p2_cards = p2_vault['CARDS']

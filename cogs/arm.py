@@ -153,6 +153,8 @@ class Arm(commands.Cog):
         if arm:
             arm_arm = arm['ARM']
             arm_show = arm['UNIVERSE']
+            arm_price = arm['PRICE']
+            exclusive = arm['EXCLUSIVE']
 
             if arm_show != 'Unbound':
                 arm_show_img = db.queryUniverse({'TITLE': arm_show})['PATH']
@@ -162,6 +164,12 @@ class Arm(commands.Cog):
             o_arm_passive_value = list(arm_passive.values())[0]
 
             message=""
+            
+            price_message ="" 
+            if exclusive:
+                price_message = "_Priceless_"
+            else:
+                price_message = f":coin: {arm_price}"
 
             if o_arm_passive_type == 'ATK':
                 message=f"{arm_arm} is an ATK arm"
@@ -207,7 +215,7 @@ class Arm(commands.Cog):
                 message=f"{arm_arm} is a GAMBLE arm"
 
 
-            embedVar = discord.Embed(arm=f"{arm_arm}".format(self), description=f"{message}", colour=000000)
+            embedVar = discord.Embed(title=f"{arm_arm}\n{price_message}".format(self), colour=000000)
             if arm_show != "Unbound":
                 embedVar.set_thumbnail(url=arm_show_img)
             embedVar.add_field(name="Unique Passive", value=f"`Increases {o_arm_passive_type} by {o_arm_passive_value}`", inline=False)

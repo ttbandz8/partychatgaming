@@ -155,6 +155,8 @@ class Titles(commands.Cog):
         if title:
             title_title = title['TITLE']
             title_show = title['UNIVERSE']
+            title_price = title['PRICE']
+            exclusive = title['EXCLUSIVE']
 
             if title_show != 'Unbound':
                 title_img = db.queryUniverse({'TITLE': title_show})['PATH']
@@ -164,6 +166,12 @@ class Titles(commands.Cog):
             o_title_passive_value = list(title_passive.values())[0]
             
             message=""
+
+            price_message ="" 
+            if exclusive:
+                price_message = "_Priceless_"
+            else:
+                price_message = f":coin: {title_price}"
 
             if o_title_passive_type == 'ATK':
                 message=f"{title_title} is an ATK title"
@@ -208,7 +216,7 @@ class Titles(commands.Cog):
             elif o_title_passive_type == 'GAMBLE':
                 message=f"{title_title} is a GAMBLE title" 
 
-            embedVar = discord.Embed(title=f"{title_title}".format(self), description=f"{message}", colour=000000)
+            embedVar = discord.Embed(title=f"{title_title}\n{price_message}".format(self), colour=000000)
             if title_show != "Unbound":
                 embedVar.set_thumbnail(url=title_img)
             embedVar.add_field(name="Unique Passive", value=f"`Increases {o_title_passive_type} by {o_title_passive_value}`", inline=False)
