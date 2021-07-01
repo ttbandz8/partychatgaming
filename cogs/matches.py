@@ -34,7 +34,7 @@ class Matches(commands.Cog):
         return await main.validate_user(ctx)
 
     @commands.command()
-    async def matches(self, ctx, *args):
+    async def analysis(self, ctx, *args):
         name = " ".join([*args])
         match_query = {"CARD": name}
         response = db.queryManyMatches(match_query)
