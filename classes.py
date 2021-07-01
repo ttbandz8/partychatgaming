@@ -85,7 +85,6 @@ class MATCHES():
     EXCLUSIVE: bool = field(default_factory=lambda: False)
     TIMESTAMP: str = now
 
-
 @dataclass(frozen=True, order=True)
 class TOURNAMENTS():
     OWNER: str
@@ -181,6 +180,7 @@ class UNIVERSE():
     DARM: str = field(default_factory=lambda: "Stock")
     UPET: str = field(default_factory=lambda: "")
     DPET: str = field(default_factory=lambda: "")
+    TIER: int = field(default_factory=lambda: 0)
 
 @dataclass(frozen=True, order=True) 
 class BOSS():
