@@ -25,7 +25,7 @@ from decouple import config
 from collections import ChainMap
 import textwrap
 import random
-import unique_traits as ut
+import unique_traits as ut 
 now = time.asctime()
 
 '''User must have predefined roles of the games they play before creating users
