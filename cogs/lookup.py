@@ -452,10 +452,12 @@ class Lookup(commands.Cog):
                     crown_list.append(crown)
             
             dungeon_list = []
-            for dungeon in dungeon_list:
+            for dungeon in dungeons:
                 if dungeon != "":
                     dungeon_list.append(dungeon)
 
+            print(crown_list)
+            print(dungeon_list)
 
             matches_to_string = dict(ChainMap(*matches))
             ign_to_string = dict(ChainMap(*ign))

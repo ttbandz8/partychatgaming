@@ -752,7 +752,7 @@ async def sell(ctx, user2: User, *args):
                   pet_ability_power = list(selected_pet['ABILITIES'][0].values())[0]
                   pet_ability_type = list(selected_pet['ABILITIES'][0].values())[1]
 
-                  response = db.updateVaultNoFilter({'OWNER': str(user2)},{'$addToSet':{'PETS': {'NAME': selected_pet['PET'], 'LVL': selected_pet['LVL'], 'EXP': 0, pet_ability_name: int(pet_ability_power), 'TYPE': pet_ability_type, 'BOND': 0, 'PATH': selected_pet['PATH']}}})
+                  response = db.updateVaultNoFilter({'OWNER': str(user2)},{'$addToSet':{'PETS': p1_active_pet}})
                   #response = db.updateVaultNoFilter({'OWNER': str(user2)},{'$addToSet':{'PETS': str(p1_trade_item)}})
                   await ctx.send(f"{p1_trade_item} has been added to {user2.mention}'s vault: PETS")
 

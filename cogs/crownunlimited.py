@@ -12994,9 +12994,7 @@ class CrownUnlimited(commands.Cog):
                 if questlogger:
                     await ctx.author.send(questlogger)
                 if currentopponent != (total_legends):
-                    
                     if private_channel.guild:
-
                         embedVar = discord.Embed(title=f"VICTORY\n`{o_card} says:`\n{o_win_description}", description=f"The game lasted {turn_total} rounds.\n\n{drop_response}", colour=0xe91e63)
                         embedVar.set_author(name=f"{t_card} lost!")
                         await private_channel.send(embed=embedVar)
