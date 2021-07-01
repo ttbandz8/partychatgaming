@@ -1235,53 +1235,39 @@ class CrownUnlimited(commands.Cog):
                             o_used_resolve = True 
                             o_pet_used=False
 
-                            turn_total= turn_total + 1
-                            turn=1
                         elif o_universe == "League Of Legends":
                             embedVar = discord.Embed(title=f"Turret Shot hits {t_card} for 25 DMG!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_health = round(t_health - 30)
-                            turn_total= turn_total + 1
-                            turn=1
                         elif o_universe == "Solo Leveling":
                             embedVar = discord.Embed(title=f"Ruler's Authority... Opponent loses {15 + turn_total} DEF!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_defense = round(t_defense - (15 + turn_total))
-                            turn_total= turn_total + 1
-                            turn=1
                         elif o_universe == "Attack On Titan":
                             embedVar = discord.Embed(title=f"Rally! {o_card} Increased Max Health!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             o_max_health = round(o_max_health + 50)
-                            turn_total= turn_total + 1
-                            turn=1
                         elif o_universe == "Black Clover":
                             embedVar = discord.Embed(title=f"Mana Zone! {o_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             o_stamina = 110
-                            turn_total= turn_total + 1
-                            turn=1
-                        elif t_universe == "One Punch Man":
+                        if t_universe == "One Punch Man":
                             embedVar = discord.Embed(title=f"Hero Reinforcements! {t_card} Increased Max Health!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_max_health = round(t_max_health + 50)
-                            turn_total= turn_total + 1
-                            turn=1
                         elif t_universe == "7ds":
                             embedVar = discord.Embed(title=f"Increase Power Level! {t_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             o_stamina = 110
-                            turn_total= turn_total + 1
-                            turn=1
                         elif t_universe == "Souls":
                             embedVar = discord.Embed(title=f"Combo Recognition! {t_card} Increased Attack by {15 + turn_total}!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_attack = round(t_attack + (15 + turn_total))
-                            turn_total= turn_total + 1
-                            turn=1
                         else:
                             turn_total= turn_total + 1
                             turn = 1
+                        turn_total= turn_total + 1
+                        turn = 1
                     else:
 
                         # UNIVERSE CARD
@@ -1890,53 +1876,47 @@ class CrownUnlimited(commands.Cog):
                             embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                             embedVar.add_field(name=f"Transformation: Digivolve", value="All stats & stamina greatly increased")
                             await private_channel.send(embed=embedVar)
-                            turn_total= turn_total + 1
-                            turn=2
+                            
                         elif t_universe == "League Of Legends":
                             embedVar = discord.Embed(title=f"Turret Shot hits {o_card} for 25 DMG!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             o_health = round(o_health - 30)
-                            turn_total= turn_total + 1
-                            turn=2
+                          
                         elif t_universe == "Solo Leveling":
                             embedVar = discord.Embed(title=f"Ruler's Authority... {o_card} loses {15 + turn_total} DEF!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             o_defense = round(o_defense - (15 + turn_total))
-                            turn_total= turn_total + 1
-                            turn=2
+                            
                         elif t_universe == "Attack On Titan":
                             embedVar = discord.Embed(title=f"Rally!{t_card} Increased Max Health!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_max_health = round(t_max_health + 50)
-                            turn_total= turn_total + 1
-                            turn=2
+                            
                         elif t_universe == "Black Clover":
                             embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_stamina = 110
-                            turn_total= turn_total + 1
-                            turn=2
-                        elif o_universe == "One Punch Man":
+                            
+                        if o_universe == "One Punch Man":
                             embedVar = discord.Embed(title=f"Hero Reinforcements! {o_card} Increased Max Health!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             o_max_health = round(o_max_health + 50)
-                            turn_total= turn_total + 1
-                            turn=2
+                            
                         elif o_universe == "7ds":
                             embedVar = discord.Embed(title=f"Increase Power Level! {o_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             o_stamina = 110
-                            turn_total= turn_total + 1
-                            turn=2
+                            
                         elif o_universe == "Souls":
                             embedVar = discord.Embed(title=f"Combo Recognition! {o_card} Increased ATK by {15 + turn_total}!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             o_attack = round(o_attack + (15 + turn_total))
-                            turn_total= turn_total + 1
-                            turn=2
+                           
                         else:
                             turn_total= turn_total + 1
                             turn=2
+                        turn_total= turn_total + 1
+                        turn=2
                     else:
                         # UNIVERSE CARD
                         player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus)
@@ -2374,53 +2354,47 @@ class CrownUnlimited(commands.Cog):
                             c_used_resolve = True 
                             c_pet_used=False
 
-                            turn_total= turn_total + 1
-                            turn=3
+                            
                         elif c_universe == "League Of Legends":
                             embedVar = discord.Embed(title=f"Turret Shot hits {t_card} for 25 DMG!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_health = round(t_health - 30)
-                            turn_total= turn_total + 1
-                            turn=3
+                         
                         elif c_universe == "Solo Leveling":
                             embedVar = discord.Embed(title=f"Ruler's Authority... {t_card} loses {15 + turn_total} DEF!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_defense = round(t_defense - (15 + turn_total))
-                            turn_total= turn_total + 1
-                            turn=3
+                           
                         elif c_universe == "Attack On Titan":
                             embedVar = discord.Embed(title=f"Rally! {c_card} Increased Max Health!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             c_max_health = round(c_max_health + 50)
-                            turn_total= turn_total + 1
-                            turn=3
+                      
                         elif c_universe == "Black Clover":
                             embedVar = discord.Embed(title=f"Mana Zone! {c_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             c_stamina = 110
-                            turn_total= turn_total + 1
-                            turn=3
-                        elif t_universe == "One Punch Man":
+                         
+                        if t_universe == "One Punch Man":
                             embedVar = discord.Embed(title=f"Hero Reinforcements! {t_card} Increased Max Health!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_max_health = round(t_max_health + 50)
-                            turn_total= turn_total + 1
-                            turn=3
+                            
                         elif t_universe == "7ds":
                             embedVar = discord.Embed(title=f"Increase Power Level! {t_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_stamina = 110
-                            turn_total= turn_total + 1
-                            turn=3
+                        
                         elif t_universe == "Souls":
                             embedVar = discord.Embed(title=f"Combo Recognition! {t_card} Increased Attack by {15 + turn_total}!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_attack = round(t_attack + (15 + turn_total))
-                            turn_total= turn_total + 1
-                            turn=3
+                            
                         else:
                             turn_total= turn_total + 1
                             turn = 3
+                        turn_total= turn_total + 1
+                        turn = 3
                     else:
 
                         # UNIVERSE CARD
@@ -3030,53 +3004,47 @@ class CrownUnlimited(commands.Cog):
                             embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                             embedVar.add_field(name=f"Transformation: Digivolve", value="All stats & stamina greatly increased")
                             await private_channel.send(embed=embedVar)
-                            turn_total= turn_total + 1
-                            turn=0
+                            
                         elif t_universe == "League Of Legends":
                             embedVar = discord.Embed(title=f"Turret Shot hits {c_card} for 25 DMG!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             c_health = round(c_health - 30)
-                            turn_total= turn_total + 1
-                            turn=0
+                           
                         elif t_universe == "Solo Leveling":
                             embedVar = discord.Embed(title=f"Ruler's Authority... {c_card} loses {15 + turn_total} DEF!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             c_defense = round(c_defense - (15 + turn_total))
-                            turn_total= turn_total + 1
-                            turn=0
+                          
                         elif t_universe == "Attack On Titan":
                             embedVar = discord.Embed(title=f"Rally!{t_card} Increased Max Health!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_max_health = round(t_max_health + 50)
-                            turn_total= turn_total + 1
-                            turn=0
+                          
                         elif t_universe == "Black Clover":
                             embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_stamina = 110
-                            turn_total= turn_total + 1
-                            turn=0
-                        elif c_universe == "One Punch Man":
+                            
+                        if c_universe == "One Punch Man":
                             embedVar = discord.Embed(title=f"Hero Reinforcements! {c_card} Increased Max Health!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             c_max_health = round(c_max_health + 50)
-                            turn_total= turn_total + 1
-                            turn=0
+                          
                         elif c_universe == "7ds":
                             embedVar = discord.Embed(title=f"Increase Power Level! {c_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             c_stamina = 110
-                            turn_total= turn_total + 1
-                            turn=0
+                            
                         elif c_universe == "Souls":
                             embedVar = discord.Embed(title=f"Combo Recognition! {c_card} Increased ATK by {15 + turn_total}!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             c_attack = round(c_attack + (15 + turn_total))
-                            turn_total= turn_total + 1
-                            turn=0
+                           
                         else:
                             turn_total= turn_total + 1
                             turn=0
+                        turn_total= turn_total + 1
+                        turn=0
                     else:
                         # UNIVERSE CARD
                         player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus)
@@ -4772,53 +4740,47 @@ class CrownUnlimited(commands.Cog):
                             o_used_resolve = True 
                             o_pet_used=False
 
-                            turn_total= turn_total + 1
-                            turn=1
+                            
                         elif o_universe == "League Of Legends":
                             embedVar = discord.Embed(title=f"Turret Shot hits {t_card}for 25 DMG!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_health = round(t_health - 30)
-                            turn_total= turn_total + 1
-                            turn=1
+                            
                         elif o_universe == "Solo Leveling":
                             embedVar = discord.Embed(title=f"Ruler's Authority... Opponent loses {15 + turn_total} DEF!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_defense = round(t_defense - (15 + turn_total))
-                            turn_total= turn_total + 1
-                            turn=1
+                            
                         elif o_universe == "Attack On Titan":
                             embedVar = discord.Embed(title=f"Rally! {o_card} Increased Max Health!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             o_max_health = round(o_max_health + 50)
-                            turn_total= turn_total + 1
-                            turn=1
+                            
                         elif o_universe == "Black Clover":
                             embedVar = discord.Embed(title=f"Mana Zone! {o_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             o_stamina = 110
-                            turn_total= turn_total + 1
-                            turn=1
-                        elif t_universe == "One Punch Man":
+                            
+                        if t_universe == "One Punch Man":
                             embedVar = discord.Embed(title=f"Hero Reinforcements! {t_card} Increased Max Health!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_max_health = round(t_max_health + 50)
-                            turn_total= turn_total + 1
-                            turn=1
+                           
                         elif t_universe == "7ds":
                             embedVar = discord.Embed(title=f"Increase Power Level! {t_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_stamina = 110
-                            turn_total= turn_total + 1
-                            turn=1
+                           
                         elif t_universe == "Souls":
                             embedVar = discord.Embed(title=f"Combo Recognition! {t_card} Increased Attack by {15 + turn_total}!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_attack = round(t_attack + (15 + turn_total))
-                            turn_total= turn_total + 1
-                            turn=1
+                            
                         else:
                             turn_total= turn_total + 1
                             turn = 1
+                        turn_total= turn_total + 1
+                        turn = 1
                     else:
 
                         # UNIVERSE CARD
@@ -5428,53 +5390,47 @@ class CrownUnlimited(commands.Cog):
                             embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                             embedVar.add_field(name=f"Transformation: Digivolve", value="All stats & stamina greatly increased")
                             await private_channel.send(embed=embedVar)
-                            turn_total= turn_total + 1
-                            turn=2
+                            
                         elif c_universe == "League Of Legends":
                             embedVar = discord.Embed(title=f"Turret Shot hits {t_card} for 25 DMG!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_health = round(t_health - 30)
-                            turn_total= turn_total + 1
-                            turn=2
+                            
                         elif c_universe == "Solo Leveling":
                             embedVar = discord.Embed(title=f"Ruler's Authority... {t_card} loses {15 + turn_total} DEF!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_defense = round(t_defense - (15 + turn_total))
-                            turn_total= turn_total + 1
-                            turn=2
+                           
                         elif t_universe == "Attack On Titan":
                             embedVar = discord.Embed(title=f"Rally!{t_card} Increased Max Health!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_max_health = round(t_max_health + 50)
-                            turn_total= turn_total + 1
-                            turn=2
+                            
                         elif t_universe == "Black Clover":
                             embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_stamina = 110
-                            turn_total= turn_total + 1
-                            turn=2
-                        elif o_universe == "One Punch Man":
+                           
+                        if o_universe == "One Punch Man":
                             embedVar = discord.Embed(title=f"Hero Reinforcements! {o_card} Increased Max Health!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             o_max_health = round(o_max_health + 50)
-                            turn_total= turn_total + 1
-                            turn=2
+                           
                         elif o_universe == "7ds":
                             embedVar = discord.Embed(title=f"Increase Power Level! {o_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             o_stamina = 110
-                            turn_total= turn_total + 1
-                            turn=2
+                            
                         elif o_universe == "Souls":
                             embedVar = discord.Embed(title=f"Combo Recognition! {o_card} Increased ATK by {15 + turn_total}!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             o_attack = round(o_attack + (15 + turn_total))
-                            turn_total= turn_total + 1
-                            turn=2
+                           
                         else:
                             turn_total= turn_total + 1
                             turn=2
+                        turn_total= turn_total + 1
+                        turn=2
                     else:
                         # UNIVERSE CARD
                         player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus)
@@ -6026,53 +5982,47 @@ class CrownUnlimited(commands.Cog):
                             c_used_resolve = True 
                             c_pet_used=False
 
-                            turn_total= turn_total + 1
-                            turn=3
+                           
                         elif c_universe == "League Of Legends":
                             embedVar = discord.Embed(title=f"Turret Shot hits {t_card} for 25 DMG!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_health = round(t_health - 30)
-                            turn_total= turn_total + 1
-                            turn=3
+                           
                         elif c_universe == "Solo Leveling":
                             embedVar = discord.Embed(title=f"Ruler's Authority... {t_card} loses {15 + turn_total} DEF!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_defense = round(t_defense - (15 + turn_total))
-                            turn_total= turn_total + 1
-                            turn=3
+                           
                         elif c_universe == "Attack On Titan":
                             embedVar = discord.Embed(title=f"Rally! {c_card} Increased Max Health!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             c_max_health = round(c_max_health + 50)
-                            turn_total= turn_total + 1
-                            turn=3
+                           
                         elif c_universe == "Black Clover":
                             embedVar = discord.Embed(title=f"Mana Zone! {c_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             c_stamina = 110
-                            turn_total= turn_total + 1
-                            turn=3
-                        elif t_universe == "One Punch Man":
+                            
+                        if t_universe == "One Punch Man":
                             embedVar = discord.Embed(title=f"Hero Reinforcements! {t_card} Increased Max Health!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_max_health = round(t_max_health + 50)
-                            turn_total= turn_total + 1
-                            turn=3
+                            
                         elif t_universe == "7ds":
                             embedVar = discord.Embed(title=f"Increase Power Level! {t_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_stamina = 110
-                            turn_total= turn_total + 1
-                            turn=3
+                            
                         elif t_universe == "Souls":
                             embedVar = discord.Embed(title=f"Combo Recognition! {t_card} Increased Attack by {15 + turn_total}!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_attack = round(t_attack + (15 + turn_total))
-                            turn_total= turn_total + 1
-                            turn=3
+                            
                         else:
                             turn_total= turn_total + 1
                             turn = 3
+                        turn_total= turn_total + 1
+                        turn = 3
                     else:
 
                         # UNIVERSE CARD
@@ -6680,53 +6630,47 @@ class CrownUnlimited(commands.Cog):
                             embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                             embedVar.add_field(name=f"Transformation: Digivolve", value="All stats & stamina greatly increased")
                             await private_channel.send(embed=embedVar)
-                            turn_total= turn_total + 1
-                            turn=0
+                           
                         elif t_universe == "League Of Legends":
                             embedVar = discord.Embed(title=f"Turret Shot hits {c_card} for 25 DMG!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             c_health = round(c_health - 30)
-                            turn_total= turn_total + 1
-                            turn=0
+                           
                         elif t_universe == "Solo Leveling":
                             embedVar = discord.Embed(title=f"Ruler's Authority... {c_card} loses {15 + turn_total} DEF!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             c_defense = round(c_defense - (15 + turn_total))
-                            turn_total= turn_total + 1
-                            turn=0
+                            
                         elif t_universe == "Attack On Titan":
                             embedVar = discord.Embed(title=f"Rally!{t_card} Increased Max Health!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_max_health = round(t_max_health + 50)
-                            turn_total= turn_total + 1
-                            turn=0
+                            
                         elif t_universe == "Black Clover":
                             embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_stamina = 110
-                            turn_total= turn_total + 1
-                            turn=0
-                        elif c_universe == "One Punch Man":
+                            
+                        if c_universe == "One Punch Man":
                             embedVar = discord.Embed(title=f"Hero Reinforcements! {c_card} Increased Max Health!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             c_max_health = round(c_max_health + 50)
-                            turn_total= turn_total + 1
-                            turn=0
+                           
                         elif c_universe == "7ds":
                             embedVar = discord.Embed(title=f"Increase Power Level! {c_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             c_stamina = 110
-                            turn_total= turn_total + 1
-                            turn=0
+                           
                         elif c_universe == "Souls":
                             embedVar = discord.Embed(title=f"Combo Recognition! {c_card} Increased ATK by {15 + turn_total}!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             c_attack = round(c_attack + (15 + turn_total))
-                            turn_total= turn_total + 1
-                            turn=0
+                            
                         else:
                             turn_total= turn_total + 1
                             turn=0
+                        turn_total= turn_total + 1
+                        turn=0
                     else:
                         # UNIVERSE CARD
                         player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus)
@@ -8517,53 +8461,47 @@ class CrownUnlimited(commands.Cog):
                         o_used_resolve = True 
                         o_pet_used=False
 
-                        turn_total= turn_total + 1
-                        turn=1
+                    
                     elif o_universe == "League Of Legends":
                         embedVar = discord.Embed(title=f"Turret Shot hits {t_card} for 25 DMG!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         t_health = round(t_health - 30)
-                        turn_total= turn_total + 1
-                        turn=1
+                        
                     elif o_universe == "Solo Leveling":
                         embedVar = discord.Embed(title=f"Ruler's Authority... Opponent loses {15 + turn_total} DEF!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         t_defense = round(t_defense - (15 + turn_total))
-                        turn_total= turn_total + 1
-                        turn=1
+                     
                     elif o_universe == "Attack On Titan":
                         embedVar = discord.Embed(title=f"Rally! {o_card} Increased Max Health!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         o_max_health = round(o_max_health + 50)
-                        turn_total= turn_total + 1
-                        turn=1
+                       
                     elif o_universe == "Black Clover":
                         embedVar = discord.Embed(title=f"Mana Zone! {o_card} Increased Stamina!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         o_stamina = 110
-                        turn_total= turn_total + 1
-                        turn=1
-                    elif t_universe == "One Punch Man":
+                       
+                    if t_universe == "One Punch Man":
                         embedVar = discord.Embed(title=f"Hero Reinforcements! {t_card} Increased Max Health!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         t_max_health = round(t_max_health + 50)
-                        turn_total= turn_total + 1
-                        turn=1
+                      
                     elif t_universe == "7ds":
                         embedVar = discord.Embed(title=f"Increase Power Level! {t_card} Increased Stamina!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         t_stamina = 110
-                        turn_total= turn_total + 1
-                        turn=1
+                        
                     elif t_universe == "Souls":
                         embedVar = discord.Embed(title=f"Combo Recognition! {t_card} Increased Attack by {15 + turn_total}!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         t_attack = round(t_attack + (15 + turn_total))
-                        turn_total= turn_total + 1
-                        turn=1
+                       
                     else:
                         turn_total= turn_total + 1
                         turn = 1
+                    turn_total= turn_total + 1
+                    turn = 1
                 else:
 
                     # UNIVERSE CARD
@@ -9187,53 +9125,47 @@ class CrownUnlimited(commands.Cog):
                         embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                         embedVar.add_field(name=f"Transformation: Digivolve", value="All stats & stamina greatly increased")
                         await private_channel.send(embed=embedVar)
-                        turn_total= turn_total + 1
-                        turn=2
+                        
                     elif t_universe == "League Of Legends":
                         embedVar = discord.Embed(title=f"Turret Shot hits {o_card} for 25 DMG!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         o_health = round(o_health - 30)
-                        turn_total= turn_total + 1
-                        turn=2
+                       
                     elif t_universe == "Solo Leveling":
-                            embedVar = discord.Embed(title=f"Ruler's Authority... {o_card} loses {15 + turn_total} DEF!", colour=0xe91e63)
-                            await private_channel.send(embed=embedVar)
-                            o_defense = round(o_defense - (15 + turn_total))
-                            turn_total= turn_total + 1
-                            turn=2
+                        embedVar = discord.Embed(title=f"Ruler's Authority... {o_card} loses {15 + turn_total} DEF!", colour=0xe91e63)
+                        await private_channel.send(embed=embedVar)
+                        o_defense = round(o_defense - (15 + turn_total))
+                      
                     elif t_universe == "Attack On Titan":
                         embedVar = discord.Embed(title=f"Rally!{t_card} Increased Max Health!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         t_max_health = round(t_max_health + 50)
-                        turn_total= turn_total + 1
-                        turn=2
+                        
                     elif t_universe == "Black Clover":
                         embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         t_stamina = 110
-                        turn_total= turn_total + 1
-                        turn=2
-                    elif o_universe == "One Punch Man":
+                        
+                    if o_universe == "One Punch Man":
                         embedVar = discord.Embed(title=f"Hero Reinforcements! {o_card} Increased Max Health!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         o_max_health = round(o_max_health + 50)
-                        turn_total= turn_total + 1
-                        turn=2
+                        
                     elif o_universe == "7ds":
                         embedVar = discord.Embed(title=f"Increase Power Level! {o_card} Increased Stamina!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         o_stamina = 110
-                        turn_total= turn_total + 1
-                        turn=2
+                        
                     elif o_universe == "Souls":
                         embedVar = discord.Embed(title=f"Combo Recognition! {o_card} Increased ATK by {15 + turn_total}!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         o_attack = round(o_attack + (15 + turn_total))
-                        turn_total= turn_total + 1
-                        turn=2
+                        
                     else:
                         turn_total= turn_total + 1
                         turn=2
+                    turn_total= turn_total + 1
+                    turn=2
                 #Play Bot
                 else:
                     # UNIVERSE CARD
@@ -9808,53 +9740,47 @@ class CrownUnlimited(commands.Cog):
                         c_used_resolve = True 
                         c_pet_used=False
 
-                        turn_total= turn_total + 1
-                        turn=3
+                        
                     elif c_universe == "League Of Legends":
                         embedVar = discord.Embed(title=f"Turret Shot hits {t_card} for 25 DMG!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         t_health = round(t_health - 30)
-                        turn_total= turn_total + 1
-                        turn=3
+                        
                     elif c_universe == "Solo Leveling":
-                            embedVar = discord.Embed(title=f"Ruler's Authority... {t_card} loses {15 + turn_total} DEF!", colour=0xe91e63)
-                            await private_channel.send(embed=embedVar)
-                            t_defense = round(t_defense - (15 + turn_total))
-                            turn_total= turn_total + 1
-                            turn=3
+                        embedVar = discord.Embed(title=f"Ruler's Authority... {t_card} loses {15 + turn_total} DEF!", colour=0xe91e63)
+                        await private_channel.send(embed=embedVar)
+                        t_defense = round(t_defense - (15 + turn_total))
+                       
                     elif c_universe == "Attack On Titan":
                         embedVar = discord.Embed(title=f"Rally! {c_card} Increased Max Health!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         c_max_health = round(c_max_health + 50)
-                        turn_total= turn_total + 1
-                        turn=3
+                      
                     elif c_universe == "Black Clover":
                         embedVar = discord.Embed(title=f"Mana Zone! {c_card} Increased Stamina!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         c_stamina = 110
-                        turn_total= turn_total + 1
-                        turn=3
-                    elif t_universe == "One Punch Man":
+                        
+                    if t_universe == "One Punch Man":
                         embedVar = discord.Embed(title=f"Hero Reinforcements! {t_card} Increased Max Health!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         t_max_health = round(t_max_health + 50)
-                        turn_total= turn_total + 1
-                        turn=3
+                        
                     elif t_universe == "7ds":
                         embedVar = discord.Embed(title=f"Increase Power Level! {t_card} Increased Stamina!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         t_stamina = 110
-                        turn_total= turn_total + 1
-                        turn=3
+                        
                     elif t_universe == "Souls":
                         embedVar = discord.Embed(title=f"Combo Recognition! {t_card} Increased Attack by {15 + turn_total}!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         t_attack = round(t_attack + (15 + turn_total))
-                        turn_total= turn_total + 1
-                        turn=3
+                        
                     else:
                         turn_total= turn_total + 1
                         turn = 3
+                    turn_total= turn_total + 1
+                    turn = 3
                 else:
 
                     # UNIVERSE CARD
@@ -10480,53 +10406,47 @@ class CrownUnlimited(commands.Cog):
                         embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                         embedVar.add_field(name=f"Transformation: Digivolve", value="All stats & stamina greatly increased")
                         await private_channel.send(embed=embedVar)
-                        turn_total= turn_total + 1
-                        turn=0
+                        
                     elif t_universe == "League Of Legends":
                         embedVar = discord.Embed(title=f"Turret Shot hits {c_card} for 25 DMG!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         c_health = round(c_health - 30)
-                        turn_total= turn_total + 1
-                        turn=0
+                      
                     elif t_universe == "Solo Leveling":
-                            embedVar = discord.Embed(title=f"Ruler's Authority... {c_card} loses {15 + turn_total} DEF!", colour=0xe91e63)
-                            await private_channel.send(embed=embedVar)
-                            c_defense = round(c_defense - (15 + turn_total))
-                            turn_total= turn_total + 1
-                            turn=0
+                        embedVar = discord.Embed(title=f"Ruler's Authority... {c_card} loses {15 + turn_total} DEF!", colour=0xe91e63)
+                        await private_channel.send(embed=embedVar)
+                        c_defense = round(c_defense - (15 + turn_total))
+                        
                     elif t_universe == "Attack On Titan":
                         embedVar = discord.Embed(title=f"Rally!{t_card} Increased Max Health!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         t_max_health = round(t_max_health + 50)
-                        turn_total= turn_total + 1
-                        turn=0
+                        
                     elif t_universe == "Black Clover":
                         embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         t_stamina = 110
-                        turn_total= turn_total + 1
-                        turn=0
-                    elif c_universe == "One Punch Man":
+                       
+                    if c_universe == "One Punch Man":
                         embedVar = discord.Embed(title=f"Hero Reinforcements! {c_card} Increased Max Health!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         c_max_health = round(c_max_health + 50)
-                        turn_total= turn_total + 1
-                        turn=0
+                       
                     elif c_universe == "7ds":
                         embedVar = discord.Embed(title=f"Increase Power Level! {c_card} Increased Stamina!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         c_stamina = 110
-                        turn_total= turn_total + 1
-                        turn=0
+                        
                     elif c_universe == "Souls":
                         embedVar = discord.Embed(title=f"Combo Recognition! {c_card} Increased ATK by {15 + turn_total}!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         c_attack = round(c_attack + (15 + turn_total))
-                        turn_total= turn_total + 1
-                        turn=0
+                        
                     else:
                         turn_total= turn_total + 1
                         turn=0
+                    turn_total= turn_total + 1
+                    turn=0
                 #Play Bot
                 else:
                     # UNIVERSE CARD
@@ -11941,53 +11861,47 @@ class CrownUnlimited(commands.Cog):
                             o_used_resolve = True 
                             o_pet_used=False
 
-                            turn_total= turn_total + 1
-                            turn=1
+                          
                         elif o_universe == "League Of Legends":
                             embedVar = discord.Embed(title=f"Turret Shot hits {t_card} for 25 DMG!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_health = round(t_health - 30)
-                            turn_total= turn_total + 1
-                            turn=1
+                           
                         elif o_universe == "Solo Leveling":
                             embedVar = discord.Embed(title=f"Ruler's Authority... {t_card} loses {15 + turn_total} DEF!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_defense = round(t_defense - (15 + turn_total))
-                            turn_total= turn_total + 1
-                            turn=1
+                            
                         elif o_universe == "Attack On Titan":
                             embedVar = discord.Embed(title=f"Rally! {o_card} Increased Max Health!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             o_max_health = round(o_max_health + 50)
-                            turn_total= turn_total + 1
-                            turn=1
+                            
                         elif o_universe == "Black Clover":
                             embedVar = discord.Embed(title=f"Mana Zone! {o_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             o_stamina = 110
-                            turn_total= turn_total + 1
-                            turn=1
-                        elif t_universe == "One Punch Man":
+                           
+                        if t_universe == "One Punch Man":
                             embedVar = discord.Embed(title=f"Hero Reinforcements! {t_card} Increased Max Health!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_max_health = round(t_max_health + 50)
-                            turn_total= turn_total + 1
-                            turn=1
+                           
                         elif t_universe == "7ds":
                             embedVar = discord.Embed(title=f"Increase Power Level! {t_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_stamina = 110
-                            turn_total= turn_total + 1
-                            turn=1
+                           
                         elif t_universe == "Souls":
                             embedVar = discord.Embed(title=f"Combo Recognition! {t_card} Increased Attack by {15 + turn_total}!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_attack = round(t_attack + (15 + turn_total))
-                            turn_total= turn_total + 1
-                            turn=1
+                           
                         else:
                             turn_total= turn_total + 1
                             turn = 1
+                        turn_total= turn_total + 1
+                        turn = 1
                     else:
 
                         # UNIVERSE CARD
@@ -12502,53 +12416,47 @@ class CrownUnlimited(commands.Cog):
                             embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                             embedVar.add_field(name=f"Transformation: Digivolve", value="All stats & stamina greatly increased")
                             await private_channel.send(embed=embedVar)
-                            turn_total= turn_total + 1
-                            turn=0
+                         
                         elif t_universe == "League Of Legends":
                             embedVar = discord.Embed(title=f"Turret Shot hits {o_card} for 25 DMG!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             o_health = round(o_health - 30)
-                            turn_total= turn_total + 1
-                            turn=0
+                            
                         elif t_universe == "Solo Leveling":
                             embedVar = discord.Embed(title=f"Ruler's Authority... {o_card} loses {15 + turn_total} DEF!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             o_defense = round(o_defense - (15 + turn_total))
-                            turn_total= turn_total + 1
-                            turn=0
+                          
                         elif t_universe == "Attack On Titan":
                             embedVar = discord.Embed(title=f"Rally!{t_card} Increased Max Health!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_max_health = round(t_max_health + 50)
-                            turn_total= turn_total + 1
-                            turn=0
+                          
                         elif t_universe == "Black Clover":
                             embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_stamina = 110
-                            turn_total= turn_total + 1
-                            turn=0
-                        elif o_universe == "One Punch Man":
+                           
+                        if o_universe == "One Punch Man":
                             embedVar = discord.Embed(title=f"Hero Reinforcements! {o_card} Increased Max Health!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             o_max_health = round(o_max_health + 50)
-                            turn_total= turn_total + 1
-                            turn=0
+                            
                         elif o_universe == "7ds":
                             embedVar = discord.Embed(title=f"Increase Power Level! {o_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             o_stamina = 110
-                            turn_total= turn_total + 1
-                            turn=0
+                           
                         elif o_universe == "Souls":
                             embedVar = discord.Embed(title=f"Combo Recognition! {o_card} Increased ATK by {15 + turn_total}!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             o_attack = round(o_attack + (15 + turn_total))
-                            turn_total= turn_total + 1
-                            turn=0
+                            
                         else:
                             turn_total= turn_total + 1
                             turn=0
+                        turn_total= turn_total + 1
+                        turn=0
                     else:
                         # UNIVERSE CARD
                         player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus)
@@ -13984,53 +13892,47 @@ class CrownUnlimited(commands.Cog):
                             o_used_resolve = True 
                             o_pet_used=False
 
-                            turn_total= turn_total + 1
-                            turn=1
+                           
                         elif o_universe == "League Of Legends":
                             embedVar = discord.Embed(title=f"Turret Shot hits {t_card} for 25 DMG!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_health = round(t_health - 30)
-                            turn_total= turn_total + 1
-                            turn=1
+                            
                         elif o_universe == "Solo Leveling":
                             embedVar = discord.Embed(title=f"Ruler's Authority... {t_card} loses {15 + turn_total} DEF!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_defense = round(t_defense - (15 + turn_total))
-                            turn_total= turn_total + 1
-                            turn=1
+                           
                         elif o_universe == "Attack On Titan":
                             embedVar = discord.Embed(title=f"Rally! {o_card} Increased Max Health!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             o_max_health = round(o_max_health + 50)
-                            turn_total= turn_total + 1
-                            turn=1
+                            
                         elif o_universe == "Black Clover":
                             embedVar = discord.Embed(title=f"Mana Zone! {o_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             o_stamina = 110
-                            turn_total= turn_total + 1
-                            turn=1
-                        elif t_universe == "One Punch Man":
+                            
+                        if t_universe == "One Punch Man":
                             embedVar = discord.Embed(title=f"Hero Reinforcements! {t_card} Increased Max Health!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_max_health = round(t_max_health + 50)
-                            turn_total= turn_total + 1
-                            turn=1
+                           
                         elif t_universe == "7ds":
                             embedVar = discord.Embed(title=f"Increase Power Level! {t_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_stamina = 110
-                            turn_total= turn_total + 1
-                            turn=1
+                           
                         elif t_universe == "Souls":
                             embedVar = discord.Embed(title=f"Combo Recognition! {t_card} Increased ATK by {15 + turn_total}!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_attack = round(t_attack + (15 + turn_total))
-                            turn_total= turn_total + 1
-                            turn=1
+                            
                         else:
                             turn_total= turn_total + 1
                             turn = 1
+                        turn_total= turn_total + 1
+                        turn = 1
                     else:
 
                         # UNIVERSE CARD
@@ -14545,53 +14447,47 @@ class CrownUnlimited(commands.Cog):
                             embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                             embedVar.add_field(name=f"Transformation: Digivolve", value="All stats & stamina greatly increased")
                             await private_channel.send(embed=embedVar)
-                            turn_total= turn_total + 1
-                            turn=0
+                            
                         elif t_universe == "League Of Legends":
                             embedVar = discord.Embed(title=f"Turret Shot hits {o_card} for 25 DMG!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             o_health = round(o_health - 30)
-                            turn_total= turn_total + 1
-                            turn=0
+                            
                         elif t_universe == "Solo Leveling":
                             embedVar = discord.Embed(title=f"Ruler's Authority... {o_card} loses {15 + turn_total} DEF!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             o_defense = round(o_defense - (15 + turn_total))
-                            turn_total= turn_total + 1
-                            turn=0
+                            
                         elif t_universe == "Attack On Titan":
                             embedVar = discord.Embed(title=f"Rally!{t_card} Increased Max Health!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_max_health = round(t_max_health + 50)
-                            turn_total= turn_total + 1
-                            turn=0
+                           
                         elif t_universe == "Black Clover":
                             embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_stamina = 110
-                            turn_total= turn_total + 1
-                            turn=0
-                        elif o_universe == "One Punch Man":
+                            
+                        if o_universe == "One Punch Man":
                             embedVar = discord.Embed(title=f"Hero Reinforcements! {o_card} Increased Max Health!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             o_max_health = round(o_max_health + 50)
-                            turn_total= turn_total + 1
-                            turn=0
+                            
                         elif o_universe == "7ds":
                             embedVar = discord.Embed(title=f"Increase Power Level! {o_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             o_stamina = 110
-                            turn_total= turn_total + 1
-                            turn=0
+                        
                         elif o_universe == "Souls":
                             embedVar = discord.Embed(title=f"Combo Recognition! {o_card} Increased ATK by {15 + turn_total}!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             o_attack = round(o_attack + (15 + turn_total))
-                            turn_total= turn_total + 1
-                            turn=0
+                            
                         else:
                             turn_total= turn_total + 1
                             turn=0
+                        turn_total= turn_total + 1
+                        turn=0
                     else:
                         # UNIVERSE CARD
                         player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus)
@@ -15923,53 +15819,48 @@ class CrownUnlimited(commands.Cog):
                         o_used_resolve = True 
                         o_pet_used=False
 
-                        turn_total= turn_total + 1
-                        turn=1
+                       
                     elif o_universe == "League Of Legends":
                         embedVar = discord.Embed(title=f"Turret Shot hits for 25 DMG!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         t_health = round(t_health - 30)
-                        turn_total= turn_total + 1
-                        turn=1
+                       
                     elif o_universe == "Solo Leveling":
                         embedVar = discord.Embed(title=f"Ruler's Authority... Opponent loses {15 + turn_total} DEF!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         t_defense = round(t_defense - (15 + turn_total))
-                        turn_total= turn_total + 1
-                        turn=1
+                       
+                       
                     elif o_universe == "Attack On Titan":
                         embedVar = discord.Embed(title=f"Rally! {o_card} Increased Max Health!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         o_max_health = round(o_max_health + 50)
-                        turn_total= turn_total + 1
-                        turn=1
+                      
                     elif o_universe == "Black Clover":
                         embedVar = discord.Embed(title=f"Mana Zone! {o_card} Increased Stamina!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         o_stamina = 110
-                        turn_total= turn_total + 1
-                        turn=1
-                    elif t_universe == "One Punch Man":
+                        
+                    if t_universe == "One Punch Man":
                         embedVar = discord.Embed(title=f"Hero Reinforcements! {t_card} Increased Max Health!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         t_max_health = round(t_max_health + 50)
-                        turn_total= turn_total + 1
-                        turn=1
+                        
                     elif t_universe == "7ds":
                         embedVar = discord.Embed(title=f"Increase Power Level! {t_card} Increased Stamina!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         t_stamina = 110
-                        turn_total= turn_total + 1
-                        turn=1
+                        
                     elif t_universe == "Souls":
                         embedVar = discord.Embed(title=f"Combo Recognition! {t_card} Increased Attack by {15 + turn_total}!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         t_attack = round(t_attack + (15 + turn_total))
-                        turn_total= turn_total + 1
-                        turn=1
+                       
                     else:
                         turn_total= turn_total + 1
                         turn = 1
+                    turn_total= turn_total + 1
+                    turn = 1
                 else:
 
                     # UNIVERSE CARD
@@ -16499,53 +16390,47 @@ class CrownUnlimited(commands.Cog):
                         embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                         embedVar.add_field(name=f"Transformation: Digivolve", value="All stats & stamina greatly increased")
                         await private_channel.send(embed=embedVar)
-                        turn_total= turn_total + 1
-                        turn=0
+                       
                     elif t_universe == "League Of Legends":
                         embedVar = discord.Embed(title=f"Turret Shot hits {o_card} for 25 DMG!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         o_health = round(o_health - 30)
-                        turn_total= turn_total + 1
-                        turn=0
+                        
                     elif t_universe == "Solo Leveling":
                         embedVar = discord.Embed(title=f"Ruler's Authority... {o_card} loses {15 + turn_total} DEF!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         o_defense = round(o_defense - (15 + turn_total))
-                        turn_total= turn_total + 1
-                        turn=0
+                        
                     elif t_universe == "Attack On Titan":
                         embedVar = discord.Embed(title=f"Rally!{t_card} Increased Max Health!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         t_max_health = round(t_max_health + 50)
-                        turn_total= turn_total + 1
-                        turn=0
+                      
                     elif t_universe == "Black Clover":
                         embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         t_stamina = 110
-                        turn_total= turn_total + 1
-                        turn=0
-                    elif o_universe == "One Punch Man":
+                       
+                    if o_universe == "One Punch Man":
                         embedVar = discord.Embed(title=f"Hero Reinforcements! {o_card} Increased Max Health!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         o_max_health = round(o_max_health + 50)
-                        turn_total= turn_total + 1
-                        turn=0
+                       
                     elif o_universe == "7ds":
                         embedVar = discord.Embed(title=f"Increase Power Level! {o_card} Increased Stamina!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         o_stamina = 110
-                        turn_total= turn_total + 1
-                        turn=0
+                       
                     elif o_universe == "Souls":
                         embedVar = discord.Embed(title=f"Combo Recognition! {o_card} Increased Attack by {15 + turn_total}!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         t_attack = round(t_attack + (15 + turn_total))
-                        turn_total= turn_total + 1
-                        turn=0
+                        
                     else:
                         turn_total= turn_total + 1
                         turn=0
+                    turn_total= turn_total + 1
+                    turn=0
                 #Play Bot
                 else:
                     # UNIVERSE CARD
@@ -17928,53 +17813,46 @@ class CrownUnlimited(commands.Cog):
                                 o_used_resolve = True 
                                 o_pet_used=False
 
-                                turn_total= turn_total + 1
-                                turn=1
+                                
                             elif o_universe == "League Of Legends":
                                 embedVar = discord.Embed(title=f"Turret Shot hits {t_card} for 25 DMG!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
                                 t_health = round(t_health - 30)
-                                turn_total= turn_total + 1
-                                turn=1
+                                
                             elif o_universe == "Solo Leveling":
                                 embedVar = discord.Embed(title=f"Ruler's Authority... Opponent loses {15 + turn_total} DEF!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
                                 t_defense = round(t_defense - (15 + turn_total))
-                                turn_total= turn_total + 1
-                                turn=1
+                                
                             elif o_universe == "Attack On Titan":
                                 embedVar = discord.Embed(title=f"Rally! {o_card} Increased Max Health!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
                                 o_max_health = round(o_max_health + 50)
-                                turn_total= turn_total + 1
-                                turn=1
+                                
                             elif o_universe == "Black Clover":
                                 embedVar = discord.Embed(title=f"Mana Zone! {o_card} Increased Stamina!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
                                 o_stamina = 110
-                                turn_total= turn_total + 1
-                                turn=1
-                            elif t_universe == "One Punch Man":
+                                
+                            if t_universe == "One Punch Man":
                                 embedVar = discord.Embed(title=f"Hero Reinforcements! {t_card} Increased Max Health!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
                                 t_max_health = round(t_max_health + 50)
-                                turn_total= turn_total + 1
-                                turn=1
+                                
                             elif t_universe == "7ds":
                                 embedVar = discord.Embed(title=f"Increase Power Level! {t_card} Increased Stamina!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
                                 t_stamina = 110
-                                turn_total= turn_total + 1
-                                turn=1
+                                
                             elif t_universe == "Souls":
                                 embedVar = discord.Embed(title=f"Combo Recognition! {t_card} Increased Attack by {15 + turn_total}!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
                                 t_attack = round(t_attack + (15 + turn_total))
-                                turn_total= turn_total + 1
-                                turn=1
                             else:
                                 turn_total= turn_total + 1
                                 turn = 1
+                            turn_total= turn_total + 1
+                            turn = 1
                         else:
 
                             # UNIVERSE CARD
@@ -18479,53 +18357,39 @@ class CrownUnlimited(commands.Cog):
                                 embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                 embedVar.add_field(name=f"Transformation: Digivolve", value="All stats & stamina greatly increased")
                                 await ctx.send(embed=embedVar)
-                                turn_total= turn_total + 1
-                                turn=0
                             elif t_universe == "League Of Legends":
                                 embedVar = discord.Embed(title=f"Turret Shot hits {o_card} for 25 DMG!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
                                 o_health = round(o_health - 30)
-                                turn_total= turn_total + 1
-                                turn=0
                             elif t_universe == "Solo Leveling":
                                 embedVar = discord.Embed(title=f"Ruler's Authority... {o_card} loses {15 + turn_total} DEF!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
                                 o_defense = round(o_defense - (15 + turn_total))
-                                turn_total= turn_total + 1
-                                turn=0
                             elif t_universe == "Attack On Titan":
                                 embedVar = discord.Embed(title=f"Rally!{t_card} Increased Max Health!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
                                 t_max_health = round(t_max_health + 50)
-                                turn_total= turn_total + 1
-                                turn=0
                             elif t_universe == "Black Clover":
                                 embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
                                 t_stamina = 110
-                                turn_total= turn_total + 1
-                                turn=0
-                            elif o_universe == "One Punch Man":
+                            if o_universe == "One Punch Man":
                                 embedVar = discord.Embed(title=f"Hero Reinforcements! {o_card} Increased Max Health!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
                                 o_max_health = round(o_max_health + 50)
-                                turn_total= turn_total + 1
-                                turn=0
                             elif o_universe == "7ds":
                                 embedVar = discord.Embed(title=f"Increase Power Level! {o_card} Increased Stamina!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
                                 o_stamina = 110
-                                turn_total= turn_total + 1
-                                turn=0
                             elif o_universe == "Souls":
                                 embedVar = discord.Embed(title=f"Combo Recognition! {o_card} Increased ATK by {15 + turn_total}!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
                                 o_attack = round(o_attack + (15 + turn_total))
-                                turn_total= turn_total + 1
-                                turn=0
                             else:
                                 turn_total= turn_total + 1
                                 turn=0
+                            turn_total= turn_total + 1
+                            turn=0
                         else:
                             #Check If Playing Bot
                             if botActive != True:
@@ -19063,7 +18927,7 @@ class CrownUnlimited(commands.Cog):
                                         await private_channel.send(f"{t_gif}")
                                 elif int(aiMove) == 4:
                                     t_enhancer_used=True
-                                    dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina,t_max_health, o_attack, t_special_move_description)
+                                    dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
                                     t_enhancer_used=False
                                 elif int(aiMove) == 5:
                                     if not t_used_resolve and t_used_focus:
@@ -20359,53 +20223,46 @@ class CrownUnlimited(commands.Cog):
                                 o_used_resolve = True 
                                 o_pet_used=False
 
-                                turn_total= turn_total + 1
-                                turn=1
                             elif o_universe == "League Of Legends":
                                 embedVar = discord.Embed(title=f"Turret Shot hits for 25 DMG!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
                                 t_health = round(t_health - 30)
-                                turn_total= turn_total + 1
-                                turn=1
+                                
                             elif o_universe == "Solo Leveling":
                                 embedVar = discord.Embed(title=f"Ruler's Authority... Opponent loses {15 + turn_total} DEF!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
                                 t_defense = round(t_defense - (15 + turn_total))
-                                turn_total= turn_total + 1
-                                turn=1
+                                
                             elif o_universe == "Attack On Titan":
                                 embedVar = discord.Embed(title=f"Rally! {o_card} Increased Max Health!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
                                 o_max_health = round(o_max_health + 50)
-                                turn_total= turn_total + 1
-                                turn=1
+                                
                             elif o_universe == "Black Clover":
                                 embedVar = discord.Embed(title=f"Mana Zone! {o_card} Increased Stamina!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
                                 o_stamina = 110
-                                turn_total= turn_total + 1
-                                turn=1
-                            elif t_universe == "One Punch Man":
+                                
+                            if t_universe == "One Punch Man":
                                 embedVar = discord.Embed(title=f"Hero Reinforcements! {t_card} Increased Max Health!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
                                 t_max_health = round(t_max_health + 50)
-                                turn_total= turn_total + 1
-                                turn=1
+                                
                             elif t_universe == "7ds":
                                 embedVar = discord.Embed(title=f"Increase Power Level! {t_card} Increased Stamina!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
                                 t_stamina = 110
-                                turn_total= turn_total + 1
-                                turn=1
+                                
                             elif t_universe == "Souls":
                                 embedVar = discord.Embed(title=f"Combo Recognition! {t_card} Increased Attack by {15 + turn_total}!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
                                 t_attack = round(t_attack + (15 + turn_total))
-                                turn_total= turn_total + 1
-                                turn=1
+                                
                             else:
                                 turn_total= turn_total + 1
                                 turn = 1
+                            turn_total= turn_total + 1
+                            turn = 1
                         else:
 
                             # UNIVERSE CARD
@@ -20919,53 +20776,47 @@ class CrownUnlimited(commands.Cog):
                                 embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                 embedVar.add_field(name=f"Transformation: Digivolve", value="All stats & stamina greatly increased")
                                 await ctx.send(embed=embedVar)
-                                turn_total= turn_total + 1
-                                turn=0
+                               
                             elif t_universe == "League Of Legends":
                                 embedVar = discord.Embed(title=f"Turret Shot hits {o_card} for 25 DMG!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
                                 o_health = round(o_health - 30)
-                                turn_total= turn_total + 1
-                                turn=0
+                                
                             elif t_universe == "Solo Leveling":
                                 embedVar = discord.Embed(title=f"Ruler's Authority... {o_card} loses {15 + turn_total} DEF!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
                                 o_defense = round(o_defense - (15 + turn_total))
-                                turn_total= turn_total + 1
-                                turn=0
+                               
                             elif t_universe == "Attack On Titan":
                                 embedVar = discord.Embed(title=f"Rally!{t_card} Increased Max Health!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
                                 t_max_health = round(t_max_health + 50)
-                                turn_total= turn_total + 1
-                                turn=0
+                                
                             elif t_universe == "Black Clover":
                                 embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
                                 t_stamina = 110
-                                turn_total= turn_total + 1
-                                turn=0
-                            elif o_universe == "One Punch Man":
+                                
+                            if o_universe == "One Punch Man":
                                 embedVar = discord.Embed(title=f"Hero Reinforcements! {o_card} Increased Max Health!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
                                 o_max_health = round(o_max_health + 50)
-                                turn_total= turn_total + 1
-                                turn=0
+                                
                             elif o_universe == "7ds":
                                 embedVar = discord.Embed(title=f"Increase Power Level! {o_card} Increased Stamina!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
                                 o_stamina = 110
-                                turn_total= turn_total + 1
-                                turn=0
+                                
                             elif o_universe == "Souls":
                                 embedVar = discord.Embed(title=f"Combo Recognition! {o_card} Increased ATK by {15 + turn_total}!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
                                 o_attack = round(o_attack + (15 + turn_total))
-                                turn_total= turn_total + 1
-                                turn=0
+                                
                             else:
                                 turn_total= turn_total + 1
                                 turn=0
+                            turn_total= turn_total + 1
+                            turn=0
                         else:
                             #Check If Playing Bot
                             if botActive != True:
