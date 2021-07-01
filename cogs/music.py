@@ -82,9 +82,6 @@ class Music(commands.Cog):
         else:
             print(song_queue)
 
-
-        
-
     @commands.command()
     async def play(self,ctx, url):
         if ctx.author.voice is None:
@@ -107,7 +104,6 @@ class Music(commands.Cog):
                 vc.play(source, after=lambda e: play_next(ctx))
         else:
             print(song_queue)
-
 
     @commands.command()
     async def next(self, ctx):
