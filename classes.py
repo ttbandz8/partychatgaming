@@ -76,16 +76,12 @@ class SESSIONS():
 @dataclass(frozen=True, order=True) 
 class MATCHES():
     PLAYER: str
-    HLT: int = field(default_factory=lambda: 500)
-    STAM: int = field(default_factory=lambda: 100) 
-    ATK: int = field(default_factory=lambda: 25)
-    DEF: int = field(default_factory=lambda: 25)
-    TYPE: int = field(default_factory=lambda: 0)
-    PASS: list[str] = field(default_factory=lambda: [{'NAME': 0, 'TYPE': 'TYPE'}])
-    TITLE: str = field(default_factory=lambda: "N/A")
-    ARM: str = field(default_factory=lambda: "N/A")
-    SPD: float = field(default_factory=lambda: .50)
+    CARD: str = field(default_factory=lambda: 'N/A')
+    PATH: str = field(default_factory=lambda: 'N/A')
+    TITLE: str = field(default_factory=lambda: 'N/A')
+    ARM: str = field(default_factory=lambda: 'N/A')
     UNIVERSE: str = field(default_factory=lambda: "Unbound")
+    UNIVERSE_TYPE: str = field(default_factory=lambda: "Unbound")
     EXCLUSIVE: bool = field(default_factory=lambda: False)
     TIMESTAMP: str = now
 
@@ -237,7 +233,7 @@ class VAULT():
     CARDS: list[str] = field(default_factory=lambda: ['Ochaco Uraraka','Eevee','Garen'])
     TITLES: list[str] = field(default_factory=lambda: ['Starter'])
     ARMS: list[str] = field(default_factory=lambda: ['Stock'])
-    PETS: list[str] = field(default_factory=lambda: [{'NAME': 'Chick', 'LVL': 1, 'EXP': 0, 'Heal': 10, 'TYPE': 'HLT', 'BOND': 0, 'PATH': "https://res.cloudinary.com/dkcmq8o15/image/upload/v1622307902/Pets/chick.jpg"}])
+    PETS: list[str] = field(default_factory=lambda: [{'NAME': 'Chick', 'LVL': 1, 'EXP': 0, 'Heal': 10, 'TYPE': 'HLT', 'BOND': 0, 'BONDEXP': 0, 'PATH': "https://res.cloudinary.com/dkcmq8o15/image/upload/v1622307902/Pets/chick.jpg"}])
     DECK: list[str] = field(default_factory=lambda: [{'CARD': 'Eevee', 'TITLE': 'Starter', 'ARM': 'Stock', 'PET': 'Chick'}, {'CARD': 'Ochaco Uraraka', 'TITLE': 'Starter', 'ARM': 'Stock', 'PET': 'Chick'}, {'CARD': 'Garen', 'TITLE': 'Starter', 'ARM': 'Stock', 'PET': 'Chick'}])
     QUESTS: list[str] = field(default_factory=lambda: [])
     DESTINY: list[str] = field(default_factory=lambda: [])
