@@ -77,7 +77,7 @@ class Music(commands.Cog):
             with youtube_dl.YoutubeDL(YDL_OPTIONS) as ydl:
                 info = ydl.extract_info(ingamemusic[0], download=False)
                 url2 = info['formats'][0]['url']
-                source = await discord.FFmpegOpusAudio.from_probe(url2, executable="ffmpeg/bin/ffmpeg.exe", **FFMPEG_OPTIONS)
+                source = await discord.FFmpegOpusAudio.from_probe(url2, **FFMPEG_OPTIONS)
                 vc.play(source, after=lambda e: play_next_igm(ctx))
         else:
             print(song_queue)
@@ -103,7 +103,7 @@ class Music(commands.Cog):
             with youtube_dl.YoutubeDL(YDL_OPTIONS) as ydl:
                 info = ydl.extract_info(url, download=False)
                 url2 = info['formats'][0]['url']
-                source = await discord.FFmpegOpusAudio.from_probe(url2, executable="ffmpeg/bin/ffmpeg.exe", **FFMPEG_OPTIONS)
+                source = await discord.FFmpegOpusAudio.from_probe(url2, **FFMPEG_OPTIONS)
                 vc.play(source, after=lambda e: play_next(ctx))
         else:
             print(song_queue)
@@ -137,7 +137,7 @@ async def play_next_igm(vc):
         with youtube_dl.YoutubeDL(YDL_OPTIONS) as ydl:
             info = ydl.extract_info(ingamemusic[0], download=False)
             url2 = info['formats'][0]['url']
-            source = await discord.FFmpegOpusAudio.from_probe(url2, executable="ffmpeg/bin/ffmpeg.exe", **FFMPEG_OPTIONS)
+            source = await discord.FFmpegOpusAudio.from_probe(url2, **FFMPEG_OPTIONS)
             voice.play(source, after=lambda e: play_next(voice))
         voice.is_playing()
 
@@ -150,7 +150,7 @@ async def play_next(vc):
         with youtube_dl.YoutubeDL(YDL_OPTIONS) as ydl:
             info = ydl.extract_info(song_queue[0], download=False)
             url2 = info['formats'][0]['url']
-            source = await discord.FFmpegOpusAudio.from_probe(url2, executable="ffmpeg/bin/ffmpeg.exe", **FFMPEG_OPTIONS)
+            source = await discord.FFmpegOpusAudio.from_probe(url2, **FFMPEG_OPTIONS)
             voice.play(source, after=lambda e: play_next(voice))
         voice.is_playing()
 
