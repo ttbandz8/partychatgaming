@@ -1,4 +1,5 @@
 from dataclasses import field
+import wikipedia
 from discord import player, team
 from discord.ext.commands.errors import CommandOnCooldown
 from discord.flags import Intents
@@ -31,6 +32,7 @@ now = time.asctime()
 '''User must have predefined roles of the games they play before creating users
    User input for IGN will be available after User is created and goes to join game events
    User input for TEAM will be available after User is created. There will be a command to add Team. '''
+
 
 # Logging Logic
 
@@ -941,6 +943,17 @@ async def addfield(ctx, collection, new_field, field_type):
 #       await ctx.send(f"Congrats & Welcome newcomer! You were awarded :coin: 150 and {user.mention} was awarded :coin:300.")
 #    else:
 #       await ctx.send("You're already referred!")
+
+
+@bot.command()
+async def about(ctx, *args):
+   name = " ".join([*args])
+   message = wikipedia.summary(str(name), sentences=5)
+   if message:
+      await ctx.send(message)
+   else:
+      await ctx.send("Sorry! There's no info for that.")
+
 
 @bot.command()
 @commands.check(validate_user)
