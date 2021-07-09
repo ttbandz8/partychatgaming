@@ -1,4 +1,5 @@
 import discord
+from discord.embeds import Embed
 from discord.ext import commands
 import bot as main
 import db
@@ -560,6 +561,38 @@ class Lookup(commands.Cog):
             await paginator.run(embeds)
         else:
             await ctx.send(m.TEAM_DOESNT_EXIST)
+
+
+    @commands.command()
+    async def lookupfamily(self, ctx, user: User):
+        user_profile = db.queryUser({'DISNAME': str(user)})
+        family = db.queryFamily({'HEAD': user_profile['FAMILY']})
+        if family:
+            print("found family")
+            family_name = family['HEAD'] + "'s Family"
+            head_name = family['HEAD']
+            partner_name = family['PARTNER']
+            savings = family['BANK']
+            house = family['HOUSE']
+            kid_list = []
+            for kids in family['KIDS']:
+                kid_list.append(kids.split("#",1)[0])
+
+
+            embed1 = discord.Embed(title=f":family_mwgb: {family_name} - :coin:{savings}".format(self), description=":bank: Party Chat Gaming Database", colour=000000)
+            # if team['LOGO_FLAG']:
+            #     embed1.set_image(url=logo)
+            embed1.add_field(name="Head Of Household :brain:", value= head_name.split("#",1)[0], inline=False)
+            embed1.add_field(name="Partner :anatomical_heart:", value= partner_name.split("#",1)[0], inline=False)
+            if kid_list:
+                embed1.add_field(name="Kids :baby:", value="\n".join(f'{k}'.format(self) for k in kid_list), inline=False)
+            embed1.add_field(name="House :house:", value=house, inline=False)
+            
+            
+            
+            await ctx.send(embed = embed1)
+        else:
+            await ctx.send(m.FAMILY_DOESNT_EXIST)
 
 
 def setup(bot):

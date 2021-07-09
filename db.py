@@ -30,6 +30,7 @@ universe_col = db['UNIVERSE']
 boss_col = db['BOSS']
 pet_col = db['PET']
 vault_col =db["VAULT"]
+house_col =db["HOUSE"]
 
 '''Check if Collection Exists'''
 def col_exists(col):
@@ -69,14 +70,14 @@ def queryFamily(family):
 
 def updateFamily(query, new_value):
     try:
-        exists = family_exists({'HEAD': family['HEAD']})
+        exists = family_exists({'HEAD': query['HEAD']})
         if exists:
             data = family_col.update_one(query, new_value)
             return data
         else:
            return False
     except:
-        print("Find team failed.")
+        print("Find family failed.")
 
 def queryAllFamily(family):
     data = family_col.find()
@@ -108,8 +109,8 @@ def deleteFamily(family, user):
         exists = family_exists({'HEAD': family['HEAD']})
         if exists:
             family = family_col.find_one(family)
-            if user == family['OWNER']:
-                users_col.update_many({'FAMILY': family['HEAD']}, {'$set': {'FAMILY': ''}})
+            if user == family['HEAD']:
+                users_col.update_many({'FAMILY': family['HEAD']}, {'$set': {'FAMILY': 'PCG'}})
                 family_col.delete_one({'HEAD': family['HEAD']})
                 return "Family deleted."
             else:
@@ -120,16 +121,16 @@ def deleteFamily(family, user):
     except:
         return "Delete Family failed."
 
-def deleteFamilyMember(query, value, user):
+def deleteFamilyMember(query, value, user, new_user):
     try:
-        exists = family_exists({'HEAD': query['FAMILY']})
+        exists = family_exists({'HEAD': query['HEAD']})
         if exists:
             family = family_col.find_one(query)
             if user == family['HEAD']:
                 update = family_col.update_one(query, value, upsert=True)
                 # Add Team to User Profile as well
-                query = {'DISNAME': str(user)}
-                new_value = {'$set': {'FAMILY': ''}}
+                query = {'DISNAME': str(new_user)}
+                new_value = {'$set': {'FAMILY': 'PCG'}}
                 users_col.update_one(query, new_value)
                 return "User has been removed from family. "
             else:
@@ -140,11 +141,32 @@ def deleteFamilyMember(query, value, user):
     except:
         print("Delete Team Member failed.")
 
+def deleteFamilyMemberAlt(query, value, user):
+    try:
+        exists = family_exists({'HEAD': query['HEAD']})
+        if exists:
+            family = family_col.find_one(query)
+            if user in family['KIDS']:
+                update = family_col.update_one(query, value, upsert=True)
+                # Add Team to User Profile as well
+                query = {'DISNAME': str(user)}
+                new_value = {'$set': {'FAMILY': 'PCG'}}
+                users_col.update_one(query, new_value)
+                return "User has been removed from family. "
+            else:
+                return "This user is not a member of the family."
+        else:
+            return "Family does not exist."
+
+    except:
+        print("Delete Team Member failed.")
+
+
 def addFamilyMember(query, add_to_family_query, user, new_user):
     exists = family_exists({'HEAD': query['HEAD']})
     if exists:
         family = family_col.find_one(query)
-        if user == team['OWNER']:
+        if user == family['HEAD']:
             family_col.update_one(query, add_to_family_query, upsert=True)
 
              # Add Team to User Profile as well
@@ -533,7 +555,8 @@ def queryShopTitles():
     return data 
 
 
-    ''' ARM '''
+
+''' ARM '''
 def arm_exists(data):
     collection_exists = col_exists("ARM")
     if collection_exists:
@@ -609,6 +632,65 @@ def queryTournamentArms():
 def queryShopArms():
     data = arm_col.find({'TOURNAMENT_REQUIREMENTS': 0, 'AVAILABLE': True})
     return data 
+
+
+''' HOUSE '''
+def house_exist(data):
+    collection_exists = col_exists("HOUSE")
+    if collection_exists:
+        house_does_exist = house_col.col.find_one(data)
+        if house_does_exist:
+            return True
+        else:
+            return False
+    else:
+        return False
+
+def createHouse(house):
+    try:
+        houseexists = house_exist({'HOUSE': house['HOUSE']})
+        if houseexists:
+            return "HOUSE already exists."
+        else:
+            house_col.insert_one(house)
+            return "New HOUSE created."
+    except:
+        return "Cannot create HOUSE."
+
+def updateHouse(query, new_value):
+    try:
+        houseexists = house_exist({'HOUSE': query['HOUSE']})
+        if houseexists:
+            house_col.update_one(query, new_value)
+            return True
+        else:
+            return False
+    except:
+        return False
+
+def updateManyHouses(new_value):
+    house_col.update_many({}, new_value)
+    return True
+
+def deleteHouse(query):
+    try:
+        houseexists = house_exist({'HOUSE': query['HOUSE']})
+        if houseexists:
+            house_col.delete_one(query)
+            return True
+        else:
+            return False
+    except:
+        return False
+
+def queryAllHouses():
+    data = house_col.find()
+    return data
+
+
+def queryHouse(query):
+    data = house_col.find_one(query)
+    return data
 
 
 ''' PETS '''

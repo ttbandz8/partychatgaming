@@ -818,6 +818,56 @@ async def curseteam(amount, team):
       else:
          print("cant find team")
 
+
+@bot.command()
+@commands.check(validate_user)
+async def familygift(ctx, user2: User, amount):
+   user = db.queryUser({'DISNAME': str(ctx.author)})
+   if user['FAMILY'] == 'PCG':
+      await ctx.send("You must be the Head of a Household to give allowance. ")
+      return
+
+   family = db.queryFamily({'HEAD': user['FAMILY']})
+   kids = family['KIDS']
+
+   if str(user2) not in family['KIDS'] and str(user2) not in family['PARTNER'] and str(user2) not in family['HEAD']:
+      await ctx.send("You can only give from savings to family members. ")
+      return
+   balance = family['BANK']
+   if balance <= int(amount):
+      await ctx.send("You do not have that amount to give.")
+   else:
+      await bless(int(amount), user2)
+      await cursefamily(int(amount), family['HEAD'])
+      await ctx.send(f":coin:{amount} has been gifted to {user2.mention}.")
+      return
+
+async def blessfamily(amount, family):
+   blessAmount = amount
+   posBlessAmount = 0 + abs(int(blessAmount))
+   query = {'HEAD': str(family)}
+   family_data = db.queryFamily(query)
+   house = family_data['HOUSE']
+   multiplier = house['MULT']
+   posBlessAmount = posBlessAmount * multiplier
+   if family_data:
+      update_query = {"$inc": {'BANK': posBlessAmount}}
+      db.updateFamily(query, update_query)
+   else:
+      print("Cannot find family")
+
+async def cursefamily(amount, family):
+      curseAmount = amount
+      negCurseAmount = 0 - abs(int(curseAmount))
+      query = {'HEAD': str(family)}
+      family_data = db.queryFamily(query)
+      if family_data:
+         print(family_data)
+         update_query = {"$inc": {'BANK': int(negCurseAmount)}}
+         db.updateFamily(query, update_query)
+      else:
+         print("cant find family")
+
 @bot.command()
 @commands.check(validate_user)
 async def traits(ctx):
