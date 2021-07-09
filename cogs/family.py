@@ -97,7 +97,8 @@ class Family(commands.Cog):
                         new_value_query = {'$set': {'PARTNER': '' }}
                         response = db.deleteFamilyMember(family_query, new_value_query, str(ctx.author), str(user1))
                         await ctx.send(response)
-                        main.curse(divorce_split)
+                        main.cursefamily(divorce_split,family_profile)
+                        main.bless(divorce_split, user1)
                     except:
                         print("Divorce Not Accepted ")
                 except:
