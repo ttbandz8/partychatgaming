@@ -118,6 +118,14 @@ class Family(commands.Cog):
             await ctx.send(m.USER_IN_FAMILY, delete_after=3)
         else:
             family_query = {'HEAD': str(ctx.author)}
+            family = db.queryFamily(family_query)
+            kid_count = 0
+            for kids in family['KIDS']:
+                kid_count = kid_count + 1
+            if kid_count >= 2:
+                await ctx.send(m.MAX_CHILDREN, delete_after=3)
+                return
+
             accept = await ctx.send(f"Do you want to adopt {user1.mention}?".format(self), delete_after=10)
             for emoji in emojis:
                 await accept.add_reaction(emoji)

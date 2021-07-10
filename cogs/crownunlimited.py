@@ -21848,7 +21848,21 @@ class CrownUnlimited(commands.Cog):
         await ctx.author.send("ALL UNIVERSES")
         await ctx.author.send("\n".join(available_universes))
         await ctx.author.send("\n".join(unavailable_universes))
-        
+
+
+    @commands.command()
+    async def houses(self, ctx):
+        house_data = db.queryAllHouses()
+        user = db.queryUser({'DISNAME': str(ctx.author)})
+
+        house_list = []
+        for homes in house_data:
+            house_list.append(f"{homes['HOUSE']}: :coin:{homes['PRICE']}: :part_alternation_mark:{homes['MULT']}x ")
+
+        await ctx.author.send("ALL HOUSES")
+        await ctx.author.send("\n".join(house_list))
+
+
 async def score(owner, user: User):
         session_query = {"OWNER": str(owner), "AVAILABLE": True, "KINGSGAMBIT": False}
         session_data = db.querySession(session_query)
