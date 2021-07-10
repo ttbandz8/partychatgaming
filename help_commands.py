@@ -22,7 +22,7 @@ BOT_COMMANDS = textwrap.dedent(f"""\
 **.uign game ign**: Update In Game Name for a game
 
 **TEAM COMMANDS**
-**.lkt team name**: Team lookup
+**.lookupteam team name**: Team lookup
 **.createteam game team name**: Create team 
 **.addteamgame game**: Add game to your team
 **.deleteteam**: Delete team
@@ -30,6 +30,15 @@ BOT_COMMANDS = textwrap.dedent(f"""\
 **.deletemember @player**: Delete team member
 **.apply @player**: Apply for owners team 
 **.leaveteam team**: Leave Team
+
+**FAMILY COMMANDS**
+**.lookupfamily @user**: Family lookup
+**.marry @user**:Create Family with a User
+**.divorce @user**: Ask for divorce from user
+**.adopt @user**: Adopt user into family
+**.runaway**: Runaway from family as child
+**.abandon**: Delete Family
+
 
 **LOBBY COMMANDS**
 **.lobby**: Check if you're in a lobby

@@ -12,7 +12,7 @@ class USER():
     IGN: list[str] = field(default_factory=lambda: [{'DEFAULT': 'PCG'}])
     GAMES: list[str] = field(default_factory=lambda: ['Crown Unlimited'])
     TEAM: str = field(default_factory=lambda: 'PCG')
-    FAMILY: str = field(default_factory=lambda: '')
+    FAMILY: str = field(default_factory=lambda: 'PCG')
     TITLE: str = field(default_factory=lambda: 'Starter')
     CARD: str = field(default_factory=lambda: "Ochaco Uraraka")
     DECK: list[str] = field(default_factory=lambda: [''])
@@ -48,10 +48,19 @@ class FAMILY():
     HEAD: str = field(default_factory=lambda: '')
     PARTNER: str = field(default_factory=lambda: '')
     KIDS: list[str] = field(default_factory=lambda: [])
-    PET: str = field(default_factory=lambda: '')
     BANK: int = field(default_factory=lambda: 0)
-    HOUSE:str = field(default_factory=lambda: '')
+    HOUSE:str = field(default_factory=lambda: 'Cave')
     TIMESTAMP: str = now
+
+@dataclass(frozen=True, order=True) 
+class HOUSE():
+    PATH: str
+    HOUSE: str
+    PRICE: int = field(default_factory=lambda: 0)
+    TIMESTAMP: str = now
+    MULT: float = field(default_factory=lambda: 1.0)
+    AVAILABLE: bool = field(default_factory=lambda: False)
+
 
 @dataclass(frozen=True, order=True)
 class SESSIONS():
@@ -303,3 +312,7 @@ def newPet(pet):
 def newMatch(match):
     m = MATCHES(**match)
     return asdict(m)
+
+def newHouse(house):
+    h = HOUSE(**house)
+    return asdict(h)

@@ -47,6 +47,8 @@ class CrownUnlimited(commands.Cog):
         cowner = db.queryUser({'DISNAME': str(user)})
         oteam = sowner['TEAM']
         cteam = cowner['TEAM']
+        ofam = sowner['FAMILY']
+        cfam = cowner['FAMILY']
         if sowner['AVAILABLE']:
             response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': False}})
         else:
@@ -3465,6 +3467,8 @@ class CrownUnlimited(commands.Cog):
                 cteambank = await blessteam(10, cteam)
                 drop_response = await drops(ctx.author, selected_universe, currentopponent)
                 cdrop_response = await drops(user, selected_universe, currentopponent)
+                ofambank = await blessfamily(10,ofam)
+                cfambank = await blessfamily(10,cfam)
                 questlogger = await quest(ouser, t_card, "Tales")
                 cquestlogger = await quest(cuser, t_card, "Tales")
                 petlogger = await petlevel(opet_name, ouser)
@@ -3541,6 +3545,8 @@ class CrownUnlimited(commands.Cog):
         private_channel = ctx
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
         oteam = sowner['TEAM']
+        ofam = sowner['FAMILY']
+        
         if sowner['AVAILABLE']:
             response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': False}})
         else:
@@ -3549,6 +3555,9 @@ class CrownUnlimited(commands.Cog):
 
 
         companion = db.queryUser({'DISNAME': str(user)})
+
+        cteam = companion['TEAM']
+        cfam = companion['FAMILY']
 
         completed_dungeons = sowner['DUNGEONS']
         completed_crown_tales = sowner['CROWN_TALES']
@@ -7190,10 +7199,12 @@ class CrownUnlimited(commands.Cog):
                 m_playtime = int(wintime[14:16])
                 s_playtime = int(wintime[17:19])
                 gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
-                teambank = await blessteam(10, oteam)
-                cteambank = await blessteam(10, cteam)
+                teambank = await blessteam(15, oteam)
+                cteambank = await blessteam(15, cteam)
                 drop_response = await dungeondrops(ctx.author, selected_universe, currentopponent)
                 cdrop_response = await dungeondrops(user, selected_universe, currentopponent)
+                ofambank = await blessfamily(15,ofam)
+                cfambank = await blessfamily(15,cfam)
                 match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']), str(oarm['ARM']), str(selected_universe), "Dungeon", o['EXCLUSIVE'])
                 cmatch = await savematch(str(user), str(c_card), str(c_card_path), str(ctitle['TITLE']), str(carm['ARM']), str(selected_universe), "Dungeon", c['EXCLUSIVE'])
                 questlogger = await quest(ouser, t_card, "Dungeon")
@@ -7269,6 +7280,10 @@ class CrownUnlimited(commands.Cog):
         companion = db.queryUser({'DISNAME': str(user)})
         private_channel = ctx
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
+        oteam = sowner['TEAM']
+        ofam = sowner['FAMILY']
+        cteam = companion['TEAM']
+        cfam = companion['FAMILY']
 
         if sowner['AVAILABLE']:
             response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': False}})
@@ -9620,13 +9635,16 @@ class CrownUnlimited(commands.Cog):
                                     c_defense = round(o_defense - ((dmg['DMG']/100) * o_defense))
                                 elif enh_type == 'WAVE':
                                     o_health = round(o_health - dmg['DMG'])
+                                    c_health = round(c_health - dmg['DMG'])
                                 elif enh_type == 'BLAST':
                                     o_health = round(o_health - dmg['DMG'])
+                                    c_health = round(c_health - dmg['DMG'])
                                 elif enh_type == 'CREATION':
                                     t_max_health = round(t_max_health + dmg['DMG'])
                                     t_health = round(t_health + dmg['DMG'])
                                 elif enh_type == 'DESTRUCTION':
                                     o_max_health = round(o_max_health - dmg['DMG'])
+                                    c_max_health = round(c_max_health - dmg['DMG'])
                                 t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                 embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                 await private_channel.send(embed=embedVar)
@@ -10898,13 +10916,16 @@ class CrownUnlimited(commands.Cog):
                                     c_attack = round(o_attack - ((dmg['DMG']/100) * o_attack))
                                     c_defense = round(o_defense - ((dmg['DMG']/100) * o_defense))
                                 elif enh_type == 'WAVE':
+                                    o_health = round(o_health - dmg['DMG'])
                                     c_health = round(c_health - dmg['DMG'])
                                 elif enh_type == 'BLAST':
+                                    o_health = round(o_health - dmg['DMG'])
                                     c_health = round(c_health - dmg['DMG'])
                                 elif enh_type == 'CREATION':
                                     t_max_health = round(t_max_health + dmg['DMG'])
                                     t_health = round(t_health + dmg['DMG'])
                                 elif enh_type == 'DESTRUCTION':
+                                    o_max_health = round(o_max_health - dmg['DMG'])
                                     c_max_health = round(c_max_health - dmg['DMG'])
                                 t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                 embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
@@ -10978,6 +10999,10 @@ class CrownUnlimited(commands.Cog):
             
             await bless(50, str(ctx.author))
             await bless(50, str(user))
+            ofambank = await blessfamily(50,ofam)
+            cfambank = await blessfamily(50,cfam)
+            oteambank = await blessteam(50,oteam)
+            cteambank = await blessteam(50,cteam)
             petlogger = await petlevel(opet_name, ouser)
             cpetlogger = await petlevel(cpet_name, user)
             response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
@@ -11015,6 +11040,7 @@ class CrownUnlimited(commands.Cog):
         private_channel = ctx
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
         oteam = sowner['TEAM']
+        ofam = sowner['FAMILY']
 
         if sowner['AVAILABLE']:
             response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': False}})
@@ -12985,6 +13011,7 @@ class CrownUnlimited(commands.Cog):
                 gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
                 drop_response = await dungeondrops(ctx.author, selected_universe, currentopponent)
                 teambank = await blessteam(15, oteam)
+                fambank = await blessfamily(15,ofam)
                 questlogger = await quest(ouser, t_card, "Dungeon")
                 destinylogger = await destiny(ouser, t_card, "Dungeon")
                 petlogger = await petlevel(opet_name, ouser)
@@ -13062,6 +13089,7 @@ class CrownUnlimited(commands.Cog):
         private_channel = ctx
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
         oteam = sowner['TEAM']
+        ofam = sowner['FAMILY']
         
         if sowner['AVAILABLE']:
             response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': False}})
@@ -14901,6 +14929,7 @@ class CrownUnlimited(commands.Cog):
                 s_playtime = int(wintime[17:19])
                 gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
                 teambank = await blessteam(10, oteam)
+                fambank = await blessfamily(10,ofam)
                 drop_response = await drops(ctx.author, selected_universe, currentopponent)
                 questlogger = await quest(ouser, t_card, "Tales")
                 destinylogger = await destiny(ouser, t_card, "Tales")
@@ -14980,6 +15009,8 @@ class CrownUnlimited(commands.Cog):
     async def boss(self, ctx):
         private_channel = ctx
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
+        oteam = sowner['TEAM']
+        ofam = sowner['FAMILY']
 
         if sowner['AVAILABLE']:
             response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': False}})
@@ -16948,6 +16979,8 @@ class CrownUnlimited(commands.Cog):
             petlogger = await petlevel(opet_name, ouser)
             match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']), str(oarm['ARM']), "N/A", "Boss", o['EXCLUSIVE'])
             await bless(50, str(ctx.author))
+            teambank = await blessteam(10, oteam)
+            fambank = await blessfamily(10,ofam)
             response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
             embedVar = discord.Embed(title=f":zap: `{o_card}`defeated the {t_universe} Boss {t_card}!\n{t_concede}", description=f"Match concluded in {turn_total} turns!\n\n{drop_response} + :coin: 50!", colour=0xe91e63)
             embedVar.set_author(name=f"{t_card} lost", icon_url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236432/PCG%20LOGOS%20AND%20RESOURCES/PCGBot_1.png")
