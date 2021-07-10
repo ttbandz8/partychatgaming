@@ -369,6 +369,10 @@ class CrownUnlimited(commands.Cog):
             if oteam == cteam:
                 o_defense = o_defense + 10
                 c_defense = c_defense + 10
+            if ofam == cfam:
+                o_health = o_health + 50
+                c_health = c_health + 50
+
              
             # Companion Passive Config
             if (c_universe == c_title_universe) or (c_title_universe == "Unbound"):
@@ -3877,6 +3881,9 @@ class CrownUnlimited(commands.Cog):
             if oteam == cteam:
                 o_defense = o_defense + 10
                 c_defense = c_defense + 10
+            if ofam == cfam:
+                o_health = o_health + 50
+                c_health = c_health + 50
             
             # Companion Passive Config
             if (c_universe == c_title_universe) or (c_title_universe == "Unbound"):
@@ -7603,6 +7610,9 @@ class CrownUnlimited(commands.Cog):
         if oteam == cteam:
             o_defense = o_defense + 10
             c_defense = c_defense + 10
+        if ofam == cfam:
+                o_health = o_health + 50
+                c_health = c_health + 50
         # Companion Passive Config
         if (c_universe == c_title_universe) or (c_title_universe == "Unbound"):
             c_title_passive_bool = True

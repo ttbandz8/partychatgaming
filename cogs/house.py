@@ -45,6 +45,8 @@ class House(commands.Cog):
         currentBalance = family['BANK']
         cost = house['PRICE']
 
+
+
         if house:
             if house_name in family['HOUSE']:
                 await ctx.send(m.USERS_ALREADY_HAS_HOUSE, delete_after=5)
@@ -62,78 +64,24 @@ class House(commands.Cog):
 
     @commands.command()
     async def viewhouse(self, ctx, *args):
-        arm_name = " ".join([*args])
-        arm = db.queryArm({'ARM': str(arm_name)})
-        if arm:
-            arm_arm = arm['ARM']
-            arm_show = arm['UNIVERSE']
-            arm_price = arm['PRICE']
-            exclusive = arm['EXCLUSIVE']
-
-            if arm_show != 'Unbound':
-                arm_show_img = db.queryUniverse({'TITLE': arm_show})['PATH']
-            arm_passive = arm['ABILITIES'][0]
-                # Arm Passive
-            o_arm_passive_type = list(arm_passive.keys())[0]
-            o_arm_passive_value = list(arm_passive.values())[0]
+        house_name = " ".join([*args])
+        house = db.queryHouse({'HOUSE': str(house_name)})
+        if house:
+            house_house = house['HOUSE']
+            house_price = house['PRICE']
+            house_img = house['PATH']
+            house_multiplier = house['MULT']
 
             message=""
             
             price_message ="" 
-            if exclusive:
-                price_message = "_Priceless_"
-            else:
-                price_message = f":coin: {arm_price}"
-
-            if o_arm_passive_type == 'ATK':
-                message=f"{arm_arm} is an ATK arm"
-            elif o_arm_passive_type == 'DEF':
-                message=f"{arm_arm} is a DEF arm"
-            elif o_arm_passive_type == 'STAM':
-                message=f"{arm_arm} is a STAM arm"
-            elif o_arm_passive_type == 'HLT':
-                message=f"{arm_arm} is a HLT arm"
-            elif o_arm_passive_type == 'LIFE':
-                message=f"{arm_arm} is a LIFE arm"
-            elif o_arm_passive_type == 'DRAIN':
-                message=f"{arm_arm} is an DRAIN arm"
-            elif o_arm_passive_type == 'FLOG':
-                message=f"{arm_arm} is a FLOG arm"
-            elif o_arm_passive_type == 'WITHER':
-                message=f"{arm_arm} is a WITHER arm"
-            elif o_arm_passive_type == 'RAGE':
-                message=f"{arm_arm} is a RAGE arm"
-            elif o_arm_passive_type == 'BRACE':            
-                message=f"{arm_arm} is a BRACE arm"
-            elif o_arm_passive_type == 'BZRK':            
-                message=f"{arm_arm} is a BZRK arm"
-            elif o_arm_passive_type == 'CRYSTAL':            
-                message=f"{arm_arm} is a CRYSTAL arm"
-            elif o_arm_passive_type == 'GROWTH':            
-                message=f"{arm_arm} is a GROWTH arm"
-            elif o_arm_passive_type == 'STANCE':
-                message=f"{arm_arm} is a STANCE arm"
-            elif o_arm_passive_type == 'CONFUSE':
-                message=f"{arm_arm} is a CONFUSE arm"
-            elif o_arm_passive_type == 'BLINK':
-                message=f"{arm_arm} is a BLINK arm"
-            elif o_arm_passive_type == 'SLOW':
-                message=f"{arm_arm} is a SLOW arm"
-            elif o_arm_passive_type == 'HASTE':
-                message=f"{arm_arm} is a HASTE arm" 
-            elif o_arm_passive_type == 'SOULCHAIN':
-                message=f"{arm_arm} is a SOULCHAIN arm"
-            elif o_arm_passive_type == 'FEAR':
-                message=f"{arm_arm} is a FEAR arm"
-            elif o_arm_passive_type == 'GAMBLE':
-                message=f"{arm_arm} is a GAMBLE arm"
+            price_message = f":coin: {house_price}"
 
 
-            embedVar = discord.Embed(title=f"{arm_arm}\n{price_message}".format(self), colour=000000)
-            if arm_show != "Unbound":
-                embedVar.set_thumbnail(url=arm_show_img)
-            embedVar.add_field(name="Unique Passive", value=f"`Increases {o_arm_passive_type} by {o_arm_passive_value}`", inline=False)
-            embedVar.set_footer(text=f".enhance - Enhancement Menu")
+            embedVar = discord.Embed(title=f"{house_house}\n{price_message}".format(self), colour=000000)
+            embedVar.set_thumbnail(url=house_img)
+            embedVar.add_field(name="Multiplier", value=f"Family earns {house_multiplier}x :coin: per match!", inline=False)
+            embedVar.set_footer(text=f".houses - House Menu")
 
             await ctx.send(embed=embedVar)
 
