@@ -568,12 +568,13 @@ class Lookup(commands.Cog):
         user_profile = db.queryUser({'DISNAME': str(user)})
         family = db.queryFamily({'HEAD': user_profile['FAMILY']})
         if family:
-            print("found family")
             family_name = family['HEAD'] + "'s Family"
             head_name = family['HEAD']
             partner_name = family['PARTNER']
             savings = family['BANK']
             house = family['HOUSE']
+            house_info = db.queryHouse({'HOUSE' : house})
+            house_img = house_info['PATH']
             kid_list = []
             for kids in family['KIDS']:
                 kid_list.append(kids.split("#",1)[0])
@@ -587,6 +588,8 @@ class Lookup(commands.Cog):
             if kid_list:
                 embed1.add_field(name="Kids :baby:", value="\n".join(f'{k}'.format(self) for k in kid_list), inline=False)
             embed1.add_field(name="House :house:", value=house, inline=False)
+            embed1.set_image(url=house_img)
+    
             
             
             

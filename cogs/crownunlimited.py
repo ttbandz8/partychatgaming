@@ -369,6 +369,10 @@ class CrownUnlimited(commands.Cog):
             if oteam == cteam:
                 o_defense = o_defense + 10
                 c_defense = c_defense + 10
+            if ofam == cfam:
+                o_health = o_health + 50
+                c_health = c_health + 50
+
              
             # Companion Passive Config
             if (c_universe == c_title_universe) or (c_title_universe == "Unbound"):
@@ -3877,6 +3881,9 @@ class CrownUnlimited(commands.Cog):
             if oteam == cteam:
                 o_defense = o_defense + 10
                 c_defense = c_defense + 10
+            if ofam == cfam:
+                o_health = o_health + 50
+                c_health = c_health + 50
             
             # Companion Passive Config
             if (c_universe == c_title_universe) or (c_title_universe == "Unbound"):
@@ -7603,6 +7610,9 @@ class CrownUnlimited(commands.Cog):
         if oteam == cteam:
             o_defense = o_defense + 10
             c_defense = c_defense + 10
+        if ofam == cfam:
+                o_health = o_health + 50
+                c_health = c_health + 50
         # Companion Passive Config
         if (c_universe == c_title_universe) or (c_title_universe == "Unbound"):
             c_title_passive_bool = True
@@ -21848,7 +21858,21 @@ class CrownUnlimited(commands.Cog):
         await ctx.author.send("ALL UNIVERSES")
         await ctx.author.send("\n".join(available_universes))
         await ctx.author.send("\n".join(unavailable_universes))
-        
+
+
+    @commands.command()
+    async def houses(self, ctx):
+        house_data = db.queryAllHouses()
+        user = db.queryUser({'DISNAME': str(ctx.author)})
+
+        house_list = []
+        for homes in house_data:
+            house_list.append(f"{homes['HOUSE']}: :coin:{homes['PRICE']}: :part_alternation_mark:{homes['MULT']}x ")
+
+        await ctx.author.send("ALL HOUSES")
+        await ctx.author.send("\n".join(house_list))
+
+
 async def score(owner, user: User):
         session_query = {"OWNER": str(owner), "AVAILABLE": True, "KINGSGAMBIT": False}
         session_data = db.querySession(session_query)

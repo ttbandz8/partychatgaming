@@ -34,10 +34,14 @@ BOT_COMMANDS = textwrap.dedent(f"""\
 **FAMILY COMMANDS**
 **.lookupfamily @user**: Family lookup
 **.marry @user**:Create Family with a User
-**.divorce @user**: Ask for divorce from user
-**.adopt @user**: Adopt user into family
+**.divorce @user**: Ask for divorce from partner
+**.adopt @user**: Adopt user into family as Child
+**.disown @user**: Remove Child From Family
 **.runaway**: Runaway from family as child
 **.abandon**: Delete Family
+**.houses**: Show list of available houses
+**.viewhouse**: View House Information
+**.buyhouse**: Buy and move into a new fmaily house
 
 
 **LOBBY COMMANDS**

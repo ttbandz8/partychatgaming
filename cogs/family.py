@@ -75,7 +75,7 @@ class Family(commands.Cog):
         divorce_split = family_bank * .50
         family_query = {'HEAD': str(ctx.author)}
         if family_profile:
-            if head_profile['DISNAME'] == family_profile['HEAD']:
+            if head_profile['DISNAME'] == family_profile['HEAD'] or head_profile['DISNAME'] == family_profile['PARTNER']:
                 accept = await ctx.send(f"Do you want to divorce {user1.mention}?".format(self), delete_after=8)
                 for emoji in emojis:
                     await accept.add_reaction(emoji)
@@ -118,6 +118,14 @@ class Family(commands.Cog):
             await ctx.send(m.USER_IN_FAMILY, delete_after=3)
         else:
             family_query = {'HEAD': str(ctx.author)}
+            family = db.queryFamily(family_query)
+            kid_count = 0
+            for kids in family['KIDS']:
+                kid_count = kid_count + 1
+            if kid_count >= 2:
+                await ctx.send(m.MAX_CHILDREN, delete_after=3)
+                return
+
             accept = await ctx.send(f"Do you want to adopt {user1.mention}?".format(self), delete_after=10)
             for emoji in emojis:
                 await accept.add_reaction(emoji)
@@ -145,6 +153,32 @@ class Family(commands.Cog):
                     await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=3)
             except:
                 print("No proposal Sent") 
+
+    @commands.command()
+    async def disown(self, ctx, user1: User):
+        head_profile = db.queryUser({'DISNAME': str(ctx.author)})
+        family_profile = db.queryFamily({'HEAD': head_profile['FAMILY']})
+        family_query = {'HEAD': str(ctx.author)}
+        if family_profile:
+            if head_profile['DISNAME'] == family_profile['HEAD']:
+                accept = await ctx.send(f"Do you want to disown {user1.mention}?".format(self), delete_after=8)
+                for emoji in emojis:
+                    await accept.add_reaction(emoji)
+
+                def check(reaction, user):
+                    return user == ctx.author and str(reaction.emoji) == '👍'
+
+                try:
+                    confirmed = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
+                    new_value_query = {'$pull': {'KIDS': str(user1) }}
+                    response = db.deleteFamilyMember(family_query, new_value_query, str(ctx.author), str(user1))
+                    await ctx.send(response)
+                except:
+                    print("No Divorce")
+            else:
+                await ctx.send(m.OWNER_ONLY_COMMAND, delete_after=5)
+        else:
+            await ctx.send(m.TEAM_DOESNT_EXIST, delete_after=5)
 
     @commands.command()
     async def runaway(self, ctx):

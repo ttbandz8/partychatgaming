@@ -825,8 +825,9 @@ async def curseteam(amount, team):
 @commands.check(validate_user)
 async def familygift(ctx, user2: User, amount):
    user = db.queryUser({'DISNAME': str(ctx.author)})
-   if user['FAMILY'] == 'PCG':
-      await ctx.send("You must be the Head of a Household to give allowance. ")
+   family = db.queryFamily({'HEAD' : user['FAMILY']})
+   if user['FAMILY'] == 'PCG' or (user['FAMILY'] != user['DISNAME'] and user['DISNAME'] != family['PARTNER']):
+      await ctx.send("You must be the Head of a Household or Partner to give allowance. ")
       return
 
    family = db.queryFamily({'HEAD': user['FAMILY']})
