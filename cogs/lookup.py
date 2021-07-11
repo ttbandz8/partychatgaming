@@ -586,7 +586,8 @@ class Lookup(commands.Cog):
             # if team['LOGO_FLAG']:
             #     embed1.set_image(url=logo)
             embed1.add_field(name="Head Of Household :brain:", value= head_name.split("#",1)[0], inline=False)
-            embed1.add_field(name="Partner :anatomical_heart:", value= partner_name.split("#",1)[0], inline=False)
+            if partner_name:
+                embed1.add_field(name="Partner :anatomical_heart:", value= partner_name.split("#",1)[0], inline=False)
             if kid_list:
                 embed1.add_field(name="Kids :baby:", value="\n".join(f'{k}'.format(self) for k in kid_list), inline=False)
             embed1.add_field(name="House :house:", value=house, inline=False)
