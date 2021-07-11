@@ -240,7 +240,7 @@ async def crown(ctx):
    Resolved characters can summon Pets to aid them in battle by entering 6
 
    **Pet Assistance!**
-   Pet assistance is a free move and can be used each round in addition to a Card Abiltiy!
+   Pet assistance cost **15 STAM** to use your pet Enhancer, Pet moves do not end the player turn!
    """) ,colour=0x7289da)
    embedVar6.set_thumbnail(url=avatar)
 
