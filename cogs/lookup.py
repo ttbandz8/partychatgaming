@@ -438,6 +438,7 @@ class Lookup(commands.Cog):
             games = d['GAMES']
             ign = d['IGN']
             team = d['TEAM']
+            family = d['FAMILY']
             titles = d['TITLE']
             arm = d['ARM']
             avatar = d['AVATAR']
@@ -466,6 +467,7 @@ class Lookup(commands.Cog):
             embed1 = discord.Embed(title= f":triangular_flag_on_post: " + f"{name}".format(self), description=":bank: Party Chat Gaming Database™️", colour=000000)
             embed1.set_thumbnail(url=avatar)
             embed1.add_field(name="Team" + " :military_helmet:", value=team)
+            embed1.add_field(name="Family" + " :family_mwgb:", value=family)
             embed1.add_field(name="Title" + " :crown:", value=' '.join(str(x) for x in titles))
             embed1.add_field(name="Arm" + " :mechanical_arm: ", value=f"{arm}")
             embed1.add_field(name="Pet" + " :dog:  ", value=f"{pet}")
