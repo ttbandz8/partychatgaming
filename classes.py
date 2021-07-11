@@ -27,6 +27,7 @@ class USER():
     REFERRED: bool = field(default_factory=lambda: False)
     REFERRER:str = field(default_factory=lambda: "N/A")
     TIMESTAMP: str = now
+    IS_ADMIN: bool = field(default_factory=lambda: False)
 
 @dataclass(frozen=True, order=True)
 class TEAMS():
