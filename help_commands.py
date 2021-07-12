@@ -30,6 +30,7 @@ BOT_COMMANDS = textwrap.dedent(f"""\
 **.deletemember @player**: Delete team member
 **.apply @player**: Apply for owners team 
 **.leaveteam team**: Leave Team
+**.teamgift @player amount**: Send Team Members coin (Owner Onlu)
 
 **FAMILY COMMANDS**
 **.lookupfamily @user**: Family lookup
@@ -39,6 +40,7 @@ BOT_COMMANDS = textwrap.dedent(f"""\
 **.disown @user**: Remove Child From Family
 **.runaway**: Runaway from family as child
 **.abandon**: Delete Family
+**.familygift @player amount**: Send Family Members coin (Head/Partner Only)
 **.houses**: Show list of available houses
 **.viewhouse**: View House Information
 **.buyhouse**: Buy and move into a new family house
