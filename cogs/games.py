@@ -138,7 +138,7 @@ class Games(commands.Cog):
 
             embedVar = discord.Embed(title=f"Games Lookup", description=":bank: Party Chat Gaming Database", colour=000000)
             embedVar.add_field(name="Games", value="\n".join(game_title_list))
-            embedVar.set_footer(text="More games will be added soon. ")
+            embedVar.set_footer(text="Use .ag game to add games to your Profile!\nMore games will be added soon. ")
 
             await ctx.send(embed=embedVar)
         else:
