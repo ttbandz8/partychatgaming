@@ -76,22 +76,26 @@ CROWN_UNLIMITED_COMMANDS = textwrap.dedent(f"""\
 **.savedeck**: Save your Build as Preset
 
 **Card Commands**
+**.cards universe**: View Universe Card List
 **.viewcard**: Preview Card 
 **.buycard**: Buy Card
 **.equipcard card**: Equip card
 **.analysis card**: View Card Statistics and Optimal Builds
 
 **Title Commands**
+**.titles universe**: View Universe Title List
 **.viewtitle**: Preview Title
 **.buytitle**: Buy Title
 **.equiptitle title**: - Equip title
 
 **Arm Commands**
+**.arms universe**: View Universe Arm List
 **.viewarm**: Preview Arm
 **.buyarm**: Buy Arm
 **.equiparm arm**: Equip arm
 
 **Pet Commands**
+**.pets universe**: View Universe Pet List
 **.viewpet** Preview Pet
 **.equippet pet**: Equip pet
 

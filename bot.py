@@ -341,12 +341,17 @@ async def r(ctx):
       **.crown**
       Read the Crown Unlimited Manual!
 
+      **.senpai**
+      Start Tutorial!
+
       **.senpaibattle**
       Start Crown Unlimited Battle Tutorial!
 
       **.build** Check your current build including your equipped Card, Title, Arm, and Pet
 
       **.shop** Purchase new Cards, Titles, and Arms
+
+      **.help** Open Party Chat Gaming Bot Help Page
 
 
       

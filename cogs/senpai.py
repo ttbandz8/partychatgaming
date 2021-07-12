@@ -102,6 +102,9 @@ class Senpai(commands.Cog):
     
     # @commands.command()
     # async def bootcamp(self, ctx):
+
+            # embed11 = discord.Embed(color=ctx.author.color).add_field(name=":woman_teacher: " + "Senpai™️ Says :\n" + "Games !:video_game:\n#lkg , `.ag` and `.uign`", value="Use the `.lk`g command to bring up the available games!\nAdd games using the `.ag` 'gamename' 'InGameName' command.\nCrown Unlimitd has already been added for you\nTry .ag game 'gameIGN'!\n\n*Hint use .uign 'game' 'newIGN' to update your In Game Name.*")
+            # embed11.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png")
     #     embed1 = discord.Embed(title= f":military_helmet: " + "Senpai™️ Bootcamp:", description="Use the Reactions to learn with Senpai™️\n\n:brain: Learn how to Create, Lookup and Score Lobbies.\n\n*The #bootcamp tutorial will walk you through the Lobby System!*\n*For help with specific commands use #help*\n\n*Make sure to say thank you*:heart_exclamation:", colour=000000, value="Page 1")
     #     embed1.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Bootcamp.png")
 
@@ -144,52 +147,55 @@ class Senpai(commands.Cog):
     #     embeds = [embed1, embed2, embed3, embed5, embed4, embed6, embed7, embed8, embed9, embed6, embed10, embed11]
     #     await paginator.run(embeds)
 
-    # @commands.command()
-    # async def senpai(self, ctx):
-    #     embed1 = discord.Embed(title= f":woman_teacher: " + "Senpai™️", description=" Use the Reactions to learn with Senpai™️\n\n:brain: Learn how to register!\n\n*The `.senpai` tutorial will walk you through registration!*\n*For help with specific commands use `.help`*\n\n*Make sure to say thank you*:heart_exclamation:", colour=000000, value="Page 1")
-    #     embed1.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png")
+    @commands.command()
+    async def senpai(self, ctx):
+        embed1 = discord.Embed(title= f":woman_teacher: " + "Senpai™️", description=" Use the Reactions to learn with Senpai™️\n\n:brain: Learn how to register!\n\n*The `.senpai` tutorial will walk you through registration!*\n*For help with specific commands use `.help`*\n\n*Make sure to say thank you*:heart_exclamation:", colour=000000, value="Page 1")
+        embed1.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png")
 
-    #     embed2 = discord.Embed(color=ctx.author.color).add_field(name=":woman_teacher: " + "Senpai™️\n" + "`.senpai` = Teacher!", value="Great you did your first `Command`!\n`Commands` are written in this format:arrow_down:\n\n`.command` `'TypeHere'` `'Type Here'`\n\n*Let's play Senpai:tm: Says!*")
-    #     embed2.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png")
+        embed2 = discord.Embed(color=ctx.author.color).add_field(name=":woman_teacher: " + "Senpai™️\n" + "`.senpai` = Teacher!", value="Great you did your first `Command`!\n`Commands` are written in this format:arrow_down:\n\n`.command` `'TypeHere'` `'Type Here'`\n\n*Let's play Senpai:tm: Says!*")
+        embed2.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png")
         
-    #     embed3 = discord.Embed(color=ctx.author.color).add_field(name=":woman_teacher: " + "Senpai™️ Says:\n" + "`.r` = REGISTER !", value="Use .r to register your account!:thumbsup:\n*We only sweep your internet history once... jk :eyes:*\n\n*Hint use .r!*")
-    #     embed3.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png")
+        embed3 = discord.Embed(color=ctx.author.color).add_field(name=":woman_teacher: " + "Senpai™️ Says:\n" + "`.r` = REGISTER !", value="Use .r to register your account!:thumbsup:\n*We only sweep your internet history once... jk :eyes:*\n\n*Hint use .r!*")
+        embed3.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png")
         
-    #     embed4 = discord.Embed(color=ctx.author.color).add_field(name=":woman_teacher: " + "Senpai™️ Says:\n" + "`.build` :muscle:", value="Now try the `.build` command!:muscle:\n`.build` shows your current Crown Unlimited Characted Build!\n\nWell Talk about Crown Unlimited more in `.bootcamp`\n*Hint use `.build`!*")
-    #     embed4.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png")
+        embed4 = discord.Embed(color=ctx.author.color).add_field(name=":woman_teacher: " + "Senpai™️ Says:\n" + "`.build` :muscle:", value="Now try the `.build` command!:muscle:\n`.build` shows your current Crown Unlimited Character Build!\n\nFor a full Crown Unlimited Manual use `.crown`\n*Hint use `.build` to see your build!*")
+        embed4.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png")
         
-    #     embed5 = discord.Embed(color=ctx.author.color).add_field(name=":woman_teacher: " + "Senpai™️ Says:\n" + "`.lookup` = Lookup:eyes:", value="type `.lookup` @`user` to Lookup other Registered Players!:mag:\n\nTry `.lookup` @Senpai\nGreat you should see my `Stats`, `Games`, `Teams`, `Title` and `Arm`!\n\n*Try `.lookup` @`user` on another user for practice!*")
-    #     embed5.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png") 
+        embed5 = discord.Embed(color=ctx.author.color).add_field(name=":woman_teacher: " + "Senpai™️ Says:\n" + "`.lookup` = Lookup:eyes:", value="type `.lookup` @`user` to Lookup other Registered Players!:mag:\n\nTry `.lookup` @`Senpai`\nGreat you should see my `Team`, `Family`,`Title`, `Arm`, and `Pet` as well as `Tournament Wins`!\n\nOn the next page are the `Games` I play frequently followed by my stats\n\nThe final page shows my Completed `Crown Tales` and `Crown Dungeons`\n\n*Try `.lookup` @`user` on another user for practice!*")
+        embed5.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png") 
         
-    #     embed6 = discord.Embed(color=ctx.author.color).add_field(name=":woman_teacher: " + "Senpai™️ Says:\n" + "The `.vault`", value="Use `.vault` to bring up the `Vault`\nYour current :coin: and all items are stored in the `vault`!\n\nEarn :coin: by playing Crown Unlimted, winning Party Chat Gaming Lobbies and Competing in Sponsored Tournaments.\nSpend :coin: to buy `items` from the `.shop`!\n\n*Hint earn special `cards`, `titles` and `arms` by competing in `tournaments`!*")
-    #     embed6.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png")
+        embed6 = discord.Embed(color=ctx.author.color).add_field(name=":woman_teacher: " + "Senpai™️ Says:\n" + "The `vault`", value="Your `Items` are stored in the `Vault` broken up into 4 different commands\nYour `Cards` are stored in the `.cvault`, `Titles` in the `.tvault`, `Arms` in the `.avault` and `Pets` in the `.pvault`\n\nEarn :coin: by playing `Crown Unlimted`, winning Party Chat Gaming `Lobbies` and Competing in Sponsored `Tournaments`.\n*Spend :coin: to buy `items` from the `.shop`!*")
+        embed6.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png")
         
-    #     embed7 = discord.Embed(color=ctx.author.color).add_field(name=":woman_teacher: " + "Senpai™️ Says :\n" + "`.shop` till you drop!", value="Type `.shop` to open the `Crown Unlimited Shop`!\nView and Buy new `Cards`, `Titles` and `Arms` here!\n\n*As you gain :coin: and complete `.tales`, you will see new items appear in the .shop!\nNew Items are added regularly so check the #shop often if something is out of stock!!*")
-    #     embed7.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png")
+        embed7 = discord.Embed(color=ctx.author.color).add_field(name=":woman_teacher: " + "Senpai™️ Says :\n" + "`.shop` till you drop!", value="Type `.shop` to open the `Crown Unlimited Pop Up Shop`!\nView and Buy new `Cards`, `Titles` and `Arms` here!\n\n*As you gain :coin: and complete `Tales` and `Dungeons`, you will see new items appear in the `.shop`!\n*New Items are added regularly so check the `.shop` often if something is out of `Stock`!*")
+        embed7.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png")
         
-    #     embed8 = discord.Embed(color=ctx.author.color).add_field(name=":woman_teacher: " + "Senpai™️ Says :\n" + "`View with `.viewcard`, `.viewarm`, `.viewtitle` and `.viewpet`", value="View the options!\n\nUse `.viewcard` `'cardname'` to View Card.\nType card name exactly as seen\n\n *Hint Try .viewcard Naruto*")
-    #     embed8.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png")
+        embed8 = discord.Embed(color=ctx.author.color).add_field(name=":woman_teacher: " + "Senpai™️ Says :\n" + "View with `.viewcard`, `.viewarm`, `.viewtitle` and `.viewpet`", value="View the options!\n\nUse `.viewcard` `'cardname'` to View Card.\n\nNow use `.viewtitle` `'title'` to View Title\n\nThen use `.viewarm` `'arm'` to View Arm\n\nFinally use `.viewpet` `'pet'` to View Pet.\n\n *Hint Try .viewcard Naruto*\n*Item names are Case-Sensitive*")
+        embed8.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png")
         
-    #     embed9 = discord.Embed(color=ctx.author.color).add_field(name=":woman_teacher: " + "Senpai™️ Says :\n" + "Buy with `.buycard`, `.buyarm`, `.buytitle`", value="Use `.buycard` 'card', .buyarm `'armn'` or .buytitle 'title' to add items to your `.vault`!\n\n*Remember you can use `.viewcard` to view `items` in the `.shop`*")
-    #     embed9.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png")
+        embed9 = discord.Embed(color=ctx.author.color).add_field(name=":woman_teacher: " + "Senpai™️ Says :\n" + "Buy with `.buycard`, `.buyarm`, `.buytitle`", value="Use `.buycard` 'card', `.buyarm` 'arm' or `.buytitle` 'title' to add items to your `Vault`!\n\nTo view a full list of items by `Universe`, use the `Universe` list commands\n*`.cards` `universe`, `.titles` `universe`\n `.arms` `universe`, and `.pets` `universe`*\n**Example**: `.cards` `My Hero Academia`")
+        embed9.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png")
         
-    #     embed10 = discord.Embed(color=ctx.author.color).add_field(name=":woman_teacher: " + "Senpai™️ Says :\n" + "Equip! `.equipcard`, `.equiparm`, `.equiptitle`", value="Use .equipcard 'card' to Equip a Card.\nNow use .equiptitle 'title' to equip a Title.\nNow use .equiparm 'arm' to equip an Arm.\nOnce you've decided on your new build use .build!\n\n*Hint Use .vault to see your available items!*")
-    #     embed10.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png")
+        embed10 = discord.Embed(color=ctx.author.color).add_field(name=":woman_teacher: " + "Senpai™️ Says :\n" + "Equip! `.equipcard`, `.equiparm`, `.equiptitle`, `.equippet`", value="Use `.equipcard` 'card' to Equip a Card.\n\nNow use `.equiptitle` 'title' to equip a Title.\n\nThen use `.equiparm` 'arm' to equip an Arm.\n\nFinally use `.equippet` 'pet' to equip an Pet\n\nOnce you've decided on your new build use `.build`!\n\n*Hint use `universe` specific items to gain a `universe` Buff!*")
+        embed10.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png")
         
-    #     embed11 = discord.Embed(color=ctx.author.color).add_field(name=":woman_teacher: " + "Senpai™️ Says :\n" + "Games !:video_game:\n#lkg , `.ag` and `.uign`", value="Use the `.lk`g command to bring up the available games!\nAdd games using the `.ag` 'gamename' 'InGameName' command.\nCrown Unlimitd has already been added for you\nTry .ag game 'gameIGN'!\n\n*Hint use .uign 'game' 'newIGN' to update your In Game Name.*")
-    #     embed11.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png")
+        embed11 = discord.Embed(color=ctx.author.color).add_field(name=":woman_teacher: " + "Senpai™️ Says :\n" + "Time to `.senpaibattle`", value="Use `.senpaibattle` to open the Crown Unlimited `Tutorial Match Lobby`\n\nThis will be your first Crown Unlimited Battle agaist ME! Senpai!\n\nMake sure your `.build` is set before entering a `Lobby`\n\nNow use `.start` to begin the tutorial match\n\nOnce you are done use the `.end` command to close the lobby\n\n*Hint use `.legendbattle` to face my Final Form!*")
+        embed11.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png")
+
+        embed12 = discord.Embed(color=ctx.author.color).add_field(name=":woman_teacher: " + "Senpai™️ Says :\n" + "Many Game Modes!", value="Crown Unlimited game modes include both Single Player and Multiplayer\n\nSingle Player Modes include `.tales`, `.dungeon` and `.boss`\n\nMultiplayer consist of Competiitve and Co-Op\n\nCo-Op Modes include `.ctales`, `.cdungeon`, and `.cboss`\n\nCompetiitive modes are acccesed using `.battle`\n\nYou can play both Ranked matches (`.start`) and Wager matches (`.wager`)\n\n*Hint use `.vs @user Crown` to view the W/L record between you and another User*")
+        embed12.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png")
         
-    #     embed12 = discord.Embed(color=ctx.author.color).add_field(name=":woman_teacher: " + "Senpai™️ Says :\n" + "CONGRATULATIONS !", value="Welcome to Party Chat Gaming:tm:\nWhen your're ready to start creating lobbies\n*Use #bootcamp!*")
-    #     embed12.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Bootcamp.png")
+        embed13 = discord.Embed(color=ctx.author.color).add_field(name=":woman_teacher: " + "Senpai™️ Says :\n" + "CONGRATULATIONS !", value="You've completed the Senpai:tm: tutorial!\n\nCrown Unlimited is a large Discord game with over 50 Commands!\n\nRead The game manual using `.crown` to get familar with all the game modes and mechanics\n\nAccess the full Command list and help page with `.help`\n\nWhen your're ready to start creating `Lobbies` and using the PCG bot to its fullest potential\n*Use .bootcamp!*")
+        embed13.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Bootcamp.png")
         
-    #     paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
-    #     paginator.add_reaction('⏮️', "first")
-    #     paginator.add_reaction('⏪', "back")
-    #     paginator.add_reaction('🔐', "lock")
-    #     paginator.add_reaction('⏩', "next")
-    #     paginator.add_reaction('⏭️', "last")
-    #     embeds = [embed1, embed2, embed3, embed4, embed5, embed6, embed7, embed8,embed9,embed10,embed11,embed12]
-    #     await paginator.run(embeds)
+        paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+        paginator.add_reaction('⏮️', "first")
+        paginator.add_reaction('⏪', "back")
+        paginator.add_reaction('🔐', "lock")
+        paginator.add_reaction('⏩', "next")
+        paginator.add_reaction('⏭️', "last")
+        embeds = [embed1, embed2, embed3, embed4, embed5, embed6, embed7, embed8,embed9,embed10,embed11,embed12,embed13]
+        await paginator.run(embeds)
 
 def setup(bot):
     bot.add_cog(Senpai(bot))
