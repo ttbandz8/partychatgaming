@@ -7611,8 +7611,8 @@ class CrownUnlimited(commands.Cog):
             o_defense = o_defense + 10
             c_defense = c_defense + 10
         if ofam == cfam:
-                o_health = o_health + 50
-                c_health = c_health + 50
+            o_health = o_health + 50
+            c_health = c_health + 50
         # Companion Passive Config
         if (c_universe == c_title_universe) or (c_title_universe == "Unbound"):
             c_title_passive_bool = True
@@ -14939,7 +14939,7 @@ class CrownUnlimited(commands.Cog):
                 s_playtime = int(wintime[17:19])
                 gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
                 teambank = await blessteam(10, oteam)
-                fambank = await blessfamily(10,ofam)
+                fambank = await blessfamily(10, ofam)
                 drop_response = await drops(ctx.author, selected_universe, currentopponent)
                 questlogger = await quest(ouser, t_card, "Tales")
                 destinylogger = await destiny(ouser, t_card, "Tales")
@@ -22628,6 +22628,21 @@ async def blessteam(amount, team):
       db.updateTeam(query, update_query)
    else:
       print("Cannot find Team")
+
+async def blessfamily(amount, family):
+   blessAmount = amount
+   posBlessAmount = 0 + abs(int(blessAmount))
+   query = {'HEAD': str(family)}
+   family_data = db.queryFamily(query)
+   if family_data:
+      house = family_data['HOUSE']
+      house_data = db.queryHouse({'HOUSE': house})
+      multiplier = house_data['MULT']
+      posBlessAmount = posBlessAmount * multiplier
+      update_query = {"$inc": {'BANK': posBlessAmount}}
+      db.updateFamily(query, update_query)
+   else:
+      print("Cannot find family")
 
 async def curse(amount, user):
       curseAmount = amount

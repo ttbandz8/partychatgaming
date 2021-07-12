@@ -848,10 +848,11 @@ async def blessfamily(amount, family):
    posBlessAmount = 0 + abs(int(blessAmount))
    query = {'HEAD': str(family)}
    family_data = db.queryFamily(query)
-   house = family_data['HOUSE']
-   multiplier = house['MULT']
-   posBlessAmount = posBlessAmount * multiplier
    if family_data:
+      house = family_data['HOUSE']
+      house_data = db.queryHouse({'HOUSE': house})
+      multiplier = house_data['MULT']
+      posBlessAmount = posBlessAmount * multiplier
       update_query = {"$inc": {'BANK': posBlessAmount}}
       db.updateFamily(query, update_query)
    else:

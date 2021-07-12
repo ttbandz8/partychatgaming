@@ -16,7 +16,7 @@ BOT_COMMANDS = textwrap.dedent(f"""\
 **.lk @player**: Profile lookup
 
 **GAME COMMANDS**
-**.vs game @player**: Matchup lookup
+**.vs @player game**: Matchup lookup
 **.lkg**: Lookup available Games to add to Profile
 **.ag game name**: Add Game to your account
 **.uign game ign**: Update In Game Name for a game
@@ -41,7 +41,7 @@ BOT_COMMANDS = textwrap.dedent(f"""\
 **.abandon**: Delete Family
 **.houses**: Show list of available houses
 **.viewhouse**: View House Information
-**.buyhouse**: Buy and move into a new fmaily house
+**.buyhouse**: Buy and move into a new family house
 
 
 **LOBBY COMMANDS**
@@ -77,6 +77,7 @@ CROWN_UNLIMITED_COMMANDS = textwrap.dedent(f"""\
 **.viewcard**: Preview Card 
 **.buycard**: Buy Card
 **.equipcard card**: Equip card
+**.analysis card**: View Card Statistics and Optimal Builds
 
 **Title Commands**
 **.viewtitle**: Preview Title
