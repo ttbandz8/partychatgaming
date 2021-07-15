@@ -70,28 +70,33 @@ CROWN_UNLIMITED_COMMANDS = textwrap.dedent(f"""\
 **.tvault**: Open your list of Titles
 **.avault**: Open your list of Arms
 **.pvault**: Open your list of Pets
-**.destiny**: Open your list of Destiny Lines
 **.quest**: Open your list of Quests
 **.deck**: View your Presets
 **.savedeck**: Save your Build as Preset
 
 **Card Commands**
+**.cards universe**: View Universe Card List
 **.viewcard**: Preview Card 
 **.buycard**: Buy Card
 **.equipcard card**: Equip card
 **.analysis card**: View Card Statistics and Optimal Builds
+**.destiny**: Open your list of Destiny Cards
+**.destinies universe**: Show Available Universe Destinies
 
 **Title Commands**
+**.titles universe**: View Universe Title List
 **.viewtitle**: Preview Title
 **.buytitle**: Buy Title
 **.equiptitle title**: - Equip title
 
 **Arm Commands**
+**.arms universe**: View Universe Arm List
 **.viewarm**: Preview Arm
 **.buyarm**: Buy Arm
 **.equiparm arm**: Equip arm
 
 **Pet Commands**
+**.pets universe**: View Universe Pet List
 **.viewpet** Preview Pet
 **.equippet pet**: Equip pet
 
@@ -109,6 +114,7 @@ CROWN_UNLIMITED_COMMANDS = textwrap.dedent(f"""\
 **.wager amount**: Wager amount to battle in current session
 
 **Crown Unlimited Story Mode**
+**.universes**: Show List Of Crown Universes
 **.tales**: Opens Crown Tales Story Mode Menu
 **.dungeon**: Opens Crown Tales Dungeon Menu
 **.boss Universe**: Opens Crown Universe Boss Fight
