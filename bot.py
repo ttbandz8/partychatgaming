@@ -93,7 +93,6 @@ async def enhance(ctx):
    embedVar2.add_field(name="`STEALS`", value="`FLOG`- `ATK` Steal\n\n`WITHER`- `DEF` Steal\n\n`LIFE` - `LIFE` Steal\n\n`DRAIN` - `STAM` Steal\n\n")
    embedVar2.set_footer(text=f".help - Bot Help")
 
-
    embedVar3 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
    embedVar3.set_thumbnail(url=avatar)
    embedVar3.add_field(name="`SACRIFICE`", value="`RAGE` - Decrease `DEF`, Increase `ATK`\n\n`BRACE` - Decrease `ATK`, Increase `DEF`\n\n`BZRK` - Decrease `HLT`,  Increase `ATK`\n\n`CRYSTAL`- Decrease `HLT`, Increase `DEF`\n\n`GROWTH`- Decrease `MAXHLT`, Increase `STATS`\n\n")
@@ -111,8 +110,18 @@ async def enhance(ctx):
 
    embedVar6 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
    embedVar6.set_thumbnail(url=avatar)
-   embedVar6.add_field(name="`CONTROL`", value="`SOULCHAIN` - Both `PLAYERS` `STAM` = \n\n`GAMBLE` - Both `PLAYERS` `HEALTH` =\n\n`FEAR` - Decrease `HLT`, Decrease `OPP ATK` & `OPP DEF`")
+   embedVar6.add_field(name="`CONTROL`", value="`SOULCHAIN` - Both `PLAYERS` `STAM` = \n\n`GAMBLE` - Both `PLAYERS` `HEALTH` =\n\n`FEAR` - Decrease `HLT`, Decrease `OPP ATK` & `OPP DEF`\n\n")
    embedVar6.set_footer(text=f".help - Bot Help")
+
+   embedVar8 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
+   embedVar8.set_thumbnail(url=avatar)
+   embedVar8.add_field(name="`DAMAGE`", value="`WAVE` - Decreasing Turn Count Based AP DMG \n\n`BLAST` - Increasing Turn Count Based AP DMG\n\n")
+   embedVar8.set_footer(text=f".help - Bot Help")
+
+   embedVar9 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
+   embedVar9.set_thumbnail(url=avatar)
+   embedVar9.add_field(name="`DIVINITY`", value="`CREATION` - Increase `MAXHEALTH`\n\n`DESTRUCTION` - Decrease `OPP MAXHEALTH\n\n")
+   embedVar9.set_footer(text=f".help - Bot Help")
 
    embedVar7 = discord.Embed(title= f":trident:ENHANCE DETAILS:", description=textwrap.dedent(f"""
    **ATK:** AP Percentage Based Attack Increased
@@ -136,9 +145,9 @@ async def enhance(ctx):
    **SOUL:** CHAIN - Make you and your opponent Stamina the same based on AP Value
    **GAMBLE:** Make you and your opponent health the same based on AP Value
    **FEAR:** Lower your Health by AP Percentage, Lower your opponent ATK and DEF by AP Percentage
-   **WAVE:** Deals AP * Turn Count Damage to Opponent that decreases as the Turn Count increases
+   **WAVE:** Deals AP / Turn Count Damage to Opponent that decreases as the Turn Count increases
    **BLAST:** Deals AP * Turn Count Damage to Opponent that increases as the Turn Count increases
-   **CREATION:** Increases AP * Turn Count Max Health & Health that decreases as the Turn Count increases
+   **CREATION:** Increases AP / Turn Count Max Health & Health that decreases as the Turn Count increases
    **DESTRUCTION:** Decreases AP * Turn Count Max Health that increases as the Turn Count increases
    """) ,colour=0x7289da)
    embedVar7.set_thumbnail(url=avatar)
@@ -150,7 +159,7 @@ async def enhance(ctx):
    paginator.add_reaction('🔐', "lock")
    paginator.add_reaction('⏩', "next")
    paginator.add_reaction('⏭️', "last")
-   embeds = [embedVar1, embedVar2, embedVar3, embedVar4, embedVar5, embedVar6, embedVar7]
+   embeds = [embedVar1, embedVar2, embedVar3, embedVar4, embedVar5, embedVar6, embedVar8, embedVar9, embedVar7]
    await paginator.run(embeds)
 
 @bot.group(invoke_without_command=True)
@@ -161,86 +170,106 @@ async def crown(ctx):
    embedVar1 = discord.Embed(title= f":crown: Crown Unlimited",colour=0x7289da)
    embedVar1.set_thumbnail(url=avatar)
    embedVar1.add_field(name="About The Game!", value=textwrap.dedent(f"""\
-   Crown Unlimited is a multiplatform card game featuring universes from your favorite series!
+   **Crown Unlimited** is a Multiplatform Card Game exploring **Universes** from your favorite Video Game and Anime Series!
 
-   Explore Tales, Dungeons, and Bosses solo, or with your friend!
+   Explore Tales, Dungeons, and Bosses! Play **Solo**, or with **Friends**!
    """))
 
    embedVar2 = discord.Embed(title= f":crown: Getting Started", description=textwrap.dedent(f"""\
-   Each player starts with 3 cards from the 3 Starter Universes to begin their journey.
+   Players begin with 3 cards from the **Starter Universes**.
+   The Title **Starter** and the Arm **Stock** are equipped.
+   Your first Pet **Chick** will be joining as well!   
 
-   The starting universes are _My Hero Academia_, _Kanto Region_, and _League Of Legends_.
+   The **Starter Universes** are _My Hero Academia_, _Kanto Region_, and _League Of Legends_.
 
-   Compete in Single Player and Multiplayer _Tales_, _Dungeons_, and _Bosses_ to earn :coin: to buy and equip better Items and unlock new worlds!
+   Play **Single Player** and **Multiplayer** Modes to earn :coin:
+   Buy and equip better Items and unlock new **Universes**!
    """), colour=0x7289da)
    embedVar2.set_thumbnail(url=avatar)
 
    embedVar3 = discord.Embed(title= f":crown: Card Mechanics", description=textwrap.dedent(f"""\
    **Card Stats** 
-   Health (HLT) Stamina (STAM) Attack (ATK) Defense(DEF)
+   Health (**HLT**) Stamina (**STAM**) Attack (**ATK**) Defense(**DEF**)
 
-   **Cards have 5 Elements** 
+   **Cards Have 6 Elements** 
    3 Abilities
    1 Enhancer
    1 Unique Passive
+   1 Universe Trait
 
    **Abilities**
    Abilities inflict damage on the opponent.
-   Each ability has a corresponding number when selecting from the Movelist
+   Each ability matches a **Number** and **Stamina Cost** in the Movelist.
    **1:** Basic Attack _uses 10 stamina_
    **2:** Special Attack _uses 30 stamina_
    **3:** Ultimate Attack _uses 80 stamina_
 
    **Enhancer**
-   Enhancers can either boost your stats or inflict status effects on your opponent. Use .enhance for full list of Enhancers and their effects.
-   **4:** Enhancer
+   Enhancers either boost your stats or inflict status effects on your opponent. Use .enhance for full list of Enhancers and their effects.
+   **4:** Enhancer _uses 20 stamina_
 
    **Unique Passive**
-   Unique Passives are Enhancers that take effect at the beginning of the game, no player action needed.
+   Unique Passives are Enhancers that take effect at the beginning of the battle.
+
+   **Universe Traits**
+   Universe Traits are universe specific abilities activated during battle. Use .traits for a full list of Universe Traits.
+
+   **Destinies**
+   Destinies are card specific achievements that earn you special **Destiny Cards**
+ 
 
    """), colour=0x7289da)
    embedVar3.set_thumbnail(url=avatar)
 
    embedVar4 = discord.Embed(title= f":crown: Titles, Arms, and Pets", description=textwrap.dedent(f"""\
    **Titles** & **Arms** 
-   Modify your or your opponents stats prior to battle by applying _Enhancers_ at the beginning of the match.
+   Modify you or the Opponents **Stats** prior to battle by applying **Enhancers** at the start of the match.
+   Buy **Titles** and **Arms** with :coin: or Earn them via **Drops**
+
+   **Universe Buff** :Match Your Titles and Arms to your Card **Universe**.
+   **Buff**: **Base Stats** + 100 **HLT** , 20 **ATK** & 20 **DEF**.
+
+   **Destiny Universe Buff** Destiny Cards gain an additional **Buff**.
+   **Buff**: **Universe Buff** + 50 **HLT**, 5 **ATK** and 5 **DEF**.
+
 
    **Pets**
-   Can assist during battle with an Enhancer
+   Can assist during battle with an **Enhancer**.
+   Earn **Pets** through Tales, Dungeon and Boss **Drops** or through trade with other Players!
+   Battle with your **Pet** to gain **EXP** to increase Pet **Ability Power**. 
 
-   Mix and Match Titles, Arms and Pet passives to gain tactical advantage!
-
-   Match Your Titles and Arms to your Card Universe To gain the **Universe Buff**
-   **Universe Buff** + 100 Health , 20 ATK & 20 DEF
-
-   **Destiny Buff** Destiny Cards gain an additional + 50 Health, 5 ATK and 5 DEF
+   Mix and Match Titles, Arms and Pets to gain the **Tactical Advantage**!
    """) ,colour=0x7289da)
    embedVar4.set_thumbnail(url=avatar)
 
    embedVar5 = discord.Embed(title= f":crown: Battle Mechanics", description=textwrap.dedent(f"""\
-   Players take turns dealing damage using one of their 3 Abilities
+   Players take turns dealing damage using one of their 3 **Abilities**.
    
-   Stamina costs are standard across all Cards _check Cards page for details_
+   **Stamina** costs are standard across all Cards 
+   _check Cards page for details_.
    
    **Recovery**
-   When Players have used all of their Stamina they enter **Focus State**
-   
-   **Focus State** sacrifices a turn to Level up stats, increase their Stamina to 90, and recover some health.
+   When Players have used all of their **Stamina** they enter **Focus State**.
 
-   The Match is over when a players Health reaches 0
+   The Match is over when a players **Health** reaches 0.
    """) ,colour=0x7289da)
    embedVar5.set_thumbnail(url=avatar)
 
    embedVar6 = discord.Embed(title= f":crown: Focus & Resolve", description=textwrap.dedent(f"""\
-   Players can take advantage of Focus State to recover, as mentioned on the previous page.
+   **Focus**
+   Players can take advantage of **Focus State** to **Recover**.
+   **Focus State** sacrifices a turn to Level Up Stats, increase **Stamina** to 90, and **Recover** some **Health**.
    
    **Resolve**
-   Once in Focus State players can enter 5 to Resolve!
-   Resolved Characters transform to greatly increase attack and health while sacrificing defense
-   Resolved characters can summon Pets to aid them in battle by entering 6
+   Once in **Focus State** players can use 5 to **Resolve**!
+   **Resolved Characters** transform to greatly increase attack and health while sacrificing defense.
+   **Resolved Characters** can summon Pets to aid them in battle.
+   **5:** Resolve _uses 1 turn_.
 
    **Pet Assistance!**
-   Pet assistance cost **15 STAM** to use your pet Enhancer, Pet moves do not end the player turn!
+   Pets Enhancers can either boost your stats or inflict status effects on your opponent. Pet moves do not end the player turn!
+   **6:** Pet _uses 15 stamina_.
+
    """) ,colour=0x7289da)
    embedVar6.set_thumbnail(url=avatar)
 
@@ -248,34 +277,35 @@ async def crown(ctx):
    **Single Player**
    **.tales** Single player adventures where you traverse through your favorite universes as characters from various worlds!
    **.dungeon** Hard version of tales with better loot and better drop rates!
-   **.boss** End Game battles featuring Iconic Villians from Crown Universes
+   **.boss** End Game battles featuring Iconic Villians from Crown Universes.
 
    **Multiplayer**
    **.ctales @partner** Take a companion with your through your favorite tales with higher stakes!
-   **.cdungeon @partner** Bring a companion through the darkest dungeons to earn awesome loot together
-   **.cboss @partner** Epic battles between 2 high level companions and 1 Incredible Boss
+   **.cdungeon @partner** Bring a companion through the darkest dungeons to earn awesome loot together.
+   **.cboss @partner** Epic battles between two high level companions and one Incredible Boss.
    
-   Co-Op must be played in Server
+   **Co-Op** *must be played in Server*
 
    **PVP**
-   **.battle @player:** Select your Build and Challenge any Crown Unlimited Player to join your Game Lobby
-   **.start:** Starts round against current opponent
-   **.wager number:*** In lobby players can wager :coin:
-   Builds are locked during lobbies, to change your build end the lobby with **.end** 
+   **.battle @player:** Select your Build and Challenge any Crown Unlimited Player to join your Game Lobby.
+   **.start:** Starts round against current opponent.
+   **.wager number:*** In lobby players can wager :coin:.
+   Builds are locked during lobbies, to change your build end the lobby with **.end** .
    """),colour=0x7289da)
    embedVar7.set_thumbnail(url=avatar)
 
    embedVar8 = discord.Embed(title= f":crown: Economy",description=textwrap.dedent(f"""\
-   Crown Unlimited features an in game shop where you can purchase new Cards, Titles, and Arms
+   Crown Unlimited features an in game **Shop** where you can purchase new Cards, Titles, and Arms.
+   Use .shop to open the **Pop-Up Shop!**
 
    **Stock**
-   Items in the shop have a stock. When they are sold out they become unavailable
+   Items in the shop have a **Stock**. When they are sold out they become unavailable.
 
    **Sell & Trade**
-   **.sell** and **.trade** will allow you to trade Cards, Titles, Arms and Pets with other players
+   **.sell** and **.trade** will allow you to trade Cards, Titles, Arms and Pets with other players.
 
    **Resell**
-   **.resell item** to sell Cards, Titles, and Arms back to the market
+   **.resell item** to sell Cards, Titles, and Arms back to the market.
    """) ,colour=0x7289da)
    embedVar8.set_thumbnail(url=avatar)
 
