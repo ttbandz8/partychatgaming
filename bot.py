@@ -276,8 +276,8 @@ async def crown(ctx):
    embedVar7 = discord.Embed(title= f":crown:CROWN Single Player & Multiplayer", description=textwrap.dedent(f"""\
    **Single Player**
    **.tales** Single player adventures where you traverse through your favorite universes as characters from various worlds!
-   **.dungeon** Hard version of tales with better loot and better drop rates!
-   **.boss** End Game battles featuring Iconic Villians from Crown Universes.
+   **.dungeon** Hard version of tales with better loot and better drop rates! (Unlocks after completing **Crown Tale**)
+   **.boss** End Game battles featuring Iconic Villians from Crown Universes. (Unlocks after completing **Crown Dungeon**)
 
    **Multiplayer**
    **.ctales @partner** Take a companion with your through your favorite tales with higher stakes!
