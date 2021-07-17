@@ -7590,11 +7590,6 @@ class CrownUnlimited(commands.Cog):
             t_defense = t_defense + 20
             t_max_health = t_max_health + 100
             t_health = t_health + 100
-            if t_destiny:
-                t_attack = t_attack + 5
-                t_defense = t_defense + 5
-                t_max_health = t_max_health + 50
-                t_health = t_health + 50
 
         if (carm_universe == c_universe) and (c_title_universe == c_universe):
             c_attack = c_attack + 20
@@ -15252,11 +15247,6 @@ class CrownUnlimited(commands.Cog):
             t_defense = t_defense + 20
             t_max_health = t_max_health + 100
             t_health = t_health + 100
-            if t_destiny:
-                t_attack = t_attack + 5
-                t_defense = t_defense + 5
-                t_max_health = t_max_health + 50
-                t_health = t_health + 50
 
         # Player 1 Passive Config
         if (o_universe == o_title_universe) or (o_title_universe == "Unbound"):
