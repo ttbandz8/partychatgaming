@@ -120,7 +120,7 @@ async def enhance(ctx):
 
    embedVar9 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
    embedVar9.set_thumbnail(url=avatar)
-   embedVar9.add_field(name="`DIVINITY`", value="`CREATION` - Increase `MAXHEALTH`\n\n`DESTRUCTION` - Decrease `OPP MAXHEALTH\n\n")
+   embedVar9.add_field(name="`DIVINITY`", value="`CREATION` - Increase `MAXHEALTH`\n\n`DESTRUCTION` - Decrease `OPP MAXHEALTH`\n\n")
    embedVar9.set_footer(text=f".help - Bot Help")
 
    embedVar7 = discord.Embed(title= f":trident:ENHANCE DETAILS:", description=textwrap.dedent(f"""
