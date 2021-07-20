@@ -73,6 +73,7 @@ CROWN_UNLIMITED_COMMANDS = textwrap.dedent(f"""\
 **.quest**: Open your list of Quests
 **.deck**: View your Presets
 **.savedeck**: Save your Build as Preset
+**.rebirth**: Rebirth Account with permanent increases
 
 **Card Commands**
 **.cards universe**: View Universe Card List

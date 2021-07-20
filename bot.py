@@ -292,6 +292,10 @@ async def crown(ctx):
    **.start:** Starts round against current opponent.
    **.wager number:*** In lobby players can wager :coin:.
    Builds are locked during lobbies, to change your build end the lobby with **.end** .
+   
+   **Crown Rifts**
+   Mash-Up Universes featuring heroes and villians connected through common triats and themes!
+   Pay attention, when the Rift opens it will not stay open for long!
    """),colour=0x7289da)
    embedVar7.set_thumbnail(url=avatar)
 
