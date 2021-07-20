@@ -13141,9 +13141,17 @@ class CrownUnlimited(commands.Cog):
         all_universes = db.queryAllUniverse()
         available_universes = []
         selected_universe = ""
-        for uni in all_universes:
-            if uni['PREREQUISITE'] in sowner['CROWN_TALES'] and uni['HAS_CROWN_TALES'] == True or uni['TIER'] == 9 and sowner['RIFT'] == 1:
-                available_universes.append(uni['TITLE'])
+        if sowner['RIFT'] == 1:
+            for uni in all_universes:
+                if uni['PREREQUISITE'] in sowner['CROWN_TALES'] and uni['HAS_CROWN_TALES'] == True or uni['TIER'] == 9:
+                    available_universes.append(uni['TITLE'])
+        else:
+            for uni in all_universes:
+                if uni['PREREQUISITE'] in sowner['CROWN_TALES'] and uni['HAS_CROWN_TALES'] == True and uni['TIER'] != 9:
+                    available_universes.append(uni['TITLE'])
+            
+            
+        
 
         embedVar = discord.Embed(title=f":crown: Select A Tales Universe", description="\n".join(available_universes), colour=0xe91e63)
         embedVar.set_footer(text="Type Quit to exit Tales selection")
