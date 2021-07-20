@@ -14,6 +14,7 @@ import help_commands as h
 # Converters
 from discord import User
 from discord import Member
+import DiscordUtils
 from PIL import Image, ImageFont, ImageDraw
 import requests
 import random
@@ -417,7 +418,7 @@ class CrownUnlimited(commands.Cog):
                 c_max_health = c_health + int(c_card_passive)
                 c_health = c_health + int(c_card_passive)
             elif c_card_passive_type == 'LIFE':
-                c_max_health = c_health + round(int(c_card_passive) + (.10 * t_health))
+                c_max_health = c_health + int((((c_card_passive/3)/100) * t_health))
             elif c_card_passive_type == 'DRAIN':
                 c_stamina = c_stamina + int(c_card_passive)
             elif c_card_passive_type == 'FLOG':
@@ -490,7 +491,7 @@ class CrownUnlimited(commands.Cog):
                     c_max_health = c_health + int(c_title_passive_value)
                     c_health = c_health + int(c_title_passive_value)
                 elif c_title_passive_type == 'LIFE':
-                    c_max_health = c_health + round(int(c_title_passive_value) + (.10 * t_health))
+                    c_max_health = c_health + int((((c_title_passive_value/3)/100) * t_health))
                 elif c_title_passive_type == 'DRAIN':
                     c_stamina = c_stamina + int(c_title_passive_value)
                 elif c_title_passive_type == 'FLOG':
@@ -562,7 +563,7 @@ class CrownUnlimited(commands.Cog):
                 c_max_health = c_health + int(carm_passive_value)
                 c_health = c_health + int(carm_passive_value)
             elif carm_passive_type == 'LIFE':
-                c_max_health = c_health + round(int(carm_passive_value) + (.10 * t_health))
+                c_max_health = c_health + int((((carm_passive_value/3)/100) * t_health))
             elif carm_passive_type == 'DRAIN':
                 c_stamina = c_stamina + int(carm_passive_value)
             elif carm_passive_type == 'FLOG':
@@ -664,7 +665,7 @@ class CrownUnlimited(commands.Cog):
                 o_max_health = o_health + int(o_card_passive)
                 o_health = o_health + int(o_card_passive)
             elif o_card_passive_type == 'LIFE':
-                o_max_health = o_health + round(int(o_card_passive) + (.10 * t_health))
+                o_max_health = o_health + int((((o_card_passive/3)/100) * t_health))
             elif o_card_passive_type == 'DRAIN':
                 o_stamina = o_stamina + int(o_card_passive)
                 t_stamina = t_stamina - int(o_card_passive)
@@ -738,7 +739,7 @@ class CrownUnlimited(commands.Cog):
                     o_max_health = o_health + int(o_title_passive_value)
                     o_health = o_health + int(o_title_passive_value)
                 elif o_title_passive_type == 'LIFE':
-                    o_max_health = o_health + round(int(o_title_passive_value) + (.10 * t_health))
+                    o_max_health = o_health + int((((o_title_passive_value/3)/100) * t_health))
                 elif o_title_passive_type == 'DRAIN':
                     o_stamina = o_stamina + int(o_title_passive_value)
                 elif o_title_passive_type == 'FLOG':
@@ -810,7 +811,7 @@ class CrownUnlimited(commands.Cog):
                 o_max_health = o_health + int(oarm_passive_value)
                 o_health = o_health + int(oarm_passive_value)
             elif oarm_passive_type == 'LIFE':
-                o_max_health = o_health + round(int(oarm_passive_value) + (.10 * t_health))
+                o_max_health = o_health + int((((oarm_passive_value/3)/100) * t_health))
             elif oarm_passive_type == 'DRAIN':
                 o_stamina = o_stamina + int(oarm_passive_value)
             elif oarm_passive_type == 'FLOG':
@@ -886,7 +887,7 @@ class CrownUnlimited(commands.Cog):
                 t_max_health = t_health + int(tarm_passive_value)
                 t_health = t_health + int(tarm_passive_value)
             elif tarm_passive_type == 'LIFE':
-                t_max_health = t_health + round(int(tarm_passive_value) + (.10 * o_health))
+                t_max_health = t_health + int((((tarm_passive_value/3)/100) * o_health))
             elif tarm_passive_type == 'DRAIN':
                 t_stamina = t_stamina + int(tarm_passive_value)
             elif tarm_passive_type == 'FLOG':
@@ -972,7 +973,7 @@ class CrownUnlimited(commands.Cog):
                 t_max_health = t_health + int(t_card_passive)
                 t_health = t_health + int(t_card_passive)
             elif t_card_passive_type == 'LIFE':
-                t_max_health = t_health + round(int(t_card_passive) + (.10 * o_health))
+                t_max_health = t_health + int((((t_card_passive/3)/100) * o_health))
             elif t_card_passive_type == 'DRAIN':
                 t_stamina = t_stamina + int(t_card_passive)
             elif t_card_passive_type == 'FLOG':
@@ -1050,7 +1051,7 @@ class CrownUnlimited(commands.Cog):
                     t_max_health = t_health + int(t_title_passive_value)
                     t_health = t_health + int(t_title_passive_value)
                 elif t_title_passive_type == 'LIFE':
-                    t_max_health = t_health + round(int(t_title_passive_value) + (.10 * o_health))
+                    t_max_health = t_health + int((((t_title_passive_value/3)/100) * o_health))
                 elif t_title_passive_type == 'DRAIN':
                     t_stamina = t_stamina + int(t_title_passive_value)
                 elif t_title_passive_type == 'FLOG':
@@ -1152,6 +1153,12 @@ class CrownUnlimited(commands.Cog):
 
             # Count Turns
             turn_total = 0
+            
+            #Rebirth Scaling
+            o_attack = o_attack + (o_user['REBIRTH'] * 10)
+            o_defense = o_defense + (o_user['REBIRTH'] * 10)
+            c_attack = c_attack + (c_user['REBIRTH'] * 10)
+            c_defense = c_defense + (c_user['REBIRTH'] * 10)
 
             # START TURNS
             while ((o_health > 0) and (c_health > 0)) and (t_health > 0):
@@ -3417,6 +3424,8 @@ class CrownUnlimited(commands.Cog):
                 m_playtime = int(wintime[14:16])
                 s_playtime = int(wintime[17:19])
                 gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
+                if o_user['RIFT'] == 1:
+                    response = db.updateUserNoFilter({'DISNAME':str(o_user['DISNAME'])}, {'$set': {'RIFT' : 0}})
 
                 embedVar = discord.Embed(title=f":zap: `{t_card}` wins the match!", description=f"The game lasted {turn_total} rounds.\n`{t_card} says:`\n`{t_win_description}`", colour=0x1abc9c)
                 embedVar.set_author(name=f"{o_card} & {c_card} lost!")
@@ -3469,6 +3478,8 @@ class CrownUnlimited(commands.Cog):
                 match = await savematch(str(user), str(c_card), str(c_card_path), str(ctitle['TITLE']), str(carm['ARM']), str(selected_universe), "Tales", c['EXCLUSIVE'])
                 teambank = await blessteam(10, oteam)
                 cteambank = await blessteam(10, cteam)
+                if o_user['RIFT'] == 1:
+                    response = db.updateUserNoFilter({'DISNAME':str(o_user['DISNAME'])}, {'$set': {'RIFT' : 0}})
                 drop_response = await drops(ctx.author, selected_universe, currentopponent)
                 cdrop_response = await drops(user, selected_universe, currentopponent)
                 ofambank = await blessfamily(10,ofam)
@@ -3932,7 +3943,7 @@ class CrownUnlimited(commands.Cog):
                 c_max_health = c_health + int(c_card_passive)
                 c_health = c_health + int(c_card_passive)
             elif c_card_passive_type == 'LIFE':
-                c_max_health = c_health + round(int(c_card_passive) + (.10 * t_health))
+                c_max_health = c_health + int((((c_card_passive/3)/100) * t_health))
             elif c_card_passive_type == 'DRAIN':
                 c_stamina = c_stamina + int(c_card_passive)
             elif c_card_passive_type == 'FLOG':
@@ -4005,7 +4016,7 @@ class CrownUnlimited(commands.Cog):
                     c_max_health = c_health + int(c_title_passive_value)
                     c_health = c_health + int(c_title_passive_value)
                 elif c_title_passive_type == 'LIFE':
-                    c_max_health = c_health + round(int(c_title_passive_value) + (.10 * t_health))
+                    c_max_health = c_health + int((((c_title_passive_value/3)/100) * t_health))
                 elif c_title_passive_type == 'DRAIN':
                     c_stamina = c_stamina + int(c_title_passive_value)
                 elif c_title_passive_type == 'FLOG':
@@ -4077,7 +4088,7 @@ class CrownUnlimited(commands.Cog):
                 c_max_health = c_health + int(carm_passive_value)
                 c_health = c_health + int(carm_passive_value)
             elif carm_passive_type == 'LIFE':
-                c_max_health = c_health + round(int(carm_passive_value) + (.10 * t_health))
+                c_max_health = c_health + int((((carm_passive_value/3)/100) * t_health))
             elif carm_passive_type == 'DRAIN':
                 c_stamina = c_stamina + int(carm_passive_value)
             elif carm_passive_type == 'FLOG':
@@ -4179,7 +4190,7 @@ class CrownUnlimited(commands.Cog):
                 o_max_health = o_health + int(o_card_passive)
                 o_health = o_health + int(o_card_passive)
             elif o_card_passive_type == 'LIFE':
-                o_max_health = o_health + round(int(o_card_passive) + (.10 * t_health))
+                o_max_health = o_health + int((((o_card_passive/3)/100) * t_health))
             elif o_card_passive_type == 'DRAIN':
                 o_stamina = o_stamina + int(o_card_passive)
                 t_stamina = t_stamina - int(o_card_passive)
@@ -4253,7 +4264,7 @@ class CrownUnlimited(commands.Cog):
                     o_max_health = o_health + int(o_title_passive_value)
                     o_health = o_health + int(o_title_passive_value)
                 elif o_title_passive_type == 'LIFE':
-                    o_max_health = o_health + round(int(o_title_passive_value) + (.10 * t_health))
+                    o_max_health = o_health + int((((o_title_passive_value/3)/100) * t_health))
                 elif o_title_passive_type == 'DRAIN':
                     o_stamina = o_stamina + int(o_title_passive_value)
                 elif o_title_passive_type == 'FLOG':
@@ -4325,7 +4336,7 @@ class CrownUnlimited(commands.Cog):
                 o_max_health = o_health + int(oarm_passive_value)
                 o_health = o_health + int(oarm_passive_value)
             elif oarm_passive_type == 'LIFE':
-                o_max_health = o_health + round(int(oarm_passive_value) + (.10 * t_health))
+                o_max_health = o_health + int((((oarm_passive_value/3)/100) * t_health))
             elif oarm_passive_type == 'DRAIN':
                 o_stamina = o_stamina + int(oarm_passive_value)
             elif oarm_passive_type == 'FLOG':
@@ -4401,7 +4412,7 @@ class CrownUnlimited(commands.Cog):
                 t_max_health = t_health + int(tarm_passive_value)
                 t_health = t_health + int(tarm_passive_value)
             elif tarm_passive_type == 'LIFE':
-                t_max_health = t_health + round(int(tarm_passive_value) + (.10 * o_health))
+                t_max_health = t_health + int((((tarm_passive_value/3)/100) * o_health))
             elif tarm_passive_type == 'DRAIN':
                 t_stamina = t_stamina + int(tarm_passive_value)
             elif tarm_passive_type == 'FLOG':
@@ -4487,7 +4498,7 @@ class CrownUnlimited(commands.Cog):
                 t_max_health = t_health + int(t_card_passive)
                 t_health = t_health + int(t_card_passive)
             elif t_card_passive_type == 'LIFE':
-                t_max_health = t_health + round(int(t_card_passive) + (.10 * o_health))
+                t_max_health = t_health + int((((t_card_passive/3)/100) * o_health))
             elif t_card_passive_type == 'DRAIN':
                 t_stamina = t_stamina + int(t_card_passive)
             elif t_card_passive_type == 'FLOG':
@@ -4565,7 +4576,7 @@ class CrownUnlimited(commands.Cog):
                     t_max_health = t_health + int(t_title_passive_value)
                     t_health = t_health + int(t_title_passive_value)
                 elif t_title_passive_type == 'LIFE':
-                    t_max_health = t_health + round(int(t_title_passive_value) + (.10 * o_health))
+                    t_max_health = t_health + int((((t_title_passive_value/3)/100) * o_health))
                 elif t_title_passive_type == 'DRAIN':
                     t_stamina = t_stamina + int(t_title_passive_value)
                 elif t_title_passive_type == 'FLOG':
@@ -4667,6 +4678,12 @@ class CrownUnlimited(commands.Cog):
 
             # Count Turns
             turn_total = 0
+            
+            #Rebirth Scaling
+            o_attack = o_attack + (o_user['REBIRTH'] * 10)
+            o_defense = o_defense + (o_user['REBIRTH'] * 10)
+            c_attack = c_attack + (c_user['REBIRTH'] * 10)
+            c_defense = c_defense + (c_user['REBIRTH'] * 10)
 
             # START TURNS
             while ((o_health > 0) and (c_health > 0)) and (t_health > 0):
@@ -7161,6 +7178,8 @@ class CrownUnlimited(commands.Cog):
                 m_playtime = int(wintime[14:16])
                 s_playtime = int(wintime[17:19])
                 gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
+                if o_user['RIFT'] == 1:
+                    response = db.updateUserNoFilter({'DISNAME':str(o_user['DISNAME'])}, {'$set': {'RIFT' : 0}})
 
                 embedVar = discord.Embed(title=f":zap: `{t_card}` wins the match!", description=f"The game lasted {turn_total} rounds.\n`{t_card} says:`\n`{t_win_description}`", colour=0x1abc9c)
                 embedVar.set_author(name=f"{o_card} & {c_card} lost!")
@@ -7208,6 +7227,8 @@ class CrownUnlimited(commands.Cog):
                 gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
                 teambank = await blessteam(15, oteam)
                 cteambank = await blessteam(15, cteam)
+                if o_user['RIFT'] == 1:
+                    response = db.updateUserNoFilter({'DISNAME':str(o_user['DISNAME'])}, {'$set': {'RIFT' : 0}})
                 drop_response = await dungeondrops(ctx.author, selected_universe, currentopponent)
                 cdrop_response = await dungeondrops(user, selected_universe, currentopponent)
                 ofambank = await blessfamily(15,ofam)
@@ -7650,7 +7671,7 @@ class CrownUnlimited(commands.Cog):
             c_max_health = c_health + int(c_card_passive)
             c_health = c_health + int(c_card_passive)
         elif c_card_passive_type == 'LIFE':
-            c_max_health = c_health + round(int(c_card_passive) + (.10 * t_health))
+            c_max_health = c_health + int((((c_card_passive/3)/100) * t_health))
         elif c_card_passive_type == 'DRAIN':
             c_stamina = c_stamina + int(c_card_passive)
         elif c_card_passive_type == 'FLOG':
@@ -7723,7 +7744,7 @@ class CrownUnlimited(commands.Cog):
                 c_max_health = c_health + int(c_title_passive_value)
                 c_health = c_health + int(c_title_passive_value)
             elif c_title_passive_type == 'LIFE':
-                c_max_health = c_health + round(int(c_title_passive_value) + (.10 * t_health))
+                c_max_health = c_health + int((((c_title_passive_value/3)/100) * t_health))
             elif c_title_passive_type == 'DRAIN':
                 c_stamina = c_stamina + int(c_title_passive_value)
             elif c_title_passive_type == 'FLOG':
@@ -7795,7 +7816,7 @@ class CrownUnlimited(commands.Cog):
             c_max_health = c_health + int(carm_passive_value)
             c_health = c_health + int(carm_passive_value)
         elif carm_passive_type == 'LIFE':
-            c_max_health = c_health + round(int(carm_passive_value) + (.10 * t_health))
+            c_max_health = c_health + int((((carm_passive_value/3)/100) * t_health))
         elif carm_passive_type == 'DRAIN':
             c_stamina = c_stamina + int(carm_passive_value)
         elif carm_passive_type == 'FLOG':
@@ -7903,7 +7924,7 @@ class CrownUnlimited(commands.Cog):
             o_max_health = o_health + int(o_card_passive)
             o_health = o_health + int(o_card_passive)
         elif o_card_passive_type == 'LIFE':
-            o_max_health = o_health + round(int(o_card_passive) + (.10 * t_health))
+            o_max_health = o_health + int((((o_card_passive/3)/100) * t_health))
         elif o_card_passive_type == 'DRAIN':
             o_stamina = o_stamina + int(o_card_passive)
         elif o_card_passive_type == 'FLOG':
@@ -8120,7 +8141,7 @@ class CrownUnlimited(commands.Cog):
             t_max_health = t_health + int(tarm_passive_value)
             t_health = t_health + int(tarm_passive_value)
         elif tarm_passive_type == 'LIFE':
-            t_max_health = t_health + round(int(tarm_passive_value) + (.10 * o_health))
+            t_max_health = t_health + int((((tarm_passive_value/3)/100) * o_health))
         elif tarm_passive_type == 'DRAIN':
             t_stamina = t_stamina + int(tarm_passive_value)
         elif tarm_passive_type == 'FLOG':
@@ -8204,7 +8225,7 @@ class CrownUnlimited(commands.Cog):
             t_max_health = t_health + int(t_card_passive)
             t_health = t_health + int(t_card_passive)
         elif t_card_passive_type == 'LIFE':
-            t_max_health = t_health + round(int(t_card_passive) + (.10 * o_health))
+            t_max_health = t_health + int((((t_card_passive/3)/100) * o_health))
         elif t_card_passive_type == 'DRAIN':
             t_stamina = t_stamina + int(t_card_passive)
         elif t_card_passive_type == 'FLOG':
@@ -8282,7 +8303,7 @@ class CrownUnlimited(commands.Cog):
                 t_max_health = t_health + int(t_title_passive_value)
                 t_health = t_health + int(t_title_passive_value)
             elif t_title_passive_type == 'LIFE':
-                t_max_health = t_health + round(int(t_title_passive_value) + (.10 * o_health))
+                t_max_health = t_health + int((((t_title_passive_value/3)/100) * o_health))
             elif t_title_passive_type == 'DRAIN':
                 t_stamina = t_stamina + int(t_title_passive_value)
             elif t_title_passive_type == 'FLOG':
@@ -8386,6 +8407,13 @@ class CrownUnlimited(commands.Cog):
 
         # Count Turns
         turn_total = 0
+        
+        
+        #Rebirth Scaling
+        o_attack = o_attack + (o_user['REBIRTH'] * 10)
+        o_defense = o_defense + (o_user['REBIRTH'] * 10)
+        c_attack = c_attack + (c_user['REBIRTH'] * 10)
+        c_defense = c_defense + (c_user['REBIRTH'] * 10)
 
 
         # START TURNS
@@ -11347,7 +11375,7 @@ class CrownUnlimited(commands.Cog):
                 o_max_health = o_health + int(o_card_passive)
                 o_health = o_health + int(o_card_passive)
             elif o_card_passive_type == 'LIFE':
-                o_max_health = o_health + round(int(o_card_passive) + (.10 * t_health))
+                o_max_health = o_health + int((((o_card_passive/3)/100) * t_health))
             elif o_card_passive_type == 'DRAIN':
                 o_stamina = o_stamina + int(o_card_passive)
                 t_stamina = t_stamina - int(o_card_passive)
@@ -11420,7 +11448,7 @@ class CrownUnlimited(commands.Cog):
                     o_max_health = o_health + int(o_title_passive_value)
                     o_health = o_health + int(o_title_passive_value)
                 elif o_title_passive_type == 'LIFE':
-                    o_max_health = o_health + round(int(o_title_passive_value) + (.10 * t_health))
+                    o_max_health = o_health + int((((o_title_passive_value/3)/100) * t_health))
                 elif o_title_passive_type == 'DRAIN':
                     o_stamina = o_stamina + int(o_title_passive_value)
                 elif o_title_passive_type == 'FLOG':
@@ -11491,7 +11519,7 @@ class CrownUnlimited(commands.Cog):
                 o_max_health = o_health + int(oarm_passive_value)
                 o_health = o_health + int(oarm_passive_value)
             elif oarm_passive_type == 'LIFE':
-                o_max_health = o_health + round(int(oarm_passive_value) + (.10 * t_health))
+                o_max_health = o_health + int((((oarm_passive_value/3)/100) * t_health))
             elif oarm_passive_type == 'DRAIN':
                 o_stamina = o_stamina + int(oarm_passive_value)
             elif oarm_passive_type == 'FLOG':
@@ -11562,7 +11590,7 @@ class CrownUnlimited(commands.Cog):
                 t_max_health = t_health + int(tarm_passive_value)
                 t_health = t_health + int(tarm_passive_value)
             elif tarm_passive_type == 'LIFE':
-                t_max_health = t_health + round(int(tarm_passive_value) + (.10 * o_health))
+                t_max_health = t_health + int((((tarm_passive_value/3)/100) * o_health))
             elif tarm_passive_type == 'DRAIN':
                 t_stamina = t_stamina + int(tarm_passive_value)
             elif tarm_passive_type == 'FLOG':
@@ -11640,7 +11668,7 @@ class CrownUnlimited(commands.Cog):
                 t_max_health = t_health + int(t_card_passive)
                 t_health = t_health + int(t_card_passive)
             elif t_card_passive_type == 'LIFE':
-                t_max_health = t_health + round(int(t_card_passive) + (.10 * o_health))
+                t_max_health = t_health + int((((t_card_passive/3)/100) * o_health))
             elif t_card_passive_type == 'DRAIN':
                 t_stamina = t_stamina + int(t_card_passive)
             elif t_card_passive_type == 'FLOG':
@@ -11712,7 +11740,7 @@ class CrownUnlimited(commands.Cog):
                     t_max_health = t_health + int(t_title_passive_value)
                     t_health = t_health + int(t_title_passive_value)
                 elif t_title_passive_type == 'LIFE':
-                    t_max_health = t_health + round(int(t_title_passive_value) + (.10 * o_health))
+                    t_max_health = t_health + int((((t_title_passive_value/3)/100) * o_health))
                 elif t_title_passive_type == 'DRAIN':
                     t_stamina = t_stamina + int(t_title_passive_value)
                 elif t_title_passive_type == 'FLOG':
@@ -11803,6 +11831,10 @@ class CrownUnlimited(commands.Cog):
 
             # Count Turns
             turn_total = 0
+            
+            #Rebirth Scaling
+            o_attack = o_attack + (o_user['REBIRTH'] * 10)
+            o_defense = o_defense + (o_user['REBIRTH'] * 10)
 
 
             # START TURNS
@@ -12969,6 +13001,8 @@ class CrownUnlimited(commands.Cog):
                 m_playtime = int(wintime[14:16])
                 s_playtime = int(wintime[17:19])
                 gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
+                if o_user['RIFT'] == 1:
+                    response = db.updateUserNoFilter({'DISNAME':str(o_user['DISNAME'])}, {'$set': {'RIFT' : 0}})
 
                 embedVar = discord.Embed(title=f":zap: `{t_card}` wins the match!", description=f"The game lasted {turn_total} rounds.\n`{t_card} says:`\n`{t_win_description}`", colour=0x1abc9c)
                 embedVar.set_author(name=f"{o_card} lost!")
@@ -13014,6 +13048,8 @@ class CrownUnlimited(commands.Cog):
                 m_playtime = int(wintime[14:16])
                 s_playtime = int(wintime[17:19])
                 gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
+                if o_user['RIFT'] == 1:
+                    response = db.updateUserNoFilter({'DISNAME':str(o_user['DISNAME'])}, {'$set': {'RIFT' : 0}})
                 drop_response = await dungeondrops(ctx.author, selected_universe, currentopponent)
                 teambank = await blessteam(15, oteam)
                 fambank = await blessfamily(15,ofam)
@@ -13106,9 +13142,17 @@ class CrownUnlimited(commands.Cog):
         all_universes = db.queryAllUniverse()
         available_universes = []
         selected_universe = ""
-        for uni in all_universes:
-            if uni['PREREQUISITE'] in sowner['CROWN_TALES'] and uni['HAS_CROWN_TALES'] == True:
-                available_universes.append(uni['TITLE'])
+        if sowner['RIFT'] == 1:
+            for uni in all_universes:
+                if uni['PREREQUISITE'] in sowner['CROWN_TALES'] and uni['HAS_CROWN_TALES'] == True or uni['TIER'] == 9:
+                    available_universes.append(uni['TITLE'])
+        else:
+            for uni in all_universes:
+                if uni['PREREQUISITE'] in sowner['CROWN_TALES'] and uni['HAS_CROWN_TALES'] == True and uni['TIER'] != 9:
+                    available_universes.append(uni['TITLE'])
+            
+            
+        
 
         embedVar = discord.Embed(title=f":crown: Select A Tales Universe", description="\n".join(available_universes), colour=0xe91e63)
         embedVar.set_footer(text="Type Quit to exit Tales selection")
@@ -13379,7 +13423,7 @@ class CrownUnlimited(commands.Cog):
                 o_max_health = o_health + int(o_card_passive)
                 o_health = o_health + int(o_card_passive)
             elif o_card_passive_type == 'LIFE':
-                o_max_health = o_health + round(int(o_card_passive) + (.10 * t_health))
+                o_max_health = o_health + int((((o_card_passive/3)/100) * t_health))
             elif o_card_passive_type == 'DRAIN':
                 o_stamina = o_stamina + int(o_card_passive)
                 t_stamina = t_stamina - int(o_card_passive)
@@ -13453,7 +13497,7 @@ class CrownUnlimited(commands.Cog):
                     o_max_health = o_health + int(o_title_passive_value)
                     o_health = o_health + int(o_title_passive_value)
                 elif o_title_passive_type == 'LIFE':
-                    o_max_health = o_health + round(int(o_title_passive_value) + (.10 * t_health))
+                    o_max_health = o_health + int((((o_title_passive_value/3)/100) * t_health))
                 elif o_title_passive_type == 'DRAIN':
                     o_stamina = o_stamina + int(o_title_passive_value)
                 elif o_title_passive_type == 'FLOG':
@@ -13524,7 +13568,7 @@ class CrownUnlimited(commands.Cog):
                 o_max_health = o_health + int(oarm_passive_value)
                 o_health = o_health + int(oarm_passive_value)
             elif oarm_passive_type == 'LIFE':
-                o_max_health = o_health + round(int(oarm_passive_value) + (.10 * t_health))
+                o_max_health = o_health + int((((oarm_passive_value/3)/100) * t_health))
             elif oarm_passive_type == 'DRAIN':
                 o_stamina = o_stamina + int(oarm_passive_value)
             elif oarm_passive_type == 'FLOG':
@@ -13595,7 +13639,7 @@ class CrownUnlimited(commands.Cog):
                 t_max_health = t_health + int(tarm_passive_value)
                 t_health = t_health + int(tarm_passive_value)
             elif tarm_passive_type == 'LIFE':
-                t_max_health = t_health + round(int(tarm_passive_value) + (.10 * o_health))
+                t_max_health = t_health + int((((tarm_passive_value/3)/100) * o_health))
             elif tarm_passive_type == 'DRAIN':
                 t_stamina = t_stamina + int(tarm_passive_value)
             elif tarm_passive_type == 'FLOG':
@@ -13671,7 +13715,7 @@ class CrownUnlimited(commands.Cog):
                 t_max_health = t_health + int(t_card_passive)
                 t_health = t_health + int(t_card_passive)
             elif t_card_passive_type == 'LIFE':
-                t_max_health = t_health + round(int(t_card_passive) + (.10 * o_health))
+                t_max_health = t_health + int((((t_card_passive/3)/100) * o_health))
             elif t_card_passive_type == 'DRAIN':
                 t_stamina = t_stamina + int(t_card_passive)
             elif t_card_passive_type == 'FLOG':
@@ -13743,7 +13787,7 @@ class CrownUnlimited(commands.Cog):
                     t_max_health = t_health + int(t_title_passive_value)
                     t_health = t_health + int(t_title_passive_value)
                 elif t_title_passive_type == 'LIFE':
-                    t_max_health = t_health + round(int(t_title_passive_value) + (.10 * o_health))
+                    t_max_health = t_health + int((((t_title_passive_value/3)/100) * o_health))
                 elif t_title_passive_type == 'DRAIN':
                     t_stamina = t_stamina + int(t_title_passive_value)
                 elif t_title_passive_type == 'FLOG':
@@ -13834,6 +13878,10 @@ class CrownUnlimited(commands.Cog):
 
             # Count Turns
             turn_total = 0
+            
+            #Rebirth Scaling
+            o_attack = o_attack + (o_user['REBIRTH'] * 10)
+            o_defense = o_defense + (o_user['REBIRTH'] * 10)
 
             # START TURNS
             while (o_health > 0) and (t_health > 0):
@@ -14887,6 +14935,8 @@ class CrownUnlimited(commands.Cog):
                 m_playtime = int(wintime[14:16])
                 s_playtime = int(wintime[17:19])
                 gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
+                if o_user['RIFT'] == 1:
+                    response = db.updateUserNoFilter({'DISNAME':str(o_user['DISNAME'])}, {'$set': {'RIFT' : 0}})
 
                 embedVar = discord.Embed(title=f":zap: `{t_card}` wins the match!", description=f"The game lasted {turn_total} rounds.\n`{t_card} says:`\n`{t_win_description}`", colour=0x1abc9c)
                 embedVar.set_author(name=f"{o_card} lost!")
@@ -14935,6 +14985,8 @@ class CrownUnlimited(commands.Cog):
                 gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
                 teambank = await blessteam(10, oteam)
                 fambank = await blessfamily(10, ofam)
+                if o_user['RIFT'] == 1:
+                    response = db.updateUserNoFilter({'DISNAME':str(o_user['DISNAME'])}, {'$set': {'RIFT' : 0}})
                 drop_response = await drops(ctx.author, selected_universe, currentopponent)
                 questlogger = await quest(ouser, t_card, "Tales")
                 destinylogger = await destiny(ouser, t_card, "Tales")
@@ -15295,7 +15347,7 @@ class CrownUnlimited(commands.Cog):
             o_max_health = o_health + int(o_card_passive)
             o_health = o_health + int(o_card_passive)
         elif o_card_passive_type == 'LIFE':
-            o_max_health = o_health + round(int(o_card_passive) + (.10 * t_health))
+            o_max_health = o_health + int((((o_card_passive/3)/100) * t_health))
         elif o_card_passive_type == 'DRAIN':
             o_stamina = o_stamina + int(o_card_passive)
         elif o_card_passive_type == 'FLOG':
@@ -15367,7 +15419,7 @@ class CrownUnlimited(commands.Cog):
                 o_max_health = o_health + int(o_title_passive_value)
                 o_health = o_health + int(o_title_passive_value)
             elif o_title_passive_type == 'LIFE':
-                o_max_health = o_health + round(int(o_title_passive_value) + (.10 * t_health))
+                o_max_health = o_health + int((((o_title_passive_value/3)/100) * t_health))
             elif o_title_passive_type == 'DRAIN':
                 o_stamina = o_stamina + int(o_title_passive_value)
             elif o_title_passive_type == 'FLOG':
@@ -15438,7 +15490,7 @@ class CrownUnlimited(commands.Cog):
             o_max_health = o_health + int(oarm_passive_value)
             o_health = o_health + int(oarm_passive_value)
         elif oarm_passive_type == 'LIFE':
-            o_max_health = o_health + round(int(oarm_passive_value) + (.10 * t_health))
+            o_max_health = o_health + int((((oarm_passive_value/3)/100) * t_health))
         elif oarm_passive_type == 'DRAIN':
             o_stamina = o_stamina + int(oarm_passive_value)
         elif oarm_passive_type == 'FLOG':
@@ -15509,7 +15561,7 @@ class CrownUnlimited(commands.Cog):
             t_max_health = t_health + int(tarm_passive_value)
             t_health = t_health + int(tarm_passive_value)
         elif tarm_passive_type == 'LIFE':
-            t_max_health = t_health + round(int(tarm_passive_value) + (.10 * o_health))
+            t_max_health = t_health + int((((tarm_passive_value/3)/100) * o_health))
         elif tarm_passive_type == 'DRAIN':
             t_stamina = t_stamina + int(tarm_passive_value)
         elif tarm_passive_type == 'FLOG':
@@ -15587,7 +15639,7 @@ class CrownUnlimited(commands.Cog):
             t_max_health = t_health + int(t_card_passive)
             t_health = t_health + int(t_card_passive)
         elif t_card_passive_type == 'LIFE':
-            t_max_health = t_health + round(int(t_card_passive) + (.10 * o_health))
+            t_max_health = t_health + int((((t_card_passive/3)/100) * o_health))
         elif t_card_passive_type == 'DRAIN':
             t_stamina = t_stamina + int(t_card_passive)
         elif t_card_passive_type == 'FLOG':
@@ -15659,7 +15711,7 @@ class CrownUnlimited(commands.Cog):
                 t_max_health = t_health + int(t_title_passive_value)
                 t_health = t_health + int(t_title_passive_value)
             elif t_title_passive_type == 'LIFE':
-                t_max_health = t_health + round(int(t_title_passive_value) + (.10 * o_health))
+                t_max_health = t_health + int((((t_title_passive_value/3)/100) * o_health))
             elif t_title_passive_type == 'DRAIN':
                 t_stamina = t_stamina + int(t_title_passive_value)
             elif t_title_passive_type == 'FLOG':
@@ -15752,6 +15804,10 @@ class CrownUnlimited(commands.Cog):
 
         # Count Turns
         turn_total = 0
+        
+        #Rebirth Scaling
+        o_attack = o_attack + (o_user['REBIRTH'] * 10)
+        o_defense = o_defense + (o_user['REBIRTH'] * 10)
 
         await private_channel.send(f"{user1.mention}: `{o_card}` VS {t_universe} BOSS : `{t_card}` has begun!")
         # START TURNS
@@ -17255,7 +17311,7 @@ class CrownUnlimited(commands.Cog):
                     t_max_health = t_health + int(t_card_passive)
                     t_health = t_health + int(t_card_passive)
                 elif t_card_passive_type == 'LIFE':
-                    t_max_health = t_health + round(int(t_card_passive) + (.10 * o_health))
+                    t_max_health = t_health + int((((t_card_passive/3)/100) * o_health))
                 elif t_card_passive_type == 'DRAIN':
                     t_stamina = t_stamina + int(t_card_passive)
                 elif t_card_passive_type == 'FLOG':
@@ -17327,7 +17383,7 @@ class CrownUnlimited(commands.Cog):
                         t_max_health = t_health + int(t_title_passive_value)
                         t_health = t_health + int(t_title_passive_value)
                     elif t_title_passive_type == 'LIFE':
-                        t_max_health = t_health + round(int(t_title_passive_value) + (.10 * o_health))
+                        t_max_health = t_health + int((((t_title_passive_value/3)/100) * o_health))
                     elif t_title_passive_type == 'DRAIN':
                         t_stamina = t_stamina + int(t_title_passive_value)
                     elif t_title_passive_type == 'FLOG':
@@ -17399,7 +17455,7 @@ class CrownUnlimited(commands.Cog):
                     t_max_health = t_health + int(tarm_passive_value)
                     t_health = t_health + int(tarm_passive_value)
                 elif tarm_passive_type == 'LIFE':
-                    t_max_health = t_health + round(int(tarm_passive_value) + (.10 * o_health))
+                    t_max_health = t_health + int((((tarm_passive_value/3)/100) *o_health))
                 elif tarm_passive_type == 'DRAIN':
                     t_stamina = t_stamina + int(tarm_passive_value)
                 elif tarm_passive_type == 'FLOG':
@@ -17468,7 +17524,7 @@ class CrownUnlimited(commands.Cog):
                     o_max_health = o_health + int(o_card_passive)
                     o_health = o_health + int(o_card_passive)
                 elif o_card_passive_type == 'LIFE':
-                    o_max_health = o_health + round(int(o_card_passive) + (.10 * t_health))
+                    o_max_health = o_health + int((((o_card_passive/3)/100) * t_health))
                 elif o_card_passive_type == 'DRAIN':
                     o_stamina = o_stamina + int(o_card_passive)
                 elif o_card_passive_type == 'FLOG':
@@ -17540,7 +17596,7 @@ class CrownUnlimited(commands.Cog):
                         o_max_health = o_health + int(o_title_passive_value)
                         o_health = o_health + int(o_title_passive_value)
                     elif o_title_passive_type == 'LIFE':
-                        o_max_health = o_health + round(int(o_title_passive_value) + (.10 * t_health))
+                        o_max_health = o_health + int((((o_title_passive_type/3)/100) * t_health))
                     elif o_title_passive_type == 'DRAIN':
                         o_stamina = o_stamina + int(o_title_passive_value)
                     elif o_title_passive_type == 'FLOG':
@@ -17611,7 +17667,7 @@ class CrownUnlimited(commands.Cog):
                     o_max_health = o_health + int(oarm_passive_value)
                     o_health = o_health + int(oarm_passive_value)
                 elif oarm_passive_type == 'LIFE':
-                    o_max_health = o_health + round(int(oarm_passive_value) + (.10 * t_health))
+                    o_max_health = o_health + int((((oarm_passive_value/3)/100) *t_health))
                 elif oarm_passive_type == 'DRAIN':
                     o_stamina = o_stamina + int(oarm_passive_value)
                 elif oarm_passive_type == 'FLOG':
@@ -17727,6 +17783,14 @@ class CrownUnlimited(commands.Cog):
 
                 # Count Turns
                 turn_total = 0
+                
+                
+                #Rebirth Scaling
+                o_attack = o_attack + (o_user['REBIRTH'] * 10)
+                o_defense = o_defense + (o_user['REBIRTH'] * 10)
+                t_attack = t_attack + (t_user['REBIRTH'] * 10)
+                t_defense = t_defense + (t_user['REBIRTH'] * 10)
+                
 
                 
                 # START TURNS
@@ -19666,7 +19730,7 @@ class CrownUnlimited(commands.Cog):
                     t_max_health = t_health + int(t_card_passive)
                     t_health = t_health + int(t_card_passive)
                 elif t_card_passive_type == 'LIFE':
-                    t_max_health = t_health + round(int(t_card_passive) + (.10 * o_health))
+                    t_max_health = t_health + int((((t_card_passive/3)/100) * o_health))
                 elif t_card_passive_type == 'DRAIN':
                     t_stamina = t_stamina + int(t_card_passive)
                 elif t_card_passive_type == 'FLOG':
@@ -19738,7 +19802,7 @@ class CrownUnlimited(commands.Cog):
                         t_max_health = t_health + int(t_title_passive_value)
                         t_health = t_health + int(t_title_passive_value)
                     elif t_title_passive_type == 'LIFE':
-                        t_max_health = t_health + round(int(t_title_passive_value) + (.10 * o_health))
+                        t_max_health = t_health + int((((t_title_passive_value/3)/100) * o_health))
                     elif t_title_passive_type == 'DRAIN':
                         t_stamina = t_stamina + int(t_title_passive_value)
                     elif t_title_passive_type == 'FLOG':
@@ -19810,7 +19874,7 @@ class CrownUnlimited(commands.Cog):
                     t_max_health = t_health + int(tarm_passive_value)
                     t_health = t_health + int(tarm_passive_value)
                 elif tarm_passive_type == 'LIFE':
-                    t_max_health = t_health + round(int(tarm_passive_value) + (.10 * o_health))
+                    t_max_health = t_health + int((((tarm_passive_value/3)/100) *o_health))
                 elif tarm_passive_type == 'DRAIN':
                     t_stamina = t_stamina + int(tarm_passive_value)
                 elif tarm_passive_type == 'FLOG':
@@ -19879,7 +19943,7 @@ class CrownUnlimited(commands.Cog):
                     o_max_health = o_health + int(o_card_passive)
                     o_health = o_health + int(o_card_passive)
                 elif o_card_passive_type == 'LIFE':
-                    o_max_health = o_health + round(int(o_card_passive) + (.10 * t_health))
+                    o_max_health = o_health + int((((o_card_passive/3)/100) * t_health))
                 elif o_card_passive_type == 'DRAIN':
                     o_stamina = o_stamina + int(o_card_passive)
                 elif o_card_passive_type == 'FLOG':
@@ -19951,7 +20015,7 @@ class CrownUnlimited(commands.Cog):
                         o_max_health = o_health + int(o_title_passive_value)
                         o_health = o_health + int(o_title_passive_value)
                     elif o_title_passive_type == 'LIFE':
-                        o_max_health = o_health + round(int(o_title_passive_value) + (.10 * t_health))
+                        o_max_health = o_health + int((((o_title_passive_value/3)/100) * t_health))
                     elif o_title_passive_type == 'DRAIN':
                         o_stamina = o_stamina + int(o_title_passive_value)
                     elif o_title_passive_type == 'FLOG':
@@ -20022,7 +20086,7 @@ class CrownUnlimited(commands.Cog):
                     o_max_health = o_health + int(oarm_passive_value)
                     o_health = o_health + int(oarm_passive_value)
                 elif oarm_passive_type == 'LIFE':
-                    o_max_health = o_health + round(int(oarm_passive_value) + (.10 * t_health))
+                    o_max_health = o_health + int((((oarm_passive_value/3)/100) *t_health))
                 elif oarm_passive_type == 'DRAIN':
                     o_stamina = o_stamina + int(oarm_passive_value)
                 elif oarm_passive_type == 'FLOG':
@@ -20139,7 +20203,11 @@ class CrownUnlimited(commands.Cog):
                 # Count Turns
                 turn_total = 0
 
-                
+                #Rebirth Scaling
+                o_attack = o_attack + (o_user['REBIRTH'] * 10)
+                o_defense = o_defense + (o_user['REBIRTH'] * 10)
+                t_attack = t_attack + (t_user['REBIRTH'] * 10)
+                t_defense = t_defense + (t_user['REBIRTH'] * 10)
                 # START TURNS
                 while (o_health > 0) and (t_health > 0):
                     #Player 1 Turn Start
@@ -21719,10 +21787,50 @@ class CrownUnlimited(commands.Cog):
                 tales_card_details.append(f"{available} **{card['NAME']}**: :coin:{card['PRICE']} _T_")
             elif card['HAS_COLLECTION']:
                 destiny_card_details.append(f"{available} **{card['NAME']}**: :coin:{card['PRICE']} _T_")
-        await ctx.author.send(f"{universe.upper()} CARDS LIST")
-        await ctx.author.send("\n".join(tales_card_details))
-        await ctx.author.send("\n".join(dungeon_card_details))
-        await ctx.author.send("\n".join(destiny_card_details))
+
+        all_cards = []
+        if tales_card_details:
+            for t in tales_card_details:
+                all_cards.append(t)
+        
+        if dungeon_card_details:
+            for d in dungeon_card_details:
+                all_cards.append(d)
+
+        if destiny_card_details:
+            for de in destiny_card_details:
+                all_cards.append(de)
+
+        total_cards = len(all_cards)
+
+        # Adding to array until divisible by 10
+        while len(all_cards) % 10 != 0:
+            all_cards.append("")
+        # Check if divisible by 10, then start to split evenly
+        if len(all_cards) % 10 == 0:
+            first_digit = int(str(len(all_cards))[:1])
+            cards_broken_up = np.array_split(all_cards, first_digit)
+        
+        # If it's not an array greater than 10, show paginationless embed
+        if len(all_cards) < 10:
+            embedVar = discord.Embed(title= f"{universe} Card List", description="\n".join(all_cards), colour=0x7289da)
+            embedVar.set_footer(text=f".buycard card name: Buy Card\n.viewcard card name: View Cards Details")
+            await ctx.send(embed=embedVar)
+
+        embed_list = []
+        for i in range(0, len(cards_broken_up)):
+            globals()['embedVar%s' % i] = discord.Embed(title= f"{universe} Card List", description="\n".join(cards_broken_up[i]), colour=0x7289da)
+            globals()['embedVar%s' % i].set_footer(text=f"{total_cards} Total Cards\n.buycard card name: Buy Card\n.viewcard card name: View Cards Details")
+            embed_list.append(globals()['embedVar%s' % i])
+
+        paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+        paginator.add_reaction('⏮️', "first")
+        paginator.add_reaction('⏪', "back")
+        paginator.add_reaction('🔐', "lock")
+        paginator.add_reaction('⏩', "next")
+        paginator.add_reaction('⏭️', "last")
+        embeds = embed_list
+        await paginator.run(embeds)
     
     @commands.command()
     async def titles(self, ctx, *args):
@@ -21748,9 +21856,48 @@ class CrownUnlimited(commands.Cog):
                 dungeon_titles_details.append(f"{available} {title['TITLE']} _D_")
             else:
                 tales_titles_details.append(f"{available} {title['TITLE']}: :coin:{title['PRICE']} _T_")
-        await ctx.author.send(f"{universe.upper()} TITLE LIST")
-        await ctx.author.send("\n".join(tales_titles_details))
-        await ctx.author.send("\n".join(dungeon_titles_details))
+
+        all_titles = []
+        if tales_titles_details:
+            for t in tales_titles_details:
+                all_titles.append(t)
+        
+        if dungeon_titles_details:
+            for d in dungeon_titles_details:
+                all_titles.append(d)
+
+        total_titles = len(all_titles)
+
+        # Adding to array until divisible by 10
+        while len(all_titles) % 10 != 0:
+            all_titles.append("")
+        # Check if divisible by 10, then start to split evenly
+        if len(all_titles) % 10 == 0:
+            first_digit = int(str(len(all_titles))[:1])
+            titles_broken_up = np.array_split(all_titles, first_digit)
+        
+        # If it's not an array greater than 10, show paginationless embed
+        if len(all_titles) < 10:
+            embedVar = discord.Embed(title= f"{universe} Title List", description="\n".join(all_titles), colour=0x7289da)
+            # embedVar.set_thumbnail(url={universe_data['PATH']})
+            embedVar.set_footer(text=f".buytitle title name: Buy Title\n.viewtitle title name: View Title Details")
+            await ctx.send(embed=embedVar)
+
+        embed_list = []
+        for i in range(0, len(titles_broken_up)):
+            globals()['embedVar%s' % i] = discord.Embed(title= f"{universe} Title List", description="\n".join(titles_broken_up[i]), colour=0x7289da)
+            # globals()['embedVar%s' % i].set_thumbnail(url={universe_data['PATH']})
+            globals()['embedVar%s' % i].set_footer(text=f"{total_titles} Total Titles\n.buytitle title name: Buy Title\n.viewtitle title name: View Title Details")
+            embed_list.append(globals()['embedVar%s' % i])
+
+        paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+        paginator.add_reaction('⏮️', "first")
+        paginator.add_reaction('⏪', "back")
+        paginator.add_reaction('🔐', "lock")
+        paginator.add_reaction('⏩', "next")
+        paginator.add_reaction('⏭️', "last")
+        embeds = embed_list
+        await paginator.run(embeds)
 
     @commands.command()
     async def arms(self, ctx, *args):
@@ -21776,9 +21923,45 @@ class CrownUnlimited(commands.Cog):
                 dungeon_arms_details.append(f"{available} {arm['ARM']} _D_")
             else:
                 tales_arms_details.append(f"{available} {arm['ARM']}: :coin:{arm['PRICE']} _T_")
-        await ctx.author.send(f"{universe.upper()} ARM LIST")
-        await ctx.author.send("\n".join(tales_arms_details))
-        await ctx.author.send("\n".join(dungeon_arms_details))
+
+        all_arms = []
+        if tales_arms_details:
+            for t in tales_arms_details:
+                all_arms.append(t)
+        
+        if dungeon_arms_details:
+            for d in dungeon_arms_details:
+                all_arms.append(d)
+
+        total_arms = len(all_arms)
+        # Adding to array until divisible by 10
+        while len(all_arms) % 10 != 0:
+            all_arms.append("")
+        # Check if divisible by 10, then start to split evenly
+        if len(all_arms) % 10 == 0:
+            first_digit = int(str(len(all_arms))[:1])
+            arms_broken_up = np.array_split(all_arms, first_digit)
+        
+        # If it's not an array greater than 10, show paginationless embed
+        if len(all_arms) < 10:
+            embedVar = discord.Embed(title= f"{universe} Arms List", description="\n".join(all_arms), colour=0x7289da)
+            embedVar.set_footer(text=f".buyarm arm name: Buy Arm\n.viewarm arm name: View Arm Details")
+            await ctx.send(embed=embedVar)
+
+        embed_list = []
+        for i in range(0, len(arms_broken_up)):
+            globals()['embedVar%s' % i] = discord.Embed(title= f"{universe} Arms List", description="\n".join(arms_broken_up[i]), colour=0x7289da)
+            globals()['embedVar%s' % i].set_footer(text=f"{total_arms} Total Arms\n.buyarm arm name: Buy Arm\n.viewarm arm name: View Arm Details")
+            embed_list.append(globals()['embedVar%s' % i])
+
+        paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+        paginator.add_reaction('⏮️', "first")
+        paginator.add_reaction('⏪', "back")
+        paginator.add_reaction('🔐', "lock")
+        paginator.add_reaction('⏩', "next")
+        paginator.add_reaction('⏭️', "last")
+        embeds = embed_list
+        await paginator.run(embeds)
 
     @commands.command()
     async def destinies(self, ctx, *args):
@@ -22650,9 +22833,12 @@ async def drops(player, universe, matchcount):
     all_available_drop_cards = db.queryDropCards(universe)
     all_available_drop_titles = db.queryDropTitles(universe)
     all_available_drop_arms = db.queryDropArms(universe)
-    all_available_drop_pets = db.queryDropPets(universe)
+    all_available_drop_pets = db.queryDropPets(universe) 
     vault_query = {'OWNER' : str(player)}
     vault = db.queryVault(vault_query)
+    user_query = {'DISNAME' : str(player)}
+    user = db.queryUser(user_query)
+    rebirth = user['REBIRTH']
     owned_destinies = []
     for destiny in vault['DESTINY']:
         owned_destinies.append(destiny['NAME'])
@@ -22684,18 +22870,25 @@ async def drops(player, universe, matchcount):
     rand_arm = random.randint(0, a)
     rand_pet = random.randint(0, p)
 
-    gold_drop = 179 #
-    title_drop = 180 #
-    arm_drop = 185 #
-    pet_drop = 191 #
+    gold_drop = 150 #
+    rift_rate = 175 #
+    title_drop = 190 #
+    arm_drop = 195 #
+    pet_drop = 198 #
     card_drop = 200 #
 
-    drop_rate = random.randint(0,200)
+    drop_rate = random.randint((0 + (rebirth * rebirth) * (1+ rebirth)),200)
+
 
     if drop_rate <= gold_drop:
-        bless_amount = 25 + (5 * matchcount)
+        bless_amount = (25 + (5 * matchcount)) * (1+ rebirth)
         await bless(bless_amount, player)
         return f"You earned :coin: **{bless_amount}**!"
+    elif drop_rate <= rift_rate and drop_rate > gold_drop:
+        response = db.updateUserNoFilter(user_query, {'$set': {'RIFT': 1}})
+        bless_amount = (40 + (5 * matchcount)) * (1+ rebirth)
+        await bless(bless_amount, player)
+        return f"A RIFT HAS OPENED! You have earned :coin: **{bless_amount}**!"
     elif drop_rate <= title_drop and drop_rate > gold_drop:
         response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'TITLES': str(titles[rand_title])}})
         return f"You earned _Title:_ **{titles[rand_title]}**!"
@@ -22729,6 +22922,9 @@ async def dungeondrops(player, universe, matchcount):
     all_available_drop_pets = db.queryExclusiveDropPets(universe)
     vault_query = {'OWNER' : str(player)}
     vault = db.queryVault(vault_query)
+    user_query = {'DISNAME' : str(player)}
+    user = db.queryUser(user_query)
+    rebirth = user['REBIRTH']
     owned_destinies = []
     for destiny in vault['DESTINY']:
         owned_destinies.append(destiny['NAME'])
@@ -22760,18 +22956,24 @@ async def dungeondrops(player, universe, matchcount):
     rand_arm = random.randint(0, a)
     rand_pet = random.randint(0, p)
 
-    gold_drop = 339 #
-    title_drop = 340 #
-    arm_drop = 370 #
-    pet_drop = 390 #
+    gold_drop = 300 #
+    rift_rate = 350 #
+    title_drop = 380 #
+    arm_drop = 390 #
+    pet_drop = 396 #
     card_drop = 400 #
 
-    drop_rate = random.randint(0,400)
+    drop_rate = random.randint((0 + (rebirth * rebirth) * (1+ rebirth)),400)
 
     if drop_rate <= gold_drop:
-        bless_amount = 60 + (5 * matchcount)
+        bless_amount = 60 + (5 * matchcount) * (1+ rebirth)
         await bless(bless_amount, player)
         return f"You earned :coin: **{bless_amount}**!"
+    elif drop_rate <= rift_rate and drop_rate > gold_drop:
+        response = db.updateUserNoFilter(user_query, {'$set': {'RIFT': 1}})
+        bless_amount = (80 + (5 * matchcount)) * (1+ rebirth)
+        await bless(bless_amount, player)
+        return f"A RIFT HAS OPENED! You have earned :coin: **{bless_amount}**!"
     elif drop_rate <= title_drop and drop_rate > gold_drop:
         response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'TITLES': str(titles[rand_title])}})
         return f"You earned _Title:_ **{titles[rand_title]}**!"
@@ -22805,6 +23007,9 @@ async def bossdrops(player, universe):
     all_available_drop_pets = db.queryExclusiveDropPets(universe)
     boss = db.queryBoss({'UNIVERSE': universe})
     vault_query = {'OWNER' : str(player)}
+    user_query = {'DISNAME' : str(player)}
+    user = db.queryUser(user_query)
+    rebirth = user['REBIRTH']
 
     cards = []
     titles = []
@@ -22844,13 +23049,14 @@ async def bossdrops(player, universe):
     card_drop = 400 #
     boss_title_drop = 450#
     boss_arm_drop = 480#
-    boss_pet_drop = 499#
+    boss_pet_drop = 495#
     boss_card_drop = 500#
 
-    drop_rate = random.randint(0,500)
+    drop_rate = random.randint((0 + (rebirth * rebirth) * (1+ rebirth)),500)
 
     if drop_rate <= gold_drop:
-        await bless(60, player)
+        bless_amount = 100 * (1+ rebirth)
+        await bless(bless_amount, player)
         return f"You earned :coin: 60!"
     elif drop_rate <= title_drop and drop_rate > gold_drop:
         response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'TITLES': str(titles[rand_title])}})

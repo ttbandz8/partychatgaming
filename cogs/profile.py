@@ -89,6 +89,8 @@ class Profile(commands.Cog):
             o_show = card['UNIVERSE']
             o_collection = card['COLLECTION']
             o_destiny = card['HAS_COLLECTION']
+            o_rebirth = d['REBIRTH']
+            rebirthBonus = o_rebirth * 10
             traits = ut.traits
             mytrait = {}
             traitmessage = ''
@@ -195,6 +197,7 @@ class Profile(commands.Cog):
             _Arm:_ **{arm_name}:** {arm_passive_type} {arm_passive_value}
             _Pet:_ **{active_pet['NAME']}:** {active_pet['TYPE']} {pet_ability_power}
             _Pet Level:_ _B_ **{bond}** {bond_message} / _L_ **{lvl}**
+            _Rebirth Buff:_ +**{rebirthBonus}**
 
             _**Moveset**_
             **{move1}:** {move1ap}
@@ -791,9 +794,21 @@ class Profile(commands.Cog):
         all_universes = db.queryAllUniverse()
         user = db.queryUser({'DISNAME': str(ctx.author)})
         available_universes = []
-        for uni in all_universes:
-            if uni['PREREQUISITE'] in user['CROWN_TALES']:
-                available_universes.append(uni['TITLE'])
+        riftShopOpen = False
+        shopName = ':shopping_cart:Pop Up Shop'
+        if user['RIFT'] == 1:
+            riftShopOpen = True
+            shopName = ':crystal_ball: Rift Shop'
+            
+        if riftShopOpen:    
+            for uni in all_universes:
+                if uni['PREREQUISITE'] in user['CROWN_TALES']:
+                    available_universes.append(uni['TITLE'])
+        else:
+            for uni in all_universes:
+                if uni['PREREQUISITE'] in user['CROWN_TALES'] and not uni['TIER'] == 9:
+                    available_universes.append(uni['TITLE'])
+        
         
         # Pull all cards that don't require tournaments
         resp = db.queryShopCards()
@@ -850,7 +865,7 @@ class Profile(commands.Cog):
             else:
                 arm_text_list.append(f"{arm['ARM']}: :coin:{arm['PRICE']} " + f"_{arm['UNIVERSE']}_")
         
-        embedVar1 = discord.Embed(title=f":shopping_cart: Pop Up Shop", description=textwrap.dedent(f"""
+        embedVar1 = discord.Embed(title=f"{shopName}", description=textwrap.dedent(f"""
         **Balance:** :coin:{vault['BALANCE']}
         **.cards universe:** View Universe Card List
         **.viewcard card name:** View Cards
@@ -860,7 +875,7 @@ class Profile(commands.Cog):
         embedVar1.add_field(name=":shopping_bags: Cards", value="\n".join(card_text_list))
         embedVar1.set_footer(text="Stock updated every day")
 
-        embedVar2 = discord.Embed(title=f":shopping_cart: Pop Up Shop", description=textwrap.dedent(f"""
+        embedVar2 = discord.Embed(title=f"{shopName}", description=textwrap.dedent(f"""
         **Balance:** :coin:{vault['BALANCE']}
         **.titles universe:** View Universe Title List
         **.viewtitle title name:** View Title Stats
@@ -870,7 +885,7 @@ class Profile(commands.Cog):
         embedVar2.add_field(name=":shopping_bags: Titles", value="\n".join(title_text_list))
         embedVar2.set_footer(text="Stock updated every day")
 
-        embedVar3 = discord.Embed(title=f":shopping_cart: Pop Up Shop", description=textwrap.dedent(f"""
+        embedVar3 = discord.Embed(title=f"{shopName}", description=textwrap.dedent(f"""
         **Balance:** :coin:{vault['BALANCE']}
         **.arms universe:** View Universe Arm List
         **.viewarm arm name:** View Arm Stats

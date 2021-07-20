@@ -31,6 +31,7 @@ BOT_COMMANDS = textwrap.dedent(f"""\
 **.apply @player**: Apply for owners team 
 **.leaveteam team**: Leave Team
 **.teamgift @player amount**: Send Team Members coin (Owner Onlu)
+**.donate amount**: Donate coin to Team Bank
 
 **FAMILY COMMANDS**
 **.lookupfamily @user**: Family lookup
@@ -41,6 +42,7 @@ BOT_COMMANDS = textwrap.dedent(f"""\
 **.runaway**: Runaway from family as child
 **.abandon**: Delete Family
 **.familygift @player amount**: Send Family Members coin (Head/Partner Only)
+**.invest amount**: Invest coin into family Bank
 **.houses**: Show list of available houses
 **.viewhouse**: View House Information
 **.buyhouse**: Buy and move into a new family house
@@ -73,6 +75,7 @@ CROWN_UNLIMITED_COMMANDS = textwrap.dedent(f"""\
 **.quest**: Open your list of Quests
 **.deck**: View your Presets
 **.savedeck**: Save your Build as Preset
+**.rebirth**: Rebirth Account with permanent increases
 
 **Card Commands**
 **.cards universe**: View Universe Card List

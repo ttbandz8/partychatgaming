@@ -3,6 +3,7 @@ import wikipedia
 from discord import player, team
 from discord.ext.commands.errors import CommandOnCooldown
 from discord.flags import Intents
+from pymongo.collation import CollationMaxVariable
 import db
 import time
 import classes as data
@@ -122,7 +123,7 @@ async def enhance(ctx):
 
    embedVar9 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
    embedVar9.set_thumbnail(url=avatar)
-   embedVar9.add_field(name="`DIVINITY`", value="`CREATION` - Increase `MAXHEALTH`\n\n`DESTRUCTION` - Decrease `OPP MAXHEALTH\n\n")
+   embedVar9.add_field(name="`DIVINITY`", value="`CREATION` - Increase `MAXHEALTH`\n\n`DESTRUCTION` - Decrease `OPP MAXHEALTH`\n\n")
    embedVar9.set_footer(text=f".help - Bot Help")
 
    embedVar7 = discord.Embed(title= f":trident:ENHANCE DETAILS:", description=textwrap.dedent(f"""
@@ -293,6 +294,10 @@ async def crown(ctx):
    **.start:** Starts round against current opponent.
    **.wager number:*** In lobby players can wager :coin:.
    Builds are locked during lobbies, to change your build end the lobby with **.end** .
+   
+   **Crown Rifts**
+   Mash-Up Universes featuring heroes and villians connected through common triats and themes!
+   Pay attention, when the Rift opens it will not stay open for long!
    """),colour=0x7289da)
    embedVar7.set_thumbnail(url=avatar)
 
@@ -404,6 +409,83 @@ async def r(ctx):
       await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=3) 
 
 @bot.command()
+async def rebirth(ctx):
+   query = {'DISNAME': str(ctx.author)}
+   user_is_validated = db.queryUser(query)
+   if user_is_validated:
+      rLevel = user_is_validated['REBIRTH']
+      if rLevel < 5:
+         rebirthCost = round(150000 * (1 + (rLevel)))
+         embedVar1 = discord.Embed(title= f":heart_on_fire:{user_is_validated['NAME']}'s Rebirth",colour=0x7289da)
+         embedVar1.set_thumbnail(url=user_is_validated['AVATAR'])
+         embedVar1.add_field(name=f"Rebirth Level: {user_is_validated['REBIRTH']}\nRebirth Cost: {rebirthCost} :coin:", value=textwrap.dedent(f"""\
+         **Rebirth Effects**
+         New Starting Deck
+         Starting Pet Bond
+         Increase Base ATK
+         Increase Base DEF
+         Increased :coin: drops
+         Increased Item Drop Rates
+         
+         You will lose all of your equipped and vaulted items.
+         
+         *Rebirth is permananet and cannot be undone*
+         """))
+         accept = await ctx.send(embed=embedVar1)
+         for emoji in emojis:
+            await accept.add_reaction(emoji)
+
+         def check(reaction, user):
+            return user == ctx.author and str(reaction.emoji) == '👍'
+
+         try:
+            reaction, user = await bot.wait_for('reaction_add', timeout=10.0, check=check)
+
+            vault = db.queryVault({'OWNER': user_is_validated['DISNAME']})
+            if vault:
+               if vault['BALANCE'] >= rebirthCost:
+                  delete = db.deleteVault(vault)              
+                  if rLevel == 0:
+                     vault = db.createVault(data.newVault({'OWNER': user_is_validated['DISNAME'], 'CARDS': ['Twice','Charmander','Braum'], 'DECK': [{'CARD': 'Charmander', 'TITLE': 'Reborn', 'ARM': 'Reborn Stock', 'PET': 'Chick'}, {'CARD': 'Twice', 'TITLE': 'Reborn', 'ARM': 'Reborn Stock', 'PET': 'Chick'}, {'CARD': 'Braum', 'TITLE': 'Reborn', 'ARM': 'Reborn Stock', 'PET': 'Chick'}], 'PETS' : [{'NAME': 'Chick', 'LVL': 1, 'EXP': 0, 'Heal': 10, 'TYPE': 'HLT', 'BOND': 1, 'BONDEXP': 0, 'PATH': "https://res.cloudinary.com/dkcmq8o15/image/upload/v1622307902/Pets/chick.jpg"}]})) 
+                     if vault:         
+                        db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'CARD': 'Charmander', 'TITLE': 'Reborn', 'ARM':'Reborn Stock'}})  
+                        db.updateUserNoFilter(query, {'$inc': {'REBIRTH': 1 }}) 
+                        await ctx.send(f"You are now Rebirth Level: {user_is_validated['REBIRTH'] + 1}")           
+                  elif rLevel == 1:
+                     vault = db.createVault(data.newVault({'OWNER': user_is_validated['DISNAME'], 'CARDS': ['Kirishima','Squirtle','Malphite'], 'DECK': [{'CARD': 'Kirishima', 'TITLE': 'Reborn Soldier', 'ARM': 'Deadgun', 'PET': 'Chick'}, {'CARD': 'Squirtle', 'TITLE': 'Reborn Soldier', 'ARM': 'Deadgun', 'PET': 'Chick'}, {'CARD': 'Malphite', 'TITLE': 'Reborn Soldier', 'ARM': 'Deadgun', 'PET': 'Chick'}], 'PETS' : [{'NAME': 'Chick', 'LVL': 5, 'EXP': 0, 'Heal': 10, 'TYPE': 'HLT', 'BOND': 1, 'BONDEXP': 0, 'PATH': "https://res.cloudinary.com/dkcmq8o15/image/upload/v1622307902/Pets/chick.jpg"}]}))         
+                     if vault:         
+                        nCard = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'CARD': 'Malphite', 'TITLE': 'Reborn Soldier', 'ARM':'Deadgun'}})  
+                        nRebirth = db.updateUserNoFilter(query, {'$inc': {'REBIRTH': 1 }}) 
+                        await ctx.send(f"You are now Rebirth Level: {user_is_validated['REBIRTH'] + 1}")   
+                  elif rLevel == 2:
+                     vault = db.createVault(data.newVault({'OWNER' : user_is_validated['DISNAME'], 'CARDS': ['Mineta','Bulbasaur','Shen'], 'DECK': [{'CARD': 'Mineta', 'TITLE': 'Reborn Legion', 'ARM': 'Glaive', 'PET': 'Chick'}, {'CARD': 'Bulbasaur', 'TITLE': 'Reborn Legion', 'ARM': 'Glaive', 'PET': 'Chick'}, {'CARD': 'Shen', 'TITLE': 'Reborn Legion', 'ARM': 'Glaive', 'PET': 'Chick'}], 'PETS' : [{'NAME': 'Chick', 'LVL': 1, 'EXP': 0, 'Heal': 10, 'TYPE': 'HLT', 'BOND': 2, 'BONDEXP': 0, 'PATH': "https://res.cloudinary.com/dkcmq8o15/image/upload/v1622307902/Pets/chick.jpg"}]}))         
+                     if vault:         
+                        nCard = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'CARD': 'Mineta', 'TITLE': 'Reborn Legion', 'ARM':'Glaive'}})  
+                        nRebirth = db.updateUserNoFilter(query, {'$inc': {'REBIRTH': 1 }}) 
+                        await ctx.send(f"You are now Rebirth Level: {user_is_validated['REBIRTH'] + 1}")      
+                  elif rLevel == 3:
+                     vault = db.createVault(data.newVault({'OWNER' : user_is_validated['DISNAME'], 'CARDS': ['Hawks','Clefairy','Yasuo'], 'DECK': [{'CARD': 'Hawks', 'TITLE': 'Reborn King', 'ARM': 'Kings Glaive', 'PET': 'Chick'}, {'CARD': 'Clefairy', 'TITLE': 'Reborn King', 'ARM': 'Kings Glaive', 'PET': 'Chick'}, {'CARD': 'Yasuo', 'TITLE': 'Reborn King', 'ARM': 'Kings Glaive', 'PET': 'Chick'}], 'PETS' : [{'NAME': 'Chick', 'LVL': 5, 'EXP': 0, 'Heal': 10, 'TYPE': 'HLT', 'BOND': 1, 'BONDEXP': 0, 'PATH': "https://res.cloudinary.com/dkcmq8o15/image/upload/v1622307902/Pets/chick.jpg"}]}))         
+                     if vault:         
+                        nCard = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'CARD': 'Clefairy', 'TITLE': 'Reborn King', 'ARM':'Kings Glaive'}})  
+                        nRebirth = db.updateUserNoFilter(query, {'$inc': {'REBIRTH': 1 }}) 
+                        await ctx.send(f"You are now Rebirth Level: {user_is_validated['REBIRTH'] + 1}")     
+                  elif rLevel == 4:
+                     vault = db.createVault(data.newVault({'OWNER' : user_is_validated['DISNAME'], 'CARDS': ['Stain','Onix','Xayah And Rakan'], 'DECK': [{'CARD': 'Stain', 'TITLE': 'Reborn Legend', 'ARM': 'Legendary Weapon', 'PET': 'Chick'}, {'CARD': 'Onix', 'TITLE': 'Reborn Legend', 'ARM': 'Legendary Weapon', 'PET': 'Chick'}, {'CARD': 'Xayah And Rakan', 'TITLE': 'Reborn Legend', 'ARM': 'Legendary Weapon', 'PET': 'Chick'}], 'PETS' : [{'NAME': 'Chick', 'LVL': 1, 'EXP': 0, 'Heal': 10, 'TYPE': 'HLT', 'BOND': 3, 'BONDEXP': 0, 'PATH': "https://res.cloudinary.com/dkcmq8o15/image/upload/v1622307902/Pets/chick.jpg"}]}))         
+                     if vault:         
+                        nCard = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'CARD': 'Xayah And Rakan', 'TITLE': 'Reborn Legend', 'ARM':'Legendary Weapon'}})  
+                        nRebirth = db.updateUserNoFilter(query, {'$inc': {'REBIRTH': 1 }}) 
+                        await ctx.send(f"You are now Rebirth Level: {user_is_validated['REBIRTH'] + 1}")   
+               else:
+                  await ctx.send(f"Not enough :coin:!\nYou need {rebirthCost} to Rebirth:angel:", delete_after=5)
+            else:
+               await ctx.send("No Vault:angel:", delete_after=5)
+         except:
+            await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=3)
+      else:
+         await ctx.send(f"You are at full Rebirth\n:angel:Level: {user_is_validated['REBIRTH']} ", delete_after=5)
+         
+      
+@bot.command()
 @commands.check(validate_user)
 async def purge(ctx, amount = 5):
    if ctx.author.guild_permissions.administrator == True:
@@ -449,7 +531,7 @@ async def daily(ctx):
    q2 = random.randint(0, oppponent_len)
    q3 = random.randint(0, oppponent_len)
 
-   quests = [{'OPPONENT': opponents[q1], 'TYPE': 'Tales', 'GOAL': 3, 'WINS': 0, 'REWARD': 200 },{'OPPONENT': opponents[q2], 'TYPE': 'Tales', 'GOAL': 5, 'WINS': 0, 'REWARD': 350 }, {'OPPONENT': opponents[q3], 'TYPE': 'Dungeon', 'GOAL': 3, 'WINS': 0, 'REWARD': 600 }]
+   quests = [{'OPPONENT': opponents[q1], 'TYPE': 'Tales', 'GOAL': 3, 'WINS': 0, 'REWARD': 500 },{'OPPONENT': opponents[q2], 'TYPE': 'Tales', 'GOAL': 5, 'WINS': 0, 'REWARD': 1000 }, {'OPPONENT': opponents[q3], 'TYPE': 'Dungeon', 'GOAL': 3, 'WINS': 0, 'REWARD': 1500 }]
    db.updateVaultNoFilter({'OWNER': str(ctx.author)}, {'$set': {'QUESTS': quests}})
 
    await ctx.send(f"Daily bonus :coin:100 has been applied for {ctx.author.mention}!\nYour new quests are available on the Quest Board!")
@@ -809,6 +891,43 @@ async def gift(ctx, user2: User, amount):
       await curse(int(amount), ctx.author)
       await ctx.send(f":coin:{amount} has been gifted to {user2.mention}.")
       return
+   
+@bot.command()
+@commands.check(validate_user)
+async def donate(ctx, amount, *args):
+   vault = db.queryVault({'OWNER': str(ctx.author)})
+   balance = vault['BALANCE']
+   team = " ".join([*args])
+   query = {'TNAME': str(team)}
+   team_data = db.queryTeam(query)
+   if team_data:
+      if balance <= int(amount):
+         await ctx.send("You do not have that amount to gift.")
+      else:
+         await blessteam(int(amount), team)
+         await curse(int(amount), ctx.author)
+         await ctx.send(f":coin:{amount} has been gifted to {team}.")
+         return
+   else:
+      await ctx.send(f"Team: {team} does not exist")
+      
+@bot.command()
+@commands.check(validate_user)
+async def invest(ctx, amount):
+   user = db.queryUser({'DISNAME': str(ctx.author)})
+   family = db.queryFamily({'HEAD': user['FAMILY']})
+   vault = db.queryVault({'OWNER': str(ctx.author)})
+   balance = vault['BALANCE']
+   if family:
+      if balance <= int(amount):
+         await ctx.send("You do not have that amount to invest.")
+      else:
+         await blessfamily(int(amount), user['FAMILY'])
+         await curse(int(amount), ctx.author)
+         await ctx.send(f":coin:{amount} invested into {user['NAME']}'s Family'.")
+         return
+   else:
+      await ctx.send(f"Family does not exist")
 
 @bot.command()
 @commands.check(validate_user)

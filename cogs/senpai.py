@@ -148,48 +148,6 @@ class Senpai(commands.Cog):
     #     embeds = [embed1, embed2, embed3, embed5, embed4, embed6, embed7, embed8, embed9, embed6, embed10, embed11]
     #     await paginator.run(embeds)
 
-    # @commands.command()
-    # async def senpai(self, ctx):
-   
-        
-    #     embed4 = discord.Embed(color=ctx.author.color).add_field(name=":woman_teacher: " + "Senpai™️ Says:\n" + "`.build` :muscle:", value="")
-    #     embed4.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png")
-        
-    #     embed5 = discord.Embed(color=ctx.author.color).add_field(name=":woman_teacher: " + "Senpai™️ Says:\n" + "`.lookup` = Lookup:eyes:", value="type `.lookup` @`user` ")
-    #     embed5.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png") 
-        
-    #     embed6 = discord.Embed(color=ctx.author.color).add_field(name=":woman_teacher: " + "Senpai™️ Says:\n" + "", value="")
-    #     embed6.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png")
-        
-    #     embed7 = discord.Embed(color=ctx.author.color).add_field(name=":woman_teacher: " + "Senpai™️ Says :\n" + "", value="")
-    #     embed7.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png")
-        
-    #     embed8 = discord.Embed(color=ctx.author.color).add_field(name=":woman_teacher: " + "Senpai™️ Says :\n" + "", value="\n\nUse `.viewcard` `'cardname'` to View Card.\n\nNow use `.viewtitle` `'title'` to View Title\n\nThen use `.viewarm` `'arm'` to View Arm\n\nFinally use `.viewpet` `'pet'` to View Pet.\n\n ")
-    #     embed8.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png")
-        
-    #     embed9 = discord.Embed(color=ctx.author.color).add_field(name=":woman_teacher: " + "Senpai™️ Says :\n" + "Buy with `.buycard`, `.buyarm`, `.buytitle`", value="Use `.buycard` 'card', `.buyarm` 'arm' or `.buytitle` 'title' to add items to your `Vault`!\n\nTo view a full list of items by `Universe`, use the `Universe` list commands\n*`.cards` `universe`, `.titles` `universe`\n `.arms` `universe`, and `.pets` `universe`*\n**Example**: `.cards` `My Hero Academia`")
-    #     embed9.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png")
-        
-    #     embed10 = discord.Embed(color=ctx.author.color).add_field(name=":woman_teacher: " + "Senpai™️ Says :\n" + "Equip! `.equipcard`, `.equiparm`, `.equiptitle`, `.equippet`", value="Use `.equipcard` 'card' to Equip a Card.\n\nNow use `.equiptitle` 'title' to equip a Title.\n\nThen use `.equiparm` 'arm' to equip an Arm.\n\nFinally use `.equippet` 'pet' to equip an Pet\n\nOnce you've decided on your new build use `.build`!\n\n*Hint use `universe` specific items to gain a `universe` Buff!*")
-    #     embed10.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png")
-        
-    #     embed11 = discord.Embed(color=ctx.author.color).add_field(name=":woman_teacher: " + "Senpai™️ Says :\n" + "Time to `.senpaibattle`", value="Use `.senpaibattle` to open the Crown Unlimited `Tutorial Match Lobby`\n\nThis will be your first Crown Unlimited Battle agaist ME! Senpai!\n\nMake sure your `.build` is set before entering a `Lobby`\n\nNow use `.start` to begin the tutorial match\n\nOnce you are done use the `.end` command to close the lobby\n\n*Hint use `.legendbattle` to face my Final Form!*")
-    #     embed11.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png")
-
-    #     embed12 = discord.Embed(color=ctx.author.color).add_field(name=":woman_teacher: " + "Senpai™️ Says :\n" + "Many Game Modes!", value="C)
-    #     embed12.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png")
-        
-    #     embed13 = discord.Embed(color=ctx.author.color).add_field(name=":woman_teacher: " + "Senpai™️ Says :\n" + "CONGRATULATIONS !", value="")
-    #     embed13.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Bootcamp.png")
-        
-    #     paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
-    #     paginator.add_reaction('⏮️', "first")
-    #     paginator.add_reaction('⏪', "back")
-    #     paginator.add_reaction('🔐', "lock")
-    #     paginator.add_reaction('⏩', "next")
-    #     paginator.add_reaction('⏭️', "last")
-    #     embeds = [embed1, embed2, embed3, embed4, embed5, embed6, embed7, embed8,embed9,embed10,embed11,embed12,embed13]
-    #     await paginator.run(embeds)
     @commands.command()
     async def senpai(self, ctx):
         avatar="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png"

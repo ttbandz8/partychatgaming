@@ -45,6 +45,7 @@ class Cards(commands.Cog):
         vault_query = {'OWNER' : str(ctx.author)}
         vault = db.altQueryVault(vault_query)
         owned_destinies = []
+        riftShopOpen = False
         for destiny in vault['DESTINY']:
             owned_destinies.append(destiny['NAME'])
 
@@ -59,9 +60,16 @@ class Cards(commands.Cog):
             all_universes = db.queryAllUniverse()
             user = db.queryUser({'DISNAME': str(ctx.author)})
             available_universes = []
-            for uni in all_universes:
-                if uni['PREREQUISITE'] in user['CROWN_TALES']:
-                    available_universes.append(uni['TITLE'])
+            if user['RIFT'] == 1:
+                riftShopOpen = True
+            if riftShopOpen:    
+                for uni in all_universes:
+                    if uni['PREREQUISITE'] in user['CROWN_TALES']:
+                        available_universes.append(uni['TITLE'])
+            else:
+                for uni in all_universes:
+                    if uni['PREREQUISITE'] in user['CROWN_TALES'] and not uni['TIER'] == 9:
+                        available_universes.append(uni['TITLE'])
             if check_card['UNIVERSE'] not in available_universes:
                 await ctx.send("You cannot purchase cards from Universes you haven't unlocked.")
                 return
