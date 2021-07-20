@@ -43,15 +43,22 @@ class Titles(commands.Cog):
         vault = db.altQueryVault(vault_query)
         shop = db.queryShopTitles()
         titles = []
-
+        riftShopOpen = False
         check_title = db.queryTitle({'TITLE' : str(title_name)})
         if check_title:
             all_universes = db.queryAllUniverse()
             user = db.queryUser({'DISNAME': str(ctx.author)})
             available_universes = []
-            for uni in all_universes:
-                if uni['PREREQUISITE'] in user['CROWN_TALES']:
-                    available_universes.append(uni['TITLE'])
+            if user['RIFT'] == 1:
+                riftShopOpen = True
+            if riftShopOpen:    
+                for uni in all_universes:
+                    if uni['PREREQUISITE'] in user['CROWN_TALES']:
+                        available_universes.append(uni['TITLE'])
+            else:
+                for uni in all_universes:
+                    if uni['PREREQUISITE'] in user['CROWN_TALES'] and not uni['TIER'] == 9:
+                        available_universes.append(uni['TITLE'])
             if check_title['UNIVERSE'] not in available_universes:
                 await ctx.send("You cannot purchase titles from Universes you haven't unlocked.")
                 return

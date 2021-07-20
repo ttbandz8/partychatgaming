@@ -43,15 +43,22 @@ class Arm(commands.Cog):
         vault = db.altQueryVault(vault_query)
         shop = db.queryShopArms()
         arms = []
-
+        riftShopOpen = False
         check_arm = db.queryArm({'ARM' : str(arm_name)})
         if check_arm:
             all_universes = db.queryAllUniverse()
             user = db.queryUser({'DISNAME': str(ctx.author)})
             available_universes = []
-            for uni in all_universes:
-                if uni['PREREQUISITE'] in user['CROWN_TALES']:
-                    available_universes.append(uni['TITLE'])
+            if user['RIFT'] == 1:
+                riftShopOpen = True
+            if riftShopOpen:    
+                for uni in all_universes:
+                    if uni['PREREQUISITE'] in user['CROWN_TALES']:
+                        available_universes.append(uni['TITLE'])
+            else:
+                for uni in all_universes:
+                    if uni['PREREQUISITE'] in user['CROWN_TALES'] and not uni['TIER'] == 9:
+                        available_universes.append(uni['TITLE'])
             if check_arm['UNIVERSE'] not in available_universes:
                 await ctx.send("You cannot purchase arms from Universes you haven't unlocked.")
                 return
