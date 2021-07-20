@@ -14,6 +14,7 @@ import help_commands as h
 # Converters
 from discord import User
 from discord import Member
+import DiscordUtils
 from PIL import Image, ImageFont, ImageDraw
 import requests
 import random
@@ -21786,10 +21787,50 @@ class CrownUnlimited(commands.Cog):
                 tales_card_details.append(f"{available} **{card['NAME']}**: :coin:{card['PRICE']} _T_")
             elif card['HAS_COLLECTION']:
                 destiny_card_details.append(f"{available} **{card['NAME']}**: :coin:{card['PRICE']} _T_")
-        await ctx.author.send(f"{universe.upper()} CARDS LIST")
-        await ctx.author.send("\n".join(tales_card_details))
-        await ctx.author.send("\n".join(dungeon_card_details))
-        await ctx.author.send("\n".join(destiny_card_details))
+
+        all_cards = []
+        if tales_card_details:
+            for t in tales_card_details:
+                all_cards.append(t)
+        
+        if dungeon_card_details:
+            for d in dungeon_card_details:
+                all_cards.append(d)
+
+        if destiny_card_details:
+            for de in destiny_card_details:
+                all_cards.append(de)
+
+        total_cards = len(all_cards)
+
+        # Adding to array until divisible by 10
+        while len(all_cards) % 10 != 0:
+            all_cards.append("")
+        # Check if divisible by 10, then start to split evenly
+        if len(all_cards) % 10 == 0:
+            first_digit = int(str(len(all_cards))[:1])
+            cards_broken_up = np.array_split(all_cards, first_digit)
+        
+        # If it's not an array greater than 10, show paginationless embed
+        if len(all_cards) < 10:
+            embedVar = discord.Embed(title= f"{universe} Card List", description="\n".join(all_cards), colour=0x7289da)
+            embedVar.set_footer(text=f".buycard card name: Buy Card\n.viewcard card name: View Cards Details")
+            await ctx.send(embed=embedVar)
+
+        embed_list = []
+        for i in range(0, len(cards_broken_up)):
+            globals()['embedVar%s' % i] = discord.Embed(title= f"{universe} Card List", description="\n".join(cards_broken_up[i]), colour=0x7289da)
+            globals()['embedVar%s' % i].set_footer(text=f"{total_cards} Total Cards\n.buycard card name: Buy Card\n.viewcard card name: View Cards Details")
+            embed_list.append(globals()['embedVar%s' % i])
+
+        paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+        paginator.add_reaction('⏮️', "first")
+        paginator.add_reaction('⏪', "back")
+        paginator.add_reaction('🔐', "lock")
+        paginator.add_reaction('⏩', "next")
+        paginator.add_reaction('⏭️', "last")
+        embeds = embed_list
+        await paginator.run(embeds)
     
     @commands.command()
     async def titles(self, ctx, *args):
@@ -21815,9 +21856,48 @@ class CrownUnlimited(commands.Cog):
                 dungeon_titles_details.append(f"{available} {title['TITLE']} _D_")
             else:
                 tales_titles_details.append(f"{available} {title['TITLE']}: :coin:{title['PRICE']} _T_")
-        await ctx.author.send(f"{universe.upper()} TITLE LIST")
-        await ctx.author.send("\n".join(tales_titles_details))
-        await ctx.author.send("\n".join(dungeon_titles_details))
+
+        all_titles = []
+        if tales_titles_details:
+            for t in tales_titles_details:
+                all_titles.append(t)
+        
+        if dungeon_titles_details:
+            for d in dungeon_titles_details:
+                all_titles.append(d)
+
+        total_titles = len(all_titles)
+
+        # Adding to array until divisible by 10
+        while len(all_titles) % 10 != 0:
+            all_titles.append("")
+        # Check if divisible by 10, then start to split evenly
+        if len(all_titles) % 10 == 0:
+            first_digit = int(str(len(all_titles))[:1])
+            titles_broken_up = np.array_split(all_titles, first_digit)
+        
+        # If it's not an array greater than 10, show paginationless embed
+        if len(all_titles) < 10:
+            embedVar = discord.Embed(title= f"{universe} Title List", description="\n".join(all_titles), colour=0x7289da)
+            # embedVar.set_thumbnail(url={universe_data['PATH']})
+            embedVar.set_footer(text=f".buytitle title name: Buy Title\n.viewtitle title name: View Title Details")
+            await ctx.send(embed=embedVar)
+
+        embed_list = []
+        for i in range(0, len(titles_broken_up)):
+            globals()['embedVar%s' % i] = discord.Embed(title= f"{universe} Title List", description="\n".join(titles_broken_up[i]), colour=0x7289da)
+            # globals()['embedVar%s' % i].set_thumbnail(url={universe_data['PATH']})
+            globals()['embedVar%s' % i].set_footer(text=f"{total_titles} Total Titles\n.buytitle title name: Buy Title\n.viewtitle title name: View Title Details")
+            embed_list.append(globals()['embedVar%s' % i])
+
+        paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+        paginator.add_reaction('⏮️', "first")
+        paginator.add_reaction('⏪', "back")
+        paginator.add_reaction('🔐', "lock")
+        paginator.add_reaction('⏩', "next")
+        paginator.add_reaction('⏭️', "last")
+        embeds = embed_list
+        await paginator.run(embeds)
 
     @commands.command()
     async def arms(self, ctx, *args):
@@ -21843,9 +21923,45 @@ class CrownUnlimited(commands.Cog):
                 dungeon_arms_details.append(f"{available} {arm['ARM']} _D_")
             else:
                 tales_arms_details.append(f"{available} {arm['ARM']}: :coin:{arm['PRICE']} _T_")
-        await ctx.author.send(f"{universe.upper()} ARM LIST")
-        await ctx.author.send("\n".join(tales_arms_details))
-        await ctx.author.send("\n".join(dungeon_arms_details))
+
+        all_arms = []
+        if tales_arms_details:
+            for t in tales_arms_details:
+                all_arms.append(t)
+        
+        if dungeon_arms_details:
+            for d in dungeon_arms_details:
+                all_arms.append(d)
+
+        total_arms = len(all_arms)
+        # Adding to array until divisible by 10
+        while len(all_arms) % 10 != 0:
+            all_arms.append("")
+        # Check if divisible by 10, then start to split evenly
+        if len(all_arms) % 10 == 0:
+            first_digit = int(str(len(all_arms))[:1])
+            arms_broken_up = np.array_split(all_arms, first_digit)
+        
+        # If it's not an array greater than 10, show paginationless embed
+        if len(all_arms) < 10:
+            embedVar = discord.Embed(title= f"{universe} Arms List", description="\n".join(all_arms), colour=0x7289da)
+            embedVar.set_footer(text=f".buyarm arm name: Buy Arm\n.viewarm arm name: View Arm Details")
+            await ctx.send(embed=embedVar)
+
+        embed_list = []
+        for i in range(0, len(arms_broken_up)):
+            globals()['embedVar%s' % i] = discord.Embed(title= f"{universe} Arms List", description="\n".join(arms_broken_up[i]), colour=0x7289da)
+            globals()['embedVar%s' % i].set_footer(text=f"{total_arms} Total Arms\n.buyarm arm name: Buy Arm\n.viewarm arm name: View Arm Details")
+            embed_list.append(globals()['embedVar%s' % i])
+
+        paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+        paginator.add_reaction('⏮️', "first")
+        paginator.add_reaction('⏪', "back")
+        paginator.add_reaction('🔐', "lock")
+        paginator.add_reaction('⏩', "next")
+        paginator.add_reaction('⏭️', "last")
+        embeds = embed_list
+        await paginator.run(embeds)
 
     @commands.command()
     async def destinies(self, ctx, *args):
