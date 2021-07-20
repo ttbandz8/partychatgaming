@@ -3423,6 +3423,8 @@ class CrownUnlimited(commands.Cog):
                 m_playtime = int(wintime[14:16])
                 s_playtime = int(wintime[17:19])
                 gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
+                if o_user['RIFT'] == 1:
+                    response = db.updateUserNoFilter({'DISNAME':str(o_user['DISNAME'])}, {'$set': {'RIFT' : 0}})
 
                 embedVar = discord.Embed(title=f":zap: `{t_card}` wins the match!", description=f"The game lasted {turn_total} rounds.\n`{t_card} says:`\n`{t_win_description}`", colour=0x1abc9c)
                 embedVar.set_author(name=f"{o_card} & {c_card} lost!")
@@ -3475,6 +3477,8 @@ class CrownUnlimited(commands.Cog):
                 match = await savematch(str(user), str(c_card), str(c_card_path), str(ctitle['TITLE']), str(carm['ARM']), str(selected_universe), "Tales", c['EXCLUSIVE'])
                 teambank = await blessteam(10, oteam)
                 cteambank = await blessteam(10, cteam)
+                if o_user['RIFT'] == 1:
+                    response = db.updateUserNoFilter({'DISNAME':str(o_user['DISNAME'])}, {'$set': {'RIFT' : 0}})
                 drop_response = await drops(ctx.author, selected_universe, currentopponent)
                 cdrop_response = await drops(user, selected_universe, currentopponent)
                 ofambank = await blessfamily(10,ofam)
@@ -7173,6 +7177,8 @@ class CrownUnlimited(commands.Cog):
                 m_playtime = int(wintime[14:16])
                 s_playtime = int(wintime[17:19])
                 gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
+                if o_user['RIFT'] == 1:
+                    response = db.updateUserNoFilter({'DISNAME':str(o_user['DISNAME'])}, {'$set': {'RIFT' : 0}})
 
                 embedVar = discord.Embed(title=f":zap: `{t_card}` wins the match!", description=f"The game lasted {turn_total} rounds.\n`{t_card} says:`\n`{t_win_description}`", colour=0x1abc9c)
                 embedVar.set_author(name=f"{o_card} & {c_card} lost!")
@@ -7220,6 +7226,8 @@ class CrownUnlimited(commands.Cog):
                 gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
                 teambank = await blessteam(15, oteam)
                 cteambank = await blessteam(15, cteam)
+                if o_user['RIFT'] == 1:
+                    response = db.updateUserNoFilter({'DISNAME':str(o_user['DISNAME'])}, {'$set': {'RIFT' : 0}})
                 drop_response = await dungeondrops(ctx.author, selected_universe, currentopponent)
                 cdrop_response = await dungeondrops(user, selected_universe, currentopponent)
                 ofambank = await blessfamily(15,ofam)
@@ -12992,6 +13000,8 @@ class CrownUnlimited(commands.Cog):
                 m_playtime = int(wintime[14:16])
                 s_playtime = int(wintime[17:19])
                 gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
+                if o_user['RIFT'] == 1:
+                    response = db.updateUserNoFilter({'DISNAME':str(o_user['DISNAME'])}, {'$set': {'RIFT' : 0}})
 
                 embedVar = discord.Embed(title=f":zap: `{t_card}` wins the match!", description=f"The game lasted {turn_total} rounds.\n`{t_card} says:`\n`{t_win_description}`", colour=0x1abc9c)
                 embedVar.set_author(name=f"{o_card} lost!")
@@ -13037,6 +13047,8 @@ class CrownUnlimited(commands.Cog):
                 m_playtime = int(wintime[14:16])
                 s_playtime = int(wintime[17:19])
                 gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
+                if o_user['RIFT'] == 1:
+                    response = db.updateUserNoFilter({'DISNAME':str(o_user['DISNAME'])}, {'$set': {'RIFT' : 0}})
                 drop_response = await dungeondrops(ctx.author, selected_universe, currentopponent)
                 teambank = await blessteam(15, oteam)
                 fambank = await blessfamily(15,ofam)
@@ -13130,7 +13142,7 @@ class CrownUnlimited(commands.Cog):
         available_universes = []
         selected_universe = ""
         for uni in all_universes:
-            if uni['PREREQUISITE'] in sowner['CROWN_TALES'] and uni['HAS_CROWN_TALES'] == True:
+            if uni['PREREQUISITE'] in sowner['CROWN_TALES'] and uni['HAS_CROWN_TALES'] == True or uni['TIER'] == 9 and sowner['RIFT'] == 1:
                 available_universes.append(uni['TITLE'])
 
         embedVar = discord.Embed(title=f":crown: Select A Tales Universe", description="\n".join(available_universes), colour=0xe91e63)
@@ -14914,6 +14926,8 @@ class CrownUnlimited(commands.Cog):
                 m_playtime = int(wintime[14:16])
                 s_playtime = int(wintime[17:19])
                 gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
+                if o_user['RIFT'] == 1:
+                    response = db.updateUserNoFilter({'DISNAME':str(o_user['DISNAME'])}, {'$set': {'RIFT' : 0}})
 
                 embedVar = discord.Embed(title=f":zap: `{t_card}` wins the match!", description=f"The game lasted {turn_total} rounds.\n`{t_card} says:`\n`{t_win_description}`", colour=0x1abc9c)
                 embedVar.set_author(name=f"{o_card} lost!")
@@ -14962,6 +14976,8 @@ class CrownUnlimited(commands.Cog):
                 gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
                 teambank = await blessteam(10, oteam)
                 fambank = await blessfamily(10, ofam)
+                if o_user['RIFT'] == 1:
+                    response = db.updateUserNoFilter({'DISNAME':str(o_user['DISNAME'])}, {'$set': {'RIFT' : 0}})
                 drop_response = await drops(ctx.author, selected_universe, currentopponent)
                 questlogger = await quest(ouser, t_card, "Tales")
                 destinylogger = await destiny(ouser, t_card, "Tales")
@@ -22730,22 +22746,23 @@ async def drops(player, universe, matchcount):
     rand_arm = random.randint(0, a)
     rand_pet = random.randint(0, p)
 
-    gold_drop = 175 #
-    rift_rate = 176 #
-    title_drop = 180 #
-    arm_drop = 185 #
-    pet_drop = 191 #
+    gold_drop = 150 #
+    rift_rate = 175 #
+    title_drop = 190 #
+    arm_drop = 195 #
+    pet_drop = 198 #
     card_drop = 200 #
 
     drop_rate = random.randint((0 + (rebirth * rebirth) * (1+ rebirth)),200)
+
 
     if drop_rate <= gold_drop:
         bless_amount = (25 + (5 * matchcount)) * (1+ rebirth)
         await bless(bless_amount, player)
         return f"You earned :coin: **{bless_amount}**!"
-    elif drop_rate <= rift_rate:
-        response = db.updateUserNoFilter(vault_query, {'$set': {'RIFT': 1}})
-        bless_amount = 40 + (5 * matchcount)
+    elif drop_rate <= rift_rate and drop_rate > gold_drop:
+        response = db.updateUserNoFilter(user_query, {'$set': {'RIFT': 1}})
+        bless_amount = (40 + (5 * matchcount)) * (1+ rebirth)
         await bless(bless_amount, player)
         return f"A RIFT HAS OPENED! You have earned :coin: **{bless_amount}**!"
     elif drop_rate <= title_drop and drop_rate > gold_drop:
@@ -22815,10 +22832,11 @@ async def dungeondrops(player, universe, matchcount):
     rand_arm = random.randint(0, a)
     rand_pet = random.randint(0, p)
 
-    gold_drop = 339 #
-    title_drop = 340 #
-    arm_drop = 370 #
-    pet_drop = 390 #
+    gold_drop = 300 #
+    rift_rate = 350 #
+    title_drop = 380 #
+    arm_drop = 390 #
+    pet_drop = 396 #
     card_drop = 400 #
 
     drop_rate = random.randint((0 + (rebirth * rebirth) * (1+ rebirth)),400)
@@ -22827,6 +22845,11 @@ async def dungeondrops(player, universe, matchcount):
         bless_amount = 60 + (5 * matchcount) * (1+ rebirth)
         await bless(bless_amount, player)
         return f"You earned :coin: **{bless_amount}**!"
+    elif drop_rate <= rift_rate and drop_rate > gold_drop:
+        response = db.updateUserNoFilter(user_query, {'$set': {'RIFT': 1}})
+        bless_amount = (80 + (5 * matchcount)) * (1+ rebirth)
+        await bless(bless_amount, player)
+        return f"A RIFT HAS OPENED! You have earned :coin: **{bless_amount}**!"
     elif drop_rate <= title_drop and drop_rate > gold_drop:
         response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'TITLES': str(titles[rand_title])}})
         return f"You earned _Title:_ **{titles[rand_title]}**!"
@@ -22902,7 +22925,7 @@ async def bossdrops(player, universe):
     card_drop = 400 #
     boss_title_drop = 450#
     boss_arm_drop = 480#
-    boss_pet_drop = 499#
+    boss_pet_drop = 495#
     boss_card_drop = 500#
 
     drop_rate = random.randint((0 + (rebirth * rebirth) * (1+ rebirth)),500)
