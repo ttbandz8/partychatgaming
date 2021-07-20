@@ -889,6 +889,43 @@ async def gift(ctx, user2: User, amount):
       await curse(int(amount), ctx.author)
       await ctx.send(f":coin:{amount} has been gifted to {user2.mention}.")
       return
+   
+@bot.command()
+@commands.check(validate_user)
+async def donate(ctx, amount, *args):
+   vault = db.queryVault({'OWNER': str(ctx.author)})
+   balance = vault['BALANCE']
+   team = " ".join([*args])
+   query = {'TNAME': str(team)}
+   team_data = db.queryTeam(query)
+   if team_data:
+      if balance <= int(amount):
+         await ctx.send("You do not have that amount to gift.")
+      else:
+         await blessteam(int(amount), team)
+         await curse(int(amount), ctx.author)
+         await ctx.send(f":coin:{amount} has been gifted to {team}.")
+         return
+   else:
+      await ctx.send(f"Team: {team} does not exist")
+      
+@bot.command()
+@commands.check(validate_user)
+async def invest(ctx, amount):
+   user = db.queryUser({'DISNAME': str(ctx.author)})
+   family = db.queryFamily({'HEAD': user['FAMILY']})
+   vault = db.queryVault({'OWNER': str(ctx.author)})
+   balance = vault['BALANCE']
+   if family:
+      if balance <= int(amount):
+         await ctx.send("You do not have that amount to invest.")
+      else:
+         await blessfamily(int(amount), user['FAMILY'])
+         await curse(int(amount), ctx.author)
+         await ctx.send(f":coin:{amount} invested into {user['NAME']}'s Family'.")
+         return
+   else:
+      await ctx.send(f"Family does not exist")
 
 @bot.command()
 @commands.check(validate_user)
