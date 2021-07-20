@@ -447,6 +447,19 @@ class Lookup(commands.Cog):
             crown_tales = d['CROWN_TALES']
             dungeons = d['DUNGEONS']
             pet = d['PET']
+            rebirth = d['REBIRTH']
+            if rebirth == 0:
+                icon = ':triangular_flag_on_post:'
+            elif rebirth == 1:
+                icon = ':heart_on_fire:'
+            elif rebirth == 2:
+                icon = ':heart_on_fire::heart_on_fire:'
+            elif rebirth == 3:
+                icon = ':heart_on_fire::heart_on_fire::heart_on_fire:'
+            elif rebirth == 4:
+                icon = ':heart_on_fire::heart_on_fire::heart_on_fire::heart_on_fire:'
+            elif rebirth == 1:
+                icon = ':heart_on_fire::heart_on_fire::heart_on_fire::heart_on_fire::heart_on_fire:'
 
             crown_list = []
             for crown in crown_tales:
@@ -458,13 +471,11 @@ class Lookup(commands.Cog):
                 if dungeon != "":
                     dungeon_list.append(dungeon)
 
-            print(crown_list)
-            print(dungeon_list)
 
             matches_to_string = dict(ChainMap(*matches))
             ign_to_string = dict(ChainMap(*ign))
 
-            embed1 = discord.Embed(title= f":triangular_flag_on_post: " + f"{name}".format(self), description=":bank: Party Chat Gaming Database™️", colour=000000)
+            embed1 = discord.Embed(title= f"{icon} " + f"{name}".format(self), description=":bank: Party Chat Gaming Database™️", colour=000000)
             embed1.set_thumbnail(url=avatar)
             embed1.add_field(name="Team" + " :military_helmet:", value=team)
             embed1.add_field(name="Family" + " :family_mwgb:", value=family)
@@ -473,12 +484,12 @@ class Lookup(commands.Cog):
             embed1.add_field(name="Pet" + " :dog:  ", value=f"{pet}")
             embed1.add_field(name="Tournament Wins" + " :fireworks:", value=tournament_wins)
 
-            embed2 = discord.Embed(title= f":triangular_flag_on_post: " + f"{name}".format(self), description=":bank: Party Chat Gaming Database™️", colour=000000)
+            embed2 = discord.Embed(title= f"{icon} " + f"{name}".format(self), description=":bank: Party Chat Gaming Database™️", colour=000000)
             embed2.set_thumbnail(url=avatar)
             embed2.add_field(name="Game" + " :video_game:" , value='\n'.join(games))
             embed2.add_field(name="In-Game Name" + " :selfie:", value="\n".join(f'{k}: :video_game: {v}' for k,v in ign_to_string.items()), inline=False)
 
-            embed3 = discord.Embed(title= f":triangular_flag_on_post: " + f"{name}".format(self), description=":bank: Party Chat Gaming Database™️", colour=000000)
+            embed3 = discord.Embed(title= f"{icon} " + f"{name}".format(self), description=":bank: Party Chat Gaming Database™️", colour=000000)
             embed3.set_thumbnail(url=avatar)
             embed3.add_field(name="Stats" + " :medal:", value="\n".join(f'{k}: {"/".join([str(int) for int in v])}' for k,v in matches_to_string.items()))
             

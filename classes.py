@@ -28,6 +28,9 @@ class USER():
     REFERRER:str = field(default_factory=lambda: "N/A")
     TIMESTAMP: str = now
     IS_ADMIN: bool = field(default_factory=lambda: False)
+    RIFT: int = field(default_factory=lambda: 0)
+    REBIRTH: int = field(default_factory=lambda: 0)
+    
 
 @dataclass(frozen=True, order=True)
 class TEAMS():
