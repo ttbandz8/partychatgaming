@@ -417,7 +417,7 @@ class CrownUnlimited(commands.Cog):
                 c_max_health = c_health + int(c_card_passive)
                 c_health = c_health + int(c_card_passive)
             elif c_card_passive_type == 'LIFE':
-                c_max_health = c_health + round(int(c_card_passive) + (.10 * t_health))
+                c_max_health = c_health + int((((c_card_passive/3)/100) * t_health))
             elif c_card_passive_type == 'DRAIN':
                 c_stamina = c_stamina + int(c_card_passive)
             elif c_card_passive_type == 'FLOG':
@@ -490,7 +490,7 @@ class CrownUnlimited(commands.Cog):
                     c_max_health = c_health + int(c_title_passive_value)
                     c_health = c_health + int(c_title_passive_value)
                 elif c_title_passive_type == 'LIFE':
-                    c_max_health = c_health + round(int(c_title_passive_value) + (.10 * t_health))
+                    c_max_health = c_health + int((((c_title_passive_value/3)/100) * t_health))
                 elif c_title_passive_type == 'DRAIN':
                     c_stamina = c_stamina + int(c_title_passive_value)
                 elif c_title_passive_type == 'FLOG':
@@ -562,7 +562,7 @@ class CrownUnlimited(commands.Cog):
                 c_max_health = c_health + int(carm_passive_value)
                 c_health = c_health + int(carm_passive_value)
             elif carm_passive_type == 'LIFE':
-                c_max_health = c_health + round(int(carm_passive_value) + (.10 * t_health))
+                c_max_health = c_health + int((((carm_passive_value/3)/100) * t_health))
             elif carm_passive_type == 'DRAIN':
                 c_stamina = c_stamina + int(carm_passive_value)
             elif carm_passive_type == 'FLOG':
@@ -664,7 +664,7 @@ class CrownUnlimited(commands.Cog):
                 o_max_health = o_health + int(o_card_passive)
                 o_health = o_health + int(o_card_passive)
             elif o_card_passive_type == 'LIFE':
-                o_max_health = o_health + round(int(o_card_passive) + (.10 * t_health))
+                o_max_health = o_health + int((((o_card_passive/3)/100) * t_health))
             elif o_card_passive_type == 'DRAIN':
                 o_stamina = o_stamina + int(o_card_passive)
                 t_stamina = t_stamina - int(o_card_passive)
@@ -738,7 +738,7 @@ class CrownUnlimited(commands.Cog):
                     o_max_health = o_health + int(o_title_passive_value)
                     o_health = o_health + int(o_title_passive_value)
                 elif o_title_passive_type == 'LIFE':
-                    o_max_health = o_health + round(int(o_title_passive_value) + (.10 * t_health))
+                    o_max_health = o_health + int((((o_title_passive_value/3)/100) * t_health))
                 elif o_title_passive_type == 'DRAIN':
                     o_stamina = o_stamina + int(o_title_passive_value)
                 elif o_title_passive_type == 'FLOG':
@@ -810,7 +810,7 @@ class CrownUnlimited(commands.Cog):
                 o_max_health = o_health + int(oarm_passive_value)
                 o_health = o_health + int(oarm_passive_value)
             elif oarm_passive_type == 'LIFE':
-                o_max_health = o_health + round(int(oarm_passive_value) + (.10 * t_health))
+                o_max_health = o_health + int((((oarm_passive_value/3)/100) * t_health))
             elif oarm_passive_type == 'DRAIN':
                 o_stamina = o_stamina + int(oarm_passive_value)
             elif oarm_passive_type == 'FLOG':
@@ -886,7 +886,7 @@ class CrownUnlimited(commands.Cog):
                 t_max_health = t_health + int(tarm_passive_value)
                 t_health = t_health + int(tarm_passive_value)
             elif tarm_passive_type == 'LIFE':
-                t_max_health = t_health + round(int(tarm_passive_value) + (.10 * o_health))
+                t_max_health = t_health + int((((tarm_passive_value/3)/100) * o_health))
             elif tarm_passive_type == 'DRAIN':
                 t_stamina = t_stamina + int(tarm_passive_value)
             elif tarm_passive_type == 'FLOG':
@@ -972,7 +972,7 @@ class CrownUnlimited(commands.Cog):
                 t_max_health = t_health + int(t_card_passive)
                 t_health = t_health + int(t_card_passive)
             elif t_card_passive_type == 'LIFE':
-                t_max_health = t_health + round(int(t_card_passive) + (.10 * o_health))
+                t_max_health = t_health + int((((t_card_passive/3)/100) * o_health))
             elif t_card_passive_type == 'DRAIN':
                 t_stamina = t_stamina + int(t_card_passive)
             elif t_card_passive_type == 'FLOG':
@@ -1050,7 +1050,7 @@ class CrownUnlimited(commands.Cog):
                     t_max_health = t_health + int(t_title_passive_value)
                     t_health = t_health + int(t_title_passive_value)
                 elif t_title_passive_type == 'LIFE':
-                    t_max_health = t_health + round(int(t_title_passive_value) + (.10 * o_health))
+                    t_max_health = t_health + int((((t_title_passive_value/3)/100) * o_health))
                 elif t_title_passive_type == 'DRAIN':
                     t_stamina = t_stamina + int(t_title_passive_value)
                 elif t_title_passive_type == 'FLOG':
@@ -1152,6 +1152,12 @@ class CrownUnlimited(commands.Cog):
 
             # Count Turns
             turn_total = 0
+            
+            #Rebirth Scaling
+            o_attack = o_attack + (o_user['REBIRTH'] * 10)
+            o_defense = o_defense + (o_user['REBIRTH'] * 10)
+            c_attack = c_attack + (c_user['REBIRTH'] * 10)
+            c_defense = c_defense + (c_user['REBIRTH'] * 10)
 
             # START TURNS
             while ((o_health > 0) and (c_health > 0)) and (t_health > 0):
@@ -3932,7 +3938,7 @@ class CrownUnlimited(commands.Cog):
                 c_max_health = c_health + int(c_card_passive)
                 c_health = c_health + int(c_card_passive)
             elif c_card_passive_type == 'LIFE':
-                c_max_health = c_health + round(int(c_card_passive) + (.10 * t_health))
+                c_max_health = c_health + int((((c_card_passive/3)/100) * t_health))
             elif c_card_passive_type == 'DRAIN':
                 c_stamina = c_stamina + int(c_card_passive)
             elif c_card_passive_type == 'FLOG':
@@ -4005,7 +4011,7 @@ class CrownUnlimited(commands.Cog):
                     c_max_health = c_health + int(c_title_passive_value)
                     c_health = c_health + int(c_title_passive_value)
                 elif c_title_passive_type == 'LIFE':
-                    c_max_health = c_health + round(int(c_title_passive_value) + (.10 * t_health))
+                    c_max_health = c_health + int((((c_title_passive_value/3)/100) * t_health))
                 elif c_title_passive_type == 'DRAIN':
                     c_stamina = c_stamina + int(c_title_passive_value)
                 elif c_title_passive_type == 'FLOG':
@@ -4077,7 +4083,7 @@ class CrownUnlimited(commands.Cog):
                 c_max_health = c_health + int(carm_passive_value)
                 c_health = c_health + int(carm_passive_value)
             elif carm_passive_type == 'LIFE':
-                c_max_health = c_health + round(int(carm_passive_value) + (.10 * t_health))
+                c_max_health = c_health + int((((carm_passive_value/3)/100) * t_health))
             elif carm_passive_type == 'DRAIN':
                 c_stamina = c_stamina + int(carm_passive_value)
             elif carm_passive_type == 'FLOG':
@@ -4179,7 +4185,7 @@ class CrownUnlimited(commands.Cog):
                 o_max_health = o_health + int(o_card_passive)
                 o_health = o_health + int(o_card_passive)
             elif o_card_passive_type == 'LIFE':
-                o_max_health = o_health + round(int(o_card_passive) + (.10 * t_health))
+                o_max_health = o_health + int((((o_card_passive/3)/100) * t_health))
             elif o_card_passive_type == 'DRAIN':
                 o_stamina = o_stamina + int(o_card_passive)
                 t_stamina = t_stamina - int(o_card_passive)
@@ -4253,7 +4259,7 @@ class CrownUnlimited(commands.Cog):
                     o_max_health = o_health + int(o_title_passive_value)
                     o_health = o_health + int(o_title_passive_value)
                 elif o_title_passive_type == 'LIFE':
-                    o_max_health = o_health + round(int(o_title_passive_value) + (.10 * t_health))
+                    o_max_health = o_health + int((((o_title_passive_value/3)/100) * t_health))
                 elif o_title_passive_type == 'DRAIN':
                     o_stamina = o_stamina + int(o_title_passive_value)
                 elif o_title_passive_type == 'FLOG':
@@ -4325,7 +4331,7 @@ class CrownUnlimited(commands.Cog):
                 o_max_health = o_health + int(oarm_passive_value)
                 o_health = o_health + int(oarm_passive_value)
             elif oarm_passive_type == 'LIFE':
-                o_max_health = o_health + round(int(oarm_passive_value) + (.10 * t_health))
+                o_max_health = o_health + int((((oarm_passive_value/3)/100) * t_health))
             elif oarm_passive_type == 'DRAIN':
                 o_stamina = o_stamina + int(oarm_passive_value)
             elif oarm_passive_type == 'FLOG':
@@ -4401,7 +4407,7 @@ class CrownUnlimited(commands.Cog):
                 t_max_health = t_health + int(tarm_passive_value)
                 t_health = t_health + int(tarm_passive_value)
             elif tarm_passive_type == 'LIFE':
-                t_max_health = t_health + round(int(tarm_passive_value) + (.10 * o_health))
+                t_max_health = t_health + int((((tarm_passive_value/3)/100) * o_health))
             elif tarm_passive_type == 'DRAIN':
                 t_stamina = t_stamina + int(tarm_passive_value)
             elif tarm_passive_type == 'FLOG':
@@ -4487,7 +4493,7 @@ class CrownUnlimited(commands.Cog):
                 t_max_health = t_health + int(t_card_passive)
                 t_health = t_health + int(t_card_passive)
             elif t_card_passive_type == 'LIFE':
-                t_max_health = t_health + round(int(t_card_passive) + (.10 * o_health))
+                t_max_health = t_health + int((((t_card_passive/3)/100) * o_health))
             elif t_card_passive_type == 'DRAIN':
                 t_stamina = t_stamina + int(t_card_passive)
             elif t_card_passive_type == 'FLOG':
@@ -4565,7 +4571,7 @@ class CrownUnlimited(commands.Cog):
                     t_max_health = t_health + int(t_title_passive_value)
                     t_health = t_health + int(t_title_passive_value)
                 elif t_title_passive_type == 'LIFE':
-                    t_max_health = t_health + round(int(t_title_passive_value) + (.10 * o_health))
+                    t_max_health = t_health + int((((t_title_passive_value/3)/100) * o_health))
                 elif t_title_passive_type == 'DRAIN':
                     t_stamina = t_stamina + int(t_title_passive_value)
                 elif t_title_passive_type == 'FLOG':
@@ -4667,6 +4673,12 @@ class CrownUnlimited(commands.Cog):
 
             # Count Turns
             turn_total = 0
+            
+            #Rebirth Scaling
+            o_attack = o_attack + (o_user['REBIRTH'] * 10)
+            o_defense = o_defense + (o_user['REBIRTH'] * 10)
+            c_attack = c_attack + (c_user['REBIRTH'] * 10)
+            c_defense = c_defense + (c_user['REBIRTH'] * 10)
 
             # START TURNS
             while ((o_health > 0) and (c_health > 0)) and (t_health > 0):
@@ -7650,7 +7662,7 @@ class CrownUnlimited(commands.Cog):
             c_max_health = c_health + int(c_card_passive)
             c_health = c_health + int(c_card_passive)
         elif c_card_passive_type == 'LIFE':
-            c_max_health = c_health + round(int(c_card_passive) + (.10 * t_health))
+            c_max_health = c_health + int((((c_card_passive/3)/100) * t_health))
         elif c_card_passive_type == 'DRAIN':
             c_stamina = c_stamina + int(c_card_passive)
         elif c_card_passive_type == 'FLOG':
@@ -7723,7 +7735,7 @@ class CrownUnlimited(commands.Cog):
                 c_max_health = c_health + int(c_title_passive_value)
                 c_health = c_health + int(c_title_passive_value)
             elif c_title_passive_type == 'LIFE':
-                c_max_health = c_health + round(int(c_title_passive_value) + (.10 * t_health))
+                c_max_health = c_health + int((((c_title_passive_value/3)/100) * t_health))
             elif c_title_passive_type == 'DRAIN':
                 c_stamina = c_stamina + int(c_title_passive_value)
             elif c_title_passive_type == 'FLOG':
@@ -7795,7 +7807,7 @@ class CrownUnlimited(commands.Cog):
             c_max_health = c_health + int(carm_passive_value)
             c_health = c_health + int(carm_passive_value)
         elif carm_passive_type == 'LIFE':
-            c_max_health = c_health + round(int(carm_passive_value) + (.10 * t_health))
+            c_max_health = c_health + int((((carm_passive_value/3)/100) * t_health))
         elif carm_passive_type == 'DRAIN':
             c_stamina = c_stamina + int(carm_passive_value)
         elif carm_passive_type == 'FLOG':
@@ -7903,7 +7915,7 @@ class CrownUnlimited(commands.Cog):
             o_max_health = o_health + int(o_card_passive)
             o_health = o_health + int(o_card_passive)
         elif o_card_passive_type == 'LIFE':
-            o_max_health = o_health + round(int(o_card_passive) + (.10 * t_health))
+            o_max_health = o_health + int((((o_card_passive/3)/100) * t_health))
         elif o_card_passive_type == 'DRAIN':
             o_stamina = o_stamina + int(o_card_passive)
         elif o_card_passive_type == 'FLOG':
@@ -8120,7 +8132,7 @@ class CrownUnlimited(commands.Cog):
             t_max_health = t_health + int(tarm_passive_value)
             t_health = t_health + int(tarm_passive_value)
         elif tarm_passive_type == 'LIFE':
-            t_max_health = t_health + round(int(tarm_passive_value) + (.10 * o_health))
+            t_max_health = t_health + int((((tarm_passive_value/3)/100) * o_health))
         elif tarm_passive_type == 'DRAIN':
             t_stamina = t_stamina + int(tarm_passive_value)
         elif tarm_passive_type == 'FLOG':
@@ -8204,7 +8216,7 @@ class CrownUnlimited(commands.Cog):
             t_max_health = t_health + int(t_card_passive)
             t_health = t_health + int(t_card_passive)
         elif t_card_passive_type == 'LIFE':
-            t_max_health = t_health + round(int(t_card_passive) + (.10 * o_health))
+            t_max_health = t_health + int((((t_card_passive/3)/100) * o_health))
         elif t_card_passive_type == 'DRAIN':
             t_stamina = t_stamina + int(t_card_passive)
         elif t_card_passive_type == 'FLOG':
@@ -8282,7 +8294,7 @@ class CrownUnlimited(commands.Cog):
                 t_max_health = t_health + int(t_title_passive_value)
                 t_health = t_health + int(t_title_passive_value)
             elif t_title_passive_type == 'LIFE':
-                t_max_health = t_health + round(int(t_title_passive_value) + (.10 * o_health))
+                t_max_health = t_health + int((((t_title_passive_value/3)/100) * o_health))
             elif t_title_passive_type == 'DRAIN':
                 t_stamina = t_stamina + int(t_title_passive_value)
             elif t_title_passive_type == 'FLOG':
@@ -8386,6 +8398,13 @@ class CrownUnlimited(commands.Cog):
 
         # Count Turns
         turn_total = 0
+        
+        
+        #Rebirth Scaling
+        o_attack = o_attack + (o_user['REBIRTH'] * 10)
+        o_defense = o_defense + (o_user['REBIRTH'] * 10)
+        c_attack = c_attack + (c_user['REBIRTH'] * 10)
+        c_defense = c_defense + (c_user['REBIRTH'] * 10)
 
 
         # START TURNS
@@ -11347,7 +11366,7 @@ class CrownUnlimited(commands.Cog):
                 o_max_health = o_health + int(o_card_passive)
                 o_health = o_health + int(o_card_passive)
             elif o_card_passive_type == 'LIFE':
-                o_max_health = o_health + round(int(o_card_passive) + (.10 * t_health))
+                o_max_health = o_health + int((((o_card_passive/3)/100) * t_health))
             elif o_card_passive_type == 'DRAIN':
                 o_stamina = o_stamina + int(o_card_passive)
                 t_stamina = t_stamina - int(o_card_passive)
@@ -11420,7 +11439,7 @@ class CrownUnlimited(commands.Cog):
                     o_max_health = o_health + int(o_title_passive_value)
                     o_health = o_health + int(o_title_passive_value)
                 elif o_title_passive_type == 'LIFE':
-                    o_max_health = o_health + round(int(o_title_passive_value) + (.10 * t_health))
+                    o_max_health = o_health + int((((o_title_passive_value/3)/100) * t_health))
                 elif o_title_passive_type == 'DRAIN':
                     o_stamina = o_stamina + int(o_title_passive_value)
                 elif o_title_passive_type == 'FLOG':
@@ -11491,7 +11510,7 @@ class CrownUnlimited(commands.Cog):
                 o_max_health = o_health + int(oarm_passive_value)
                 o_health = o_health + int(oarm_passive_value)
             elif oarm_passive_type == 'LIFE':
-                o_max_health = o_health + round(int(oarm_passive_value) + (.10 * t_health))
+                o_max_health = o_health + int((((oarm_passive_value/3)/100) * t_health))
             elif oarm_passive_type == 'DRAIN':
                 o_stamina = o_stamina + int(oarm_passive_value)
             elif oarm_passive_type == 'FLOG':
@@ -11562,7 +11581,7 @@ class CrownUnlimited(commands.Cog):
                 t_max_health = t_health + int(tarm_passive_value)
                 t_health = t_health + int(tarm_passive_value)
             elif tarm_passive_type == 'LIFE':
-                t_max_health = t_health + round(int(tarm_passive_value) + (.10 * o_health))
+                t_max_health = t_health + int((((tarm_passive_value/3)/100) * o_health))
             elif tarm_passive_type == 'DRAIN':
                 t_stamina = t_stamina + int(tarm_passive_value)
             elif tarm_passive_type == 'FLOG':
@@ -11640,7 +11659,7 @@ class CrownUnlimited(commands.Cog):
                 t_max_health = t_health + int(t_card_passive)
                 t_health = t_health + int(t_card_passive)
             elif t_card_passive_type == 'LIFE':
-                t_max_health = t_health + round(int(t_card_passive) + (.10 * o_health))
+                t_max_health = t_health + int((((t_card_passive/3)/100) * o_health))
             elif t_card_passive_type == 'DRAIN':
                 t_stamina = t_stamina + int(t_card_passive)
             elif t_card_passive_type == 'FLOG':
@@ -11712,7 +11731,7 @@ class CrownUnlimited(commands.Cog):
                     t_max_health = t_health + int(t_title_passive_value)
                     t_health = t_health + int(t_title_passive_value)
                 elif t_title_passive_type == 'LIFE':
-                    t_max_health = t_health + round(int(t_title_passive_value) + (.10 * o_health))
+                    t_max_health = t_health + int((((t_title_passive_value/3)/100) * o_health))
                 elif t_title_passive_type == 'DRAIN':
                     t_stamina = t_stamina + int(t_title_passive_value)
                 elif t_title_passive_type == 'FLOG':
@@ -11803,6 +11822,10 @@ class CrownUnlimited(commands.Cog):
 
             # Count Turns
             turn_total = 0
+            
+            #Rebirth Scaling
+            o_attack = o_attack + (o_user['REBIRTH'] * 10)
+            o_defense = o_defense + (o_user['REBIRTH'] * 10)
 
 
             # START TURNS
@@ -13379,7 +13402,7 @@ class CrownUnlimited(commands.Cog):
                 o_max_health = o_health + int(o_card_passive)
                 o_health = o_health + int(o_card_passive)
             elif o_card_passive_type == 'LIFE':
-                o_max_health = o_health + round(int(o_card_passive) + (.10 * t_health))
+                o_max_health = o_health + int((((o_card_passive/3)/100) * t_health))
             elif o_card_passive_type == 'DRAIN':
                 o_stamina = o_stamina + int(o_card_passive)
                 t_stamina = t_stamina - int(o_card_passive)
@@ -13453,7 +13476,7 @@ class CrownUnlimited(commands.Cog):
                     o_max_health = o_health + int(o_title_passive_value)
                     o_health = o_health + int(o_title_passive_value)
                 elif o_title_passive_type == 'LIFE':
-                    o_max_health = o_health + round(int(o_title_passive_value) + (.10 * t_health))
+                    o_max_health = o_health + int((((o_title_passive_value/3)/100) * t_health))
                 elif o_title_passive_type == 'DRAIN':
                     o_stamina = o_stamina + int(o_title_passive_value)
                 elif o_title_passive_type == 'FLOG':
@@ -13524,7 +13547,7 @@ class CrownUnlimited(commands.Cog):
                 o_max_health = o_health + int(oarm_passive_value)
                 o_health = o_health + int(oarm_passive_value)
             elif oarm_passive_type == 'LIFE':
-                o_max_health = o_health + round(int(oarm_passive_value) + (.10 * t_health))
+                o_max_health = o_health + int((((oarm_passive_value/3)/100) * t_health))
             elif oarm_passive_type == 'DRAIN':
                 o_stamina = o_stamina + int(oarm_passive_value)
             elif oarm_passive_type == 'FLOG':
@@ -13595,7 +13618,7 @@ class CrownUnlimited(commands.Cog):
                 t_max_health = t_health + int(tarm_passive_value)
                 t_health = t_health + int(tarm_passive_value)
             elif tarm_passive_type == 'LIFE':
-                t_max_health = t_health + round(int(tarm_passive_value) + (.10 * o_health))
+                t_max_health = t_health + int((((tarm_passive_value/3)/100) * o_health))
             elif tarm_passive_type == 'DRAIN':
                 t_stamina = t_stamina + int(tarm_passive_value)
             elif tarm_passive_type == 'FLOG':
@@ -13671,7 +13694,7 @@ class CrownUnlimited(commands.Cog):
                 t_max_health = t_health + int(t_card_passive)
                 t_health = t_health + int(t_card_passive)
             elif t_card_passive_type == 'LIFE':
-                t_max_health = t_health + round(int(t_card_passive) + (.10 * o_health))
+                t_max_health = t_health + int((((t_card_passive/3)/100) * o_health))
             elif t_card_passive_type == 'DRAIN':
                 t_stamina = t_stamina + int(t_card_passive)
             elif t_card_passive_type == 'FLOG':
@@ -13743,7 +13766,7 @@ class CrownUnlimited(commands.Cog):
                     t_max_health = t_health + int(t_title_passive_value)
                     t_health = t_health + int(t_title_passive_value)
                 elif t_title_passive_type == 'LIFE':
-                    t_max_health = t_health + round(int(t_title_passive_value) + (.10 * o_health))
+                    t_max_health = t_health + int((((t_title_passive_value/3)/100) * o_health))
                 elif t_title_passive_type == 'DRAIN':
                     t_stamina = t_stamina + int(t_title_passive_value)
                 elif t_title_passive_type == 'FLOG':
@@ -13834,6 +13857,10 @@ class CrownUnlimited(commands.Cog):
 
             # Count Turns
             turn_total = 0
+            
+            #Rebirth Scaling
+            o_attack = o_attack + (o_user['REBIRTH'] * 10)
+            o_defense = o_defense + (o_user['REBIRTH'] * 10)
 
             # START TURNS
             while (o_health > 0) and (t_health > 0):
@@ -15295,7 +15322,7 @@ class CrownUnlimited(commands.Cog):
             o_max_health = o_health + int(o_card_passive)
             o_health = o_health + int(o_card_passive)
         elif o_card_passive_type == 'LIFE':
-            o_max_health = o_health + round(int(o_card_passive) + (.10 * t_health))
+            o_max_health = o_health + int((((o_card_passive/3)/100) * t_health))
         elif o_card_passive_type == 'DRAIN':
             o_stamina = o_stamina + int(o_card_passive)
         elif o_card_passive_type == 'FLOG':
@@ -15367,7 +15394,7 @@ class CrownUnlimited(commands.Cog):
                 o_max_health = o_health + int(o_title_passive_value)
                 o_health = o_health + int(o_title_passive_value)
             elif o_title_passive_type == 'LIFE':
-                o_max_health = o_health + round(int(o_title_passive_value) + (.10 * t_health))
+                o_max_health = o_health + int((((o_title_passive_value/3)/100) * t_health))
             elif o_title_passive_type == 'DRAIN':
                 o_stamina = o_stamina + int(o_title_passive_value)
             elif o_title_passive_type == 'FLOG':
@@ -15438,7 +15465,7 @@ class CrownUnlimited(commands.Cog):
             o_max_health = o_health + int(oarm_passive_value)
             o_health = o_health + int(oarm_passive_value)
         elif oarm_passive_type == 'LIFE':
-            o_max_health = o_health + round(int(oarm_passive_value) + (.10 * t_health))
+            o_max_health = o_health + int((((oarm_passive_value/3)/100) * t_health))
         elif oarm_passive_type == 'DRAIN':
             o_stamina = o_stamina + int(oarm_passive_value)
         elif oarm_passive_type == 'FLOG':
@@ -15509,7 +15536,7 @@ class CrownUnlimited(commands.Cog):
             t_max_health = t_health + int(tarm_passive_value)
             t_health = t_health + int(tarm_passive_value)
         elif tarm_passive_type == 'LIFE':
-            t_max_health = t_health + round(int(tarm_passive_value) + (.10 * o_health))
+            t_max_health = t_health + int((((tarm_passive_value/3)/100) * o_health))
         elif tarm_passive_type == 'DRAIN':
             t_stamina = t_stamina + int(tarm_passive_value)
         elif tarm_passive_type == 'FLOG':
@@ -15587,7 +15614,7 @@ class CrownUnlimited(commands.Cog):
             t_max_health = t_health + int(t_card_passive)
             t_health = t_health + int(t_card_passive)
         elif t_card_passive_type == 'LIFE':
-            t_max_health = t_health + round(int(t_card_passive) + (.10 * o_health))
+            t_max_health = t_health + int((((t_card_passive/3)/100) * o_health))
         elif t_card_passive_type == 'DRAIN':
             t_stamina = t_stamina + int(t_card_passive)
         elif t_card_passive_type == 'FLOG':
@@ -15659,7 +15686,7 @@ class CrownUnlimited(commands.Cog):
                 t_max_health = t_health + int(t_title_passive_value)
                 t_health = t_health + int(t_title_passive_value)
             elif t_title_passive_type == 'LIFE':
-                t_max_health = t_health + round(int(t_title_passive_value) + (.10 * o_health))
+                t_max_health = t_health + int((((t_title_passive_value/3)/100) * o_health))
             elif t_title_passive_type == 'DRAIN':
                 t_stamina = t_stamina + int(t_title_passive_value)
             elif t_title_passive_type == 'FLOG':
@@ -15752,6 +15779,10 @@ class CrownUnlimited(commands.Cog):
 
         # Count Turns
         turn_total = 0
+        
+        #Rebirth Scaling
+        o_attack = o_attack + (o_user['REBIRTH'] * 10)
+        o_defense = o_defense + (o_user['REBIRTH'] * 10)
 
         await private_channel.send(f"{user1.mention}: `{o_card}` VS {t_universe} BOSS : `{t_card}` has begun!")
         # START TURNS
@@ -17255,7 +17286,7 @@ class CrownUnlimited(commands.Cog):
                     t_max_health = t_health + int(t_card_passive)
                     t_health = t_health + int(t_card_passive)
                 elif t_card_passive_type == 'LIFE':
-                    t_max_health = t_health + round(int(t_card_passive) + (.10 * o_health))
+                    t_max_health = t_health + int((((t_card_passive/3)/100) * o_health))
                 elif t_card_passive_type == 'DRAIN':
                     t_stamina = t_stamina + int(t_card_passive)
                 elif t_card_passive_type == 'FLOG':
@@ -17327,7 +17358,7 @@ class CrownUnlimited(commands.Cog):
                         t_max_health = t_health + int(t_title_passive_value)
                         t_health = t_health + int(t_title_passive_value)
                     elif t_title_passive_type == 'LIFE':
-                        t_max_health = t_health + round(int(t_title_passive_value) + (.10 * o_health))
+                        t_max_health = t_health + int((((t_title_passive_value/3)/100) * o_health))
                     elif t_title_passive_type == 'DRAIN':
                         t_stamina = t_stamina + int(t_title_passive_value)
                     elif t_title_passive_type == 'FLOG':
@@ -17399,7 +17430,7 @@ class CrownUnlimited(commands.Cog):
                     t_max_health = t_health + int(tarm_passive_value)
                     t_health = t_health + int(tarm_passive_value)
                 elif tarm_passive_type == 'LIFE':
-                    t_max_health = t_health + round(int(tarm_passive_value) + (.10 * o_health))
+                    t_max_health = t_health + int((((tarm_passive_value/3)/100) *o_health))
                 elif tarm_passive_type == 'DRAIN':
                     t_stamina = t_stamina + int(tarm_passive_value)
                 elif tarm_passive_type == 'FLOG':
@@ -17468,7 +17499,7 @@ class CrownUnlimited(commands.Cog):
                     o_max_health = o_health + int(o_card_passive)
                     o_health = o_health + int(o_card_passive)
                 elif o_card_passive_type == 'LIFE':
-                    o_max_health = o_health + round(int(o_card_passive) + (.10 * t_health))
+                    o_max_health = o_health + int((((o_card_passive/3)/100) * t_health))
                 elif o_card_passive_type == 'DRAIN':
                     o_stamina = o_stamina + int(o_card_passive)
                 elif o_card_passive_type == 'FLOG':
@@ -17540,7 +17571,7 @@ class CrownUnlimited(commands.Cog):
                         o_max_health = o_health + int(o_title_passive_value)
                         o_health = o_health + int(o_title_passive_value)
                     elif o_title_passive_type == 'LIFE':
-                        o_max_health = o_health + round(int(o_title_passive_value) + (.10 * t_health))
+                        o_max_health = o_health + int((((o_title_passive_type/3)/100) * t_health))
                     elif o_title_passive_type == 'DRAIN':
                         o_stamina = o_stamina + int(o_title_passive_value)
                     elif o_title_passive_type == 'FLOG':
@@ -17611,7 +17642,7 @@ class CrownUnlimited(commands.Cog):
                     o_max_health = o_health + int(oarm_passive_value)
                     o_health = o_health + int(oarm_passive_value)
                 elif oarm_passive_type == 'LIFE':
-                    o_max_health = o_health + round(int(oarm_passive_value) + (.10 * t_health))
+                    o_max_health = o_health + int((((oarm_passive_value/3)/100) *t_health))
                 elif oarm_passive_type == 'DRAIN':
                     o_stamina = o_stamina + int(oarm_passive_value)
                 elif oarm_passive_type == 'FLOG':
@@ -17727,6 +17758,14 @@ class CrownUnlimited(commands.Cog):
 
                 # Count Turns
                 turn_total = 0
+                
+                
+                #Rebirth Scaling
+                o_attack = o_attack + (o_user['REBIRTH'] * 10)
+                o_defense = o_defense + (o_user['REBIRTH'] * 10)
+                t_attack = t_attack + (t_user['REBIRTH'] * 10)
+                t_defense = t_defense + (t_user['REBIRTH'] * 10)
+                
 
                 
                 # START TURNS
@@ -19666,7 +19705,7 @@ class CrownUnlimited(commands.Cog):
                     t_max_health = t_health + int(t_card_passive)
                     t_health = t_health + int(t_card_passive)
                 elif t_card_passive_type == 'LIFE':
-                    t_max_health = t_health + round(int(t_card_passive) + (.10 * o_health))
+                    t_max_health = t_health + int((((t_card_passive/3)/100) * o_health))
                 elif t_card_passive_type == 'DRAIN':
                     t_stamina = t_stamina + int(t_card_passive)
                 elif t_card_passive_type == 'FLOG':
@@ -19738,7 +19777,7 @@ class CrownUnlimited(commands.Cog):
                         t_max_health = t_health + int(t_title_passive_value)
                         t_health = t_health + int(t_title_passive_value)
                     elif t_title_passive_type == 'LIFE':
-                        t_max_health = t_health + round(int(t_title_passive_value) + (.10 * o_health))
+                        t_max_health = t_health + int((((t_title_passive_value/3)/100) * o_health))
                     elif t_title_passive_type == 'DRAIN':
                         t_stamina = t_stamina + int(t_title_passive_value)
                     elif t_title_passive_type == 'FLOG':
@@ -19810,7 +19849,7 @@ class CrownUnlimited(commands.Cog):
                     t_max_health = t_health + int(tarm_passive_value)
                     t_health = t_health + int(tarm_passive_value)
                 elif tarm_passive_type == 'LIFE':
-                    t_max_health = t_health + round(int(tarm_passive_value) + (.10 * o_health))
+                    t_max_health = t_health + int((((tarm_passive_value/3)/100) *o_health))
                 elif tarm_passive_type == 'DRAIN':
                     t_stamina = t_stamina + int(tarm_passive_value)
                 elif tarm_passive_type == 'FLOG':
@@ -19879,7 +19918,7 @@ class CrownUnlimited(commands.Cog):
                     o_max_health = o_health + int(o_card_passive)
                     o_health = o_health + int(o_card_passive)
                 elif o_card_passive_type == 'LIFE':
-                    o_max_health = o_health + round(int(o_card_passive) + (.10 * t_health))
+                    o_max_health = o_health + int((((o_card_passive/3)/100) * t_health))
                 elif o_card_passive_type == 'DRAIN':
                     o_stamina = o_stamina + int(o_card_passive)
                 elif o_card_passive_type == 'FLOG':
@@ -19951,7 +19990,7 @@ class CrownUnlimited(commands.Cog):
                         o_max_health = o_health + int(o_title_passive_value)
                         o_health = o_health + int(o_title_passive_value)
                     elif o_title_passive_type == 'LIFE':
-                        o_max_health = o_health + round(int(o_title_passive_value) + (.10 * t_health))
+                        o_max_health = o_health + int((((o_title_passive_value/3)/100) * t_health))
                     elif o_title_passive_type == 'DRAIN':
                         o_stamina = o_stamina + int(o_title_passive_value)
                     elif o_title_passive_type == 'FLOG':
@@ -20022,7 +20061,7 @@ class CrownUnlimited(commands.Cog):
                     o_max_health = o_health + int(oarm_passive_value)
                     o_health = o_health + int(oarm_passive_value)
                 elif oarm_passive_type == 'LIFE':
-                    o_max_health = o_health + round(int(oarm_passive_value) + (.10 * t_health))
+                    o_max_health = o_health + int((((oarm_passive_value/3)/100) *t_health))
                 elif oarm_passive_type == 'DRAIN':
                     o_stamina = o_stamina + int(oarm_passive_value)
                 elif oarm_passive_type == 'FLOG':
@@ -20139,7 +20178,11 @@ class CrownUnlimited(commands.Cog):
                 # Count Turns
                 turn_total = 0
 
-                
+                #Rebirth Scaling
+                o_attack = o_attack + (o_user['REBIRTH'] * 10)
+                o_defense = o_defense + (o_user['REBIRTH'] * 10)
+                t_attack = t_attack + (t_user['REBIRTH'] * 10)
+                t_defense = t_defense + (t_user['REBIRTH'] * 10)
                 # START TURNS
                 while (o_health > 0) and (t_health > 0):
                     #Player 1 Turn Start
@@ -22650,9 +22693,12 @@ async def drops(player, universe, matchcount):
     all_available_drop_cards = db.queryDropCards(universe)
     all_available_drop_titles = db.queryDropTitles(universe)
     all_available_drop_arms = db.queryDropArms(universe)
-    all_available_drop_pets = db.queryDropPets(universe)
+    all_available_drop_pets = db.queryDropPets(universe) 
     vault_query = {'OWNER' : str(player)}
     vault = db.queryVault(vault_query)
+    user_query = {'DISNAME' : str(player)}
+    user = db.queryUser(user_query)
+    rebirth = user['REBIRTH']
     owned_destinies = []
     for destiny in vault['DESTINY']:
         owned_destinies.append(destiny['NAME'])
@@ -22691,10 +22737,10 @@ async def drops(player, universe, matchcount):
     pet_drop = 191 #
     card_drop = 200 #
 
-    drop_rate = random.randint(0,200)
+    drop_rate = random.randint((0 + (rebirth * rebirth) * (1+ rebirth)),200)
 
     if drop_rate <= gold_drop:
-        bless_amount = 25 + (5 * matchcount)
+        bless_amount = (25 + (5 * matchcount)) * (1+ rebirth)
         await bless(bless_amount, player)
         return f"You earned :coin: **{bless_amount}**!"
     elif drop_rate <= rift_rate:
@@ -22735,6 +22781,9 @@ async def dungeondrops(player, universe, matchcount):
     all_available_drop_pets = db.queryExclusiveDropPets(universe)
     vault_query = {'OWNER' : str(player)}
     vault = db.queryVault(vault_query)
+    user_query = {'DISNAME' : str(player)}
+    user = db.queryUser(user_query)
+    rebirth = user['REBIRTH']
     owned_destinies = []
     for destiny in vault['DESTINY']:
         owned_destinies.append(destiny['NAME'])
@@ -22772,10 +22821,10 @@ async def dungeondrops(player, universe, matchcount):
     pet_drop = 390 #
     card_drop = 400 #
 
-    drop_rate = random.randint(0,400)
+    drop_rate = random.randint((0 + (rebirth * rebirth) * (1+ rebirth)),400)
 
     if drop_rate <= gold_drop:
-        bless_amount = 60 + (5 * matchcount)
+        bless_amount = 60 + (5 * matchcount) * (1+ rebirth)
         await bless(bless_amount, player)
         return f"You earned :coin: **{bless_amount}**!"
     elif drop_rate <= title_drop and drop_rate > gold_drop:
@@ -22811,6 +22860,9 @@ async def bossdrops(player, universe):
     all_available_drop_pets = db.queryExclusiveDropPets(universe)
     boss = db.queryBoss({'UNIVERSE': universe})
     vault_query = {'OWNER' : str(player)}
+    user_query = {'DISNAME' : str(player)}
+    user = db.queryUser(user_query)
+    rebirth = user['REBIRTH']
 
     cards = []
     titles = []
@@ -22853,10 +22905,11 @@ async def bossdrops(player, universe):
     boss_pet_drop = 499#
     boss_card_drop = 500#
 
-    drop_rate = random.randint(0,500)
+    drop_rate = random.randint((0 + (rebirth * rebirth) * (1+ rebirth)),500)
 
     if drop_rate <= gold_drop:
-        await bless(60, player)
+        bless_amount = 100 * (1+ rebirth)
+        await bless(bless_amount, player)
         return f"You earned :coin: 60!"
     elif drop_rate <= title_drop and drop_rate > gold_drop:
         response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'TITLES': str(titles[rand_title])}})

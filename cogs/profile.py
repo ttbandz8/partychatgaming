@@ -89,6 +89,8 @@ class Profile(commands.Cog):
             o_show = card['UNIVERSE']
             o_collection = card['COLLECTION']
             o_destiny = card['HAS_COLLECTION']
+            o_rebirth = d['REBIRTH']
+            rebirthBonus = o_rebirth * 10
             traits = ut.traits
             mytrait = {}
             traitmessage = ''
@@ -195,6 +197,7 @@ class Profile(commands.Cog):
             _Arm:_ **{arm_name}:** {arm_passive_type} {arm_passive_value}
             _Pet:_ **{active_pet['NAME']}:** {active_pet['TYPE']} {pet_ability_power}
             _Pet Level:_ _B_ **{bond}** {bond_message} / _L_ **{lvl}**
+            _Rebirth Buff:_ +**{rebirthBonus}**
 
             _**Moveset**_
             **{move1}:** {move1ap}
