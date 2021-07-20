@@ -22684,7 +22684,8 @@ async def drops(player, universe, matchcount):
     rand_arm = random.randint(0, a)
     rand_pet = random.randint(0, p)
 
-    gold_drop = 179 #
+    gold_drop = 175 #
+    rift_rate = 176 #
     title_drop = 180 #
     arm_drop = 185 #
     pet_drop = 191 #
@@ -22696,6 +22697,11 @@ async def drops(player, universe, matchcount):
         bless_amount = 25 + (5 * matchcount)
         await bless(bless_amount, player)
         return f"You earned :coin: **{bless_amount}**!"
+    elif drop_rate <= rift_rate:
+        response = db.updateUserNoFilter(vault_query, {'$set': {'RIFT': 1}})
+        bless_amount = 40 + (5 * matchcount)
+        await bless(bless_amount, player)
+        return f"A RIFT HAS OPENED! You have earned :coin: **{bless_amount}**!"
     elif drop_rate <= title_drop and drop_rate > gold_drop:
         response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'TITLES': str(titles[rand_title])}})
         return f"You earned _Title:_ **{titles[rand_title]}**!"
