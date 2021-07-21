@@ -59,6 +59,10 @@ traits = [{
     'EFFECT': 'Combo Recognition',
     'TRAIT': 'When your opponent focus, gain (15 + turn count) attack'
 },{
+    'NAME': 'Death Note',
+    'EFFECT': 'Scheduled Death',
+    'TRAIT': 'After 24 Turns You Win'
+},{
     'NAME': 'Crown Rift Slayers',
     'EFFECT': 'Follow Up Attack',
     'TRAIT': 'If you miss, you connect'
@@ -66,4 +70,8 @@ traits = [{
     'NAME': 'Crown Rift Awakening',
     'EFFECT': 'Blood Awakening',
     'TRAIT': 'Your crits do 2.5x Damage'
+},{
+    'NAME': 'Crown Rift Madness',
+    'EFFECT': 'Madness',
+    'TRAIT': 'Do not lose turn on Focus, but also do not heal'
 }]

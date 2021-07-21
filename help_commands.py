@@ -31,7 +31,7 @@ BOT_COMMANDS = textwrap.dedent(f"""\
 **.apply @player**: Apply for owners team 
 **.leaveteam team**: Leave Team
 **.teamgift @player amount**: Send Team Members coin (Owner Onlu)
-**.donate amount**: Donate coin to Team Bank
+**.donate amount team name**: Donate coin to Team Bank
 
 **FAMILY COMMANDS**
 **.lookupfamily @user**: Family lookup
