@@ -7470,7 +7470,10 @@ class CrownUnlimited(commands.Cog):
         available_universes = []
         selected_universe = ""
         for uni in completed_dungeons:
-            available_universes.append(uni)
+            if uni != "":
+                searchUni = db.queryUniverse({'TITLE': str(uni)})
+                if searchUni['UNIVERSE_BOSS'] != "":
+                    available_universes.append(uni)
         if len(available_universes) == 1 and "" in available_universes:
             await private_channel.send("No available Bosses for you at this time!")
             response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
@@ -15384,7 +15387,10 @@ class CrownUnlimited(commands.Cog):
         available_universes = []
         selected_universe = ""
         for uni in completed_dungeons:
-            available_universes.append(uni)
+            if uni != "":
+                searchUni = db.queryUniverse({'TITLE': str(uni)})
+                if searchUni['UNIVERSE_BOSS'] != "":
+                    available_universes.append(uni)
         if len(available_universes) == 1 and "" in available_universes:
             await private_channel.send("No available Bosses for you at this time!")
             response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
@@ -15401,7 +15407,7 @@ class CrownUnlimited(commands.Cog):
             msg = await self.bot.wait_for('message', timeout=30.0, check=check)
 
             if msg.content == "Quit":
-                await private_channel.send("Quit Boss  selection. ")
+                await private_channel.send("Quit Boss Selection. ")
                 db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                 return
 

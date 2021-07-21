@@ -1868,5 +1868,203 @@ destiny = [
         "EARN": "Cadis Etrama Di Raizel",
         "COMPLETED": False,
         "UNIVERSE": "Crown Rift Awakening"
+    },{
+        "NAME": "Hunting Season",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Cleric Beast",
+        "USE_CARDS": ["Hunter"],
+        "EARN": "Cleric Beast",
+        "COMPLETED": False,
+        "UNIVERSE": "Crown Rift Madness"
+    },{
+        "NAME": "Daddy Issues",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Father Gascoigne",
+        "USE_CARDS": ["Mad Hunter"],
+        "EARN": "Father Gascoigne",
+        "COMPLETED": False,
+        "UNIVERSE": "Crown Rift Madness"
+    },{
+        "NAME": "Bloody Battle",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Blood Starved Beast",
+        "USE_CARDS": ["Ranged Hunter"],
+        "EARN": "Blood Starved Beast",
+        "COMPLETED": False,
+        "UNIVERSE": "Crown Rift Madness"
+    },{
+        "NAME": "Hunt The Vicar",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Vicar Amelia",
+        "USE_CARDS": ["Insight Hunter"],
+        "EARN": "Vicar Amelia",
+        "COMPLETED": False,
+        "UNIVERSE": "Crown Rift Madness"
+    },{
+        "NAME": "Witch Season",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "The Witch Of Hemwick",
+        "USE_CARDS": ["Priest"],
+        "EARN": "The Witch Of Hemwick",
+        "COMPLETED": False,
+        "UNIVERSE": "Crown Rift Madness"
+    },{
+        "NAME": "Outnumbered",
+        "WINS": 0,
+        "REQUIRED": 20,
+        "DEFEAT": "Shadow of Yharnam",
+        "USE_CARDS": ["Hunter"],
+        "EARN": "Shadow of Yharnam",
+        "COMPLETED": False,
+        "UNIVERSE": "Crown Rift Madness"
+    },{
+        "NAME": "8 Legged Freak",
+        "WINS": 0,
+        "REQUIRED": 20,
+        "DEFEAT": "Rom The Vaccous Spider",
+        "USE_CARDS": ["Mad Hunter"],
+        "EARN": "Rom The Vaccous Spider",
+        "COMPLETED": False,
+        "UNIVERSE": "Crown Rift Madness"
+    },{
+        "NAME": "Corpse Battle",
+        "WINS": 0,
+        "REQUIRED": 20,
+        "DEFEAT": "The One Reborn",
+        "USE_CARDS": ["Ranged Hunter"],
+        "EARN": "The One Reborn",
+        "COMPLETED": False,
+        "UNIVERSE": "Crown Rift Madness"
+    },{
+        "NAME": "The Darkbeast Den",
+        "WINS": 0,
+        "REQUIRED": 20,
+        "DEFEAT": "The Darkbeast Paarl",
+        "USE_CARDS": ["Insight Hunter"],
+        "EARN": "The Darkbeast Paarl",
+        "COMPLETED": False,
+        "UNIVERSE": "Crown Rift Madness"
+    },{
+        "NAME": "Lurking Phantoms",
+        "WINS": 0,
+        "REQUIRED": 20,
+        "DEFEAT": "Amygdala",
+        "USE_CARDS": ["Priest"],
+        "EARN": "Amygdala",
+        "COMPLETED": False,
+        "UNIVERSE": "Crown Rift Madness"
+    },{
+        "NAME": "Host Of The Nightmare",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Micolash",
+        "USE_CARDS": ["Old Hunter"],
+        "EARN": "Micolash",
+        "COMPLETED": False,
+        "UNIVERSE": "Crown Rift Madness"
+    },{
+        "NAME": "Nightnare Nurse",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Mergo's Wet Nurse",
+        "USE_CARDS": ["Old Hunter"],
+        "EARN": "Mergo's Wet Nurse",
+        "COMPLETED": False,
+        "UNIVERSE": "Crown Rift Madness"
+    },{
+        "NAME": "Martyrdom",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Martyr Logarius",
+        "USE_CARDS": ["Old Hunter"],
+        "EARN": "Martyr Logarius",
+        "COMPLETED": False,
+        "UNIVERSE": "Crown Rift Madness"
+    },{
+        "NAME": "Voidcaller",
+        "WINS": 0,
+        "REQUIRED": 20,
+        "DEFEAT": "Celestial Emissary",
+        "USE_CARDS": ["Old Hunter"],
+        "EARN": "Celestial Emissary",
+        "COMPLETED": False,
+        "UNIVERSE": "Crown Rift Madness"
+    },{
+        "NAME": "Cosmic Child",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Ebrietas",
+        "USE_CARDS": ["Old Hunter"],
+        "EARN": "Ebrietas",
+        "COMPLETED": False,
+        "UNIVERSE": "Crown Rift Madness"
+    },{
+        "NAME": "Hunters Dream?",
+        "WINS": 0,
+        "REQUIRED": 30,
+        "DEFEAT": "Gehrman",
+        "USE_CARDS": ["Old Hunter"],
+        "EARN": "Gehrman",
+        "COMPLETED": False,
+        "UNIVERSE": "Crown Rift Madness"
+    },{
+        "NAME": "Servant Of The Nightmare",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Moon Presence",
+        "USE_CARDS": ["Gehrman"],
+        "EARN": "Moon Presence",
+        "COMPLETED": False,
+        "UNIVERSE": "Crown Rift Madness"
+    },{
+        "NAME": "Hunter Of Great Ones",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Cthulhu",
+        "USE_CARDS": ["Moon Presence"],
+        "EARN": "Cthulhu",
+        "COMPLETED": False,
+        "UNIVERSE": "Crown Rift Madness"
+    },{
+        "NAME": "Outer God Alpha",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Shub Niggurath",
+        "USE_CARDS": ["The Unnamed Darkness"],
+        "EARN": "Shub Niggurath",
+        "COMPLETED": False,
+        "UNIVERSE": "Crown Rift Madness"
+    },{
+        "NAME": "Outer God Omega",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Yog Sothoth",
+        "USE_CARDS": ["The Nameless Mist"],
+        "EARN": "Yog Sothoth",
+        "COMPLETED": False,
+        "UNIVERSE": "Crown Rift Madness"
+    },{
+        "NAME": "The Deep Dark",
+        "WINS": 0,
+        "REQUIRED": 20,
+        "DEFEAT": "Azathoth",
+        "USE_CARDS": ["Yog Sothoth"],
+        "EARN": "Azathoth",
+        "COMPLETED": False,
+        "UNIVERSE": "Crown Rift Madness"
+    },{
+        "NAME": "The Deep Dark",
+        "WINS": 0,
+        "REQUIRED": 20,
+        "DEFEAT": "Azathoth",
+        "USE_CARDS": ["Shub Niggurath"],
+        "EARN": "Azathoth",
+        "COMPLETED": False,
+        "UNIVERSE": "Crown Rift Madness"
     },
 ]

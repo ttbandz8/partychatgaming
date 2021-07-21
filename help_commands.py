@@ -64,7 +64,7 @@ CROWN_UNLIMITED_COMMANDS = textwrap.dedent(f"""\
 **.solo**: Play Crown Unlimited In DM
 **.crown**: Crown Unlimited Help Book
 **.build**: View your current build
-**.viewdeck** View your build presets
+**.deck** View your build presets
 **.savedeck**: Save your current build as preset
 **.shop**: Open shop
 **.bal**: View Balance
@@ -83,7 +83,7 @@ CROWN_UNLIMITED_COMMANDS = textwrap.dedent(f"""\
 **.buycard**: Buy Card
 **.equipcard card**: Equip card
 **.analysis card**: View Card Statistics and Optimal Builds
-**.destiny**: Open your list of Destiny Cards
+**.destiny**: Open your Destiny List
 **.destinies universe**: Show Available Universe Destinies
 
 **Title Commands**
@@ -120,8 +120,8 @@ CROWN_UNLIMITED_COMMANDS = textwrap.dedent(f"""\
 **.universes**: Show List Of Crown Universes
 **.tales**: Opens Crown Tales Story Mode Menu
 **.dungeon**: Opens Crown Tales Dungeon Menu
-**.boss Universe**: Opens Crown Universe Boss Fight
+**.boss**: Opens Crown Universe Boss Menu
 **.ctales @companion**: Opens Crown Tales CO-OP Story Mode Menu
 **.cdungeon @companion**: Opens Crown Tales CO-OP Dungeon Menu
-**.cboss @companion universe**: Opens Crown Universe CO-OP Boss Fight
+**.cboss @companion**: Opens Crown Universe CO-OP Boss Menu
 """)
