@@ -1143,9 +1143,9 @@ async def addfield(ctx, collection, new_field, field_type):
 #    referred = db.queryUser({"DISNAME": str(ctx.author)})
 #    if not referred['REFERRED']:
 #       resp = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'REFERRED': True, 'REFERRER': str(user)}})
-#       await bless(150, str(ctx.author))
-#       await bless(300, str(user))
-#       await ctx.send(f"Congrats & Welcome newcomer! You were awarded :coin: 150 and {user.mention} was awarded :coin:300.")
+#       await bless(500, str(ctx.author))
+#       await bless(1000, str(user))
+#       await ctx.send(f"Congrats & Welcome newcomer! You were awarded :coin: 500 and {user.mention} was awarded :coin:1000.")
 #    else:
 #       await ctx.send("You're already referred!")
 
