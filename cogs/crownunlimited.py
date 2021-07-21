@@ -1164,6 +1164,15 @@ class CrownUnlimited(commands.Cog):
             while ((o_health > 0) and (c_health > 0)) and (t_health > 0):
                 #Player 1 Turn Start
                 if turn == 0:
+                    if o_universe == "Death Note" and turn_total == 0:
+                        embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death", description=f"`{o_card} says:`\nYou will die in 24 turns...", colour=0xe91e63)
+                        await private_channel.send(embed=embedVar)
+                    if c_universe == "Death Note" and turn_total == 0:
+                        embedVar = discord.Embed(title=f"{c_card.upper()} Scheduled Death", description=f"`{c_card} says:`\nYou will die in 24 turns...", colour=0xe91e63)
+                        await private_channel.send(embed=embedVar)
+                    if t_universe == 'Death Note' and turn_total == 0:
+                        embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death", description=f"`{t_card} says:`\nYou will die in 24 turns...", colour=0xe91e63)
+                        await private_channel.send(embed=embedVar)
                     if o_attack <= 25:
                         o_attack = 25
                     if o_defense <= 30:
@@ -1205,19 +1214,23 @@ class CrownUnlimited(commands.Cog):
                         o_newhealth = 0
                         healmessage = ""
                         messagenumber = 0
-                        if o_health <= o_max_health:
-                            o_newhealth = o_health + o_healthcalc
-                            if o_newhealth > o_max_health:
-                                healmessage = "the injuries dissapeared"
-                                messagenumber = 1
-                                o_health = o_max_health
-                            else:
-                                healmessage = "regained some vitality"
-                                messagenumber = 2
-                                o_health = o_newhealth
+                        if o_universe == "Crown Rift Madness":
+                            healmessage = "yet inner madness drags on"
+                            messagenumber = 3
                         else:
-                            healmessage = f"`{t_card}`'s blows don't appear to have any effect!"
-                            messagenumber = 0
+                            if o_health <= o_max_health:
+                                o_newhealth = o_health + o_healthcalc
+                                if o_newhealth > o_max_health:
+                                    healmessage = "the injuries dissapeared"
+                                    messagenumber = 1
+                                    o_health = o_max_health
+                                else:
+                                    healmessage = "regained some vitality"
+                                    messagenumber = 2
+                                    o_health = o_newhealth
+                            else:
+                                healmessage = f"`{t_card}`'s blows don't appear to have any effect!"
+                                messagenumber = 0
                         o_attack = o_attack + o_attackcalc
                         o_defense =  o_defense + o_defensecalc
                         o_used_focus = True
@@ -1264,6 +1277,12 @@ class CrownUnlimited(commands.Cog):
                             embedVar = discord.Embed(title=f"Mana Zone! {o_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             o_stamina = 110
+                        elif o_universe == "Death Note":
+                            if turn_total >= 24:
+                                embedVar = discord.Embed(title=f"{t_card.upper()}'s' Scheduled Death", description=f"`{o_card} says:`\n'Delete'", colour=0xe91e63)
+                                embedVar.add_field(name=f"{t_card} had a heart attack and died", value=f"Death....")
+                                await private_channel.send(embed=embedVar)
+                                t_health = 0
                         if t_universe == "One Punch Man":
                             embedVar = discord.Embed(title=f"Hero Reinforcements! {t_card} Increased Max Health!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
@@ -1278,9 +1297,15 @@ class CrownUnlimited(commands.Cog):
                             t_attack = round(t_attack + (15 + turn_total))
                         else:
                             turn_total= turn_total + 1
-                            turn = 1
+                            if o_universe != "Crown Rift Madness":
+                                turn = 1
+                            else:
+                                turn = 0 
                         turn_total= turn_total + 1
-                        turn = 1
+                        if o_universe != "Crown Rift Madness":
+                            turn = 1
+                        else:
+                            turn = 0 
                     else:
 
                         # UNIVERSE CARD
@@ -1846,21 +1871,23 @@ class CrownUnlimited(commands.Cog):
                         t_newhealth = 0
                         healmessage = ""
                         messagenumber = 0
-
-                        if t_health <= t_max_health:
-                            t_newhealth = t_health + t_healthcalc
-                            if t_newhealth > t_max_health:
-                                healmessage = f"recovered!"
-                                messagenumber = 1
-                                t_health = t_max_health
+                        if t_universe == "Crown Rift Madness":
+                            healmessage = "yet inner madness drags on"
+                            messagenumber = 3
+                        else:   
+                            if t_health <= t_max_health:
+                                t_newhealth = t_health + t_healthcalc
+                                if t_newhealth > t_max_health:
+                                    healmessage = f"recovered!"
+                                    messagenumber = 1
+                                    t_health = t_max_health
+                                else:
+                                    healmessage = f"stopped the bleeding..."
+                                    messagenumber = 2
+                                    t_health = t_newhealth
                             else:
-                                healmessage = f"stopped the bleeding..."
-                                messagenumber = 2
-                                t_health = t_newhealth
-                        else:
-                            healmessage = f"hasn't been touched..."
-                            messagenumber = 0
-
+                                healmessage = f"hasn't been touched..."
+                                messagenumber = 0
                         t_attack = t_attack + t_attackcalc
                         t_defense =  t_defense + t_defensecalc
                         t_used_focus=True
@@ -1910,6 +1937,13 @@ class CrownUnlimited(commands.Cog):
                             await private_channel.send(embed=embedVar)
                             t_stamina = 110
                             
+                        elif t_universe == "Death Note":
+                            if turn_total >= 24:
+                                embedVar = discord.Embed(title=f"{o_card.upper()}'s' Scheduled Death", description=f"`{t_card} says:`\n'Delete'", colour=0xe91e63)
+                                embedVar.add_field(name=f"{o_card} had a heart attack and died", value=f"Death....")
+                                await private_channel.send(embed=embedVar)
+                                o_health = 0
+                            
                         if o_universe == "One Punch Man":
                             embedVar = discord.Embed(title=f"Hero Reinforcements! {o_card} Increased Max Health!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
@@ -1927,9 +1961,15 @@ class CrownUnlimited(commands.Cog):
                            
                         else:
                             turn_total= turn_total + 1
-                            turn=2
+                            if t_universe != "Crown Rift Madness":
+                                turn = 2
+                            else:
+                                turn = 1 
                         turn_total= turn_total + 1
-                        turn=2
+                        if t_universe != "Crown Rift Madness":
+                            turn = 2
+                        else:
+                            turn = 1
                     else:
                         # UNIVERSE CARD
                         player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus)
@@ -2326,19 +2366,23 @@ class CrownUnlimited(commands.Cog):
                         c_newhealth = 0
                         healmessage = ""
                         messagenumber = 0
-                        if c_health <= c_max_health:
-                            c_newhealth = c_health + c_healthcalc
-                            if c_newhealth > c_max_health:
-                                healmessage = "the injuries dissapeared"
-                                messagenumber = 1
-                                c_health = c_max_health
-                            else:
-                                healmessage = "regained some vitality"
-                                messagenumber = 2
-                                c_health = c_newhealth
+                        if c_universe == "Crown Rift Madness":
+                                healmessage = "yet inner madness drags on"
+                                messagenumber = 3
                         else:
-                            healmessage = f"`{t_card}`'s blows don't appear to have any effect!"
-                            messagenumber = 0
+                            if c_health <= c_max_health:
+                                c_newhealth = c_health + c_healthcalc
+                                if c_newhealth > c_max_health:
+                                    healmessage = "the injuries dissapeared"
+                                    messagenumber = 1
+                                    c_health = c_max_health
+                                else:
+                                    healmessage = "regained some vitality"
+                                    messagenumber = 2
+                                    c_health = c_newhealth
+                            else:
+                                healmessage = f"`{t_card}`'s blows don't appear to have any effect!"
+                                messagenumber = 0
                         c_attack = c_attack + c_attackcalc
                         c_defense =  c_defense + c_defensecalc
                         c_used_focus = True
@@ -2387,6 +2431,13 @@ class CrownUnlimited(commands.Cog):
                             embedVar = discord.Embed(title=f"Mana Zone! {c_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             c_stamina = 110
+                        
+                        elif c_universe == "Death Note":
+                            if turn_total >= 24:
+                                embedVar = discord.Embed(title=f"{t_card.upper()}'s' Scheduled Death", description=f"`{c_card} says:`\n'Delete'", colour=0xe91e63)
+                                embedVar.add_field(name=f"{t_card} had a heart attack and died", value=f"Death....")
+                                await private_channel.send(embed=embedVar)
+                                t_health = 0
                          
                         if t_universe == "One Punch Man":
                             embedVar = discord.Embed(title=f"Hero Reinforcements! {t_card} Increased Max Health!", colour=0xe91e63)
@@ -2405,9 +2456,15 @@ class CrownUnlimited(commands.Cog):
                             
                         else:
                             turn_total= turn_total + 1
-                            turn = 3
+                            if c_universe != "Crown Rift Madness":
+                                turn = 3
+                            else:
+                                turn = 2 
                         turn_total= turn_total + 1
-                        turn = 3
+                        if c_universe != "Crown Rift Madness":
+                            turn = 3
+                        else:
+                            turn = 2 
                     else:
 
                         # UNIVERSE CARD
@@ -2974,21 +3031,23 @@ class CrownUnlimited(commands.Cog):
                         t_newhealth = 0
                         healmessage = ""
                         messagenumber = 0
-
-                        if t_health <= t_max_health:
-                            t_newhealth = t_health + t_healthcalc
-                            if t_newhealth > t_max_health:
-                                healmessage = f"recovered!"
-                                messagenumber = 1
-                                t_health = t_max_health
+                        if t_universe == "Crown Rift Madness":
+                            healmessage = "yet inner madness drags on"
+                            messagenumber = 3
+                        else:   
+                            if t_health <= t_max_health:
+                                t_newhealth = t_health + t_healthcalc
+                                if t_newhealth > t_max_health:
+                                    healmessage = f"recovered!"
+                                    messagenumber = 1
+                                    t_health = t_max_health
+                                else:
+                                    healmessage = f"stopped the bleeding..."
+                                    messagenumber = 2
+                                    t_health = t_newhealth
                             else:
-                                healmessage = f"stopped the bleeding..."
-                                messagenumber = 2
-                                t_health = t_newhealth
-                        else:
-                            healmessage = f"hasn't been touched..."
-                            messagenumber = 0
-
+                                healmessage = f"hasn't been touched..."
+                                messagenumber = 0
                         t_attack = t_attack + t_attackcalc
                         t_defense =  t_defense + t_defensecalc
                         t_used_focus=True
@@ -3037,6 +3096,13 @@ class CrownUnlimited(commands.Cog):
                             embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_stamina = 110
+                        
+                        elif t_universe == "Death Note":
+                            if turn_total >= 24:
+                                embedVar = discord.Embed(title=f"{o_card.upper()}'s' Scheduled Death", description=f"`{t_card} says:`\n'Delete'", colour=0xe91e63)
+                                embedVar.add_field(name=f"{o_card} had a heart attack and died", value=f"Death....")
+                                await private_channel.send(embed=embedVar)
+                                o_health = 0
                             
                         if c_universe == "One Punch Man":
                             embedVar = discord.Embed(title=f"Hero Reinforcements! {c_card} Increased Max Health!", colour=0xe91e63)
@@ -3055,9 +3121,15 @@ class CrownUnlimited(commands.Cog):
                            
                         else:
                             turn_total= turn_total + 1
-                            turn=0
+                            if t_universe != "Crown Rift Madness":
+                                turn = 0
+                            else:
+                                turn = 3 
                         turn_total= turn_total + 1
-                        turn=0
+                        if t_universe != "Crown Rift Madness":
+                            turn = 0
+                        else:
+                            turn = 3 
                     else:
                         # UNIVERSE CARD
                         player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus)
@@ -4689,6 +4761,15 @@ class CrownUnlimited(commands.Cog):
             while ((o_health > 0) and (c_health > 0)) and (t_health > 0):
                 #Player 1 Turn Start
                 if turn == 0:
+                    if o_universe == "Death Note" and turn_total == 0:
+                        embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death", description=f"`{o_card} says:`\nYou will die in 24 turns...", colour=0xe91e63)
+                        await private_channel.send(embed=embedVar)
+                    if c_universe == "Death Note" and turn_total == 0:
+                        embedVar = discord.Embed(title=f"{c_card.upper()} Scheduled Death", description=f"`{c_card} says:`\nYou will die in 24 turns...", colour=0xe91e63)
+                        await private_channel.send(embed=embedVar)
+                    if t_universe == 'Death Note' and turn_total == 0:
+                        embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death", description=f"`{t_card} says:`\nYou will die in 24 turns...", colour=0xe91e63)
+                        await private_channel.send(embed=embedVar)
                     if o_attack <= 25:
                         o_attack = 25
                     if o_defense <= 30:
@@ -4730,19 +4811,23 @@ class CrownUnlimited(commands.Cog):
                         o_newhealth = 0
                         healmessage = ""
                         messagenumber = 0
-                        if o_health <= o_max_health:
-                            o_newhealth = o_health + o_healthcalc
-                            if o_newhealth > o_max_health:
-                                healmessage = "the injuries dissapeared"
-                                messagenumber = 1
-                                o_health = o_max_health
-                            else:
-                                healmessage = "regained some vitality"
-                                messagenumber = 2
-                                o_health = o_newhealth
+                        if o_universe == "Crown Rift Madness":
+                            healmessage = "yet inner madness drags on"
+                            messagenumber = 3
                         else:
-                            healmessage = f"`{t_card}`'s blows don't appear to have any effect!"
-                            messagenumber = 0
+                            if o_health <= o_max_health:
+                                o_newhealth = o_health + o_healthcalc
+                                if o_newhealth > o_max_health:
+                                    healmessage = "the injuries dissapeared"
+                                    messagenumber = 1
+                                    o_health = o_max_health
+                                else:
+                                    healmessage = "regained some vitality"
+                                    messagenumber = 2
+                                    o_health = o_newhealth
+                            else:
+                                healmessage = f"`{t_card}`'s blows don't appear to have any effect!"
+                                messagenumber = 0
                         o_attack = o_attack + o_attackcalc
                         o_defense =  o_defense + o_defensecalc
                         o_used_focus = True
@@ -4793,6 +4878,12 @@ class CrownUnlimited(commands.Cog):
                             embedVar = discord.Embed(title=f"Mana Zone! {o_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             o_stamina = 110
+                        elif o_universe == "Death Note":
+                            if turn_total >= 24:
+                                embedVar = discord.Embed(title=f"{t_card.upper()}'s' Scheduled Death", description=f"`{o_card} says:`\n'Delete'", colour=0xe91e63)
+                                embedVar.add_field(name=f"{t_card} had a heart attack and died", value=f"Death....")
+                                await private_channel.send(embed=embedVar)
+                                t_health = 0
                             
                         if t_universe == "One Punch Man":
                             embedVar = discord.Embed(title=f"Hero Reinforcements! {t_card} Increased Max Health!", colour=0xe91e63)
@@ -4811,9 +4902,15 @@ class CrownUnlimited(commands.Cog):
                             
                         else:
                             turn_total= turn_total + 1
-                            turn = 1
+                            if o_universe != "Crown Rift Madness":
+                                turn = 1
+                            else:
+                                turn = 0 
                         turn_total= turn_total + 1
-                        turn = 1
+                        if o_universe != "Crown Rift Madness":
+                            turn = 1
+                        else:
+                            turn = 0 
                     else:
 
                         # UNIVERSE CARD
@@ -5380,21 +5477,23 @@ class CrownUnlimited(commands.Cog):
                         t_newhealth = 0
                         healmessage = ""
                         messagenumber = 0
-
-                        if t_health <= t_max_health:
-                            t_newhealth = t_health + t_healthcalc
-                            if t_newhealth > t_max_health:
-                                healmessage = f"recovered!"
-                                messagenumber = 1
-                                t_health = t_max_health
+                        if t_universe == "Crown Rift Madness":
+                            healmessage = "yet inner madness drags on"
+                            messagenumber = 3
+                        else:   
+                            if t_health <= t_max_health:
+                                t_newhealth = t_health + t_healthcalc
+                                if t_newhealth > t_max_health:
+                                    healmessage = f"recovered!"
+                                    messagenumber = 1
+                                    t_health = t_max_health
+                                else:
+                                    healmessage = f"stopped the bleeding..."
+                                    messagenumber = 2
+                                    t_health = t_newhealth
                             else:
-                                healmessage = f"stopped the bleeding..."
-                                messagenumber = 2
-                                t_health = t_newhealth
-                        else:
-                            healmessage = f"hasn't been touched..."
-                            messagenumber = 0
-
+                                healmessage = f"hasn't been touched..."
+                                messagenumber = 0
                         t_attack = t_attack + t_attackcalc
                         t_defense =  t_defense + t_defensecalc
                         t_used_focus=True
@@ -5443,6 +5542,13 @@ class CrownUnlimited(commands.Cog):
                             embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_stamina = 110
+                            
+                        elif t_universe == "Death Note":
+                            if turn_total >= 24:
+                                embedVar = discord.Embed(title=f"{o_card.upper()}'s' Scheduled Death", description=f"`{t_card} says:`\n'Delete'", colour=0xe91e63)
+                                embedVar.add_field(name=f"{o_card} had a heart attack and died", value=f"Death....")
+                                await private_channel.send(embed=embedVar)
+                                o_health = 0
                            
                         if o_universe == "One Punch Man":
                             embedVar = discord.Embed(title=f"Hero Reinforcements! {o_card} Increased Max Health!", colour=0xe91e63)
@@ -5461,9 +5567,15 @@ class CrownUnlimited(commands.Cog):
                            
                         else:
                             turn_total= turn_total + 1
-                            turn=2
+                            if t_universe != "Crown Rift Madness":
+                                turn = 2
+                            else:
+                                turn = 1 
                         turn_total= turn_total + 1
-                        turn=2
+                        if t_universe != "Crown Rift Madness":
+                            turn = 2
+                        else:
+                            turn = 1
                     else:
                         # UNIVERSE CARD
                         player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus)
@@ -5974,19 +6086,23 @@ class CrownUnlimited(commands.Cog):
                         c_newhealth = 0
                         healmessage = ""
                         messagenumber = 0
-                        if c_health <= c_max_health:
-                            c_newhealth = c_health + c_healthcalc
-                            if c_newhealth > c_max_health:
-                                healmessage = "the injuries dissapeared"
-                                messagenumber = 1
-                                c_health = c_max_health
-                            else:
-                                healmessage = "regained some vitality"
-                                messagenumber = 2
-                                c_health = c_newhealth
+                        if c_universe == "Crown Rift Madness":
+                                healmessage = "yet inner madness drags on"
+                                messagenumber = 3
                         else:
-                            healmessage = f"`{t_card}`'s blows don't appear to have any effect!"
-                            messagenumber = 0
+                            if c_health <= c_max_health:
+                                c_newhealth = c_health + c_healthcalc
+                                if c_newhealth > c_max_health:
+                                    healmessage = "the injuries dissapeared"
+                                    messagenumber = 1
+                                    c_health = c_max_health
+                                else:
+                                    healmessage = "regained some vitality"
+                                    messagenumber = 2
+                                    c_health = c_newhealth
+                            else:
+                                healmessage = f"`{t_card}`'s blows don't appear to have any effect!"
+                                messagenumber = 0
                         c_attack = c_attack + c_attackcalc
                         c_defense =  c_defense + c_defensecalc
                         c_used_focus = True
@@ -6036,6 +6152,13 @@ class CrownUnlimited(commands.Cog):
                             await private_channel.send(embed=embedVar)
                             c_stamina = 110
                             
+                        elif c_universe == "Death Note":
+                            if turn_total >= 24:
+                                embedVar = discord.Embed(title=f"{t_card.upper()}'s' Scheduled Death", description=f"`{c_card} says:`\n'Delete'", colour=0xe91e63)
+                                embedVar.add_field(name=f"{t_card} had a heart attack and died", value=f"Death....")
+                                await private_channel.send(embed=embedVar)
+                                t_health = 0
+                            
                         if t_universe == "One Punch Man":
                             embedVar = discord.Embed(title=f"Hero Reinforcements! {t_card} Increased Max Health!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
@@ -6053,9 +6176,15 @@ class CrownUnlimited(commands.Cog):
                             
                         else:
                             turn_total= turn_total + 1
-                            turn = 3
+                            if c_universe != "Crown Rift Madness":
+                                turn = 3
+                            else:
+                                turn = 2 
                         turn_total= turn_total + 1
-                        turn = 3
+                        if c_universe != "Crown Rift Madness":
+                            turn = 3
+                        else:
+                            turn = 2 
                     else:
 
                         # UNIVERSE CARD
@@ -6620,21 +6749,23 @@ class CrownUnlimited(commands.Cog):
                         t_newhealth = 0
                         healmessage = ""
                         messagenumber = 0
-
-                        if t_health <= t_max_health:
-                            t_newhealth = t_health + t_healthcalc
-                            if t_newhealth > t_max_health:
-                                healmessage = f"recovered!"
-                                messagenumber = 1
-                                t_health = t_max_health
+                        if t_universe == "Crown Rift Madness":
+                            healmessage = "yet inner madness drags on"
+                            messagenumber = 3
+                        else:   
+                            if t_health <= t_max_health:
+                                t_newhealth = t_health + t_healthcalc
+                                if t_newhealth > t_max_health:
+                                    healmessage = f"recovered!"
+                                    messagenumber = 1
+                                    t_health = t_max_health
+                                else:
+                                    healmessage = f"stopped the bleeding..."
+                                    messagenumber = 2
+                                    t_health = t_newhealth
                             else:
-                                healmessage = f"stopped the bleeding..."
-                                messagenumber = 2
-                                t_health = t_newhealth
-                        else:
-                            healmessage = f"hasn't been touched..."
-                            messagenumber = 0
-
+                                healmessage = f"hasn't been touched..."
+                                messagenumber = 0
                         t_attack = t_attack + t_attackcalc
                         t_defense =  t_defense + t_defensecalc
                         t_used_focus=True
@@ -6683,6 +6814,14 @@ class CrownUnlimited(commands.Cog):
                             embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_stamina = 110
+                        
+                        
+                        elif t_universe == "Death Note":
+                            if turn_total >= 24:
+                                embedVar = discord.Embed(title=f"{o_card.upper()}'s' Scheduled Death", description=f"`{t_card} says:`\n'Delete'", colour=0xe91e63)
+                                embedVar.add_field(name=f"{o_card} had a heart attack and died", value=f"Death....")
+                                await private_channel.send(embed=embedVar)
+                                o_health = 0
                             
                         if c_universe == "One Punch Man":
                             embedVar = discord.Embed(title=f"Hero Reinforcements! {c_card} Increased Max Health!", colour=0xe91e63)
@@ -6701,9 +6840,15 @@ class CrownUnlimited(commands.Cog):
                             
                         else:
                             turn_total= turn_total + 1
-                            turn=0
+                            if t_universe != "Crown Rift Madness":
+                                turn = 0
+                            else:
+                                turn = 3 
                         turn_total= turn_total + 1
-                        turn=0
+                        if t_universe != "Crown Rift Madness":
+                            turn = 0
+                        else:
+                            turn = 3
                     else:
                         # UNIVERSE CARD
                         player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus)
@@ -8421,6 +8566,15 @@ class CrownUnlimited(commands.Cog):
             
             #Player 1 Turn Start
             if turn == 0:
+                if o_universe == "Death Note" and turn_total == 0:
+                    embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death", description=f"`{o_card} says:`\nYou will die in 24 turns...", colour=0xe91e63)
+                    await private_channel.send(embed=embedVar)
+                if c_universe == "Death Note" and turn_total == 0:
+                    embedVar = discord.Embed(title=f"{c_card.upper()} Scheduled Death", description=f"`{c_card} says:`\nYou will die in 24 turns...", colour=0xe91e63)
+                    await private_channel.send(embed=embedVar)
+                if t_universe == 'Death Note' and turn_total == 0:
+                    embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death", description=f"`{t_card} says:`\nYou will die in 24 turns...", colour=0xe91e63)
+                    await private_channel.send(embed=embedVar)
                 if o_attack <= 25:
                     o_attack = 25
                 if o_defense <= 30:
@@ -8467,19 +8621,23 @@ class CrownUnlimited(commands.Cog):
                     o_newhealth = 0
                     healmessage = ""
                     messagenumber = 0
-                    if o_health <= o_max_health:
-                        o_newhealth = o_health + o_healthcalc
-                        if o_newhealth > o_max_health:
-                            healmessage = "the injuries dissapeared"
-                            messagenumber = 1
-                            o_health = o_max_health
-                        else:
-                            healmessage = "regained some vitality"
-                            messagenumber = 2
-                            o_health = o_newhealth
+                    if o_universe == "Crown Rift Madness":
+                        healmessage = "yet inner madness drags on"
+                        messagenumber = 3
                     else:
-                        healmessage = f"`{t_card}`'s blows don't appear to have any effect!"
-                        messagenumber = 0
+                        if o_health <= o_max_health:
+                            o_newhealth = o_health + o_healthcalc
+                            if o_newhealth > o_max_health:
+                                healmessage = "the injuries dissapeared"
+                                messagenumber = 1
+                                o_health = o_max_health
+                            else:
+                                healmessage = "regained some vitality"
+                                messagenumber = 2
+                                o_health = o_newhealth
+                        else:
+                            healmessage = f"`{t_card}`'s blows don't appear to have any effect!"
+                            messagenumber = 0
                     o_attack = o_attack + o_attackcalc
                     o_defense =  o_defense + o_defensecalc
                     o_used_focus = True
@@ -8529,6 +8687,12 @@ class CrownUnlimited(commands.Cog):
                         embedVar = discord.Embed(title=f"Mana Zone! {o_card} Increased Stamina!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         o_stamina = 110
+                    elif o_universe == "Death Note":
+                        if turn_total >= 24:
+                            embedVar = discord.Embed(title=f"{t_card.upper()}'s' Scheduled Death", description=f"`{o_card} says:`\n'Delete'", colour=0xe91e63)
+                            embedVar.add_field(name=f"{t_card} had a heart attack and died", value=f"Death....")
+                            await private_channel.send(embed=embedVar)
+                            t_health = 0
                        
                     if t_universe == "One Punch Man":
                         embedVar = discord.Embed(title=f"Hero Reinforcements! {t_card} Increased Max Health!", colour=0xe91e63)
@@ -8547,9 +8711,15 @@ class CrownUnlimited(commands.Cog):
                        
                     else:
                         turn_total= turn_total + 1
-                        turn = 1
+                        if o_universe != "Crown Rift Madness":
+                            turn = 1
+                        else:
+                            turn = 0 
                     turn_total= turn_total + 1
-                    turn = 1
+                    if o_universe != "Crown Rift Madness":
+                        turn = 1
+                    else:
+                        turn = 0 
                 else:
 
                     # UNIVERSE CARD
@@ -9122,21 +9292,23 @@ class CrownUnlimited(commands.Cog):
                     t_newhealth = 0
                     healmessage = ""
                     messagenumber = 0
-
-                    if t_health <= t_max_health:
-                        t_newhealth = t_health + t_healthcalc
-                        if t_newhealth > t_max_health:
-                            healmessage = f"recovered!"
-                            messagenumber = 1
-                            t_health = t_max_health
+                    if t_universe == "Crown Rift Madness":
+                        healmessage = "yet inner madness drags on"
+                        messagenumber = 3
+                    else:   
+                        if t_health <= t_max_health:
+                            t_newhealth = t_health + t_healthcalc
+                            if t_newhealth > t_max_health:
+                                healmessage = f"recovered!"
+                                messagenumber = 1
+                                t_health = t_max_health
+                            else:
+                                healmessage = f"stopped the bleeding..."
+                                messagenumber = 2
+                                t_health = t_newhealth
                         else:
-                            healmessage = f"stopped the bleeding..."
-                            messagenumber = 2
-                            t_health = t_newhealth
-                    else:
-                        healmessage = f"hasn't been touched..."
-                        messagenumber = 0
-
+                            healmessage = f"hasn't been touched..."
+                            messagenumber = 0
                     t_attack = t_attack + t_attackcalc
                     t_defense =  t_defense + t_defensecalc
                     t_used_focus=True
@@ -9192,7 +9364,14 @@ class CrownUnlimited(commands.Cog):
                     elif t_universe == "Black Clover":
                         embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
-                        t_stamina = 110
+                        t_stamina = 110                  
+                    
+                    elif t_universe == "Death Note":
+                        if turn_total >= 24:
+                            embedVar = discord.Embed(title=f"{o_card.upper()}'s' Scheduled Death", description=f"`{t_card} says:`\n'Delete'", colour=0xe91e63)
+                            embedVar.add_field(name=f"{o_card} had a heart attack and died", value=f"Death....")
+                            await private_channel.send(embed=embedVar)
+                            o_health = 0
                         
                     if o_universe == "One Punch Man":
                         embedVar = discord.Embed(title=f"Hero Reinforcements! {o_card} Increased Max Health!", colour=0xe91e63)
@@ -9211,9 +9390,15 @@ class CrownUnlimited(commands.Cog):
                         
                     else:
                         turn_total= turn_total + 1
-                        turn=2
+                        if t_universe != "Crown Rift Madness":
+                            turn = 2
+                        else:
+                            turn = 1 
                     turn_total= turn_total + 1
-                    turn=2
+                    if t_universe != "Crown Rift Madness":
+                        turn = 2
+                    else:
+                        turn = 1
                 #Play Bot
                 else:
                     # UNIVERSE CARD
@@ -9749,19 +9934,23 @@ class CrownUnlimited(commands.Cog):
                     c_newhealth = 0
                     healmessage = ""
                     messagenumber = 0
-                    if c_health <= c_max_health:
-                        c_newhealth = c_health + c_healthcalc
-                        if c_newhealth > c_max_health:
-                            healmessage = "the injuries dissapeared"
-                            messagenumber = 1
-                            c_health = c_max_health
-                        else:
-                            healmessage = "regained some vitality"
-                            messagenumber = 2
-                            c_health = c_newhealth
+                    if c_universe == "Crown Rift Madness":
+                            healmessage = "yet inner madness drags on"
+                            messagenumber = 3
                     else:
-                        healmessage = f"`{t_card}`'s blows don't appear to have any effect!"
-                        messagenumber = 0
+                        if c_health <= c_max_health:
+                            c_newhealth = c_health + c_healthcalc
+                            if c_newhealth > c_max_health:
+                                healmessage = "the injuries dissapeared"
+                                messagenumber = 1
+                                c_health = c_max_health
+                            else:
+                                healmessage = "regained some vitality"
+                                messagenumber = 2
+                                c_health = c_newhealth
+                        else:
+                            healmessage = f"`{t_card}`'s blows don't appear to have any effect!"
+                            messagenumber = 0
                     c_attack = c_attack + c_attackcalc
                     c_defense =  c_defense + c_defensecalc
                     c_used_focus = True
@@ -9812,6 +10001,13 @@ class CrownUnlimited(commands.Cog):
                         await private_channel.send(embed=embedVar)
                         c_stamina = 110
                         
+                    elif c_universe == "Death Note":
+                        if turn_total >= 24:
+                            embedVar = discord.Embed(title=f"{t_card.upper()}'s' Scheduled Death", description=f"`{c_card} says:`\n'Delete'", colour=0xe91e63)
+                            embedVar.add_field(name=f"{t_card} had a heart attack and died", value=f"Death....")
+                            await private_channel.send(embed=embedVar)
+                            t_health = 0
+                        
                     if t_universe == "One Punch Man":
                         embedVar = discord.Embed(title=f"Hero Reinforcements! {t_card} Increased Max Health!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
@@ -9829,9 +10025,15 @@ class CrownUnlimited(commands.Cog):
                         
                     else:
                         turn_total= turn_total + 1
-                        turn = 3
+                        if c_universe != "Crown Rift Madness":
+                            turn = 3
+                        else:
+                            turn = 2 
                     turn_total= turn_total + 1
-                    turn = 3
+                    if c_universe != "Crown Rift Madness":
+                        turn = 3
+                    else:
+                        turn = 2 
                 else:
 
                     # UNIVERSE CARD
@@ -10406,21 +10608,23 @@ class CrownUnlimited(commands.Cog):
                     t_newhealth = 0
                     healmessage = ""
                     messagenumber = 0
-
-                    if t_health <= t_max_health:
-                        t_newhealth = t_health + t_healthcalc
-                        if t_newhealth > t_max_health:
-                            healmessage = f"recovered!"
-                            messagenumber = 1
-                            t_health = t_max_health
+                    if t_universe == "Crown Rift Madness":
+                        healmessage = "yet inner madness drags on"
+                        messagenumber = 3
+                    else:   
+                        if t_health <= t_max_health:
+                            t_newhealth = t_health + t_healthcalc
+                            if t_newhealth > t_max_health:
+                                healmessage = f"recovered!"
+                                messagenumber = 1
+                                t_health = t_max_health
+                            else:
+                                healmessage = f"stopped the bleeding..."
+                                messagenumber = 2
+                                t_health = t_newhealth
                         else:
-                            healmessage = f"stopped the bleeding..."
-                            messagenumber = 2
-                            t_health = t_newhealth
-                    else:
-                        healmessage = f"hasn't been touched..."
-                        messagenumber = 0
-
+                            healmessage = f"hasn't been touched..."
+                            messagenumber = 0
                     t_attack = t_attack + t_attackcalc
                     t_defense =  t_defense + t_defensecalc
                     t_used_focus=True
@@ -10477,6 +10681,14 @@ class CrownUnlimited(commands.Cog):
                         embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         t_stamina = 110
+                    
+                    
+                    elif t_universe == "Death Note":
+                        if turn_total >= 24:
+                            embedVar = discord.Embed(title=f"{o_card.upper()}'s' Scheduled Death", description=f"`{t_card} says:`\n'Delete'", colour=0xe91e63)
+                            embedVar.add_field(name=f"{o_card} had a heart attack and died", value=f"Death....")
+                            await private_channel.send(embed=embedVar)
+                            o_health = 0
                        
                     if c_universe == "One Punch Man":
                         embedVar = discord.Embed(title=f"Hero Reinforcements! {c_card} Increased Max Health!", colour=0xe91e63)
@@ -10495,9 +10707,15 @@ class CrownUnlimited(commands.Cog):
                         
                     else:
                         turn_total= turn_total + 1
-                        turn=0
+                        if t_universe != "Crown Rift Madness":
+                            turn = 0
+                        else:
+                            turn = 3 
                     turn_total= turn_total + 1
-                    turn=0
+                    if t_universe != "Crown Rift Madness":
+                        turn = 0
+                    else:
+                        turn = 3
                 #Play Bot
                 else:
                     # UNIVERSE CARD
@@ -11841,6 +12059,12 @@ class CrownUnlimited(commands.Cog):
             while (o_health > 0) and (t_health > 0):
                 #Player 1 Turn Start
                 if turn == 0:
+                    if o_universe == "Death Note" and turn_total == 0:
+                        embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death", description=f"`{o_card} says:`\nYou will die in 24 turns...", colour=0xe91e63)
+                        await private_channel.send(embed=embedVar)
+                    if t_universe == 'Death Note' and turn_total == 0:
+                        embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death", description=f"`{t_card} says:`\nYou will die in 24 turns...", colour=0xe91e63)
+                        await private_channel.send(embed=embedVar)
                     if o_attack <= 25:
                         o_attack = 25
                     if o_defense <= 30:
@@ -11881,19 +12105,23 @@ class CrownUnlimited(commands.Cog):
                         o_newhealth = 0
                         healmessage = ""
                         messagenumber = 0
-                        if o_health <= o_max_health:
-                            o_newhealth = o_health + o_healthcalc
-                            if o_newhealth > o_max_health:
-                                healmessage = "the injuries dissapeared"
-                                messagenumber = 1
-                                o_health = o_max_health
-                            else:
-                                healmessage = "regained some vitality"
-                                messagenumber = 2
-                                o_health = o_newhealth
+                        if o_universe == "Crown Rift Madness":
+                            healmessage = "yet inner madness drags on"
+                            messagenumber = 3
                         else:
-                            healmessage = f"`{t_card}`'s blows don't appear to have any effect!"
-                            messagenumber = 0
+                            if o_health <= o_max_health:
+                                o_newhealth = o_health + o_healthcalc
+                                if o_newhealth > o_max_health:
+                                    healmessage = "the injuries dissapeared"
+                                    messagenumber = 1
+                                    o_health = o_max_health
+                                else:
+                                    healmessage = "regained some vitality"
+                                    messagenumber = 2
+                                    o_health = o_newhealth
+                            else:
+                                healmessage = f"`{t_card}`'s blows don't appear to have any effect!"
+                                messagenumber = 0
                         o_attack = o_attack + o_attackcalc
                         o_defense =  o_defense + o_defensecalc
                         o_used_focus = True
@@ -11944,6 +12172,12 @@ class CrownUnlimited(commands.Cog):
                             embedVar = discord.Embed(title=f"Mana Zone! {o_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             o_stamina = 110
+                        elif o_universe == "Death Note":
+                            if turn_total >= 24:
+                                embedVar = discord.Embed(title=f"{t_card.upper()}'s' Scheduled Death", description=f"`{o_card} says:`\n'Delete'", colour=0xe91e63)
+                                embedVar.add_field(name=f"{t_card} had a heart attack and died", value=f"Death....")
+                                await private_channel.send(embed=embedVar)
+                                t_health = 0
                            
                         if t_universe == "One Punch Man":
                             embedVar = discord.Embed(title=f"Hero Reinforcements! {t_card} Increased Max Health!", colour=0xe91e63)
@@ -11962,9 +12196,15 @@ class CrownUnlimited(commands.Cog):
                            
                         else:
                             turn_total= turn_total + 1
-                            turn = 1
+                            if o_universe != "Crown Rift Madness":
+                                turn = 1
+                            else:
+                                turn = 0 
                         turn_total= turn_total + 1
-                        turn = 1
+                        if o_universe != "Crown Rift Madness":
+                            turn = 1
+                        else:
+                            turn = 0 
                     else:
 
                         # UNIVERSE CARD
@@ -12437,21 +12677,23 @@ class CrownUnlimited(commands.Cog):
                         t_newhealth = 0
                         healmessage = ""
                         messagenumber = 0
-
-                        if t_health <= t_max_health:
-                            t_newhealth = t_health + t_healthcalc
-                            if t_newhealth > t_max_health:
-                                healmessage = f"recovered!"
-                                messagenumber = 1
-                                t_health = t_max_health
+                        if t_universe == "Crown Rift Madness":
+                            healmessage = "yet inner madness drags on"
+                            messagenumber = 3
+                        else:   
+                            if t_health <= t_max_health:
+                                t_newhealth = t_health + t_healthcalc
+                                if t_newhealth > t_max_health:
+                                    healmessage = f"recovered!"
+                                    messagenumber = 1
+                                    t_health = t_max_health
+                                else:
+                                    healmessage = f"stopped the bleeding..."
+                                    messagenumber = 2
+                                    t_health = t_newhealth
                             else:
-                                healmessage = f"stopped the bleeding..."
-                                messagenumber = 2
-                                t_health = t_newhealth
-                        else:
-                            healmessage = f"hasn't been touched..."
-                            messagenumber = 0
-
+                                healmessage = f"hasn't been touched..."
+                                messagenumber = 0
                         t_attack = t_attack + t_attackcalc
                         t_defense =  t_defense + t_defensecalc
                         t_used_focus=True
@@ -12499,6 +12741,13 @@ class CrownUnlimited(commands.Cog):
                             embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_stamina = 110
+                            
+                        elif t_universe == "Death Note":
+                            if turn_total >= 24:
+                                embedVar = discord.Embed(title=f"{o_card.upper()}'s' Scheduled Death", description=f"`{t_card} says:`\n'Delete'", colour=0xe91e63)
+                                embedVar.add_field(name=f"{o_card} had a heart attack and died", value=f"Death....")
+                                await private_channel.send(embed=embedVar)
+                                o_health = 0
                            
                         if o_universe == "One Punch Man":
                             embedVar = discord.Embed(title=f"Hero Reinforcements! {o_card} Increased Max Health!", colour=0xe91e63)
@@ -12517,9 +12766,15 @@ class CrownUnlimited(commands.Cog):
                             
                         else:
                             turn_total= turn_total + 1
-                            turn=0
+                            if t_universe != "Crown Rift Madness":
+                                turn = 0
+                            else:
+                                turn = 1 
                         turn_total= turn_total + 1
-                        turn=0
+                        if t_universe != "Crown Rift Madness":
+                            turn = 0
+                        else:
+                            turn = 1
                     else:
                         # UNIVERSE CARD
                         player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus)
@@ -13885,8 +14140,23 @@ class CrownUnlimited(commands.Cog):
 
             # START TURNS
             while (o_health > 0) and (t_health > 0):
+                
+                # 
+                
+                # if t_universe == 'Death Note' and turn_total == 3:
+                #     embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death", description=f"`{t_card} says:`\n'Delete'", colour=0xe91e63)
+                #     embedVar.add_field(name=f"{o_card} had a heart attack and died", value=f"Death....")
+                #     await private_channel.send(embed=embedVar)
+                #     o_health == 0
                 #Player 1 Turn Start
                 if turn == 0:
+                    if o_universe == "Death Note" and turn_total == 0:
+                        embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death", description=f"`{o_card} says:`\nYou will die in 24 turns...", colour=0xe91e63)
+                        await private_channel.send(embed=embedVar)
+                    if t_universe == 'Death Note' and turn_total == 0:
+                        embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death", description=f"`{t_card} says:`\nYou will die in 24 turns...", colour=0xe91e63)
+                        await private_channel.send(embed=embedVar)
+                    
                     if o_attack <= 25:
                         o_attack = 25
                     if o_defense <= 30:
@@ -13928,19 +14198,23 @@ class CrownUnlimited(commands.Cog):
                         o_newhealth = 0
                         healmessage = ""
                         messagenumber = 0
-                        if o_health <= o_max_health:
-                            o_newhealth = o_health + o_healthcalc
-                            if o_newhealth > o_max_health:
-                                healmessage = "the injuries dissapeared"
-                                messagenumber = 1
-                                o_health = o_max_health
-                            else:
-                                healmessage = "regained some vitality"
-                                messagenumber = 2
-                                o_health = o_newhealth
+                        if o_universe == "Crown Rift Madness":
+                            healmessage = "yet inner madness drags on"
+                            messagenumber = 3
                         else:
-                            healmessage = f"`{t_card}`'s blows don't appear to have any effect!"
-                            messagenumber = 0
+                            if o_health <= o_max_health:
+                                o_newhealth = o_health + o_healthcalc
+                                if o_newhealth > o_max_health:
+                                    healmessage = "the injuries dissapeared"
+                                    messagenumber = 1
+                                    o_health = o_max_health
+                                else:
+                                    healmessage = "regained some vitality"
+                                    messagenumber = 2
+                                    o_health = o_newhealth
+                            else:
+                                healmessage = f"`{t_card}`'s blows don't appear to have any effect!"
+                                messagenumber = 0
                         o_attack = o_attack + o_attackcalc
                         o_defense =  o_defense + o_defensecalc
                         o_used_focus = True
@@ -13948,6 +14222,7 @@ class CrownUnlimited(commands.Cog):
                         embedVar = discord.Embed(title=f"{o_card.upper()} FOCUSED", description=f"`{o_card} says:`\n{o_focus_description}", colour=0xe91e63)
                         embedVar.add_field(name=f"{o_card} focused and {healmessage}", value="All stats & stamina increased")
                         await private_channel.send(embed=embedVar)
+                        
 
                         #Resolve Check and Calculation
                         if not o_used_resolve and o_used_focus and o_universe == "Digimon": # Digimon Universal Trait
@@ -13991,6 +14266,13 @@ class CrownUnlimited(commands.Cog):
                             embedVar = discord.Embed(title=f"Mana Zone! {o_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             o_stamina = 110
+                        
+                        elif o_universe == "Death Note":
+                            if turn_total >= 24:
+                                embedVar = discord.Embed(title=f"{t_card.upper()}'s' Scheduled Death", description=f"`{o_card} says:`\n'Delete'", colour=0xe91e63)
+                                embedVar.add_field(name=f"{t_card} had a heart attack and died", value=f"Death....")
+                                await private_channel.send(embed=embedVar)
+                                t_health = 0
                             
                         if t_universe == "One Punch Man":
                             embedVar = discord.Embed(title=f"Hero Reinforcements! {t_card} Increased Max Health!", colour=0xe91e63)
@@ -14009,9 +14291,15 @@ class CrownUnlimited(commands.Cog):
                             
                         else:
                             turn_total= turn_total + 1
-                            turn = 1
+                            if o_universe != "Crown Rift Madness":
+                                turn = 1
+                            else:
+                                turn = 0 
                         turn_total= turn_total + 1
-                        turn = 1
+                        if o_universe != "Crown Rift Madness":
+                            turn = 1
+                        else:
+                            turn = 0 
                     else:
 
                         # UNIVERSE CARD
@@ -14484,21 +14772,23 @@ class CrownUnlimited(commands.Cog):
                         t_newhealth = 0
                         healmessage = ""
                         messagenumber = 0
-
-                        if t_health <= t_max_health:
-                            t_newhealth = t_health + t_healthcalc
-                            if t_newhealth > t_max_health:
-                                healmessage = f"recovered!"
-                                messagenumber = 1
-                                t_health = t_max_health
+                        if t_universe == "Crown Rift Madness":
+                            healmessage = "yet inner madness drags on"
+                            messagenumber = 3
+                        else:   
+                            if t_health <= t_max_health:
+                                t_newhealth = t_health + t_healthcalc
+                                if t_newhealth > t_max_health:
+                                    healmessage = f"recovered!"
+                                    messagenumber = 1
+                                    t_health = t_max_health
+                                else:
+                                    healmessage = f"stopped the bleeding..."
+                                    messagenumber = 2
+                                    t_health = t_newhealth
                             else:
-                                healmessage = f"stopped the bleeding..."
-                                messagenumber = 2
-                                t_health = t_newhealth
-                        else:
-                            healmessage = f"hasn't been touched..."
-                            messagenumber = 0
-
+                                healmessage = f"hasn't been touched..."
+                                messagenumber = 0
                         t_attack = t_attack + t_attackcalc
                         t_defense =  t_defense + t_defensecalc
                         t_used_focus=True
@@ -14547,6 +14837,13 @@ class CrownUnlimited(commands.Cog):
                             await private_channel.send(embed=embedVar)
                             t_stamina = 110
                             
+                        elif t_universe == "Death Note":
+                            if turn_total >= 24:
+                                embedVar = discord.Embed(title=f"{o_card.upper()}'s' Scheduled Death", description=f"`{t_card} says:`\n'Delete'", colour=0xe91e63)
+                                embedVar.add_field(name=f"{o_card} had a heart attack and died", value=f"Death....")
+                                await private_channel.send(embed=embedVar)
+                                o_health = 0
+                            
                         if o_universe == "One Punch Man":
                             embedVar = discord.Embed(title=f"Hero Reinforcements! {o_card} Increased Max Health!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
@@ -14564,9 +14861,15 @@ class CrownUnlimited(commands.Cog):
                             
                         else:
                             turn_total= turn_total + 1
-                            turn=0
+                            if t_universe != "Crown Rift Madness":
+                                turn = 0
+                            else:
+                                turn = 1 
                         turn_total= turn_total + 1
-                        turn=0
+                        if t_universe != "Crown Rift Madness":
+                            turn = 0
+                        else:
+                            turn = 1
                     else:
                         # UNIVERSE CARD
                         player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus)
@@ -15815,6 +16118,12 @@ class CrownUnlimited(commands.Cog):
             
             #Player 1 Turn Start
             if turn == 0:
+                if o_universe == "Death Note" and turn_total == 0:
+                    embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death", description=f"`{o_card} says:`\nYou will die in 24 turns...", colour=0xe91e63)
+                    await private_channel.send(embed=embedVar)
+                if t_universe == 'Death Note' and turn_total == 0:
+                    embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death", description=f"`{t_card} says:`\nYou will die in 24 turns...", colour=0xe91e63)
+                    await private_channel.send(embed=embedVar)
                 if o_attack <= 25:
                         o_attack = 25
                 if o_defense <= 30:
@@ -15926,6 +16235,13 @@ class CrownUnlimited(commands.Cog):
                         await private_channel.send(embed=embedVar)
                         o_stamina = 110
                         
+                    elif o_universe == "Death Note":
+                        if turn_total >= 24:
+                            embedVar = discord.Embed(title=f"{t_card.upper()}'s' Scheduled Death", description=f"`{o_card} says:`\n'Delete'", colour=0xe91e63)
+                            embedVar.add_field(name=f"{t_card} had a heart attack and died", value=f"Death....")
+                            await private_channel.send(embed=embedVar)
+                            t_health = 0
+                        
                     if t_universe == "One Punch Man":
                         embedVar = discord.Embed(title=f"Hero Reinforcements! {t_card} Increased Max Health!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
@@ -15943,9 +16259,15 @@ class CrownUnlimited(commands.Cog):
                        
                     else:
                         turn_total= turn_total + 1
-                        turn = 1
+                        if o_universe != "Crown Rift Madness":
+                            turn = 1
+                        else:
+                            turn = 0 
                     turn_total= turn_total + 1
-                    turn = 1
+                    if o_universe != "Crown Rift Madness":
+                        turn = 1
+                    else:
+                        turn = 0 
                 else:
 
                     # UNIVERSE CARD
@@ -16424,21 +16746,23 @@ class CrownUnlimited(commands.Cog):
                     t_newhealth = 0
                     healmessage = ""
                     messagenumber = 0
-
-                    if t_health <= t_max_health:
-                        t_newhealth = t_health + t_healthcalc
-                        if t_newhealth > t_max_health:
-                            healmessage = f"recovered!"
-                            messagenumber = 1
-                            t_health = t_max_health
+                    if t_universe == "Crown Rift Madness":
+                        healmessage = "yet inner madness drags on"
+                        messagenumber = 3
+                    else:   
+                        if t_health <= t_max_health:
+                            t_newhealth = t_health + t_healthcalc
+                            if t_newhealth > t_max_health:
+                                healmessage = f"recovered!"
+                                messagenumber = 1
+                                t_health = t_max_health
+                            else:
+                                healmessage = f"stopped the bleeding..."
+                                messagenumber = 2
+                                t_health = t_newhealth
                         else:
-                            healmessage = f"stopped the bleeding..."
-                            messagenumber = 2
-                            t_health = t_newhealth
-                    else:
-                        healmessage = f"hasn't been touched..."
-                        messagenumber = 0
-
+                            healmessage = f"hasn't been touched..."
+                            messagenumber = 0
                     t_attack = t_attack + t_attackcalc
                     t_defense =  t_defense + t_defensecalc
                     t_used_focus=True
@@ -16495,6 +16819,13 @@ class CrownUnlimited(commands.Cog):
                         embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         t_stamina = 110
+                        
+                    elif t_universe == "Death Note":
+                        if turn_total >= 24:
+                            embedVar = discord.Embed(title=f"{o_card.upper()}'s' Scheduled Death", description=f"`{t_card} says:`\n'Delete'", colour=0xe91e63)
+                            embedVar.add_field(name=f"{o_card} had a heart attack and died", value=f"Death....")
+                            await private_channel.send(embed=embedVar)
+                            o_health = 0
                        
                     if o_universe == "One Punch Man":
                         embedVar = discord.Embed(title=f"Hero Reinforcements! {o_card} Increased Max Health!", colour=0xe91e63)
@@ -16513,9 +16844,15 @@ class CrownUnlimited(commands.Cog):
                         
                     else:
                         turn_total= turn_total + 1
-                        turn=0
+                        if t_universe != "Crown Rift Madness":
+                            turn = 0
+                        else:
+                            turn = 1 
                     turn_total= turn_total + 1
-                    turn=0
+                    if t_universe != "Crown Rift Madness":
+                        turn = 0
+                    else:
+                        turn = 1
                 #Play Bot
                 else:
                     # UNIVERSE CARD
@@ -17797,6 +18134,12 @@ class CrownUnlimited(commands.Cog):
                 while (o_health > 0) and (t_health > 0):
                     #Player 1 Turn Start
                     if turn == 0:
+                        if o_universe == "Death Note" and turn_total == 0:
+                            embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death", description=f"`{o_card} says:`\nYou will die in 24 turns...", colour=0xe91e63)
+                            await private_channel.send(embed=embedVar)
+                        if t_universe == 'Death Note' and turn_total == 0:
+                            embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death", description=f"`{t_card} says:`\nYou will die in 24 turns...", colour=0xe91e63)
+                            await private_channel.send(embed=embedVar)
                         if o_attack <= 25:
                             o_attack = 25
                         if o_defense <= 30:
@@ -17851,19 +18194,23 @@ class CrownUnlimited(commands.Cog):
                             o_newhealth = 0
                             healmessage = ""
                             messagenumber = 0
-                            if o_health <= o_max_health:
-                                o_newhealth = o_health + o_healthcalc
-                                if o_newhealth > o_max_health:
-                                    healmessage = "the injuries dissapeared"
-                                    messagenumber = 1
-                                    o_health = o_max_health
-                                else:
-                                    healmessage = "regained some vitality"
-                                    messagenumber = 2
-                                    o_health = o_newhealth
+                            if o_universe == "Crown Rift Madness":
+                                healmessage = "yet inner madness drags on"
+                                messagenumber = 3
                             else:
-                                healmessage = f"`{t_card}`'s blows don't appear to have any effect!"
-                                messagenumber = 0
+                                if o_health <= o_max_health:
+                                    o_newhealth = o_health + o_healthcalc
+                                    if o_newhealth > o_max_health:
+                                        healmessage = "the injuries dissapeared"
+                                        messagenumber = 1
+                                        o_health = o_max_health
+                                    else:
+                                        healmessage = "regained some vitality"
+                                        messagenumber = 2
+                                        o_health = o_newhealth
+                                else:
+                                    healmessage = f"`{t_card}`'s blows don't appear to have any effect!"
+                                    messagenumber = 0
                             o_attack = o_attack + o_attackcalc
                             o_defense =  o_defense + o_defensecalc
                             o_used_focus = True
@@ -17929,6 +18276,13 @@ class CrownUnlimited(commands.Cog):
                                 await ctx.send(embed=embedVar)
                                 o_stamina = 110
                                 
+                            elif o_universe == "Death Note":
+                                if turn_total >= 24:
+                                    embedVar = discord.Embed(title=f"{t_card.upper()}'s' Scheduled Death", description=f"`{o_card} says:`\n'Delete'", colour=0xe91e63)
+                                    embedVar.add_field(name=f"{t_card} had a heart attack and died", value=f"Death....")
+                                    await private_channel.send(embed=embedVar)
+                                    t_health = 0
+                                
                             if t_universe == "One Punch Man":
                                 embedVar = discord.Embed(title=f"Hero Reinforcements! {t_card} Increased Max Health!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
@@ -17945,9 +18299,15 @@ class CrownUnlimited(commands.Cog):
                                 t_attack = round(t_attack + (15 + turn_total))
                             else:
                                 turn_total= turn_total + 1
-                                turn = 1
+                                if o_universe != "Crown Rift Madness":
+                                    turn = 1
+                                else:
+                                    turn = 0 
                             turn_total= turn_total + 1
-                            turn = 1
+                            if o_universe != "Crown Rift Madness":
+                                turn = 1
+                            else:
+                                turn = 0 
                         else:
 
                             # UNIVERSE CARD
@@ -18411,21 +18771,23 @@ class CrownUnlimited(commands.Cog):
                             t_newhealth = 0
                             healmessage = ""
                             messagenumber = 0
-
-                            if t_health <= t_max_health:
-                                t_newhealth = t_health + t_healthcalc
-                                if t_newhealth > t_max_health:
-                                    healmessage = f"recovered!"
-                                    messagenumber = 1
-                                    t_health = t_max_health
+                            if t_universe == "Crown Rift Madness":
+                                healmessage = "yet inner madness drags on"
+                                messagenumber = 3
+                            else:   
+                                if t_health <= t_max_health:
+                                    t_newhealth = t_health + t_healthcalc
+                                    if t_newhealth > t_max_health:
+                                        healmessage = f"recovered!"
+                                        messagenumber = 1
+                                        t_health = t_max_health
+                                    else:
+                                        healmessage = f"stopped the bleeding..."
+                                        messagenumber = 2
+                                        t_health = t_newhealth
                                 else:
-                                    healmessage = f"stopped the bleeding..."
-                                    messagenumber = 2
-                                    t_health = t_newhealth
-                            else:
-                                healmessage = f"hasn't been touched..."
-                                messagenumber = 0
-
+                                    healmessage = f"hasn't been touched..."
+                                    messagenumber = 0
                             t_attack = t_attack + t_attackcalc
                             t_defense =  t_defense + t_defensecalc
                             t_used_focus=True
@@ -18468,6 +18830,12 @@ class CrownUnlimited(commands.Cog):
                                 embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
                                 t_stamina = 110
+                            elif t_universe == "Death Note":
+                                if turn_total >= 24:
+                                    embedVar = discord.Embed(title=f"{o_card.upper()}'s' Scheduled Death", description=f"`{t_card} says:`\n'Delete'", colour=0xe91e63)
+                                    embedVar.add_field(name=f"{o_card} had a heart attack and died", value=f"Death....")
+                                    await private_channel.send(embed=embedVar)
+                                    o_health = 0
                             if o_universe == "One Punch Man":
                                 embedVar = discord.Embed(title=f"Hero Reinforcements! {o_card} Increased Max Health!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
@@ -18482,9 +18850,15 @@ class CrownUnlimited(commands.Cog):
                                 o_attack = round(o_attack + (15 + turn_total))
                             else:
                                 turn_total= turn_total + 1
-                                turn=0
+                                if t_universe != "Crown Rift Madness":
+                                    turn = 0
+                                else:
+                                    turn = 1 
                             turn_total= turn_total + 1
-                            turn=0
+                            if t_universe != "Crown Rift Madness":
+                                turn = 0
+                            else:
+                                turn = 1
                         else:
                             #Check If Playing Bot
                             if botActive != True:
@@ -20212,6 +20586,12 @@ class CrownUnlimited(commands.Cog):
                 while (o_health > 0) and (t_health > 0):
                     #Player 1 Turn Start
                     if turn == 0:
+                        if o_universe == "Death Note" and turn_total == 0:
+                            embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death", description=f"`{o_card} says:`\nYou will die in 24 turns...", colour=0xe91e63)
+                            await private_channel.send(embed=embedVar)
+                        if t_universe == 'Death Note' and turn_total == 0:
+                            embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death", description=f"`{t_card} says:`\nYou will die in 24 turns...", colour=0xe91e63)
+                            await private_channel.send(embed=embedVar)
                         if o_attack <= 25:
                             o_attack = 25
                         if o_defense <= 30:
@@ -20265,19 +20645,23 @@ class CrownUnlimited(commands.Cog):
                             o_newhealth = 0
                             healmessage = ""
                             messagenumber = 0
-                            if o_health <= o_max_health:
-                                o_newhealth = o_health + o_healthcalc
-                                if o_newhealth > o_max_health:
-                                    healmessage = "the injuries dissapeared"
-                                    messagenumber = 1
-                                    o_health = o_max_health
-                                else:
-                                    healmessage = "regained some vitality"
-                                    messagenumber = 2
-                                    o_health = o_newhealth
+                            if o_universe == "Crown Rift Madness":
+                                healmessage = "yet inner madness drags on"
+                                messagenumber = 3
                             else:
-                                healmessage = f"`{t_card}`'s blows don't appear to have any effect!"
-                                messagenumber = 0
+                                if o_health <= o_max_health:
+                                    o_newhealth = o_health + o_healthcalc
+                                    if o_newhealth > o_max_health:
+                                        healmessage = "the injuries dissapeared"
+                                        messagenumber = 1
+                                        o_health = o_max_health
+                                    else:
+                                        healmessage = "regained some vitality"
+                                        messagenumber = 2
+                                        o_health = o_newhealth
+                                else:
+                                    healmessage = f"`{t_card}`'s blows don't appear to have any effect!"
+                                    messagenumber = 0
                             o_attack = o_attack + o_attackcalc
                             o_defense =  o_defense + o_defensecalc
                             o_used_focus = True
@@ -20342,6 +20726,13 @@ class CrownUnlimited(commands.Cog):
                                 await ctx.send(embed=embedVar)
                                 o_stamina = 110
                                 
+                            elif o_universe == "Death Note":
+                                if turn_total >= 24:
+                                    embedVar = discord.Embed(title=f"{t_card.upper()}'s' Scheduled Death", description=f"`{o_card} says:`\n'Delete'", colour=0xe91e63)
+                                    embedVar.add_field(name=f"{t_card} had a heart attack and died", value=f"Death....")
+                                    await private_channel.send(embed=embedVar)
+                                    t_health = 0
+                                
                             if t_universe == "One Punch Man":
                                 embedVar = discord.Embed(title=f"Hero Reinforcements! {t_card} Increased Max Health!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
@@ -20359,9 +20750,15 @@ class CrownUnlimited(commands.Cog):
                                 
                             else:
                                 turn_total= turn_total + 1
-                                turn = 1
+                                if o_universe != "Crown Rift Madness":
+                                    turn = 1
+                                else:
+                                    turn = 0 
                             turn_total= turn_total + 1
-                            turn = 1
+                            if o_universe != "Crown Rift Madness":
+                                turn = 1
+                            else:
+                                turn = 0 
                         else:
 
                             # UNIVERSE CARD
@@ -20833,21 +21230,23 @@ class CrownUnlimited(commands.Cog):
                             t_newhealth = 0
                             healmessage = ""
                             messagenumber = 0
-
-                            if t_health <= t_max_health:
-                                t_newhealth = t_health + t_healthcalc
-                                if t_newhealth > t_max_health:
-                                    healmessage = f"recovered!"
-                                    messagenumber = 1
-                                    t_health = t_max_health
+                            if t_universe == "Crown Rift Madness":
+                                healmessage = "yet inner madness drags on"
+                                messagenumber = 3
+                            else:   
+                                if t_health <= t_max_health:
+                                    t_newhealth = t_health + t_healthcalc
+                                    if t_newhealth > t_max_health:
+                                        healmessage = f"recovered!"
+                                        messagenumber = 1
+                                        t_health = t_max_health
+                                    else:
+                                        healmessage = f"stopped the bleeding..."
+                                        messagenumber = 2
+                                        t_health = t_newhealth
                                 else:
-                                    healmessage = f"stopped the bleeding..."
-                                    messagenumber = 2
-                                    t_health = t_newhealth
-                            else:
-                                healmessage = f"hasn't been touched..."
-                                messagenumber = 0
-
+                                    healmessage = f"hasn't been touched..."
+                                    messagenumber = 0
                             t_attack = t_attack + t_attackcalc
                             t_defense =  t_defense + t_defensecalc
                             t_used_focus=True
@@ -20896,6 +21295,13 @@ class CrownUnlimited(commands.Cog):
                                 await ctx.send(embed=embedVar)
                                 t_stamina = 110
                                 
+                            elif t_universe == "Death Note":
+                                if turn_total >= 24:
+                                    embedVar = discord.Embed(title=f"{o_card.upper()}'s' Scheduled Death", description=f"`{t_card} says:`\n'Delete'", colour=0xe91e63)
+                                    embedVar.add_field(name=f"{o_card} had a heart attack and died", value=f"Death....")
+                                    await private_channel.send(embed=embedVar)
+                                    o_health = 0
+                                
                             if o_universe == "One Punch Man":
                                 embedVar = discord.Embed(title=f"Hero Reinforcements! {o_card} Increased Max Health!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
@@ -20913,9 +21319,15 @@ class CrownUnlimited(commands.Cog):
                                 
                             else:
                                 turn_total= turn_total + 1
-                                turn=0
+                                if t_universe != "Crown Rift Madness":
+                                    turn = 0
+                                else:
+                                    turn = 1 
                             turn_total= turn_total + 1
-                            turn=0
+                            if t_universe != "Crown Rift Madness":
+                                turn = 0
+                            else:
+                                turn = 1
                         else:
                             #Check If Playing Bot
                             if botActive != True:
