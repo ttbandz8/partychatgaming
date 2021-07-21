@@ -2058,13 +2058,93 @@ destiny = [
         "COMPLETED": False,
         "UNIVERSE": "Crown Rift Madness"
     },{
-        "NAME": "The Deep Dark",
+        "NAME": "Don’t You Care",
         "WINS": 0,
-        "REQUIRED": 20,
-        "DEFEAT": "Azathoth",
-        "USE_CARDS": ["Shub Niggurath"],
-        "EARN": "Azathoth",
+        "REQUIRED": 10,
+        "DEFEAT": "Zabuza",
+        "USE_CARDS": ["Naruto"],
+        "EARN": "Zabuza",
         "COMPLETED": False,
-        "UNIVERSE": "Crown Rift Madness"
+        "UNIVERSE": "Naruto"
+    },
+    {
+        "NAME": "Orphan from the Land of Water",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Haku",
+        "USE_CARDS": ["Zabuza"],
+        "EARN": "Haku",
+        "COMPLETED": False,
+        "UNIVERSE": "Naruto"
+    },
+    {
+        "NAME": "Bjuu Brothers",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Gaara",
+        "USE_CARDS": ["Naruto"],
+        "EARN": "Gaara",
+        "COMPLETED": False,
+        "UNIVERSE": "Naruto"
+    },
+    {
+        "NAME": "Demon Shinki",
+        "WINS": 0,
+        "REQUIRED": 3,
+        "DEFEAT": "Gaara",
+        "USE_CARDS": ["Gaara"],
+        "EARN": "Shinki",
+        "COMPLETED": False,
+        "UNIVERSE": "Naruto"
+    },
+    {
+        "NAME": "Forgiven Kazekage",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Gaara",
+        "USE_CARDS": ["Shinki"],
+        "EARN": "Rasa",
+        "COMPLETED": False,
+        "UNIVERSE": "Naruto"
+    },
+    {
+        "NAME": "The Old Puppeteer",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Granny Chiyo",
+        "USE_CARDS": ["Sakura"],
+        "EARN": "Granny Chiyo",
+        "COMPLETED": False,
+        "UNIVERSE": "Naruto"
+    },
+    {
+        "NAME": "Troubled Grandson",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Sasori",
+        "USE_CARDS": ["Granny Chiyo"],
+        "EARN": "Sasori",
+        "COMPLETED": False,
+        "UNIVERSE": "Naruto"
+    },
+    {
+        "NAME": "Watching You, Always",
+        "WINS": 0,
+        "REQUIRED": 3,
+        "DEFEAT": "Obito",
+        "USE_CARDS": ["Rin"],
+        "EARN": "Obito",
+        "COMPLETED": False,
+        "UNIVERSE": "Naruto"
+    },
+    {
+        "NAME": "Blood Stained Heart",
+        "WINS": 0,
+        "REQUIRED": 3,
+        "DEFEAT": "Kakashi ",
+        "USE_CARDS": ["Rin"],
+        "EARN": "Kakashi",
+        "COMPLETED": False,
+        "UNIVERSE": "Naruto"
     },
 ]
