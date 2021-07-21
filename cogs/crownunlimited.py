@@ -22204,7 +22204,7 @@ class CrownUnlimited(commands.Cog):
             elif not card['HAS_COLLECTION']:
                 tales_card_details.append(f"{available} **{card['NAME']}**: :coin:{card['PRICE']} _T_")
             elif card['HAS_COLLECTION']:
-                destiny_card_details.append(f"{available} **{card['NAME']}**: :coin:{card['PRICE']} _T_")
+                destiny_card_details.append(f"{available} **{card['NAME']}**: _T_")
 
         all_cards = []
         if tales_card_details:
