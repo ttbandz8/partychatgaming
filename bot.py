@@ -510,7 +510,7 @@ async def daily_error_message(ctx,error):
 @bot.command(pass_context=True)
 @commands.cooldown(1, 60*60*24, commands.BucketType.user)
 async def daily(ctx):
-   await bless(100, ctx.author)
+   await bless(500, ctx.author)
 
    user_data = db.queryUser({'DISNAME': str(ctx.author)})
    user_completed_tales = user_data['CROWN_TALES']
@@ -532,7 +532,7 @@ async def daily(ctx):
    quests = [{'OPPONENT': opponents[q1], 'TYPE': 'Tales', 'GOAL': 3, 'WINS': 0, 'REWARD': 500 },{'OPPONENT': opponents[q2], 'TYPE': 'Tales', 'GOAL': 5, 'WINS': 0, 'REWARD': 1000 }, {'OPPONENT': opponents[q3], 'TYPE': 'Dungeon', 'GOAL': 3, 'WINS': 0, 'REWARD': 1500 }]
    db.updateVaultNoFilter({'OWNER': str(ctx.author)}, {'$set': {'QUESTS': quests}})
 
-   await ctx.send(f"Daily bonus :coin:100 has been applied for {ctx.author.mention}!\nYour new quests are available on the Quest Board!")
+   await ctx.send(f"Daily bonus :coin:500 has been applied for {ctx.author.mention}!\nYour new quests are available on the Quest Board!")
       
 @bot.command()
 @commands.check(validate_user)
