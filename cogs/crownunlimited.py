@@ -22222,9 +22222,9 @@ class CrownUnlimited(commands.Cog):
         
         if len(all_cards) % 10 == 0:
             first_digit = int(str(len(all_cards))[:1])
-            print(first_digit)
-            if first_digit == 1:
-                first_digit = 10
+            if len(all_cards) >= 89:
+                if first_digit == 1:
+                    first_digit = 10
             #first_digit = 10
             cards_broken_up = np.array_split(all_cards, first_digit)
         
@@ -22397,9 +22397,41 @@ class CrownUnlimited(commands.Cog):
         destiny_details = []
         for de in destinies:
             destiny_details.append(f"**{de['NAME']}**\nDefeat {de['DEFEAT']} with {' '.join(de['USE_CARDS'])} {str(de['REQUIRED'])} times: Unlock **{de['EARN']}**")
+        
+        total_destinies = len(destiny_details)
 
-        await ctx.author.send(f"{universe.upper()} DESTINY LIST")
-        await ctx.author.send("\n".join(destiny_details))
+        # Adding to array until divisible by 10
+        while len(destiny_details) % 10 != 0:
+            destiny_details.append("")
+        # Check if divisible by 10, then start to split evenly
+        
+        if len(destiny_details) % 10 == 0:
+            first_digit = int(str(len(destiny_details))[:1])
+            if len(destiny_details) >= 89:
+                if first_digit == 1:
+                    first_digit = 10
+            destinies_broken_up = np.array_split(destiny_details, first_digit)
+        
+        # If it's not an array greater than 10, show paginationless embed
+        if len(destiny_details) < 10:
+            embedVar = discord.Embed(title= f"{universe} Destiny List", description="\n".join(destiny_details), colour=0x7289da)
+            globals()['embedVar%s' % i].set_footer(text=f"{total_destinies} Total Destiny Lines")
+            await ctx.send(embed=embedVar)
+
+        embed_list = []
+        for i in range(0, len(destinies_broken_up)):
+            globals()['embedVar%s' % i] = discord.Embed(title= f"{universe} Destiny List", description="\n".join(destinies_broken_up[i]), colour=0x7289da)
+            globals()['embedVar%s' % i].set_footer(text=f"{total_destinies} Total Destiny Lines")
+            embed_list.append(globals()['embedVar%s' % i])
+
+        paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+        paginator.add_reaction('⏮️', "first")
+        paginator.add_reaction('⏪', "back")
+        paginator.add_reaction('🔐', "lock")
+        paginator.add_reaction('⏩', "next")
+        paginator.add_reaction('⏭️', "last")
+        embeds = embed_list
+        await paginator.run(embeds)
 
     @commands.command()
     async def pets(self, ctx, *args):
@@ -22426,9 +22458,47 @@ class CrownUnlimited(commands.Cog):
                 dungeon_pets_details.append(f"{available} {pet['PET']} _D_")
             else:
                 tales_pets_details.append(f"{available} {pet['PET']} _T_")
-        await ctx.author.send(f"{universe.upper()} PET LIST")
-        await ctx.author.send("\n".join(tales_pets_details))
-        await ctx.author.send("\n".join(dungeon_pets_details))
+
+        all_pets = []
+        if tales_pets_details:
+            for t in tales_pets_details:
+                all_pets.append(t)
+        
+        if dungeon_pets_details:
+            for d in dungeon_pets_details:
+                all_pets.append(d)
+
+        total_pets = len(all_pets)
+
+        # Adding to array until divisible by 10
+        while len(all_pets) % 10 != 0:
+            all_pets.append("")
+
+        # Check if divisible by 10, then start to split evenly
+        if len(all_pets) % 10 == 0:
+            first_digit = int(str(len(all_pets))[:1])
+            pets_broken_up = np.array_split(all_pets, first_digit)
+        
+        # If it's not an array greater than 10, show paginationless embed
+        if len(all_pets) < 10:
+            embedVar = discord.Embed(title= f"{universe} Pet List", description="\n".join(all_pets), colour=0x7289da)
+            embedVar.set_footer(text=f".viewpet pet name: View Pet Details")
+            await ctx.send(embed=embedVar)
+
+        embed_list = []
+        for i in range(0, len(pets_broken_up)):
+            globals()['embedVar%s' % i] = discord.Embed(title= f"{universe} Pet List", description="\n".join(pets_broken_up[i]), colour=0x7289da)
+            globals()['embedVar%s' % i].set_footer(text=f"{total_pets} Total Pets\n.viewpet pet name: View Pet Details")
+            embed_list.append(globals()['embedVar%s' % i])
+
+        paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+        paginator.add_reaction('⏮️', "first")
+        paginator.add_reaction('⏪', "back")
+        paginator.add_reaction('🔐', "lock")
+        paginator.add_reaction('⏩', "next")
+        paginator.add_reaction('⏭️', "last")
+        embeds = embed_list
+        await paginator.run(embeds)
 
     @commands.command()
     async def universes(self, ctx):
