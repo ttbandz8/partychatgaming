@@ -427,7 +427,7 @@ async def rebirth(ctx):
          
          You will lose all of your equipped and vaulted items.
          
-         *Rebirth is permananet and cannot be undone*
+         *Rebirth is permanent and cannot be undone*
          """))
          accept = await ctx.send(embed=embedVar1)
          for emoji in emojis:
@@ -900,7 +900,7 @@ async def donate(ctx, amount, *args):
    team_data = db.queryTeam(query)
    if team_data:
       if balance <= int(amount):
-         await ctx.send("You do not have that amount to gift.")
+         await ctx.send("You do not have that amount to donate.")
       else:
          await blessteam(int(amount), team)
          await curse(int(amount), ctx.author)

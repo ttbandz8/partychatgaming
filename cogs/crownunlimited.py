@@ -21807,8 +21807,13 @@ class CrownUnlimited(commands.Cog):
         while len(all_cards) % 10 != 0:
             all_cards.append("")
         # Check if divisible by 10, then start to split evenly
+        
         if len(all_cards) % 10 == 0:
             first_digit = int(str(len(all_cards))[:1])
+            print(first_digit)
+            if first_digit == 1:
+                first_digit = 10
+            #first_digit = 10
             cards_broken_up = np.array_split(all_cards, first_digit)
         
         # If it's not an array greater than 10, show paginationless embed
