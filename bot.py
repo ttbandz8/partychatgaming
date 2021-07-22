@@ -203,6 +203,7 @@ async def crown(ctx):
    1 Enhancer
    1 Unique Passive
    1 Universe Trait
+   
 
    **Abilities**
    Abilities inflict damage on the opponent.
@@ -210,6 +211,10 @@ async def crown(ctx):
    **1:** Basic Attack _uses 10 stamina_
    **2:** Special Attack _uses 30 stamina_
    **3:** Ultimate Attack _uses 80 stamina_
+   
+   **Block**
+   Doubles Defense for 1 turn   
+   **0:** _uses 20 stamina_ 
 
    **Enhancer**
    Enhancers either boost your stats or inflict status effects on your opponent. Use .enhance for full list of Enhancers and their effects.

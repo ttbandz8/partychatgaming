@@ -1353,7 +1353,7 @@ class CrownUnlimited(commands.Cog):
                         if o_used_focus and o_used_resolve and not o_pet_used:
                             embedVar.set_author(name="Press Q to Quit Match. Press 6 to Summon your Pet!")                                    
                         elif o_used_focus and not o_used_resolve:
-                            embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen resolve!")
+                            embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen Resolve!")
                         else:
                             embedVar.set_author(name="Press Q to Quit Match")
                         embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
@@ -1737,6 +1737,7 @@ class CrownUnlimited(commands.Cog):
                                     embedVar = discord.Embed(title=f"{o_card.upper()} ASSISTED {c_card.upper()}", colour=0xe91e63)
                                     embedVar.add_field(name=f"{o_card} used {omove_enhanced_text}!", value =f"Enhanced {comp_enh}")
                                     await private_channel.send(embed=embedVar)
+                                    turn_total= turn_total + 1
                                     turn=1
                                 else:
                                     await private_channel.send(m.NOT_ENOUGH_STAMINA)
@@ -1830,6 +1831,7 @@ class CrownUnlimited(commands.Cog):
                                     embedVar = discord.Embed(title=f"{c_card.upper()} ASSISTED {o_card.upper()}", colour=0xe91e63)
                                     embedVar.add_field(name=f"{c_card} used {cmove_enhanced_text}!", value =f"Enhanced {cenh_type}")
                                     await private_channel.send(embed=embedVar)
+                                    turn_total= turn_total + 1
                                     turn=1
                                 else:
                                     await private_channel.send(m.NOT_ENOUGH_STAMINA)
@@ -1842,6 +1844,7 @@ class CrownUnlimited(commands.Cog):
                                     embedVar = discord.Embed(title=f"{c_card.upper()} DEFENDS {o_card.upper()}", colour=0xe91e63)
                                     embedVar.add_field(name=f"{c_card} used Block!", value =f"Enhanced DEF")
                                     await private_channel.send(embed=embedVar)
+                                    turn_total= turn_total + 1
                                     turn=1
                                 else:
                                     await private_channel.send(f"{c_card} is too tired to block...")
@@ -1854,6 +1857,7 @@ class CrownUnlimited(commands.Cog):
                                     embedVar = discord.Embed(title=f"{o_card.upper()} DEFENDS {c_card.upper()}", colour=0xe91e63)
                                     embedVar.add_field(name=f"{o_card} used Block!", value =f"Enhanced DEF")
                                     await private_channel.send(embed=embedVar)
+                                    turn_total= turn_total + 1
                                     turn=1
                                 else:
                                     await private_channel.send(f"{o_card} is too tired to block...")
@@ -5452,7 +5456,7 @@ class CrownUnlimited(commands.Cog):
                         if o_used_focus and o_used_resolve and not o_pet_used:
                             embedVar.set_author(name="Press Q to Quit Match. Press 6 to Summon your Pet!")                                    
                         elif o_used_focus and not o_used_resolve:
-                            embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen resolve!")
+                            embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen Resolve!")
                         else:
                             embedVar.set_author(name="Press Q to Quit Match")
                         embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
@@ -5837,6 +5841,7 @@ class CrownUnlimited(commands.Cog):
                                     embedVar = discord.Embed(title=f"{o_card.upper()} ASSISTED {c_card.upper()}", colour=0xe91e63)
                                     embedVar.add_field(name=f"{o_card} used {omove_enhanced_text}!", value =f"Enhanced {comp_enh}")
                                     await private_channel.send(embed=embedVar)
+                                    turn_total= turn_total + 1
                                     turn=1
                                 else:
                                     await private_channel.send(m.NOT_ENOUGH_STAMINA)
@@ -5930,6 +5935,7 @@ class CrownUnlimited(commands.Cog):
                                     embedVar = discord.Embed(title=f"{c_card.upper()} ASSISTED {o_card.upper()}", colour=0xe91e63)
                                     embedVar.add_field(name=f"{c_card} used {cmove_enhanced_text}!", value =f"Enhanced {cenh_type}")
                                     await private_channel.send(embed=embedVar)
+                                    turn_total= turn_total + 1
                                     turn=1
                                 else:
                                     await private_channel.send(m.NOT_ENOUGH_STAMINA)
@@ -5942,6 +5948,7 @@ class CrownUnlimited(commands.Cog):
                                     embedVar = discord.Embed(title=f"{c_card.upper()} DEFENDS {o_card.upper()}", colour=0xe91e63)
                                     embedVar.add_field(name=f"{c_card} used Block!", value =f"Enhanced DEF")
                                     await private_channel.send(embed=embedVar)
+                                    turn_total= turn_total + 1
                                     turn=1
                                 else:
                                     await private_channel.send(f"{c_card} is too tired to block...")
@@ -5954,6 +5961,7 @@ class CrownUnlimited(commands.Cog):
                                     embedVar = discord.Embed(title=f"{o_card.upper()} DEFENDS {c_card.upper()}", colour=0xe91e63)
                                     embedVar.add_field(name=f"{o_card} used Block!", value =f"Enhanced DEF")
                                     await private_channel.send(embed=embedVar)
+                                    turn_total= turn_total + 1
                                     turn=1
                                 else:
                                     await private_channel.send(f"{o_card} is too tired to block...")
@@ -9986,7 +9994,7 @@ class CrownUnlimited(commands.Cog):
                     if o_used_focus and o_used_resolve and not o_pet_used:
                         embedVar.set_author(name="Press Q to Quit Match. Press 6 to Summon your Pet!")                                    
                     elif o_used_focus and not o_used_resolve:
-                        embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen resolve!")
+                        embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen Resolve!")
                     else:
                         embedVar.set_author(name="Press Q to Quit Match")
                     embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
@@ -10371,6 +10379,7 @@ class CrownUnlimited(commands.Cog):
                                 embedVar = discord.Embed(title=f"{o_card.upper()} ASSISTED {c_card.upper()}", colour=0xe91e63)
                                 embedVar.add_field(name=f"{o_card} used {omove_enhanced_text}!", value =f"Enhanced {comp_enh}")
                                 await private_channel.send(embed=embedVar)
+                                turn_total= turn_total + 1
                                 turn=1
                             else:
                                 await private_channel.send(m.NOT_ENOUGH_STAMINA)
@@ -10464,6 +10473,7 @@ class CrownUnlimited(commands.Cog):
                                 embedVar = discord.Embed(title=f"{c_card.upper()} ASSISTED {o_card.upper()}", colour=0xe91e63)
                                 embedVar.add_field(name=f"{c_card} used {cmove_enhanced_text}!", value =f"Enhanced {cenh_type}")
                                 await private_channel.send(embed=embedVar)
+                                turn_total= turn_total + 1
                                 turn=1
                             else:
                                 await private_channel.send(m.NOT_ENOUGH_STAMINA)
@@ -10476,6 +10486,7 @@ class CrownUnlimited(commands.Cog):
                                 embedVar = discord.Embed(title=f"{c_card.upper()} DEFENDS {o_card.upper()}", colour=0xe91e63)
                                 embedVar.add_field(name=f"{c_card} used Block!", value =f"Enhanced DEF")
                                 await private_channel.send(embed=embedVar)
+                                turn_total= turn_total + 1
                                 turn=1
                             else:
                                 await private_channel.send(f"{c_card} is too tired to block...")
@@ -10488,6 +10499,7 @@ class CrownUnlimited(commands.Cog):
                                 embedVar = discord.Embed(title=f"{o_card.upper()} DEFENDS {c_card.upper()}", colour=0xe91e63)
                                 embedVar.add_field(name=f"{o_card} used Block!", value =f"Enhanced DEF")
                                 await private_channel.send(embed=embedVar)
+                                turn_total= turn_total + 1
                                 turn=1
                             else:
                                 await private_channel.send(f"{o_card} is too tired to block...")
@@ -14481,7 +14493,7 @@ class CrownUnlimited(commands.Cog):
                         if o_used_focus and o_used_resolve and not o_pet_used:
                             embedVar.set_author(name="Press Q to Quit Match. Press 6 to Summon your Pet!")                                    
                         elif o_used_focus and not o_used_resolve:
-                            embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen resolve!")
+                            embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen Resolve!")
                         else:
                             embedVar.set_author(name="Press Q to Quit Match")
                         embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
@@ -14866,6 +14878,7 @@ class CrownUnlimited(commands.Cog):
                                     embedVar = discord.Embed(title=f"{o_card.upper()} ASSISTED {c_card.upper()}", colour=0xe91e63)
                                     embedVar.add_field(name=f"{o_card} used {omove_enhanced_text}!", value =f"Enhanced {comp_enh}")
                                     await private_channel.send(embed=embedVar)
+                                    turn_total= turn_total + 1
                                     turn=1
                                 else:
                                     await private_channel.send(m.NOT_ENOUGH_STAMINA)
@@ -14878,6 +14891,7 @@ class CrownUnlimited(commands.Cog):
                                     embedVar = discord.Embed(title=f"{o_card.upper()} DEFENDS {c_card.upper()}", colour=0xe91e63)
                                     embedVar.add_field(name=f"{o_card} used Block!", value =f"Enhanced DEF")
                                     await private_channel.send(embed=embedVar)
+                                    turn_total= turn_total + 1
                                     turn=1
                                 else:
                                     await private_channel.send(f"{o_card} is too tired to block...")
@@ -15805,7 +15819,7 @@ class CrownUnlimited(commands.Cog):
                         if c_used_focus and c_used_resolve and not c_pet_used:
                             embedVar.set_author(name="Press Q to Quit Match. Press 6 to Summon your Pet!")                                    
                         elif c_used_focus and not c_used_resolve:
-                            embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen resolve!")
+                            embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen Resolve!")
                         else:
                             embedVar.set_author(name="Press Q to Quit Match")
                         embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
@@ -16187,6 +16201,7 @@ class CrownUnlimited(commands.Cog):
                                     embedVar = discord.Embed(title=f"{c_card.upper()} ASSISTED {o_card.upper()}", colour=0xe91e63)
                                     embedVar.add_field(name=f"{c_card} used {cmove_enhanced_text}!", value =f"Enhanced {cenh_type}")
                                     await private_channel.send(embed=embedVar)
+                                    turn_total= turn_total + 1
                                     turn=3
                                 else:
                                     await private_channel.send(m.NOT_ENOUGH_STAMINA)
@@ -16199,6 +16214,7 @@ class CrownUnlimited(commands.Cog):
                                     embedVar = discord.Embed(title=f"{c_card.upper()} DEFENDS {o_card.upper()}", colour=0xe91e63)
                                     embedVar.add_field(name=f"{c_card} used Block!", value =f"Enhanced DEF")
                                     await private_channel.send(embed=embedVar)
+                                    turn_total= turn_total + 1
                                     turn=3
                                 else:
                                     await private_channel.send(f"{c_card} is too tired to block...")
@@ -18416,7 +18432,7 @@ class CrownUnlimited(commands.Cog):
                         if o_used_focus and o_used_resolve and not o_pet_used:
                             embedVar.set_author(name="Press Q to Quit Match. Press 6 to Summon your Pet!")                                    
                         elif o_used_focus and not o_used_resolve:
-                            embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen resolve!")
+                            embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen Resolve!")
                         else:
                             embedVar.set_author(name="Press Q to Quit Match")
                         embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
@@ -18801,6 +18817,7 @@ class CrownUnlimited(commands.Cog):
                                     embedVar = discord.Embed(title=f"{o_card.upper()} ASSISTED {c_card.upper()}", colour=0xe91e63)
                                     embedVar.add_field(name=f"{o_card} used {omove_enhanced_text}!", value =f"Enhanced {comp_enh}")
                                     await private_channel.send(embed=embedVar)
+                                    turn_total= turn_total + 1
                                     turn=1
                                 else:
                                     await private_channel.send(m.NOT_ENOUGH_STAMINA)
@@ -18813,6 +18830,7 @@ class CrownUnlimited(commands.Cog):
                                     embedVar = discord.Embed(title=f"{o_card.upper()} DEFENDS {c_card.upper()}", colour=0xe91e63)
                                     embedVar.add_field(name=f"{o_card} used Block!", value =f"Enhanced DEF")
                                     await private_channel.send(embed=embedVar)
+                                    turn_total= turn_total + 1
                                     turn=1
                                 else:
                                     await private_channel.send(f"{o_card} is too tired to block...")
@@ -19936,7 +19954,7 @@ class CrownUnlimited(commands.Cog):
                         if c_used_focus and c_used_resolve and not c_pet_used:
                             embedVar.set_author(name="Press Q to Quit Match. Press 6 to Summon your Pet!")                                    
                         elif c_used_focus and not c_used_resolve:
-                            embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen resolve!")
+                            embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen Resolve!")
                         else:
                             embedVar.set_author(name="Press Q to Quit Match")
                         embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
@@ -20318,6 +20336,7 @@ class CrownUnlimited(commands.Cog):
                                     embedVar = discord.Embed(title=f"{c_card.upper()} ASSISTED {o_card.upper()}", colour=0xe91e63)
                                     embedVar.add_field(name=f"{c_card} used {cmove_enhanced_text}!", value =f"Enhanced {cenh_type}")
                                     await private_channel.send(embed=embedVar)
+                                    turn_total= turn_total + 1
                                     turn=3
                                 else:
                                     await private_channel.send(m.NOT_ENOUGH_STAMINA)
@@ -20330,6 +20349,7 @@ class CrownUnlimited(commands.Cog):
                                     embedVar = discord.Embed(title=f"{c_card.upper()} DEFENDS {o_card.upper()}", colour=0xe91e63)
                                     embedVar.add_field(name=f"{c_card} used Block!", value =f"Enhanced DEF")
                                     await private_channel.send(embed=embedVar)
+                                    turn_total= turn_total + 1
                                     turn=3
                                 else:
                                     await private_channel.send(f"{c_card} is too tired to block...")
@@ -22738,7 +22758,7 @@ class CrownUnlimited(commands.Cog):
                     if o_used_focus and o_used_resolve and not o_pet_used:
                         embedVar.set_author(name="Press Q to Quit Match. Press 6 to Summon your Pet!")                                    
                     elif o_used_focus and not o_used_resolve:
-                        embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen resolve!")
+                        embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen Resolve!")
                     else:
                         embedVar.set_author(name="Press Q to Quit Match")
                     embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
@@ -23123,6 +23143,7 @@ class CrownUnlimited(commands.Cog):
                                 embedVar = discord.Embed(title=f"{o_card.upper()} ASSISTED {c_card.upper()}", colour=0xe91e63)
                                 embedVar.add_field(name=f"{o_card} used {omove_enhanced_text}!", value =f"Enhanced {comp_enh}")
                                 await private_channel.send(embed=embedVar)
+                                turn_total= turn_total + 1
                                 turn=1
                             else:
                                 await private_channel.send(m.NOT_ENOUGH_STAMINA)
@@ -23135,6 +23156,7 @@ class CrownUnlimited(commands.Cog):
                                 embedVar = discord.Embed(title=f"{o_card.upper()} DEFENDS {c_card.upper()}", colour=0xe91e63)
                                 embedVar.add_field(name=f"{o_card} used Block!", value =f"Enhanced DEF")
                                 await private_channel.send(embed=embedVar)
+                                turn_total= turn_total + 1
                                 turn=1
                             else:
                                 await private_channel.send(f"{o_card} is too tired to block...")
@@ -24277,7 +24299,7 @@ class CrownUnlimited(commands.Cog):
                     if c_used_focus and c_used_resolve and not c_pet_used:
                         embedVar.set_author(name="Press Q to Quit Match. Press 6 to Summon your Pet!")                                    
                     elif c_used_focus and not c_used_resolve:
-                        embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen resolve!")
+                        embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen Resolve!")
                     else:
                         embedVar.set_author(name="Press Q to Quit Match")
                     embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
@@ -24671,6 +24693,7 @@ class CrownUnlimited(commands.Cog):
                                 embedVar = discord.Embed(title=f"{c_card.upper()} DEFENDS {o_card.upper()}", colour=0xe91e63)
                                 embedVar.add_field(name=f"{c_card} used Block!", value =f"Enhanced DEF")
                                 await private_channel.send(embed=embedVar)
+                                turn_total= turn_total + 1
                                 turn=3
                             else:
                                 await private_channel.send(f"{c_card} is too tired to block...")
@@ -26667,11 +26690,11 @@ class CrownUnlimited(commands.Cog):
                         , colour=embed_color_o)
                         embedVar.set_thumbnail(url=opet_image)
                         if o_used_focus and o_used_resolve and not o_pet_used:
-                            embedVar.set_author(name="Press 0 to Quit Match. Press 6 to Summon your Pet!")                                    
+                            embedVar.set_author(name="Press Q to Quit Match. Press 6 to Summon your Pet!")                                    
                         elif o_used_focus and not o_used_resolve:
-                            embedVar.set_author(name="Press 0 to Quit Match. Press 5 to Strengthen resolve!")
+                            embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen Resolve!")
                         else:
-                            embedVar.set_author(name="Press 0 to Quit Match")
+                            embedVar.set_author(name="Press Q to Quit Match")
                         embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
                         await private_channel.send(embed=embedVar)
                         
@@ -26973,6 +26996,7 @@ class CrownUnlimited(commands.Cog):
                                     embedVar = discord.Embed(title=f"{o_card.upper()} DEFENDS", colour=0xe91e63)
                                     embedVar.add_field(name=f"{o_card} used Block!", value =f"Enhanced DEF")
                                     await private_channel.send(embed=embedVar)
+                                    turn_total= turn_total + 1
                                     turn=1
                                 else:
                                     await private_channel.send(f"{o_card} is too tired to block...")
@@ -28787,11 +28811,11 @@ class CrownUnlimited(commands.Cog):
                         , colour=embed_color_o)
                         embedVar.set_thumbnail(url=opet_image)
                         if o_used_focus and o_used_resolve and not o_pet_used:
-                            embedVar.set_author(name="Press 0 to Quit Match. Press 6 to Summon your Pet!")                                    
+                            embedVar.set_author(name="Press Q to Quit Match. Press 6 to Summon your Pet!")                                    
                         elif o_used_focus and not o_used_resolve:
-                            embedVar.set_author(name="Press 0 to Quit Match. Press 5 to Strengthen resolve!")
+                            embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen Resolve!")
                         else:
-                            embedVar.set_author(name="Press 0 to Quit Match")
+                            embedVar.set_author(name="Press Q to Quit Match")
                         embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
                         await private_channel.send(embed=embedVar)
                         
@@ -29093,6 +29117,7 @@ class CrownUnlimited(commands.Cog):
                                     embedVar = discord.Embed(title=f"{o_card.upper()} DEFENDS", colour=0xe91e63)
                                     embedVar.add_field(name=f"{o_card} used Block!", value =f"Enhanced DEF")
                                     await private_channel.send(embed=embedVar)
+                                    turn_total= turn_total + 1
                                     turn=1
                                 else:
                                     await private_channel.send(f"{o_card} is too tired to block...")
@@ -30791,11 +30816,11 @@ class CrownUnlimited(commands.Cog):
                     , colour=embed_color_o)
                     embedVar.set_thumbnail(url=opet_image)
                     if o_used_focus and o_used_resolve and not o_pet_used:
-                        embedVar.set_author(name="Press 0 to Quit Match. Press 6 to Summon your Pet!")                                    
+                        embedVar.set_author(name="Press Q to Quit Match. Press 6 to Summon your Pet!")                                    
                     elif o_used_focus and not o_used_resolve:
-                        embedVar.set_author(name="Press 0 to Quit Match. Press 5 to Strengthen resolve!")
+                        embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen Resolve!")
                     else:
-                        embedVar.set_author(name="Press 0 to Quit Match")
+                        embedVar.set_author(name="Press Q to Quit Match")
                     embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
                     await private_channel.send(embed=embedVar)
                     
@@ -31094,6 +31119,7 @@ class CrownUnlimited(commands.Cog):
                                 embedVar = discord.Embed(title=f"{o_card.upper()} DEFENDS", colour=0xe91e63)
                                 embedVar.add_field(name=f"{o_card} used Block!", value =f"Enhanced DEF")
                                 await private_channel.send(embed=embedVar)
+                                turn_total= turn_total + 1
                                 turn=1
                             else:
                                 await private_channel.send(f"{o_card} is too tired to block...")
@@ -32605,6 +32631,7 @@ class CrownUnlimited(commands.Cog):
                 
                 # Turn iterator
                 turn = 0
+                turn_total = 0
                 # Enhance Turn Iterators
                 eo=0
                 et=0
@@ -32849,11 +32876,11 @@ class CrownUnlimited(commands.Cog):
                             , colour=embed_color_o)
                             embedVar.set_thumbnail(url=opet_image)
                             if o_used_focus and o_used_resolve and not o_pet_used:
-                                embedVar.set_author(name="Press 0 to Quit Match. Press 6 to Summon your Pet!")                                    
+                                embedVar.set_author(name="Press Q to Quit Match. Press 6 to Summon your Pet!")                                    
                             elif o_used_focus and not o_used_resolve:
-                                embedVar.set_author(name="Press 0 to Quit Match. Press 5 to Strengthen resolve!")
+                                embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen Resolve!")
                             else:
-                                embedVar.set_author(name="Press 0 to Quit Match")
+                                embedVar.set_author(name="Press Q to Quit Match")
                             embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
                             await ctx.send(embed=embedVar)
 
@@ -33148,6 +33175,7 @@ class CrownUnlimited(commands.Cog):
                                         embedVar = discord.Embed(title=f"{o_card.upper()} DEFENDS", colour=0xe91e63)
                                         embedVar.add_field(name=f"{o_card} used Block!", value =f"Enhanced DEF")
                                         await private_channel.send(embed=embedVar)
+                                        turn_total= turn_total + 1
                                         turn=1
                                     else:
                                         await private_channel.send(f"{o_card} is too tired to block...")
@@ -33422,12 +33450,12 @@ class CrownUnlimited(commands.Cog):
 
                                 embedVar.set_thumbnail(url=tpet_image)
                                 if t_used_focus and t_used_resolve and not t_pet_used:
-                                    embedVar.set_author(name="Press 0 to Quit Match. Press 6 to Summon your Pet!")
+                                    embedVar.set_author(name="Press Q to Quit Match. Press 6 to Summon your Pet!")
                                     
                                 elif t_used_focus and not t_used_resolve:
-                                    embedVar.set_author(name="Press 0 to Quit Match. Press 5 to Strengthen resolve!")
+                                    embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen Resolve!")
                                 else:
-                                    embedVar.set_author(name="Press 0 to Quit Match")
+                                    embedVar.set_author(name="Press Q to Quit Match")
                                 embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
                                 await ctx.send(embed=embedVar)
 
@@ -33728,6 +33756,7 @@ class CrownUnlimited(commands.Cog):
                                             embedVar = discord.Embed(title=f"{t_card.upper()} DEFENDS", colour=0xe91e63)
                                             embedVar.add_field(name=f"{t_card} used Block!", value =f"Enhanced DEF")
                                             await private_channel.send(embed=embedVar)
+                                            turn_total= turn_total + 1
                                             turn=0
                                         else:
                                             await private_channel.send(f"{t_card} is too tired to block...")
@@ -35341,11 +35370,11 @@ class CrownUnlimited(commands.Cog):
                             , colour=embed_color_o)
                             embedVar.set_thumbnail(url=opet_image)
                             if o_used_focus and o_used_resolve and not o_pet_used:
-                                embedVar.set_author(name="Press 0 to Quit Match. Press 6 to Summon your Pet!")                                    
+                                embedVar.set_author(name="Press Q to Quit Match. Press 6 to Summon your Pet!")                                    
                             elif o_used_focus and not o_used_resolve:
-                                embedVar.set_author(name="Press 0 to Quit Match. Press 5 to Strengthen resolve!")
+                                embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen Resolve!")
                             else:
-                                embedVar.set_author(name="Press 0 to Quit Match")
+                                embedVar.set_author(name="Press Q to Quit Match")
                             embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
                             await ctx.send(embed=embedVar)
 
@@ -35642,6 +35671,7 @@ class CrownUnlimited(commands.Cog):
                                         embedVar = discord.Embed(title=f"{o_card.upper()} DEFENDS", colour=0xe91e63)
                                         embedVar.add_field(name=f"{o_card} used Block!", value =f"Enhanced DEF")
                                         await private_channel.send(embed=embedVar)
+                                        turn_total= turn_total + 1
                                         turn=1
                                     else:
                                         await private_channel.send(f"{o_card} is too tired to block...")
@@ -35919,12 +35949,12 @@ class CrownUnlimited(commands.Cog):
                                 embedVar.add_field(name=f"{t_card} Move List", value=f"1. {tmove1_text} | 10 STAM\n2. {tmove2_text} | 30 STAM\n3. {tmove3_text} | 80 STAM\n4. {tmove_enhanced_text} | 20 STAM")
                                 embedVar.set_thumbnail(url=tpet_image)
                                 if t_used_focus and t_used_resolve and not t_pet_used:
-                                    embedVar.set_author(name="Press 0 to Quit Match. Press 6 to Summon your Pet!")
+                                    embedVar.set_author(name="Press Q to Quit Match. Press 6 to Summon your Pet!")
                                     
                                 elif t_used_focus and not t_used_resolve:
-                                    embedVar.set_author(name="Press 0 to Quit Match. Press 5 to Strengthen resolve!")
+                                    embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen Resolve!")
                                 else:
-                                    embedVar.set_author(name="Press 0 to Quit Match")
+                                    embedVar.set_author(name="Press Q to Quit Match")
                                 embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
                                 await ctx.send(embed=embedVar)
 
@@ -36221,6 +36251,7 @@ class CrownUnlimited(commands.Cog):
                                             embedVar = discord.Embed(title=f"{t_card.upper()} DEFENDS", colour=0xe91e63)
                                             embedVar.add_field(name=f"{t_card} used Block!", value =f"Enhanced DEF")
                                             await private_channel.send(embed=embedVar)
+                                            turn_total= turn_total + 1
                                             turn=0
                                         else:
                                             await private_channel.send(f"{t_card} is too tired to block...")
