@@ -382,6 +382,8 @@ class CrownUnlimited(commands.Cog):
             if ofam == cfam:
                 o_health = o_health + 50
                 c_health = c_health + 50
+                o_max_health = o_max_health + 50
+                c_max_health = c_max_health + 50
 
              
             # Companion Passive Config
@@ -401,6 +403,8 @@ class CrownUnlimited(commands.Cog):
             c_enhancer = c_moveset[3]
             c_enhancer_used=False
             c_pet_used=False
+            c_block_used=False
+            c_defend_used=False
 
             cmove1_text = list(c_1.keys())[0]
             cmove2_text = list(c_2.keys())[0]
@@ -649,6 +653,8 @@ class CrownUnlimited(commands.Cog):
             o_enhancer = o_moveset[3]
             o_enhancer_used=False
             o_pet_used=False
+            o_block_used=False
+            o_defend_used=False
 
             omove1_text = list(o_1.keys())[0]
             omove2_text = list(o_2.keys())[0]
@@ -1173,6 +1179,12 @@ class CrownUnlimited(commands.Cog):
             while ((o_health > 0) and (c_health > 0)) and (t_health > 0):
                 #Player 1 Turn Start
                 if turn == 0:
+                    if o_block_used==True:
+                        o_defense = co_defense/2
+                        o_block_used=False
+                    if o_defend_used==True:
+                        o_defense = o_defense/2
+                        o_defend_used=False
                     if o_universe == "Death Note" and turn_total == 0:
                         embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death", description=f"`{o_card} says:`\nYou will die in 24 turns...", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
@@ -1326,29 +1338,33 @@ class CrownUnlimited(commands.Cog):
                         **{omove2_text}** 30 Stamina _press 2_
                         **{omove3_text}** 80 Stamina _press 3_
                         **{omove_enhanced_text}** 20 Stamina _press 4_
-                        **Enhance Companion** 20 Stamina _press 7_
-                        **Companion Assist** 20 Stamina _press 8_
+                        **Defend {c_card}** 20 Stamina _press 0_
+                        
+                        **{c_card}:** {c_health}/{c_stamina} _Companion_
+                        **Enhance {c_card}** 20 Stamina _press 7_
+                        **{c_card} Assist** 20 Stamina _press 8_
+                        **{c_card} Block** 20 Stamina _press 9_
+                        
                     
-                        **{t_card}:** {t_health}/{t_stamina}
-                        **{c_card}:** {c_health}/{c_stamina} _partner_
+                        **{t_card}:** {t_health}/{t_stamina}                       
                         """) 
                         , colour=embed_color_o)
                         embedVar.set_thumbnail(url=opet_image)
-                        if o_used_focus and o_used_resolve and not t_pet_used:
-                            embedVar.set_author(name="Press 0 to Quit Match. Press 6 to Summon your Pet!")                                    
+                        if o_used_focus and o_used_resolve and not o_pet_used:
+                            embedVar.set_author(name="Press Q to Quit Match. Press 6 to Summon your Pet!")                                    
                         elif o_used_focus and not o_used_resolve:
-                            embedVar.set_author(name="Press 0 to Quit Match. Press 5 to Strengthen resolve!")
+                            embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen resolve!")
                         else:
-                            embedVar.set_author(name="Press 0 to Quit Match")
+                            embedVar.set_author(name="Press Q to Quit Match")
                         embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
                         await private_channel.send(embed=embedVar)
                         
                         if o_used_focus and o_used_resolve:
-                            options = ["0","1","2","3","4","6","7","8"]
+                            options = ["q","Q","0","1","2","3","4","6","7","8","9"]
                         elif o_used_focus and not o_used_resolve:
-                            options = ["0","1","2","3","4","5","7","8"]
+                            options = ["q","Q","0","1","2","3","4","5","7","8","9"]
                         else:
-                            options = ["0","1","2","3","4","7","8"]
+                            options = ["q","Q","0","1","2","3","4","7","8","9"]
 
                         # Make sure user is responding with move
                         def check(msg):
@@ -1360,7 +1376,7 @@ class CrownUnlimited(commands.Cog):
                             msg = await self.bot.wait_for("message",timeout=120.0, check=check)
 
                             # calculate data based on selected move
-                            if msg.content == "0":
+                            if msg.content == "q" or msg.content == "Q":
                                 o_health=0
                         
                                 if private_channel.guild:
@@ -1818,9 +1834,34 @@ class CrownUnlimited(commands.Cog):
                                 else:
                                     await private_channel.send(m.NOT_ENOUGH_STAMINA)
                                     turn=0
+                            elif msg.content == "9":
+                                if c_stamina >=20:
+                                    c_stamina = c_stamina - 20
+                                    c_block_used=True
+                                    c_defense = c_defense * 2
+                                    embedVar = discord.Embed(title=f"{c_card.upper()} DEFENDS {o_card.upper()}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"{c_card} used Block!", value =f"Enhanced DEF")
+                                    await private_channel.send(embed=embedVar)
+                                    turn=1
+                                else:
+                                    await private_channel.send(f"{c_card} is too tired to block...")
+                                    turn=0
+                            elif msg.content == "0":
+                                if o_stamina >=20:
+                                    o_stamina = o_stamina - 20
+                                    o_defend_used=True
+                                    o_defense = o_defense * 2
+                                    embedVar = discord.Embed(title=f"{o_card.upper()} DEFENDS {c_card.upper()}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"{o_card} used Block!", value =f"Enhanced DEF")
+                                    await private_channel.send(embed=embedVar)
+                                    turn=1
+                                else:
+                                    await private_channel.send(f"{o_card} is too tired to block...")
+                                    turn=0
+                                
+                                
 
-
-                            if msg.content != "5" and msg.content != "6" and msg.content != "7" and msg.content in options:
+                            if msg.content != "5" and msg.content != "6" and msg.content != "7" and msg.content != "9" and msg.content != "0" and msg.content in options:
                                 # If you have enough stamina for move, use it
                                 if dmg['CAN_USE_MOVE']:
                                     if dmg['ENHANCE']:
@@ -1919,7 +1960,7 @@ class CrownUnlimited(commands.Cog):
                                     else:
                                         if t_universe == "Naruto" and t_stamina == 0:
                                             t_health = t_health 
-                                            embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{o_card} attack strikes a log", colour=0xe91e63)
+                                            embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{o_card} strikes a log", colour=0xe91e63)
                                             await private_channel.send(embed=embedVar)
                                         else:
                                             t_health = t_health - dmg['DMG']
@@ -2165,16 +2206,28 @@ class CrownUnlimited(commands.Cog):
                         if int(aiMove) == 0:
                             t_health=0
                         if int(aiMove) == 1:
-                            dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                            if c_block_used==True:
+                                dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
+                            else:
+                                dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
                         elif int(aiMove) == 2:
-                            dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                            if c_block_used==True:
+                                dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
+                            else:
+                                dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
                         elif int(aiMove) == 3:
-                            dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                            if c_block_used==True:
+                                dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
+                            else:
+                                dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
                             if t_gif != "N/A":
                                     await private_channel.send(f"{t_gif}")
                         elif int(aiMove) == 4:
                             t_enhancer_used=True
-                            dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                            if c_block_used==True:
+                                dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
+                            else:
+                                dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
                             t_enhancer_used=False
                         elif int(aiMove) == 5:
                             if not t_used_resolve and t_used_focus:
@@ -2264,9 +2317,12 @@ class CrownUnlimited(commands.Cog):
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
                                     await private_channel.send(embed=embedVar)
-                                    dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
+                                    if c_block_used==True:
+                                        dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina,t_max_health, c_attack, t_special_move_description, turn_total)
+                                    else:
+                                        dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
                                     t_pet_used =False
-                                    o_health = o_health - int(dmg['DMG'])
+                                    c_health = c_health - int(dmg['DMG'])
                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                     await private_channel.send(embed=embedVar)
                                     t_stamina = 0
@@ -2321,117 +2377,229 @@ class CrownUnlimited(commands.Cog):
                                 turn=1
                         if int(aiMove) !=5:
                             # If you have enough stamina for move, use it
-                            if dmg['CAN_USE_MOVE']:
-                                if dmg['ENHANCE']:
-                                    enh_type= dmg['ENHANCED_TYPE']
-                                    if enh_type == 'ATK':
-                                        t_attack = round(t_attack + dmg['DMG'])
-                                    elif enh_type == 'DEF':
-                                        t_defense = round(t_defense + dmg['DMG'])
-                                    elif enh_type == 'STAM':
-                                        t_stamina = round(t_stamina + dmg['DMG'])
-                                    elif enh_type == 'HLT':
-                                        t_health = round(t_health + dmg['DMG'])
-                                    elif enh_type == 'LIFE':
-                                        t_health = round(t_health + dmg['DMG'])
-                                        o_health = round(o_health - dmg['DMG'])
-                                    elif enh_type == 'DRAIN':
-                                        t_stamina = round(t_stamina + dmg['DMG'])
-                                        o_stamina = round(o_stamina - dmg['DMG'])
-                                    elif enh_type == 'FLOG':
-                                        t_attack = round(t_attack + dmg['DMG'])
-                                        o_attack = round(o_attack - dmg['DMG'])
-                                    elif enh_type == 'WITHER':
-                                        t_defense = round(t_defense + dmg['DMG'])
-                                        o_defense = round(o_defense - dmg['DMG'])
-                                    elif enh_type == 'RAGE':
-                                        t_defense = round(t_defense - dmg['DMG'])
-                                        t_attack = round(t_attack + dmg['DMG'])
-                                    elif enh_type == 'BRACE':
-                                        t_defense = round(t_defense + dmg['DMG'])
-                                        t_attack = round(t_attack - dmg['DMG'])
-                                    elif enh_type == 'BZRK':
-                                        t_health = round(t_health - dmg['DMG'])
-                                        t_attack = round(t_attack +(.50 *  dmg['DMG']))
-                                    elif enh_type == 'CRYSTAL':
-                                        t_health = round(t_health - dmg['DMG'])
-                                        t_defense = round(t_defense + (.75 * dmg['DMG']))
-                                    elif enh_type == 'GROWTH':
-                                        t_max_health = round(t_max_health - dmg['DMG'])
-                                        t_defense = round(t_defense + (.3 * dmg['DMG']))
-                                        t_attack = round(t_attack+ (.3 * dmg['DMG']))
-                                    elif enh_type == 'STANCE':
-                                        tempattack = dmg['DMG']
-                                        t_attack = t_defense
-                                        t_defense = tempattack
-                                    elif enh_type == 'CONFUSE':
-                                        tempattack = dmg['DMG']
-                                        o_attack = o_defense
-                                        o_defense = tempattack
-                                    elif enh_type == 'BLINK':
-                                        t_stamina = round(t_stamina - dmg['DMG'])
-                                        o_stamina = round(o_stamina + dmg['DMG'] - 10)
-                                    elif enh_type == 'SLOW':
-                                        tempstam = round(o_stamina + dmg['DMG'])
-                                        t_stamina = round(t_stamina - dmg['DMG'])
-                                        o_stamina = t_stamina
-                                        t_stamina = tempstam
-                                    elif enh_type == 'HASTE':
-                                        tempstam = round(o_stamina - dmg['DMG'])
-                                        t_stamina = round(t_stamina + dmg['DMG'])
-                                        o_stamina = t_stamina
-                                        t_stamina = tempstam                                       
-                                    elif enh_type == 'SOULCHAIN':
-                                        t_stamina = round(dmg['DMG'])
-                                        o_stamina = o_stamina
-                                    elif enh_type == 'GAMBLE':
-                                        t_health = round(dmg['DMG']) * 2
-                                        o_health = t_health
-                                    elif enh_type == 'FEAR':
-                                        t_health = round(t_health - ((dmg['DMG']/100) * t_health))
-                                        o_attack = round(c_attack - ((dmg['DMG']/100) * o_attack))
-                                        o_defense = round(c_defense - ((dmg['DMG']/100) * o_defense))
-                                    elif enh_type == 'WAVE':
-                                        o_health = round(o_health - dmg['DMG'])
-                                    elif enh_type == 'BLAST':
-                                        o_health = round(o_health - dmg['DMG'])
-                                    elif enh_type == 'CREATION':
-                                        t_max_health = round(t_max_health + dmg['DMG'])
-                                        t_health = round(t_health + dmg['DMG'])
-                                    elif enh_type == 'DESTRUCTION':
-                                        o_max_health = round(o_max_health - dmg['DMG'])
-                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-                                    embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
-                                    await private_channel.send(embed=embedVar)
-                                    turn_total= turn_total + 1
-                                    turn = 2
-                                elif dmg['DMG'] == 0:
-                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-                                    embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
-                                    await private_channel.send(embed=embedVar)
-                                    turn_total= turn_total + 1
-                                    turn=2
-                                else:
-                                    if o_universe == "Naruto" and o_stamina == 0:
-                                        o_health = o_health 
-                                        embedVar = discord.Embed(title=f"{o_card.upper()}: Substitution Jutsu", description=f"{t_card} attack strikes a log", colour=0xe91e63)
-                                        await private_channel.send(embed=embedVar)
-                                    else:
-                                        o_health = o_health - int(dmg['DMG'])
+                            #if c used block
+                            if c_block_used==True:
+                                if dmg['CAN_USE_MOVE']:
+                                    if dmg['ENHANCE']:
+                                        enh_type= dmg['ENHANCED_TYPE']
+                                        if enh_type == 'ATK':
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                        elif enh_type == 'DEF':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                        elif enh_type == 'STAM':
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                        elif enh_type == 'HLT':
+                                            t_health = round(t_health + dmg['DMG'])
+                                        elif enh_type == 'LIFE':
+                                            t_health = round(t_health + dmg['DMG'])
+                                            c_health = round(c_health - dmg['DMG'])
+                                        elif enh_type == 'DRAIN':
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                            c_stamina = round(c_stamina - dmg['DMG'])
+                                        elif enh_type == 'FLOG':
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                            c_attack = round(c_attack - dmg['DMG'])
+                                        elif enh_type == 'WITHER':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                            c_defense = round(t_defense - dmg['DMG'])
+                                        elif enh_type == 'RAGE':
+                                            t_defense = round(t_defense - dmg['DMG'])
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                        elif enh_type == 'BRACE':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                            t_attack = round(t_attack - dmg['DMG'])
+                                        elif enh_type == 'BZRK':
+                                            t_health = round(t_health - dmg['DMG'])
+                                            t_attack = round(t_attack +(.75 *  dmg['DMG']))
+                                        elif enh_type == 'CRYSTAL':
+                                            t_health = round(t_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                        elif enh_type == 'GROWTH':
+                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                            t_attack = round(t_attack+ (.3 * dmg['DMG']))
+                                        elif enh_type == 'STANCE':
+                                            tempattack = dmg['DMG']
+                                            t_attack = t_defense
+                                            t_defense = tempattack
+                                        elif enh_type == 'CONFUSE':
+                                            tempattack = dmg['DMG']
+                                            c_attack = c_defense
+                                            c_defense = tempattack
+                                        elif enh_type == 'BLINK':
+                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                            c_stamina = round(c_stamina + dmg['DMG'] - 10)
+                                        elif enh_type == 'SLOW':
+                                            tempstam = round(c_stamina + dmg['DMG'])
+                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                            c_stamina = t_stamina
+                                            t_stamina = tempstam
+                                        elif enh_type == 'HASTE':
+                                            tempstam = round(c_stamina - dmg['DMG'])
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                            c_stamina = t_stamina
+                                            t_stamina = tempstam                                       
+                                        elif enh_type == 'SOULCHAIN':
+                                            t_stamina = round(dmg['DMG'])
+                                            c_stamina = t_stamina
+                                        elif enh_type == 'GAMBLE':
+                                            t_health = round(dmg['DMG']) * 2
+                                            c_health = t_health
+                                        elif enh_type == 'FEAR':
+                                            t_health = round(t_health - ((dmg['DMG']/100) * t_health))
+                                            c_attack = round(c_attack - ((dmg['DMG']/100) * c_attack))
+                                            c_defense = round(c_defense - ((dmg['DMG']/100) * c_defense))
+                                        elif enh_type == 'WAVE':
+                                            c_health = round(c_health - dmg['DMG'])
+                                        elif enh_type == 'BLAST':
+                                            c_health = round(c_health - dmg['DMG'])
+                                        elif enh_type == 'CREATION':
+                                            t_max_health = round(t_max_health + dmg['DMG'])
+                                            t_health = round(t_health + dmg['DMG'])
+                                        elif enh_type == 'DESTRUCTION':
+                                            c_max_health = round(c_max_health - dmg['DMG'])
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                         await private_channel.send(embed=embedVar)
-                                    if o_health < 0:
-                                        o_health=0
-                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
-                                    turn_total= turn_total + 1
-                                    turn=2
-
+                                        turn_total= turn_total + 1
+                                        turn = 2
+                                    elif dmg['DMG'] == 0:
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                        await private_channel.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn=2
+                                    else:
+                                        if c_universe == "Naruto" and c_stamina == 0:
+                                            c_health = c_health 
+                                            embedVar = discord.Embed(title=f"{c_card.upper()}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
+                                            await private_channel.send(embed=embedVar)
+                                        else:
+                                            c_health = c_health - int(dmg['DMG'])
+                                            embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                            await private_channel.send(embed=embedVar)
+                                        if c_health < 0:
+                                            c_health=0
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                        turn_total= turn_total + 1
+                                        turn=2
+                                else:
+                                    await private_channel.send(m.NOT_ENOUGH_STAMINA)
+                                    turn = 1
                             else:
-                                await private_channel.send(m.NOT_ENOUGH_STAMINA)
-                                turn = 1
+                                if dmg['CAN_USE_MOVE']:
+                                    if dmg['ENHANCE']:
+                                        enh_type= dmg['ENHANCED_TYPE']
+                                        if enh_type == 'ATK':
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                        elif enh_type == 'DEF':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                        elif enh_type == 'STAM':
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                        elif enh_type == 'HLT':
+                                            t_health = round(t_health + dmg['DMG'])
+                                        elif enh_type == 'LIFE':
+                                            t_health = round(t_health + dmg['DMG'])
+                                            o_health = round(o_health - dmg['DMG'])
+                                        elif enh_type == 'DRAIN':
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                            o_stamina = round(o_stamina - dmg['DMG'])
+                                        elif enh_type == 'FLOG':
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                            o_attack = round(o_attack - dmg['DMG'])
+                                        elif enh_type == 'WITHER':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                            o_defense = round(o_defense - dmg['DMG'])
+                                        elif enh_type == 'RAGE':
+                                            t_defense = round(t_defense - dmg['DMG'])
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                        elif enh_type == 'BRACE':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                            t_attack = round(t_attack - dmg['DMG'])
+                                        elif enh_type == 'BZRK':
+                                            t_health = round(t_health - dmg['DMG'])
+                                            t_attack = round(t_attack +(.50 *  dmg['DMG']))
+                                        elif enh_type == 'CRYSTAL':
+                                            t_health = round(t_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                        elif enh_type == 'GROWTH':
+                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                            t_attack = round(t_attack+ (.3 * dmg['DMG']))
+                                        elif enh_type == 'STANCE':
+                                            tempattack = dmg['DMG']
+                                            t_attack = t_defense
+                                            t_defense = tempattack
+                                        elif enh_type == 'CONFUSE':
+                                            tempattack = dmg['DMG']
+                                            o_attack = o_defense
+                                            o_defense = tempattack
+                                        elif enh_type == 'BLINK':
+                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                            o_stamina = round(o_stamina + dmg['DMG'] - 10)
+                                        elif enh_type == 'SLOW':
+                                            tempstam = round(o_stamina + dmg['DMG'])
+                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                            o_stamina = t_stamina
+                                            t_stamina = tempstam
+                                        elif enh_type == 'HASTE':
+                                            tempstam = round(o_stamina - dmg['DMG'])
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                            o_stamina = t_stamina
+                                            t_stamina = tempstam                                       
+                                        elif enh_type == 'SOULCHAIN':
+                                            t_stamina = round(dmg['DMG'])
+                                            o_stamina = o_stamina
+                                        elif enh_type == 'GAMBLE':
+                                            t_health = round(dmg['DMG']) * 2
+                                            o_health = t_health
+                                        elif enh_type == 'FEAR':
+                                            t_health = round(t_health - ((dmg['DMG']/100) * t_health))
+                                            o_attack = round(c_attack - ((dmg['DMG']/100) * o_attack))
+                                            o_defense = round(c_defense - ((dmg['DMG']/100) * o_defense))
+                                        elif enh_type == 'WAVE':
+                                            o_health = round(o_health - dmg['DMG'])
+                                        elif enh_type == 'BLAST':
+                                            o_health = round(o_health - dmg['DMG'])
+                                        elif enh_type == 'CREATION':
+                                            t_max_health = round(t_max_health + dmg['DMG'])
+                                            t_health = round(t_health + dmg['DMG'])
+                                        elif enh_type == 'DESTRUCTION':
+                                            o_max_health = round(o_max_health - dmg['DMG'])
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                        await private_channel.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn = 2
+                                    elif dmg['DMG'] == 0:
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                        await private_channel.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn=2
+                                    else:
+                                        if o_universe == "Naruto" and o_stamina == 0:
+                                            o_health = o_health 
+                                            embedVar = discord.Embed(title=f"{o_card.upper()}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
+                                            await private_channel.send(embed=embedVar)
+                                        else:
+                                            o_health = o_health - int(dmg['DMG'])
+                                            embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                            await private_channel.send(embed=embedVar)
+                                        if o_health < 0:
+                                            o_health=0
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                        turn_total= turn_total + 1
+                                        turn=2
+                                else:
+                                    await private_channel.send(m.NOT_ENOUGH_STAMINA)
+                                    turn = 1
 
                 #Companion Turn Start
                 if turn == 2:
+                    if c_block_used==True:
+                        c_defense = c_defense/2
+                        c_block_used=False
                     if c_attack <= 25:
                         c_attack = 25
                     if c_defense <= 30:
@@ -2577,7 +2745,9 @@ class CrownUnlimited(commands.Cog):
                         await private_channel.send(file=companion_card)
                         aiMove = 0
                         
-                        if t_stamina == 0:
+                        if c_health <= (c_health * .50) and not c_used_resolve and c_used_focus:
+                            aiMove = 5
+                        elif t_stamina == 0:
                             aiMove = 1
                         elif c_stamina >= 160 and (c_health >= t_health):
                             if o_health <= t_health:
@@ -2610,12 +2780,27 @@ class CrownUnlimited(commands.Cog):
                         elif c_stamina >= 110:
                             aiMove = 2                                   
                         elif c_stamina >= 100 and (c_health >= t_health):
-                            aiMove = 7
+                            if o_defense < c_defense:
+                                aiMove = 8
+                            else:
+                                aiMove = 7
                         elif c_stamina >= 100:
-                            aiMove = 1
+                            if c_health >= o_health:
+                                if c_defense >= o_defense:
+                                    aiMove = 8
+                                else:
+                                    aiMove = 7
+                            else:
+                                if c_defense >= o_defense:
+                                    aiMove = 8
+                                else:
+                                    aiMove = 1
                         elif c_stamina >= 90 and (c_health >= t_health):
                             if o_health <= t_health:
-                                aiMove = 7
+                                if o_defense < c_defense:
+                                    aiMove = 8
+                                else:
+                                    aiMove = 7
                             else:
                                 aiMove = 3
                         elif c_stamina >= 90:
@@ -2657,7 +2842,10 @@ class CrownUnlimited(commands.Cog):
                             aiMove = 2
                         elif c_stamina >= 40 and (c_health >= t_health):
                             if o_health <= t_health:
-                                aiMove = 7
+                                if o_defense <= c_defense:
+                                    aiMove =8
+                                else:
+                                    aiMove = 7
                             else:
                                 aiMove = 1
                         elif c_stamina >= 40:
@@ -2670,9 +2858,15 @@ class CrownUnlimited(commands.Cog):
                         elif c_stamina >= 30:
                             aiMove = 2
                         elif c_stamina >= 20 and (c_health >= t_health):
-                            aiMove = 1
+                            if c_health >= o_health:
+                                aiMove = 1
+                            else:
+                                if c_defense >= o_defense:
+                                    aiMove = 8
+                                else:
+                                    aiMove = 7
                         elif c_stamina >= 20:
-                            aiMove = 7
+                            aiMove = 4
                         elif c_stamina >= 10:
                             aiMove = 1
                         else:
@@ -3046,9 +3240,20 @@ class CrownUnlimited(commands.Cog):
                             else:
                                 await private_channel.send(m.NOT_ENOUGH_STAMINA)
                                 turn=2
-                        
+                        elif aiMove == 8:
+                            if c_stamina >=20:
+                                c_block_used=True
+                                c_stamina = c_stamina - 20
+                                c_defense = c_defense * 2
+                                embedVar = discord.Embed(title=f"{c_card.upper()} DEFENDS {o_card.upper()}", colour=0xe91e63)
+                                embedVar.add_field(name=f"{c_card} used Block!", value =f"Enhanced DEF")
+                                await private_channel.send(embed=embedVar)
+                                turn=3
+                            else:
+                                await private_channel.send(f"{c_card} is too tired to block...")
+                                turn=2
 
-                        if aiMove != 5 and aiMove != 6 and aiMove != 7:
+                        if aiMove != 5 and aiMove != 6 and aiMove != 7 and aiMove != 8:
                             # If you have enough stamina for move, use it
                             if dmg['CAN_USE_MOVE']:
                                 if dmg['ENHANCE']:
@@ -3147,7 +3352,7 @@ class CrownUnlimited(commands.Cog):
                                 else:
                                     if t_universe == "Naruto" and t_stamina == 0:
                                         t_health = t_health 
-                                        embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{c_card} attack strikes a log", colour=0xe91e63)
+                                        embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{c_card} strikes a log", colour=0xe91e63)
                                         await private_channel.send(embed=embedVar)
                                     else:
                                         t_health = t_health - dmg['DMG']
@@ -3387,16 +3592,28 @@ class CrownUnlimited(commands.Cog):
                         if int(aiMove) == 0:
                             t_health=0
                         if int(aiMove) == 1:
-                            dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
+                            if o_defend_used==True:
+                                dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                            else:
+                                dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
                         elif int(aiMove) == 2:
-                            dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
+                            if o_defend_used==True:
+                                dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                            else:
+                                dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
                         elif int(aiMove) == 3:
-                            dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
+                            if o_defend_used==True:
+                                dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                            else: 
+                                dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
                             if t_gif != "N/A":
                                     await private_channel.send(f"{t_gif}")
                         elif int(aiMove) == 4:
                             t_enhancer_used=True
-                            dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
+                            if o_defend_used==True:
+                                dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                            else:
+                                dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
                             t_enhancer_used=False
                         elif int(aiMove) == 5:
                             if not t_used_resolve and t_used_focus:
@@ -3486,9 +3703,13 @@ class CrownUnlimited(commands.Cog):
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
                                     await private_channel.send(embed=embedVar)
-                                    dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
-                                    t_pet_used =False
-                                    o_health = o_health - int(dmg['DMG'])
+                                    if o_defend_used==True:
+                                        dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
+                                        o_health = o_health - int(dmg['DMG'])
+                                    else:
+                                        dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina,t_max_health, c_attack, t_special_move_description, turn_total)
+                                        c_health = c_health - int(dmg['DMG'])
+                                    t_pet_used =False                                    
                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                     await private_channel.send(embed=embedVar)
                                     t_stamina = 0
@@ -3540,117 +3761,227 @@ class CrownUnlimited(commands.Cog):
                                     turn=0
                             else:
                                 await private_channel.send(m.CANNOT_USE_RESOLVE)
-                                turn=1
+                                turn=3
                         if int(aiMove) !=5:
                             # If you have enough stamina for move, use it
-                            if dmg['CAN_USE_MOVE']:
-                                if dmg['ENHANCE']:
-                                    enh_type= dmg['ENHANCED_TYPE']
-                                    if enh_type == 'ATK':
-                                        t_attack = round(t_attack + dmg['DMG'])
-                                    elif enh_type == 'DEF':
-                                        t_defense = round(t_defense + dmg['DMG'])
-                                    elif enh_type == 'STAM':
-                                        t_stamina = round(t_stamina + dmg['DMG'])
-                                    elif enh_type == 'HLT':
-                                        t_health = round(t_health + dmg['DMG'])
-                                    elif enh_type == 'LIFE':
-                                        t_health = round(t_health + dmg['DMG'])
-                                        c_health = round(c_health - dmg['DMG'])
-                                    elif enh_type == 'DRAIN':
-                                        t_stamina = round(t_stamina + dmg['DMG'])
-                                        c_stamina = round(c_stamina - dmg['DMG'])
-                                    elif enh_type == 'FLOG':
-                                        t_attack = round(t_attack + dmg['DMG'])
-                                        c_attack = round(c_attack - dmg['DMG'])
-                                    elif enh_type == 'WITHER':
-                                        t_defense = round(t_defense + dmg['DMG'])
-                                        c_defense = round(t_defense - dmg['DMG'])
-                                    elif enh_type == 'RAGE':
-                                        t_defense = round(t_defense - dmg['DMG'])
-                                        t_attack = round(t_attack + dmg['DMG'])
-                                    elif enh_type == 'BRACE':
-                                        t_defense = round(t_defense + dmg['DMG'])
-                                        t_attack = round(t_attack - dmg['DMG'])
-                                    elif enh_type == 'BZRK':
-                                        t_health = round(t_health - dmg['DMG'])
-                                        t_attack = round(t_attack +(.75 *  dmg['DMG']))
-                                    elif enh_type == 'CRYSTAL':
-                                        t_health = round(t_health - dmg['DMG'])
-                                        t_defense = round(t_defense + (.75 * dmg['DMG']))
-                                    elif enh_type == 'GROWTH':
-                                        t_max_health = round(t_max_health - dmg['DMG'])
-                                        t_defense = round(t_defense + (.3 * dmg['DMG']))
-                                        t_attack = round(t_attack+ (.3 * dmg['DMG']))
-                                    elif enh_type == 'STANCE':
-                                        tempattack = dmg['DMG']
-                                        t_attack = t_defense
-                                        t_defense = tempattack
-                                    elif enh_type == 'CONFUSE':
-                                        tempattack = dmg['DMG']
-                                        c_attack = c_defense
-                                        c_defense = tempattack
-                                    elif enh_type == 'BLINK':
-                                        t_stamina = round(t_stamina - dmg['DMG'])
-                                        c_stamina = round(c_stamina + dmg['DMG'] - 10)
-                                    elif enh_type == 'SLOW':
-                                        tempstam = round(c_stamina + dmg['DMG'])
-                                        t_stamina = round(t_stamina - dmg['DMG'])
-                                        c_stamina = t_stamina
-                                        t_stamina = tempstam
-                                    elif enh_type == 'HASTE':
-                                        tempstam = round(c_stamina - dmg['DMG'])
-                                        t_stamina = round(t_stamina + dmg['DMG'])
-                                        c_stamina = t_stamina
-                                        t_stamina = tempstam                                       
-                                    elif enh_type == 'SOULCHAIN':
-                                        t_stamina = round(dmg['DMG'])
-                                        c_stamina = t_stamina
-                                    elif enh_type == 'GAMBLE':
-                                        t_health = round(dmg['DMG']) * 2
-                                        c_health = t_health
-                                    elif enh_type == 'FEAR':
-                                        t_health = round(t_health - ((dmg['DMG']/100) * t_health))
-                                        c_attack = round(c_attack - ((dmg['DMG']/100) * c_attack))
-                                        c_defense = round(c_defense - ((dmg['DMG']/100) * c_defense))
-                                    elif enh_type == 'WAVE':
-                                        c_health = round(c_health - dmg['DMG'])
-                                    elif enh_type == 'BLAST':
-                                        c_health = round(c_health - dmg['DMG'])
-                                    elif enh_type == 'CREATION':
-                                        t_max_health = round(t_max_health + dmg['DMG'])
-                                        t_health = round(t_health + dmg['DMG'])
-                                    elif enh_type == 'DESTRUCTION':
-                                        c_max_health = round(c_max_health - dmg['DMG'])
-                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-                                    embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
-                                    await private_channel.send(embed=embedVar)
-                                    turn_total= turn_total + 1
-                                    turn = 0
-                                elif dmg['DMG'] == 0:
-                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-                                    embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
-                                    await private_channel.send(embed=embedVar)
-                                    turn_total= turn_total + 1
-                                    turn=0
-                                else:
-                                    if c_universe == "Naruto" and c_stamina == 0:
-                                        c_health = c_health 
-                                        embedVar = discord.Embed(title=f"{c_card.upper()}: Substitution Jutsu", description=f"{t_card} attack strikes a log", colour=0xe91e63)
-                                        await private_channel.send(embed=embedVar)
-                                    else:
-                                        c_health = c_health - int(dmg['DMG'])
+                            #check if o is blocking
+                            if o_defend_used==True:
+                                if dmg['CAN_USE_MOVE']:
+                                    if dmg['ENHANCE']:
+                                        enh_type= dmg['ENHANCED_TYPE']
+                                        if enh_type == 'ATK':
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                        elif enh_type == 'DEF':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                        elif enh_type == 'STAM':
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                        elif enh_type == 'HLT':
+                                            t_health = round(t_health + dmg['DMG'])
+                                        elif enh_type == 'LIFE':
+                                            t_health = round(t_health + dmg['DMG'])
+                                            o_health = round(o_health - dmg['DMG'])
+                                        elif enh_type == 'DRAIN':
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                            o_stamina = round(o_stamina - dmg['DMG'])
+                                        elif enh_type == 'FLOG':
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                            o_attack = round(o_attack - dmg['DMG'])
+                                        elif enh_type == 'WITHER':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                            o_defense = round(o_defense - dmg['DMG'])
+                                        elif enh_type == 'RAGE':
+                                            t_defense = round(t_defense - dmg['DMG'])
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                        elif enh_type == 'BRACE':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                            t_attack = round(t_attack - dmg['DMG'])
+                                        elif enh_type == 'BZRK':
+                                            t_health = round(t_health - dmg['DMG'])
+                                            t_attack = round(t_attack +(.50 *  dmg['DMG']))
+                                        elif enh_type == 'CRYSTAL':
+                                            t_health = round(t_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                        elif enh_type == 'GROWTH':
+                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                            t_attack = round(t_attack+ (.3 * dmg['DMG']))
+                                        elif enh_type == 'STANCE':
+                                            tempattack = dmg['DMG']
+                                            t_attack = t_defense
+                                            t_defense = tempattack
+                                        elif enh_type == 'CONFUSE':
+                                            tempattack = dmg['DMG']
+                                            o_attack = o_defense
+                                            o_defense = tempattack
+                                        elif enh_type == 'BLINK':
+                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                            o_stamina = round(o_stamina + dmg['DMG'] - 10)
+                                        elif enh_type == 'SLOW':
+                                            tempstam = round(o_stamina + dmg['DMG'])
+                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                            o_stamina = t_stamina
+                                            t_stamina = tempstam
+                                        elif enh_type == 'HASTE':
+                                            tempstam = round(o_stamina - dmg['DMG'])
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                            o_stamina = t_stamina
+                                            t_stamina = tempstam                                       
+                                        elif enh_type == 'SOULCHAIN':
+                                            t_stamina = round(dmg['DMG'])
+                                            o_stamina = o_stamina
+                                        elif enh_type == 'GAMBLE':
+                                            t_health = round(dmg['DMG']) * 2
+                                            o_health = t_health
+                                        elif enh_type == 'FEAR':
+                                            t_health = round(t_health - ((dmg['DMG']/100) * t_health))
+                                            o_attack = round(c_attack - ((dmg['DMG']/100) * o_attack))
+                                            o_defense = round(c_defense - ((dmg['DMG']/100) * o_defense))
+                                        elif enh_type == 'WAVE':
+                                            o_health = round(o_health - dmg['DMG'])
+                                        elif enh_type == 'BLAST':
+                                            o_health = round(o_health - dmg['DMG'])
+                                        elif enh_type == 'CREATION':
+                                            t_max_health = round(t_max_health + dmg['DMG'])
+                                            t_health = round(t_health + dmg['DMG'])
+                                        elif enh_type == 'DESTRUCTION':
+                                            o_max_health = round(o_max_health - dmg['DMG'])
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                         await private_channel.send(embed=embedVar)
-                                    if c_health < 0:
-                                        c_health=0
-                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
-                                    turn_total= turn_total + 1
-                                    turn=0
-                            else:
-                                await private_channel.send(m.NOT_ENOUGH_STAMINA)
-                                turn = 1
-       
+                                        turn_total= turn_total + 1
+                                        turn = 0
+                                    elif dmg['DMG'] == 0:
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                        await private_channel.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn=0
+                                    else:
+                                        if o_universe == "Naruto" and o_stamina == 0:
+                                            o_health = o_health 
+                                            embedVar = discord.Embed(title=f"{o_card.upper()}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
+                                            await private_channel.send(embed=embedVar)
+                                        else:
+                                            o_health = o_health - int(dmg['DMG'])
+                                            embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                            await private_channel.send(embed=embedVar)
+                                        if o_health < 0:
+                                            o_health=0
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                        turn_total= turn_total + 1
+                                        turn=0
+                                else:
+                                    await private_channel.send(m.NOT_ENOUGH_STAMINA)
+                                    turn = 3
+                            else:                                 
+                                if dmg['CAN_USE_MOVE']:
+                                    if dmg['ENHANCE']:
+                                        enh_type= dmg['ENHANCED_TYPE']
+                                        if enh_type == 'ATK':
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                        elif enh_type == 'DEF':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                        elif enh_type == 'STAM':
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                        elif enh_type == 'HLT':
+                                            t_health = round(t_health + dmg['DMG'])
+                                        elif enh_type == 'LIFE':
+                                            t_health = round(t_health + dmg['DMG'])
+                                            c_health = round(c_health - dmg['DMG'])
+                                        elif enh_type == 'DRAIN':
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                            c_stamina = round(c_stamina - dmg['DMG'])
+                                        elif enh_type == 'FLOG':
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                            c_attack = round(c_attack - dmg['DMG'])
+                                        elif enh_type == 'WITHER':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                            c_defense = round(t_defense - dmg['DMG'])
+                                        elif enh_type == 'RAGE':
+                                            t_defense = round(t_defense - dmg['DMG'])
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                        elif enh_type == 'BRACE':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                            t_attack = round(t_attack - dmg['DMG'])
+                                        elif enh_type == 'BZRK':
+                                            t_health = round(t_health - dmg['DMG'])
+                                            t_attack = round(t_attack +(.75 *  dmg['DMG']))
+                                        elif enh_type == 'CRYSTAL':
+                                            t_health = round(t_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                        elif enh_type == 'GROWTH':
+                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                            t_attack = round(t_attack+ (.3 * dmg['DMG']))
+                                        elif enh_type == 'STANCE':
+                                            tempattack = dmg['DMG']
+                                            t_attack = t_defense
+                                            t_defense = tempattack
+                                        elif enh_type == 'CONFUSE':
+                                            tempattack = dmg['DMG']
+                                            c_attack = c_defense
+                                            c_defense = tempattack
+                                        elif enh_type == 'BLINK':
+                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                            c_stamina = round(c_stamina + dmg['DMG'] - 10)
+                                        elif enh_type == 'SLOW':
+                                            tempstam = round(c_stamina + dmg['DMG'])
+                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                            c_stamina = t_stamina
+                                            t_stamina = tempstam
+                                        elif enh_type == 'HASTE':
+                                            tempstam = round(c_stamina - dmg['DMG'])
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                            c_stamina = t_stamina
+                                            t_stamina = tempstam                                       
+                                        elif enh_type == 'SOULCHAIN':
+                                            t_stamina = round(dmg['DMG'])
+                                            c_stamina = t_stamina
+                                        elif enh_type == 'GAMBLE':
+                                            t_health = round(dmg['DMG']) * 2
+                                            c_health = t_health
+                                        elif enh_type == 'FEAR':
+                                            t_health = round(t_health - ((dmg['DMG']/100) * t_health))
+                                            c_attack = round(c_attack - ((dmg['DMG']/100) * c_attack))
+                                            c_defense = round(c_defense - ((dmg['DMG']/100) * c_defense))
+                                        elif enh_type == 'WAVE':
+                                            c_health = round(c_health - dmg['DMG'])
+                                        elif enh_type == 'BLAST':
+                                            c_health = round(c_health - dmg['DMG'])
+                                        elif enh_type == 'CREATION':
+                                            t_max_health = round(t_max_health + dmg['DMG'])
+                                            t_health = round(t_health + dmg['DMG'])
+                                        elif enh_type == 'DESTRUCTION':
+                                            c_max_health = round(c_max_health - dmg['DMG'])
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                        await private_channel.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn = 0
+                                    elif dmg['DMG'] == 0:
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                        await private_channel.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn=0
+                                    else:
+                                        if c_universe == "Naruto" and c_stamina == 0:
+                                            c_health = c_health 
+                                            embedVar = discord.Embed(title=f"{c_card.upper()}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
+                                            await private_channel.send(embed=embedVar)
+                                        else:
+                                            c_health = c_health - int(dmg['DMG'])
+                                            embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                            await private_channel.send(embed=embedVar)
+                                        if c_health < 0:
+                                            c_health=0
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                        turn_total= turn_total + 1
+                                        turn=0
+                                else:
+                                    await private_channel.send(m.NOT_ENOUGH_STAMINA)
+                                    turn = 3
+        
             if botActive:
                 end_message="Use the #end command to end the tutorial lobby"
             else:
@@ -4140,6 +4471,8 @@ class CrownUnlimited(commands.Cog):
             if ofam == cfam:
                 o_health = o_health + 50
                 c_health = c_health + 50
+                o_max_health = o_max_health + 50
+                c_max_health = c_max_health + 50
             
             # Companion Passive Config
             if (c_universe == c_title_universe) or (c_title_universe == "Unbound"):
@@ -4158,6 +4491,7 @@ class CrownUnlimited(commands.Cog):
             c_enhancer = c_moveset[3]
             c_enhancer_used=False
             c_pet_used=False
+            c_block_used=False
 
             tpetmove_text = list(tpet_passive.keys())[0]
             tpetmove_ap = list(tpet_passive.values())[0]
@@ -4410,6 +4744,8 @@ class CrownUnlimited(commands.Cog):
             o_enhancer = o_moveset[3]
             o_enhancer_used=False
             o_pet_used=False
+            o_block_used=False
+            o_defend_used=False
 
             omove1_text = list(o_1.keys())[0]
             omove2_text = list(o_2.keys())[0]
@@ -4934,6 +5270,12 @@ class CrownUnlimited(commands.Cog):
             while ((o_health > 0) and (c_health > 0)) and (t_health > 0):
                 #Player 1 Turn Start
                 if turn == 0:
+                    if o_block_used==True:
+                        o_defense = o_defense/2
+                        o_block_used=False
+                    if o_defend_used==True:
+                        o_defense = o_defense/2
+                        o_defend_used=False
                     if o_universe == "Death Note" and turn_total == 0:
                         embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death", description=f"`{o_card} says:`\nYou will die in 24 turns...", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
@@ -5095,29 +5437,33 @@ class CrownUnlimited(commands.Cog):
                         **{omove2_text}** 30 Stamina _press 2_
                         **{omove3_text}** 80 Stamina _press 3_
                         **{omove_enhanced_text}** 20 Stamina _press 4_
-                        **Enhance Companion** 20 Stamina _press 7_
-                        **Companion Assist** 20 Stamina _press 8_
+                        **Defend {c_card}** 20 Stamina _press 0_
+                        
+                        **{c_card}:** {c_health}/{c_stamina} _Companion_
+                        **Enhance {c_card}** 20 Stamina _press 7_
+                        **{c_card} Assist** 20 Stamina _press 8_
+                        **{c_card} Block** 20 Stamina _press 9_
+                        
                     
-                        **{t_card}:** {t_health}/{t_stamina}
-                        **{c_card}:** {c_health}/{c_stamina} _partner_
+                        **{t_card}:** {t_health}/{t_stamina}   
                         """) 
                         , colour=embed_color_o)
                         embedVar.set_thumbnail(url=opet_image)
-                        if o_used_focus and o_used_resolve and not t_pet_used:
-                            embedVar.set_author(name="Press 0 to Quit Match. Press 6 to Summon your Pet!")                                    
+                        if o_used_focus and o_used_resolve and not o_pet_used:
+                            embedVar.set_author(name="Press Q to Quit Match. Press 6 to Summon your Pet!")                                    
                         elif o_used_focus and not o_used_resolve:
-                            embedVar.set_author(name="Press 0 to Quit Match. Press 5 to Strengthen resolve!")
+                            embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen resolve!")
                         else:
-                            embedVar.set_author(name="Press 0 to Quit Match")
+                            embedVar.set_author(name="Press Q to Quit Match")
                         embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
                         await private_channel.send(embed=embedVar)
                         
                         if o_used_focus and o_used_resolve:
-                            options = ["0","1","2","3","4","6","7","8"]
+                            options = ["q","Q","0","1","2","3","4","6","7","8","9"]
                         elif o_used_focus and not o_used_resolve:
-                            options = ["0","1","2","3","4","5","7","8"]
+                            options = ["q","Q","0","1","2","3","4","5","7","8","9"]
                         else:
-                            options = ["0","1","2","3","4","7","8"]
+                            options = ["q","Q","0","1","2","3","4","7","8","9"]
 
                         # Make sure user is responding with move
                         def check(msg):
@@ -5129,7 +5475,7 @@ class CrownUnlimited(commands.Cog):
                             msg = await self.bot.wait_for("message",timeout=120.0, check=check)
 
                             # calculate data based on selected move
-                            if msg.content == "0":
+                            if msg.content == "q" or msg.content == "Q":
                                 o_health=0
                         
                                 if private_channel.guild:
@@ -5588,9 +5934,33 @@ class CrownUnlimited(commands.Cog):
                                 else:
                                     await private_channel.send(m.NOT_ENOUGH_STAMINA)
                                     turn=0
+                            elif msg.content == "9":
+                                if c_stamina >=20:
+                                    c_stamina = c_stamina - 20
+                                    c_block_used=True
+                                    c_defense = c_defense * 2
+                                    embedVar = discord.Embed(title=f"{c_card.upper()} DEFENDS {o_card.upper()}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"{c_card} used Block!", value =f"Enhanced DEF")
+                                    await private_channel.send(embed=embedVar)
+                                    turn=1
+                                else:
+                                    await private_channel.send(f"{c_card} is too tired to block...")
+                                    turn=0
+                            elif msg.content == "0":
+                                if o_stamina >=20:
+                                    o_stamina = o_stamina - 20
+                                    o_defend_used=True
+                                    o_defense = o_defense * 2
+                                    embedVar = discord.Embed(title=f"{o_card.upper()} DEFENDS {c_card.upper()}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"{o_card} used Block!", value =f"Enhanced DEF")
+                                    await private_channel.send(embed=embedVar)
+                                    turn=1
+                                else:
+                                    await private_channel.send(f"{o_card} is too tired to block...")
+                                    turn=0
 
 
-                            if msg.content != "5" and msg.content != "6" and msg.content != "7" and msg.content in options:
+                            if msg.content != "5" and msg.content != "6" and msg.content != "7" and msg.content != "9" and msg.content != "0" and msg.content in options:
                                 # If you have enough stamina for move, use it
                                 if dmg['CAN_USE_MOVE']:
                                     if dmg['ENHANCE']:
@@ -5689,7 +6059,7 @@ class CrownUnlimited(commands.Cog):
                                     else:
                                         if t_universe == "Naruto" and t_stamina == 0:
                                             t_health = t_health 
-                                            embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{o_card} attack strikes a log", colour=0xe91e63)
+                                            embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{o_card} strikes a log", colour=0xe91e63)
                                             await private_channel.send(embed=embedVar)
                                         else:
                                             t_health = t_health - dmg['DMG']
@@ -5942,24 +6312,36 @@ class CrownUnlimited(commands.Cog):
                         else:
                             aiMove = 0
                         
-
+                        t_special_move_description= " "
                         if int(aiMove) == 0:
                             t_health=0
                         if int(aiMove) == 1:
                             t_pet_used =False
-                            dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                            if c_block_used==True:
+                                dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
+                            else:
+                                dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
                         elif int(aiMove) == 2:
                             t_pet_used =False
-                            dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                            if c_block_used==True:
+                                dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
+                            else:
+                                dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
                         elif int(aiMove) == 3:
                             t_pet_used =False
-                            dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                            if c_block_used==True:
+                                dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
+                            else:
+                                dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
                             if t_gif != "N/A":
                                     await private_channel.send(f"{t_gif}")
                         elif int(aiMove) == 4:
                             t_pet_used =False
                             t_enhancer_used=True
-                            dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                            if c_block_used==True:
+                                dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
+                            else:
+                                dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
                             t_enhancer_used=False
                         elif int(aiMove) == 5:
                             if not t_used_resolve and t_used_focus:
@@ -5979,6 +6361,7 @@ class CrownUnlimited(commands.Cog):
                                         t_attack = round(t_attack + t_resolve_attack)
                                         t_defense = round(t_defense - t_resolve_defense)
                                         t_used_resolve=True
+                                        t_pet_used =False
 
                                         embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                         embedVar.add_field(name=f"Transformation: Plus Ultra", value="All stats & stamina greatly increased")
@@ -6001,6 +6384,7 @@ class CrownUnlimited(commands.Cog):
                                     t_attack = round(t_attack + (2 * t_resolve_attack))
                                     t_defense = round(t_defense - t_resolve_defense)
                                     t_used_resolve=True
+                                    t_pet_used =False
 
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
@@ -6023,6 +6407,7 @@ class CrownUnlimited(commands.Cog):
                                     t_attack = round(t_attack + t_resolve_attack)
                                     t_defense = round(t_defense - t_resolve_defense)
                                     t_used_resolve=True
+                                    t_pet_used =False
 
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation: Ascension", value="All stats & stamina greatly increased")
@@ -6049,9 +6434,12 @@ class CrownUnlimited(commands.Cog):
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
                                     await private_channel.send(embed=embedVar)
-                                    dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
+                                    if c_block_used==True:
+                                        dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina,t_max_health, c_attack, t_special_move_description, turn_total)
+                                    else:
+                                        dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
                                     t_pet_used =False
-                                    o_health = o_health - int(dmg['DMG'])
+                                    c_health = c_health - int(dmg['DMG'])
                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                     await private_channel.send(embed=embedVar)
                                     t_stamina = 0
@@ -6073,6 +6461,7 @@ class CrownUnlimited(commands.Cog):
                                     t_attack = round(t_attack + t_resolve_attack)
                                     t_defense = round(t_defense)
                                     t_used_resolve=True
+                                    t_pet_used =False
 
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation: Evolution", value="All stats & stamina greatly increased")
@@ -6095,6 +6484,7 @@ class CrownUnlimited(commands.Cog):
                                     t_attack = round(t_attack + t_resolve_attack)
                                     t_defense = round(t_defense - t_resolve_defense)
                                     t_used_resolve=True
+                                    t_pet_used =False
 
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
@@ -6104,218 +6494,426 @@ class CrownUnlimited(commands.Cog):
                             else:
                                 await private_channel.send(m.CANNOT_USE_RESOLVE)
                                 turn=1
-                        elif aiMove == 6:
+                        elif int(aiMove) == 6:
                             #Resolve Check and Calculation
-                            if t_used_resolve and t_used_focus and not t_pet_used:                                      
-                                t_enhancer_used=True
-                                dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
-                                t_enhancer_used=False
-                                t_pet_used =True
-                                tpet_dmg = dmg['DMG']
-                                tpet_type = dmg['ENHANCED_TYPE']
-                                if dmg['CAN_USE_MOVE']:
-                                    if tpet_type == 'ATK':
-                                        t_attack = round(t_attack + dmg['DMG'])
-                                    elif tpet_type == 'DEF':
-                                        t_defense = round(t_defense + dmg['DMG'])
-                                    elif tpet_type == 'STAM':
-                                        t_stamina = round(t_stamina + dmg['DMG'])
-                                    elif tpet_type == 'HLT':
-                                        t_health = round(t_health + dmg['DMG'])
-                                    elif tpet_type == 'LIFE':
-                                        t_health = round(t_health + dmg['DMG'])
-                                        o_health = round(o_health - dmg['DMG'])
-                                    elif tpet_type == 'DRAIN':
-                                        t_stamina = round(t_stamina + dmg['DMG'])
-                                        o_stamina = round(o_stamina - dmg['DMG'])
-                                    elif tpet_type == 'FLOG':
-                                        t_attack = round(t_attack + dmg['DMG'])
-                                        o_attack = round (o_attack - dmg['DMG'])
-                                    elif tpet_type == 'WITHER':
-                                        t_defense = round(t_defense + dmg['DMG'])
-                                        o_defense = round (o_defense - dmg['DMG'])
-                                    elif tpet_type == 'RAGE':
-                                        t_defense = round(t_defense - dmg['DMG'])
-                                        t_attack = round(t_attack + dmg['DMG'])
-                                    elif tpet_type == 'BRACE':
-                                        t_defense = round(t_defense + dmg['DMG'])
-                                        t_attack = round(t_attack - dmg['DMG'])
-                                    elif tpet_type == 'BZRK':
-                                        t_health = round(t_health - dmg['DMG'])
-                                        t_attack = round(t_attack + (.75 * dmg['DMG']))
-                                    elif tpet_type == 'CRYSTAL':
-                                        t_health = round(t_health - dmg['DMG'])
-                                        t_defense = round(t_defense + (.75 * dmg['DMG']))
-                                    elif tpet_type == 'GROWTH':
-                                        t_max_health = round(t_max_health - dmg['DMG'])
-                                        t_defense = round(t_defense + (.3 * dmg['DMG']))
-                                        t_attack = round(t_attack+ (.3 * dmg['DMG']))
-                                    elif tpet_type == 'STANCE':
-                                        tempattack = dmg['DMG']
-                                        t_attack = t_defense
-                                        t_defense = tempattack
-                                    elif tpet_type == 'CONFUSE':
-                                        tempattack = dmg['DMG']
-                                        o_attack = o_defense
-                                        o_defense = tempattack
-                                    elif tpet_type == 'BLINK':
-                                        t_stamina = round(t_stamina - dmg['DMG'])
-                                        o_stamina = round(o_stamina + dmg['DMG'] - 10)
-                                    elif tpet_type == 'SLOW':
-                                        tempstam = round(o_stamina + dmg['DMG'])
-                                        t_stamina = round(t_stamina - dmg['DMG'])
-                                        o_stamina = t_stamina
-                                        t_stamina = tempstam
-                                    elif tpet_type == 'HASTE':
-                                        tempstam = round(o_stamina - dmg['DMG'])
-                                        t_stamina = round(t_stamina + dmg['DMG'])
-                                        o_stamina = t_stamina
-                                        t_stamina = tempstam                                       
-                                    elif tpet_type == 'SOULCHAIN':
-                                        t_stamina = round(dmg['DMG'])
-                                        o_stamina = t_stamina
-                                    elif tpet_type == 'GAMBLE':
-                                        t_health = round(dmg['DMG'])
-                                        o_health = t_health
-                                    elif tpet_type == 'FEAR':
-                                        t_health = round(t_health - ((dmg['DMG']/100)* t_health))
-                                        o_attack = round(o_attack - ((dmg['DMG']/100)* o_attack))
-                                        o_defense = round(o_defense - ((dmg['DMG']/100)* o_defense))
-                                    elif tpet_type == 'WAVE':
-                                        o_health = round(o_health - dmg['DMG'])
-                                    elif tpet_type == 'BLAST':
-                                        o_health = round(o_health - dmg['DMG'])
-                                    elif tpet_type == 'CREATION':
-                                        t_max_health = round(t_max_health + dmg['DMG'])
-                                        t_health = round(t_health + dmg['DMG'])
-                                    elif tpet_type == 'DESTRUCTION':
-                                        o_max_health = round(o_max_health - dmg['DMG'])
-                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+                            if t_used_resolve and t_used_focus and not t_pet_used:
+                                if c_block_used==True:
+                                    t_enhancer_used=True
+                                    dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
+                                    t_enhancer_used=False
+                                    t_pet_used =True
+                                    tpet_dmg = dmg['DMG']
+                                    tpet_type = dmg['ENHANCED_TYPE']
+                                    if dmg['CAN_USE_MOVE']:
+                                        if tpet_type == 'ATK':
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                        elif tpet_type == 'DEF':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                        elif tpet_type == 'STAM':
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                        elif tpet_type == 'HLT':
+                                            t_health = round(t_health + dmg['DMG'])
+                                        elif tpet_type == 'LIFE':
+                                            t_health = round(t_health + dmg['DMG'])
+                                            c_health = round(c_health - dmg['DMG'])
+                                        elif tpet_type == 'DRAIN':
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                            c_stamina = round(c_stamina - dmg['DMG'])
+                                        elif tpet_type == 'FLOG':
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                            c_attack = round (c_attack - dmg['DMG'])
+                                        elif tpet_type == 'WITHER':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                            c_defense = round (c_defense - dmg['DMG'])
+                                        elif tpet_type == 'RAGE':
+                                            t_defense = round(t_defense - dmg['DMG'])
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                        elif tpet_type == 'BRACE':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                            t_attack = round(t_attack - dmg['DMG'])
+                                        elif tpet_type == 'BZRK':
+                                            t_health = round(t_health - dmg['DMG'])
+                                            t_attack = round(t_attack + (.75 * dmg['DMG']))
+                                        elif tpet_type == 'CRYSTAL':
+                                            t_health = round(t_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                        elif tpet_type == 'GROWTH':
+                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                            t_attack = round(t_attack+ (.3 * dmg['DMG']))
+                                        elif tpet_type == 'STANCE':
+                                            tempattack = dmg['DMG']
+                                            t_attack = t_defense
+                                            t_defense = tempattack
+                                        elif tpet_type == 'CONFUSE':
+                                            tempattack = dmg['DMG']
+                                            c_attack = c_defense
+                                            c_defense = tempattack
+                                        elif tpet_type == 'BLINK':
+                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                            c_stamina = round(c_stamina + dmg['DMG'] - 10)
+                                        elif tpet_type == 'SLOW':
+                                            tempstam = round(c_stamina + dmg['DMG'])
+                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                            c_stamina = t_stamina
+                                            t_stamina = tempstam
+                                        elif tpet_type == 'HASTE':
+                                            tempstam = round(c_stamina - dmg['DMG'])
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                            c_stamina = t_stamina
+                                            t_stamina = tempstam                                       
+                                        elif tpet_type == 'SOULCHAIN':
+                                            t_stamina = round(dmg['DMG'])
+                                            c_stamina = t_stamina
+                                        elif tpet_type == 'GAMBLE':
+                                            t_health = round(dmg['DMG'])
+                                            c_health = t_health
+                                        elif tpet_type == 'FEAR':
+                                            t_health = round(t_health - ((dmg['DMG']/100)* t_health))
+                                            c_attack = round(c_attack - ((dmg['DMG']/100)* c_attack))
+                                            c_defense = round(c_defense - ((dmg['DMG']/100)* c_defense))
+                                        elif tpet_type == 'WAVE':
+                                            c_health = round(c_health - dmg['DMG'])
+                                        elif tpet_type == 'BLAST':
+                                            c_health = round(c_health - dmg['DMG'])
+                                        elif tpet_type == 'CREATION':
+                                            t_max_health = round(t_max_health + dmg['DMG'])
+                                            t_health = round(t_health + dmg['DMG'])
+                                        elif tpet_type == 'DESTRUCTION':
+                                            c_max_health = round(c_max_health - dmg['DMG'])
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])
 
-                                    embedVar = discord.Embed(title=f"{t_card.upper()} Summoned {tpet_name}", colour=0xe91e63)
-                                    embedVar.add_field(name=f"{tpet_name} used {tpetmove_text}!", value =f"Enhanced {tpet_type}")
-                                    embedVar.set_thumbnail(url=tpet_image)
-                                    await private_channel.send(embed=embedVar)
-                                    turn=1
-                                else:
-                                    await private_channel.send(f"{tpet_name} needs a turn to rest...")
-                                    turn=1
+                                        embedVar = discord.Embed(title=f"{t_card.upper()} Summoned {tpet_name}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"{tpet_name} used {tpetmove_text}!", value =f"Enhanced {tpet_type}")
+                                        embedVar.set_thumbnail(url=tpet_image)
+                                        await private_channel.send(embed=embedVar)
+                                        turn=2
+                                    else:
+                                        await private_channel.send(f"{tpet_name} needs a turn to rest...")
+                                        turn=1
+                                else:                                  
+                                    t_enhancer_used=True
+                                    dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                                    t_enhancer_used=False
+                                    t_pet_used =True
+                                    tpet_dmg = dmg['DMG']
+                                    tpet_type = dmg['ENHANCED_TYPE']
+                                    if dmg['CAN_USE_MOVE']:
+                                        if tpet_type == 'ATK':
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                        elif tpet_type == 'DEF':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                        elif tpet_type == 'STAM':
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                        elif tpet_type == 'HLT':
+                                            t_health = round(t_health + dmg['DMG'])
+                                        elif tpet_type == 'LIFE':
+                                            t_health = round(t_health + dmg['DMG'])
+                                            o_health = round(o_health - dmg['DMG'])
+                                        elif tpet_type == 'DRAIN':
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                            o_stamina = round(o_stamina - dmg['DMG'])
+                                        elif tpet_type == 'FLOG':
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                            o_attack = round (o_attack - dmg['DMG'])
+                                        elif tpet_type == 'WITHER':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                            o_defense = round (o_defense - dmg['DMG'])
+                                        elif tpet_type == 'RAGE':
+                                            t_defense = round(t_defense - dmg['DMG'])
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                        elif tpet_type == 'BRACE':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                            t_attack = round(t_attack - dmg['DMG'])
+                                        elif tpet_type == 'BZRK':
+                                            t_health = round(t_health - dmg['DMG'])
+                                            t_attack = round(t_attack + (.75 * dmg['DMG']))
+                                        elif tpet_type == 'CRYSTAL':
+                                            t_health = round(t_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                        elif tpet_type == 'GROWTH':
+                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                            t_attack = round(t_attack+ (.3 * dmg['DMG']))
+                                        elif tpet_type == 'STANCE':
+                                            tempattack = dmg['DMG']
+                                            t_attack = t_defense
+                                            t_defense = tempattack
+                                        elif tpet_type == 'CONFUSE':
+                                            tempattack = dmg['DMG']
+                                            o_attack = o_defense
+                                            o_defense = tempattack
+                                        elif tpet_type == 'BLINK':
+                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                            o_stamina = round(o_stamina + dmg['DMG'] - 10)
+                                        elif tpet_type == 'SLOW':
+                                            tempstam = round(o_stamina + dmg['DMG'])
+                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                            o_stamina = t_stamina
+                                            t_stamina = tempstam
+                                        elif tpet_type == 'HASTE':
+                                            tempstam = round(o_stamina - dmg['DMG'])
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                            o_stamina = t_stamina
+                                            t_stamina = tempstam                                       
+                                        elif tpet_type == 'SOULCHAIN':
+                                            t_stamina = round(dmg['DMG'])
+                                            o_stamina = t_stamina
+                                        elif tpet_type == 'GAMBLE':
+                                            t_health = round(dmg['DMG'])
+                                            o_health = t_health
+                                        elif tpet_type == 'FEAR':
+                                            t_health = round(t_health - ((dmg['DMG']/100)* t_health))
+                                            o_attack = round(o_attack - ((dmg['DMG']/100)* o_attack))
+                                            o_defense = round(o_defense - ((dmg['DMG']/100)* o_defense))
+                                        elif tpet_type == 'WAVE':
+                                            o_health = round(o_health - dmg['DMG'])
+                                        elif tpet_type == 'BLAST':
+                                            o_health = round(o_health - dmg['DMG'])
+                                        elif tpet_type == 'CREATION':
+                                            t_max_health = round(t_max_health + dmg['DMG'])
+                                            t_health = round(t_health + dmg['DMG'])
+                                        elif tpet_type == 'DESTRUCTION':
+                                            o_max_health = round(o_max_health - dmg['DMG'])
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+
+                                        embedVar = discord.Embed(title=f"{t_card.upper()} Summoned {tpet_name}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"{tpet_name} used {tpetmove_text}!", value =f"Enhanced {tpet_type}")
+                                        embedVar.set_thumbnail(url=tpet_image)
+                                        await private_channel.send(embed=embedVar)
+                                        turn=1
+                                    else:
+                                        await private_channel.send(f"{tpet_name} needs a turn to rest...")
+                                        turn=1
                             else:
                                 await private_channel.send(f"{tpet_name} needs a turn to rest...")
 
                         if int(aiMove) !=5 and int(aiMove) !=6:
                             # If you have enough stamina for move, use it
-                            if dmg['CAN_USE_MOVE']:
-                                if dmg['ENHANCE']:
-                                    enh_type= dmg['ENHANCED_TYPE']
-                                    if enh_type == 'ATK':
-                                        t_attack = round(t_attack + dmg['DMG'])
-                                    elif enh_type == 'DEF':
-                                        t_defense = round(t_defense + dmg['DMG'])
-                                    elif enh_type == 'STAM':
-                                        t_stamina = round(t_stamina + dmg['DMG'])
-                                    elif enh_type == 'HLT':
-                                        t_health = round(t_health + dmg['DMG'])
-                                    elif enh_type == 'LIFE':
-                                        t_health = round(t_health + dmg['DMG'])
-                                        o_health = round(o_health - dmg['DMG'])
-                                    elif enh_type == 'DRAIN':
-                                        t_stamina = round(t_stamina + dmg['DMG'])
-                                        o_stamina = round(o_stamina - dmg['DMG'])
-                                    elif enh_type == 'FLOG':
-                                        t_attack = round(t_attack + dmg['DMG'])
-                                        o_attack = round(o_attack - dmg['DMG'])
-                                    elif enh_type == 'WITHER':
-                                        t_defense = round(t_defense + dmg['DMG'])
-                                        o_defense = round(o_defense - dmg['DMG'])
-                                    elif enh_type == 'RAGE':
-                                        t_defense = round(t_defense - dmg['DMG'])
-                                        t_attack = round(t_attack + dmg['DMG'])
-                                    elif enh_type == 'BRACE':
-                                        t_defense = round(t_defense + dmg['DMG'])
-                                        t_attack = round(t_attack - dmg['DMG'])
-                                    elif enh_type == 'BZRK':
-                                        t_health = round(t_health - dmg['DMG'])
-                                        t_attack = round(t_attack +(.75 *  dmg['DMG']))
-                                    elif enh_type == 'CRYSTAL':
-                                        t_health = round(t_health - dmg['DMG'])
-                                        t_defense = round(t_defense + (.75 * dmg['DMG']))
-                                    elif enh_type == 'GROWTH':
-                                        t_max_health = round(t_max_health - dmg['DMG'])
-                                        t_defense = round(t_defense + (.3 * dmg['DMG']))
-                                        t_attack = round(t_attack+ (.3 * dmg['DMG']))
-                                    elif enh_type == 'STANCE':
-                                        tempattack = dmg['DMG']
-                                        t_attack = t_defense
-                                        t_defense = tempattack
-                                    elif enh_type == 'CONFUSE':
-                                        tempattack = dmg['DMG']
-                                        o_attack = o_defense
-                                        o_defense = tempattack
-                                    elif enh_type == 'BLINK':
-                                        t_stamina = round(t_stamina - dmg['DMG'])
-                                        o_stamina = round(o_stamina + dmg['DMG'] - 10)
-                                    elif enh_type == 'SLOW':
-                                        tempstam = round(o_stamina + dmg['DMG'])
-                                        t_stamina = round(t_stamina - dmg['DMG'])
-                                        o_stamina = t_stamina
-                                        t_stamina = tempstam
-                                    elif enh_type == 'HASTE':
-                                        tempstam = round(o_stamina - dmg['DMG'])
-                                        t_stamina = round(t_stamina + dmg['DMG'])
-                                        o_stamina = t_stamina
-                                        t_stamina = tempstam                                       
-                                    elif enh_type == 'SOULCHAIN':
-                                        t_stamina = round(dmg['DMG'])
-                                        o_stamina = o_stamina
-                                    elif enh_type == 'GAMBLE':
-                                        t_health = round(dmg['DMG']) * 2
-                                        o_health = t_health
-                                    elif enh_type == 'FEAR':
-                                        t_health = round(t_health - ((dmg['DMG']/100) * t_health))
-                                        o_attack = round(c_attack - ((dmg['DMG']/100) * o_attack))
-                                        o_defense = round(c_defense - ((dmg['DMG']/100) * o_defense))
-                                    elif enh_type == 'WAVE':
-                                        o_health = round(o_health - dmg['DMG'])
-                                    elif enh_type == 'BLAST':
-                                        o_health = round(o_health - dmg['DMG'])
-                                    elif enh_type == 'CREATION':
-                                        t_max_health = round(t_max_health + dmg['DMG'])
-                                        t_health = round(t_health + dmg['DMG'])
-                                    elif enh_type == 'DESTRUCTION':
-                                        o_max_health = round(o_max_health - dmg['DMG'])
-                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-                                    embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
-                                    await private_channel.send(embed=embedVar)
-                                    turn_total= turn_total + 1
-                                    turn = 2
-                                elif dmg['DMG'] == 0:
-                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-                                    embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
-                                    await private_channel.send(embed=embedVar)
-                                    turn_total= turn_total + 1
-                                    turn=2
-                                else:
-                                    if o_universe == "Naruto" and o_stamina == 0:
-                                        o_health = o_health 
-                                        embedVar = discord.Embed(title=f"{o_card.upper()}: Substitution Jutsu", description=f"{t_card} attack strikes a log", colour=0xe91e63)
-                                        await private_channel.send(embed=embedVar)
-                                    else:
-                                        o_health = o_health - int(dmg['DMG'])
+                            #if c used block
+                            if c_block_used==True:
+                                print("Attacking C")
+                                if dmg['CAN_USE_MOVE']:
+                                    if dmg['ENHANCE']:
+                                        enh_type= dmg['ENHANCED_TYPE']
+                                        if enh_type == 'ATK':
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                        elif enh_type == 'DEF':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                        elif enh_type == 'STAM':
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                        elif enh_type == 'HLT':
+                                            t_health = round(t_health + dmg['DMG'])
+                                        elif enh_type == 'LIFE':
+                                            t_health = round(t_health + dmg['DMG'])
+                                            c_health = round(c_health - dmg['DMG'])
+                                        elif enh_type == 'DRAIN':
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                            c_stamina = round(c_stamina - dmg['DMG'])
+                                        elif enh_type == 'FLOG':
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                            c_attack = round(c_attack - dmg['DMG'])
+                                        elif enh_type == 'WITHER':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                            c_defense = round(t_defense - dmg['DMG'])
+                                        elif enh_type == 'RAGE':
+                                            t_defense = round(t_defense - dmg['DMG'])
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                        elif enh_type == 'BRACE':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                            t_attack = round(t_attack - dmg['DMG'])
+                                        elif enh_type == 'BZRK':
+                                            t_health = round(t_health - dmg['DMG'])
+                                            t_attack = round(t_attack +(.75 *  dmg['DMG']))
+                                        elif enh_type == 'CRYSTAL':
+                                            t_health = round(t_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                        elif enh_type == 'GROWTH':
+                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                            t_attack = round(t_attack+ (.3 * dmg['DMG']))
+                                        elif enh_type == 'STANCE':
+                                            tempattack = dmg['DMG']
+                                            t_attack = t_defense
+                                            t_defense = tempattack
+                                        elif enh_type == 'CONFUSE':
+                                            tempattack = dmg['DMG']
+                                            c_attack = c_defense
+                                            c_defense = tempattack
+                                        elif enh_type == 'BLINK':
+                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                            c_stamina = round(c_stamina + dmg['DMG'] - 10)
+                                        elif enh_type == 'SLOW':
+                                            tempstam = round(c_stamina + dmg['DMG'])
+                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                            c_stamina = t_stamina
+                                            t_stamina = tempstam
+                                        elif enh_type == 'HASTE':
+                                            tempstam = round(c_stamina - dmg['DMG'])
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                            c_stamina = t_stamina
+                                            t_stamina = tempstam                                       
+                                        elif enh_type == 'SOULCHAIN':
+                                            t_stamina = round(dmg['DMG'])
+                                            c_stamina = t_stamina
+                                        elif enh_type == 'GAMBLE':
+                                            t_health = round(dmg['DMG']) * 2
+                                            c_health = t_health
+                                        elif enh_type == 'FEAR':
+                                            t_health = round(t_health - ((dmg['DMG']/100) * t_health))
+                                            c_attack = round(c_attack - ((dmg['DMG']/100) * c_attack))
+                                            c_defense = round(c_defense - ((dmg['DMG']/100) * c_defense))
+                                        elif enh_type == 'WAVE':
+                                            c_health = round(c_health - dmg['DMG'])
+                                        elif enh_type == 'BLAST':
+                                            c_health = round(c_health - dmg['DMG'])
+                                        elif enh_type == 'CREATION':
+                                            t_max_health = round(t_max_health + dmg['DMG'])
+                                            t_health = round(t_health + dmg['DMG'])
+                                        elif enh_type == 'DESTRUCTION':
+                                            c_max_health = round(c_max_health - dmg['DMG'])
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                         await private_channel.send(embed=embedVar)
-                                    if o_health < 0:
-                                        o_health=0
-                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
-                                    turn_total= turn_total + 1
-                                    turn=2
-
+                                        turn_total= turn_total + 1
+                                        turn = 2
+                                    elif dmg['DMG'] == 0:
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                        await private_channel.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn=2
+                                    else:
+                                        if c_universe == "Naruto" and c_stamina == 0:
+                                            c_health = c_health 
+                                            embedVar = discord.Embed(title=f"{c_card.upper()}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
+                                            await private_channel.send(embed=embedVar)
+                                        else:
+                                            c_health = c_health - int(dmg['DMG'])
+                                            embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                            await private_channel.send(embed=embedVar)
+                                        if c_health < 0:
+                                            c_health=0
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                        turn_total= turn_total + 1
+                                        turn=2
+                                else:
+                                    await private_channel.send(m.NOT_ENOUGH_STAMINA)
+                                    turn = 1
                             else:
-                                await private_channel.send(m.NOT_ENOUGH_STAMINA)
-                                turn = 1
+                                if dmg['CAN_USE_MOVE']:
+                                    if dmg['ENHANCE']:
+                                        enh_type= dmg['ENHANCED_TYPE']
+                                        if enh_type == 'ATK':
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                        elif enh_type == 'DEF':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                        elif enh_type == 'STAM':
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                        elif enh_type == 'HLT':
+                                            t_health = round(t_health + dmg['DMG'])
+                                        elif enh_type == 'LIFE':
+                                            t_health = round(t_health + dmg['DMG'])
+                                            o_health = round(o_health - dmg['DMG'])
+                                        elif enh_type == 'DRAIN':
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                            o_stamina = round(o_stamina - dmg['DMG'])
+                                        elif enh_type == 'FLOG':
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                            o_attack = round(o_attack - dmg['DMG'])
+                                        elif enh_type == 'WITHER':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                            o_defense = round(o_defense - dmg['DMG'])
+                                        elif enh_type == 'RAGE':
+                                            t_defense = round(t_defense - dmg['DMG'])
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                        elif enh_type == 'BRACE':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                            t_attack = round(t_attack - dmg['DMG'])
+                                        elif enh_type == 'BZRK':
+                                            t_health = round(t_health - dmg['DMG'])
+                                            t_attack = round(t_attack +(.50 *  dmg['DMG']))
+                                        elif enh_type == 'CRYSTAL':
+                                            t_health = round(t_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                        elif enh_type == 'GROWTH':
+                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                            t_attack = round(t_attack+ (.3 * dmg['DMG']))
+                                        elif enh_type == 'STANCE':
+                                            tempattack = dmg['DMG']
+                                            t_attack = t_defense
+                                            t_defense = tempattack
+                                        elif enh_type == 'CONFUSE':
+                                            tempattack = dmg['DMG']
+                                            o_attack = o_defense
+                                            o_defense = tempattack
+                                        elif enh_type == 'BLINK':
+                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                            o_stamina = round(o_stamina + dmg['DMG'] - 10)
+                                        elif enh_type == 'SLOW':
+                                            tempstam = round(o_stamina + dmg['DMG'])
+                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                            o_stamina = t_stamina
+                                            t_stamina = tempstam
+                                        elif enh_type == 'HASTE':
+                                            tempstam = round(o_stamina - dmg['DMG'])
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                            o_stamina = t_stamina
+                                            t_stamina = tempstam                                       
+                                        elif enh_type == 'SOULCHAIN':
+                                            t_stamina = round(dmg['DMG'])
+                                            o_stamina = o_stamina
+                                        elif enh_type == 'GAMBLE':
+                                            t_health = round(dmg['DMG']) * 2
+                                            o_health = t_health
+                                        elif enh_type == 'FEAR':
+                                            t_health = round(t_health - ((dmg['DMG']/100) * t_health))
+                                            o_attack = round(c_attack - ((dmg['DMG']/100) * o_attack))
+                                            o_defense = round(c_defense - ((dmg['DMG']/100) * o_defense))
+                                        elif enh_type == 'WAVE':
+                                            o_health = round(o_health - dmg['DMG'])
+                                        elif enh_type == 'BLAST':
+                                            o_health = round(o_health - dmg['DMG'])
+                                        elif enh_type == 'CREATION':
+                                            t_max_health = round(t_max_health + dmg['DMG'])
+                                            t_health = round(t_health + dmg['DMG'])
+                                        elif enh_type == 'DESTRUCTION':
+                                            o_max_health = round(o_max_health - dmg['DMG'])
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                        await private_channel.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn = 2
+                                    elif dmg['DMG'] == 0:
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                        await private_channel.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn=2
+                                    else:
+                                        if o_universe == "Naruto" and o_stamina == 0:
+                                            o_health = o_health 
+                                            embedVar = discord.Embed(title=f"{o_card.upper()}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
+                                            await private_channel.send(embed=embedVar)
+                                        else:
+                                            o_health = o_health - int(dmg['DMG'])
+                                            embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                            await private_channel.send(embed=embedVar)
+                                        if o_health < 0:
+                                            o_health=0
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                        turn_total= turn_total + 1
+                                        turn=2
+                                else:
+                                    await private_channel.send(m.NOT_ENOUGH_STAMINA)
+                                    turn = 1
 
                 #Companion Turn Start
                 if turn == 2:
+                    if c_block_used==True:
+                        c_defense = c_defense/2
+                        c_block_used=False
                     if c_attack <= 25:
                         c_attack = 25
                     if c_defense <= 30:
@@ -6465,6 +7063,8 @@ class CrownUnlimited(commands.Cog):
                             aiMove = 6 
                         elif t_stamina == 0:
                             aiMove = 1
+                        elif c_health <= (.50 * c_max_health) and c_used_resolve == False and c_used_focus:
+                            aiMove = 5
                         elif c_stamina >= 160 and (c_health >= t_health):
                             if o_health <= t_health:
                                 aiMove = 7
@@ -6496,16 +7096,31 @@ class CrownUnlimited(commands.Cog):
                         elif c_stamina >= 110:
                             aiMove = 2                                   
                         elif c_stamina >= 100 and (c_health >= t_health):
-                            aiMove = 7
+                            if c_health >= o_health:
+                                aiMove = 8
+                            else:
+                                aiMove = 7
                         elif c_stamina >= 100:
-                            aiMove = 1
+                            if c_health >= o_health:
+                                aiMove = 8
+                            else:
+                                aiMove = 1
                         elif c_stamina >= 90 and (c_health >= t_health):
                             if o_health <= t_health:
-                                aiMove = 7
+                                if c_health >= o_health:
+                                    aiMove = 8
+                                else:
+                                    aiMove = 7
                             else:
-                                aiMove = 3
+                                if c_health >= o_health:
+                                    aiMove = 8
+                                else:
+                                    aiMove = 3
                         elif c_stamina >= 90:
-                            aiMove = 7
+                            if c_health >= o_health:
+                                aiMove = 8
+                            else:
+                                aiMove = 7
                         elif c_stamina >= 80 and (c_health >= t_health):
                             if o_health <= t_health:
                                 aiMove = 7
@@ -6528,7 +7143,7 @@ class CrownUnlimited(commands.Cog):
                             else:
                                 aiMove = 1 
                         elif c_stamina >= 60:
-                            if t_used_resolve == False and t_used_focus:
+                            if c_used_resolve == False and t_used_focus:
                                 aiMove = 5
                             elif t_used_focus == False:
                                 aiMove = 2
@@ -6536,9 +7151,15 @@ class CrownUnlimited(commands.Cog):
                                 aiMove = 1 
                         elif c_stamina >= 50 and (c_health >= t_health):
                             if c_stamina >= o_stamina:
-                                aiMove = 7
+                                if c_health >= o_health:
+                                    aiMove = 8
+                                else:
+                                    aiMove = 7
                             else:
-                                aiMove = 1
+                                if c_health >= o_health:
+                                    aiMove = 8
+                                else:
+                                    aiMove = 1
                         elif c_stamina >= 50:
                             aiMove = 2
                         elif c_stamina >= 40 and (c_health >= t_health):
@@ -6556,9 +7177,15 @@ class CrownUnlimited(commands.Cog):
                         elif c_stamina >= 30:
                             aiMove = 2
                         elif c_stamina >= 20 and (c_health >= t_health):
-                            aiMove = 1
+                            if c_health >= o_health:
+                                aiMove = 8
+                            else:
+                                aiMove = 1
                         elif c_stamina >= 20:
-                            aiMove = 7
+                            if c_health >= o_health:
+                                aiMove = 8
+                            else:
+                                aiMove = 7
                         elif c_stamina >= 10:
                             aiMove = 1
                         else:
@@ -6566,12 +7193,12 @@ class CrownUnlimited(commands.Cog):
             
 
                         
-                            # calculate data based on selected move
+                        # calculate data based on selected move
                         if aiMove == 0:
                             c_health=0
                     
                             if private_channel.guild:
-                                await private_channel.send(f"{activeDeck['CARD']} has fled the battle...")
+                                await private_channel.send(f"{user2.mention} has fled the battle...")
                                 response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                                 await discord.TextChannel.delete(private_channel, reason=None)
                             else:
@@ -6932,9 +7559,20 @@ class CrownUnlimited(commands.Cog):
                             else:
                                 await private_channel.send(m.NOT_ENOUGH_STAMINA)
                                 turn=2
-                        
+                        elif aiMove == 8:
+                            if c_stamina >=20:
+                                c_block_used=True
+                                c_stamina = c_stamina - 20
+                                c_defense = c_defense * 2
+                                embedVar = discord.Embed(title=f"{c_card.upper()} DEFENDS {o_card.upper()}", colour=0xe91e63)
+                                embedVar.add_field(name=f"{c_card} used Block!", value =f"Enhanced DEF")
+                                await private_channel.send(embed=embedVar)
+                                turn=3
+                            else:
+                                await private_channel.send(f"{c_card} is too tired to block...")
+                                turn=2
 
-                        if aiMove != 5 and aiMove != 6 and aiMove != 7:
+                        if aiMove != 5 and aiMove != 6 and aiMove != 7 and aiMove != 8:
                             # If you have enough stamina for move, use it
                             if dmg['CAN_USE_MOVE']:
                                 if dmg['ENHANCE']:
@@ -7033,7 +7671,7 @@ class CrownUnlimited(commands.Cog):
                                 else:
                                     if t_universe == "Naruto" and t_stamina == 0:
                                         t_health = t_health 
-                                        embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{c_card} attack strikes a log", colour=0xe91e63)
+                                        embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{c_card} strikes a log", colour=0xe91e63)
                                         await private_channel.send(embed=embedVar)
                                     else:
                                         t_health = t_health - dmg['DMG']
@@ -7049,7 +7687,7 @@ class CrownUnlimited(commands.Cog):
                                 embedVar = discord.Embed(title=emessage, description=f"Use abilities to Increase `STAM` or enter `FOCUS STATE`!", colour=0xe91e63)
                                 await private_channel.send(embed=embedVar)
                                 turn=2
-      
+    
                 #Opponent Turn Start
                 elif turn == 3:
                     if t_attack <= 25:
@@ -7279,20 +7917,36 @@ class CrownUnlimited(commands.Cog):
                         else:
                             aiMove = 0
                         
-
+                        t_special_move_description =""
                         if int(aiMove) == 0:
                             t_health=0
                         if int(aiMove) == 1:
-                            dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
+                            t_pet_used =False
+                            if o_defend_used==True:
+                                dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                            else:
+                                dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
                         elif int(aiMove) == 2:
-                            dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
+                            t_pet_used =False
+                            if o_defend_used==True:
+                                dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                            else:
+                                dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
                         elif int(aiMove) == 3:
-                            dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
+                            t_pet_used =False
+                            if o_defend_used==True:
+                                dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                            else: 
+                                dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
                             if t_gif != "N/A":
                                     await private_channel.send(f"{t_gif}")
                         elif int(aiMove) == 4:
+                            t_pet_used =False
                             t_enhancer_used=True
-                            dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
+                            if o_defend_used==True:
+                                dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                            else:
+                                dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
                             t_enhancer_used=False
                         elif int(aiMove) == 5:
                             if not t_used_resolve and t_used_focus:
@@ -7312,6 +7966,7 @@ class CrownUnlimited(commands.Cog):
                                         t_attack = round(t_attack + t_resolve_attack)
                                         t_defense = round(t_defense - t_resolve_defense)
                                         t_used_resolve=True
+                                        t_pet_used =False
 
                                         embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                         embedVar.add_field(name=f"Transformation: Plus Ultra", value="All stats & stamina greatly increased")
@@ -7334,6 +7989,7 @@ class CrownUnlimited(commands.Cog):
                                     t_attack = round(t_attack + (2 * t_resolve_attack))
                                     t_defense = round(t_defense - t_resolve_defense)
                                     t_used_resolve=True
+                                    t_pet_used =False
 
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
@@ -7356,6 +8012,7 @@ class CrownUnlimited(commands.Cog):
                                     t_attack = round(t_attack + t_resolve_attack)
                                     t_defense = round(t_defense - t_resolve_defense)
                                     t_used_resolve=True
+                                    t_pet_used =False
 
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation: Ascension", value="All stats & stamina greatly increased")
@@ -7379,12 +8036,17 @@ class CrownUnlimited(commands.Cog):
                                     t_defense = round(t_defense - t_resolve_defense)
                                     t_used_resolve=True
                                     
+                                    
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
                                     await private_channel.send(embed=embedVar)
-                                    dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
-                                    t_pet_used =False
-                                    o_health = o_health - int(dmg['DMG'])
+                                    if o_defend_used==True:
+                                        dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
+                                        o_health = o_health - int(dmg['DMG'])
+                                    else:
+                                        dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina,t_max_health, c_attack, t_special_move_description, turn_total)
+                                        c_health = c_health - int(dmg['DMG'])
+                                    t_pet_used =False                                    
                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                     await private_channel.send(embed=embedVar)
                                     t_stamina = 0
@@ -7406,6 +8068,7 @@ class CrownUnlimited(commands.Cog):
                                     t_attack = round(t_attack + t_resolve_attack)
                                     t_defense = round(t_defense)
                                     t_used_resolve=True
+                                    t_pet_used =False
 
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation: Evolution", value="All stats & stamina greatly increased")
@@ -7428,6 +8091,7 @@ class CrownUnlimited(commands.Cog):
                                     t_attack = round(t_attack + t_resolve_attack)
                                     t_defense = round(t_defense - t_resolve_defense)
                                     t_used_resolve=True
+                                    t_pet_used =False
 
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
@@ -7436,216 +8100,421 @@ class CrownUnlimited(commands.Cog):
                                     turn=0
                             else:
                                 await private_channel.send(m.CANNOT_USE_RESOLVE)
-                                turn=1
-                        elif aiMove == 6:
+                                turn=3
+                        elif int(aiMove) == 6:
                             #Resolve Check and Calculation
-                            if t_used_resolve and t_used_focus and not t_pet_used:                                      
-                                t_enhancer_used=True
-                                dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
-                                t_enhancer_used=False
-                                t_pet_used =True
-                                tpet_dmg = dmg['DMG']
-                                tpet_type = dmg['ENHANCED_TYPE']
-                                if dmg['CAN_USE_MOVE']:
-                                    if tpet_type == 'ATK':
-                                        t_attack = round(t_attack + dmg['DMG'])
-                                    elif tpet_type == 'DEF':
-                                        t_defense = round(t_defense + dmg['DMG'])
-                                    elif tpet_type == 'STAM':
-                                        t_stamina = round(t_stamina + dmg['DMG'])
-                                    elif tpet_type == 'HLT':
-                                        t_health = round(t_health + dmg['DMG'])
-                                    elif tpet_type == 'LIFE':
-                                        t_health = round(t_health + dmg['DMG'])
-                                        c_health = round(c_health - dmg['DMG'])
-                                    elif tpet_type == 'DRAIN':
-                                        t_stamina = round(t_stamina + dmg['DMG'])
-                                        c_stamina = round(c_stamina - dmg['DMG'])
-                                    elif tpet_type == 'FLOG':
-                                        t_attack = round(t_attack + dmg['DMG'])
-                                        c_attack = round (c_attack - dmg['DMG'])
-                                    elif tpet_type == 'WITHER':
-                                        t_defense = round(t_defense + dmg['DMG'])
-                                        c_defense = round (c_defense - dmg['DMG'])
-                                    elif tpet_type == 'RAGE':
-                                        t_defense = round(t_defense - dmg['DMG'])
-                                        t_attack = round(t_attack + dmg['DMG'])
-                                    elif tpet_type == 'BRACE':
-                                        t_defense = round(t_defense + dmg['DMG'])
-                                        t_attack = round(t_attack - dmg['DMG'])
-                                    elif tpet_type == 'BZRK':
-                                        t_health = round(t_health - dmg['DMG'])
-                                        t_attack = round(t_attack + (.75 * dmg['DMG']))
-                                    elif tpet_type == 'CRYSTAL':
-                                        t_health = round(t_health - dmg['DMG'])
-                                        t_defense = round(t_defense + (.75 * dmg['DMG']))
-                                    elif tpet_type == 'GROWTH':
-                                        t_max_health = round(t_max_health - dmg['DMG'])
-                                        t_defense = round(t_defense + (.3 * dmg['DMG']))
-                                        t_attack = round(t_attack+ (.3 * dmg['DMG']))
-                                    elif tpet_type == 'STANCE':
-                                        tempattack = dmg['DMG']
-                                        t_attack = t_defense
-                                        t_defense = tempattack
-                                    elif tpet_type == 'CONFUSE':
-                                        tempattack = dmg['DMG']
-                                        c_attack = c_defense
-                                        c_defense = tempattack
-                                    elif tpet_type == 'BLINK':
-                                        t_stamina = round(t_stamina - dmg['DMG'])
-                                        c_stamina = round(c_stamina + dmg['DMG'] - 10)
-                                    elif tpet_type == 'SLOW':
-                                        tempstam = round(c_stamina + dmg['DMG'])
-                                        t_stamina = round(t_stamina - dmg['DMG'])
-                                        c_stamina = t_stamina
-                                        t_stamina = tempstam
-                                    elif tpet_type == 'HASTE':
-                                        tempstam = round(c_stamina - dmg['DMG'])
-                                        t_stamina = round(t_stamina + dmg['DMG'])
-                                        c_stamina = t_stamina
-                                        t_stamina = tempstam                                       
-                                    elif tpet_type == 'SOULCHAIN':
-                                        t_stamina = round(dmg['DMG'])
-                                        c_stamina = t_stamina
-                                    elif tpet_type == 'GAMBLE':
-                                        t_health = round(dmg['DMG'])
-                                        c_health = t_health
-                                    elif tpet_type == 'FEAR':
-                                        t_health = round(t_health - ((dmg['DMG']/100)* t_health))
-                                        c_attack = round(c_attack - ((dmg['DMG']/100)* c_attack))
-                                        c_defense = round(c_defense - ((dmg['DMG']/100)* c_defense))
-                                    elif tpet_type == 'WAVE':
-                                        c_health = round(c_health - dmg['DMG'])
-                                    elif tpet_type == 'BLAST':
-                                        c_health = round(c_health - dmg['DMG'])
-                                    elif tpet_type == 'CREATION':
-                                        t_max_health = round(t_max_health + dmg['DMG'])
-                                        t_health = round(t_health + dmg['DMG'])
-                                    elif tpet_type == 'DESTRUCTION':
-                                        c_max_health = round(c_max_health - dmg['DMG'])
-                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+                            if t_used_resolve and t_used_focus and not t_pet_used:
+                                if o_defend_used==True:
+                                    t_enhancer_used=True
+                                    dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                                    t_enhancer_used=False
+                                    t_pet_used =True
+                                    tpet_dmg = dmg['DMG']
+                                    tpet_type = dmg['ENHANCED_TYPE']
+                                    if dmg['CAN_USE_MOVE']:
+                                        if tpet_type == 'ATK':
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                        elif tpet_type == 'DEF':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                        elif tpet_type == 'STAM':
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                        elif tpet_type == 'HLT':
+                                            t_health = round(t_health + dmg['DMG'])
+                                        elif tpet_type == 'LIFE':
+                                            t_health = round(t_health + dmg['DMG'])
+                                            o_health = round(o_health - dmg['DMG'])
+                                        elif tpet_type == 'DRAIN':
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                            o_stamina = round(o_stamina - dmg['DMG'])
+                                        elif tpet_type == 'FLOG':
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                            o_attack = round (o_attack - dmg['DMG'])
+                                        elif tpet_type == 'WITHER':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                            o_defense = round (o_defense - dmg['DMG'])
+                                        elif tpet_type == 'RAGE':
+                                            t_defense = round(t_defense - dmg['DMG'])
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                        elif tpet_type == 'BRACE':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                            t_attack = round(t_attack - dmg['DMG'])
+                                        elif tpet_type == 'BZRK':
+                                            t_health = round(t_health - dmg['DMG'])
+                                            t_attack = round(t_attack + (.75 * dmg['DMG']))
+                                        elif tpet_type == 'CRYSTAL':
+                                            t_health = round(t_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                        elif tpet_type == 'GROWTH':
+                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                            t_attack = round(t_attack+ (.3 * dmg['DMG']))
+                                        elif tpet_type == 'STANCE':
+                                            tempattack = dmg['DMG']
+                                            t_attack = t_defense
+                                            t_defense = tempattack
+                                        elif tpet_type == 'CONFUSE':
+                                            tempattack = dmg['DMG']
+                                            o_attack = o_defense
+                                            o_defense = tempattack
+                                        elif tpet_type == 'BLINK':
+                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                            o_stamina = round(o_stamina + dmg['DMG'] - 10)
+                                        elif tpet_type == 'SLOW':
+                                            tempstam = round(o_stamina + dmg['DMG'])
+                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                            o_stamina = t_stamina
+                                            t_stamina = tempstam
+                                        elif tpet_type == 'HASTE':
+                                            tempstam = round(o_stamina - dmg['DMG'])
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                            o_stamina = t_stamina
+                                            t_stamina = tempstam                                       
+                                        elif tpet_type == 'SOULCHAIN':
+                                            t_stamina = round(dmg['DMG'])
+                                            o_stamina = t_stamina
+                                        elif tpet_type == 'GAMBLE':
+                                            t_health = round(dmg['DMG'])
+                                            o_health = t_health
+                                        elif tpet_type == 'FEAR':
+                                            t_health = round(t_health - ((dmg['DMG']/100)* t_health))
+                                            o_attack = round(o_attack - ((dmg['DMG']/100)* o_attack))
+                                            o_defense = round(o_defense - ((dmg['DMG']/100)* o_defense))
+                                        elif tpet_type == 'WAVE':
+                                            o_health = round(o_health - dmg['DMG'])
+                                        elif tpet_type == 'BLAST':
+                                            o_health = round(o_health - dmg['DMG'])
+                                        elif tpet_type == 'CREATION':
+                                            t_max_health = round(t_max_health + dmg['DMG'])
+                                            t_health = round(t_health + dmg['DMG'])
+                                        elif tpet_type == 'DESTRUCTION':
+                                            o_max_health = round(o_max_health - dmg['DMG'])
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])
 
-                                    embedVar = discord.Embed(title=f"{t_card.upper()} Summoned {tpet_name}", colour=0xe91e63)
-                                    embedVar.add_field(name=f"{tpet_name} used {tpetmove_text}!", value =f"Enhanced {tpet_type}")
-                                    embedVar.set_thumbnail(url=tpet_image)
-                                    await private_channel.send(embed=embedVar)
-                                    turn=3
-                                else:
-                                    await private_channel.send(f"{tpet_name} needs a turn to rest...")
-                                    turn=1
+                                        embedVar = discord.Embed(title=f"{t_card.upper()} Summoned {tpet_name}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"{tpet_name} used {tpetmove_text}!", value =f"Enhanced {tpet_type}")
+                                        embedVar.set_thumbnail(url=tpet_image)
+                                        await private_channel.send(embed=embedVar)
+                                        turn=1
+                                    else:
+                                        await private_channel.send(f"{tpet_name} needs a turn to rest...")
+                                        turn=1
+                                else:                                      
+                                    t_enhancer_used=True
+                                    dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
+                                    t_enhancer_used=False
+                                    t_pet_used =True
+                                    tpet_dmg = dmg['DMG']
+                                    tpet_type = dmg['ENHANCED_TYPE']
+                                    if dmg['CAN_USE_MOVE']:
+                                        if tpet_type == 'ATK':
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                        elif tpet_type == 'DEF':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                        elif tpet_type == 'STAM':
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                        elif tpet_type == 'HLT':
+                                            t_health = round(t_health + dmg['DMG'])
+                                        elif tpet_type == 'LIFE':
+                                            t_health = round(t_health + dmg['DMG'])
+                                            c_health = round(c_health - dmg['DMG'])
+                                        elif tpet_type == 'DRAIN':
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                            c_stamina = round(c_stamina - dmg['DMG'])
+                                        elif tpet_type == 'FLOG':
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                            c_attack = round (c_attack - dmg['DMG'])
+                                        elif tpet_type == 'WITHER':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                            c_defense = round (c_defense - dmg['DMG'])
+                                        elif tpet_type == 'RAGE':
+                                            t_defense = round(t_defense - dmg['DMG'])
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                        elif tpet_type == 'BRACE':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                            t_attack = round(t_attack - dmg['DMG'])
+                                        elif tpet_type == 'BZRK':
+                                            t_health = round(t_health - dmg['DMG'])
+                                            t_attack = round(t_attack + (.75 * dmg['DMG']))
+                                        elif tpet_type == 'CRYSTAL':
+                                            t_health = round(t_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                        elif tpet_type == 'GROWTH':
+                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                            t_attack = round(t_attack+ (.3 * dmg['DMG']))
+                                        elif tpet_type == 'STANCE':
+                                            tempattack = dmg['DMG']
+                                            t_attack = t_defense
+                                            t_defense = tempattack
+                                        elif tpet_type == 'CONFUSE':
+                                            tempattack = dmg['DMG']
+                                            c_attack = c_defense
+                                            c_defense = tempattack
+                                        elif tpet_type == 'BLINK':
+                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                            c_stamina = round(c_stamina + dmg['DMG'] - 10)
+                                        elif tpet_type == 'SLOW':
+                                            tempstam = round(c_stamina + dmg['DMG'])
+                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                            c_stamina = t_stamina
+                                            t_stamina = tempstam
+                                        elif tpet_type == 'HASTE':
+                                            tempstam = round(c_stamina - dmg['DMG'])
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                            c_stamina = t_stamina
+                                            t_stamina = tempstam                                       
+                                        elif tpet_type == 'SOULCHAIN':
+                                            t_stamina = round(dmg['DMG'])
+                                            c_stamina = t_stamina
+                                        elif tpet_type == 'GAMBLE':
+                                            t_health = round(dmg['DMG'])
+                                            c_health = t_health
+                                        elif tpet_type == 'FEAR':
+                                            t_health = round(t_health - ((dmg['DMG']/100)* t_health))
+                                            c_attack = round(c_attack - ((dmg['DMG']/100)* c_attack))
+                                            c_defense = round(c_defense - ((dmg['DMG']/100)* c_defense))
+                                        elif tpet_type == 'WAVE':
+                                            c_health = round(c_health - dmg['DMG'])
+                                        elif tpet_type == 'BLAST':
+                                            c_health = round(c_health - dmg['DMG'])
+                                        elif tpet_type == 'CREATION':
+                                            t_max_health = round(t_max_health + dmg['DMG'])
+                                            t_health = round(t_health + dmg['DMG'])
+                                        elif tpet_type == 'DESTRUCTION':
+                                            c_max_health = round(c_max_health - dmg['DMG'])
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+
+                                        embedVar = discord.Embed(title=f"{t_card.upper()} Summoned {tpet_name}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"{tpet_name} used {tpetmove_text}!", value =f"Enhanced {tpet_type}")
+                                        embedVar.set_thumbnail(url=tpet_image)
+                                        await private_channel.send(embed=embedVar)
+                                        turn=3
+                                    else:
+                                        await private_channel.send(f"{tpet_name} needs a turn to rest...")
+                                        turn=1
                             else:
                                 await private_channel.send(f"{tpet_name} needs a turn to rest...")
 
                         if int(aiMove) !=5 and int(aiMove) !=6:
                             # If you have enough stamina for move, use it
-                            if dmg['CAN_USE_MOVE']:
-                                if dmg['ENHANCE']:
-                                    enh_type= dmg['ENHANCED_TYPE']
-                                    if enh_type == 'ATK':
-                                        t_attack = round(t_attack + dmg['DMG'])
-                                    elif enh_type == 'DEF':
-                                        t_defense = round(t_defense + dmg['DMG'])
-                                    elif enh_type == 'STAM':
-                                        t_stamina = round(t_stamina + dmg['DMG'])
-                                    elif enh_type == 'HLT':
-                                        t_health = round(t_health + dmg['DMG'])
-                                    elif enh_type == 'LIFE':
-                                        t_health = round(t_health + dmg['DMG'])
-                                        c_health = round(c_health - dmg['DMG'])
-                                    elif enh_type == 'DRAIN':
-                                        t_stamina = round(t_stamina + dmg['DMG'])
-                                        c_stamina = round(c_stamina - dmg['DMG'])
-                                    elif enh_type == 'FLOG':
-                                        t_attack = round(t_attack + dmg['DMG'])
-                                        c_attack = round(c_attack - dmg['DMG'])
-                                    elif enh_type == 'WITHER':
-                                        t_defense = round(t_defense + dmg['DMG'])
-                                        c_defense = round(t_defense - dmg['DMG'])
-                                    elif enh_type == 'RAGE':
-                                        t_defense = round(t_defense - dmg['DMG'])
-                                        t_attack = round(t_attack + dmg['DMG'])
-                                    elif enh_type == 'BRACE':
-                                        t_defense = round(t_defense + dmg['DMG'])
-                                        t_attack = round(t_attack - dmg['DMG'])
-                                    elif enh_type == 'BZRK':
-                                        t_health = round(t_health - dmg['DMG'])
-                                        t_attack = round(t_attack +(.50 *  dmg['DMG']))
-                                    elif enh_type == 'CRYSTAL':
-                                        t_health = round(t_health - dmg['DMG'])
-                                        t_defense = round(t_defense + (.75 * dmg['DMG']))
-                                    elif enh_type == 'GROWTH':
-                                        t_max_health = round(t_max_health - dmg['DMG'])
-                                        t_defense = round(t_defense + (.3 * dmg['DMG']))
-                                        t_attack = round(t_attack+ (.3 * dmg['DMG']))
-                                    elif enh_type == 'STANCE':
-                                        tempattack = dmg['DMG']
-                                        t_attack = t_defense
-                                        t_defense = tempattack
-                                    elif enh_type == 'CONFUSE':
-                                        tempattack = dmg['DMG']
-                                        c_attack = c_defense
-                                        c_defense = tempattack
-                                    elif enh_type == 'BLINK':
-                                        t_stamina = round(t_stamina - dmg['DMG'])
-                                        c_stamina = round(c_stamina + dmg['DMG'] - 10)
-                                    elif enh_type == 'SLOW':
-                                        tempstam = round(c_stamina + dmg['DMG'])
-                                        t_stamina = round(t_stamina - dmg['DMG'])
-                                        c_stamina = t_stamina
-                                        t_stamina = tempstam
-                                    elif enh_type == 'HASTE':
-                                        tempstam = round(c_stamina - dmg['DMG'])
-                                        t_stamina = round(t_stamina + dmg['DMG'])
-                                        c_stamina = t_stamina
-                                        t_stamina = tempstam                                       
-                                    elif enh_type == 'SOULCHAIN':
-                                        t_stamina = round(dmg['DMG'])
-                                        c_stamina = t_stamina
-                                    elif enh_type == 'GAMBLE':
-                                        t_health = round(dmg['DMG']) * 2
-                                        c_health = t_health
-                                    elif enh_type == 'FEAR':
-                                        t_health = round(t_health - ((dmg['DMG']/100) * t_health))
-                                        c_attack = round(c_attack - ((dmg['DMG']/100) * c_attack))
-                                        c_defense = round(c_defense - ((dmg['DMG']/100) * c_defense))
-                                    elif enh_type == 'WAVE':
-                                        c_health = round(c_health - dmg['DMG'])
-                                    elif enh_type == 'BLAST':
-                                        c_health = round(c_health - dmg['DMG'])
-                                    elif enh_type == 'CREATION':
-                                        t_max_health = round(t_max_health + dmg['DMG'])
-                                        t_health = round(t_health + dmg['DMG'])
-                                    elif enh_type == 'DESTRUCTION':
-                                        c_max_health = round(c_max_health - dmg['DMG'])
-                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-                                    embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
-                                    await private_channel.send(embed=embedVar)
-                                    turn_total= turn_total + 1
-                                    turn = 0
-                                elif dmg['DMG'] == 0:
-                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-                                    embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
-                                    await private_channel.send(embed=embedVar)
-                                    turn_total= turn_total + 1
-                                    turn=0
-                                else:
-                                    if c_universe == "Naruto" and c_stamina == 0:
-                                        c_health = c_health 
-                                        embedVar = discord.Embed(title=f"{c_card.upper()}: Substitution Jutsu", description=f"{t_card} attack strikes a log", colour=0xe91e63)
-                                        await private_channel.send(embed=embedVar)
-                                    else:
-                                        c_health = c_health - int(dmg['DMG'])
+                            #check if o is blocking
+                            if o_defend_used==True:
+                                if dmg['CAN_USE_MOVE']:
+                                    if dmg['ENHANCE']:
+                                        enh_type= dmg['ENHANCED_TYPE']
+                                        if enh_type == 'ATK':
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                        elif enh_type == 'DEF':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                        elif enh_type == 'STAM':
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                        elif enh_type == 'HLT':
+                                            t_health = round(t_health + dmg['DMG'])
+                                        elif enh_type == 'LIFE':
+                                            t_health = round(t_health + dmg['DMG'])
+                                            o_health = round(o_health - dmg['DMG'])
+                                        elif enh_type == 'DRAIN':
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                            o_stamina = round(o_stamina - dmg['DMG'])
+                                        elif enh_type == 'FLOG':
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                            o_attack = round(o_attack - dmg['DMG'])
+                                        elif enh_type == 'WITHER':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                            o_defense = round(o_defense - dmg['DMG'])
+                                        elif enh_type == 'RAGE':
+                                            t_defense = round(t_defense - dmg['DMG'])
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                        elif enh_type == 'BRACE':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                            t_attack = round(t_attack - dmg['DMG'])
+                                        elif enh_type == 'BZRK':
+                                            t_health = round(t_health - dmg['DMG'])
+                                            t_attack = round(t_attack +(.50 *  dmg['DMG']))
+                                        elif enh_type == 'CRYSTAL':
+                                            t_health = round(t_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                        elif enh_type == 'GROWTH':
+                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                            t_attack = round(t_attack+ (.3 * dmg['DMG']))
+                                        elif enh_type == 'STANCE':
+                                            tempattack = dmg['DMG']
+                                            t_attack = t_defense
+                                            t_defense = tempattack
+                                        elif enh_type == 'CONFUSE':
+                                            tempattack = dmg['DMG']
+                                            o_attack = o_defense
+                                            o_defense = tempattack
+                                        elif enh_type == 'BLINK':
+                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                            o_stamina = round(o_stamina + dmg['DMG'] - 10)
+                                        elif enh_type == 'SLOW':
+                                            tempstam = round(o_stamina + dmg['DMG'])
+                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                            o_stamina = t_stamina
+                                            t_stamina = tempstam
+                                        elif enh_type == 'HASTE':
+                                            tempstam = round(o_stamina - dmg['DMG'])
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                            o_stamina = t_stamina
+                                            t_stamina = tempstam                                       
+                                        elif enh_type == 'SOULCHAIN':
+                                            t_stamina = round(dmg['DMG'])
+                                            o_stamina = o_stamina
+                                        elif enh_type == 'GAMBLE':
+                                            t_health = round(dmg['DMG']) * 2
+                                            o_health = t_health
+                                        elif enh_type == 'FEAR':
+                                            t_health = round(t_health - ((dmg['DMG']/100) * t_health))
+                                            o_attack = round(c_attack - ((dmg['DMG']/100) * o_attack))
+                                            o_defense = round(c_defense - ((dmg['DMG']/100) * o_defense))
+                                        elif enh_type == 'WAVE':
+                                            o_health = round(o_health - dmg['DMG'])
+                                        elif enh_type == 'BLAST':
+                                            o_health = round(o_health - dmg['DMG'])
+                                        elif enh_type == 'CREATION':
+                                            t_max_health = round(t_max_health + dmg['DMG'])
+                                            t_health = round(t_health + dmg['DMG'])
+                                        elif enh_type == 'DESTRUCTION':
+                                            o_max_health = round(o_max_health - dmg['DMG'])
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                         await private_channel.send(embed=embedVar)
-                                    if c_health < 0:
-                                        c_health=0
-                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
-                                    turn_total= turn_total + 1
-                                    turn=0
-
-                            else:
-                                await private_channel.send(m.NOT_ENOUGH_STAMINA)
-                                turn = 1    
+                                        turn_total= turn_total + 1
+                                        turn = 0
+                                    elif dmg['DMG'] == 0:
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                        await private_channel.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn=0
+                                    else:
+                                        if o_universe == "Naruto" and o_stamina == 0:
+                                            o_health = o_health 
+                                            embedVar = discord.Embed(title=f"{o_card.upper()}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
+                                            await private_channel.send(embed=embedVar)
+                                        else:
+                                            o_health = o_health - int(dmg['DMG'])
+                                            embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                            await private_channel.send(embed=embedVar)
+                                        if o_health < 0:
+                                            o_health=0
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                        turn_total= turn_total + 1
+                                        turn=0
+                                else:
+                                    await private_channel.send(m.NOT_ENOUGH_STAMINA)
+                                    turn = 3
+                            else:                                 
+                                if dmg['CAN_USE_MOVE']:
+                                    if dmg['ENHANCE']:
+                                        enh_type= dmg['ENHANCED_TYPE']
+                                        if enh_type == 'ATK':
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                        elif enh_type == 'DEF':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                        elif enh_type == 'STAM':
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                        elif enh_type == 'HLT':
+                                            t_health = round(t_health + dmg['DMG'])
+                                        elif enh_type == 'LIFE':
+                                            t_health = round(t_health + dmg['DMG'])
+                                            c_health = round(c_health - dmg['DMG'])
+                                        elif enh_type == 'DRAIN':
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                            c_stamina = round(c_stamina - dmg['DMG'])
+                                        elif enh_type == 'FLOG':
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                            c_attack = round(c_attack - dmg['DMG'])
+                                        elif enh_type == 'WITHER':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                            c_defense = round(t_defense - dmg['DMG'])
+                                        elif enh_type == 'RAGE':
+                                            t_defense = round(t_defense - dmg['DMG'])
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                        elif enh_type == 'BRACE':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                            t_attack = round(t_attack - dmg['DMG'])
+                                        elif enh_type == 'BZRK':
+                                            t_health = round(t_health - dmg['DMG'])
+                                            t_attack = round(t_attack +(.75 *  dmg['DMG']))
+                                        elif enh_type == 'CRYSTAL':
+                                            t_health = round(t_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                        elif enh_type == 'GROWTH':
+                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                            t_attack = round(t_attack+ (.3 * dmg['DMG']))
+                                        elif enh_type == 'STANCE':
+                                            tempattack = dmg['DMG']
+                                            t_attack = t_defense
+                                            t_defense = tempattack
+                                        elif enh_type == 'CONFUSE':
+                                            tempattack = dmg['DMG']
+                                            c_attack = c_defense
+                                            c_defense = tempattack
+                                        elif enh_type == 'BLINK':
+                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                            c_stamina = round(c_stamina + dmg['DMG'] - 10)
+                                        elif enh_type == 'SLOW':
+                                            tempstam = round(c_stamina + dmg['DMG'])
+                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                            c_stamina = t_stamina
+                                            t_stamina = tempstam
+                                        elif enh_type == 'HASTE':
+                                            tempstam = round(c_stamina - dmg['DMG'])
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                            c_stamina = t_stamina
+                                            t_stamina = tempstam                                       
+                                        elif enh_type == 'SOULCHAIN':
+                                            t_stamina = round(dmg['DMG'])
+                                            c_stamina = t_stamina
+                                        elif enh_type == 'GAMBLE':
+                                            t_health = round(dmg['DMG']) * 2
+                                            c_health = t_health
+                                        elif enh_type == 'FEAR':
+                                            t_health = round(t_health - ((dmg['DMG']/100) * t_health))
+                                            c_attack = round(c_attack - ((dmg['DMG']/100) * c_attack))
+                                            c_defense = round(c_defense - ((dmg['DMG']/100) * c_defense))
+                                        elif enh_type == 'WAVE':
+                                            c_health = round(c_health - dmg['DMG'])
+                                        elif enh_type == 'BLAST':
+                                            c_health = round(c_health - dmg['DMG'])
+                                        elif enh_type == 'CREATION':
+                                            t_max_health = round(t_max_health + dmg['DMG'])
+                                            t_health = round(t_health + dmg['DMG'])
+                                        elif enh_type == 'DESTRUCTION':
+                                            c_max_health = round(c_max_health - dmg['DMG'])
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                        await private_channel.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn = 0
+                                    elif dmg['DMG'] == 0:
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                        await private_channel.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn=0
+                                    else:
+                                        if c_universe == "Naruto" and c_stamina == 0:
+                                            c_health = c_health 
+                                            embedVar = discord.Embed(title=f"{c_card.upper()}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
+                                            await private_channel.send(embed=embedVar)
+                                        else:
+                                            c_health = c_health - int(dmg['DMG'])
+                                            embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                            await private_channel.send(embed=embedVar)
+                                        if c_health < 0:
+                                            c_health=0
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                        turn_total= turn_total + 1
+                                        turn=0
+                                else:
+                                    await private_channel.send(m.NOT_ENOUGH_STAMINA)
+                                    turn = 3
+  
             if botActive:
                 end_message="Use the #end command to end the tutorial lobby"
             else:
@@ -8134,6 +9003,8 @@ class CrownUnlimited(commands.Cog):
         if ofam == cfam:
             o_health = o_health + 50
             c_health = c_health + 50
+            o_max_health = o_health
+            c_max_health = c_health
         # Companion Passive Config
         if (c_universe == c_title_universe) or (c_title_universe == "Unbound"):
             c_title_passive_bool = True
@@ -8151,6 +9022,7 @@ class CrownUnlimited(commands.Cog):
         c_enhancer = c_moveset[3]
         c_enhancer_used=False
         c_pet_used=False
+        c_block_used=False
 
         cmove1_text = list(c_1.keys())[0]
         cmove2_text = list(c_2.keys())[0]
@@ -8399,6 +9271,8 @@ class CrownUnlimited(commands.Cog):
         o_enhancer = o_moveset[3]
         o_enhancer_used=False
         o_pet_used=False
+        o_block_used=False
+        o_defend_used=False
 
         omove1_text = list(o_1.keys())[0]
         omove2_text = list(o_2.keys())[0]
@@ -8926,6 +9800,12 @@ class CrownUnlimited(commands.Cog):
             
             #Player 1 Turn Start
             if turn == 0:
+                if o_block_used==True:
+                    o_defense = o_defense/2
+                    o_block_used=False
+                if o_defend_used==True:
+                    o_defense = o_defense/2
+                    o_defend_used=False
                 if o_universe == "Death Note" and turn_total == 0:
                     embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death", description=f"`{o_card} says:`\nYou will die in 24 turns...", colour=0xe91e63)
                     await private_channel.send(embed=embedVar)
@@ -9086,36 +9966,40 @@ class CrownUnlimited(commands.Cog):
                     player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                     await private_channel.send(file=player_1_card)
                     embedVar = discord.Embed(title=f"{o_card}, choose your move!", description=textwrap.dedent(f"""\
-                    **{o_health}/{o_stamina}**    
+                    **{o_health}/{o_stamina}**
                     **{omove1_text}** 10 Stamina _press 1_
                     **{omove2_text}** 30 Stamina _press 2_
                     **{omove3_text}** 80 Stamina _press 3_
                     **{omove_enhanced_text}** 20 Stamina _press 4_
-                    **Enhance Companion** 20 Stamina _press 7_
-                    **Companion Assist** 20 Stamina _press 8_
-                
-                    **{t_card}:** {t_health}/{t_stamina}
-                    **{c_card}:** {c_health}/{c_stamina} _partner_
-                    """) 
+                    **Defend {c_card}** 20 Stamina _press 0_
                     
+                    **{c_card}:** {c_health}/{c_stamina} _Companion_
+                    **Enhance {c_card}** 20 Stamina _press 7_
+                    **{c_card} Assist** 20 Stamina _press 8_
+                    **{c_card} Block** 20 Stamina _press 9_
+                    
+                
+                    **{t_card}:** {t_health}/{t_stamina}   
+                    """) 
                     , colour=embed_color_o)
                     embedVar.set_thumbnail(url=opet_image)
-                    if o_used_focus and o_used_resolve and not t_pet_used:
-                        embedVar.set_author(name="Press 0 to Quit Match. Press 6 to Summon your Pet!")                                    
+                    if o_used_focus and o_used_resolve and not o_pet_used:
+                        embedVar.set_author(name="Press Q to Quit Match. Press 6 to Summon your Pet!")                                    
                     elif o_used_focus and not o_used_resolve:
-                        embedVar.set_author(name="Press 0 to Quit Match. Press 5 to Strengthen resolve!")
+                        embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen resolve!")
                     else:
-                        embedVar.set_author(name="Press 0 to Quit Match")
+                        embedVar.set_author(name="Press Q to Quit Match")
                     embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
                     await private_channel.send(embed=embedVar)
                     
-                    # Make sure user is responding with move
                     if o_used_focus and o_used_resolve:
-                        options = ["0","1","2","3","4","6","7","8"]
+                        options = ["q","Q","0","1","2","3","4","6","7","8","9"]
                     elif o_used_focus and not o_used_resolve:
-                        options = ["0","1","2","3","4","5","7","8"]
+                        options = ["q","Q","0","1","2","3","4","5","7","8","9"]
                     else:
-                        options = ["0","1","2","3","4","7","8"]
+                        options = ["q","Q","0","1","2","3","4","7","8","9"]
+
+                    # Make sure user is responding with move
                     def check(msg):
                         if private_channel.guild:
                             return msg.author == user1 and msg.channel == private_channel and msg.content in options
@@ -9125,29 +10009,32 @@ class CrownUnlimited(commands.Cog):
                         msg = await self.bot.wait_for("message",timeout=120.0, check=check)
 
                         # calculate data based on selected move
-                        if msg.content == "0":
+                        if msg.content == "q" or msg.content == "Q":
                             o_health=0
                     
                             if private_channel.guild:
                                 await private_channel.send(f"{ctx.author.mention} has fled the battle...")
+                                response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                                 await discord.TextChannel.delete(private_channel, reason=None)
                             else:
+                                response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                                 await private_channel.send(f"You fled the battle...")
                             return
-
                         if msg.content == "1":
                             o_pet_used =False
-                            dmg = damage_cal(o_universe, o_card, o_1, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
+                            dmg = damage_cal(o_universe, o_card, o_1, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total)
                         elif msg.content == "2":
                             o_pet_used =False
-                            dmg = damage_cal(o_universe, o_card, o_2, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
+                            dmg = damage_cal(o_universe, o_card, o_2, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total)
                         elif msg.content == "3":
                             o_pet_used =False
-                            dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
+                            dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total)
+                            if o_gif != "N/A":
+                                await private_channel.send(f"{o_gif}")
                         elif msg.content == "4":
-                            o_pet_used =False
                             o_enhancer_used=True
-                            dmg = damage_cal(o_universe, o_card, o_enhancer, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
+                            o_pet_used =False
+                            dmg = damage_cal(o_universe, o_card, o_enhancer, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total)
                             o_enhancer_used=False
                         elif msg.content == "5":
                             #Resolve Check and Calculation
@@ -9298,7 +10185,7 @@ class CrownUnlimited(commands.Cog):
                                 turn=0
                         elif msg.content == "6":
                                 #Resolve Check and Calculation
-                            if o_used_resolve and o_used_focus and not o_pet_used:                                      
+                            if o_used_resolve and o_used_focus and not o_pet_used:                                  
                                 o_enhancer_used=True
                                 dmg = damage_cal(o_universe, o_card, opet_move, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
                                 o_enhancer_used=False
@@ -9337,7 +10224,7 @@ class CrownUnlimited(commands.Cog):
                                         o_attack = round(o_attack + (.75 * dmg['DMG']))
                                     elif opet_type == 'CRYSTAL':
                                         o_health = round(o_health - dmg['DMG'])
-                                        o_defense = round(o_defense +(.75 * dmg['DMG']))
+                                        o_defense = round(o_defense + (.75 * dmg['DMG']))
                                     elif opet_type == 'GROWTH':
                                         o_max_health = round(o_max_health - dmg['DMG'])
                                         o_defense = round(o_defense + (.3 * dmg['DMG']))
@@ -9436,8 +10323,8 @@ class CrownUnlimited(commands.Cog):
                                     c_defense = round(c_defense +(.75 * dmg['DMG']))
                                 elif comp_enh == 'GROWTH':
                                     c_max_health = round(c_max_health - dmg['DMG'])
-                                    c_defense = round(c_defense + (c_defense * dmg['DMG']))
-                                    c_attack = round(c_attack + (c_attack * dmg['DMG']))
+                                    c_defense = round(c_defense + (.3 * dmg['DMG']))
+                                    c_attack = round(c_attack + (.3 * dmg['DMG']))
                                 elif comp_enh == 'STANCE':
                                     tempattack = dmg['DMG']
                                     c_attack = c_defense
@@ -9581,13 +10468,38 @@ class CrownUnlimited(commands.Cog):
                             else:
                                 await private_channel.send(m.NOT_ENOUGH_STAMINA)
                                 turn=0
+                        elif msg.content == "9":
+                            if c_stamina >=20:
+                                c_stamina = c_stamina - 20
+                                c_block_used=True
+                                c_defense = c_defense * 2
+                                embedVar = discord.Embed(title=f"{c_card.upper()} DEFENDS {o_card.upper()}", colour=0xe91e63)
+                                embedVar.add_field(name=f"{c_card} used Block!", value =f"Enhanced DEF")
+                                await private_channel.send(embed=embedVar)
+                                turn=1
+                            else:
+                                await private_channel.send(f"{c_card} is too tired to block...")
+                                turn=0
+                        elif msg.content == "0":
+                            if o_stamina >=20:
+                                o_stamina = o_stamina - 20
+                                o_defend_used=True
+                                o_defense = o_defense * 2
+                                embedVar = discord.Embed(title=f"{o_card.upper()} DEFENDS {c_card.upper()}", colour=0xe91e63)
+                                embedVar.add_field(name=f"{o_card} used Block!", value =f"Enhanced DEF")
+                                await private_channel.send(embed=embedVar)
+                                turn=1
+                            else:
+                                await private_channel.send(f"{o_card} is too tired to block...")
+                                turn=0
 
 
-                        if msg.content != "5" and msg.content != "6" and msg.content != "7" and msg.content in options:
+                        if msg.content != "5" and msg.content != "6" and msg.content != "7" and msg.content != "9" and msg.content != "0" and msg.content in options:
                             # If you have enough stamina for move, use it
                             if dmg['CAN_USE_MOVE']:
                                 if dmg['ENHANCE']:
-                                    enh_type= dmg['ENHANCED_TYPE']                                
+                                    enh_type= dmg['ENHANCED_TYPE']
+                                
                                     if enh_type == 'ATK':
                                         o_attack = round(o_attack + dmg['DMG'])
                                     elif enh_type == 'DEF':
@@ -9663,7 +10575,7 @@ class CrownUnlimited(commands.Cog):
                                         o_max_health = round(o_max_health + dmg['DMG'])
                                         o_health = round(o_health + dmg['DMG'])
                                     elif enh_type == 'DESTRUCTION':
-                                        t_max_health = round(t_max_health - dmg['DMG'])
+                                        t_max_health = round(t_health - dmg['DMG'])
 
                                     o_stamina = o_stamina - int(dmg['STAMINA_USED'])
 
@@ -9681,7 +10593,7 @@ class CrownUnlimited(commands.Cog):
                                 else:
                                     if t_universe == "Naruto" and t_stamina == 0:
                                         t_health = t_health 
-                                        embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{o_card} attack strikes a log", colour=0xe91e63)
+                                        embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{o_card} strikes a log", colour=0xe91e63)
                                         await private_channel.send(embed=embedVar)
                                     else:
                                         t_health = t_health - dmg['DMG']
@@ -9698,11 +10610,12 @@ class CrownUnlimited(commands.Cog):
                                 await private_channel.send(embed=embedVar)
                                 turn=0
                     except asyncio.TimeoutError:
-                        await private_channel.send(f"{ctx.author.mention} {m.STORY_ENDED}")
-                        if private_channel.guild:
-                            await discord.TextChannel.delete(private_channel, reason=None)
-                        return
-           
+                            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                            await private_channel.send(f"{ctx.author.mention} {m.STORY_ENDED}")
+                            if private_channel.guild:
+                                await discord.TextChannel.delete(private_channel, reason=None)
+                            return
+          
             #Boss Turn Start
             elif turn == 1:
                 if t_attack <= 25:
@@ -9955,24 +10868,37 @@ class CrownUnlimited(commands.Cog):
                     
                     boss_special_move_default_msg = " "
 
-                    if aiMove == 0:
-                        t_pet_used =False
+                    if int(aiMove) == 0:
                         t_health=0
-                    elif aiMove == 1:
+                    if int(aiMove) == 1:
                         t_pet_used =False
-                        dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
-                    elif aiMove == 2:
+                        if c_block_used==True:
+                            dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total)
+                        else:
+                            dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                    elif int(aiMove) == 2:
                         t_pet_used =False
-                        dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
-                    elif aiMove == 3:
+                        if c_block_used==True:
+                            dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total)
+                        else:
+                            dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                    elif int(aiMove) == 3:
                         t_pet_used =False
-                        dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
-                    elif aiMove == 4:
+                        if c_block_used==True:
+                            dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total)
+                        else:
+                            dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                        if t_gif != "N/A":
+                                await private_channel.send(f"{t_gif}")
+                    elif int(aiMove) == 4:
+                        t_pet_used =False
                         t_enhancer_used=True
-                        t_pet_used =False
-                        dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                        if c_block_used==True:
+                            dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total)
+                        else:
+                            dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
                         t_enhancer_used=False
-                    elif aiMove == 5:
+                    elif int(aiMove) == 5:
                         if not t_used_resolve and t_used_focus:
                             if t_universe == "My Hero Academia": #My hero TRait
                                     #fortitude or luck is based on health  
@@ -9990,6 +10916,7 @@ class CrownUnlimited(commands.Cog):
                                     t_attack = round(t_attack + t_resolve_attack)
                                     t_defense = round(t_defense - t_resolve_defense)
                                     t_used_resolve=True
+                                    t_pet_used =False
 
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation: Plus Ultra", value="All stats & stamina greatly increased")
@@ -10012,6 +10939,7 @@ class CrownUnlimited(commands.Cog):
                                 t_attack = round(t_attack + (2 * t_resolve_attack))
                                 t_defense = round(t_defense - t_resolve_defense)
                                 t_used_resolve=True
+                                t_pet_used =False
 
                                 embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                 embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
@@ -10034,6 +10962,7 @@ class CrownUnlimited(commands.Cog):
                                 t_attack = round(t_attack + t_resolve_attack)
                                 t_defense = round(t_defense - t_resolve_defense)
                                 t_used_resolve=True
+                                t_pet_used =False
 
                                 embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                 embedVar.add_field(name=f"Transformation: Ascension", value="All stats & stamina greatly increased")
@@ -10060,9 +10989,12 @@ class CrownUnlimited(commands.Cog):
                                 embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                 embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
                                 await private_channel.send(embed=embedVar)
-                                dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
+                                if c_block_used==True:
+                                    dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina,t_max_health, c_attack, boss_special_move_default_msg, turn_total)
+                                else:
+                                    dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, boss_special_move_default_msg, turn_total)
                                 t_pet_used =False
-                                o_health = o_health - int(dmg['DMG'])
+                                c_health = c_health - int(dmg['DMG'])
                                 embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                 await private_channel.send(embed=embedVar)
                                 t_stamina = 0
@@ -10084,6 +11016,7 @@ class CrownUnlimited(commands.Cog):
                                 t_attack = round(t_attack + t_resolve_attack)
                                 t_defense = round(t_defense)
                                 t_used_resolve=True
+                                t_pet_used =False
 
                                 embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                 embedVar.add_field(name=f"Transformation: Evolution", value="All stats & stamina greatly increased")
@@ -10106,6 +11039,7 @@ class CrownUnlimited(commands.Cog):
                                 t_attack = round(t_attack + t_resolve_attack)
                                 t_defense = round(t_defense - t_resolve_defense)
                                 t_used_resolve=True
+                                t_pet_used =False
 
                                 embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                 embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
@@ -10113,238 +11047,427 @@ class CrownUnlimited(commands.Cog):
                                 turn_total= turn_total + 1
                                 turn=2
                         else:
-                            emessage = m.CANNOT_USE_RESOLVE
-                            embedVar = discord.Embed(title=emessage, description=f"Entering `Resolved State` sacrifices a turn to power up even greater and regain `Stamina`!", colour=0xe91e63)
-                            await private_channel.send(embed=embedVar)
-                            turn=2
-                    elif aiMove == 6:
+                            await private_channel.send(m.CANNOT_USE_RESOLVE)
+                            turn=1
+                    elif int(aiMove) == 6:
                         #Resolve Check and Calculation
-                        if t_used_resolve and t_used_focus and not t_pet_used:                                      
-                            t_enhancer_used=True
-                            dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
-                            t_enhancer_used=False
-                            t_pet_used =True
-                            tpet_dmg = dmg['DMG']
-                            tpet_type = dmg['ENHANCED_TYPE']
-                            if dmg['CAN_USE_MOVE']:
-                                if tpet_type == 'ATK':
-                                    t_attack = round(t_attack + dmg['DMG'])
-                                elif tpet_type == 'DEF':
-                                    t_defense = round(t_defense + dmg['DMG'])
-                                elif tpet_type == 'STAM':
-                                    t_stamina = round(t_stamina + dmg['DMG'])
-                                elif tpet_type == 'HLT':
-                                    t_health = round(t_health + dmg['DMG'])
-                                elif tpet_type == 'LIFE':
-                                    t_health = round(t_health + dmg['DMG'])
-                                    o_health = round(o_health - dmg['DMG'])
-                                elif tpet_type == 'DRAIN':
-                                    t_stamina = round(t_stamina + dmg['DMG'])
-                                    o_stamina = round(o_stamina - dmg['DMG'])
-                                elif tpet_type == 'FLOG':
-                                    t_attack = round(t_attack + dmg['DMG'])
-                                    o_attack = round (o_attack - dmg['DMG'])
-                                elif tpet_type == 'WITHER':
-                                    t_defense = round(t_defense + dmg['DMG'])
-                                    o_defense = round (o_defense - dmg['DMG'])
-                                elif tpet_type == 'RAGE':
-                                    t_defense = round(t_defense - dmg['DMG'])
-                                    t_attack = round(t_attack + dmg['DMG'])
-                                elif tpet_type == 'BRACE':
-                                    t_defense = round(t_defense + dmg['DMG'])
-                                    t_attack = round(t_attack - dmg['DMG'])
-                                elif tpet_type == 'BZRK':
-                                    t_health = round(t_health - dmg['DMG'])
-                                    t_attack = round(t_attack + (.75 * dmg['DMG']))
-                                elif tpet_type == 'CRYSTAL':
-                                    t_health = round(t_health - dmg['DMG'])
-                                    t_defense = round(t_defense + (.75 * dmg['DMG']))
-                                elif tpet_type == 'GROWTH':
-                                    t_max_health = round(t_max_health - dmg['DMG'])
-                                    t_defense = round(t_defense + (.3 * dmg['DMG']))
-                                    t_attack = round(t_attack + (.3 * dmg['DMG']))
-                                elif tpet_type == 'STANCE':
-                                    tempattack = dmg['DMG']
-                                    t_attack = t_defense
-                                    t_defense = tempattack
-                                elif tpet_type == 'CONFUSE':
-                                    tempattack = dmg['DMG']
-                                    o_attack = o_defense
-                                    o_defense = tempattack
-                                elif tpet_type == 'BLINK':
-                                    t_stamina = round(t_stamina - dmg['DMG'])
-                                    o_stamina = round(o_stamina + dmg['DMG'] - 10)
-                                elif tpet_type == 'SLOW':
-                                    tempstam = round(o_stamina + dmg['DMG'])
-                                    t_stamina = round(t_stamina - dmg['DMG'])
-                                    o_stamina = t_stamina
-                                    t_stamina = tempstam
-                                elif tpet_type == 'HASTE':
-                                    tempstam = round(o_stamina - dmg['DMG'])
-                                    t_stamina = round(t_stamina + dmg['DMG'])
-                                    o_stamina = t_stamina
-                                    t_stamina = tempstam                                       
-                                elif tpet_type == 'SOULCHAIN':
-                                    t_stamina = round(dmg['DMG'])
-                                    o_stamina = t_stamina
-                                elif tpet_type == 'GAMBLE':
-                                    t_health = round(dmg['DMG'])
-                                    o_health = t_health
-                                elif tpet_type == 'FEAR':
-                                    t_health = round(t_health - ((dmg['DMG']/100)* t_health))
-                                    o_attack = round(o_attack - ((dmg['DMG']/100)* o_attack))
-                                    o_defense = round(o_defense - ((dmg['DMG']/100)* o_defense))
-                                elif tpet_type == 'WAVE':
-                                    o_health = round(o_health - dmg['DMG'])
-                                elif tpet_type == 'BLAST':
-                                    o_health = round(o_health - dmg['DMG'])
-                                elif tpet_type == 'CREATION':
-                                    t_max_health = round(t_max_health + dmg['DMG'])
-                                    t_health = round(t_health + dmg['DMG'])
-                                elif tpet_type == 'DESTRUCTION':
-                                    o_max_health = round(o_max_health - dmg['DMG'])
-                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+                        if t_used_resolve and t_used_focus and not t_pet_used:
+                            if c_block_used==True:
+                                t_enhancer_used=True
+                                dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total)
+                                t_enhancer_used=False
+                                t_pet_used =True
+                                tpet_dmg = dmg['DMG']
+                                tpet_type = dmg['ENHANCED_TYPE']
+                                if dmg['CAN_USE_MOVE']:
+                                    if tpet_type == 'ATK':
+                                        t_attack = round(t_attack + dmg['DMG'])
+                                    elif tpet_type == 'DEF':
+                                        t_defense = round(t_defense + dmg['DMG'])
+                                    elif tpet_type == 'STAM':
+                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                    elif tpet_type == 'HLT':
+                                        t_health = round(t_health + dmg['DMG'])
+                                    elif tpet_type == 'LIFE':
+                                        t_health = round(t_health + dmg['DMG'])
+                                        c_health = round(c_health - dmg['DMG'])
+                                    elif tpet_type == 'DRAIN':
+                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                        c_stamina = round(c_stamina - dmg['DMG'])
+                                    elif tpet_type == 'FLOG':
+                                        t_attack = round(t_attack + dmg['DMG'])
+                                        c_attack = round (c_attack - dmg['DMG'])
+                                    elif tpet_type == 'WITHER':
+                                        t_defense = round(t_defense + dmg['DMG'])
+                                        c_defense = round (c_defense - dmg['DMG'])
+                                    elif tpet_type == 'RAGE':
+                                        t_defense = round(t_defense - dmg['DMG'])
+                                        t_attack = round(t_attack + dmg['DMG'])
+                                    elif tpet_type == 'BRACE':
+                                        t_defense = round(t_defense + dmg['DMG'])
+                                        t_attack = round(t_attack - dmg['DMG'])
+                                    elif tpet_type == 'BZRK':
+                                        t_health = round(t_health - dmg['DMG'])
+                                        t_attack = round(t_attack + (.75 * dmg['DMG']))
+                                    elif tpet_type == 'CRYSTAL':
+                                        t_health = round(t_health - dmg['DMG'])
+                                        t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                    elif tpet_type == 'GROWTH':
+                                        t_max_health = round(t_max_health - dmg['DMG'])
+                                        t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                        t_attack = round(t_attack+ (.3 * dmg['DMG']))
+                                    elif tpet_type == 'STANCE':
+                                        tempattack = dmg['DMG']
+                                        t_attack = t_defense
+                                        t_defense = tempattack
+                                    elif tpet_type == 'CONFUSE':
+                                        tempattack = dmg['DMG']
+                                        c_attack = c_defense
+                                        c_defense = tempattack
+                                    elif tpet_type == 'BLINK':
+                                        t_stamina = round(t_stamina - dmg['DMG'])
+                                        c_stamina = round(c_stamina + dmg['DMG'] - 10)
+                                    elif tpet_type == 'SLOW':
+                                        tempstam = round(c_stamina + dmg['DMG'])
+                                        t_stamina = round(t_stamina - dmg['DMG'])
+                                        c_stamina = t_stamina
+                                        t_stamina = tempstam
+                                    elif tpet_type == 'HASTE':
+                                        tempstam = round(c_stamina - dmg['DMG'])
+                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                        c_stamina = t_stamina
+                                        t_stamina = tempstam                                       
+                                    elif tpet_type == 'SOULCHAIN':
+                                        t_stamina = round(dmg['DMG'])
+                                        c_stamina = t_stamina
+                                    elif tpet_type == 'GAMBLE':
+                                        t_health = round(dmg['DMG'])
+                                        c_health = t_health
+                                    elif tpet_type == 'FEAR':
+                                        t_health = round(t_health - ((dmg['DMG']/100)* t_health))
+                                        c_attack = round(c_attack - ((dmg['DMG']/100)* c_attack))
+                                        c_defense = round(c_defense - ((dmg['DMG']/100)* c_defense))
+                                    elif tpet_type == 'WAVE':
+                                        c_health = round(c_health - dmg['DMG'])
+                                    elif tpet_type == 'BLAST':
+                                        c_health = round(c_health - dmg['DMG'])
+                                    elif tpet_type == 'CREATION':
+                                        t_max_health = round(t_max_health + dmg['DMG'])
+                                        t_health = round(t_health + dmg['DMG'])
+                                    elif tpet_type == 'DESTRUCTION':
+                                        c_max_health = round(c_max_health - dmg['DMG'])
+                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
 
-                                embedVar = discord.Embed(title=f"{t_card.upper()} Summoned {tpet_name}", colour=0xe91e63)
-                                embedVar.add_field(name=f"{tpet_name} used {tpetmove_text}!", value =f"Enhanced {tpet_type}")
-                                embedVar.set_thumbnail(url=tpet_image)
-                                await private_channel.send(embed=embedVar)
-                                turn=1
-                            else:
-                                await private_channel.send(f"{tpet_name} needs a turn to rest...")
-                                turn=1
+                                    embedVar = discord.Embed(title=f"{t_card.upper()} Summoned {tpet_name}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"{tpet_name} used {tpetmove_text}!", value =f"Enhanced {tpet_type}")
+                                    embedVar.set_thumbnail(url=tpet_image)
+                                    await private_channel.send(embed=embedVar)
+                                    turn=2
+                                else:
+                                    await private_channel.send(f"{tpet_name} needs a turn to rest...")
+                                    turn=1
+                            else:                                  
+                                t_enhancer_used=True
+                                dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                                t_enhancer_used=False
+                                t_pet_used =True
+                                tpet_dmg = dmg['DMG']
+                                tpet_type = dmg['ENHANCED_TYPE']
+                                if dmg['CAN_USE_MOVE']:
+                                    if tpet_type == 'ATK':
+                                        t_attack = round(t_attack + dmg['DMG'])
+                                    elif tpet_type == 'DEF':
+                                        t_defense = round(t_defense + dmg['DMG'])
+                                    elif tpet_type == 'STAM':
+                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                    elif tpet_type == 'HLT':
+                                        t_health = round(t_health + dmg['DMG'])
+                                    elif tpet_type == 'LIFE':
+                                        t_health = round(t_health + dmg['DMG'])
+                                        o_health = round(o_health - dmg['DMG'])
+                                    elif tpet_type == 'DRAIN':
+                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                        o_stamina = round(o_stamina - dmg['DMG'])
+                                    elif tpet_type == 'FLOG':
+                                        t_attack = round(t_attack + dmg['DMG'])
+                                        o_attack = round (o_attack - dmg['DMG'])
+                                    elif tpet_type == 'WITHER':
+                                        t_defense = round(t_defense + dmg['DMG'])
+                                        o_defense = round (o_defense - dmg['DMG'])
+                                    elif tpet_type == 'RAGE':
+                                        t_defense = round(t_defense - dmg['DMG'])
+                                        t_attack = round(t_attack + dmg['DMG'])
+                                    elif tpet_type == 'BRACE':
+                                        t_defense = round(t_defense + dmg['DMG'])
+                                        t_attack = round(t_attack - dmg['DMG'])
+                                    elif tpet_type == 'BZRK':
+                                        t_health = round(t_health - dmg['DMG'])
+                                        t_attack = round(t_attack + (.75 * dmg['DMG']))
+                                    elif tpet_type == 'CRYSTAL':
+                                        t_health = round(t_health - dmg['DMG'])
+                                        t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                    elif tpet_type == 'GROWTH':
+                                        t_max_health = round(t_max_health - dmg['DMG'])
+                                        t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                        t_attack = round(t_attack+ (.3 * dmg['DMG']))
+                                    elif tpet_type == 'STANCE':
+                                        tempattack = dmg['DMG']
+                                        t_attack = t_defense
+                                        t_defense = tempattack
+                                    elif tpet_type == 'CONFUSE':
+                                        tempattack = dmg['DMG']
+                                        o_attack = o_defense
+                                        o_defense = tempattack
+                                    elif tpet_type == 'BLINK':
+                                        t_stamina = round(t_stamina - dmg['DMG'])
+                                        o_stamina = round(o_stamina + dmg['DMG'] - 10)
+                                    elif tpet_type == 'SLOW':
+                                        tempstam = round(o_stamina + dmg['DMG'])
+                                        t_stamina = round(t_stamina - dmg['DMG'])
+                                        o_stamina = t_stamina
+                                        t_stamina = tempstam
+                                    elif tpet_type == 'HASTE':
+                                        tempstam = round(o_stamina - dmg['DMG'])
+                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                        o_stamina = t_stamina
+                                        t_stamina = tempstam                                       
+                                    elif tpet_type == 'SOULCHAIN':
+                                        t_stamina = round(dmg['DMG'])
+                                        o_stamina = t_stamina
+                                    elif tpet_type == 'GAMBLE':
+                                        t_health = round(dmg['DMG'])
+                                        o_health = t_health
+                                    elif tpet_type == 'FEAR':
+                                        t_health = round(t_health - ((dmg['DMG']/100)* t_health))
+                                        o_attack = round(o_attack - ((dmg['DMG']/100)* o_attack))
+                                        o_defense = round(o_defense - ((dmg['DMG']/100)* o_defense))
+                                    elif tpet_type == 'WAVE':
+                                        o_health = round(o_health - dmg['DMG'])
+                                    elif tpet_type == 'BLAST':
+                                        o_health = round(o_health - dmg['DMG'])
+                                    elif tpet_type == 'CREATION':
+                                        t_max_health = round(t_max_health + dmg['DMG'])
+                                        t_health = round(t_health + dmg['DMG'])
+                                    elif tpet_type == 'DESTRUCTION':
+                                        o_max_health = round(o_max_health - dmg['DMG'])
+                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+
+                                    embedVar = discord.Embed(title=f"{t_card.upper()} Summoned {tpet_name}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"{tpet_name} used {tpetmove_text}!", value =f"Enhanced {tpet_type}")
+                                    embedVar.set_thumbnail(url=tpet_image)
+                                    await private_channel.send(embed=embedVar)
+                                    turn=1
+                                else:
+                                    await private_channel.send(f"{tpet_name} needs a turn to rest...")
+                                    turn=1
                         else:
                             await private_channel.send(f"{tpet_name} needs a turn to rest...")
 
                     if int(aiMove) !=5 and int(aiMove) !=6:
                         # If you have enough stamina for move, use it
-                        if dmg['CAN_USE_MOVE']:
-                            if dmg['ENHANCE']:
-                                enh_type= dmg['ENHANCED_TYPE']
-                                if enh_type == 'ATK':
-                                    t_attack = round(t_attack + dmg['DMG'])
-                                elif enh_type == 'DEF':
-                                    t_defense = round(t_defense + dmg['DMG'])
-                                elif enh_type == 'STAM':
-                                    t_stamina = round(t_stamina + dmg['DMG'])
-                                elif enh_type == 'HLT':
-                                    t_health = round(t_health + dmg['DMG'])
-                                elif enh_type == 'LIFE':
-                                    t_health = round(t_health + dmg['DMG'])
-                                    o_health = round(o_health - dmg['DMG'])
-                                    c_health = round(o_health - dmg['DMG'])
-                                elif enh_type == 'DRAIN':
-                                    t_stamina = round(t_stamina + dmg['DMG'])
-                                    o_stamina = round(o_stamina - dmg['DMG'])
-                                    c_stamina = round(o_stamina - dmg['DMG'])
-                                elif enh_type == 'FLOG':
-                                    t_attack = round(t_attack + dmg['DMG'])
-                                    o_attack = round(o_attack - dmg['DMG'])
-                                    c_attack = round(c_attack - dmg['DMG'])
-                                elif enh_type == 'WITHER':
-                                    t_defense = round(t_defense + dmg['DMG'])
-                                    o_defense = round(o_defense - dmg['DMG'])
-                                    c_defense = round(c_defense - dmg['DMG'])
-                                elif enh_type == 'RAGE':
-                                    t_defense = round(t_defense - dmg['DMG'])
-                                    t_attack = round(t_attack + dmg['DMG'])
-                                elif enh_type == 'BRACE':
-                                    t_defense = round(t_defense + dmg['DMG'])
-                                    t_attack = round(t_attack - dmg['DMG'])
-                                elif enh_type == 'BZRK':
-                                    t_health = round(t_health - dmg['DMG'])
-                                    t_attack = round(t_attack +(.50 *  dmg['DMG']))
-                                elif enh_type == 'CRYSTAL':
-                                    t_health = round(t_health - dmg['DMG'])
-                                    t_defense = round(t_defense + (.75 * dmg['DMG']))
-                                elif enh_type == 'GROWTH':
-                                    t_max_health = round(t_max_health - dmg['DMG'])
-                                    t_defense = round(t_defense + (.3 * dmg['DMG']))
-                                    t_attack = round(t_attack + (.3 * dmg['DMG']))
-                                elif enh_type == 'STANCE':
-                                    tempattack = dmg['DMG']
-                                    t_attack = t_defense
-                                    t_defense = tempattack
-                                elif enh_type == 'CONFUSE':
-                                    tempattack = dmg['DMG']
-                                    o_attack = o_defense
-                                    o_defense = tempattack
-                                    c_attack = c_defense
-                                    c_defense = tempattack
-                                elif enh_type == 'BLINK':
-                                    t_stamina = round(t_stamina - dmg['DMG'])
-                                    o_stamina = round(o_stamina + dmg['DMG'] - 10)
-                                    c_stamina = round(c_stamina + dmg['DMG'] - 10)
-                                elif enh_type == 'SLOW':
-                                    tempstam = round(o_stamina + dmg['DMG'])
-                                    t_stamina = round(t_stamina - dmg['DMG'])
-                                    o_stamina = t_stamina
-                                    c_stamina = t_stamina
-                                    t_stamina = tempstam
-                                elif enh_type == 'HASTE':
-                                    tempstam = round(o_stamina - dmg['DMG'])
-                                    t_stamina = round(t_stamina + dmg['DMG'])
-                                    o_stamina = t_stamina
-                                    c_stamina = t_stamina
-                                    t_stamina = tempstam                                       
-                                elif enh_type == 'SOULCHAIN':
-                                    t_stamina = round(dmg['DMG'])
-                                    o_stamina = t_stamina
-                                    c_stamina = t_stamina
-                                elif enh_type == 'GAMBLE':
-                                    t_health = round(dmg['DMG'])
-                                    o_health = t_health
-                                    c_health = t_health
-                                elif enh_type == 'FEAR':
-                                    t_health = round(t_health - ((dmg['DMG']/100) * t_health))
-                                    o_attack = round(o_attack - ((dmg['DMG']/100) * o_attack))
-                                    o_defense = round(o_defense - ((dmg['DMG']/100) * o_defense))
-                                    c_attack = round(o_attack - ((dmg['DMG']/100) * o_attack))
-                                    c_defense = round(o_defense - ((dmg['DMG']/100) * o_defense))
-                                elif enh_type == 'WAVE':
-                                    o_health = round(o_health - dmg['DMG'])
-                                    c_health = round(c_health - dmg['DMG'])
-                                elif enh_type == 'BLAST':
-                                    o_health = round(o_health - dmg['DMG'])
-                                    c_health = round(c_health - dmg['DMG'])
-                                elif enh_type == 'CREATION':
-                                    t_max_health = round(t_max_health + dmg['DMG'])
-                                    t_health = round(t_health + dmg['DMG'])
-                                elif enh_type == 'DESTRUCTION':
-                                    o_max_health = round(o_max_health - dmg['DMG'])
-                                    c_max_health = round(c_max_health - dmg['DMG'])
-                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-                                embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
-                                await private_channel.send(embed=embedVar)
-                                turn_total= turn_total + 1
-                                turn = 2
-                            elif dmg['DMG'] == 0:
-                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-                                embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
-                                await private_channel.send(embed=embedVar)
-                                turn_total= turn_total + 1
-                                turn=2
-                            else:
-                                if o_universe == "Naruto" and o_stamina == 0:
-                                    o_health = o_health 
-                                    embedVar = discord.Embed(title=f"{o_card.upper()}: Substitution Jutsu", description=f"{t_card} attack strikes a log", colour=0xe91e63)
-                                    await private_channel.send(embed=embedVar)
-                                else:
-                                    o_health = o_health - int(dmg['DMG'])
+                        #if c used block
+                        if c_block_used==True:
+                            if dmg['CAN_USE_MOVE']:
+                                if dmg['ENHANCE']:
+                                    enh_type= dmg['ENHANCED_TYPE']
+                                    if enh_type == 'ATK':
+                                        t_attack = round(t_attack + dmg['DMG'])
+                                    elif enh_type == 'DEF':
+                                        t_defense = round(t_defense + dmg['DMG'])
+                                    elif enh_type == 'STAM':
+                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                    elif enh_type == 'HLT':
+                                        t_health = round(t_health + dmg['DMG'])
+                                    elif enh_type == 'LIFE':
+                                        t_health = round(t_health + dmg['DMG'])
+                                        c_health = round(c_health - dmg['DMG'])
+                                    elif enh_type == 'DRAIN':
+                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                        c_stamina = round(c_stamina - dmg['DMG'])
+                                    elif enh_type == 'FLOG':
+                                        t_attack = round(t_attack + dmg['DMG'])
+                                        c_attack = round(c_attack - dmg['DMG'])
+                                    elif enh_type == 'WITHER':
+                                        t_defense = round(t_defense + dmg['DMG'])
+                                        c_defense = round(t_defense - dmg['DMG'])
+                                    elif enh_type == 'RAGE':
+                                        t_defense = round(t_defense - dmg['DMG'])
+                                        t_attack = round(t_attack + dmg['DMG'])
+                                    elif enh_type == 'BRACE':
+                                        t_defense = round(t_defense + dmg['DMG'])
+                                        t_attack = round(t_attack - dmg['DMG'])
+                                    elif enh_type == 'BZRK':
+                                        t_health = round(t_health - dmg['DMG'])
+                                        t_attack = round(t_attack +(.75 *  dmg['DMG']))
+                                    elif enh_type == 'CRYSTAL':
+                                        t_health = round(t_health - dmg['DMG'])
+                                        t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                    elif enh_type == 'GROWTH':
+                                        t_max_health = round(t_max_health - dmg['DMG'])
+                                        t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                        t_attack = round(t_attack+ (.3 * dmg['DMG']))
+                                    elif enh_type == 'STANCE':
+                                        tempattack = dmg['DMG']
+                                        t_attack = t_defense
+                                        t_defense = tempattack
+                                    elif enh_type == 'CONFUSE':
+                                        tempattack = dmg['DMG']
+                                        c_attack = c_defense
+                                        c_defense = tempattack
+                                    elif enh_type == 'BLINK':
+                                        t_stamina = round(t_stamina - dmg['DMG'])
+                                        c_stamina = round(c_stamina + dmg['DMG'] - 10)
+                                    elif enh_type == 'SLOW':
+                                        tempstam = round(c_stamina + dmg['DMG'])
+                                        t_stamina = round(t_stamina - dmg['DMG'])
+                                        c_stamina = t_stamina
+                                        t_stamina = tempstam
+                                    elif enh_type == 'HASTE':
+                                        tempstam = round(c_stamina - dmg['DMG'])
+                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                        c_stamina = t_stamina
+                                        t_stamina = tempstam                                       
+                                    elif enh_type == 'SOULCHAIN':
+                                        t_stamina = round(dmg['DMG'])
+                                        c_stamina = t_stamina
+                                    elif enh_type == 'GAMBLE':
+                                        t_health = round(dmg['DMG']) * 2
+                                        c_health = t_health
+                                    elif enh_type == 'FEAR':
+                                        t_health = round(t_health - ((dmg['DMG']/100) * t_health))
+                                        c_attack = round(c_attack - ((dmg['DMG']/100) * c_attack))
+                                        c_defense = round(c_defense - ((dmg['DMG']/100) * c_defense))
+                                    elif enh_type == 'WAVE':
+                                        c_health = round(c_health - dmg['DMG'])
+                                    elif enh_type == 'BLAST':
+                                        c_health = round(c_health - dmg['DMG'])
+                                    elif enh_type == 'CREATION':
+                                        t_max_health = round(t_max_health + dmg['DMG'])
+                                        t_health = round(t_health + dmg['DMG'])
+                                    elif enh_type == 'DESTRUCTION':
+                                        c_max_health = round(c_max_health - dmg['DMG'])
+                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                     await private_channel.send(embed=embedVar)
-                                if o_health < 0:
-                                    o_health=0
-                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
-                                turn_total= turn_total + 1
-                                turn=2
-
+                                    turn_total= turn_total + 1
+                                    turn = 2
+                                elif dmg['DMG'] == 0:
+                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+                                    embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                    await private_channel.send(embed=embedVar)
+                                    turn_total= turn_total + 1
+                                    turn=2
+                                else:
+                                    if c_universe == "Naruto" and c_stamina == 0:
+                                        c_health = c_health 
+                                        embedVar = discord.Embed(title=f"{c_card.upper()}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
+                                        await private_channel.send(embed=embedVar)
+                                    else:
+                                        c_health = c_health - int(dmg['DMG'])
+                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                        await private_channel.send(embed=embedVar)
+                                    if c_health < 0:
+                                        c_health=0
+                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                    turn_total= turn_total + 1
+                                    turn=2
+                            else:
+                                await private_channel.send(m.NOT_ENOUGH_STAMINA)
+                                turn = 1
                         else:
-                            await private_channel.send(m.NOT_ENOUGH_STAMINA)
-                            turn = 1
+                            if dmg['CAN_USE_MOVE']:
+                                if dmg['ENHANCE']:
+                                    enh_type= dmg['ENHANCED_TYPE']
+                                    if enh_type == 'ATK':
+                                        t_attack = round(t_attack + dmg['DMG'])
+                                    elif enh_type == 'DEF':
+                                        t_defense = round(t_defense + dmg['DMG'])
+                                    elif enh_type == 'STAM':
+                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                    elif enh_type == 'HLT':
+                                        t_health = round(t_health + dmg['DMG'])
+                                    elif enh_type == 'LIFE':
+                                        t_health = round(t_health + dmg['DMG'])
+                                        o_health = round(o_health - dmg['DMG'])
+                                    elif enh_type == 'DRAIN':
+                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                        o_stamina = round(o_stamina - dmg['DMG'])
+                                    elif enh_type == 'FLOG':
+                                        t_attack = round(t_attack + dmg['DMG'])
+                                        o_attack = round(o_attack - dmg['DMG'])
+                                    elif enh_type == 'WITHER':
+                                        t_defense = round(t_defense + dmg['DMG'])
+                                        o_defense = round(o_defense - dmg['DMG'])
+                                    elif enh_type == 'RAGE':
+                                        t_defense = round(t_defense - dmg['DMG'])
+                                        t_attack = round(t_attack + dmg['DMG'])
+                                    elif enh_type == 'BRACE':
+                                        t_defense = round(t_defense + dmg['DMG'])
+                                        t_attack = round(t_attack - dmg['DMG'])
+                                    elif enh_type == 'BZRK':
+                                        t_health = round(t_health - dmg['DMG'])
+                                        t_attack = round(t_attack +(.50 *  dmg['DMG']))
+                                    elif enh_type == 'CRYSTAL':
+                                        t_health = round(t_health - dmg['DMG'])
+                                        t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                    elif enh_type == 'GROWTH':
+                                        t_max_health = round(t_max_health - dmg['DMG'])
+                                        t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                        t_attack = round(t_attack+ (.3 * dmg['DMG']))
+                                    elif enh_type == 'STANCE':
+                                        tempattack = dmg['DMG']
+                                        t_attack = t_defense
+                                        t_defense = tempattack
+                                    elif enh_type == 'CONFUSE':
+                                        tempattack = dmg['DMG']
+                                        o_attack = o_defense
+                                        o_defense = tempattack
+                                    elif enh_type == 'BLINK':
+                                        t_stamina = round(t_stamina - dmg['DMG'])
+                                        o_stamina = round(o_stamina + dmg['DMG'] - 10)
+                                    elif enh_type == 'SLOW':
+                                        tempstam = round(o_stamina + dmg['DMG'])
+                                        t_stamina = round(t_stamina - dmg['DMG'])
+                                        o_stamina = t_stamina
+                                        t_stamina = tempstam
+                                    elif enh_type == 'HASTE':
+                                        tempstam = round(o_stamina - dmg['DMG'])
+                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                        o_stamina = t_stamina
+                                        t_stamina = tempstam                                       
+                                    elif enh_type == 'SOULCHAIN':
+                                        t_stamina = round(dmg['DMG'])
+                                        o_stamina = o_stamina
+                                    elif enh_type == 'GAMBLE':
+                                        t_health = round(dmg['DMG']) * 2
+                                        o_health = t_health
+                                    elif enh_type == 'FEAR':
+                                        t_health = round(t_health - ((dmg['DMG']/100) * t_health))
+                                        o_attack = round(c_attack - ((dmg['DMG']/100) * o_attack))
+                                        o_defense = round(c_defense - ((dmg['DMG']/100) * o_defense))
+                                    elif enh_type == 'WAVE':
+                                        o_health = round(o_health - dmg['DMG'])
+                                    elif enh_type == 'BLAST':
+                                        o_health = round(o_health - dmg['DMG'])
+                                    elif enh_type == 'CREATION':
+                                        t_max_health = round(t_max_health + dmg['DMG'])
+                                        t_health = round(t_health + dmg['DMG'])
+                                    elif enh_type == 'DESTRUCTION':
+                                        o_max_health = round(o_max_health - dmg['DMG'])
+                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+                                    embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                    await private_channel.send(embed=embedVar)
+                                    turn_total= turn_total + 1
+                                    turn = 2
+                                elif dmg['DMG'] == 0:
+                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+                                    embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                    await private_channel.send(embed=embedVar)
+                                    turn_total= turn_total + 1
+                                    turn=2
+                                else:
+                                    if o_universe == "Naruto" and o_stamina == 0:
+                                        o_health = o_health 
+                                        embedVar = discord.Embed(title=f"{o_card.upper()}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
+                                        await private_channel.send(embed=embedVar)
+                                    else:
+                                        o_health = o_health - int(dmg['DMG'])
+                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                        await private_channel.send(embed=embedVar)
+                                    if o_health < 0:
+                                        o_health=0
+                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                    turn_total= turn_total + 1
+                                    turn=2
+                            else:
+                                await private_channel.send(m.NOT_ENOUGH_STAMINA)
+                                turn = 1
 
             #Companion Turn Start
             if turn == 2:
+                if c_block_used==True:
+                    c_defense = c_defense/2
+                    c_block_used=False
                 if c_attack <= 25:
                     c_attack = 25
                 if c_defense <= 30:
@@ -10494,6 +11617,8 @@ class CrownUnlimited(commands.Cog):
                         aiMove = 6 
                     elif t_stamina == 0:
                         aiMove = 1
+                    elif c_health <= (.50 * c_max_health) and c_used_resolve == False and c_used_focus:
+                        aiMove = 5
                     elif c_stamina >= 160 and (c_health >= t_health):
                         if o_health <= t_health:
                             aiMove = 7
@@ -10525,16 +11650,31 @@ class CrownUnlimited(commands.Cog):
                     elif c_stamina >= 110:
                         aiMove = 2                                   
                     elif c_stamina >= 100 and (c_health >= t_health):
-                        aiMove = 7
+                        if c_health >= o_health:
+                            aiMove = 8
+                        else:
+                            aiMove = 7
                     elif c_stamina >= 100:
-                        aiMove = 1
+                        if c_health >= o_health:
+                            aiMove = 8
+                        else:
+                            aiMove = 1
                     elif c_stamina >= 90 and (c_health >= t_health):
                         if o_health <= t_health:
-                            aiMove = 7
+                            if c_health >= o_health:
+                                aiMove = 8
+                            else:
+                                aiMove = 7
                         else:
-                            aiMove = 3
+                            if c_health >= o_health:
+                                aiMove = 8
+                            else:
+                                aiMove = 3
                     elif c_stamina >= 90:
-                        aiMove = 7
+                        if c_health >= o_health:
+                            aiMove = 8
+                        else:
+                            aiMove = 7
                     elif c_stamina >= 80 and (c_health >= t_health):
                         if o_health <= t_health:
                             aiMove = 7
@@ -10557,7 +11697,7 @@ class CrownUnlimited(commands.Cog):
                         else:
                             aiMove = 1 
                     elif c_stamina >= 60:
-                        if t_used_resolve == False and t_used_focus:
+                        if c_used_resolve == False and t_used_focus:
                             aiMove = 5
                         elif t_used_focus == False:
                             aiMove = 2
@@ -10565,9 +11705,15 @@ class CrownUnlimited(commands.Cog):
                             aiMove = 1 
                     elif c_stamina >= 50 and (c_health >= t_health):
                         if c_stamina >= o_stamina:
-                            aiMove = 7
+                            if c_health >= o_health:
+                                aiMove = 8
+                            else:
+                                aiMove = 7
                         else:
-                            aiMove = 1
+                            if c_health >= o_health:
+                                aiMove = 8
+                            else:
+                                aiMove = 1
                     elif c_stamina >= 50:
                         aiMove = 2
                     elif c_stamina >= 40 and (c_health >= t_health):
@@ -10585,9 +11731,15 @@ class CrownUnlimited(commands.Cog):
                     elif c_stamina >= 30:
                         aiMove = 2
                     elif c_stamina >= 20 and (c_health >= t_health):
-                        aiMove = 1
+                        if c_health >= o_health:
+                            aiMove = 8
+                        else:
+                            aiMove = 1
                     elif c_stamina >= 20:
-                        aiMove = 7
+                        if c_health >= o_health:
+                            aiMove = 8
+                        else:
+                            aiMove = 7
                     elif c_stamina >= 10:
                         aiMove = 1
                     else:
@@ -10601,6 +11753,17 @@ class CrownUnlimited(commands.Cog):
                 
                         if private_channel.guild:
                             await private_channel.send(f"{activeDeck['CARD']} has fled the battle...")
+                            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                            await discord.TextChannel.delete(private_channel, reason=None)
+                        else:
+                            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                            await private_channel.send(f"You fled the battle...")
+                        return
+                    if aiMove == 0:
+                        c_health=0
+                
+                        if private_channel.guild:
+                            await private_channel.send(f"{user2.mention} has fled the battle...")
                             response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                             await discord.TextChannel.delete(private_channel, reason=None)
                         else:
@@ -10961,9 +12124,20 @@ class CrownUnlimited(commands.Cog):
                         else:
                             await private_channel.send(m.NOT_ENOUGH_STAMINA)
                             turn=2
-                    
+                    elif aiMove == 8:
+                        if c_stamina >=20:
+                            c_block_used=True
+                            c_stamina = c_stamina - 20
+                            c_defense = c_defense * 2
+                            embedVar = discord.Embed(title=f"{c_card.upper()} DEFENDS {o_card.upper()}", colour=0xe91e63)
+                            embedVar.add_field(name=f"{c_card} used Block!", value =f"Enhanced DEF")
+                            await private_channel.send(embed=embedVar)
+                            turn=3
+                        else:
+                            await private_channel.send(f"{c_card} is too tired to block...")
+                            turn=2
 
-                    if aiMove != 5 and aiMove != 6 and aiMove != 7:
+                    if aiMove != 5 and aiMove != 6 and aiMove != 7 and aiMove != 8:
                         # If you have enough stamina for move, use it
                         if dmg['CAN_USE_MOVE']:
                             if dmg['ENHANCE']:
@@ -11062,7 +12236,7 @@ class CrownUnlimited(commands.Cog):
                             else:
                                 if t_universe == "Naruto" and t_stamina == 0:
                                     t_health = t_health 
-                                    embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{c_card} attack strikes a log", colour=0xe91e63)
+                                    embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{c_card} strikes a log", colour=0xe91e63)
                                     await private_channel.send(embed=embedVar)
                                 else:
                                     t_health = t_health - dmg['DMG']
@@ -11331,24 +12505,37 @@ class CrownUnlimited(commands.Cog):
                     
                     boss_special_move_default_msg = " "
 
-                    if aiMove == 0:
-                        t_pet_used =False
+                    if int(aiMove) == 0:
                         t_health=0
-                    elif aiMove == 1:
+                    if int(aiMove) == 1:
                         t_pet_used =False
-                        dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total)
-                    elif aiMove == 2:
+                        if o_defend_used==True:
+                            dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                        else:
+                            dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total)
+                    elif int(aiMove) == 2:
                         t_pet_used =False
-                        dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total)
-                    elif aiMove == 3:
+                        if o_defend_used==True:
+                            dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                        else:
+                            dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total)
+                    elif int(aiMove) == 3:
                         t_pet_used =False
-                        dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total)
-                    elif aiMove == 4:
+                        if o_defend_used==True:
+                            dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                        else: 
+                            dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total)
+                        if t_gif != "N/A":
+                                await private_channel.send(f"{t_gif}")
+                    elif int(aiMove) == 4:
+                        t_pet_used =False
                         t_enhancer_used=True
-                        t_pet_used =False
-                        dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total)
+                        if o_defend_used==True:
+                            dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                        else:
+                            dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total)
                         t_enhancer_used=False
-                    elif aiMove == 5:
+                    elif int(aiMove) == 5:
                         if not t_used_resolve and t_used_focus:
                             if t_universe == "My Hero Academia": #My hero TRait
                                     #fortitude or luck is based on health  
@@ -11366,6 +12553,7 @@ class CrownUnlimited(commands.Cog):
                                     t_attack = round(t_attack + t_resolve_attack)
                                     t_defense = round(t_defense - t_resolve_defense)
                                     t_used_resolve=True
+                                    t_pet_used =False
 
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation: Plus Ultra", value="All stats & stamina greatly increased")
@@ -11388,6 +12576,7 @@ class CrownUnlimited(commands.Cog):
                                 t_attack = round(t_attack + (2 * t_resolve_attack))
                                 t_defense = round(t_defense - t_resolve_defense)
                                 t_used_resolve=True
+                                t_pet_used =False
 
                                 embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                 embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
@@ -11410,6 +12599,7 @@ class CrownUnlimited(commands.Cog):
                                 t_attack = round(t_attack + t_resolve_attack)
                                 t_defense = round(t_defense - t_resolve_defense)
                                 t_used_resolve=True
+                                t_pet_used =False
 
                                 embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                 embedVar.add_field(name=f"Transformation: Ascension", value="All stats & stamina greatly increased")
@@ -11436,9 +12626,13 @@ class CrownUnlimited(commands.Cog):
                                 embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                 embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
                                 await private_channel.send(embed=embedVar)
-                                dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
-                                t_pet_used =False
-                                o_health = o_health - int(dmg['DMG'])
+                                if o_defend_used==True:
+                                    dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                                    o_health = o_health - int(dmg['DMG'])
+                                else:
+                                    dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina,t_max_health, c_attack, boss_special_move_default_msg, turn_total)
+                                    c_health = c_health - int(dmg['DMG'])
+                                t_pet_used =False                                    
                                 embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                 await private_channel.send(embed=embedVar)
                                 t_stamina = 0
@@ -11460,6 +12654,7 @@ class CrownUnlimited(commands.Cog):
                                 t_attack = round(t_attack + t_resolve_attack)
                                 t_defense = round(t_defense)
                                 t_used_resolve=True
+                                t_pet_used =False
 
                                 embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                 embedVar.add_field(name=f"Transformation: Evolution", value="All stats & stamina greatly increased")
@@ -11482,6 +12677,7 @@ class CrownUnlimited(commands.Cog):
                                 t_attack = round(t_attack + t_resolve_attack)
                                 t_defense = round(t_defense - t_resolve_defense)
                                 t_used_resolve=True
+                                t_pet_used =False
 
                                 embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                 embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
@@ -11489,236 +12685,422 @@ class CrownUnlimited(commands.Cog):
                                 turn_total= turn_total + 1
                                 turn=0
                         else:
-                            emessage = m.CANNOT_USE_RESOLVE
-                            embedVar = discord.Embed(title=emessage, description=f"Entering `Resolved State` sacrifices a turn to power up even greater and regain `Stamina`!", colour=0xe91e63)
-                            await private_channel.send(embed=embedVar)
+                            await private_channel.send(m.CANNOT_USE_RESOLVE)
                             turn=3
-                    elif aiMove == 6:
+                    elif int(aiMove) == 6:
                         #Resolve Check and Calculation
-                        if t_used_resolve and t_used_focus and not t_pet_used:                                      
-                            t_enhancer_used=True
-                            dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total)
-                            t_enhancer_used=False
-                            t_pet_used =True
-                            tpet_dmg = dmg['DMG']
-                            tpet_type = dmg['ENHANCED_TYPE']
-                            if dmg['CAN_USE_MOVE']:
-                                if tpet_type == 'ATK':
-                                    t_attack = round(t_attack + dmg['DMG'])
-                                elif tpet_type == 'DEF':
-                                    t_defense = round(t_defense + dmg['DMG'])
-                                elif tpet_type == 'STAM':
-                                    t_stamina = round(t_stamina + dmg['DMG'])
-                                elif tpet_type == 'HLT':
-                                    t_health = round(t_health + dmg['DMG'])
-                                elif tpet_type == 'LIFE':
-                                    t_health = round(t_health + dmg['DMG'])
-                                    c_health = round(c_health - dmg['DMG'])
-                                elif tpet_type == 'DRAIN':
-                                    t_stamina = round(t_stamina + dmg['DMG'])
-                                    c_stamina = round(c_stamina - dmg['DMG'])
-                                elif tpet_type == 'FLOG':
-                                    t_attack = round(t_attack + dmg['DMG'])
-                                    c_attack = round (c_attack - dmg['DMG'])
-                                elif tpet_type == 'WITHER':
-                                    t_defense = round(t_defense + dmg['DMG'])
-                                    c_defense = round(c_defense + dmg['DMG'])
-                                elif tpet_type == 'RAGE':
-                                    t_defense = round(t_defense - dmg['DMG'])
-                                    t_attack = round(t_attack + dmg['DMG'])
-                                elif tpet_type == 'BRACE':
-                                    t_defense = round(t_defense + dmg['DMG'])
-                                    t_attack = round(t_attack - dmg['DMG'])
-                                elif tpet_type == 'BZRK':
-                                    t_health = round(t_health - dmg['DMG'])
-                                    t_attack = round(t_attack + (.75 * dmg['DMG']))
-                                elif tpet_type == 'CRYSTAL':
-                                    t_health = round(t_health - dmg['DMG'])
-                                    t_defense = round(t_defense + (.75 * dmg['DMG']))
-                                elif tpet_type == 'GROWTH':
-                                    t_max_health = round(t_max_health - dmg['DMG'])
-                                    t_defense = round(t_defense + (t_defense *  (.75 * dmg['DMG'])))
-                                    t_attack = round(t_attack + (.3 * dmg['DMG']))
-                                elif tpet_type == 'STANCE':
-                                    tempattack = dmg['DMG']
-                                    t_attack = t_defense
-                                    t_defense = tempattack
-                                elif tpet_type == 'CONFUSE':
-                                    tempattack = dmg['DMG']
-                                    c_attack = c_defense
-                                    c_defense = tempattack
-                                elif tpet_type == 'BLINK':
-                                    t_stamina = round(t_stamina - dmg['DMG'])
-                                    c_stamina = round(c_stamina + dmg['DMG'] - 10)
-                                elif tpet_type == 'SLOW':
-                                    tempstam = round(c_stamina + dmg['DMG'])
-                                    t_stamina = round(t_stamina - dmg['DMG'])
-                                    c_stamina = t_stamina
-                                    t_stamina = tempstam
-                                elif tpet_type == 'HASTE':
-                                    tempstam = round(c_stamina - dmg['DMG'])
-                                    t_stamina = round(t_stamina + dmg['DMG'])
-                                    c_stamina = t_stamina
-                                    t_stamina = tempstam                                       
-                                elif tpet_type == 'SOULCHAIN':
-                                    t_stamina = round(dmg['DMG'])
-                                    c_stamina = t_stamina
-                                elif tpet_type == 'GAMBLE':
-                                    t_health = round(dmg['DMG'])
-                                    c_health = t_health
-                                elif tpet_type == 'FEAR':
-                                    t_health = round(t_health - ((dmg['DMG']/100)* t_health))
-                                    c_attack = round(c_attack - ((dmg['DMG']/100)* c_attack))
-                                    c_defense = round(c_defense - ((dmg['DMG']/100)* c_defense))
-                                elif tpet_type == 'WAVE':
-                                    c_health = round(c_health - dmg['DMG'])
-                                elif tpet_type == 'BLAST':
-                                    c_health = round(c_health - dmg['DMG'])
-                                elif tpet_type == 'CREATION':
-                                    t_max_health = round(t_max_health + dmg['DMG'])
-                                    t_health = round(t_health + dmg['DMG'])
-                                elif tpet_type == 'DESTRUCTION':
-                                    c_max_health = round(c_max_health - dmg['DMG'])
-                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+                        if t_used_resolve and t_used_focus and not t_pet_used:
+                            if o_defend_used==True:
+                                t_enhancer_used=True
+                                dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                                t_enhancer_used=False
+                                t_pet_used =True
+                                tpet_dmg = dmg['DMG']
+                                tpet_type = dmg['ENHANCED_TYPE']
+                                if dmg['CAN_USE_MOVE']:
+                                    if tpet_type == 'ATK':
+                                        t_attack = round(t_attack + dmg['DMG'])
+                                    elif tpet_type == 'DEF':
+                                        t_defense = round(t_defense + dmg['DMG'])
+                                    elif tpet_type == 'STAM':
+                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                    elif tpet_type == 'HLT':
+                                        t_health = round(t_health + dmg['DMG'])
+                                    elif tpet_type == 'LIFE':
+                                        t_health = round(t_health + dmg['DMG'])
+                                        o_health = round(o_health - dmg['DMG'])
+                                    elif tpet_type == 'DRAIN':
+                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                        o_stamina = round(o_stamina - dmg['DMG'])
+                                    elif tpet_type == 'FLOG':
+                                        t_attack = round(t_attack + dmg['DMG'])
+                                        o_attack = round (o_attack - dmg['DMG'])
+                                    elif tpet_type == 'WITHER':
+                                        t_defense = round(t_defense + dmg['DMG'])
+                                        o_defense = round (o_defense - dmg['DMG'])
+                                    elif tpet_type == 'RAGE':
+                                        t_defense = round(t_defense - dmg['DMG'])
+                                        t_attack = round(t_attack + dmg['DMG'])
+                                    elif tpet_type == 'BRACE':
+                                        t_defense = round(t_defense + dmg['DMG'])
+                                        t_attack = round(t_attack - dmg['DMG'])
+                                    elif tpet_type == 'BZRK':
+                                        t_health = round(t_health - dmg['DMG'])
+                                        t_attack = round(t_attack + (.75 * dmg['DMG']))
+                                    elif tpet_type == 'CRYSTAL':
+                                        t_health = round(t_health - dmg['DMG'])
+                                        t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                    elif tpet_type == 'GROWTH':
+                                        t_max_health = round(t_max_health - dmg['DMG'])
+                                        t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                        t_attack = round(t_attack+ (.3 * dmg['DMG']))
+                                    elif tpet_type == 'STANCE':
+                                        tempattack = dmg['DMG']
+                                        t_attack = t_defense
+                                        t_defense = tempattack
+                                    elif tpet_type == 'CONFUSE':
+                                        tempattack = dmg['DMG']
+                                        o_attack = o_defense
+                                        o_defense = tempattack
+                                    elif tpet_type == 'BLINK':
+                                        t_stamina = round(t_stamina - dmg['DMG'])
+                                        o_stamina = round(o_stamina + dmg['DMG'] - 10)
+                                    elif tpet_type == 'SLOW':
+                                        tempstam = round(o_stamina + dmg['DMG'])
+                                        t_stamina = round(t_stamina - dmg['DMG'])
+                                        o_stamina = t_stamina
+                                        t_stamina = tempstam
+                                    elif tpet_type == 'HASTE':
+                                        tempstam = round(o_stamina - dmg['DMG'])
+                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                        o_stamina = t_stamina
+                                        t_stamina = tempstam                                       
+                                    elif tpet_type == 'SOULCHAIN':
+                                        t_stamina = round(dmg['DMG'])
+                                        o_stamina = t_stamina
+                                    elif tpet_type == 'GAMBLE':
+                                        t_health = round(dmg['DMG'])
+                                        o_health = t_health
+                                    elif tpet_type == 'FEAR':
+                                        t_health = round(t_health - ((dmg['DMG']/100)* t_health))
+                                        o_attack = round(o_attack - ((dmg['DMG']/100)* o_attack))
+                                        o_defense = round(o_defense - ((dmg['DMG']/100)* o_defense))
+                                    elif tpet_type == 'WAVE':
+                                        o_health = round(o_health - dmg['DMG'])
+                                    elif tpet_type == 'BLAST':
+                                        o_health = round(o_health - dmg['DMG'])
+                                    elif tpet_type == 'CREATION':
+                                        t_max_health = round(t_max_health + dmg['DMG'])
+                                        t_health = round(t_health + dmg['DMG'])
+                                    elif tpet_type == 'DESTRUCTION':
+                                        o_max_health = round(o_max_health - dmg['DMG'])
+                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
 
-                                embedVar = discord.Embed(title=f"{t_card.upper()} Summoned {tpet_name}", colour=0xe91e63)
-                                embedVar.add_field(name=f"{tpet_name} used {tpetmove_text}!", value =f"Enhanced {tpet_type}")
-                                embedVar.set_thumbnail(url=tpet_image)
-                                await private_channel.send(embed=embedVar)
-                                turn=3
-                            else:
-                                await private_channel.send(f"{tpet_name} needs a turn to rest...")
-                                turn=3
+                                    embedVar = discord.Embed(title=f"{t_card.upper()} Summoned {tpet_name}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"{tpet_name} used {tpetmove_text}!", value =f"Enhanced {tpet_type}")
+                                    embedVar.set_thumbnail(url=tpet_image)
+                                    await private_channel.send(embed=embedVar)
+                                    turn=1
+                                else:
+                                    await private_channel.send(f"{tpet_name} needs a turn to rest...")
+                                    turn=1
+                            else:                                      
+                                t_enhancer_used=True
+                                dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total)
+                                t_enhancer_used=False
+                                t_pet_used =True
+                                tpet_dmg = dmg['DMG']
+                                tpet_type = dmg['ENHANCED_TYPE']
+                                if dmg['CAN_USE_MOVE']:
+                                    if tpet_type == 'ATK':
+                                        t_attack = round(t_attack + dmg['DMG'])
+                                    elif tpet_type == 'DEF':
+                                        t_defense = round(t_defense + dmg['DMG'])
+                                    elif tpet_type == 'STAM':
+                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                    elif tpet_type == 'HLT':
+                                        t_health = round(t_health + dmg['DMG'])
+                                    elif tpet_type == 'LIFE':
+                                        t_health = round(t_health + dmg['DMG'])
+                                        c_health = round(c_health - dmg['DMG'])
+                                    elif tpet_type == 'DRAIN':
+                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                        c_stamina = round(c_stamina - dmg['DMG'])
+                                    elif tpet_type == 'FLOG':
+                                        t_attack = round(t_attack + dmg['DMG'])
+                                        c_attack = round (c_attack - dmg['DMG'])
+                                    elif tpet_type == 'WITHER':
+                                        t_defense = round(t_defense + dmg['DMG'])
+                                        c_defense = round (c_defense - dmg['DMG'])
+                                    elif tpet_type == 'RAGE':
+                                        t_defense = round(t_defense - dmg['DMG'])
+                                        t_attack = round(t_attack + dmg['DMG'])
+                                    elif tpet_type == 'BRACE':
+                                        t_defense = round(t_defense + dmg['DMG'])
+                                        t_attack = round(t_attack - dmg['DMG'])
+                                    elif tpet_type == 'BZRK':
+                                        t_health = round(t_health - dmg['DMG'])
+                                        t_attack = round(t_attack + (.75 * dmg['DMG']))
+                                    elif tpet_type == 'CRYSTAL':
+                                        t_health = round(t_health - dmg['DMG'])
+                                        t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                    elif tpet_type == 'GROWTH':
+                                        t_max_health = round(t_max_health - dmg['DMG'])
+                                        t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                        t_attack = round(t_attack+ (.3 * dmg['DMG']))
+                                    elif tpet_type == 'STANCE':
+                                        tempattack = dmg['DMG']
+                                        t_attack = t_defense
+                                        t_defense = tempattack
+                                    elif tpet_type == 'CONFUSE':
+                                        tempattack = dmg['DMG']
+                                        c_attack = c_defense
+                                        c_defense = tempattack
+                                    elif tpet_type == 'BLINK':
+                                        t_stamina = round(t_stamina - dmg['DMG'])
+                                        c_stamina = round(c_stamina + dmg['DMG'] - 10)
+                                    elif tpet_type == 'SLOW':
+                                        tempstam = round(c_stamina + dmg['DMG'])
+                                        t_stamina = round(t_stamina - dmg['DMG'])
+                                        c_stamina = t_stamina
+                                        t_stamina = tempstam
+                                    elif tpet_type == 'HASTE':
+                                        tempstam = round(c_stamina - dmg['DMG'])
+                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                        c_stamina = t_stamina
+                                        t_stamina = tempstam                                       
+                                    elif tpet_type == 'SOULCHAIN':
+                                        t_stamina = round(dmg['DMG'])
+                                        c_stamina = t_stamina
+                                    elif tpet_type == 'GAMBLE':
+                                        t_health = round(dmg['DMG'])
+                                        c_health = t_health
+                                    elif tpet_type == 'FEAR':
+                                        t_health = round(t_health - ((dmg['DMG']/100)* t_health))
+                                        c_attack = round(c_attack - ((dmg['DMG']/100)* c_attack))
+                                        c_defense = round(c_defense - ((dmg['DMG']/100)* c_defense))
+                                    elif tpet_type == 'WAVE':
+                                        c_health = round(c_health - dmg['DMG'])
+                                    elif tpet_type == 'BLAST':
+                                        c_health = round(c_health - dmg['DMG'])
+                                    elif tpet_type == 'CREATION':
+                                        t_max_health = round(t_max_health + dmg['DMG'])
+                                        t_health = round(t_health + dmg['DMG'])
+                                    elif tpet_type == 'DESTRUCTION':
+                                        c_max_health = round(c_max_health - dmg['DMG'])
+                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+
+                                    embedVar = discord.Embed(title=f"{t_card.upper()} Summoned {tpet_name}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"{tpet_name} used {tpetmove_text}!", value =f"Enhanced {tpet_type}")
+                                    embedVar.set_thumbnail(url=tpet_image)
+                                    await private_channel.send(embed=embedVar)
+                                    turn=3
+                                else:
+                                    await private_channel.send(f"{tpet_name} needs a turn to rest...")
+                                    turn=1
                         else:
                             await private_channel.send(f"{tpet_name} needs a turn to rest...")
 
                     if int(aiMove) !=5 and int(aiMove) !=6:
                         # If you have enough stamina for move, use it
-                        if dmg['CAN_USE_MOVE']:
-                            if dmg['ENHANCE']:
-                                enh_type= dmg['ENHANCED_TYPE']
-                                if enh_type == 'ATK':
-                                    t_attack = round(t_attack + dmg['DMG'])
-                                elif enh_type == 'DEF':
-                                    t_defense = round(t_defense + dmg['DMG'])
-                                elif enh_type == 'STAM':
-                                    t_stamina = round(t_stamina + dmg['DMG'])
-                                elif enh_type == 'HLT':
-                                    t_health = round(t_health + dmg['DMG'])
-                                elif enh_type == 'LIFE':
-                                    t_health = round(t_health + dmg['DMG'])
-                                    o_health = round(o_health - dmg['DMG'])
-                                    c_health = round(o_health - dmg['DMG'])
-                                elif enh_type == 'DRAIN':
-                                    t_stamina = round(t_stamina + dmg['DMG'])
-                                    o_stamina = round(o_stamina - dmg['DMG'])
-                                    c_stamina = round(o_stamina - dmg['DMG'])
-                                elif enh_type == 'FLOG':
-                                    t_attack = round(t_attack + dmg['DMG'])
-                                    o_attack = round(o_attack - dmg['DMG'])
-                                    c_attack = round(c_attack - dmg['DMG'])
-                                elif enh_type == 'WITHER':
-                                    t_defense = round(t_defense + dmg['DMG'])
-                                    o_defense = round(o_defense - dmg['DMG'])
-                                    c_defense = round(c_defense - dmg['DMG'])
-                                elif enh_type == 'RAGE':
-                                    t_defense = round(t_defense - dmg['DMG'])
-                                    t_attack = round(t_attack + dmg['DMG'])
-                                elif enh_type == 'BRACE':
-                                    t_defense = round(t_defense + dmg['DMG'])
-                                    t_attack = round(t_attack - dmg['DMG'])
-                                elif enh_type == 'BZRK':
-                                    t_health = round(t_health - dmg['DMG'])
-                                    t_attack = round(t_attack +(.50 *  dmg['DMG']))
-                                elif enh_type == 'CRYSTAL':
-                                    t_health = round(t_health - dmg['DMG'])
-                                    t_defense = round(t_defense + (.75 * dmg['DMG']))
-                                elif enh_type == 'GROWTH':
-                                    t_max_health = round(t_max_health - dmg['DMG'])
-                                    t_defense = round(t_defense + (.3 * dmg['DMG']))
-                                    t_attack = round(t_attack + (.3 * dmg['DMG']))
-                                elif enh_type == 'STANCE':
-                                    tempattack = dmg['DMG']
-                                    t_attack = t_defense
-                                    t_defense = tempattack
-                                elif enh_type == 'CONFUSE':
-                                    tempattack = dmg['DMG']
-                                    o_attack = o_defense
-                                    o_defense = tempattack
-                                    c_attack = c_defense
-                                    c_defense = tempattack
-                                elif enh_type == 'BLINK':
-                                    t_stamina = round(t_stamina - dmg['DMG'])
-                                    o_stamina = round(o_stamina + dmg['DMG'] - 10)
-                                    c_stamina = round(c_stamina + dmg['DMG'] - 10)
-                                elif enh_type == 'SLOW':
-                                    tempstam = round(o_stamina + dmg['DMG'])
-                                    t_stamina = round(t_stamina - dmg['DMG'])
-                                    o_stamina = t_stamina
-                                    c_stamina = t_stamina
-                                    t_stamina = tempstam
-                                elif enh_type == 'HASTE':
-                                    tempstam = round(o_stamina - dmg['DMG'])
-                                    t_stamina = round(t_stamina + dmg['DMG'])
-                                    o_stamina = t_stamina
-                                    c_stamina = t_stamina
-                                    t_stamina = tempstam                                       
-                                elif enh_type == 'SOULCHAIN':
-                                    t_stamina = round(dmg['DMG'])
-                                    o_stamina = t_stamina
-                                    c_stamina = t_stamina
-                                elif enh_type == 'GAMBLE':
-                                    t_health = round(dmg['DMG'])
-                                    o_health = t_health
-                                    c_health = t_health
-                                elif enh_type == 'FEAR':
-                                    t_health = round(t_health - ((dmg['DMG']/100) * t_health))
-                                    o_attack = round(o_attack - ((dmg['DMG']/100) * o_attack))
-                                    o_defense = round(o_defense - ((dmg['DMG']/100) * o_defense))
-                                    c_attack = round(o_attack - ((dmg['DMG']/100) * o_attack))
-                                    c_defense = round(o_defense - ((dmg['DMG']/100) * o_defense))
-                                elif enh_type == 'WAVE':
-                                    o_health = round(o_health - dmg['DMG'])
-                                    c_health = round(c_health - dmg['DMG'])
-                                elif enh_type == 'BLAST':
-                                    o_health = round(o_health - dmg['DMG'])
-                                    c_health = round(c_health - dmg['DMG'])
-                                elif enh_type == 'CREATION':
-                                    t_max_health = round(t_max_health + dmg['DMG'])
-                                    t_health = round(t_health + dmg['DMG'])
-                                elif enh_type == 'DESTRUCTION':
-                                    o_max_health = round(o_max_health - dmg['DMG'])
-                                    c_max_health = round(c_max_health - dmg['DMG'])
-                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-                                embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
-                                await private_channel.send(embed=embedVar)
-                                turn_total= turn_total + 1
-                                turn = 0
-                            elif dmg['DMG'] == 0:
-                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-                                embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
-                                await private_channel.send(embed=embedVar)
-                                turn_total= turn_total + 1
-                                turn=0
-                            else:
-                                if c_universe == "Naruto" and c_stamina == 0:
-                                    c_health = c_health 
-                                    embedVar = discord.Embed(title=f"{c_card.upper()}: Substitution Jutsu", description=f"{t_card} attack strikes a log", colour=0xe91e63)
-                                    await private_channel.send(embed=embedVar)
-                                else:
-                                    c_health = c_health - int(dmg['DMG'])
+                        #check if o is blocking
+                        if o_defend_used==True:
+                            if dmg['CAN_USE_MOVE']:
+                                if dmg['ENHANCE']:
+                                    enh_type= dmg['ENHANCED_TYPE']
+                                    if enh_type == 'ATK':
+                                        t_attack = round(t_attack + dmg['DMG'])
+                                    elif enh_type == 'DEF':
+                                        t_defense = round(t_defense + dmg['DMG'])
+                                    elif enh_type == 'STAM':
+                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                    elif enh_type == 'HLT':
+                                        t_health = round(t_health + dmg['DMG'])
+                                    elif enh_type == 'LIFE':
+                                        t_health = round(t_health + dmg['DMG'])
+                                        o_health = round(o_health - dmg['DMG'])
+                                    elif enh_type == 'DRAIN':
+                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                        o_stamina = round(o_stamina - dmg['DMG'])
+                                    elif enh_type == 'FLOG':
+                                        t_attack = round(t_attack + dmg['DMG'])
+                                        o_attack = round(o_attack - dmg['DMG'])
+                                    elif enh_type == 'WITHER':
+                                        t_defense = round(t_defense + dmg['DMG'])
+                                        o_defense = round(o_defense - dmg['DMG'])
+                                    elif enh_type == 'RAGE':
+                                        t_defense = round(t_defense - dmg['DMG'])
+                                        t_attack = round(t_attack + dmg['DMG'])
+                                    elif enh_type == 'BRACE':
+                                        t_defense = round(t_defense + dmg['DMG'])
+                                        t_attack = round(t_attack - dmg['DMG'])
+                                    elif enh_type == 'BZRK':
+                                        t_health = round(t_health - dmg['DMG'])
+                                        t_attack = round(t_attack +(.50 *  dmg['DMG']))
+                                    elif enh_type == 'CRYSTAL':
+                                        t_health = round(t_health - dmg['DMG'])
+                                        t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                    elif enh_type == 'GROWTH':
+                                        t_max_health = round(t_max_health - dmg['DMG'])
+                                        t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                        t_attack = round(t_attack+ (.3 * dmg['DMG']))
+                                    elif enh_type == 'STANCE':
+                                        tempattack = dmg['DMG']
+                                        t_attack = t_defense
+                                        t_defense = tempattack
+                                    elif enh_type == 'CONFUSE':
+                                        tempattack = dmg['DMG']
+                                        o_attack = o_defense
+                                        o_defense = tempattack
+                                    elif enh_type == 'BLINK':
+                                        t_stamina = round(t_stamina - dmg['DMG'])
+                                        o_stamina = round(o_stamina + dmg['DMG'] - 10)
+                                    elif enh_type == 'SLOW':
+                                        tempstam = round(o_stamina + dmg['DMG'])
+                                        t_stamina = round(t_stamina - dmg['DMG'])
+                                        o_stamina = t_stamina
+                                        t_stamina = tempstam
+                                    elif enh_type == 'HASTE':
+                                        tempstam = round(o_stamina - dmg['DMG'])
+                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                        o_stamina = t_stamina
+                                        t_stamina = tempstam                                       
+                                    elif enh_type == 'SOULCHAIN':
+                                        t_stamina = round(dmg['DMG'])
+                                        o_stamina = o_stamina
+                                    elif enh_type == 'GAMBLE':
+                                        t_health = round(dmg['DMG']) * 2
+                                        o_health = t_health
+                                    elif enh_type == 'FEAR':
+                                        t_health = round(t_health - ((dmg['DMG']/100) * t_health))
+                                        o_attack = round(c_attack - ((dmg['DMG']/100) * o_attack))
+                                        o_defense = round(c_defense - ((dmg['DMG']/100) * o_defense))
+                                    elif enh_type == 'WAVE':
+                                        o_health = round(o_health - dmg['DMG'])
+                                    elif enh_type == 'BLAST':
+                                        o_health = round(o_health - dmg['DMG'])
+                                    elif enh_type == 'CREATION':
+                                        t_max_health = round(t_max_health + dmg['DMG'])
+                                        t_health = round(t_health + dmg['DMG'])
+                                    elif enh_type == 'DESTRUCTION':
+                                        o_max_health = round(o_max_health - dmg['DMG'])
+                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                     await private_channel.send(embed=embedVar)
-                                if c_health < 0:
-                                    c_health=0
-                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
-                                turn_total= turn_total + 1
-                                turn=0
-
-                        else:
-                            await private_channel.send(m.NOT_ENOUGH_STAMINA)
-                            turn = 0
-
+                                    turn_total= turn_total + 1
+                                    turn = 0
+                                elif dmg['DMG'] == 0:
+                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+                                    embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                    await private_channel.send(embed=embedVar)
+                                    turn_total= turn_total + 1
+                                    turn=0
+                                else:
+                                    if o_universe == "Naruto" and o_stamina == 0:
+                                        o_health = o_health 
+                                        embedVar = discord.Embed(title=f"{o_card.upper()}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
+                                        await private_channel.send(embed=embedVar)
+                                    else:
+                                        o_health = o_health - int(dmg['DMG'])
+                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                        await private_channel.send(embed=embedVar)
+                                    if o_health < 0:
+                                        o_health=0
+                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                    turn_total= turn_total + 1
+                                    turn=0
+                            else:
+                                await private_channel.send(m.NOT_ENOUGH_STAMINA)
+                                turn = 3
+                        else:                                 
+                            if dmg['CAN_USE_MOVE']:
+                                if dmg['ENHANCE']:
+                                    enh_type= dmg['ENHANCED_TYPE']
+                                    if enh_type == 'ATK':
+                                        t_attack = round(t_attack + dmg['DMG'])
+                                    elif enh_type == 'DEF':
+                                        t_defense = round(t_defense + dmg['DMG'])
+                                    elif enh_type == 'STAM':
+                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                    elif enh_type == 'HLT':
+                                        t_health = round(t_health + dmg['DMG'])
+                                    elif enh_type == 'LIFE':
+                                        t_health = round(t_health + dmg['DMG'])
+                                        c_health = round(c_health - dmg['DMG'])
+                                    elif enh_type == 'DRAIN':
+                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                        c_stamina = round(c_stamina - dmg['DMG'])
+                                    elif enh_type == 'FLOG':
+                                        t_attack = round(t_attack + dmg['DMG'])
+                                        c_attack = round(c_attack - dmg['DMG'])
+                                    elif enh_type == 'WITHER':
+                                        t_defense = round(t_defense + dmg['DMG'])
+                                        c_defense = round(t_defense - dmg['DMG'])
+                                    elif enh_type == 'RAGE':
+                                        t_defense = round(t_defense - dmg['DMG'])
+                                        t_attack = round(t_attack + dmg['DMG'])
+                                    elif enh_type == 'BRACE':
+                                        t_defense = round(t_defense + dmg['DMG'])
+                                        t_attack = round(t_attack - dmg['DMG'])
+                                    elif enh_type == 'BZRK':
+                                        t_health = round(t_health - dmg['DMG'])
+                                        t_attack = round(t_attack +(.75 *  dmg['DMG']))
+                                    elif enh_type == 'CRYSTAL':
+                                        t_health = round(t_health - dmg['DMG'])
+                                        t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                    elif enh_type == 'GROWTH':
+                                        t_max_health = round(t_max_health - dmg['DMG'])
+                                        t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                        t_attack = round(t_attack+ (.3 * dmg['DMG']))
+                                    elif enh_type == 'STANCE':
+                                        tempattack = dmg['DMG']
+                                        t_attack = t_defense
+                                        t_defense = tempattack
+                                    elif enh_type == 'CONFUSE':
+                                        tempattack = dmg['DMG']
+                                        c_attack = c_defense
+                                        c_defense = tempattack
+                                    elif enh_type == 'BLINK':
+                                        t_stamina = round(t_stamina - dmg['DMG'])
+                                        c_stamina = round(c_stamina + dmg['DMG'] - 10)
+                                    elif enh_type == 'SLOW':
+                                        tempstam = round(c_stamina + dmg['DMG'])
+                                        t_stamina = round(t_stamina - dmg['DMG'])
+                                        c_stamina = t_stamina
+                                        t_stamina = tempstam
+                                    elif enh_type == 'HASTE':
+                                        tempstam = round(c_stamina - dmg['DMG'])
+                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                        c_stamina = t_stamina
+                                        t_stamina = tempstam                                       
+                                    elif enh_type == 'SOULCHAIN':
+                                        t_stamina = round(dmg['DMG'])
+                                        c_stamina = t_stamina
+                                    elif enh_type == 'GAMBLE':
+                                        t_health = round(dmg['DMG']) * 2
+                                        c_health = t_health
+                                    elif enh_type == 'FEAR':
+                                        t_health = round(t_health - ((dmg['DMG']/100) * t_health))
+                                        c_attack = round(c_attack - ((dmg['DMG']/100) * c_attack))
+                                        c_defense = round(c_defense - ((dmg['DMG']/100) * c_defense))
+                                    elif enh_type == 'WAVE':
+                                        c_health = round(c_health - dmg['DMG'])
+                                    elif enh_type == 'BLAST':
+                                        c_health = round(c_health - dmg['DMG'])
+                                    elif enh_type == 'CREATION':
+                                        t_max_health = round(t_max_health + dmg['DMG'])
+                                        t_health = round(t_health + dmg['DMG'])
+                                    elif enh_type == 'DESTRUCTION':
+                                        c_max_health = round(c_max_health - dmg['DMG'])
+                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+                                    embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                    await private_channel.send(embed=embedVar)
+                                    turn_total= turn_total + 1
+                                    turn = 0
+                                elif dmg['DMG'] == 0:
+                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+                                    embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                    await private_channel.send(embed=embedVar)
+                                    turn_total= turn_total + 1
+                                    turn=0
+                                else:
+                                    if c_universe == "Naruto" and c_stamina == 0:
+                                        c_health = c_health 
+                                        embedVar = discord.Embed(title=f"{c_card.upper()}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
+                                        await private_channel.send(embed=embedVar)
+                                    else:
+                                        c_health = c_health - int(dmg['DMG'])
+                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                        await private_channel.send(embed=embedVar)
+                                    if c_health < 0:
+                                        c_health=0
+                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                    turn_total= turn_total + 1
+                                    turn=0
+                            else:
+                                await private_channel.send(m.NOT_ENOUGH_STAMINA)
+                                turn = 3
+ 
         # End the match
         if o_health <= 0 or c_health <= 0 or o_max_health <= 0 or c_max_health <= 0:
             # await private_channel.send(f":zap: {user2.mention} you win the match!")
@@ -12129,6 +13511,8 @@ class CrownUnlimited(commands.Cog):
             if ofam == cfam:
                 o_health = o_health + 50
                 c_health = c_health + 50
+                o_max_health = o_max_health + 50
+                c_max_health = c_max_health + 50
 
              
             # Companion Passive Config
@@ -12148,6 +13532,7 @@ class CrownUnlimited(commands.Cog):
             c_enhancer = c_moveset[3]
             c_enhancer_used=False
             c_pet_used=False
+            c_block_used=False
 
             cmove1_text = list(c_1.keys())[0]
             cmove2_text = list(c_2.keys())[0]
@@ -12396,6 +13781,7 @@ class CrownUnlimited(commands.Cog):
             o_enhancer = o_moveset[3]
             o_enhancer_used=False
             o_pet_used=False
+            o_defend_used=False
 
             omove1_text = list(o_1.keys())[0]
             omove2_text = list(o_2.keys())[0]
@@ -12920,6 +14306,9 @@ class CrownUnlimited(commands.Cog):
             while ((o_health > 0) and (c_health > 0)) and (t_health > 0):
                 #Player 1 Turn Start
                 if turn == 0:
+                    if o_defend_used==True:
+                        o_defense = o_defense/2
+                        o_defend_used=False
                     if o_universe == "Death Note" and turn_total == 0:
                         embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death", description=f"`{o_card} says:`\nYou will die in 24 turns...", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
@@ -12937,9 +14326,9 @@ class CrownUnlimited(commands.Cog):
                         o_health = o_max_health
 
                     # Tutorial Instructions
-                    if turn_total == 0 and botActive:     
-                        await private_channel.send(f"{ctx.author.mention}{user.mention}")                 
-                        embedVar = discord.Embed(title=f"`{o_card}` & `{c_card}` VS `{t_card}` has begun! {lineup}\n{t_universe} Co-Op Tales Battle", description=f"`{o_card} Says:`\n{o_greeting_description}", colour=0xe91e63)
+                    if turn_total == 0 and botActive:
+                        await private_channel.send(f"{ctx.author.mention}")                   
+                        embedVar = discord.Embed(title=f"`{o_card}` & `{c_card}` VS `{t_card}` has begun! {lineup}\n{t_universe} Duo Dungeon Battle", description=f"`{o_card} Says:`\n{o_greeting_description}", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
 
                     
@@ -13017,18 +14406,22 @@ class CrownUnlimited(commands.Cog):
                             o_used_resolve = True 
                             o_pet_used=False
 
+                            
                         elif o_universe == "League Of Legends":
-                            embedVar = discord.Embed(title=f"Turret Shot hits {t_card} for 25 DMG!", colour=0xe91e63)
+                            embedVar = discord.Embed(title=f"Turret Shot hits {t_card}for 25 DMG!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_health = round(t_health - 30)
+                            
                         elif o_universe == "Solo Leveling":
                             embedVar = discord.Embed(title=f"Ruler's Authority... Opponent loses {15 + turn_total} DEF!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_defense = round(t_defense - (15 + turn_total))
+                            
                         elif o_universe == "Attack On Titan":
                             embedVar = discord.Embed(title=f"Rally! {o_card} Increased Max Health!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             o_max_health = round(o_max_health + 50)
+                            
                         elif o_universe == "Black Clover":
                             embedVar = discord.Embed(title=f"Mana Zone! {o_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
@@ -13039,18 +14432,22 @@ class CrownUnlimited(commands.Cog):
                                 embedVar.add_field(name=f"{t_card} had a heart attack and died", value=f"Death....")
                                 await private_channel.send(embed=embedVar)
                                 t_health = 0
+                            
                         if t_universe == "One Punch Man":
                             embedVar = discord.Embed(title=f"Hero Reinforcements! {t_card} Increased Max Health!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_max_health = round(t_max_health + 50)
+                           
                         elif t_universe == "7ds":
                             embedVar = discord.Embed(title=f"Increase Power Level! {t_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            o_stamina = 110
+                            t_stamina = 110
+                           
                         elif t_universe == "Souls":
                             embedVar = discord.Embed(title=f"Combo Recognition! {t_card} Increased Attack by {15 + turn_total}!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_attack = round(t_attack + (15 + turn_total))
+                            
                         else:
                             turn_total= turn_total + 1
                             if o_universe != "Crown Rift Madness":
@@ -13073,28 +14470,29 @@ class CrownUnlimited(commands.Cog):
                         **{omove2_text}** 30 Stamina _press 2_
                         **{omove3_text}** 80 Stamina _press 3_
                         **{omove_enhanced_text}** 20 Stamina _press 4_
-                        **Enhance Companion** 20 Stamina _press 7_
-                    
-                        **{t_card}:** {t_health}/{t_stamina}
-                        **{c_card}:** {c_health}/{c_stamina} _partner_
+                        **Enhance {c_card}** 20 Stamina _press 7_
+                        **Defend {c_card}** 20 Stamina _press 0_
+                        
+                        **{c_card}:** {c_health}/{c_stamina} _Companion_           
+                        **{t_card}:** {t_health}/{t_stamina}   
                         """) 
                         , colour=embed_color_o)
                         embedVar.set_thumbnail(url=opet_image)
-                        if o_used_focus and o_used_resolve and not t_pet_used:
-                            embedVar.set_author(name="Press 0 to Quit Match. Press 6 to Summon your Pet!")                                    
+                        if o_used_focus and o_used_resolve and not o_pet_used:
+                            embedVar.set_author(name="Press Q to Quit Match. Press 6 to Summon your Pet!")                                    
                         elif o_used_focus and not o_used_resolve:
-                            embedVar.set_author(name="Press 0 to Quit Match. Press 5 to Strengthen resolve!")
+                            embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen resolve!")
                         else:
-                            embedVar.set_author(name="Press 0 to Quit Match")
+                            embedVar.set_author(name="Press Q to Quit Match")
                         embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
                         await private_channel.send(embed=embedVar)
                         
                         if o_used_focus and o_used_resolve:
-                            options = ["0","1","2","3","4","6","7"]
+                            options = ["q","Q","0","1","2","3","4","6","7"]
                         elif o_used_focus and not o_used_resolve:
-                            options = ["0","1","2","3","4","5","7"]
+                            options = ["q","Q","0","1","2","3","4","5","7"]
                         else:
-                            options = ["0","1","2","3","4","7"]
+                            options = ["q","Q","0","1","2","3","4","7"]
 
                         # Make sure user is responding with move
                         def check(msg):
@@ -13106,7 +14504,7 @@ class CrownUnlimited(commands.Cog):
                             msg = await self.bot.wait_for("message",timeout=120.0, check=check)
 
                             # calculate data based on selected move
-                            if msg.content == "0":
+                            if msg.content == "q" or msg.content == "Q":
                                 o_health=0
                         
                                 if private_channel.guild:
@@ -13134,6 +14532,7 @@ class CrownUnlimited(commands.Cog):
                                 dmg = damage_cal(o_universe, o_card, o_enhancer, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total)
                                 o_enhancer_used=False
                             elif msg.content == "5":
+                                #Resolve Check and Calculation
                                 if not o_used_resolve and o_used_focus:
                                     if o_universe == "My Hero Academia": #My Hero Trait
                                         #fortitude or luck is based on health  
@@ -13176,7 +14575,7 @@ class CrownUnlimited(commands.Cog):
                                         o_used_resolve = True 
                                         o_pet_used=False
                                         embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
-                                        embedVar.add_field(name=f"Transformation: Ascension", value="All stats & stamina greatly increased")
+                                        embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
                                         await private_channel.send(embed=embedVar)
                                         turn_total= turn_total + 1
                                         turn=1
@@ -13320,11 +14719,11 @@ class CrownUnlimited(commands.Cog):
                                             o_attack = round(o_attack + (.75 * dmg['DMG']))
                                         elif opet_type == 'CRYSTAL':
                                             o_health = round(o_health - dmg['DMG'])
-                                            o_defense = round(o_defense +(.75 * dmg['DMG']))
+                                            o_defense = round(o_defense + (.75 * dmg['DMG']))
                                         elif opet_type == 'GROWTH':
                                             o_max_health = round(o_max_health - dmg['DMG'])
-                                            o_defense = round(o_defense + (o_defense * dmg['DMG'])) + (.05 * o_max_health)
-                                            o_attack = round(o_attack + (o_attack * dmg['DMG'])) + (.05 * o_max_health)
+                                            o_defense = round(o_defense + (.3 * dmg['DMG']))
+                                            o_attack = round(o_attack + (.3 * dmg['DMG']))
                                         elif opet_type == 'STANCE':
                                             tempattack = dmg['DMG']
                                             o_attack = o_defense
@@ -13471,8 +14870,21 @@ class CrownUnlimited(commands.Cog):
                                 else:
                                     await private_channel.send(m.NOT_ENOUGH_STAMINA)
                                     turn=0
+                            elif msg.content == "0":
+                                if o_stamina >=20:
+                                    o_stamina = o_stamina - 20
+                                    o_defend_used=True
+                                    o_defense = o_defense * 2
+                                    embedVar = discord.Embed(title=f"{o_card.upper()} DEFENDS {c_card.upper()}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"{o_card} used Block!", value =f"Enhanced DEF")
+                                    await private_channel.send(embed=embedVar)
+                                    turn=1
+                                else:
+                                    await private_channel.send(f"{o_card} is too tired to block...")
+                                    turn=0
 
-                            if msg.content != "5" and msg.content != "6" and msg.content != "7" and msg.content in options:
+
+                            if msg.content != "5" and msg.content != "6" and msg.content != "7" and msg.content != "9" and msg.content != "0" and msg.content in options:
                                 # If you have enough stamina for move, use it
                                 if dmg['CAN_USE_MOVE']:
                                     if dmg['ENHANCE']:
@@ -13512,8 +14924,8 @@ class CrownUnlimited(commands.Cog):
                                             o_defense = round(o_defense +(.75 * dmg['DMG']))
                                         elif enh_type == 'GROWTH':
                                             o_max_health = round(o_max_health - dmg['DMG'])
-                                            o_defense = round(o_defense + (o_defense * dmg['DMG'])) + (.05 * o_max_health)
-                                            o_attack = round(o_attack + (o_attack * dmg['DMG'])) + (.05 * o_max_health)
+                                            o_defense = round(o_defense + (.3 * dmg['DMG']))
+                                            o_attack = round(o_attack + (.3 * dmg['DMG']))
                                         elif enh_type == 'STANCE':
                                             tempattack = dmg['DMG']
                                             o_attack = o_defense
@@ -13571,7 +14983,7 @@ class CrownUnlimited(commands.Cog):
                                     else:
                                         if t_universe == "Naruto" and t_stamina == 0:
                                             t_health = t_health 
-                                            embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{o_card} attack strikes a log", colour=0xe91e63)
+                                            embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{o_card} strikes a log", colour=0xe91e63)
                                             await private_channel.send(embed=embedVar)
                                         else:
                                             t_health = t_health - dmg['DMG']
@@ -13588,7 +15000,7 @@ class CrownUnlimited(commands.Cog):
                                     await private_channel.send(embed=embedVar)
                                     turn=0
                         except asyncio.TimeoutError:
-                            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                             await private_channel.send(f"{ctx.author.mention} {m.STORY_ENDED}")
                             if private_channel.guild:
                                 await discord.TextChannel.delete(private_channel, reason=None)
@@ -13674,16 +15086,16 @@ class CrownUnlimited(commands.Cog):
                             embedVar.add_field(name=f"Transformation: Digivolve", value="All stats & stamina greatly increased")
                             await private_channel.send(embed=embedVar)
                             
-                        elif t_universe == "League Of Legends":
-                            embedVar = discord.Embed(title=f"Turret Shot hits {o_card} for 25 DMG!", colour=0xe91e63)
+                        elif c_universe == "League Of Legends":
+                            embedVar = discord.Embed(title=f"Turret Shot hits {t_card} for 25 DMG!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            o_health = round(o_health - 30)
-                          
-                        elif t_universe == "Solo Leveling":
-                            embedVar = discord.Embed(title=f"Ruler's Authority... {o_card} loses {15 + turn_total} DEF!", colour=0xe91e63)
-                            await private_channel.send(embed=embedVar)
-                            o_defense = round(o_defense - (15 + turn_total))
+                            t_health = round(t_health - 30)
                             
+                        elif c_universe == "Solo Leveling":
+                            embedVar = discord.Embed(title=f"Ruler's Authority... {t_card} loses {15 + turn_total} DEF!", colour=0xe91e63)
+                            await private_channel.send(embed=embedVar)
+                            t_defense = round(t_defense - (15 + turn_total))
+                           
                         elif t_universe == "Attack On Titan":
                             embedVar = discord.Embed(title=f"Rally!{t_card} Increased Max Health!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
@@ -13700,12 +15112,12 @@ class CrownUnlimited(commands.Cog):
                                 embedVar.add_field(name=f"{o_card} had a heart attack and died", value=f"Death....")
                                 await private_channel.send(embed=embedVar)
                                 o_health = 0
-                            
+                           
                         if o_universe == "One Punch Man":
                             embedVar = discord.Embed(title=f"Hero Reinforcements! {o_card} Increased Max Health!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             o_max_health = round(o_max_health + 50)
-                            
+                           
                         elif o_universe == "7ds":
                             embedVar = discord.Embed(title=f"Increase Power Level! {o_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
@@ -13735,6 +15147,8 @@ class CrownUnlimited(commands.Cog):
                         
                         if o_stamina == 0:
                             aiMove = 1
+                        elif t_health <= (.50 * t_max_health) and t_used_resolve == False and t_used_focus:
+                            aiMove = 5
                         elif t_stamina >= 160 and (t_health >= o_health):
                             aiMove = 3
                         elif t_stamina >= 160:
@@ -13790,12 +15204,19 @@ class CrownUnlimited(commands.Cog):
                             else:
                                 aiMove = 1 
                         elif t_stamina >= 50 and (t_health >= o_health):
-                            if t_stamina >= o_stamina:
-                                aiMove = 4
+                            if t_used_resolve == False and t_used_focus:
+                                aiMove = 5
+                            elif t_used_focus == False:
+                                aiMove = 2
                             else:
-                                aiMove = 1
+                                aiMove = 1 
                         elif t_stamina >= 50:
-                            aiMove = 2
+                            if t_used_resolve == False and t_used_focus:
+                                aiMove = 5
+                            elif t_used_focus == False:
+                                aiMove = 2
+                            else:
+                                aiMove = 1 
                         elif t_stamina >= 40 and (t_health >= o_health):
                             aiMove = 1
                         elif t_stamina >= 40:
@@ -13813,20 +15234,36 @@ class CrownUnlimited(commands.Cog):
                         else:
                             aiMove = 0
                         
-
+                        t_special_move_description= " "
                         if int(aiMove) == 0:
                             t_health=0
                         if int(aiMove) == 1:
-                            dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                            t_pet_used =False
+                            if c_block_used==True:
+                                dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
+                            else:
+                                dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
                         elif int(aiMove) == 2:
-                            dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                            t_pet_used =False
+                            if c_block_used==True:
+                                dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
+                            else:
+                                dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
                         elif int(aiMove) == 3:
-                            dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                            t_pet_used =False
+                            if c_block_used==True:
+                                dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
+                            else:
+                                dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
                             if t_gif != "N/A":
                                     await private_channel.send(f"{t_gif}")
                         elif int(aiMove) == 4:
+                            t_pet_used =False
                             t_enhancer_used=True
-                            dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                            if c_block_used==True:
+                                dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
+                            else:
+                                dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
                             t_enhancer_used=False
                         elif int(aiMove) == 5:
                             if not t_used_resolve and t_used_focus:
@@ -13846,6 +15283,7 @@ class CrownUnlimited(commands.Cog):
                                         t_attack = round(t_attack + t_resolve_attack)
                                         t_defense = round(t_defense - t_resolve_defense)
                                         t_used_resolve=True
+                                        t_pet_used =False
 
                                         embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                         embedVar.add_field(name=f"Transformation: Plus Ultra", value="All stats & stamina greatly increased")
@@ -13868,6 +15306,7 @@ class CrownUnlimited(commands.Cog):
                                     t_attack = round(t_attack + (2 * t_resolve_attack))
                                     t_defense = round(t_defense - t_resolve_defense)
                                     t_used_resolve=True
+                                    t_pet_used =False
 
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
@@ -13890,6 +15329,7 @@ class CrownUnlimited(commands.Cog):
                                     t_attack = round(t_attack + t_resolve_attack)
                                     t_defense = round(t_defense - t_resolve_defense)
                                     t_used_resolve=True
+                                    t_pet_used =False
 
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation: Ascension", value="All stats & stamina greatly increased")
@@ -13912,13 +15352,17 @@ class CrownUnlimited(commands.Cog):
                                     t_attack = round(t_attack + t_resolve_attack)
                                     t_defense = round(t_defense - t_resolve_defense)
                                     t_used_resolve=True
+                                    t_pet_used =False
                                     
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
                                     await private_channel.send(embed=embedVar)
-                                    dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
+                                    if c_block_used==True:
+                                        dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina,t_max_health, c_attack, t_special_move_description, turn_total)
+                                    else:
+                                        dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
                                     t_pet_used =False
-                                    o_health = o_health - int(dmg['DMG'])
+                                    c_health = c_health - int(dmg['DMG'])
                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                     await private_channel.send(embed=embedVar)
                                     t_stamina = 0
@@ -13940,6 +15384,7 @@ class CrownUnlimited(commands.Cog):
                                     t_attack = round(t_attack + t_resolve_attack)
                                     t_defense = round(t_defense)
                                     t_used_resolve=True
+                                    t_pet_used =False
 
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation: Evolution", value="All stats & stamina greatly increased")
@@ -13962,6 +15407,7 @@ class CrownUnlimited(commands.Cog):
                                     t_attack = round(t_attack + t_resolve_attack)
                                     t_defense = round(t_defense - t_resolve_defense)
                                     t_used_resolve=True
+                                    t_pet_used =False
 
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
@@ -13971,119 +15417,232 @@ class CrownUnlimited(commands.Cog):
                             else:
                                 await private_channel.send(m.CANNOT_USE_RESOLVE)
                                 turn=1
+
                         if int(aiMove) !=5:
                             # If you have enough stamina for move, use it
-                            if dmg['CAN_USE_MOVE']:
-                                if dmg['ENHANCE']:
-                                    enh_type= dmg['ENHANCED_TYPE']
-                                    if enh_type == 'ATK':
-                                        t_attack = round(t_attack + dmg['DMG'])
-                                    elif enh_type == 'DEF':
-                                        t_defense = round(t_defense + dmg['DMG'])
-                                    elif enh_type == 'STAM':
-                                        t_stamina = round(t_stamina + dmg['DMG'])
-                                    elif enh_type == 'HLT':
-                                        t_health = round(t_health + dmg['DMG'])
-                                    elif enh_type == 'LIFE':
-                                        t_health = round(t_health + dmg['DMG'])
-                                        o_health = round(o_health - dmg['DMG'])
-                                    elif enh_type == 'DRAIN':
-                                        t_stamina = round(t_stamina + dmg['DMG'])
-                                        o_stamina = round(o_stamina - dmg['DMG'])
-                                    elif enh_type == 'FLOG':
-                                        t_attack = round(t_attack + dmg['DMG'])
-                                        o_attack = round(o_attack - dmg['DMG'])
-                                    elif enh_type == 'WITHER':
-                                        t_defense = round(t_defense + dmg['DMG'])
-                                        o_defense = round(o_defense - dmg['DMG'])
-                                    elif enh_type == 'RAGE':
-                                        t_defense = round(t_defense - dmg['DMG'])
-                                        t_attack = round(t_attack + dmg['DMG'])
-                                    elif enh_type == 'BRACE':
-                                        t_defense = round(t_defense + dmg['DMG'])
-                                        t_attack = round(t_attack - dmg['DMG'])
-                                    elif enh_type == 'BZRK':
-                                        t_health = round(t_health - dmg['DMG'])
-                                        t_attack = round(t_attack +(.50 *  dmg['DMG']))
-                                    elif enh_type == 'CRYSTAL':
-                                        t_health = round(t_health - dmg['DMG'])
-                                        t_defense = round(t_defense + (.75 * dmg['DMG']))
-                                    elif enh_type == 'GROWTH':
-                                        t_max_health = round(t_max_health - dmg['DMG'])
-                                        t_defense = round(t_defense + (.3 * dmg['DMG']))
-                                        t_attack = round(t_attack+ (.3 * dmg['DMG']))
-                                    elif enh_type == 'STANCE':
-                                        tempattack = dmg['DMG']
-                                        t_attack = t_defense
-                                        t_defense = tempattack
-                                    elif enh_type == 'CONFUSE':
-                                        tempattack = dmg['DMG']
-                                        o_attack = o_defense
-                                        o_defense = tempattack
-                                    elif enh_type == 'BLINK':
-                                        t_stamina = round(t_stamina - dmg['DMG'])
-                                        o_stamina = round(o_stamina + dmg['DMG'] - 10)
-                                    elif enh_type == 'SLOW':
-                                        tempstam = round(o_stamina + dmg['DMG'])
-                                        t_stamina = round(t_stamina - dmg['DMG'])
-                                        o_stamina = t_stamina
-                                        t_stamina = tempstam
-                                    elif enh_type == 'HASTE':
-                                        tempstam = round(o_stamina - dmg['DMG'])
-                                        t_stamina = round(t_stamina + dmg['DMG'])
-                                        o_stamina = t_stamina
-                                        t_stamina = tempstam                                       
-                                    elif enh_type == 'SOULCHAIN':
-                                        t_stamina = round(dmg['DMG'])
-                                        o_stamina = o_stamina
-                                    elif enh_type == 'GAMBLE':
-                                        t_health = round(dmg['DMG']) * 2
-                                        o_health = t_health
-                                    elif enh_type == 'FEAR':
-                                        t_health = round(t_health - ((dmg['DMG']/100) * t_health))
-                                        o_attack = round(c_attack - ((dmg['DMG']/100) * o_attack))
-                                        o_defense = round(c_defense - ((dmg['DMG']/100) * o_defense))
-                                    elif enh_type == 'WAVE':
-                                        o_health = round(o_health - dmg['DMG'])
-                                    elif enh_type == 'BLAST':
-                                        o_health = round(o_health - dmg['DMG'])
-                                    elif enh_type == 'CREATION':
-                                        t_max_health = round(t_max_health + dmg['DMG'])
-                                        t_health = round(t_health + dmg['DMG'])
-                                    elif enh_type == 'DESTRUCTION':
-                                        o_max_health = round(o_max_health - dmg['DMG'])
-                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-                                    embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
-                                    await private_channel.send(embed=embedVar)
-                                    turn_total= turn_total + 1
-                                    turn = 2
-                                elif dmg['DMG'] == 0:
-                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-                                    embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
-                                    await private_channel.send(embed=embedVar)
-                                    turn_total= turn_total + 1
-                                    turn=2
-                                else:
-                                    if o_universe == "Naruto" and o_stamina == 0:
-                                        o_health = o_health 
-                                        embedVar = discord.Embed(title=f"{o_card.upper()}: Substitution Jutsu", description=f"{t_card} attack strikes a log", colour=0xe91e63)
-                                        await private_channel.send(embed=embedVar)
-                                    else:
-                                        o_health = o_health - int(dmg['DMG'])
+                            #if c used block
+                            if c_block_used==True:
+                                if dmg['CAN_USE_MOVE']:
+                                    if dmg['ENHANCE']:
+                                        enh_type= dmg['ENHANCED_TYPE']
+                                        if enh_type == 'ATK':
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                        elif enh_type == 'DEF':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                        elif enh_type == 'STAM':
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                        elif enh_type == 'HLT':
+                                            t_health = round(t_health + dmg['DMG'])
+                                        elif enh_type == 'LIFE':
+                                            t_health = round(t_health + dmg['DMG'])
+                                            c_health = round(c_health - dmg['DMG'])
+                                        elif enh_type == 'DRAIN':
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                            c_stamina = round(c_stamina - dmg['DMG'])
+                                        elif enh_type == 'FLOG':
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                            c_attack = round(c_attack - dmg['DMG'])
+                                        elif enh_type == 'WITHER':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                            c_defense = round(t_defense - dmg['DMG'])
+                                        elif enh_type == 'RAGE':
+                                            t_defense = round(t_defense - dmg['DMG'])
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                        elif enh_type == 'BRACE':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                            t_attack = round(t_attack - dmg['DMG'])
+                                        elif enh_type == 'BZRK':
+                                            t_health = round(t_health - dmg['DMG'])
+                                            t_attack = round(t_attack +(.75 *  dmg['DMG']))
+                                        elif enh_type == 'CRYSTAL':
+                                            t_health = round(t_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                        elif enh_type == 'GROWTH':
+                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                            t_attack = round(t_attack+ (.3 * dmg['DMG']))
+                                        elif enh_type == 'STANCE':
+                                            tempattack = dmg['DMG']
+                                            t_attack = t_defense
+                                            t_defense = tempattack
+                                        elif enh_type == 'CONFUSE':
+                                            tempattack = dmg['DMG']
+                                            c_attack = c_defense
+                                            c_defense = tempattack
+                                        elif enh_type == 'BLINK':
+                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                            c_stamina = round(c_stamina + dmg['DMG'] - 10)
+                                        elif enh_type == 'SLOW':
+                                            tempstam = round(c_stamina + dmg['DMG'])
+                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                            c_stamina = t_stamina
+                                            t_stamina = tempstam
+                                        elif enh_type == 'HASTE':
+                                            tempstam = round(c_stamina - dmg['DMG'])
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                            c_stamina = t_stamina
+                                            t_stamina = tempstam                                       
+                                        elif enh_type == 'SOULCHAIN':
+                                            t_stamina = round(dmg['DMG'])
+                                            c_stamina = t_stamina
+                                        elif enh_type == 'GAMBLE':
+                                            t_health = round(dmg['DMG']) * 2
+                                            c_health = t_health
+                                        elif enh_type == 'FEAR':
+                                            t_health = round(t_health - ((dmg['DMG']/100) * t_health))
+                                            c_attack = round(c_attack - ((dmg['DMG']/100) * c_attack))
+                                            c_defense = round(c_defense - ((dmg['DMG']/100) * c_defense))
+                                        elif enh_type == 'WAVE':
+                                            c_health = round(c_health - dmg['DMG'])
+                                        elif enh_type == 'BLAST':
+                                            c_health = round(c_health - dmg['DMG'])
+                                        elif enh_type == 'CREATION':
+                                            t_max_health = round(t_max_health + dmg['DMG'])
+                                            t_health = round(t_health + dmg['DMG'])
+                                        elif enh_type == 'DESTRUCTION':
+                                            c_max_health = round(c_max_health - dmg['DMG'])
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                         await private_channel.send(embed=embedVar)
-                                    if o_health < 0:
-                                        o_health=0
-                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
-                                    turn_total= turn_total + 1
-                                    turn=2
-
+                                        turn_total= turn_total + 1
+                                        turn = 2
+                                    elif dmg['DMG'] == 0:
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                        await private_channel.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn=2
+                                    else:
+                                        if c_universe == "Naruto" and c_stamina == 0:
+                                            c_health = c_health 
+                                            embedVar = discord.Embed(title=f"{c_card.upper()}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
+                                            await private_channel.send(embed=embedVar)
+                                        else:
+                                            c_health = c_health - int(dmg['DMG'])
+                                            embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                            await private_channel.send(embed=embedVar)
+                                        if c_health < 0:
+                                            c_health=0
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                        turn_total= turn_total + 1
+                                        turn=2
+                                else:
+                                    await private_channel.send(m.NOT_ENOUGH_STAMINA)
+                                    turn = 1
                             else:
-                                await private_channel.send(m.NOT_ENOUGH_STAMINA)
-                                turn = 1
+                                if dmg['CAN_USE_MOVE']:
+                                    if dmg['ENHANCE']:
+                                        enh_type= dmg['ENHANCED_TYPE']
+                                        if enh_type == 'ATK':
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                        elif enh_type == 'DEF':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                        elif enh_type == 'STAM':
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                        elif enh_type == 'HLT':
+                                            t_health = round(t_health + dmg['DMG'])
+                                        elif enh_type == 'LIFE':
+                                            t_health = round(t_health + dmg['DMG'])
+                                            o_health = round(o_health - dmg['DMG'])
+                                        elif enh_type == 'DRAIN':
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                            o_stamina = round(o_stamina - dmg['DMG'])
+                                        elif enh_type == 'FLOG':
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                            o_attack = round(o_attack - dmg['DMG'])
+                                        elif enh_type == 'WITHER':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                            o_defense = round(o_defense - dmg['DMG'])
+                                        elif enh_type == 'RAGE':
+                                            t_defense = round(t_defense - dmg['DMG'])
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                        elif enh_type == 'BRACE':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                            t_attack = round(t_attack - dmg['DMG'])
+                                        elif enh_type == 'BZRK':
+                                            t_health = round(t_health - dmg['DMG'])
+                                            t_attack = round(t_attack +(.50 *  dmg['DMG']))
+                                        elif enh_type == 'CRYSTAL':
+                                            t_health = round(t_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                        elif enh_type == 'GROWTH':
+                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                            t_attack = round(t_attack+ (.3 * dmg['DMG']))
+                                        elif enh_type == 'STANCE':
+                                            tempattack = dmg['DMG']
+                                            t_attack = t_defense
+                                            t_defense = tempattack
+                                        elif enh_type == 'CONFUSE':
+                                            tempattack = dmg['DMG']
+                                            o_attack = o_defense
+                                            o_defense = tempattack
+                                        elif enh_type == 'BLINK':
+                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                            o_stamina = round(o_stamina + dmg['DMG'] - 10)
+                                        elif enh_type == 'SLOW':
+                                            tempstam = round(o_stamina + dmg['DMG'])
+                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                            o_stamina = t_stamina
+                                            t_stamina = tempstam
+                                        elif enh_type == 'HASTE':
+                                            tempstam = round(o_stamina - dmg['DMG'])
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                            o_stamina = t_stamina
+                                            t_stamina = tempstam                                       
+                                        elif enh_type == 'SOULCHAIN':
+                                            t_stamina = round(dmg['DMG'])
+                                            o_stamina = o_stamina
+                                        elif enh_type == 'GAMBLE':
+                                            t_health = round(dmg['DMG']) * 2
+                                            o_health = t_health
+                                        elif enh_type == 'FEAR':
+                                            t_health = round(t_health - ((dmg['DMG']/100) * t_health))
+                                            o_attack = round(c_attack - ((dmg['DMG']/100) * o_attack))
+                                            o_defense = round(c_defense - ((dmg['DMG']/100) * o_defense))
+                                        elif enh_type == 'WAVE':
+                                            o_health = round(o_health - dmg['DMG'])
+                                        elif enh_type == 'BLAST':
+                                            o_health = round(o_health - dmg['DMG'])
+                                        elif enh_type == 'CREATION':
+                                            t_max_health = round(t_max_health + dmg['DMG'])
+                                            t_health = round(t_health + dmg['DMG'])
+                                        elif enh_type == 'DESTRUCTION':
+                                            o_max_health = round(o_max_health - dmg['DMG'])
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                        await private_channel.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn = 2
+                                    elif dmg['DMG'] == 0:
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                        await private_channel.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn=2
+                                    else:
+                                        if o_universe == "Naruto" and o_stamina == 0:
+                                            o_health = o_health 
+                                            embedVar = discord.Embed(title=f"{o_card.upper()}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
+                                            await private_channel.send(embed=embedVar)
+                                        else:
+                                            o_health = o_health - int(dmg['DMG'])
+                                            embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                            await private_channel.send(embed=embedVar)
+                                        if o_health < 0:
+                                            o_health=0
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                        turn_total= turn_total + 1
+                                        turn=2
+                                else:
+                                    await private_channel.send(m.NOT_ENOUGH_STAMINA)
+                                    turn = 1
 
                 #Companion Turn Start
                 if turn == 2:
+                    if c_block_used==True:
+                        c_defense = c_defense/2
+                        c_block_used=False
                     if c_attack <= 25:
                         c_attack = 25
                     if c_defense <= 30:
@@ -14168,12 +15727,12 @@ class CrownUnlimited(commands.Cog):
                             c_used_resolve = True 
                             c_pet_used=False
 
-                            
+                           
                         elif c_universe == "League Of Legends":
                             embedVar = discord.Embed(title=f"Turret Shot hits {t_card} for 25 DMG!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_health = round(t_health - 30)
-                         
+                           
                         elif c_universe == "Solo Leveling":
                             embedVar = discord.Embed(title=f"Ruler's Authority... {t_card} loses {15 + turn_total} DEF!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
@@ -14183,19 +15742,19 @@ class CrownUnlimited(commands.Cog):
                             embedVar = discord.Embed(title=f"Rally! {c_card} Increased Max Health!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             c_max_health = round(c_max_health + 50)
-                      
+                           
                         elif c_universe == "Black Clover":
                             embedVar = discord.Embed(title=f"Mana Zone! {c_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             c_stamina = 110
-                        
+                            
                         elif c_universe == "Death Note":
                             if turn_total >= 24:
                                 embedVar = discord.Embed(title=f"{t_card.upper()}'s' Scheduled Death", description=f"`{c_card} says:`\n'Delete'", colour=0xe91e63)
                                 embedVar.add_field(name=f"{t_card} had a heart attack and died", value=f"Death....")
                                 await private_channel.send(embed=embedVar)
                                 t_health = 0
-                         
+                            
                         if t_universe == "One Punch Man":
                             embedVar = discord.Embed(title=f"Hero Reinforcements! {t_card} Increased Max Health!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
@@ -14205,7 +15764,7 @@ class CrownUnlimited(commands.Cog):
                             embedVar = discord.Embed(title=f"Increase Power Level! {t_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_stamina = 110
-                        
+                            
                         elif t_universe == "Souls":
                             embedVar = discord.Embed(title=f"Combo Recognition! {t_card} Increased Attack by {15 + turn_total}!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
@@ -14233,28 +15792,31 @@ class CrownUnlimited(commands.Cog):
                         **{cmove2_text}** 30 Stamina _press 2_
                         **{cmove3_text}** 80 Stamina _press 3_
                         **{cmove_enhanced_text}** 20 Stamina _press 4_
-                        **Enhance Companion** 20 Stamina _press 7_
-                    
-                        **{t_card}:** {t_health}/{t_stamina}
-                        **{o_card}:** {o_health}/{o_stamina} _partner_
+                        **Enhance {o_card}** 20 Stamina _press 7_
+                        **Defend {o_card}** 20 Stamina _press 0_
+                        
+                        **{o_card}:** {o_health}/{o_stamina} _Companion_
+                        
+                                      
+                        **{t_card}:** {t_health}/{t_stamina}   
                         """) 
-                        , colour=embed_color_c)
-                        embedVar.set_thumbnail(url=cpet_image)
-                        if c_used_focus and c_used_resolve and not t_pet_used:
-                            embedVar.set_author(name="Press 0 to Quit Match. Press 6 to Summon your Pet!")                                    
+                        , colour=embed_color_o)
+                        embedVar.set_thumbnail(url=opet_image)
+                        if c_used_focus and c_used_resolve and not c_pet_used:
+                            embedVar.set_author(name="Press Q to Quit Match. Press 6 to Summon your Pet!")                                    
                         elif c_used_focus and not c_used_resolve:
-                            embedVar.set_author(name="Press 0 to Quit Match. Press 5 to Strengthen resolve!")
+                            embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen resolve!")
                         else:
-                            embedVar.set_author(name="Press 0 to Quit Match")
+                            embedVar.set_author(name="Press Q to Quit Match")
                         embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
                         await private_channel.send(embed=embedVar)
                         
                         if c_used_focus and c_used_resolve:
-                            options = ["0","1","2","3","4","6","7"]
+                            options = ["q","Q","0","1","2","3","4","6","7"]
                         elif c_used_focus and not c_used_resolve:
-                            options = ["0","1","2","3","4","5","7"]
+                            options = ["q","Q","0","1","2","3","4","5","7"]
                         else:
-                            options = ["0","1","2","3","4","7"]
+                            options = ["q","Q","0","1","2","3","4","7"]
 
                         # Make sure user is responding with move
                         def check(msg):
@@ -14266,15 +15828,13 @@ class CrownUnlimited(commands.Cog):
                             msg = await self.bot.wait_for("message",timeout=120.0, check=check)
 
                             # calculate data based on selected move
-                            if msg.content == "0":
+                            if msg.content == "q" or msg.content == "Q" :
                                 c_health=0
-                        
+                                response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                                 if private_channel.guild:
                                     await private_channel.send(f"{user2.mention} has fled the battle...")
-                                    response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                                     await discord.TextChannel.delete(private_channel, reason=None)
                                 else:
-                                    response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                                     await private_channel.send(f"You fled the battle...")
                                 return
                             if msg.content == "1":
@@ -14468,7 +16028,7 @@ class CrownUnlimited(commands.Cog):
                                             t_attack = round (t_attack - dmg['DMG'])
                                         elif cpet_type == 'WITHER':
                                             c_defense = round(c_defense + dmg['DMG'])
-                                            t_defense = round (t_defense - dmg['DMG'])
+                                            t_defense = round (t_attack - dmg['DMG'])
                                         elif cpet_type == 'RAGE':
                                             c_defense = round(c_defense - dmg['DMG'])
                                             c_attack = round(c_attack + dmg['DMG'])
@@ -14483,8 +16043,8 @@ class CrownUnlimited(commands.Cog):
                                             c_defense = round(c_defense +(.75 * dmg['DMG']))
                                         elif cpet_type == 'GROWTH':
                                             c_max_health = round(c_max_health - dmg['DMG'])
-                                            c_defense = round(c_defense + (.3 * dmg['DMG']))
-                                            c_attack = round(c_attack + (.3 * dmg['DMG']))
+                                            c_defense = round(c_defense + (c_defense * dmg['DMG']))
+                                            c_attack = round(c_attack + (c_attack *  (.75 * dmg['DMG'])))
                                         elif cpet_type == 'STANCE':
                                             tempattack = dmg['DMG']
                                             c_attack = c_defense
@@ -14631,9 +16191,21 @@ class CrownUnlimited(commands.Cog):
                                 else:
                                     await private_channel.send(m.NOT_ENOUGH_STAMINA)
                                     turn=2
+                            elif msg.content == "0":
+                                if c_stamina >=20:
+                                    c_block_used=True
+                                    c_stamina = c_stamina - 20
+                                    c_defense = c_defense * 2
+                                    embedVar = discord.Embed(title=f"{c_card.upper()} DEFENDS {o_card.upper()}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"{c_card} used Block!", value =f"Enhanced DEF")
+                                    await private_channel.send(embed=embedVar)
+                                    turn=3
+                                else:
+                                    await private_channel.send(f"{c_card} is too tired to block...")
+                                    turn=2
                             
 
-                            if msg.content != "5" and msg.content != "6" and msg.content != "7" and msg.content in options:
+                            if msg.content != "5" and msg.content != "6" and msg.content != "7" and msg.content != "0" and msg.content in options:
                                 # If you have enough stamina for move, use it
                                 if dmg['CAN_USE_MOVE']:
                                     if dmg['ENHANCE']:
@@ -14732,7 +16304,7 @@ class CrownUnlimited(commands.Cog):
                                     else:
                                         if t_universe == "Naruto" and t_stamina == 0:
                                             t_health = t_health 
-                                            embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{c_card} attack strikes a log", colour=0xe91e63)
+                                            embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{c_card} strikes a log", colour=0xe91e63)
                                             await private_channel.send(embed=embedVar)
                                         else:
                                             t_health = t_health - dmg['DMG']
@@ -14749,7 +16321,7 @@ class CrownUnlimited(commands.Cog):
                                     await private_channel.send(embed=embedVar)
                                     turn=2
                         except asyncio.TimeoutError:
-                            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                             await private_channel.send(f"{ctx.author.mention} {m.STORY_ENDED}")
                             if private_channel.guild:
                                 await discord.TextChannel.delete(private_channel, reason=None)
@@ -14834,7 +16406,7 @@ class CrownUnlimited(commands.Cog):
                             embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                             embedVar.add_field(name=f"Transformation: Digivolve", value="All stats & stamina greatly increased")
                             await private_channel.send(embed=embedVar)
-                            
+                           
                         elif t_universe == "League Of Legends":
                             embedVar = discord.Embed(title=f"Turret Shot hits {c_card} for 25 DMG!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
@@ -14844,16 +16416,17 @@ class CrownUnlimited(commands.Cog):
                             embedVar = discord.Embed(title=f"Ruler's Authority... {c_card} loses {15 + turn_total} DEF!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             c_defense = round(c_defense - (15 + turn_total))
-                          
+                            
                         elif t_universe == "Attack On Titan":
                             embedVar = discord.Embed(title=f"Rally!{t_card} Increased Max Health!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_max_health = round(t_max_health + 50)
-                          
+                            
                         elif t_universe == "Black Clover":
                             embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_stamina = 110
+                        
                         
                         elif t_universe == "Death Note":
                             if turn_total >= 24:
@@ -14866,17 +16439,17 @@ class CrownUnlimited(commands.Cog):
                             embedVar = discord.Embed(title=f"Hero Reinforcements! {c_card} Increased Max Health!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             c_max_health = round(c_max_health + 50)
-                          
+                           
                         elif c_universe == "7ds":
                             embedVar = discord.Embed(title=f"Increase Power Level! {c_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             c_stamina = 110
-                            
+                           
                         elif c_universe == "Souls":
                             embedVar = discord.Embed(title=f"Combo Recognition! {c_card} Increased ATK by {15 + turn_total}!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             c_attack = round(c_attack + (15 + turn_total))
-                           
+                            
                         else:
                             turn_total= turn_total + 1
                             if t_universe != "Crown Rift Madness":
@@ -14887,12 +16460,13 @@ class CrownUnlimited(commands.Cog):
                         if t_universe != "Crown Rift Madness":
                             turn = 0
                         else:
-                            turn = 3 
+                            turn = 3
                     else:
                         # UNIVERSE CARD
                         player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus)
                         await private_channel.send(file=player_2_card)
                         aiMove = 0
+                        
                         
                         if c_stamina == 0:
                             aiMove = 1
@@ -14951,12 +16525,19 @@ class CrownUnlimited(commands.Cog):
                             else:
                                 aiMove = 1 
                         elif t_stamina >= 50 and (t_health >= c_health):
-                            if t_stamina >= o_stamina:
-                                aiMove = 4
+                            if t_used_resolve == False and t_used_focus:
+                                aiMove = 5
+                            elif t_used_focus == False:
+                                aiMove = 2
                             else:
-                                aiMove = 1
+                                aiMove = 1 
                         elif t_stamina >= 50:
-                            aiMove = 2
+                            if t_used_resolve == False and t_used_focus:
+                                aiMove = 5
+                            elif t_used_focus == False:
+                                aiMove = 2
+                            else:
+                                aiMove = 1 
                         elif t_stamina >= 40 and (t_health >= c_health):
                             aiMove = 1
                         elif t_stamina >= 40:
@@ -14974,23 +16555,40 @@ class CrownUnlimited(commands.Cog):
                         else:
                             aiMove = 0
                         
-
+                        t_special_move_description =""
                         if int(aiMove) == 0:
                             t_health=0
                         if int(aiMove) == 1:
-                            dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
+                            if o_defend_used==True:
+                                dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                            else:
+                                dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
+                            t_pet_used =False
                         elif int(aiMove) == 2:
-                            dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
+                            if o_defend_used==True:
+                                dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                            else:
+                                dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
+                            t_pet_used =False
                         elif int(aiMove) == 3:
-                            dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
+                            if o_defend_used==True:
+                                dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                            else: 
+                                dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
                             if t_gif != "N/A":
                                     await private_channel.send(f"{t_gif}")
+                            t_pet_used =False
                         elif int(aiMove) == 4:
                             t_enhancer_used=True
-                            dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
+                            if o_defend_used==True:
+                                dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                            else:
+                                dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
                             t_enhancer_used=False
+                            t_pet_used =False
                         elif int(aiMove) == 5:
                             if not t_used_resolve and t_used_focus:
+                                t_pet_used =False
                                 if t_universe == "My Hero Academia": #My hero TRait
                                         #fortitude or luck is based on health  
                                         fortitude = 0.0
@@ -15007,6 +16605,7 @@ class CrownUnlimited(commands.Cog):
                                         t_attack = round(t_attack + t_resolve_attack)
                                         t_defense = round(t_defense - t_resolve_defense)
                                         t_used_resolve=True
+                                        t_pet_used =False
 
                                         embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                         embedVar.add_field(name=f"Transformation: Plus Ultra", value="All stats & stamina greatly increased")
@@ -15029,6 +16628,7 @@ class CrownUnlimited(commands.Cog):
                                     t_attack = round(t_attack + (2 * t_resolve_attack))
                                     t_defense = round(t_defense - t_resolve_defense)
                                     t_used_resolve=True
+                                    t_pet_used =False
 
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
@@ -15051,6 +16651,7 @@ class CrownUnlimited(commands.Cog):
                                     t_attack = round(t_attack + t_resolve_attack)
                                     t_defense = round(t_defense - t_resolve_defense)
                                     t_used_resolve=True
+                                    t_pet_used =False
 
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation: Ascension", value="All stats & stamina greatly increased")
@@ -15077,9 +16678,13 @@ class CrownUnlimited(commands.Cog):
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
                                     await private_channel.send(embed=embedVar)
-                                    dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
-                                    t_pet_used =False
-                                    o_health = o_health - int(dmg['DMG'])
+                                    if o_defend_used==True:
+                                        dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
+                                        o_health = o_health - int(dmg['DMG'])
+                                    else:
+                                        dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina,t_max_health, c_attack, t_special_move_description, turn_total)
+                                        c_health = c_health - int(dmg['DMG'])
+                                    t_pet_used =False                                    
                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                     await private_channel.send(embed=embedVar)
                                     t_stamina = 0
@@ -15101,6 +16706,7 @@ class CrownUnlimited(commands.Cog):
                                     t_attack = round(t_attack + t_resolve_attack)
                                     t_defense = round(t_defense)
                                     t_used_resolve=True
+                                    t_pet_used =False
 
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation: Evolution", value="All stats & stamina greatly increased")
@@ -15123,6 +16729,7 @@ class CrownUnlimited(commands.Cog):
                                     t_attack = round(t_attack + t_resolve_attack)
                                     t_defense = round(t_defense - t_resolve_defense)
                                     t_used_resolve=True
+                                    t_pet_used =False
 
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
@@ -15131,116 +16738,226 @@ class CrownUnlimited(commands.Cog):
                                     turn=0
                             else:
                                 await private_channel.send(m.CANNOT_USE_RESOLVE)
-                                turn=1
+                                turn=3
                         if int(aiMove) !=5:
                             # If you have enough stamina for move, use it
-                            if dmg['CAN_USE_MOVE']:
-                                if dmg['ENHANCE']:
-                                    enh_type= dmg['ENHANCED_TYPE']
-                                    if enh_type == 'ATK':
-                                        t_attack = round(t_attack + dmg['DMG'])
-                                    elif enh_type == 'DEF':
-                                        t_defense = round(t_defense + dmg['DMG'])
-                                    elif enh_type == 'STAM':
-                                        t_stamina = round(t_stamina + dmg['DMG'])
-                                    elif enh_type == 'HLT':
-                                        t_health = round(t_health + dmg['DMG'])
-                                    elif enh_type == 'LIFE':
-                                        t_health = round(t_health + dmg['DMG'])
-                                        c_health = round(c_health - dmg['DMG'])
-                                    elif enh_type == 'DRAIN':
-                                        t_stamina = round(t_stamina + dmg['DMG'])
-                                        c_stamina = round(c_stamina - dmg['DMG'])
-                                    elif enh_type == 'FLOG':
-                                        t_attack = round(t_attack + dmg['DMG'])
-                                        c_attack = round(c_attack - dmg['DMG'])
-                                    elif enh_type == 'WITHER':
-                                        t_defense = round(t_defense + dmg['DMG'])
-                                        c_defense = round(t_defense - dmg['DMG'])
-                                    elif enh_type == 'RAGE':
-                                        t_defense = round(t_defense - dmg['DMG'])
-                                        t_attack = round(t_attack + dmg['DMG'])
-                                    elif enh_type == 'BRACE':
-                                        t_defense = round(t_defense + dmg['DMG'])
-                                        t_attack = round(t_attack - dmg['DMG'])
-                                    elif enh_type == 'BZRK':
-                                        t_health = round(t_health - dmg['DMG'])
-                                        t_attack = round(t_attack +(.75 *  dmg['DMG']))
-                                    elif enh_type == 'CRYSTAL':
-                                        t_health = round(t_health - dmg['DMG'])
-                                        t_defense = round(t_defense + (.75 * dmg['DMG']))
-                                    elif enh_type == 'GROWTH':
-                                        t_max_health = round(t_max_health - dmg['DMG'])
-                                        t_defense = round(t_defense + (.3 * dmg['DMG']))
-                                        t_attack = round(t_attack+ (.3 * dmg['DMG']))
-                                    elif enh_type == 'STANCE':
-                                        tempattack = dmg['DMG']
-                                        t_attack = t_defense
-                                        t_defense = tempattack
-                                    elif enh_type == 'CONFUSE':
-                                        tempattack = dmg['DMG']
-                                        c_attack = c_defense
-                                        c_defense = tempattack
-                                    elif enh_type == 'BLINK':
-                                        t_stamina = round(t_stamina - dmg['DMG'])
-                                        c_stamina = round(c_stamina + dmg['DMG'] - 10)
-                                    elif enh_type == 'SLOW':
-                                        tempstam = round(c_stamina + dmg['DMG'])
-                                        t_stamina = round(t_stamina - dmg['DMG'])
-                                        c_stamina = t_stamina
-                                        t_stamina = tempstam
-                                    elif enh_type == 'HASTE':
-                                        tempstam = round(c_stamina - dmg['DMG'])
-                                        t_stamina = round(t_stamina + dmg['DMG'])
-                                        c_stamina = t_stamina
-                                        t_stamina = tempstam                                       
-                                    elif enh_type == 'SOULCHAIN':
-                                        t_stamina = round(dmg['DMG'])
-                                        c_stamina = t_stamina
-                                    elif enh_type == 'GAMBLE':
-                                        t_health = round(dmg['DMG']) * 2
-                                        c_health = t_health
-                                    elif enh_type == 'FEAR':
-                                        t_health = round(t_health - ((dmg['DMG']/100) * t_health))
-                                        c_attack = round(c_attack - ((dmg['DMG']/100) * c_attack))
-                                        c_defense = round(c_defense - ((dmg['DMG']/100) * c_defense))
-                                    elif enh_type == 'WAVE':
-                                        c_health = round(c_health - dmg['DMG'])
-                                    elif enh_type == 'BLAST':
-                                        c_health = round(c_health - dmg['DMG'])
-                                    elif enh_type == 'CREATION':
-                                        t_max_health = round(t_max_health + dmg['DMG'])
-                                        t_health = round(t_health + dmg['DMG'])
-                                    elif enh_type == 'DESTRUCTION':
-                                        c_max_health = round(c_max_health - dmg['DMG'])
-                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-                                    embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
-                                    await private_channel.send(embed=embedVar)
-                                    turn_total= turn_total + 1
-                                    turn = 0
-                                elif dmg['DMG'] == 0:
-                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-                                    embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
-                                    await private_channel.send(embed=embedVar)
-                                    turn_total= turn_total + 1
-                                    turn=0
-                                else:
-                                    if c_universe == "Naruto" and c_stamina == 0:
-                                        c_health = c_health 
-                                        embedVar = discord.Embed(title=f"{c_card.upper()}: Substitution Jutsu", description=f"{t_card} attack strikes a log", colour=0xe91e63)
-                                        await private_channel.send(embed=embedVar)
-                                    else:
-                                        c_health = c_health - int(dmg['DMG'])
+                            #check if o is blocking
+                            if o_defend_used==True:
+                                if dmg['CAN_USE_MOVE']:
+                                    if dmg['ENHANCE']:
+                                        enh_type= dmg['ENHANCED_TYPE']
+                                        if enh_type == 'ATK':
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                        elif enh_type == 'DEF':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                        elif enh_type == 'STAM':
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                        elif enh_type == 'HLT':
+                                            t_health = round(t_health + dmg['DMG'])
+                                        elif enh_type == 'LIFE':
+                                            t_health = round(t_health + dmg['DMG'])
+                                            o_health = round(o_health - dmg['DMG'])
+                                        elif enh_type == 'DRAIN':
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                            o_stamina = round(o_stamina - dmg['DMG'])
+                                        elif enh_type == 'FLOG':
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                            o_attack = round(o_attack - dmg['DMG'])
+                                        elif enh_type == 'WITHER':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                            o_defense = round(o_defense - dmg['DMG'])
+                                        elif enh_type == 'RAGE':
+                                            t_defense = round(t_defense - dmg['DMG'])
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                        elif enh_type == 'BRACE':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                            t_attack = round(t_attack - dmg['DMG'])
+                                        elif enh_type == 'BZRK':
+                                            t_health = round(t_health - dmg['DMG'])
+                                            t_attack = round(t_attack +(.50 *  dmg['DMG']))
+                                        elif enh_type == 'CRYSTAL':
+                                            t_health = round(t_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                        elif enh_type == 'GROWTH':
+                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                            t_attack = round(t_attack+ (.3 * dmg['DMG']))
+                                        elif enh_type == 'STANCE':
+                                            tempattack = dmg['DMG']
+                                            t_attack = t_defense
+                                            t_defense = tempattack
+                                        elif enh_type == 'CONFUSE':
+                                            tempattack = dmg['DMG']
+                                            o_attack = o_defense
+                                            o_defense = tempattack
+                                        elif enh_type == 'BLINK':
+                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                            o_stamina = round(o_stamina + dmg['DMG'] - 10)
+                                        elif enh_type == 'SLOW':
+                                            tempstam = round(o_stamina + dmg['DMG'])
+                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                            o_stamina = t_stamina
+                                            t_stamina = tempstam
+                                        elif enh_type == 'HASTE':
+                                            tempstam = round(o_stamina - dmg['DMG'])
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                            o_stamina = t_stamina
+                                            t_stamina = tempstam                                       
+                                        elif enh_type == 'SOULCHAIN':
+                                            t_stamina = round(dmg['DMG'])
+                                            o_stamina = o_stamina
+                                        elif enh_type == 'GAMBLE':
+                                            t_health = round(dmg['DMG']) * 2
+                                            o_health = t_health
+                                        elif enh_type == 'FEAR':
+                                            t_health = round(t_health - ((dmg['DMG']/100) * t_health))
+                                            o_attack = round(c_attack - ((dmg['DMG']/100) * o_attack))
+                                            o_defense = round(c_defense - ((dmg['DMG']/100) * o_defense))
+                                        elif enh_type == 'WAVE':
+                                            o_health = round(o_health - dmg['DMG'])
+                                        elif enh_type == 'BLAST':
+                                            o_health = round(o_health - dmg['DMG'])
+                                        elif enh_type == 'CREATION':
+                                            t_max_health = round(t_max_health + dmg['DMG'])
+                                            t_health = round(t_health + dmg['DMG'])
+                                        elif enh_type == 'DESTRUCTION':
+                                            o_max_health = round(o_max_health - dmg['DMG'])
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                         await private_channel.send(embed=embedVar)
-                                    if c_health < 0:
-                                        c_health=0
-                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
-                                    turn_total= turn_total + 1
-                                    turn=0
-                            else:
-                                await private_channel.send(m.NOT_ENOUGH_STAMINA)
-                                turn = 1
+                                        turn_total= turn_total + 1
+                                        turn = 0
+                                    elif dmg['DMG'] == 0:
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                        await private_channel.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn=0
+                                    else:
+                                        if o_universe == "Naruto" and o_stamina == 0:
+                                            o_health = o_health 
+                                            embedVar = discord.Embed(title=f"{o_card.upper()}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
+                                            await private_channel.send(embed=embedVar)
+                                        else:
+                                            o_health = o_health - int(dmg['DMG'])
+                                            embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                            await private_channel.send(embed=embedVar)
+                                        if o_health < 0:
+                                            o_health=0
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                        turn_total= turn_total + 1
+                                        turn=0
+                                else:
+                                    await private_channel.send(m.NOT_ENOUGH_STAMINA)
+                                    turn = 3
+                            else:                                 
+                                if dmg['CAN_USE_MOVE']:
+                                    if dmg['ENHANCE']:
+                                        enh_type= dmg['ENHANCED_TYPE']
+                                        if enh_type == 'ATK':
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                        elif enh_type == 'DEF':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                        elif enh_type == 'STAM':
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                        elif enh_type == 'HLT':
+                                            t_health = round(t_health + dmg['DMG'])
+                                        elif enh_type == 'LIFE':
+                                            t_health = round(t_health + dmg['DMG'])
+                                            c_health = round(c_health - dmg['DMG'])
+                                        elif enh_type == 'DRAIN':
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                            c_stamina = round(c_stamina - dmg['DMG'])
+                                        elif enh_type == 'FLOG':
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                            c_attack = round(c_attack - dmg['DMG'])
+                                        elif enh_type == 'WITHER':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                            c_defense = round(t_defense - dmg['DMG'])
+                                        elif enh_type == 'RAGE':
+                                            t_defense = round(t_defense - dmg['DMG'])
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                        elif enh_type == 'BRACE':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                            t_attack = round(t_attack - dmg['DMG'])
+                                        elif enh_type == 'BZRK':
+                                            t_health = round(t_health - dmg['DMG'])
+                                            t_attack = round(t_attack +(.75 *  dmg['DMG']))
+                                        elif enh_type == 'CRYSTAL':
+                                            t_health = round(t_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                        elif enh_type == 'GROWTH':
+                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                            t_attack = round(t_attack+ (.3 * dmg['DMG']))
+                                        elif enh_type == 'STANCE':
+                                            tempattack = dmg['DMG']
+                                            t_attack = t_defense
+                                            t_defense = tempattack
+                                        elif enh_type == 'CONFUSE':
+                                            tempattack = dmg['DMG']
+                                            c_attack = c_defense
+                                            c_defense = tempattack
+                                        elif enh_type == 'BLINK':
+                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                            c_stamina = round(c_stamina + dmg['DMG'] - 10)
+                                        elif enh_type == 'SLOW':
+                                            tempstam = round(c_stamina + dmg['DMG'])
+                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                            c_stamina = t_stamina
+                                            t_stamina = tempstam
+                                        elif enh_type == 'HASTE':
+                                            tempstam = round(c_stamina - dmg['DMG'])
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                            c_stamina = t_stamina
+                                            t_stamina = tempstam                                       
+                                        elif enh_type == 'SOULCHAIN':
+                                            t_stamina = round(dmg['DMG'])
+                                            c_stamina = t_stamina
+                                        elif enh_type == 'GAMBLE':
+                                            t_health = round(dmg['DMG']) * 2
+                                            c_health = t_health
+                                        elif enh_type == 'FEAR':
+                                            t_health = round(t_health - ((dmg['DMG']/100) * t_health))
+                                            c_attack = round(c_attack - ((dmg['DMG']/100) * c_attack))
+                                            c_defense = round(c_defense - ((dmg['DMG']/100) * c_defense))
+                                        elif enh_type == 'WAVE':
+                                            c_health = round(c_health - dmg['DMG'])
+                                        elif enh_type == 'BLAST':
+                                            c_health = round(c_health - dmg['DMG'])
+                                        elif enh_type == 'CREATION':
+                                            t_max_health = round(t_max_health + dmg['DMG'])
+                                            t_health = round(t_health + dmg['DMG'])
+                                        elif enh_type == 'DESTRUCTION':
+                                            c_max_health = round(c_max_health - dmg['DMG'])
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                        await private_channel.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn = 0
+                                    elif dmg['DMG'] == 0:
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                        await private_channel.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn=0
+                                    else:
+                                        if c_universe == "Naruto" and c_stamina == 0:
+                                            c_health = c_health 
+                                            embedVar = discord.Embed(title=f"{c_card.upper()}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
+                                            await private_channel.send(embed=embedVar)
+                                        else:
+                                            c_health = c_health - int(dmg['DMG'])
+                                            embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                            await private_channel.send(embed=embedVar)
+                                        if c_health < 0:
+                                            c_health=0
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                        turn_total= turn_total + 1
+                                        turn=0
+                                else:
+                                    await private_channel.send(m.NOT_ENOUGH_STAMINA)
+                                    turn = 3
        
             if botActive:
                 end_message="Use the #end command to end the tutorial lobby"
@@ -15725,6 +17442,8 @@ class CrownUnlimited(commands.Cog):
             if ofam == cfam:
                 o_health = o_health + 50
                 c_health = c_health + 50
+                o_max_health = o_max_health + 50
+                c_max_health = c_max_health + 50
             
             # Companion Passive Config
             if (c_universe == c_title_universe) or (c_title_universe == "Unbound"):
@@ -15743,6 +17462,7 @@ class CrownUnlimited(commands.Cog):
             c_enhancer = c_moveset[3]
             c_enhancer_used=False
             c_pet_used=False
+            c_block_used=False
 
             tpetmove_text = list(tpet_passive.keys())[0]
             tpetmove_ap = list(tpet_passive.values())[0]
@@ -15995,6 +17715,8 @@ class CrownUnlimited(commands.Cog):
             o_enhancer = o_moveset[3]
             o_enhancer_used=False
             o_pet_used=False
+            o_block_used=False
+            o_defend_used=False
 
             omove1_text = list(o_1.keys())[0]
             omove2_text = list(o_2.keys())[0]
@@ -16519,6 +18241,9 @@ class CrownUnlimited(commands.Cog):
             while ((o_health > 0) and (c_health > 0)) and (t_health > 0):
                 #Player 1 Turn Start
                 if turn == 0:
+                    if o_defend_used==True:
+                        o_defense = o_defense/2
+                        o_defend_used=False
                     if o_universe == "Death Note" and turn_total == 0:
                         embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death", description=f"`{o_card} says:`\nYou will die in 24 turns...", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
@@ -16537,8 +18262,8 @@ class CrownUnlimited(commands.Cog):
 
                     # Tutorial Instructions
                     if turn_total == 0 and botActive:
-                        await private_channel.send(f"{ctx.author.mention}{user.mention}")                   
-                        embedVar = discord.Embed(title=f"`{o_card}` & `{c_card}` VS `{t_card}` has begun! {lineup}\n{t_universe} Co-Op Tales Battle", description=f"`{o_card} Says:`\n{o_greeting_description}", colour=0xe91e63)
+                        await private_channel.send(f"{ctx.author.mention}")                   
+                        embedVar = discord.Embed(title=f"`{o_card}` & `{c_card}` VS `{t_card}` has begun! {lineup}\n{t_universe} Duo Dungeon Battle", description=f"`{o_card} Says:`\n{o_greeting_description}", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
 
                     
@@ -16680,28 +18405,29 @@ class CrownUnlimited(commands.Cog):
                         **{omove2_text}** 30 Stamina _press 2_
                         **{omove3_text}** 80 Stamina _press 3_
                         **{omove_enhanced_text}** 20 Stamina _press 4_
-                        **Enhance Companion** 20 Stamina _press 7_
-                    
-                        **{t_card}:** {t_health}/{t_stamina}
-                        **{c_card}:** {c_health}/{c_stamina} _partner_
+                        **Enhance {c_card}** 20 Stamina _press 7_
+                        **Defend {c_card}** 20 Stamina _press 0_
+                        
+                        **{c_card}:** {c_health}/{c_stamina} _Companion_                 
+                        **{t_card}:** {t_health}/{t_stamina}   
                         """) 
                         , colour=embed_color_o)
                         embedVar.set_thumbnail(url=opet_image)
-                        if o_used_focus and o_used_resolve and not t_pet_used:
-                            embedVar.set_author(name="Press 0 to Quit Match. Press 6 to Summon your Pet!")                                    
+                        if o_used_focus and o_used_resolve and not o_pet_used:
+                            embedVar.set_author(name="Press Q to Quit Match. Press 6 to Summon your Pet!")                                    
                         elif o_used_focus and not o_used_resolve:
-                            embedVar.set_author(name="Press 0 to Quit Match. Press 5 to Strengthen resolve!")
+                            embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen resolve!")
                         else:
-                            embedVar.set_author(name="Press 0 to Quit Match")
+                            embedVar.set_author(name="Press Q to Quit Match")
                         embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
                         await private_channel.send(embed=embedVar)
                         
                         if o_used_focus and o_used_resolve:
-                            options = ["0","1","2","3","4","6","7"]
+                            options = ["q","Q","0","1","2","3","4","6","7"]
                         elif o_used_focus and not o_used_resolve:
-                            options = ["0","1","2","3","4","5","7"]
+                            options = ["q","Q","0","1","2","3","4","5","7"]
                         else:
-                            options = ["0","1","2","3","4","7"]
+                            options = ["q","Q","0","1","2","3","4","7"]
 
                         # Make sure user is responding with move
                         def check(msg):
@@ -16713,7 +18439,7 @@ class CrownUnlimited(commands.Cog):
                             msg = await self.bot.wait_for("message",timeout=120.0, check=check)
 
                             # calculate data based on selected move
-                            if msg.content == "0":
+                            if msg.content == "q" or msg.content == "Q":
                                 o_health=0
                         
                                 if private_channel.guild:
@@ -17079,8 +18805,21 @@ class CrownUnlimited(commands.Cog):
                                 else:
                                     await private_channel.send(m.NOT_ENOUGH_STAMINA)
                                     turn=0
+                            elif msg.content == "0":
+                                if o_stamina >=20:
+                                    o_stamina = o_stamina - 20
+                                    o_defend_used=True
+                                    o_defense = o_defense * 2
+                                    embedVar = discord.Embed(title=f"{o_card.upper()} DEFENDS {c_card.upper()}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"{o_card} used Block!", value =f"Enhanced DEF")
+                                    await private_channel.send(embed=embedVar)
+                                    turn=1
+                                else:
+                                    await private_channel.send(f"{o_card} is too tired to block...")
+                                    turn=0
 
-                            if msg.content != "5" and msg.content != "6" and msg.content != "7" and msg.content in options:
+
+                            if msg.content != "5" and msg.content != "6" and msg.content != "7" and msg.content != "9" and msg.content != "0" and msg.content in options:
                                 # If you have enough stamina for move, use it
                                 if dmg['CAN_USE_MOVE']:
                                     if dmg['ENHANCE']:
@@ -17179,7 +18918,7 @@ class CrownUnlimited(commands.Cog):
                                     else:
                                         if t_universe == "Naruto" and t_stamina == 0:
                                             t_health = t_health 
-                                            embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{o_card} attack strikes a log", colour=0xe91e63)
+                                            embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{o_card} strikes a log", colour=0xe91e63)
                                             await private_channel.send(embed=embedVar)
                                         else:
                                             t_health = t_health - dmg['DMG']
@@ -17432,24 +19171,36 @@ class CrownUnlimited(commands.Cog):
                         else:
                             aiMove = 0
                         
-
+                        t_special_move_description= " "
                         if int(aiMove) == 0:
                             t_health=0
                         if int(aiMove) == 1:
                             t_pet_used =False
-                            dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                            if c_block_used==True:
+                                dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
+                            else:
+                                dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
                         elif int(aiMove) == 2:
                             t_pet_used =False
-                            dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                            if c_block_used==True:
+                                dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
+                            else:
+                                dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
                         elif int(aiMove) == 3:
                             t_pet_used =False
-                            dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                            if c_block_used==True:
+                                dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
+                            else:
+                                dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
                             if t_gif != "N/A":
                                     await private_channel.send(f"{t_gif}")
                         elif int(aiMove) == 4:
                             t_pet_used =False
                             t_enhancer_used=True
-                            dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                            if c_block_used==True:
+                                dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
+                            else:
+                                dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
                             t_enhancer_used=False
                         elif int(aiMove) == 5:
                             if not t_used_resolve and t_used_focus:
@@ -17469,6 +19220,7 @@ class CrownUnlimited(commands.Cog):
                                         t_attack = round(t_attack + t_resolve_attack)
                                         t_defense = round(t_defense - t_resolve_defense)
                                         t_used_resolve=True
+                                        t_pet_used =False
 
                                         embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                         embedVar.add_field(name=f"Transformation: Plus Ultra", value="All stats & stamina greatly increased")
@@ -17491,6 +19243,7 @@ class CrownUnlimited(commands.Cog):
                                     t_attack = round(t_attack + (2 * t_resolve_attack))
                                     t_defense = round(t_defense - t_resolve_defense)
                                     t_used_resolve=True
+                                    t_pet_used =False
 
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
@@ -17513,6 +19266,7 @@ class CrownUnlimited(commands.Cog):
                                     t_attack = round(t_attack + t_resolve_attack)
                                     t_defense = round(t_defense - t_resolve_defense)
                                     t_used_resolve=True
+                                    t_pet_used =False
 
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation: Ascension", value="All stats & stamina greatly increased")
@@ -17535,13 +19289,17 @@ class CrownUnlimited(commands.Cog):
                                     t_attack = round(t_attack + t_resolve_attack)
                                     t_defense = round(t_defense - t_resolve_defense)
                                     t_used_resolve=True
+                                    t_pet_used =False
                                     
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
                                     await private_channel.send(embed=embedVar)
-                                    dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
+                                    if c_block_used==True:
+                                        dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina,t_max_health, c_attack, t_special_move_description, turn_total)
+                                    else:
+                                        dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
                                     t_pet_used =False
-                                    o_health = o_health - int(dmg['DMG'])
+                                    c_health = c_health - int(dmg['DMG'])
                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                     await private_channel.send(embed=embedVar)
                                     t_stamina = 0
@@ -17563,6 +19321,7 @@ class CrownUnlimited(commands.Cog):
                                     t_attack = round(t_attack + t_resolve_attack)
                                     t_defense = round(t_defense)
                                     t_used_resolve=True
+                                    t_pet_used =False
 
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation: Evolution", value="All stats & stamina greatly increased")
@@ -17585,6 +19344,7 @@ class CrownUnlimited(commands.Cog):
                                     t_attack = round(t_attack + t_resolve_attack)
                                     t_defense = round(t_defense - t_resolve_defense)
                                     t_used_resolve=True
+                                    t_pet_used =False
 
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
@@ -17594,218 +19354,426 @@ class CrownUnlimited(commands.Cog):
                             else:
                                 await private_channel.send(m.CANNOT_USE_RESOLVE)
                                 turn=1
-                        elif aiMove == 6:
+                        elif int(aiMove) == 6:
                             #Resolve Check and Calculation
-                            if t_used_resolve and t_used_focus and not t_pet_used:                                      
-                                t_enhancer_used=True
-                                dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
-                                t_enhancer_used=False
-                                t_pet_used =True
-                                tpet_dmg = dmg['DMG']
-                                tpet_type = dmg['ENHANCED_TYPE']
-                                if dmg['CAN_USE_MOVE']:
-                                    if tpet_type == 'ATK':
-                                        t_attack = round(t_attack + dmg['DMG'])
-                                    elif tpet_type == 'DEF':
-                                        t_defense = round(t_defense + dmg['DMG'])
-                                    elif tpet_type == 'STAM':
-                                        t_stamina = round(t_stamina + dmg['DMG'])
-                                    elif tpet_type == 'HLT':
-                                        t_health = round(t_health + dmg['DMG'])
-                                    elif tpet_type == 'LIFE':
-                                        t_health = round(t_health + dmg['DMG'])
-                                        o_health = round(o_health - dmg['DMG'])
-                                    elif tpet_type == 'DRAIN':
-                                        t_stamina = round(t_stamina + dmg['DMG'])
-                                        o_stamina = round(o_stamina - dmg['DMG'])
-                                    elif tpet_type == 'FLOG':
-                                        t_attack = round(t_attack + dmg['DMG'])
-                                        o_attack = round (o_attack - dmg['DMG'])
-                                    elif tpet_type == 'WITHER':
-                                        t_defense = round(t_defense + dmg['DMG'])
-                                        o_defense = round (o_defense - dmg['DMG'])
-                                    elif tpet_type == 'RAGE':
-                                        t_defense = round(t_defense - dmg['DMG'])
-                                        t_attack = round(t_attack + dmg['DMG'])
-                                    elif tpet_type == 'BRACE':
-                                        t_defense = round(t_defense + dmg['DMG'])
-                                        t_attack = round(t_attack - dmg['DMG'])
-                                    elif tpet_type == 'BZRK':
-                                        t_health = round(t_health - dmg['DMG'])
-                                        t_attack = round(t_attack + (.75 * dmg['DMG']))
-                                    elif tpet_type == 'CRYSTAL':
-                                        t_health = round(t_health - dmg['DMG'])
-                                        t_defense = round(t_defense + (.75 * dmg['DMG']))
-                                    elif tpet_type == 'GROWTH':
-                                        t_max_health = round(t_max_health - dmg['DMG'])
-                                        t_defense = round(t_defense + (.3 * dmg['DMG']))
-                                        t_attack = round(t_attack+ (.3 * dmg['DMG']))
-                                    elif tpet_type == 'STANCE':
-                                        tempattack = dmg['DMG']
-                                        t_attack = t_defense
-                                        t_defense = tempattack
-                                    elif tpet_type == 'CONFUSE':
-                                        tempattack = dmg['DMG']
-                                        o_attack = o_defense
-                                        o_defense = tempattack
-                                    elif tpet_type == 'BLINK':
-                                        t_stamina = round(t_stamina - dmg['DMG'])
-                                        o_stamina = round(o_stamina + dmg['DMG'] - 10)
-                                    elif tpet_type == 'SLOW':
-                                        tempstam = round(o_stamina + dmg['DMG'])
-                                        t_stamina = round(t_stamina - dmg['DMG'])
-                                        o_stamina = t_stamina
-                                        t_stamina = tempstam
-                                    elif tpet_type == 'HASTE':
-                                        tempstam = round(o_stamina - dmg['DMG'])
-                                        t_stamina = round(t_stamina + dmg['DMG'])
-                                        o_stamina = t_stamina
-                                        t_stamina = tempstam                                       
-                                    elif tpet_type == 'SOULCHAIN':
-                                        t_stamina = round(dmg['DMG'])
-                                        o_stamina = t_stamina
-                                    elif tpet_type == 'GAMBLE':
-                                        t_health = round(dmg['DMG'])
-                                        o_health = t_health
-                                    elif tpet_type == 'FEAR':
-                                        t_health = round(t_health - ((dmg['DMG']/100)* t_health))
-                                        o_attack = round(o_attack - ((dmg['DMG']/100)* o_attack))
-                                        o_defense = round(o_defense - ((dmg['DMG']/100)* o_defense))
-                                    elif tpet_type == 'WAVE':
-                                        o_health = round(o_health - dmg['DMG'])
-                                    elif tpet_type == 'BLAST':
-                                        o_health = round(o_health - dmg['DMG'])
-                                    elif tpet_type == 'CREATION':
-                                        t_max_health = round(t_max_health + dmg['DMG'])
-                                        t_health = round(t_health + dmg['DMG'])
-                                    elif tpet_type == 'DESTRUCTION':
-                                        o_max_health = round(o_max_health - dmg['DMG'])
-                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+                            if t_used_resolve and t_used_focus and not t_pet_used:
+                                if c_block_used==True:
+                                    t_enhancer_used=True
+                                    dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
+                                    t_enhancer_used=False
+                                    t_pet_used =True
+                                    tpet_dmg = dmg['DMG']
+                                    tpet_type = dmg['ENHANCED_TYPE']
+                                    if dmg['CAN_USE_MOVE']:
+                                        if tpet_type == 'ATK':
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                        elif tpet_type == 'DEF':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                        elif tpet_type == 'STAM':
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                        elif tpet_type == 'HLT':
+                                            t_health = round(t_health + dmg['DMG'])
+                                        elif tpet_type == 'LIFE':
+                                            t_health = round(t_health + dmg['DMG'])
+                                            c_health = round(c_health - dmg['DMG'])
+                                        elif tpet_type == 'DRAIN':
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                            c_stamina = round(c_stamina - dmg['DMG'])
+                                        elif tpet_type == 'FLOG':
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                            c_attack = round (c_attack - dmg['DMG'])
+                                        elif tpet_type == 'WITHER':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                            c_defense = round (c_defense - dmg['DMG'])
+                                        elif tpet_type == 'RAGE':
+                                            t_defense = round(t_defense - dmg['DMG'])
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                        elif tpet_type == 'BRACE':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                            t_attack = round(t_attack - dmg['DMG'])
+                                        elif tpet_type == 'BZRK':
+                                            t_health = round(t_health - dmg['DMG'])
+                                            t_attack = round(t_attack + (.75 * dmg['DMG']))
+                                        elif tpet_type == 'CRYSTAL':
+                                            t_health = round(t_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                        elif tpet_type == 'GROWTH':
+                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                            t_attack = round(t_attack+ (.3 * dmg['DMG']))
+                                        elif tpet_type == 'STANCE':
+                                            tempattack = dmg['DMG']
+                                            t_attack = t_defense
+                                            t_defense = tempattack
+                                        elif tpet_type == 'CONFUSE':
+                                            tempattack = dmg['DMG']
+                                            c_attack = c_defense
+                                            c_defense = tempattack
+                                        elif tpet_type == 'BLINK':
+                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                            c_stamina = round(c_stamina + dmg['DMG'] - 10)
+                                        elif tpet_type == 'SLOW':
+                                            tempstam = round(c_stamina + dmg['DMG'])
+                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                            c_stamina = t_stamina
+                                            t_stamina = tempstam
+                                        elif tpet_type == 'HASTE':
+                                            tempstam = round(c_stamina - dmg['DMG'])
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                            c_stamina = t_stamina
+                                            t_stamina = tempstam                                       
+                                        elif tpet_type == 'SOULCHAIN':
+                                            t_stamina = round(dmg['DMG'])
+                                            c_stamina = t_stamina
+                                        elif tpet_type == 'GAMBLE':
+                                            t_health = round(dmg['DMG'])
+                                            c_health = t_health
+                                        elif tpet_type == 'FEAR':
+                                            t_health = round(t_health - ((dmg['DMG']/100)* t_health))
+                                            c_attack = round(c_attack - ((dmg['DMG']/100)* c_attack))
+                                            c_defense = round(c_defense - ((dmg['DMG']/100)* c_defense))
+                                        elif tpet_type == 'WAVE':
+                                            c_health = round(c_health - dmg['DMG'])
+                                        elif tpet_type == 'BLAST':
+                                            c_health = round(c_health - dmg['DMG'])
+                                        elif tpet_type == 'CREATION':
+                                            t_max_health = round(t_max_health + dmg['DMG'])
+                                            t_health = round(t_health + dmg['DMG'])
+                                        elif tpet_type == 'DESTRUCTION':
+                                            c_max_health = round(c_max_health - dmg['DMG'])
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])
 
-                                    embedVar = discord.Embed(title=f"{t_card.upper()} Summoned {tpet_name}", colour=0xe91e63)
-                                    embedVar.add_field(name=f"{tpet_name} used {tpetmove_text}!", value =f"Enhanced {tpet_type}")
-                                    embedVar.set_thumbnail(url=tpet_image)
-                                    await private_channel.send(embed=embedVar)
-                                    turn=1
-                                else:
-                                    await private_channel.send(f"{tpet_name} needs a turn to rest...")
-                                    turn=1
+                                        embedVar = discord.Embed(title=f"{t_card.upper()} Summoned {tpet_name}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"{tpet_name} used {tpetmove_text}!", value =f"Enhanced {tpet_type}")
+                                        embedVar.set_thumbnail(url=tpet_image)
+                                        await private_channel.send(embed=embedVar)
+                                        turn=2
+                                    else:
+                                        await private_channel.send(f"{tpet_name} needs a turn to rest...")
+                                        turn=1
+                                else:                                  
+                                    t_enhancer_used=True
+                                    dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                                    t_enhancer_used=False
+                                    t_pet_used =True
+                                    tpet_dmg = dmg['DMG']
+                                    tpet_type = dmg['ENHANCED_TYPE']
+                                    if dmg['CAN_USE_MOVE']:
+                                        if tpet_type == 'ATK':
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                        elif tpet_type == 'DEF':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                        elif tpet_type == 'STAM':
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                        elif tpet_type == 'HLT':
+                                            t_health = round(t_health + dmg['DMG'])
+                                        elif tpet_type == 'LIFE':
+                                            t_health = round(t_health + dmg['DMG'])
+                                            o_health = round(o_health - dmg['DMG'])
+                                        elif tpet_type == 'DRAIN':
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                            o_stamina = round(o_stamina - dmg['DMG'])
+                                        elif tpet_type == 'FLOG':
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                            o_attack = round (o_attack - dmg['DMG'])
+                                        elif tpet_type == 'WITHER':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                            o_defense = round (o_defense - dmg['DMG'])
+                                        elif tpet_type == 'RAGE':
+                                            t_defense = round(t_defense - dmg['DMG'])
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                        elif tpet_type == 'BRACE':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                            t_attack = round(t_attack - dmg['DMG'])
+                                        elif tpet_type == 'BZRK':
+                                            t_health = round(t_health - dmg['DMG'])
+                                            t_attack = round(t_attack + (.75 * dmg['DMG']))
+                                        elif tpet_type == 'CRYSTAL':
+                                            t_health = round(t_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                        elif tpet_type == 'GROWTH':
+                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                            t_attack = round(t_attack+ (.3 * dmg['DMG']))
+                                        elif tpet_type == 'STANCE':
+                                            tempattack = dmg['DMG']
+                                            t_attack = t_defense
+                                            t_defense = tempattack
+                                        elif tpet_type == 'CONFUSE':
+                                            tempattack = dmg['DMG']
+                                            o_attack = o_defense
+                                            o_defense = tempattack
+                                        elif tpet_type == 'BLINK':
+                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                            o_stamina = round(o_stamina + dmg['DMG'] - 10)
+                                        elif tpet_type == 'SLOW':
+                                            tempstam = round(o_stamina + dmg['DMG'])
+                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                            o_stamina = t_stamina
+                                            t_stamina = tempstam
+                                        elif tpet_type == 'HASTE':
+                                            tempstam = round(o_stamina - dmg['DMG'])
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                            o_stamina = t_stamina
+                                            t_stamina = tempstam                                       
+                                        elif tpet_type == 'SOULCHAIN':
+                                            t_stamina = round(dmg['DMG'])
+                                            o_stamina = t_stamina
+                                        elif tpet_type == 'GAMBLE':
+                                            t_health = round(dmg['DMG'])
+                                            o_health = t_health
+                                        elif tpet_type == 'FEAR':
+                                            t_health = round(t_health - ((dmg['DMG']/100)* t_health))
+                                            o_attack = round(o_attack - ((dmg['DMG']/100)* o_attack))
+                                            o_defense = round(o_defense - ((dmg['DMG']/100)* o_defense))
+                                        elif tpet_type == 'WAVE':
+                                            o_health = round(o_health - dmg['DMG'])
+                                        elif tpet_type == 'BLAST':
+                                            o_health = round(o_health - dmg['DMG'])
+                                        elif tpet_type == 'CREATION':
+                                            t_max_health = round(t_max_health + dmg['DMG'])
+                                            t_health = round(t_health + dmg['DMG'])
+                                        elif tpet_type == 'DESTRUCTION':
+                                            o_max_health = round(o_max_health - dmg['DMG'])
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+
+                                        embedVar = discord.Embed(title=f"{t_card.upper()} Summoned {tpet_name}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"{tpet_name} used {tpetmove_text}!", value =f"Enhanced {tpet_type}")
+                                        embedVar.set_thumbnail(url=tpet_image)
+                                        await private_channel.send(embed=embedVar)
+                                        turn=1
+                                    else:
+                                        await private_channel.send(f"{tpet_name} needs a turn to rest...")
+                                        turn=1
                             else:
                                 await private_channel.send(f"{tpet_name} needs a turn to rest...")
 
                         if int(aiMove) !=5 and int(aiMove) !=6:
                             # If you have enough stamina for move, use it
-                            if dmg['CAN_USE_MOVE']:
-                                if dmg['ENHANCE']:
-                                    enh_type= dmg['ENHANCED_TYPE']
-                                    if enh_type == 'ATK':
-                                        t_attack = round(t_attack + dmg['DMG'])
-                                    elif enh_type == 'DEF':
-                                        t_defense = round(t_defense + dmg['DMG'])
-                                    elif enh_type == 'STAM':
-                                        t_stamina = round(t_stamina + dmg['DMG'])
-                                    elif enh_type == 'HLT':
-                                        t_health = round(t_health + dmg['DMG'])
-                                    elif enh_type == 'LIFE':
-                                        t_health = round(t_health + dmg['DMG'])
-                                        o_health = round(o_health - dmg['DMG'])
-                                    elif enh_type == 'DRAIN':
-                                        t_stamina = round(t_stamina + dmg['DMG'])
-                                        o_stamina = round(o_stamina - dmg['DMG'])
-                                    elif enh_type == 'FLOG':
-                                        t_attack = round(t_attack + dmg['DMG'])
-                                        o_attack = round(o_attack - dmg['DMG'])
-                                    elif enh_type == 'WITHER':
-                                        t_defense = round(t_defense + dmg['DMG'])
-                                        o_defense = round(o_defense - dmg['DMG'])
-                                    elif enh_type == 'RAGE':
-                                        t_defense = round(t_defense - dmg['DMG'])
-                                        t_attack = round(t_attack + dmg['DMG'])
-                                    elif enh_type == 'BRACE':
-                                        t_defense = round(t_defense + dmg['DMG'])
-                                        t_attack = round(t_attack - dmg['DMG'])
-                                    elif enh_type == 'BZRK':
-                                        t_health = round(t_health - dmg['DMG'])
-                                        t_attack = round(t_attack +(.75 *  dmg['DMG']))
-                                    elif enh_type == 'CRYSTAL':
-                                        t_health = round(t_health - dmg['DMG'])
-                                        t_defense = round(t_defense + (.75 * dmg['DMG']))
-                                    elif enh_type == 'GROWTH':
-                                        t_max_health = round(t_max_health - dmg['DMG'])
-                                        t_defense = round(t_defense + (.3 * dmg['DMG']))
-                                        t_attack = round(t_attack+ (.3 * dmg['DMG']))
-                                    elif enh_type == 'STANCE':
-                                        tempattack = dmg['DMG']
-                                        t_attack = t_defense
-                                        t_defense = tempattack
-                                    elif enh_type == 'CONFUSE':
-                                        tempattack = dmg['DMG']
-                                        o_attack = o_defense
-                                        o_defense = tempattack
-                                    elif enh_type == 'BLINK':
-                                        t_stamina = round(t_stamina - dmg['DMG'])
-                                        o_stamina = round(o_stamina + dmg['DMG'] - 10)
-                                    elif enh_type == 'SLOW':
-                                        tempstam = round(o_stamina + dmg['DMG'])
-                                        t_stamina = round(t_stamina - dmg['DMG'])
-                                        o_stamina = t_stamina
-                                        t_stamina = tempstam
-                                    elif enh_type == 'HASTE':
-                                        tempstam = round(o_stamina - dmg['DMG'])
-                                        t_stamina = round(t_stamina + dmg['DMG'])
-                                        o_stamina = t_stamina
-                                        t_stamina = tempstam                                       
-                                    elif enh_type == 'SOULCHAIN':
-                                        t_stamina = round(dmg['DMG'])
-                                        o_stamina = o_stamina
-                                    elif enh_type == 'GAMBLE':
-                                        t_health = round(dmg['DMG']) * 2
-                                        o_health = t_health
-                                    elif enh_type == 'FEAR':
-                                        t_health = round(t_health - ((dmg['DMG']/100) * t_health))
-                                        o_attack = round(c_attack - ((dmg['DMG']/100) * o_attack))
-                                        o_defense = round(c_defense - ((dmg['DMG']/100) * o_defense))
-                                    elif enh_type == 'WAVE':
-                                        o_health = round(o_health - dmg['DMG'])
-                                    elif enh_type == 'BLAST':
-                                        o_health = round(o_health - dmg['DMG'])
-                                    elif enh_type == 'CREATION':
-                                        t_max_health = round(t_max_health + dmg['DMG'])
-                                        t_health = round(t_health + dmg['DMG'])
-                                    elif enh_type == 'DESTRUCTION':
-                                        o_max_health = round(o_max_health - dmg['DMG'])
-                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-                                    embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
-                                    await private_channel.send(embed=embedVar)
-                                    turn_total= turn_total + 1
-                                    turn = 2
-                                elif dmg['DMG'] == 0:
-                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-                                    embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
-                                    await private_channel.send(embed=embedVar)
-                                    turn_total= turn_total + 1
-                                    turn=2
-                                else:
-                                    if o_universe == "Naruto" and o_stamina == 0:
-                                        o_health = o_health 
-                                        embedVar = discord.Embed(title=f"{o_card.upper()}: Substitution Jutsu", description=f"{t_card} attack strikes a log", colour=0xe91e63)
-                                        await private_channel.send(embed=embedVar)
-                                    else:
-                                        o_health = o_health - int(dmg['DMG'])
+                            #if c used block
+                            if c_block_used==True:
+                                print("Attacking C")
+                                if dmg['CAN_USE_MOVE']:
+                                    if dmg['ENHANCE']:
+                                        enh_type= dmg['ENHANCED_TYPE']
+                                        if enh_type == 'ATK':
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                        elif enh_type == 'DEF':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                        elif enh_type == 'STAM':
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                        elif enh_type == 'HLT':
+                                            t_health = round(t_health + dmg['DMG'])
+                                        elif enh_type == 'LIFE':
+                                            t_health = round(t_health + dmg['DMG'])
+                                            c_health = round(c_health - dmg['DMG'])
+                                        elif enh_type == 'DRAIN':
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                            c_stamina = round(c_stamina - dmg['DMG'])
+                                        elif enh_type == 'FLOG':
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                            c_attack = round(c_attack - dmg['DMG'])
+                                        elif enh_type == 'WITHER':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                            c_defense = round(t_defense - dmg['DMG'])
+                                        elif enh_type == 'RAGE':
+                                            t_defense = round(t_defense - dmg['DMG'])
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                        elif enh_type == 'BRACE':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                            t_attack = round(t_attack - dmg['DMG'])
+                                        elif enh_type == 'BZRK':
+                                            t_health = round(t_health - dmg['DMG'])
+                                            t_attack = round(t_attack +(.75 *  dmg['DMG']))
+                                        elif enh_type == 'CRYSTAL':
+                                            t_health = round(t_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                        elif enh_type == 'GROWTH':
+                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                            t_attack = round(t_attack+ (.3 * dmg['DMG']))
+                                        elif enh_type == 'STANCE':
+                                            tempattack = dmg['DMG']
+                                            t_attack = t_defense
+                                            t_defense = tempattack
+                                        elif enh_type == 'CONFUSE':
+                                            tempattack = dmg['DMG']
+                                            c_attack = c_defense
+                                            c_defense = tempattack
+                                        elif enh_type == 'BLINK':
+                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                            c_stamina = round(c_stamina + dmg['DMG'] - 10)
+                                        elif enh_type == 'SLOW':
+                                            tempstam = round(c_stamina + dmg['DMG'])
+                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                            c_stamina = t_stamina
+                                            t_stamina = tempstam
+                                        elif enh_type == 'HASTE':
+                                            tempstam = round(c_stamina - dmg['DMG'])
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                            c_stamina = t_stamina
+                                            t_stamina = tempstam                                       
+                                        elif enh_type == 'SOULCHAIN':
+                                            t_stamina = round(dmg['DMG'])
+                                            c_stamina = t_stamina
+                                        elif enh_type == 'GAMBLE':
+                                            t_health = round(dmg['DMG']) * 2
+                                            c_health = t_health
+                                        elif enh_type == 'FEAR':
+                                            t_health = round(t_health - ((dmg['DMG']/100) * t_health))
+                                            c_attack = round(c_attack - ((dmg['DMG']/100) * c_attack))
+                                            c_defense = round(c_defense - ((dmg['DMG']/100) * c_defense))
+                                        elif enh_type == 'WAVE':
+                                            c_health = round(c_health - dmg['DMG'])
+                                        elif enh_type == 'BLAST':
+                                            c_health = round(c_health - dmg['DMG'])
+                                        elif enh_type == 'CREATION':
+                                            t_max_health = round(t_max_health + dmg['DMG'])
+                                            t_health = round(t_health + dmg['DMG'])
+                                        elif enh_type == 'DESTRUCTION':
+                                            c_max_health = round(c_max_health - dmg['DMG'])
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                         await private_channel.send(embed=embedVar)
-                                    if o_health < 0:
-                                        o_health=0
-                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
-                                    turn_total= turn_total + 1
-                                    turn=2
-
+                                        turn_total= turn_total + 1
+                                        turn = 2
+                                    elif dmg['DMG'] == 0:
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                        await private_channel.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn=2
+                                    else:
+                                        if c_universe == "Naruto" and c_stamina == 0:
+                                            c_health = c_health 
+                                            embedVar = discord.Embed(title=f"{c_card.upper()}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
+                                            await private_channel.send(embed=embedVar)
+                                        else:
+                                            c_health = c_health - int(dmg['DMG'])
+                                            embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                            await private_channel.send(embed=embedVar)
+                                        if c_health < 0:
+                                            c_health=0
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                        turn_total= turn_total + 1
+                                        turn=2
+                                else:
+                                    await private_channel.send(m.NOT_ENOUGH_STAMINA)
+                                    turn = 1
                             else:
-                                await private_channel.send(m.NOT_ENOUGH_STAMINA)
-                                turn = 1
+                                if dmg['CAN_USE_MOVE']:
+                                    if dmg['ENHANCE']:
+                                        enh_type= dmg['ENHANCED_TYPE']
+                                        if enh_type == 'ATK':
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                        elif enh_type == 'DEF':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                        elif enh_type == 'STAM':
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                        elif enh_type == 'HLT':
+                                            t_health = round(t_health + dmg['DMG'])
+                                        elif enh_type == 'LIFE':
+                                            t_health = round(t_health + dmg['DMG'])
+                                            o_health = round(o_health - dmg['DMG'])
+                                        elif enh_type == 'DRAIN':
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                            o_stamina = round(o_stamina - dmg['DMG'])
+                                        elif enh_type == 'FLOG':
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                            o_attack = round(o_attack - dmg['DMG'])
+                                        elif enh_type == 'WITHER':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                            o_defense = round(o_defense - dmg['DMG'])
+                                        elif enh_type == 'RAGE':
+                                            t_defense = round(t_defense - dmg['DMG'])
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                        elif enh_type == 'BRACE':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                            t_attack = round(t_attack - dmg['DMG'])
+                                        elif enh_type == 'BZRK':
+                                            t_health = round(t_health - dmg['DMG'])
+                                            t_attack = round(t_attack +(.50 *  dmg['DMG']))
+                                        elif enh_type == 'CRYSTAL':
+                                            t_health = round(t_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                        elif enh_type == 'GROWTH':
+                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                            t_attack = round(t_attack+ (.3 * dmg['DMG']))
+                                        elif enh_type == 'STANCE':
+                                            tempattack = dmg['DMG']
+                                            t_attack = t_defense
+                                            t_defense = tempattack
+                                        elif enh_type == 'CONFUSE':
+                                            tempattack = dmg['DMG']
+                                            o_attack = o_defense
+                                            o_defense = tempattack
+                                        elif enh_type == 'BLINK':
+                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                            o_stamina = round(o_stamina + dmg['DMG'] - 10)
+                                        elif enh_type == 'SLOW':
+                                            tempstam = round(o_stamina + dmg['DMG'])
+                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                            o_stamina = t_stamina
+                                            t_stamina = tempstam
+                                        elif enh_type == 'HASTE':
+                                            tempstam = round(o_stamina - dmg['DMG'])
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                            o_stamina = t_stamina
+                                            t_stamina = tempstam                                       
+                                        elif enh_type == 'SOULCHAIN':
+                                            t_stamina = round(dmg['DMG'])
+                                            o_stamina = o_stamina
+                                        elif enh_type == 'GAMBLE':
+                                            t_health = round(dmg['DMG']) * 2
+                                            o_health = t_health
+                                        elif enh_type == 'FEAR':
+                                            t_health = round(t_health - ((dmg['DMG']/100) * t_health))
+                                            o_attack = round(c_attack - ((dmg['DMG']/100) * o_attack))
+                                            o_defense = round(c_defense - ((dmg['DMG']/100) * o_defense))
+                                        elif enh_type == 'WAVE':
+                                            o_health = round(o_health - dmg['DMG'])
+                                        elif enh_type == 'BLAST':
+                                            o_health = round(o_health - dmg['DMG'])
+                                        elif enh_type == 'CREATION':
+                                            t_max_health = round(t_max_health + dmg['DMG'])
+                                            t_health = round(t_health + dmg['DMG'])
+                                        elif enh_type == 'DESTRUCTION':
+                                            o_max_health = round(o_max_health - dmg['DMG'])
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                        await private_channel.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn = 2
+                                    elif dmg['DMG'] == 0:
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                        await private_channel.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn=2
+                                    else:
+                                        if o_universe == "Naruto" and o_stamina == 0:
+                                            o_health = o_health 
+                                            embedVar = discord.Embed(title=f"{o_card.upper()}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
+                                            await private_channel.send(embed=embedVar)
+                                        else:
+                                            o_health = o_health - int(dmg['DMG'])
+                                            embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                            await private_channel.send(embed=embedVar)
+                                        if o_health < 0:
+                                            o_health=0
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                        turn_total= turn_total + 1
+                                        turn=2
+                                else:
+                                    await private_channel.send(m.NOT_ENOUGH_STAMINA)
+                                    turn = 1
 
                 #Companion Turn Start
                 if turn == 2:
+                    if c_block_used==True:
+                        c_defense = c_defense/2
+                        c_block_used=False
                     if c_attack <= 25:
                         c_attack = 25
                     if c_defense <= 30:
@@ -17955,28 +19923,31 @@ class CrownUnlimited(commands.Cog):
                         **{cmove2_text}** 30 Stamina _press 2_
                         **{cmove3_text}** 80 Stamina _press 3_
                         **{cmove_enhanced_text}** 20 Stamina _press 4_
-                        **Enhance Companion** 20 Stamina _press 7_
-                    
-                        **{t_card}:** {t_health}/{t_stamina}
-                        **{o_card}:** {o_health}/{o_stamina} _partner_
+                        **Enhance {o_card}** 20 Stamina _press 7_
+                        **Defend {o_card}** 20 Stamina _press 0_
+                        
+                        **{o_card}:** {o_health}/{o_stamina} _Companion_
+                        
+                                      
+                        **{t_card}:** {t_health}/{t_stamina}   
                         """) 
-                        , colour=embed_color_c)
-                        embedVar.set_thumbnail(url=cpet_image)
-                        if c_used_focus and c_used_resolve and not t_pet_used:
-                            embedVar.set_author(name="Press 0 to Quit Match. Press 6 to Summon your Pet!")                                    
+                        , colour=embed_color_o)
+                        embedVar.set_thumbnail(url=opet_image)
+                        if c_used_focus and c_used_resolve and not c_pet_used:
+                            embedVar.set_author(name="Press Q to Quit Match. Press 6 to Summon your Pet!")                                    
                         elif c_used_focus and not c_used_resolve:
-                            embedVar.set_author(name="Press 0 to Quit Match. Press 5 to Strengthen resolve!")
+                            embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen resolve!")
                         else:
-                            embedVar.set_author(name="Press 0 to Quit Match")
+                            embedVar.set_author(name="Press Q to Quit Match")
                         embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
                         await private_channel.send(embed=embedVar)
                         
                         if c_used_focus and c_used_resolve:
-                            options = ["0","1","2","3","4","6","7"]
+                            options = ["q","Q","0","1","2","3","4","6","7"]
                         elif c_used_focus and not c_used_resolve:
-                            options = ["0","1","2","3","4","5","7"]
+                            options = ["q","Q","0","1","2","3","4","5","7"]
                         else:
-                            options = ["0","1","2","3","4","7"]
+                            options = ["q","Q","0","1","2","3","4","7"]
 
                         # Make sure user is responding with move
                         def check(msg):
@@ -17988,7 +19959,7 @@ class CrownUnlimited(commands.Cog):
                             msg = await self.bot.wait_for("message",timeout=120.0, check=check)
 
                             # calculate data based on selected move
-                            if msg.content == "0":
+                            if msg.content == "q" or msg.content == "Q" :
                                 c_health=0
                                 response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                                 if private_channel.guild:
@@ -18351,9 +20322,21 @@ class CrownUnlimited(commands.Cog):
                                 else:
                                     await private_channel.send(m.NOT_ENOUGH_STAMINA)
                                     turn=2
+                            elif msg.content == "0":
+                                if c_stamina >=20:
+                                    c_block_used=True
+                                    c_stamina = c_stamina - 20
+                                    c_defense = c_defense * 2
+                                    embedVar = discord.Embed(title=f"{c_card.upper()} DEFENDS {o_card.upper()}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"{c_card} used Block!", value =f"Enhanced DEF")
+                                    await private_channel.send(embed=embedVar)
+                                    turn=3
+                                else:
+                                    await private_channel.send(f"{c_card} is too tired to block...")
+                                    turn=2
                             
 
-                            if msg.content != "5" and msg.content != "6" and msg.content != "7" and msg.content in options:
+                            if msg.content != "5" and msg.content != "6" and msg.content != "7" and msg.content != "0" and msg.content in options:
                                 # If you have enough stamina for move, use it
                                 if dmg['CAN_USE_MOVE']:
                                     if dmg['ENHANCE']:
@@ -18452,7 +20435,7 @@ class CrownUnlimited(commands.Cog):
                                     else:
                                         if t_universe == "Naruto" and t_stamina == 0:
                                             t_health = t_health 
-                                            embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{c_card} attack strikes a log", colour=0xe91e63)
+                                            embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{c_card} strikes a log", colour=0xe91e63)
                                             await private_channel.send(embed=embedVar)
                                         else:
                                             t_health = t_health - dmg['DMG']
@@ -18704,23 +20687,40 @@ class CrownUnlimited(commands.Cog):
                         else:
                             aiMove = 0
                         
-
+                        t_special_move_description =""
                         if int(aiMove) == 0:
                             t_health=0
                         if int(aiMove) == 1:
-                            dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
+                            if o_defend_used==True:
+                                dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                            else:
+                                dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
+                            t_pet_used =False
                         elif int(aiMove) == 2:
-                            dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
+                            if o_defend_used==True:
+                                dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                            else:
+                                dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
+                            t_pet_used =False
                         elif int(aiMove) == 3:
-                            dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
+                            if o_defend_used==True:
+                                dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                            else: 
+                                dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
                             if t_gif != "N/A":
                                     await private_channel.send(f"{t_gif}")
+                            t_pet_used =False
                         elif int(aiMove) == 4:
                             t_enhancer_used=True
-                            dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
+                            if o_defend_used==True:
+                                dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                            else:
+                                dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
                             t_enhancer_used=False
+                            t_pet_used =False
                         elif int(aiMove) == 5:
                             if not t_used_resolve and t_used_focus:
+                                t_pet_used =False
                                 if t_universe == "My Hero Academia": #My hero TRait
                                         #fortitude or luck is based on health  
                                         fortitude = 0.0
@@ -18737,6 +20737,7 @@ class CrownUnlimited(commands.Cog):
                                         t_attack = round(t_attack + t_resolve_attack)
                                         t_defense = round(t_defense - t_resolve_defense)
                                         t_used_resolve=True
+                                        t_pet_used =False
 
                                         embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                         embedVar.add_field(name=f"Transformation: Plus Ultra", value="All stats & stamina greatly increased")
@@ -18759,6 +20760,7 @@ class CrownUnlimited(commands.Cog):
                                     t_attack = round(t_attack + (2 * t_resolve_attack))
                                     t_defense = round(t_defense - t_resolve_defense)
                                     t_used_resolve=True
+                                    t_pet_used =False
 
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
@@ -18781,6 +20783,7 @@ class CrownUnlimited(commands.Cog):
                                     t_attack = round(t_attack + t_resolve_attack)
                                     t_defense = round(t_defense - t_resolve_defense)
                                     t_used_resolve=True
+                                    t_pet_used =False
 
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation: Ascension", value="All stats & stamina greatly increased")
@@ -18807,9 +20810,13 @@ class CrownUnlimited(commands.Cog):
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
                                     await private_channel.send(embed=embedVar)
-                                    dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
-                                    t_pet_used =False
-                                    o_health = o_health - int(dmg['DMG'])
+                                    if o_defend_used==True:
+                                        dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
+                                        o_health = o_health - int(dmg['DMG'])
+                                    else:
+                                        dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina,t_max_health, c_attack, t_special_move_description, turn_total)
+                                        c_health = c_health - int(dmg['DMG'])
+                                    t_pet_used =False                                    
                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                     await private_channel.send(embed=embedVar)
                                     t_stamina = 0
@@ -18831,6 +20838,7 @@ class CrownUnlimited(commands.Cog):
                                     t_attack = round(t_attack + t_resolve_attack)
                                     t_defense = round(t_defense)
                                     t_used_resolve=True
+                                    t_pet_used =False
 
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation: Evolution", value="All stats & stamina greatly increased")
@@ -18853,6 +20861,7 @@ class CrownUnlimited(commands.Cog):
                                     t_attack = round(t_attack + t_resolve_attack)
                                     t_defense = round(t_defense - t_resolve_defense)
                                     t_used_resolve=True
+                                    t_pet_used =False
 
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
@@ -18861,216 +20870,421 @@ class CrownUnlimited(commands.Cog):
                                     turn=0
                             else:
                                 await private_channel.send(m.CANNOT_USE_RESOLVE)
-                                turn=1
-                        elif aiMove == 6:
+                                turn=3
+                        elif int(aiMove) == 6:
                             #Resolve Check and Calculation
-                            if t_used_resolve and t_used_focus and not t_pet_used:                                      
-                                t_enhancer_used=True
-                                dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
-                                t_enhancer_used=False
-                                t_pet_used =True
-                                tpet_dmg = dmg['DMG']
-                                tpet_type = dmg['ENHANCED_TYPE']
-                                if dmg['CAN_USE_MOVE']:
-                                    if tpet_type == 'ATK':
-                                        t_attack = round(t_attack + dmg['DMG'])
-                                    elif tpet_type == 'DEF':
-                                        t_defense = round(t_defense + dmg['DMG'])
-                                    elif tpet_type == 'STAM':
-                                        t_stamina = round(t_stamina + dmg['DMG'])
-                                    elif tpet_type == 'HLT':
-                                        t_health = round(t_health + dmg['DMG'])
-                                    elif tpet_type == 'LIFE':
-                                        t_health = round(t_health + dmg['DMG'])
-                                        c_health = round(c_health - dmg['DMG'])
-                                    elif tpet_type == 'DRAIN':
-                                        t_stamina = round(t_stamina + dmg['DMG'])
-                                        c_stamina = round(c_stamina - dmg['DMG'])
-                                    elif tpet_type == 'FLOG':
-                                        t_attack = round(t_attack + dmg['DMG'])
-                                        c_attack = round (c_attack - dmg['DMG'])
-                                    elif tpet_type == 'WITHER':
-                                        t_defense = round(t_defense + dmg['DMG'])
-                                        c_defense = round (c_defense - dmg['DMG'])
-                                    elif tpet_type == 'RAGE':
-                                        t_defense = round(t_defense - dmg['DMG'])
-                                        t_attack = round(t_attack + dmg['DMG'])
-                                    elif tpet_type == 'BRACE':
-                                        t_defense = round(t_defense + dmg['DMG'])
-                                        t_attack = round(t_attack - dmg['DMG'])
-                                    elif tpet_type == 'BZRK':
-                                        t_health = round(t_health - dmg['DMG'])
-                                        t_attack = round(t_attack + (.75 * dmg['DMG']))
-                                    elif tpet_type == 'CRYSTAL':
-                                        t_health = round(t_health - dmg['DMG'])
-                                        t_defense = round(t_defense + (.75 * dmg['DMG']))
-                                    elif tpet_type == 'GROWTH':
-                                        t_max_health = round(t_max_health - dmg['DMG'])
-                                        t_defense = round(t_defense + (.3 * dmg['DMG']))
-                                        t_attack = round(t_attack+ (.3 * dmg['DMG']))
-                                    elif tpet_type == 'STANCE':
-                                        tempattack = dmg['DMG']
-                                        t_attack = t_defense
-                                        t_defense = tempattack
-                                    elif tpet_type == 'CONFUSE':
-                                        tempattack = dmg['DMG']
-                                        c_attack = c_defense
-                                        c_defense = tempattack
-                                    elif tpet_type == 'BLINK':
-                                        t_stamina = round(t_stamina - dmg['DMG'])
-                                        c_stamina = round(c_stamina + dmg['DMG'] - 10)
-                                    elif tpet_type == 'SLOW':
-                                        tempstam = round(c_stamina + dmg['DMG'])
-                                        t_stamina = round(t_stamina - dmg['DMG'])
-                                        c_stamina = t_stamina
-                                        t_stamina = tempstam
-                                    elif tpet_type == 'HASTE':
-                                        tempstam = round(c_stamina - dmg['DMG'])
-                                        t_stamina = round(t_stamina + dmg['DMG'])
-                                        c_stamina = t_stamina
-                                        t_stamina = tempstam                                       
-                                    elif tpet_type == 'SOULCHAIN':
-                                        t_stamina = round(dmg['DMG'])
-                                        c_stamina = t_stamina
-                                    elif tpet_type == 'GAMBLE':
-                                        t_health = round(dmg['DMG'])
-                                        c_health = t_health
-                                    elif tpet_type == 'FEAR':
-                                        t_health = round(t_health - ((dmg['DMG']/100)* t_health))
-                                        c_attack = round(c_attack - ((dmg['DMG']/100)* c_attack))
-                                        c_defense = round(c_defense - ((dmg['DMG']/100)* c_defense))
-                                    elif tpet_type == 'WAVE':
-                                        c_health = round(c_health - dmg['DMG'])
-                                    elif tpet_type == 'BLAST':
-                                        c_health = round(c_health - dmg['DMG'])
-                                    elif tpet_type == 'CREATION':
-                                        t_max_health = round(t_max_health + dmg['DMG'])
-                                        t_health = round(t_health + dmg['DMG'])
-                                    elif tpet_type == 'DESTRUCTION':
-                                        c_max_health = round(c_max_health - dmg['DMG'])
-                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+                            if t_used_resolve and t_used_focus and not t_pet_used:
+                                if o_defend_used==True:
+                                    t_enhancer_used=True
+                                    dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
+                                    t_enhancer_used=False
+                                    t_pet_used =True
+                                    tpet_dmg = dmg['DMG']
+                                    tpet_type = dmg['ENHANCED_TYPE']
+                                    if dmg['CAN_USE_MOVE']:
+                                        if tpet_type == 'ATK':
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                        elif tpet_type == 'DEF':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                        elif tpet_type == 'STAM':
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                        elif tpet_type == 'HLT':
+                                            t_health = round(t_health + dmg['DMG'])
+                                        elif tpet_type == 'LIFE':
+                                            t_health = round(t_health + dmg['DMG'])
+                                            o_health = round(o_health - dmg['DMG'])
+                                        elif tpet_type == 'DRAIN':
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                            o_stamina = round(o_stamina - dmg['DMG'])
+                                        elif tpet_type == 'FLOG':
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                            o_attack = round (o_attack - dmg['DMG'])
+                                        elif tpet_type == 'WITHER':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                            o_defense = round (o_defense - dmg['DMG'])
+                                        elif tpet_type == 'RAGE':
+                                            t_defense = round(t_defense - dmg['DMG'])
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                        elif tpet_type == 'BRACE':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                            t_attack = round(t_attack - dmg['DMG'])
+                                        elif tpet_type == 'BZRK':
+                                            t_health = round(t_health - dmg['DMG'])
+                                            t_attack = round(t_attack + (.75 * dmg['DMG']))
+                                        elif tpet_type == 'CRYSTAL':
+                                            t_health = round(t_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                        elif tpet_type == 'GROWTH':
+                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                            t_attack = round(t_attack+ (.3 * dmg['DMG']))
+                                        elif tpet_type == 'STANCE':
+                                            tempattack = dmg['DMG']
+                                            t_attack = t_defense
+                                            t_defense = tempattack
+                                        elif tpet_type == 'CONFUSE':
+                                            tempattack = dmg['DMG']
+                                            o_attack = o_defense
+                                            o_defense = tempattack
+                                        elif tpet_type == 'BLINK':
+                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                            o_stamina = round(o_stamina + dmg['DMG'] - 10)
+                                        elif tpet_type == 'SLOW':
+                                            tempstam = round(o_stamina + dmg['DMG'])
+                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                            o_stamina = t_stamina
+                                            t_stamina = tempstam
+                                        elif tpet_type == 'HASTE':
+                                            tempstam = round(o_stamina - dmg['DMG'])
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                            o_stamina = t_stamina
+                                            t_stamina = tempstam                                       
+                                        elif tpet_type == 'SOULCHAIN':
+                                            t_stamina = round(dmg['DMG'])
+                                            o_stamina = t_stamina
+                                        elif tpet_type == 'GAMBLE':
+                                            t_health = round(dmg['DMG'])
+                                            o_health = t_health
+                                        elif tpet_type == 'FEAR':
+                                            t_health = round(t_health - ((dmg['DMG']/100)* t_health))
+                                            o_attack = round(o_attack - ((dmg['DMG']/100)* o_attack))
+                                            o_defense = round(o_defense - ((dmg['DMG']/100)* o_defense))
+                                        elif tpet_type == 'WAVE':
+                                            o_health = round(o_health - dmg['DMG'])
+                                        elif tpet_type == 'BLAST':
+                                            o_health = round(o_health - dmg['DMG'])
+                                        elif tpet_type == 'CREATION':
+                                            t_max_health = round(t_max_health + dmg['DMG'])
+                                            t_health = round(t_health + dmg['DMG'])
+                                        elif tpet_type == 'DESTRUCTION':
+                                            o_max_health = round(o_max_health - dmg['DMG'])
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])
 
-                                    embedVar = discord.Embed(title=f"{t_card.upper()} Summoned {tpet_name}", colour=0xe91e63)
-                                    embedVar.add_field(name=f"{tpet_name} used {tpetmove_text}!", value =f"Enhanced {tpet_type}")
-                                    embedVar.set_thumbnail(url=tpet_image)
-                                    await private_channel.send(embed=embedVar)
-                                    turn=3
-                                else:
-                                    await private_channel.send(f"{tpet_name} needs a turn to rest...")
-                                    turn=1
+                                        embedVar = discord.Embed(title=f"{t_card.upper()} Summoned {tpet_name}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"{tpet_name} used {tpetmove_text}!", value =f"Enhanced {tpet_type}")
+                                        embedVar.set_thumbnail(url=tpet_image)
+                                        await private_channel.send(embed=embedVar)
+                                        turn=3
+                                    else:
+                                        await private_channel.send(f"{tpet_name} needs a turn to rest...")
+                                        turn=1
+                                else:                                      
+                                    t_enhancer_used=True
+                                    dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
+                                    t_enhancer_used=False
+                                    t_pet_used =True
+                                    tpet_dmg = dmg['DMG']
+                                    tpet_type = dmg['ENHANCED_TYPE']
+                                    if dmg['CAN_USE_MOVE']:
+                                        if tpet_type == 'ATK':
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                        elif tpet_type == 'DEF':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                        elif tpet_type == 'STAM':
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                        elif tpet_type == 'HLT':
+                                            t_health = round(t_health + dmg['DMG'])
+                                        elif tpet_type == 'LIFE':
+                                            t_health = round(t_health + dmg['DMG'])
+                                            c_health = round(c_health - dmg['DMG'])
+                                        elif tpet_type == 'DRAIN':
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                            c_stamina = round(c_stamina - dmg['DMG'])
+                                        elif tpet_type == 'FLOG':
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                            c_attack = round (c_attack - dmg['DMG'])
+                                        elif tpet_type == 'WITHER':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                            c_defense = round (c_defense - dmg['DMG'])
+                                        elif tpet_type == 'RAGE':
+                                            t_defense = round(t_defense - dmg['DMG'])
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                        elif tpet_type == 'BRACE':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                            t_attack = round(t_attack - dmg['DMG'])
+                                        elif tpet_type == 'BZRK':
+                                            t_health = round(t_health - dmg['DMG'])
+                                            t_attack = round(t_attack + (.75 * dmg['DMG']))
+                                        elif tpet_type == 'CRYSTAL':
+                                            t_health = round(t_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                        elif tpet_type == 'GROWTH':
+                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                            t_attack = round(t_attack+ (.3 * dmg['DMG']))
+                                        elif tpet_type == 'STANCE':
+                                            tempattack = dmg['DMG']
+                                            t_attack = t_defense
+                                            t_defense = tempattack
+                                        elif tpet_type == 'CONFUSE':
+                                            tempattack = dmg['DMG']
+                                            c_attack = c_defense
+                                            c_defense = tempattack
+                                        elif tpet_type == 'BLINK':
+                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                            c_stamina = round(c_stamina + dmg['DMG'] - 10)
+                                        elif tpet_type == 'SLOW':
+                                            tempstam = round(c_stamina + dmg['DMG'])
+                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                            c_stamina = t_stamina
+                                            t_stamina = tempstam
+                                        elif tpet_type == 'HASTE':
+                                            tempstam = round(c_stamina - dmg['DMG'])
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                            c_stamina = t_stamina
+                                            t_stamina = tempstam                                       
+                                        elif tpet_type == 'SOULCHAIN':
+                                            t_stamina = round(dmg['DMG'])
+                                            c_stamina = t_stamina
+                                        elif tpet_type == 'GAMBLE':
+                                            t_health = round(dmg['DMG'])
+                                            c_health = t_health
+                                        elif tpet_type == 'FEAR':
+                                            t_health = round(t_health - ((dmg['DMG']/100)* t_health))
+                                            c_attack = round(c_attack - ((dmg['DMG']/100)* c_attack))
+                                            c_defense = round(c_defense - ((dmg['DMG']/100)* c_defense))
+                                        elif tpet_type == 'WAVE':
+                                            c_health = round(c_health - dmg['DMG'])
+                                        elif tpet_type == 'BLAST':
+                                            c_health = round(c_health - dmg['DMG'])
+                                        elif tpet_type == 'CREATION':
+                                            t_max_health = round(t_max_health + dmg['DMG'])
+                                            t_health = round(t_health + dmg['DMG'])
+                                        elif tpet_type == 'DESTRUCTION':
+                                            c_max_health = round(c_max_health - dmg['DMG'])
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+
+                                        embedVar = discord.Embed(title=f"{t_card.upper()} Summoned {tpet_name}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"{tpet_name} used {tpetmove_text}!", value =f"Enhanced {tpet_type}")
+                                        embedVar.set_thumbnail(url=tpet_image)
+                                        await private_channel.send(embed=embedVar)
+                                        turn=3
+                                    else:
+                                        await private_channel.send(f"{tpet_name} needs a turn to rest...")
+                                        turn=1
                             else:
                                 await private_channel.send(f"{tpet_name} needs a turn to rest...")
 
                         if int(aiMove) !=5 and int(aiMove) !=6:
                             # If you have enough stamina for move, use it
-                            if dmg['CAN_USE_MOVE']:
-                                if dmg['ENHANCE']:
-                                    enh_type= dmg['ENHANCED_TYPE']
-                                    if enh_type == 'ATK':
-                                        t_attack = round(t_attack + dmg['DMG'])
-                                    elif enh_type == 'DEF':
-                                        t_defense = round(t_defense + dmg['DMG'])
-                                    elif enh_type == 'STAM':
-                                        t_stamina = round(t_stamina + dmg['DMG'])
-                                    elif enh_type == 'HLT':
-                                        t_health = round(t_health + dmg['DMG'])
-                                    elif enh_type == 'LIFE':
-                                        t_health = round(t_health + dmg['DMG'])
-                                        c_health = round(c_health - dmg['DMG'])
-                                    elif enh_type == 'DRAIN':
-                                        t_stamina = round(t_stamina + dmg['DMG'])
-                                        c_stamina = round(c_stamina - dmg['DMG'])
-                                    elif enh_type == 'FLOG':
-                                        t_attack = round(t_attack + dmg['DMG'])
-                                        c_attack = round(c_attack - dmg['DMG'])
-                                    elif enh_type == 'WITHER':
-                                        t_defense = round(t_defense + dmg['DMG'])
-                                        c_defense = round(t_defense - dmg['DMG'])
-                                    elif enh_type == 'RAGE':
-                                        t_defense = round(t_defense - dmg['DMG'])
-                                        t_attack = round(t_attack + dmg['DMG'])
-                                    elif enh_type == 'BRACE':
-                                        t_defense = round(t_defense + dmg['DMG'])
-                                        t_attack = round(t_attack - dmg['DMG'])
-                                    elif enh_type == 'BZRK':
-                                        t_health = round(t_health - dmg['DMG'])
-                                        t_attack = round(t_attack +(.50 *  dmg['DMG']))
-                                    elif enh_type == 'CRYSTAL':
-                                        t_health = round(t_health - dmg['DMG'])
-                                        t_defense = round(t_defense + (.75 * dmg['DMG']))
-                                    elif enh_type == 'GROWTH':
-                                        t_max_health = round(t_max_health - dmg['DMG'])
-                                        t_defense = round(t_defense + (.3 * dmg['DMG']))
-                                        t_attack = round(t_attack+ (.3 * dmg['DMG']))
-                                    elif enh_type == 'STANCE':
-                                        tempattack = dmg['DMG']
-                                        t_attack = t_defense
-                                        t_defense = tempattack
-                                    elif enh_type == 'CONFUSE':
-                                        tempattack = dmg['DMG']
-                                        c_attack = c_defense
-                                        c_defense = tempattack
-                                    elif enh_type == 'BLINK':
-                                        t_stamina = round(t_stamina - dmg['DMG'])
-                                        c_stamina = round(c_stamina + dmg['DMG'] - 10)
-                                    elif enh_type == 'SLOW':
-                                        tempstam = round(c_stamina + dmg['DMG'])
-                                        t_stamina = round(t_stamina - dmg['DMG'])
-                                        c_stamina = t_stamina
-                                        t_stamina = tempstam
-                                    elif enh_type == 'HASTE':
-                                        tempstam = round(c_stamina - dmg['DMG'])
-                                        t_stamina = round(t_stamina + dmg['DMG'])
-                                        c_stamina = t_stamina
-                                        t_stamina = tempstam                                       
-                                    elif enh_type == 'SOULCHAIN':
-                                        t_stamina = round(dmg['DMG'])
-                                        c_stamina = t_stamina
-                                    elif enh_type == 'GAMBLE':
-                                        t_health = round(dmg['DMG']) * 2
-                                        c_health = t_health
-                                    elif enh_type == 'FEAR':
-                                        t_health = round(t_health - ((dmg['DMG']/100) * t_health))
-                                        c_attack = round(c_attack - ((dmg['DMG']/100) * c_attack))
-                                        c_defense = round(c_defense - ((dmg['DMG']/100) * c_defense))
-                                    elif enh_type == 'WAVE':
-                                        c_health = round(c_health - dmg['DMG'])
-                                    elif enh_type == 'BLAST':
-                                        c_health = round(c_health - dmg['DMG'])
-                                    elif enh_type == 'CREATION':
-                                        t_max_health = round(t_max_health + dmg['DMG'])
-                                        t_health = round(t_health + dmg['DMG'])
-                                    elif enh_type == 'DESTRUCTION':
-                                        c_max_health = round(c_max_health - dmg['DMG'])
-                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-                                    embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
-                                    await private_channel.send(embed=embedVar)
-                                    turn_total= turn_total + 1
-                                    turn = 0
-                                elif dmg['DMG'] == 0:
-                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-                                    embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
-                                    await private_channel.send(embed=embedVar)
-                                    turn_total= turn_total + 1
-                                    turn=0
-                                else:
-                                    if c_universe == "Naruto" and c_stamina == 0:
-                                        c_health = c_health 
-                                        embedVar = discord.Embed(title=f"{c_card.upper()}: Substitution Jutsu", description=f"{t_card} attack strikes a log", colour=0xe91e63)
-                                        await private_channel.send(embed=embedVar)
-                                    else:
-                                        c_health = c_health - int(dmg['DMG'])
+                            #check if o is blocking
+                            if o_defend_used==True:
+                                if dmg['CAN_USE_MOVE']:
+                                    if dmg['ENHANCE']:
+                                        enh_type= dmg['ENHANCED_TYPE']
+                                        if enh_type == 'ATK':
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                        elif enh_type == 'DEF':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                        elif enh_type == 'STAM':
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                        elif enh_type == 'HLT':
+                                            t_health = round(t_health + dmg['DMG'])
+                                        elif enh_type == 'LIFE':
+                                            t_health = round(t_health + dmg['DMG'])
+                                            o_health = round(o_health - dmg['DMG'])
+                                        elif enh_type == 'DRAIN':
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                            o_stamina = round(o_stamina - dmg['DMG'])
+                                        elif enh_type == 'FLOG':
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                            o_attack = round(o_attack - dmg['DMG'])
+                                        elif enh_type == 'WITHER':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                            o_defense = round(o_defense - dmg['DMG'])
+                                        elif enh_type == 'RAGE':
+                                            t_defense = round(t_defense - dmg['DMG'])
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                        elif enh_type == 'BRACE':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                            t_attack = round(t_attack - dmg['DMG'])
+                                        elif enh_type == 'BZRK':
+                                            t_health = round(t_health - dmg['DMG'])
+                                            t_attack = round(t_attack +(.50 *  dmg['DMG']))
+                                        elif enh_type == 'CRYSTAL':
+                                            t_health = round(t_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                        elif enh_type == 'GROWTH':
+                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                            t_attack = round(t_attack+ (.3 * dmg['DMG']))
+                                        elif enh_type == 'STANCE':
+                                            tempattack = dmg['DMG']
+                                            t_attack = t_defense
+                                            t_defense = tempattack
+                                        elif enh_type == 'CONFUSE':
+                                            tempattack = dmg['DMG']
+                                            o_attack = o_defense
+                                            o_defense = tempattack
+                                        elif enh_type == 'BLINK':
+                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                            o_stamina = round(o_stamina + dmg['DMG'] - 10)
+                                        elif enh_type == 'SLOW':
+                                            tempstam = round(o_stamina + dmg['DMG'])
+                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                            o_stamina = t_stamina
+                                            t_stamina = tempstam
+                                        elif enh_type == 'HASTE':
+                                            tempstam = round(o_stamina - dmg['DMG'])
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                            o_stamina = t_stamina
+                                            t_stamina = tempstam                                       
+                                        elif enh_type == 'SOULCHAIN':
+                                            t_stamina = round(dmg['DMG'])
+                                            o_stamina = o_stamina
+                                        elif enh_type == 'GAMBLE':
+                                            t_health = round(dmg['DMG']) * 2
+                                            o_health = t_health
+                                        elif enh_type == 'FEAR':
+                                            t_health = round(t_health - ((dmg['DMG']/100) * t_health))
+                                            o_attack = round(c_attack - ((dmg['DMG']/100) * o_attack))
+                                            o_defense = round(c_defense - ((dmg['DMG']/100) * o_defense))
+                                        elif enh_type == 'WAVE':
+                                            o_health = round(o_health - dmg['DMG'])
+                                        elif enh_type == 'BLAST':
+                                            o_health = round(o_health - dmg['DMG'])
+                                        elif enh_type == 'CREATION':
+                                            t_max_health = round(t_max_health + dmg['DMG'])
+                                            t_health = round(t_health + dmg['DMG'])
+                                        elif enh_type == 'DESTRUCTION':
+                                            o_max_health = round(o_max_health - dmg['DMG'])
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                         await private_channel.send(embed=embedVar)
-                                    if c_health < 0:
-                                        c_health=0
-                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
-                                    turn_total= turn_total + 1
-                                    turn=0
-
-                            else:
-                                await private_channel.send(m.NOT_ENOUGH_STAMINA)
-                                turn = 1    
+                                        turn_total= turn_total + 1
+                                        turn = 0
+                                    elif dmg['DMG'] == 0:
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                        await private_channel.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn=0
+                                    else:
+                                        if o_universe == "Naruto" and o_stamina == 0:
+                                            o_health = o_health 
+                                            embedVar = discord.Embed(title=f"{o_card.upper()}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
+                                            await private_channel.send(embed=embedVar)
+                                        else:
+                                            o_health = o_health - int(dmg['DMG'])
+                                            embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                            await private_channel.send(embed=embedVar)
+                                        if o_health < 0:
+                                            o_health=0
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                        turn_total= turn_total + 1
+                                        turn=0
+                                else:
+                                    await private_channel.send(m.NOT_ENOUGH_STAMINA)
+                                    turn = 3
+                            else:                                 
+                                if dmg['CAN_USE_MOVE']:
+                                    if dmg['ENHANCE']:
+                                        enh_type= dmg['ENHANCED_TYPE']
+                                        if enh_type == 'ATK':
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                        elif enh_type == 'DEF':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                        elif enh_type == 'STAM':
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                        elif enh_type == 'HLT':
+                                            t_health = round(t_health + dmg['DMG'])
+                                        elif enh_type == 'LIFE':
+                                            t_health = round(t_health + dmg['DMG'])
+                                            c_health = round(c_health - dmg['DMG'])
+                                        elif enh_type == 'DRAIN':
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                            c_stamina = round(c_stamina - dmg['DMG'])
+                                        elif enh_type == 'FLOG':
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                            c_attack = round(c_attack - dmg['DMG'])
+                                        elif enh_type == 'WITHER':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                            c_defense = round(t_defense - dmg['DMG'])
+                                        elif enh_type == 'RAGE':
+                                            t_defense = round(t_defense - dmg['DMG'])
+                                            t_attack = round(t_attack + dmg['DMG'])
+                                        elif enh_type == 'BRACE':
+                                            t_defense = round(t_defense + dmg['DMG'])
+                                            t_attack = round(t_attack - dmg['DMG'])
+                                        elif enh_type == 'BZRK':
+                                            t_health = round(t_health - dmg['DMG'])
+                                            t_attack = round(t_attack +(.75 *  dmg['DMG']))
+                                        elif enh_type == 'CRYSTAL':
+                                            t_health = round(t_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                        elif enh_type == 'GROWTH':
+                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                            t_attack = round(t_attack+ (.3 * dmg['DMG']))
+                                        elif enh_type == 'STANCE':
+                                            tempattack = dmg['DMG']
+                                            t_attack = t_defense
+                                            t_defense = tempattack
+                                        elif enh_type == 'CONFUSE':
+                                            tempattack = dmg['DMG']
+                                            c_attack = c_defense
+                                            c_defense = tempattack
+                                        elif enh_type == 'BLINK':
+                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                            c_stamina = round(c_stamina + dmg['DMG'] - 10)
+                                        elif enh_type == 'SLOW':
+                                            tempstam = round(c_stamina + dmg['DMG'])
+                                            t_stamina = round(t_stamina - dmg['DMG'])
+                                            c_stamina = t_stamina
+                                            t_stamina = tempstam
+                                        elif enh_type == 'HASTE':
+                                            tempstam = round(c_stamina - dmg['DMG'])
+                                            t_stamina = round(t_stamina + dmg['DMG'])
+                                            c_stamina = t_stamina
+                                            t_stamina = tempstam                                       
+                                        elif enh_type == 'SOULCHAIN':
+                                            t_stamina = round(dmg['DMG'])
+                                            c_stamina = t_stamina
+                                        elif enh_type == 'GAMBLE':
+                                            t_health = round(dmg['DMG']) * 2
+                                            c_health = t_health
+                                        elif enh_type == 'FEAR':
+                                            t_health = round(t_health - ((dmg['DMG']/100) * t_health))
+                                            c_attack = round(c_attack - ((dmg['DMG']/100) * c_attack))
+                                            c_defense = round(c_defense - ((dmg['DMG']/100) * c_defense))
+                                        elif enh_type == 'WAVE':
+                                            c_health = round(c_health - dmg['DMG'])
+                                        elif enh_type == 'BLAST':
+                                            c_health = round(c_health - dmg['DMG'])
+                                        elif enh_type == 'CREATION':
+                                            t_max_health = round(t_max_health + dmg['DMG'])
+                                            t_health = round(t_health + dmg['DMG'])
+                                        elif enh_type == 'DESTRUCTION':
+                                            c_max_health = round(c_max_health - dmg['DMG'])
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                        await private_channel.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn = 0
+                                    elif dmg['DMG'] == 0:
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                        await private_channel.send(embed=embedVar)
+                                        turn_total= turn_total + 1
+                                        turn=0
+                                    else:
+                                        if c_universe == "Naruto" and c_stamina == 0:
+                                            c_health = c_health 
+                                            embedVar = discord.Embed(title=f"{c_card.upper()}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
+                                            await private_channel.send(embed=embedVar)
+                                        else:
+                                            c_health = c_health - int(dmg['DMG'])
+                                            embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                            await private_channel.send(embed=embedVar)
+                                        if c_health < 0:
+                                            c_health=0
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                        turn_total= turn_total + 1
+                                        turn=0
+                                else:
+                                    await private_channel.send(m.NOT_ENOUGH_STAMINA)
+                                    turn = 3
+           
             if botActive:
                 end_message="Use the #end command to end the tutorial lobby"
             else:
@@ -19552,6 +21766,8 @@ class CrownUnlimited(commands.Cog):
         if ofam == cfam:
             o_health = o_health + 50
             c_health = c_health + 50
+            o_max_health = o_health
+            c_max_health = c_health
         # Companion Passive Config
         if (c_universe == c_title_universe) or (c_title_universe == "Unbound"):
             c_title_passive_bool = True
@@ -19569,6 +21785,7 @@ class CrownUnlimited(commands.Cog):
         c_enhancer = c_moveset[3]
         c_enhancer_used=False
         c_pet_used=False
+        c_block_used=False
 
         cmove1_text = list(c_1.keys())[0]
         cmove2_text = list(c_2.keys())[0]
@@ -19817,6 +22034,8 @@ class CrownUnlimited(commands.Cog):
         o_enhancer = o_moveset[3]
         o_enhancer_used=False
         o_pet_used=False
+        o_defend_used=False
+        o_block_used=False
 
         omove1_text = list(o_1.keys())[0]
         omove2_text = list(o_2.keys())[0]
@@ -20344,6 +22563,9 @@ class CrownUnlimited(commands.Cog):
             
             #Player 1 Turn Start
             if turn == 0:
+                if o_defend_used==True:
+                    o_defense = o_defense/2
+                    o_defend_used=False
                 if o_universe == "Death Note" and turn_total == 0:
                     embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death", description=f"`{o_card} says:`\nYou will die in 24 turns...", colour=0xe91e63)
                     await private_channel.send(embed=embedVar)
@@ -20358,14 +22580,14 @@ class CrownUnlimited(commands.Cog):
                 if o_defense <= 30:
                     o_defense = 30
                 if o_health >= o_max_health:
-                    o_health = o_max_health    
+                    o_health = o_max_health
+
                 # Tutorial Instructions
-                if turn_total == 0 and botActive:                    
-                    embedVar = discord.Embed(title=f"`{t_card}` Boss of `{t_universe}`", description=f"*{t_description}*", colour=0xe91e63)
-                    embedVar.add_field(name=f"{t_arena}", value=f"{t_arenades}")
-                    embedVar.add_field(name=f"Entering the {t_arena}",value= f"{t_entrance}", inline=False)
-                    embedVar.set_footer(text=f"{t_card} waits for you to strike....")
+                if turn_total == 0 and botActive:
+                    await private_channel.send(f"{ctx.author.mention}")                   
+                    embedVar = discord.Embed(title=f"`{o_card}` & `{c_card}` VS `{t_card}` has begun!\n{t_universe} Duo Dungeon Battle", description=f"`{o_card} Says:`\n{o_greeting_description}", colour=0xe91e63)
                     await private_channel.send(embed=embedVar)
+
                 
 
                 if o_health <= (o_max_health * .25):
@@ -20380,11 +22602,6 @@ class CrownUnlimited(commands.Cog):
                     embed_color_o = 0x2ecc71
 
                 if o_stamina < 10:
-                    if botActive and not o_used_focus:                    
-                        embedVar = discord.Embed(title=f"{t_punish}")
-                        embedVar.add_field(name=f"{t_arena}",value= f"{t_world}", inline=False)
-                        embedVar.set_footer(text=f"{t_assault}")
-                        await private_channel.send(embed=embedVar)
                     #fortitude or luck is based on health  
                     fortitude = 0.0
                     low = o_health - (o_health*.90)
@@ -20419,10 +22636,11 @@ class CrownUnlimited(commands.Cog):
                     o_attack = o_attack + o_attackcalc
                     o_defense =  o_defense + o_defensecalc
                     o_used_focus = True
-
+                        
                     embedVar = discord.Embed(title=f"{o_card.upper()} FOCUSED", description=f"`{o_card} says:`\n{o_focus_description}", colour=0xe91e63)
                     embedVar.add_field(name=f"{o_card} focused and {healmessage}", value="All stats & stamina increased")
                     await private_channel.send(embed=embedVar)
+
                     #Resolve Check and Calculation
                     if not o_used_resolve and o_used_focus and o_universe == "Digimon": # Digimon Universal Trait
                         embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
@@ -20445,9 +22663,9 @@ class CrownUnlimited(commands.Cog):
                         o_used_resolve = True 
                         o_pet_used=False
 
-                    
+                        
                     elif o_universe == "League Of Legends":
-                        embedVar = discord.Embed(title=f"Turret Shot hits {t_card} for 25 DMG!", colour=0xe91e63)
+                        embedVar = discord.Embed(title=f"Turret Shot hits {t_card}for 25 DMG!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         t_health = round(t_health - 30)
                         
@@ -20455,12 +22673,12 @@ class CrownUnlimited(commands.Cog):
                         embedVar = discord.Embed(title=f"Ruler's Authority... Opponent loses {15 + turn_total} DEF!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         t_defense = round(t_defense - (15 + turn_total))
-                     
+                        
                     elif o_universe == "Attack On Titan":
                         embedVar = discord.Embed(title=f"Rally! {o_card} Increased Max Health!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         o_max_health = round(o_max_health + 50)
-                       
+                        
                     elif o_universe == "Black Clover":
                         embedVar = discord.Embed(title=f"Mana Zone! {o_card} Increased Stamina!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
@@ -20471,12 +22689,12 @@ class CrownUnlimited(commands.Cog):
                             embedVar.add_field(name=f"{t_card} had a heart attack and died", value=f"Death....")
                             await private_channel.send(embed=embedVar)
                             t_health = 0
-                       
+                        
                     if t_universe == "One Punch Man":
                         embedVar = discord.Embed(title=f"Hero Reinforcements! {t_card} Increased Max Health!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         t_max_health = round(t_max_health + 50)
-                      
+                        
                     elif t_universe == "7ds":
                         embedVar = discord.Embed(title=f"Increase Power Level! {t_card} Increased Stamina!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
@@ -20486,7 +22704,7 @@ class CrownUnlimited(commands.Cog):
                         embedVar = discord.Embed(title=f"Combo Recognition! {t_card} Increased Attack by {15 + turn_total}!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         t_attack = round(t_attack + (15 + turn_total))
-                       
+                        
                     else:
                         turn_total= turn_total + 1
                         if o_universe != "Crown Rift Madness":
@@ -20504,35 +22722,36 @@ class CrownUnlimited(commands.Cog):
                     player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                     await private_channel.send(file=player_1_card)
                     embedVar = discord.Embed(title=f"{o_card}, choose your move!", description=textwrap.dedent(f"""\
-                    **{o_health}/{o_stamina}**    
+                    **{o_health}/{o_stamina}**
                     **{omove1_text}** 10 Stamina _press 1_
                     **{omove2_text}** 30 Stamina _press 2_
                     **{omove3_text}** 80 Stamina _press 3_
                     **{omove_enhanced_text}** 20 Stamina _press 4_
-                    **Enhance Companion** 20 Stamina _press 7_
-                
-                    **{t_card}:** {t_health}/{t_stamina}
-                    **{c_card}:** {c_health}/{c_stamina} _partner_
-                    """) 
+                    **Enhance {c_card}** 20 Stamina _press 7_
+                    **Defend {c_card}** 20 Stamina _press 0_
                     
+                    **{c_card}:** {c_health}/{c_stamina} _Companion_                 
+                    **{t_card}:** {t_health}/{t_stamina}   
+                    """) 
                     , colour=embed_color_o)
                     embedVar.set_thumbnail(url=opet_image)
-                    if o_used_focus and o_used_resolve and not t_pet_used:
-                        embedVar.set_author(name="Press 0 to Quit Match. Press 6 to Summon your Pet!")                                    
+                    if o_used_focus and o_used_resolve and not o_pet_used:
+                        embedVar.set_author(name="Press Q to Quit Match. Press 6 to Summon your Pet!")                                    
                     elif o_used_focus and not o_used_resolve:
-                        embedVar.set_author(name="Press 0 to Quit Match. Press 5 to Strengthen resolve!")
+                        embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen resolve!")
                     else:
-                        embedVar.set_author(name="Press 0 to Quit Match")
+                        embedVar.set_author(name="Press Q to Quit Match")
                     embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
                     await private_channel.send(embed=embedVar)
                     
-                    # Make sure user is responding with move
                     if o_used_focus and o_used_resolve:
-                        options = ["0","1","2","3","4","6","7"]
+                        options = ["q","Q","0","1","2","3","4","6","7"]
                     elif o_used_focus and not o_used_resolve:
-                        options = ["0","1","2","3","4","5","7"]
+                        options = ["q","Q","0","1","2","3","4","5","7"]
                     else:
-                        options = ["0","1","2","3","4","7"]
+                        options = ["q","Q","0","1","2","3","4","7"]
+
+                    # Make sure user is responding with move
                     def check(msg):
                         if private_channel.guild:
                             return msg.author == user1 and msg.channel == private_channel and msg.content in options
@@ -20542,29 +22761,32 @@ class CrownUnlimited(commands.Cog):
                         msg = await self.bot.wait_for("message",timeout=120.0, check=check)
 
                         # calculate data based on selected move
-                        if msg.content == "0":
+                        if msg.content == "q" or msg.content == "Q":
                             o_health=0
                     
                             if private_channel.guild:
                                 await private_channel.send(f"{ctx.author.mention} has fled the battle...")
+                                response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                                 await discord.TextChannel.delete(private_channel, reason=None)
                             else:
+                                response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                                 await private_channel.send(f"You fled the battle...")
                             return
-
                         if msg.content == "1":
                             o_pet_used =False
-                            dmg = damage_cal(o_universe, o_card, o_1, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
+                            dmg = damage_cal(o_universe, o_card, o_1, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total)
                         elif msg.content == "2":
                             o_pet_used =False
-                            dmg = damage_cal(o_universe, o_card, o_2, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
+                            dmg = damage_cal(o_universe, o_card, o_2, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total)
                         elif msg.content == "3":
                             o_pet_used =False
-                            dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
+                            dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total)
+                            if o_gif != "N/A":
+                                await private_channel.send(f"{o_gif}")
                         elif msg.content == "4":
-                            o_pet_used =False
                             o_enhancer_used=True
-                            dmg = damage_cal(o_universe, o_card, o_enhancer, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
+                            o_pet_used =False
+                            dmg = damage_cal(o_universe, o_card, o_enhancer, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total)
                             o_enhancer_used=False
                         elif msg.content == "5":
                             #Resolve Check and Calculation
@@ -20715,7 +22937,7 @@ class CrownUnlimited(commands.Cog):
                                 turn=0
                         elif msg.content == "6":
                                 #Resolve Check and Calculation
-                            if o_used_resolve and o_used_focus and not o_pet_used:                                      
+                            if o_used_resolve and o_used_focus and not o_pet_used:                                  
                                 o_enhancer_used=True
                                 dmg = damage_cal(o_universe, o_card, opet_move, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
                                 o_enhancer_used=False
@@ -20754,7 +22976,7 @@ class CrownUnlimited(commands.Cog):
                                         o_attack = round(o_attack + (.75 * dmg['DMG']))
                                     elif opet_type == 'CRYSTAL':
                                         o_health = round(o_health - dmg['DMG'])
-                                        o_defense = round(o_defense +(.75 * dmg['DMG']))
+                                        o_defense = round(o_defense + (.75 * dmg['DMG']))
                                     elif opet_type == 'GROWTH':
                                         o_max_health = round(o_max_health - dmg['DMG'])
                                         o_defense = round(o_defense + (.3 * dmg['DMG']))
@@ -20853,8 +23075,8 @@ class CrownUnlimited(commands.Cog):
                                     c_defense = round(c_defense +(.75 * dmg['DMG']))
                                 elif comp_enh == 'GROWTH':
                                     c_max_health = round(c_max_health - dmg['DMG'])
-                                    c_defense = round(c_defense + (c_defense * dmg['DMG']))
-                                    c_attack = round(c_attack + (c_attack * dmg['DMG']))
+                                    c_defense = round(c_defense + (.3 * dmg['DMG']))
+                                    c_attack = round(c_attack + (.3 * dmg['DMG']))
                                 elif comp_enh == 'STANCE':
                                     tempattack = dmg['DMG']
                                     c_attack = c_defense
@@ -20905,12 +23127,26 @@ class CrownUnlimited(commands.Cog):
                             else:
                                 await private_channel.send(m.NOT_ENOUGH_STAMINA)
                                 turn=0
+                        elif msg.content == "0":
+                            if o_stamina >=20:
+                                o_stamina = o_stamina - 20
+                                o_defend_used=True
+                                o_defense = o_defense * 2
+                                embedVar = discord.Embed(title=f"{o_card.upper()} DEFENDS {c_card.upper()}", colour=0xe91e63)
+                                embedVar.add_field(name=f"{o_card} used Block!", value =f"Enhanced DEF")
+                                await private_channel.send(embed=embedVar)
+                                turn=1
+                            else:
+                                await private_channel.send(f"{o_card} is too tired to block...")
+                                turn=0
 
-                        if msg.content != "5" and msg.content != "6" and msg.content != "7" and msg.content in options:
+
+                        if msg.content != "5" and msg.content != "6" and msg.content != "7" and msg.content != "9" and msg.content != "0" and msg.content in options:
                             # If you have enough stamina for move, use it
                             if dmg['CAN_USE_MOVE']:
                                 if dmg['ENHANCE']:
-                                    enh_type= dmg['ENHANCED_TYPE']                                
+                                    enh_type= dmg['ENHANCED_TYPE']
+                                
                                     if enh_type == 'ATK':
                                         o_attack = round(o_attack + dmg['DMG'])
                                     elif enh_type == 'DEF':
@@ -20986,7 +23222,7 @@ class CrownUnlimited(commands.Cog):
                                         o_max_health = round(o_max_health + dmg['DMG'])
                                         o_health = round(o_health + dmg['DMG'])
                                     elif enh_type == 'DESTRUCTION':
-                                        t_max_health = round(t_max_health - dmg['DMG'])
+                                        t_max_health = round(t_health - dmg['DMG'])
 
                                     o_stamina = o_stamina - int(dmg['STAMINA_USED'])
 
@@ -21004,7 +23240,7 @@ class CrownUnlimited(commands.Cog):
                                 else:
                                     if t_universe == "Naruto" and t_stamina == 0:
                                         t_health = t_health 
-                                        embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{o_card} attack strikes a log", colour=0xe91e63)
+                                        embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{o_card} strikes a log", colour=0xe91e63)
                                         await private_channel.send(embed=embedVar)
                                     else:
                                         t_health = t_health - dmg['DMG']
@@ -21021,6 +23257,7 @@ class CrownUnlimited(commands.Cog):
                                 await private_channel.send(embed=embedVar)
                                 turn=0
                     except asyncio.TimeoutError:
+                        db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                         await private_channel.send(f"{ctx.author.mention} {m.STORY_ENDED}")
                         if private_channel.guild:
                             await discord.TextChannel.delete(private_channel, reason=None)
@@ -21183,7 +23420,6 @@ class CrownUnlimited(commands.Cog):
                     # UNIVERSE CARD
                     player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus)
                     await private_channel.send(file=player_2_card)
-
                     aiMove = 0
                     
                     if t_used_resolve and not t_pet_used:
@@ -21279,24 +23515,37 @@ class CrownUnlimited(commands.Cog):
                     
                     boss_special_move_default_msg = " "
 
-                    if aiMove == 0:
-                        t_pet_used =False
+                    if int(aiMove) == 0:
                         t_health=0
-                    elif aiMove == 1:
+                    if int(aiMove) == 1:
                         t_pet_used =False
-                        dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
-                    elif aiMove == 2:
+                        if c_block_used==True:
+                            dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total)
+                        else:
+                            dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                    elif int(aiMove) == 2:
                         t_pet_used =False
-                        dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
-                    elif aiMove == 3:
+                        if c_block_used==True:
+                            dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total)
+                        else:
+                            dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                    elif int(aiMove) == 3:
                         t_pet_used =False
-                        dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
-                    elif aiMove == 4:
+                        if c_block_used==True:
+                            dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total)
+                        else:
+                            dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                        if t_gif != "N/A":
+                                await private_channel.send(f"{t_gif}")
+                    elif int(aiMove) == 4:
+                        t_pet_used =False
                         t_enhancer_used=True
-                        t_pet_used =False
-                        dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                        if c_block_used==True:
+                            dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total)
+                        else:
+                            dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
                         t_enhancer_used=False
-                    elif aiMove == 5:
+                    elif int(aiMove) == 5:
                         if not t_used_resolve and t_used_focus:
                             if t_universe == "My Hero Academia": #My hero TRait
                                     #fortitude or luck is based on health  
@@ -21314,6 +23563,7 @@ class CrownUnlimited(commands.Cog):
                                     t_attack = round(t_attack + t_resolve_attack)
                                     t_defense = round(t_defense - t_resolve_defense)
                                     t_used_resolve=True
+                                    t_pet_used =False
 
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation: Plus Ultra", value="All stats & stamina greatly increased")
@@ -21336,6 +23586,7 @@ class CrownUnlimited(commands.Cog):
                                 t_attack = round(t_attack + (2 * t_resolve_attack))
                                 t_defense = round(t_defense - t_resolve_defense)
                                 t_used_resolve=True
+                                t_pet_used =False
 
                                 embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                 embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
@@ -21358,6 +23609,7 @@ class CrownUnlimited(commands.Cog):
                                 t_attack = round(t_attack + t_resolve_attack)
                                 t_defense = round(t_defense - t_resolve_defense)
                                 t_used_resolve=True
+                                t_pet_used =False
 
                                 embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                 embedVar.add_field(name=f"Transformation: Ascension", value="All stats & stamina greatly increased")
@@ -21384,9 +23636,12 @@ class CrownUnlimited(commands.Cog):
                                 embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                 embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
                                 await private_channel.send(embed=embedVar)
-                                dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
+                                if c_block_used==True:
+                                    dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina,t_max_health, c_attack, boss_special_move_default_msg, turn_total)
+                                else:
+                                    dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, boss_special_move_default_msg, turn_total)
                                 t_pet_used =False
-                                o_health = o_health - int(dmg['DMG'])
+                                c_health = c_health - int(dmg['DMG'])
                                 embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                 await private_channel.send(embed=embedVar)
                                 t_stamina = 0
@@ -21408,6 +23663,7 @@ class CrownUnlimited(commands.Cog):
                                 t_attack = round(t_attack + t_resolve_attack)
                                 t_defense = round(t_defense)
                                 t_used_resolve=True
+                                t_pet_used =False
 
                                 embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                 embedVar.add_field(name=f"Transformation: Evolution", value="All stats & stamina greatly increased")
@@ -21430,6 +23686,7 @@ class CrownUnlimited(commands.Cog):
                                 t_attack = round(t_attack + t_resolve_attack)
                                 t_defense = round(t_defense - t_resolve_defense)
                                 t_used_resolve=True
+                                t_pet_used =False
 
                                 embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                 embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
@@ -21437,238 +23694,427 @@ class CrownUnlimited(commands.Cog):
                                 turn_total= turn_total + 1
                                 turn=2
                         else:
-                            emessage = m.CANNOT_USE_RESOLVE
-                            embedVar = discord.Embed(title=emessage, description=f"Entering `Resolved State` sacrifices a turn to power up even greater and regain `Stamina`!", colour=0xe91e63)
-                            await private_channel.send(embed=embedVar)
-                            turn=2
-                    elif aiMove == 6:
+                            await private_channel.send(m.CANNOT_USE_RESOLVE)
+                            turn=1
+                    elif int(aiMove) == 6:
                         #Resolve Check and Calculation
-                        if t_used_resolve and t_used_focus and not t_pet_used:                                      
-                            t_enhancer_used=True
-                            dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
-                            t_enhancer_used=False
-                            t_pet_used =True
-                            tpet_dmg = dmg['DMG']
-                            tpet_type = dmg['ENHANCED_TYPE']
-                            if dmg['CAN_USE_MOVE']:
-                                if tpet_type == 'ATK':
-                                    t_attack = round(t_attack + dmg['DMG'])
-                                elif tpet_type == 'DEF':
-                                    t_defense = round(t_defense + dmg['DMG'])
-                                elif tpet_type == 'STAM':
-                                    t_stamina = round(t_stamina + dmg['DMG'])
-                                elif tpet_type == 'HLT':
-                                    t_health = round(t_health + dmg['DMG'])
-                                elif tpet_type == 'LIFE':
-                                    t_health = round(t_health + dmg['DMG'])
-                                    o_health = round(o_health - dmg['DMG'])
-                                elif tpet_type == 'DRAIN':
-                                    t_stamina = round(t_stamina + dmg['DMG'])
-                                    o_stamina = round(o_stamina - dmg['DMG'])
-                                elif tpet_type == 'FLOG':
-                                    t_attack = round(t_attack + dmg['DMG'])
-                                    o_attack = round (o_attack - dmg['DMG'])
-                                elif tpet_type == 'WITHER':
-                                    t_defense = round(t_defense + dmg['DMG'])
-                                    o_defense = round (o_defense - dmg['DMG'])
-                                elif tpet_type == 'RAGE':
-                                    t_defense = round(t_defense - dmg['DMG'])
-                                    t_attack = round(t_attack + dmg['DMG'])
-                                elif tpet_type == 'BRACE':
-                                    t_defense = round(t_defense + dmg['DMG'])
-                                    t_attack = round(t_attack - dmg['DMG'])
-                                elif tpet_type == 'BZRK':
-                                    t_health = round(t_health - dmg['DMG'])
-                                    t_attack = round(t_attack + (.75 * dmg['DMG']))
-                                elif tpet_type == 'CRYSTAL':
-                                    t_health = round(t_health - dmg['DMG'])
-                                    t_defense = round(t_defense + (.75 * dmg['DMG']))
-                                elif tpet_type == 'GROWTH':
-                                    t_max_health = round(t_max_health - dmg['DMG'])
-                                    t_defense = round(t_defense + (.3 * dmg['DMG']))
-                                    t_attack = round(t_attack + (.3 * dmg['DMG']))
-                                elif tpet_type == 'STANCE':
-                                    tempattack = dmg['DMG']
-                                    t_attack = t_defense
-                                    t_defense = tempattack
-                                elif tpet_type == 'CONFUSE':
-                                    tempattack = dmg['DMG']
-                                    o_attack = o_defense
-                                    o_defense = tempattack
-                                elif tpet_type == 'BLINK':
-                                    t_stamina = round(t_stamina - dmg['DMG'])
-                                    o_stamina = round(o_stamina + dmg['DMG'] - 10)
-                                elif tpet_type == 'SLOW':
-                                    tempstam = round(o_stamina + dmg['DMG'])
-                                    t_stamina = round(t_stamina - dmg['DMG'])
-                                    o_stamina = t_stamina
-                                    t_stamina = tempstam
-                                elif tpet_type == 'HASTE':
-                                    tempstam = round(o_stamina - dmg['DMG'])
-                                    t_stamina = round(t_stamina + dmg['DMG'])
-                                    o_stamina = t_stamina
-                                    t_stamina = tempstam                                       
-                                elif tpet_type == 'SOULCHAIN':
-                                    t_stamina = round(dmg['DMG'])
-                                    o_stamina = t_stamina
-                                elif tpet_type == 'GAMBLE':
-                                    t_health = round(dmg['DMG'])
-                                    o_health = t_health
-                                elif tpet_type == 'FEAR':
-                                    t_health = round(t_health - ((dmg['DMG']/100)* t_health))
-                                    o_attack = round(o_attack - ((dmg['DMG']/100)* o_attack))
-                                    o_defense = round(o_defense - ((dmg['DMG']/100)* o_defense))
-                                elif tpet_type == 'WAVE':
-                                    o_health = round(o_health - dmg['DMG'])
-                                elif tpet_type == 'BLAST':
-                                    o_health = round(o_health - dmg['DMG'])
-                                elif tpet_type == 'CREATION':
-                                    t_max_health = round(t_max_health + dmg['DMG'])
-                                    t_health = round(t_health + dmg['DMG'])
-                                elif tpet_type == 'DESTRUCTION':
-                                    o_max_health = round(o_max_health - dmg['DMG'])
-                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+                        if t_used_resolve and t_used_focus and not t_pet_used:
+                            if c_block_used==True:
+                                t_enhancer_used=True
+                                dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total)
+                                t_enhancer_used=False
+                                t_pet_used =True
+                                tpet_dmg = dmg['DMG']
+                                tpet_type = dmg['ENHANCED_TYPE']
+                                if dmg['CAN_USE_MOVE']:
+                                    if tpet_type == 'ATK':
+                                        t_attack = round(t_attack + dmg['DMG'])
+                                    elif tpet_type == 'DEF':
+                                        t_defense = round(t_defense + dmg['DMG'])
+                                    elif tpet_type == 'STAM':
+                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                    elif tpet_type == 'HLT':
+                                        t_health = round(t_health + dmg['DMG'])
+                                    elif tpet_type == 'LIFE':
+                                        t_health = round(t_health + dmg['DMG'])
+                                        c_health = round(c_health - dmg['DMG'])
+                                    elif tpet_type == 'DRAIN':
+                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                        c_stamina = round(c_stamina - dmg['DMG'])
+                                    elif tpet_type == 'FLOG':
+                                        t_attack = round(t_attack + dmg['DMG'])
+                                        c_attack = round (c_attack - dmg['DMG'])
+                                    elif tpet_type == 'WITHER':
+                                        t_defense = round(t_defense + dmg['DMG'])
+                                        c_defense = round (c_defense - dmg['DMG'])
+                                    elif tpet_type == 'RAGE':
+                                        t_defense = round(t_defense - dmg['DMG'])
+                                        t_attack = round(t_attack + dmg['DMG'])
+                                    elif tpet_type == 'BRACE':
+                                        t_defense = round(t_defense + dmg['DMG'])
+                                        t_attack = round(t_attack - dmg['DMG'])
+                                    elif tpet_type == 'BZRK':
+                                        t_health = round(t_health - dmg['DMG'])
+                                        t_attack = round(t_attack + (.75 * dmg['DMG']))
+                                    elif tpet_type == 'CRYSTAL':
+                                        t_health = round(t_health - dmg['DMG'])
+                                        t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                    elif tpet_type == 'GROWTH':
+                                        t_max_health = round(t_max_health - dmg['DMG'])
+                                        t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                        t_attack = round(t_attack+ (.3 * dmg['DMG']))
+                                    elif tpet_type == 'STANCE':
+                                        tempattack = dmg['DMG']
+                                        t_attack = t_defense
+                                        t_defense = tempattack
+                                    elif tpet_type == 'CONFUSE':
+                                        tempattack = dmg['DMG']
+                                        c_attack = c_defense
+                                        c_defense = tempattack
+                                    elif tpet_type == 'BLINK':
+                                        t_stamina = round(t_stamina - dmg['DMG'])
+                                        c_stamina = round(c_stamina + dmg['DMG'] - 10)
+                                    elif tpet_type == 'SLOW':
+                                        tempstam = round(c_stamina + dmg['DMG'])
+                                        t_stamina = round(t_stamina - dmg['DMG'])
+                                        c_stamina = t_stamina
+                                        t_stamina = tempstam
+                                    elif tpet_type == 'HASTE':
+                                        tempstam = round(c_stamina - dmg['DMG'])
+                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                        c_stamina = t_stamina
+                                        t_stamina = tempstam                                       
+                                    elif tpet_type == 'SOULCHAIN':
+                                        t_stamina = round(dmg['DMG'])
+                                        c_stamina = t_stamina
+                                    elif tpet_type == 'GAMBLE':
+                                        t_health = round(dmg['DMG'])
+                                        c_health = t_health
+                                    elif tpet_type == 'FEAR':
+                                        t_health = round(t_health - ((dmg['DMG']/100)* t_health))
+                                        c_attack = round(c_attack - ((dmg['DMG']/100)* c_attack))
+                                        c_defense = round(c_defense - ((dmg['DMG']/100)* c_defense))
+                                    elif tpet_type == 'WAVE':
+                                        c_health = round(c_health - dmg['DMG'])
+                                    elif tpet_type == 'BLAST':
+                                        c_health = round(c_health - dmg['DMG'])
+                                    elif tpet_type == 'CREATION':
+                                        t_max_health = round(t_max_health + dmg['DMG'])
+                                        t_health = round(t_health + dmg['DMG'])
+                                    elif tpet_type == 'DESTRUCTION':
+                                        c_max_health = round(c_max_health - dmg['DMG'])
+                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
 
-                                embedVar = discord.Embed(title=f"{t_card.upper()} Summoned {tpet_name}", colour=0xe91e63)
-                                embedVar.add_field(name=f"{tpet_name} used {tpetmove_text}!", value =f"Enhanced {tpet_type}")
-                                embedVar.set_thumbnail(url=tpet_image)
-                                await private_channel.send(embed=embedVar)
-                                turn=1
-                            else:
-                                await private_channel.send(f"{tpet_name} needs a turn to rest...")
-                                turn=1
+                                    embedVar = discord.Embed(title=f"{t_card.upper()} Summoned {tpet_name}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"{tpet_name} used {tpetmove_text}!", value =f"Enhanced {tpet_type}")
+                                    embedVar.set_thumbnail(url=tpet_image)
+                                    await private_channel.send(embed=embedVar)
+                                    turn=2
+                                else:
+                                    await private_channel.send(f"{tpet_name} needs a turn to rest...")
+                                    turn=1
+                            else:                                  
+                                t_enhancer_used=True
+                                dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                                t_enhancer_used=False
+                                t_pet_used =True
+                                tpet_dmg = dmg['DMG']
+                                tpet_type = dmg['ENHANCED_TYPE']
+                                if dmg['CAN_USE_MOVE']:
+                                    if tpet_type == 'ATK':
+                                        t_attack = round(t_attack + dmg['DMG'])
+                                    elif tpet_type == 'DEF':
+                                        t_defense = round(t_defense + dmg['DMG'])
+                                    elif tpet_type == 'STAM':
+                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                    elif tpet_type == 'HLT':
+                                        t_health = round(t_health + dmg['DMG'])
+                                    elif tpet_type == 'LIFE':
+                                        t_health = round(t_health + dmg['DMG'])
+                                        o_health = round(o_health - dmg['DMG'])
+                                    elif tpet_type == 'DRAIN':
+                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                        o_stamina = round(o_stamina - dmg['DMG'])
+                                    elif tpet_type == 'FLOG':
+                                        t_attack = round(t_attack + dmg['DMG'])
+                                        o_attack = round (o_attack - dmg['DMG'])
+                                    elif tpet_type == 'WITHER':
+                                        t_defense = round(t_defense + dmg['DMG'])
+                                        o_defense = round (o_defense - dmg['DMG'])
+                                    elif tpet_type == 'RAGE':
+                                        t_defense = round(t_defense - dmg['DMG'])
+                                        t_attack = round(t_attack + dmg['DMG'])
+                                    elif tpet_type == 'BRACE':
+                                        t_defense = round(t_defense + dmg['DMG'])
+                                        t_attack = round(t_attack - dmg['DMG'])
+                                    elif tpet_type == 'BZRK':
+                                        t_health = round(t_health - dmg['DMG'])
+                                        t_attack = round(t_attack + (.75 * dmg['DMG']))
+                                    elif tpet_type == 'CRYSTAL':
+                                        t_health = round(t_health - dmg['DMG'])
+                                        t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                    elif tpet_type == 'GROWTH':
+                                        t_max_health = round(t_max_health - dmg['DMG'])
+                                        t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                        t_attack = round(t_attack+ (.3 * dmg['DMG']))
+                                    elif tpet_type == 'STANCE':
+                                        tempattack = dmg['DMG']
+                                        t_attack = t_defense
+                                        t_defense = tempattack
+                                    elif tpet_type == 'CONFUSE':
+                                        tempattack = dmg['DMG']
+                                        o_attack = o_defense
+                                        o_defense = tempattack
+                                    elif tpet_type == 'BLINK':
+                                        t_stamina = round(t_stamina - dmg['DMG'])
+                                        o_stamina = round(o_stamina + dmg['DMG'] - 10)
+                                    elif tpet_type == 'SLOW':
+                                        tempstam = round(o_stamina + dmg['DMG'])
+                                        t_stamina = round(t_stamina - dmg['DMG'])
+                                        o_stamina = t_stamina
+                                        t_stamina = tempstam
+                                    elif tpet_type == 'HASTE':
+                                        tempstam = round(o_stamina - dmg['DMG'])
+                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                        o_stamina = t_stamina
+                                        t_stamina = tempstam                                       
+                                    elif tpet_type == 'SOULCHAIN':
+                                        t_stamina = round(dmg['DMG'])
+                                        o_stamina = t_stamina
+                                    elif tpet_type == 'GAMBLE':
+                                        t_health = round(dmg['DMG'])
+                                        o_health = t_health
+                                    elif tpet_type == 'FEAR':
+                                        t_health = round(t_health - ((dmg['DMG']/100)* t_health))
+                                        o_attack = round(o_attack - ((dmg['DMG']/100)* o_attack))
+                                        o_defense = round(o_defense - ((dmg['DMG']/100)* o_defense))
+                                    elif tpet_type == 'WAVE':
+                                        o_health = round(o_health - dmg['DMG'])
+                                    elif tpet_type == 'BLAST':
+                                        o_health = round(o_health - dmg['DMG'])
+                                    elif tpet_type == 'CREATION':
+                                        t_max_health = round(t_max_health + dmg['DMG'])
+                                        t_health = round(t_health + dmg['DMG'])
+                                    elif tpet_type == 'DESTRUCTION':
+                                        o_max_health = round(o_max_health - dmg['DMG'])
+                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+
+                                    embedVar = discord.Embed(title=f"{t_card.upper()} Summoned {tpet_name}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"{tpet_name} used {tpetmove_text}!", value =f"Enhanced {tpet_type}")
+                                    embedVar.set_thumbnail(url=tpet_image)
+                                    await private_channel.send(embed=embedVar)
+                                    turn=1
+                                else:
+                                    await private_channel.send(f"{tpet_name} needs a turn to rest...")
+                                    turn=1
                         else:
                             await private_channel.send(f"{tpet_name} needs a turn to rest...")
 
                     if int(aiMove) !=5 and int(aiMove) !=6:
                         # If you have enough stamina for move, use it
-                        if dmg['CAN_USE_MOVE']:
-                            if dmg['ENHANCE']:
-                                enh_type= dmg['ENHANCED_TYPE']
-                                if enh_type == 'ATK':
-                                    t_attack = round(t_attack + dmg['DMG'])
-                                elif enh_type == 'DEF':
-                                    t_defense = round(t_defense + dmg['DMG'])
-                                elif enh_type == 'STAM':
-                                    t_stamina = round(t_stamina + dmg['DMG'])
-                                elif enh_type == 'HLT':
-                                    t_health = round(t_health + dmg['DMG'])
-                                elif enh_type == 'LIFE':
-                                    t_health = round(t_health + dmg['DMG'])
-                                    o_health = round(o_health - dmg['DMG'])
-                                    c_health = round(o_health - dmg['DMG'])
-                                elif enh_type == 'DRAIN':
-                                    t_stamina = round(t_stamina + dmg['DMG'])
-                                    o_stamina = round(o_stamina - dmg['DMG'])
-                                    c_stamina = round(o_stamina - dmg['DMG'])
-                                elif enh_type == 'FLOG':
-                                    t_attack = round(t_attack + dmg['DMG'])
-                                    o_attack = round(o_attack - dmg['DMG'])
-                                    c_attack = round(c_attack - dmg['DMG'])
-                                elif enh_type == 'WITHER':
-                                    t_defense = round(t_defense + dmg['DMG'])
-                                    o_defense = round(o_defense - dmg['DMG'])
-                                    c_defense = round(c_defense - dmg['DMG'])
-                                elif enh_type == 'RAGE':
-                                    t_defense = round(t_defense - dmg['DMG'])
-                                    t_attack = round(t_attack + dmg['DMG'])
-                                elif enh_type == 'BRACE':
-                                    t_defense = round(t_defense + dmg['DMG'])
-                                    t_attack = round(t_attack - dmg['DMG'])
-                                elif enh_type == 'BZRK':
-                                    t_health = round(t_health - dmg['DMG'])
-                                    t_attack = round(t_attack +(.50 *  dmg['DMG']))
-                                elif enh_type == 'CRYSTAL':
-                                    t_health = round(t_health - dmg['DMG'])
-                                    t_defense = round(t_defense + (.75 * dmg['DMG']))
-                                elif enh_type == 'GROWTH':
-                                    t_max_health = round(t_max_health - dmg['DMG'])
-                                    t_defense = round(t_defense + (.3 * dmg['DMG']))
-                                    t_attack = round(t_attack + (.3 * dmg['DMG']))
-                                elif enh_type == 'STANCE':
-                                    tempattack = dmg['DMG']
-                                    t_attack = t_defense
-                                    t_defense = tempattack
-                                elif enh_type == 'CONFUSE':
-                                    tempattack = dmg['DMG']
-                                    o_attack = o_defense
-                                    o_defense = tempattack
-                                    c_attack = c_defense
-                                    c_defense = tempattack
-                                elif enh_type == 'BLINK':
-                                    t_stamina = round(t_stamina - dmg['DMG'])
-                                    o_stamina = round(o_stamina + dmg['DMG'] - 10)
-                                    c_stamina = round(c_stamina + dmg['DMG'] - 10)
-                                elif enh_type == 'SLOW':
-                                    tempstam = round(o_stamina + dmg['DMG'])
-                                    t_stamina = round(t_stamina - dmg['DMG'])
-                                    o_stamina = t_stamina
-                                    c_stamina = t_stamina
-                                    t_stamina = tempstam
-                                elif enh_type == 'HASTE':
-                                    tempstam = round(o_stamina - dmg['DMG'])
-                                    t_stamina = round(t_stamina + dmg['DMG'])
-                                    o_stamina = t_stamina
-                                    c_stamina = t_stamina
-                                    t_stamina = tempstam                                       
-                                elif enh_type == 'SOULCHAIN':
-                                    t_stamina = round(dmg['DMG'])
-                                    o_stamina = t_stamina
-                                    c_stamina = t_stamina
-                                elif enh_type == 'GAMBLE':
-                                    t_health = round(dmg['DMG'])
-                                    o_health = t_health
-                                    c_health = t_health
-                                elif enh_type == 'FEAR':
-                                    t_health = round(t_health - ((dmg['DMG']/100) * t_health))
-                                    o_attack = round(o_attack - ((dmg['DMG']/100) * o_attack))
-                                    o_defense = round(o_defense - ((dmg['DMG']/100) * o_defense))
-                                    c_attack = round(o_attack - ((dmg['DMG']/100) * o_attack))
-                                    c_defense = round(o_defense - ((dmg['DMG']/100) * o_defense))
-                                elif enh_type == 'WAVE':
-                                    o_health = round(o_health - dmg['DMG'])
-                                    c_health = round(c_health - dmg['DMG'])
-                                elif enh_type == 'BLAST':
-                                    o_health = round(o_health - dmg['DMG'])
-                                    c_health = round(c_health - dmg['DMG'])
-                                elif enh_type == 'CREATION':
-                                    t_max_health = round(t_max_health + dmg['DMG'])
-                                    t_health = round(t_health + dmg['DMG'])
-                                elif enh_type == 'DESTRUCTION':
-                                    o_max_health = round(o_max_health - dmg['DMG'])
-                                    c_max_health = round(c_max_health - dmg['DMG'])
-                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-                                embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
-                                await private_channel.send(embed=embedVar)
-                                turn_total= turn_total + 1
-                                turn = 2
-                            elif dmg['DMG'] == 0:
-                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-                                embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
-                                await private_channel.send(embed=embedVar)
-                                turn_total= turn_total + 1
-                                turn=2
-                            else:
-                                if o_universe == "Naruto" and o_stamina == 0:
-                                    o_health = o_health 
-                                    embedVar = discord.Embed(title=f"{o_card.upper()}: Substitution Jutsu", description=f"{t_card} attack strikes a log", colour=0xe91e63)
-                                    await private_channel.send(embed=embedVar)
-                                else:
-                                    o_health = o_health - int(dmg['DMG'])
+                        #if c used block
+                        if c_block_used==True:
+                            if dmg['CAN_USE_MOVE']:
+                                if dmg['ENHANCE']:
+                                    enh_type= dmg['ENHANCED_TYPE']
+                                    if enh_type == 'ATK':
+                                        t_attack = round(t_attack + dmg['DMG'])
+                                    elif enh_type == 'DEF':
+                                        t_defense = round(t_defense + dmg['DMG'])
+                                    elif enh_type == 'STAM':
+                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                    elif enh_type == 'HLT':
+                                        t_health = round(t_health + dmg['DMG'])
+                                    elif enh_type == 'LIFE':
+                                        t_health = round(t_health + dmg['DMG'])
+                                        c_health = round(c_health - dmg['DMG'])
+                                    elif enh_type == 'DRAIN':
+                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                        c_stamina = round(c_stamina - dmg['DMG'])
+                                    elif enh_type == 'FLOG':
+                                        t_attack = round(t_attack + dmg['DMG'])
+                                        c_attack = round(c_attack - dmg['DMG'])
+                                    elif enh_type == 'WITHER':
+                                        t_defense = round(t_defense + dmg['DMG'])
+                                        c_defense = round(t_defense - dmg['DMG'])
+                                    elif enh_type == 'RAGE':
+                                        t_defense = round(t_defense - dmg['DMG'])
+                                        t_attack = round(t_attack + dmg['DMG'])
+                                    elif enh_type == 'BRACE':
+                                        t_defense = round(t_defense + dmg['DMG'])
+                                        t_attack = round(t_attack - dmg['DMG'])
+                                    elif enh_type == 'BZRK':
+                                        t_health = round(t_health - dmg['DMG'])
+                                        t_attack = round(t_attack +(.75 *  dmg['DMG']))
+                                    elif enh_type == 'CRYSTAL':
+                                        t_health = round(t_health - dmg['DMG'])
+                                        t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                    elif enh_type == 'GROWTH':
+                                        t_max_health = round(t_max_health - dmg['DMG'])
+                                        t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                        t_attack = round(t_attack+ (.3 * dmg['DMG']))
+                                    elif enh_type == 'STANCE':
+                                        tempattack = dmg['DMG']
+                                        t_attack = t_defense
+                                        t_defense = tempattack
+                                    elif enh_type == 'CONFUSE':
+                                        tempattack = dmg['DMG']
+                                        c_attack = c_defense
+                                        c_defense = tempattack
+                                    elif enh_type == 'BLINK':
+                                        t_stamina = round(t_stamina - dmg['DMG'])
+                                        c_stamina = round(c_stamina + dmg['DMG'] - 10)
+                                    elif enh_type == 'SLOW':
+                                        tempstam = round(c_stamina + dmg['DMG'])
+                                        t_stamina = round(t_stamina - dmg['DMG'])
+                                        c_stamina = t_stamina
+                                        t_stamina = tempstam
+                                    elif enh_type == 'HASTE':
+                                        tempstam = round(c_stamina - dmg['DMG'])
+                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                        c_stamina = t_stamina
+                                        t_stamina = tempstam                                       
+                                    elif enh_type == 'SOULCHAIN':
+                                        t_stamina = round(dmg['DMG'])
+                                        c_stamina = t_stamina
+                                    elif enh_type == 'GAMBLE':
+                                        t_health = round(dmg['DMG']) * 2
+                                        c_health = t_health
+                                    elif enh_type == 'FEAR':
+                                        t_health = round(t_health - ((dmg['DMG']/100) * t_health))
+                                        c_attack = round(c_attack - ((dmg['DMG']/100) * c_attack))
+                                        c_defense = round(c_defense - ((dmg['DMG']/100) * c_defense))
+                                    elif enh_type == 'WAVE':
+                                        c_health = round(c_health - dmg['DMG'])
+                                    elif enh_type == 'BLAST':
+                                        c_health = round(c_health - dmg['DMG'])
+                                    elif enh_type == 'CREATION':
+                                        t_max_health = round(t_max_health + dmg['DMG'])
+                                        t_health = round(t_health + dmg['DMG'])
+                                    elif enh_type == 'DESTRUCTION':
+                                        c_max_health = round(c_max_health - dmg['DMG'])
+                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                     await private_channel.send(embed=embedVar)
-                                if o_health < 0:
-                                    o_health=0
-                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
-                                turn_total= turn_total + 1
-                                turn=2
-
+                                    turn_total= turn_total + 1
+                                    turn = 2
+                                elif dmg['DMG'] == 0:
+                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+                                    embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                    await private_channel.send(embed=embedVar)
+                                    turn_total= turn_total + 1
+                                    turn=2
+                                else:
+                                    if c_universe == "Naruto" and c_stamina == 0:
+                                        c_health = c_health 
+                                        embedVar = discord.Embed(title=f"{c_card.upper()}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
+                                        await private_channel.send(embed=embedVar)
+                                    else:
+                                        c_health = c_health - int(dmg['DMG'])
+                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                        await private_channel.send(embed=embedVar)
+                                    if c_health < 0:
+                                        c_health=0
+                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                    turn_total= turn_total + 1
+                                    turn=2
+                            else:
+                                await private_channel.send(m.NOT_ENOUGH_STAMINA)
+                                turn = 1
                         else:
-                            await private_channel.send(m.NOT_ENOUGH_STAMINA)
-                            turn = 1
+                            if dmg['CAN_USE_MOVE']:
+                                if dmg['ENHANCE']:
+                                    enh_type= dmg['ENHANCED_TYPE']
+                                    if enh_type == 'ATK':
+                                        t_attack = round(t_attack + dmg['DMG'])
+                                    elif enh_type == 'DEF':
+                                        t_defense = round(t_defense + dmg['DMG'])
+                                    elif enh_type == 'STAM':
+                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                    elif enh_type == 'HLT':
+                                        t_health = round(t_health + dmg['DMG'])
+                                    elif enh_type == 'LIFE':
+                                        t_health = round(t_health + dmg['DMG'])
+                                        o_health = round(o_health - dmg['DMG'])
+                                    elif enh_type == 'DRAIN':
+                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                        o_stamina = round(o_stamina - dmg['DMG'])
+                                    elif enh_type == 'FLOG':
+                                        t_attack = round(t_attack + dmg['DMG'])
+                                        o_attack = round(o_attack - dmg['DMG'])
+                                    elif enh_type == 'WITHER':
+                                        t_defense = round(t_defense + dmg['DMG'])
+                                        o_defense = round(o_defense - dmg['DMG'])
+                                    elif enh_type == 'RAGE':
+                                        t_defense = round(t_defense - dmg['DMG'])
+                                        t_attack = round(t_attack + dmg['DMG'])
+                                    elif enh_type == 'BRACE':
+                                        t_defense = round(t_defense + dmg['DMG'])
+                                        t_attack = round(t_attack - dmg['DMG'])
+                                    elif enh_type == 'BZRK':
+                                        t_health = round(t_health - dmg['DMG'])
+                                        t_attack = round(t_attack +(.50 *  dmg['DMG']))
+                                    elif enh_type == 'CRYSTAL':
+                                        t_health = round(t_health - dmg['DMG'])
+                                        t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                    elif enh_type == 'GROWTH':
+                                        t_max_health = round(t_max_health - dmg['DMG'])
+                                        t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                        t_attack = round(t_attack+ (.3 * dmg['DMG']))
+                                    elif enh_type == 'STANCE':
+                                        tempattack = dmg['DMG']
+                                        t_attack = t_defense
+                                        t_defense = tempattack
+                                    elif enh_type == 'CONFUSE':
+                                        tempattack = dmg['DMG']
+                                        o_attack = o_defense
+                                        o_defense = tempattack
+                                    elif enh_type == 'BLINK':
+                                        t_stamina = round(t_stamina - dmg['DMG'])
+                                        o_stamina = round(o_stamina + dmg['DMG'] - 10)
+                                    elif enh_type == 'SLOW':
+                                        tempstam = round(o_stamina + dmg['DMG'])
+                                        t_stamina = round(t_stamina - dmg['DMG'])
+                                        o_stamina = t_stamina
+                                        t_stamina = tempstam
+                                    elif enh_type == 'HASTE':
+                                        tempstam = round(o_stamina - dmg['DMG'])
+                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                        o_stamina = t_stamina
+                                        t_stamina = tempstam                                       
+                                    elif enh_type == 'SOULCHAIN':
+                                        t_stamina = round(dmg['DMG'])
+                                        o_stamina = o_stamina
+                                    elif enh_type == 'GAMBLE':
+                                        t_health = round(dmg['DMG']) * 2
+                                        o_health = t_health
+                                    elif enh_type == 'FEAR':
+                                        t_health = round(t_health - ((dmg['DMG']/100) * t_health))
+                                        o_attack = round(c_attack - ((dmg['DMG']/100) * o_attack))
+                                        o_defense = round(c_defense - ((dmg['DMG']/100) * o_defense))
+                                    elif enh_type == 'WAVE':
+                                        o_health = round(o_health - dmg['DMG'])
+                                    elif enh_type == 'BLAST':
+                                        o_health = round(o_health - dmg['DMG'])
+                                    elif enh_type == 'CREATION':
+                                        t_max_health = round(t_max_health + dmg['DMG'])
+                                        t_health = round(t_health + dmg['DMG'])
+                                    elif enh_type == 'DESTRUCTION':
+                                        o_max_health = round(o_max_health - dmg['DMG'])
+                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+                                    embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                    await private_channel.send(embed=embedVar)
+                                    turn_total= turn_total + 1
+                                    turn = 2
+                                elif dmg['DMG'] == 0:
+                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+                                    embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                    await private_channel.send(embed=embedVar)
+                                    turn_total= turn_total + 1
+                                    turn=2
+                                else:
+                                    if o_universe == "Naruto" and o_stamina == 0:
+                                        o_health = o_health 
+                                        embedVar = discord.Embed(title=f"{o_card.upper()}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
+                                        await private_channel.send(embed=embedVar)
+                                    else:
+                                        o_health = o_health - int(dmg['DMG'])
+                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                        await private_channel.send(embed=embedVar)
+                                    if o_health < 0:
+                                        o_health=0
+                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                    turn_total= turn_total + 1
+                                    turn=2
+                            else:
+                                await private_channel.send(m.NOT_ENOUGH_STAMINA)
+                                turn = 1
 
             #Companion Turn Start
-            elif turn == 2:
+            if turn == 2:
+                if c_block_used==True:
+                    c_defense = c_defense/2
+                    c_block_used=False
                 if c_attack <= 25:
                     c_attack = 25
                 if c_defense <= 30:
@@ -21732,7 +24178,6 @@ class CrownUnlimited(commands.Cog):
                     embedVar = discord.Embed(title=f"{c_card.upper()} FOCUSED", description=f"`{c_card} says:`\n{c_focus_description}", colour=0xe91e63)
                     embedVar.add_field(name=f"{c_card} focused and {healmessage}", value="All stats & stamina increased")
                     await private_channel.send(embed=embedVar)
-                    #Resolve Check and Calculation
                     if not c_used_resolve and c_used_focus and c_universe == "Digimon": # Digimon Universal Trait
                         embedVar = discord.Embed(title=f"{c_card.upper()} STRENGTHENED RESOLVE", description=f"`{c_card} says:`\n{c_resolve_description}", colour=0xe91e63)
                         embedVar.add_field(name=f"Transformation: Digivolve", value="All stats & stamina greatly increased")
@@ -21764,12 +24209,12 @@ class CrownUnlimited(commands.Cog):
                         embedVar = discord.Embed(title=f"Ruler's Authority... {t_card} loses {15 + turn_total} DEF!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         t_defense = round(t_defense - (15 + turn_total))
-                       
+                        
                     elif c_universe == "Attack On Titan":
                         embedVar = discord.Embed(title=f"Rally! {c_card} Increased Max Health!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         c_max_health = round(c_max_health + 50)
-                      
+                        
                     elif c_universe == "Black Clover":
                         embedVar = discord.Embed(title=f"Mana Zone! {c_card} Increased Stamina!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
@@ -21814,33 +24259,36 @@ class CrownUnlimited(commands.Cog):
                     companion = showcard(c, c_max_health, c_health, c_max_stamina, c_stamina, c_used_resolve, ctitle, c_used_focus)
                     await private_channel.send(file=companion)
                     embedVar = discord.Embed(title=f"{c_card}, choose your move!", description=textwrap.dedent(f"""\
-                    **{c_health}/{c_stamina}**    
+                    **{c_health}/{c_stamina}**
                     **{cmove1_text}** 10 Stamina _press 1_
                     **{cmove2_text}** 30 Stamina _press 2_
                     **{cmove3_text}** 80 Stamina _press 3_
                     **{cmove_enhanced_text}** 20 Stamina _press 4_
-                    **Enhance Companion** 20 Stamina _press 7_
-                
-                    **{t_card}:** {t_health}/{t_stamina}
-                    **{o_card}:** {o_health}/{o_stamina} _partner_
+                    **Enhance {o_card}** 20 Stamina _press 7_
+                    **Defend {o_card}** 20 Stamina _press 0_
+                    
+                    **{o_card}:** {o_health}/{o_stamina} _Companion_
+                    
+                                    
+                    **{t_card}:** {t_health}/{t_stamina}   
                     """) 
-                    , colour=embed_color_c)
-                    embedVar.set_thumbnail(url=cpet_image)
-                    if c_used_focus and c_used_resolve and not t_pet_used:
-                        embedVar.set_author(name="Press 0 to Quit Match. Press 6 to Summon your Pet!")                                    
+                    , colour=embed_color_o)
+                    embedVar.set_thumbnail(url=opet_image)
+                    if c_used_focus and c_used_resolve and not c_pet_used:
+                        embedVar.set_author(name="Press Q to Quit Match. Press 6 to Summon your Pet!")                                    
                     elif c_used_focus and not c_used_resolve:
-                        embedVar.set_author(name="Press 0 to Quit Match. Press 5 to Strengthen resolve!")
+                        embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen resolve!")
                     else:
-                        embedVar.set_author(name="Press 0 to Quit Match")
+                        embedVar.set_author(name="Press Q to Quit Match")
                     embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
                     await private_channel.send(embed=embedVar)
                     
                     if c_used_focus and c_used_resolve:
-                        options = ["0","1","2","3","4","6","7"]
+                        options = ["q","Q","0","1","2","3","4","6","7"]
                     elif c_used_focus and not c_used_resolve:
-                        options = ["0","1","2","3","4","5","7"]
+                        options = ["q","Q","0","1","2","3","4","5","7"]
                     else:
-                        options = ["0","1","2","3","4","7"]
+                        options = ["q","Q","0","1","2","3","4","7"]
 
                     # Make sure user is responding with move
                     def check(msg):
@@ -21852,9 +24300,9 @@ class CrownUnlimited(commands.Cog):
                         msg = await self.bot.wait_for("message",timeout=120.0, check=check)
 
                         # calculate data based on selected move
-                        if msg.content == "0":
+                        if msg.content == "q" or msg.content == "Q" :
                             c_health=0
-                    
+                            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                             if private_channel.guild:
                                 await private_channel.send(f"{user2.mention} has fled the battle...")
                                 await discord.TextChannel.delete(private_channel, reason=None)
@@ -21870,6 +24318,8 @@ class CrownUnlimited(commands.Cog):
                         elif msg.content == "3":
                             c_pet_used =False
                             dmg = damage_cal(c_universe, c_card, c_3, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina, c_max_health, t_attack, c_special_move_description, turn_total)
+                            if c_gif != "N/A":
+                                await private_channel.send(f"{c_gif}")
                         elif msg.content == "4":
                             c_enhancer_used=True
                             c_pet_used =False
@@ -22050,7 +24500,7 @@ class CrownUnlimited(commands.Cog):
                                         t_attack = round (t_attack - dmg['DMG'])
                                     elif cpet_type == 'WITHER':
                                         c_defense = round(c_defense + dmg['DMG'])
-                                        t_attack = round (t_attack - dmg['DMG'])
+                                        t_defense = round (t_attack - dmg['DMG'])
                                     elif cpet_type == 'RAGE':
                                         c_defense = round(c_defense - dmg['DMG'])
                                         c_attack = round(c_attack + dmg['DMG'])
@@ -22065,8 +24515,8 @@ class CrownUnlimited(commands.Cog):
                                         c_defense = round(c_defense +(.75 * dmg['DMG']))
                                     elif cpet_type == 'GROWTH':
                                         c_max_health = round(c_max_health - dmg['DMG'])
-                                        c_defense = round(c_defense + (.3 * dmg['DMG']))
-                                        c_attack = round(c_attack + (.3 * dmg['DMG']))
+                                        c_defense = round(c_defense + (c_defense * dmg['DMG']))
+                                        c_attack = round(c_attack + (c_attack *  (.75 * dmg['DMG'])))
                                     elif cpet_type == 'STANCE':
                                         tempattack = dmg['DMG']
                                         c_attack = c_defense
@@ -22213,9 +24663,21 @@ class CrownUnlimited(commands.Cog):
                             else:
                                 await private_channel.send(m.NOT_ENOUGH_STAMINA)
                                 turn=2
+                        elif msg.content == "0":
+                            if c_stamina >=20:
+                                c_block_used=True
+                                c_stamina = c_stamina - 20
+                                c_defense = c_defense * 2
+                                embedVar = discord.Embed(title=f"{c_card.upper()} DEFENDS {o_card.upper()}", colour=0xe91e63)
+                                embedVar.add_field(name=f"{c_card} used Block!", value =f"Enhanced DEF")
+                                await private_channel.send(embed=embedVar)
+                                turn=3
+                            else:
+                                await private_channel.send(f"{c_card} is too tired to block...")
+                                turn=2
                         
 
-                        if msg.content != "5" and msg.content != "6" and msg.content != "7" and msg.content in options:
+                        if msg.content != "5" and msg.content != "6" and msg.content != "7" and msg.content != "0" and msg.content in options:
                             # If you have enough stamina for move, use it
                             if dmg['CAN_USE_MOVE']:
                                 if dmg['ENHANCE']:
@@ -22296,8 +24758,7 @@ class CrownUnlimited(commands.Cog):
                                         c_max_health = round(c_max_health + dmg['DMG'])
                                         c_health = round(c_health + dmg['DMG'])
                                     elif enh_type == 'DESTRUCTION':
-                                        t_max_health = round(t_max_health - dmg['DMG'])
-                                    
+                                        t_max_health = round(t_health - dmg['DMG'])
 
                                     c_stamina = c_stamina - int(dmg['STAMINA_USED'])
 
@@ -22315,7 +24776,7 @@ class CrownUnlimited(commands.Cog):
                                 else:
                                     if t_universe == "Naruto" and t_stamina == 0:
                                         t_health = t_health 
-                                        embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{c_card} attack strikes a log", colour=0xe91e63)
+                                        embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{c_card} strikes a log", colour=0xe91e63)
                                         await private_channel.send(embed=embedVar)
                                     else:
                                         t_health = t_health - dmg['DMG']
@@ -22332,6 +24793,7 @@ class CrownUnlimited(commands.Cog):
                                 await private_channel.send(embed=embedVar)
                                 turn=2
                     except asyncio.TimeoutError:
+                        db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                         await private_channel.send(f"{ctx.author.mention} {m.STORY_ENDED}")
                         if private_channel.guild:
                             await discord.TextChannel.delete(private_channel, reason=None)
@@ -22589,24 +25051,37 @@ class CrownUnlimited(commands.Cog):
                     
                     boss_special_move_default_msg = " "
 
-                    if aiMove == 0:
-                        t_pet_used =False
+                    if int(aiMove) == 0:
                         t_health=0
-                    elif aiMove == 1:
+                    if int(aiMove) == 1:
                         t_pet_used =False
-                        dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total)
-                    elif aiMove == 2:
+                        if o_defend_used==True:
+                            dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                        else:
+                            dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total)
+                    elif int(aiMove) == 2:
                         t_pet_used =False
-                        dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total)
-                    elif aiMove == 3:
+                        if o_defend_used==True:
+                            dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                        else:
+                            dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total)
+                    elif int(aiMove) == 3:
                         t_pet_used =False
-                        dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total)
-                    elif aiMove == 4:
+                        if o_defend_used==True:
+                            dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                        else: 
+                            dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total)
+                        if t_gif != "N/A":
+                                await private_channel.send(f"{t_gif}")
+                    elif int(aiMove) == 4:
+                        t_pet_used =False
                         t_enhancer_used=True
-                        t_pet_used =False
-                        dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total)
+                        if o_defend_used==True:
+                            dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                        else:
+                            dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total)
                         t_enhancer_used=False
-                    elif aiMove == 5:
+                    elif int(aiMove) == 5:
                         if not t_used_resolve and t_used_focus:
                             if t_universe == "My Hero Academia": #My hero TRait
                                     #fortitude or luck is based on health  
@@ -22624,6 +25099,7 @@ class CrownUnlimited(commands.Cog):
                                     t_attack = round(t_attack + t_resolve_attack)
                                     t_defense = round(t_defense - t_resolve_defense)
                                     t_used_resolve=True
+                                    t_pet_used =False
 
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation: Plus Ultra", value="All stats & stamina greatly increased")
@@ -22646,6 +25122,7 @@ class CrownUnlimited(commands.Cog):
                                 t_attack = round(t_attack + (2 * t_resolve_attack))
                                 t_defense = round(t_defense - t_resolve_defense)
                                 t_used_resolve=True
+                                t_pet_used =False
 
                                 embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                 embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
@@ -22668,6 +25145,7 @@ class CrownUnlimited(commands.Cog):
                                 t_attack = round(t_attack + t_resolve_attack)
                                 t_defense = round(t_defense - t_resolve_defense)
                                 t_used_resolve=True
+                                t_pet_used =False
 
                                 embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                 embedVar.add_field(name=f"Transformation: Ascension", value="All stats & stamina greatly increased")
@@ -22694,9 +25172,13 @@ class CrownUnlimited(commands.Cog):
                                 embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                 embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
                                 await private_channel.send(embed=embedVar)
-                                dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total)
-                                t_pet_used =False
-                                o_health = o_health - int(dmg['DMG'])
+                                if o_defend_used==True:
+                                    dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                                    o_health = o_health - int(dmg['DMG'])
+                                else:
+                                    dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina,t_max_health, c_attack, boss_special_move_default_msg, turn_total)
+                                    c_health = c_health - int(dmg['DMG'])
+                                t_pet_used =False                                    
                                 embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                 await private_channel.send(embed=embedVar)
                                 t_stamina = 0
@@ -22718,6 +25200,7 @@ class CrownUnlimited(commands.Cog):
                                 t_attack = round(t_attack + t_resolve_attack)
                                 t_defense = round(t_defense)
                                 t_used_resolve=True
+                                t_pet_used =False
 
                                 embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                 embedVar.add_field(name=f"Transformation: Evolution", value="All stats & stamina greatly increased")
@@ -22740,6 +25223,7 @@ class CrownUnlimited(commands.Cog):
                                 t_attack = round(t_attack + t_resolve_attack)
                                 t_defense = round(t_defense - t_resolve_defense)
                                 t_used_resolve=True
+                                t_pet_used =False
 
                                 embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                 embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
@@ -22747,236 +25231,422 @@ class CrownUnlimited(commands.Cog):
                                 turn_total= turn_total + 1
                                 turn=0
                         else:
-                            emessage = m.CANNOT_USE_RESOLVE
-                            embedVar = discord.Embed(title=emessage, description=f"Entering `Resolved State` sacrifices a turn to power up even greater and regain `Stamina`!", colour=0xe91e63)
-                            await private_channel.send(embed=embedVar)
+                            await private_channel.send(m.CANNOT_USE_RESOLVE)
                             turn=3
-                    elif aiMove == 6:
+                    elif int(aiMove) == 6:
                         #Resolve Check and Calculation
-                        if t_used_resolve and t_used_focus and not t_pet_used:                                      
-                            t_enhancer_used=True
-                            dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total)
-                            t_enhancer_used=False
-                            t_pet_used =True
-                            tpet_dmg = dmg['DMG']
-                            tpet_type = dmg['ENHANCED_TYPE']
-                            if dmg['CAN_USE_MOVE']:
-                                if tpet_type == 'ATK':
-                                    t_attack = round(t_attack + dmg['DMG'])
-                                elif tpet_type == 'DEF':
-                                    t_defense = round(t_defense + dmg['DMG'])
-                                elif tpet_type == 'STAM':
-                                    t_stamina = round(t_stamina + dmg['DMG'])
-                                elif tpet_type == 'HLT':
-                                    t_health = round(t_health + dmg['DMG'])
-                                elif tpet_type == 'LIFE':
-                                    t_health = round(t_health + dmg['DMG'])
-                                    c_health = round(c_health - dmg['DMG'])
-                                elif tpet_type == 'DRAIN':
-                                    t_stamina = round(t_stamina + dmg['DMG'])
-                                    c_stamina = round(c_stamina - dmg['DMG'])
-                                elif tpet_type == 'FLOG':
-                                    t_attack = round(t_attack + dmg['DMG'])
-                                    c_attack = round (c_attack - dmg['DMG'])
-                                elif tpet_type == 'WITHER':
-                                    t_defense = round(t_defense + dmg['DMG'])
-                                    c_defense = round(c_defense + dmg['DMG'])
-                                elif tpet_type == 'RAGE':
-                                    t_defense = round(t_defense - dmg['DMG'])
-                                    t_attack = round(t_attack + dmg['DMG'])
-                                elif tpet_type == 'BRACE':
-                                    t_defense = round(t_defense + dmg['DMG'])
-                                    t_attack = round(t_attack - dmg['DMG'])
-                                elif tpet_type == 'BZRK':
-                                    t_health = round(t_health - dmg['DMG'])
-                                    t_attack = round(t_attack + (.75 * dmg['DMG']))
-                                elif tpet_type == 'CRYSTAL':
-                                    t_health = round(t_health - dmg['DMG'])
-                                    t_defense = round(t_defense + (.75 * dmg['DMG']))
-                                elif tpet_type == 'GROWTH':
-                                    t_max_health = round(t_max_health - dmg['DMG'])
-                                    t_defense = round(t_defense + (t_defense *  (.75 * dmg['DMG'])))
-                                    t_attack = round(t_attack + (.3 * dmg['DMG']))
-                                elif tpet_type == 'STANCE':
-                                    tempattack = dmg['DMG']
-                                    t_attack = t_defense
-                                    t_defense = tempattack
-                                elif tpet_type == 'CONFUSE':
-                                    tempattack = dmg['DMG']
-                                    c_attack = c_defense
-                                    c_defense = tempattack
-                                elif tpet_type == 'BLINK':
-                                    t_stamina = round(t_stamina - dmg['DMG'])
-                                    c_stamina = round(c_stamina + dmg['DMG'] - 10)
-                                elif tpet_type == 'SLOW':
-                                    tempstam = round(c_stamina + dmg['DMG'])
-                                    t_stamina = round(t_stamina - dmg['DMG'])
-                                    c_stamina = t_stamina
-                                    t_stamina = tempstam
-                                elif tpet_type == 'HASTE':
-                                    tempstam = round(c_stamina - dmg['DMG'])
-                                    t_stamina = round(t_stamina + dmg['DMG'])
-                                    c_stamina = t_stamina
-                                    t_stamina = tempstam                                       
-                                elif tpet_type == 'SOULCHAIN':
-                                    t_stamina = round(dmg['DMG'])
-                                    c_stamina = t_stamina
-                                elif tpet_type == 'GAMBLE':
-                                    t_health = round(dmg['DMG'])
-                                    c_health = t_health
-                                elif tpet_type == 'FEAR':
-                                    t_health = round(t_health - ((dmg['DMG']/100)* t_health))
-                                    c_attack = round(c_attack - ((dmg['DMG']/100)* c_attack))
-                                    c_defense = round(c_defense - ((dmg['DMG']/100)* c_defense))
-                                elif tpet_type == 'WAVE':
-                                    c_health = round(c_health - dmg['DMG'])
-                                elif tpet_type == 'BLAST':
-                                    c_health = round(c_health - dmg['DMG'])
-                                elif tpet_type == 'CREATION':
-                                    t_max_health = round(t_max_health + dmg['DMG'])
-                                    t_health = round(t_health + dmg['DMG'])
-                                elif tpet_type == 'DESTRUCTION':
-                                    c_max_health = round(c_max_health - dmg['DMG'])
-                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+                        if t_used_resolve and t_used_focus and not t_pet_used:
+                            if o_defend_used==True:
+                                t_enhancer_used=True
+                                dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                                t_enhancer_used=False
+                                t_pet_used =True
+                                tpet_dmg = dmg['DMG']
+                                tpet_type = dmg['ENHANCED_TYPE']
+                                if dmg['CAN_USE_MOVE']:
+                                    if tpet_type == 'ATK':
+                                        t_attack = round(t_attack + dmg['DMG'])
+                                    elif tpet_type == 'DEF':
+                                        t_defense = round(t_defense + dmg['DMG'])
+                                    elif tpet_type == 'STAM':
+                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                    elif tpet_type == 'HLT':
+                                        t_health = round(t_health + dmg['DMG'])
+                                    elif tpet_type == 'LIFE':
+                                        t_health = round(t_health + dmg['DMG'])
+                                        o_health = round(o_health - dmg['DMG'])
+                                    elif tpet_type == 'DRAIN':
+                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                        o_stamina = round(o_stamina - dmg['DMG'])
+                                    elif tpet_type == 'FLOG':
+                                        t_attack = round(t_attack + dmg['DMG'])
+                                        o_attack = round (o_attack - dmg['DMG'])
+                                    elif tpet_type == 'WITHER':
+                                        t_defense = round(t_defense + dmg['DMG'])
+                                        o_defense = round (o_defense - dmg['DMG'])
+                                    elif tpet_type == 'RAGE':
+                                        t_defense = round(t_defense - dmg['DMG'])
+                                        t_attack = round(t_attack + dmg['DMG'])
+                                    elif tpet_type == 'BRACE':
+                                        t_defense = round(t_defense + dmg['DMG'])
+                                        t_attack = round(t_attack - dmg['DMG'])
+                                    elif tpet_type == 'BZRK':
+                                        t_health = round(t_health - dmg['DMG'])
+                                        t_attack = round(t_attack + (.75 * dmg['DMG']))
+                                    elif tpet_type == 'CRYSTAL':
+                                        t_health = round(t_health - dmg['DMG'])
+                                        t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                    elif tpet_type == 'GROWTH':
+                                        t_max_health = round(t_max_health - dmg['DMG'])
+                                        t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                        t_attack = round(t_attack+ (.3 * dmg['DMG']))
+                                    elif tpet_type == 'STANCE':
+                                        tempattack = dmg['DMG']
+                                        t_attack = t_defense
+                                        t_defense = tempattack
+                                    elif tpet_type == 'CONFUSE':
+                                        tempattack = dmg['DMG']
+                                        o_attack = o_defense
+                                        o_defense = tempattack
+                                    elif tpet_type == 'BLINK':
+                                        t_stamina = round(t_stamina - dmg['DMG'])
+                                        o_stamina = round(o_stamina + dmg['DMG'] - 10)
+                                    elif tpet_type == 'SLOW':
+                                        tempstam = round(o_stamina + dmg['DMG'])
+                                        t_stamina = round(t_stamina - dmg['DMG'])
+                                        o_stamina = t_stamina
+                                        t_stamina = tempstam
+                                    elif tpet_type == 'HASTE':
+                                        tempstam = round(o_stamina - dmg['DMG'])
+                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                        o_stamina = t_stamina
+                                        t_stamina = tempstam                                       
+                                    elif tpet_type == 'SOULCHAIN':
+                                        t_stamina = round(dmg['DMG'])
+                                        o_stamina = t_stamina
+                                    elif tpet_type == 'GAMBLE':
+                                        t_health = round(dmg['DMG'])
+                                        o_health = t_health
+                                    elif tpet_type == 'FEAR':
+                                        t_health = round(t_health - ((dmg['DMG']/100)* t_health))
+                                        o_attack = round(o_attack - ((dmg['DMG']/100)* o_attack))
+                                        o_defense = round(o_defense - ((dmg['DMG']/100)* o_defense))
+                                    elif tpet_type == 'WAVE':
+                                        o_health = round(o_health - dmg['DMG'])
+                                    elif tpet_type == 'BLAST':
+                                        o_health = round(o_health - dmg['DMG'])
+                                    elif tpet_type == 'CREATION':
+                                        t_max_health = round(t_max_health + dmg['DMG'])
+                                        t_health = round(t_health + dmg['DMG'])
+                                    elif tpet_type == 'DESTRUCTION':
+                                        o_max_health = round(o_max_health - dmg['DMG'])
+                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
 
-                                embedVar = discord.Embed(title=f"{t_card.upper()} Summoned {tpet_name}", colour=0xe91e63)
-                                embedVar.add_field(name=f"{tpet_name} used {tpetmove_text}!", value =f"Enhanced {tpet_type}")
-                                embedVar.set_thumbnail(url=tpet_image)
-                                await private_channel.send(embed=embedVar)
-                                turn=3
-                            else:
-                                await private_channel.send(f"{tpet_name} needs a turn to rest...")
-                                turn=3
+                                    embedVar = discord.Embed(title=f"{t_card.upper()} Summoned {tpet_name}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"{tpet_name} used {tpetmove_text}!", value =f"Enhanced {tpet_type}")
+                                    embedVar.set_thumbnail(url=tpet_image)
+                                    await private_channel.send(embed=embedVar)
+                                    turn=1
+                                else:
+                                    await private_channel.send(f"{tpet_name} needs a turn to rest...")
+                                    turn=1
+                            else:                                      
+                                t_enhancer_used=True
+                                dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total)
+                                t_enhancer_used=False
+                                t_pet_used =True
+                                tpet_dmg = dmg['DMG']
+                                tpet_type = dmg['ENHANCED_TYPE']
+                                if dmg['CAN_USE_MOVE']:
+                                    if tpet_type == 'ATK':
+                                        t_attack = round(t_attack + dmg['DMG'])
+                                    elif tpet_type == 'DEF':
+                                        t_defense = round(t_defense + dmg['DMG'])
+                                    elif tpet_type == 'STAM':
+                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                    elif tpet_type == 'HLT':
+                                        t_health = round(t_health + dmg['DMG'])
+                                    elif tpet_type == 'LIFE':
+                                        t_health = round(t_health + dmg['DMG'])
+                                        c_health = round(c_health - dmg['DMG'])
+                                    elif tpet_type == 'DRAIN':
+                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                        c_stamina = round(c_stamina - dmg['DMG'])
+                                    elif tpet_type == 'FLOG':
+                                        t_attack = round(t_attack + dmg['DMG'])
+                                        c_attack = round (c_attack - dmg['DMG'])
+                                    elif tpet_type == 'WITHER':
+                                        t_defense = round(t_defense + dmg['DMG'])
+                                        c_defense = round (c_defense - dmg['DMG'])
+                                    elif tpet_type == 'RAGE':
+                                        t_defense = round(t_defense - dmg['DMG'])
+                                        t_attack = round(t_attack + dmg['DMG'])
+                                    elif tpet_type == 'BRACE':
+                                        t_defense = round(t_defense + dmg['DMG'])
+                                        t_attack = round(t_attack - dmg['DMG'])
+                                    elif tpet_type == 'BZRK':
+                                        t_health = round(t_health - dmg['DMG'])
+                                        t_attack = round(t_attack + (.75 * dmg['DMG']))
+                                    elif tpet_type == 'CRYSTAL':
+                                        t_health = round(t_health - dmg['DMG'])
+                                        t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                    elif tpet_type == 'GROWTH':
+                                        t_max_health = round(t_max_health - dmg['DMG'])
+                                        t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                        t_attack = round(t_attack+ (.3 * dmg['DMG']))
+                                    elif tpet_type == 'STANCE':
+                                        tempattack = dmg['DMG']
+                                        t_attack = t_defense
+                                        t_defense = tempattack
+                                    elif tpet_type == 'CONFUSE':
+                                        tempattack = dmg['DMG']
+                                        c_attack = c_defense
+                                        c_defense = tempattack
+                                    elif tpet_type == 'BLINK':
+                                        t_stamina = round(t_stamina - dmg['DMG'])
+                                        c_stamina = round(c_stamina + dmg['DMG'] - 10)
+                                    elif tpet_type == 'SLOW':
+                                        tempstam = round(c_stamina + dmg['DMG'])
+                                        t_stamina = round(t_stamina - dmg['DMG'])
+                                        c_stamina = t_stamina
+                                        t_stamina = tempstam
+                                    elif tpet_type == 'HASTE':
+                                        tempstam = round(c_stamina - dmg['DMG'])
+                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                        c_stamina = t_stamina
+                                        t_stamina = tempstam                                       
+                                    elif tpet_type == 'SOULCHAIN':
+                                        t_stamina = round(dmg['DMG'])
+                                        c_stamina = t_stamina
+                                    elif tpet_type == 'GAMBLE':
+                                        t_health = round(dmg['DMG'])
+                                        c_health = t_health
+                                    elif tpet_type == 'FEAR':
+                                        t_health = round(t_health - ((dmg['DMG']/100)* t_health))
+                                        c_attack = round(c_attack - ((dmg['DMG']/100)* c_attack))
+                                        c_defense = round(c_defense - ((dmg['DMG']/100)* c_defense))
+                                    elif tpet_type == 'WAVE':
+                                        c_health = round(c_health - dmg['DMG'])
+                                    elif tpet_type == 'BLAST':
+                                        c_health = round(c_health - dmg['DMG'])
+                                    elif tpet_type == 'CREATION':
+                                        t_max_health = round(t_max_health + dmg['DMG'])
+                                        t_health = round(t_health + dmg['DMG'])
+                                    elif tpet_type == 'DESTRUCTION':
+                                        c_max_health = round(c_max_health - dmg['DMG'])
+                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+
+                                    embedVar = discord.Embed(title=f"{t_card.upper()} Summoned {tpet_name}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"{tpet_name} used {tpetmove_text}!", value =f"Enhanced {tpet_type}")
+                                    embedVar.set_thumbnail(url=tpet_image)
+                                    await private_channel.send(embed=embedVar)
+                                    turn=3
+                                else:
+                                    await private_channel.send(f"{tpet_name} needs a turn to rest...")
+                                    turn=1
                         else:
                             await private_channel.send(f"{tpet_name} needs a turn to rest...")
 
                     if int(aiMove) !=5 and int(aiMove) !=6:
                         # If you have enough stamina for move, use it
-                        if dmg['CAN_USE_MOVE']:
-                            if dmg['ENHANCE']:
-                                enh_type= dmg['ENHANCED_TYPE']
-                                if enh_type == 'ATK':
-                                    t_attack = round(t_attack + dmg['DMG'])
-                                elif enh_type == 'DEF':
-                                    t_defense = round(t_defense + dmg['DMG'])
-                                elif enh_type == 'STAM':
-                                    t_stamina = round(t_stamina + dmg['DMG'])
-                                elif enh_type == 'HLT':
-                                    t_health = round(t_health + dmg['DMG'])
-                                elif enh_type == 'LIFE':
-                                    t_health = round(t_health + dmg['DMG'])
-                                    o_health = round(o_health - dmg['DMG'])
-                                    c_health = round(o_health - dmg['DMG'])
-                                elif enh_type == 'DRAIN':
-                                    t_stamina = round(t_stamina + dmg['DMG'])
-                                    o_stamina = round(o_stamina - dmg['DMG'])
-                                    c_stamina = round(o_stamina - dmg['DMG'])
-                                elif enh_type == 'FLOG':
-                                    t_attack = round(t_attack + dmg['DMG'])
-                                    o_attack = round(o_attack - dmg['DMG'])
-                                    c_attack = round(c_attack - dmg['DMG'])
-                                elif enh_type == 'WITHER':
-                                    t_defense = round(t_defense + dmg['DMG'])
-                                    o_defense = round(o_defense - dmg['DMG'])
-                                    c_defense = round(c_defense - dmg['DMG'])
-                                elif enh_type == 'RAGE':
-                                    t_defense = round(t_defense - dmg['DMG'])
-                                    t_attack = round(t_attack + dmg['DMG'])
-                                elif enh_type == 'BRACE':
-                                    t_defense = round(t_defense + dmg['DMG'])
-                                    t_attack = round(t_attack - dmg['DMG'])
-                                elif enh_type == 'BZRK':
-                                    t_health = round(t_health - dmg['DMG'])
-                                    t_attack = round(t_attack +(.50 *  dmg['DMG']))
-                                elif enh_type == 'CRYSTAL':
-                                    t_health = round(t_health - dmg['DMG'])
-                                    t_defense = round(t_defense + (.75 * dmg['DMG']))
-                                elif enh_type == 'GROWTH':
-                                    t_max_health = round(t_max_health - dmg['DMG'])
-                                    t_defense = round(t_defense + (.3 * dmg['DMG']))
-                                    t_attack = round(t_attack + (.3 * dmg['DMG']))
-                                elif enh_type == 'STANCE':
-                                    tempattack = dmg['DMG']
-                                    t_attack = t_defense
-                                    t_defense = tempattack
-                                elif enh_type == 'CONFUSE':
-                                    tempattack = dmg['DMG']
-                                    o_attack = o_defense
-                                    o_defense = tempattack
-                                    c_attack = c_defense
-                                    c_defense = tempattack
-                                elif enh_type == 'BLINK':
-                                    t_stamina = round(t_stamina - dmg['DMG'])
-                                    o_stamina = round(o_stamina + dmg['DMG'] - 10)
-                                    c_stamina = round(c_stamina + dmg['DMG'] - 10)
-                                elif enh_type == 'SLOW':
-                                    tempstam = round(o_stamina + dmg['DMG'])
-                                    t_stamina = round(t_stamina - dmg['DMG'])
-                                    o_stamina = t_stamina
-                                    c_stamina = t_stamina
-                                    t_stamina = tempstam
-                                elif enh_type == 'HASTE':
-                                    tempstam = round(o_stamina - dmg['DMG'])
-                                    t_stamina = round(t_stamina + dmg['DMG'])
-                                    o_stamina = t_stamina
-                                    c_stamina = t_stamina
-                                    t_stamina = tempstam                                       
-                                elif enh_type == 'SOULCHAIN':
-                                    t_stamina = round(dmg['DMG'])
-                                    o_stamina = t_stamina
-                                    c_stamina = t_stamina
-                                elif enh_type == 'GAMBLE':
-                                    t_health = round(dmg['DMG'])
-                                    o_health = t_health
-                                    c_health = t_health
-                                elif enh_type == 'FEAR':
-                                    t_health = round(t_health - ((dmg['DMG']/100) * t_health))
-                                    o_attack = round(o_attack - ((dmg['DMG']/100) * o_attack))
-                                    o_defense = round(o_defense - ((dmg['DMG']/100) * o_defense))
-                                    c_attack = round(o_attack - ((dmg['DMG']/100) * o_attack))
-                                    c_defense = round(o_defense - ((dmg['DMG']/100) * o_defense))
-                                elif enh_type == 'WAVE':
-                                    o_health = round(o_health - dmg['DMG'])
-                                    c_health = round(c_health - dmg['DMG'])
-                                elif enh_type == 'BLAST':
-                                    o_health = round(o_health - dmg['DMG'])
-                                    c_health = round(c_health - dmg['DMG'])
-                                elif enh_type == 'CREATION':
-                                    t_max_health = round(t_max_health + dmg['DMG'])
-                                    t_health = round(t_health + dmg['DMG'])
-                                elif enh_type == 'DESTRUCTION':
-                                    o_max_health = round(o_max_health - dmg['DMG'])
-                                    c_max_health = round(c_max_health - dmg['DMG'])
-                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-                                embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
-                                await private_channel.send(embed=embedVar)
-                                turn_total= turn_total + 1
-                                turn = 0
-                            elif dmg['DMG'] == 0:
-                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-                                embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
-                                await private_channel.send(embed=embedVar)
-                                turn_total= turn_total + 1
-                                turn=0
-                            else:
-                                if c_universe == "Naruto" and c_stamina == 0:
-                                    c_health = c_health 
-                                    embedVar = discord.Embed(title=f"{c_card.upper()}: Substitution Jutsu", description=f"{t_card} attack strikes a log", colour=0xe91e63)
-                                    await private_channel.send(embed=embedVar)
-                                else:
-                                    c_health = c_health - int(dmg['DMG'])
+                        #check if o is blocking
+                        if o_defend_used==True:
+                            if dmg['CAN_USE_MOVE']:
+                                if dmg['ENHANCE']:
+                                    enh_type= dmg['ENHANCED_TYPE']
+                                    if enh_type == 'ATK':
+                                        t_attack = round(t_attack + dmg['DMG'])
+                                    elif enh_type == 'DEF':
+                                        t_defense = round(t_defense + dmg['DMG'])
+                                    elif enh_type == 'STAM':
+                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                    elif enh_type == 'HLT':
+                                        t_health = round(t_health + dmg['DMG'])
+                                    elif enh_type == 'LIFE':
+                                        t_health = round(t_health + dmg['DMG'])
+                                        o_health = round(o_health - dmg['DMG'])
+                                    elif enh_type == 'DRAIN':
+                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                        o_stamina = round(o_stamina - dmg['DMG'])
+                                    elif enh_type == 'FLOG':
+                                        t_attack = round(t_attack + dmg['DMG'])
+                                        o_attack = round(o_attack - dmg['DMG'])
+                                    elif enh_type == 'WITHER':
+                                        t_defense = round(t_defense + dmg['DMG'])
+                                        o_defense = round(o_defense - dmg['DMG'])
+                                    elif enh_type == 'RAGE':
+                                        t_defense = round(t_defense - dmg['DMG'])
+                                        t_attack = round(t_attack + dmg['DMG'])
+                                    elif enh_type == 'BRACE':
+                                        t_defense = round(t_defense + dmg['DMG'])
+                                        t_attack = round(t_attack - dmg['DMG'])
+                                    elif enh_type == 'BZRK':
+                                        t_health = round(t_health - dmg['DMG'])
+                                        t_attack = round(t_attack +(.50 *  dmg['DMG']))
+                                    elif enh_type == 'CRYSTAL':
+                                        t_health = round(t_health - dmg['DMG'])
+                                        t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                    elif enh_type == 'GROWTH':
+                                        t_max_health = round(t_max_health - dmg['DMG'])
+                                        t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                        t_attack = round(t_attack+ (.3 * dmg['DMG']))
+                                    elif enh_type == 'STANCE':
+                                        tempattack = dmg['DMG']
+                                        t_attack = t_defense
+                                        t_defense = tempattack
+                                    elif enh_type == 'CONFUSE':
+                                        tempattack = dmg['DMG']
+                                        o_attack = o_defense
+                                        o_defense = tempattack
+                                    elif enh_type == 'BLINK':
+                                        t_stamina = round(t_stamina - dmg['DMG'])
+                                        o_stamina = round(o_stamina + dmg['DMG'] - 10)
+                                    elif enh_type == 'SLOW':
+                                        tempstam = round(o_stamina + dmg['DMG'])
+                                        t_stamina = round(t_stamina - dmg['DMG'])
+                                        o_stamina = t_stamina
+                                        t_stamina = tempstam
+                                    elif enh_type == 'HASTE':
+                                        tempstam = round(o_stamina - dmg['DMG'])
+                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                        o_stamina = t_stamina
+                                        t_stamina = tempstam                                       
+                                    elif enh_type == 'SOULCHAIN':
+                                        t_stamina = round(dmg['DMG'])
+                                        o_stamina = o_stamina
+                                    elif enh_type == 'GAMBLE':
+                                        t_health = round(dmg['DMG']) * 2
+                                        o_health = t_health
+                                    elif enh_type == 'FEAR':
+                                        t_health = round(t_health - ((dmg['DMG']/100) * t_health))
+                                        o_attack = round(c_attack - ((dmg['DMG']/100) * o_attack))
+                                        o_defense = round(c_defense - ((dmg['DMG']/100) * o_defense))
+                                    elif enh_type == 'WAVE':
+                                        o_health = round(o_health - dmg['DMG'])
+                                    elif enh_type == 'BLAST':
+                                        o_health = round(o_health - dmg['DMG'])
+                                    elif enh_type == 'CREATION':
+                                        t_max_health = round(t_max_health + dmg['DMG'])
+                                        t_health = round(t_health + dmg['DMG'])
+                                    elif enh_type == 'DESTRUCTION':
+                                        o_max_health = round(o_max_health - dmg['DMG'])
+                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                     await private_channel.send(embed=embedVar)
-                                if c_health < 0:
-                                    c_health=0
-                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
-                                turn_total= turn_total + 1
-                                turn=0
-
-                        else:
-                            await private_channel.send(m.NOT_ENOUGH_STAMINA)
-                            turn = 0
-
+                                    turn_total= turn_total + 1
+                                    turn = 0
+                                elif dmg['DMG'] == 0:
+                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+                                    embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                    await private_channel.send(embed=embedVar)
+                                    turn_total= turn_total + 1
+                                    turn=0
+                                else:
+                                    if o_universe == "Naruto" and o_stamina == 0:
+                                        o_health = o_health 
+                                        embedVar = discord.Embed(title=f"{o_card.upper()}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
+                                        await private_channel.send(embed=embedVar)
+                                    else:
+                                        o_health = o_health - int(dmg['DMG'])
+                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                        await private_channel.send(embed=embedVar)
+                                    if o_health < 0:
+                                        o_health=0
+                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                    turn_total= turn_total + 1
+                                    turn=0
+                            else:
+                                await private_channel.send(m.NOT_ENOUGH_STAMINA)
+                                turn = 3
+                        else:                                 
+                            if dmg['CAN_USE_MOVE']:
+                                if dmg['ENHANCE']:
+                                    enh_type= dmg['ENHANCED_TYPE']
+                                    if enh_type == 'ATK':
+                                        t_attack = round(t_attack + dmg['DMG'])
+                                    elif enh_type == 'DEF':
+                                        t_defense = round(t_defense + dmg['DMG'])
+                                    elif enh_type == 'STAM':
+                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                    elif enh_type == 'HLT':
+                                        t_health = round(t_health + dmg['DMG'])
+                                    elif enh_type == 'LIFE':
+                                        t_health = round(t_health + dmg['DMG'])
+                                        c_health = round(c_health - dmg['DMG'])
+                                    elif enh_type == 'DRAIN':
+                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                        c_stamina = round(c_stamina - dmg['DMG'])
+                                    elif enh_type == 'FLOG':
+                                        t_attack = round(t_attack + dmg['DMG'])
+                                        c_attack = round(c_attack - dmg['DMG'])
+                                    elif enh_type == 'WITHER':
+                                        t_defense = round(t_defense + dmg['DMG'])
+                                        c_defense = round(t_defense - dmg['DMG'])
+                                    elif enh_type == 'RAGE':
+                                        t_defense = round(t_defense - dmg['DMG'])
+                                        t_attack = round(t_attack + dmg['DMG'])
+                                    elif enh_type == 'BRACE':
+                                        t_defense = round(t_defense + dmg['DMG'])
+                                        t_attack = round(t_attack - dmg['DMG'])
+                                    elif enh_type == 'BZRK':
+                                        t_health = round(t_health - dmg['DMG'])
+                                        t_attack = round(t_attack +(.75 *  dmg['DMG']))
+                                    elif enh_type == 'CRYSTAL':
+                                        t_health = round(t_health - dmg['DMG'])
+                                        t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                    elif enh_type == 'GROWTH':
+                                        t_max_health = round(t_max_health - dmg['DMG'])
+                                        t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                        t_attack = round(t_attack+ (.3 * dmg['DMG']))
+                                    elif enh_type == 'STANCE':
+                                        tempattack = dmg['DMG']
+                                        t_attack = t_defense
+                                        t_defense = tempattack
+                                    elif enh_type == 'CONFUSE':
+                                        tempattack = dmg['DMG']
+                                        c_attack = c_defense
+                                        c_defense = tempattack
+                                    elif enh_type == 'BLINK':
+                                        t_stamina = round(t_stamina - dmg['DMG'])
+                                        c_stamina = round(c_stamina + dmg['DMG'] - 10)
+                                    elif enh_type == 'SLOW':
+                                        tempstam = round(c_stamina + dmg['DMG'])
+                                        t_stamina = round(t_stamina - dmg['DMG'])
+                                        c_stamina = t_stamina
+                                        t_stamina = tempstam
+                                    elif enh_type == 'HASTE':
+                                        tempstam = round(c_stamina - dmg['DMG'])
+                                        t_stamina = round(t_stamina + dmg['DMG'])
+                                        c_stamina = t_stamina
+                                        t_stamina = tempstam                                       
+                                    elif enh_type == 'SOULCHAIN':
+                                        t_stamina = round(dmg['DMG'])
+                                        c_stamina = t_stamina
+                                    elif enh_type == 'GAMBLE':
+                                        t_health = round(dmg['DMG']) * 2
+                                        c_health = t_health
+                                    elif enh_type == 'FEAR':
+                                        t_health = round(t_health - ((dmg['DMG']/100) * t_health))
+                                        c_attack = round(c_attack - ((dmg['DMG']/100) * c_attack))
+                                        c_defense = round(c_defense - ((dmg['DMG']/100) * c_defense))
+                                    elif enh_type == 'WAVE':
+                                        c_health = round(c_health - dmg['DMG'])
+                                    elif enh_type == 'BLAST':
+                                        c_health = round(c_health - dmg['DMG'])
+                                    elif enh_type == 'CREATION':
+                                        t_max_health = round(t_max_health + dmg['DMG'])
+                                        t_health = round(t_health + dmg['DMG'])
+                                    elif enh_type == 'DESTRUCTION':
+                                        c_max_health = round(c_max_health - dmg['DMG'])
+                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+                                    embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                    await private_channel.send(embed=embedVar)
+                                    turn_total= turn_total + 1
+                                    turn = 0
+                                elif dmg['DMG'] == 0:
+                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])
+                                    embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                    await private_channel.send(embed=embedVar)
+                                    turn_total= turn_total + 1
+                                    turn=0
+                                else:
+                                    if c_universe == "Naruto" and c_stamina == 0:
+                                        c_health = c_health 
+                                        embedVar = discord.Embed(title=f"{c_card.upper()}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
+                                        await private_channel.send(embed=embedVar)
+                                    else:
+                                        c_health = c_health - int(dmg['DMG'])
+                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                        await private_channel.send(embed=embedVar)
+                                    if c_health < 0:
+                                        c_health=0
+                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                    turn_total= turn_total + 1
+                                    turn=0
+                            else:
+                                await private_channel.send(m.NOT_ENOUGH_STAMINA)
+                                turn = 3
+ 
         # End the match
         if o_health <= 0 or c_health <= 0 or o_max_health <= 0 or c_max_health <= 0:
             # await private_channel.send(f":zap: {user2.mention} you win the match!")
@@ -23332,6 +26002,7 @@ class CrownUnlimited(commands.Cog):
             o_enhancer = o_moveset[3]
             o_enhancer_used=False
             o_pet_used=False
+            o_block_used=False
 
             omove1_text = list(o_1.keys())[0]
             omove2_text = list(o_2.keys())[0]
@@ -23828,6 +26499,9 @@ class CrownUnlimited(commands.Cog):
             while (o_health > 0) and (t_health > 0):
                 #Player 1 Turn Start
                 if turn == 0:
+                    if o_block_used==True:
+                        o_block_used=False
+                        o_defense = o_defense/2
                     if o_universe == "Death Note" and turn_total == 0:
                         embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death", description=f"`{o_card} says:`\nYou will die in 24 turns...", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
@@ -23985,13 +26659,14 @@ class CrownUnlimited(commands.Cog):
                         **{omove2_text}** 30 Stamina _press 2_
                         **{omove3_text}** 80 Stamina _press 3_
                         **{omove_enhanced_text}** 20 Stamina _press 4_
+                        **Block** 20 Stamina _press 0_
                         
                     
                         **{t_card}:** {t_health}/{t_stamina}
                         """) 
                         , colour=embed_color_o)
                         embedVar.set_thumbnail(url=opet_image)
-                        if o_used_focus and o_used_resolve and not t_pet_used:
+                        if o_used_focus and o_used_resolve and not o_pet_used:
                             embedVar.set_author(name="Press 0 to Quit Match. Press 6 to Summon your Pet!")                                    
                         elif o_used_focus and not o_used_resolve:
                             embedVar.set_author(name="Press 0 to Quit Match. Press 5 to Strengthen resolve!")
@@ -24001,11 +26676,11 @@ class CrownUnlimited(commands.Cog):
                         await private_channel.send(embed=embedVar)
                         
                         if o_used_focus and o_used_resolve:
-                            options = ["0","1","2","3","4","6"]
+                            options = ["q","Q","0","1","2","3","4","6"]
                         elif o_used_focus and not o_used_resolve:
-                            options = ["0","1","2","3","4","5"]
+                            options = ["q","Q","0","1","2","3","4","5"]
                         else:
-                            options = ["0","1","2","3","4"]
+                            options = ["q","Q","0","1","2","3","4"]
 
                         # Make sure user is responding with move
                         def check(msg):
@@ -24017,7 +26692,7 @@ class CrownUnlimited(commands.Cog):
                             msg = await self.bot.wait_for("message",timeout=120.0, check=check)
 
                             # calculate data based on selected move
-                            if msg.content == "0":
+                            if msg.content == "q" or msg.content =="Q" :
                                 o_health=0
                         
                                 if private_channel.guild:
@@ -24289,9 +26964,22 @@ class CrownUnlimited(commands.Cog):
                                         await private_channel.send(f"{opet_name} needs a turn to rest...")
                                         turn=0
                                 else:
-                                    await private_channel.send(f"{opet_name} needs a turn to rest...")                                   
+                                    await private_channel.send(f"{opet_name} needs a turn to rest...")  
+                            elif msg.content == "0":
+                                if o_stamina >=20:
+                                    o_stamina = o_stamina - 20
+                                    o_block_used=True
+                                    o_defense = o_defense * 2
+                                    embedVar = discord.Embed(title=f"{o_card.upper()} DEFENDS", colour=0xe91e63)
+                                    embedVar.add_field(name=f"{o_card} used Block!", value =f"Enhanced DEF")
+                                    await private_channel.send(embed=embedVar)
+                                    turn=1
+                                else:
+                                    await private_channel.send(f"{o_card} is too tired to block...")
+                                    turn=0
+                                                                 
 
-                            if msg.content != "5" and msg.content != "6" and msg.content in options:
+                            if msg.content != "5" and msg.content != "6" and msg.content != "0" and msg.content in options:
                                 # If you have enough stamina for move, use it
                                 if dmg['CAN_USE_MOVE']:
                                     if dmg['ENHANCE']:
@@ -24390,7 +27078,7 @@ class CrownUnlimited(commands.Cog):
                                     else:
                                         if t_universe == "Naruto" and t_stamina == 0:
                                             t_health = t_health 
-                                            embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{o_card} attack strikes a log", colour=0xe91e63)
+                                            embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{o_card} strikes a log", colour=0xe91e63)
                                             await private_channel.send(embed=embedVar)
                                         else:
                                             t_health = t_health - dmg['DMG']
@@ -24658,6 +27346,7 @@ class CrownUnlimited(commands.Cog):
                             if t_gif != "N/A":
                                     await private_channel.send(f"{t_gif}")
                         elif int(aiMove) == 4:
+                            t_pet_used =False
                             t_enhancer_used=True
                             dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
                             t_enhancer_used=False
@@ -24679,6 +27368,7 @@ class CrownUnlimited(commands.Cog):
                                         t_attack = round(t_attack + t_resolve_attack)
                                         t_defense = round(t_defense - t_resolve_defense)
                                         t_used_resolve=True
+                                        t_pet_used =False
 
                                         embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                         embedVar.add_field(name=f"Transformation: Plus Ultra", value="All stats & stamina greatly increased")
@@ -24701,6 +27391,7 @@ class CrownUnlimited(commands.Cog):
                                     t_attack = round(t_attack + (2 * t_resolve_attack))
                                     t_defense = round(t_defense - t_resolve_defense)
                                     t_used_resolve=True
+                                    t_pet_used =False
 
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
@@ -24723,6 +27414,7 @@ class CrownUnlimited(commands.Cog):
                                     t_attack = round(t_attack + t_resolve_attack)
                                     t_defense = round(t_defense - t_resolve_defense)
                                     t_used_resolve=True
+                                    t_pet_used =False
 
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation: Ascension", value="All stats & stamina greatly increased")
@@ -24773,6 +27465,7 @@ class CrownUnlimited(commands.Cog):
                                     t_attack = round(t_attack + t_resolve_attack)
                                     t_defense = round(t_defense)
                                     t_used_resolve=True
+                                    t_pet_used =False
 
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation: Evolution", value="All stats & stamina greatly increased")
@@ -24795,6 +27488,7 @@ class CrownUnlimited(commands.Cog):
                                     t_attack = round(t_attack + t_resolve_attack)
                                     t_defense = round(t_defense - t_resolve_defense)
                                     t_used_resolve=True
+                                    t_pet_used =False
 
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
@@ -24999,7 +27693,7 @@ class CrownUnlimited(commands.Cog):
                                 else:
                                     if o_universe == "Naruto" and o_stamina == 0:
                                         o_health = o_health 
-                                        embedVar = discord.Embed(title=f"{o_card.upper()}: Substitution Jutsu", description=f"{t_card} attack strikes a log", colour=0xe91e63)
+                                        embedVar = discord.Embed(title=f"{o_card.upper()}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
                                         await private_channel.send(embed=embedVar)
                                     else:
                                         o_health = o_health - int(dmg['DMG'])
@@ -25423,6 +28117,8 @@ class CrownUnlimited(commands.Cog):
             o_enhancer = o_moveset[3] 
             o_enhancer_used=False
             o_pet_used=False
+            o_defend_used=False
+            o_block_used=False
 
             omove1_text = list(o_1.keys())[0]
             omove2_text = list(o_2.keys())[0]
@@ -25920,6 +28616,9 @@ class CrownUnlimited(commands.Cog):
                 #     o_health == 0
                 #Player 1 Turn Start
                 if turn == 0:
+                    if o_block_used==True:
+                        o_block_used=False
+                        o_defense = o_defense/2
                     if o_universe == "Death Note" and turn_total == 0:
                         embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death", description=f"`{o_card} says:`\nYou will die in 24 turns...", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
@@ -26081,12 +28780,13 @@ class CrownUnlimited(commands.Cog):
                         **{omove2_text}** 30 Stamina _press 2_
                         **{omove3_text}** 80 Stamina _press 3_
                         **{omove_enhanced_text}** 20 Stamina _press 4_
+                        **Block** 20 Stamina _press 0_
                         
                         **{t_card}:** {t_health}/{t_stamina}
                         """) 
                         , colour=embed_color_o)
                         embedVar.set_thumbnail(url=opet_image)
-                        if o_used_focus and o_used_resolve and not t_pet_used:
+                        if o_used_focus and o_used_resolve and not o_pet_used:
                             embedVar.set_author(name="Press 0 to Quit Match. Press 6 to Summon your Pet!")                                    
                         elif o_used_focus and not o_used_resolve:
                             embedVar.set_author(name="Press 0 to Quit Match. Press 5 to Strengthen resolve!")
@@ -26096,11 +28796,11 @@ class CrownUnlimited(commands.Cog):
                         await private_channel.send(embed=embedVar)
                         
                         if o_used_focus and o_used_resolve:
-                            options = ["0","1","2","3","4","6"]
+                            options = ["q","Q","0","1","2","3","4","6"]
                         elif o_used_focus and not o_used_resolve:
-                            options = ["0","1","2","3","4","5"]
+                            options = ["q","Q","0","1","2","3","4","5"]
                         else:
-                            options = ["0","1","2","3","4"]
+                            options = ["q","Q","0","1","2","3","4"]
 
                         # Make sure user is responding with move
                         def check(msg):
@@ -26112,7 +28812,7 @@ class CrownUnlimited(commands.Cog):
                             msg = await self.bot.wait_for("message",timeout=120.0, check=check)
 
                             # calculate data based on selected move
-                            if msg.content == "0":
+                            if msg.content == "q" or msg.content =="Q":
                                 o_health=0
                         
                                 if private_channel.guild:
@@ -26384,9 +29084,21 @@ class CrownUnlimited(commands.Cog):
                                         await private_channel.send(f"{opet_name} needs a turn to rest...")
                                         turn=0
                                 else:
-                                    await private_channel.send(f"{opet_name} needs a turn to rest...")                                   
+                                    await private_channel.send(f"{opet_name} needs a turn to rest...") 
+                            elif msg.content == "0":
+                                if o_stamina >=20:
+                                    o_stamina = o_stamina - 20
+                                    o_block_used=True
+                                    o_defense = o_defense * 2
+                                    embedVar = discord.Embed(title=f"{o_card.upper()} DEFENDS", colour=0xe91e63)
+                                    embedVar.add_field(name=f"{o_card} used Block!", value =f"Enhanced DEF")
+                                    await private_channel.send(embed=embedVar)
+                                    turn=1
+                                else:
+                                    await private_channel.send(f"{o_card} is too tired to block...")
+                                    turn=0                                  
 
-                            if msg.content != "5" and msg.content != "6" and msg.content in options:
+                            if msg.content != "5" and msg.content != "6" and msg.content != "0" and msg.content in options:
                                 # If you have enough stamina for move, use it
                                 if dmg['CAN_USE_MOVE']:
                                     if dmg['ENHANCE']:
@@ -26485,7 +29197,7 @@ class CrownUnlimited(commands.Cog):
                                     else:
                                         if t_universe == "Naruto" and t_stamina == 0:
                                             t_health = t_health 
-                                            embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{o_card} attack strikes a log", colour=0xe91e63)
+                                            embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{o_card} strikes a log", colour=0xe91e63)
                                             await private_channel.send(embed=embedVar)
                                         else:
                                             t_health = t_health - dmg['DMG']
@@ -26981,7 +29693,7 @@ class CrownUnlimited(commands.Cog):
                                 else:
                                     if o_universe == "Naruto" and o_stamina == 0:
                                         o_health = o_health 
-                                        embedVar = discord.Embed(title=f"{o_card.upper()}: Substitution Jutsu", description=f"{t_card} attack strikes a log", colour=0xe91e63)
+                                        embedVar = discord.Embed(title=f"{o_card.upper()}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
                                         await private_channel.send(embed=embedVar)
                                     else:
                                         o_health = o_health - int(dmg['DMG'])
@@ -27408,6 +30120,8 @@ class CrownUnlimited(commands.Cog):
         o_enhancer = o_moveset[3]
         o_enhancer_used=False
         o_pet_used=False
+        o_defend_used=False
+        o_block_used=False
 
         omove1_text = list(o_1.keys())[0]
         omove2_text = list(o_2.keys())[0]
@@ -27906,6 +30620,9 @@ class CrownUnlimited(commands.Cog):
             
             #Player 1 Turn Start
             if turn == 0:
+                if o_block_used==True:
+                    o_block_used=False
+                    o_defense= o_defense/2
                 if o_universe == "Death Note" and turn_total == 0:
                     embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death", description=f"`{o_card} says:`\nYou will die in 24 turns...", colour=0xe91e63)
                     await private_channel.send(embed=embedVar)
@@ -28067,12 +30784,13 @@ class CrownUnlimited(commands.Cog):
                     **{omove2_text}** 30 Stamina _press 2_
                     **{omove3_text}** 80 Stamina _press 3_
                     **{omove_enhanced_text}** 20 Stamina _press 4_
+                    **Block** 20 Stamina _press 0_
                 
                     **{t_card}:** {t_health}/{t_stamina}
                     """) 
                     , colour=embed_color_o)
                     embedVar.set_thumbnail(url=opet_image)
-                    if o_used_focus and o_used_resolve and not t_pet_used:
+                    if o_used_focus and o_used_resolve and not o_pet_used:
                         embedVar.set_author(name="Press 0 to Quit Match. Press 6 to Summon your Pet!")                                    
                     elif o_used_focus and not o_used_resolve:
                         embedVar.set_author(name="Press 0 to Quit Match. Press 5 to Strengthen resolve!")
@@ -28083,11 +30801,11 @@ class CrownUnlimited(commands.Cog):
                     
                     # Make sure user is responding with move
                     if o_used_focus and o_used_resolve:
-                        options = ["0","1","2","3","4","6"]
+                        options = ["q","Q","0","1","2","3","4","6"]
                     elif o_used_focus and not o_used_resolve:
-                        options = ["0","1","2","3","4","5"]
+                        options = ["q","Q","0","1","2","3","4","5"]
                     else:
-                        options = ["0","1","2","3","4"]
+                        options = ["q","Q","0","1","2","3","4"]
                     def check(msg):
                         if private_channel.guild:
                             return msg.author == user1 and msg.channel == private_channel and msg.content in options
@@ -28097,7 +30815,7 @@ class CrownUnlimited(commands.Cog):
                         msg = await self.bot.wait_for("message",timeout=120.0, check=check)
 
                         # calculate data based on selected move
-                        if msg.content == "0":
+                        if msg.content == "q" or msg.content =="Q":
                             o_health=0
                             response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                     
@@ -28107,7 +30825,6 @@ class CrownUnlimited(commands.Cog):
                             else:
                                 await private_channel.send(f"You fled the battle...")
                             return
-
                         if msg.content == "1":
                             o_pet_used =False
                             dmg = damage_cal(o_universe, o_card, o_1, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
@@ -28369,9 +31086,20 @@ class CrownUnlimited(commands.Cog):
                                     turn=0
                             else:
                                 await private_channel.send(f"{opet_name} needs a turn to rest...")                                   
+                        elif msg.content == "0":
+                            if o_stamina >=20:
+                                o_stamina = o_stamina - 20
+                                o_block_used=True
+                                o_defense = o_defense * 2
+                                embedVar = discord.Embed(title=f"{o_card.upper()} DEFENDS", colour=0xe91e63)
+                                embedVar.add_field(name=f"{o_card} used Block!", value =f"Enhanced DEF")
+                                await private_channel.send(embed=embedVar)
+                                turn=1
+                            else:
+                                await private_channel.send(f"{o_card} is too tired to block...")
+                                turn=0            
 
-
-                        if msg.content != "5" and msg.content != "6" and msg.content in options:
+                        if msg.content != "5" and msg.content != "6" and msg.content != "0" and msg.content in options:
                             if dmg['CAN_USE_MOVE']:
                                 if dmg['ENHANCE']:
                                     enh_type= dmg['ENHANCED_TYPE']
@@ -28468,7 +31196,7 @@ class CrownUnlimited(commands.Cog):
                                 else:
                                     if t_universe == "Naruto" and t_stamina == 0:
                                         t_health = t_health 
-                                        embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{o_card} attack strikes a log", colour=0xe91e63)
+                                        embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{o_card} strikes a log", colour=0xe91e63)
                                         await private_channel.send(embed=embedVar)
                                     else:
                                         t_health = t_health - dmg['DMG']
@@ -28777,6 +31505,7 @@ class CrownUnlimited(commands.Cog):
                                     t_attack = round(t_attack + t_resolve_attack)
                                     t_defense = round(t_defense - t_resolve_defense)
                                     t_used_resolve=True
+                                    t_pet_used =False
 
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                     embedVar.add_field(name=f"Transformation: Plus Ultra", value="All stats & stamina greatly increased")
@@ -28799,6 +31528,7 @@ class CrownUnlimited(commands.Cog):
                                 t_attack = round(t_attack + (2 * t_resolve_attack))
                                 t_defense = round(t_defense - t_resolve_defense)
                                 t_used_resolve=True
+                                t_pet_used =False
 
                                 embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                 embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
@@ -28821,6 +31551,7 @@ class CrownUnlimited(commands.Cog):
                                 t_attack = round(t_attack + t_resolve_attack)
                                 t_defense = round(t_defense - t_resolve_defense)
                                 t_used_resolve=True
+                                t_pet_used =False
 
                                 embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                 embedVar.add_field(name=f"Transformation: Ascension", value="All stats & stamina greatly increased")
@@ -28871,6 +31602,7 @@ class CrownUnlimited(commands.Cog):
                                 t_attack = round(t_attack + t_resolve_attack)
                                 t_defense = round(t_defense)
                                 t_used_resolve=True
+                                t_pet_used =False
 
                                 embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                 embedVar.add_field(name=f"Transformation: Evolution", value="All stats & stamina greatly increased")
@@ -28893,6 +31625,7 @@ class CrownUnlimited(commands.Cog):
                                 t_attack = round(t_attack + t_resolve_attack)
                                 t_defense = round(t_defense - t_resolve_defense)
                                 t_used_resolve=True
+                                t_pet_used =False
 
                                 embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                 embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
@@ -29099,7 +31832,7 @@ class CrownUnlimited(commands.Cog):
                             else:
                                 if o_universe == "Naruto" and o_stamina == 0:
                                     o_health = o_health 
-                                    embedVar = discord.Embed(title=f"{o_card.upper()}: Substitution Jutsu", description=f"{t_card} attack strikes a log", colour=0xe91e63)
+                                    embedVar = discord.Embed(title=f"{o_card.upper()}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
                                     await private_channel.send(embed=embedVar)
                                 else:
                                     o_health = o_health - int(dmg['DMG'])
@@ -29387,6 +32120,8 @@ class CrownUnlimited(commands.Cog):
                 o_enhancer = o_moveset[3]
                 o_enhancer_used=False
                 o_pet_used=False
+                o_block_used=False
+                o_defend_used=False
 
                 omove1_text = list(o_1.keys())[0]
                 omove2_text = list(o_2.keys())[0]
@@ -29859,6 +32594,8 @@ class CrownUnlimited(commands.Cog):
                 t_used_focus=False
                 t_resolve = 60
                 t_used_resolve=False
+                t_block_used=False
+                t_defend_used=False
 
                 tmove1_text = list(t_1.keys())[0]
                 tmove2_text = list(t_2.keys())[0]
@@ -29917,6 +32654,9 @@ class CrownUnlimited(commands.Cog):
                 while (o_health > 0) and (t_health > 0):
                     #Player 1 Turn Start
                     if turn == 0:
+                        if o_block_used==True:
+                            o_block_used=False
+                            o_defense = o_defense/ 2
                         if o_universe == "Death Note" and turn_total == 0:
                             embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death", description=f"`{o_card} says:`\nYou will die in 24 turns...", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
@@ -30102,12 +32842,13 @@ class CrownUnlimited(commands.Cog):
                             **{omove2_text}** 30 Stamina _press 2_
                             **{omove3_text}** 80 Stamina _press 3_
                             **{omove_enhanced_text}** 20 Stamina _press 4_
+                            **Block** 20 Stamind _press 0"
                         
                             **{t_card}:** {t_health}/{t_stamina}
                             """) 
                             , colour=embed_color_o)
                             embedVar.set_thumbnail(url=opet_image)
-                            if o_used_focus and o_used_resolve and not t_pet_used:
+                            if o_used_focus and o_used_resolve and not o_pet_used:
                                 embedVar.set_author(name="Press 0 to Quit Match. Press 6 to Summon your Pet!")                                    
                             elif o_used_focus and not o_used_resolve:
                                 embedVar.set_author(name="Press 0 to Quit Match. Press 5 to Strengthen resolve!")
@@ -30117,11 +32858,11 @@ class CrownUnlimited(commands.Cog):
                             await ctx.send(embed=embedVar)
 
                             if o_used_focus and o_used_resolve:
-                                options = ["0","1","2","3","4","6"]
+                                options = ["q","Q","0","1","2","3","4","6"]
                             elif o_used_focus and not o_used_resolve:
-                                options = ["0","1","2","3","4","5"]
+                                options = ["q","Q","0","1","2","3","4","5"]
                             else:
-                                options = ["0","1","2","3","4"]
+                                options = ["q","Q","0","1","2","3","4"]
                             
                             # Make sure user is responding with move
                             def check(msg):
@@ -30133,7 +32874,7 @@ class CrownUnlimited(commands.Cog):
                                 msg = await self.bot.wait_for("message",timeout=120.0, check=check)
 
                                 # calculate data based on selected move
-                                if msg.content == "0":
+                                if msg.content == "q" or msg.content =="Q":
                                     o_health = 0
                                     await ctx.send(f"{ctx.author.mention} has fled the battle...")
                                     return
@@ -30399,8 +33140,20 @@ class CrownUnlimited(commands.Cog):
                                             turn=0
                                     else:
                                         await private_channel.send(f"{opet_name} needs a turn to rest...")
+                                elif msg.content == "0":
+                                    if o_stamina >=20:
+                                        o_stamina = o_stamina - 20
+                                        o_block_used=True
+                                        o_defense = o_defense * 2
+                                        embedVar = discord.Embed(title=f"{o_card.upper()} DEFENDS", colour=0xe91e63)
+                                        embedVar.add_field(name=f"{o_card} used Block!", value =f"Enhanced DEF")
+                                        await private_channel.send(embed=embedVar)
+                                        turn=1
+                                    else:
+                                        await private_channel.send(f"{o_card} is too tired to block...")
+                                        turn=0
                                     
-                                if msg.content != "5" and msg.content != "6" and msg.content in options:
+                                if msg.content != "5" and msg.content != "6" and msg.content != "0" and msg.content in options:
                                     # If you have enough stamina for move, use it
                                     if dmg['CAN_USE_MOVE']:
                                         if dmg['ENHANCE']:
@@ -30498,7 +33251,7 @@ class CrownUnlimited(commands.Cog):
                                         else:
                                             if t_universe == "Naruto" and t_stamina == 0:
                                                 t_health = t_health 
-                                                embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{o_card} attack strikes a log", colour=0xe91e63)
+                                                embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{o_card} strikes a log", colour=0xe91e63)
                                                 await ctx.send(embed=embedVar)
                                             else:
                                                 t_health = t_health - dmg['DMG']
@@ -30519,6 +33272,9 @@ class CrownUnlimited(commands.Cog):
                                 return
                     #PLayer 2 Turn Start
                     elif turn == 1:
+                        if t_block_used==True:
+                            t_block_used = False
+                            t_defense = t_defense/2
                         if t_attack <= 25:
                             t_attack = 25
                         if t_defense <= 30:
@@ -30656,6 +33412,7 @@ class CrownUnlimited(commands.Cog):
                                 **{tmove2_text}** 30 Stamina _press 2_
                                 **{tmove3_text}** 80 Stamina _press 3_
                                 **{tmove_enhanced_text}** 20 Stamina _press 4_
+                                **Block** 20 Stamina _press 0_
                             
                                 **Opponent {o_card}:** _Health_ {o_health} / _Stamina_ {o_stamina}
 
@@ -30675,11 +33432,11 @@ class CrownUnlimited(commands.Cog):
                                 await ctx.send(embed=embedVar)
 
                                 if t_used_focus and t_used_resolve:
-                                    options = ["0","1","2","3","4","6"]
+                                    options = ["q","Q","0","1","2","3","4","6"]
                                 elif t_used_focus and not t_used_resolve:
-                                    options = ["0","1","2","3","4","5"]
+                                    options = ["q","Q","0","1","2","3","4","5"]
                                 else:
-                                    options = ["0","1","2","3","4"]
+                                    options = ["q","Q","0","1","2","3","4"]
 
                                 # Make sure user is responding with move
                                 def check(msg):
@@ -30691,7 +33448,7 @@ class CrownUnlimited(commands.Cog):
                                     msg = await self.bot.wait_for("message",timeout=120.0, check=check)
 
                                     # calculate data based on selected move
-                                    if msg.content == "0":
+                                    if msg.content == "q" or msg.content =="Q":
                                         t_health = 0
                                         uid = t_DID
                                         tuser = await self.bot.fetch_user(uid)
@@ -30731,6 +33488,7 @@ class CrownUnlimited(commands.Cog):
                                                 t_attack = round(t_attack + t_resolve_attack)
                                                 t_defense = round(t_defense - t_resolve_defense)
                                                 t_used_resolve=True
+                                                t_pet_used =False
 
                                                 embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                                 embedVar.add_field(name=f"Transformation: Plus Ultra", value="All stats & stamina greatly increased")
@@ -30753,6 +33511,7 @@ class CrownUnlimited(commands.Cog):
                                                 t_attack = round(t_attack + (2 * t_resolve_attack))
                                                 t_defense = round(t_defense - t_resolve_defense)
                                                 t_used_resolve=True
+                                                t_pet_used =False
 
                                                 embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                                 embedVar.add_field(name=f"Transformation: Bankai", value="All stats & stamina greatly increased")
@@ -30775,6 +33534,7 @@ class CrownUnlimited(commands.Cog):
                                                 t_attack = round(t_attack + t_resolve_attack)
                                                 t_defense = round(t_defense - t_resolve_defense)
                                                 t_used_resolve=True
+                                                t_pet_used =False
 
                                                 embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                                 embedVar.add_field(name=f"Transformation: Ascension", value="All stats & stamina greatly increased")
@@ -30797,6 +33557,7 @@ class CrownUnlimited(commands.Cog):
                                                 t_attack = round(t_attack + t_resolve_attack)
                                                 t_defense = round(t_defense - t_resolve_defense)
                                                 t_used_resolve=True
+                                                
                                                 
                                                 embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                                 embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
@@ -30825,6 +33586,7 @@ class CrownUnlimited(commands.Cog):
                                                 t_attack = round(t_attack + t_resolve_attack)
                                                 t_defense = round(t_defense)
                                                 t_used_resolve=True
+                                                t_pet_used =False
 
                                                 embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                                 embedVar.add_field(name=f"Transformation: Evolution", value="All stats & stamina greatly increased")
@@ -30847,6 +33609,7 @@ class CrownUnlimited(commands.Cog):
                                                 t_attack = round(t_attack + t_resolve_attack)
                                                 t_defense = round(t_defense - t_resolve_defense)
                                                 t_used_resolve=True
+                                                t_pet_used =False
 
                                                 embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
                                                 embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
@@ -30957,9 +33720,22 @@ class CrownUnlimited(commands.Cog):
                                                 turn=1
                                         else:
                                             await ctx.send(f"{tpet_name} needs a turn to rest...")
+                                    elif msg.content == "0":
+                                        if t_stamina >=20:
+                                            t_stamina = t_stamina - 20
+                                            t_block_used=True
+                                            t_defense = t_defense * 2
+                                            embedVar = discord.Embed(title=f"{t_card.upper()} DEFENDS", colour=0xe91e63)
+                                            embedVar.add_field(name=f"{t_card} used Block!", value =f"Enhanced DEF")
+                                            await private_channel.send(embed=embedVar)
+                                            turn=0
+                                        else:
+                                            await private_channel.send(f"{t_card} is too tired to block...")
+                                            turn=1
+                                    
  
 
-                                    if msg.content != "5" and msg.content != "6" and msg.content in options:
+                                    if msg.content != "5" and msg.content != "6" and msg.content != "0" and msg.content in options:
                                         # If you have enough stamina for move, use it
                                         if dmg['CAN_USE_MOVE']:
                                             if dmg['ENHANCE']:
@@ -31055,7 +33831,7 @@ class CrownUnlimited(commands.Cog):
                                             else:
                                                 if o_universe == "Naruto" and o_stamina == 0:
                                                     o_health = o_health 
-                                                    embedVar = discord.Embed(title=f"{o_card.upper()}: Substitution Jutsu", description=f"{t_card} attack strikes a log", colour=0xe91e63)
+                                                    embedVar = discord.Embed(title=f"{o_card.upper()}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
                                                     await ctx.send(embed=embedVar)
                                                 else:
                                                     o_health = o_health - int(dmg['DMG'])
@@ -31523,7 +34299,7 @@ class CrownUnlimited(commands.Cog):
                                         else:
                                             if o_universe == "Naruto" and o_stamina == 0:
                                                 o_health = o_health 
-                                                embedVar = discord.Embed(title=f"{o_card.upper()}: Substitution Jutsu", description=f"{t_card} attack strikes a log", colour=0xe91e63)
+                                                embedVar = discord.Embed(title=f"{o_card.upper()}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
                                                 await ctx.send(embed=embedVar)
                                             else:
                                                 o_health = o_health - int(dmg['DMG'])
@@ -31843,6 +34619,7 @@ class CrownUnlimited(commands.Cog):
                 o_enhancer = o_moveset[3]
                 o_enhancer_used=False
                 o_pet_used=False
+                o_block_used=False
 
                 omove1_text = list(o_1.keys())[0]
                 omove2_text = list(o_2.keys())[0]
@@ -32308,6 +35085,7 @@ class CrownUnlimited(commands.Cog):
                 t_enhancer = t_moveset[3]
                 t_enhancer_used=False
                 t_pet_used=False
+                t_block_used=False
 
                 # Player 1 Focus & Resolve
                 t_focus_count = 0
@@ -32369,6 +35147,9 @@ class CrownUnlimited(commands.Cog):
                 while (o_health > 0) and (t_health > 0):
                     #Player 1 Turn Start
                     if turn == 0:
+                        if o_block_used==True:
+                            o_block_used =False
+                            o_defense= o_defense/2
                         if o_universe == "Death Note" and turn_total == 0:
                             embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death", description=f"`{o_card} says:`\nYou will die in 24 turns...", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
@@ -32553,12 +35334,13 @@ class CrownUnlimited(commands.Cog):
                             **{omove2_text}** 30 Stamina _press 2_
                             **{omove3_text}** 80 Stamina _press 3_
                             **{omove_enhanced_text}** 20 Stamina _press 4_
+                            **Block** 20 Stamina _press 0_
                         
                             **{t_card}:** {t_health}/{t_stamina}
                             """) 
                             , colour=embed_color_o)
                             embedVar.set_thumbnail(url=opet_image)
-                            if o_used_focus and o_used_resolve and not t_pet_used:
+                            if o_used_focus and o_used_resolve and not o_pet_used:
                                 embedVar.set_author(name="Press 0 to Quit Match. Press 6 to Summon your Pet!")                                    
                             elif o_used_focus and not o_used_resolve:
                                 embedVar.set_author(name="Press 0 to Quit Match. Press 5 to Strengthen resolve!")
@@ -32568,11 +35350,11 @@ class CrownUnlimited(commands.Cog):
                             await ctx.send(embed=embedVar)
 
                             if o_used_focus and o_used_resolve:
-                                options = ["0","1","2","3","4","6"]
+                                options = ["q","Q","0","1","2","3","4","6"]
                             elif o_used_focus and not o_used_resolve:
-                                options = ["0","1","2","3","4","5"]
+                                options = ["q","Q","0","1","2","3","4","5"]
                             else:
-                                options = ["0","1","2","3","4"]
+                                options = ["q","Q","0","1","2","3","4"]
                             
                             # Make sure user is responding with move
                             def check(msg):
@@ -32584,7 +35366,7 @@ class CrownUnlimited(commands.Cog):
                                 msg = await self.bot.wait_for("message",timeout=120.0, check=check)
 
                                 # calculate data based on selected move
-                                if msg.content == "0":
+                                if msg.content == "q" or msg.content =="Q":
                                     o_health = 0
                                     await curse(wager, str(ctx.author))
                                     await bless(wager, tuser)
@@ -32852,10 +35634,22 @@ class CrownUnlimited(commands.Cog):
                                             turn=0
                                     else:
                                         await private_channel.send(f"{opet_name} needs a turn to rest...")
+                                elif msg.content == "0":
+                                    if o_stamina >=20:
+                                        o_stamina = o_stamina - 20
+                                        o_block_used=True
+                                        o_defense = o_defense * 2
+                                        embedVar = discord.Embed(title=f"{o_card.upper()} DEFENDS", colour=0xe91e63)
+                                        embedVar.add_field(name=f"{o_card} used Block!", value =f"Enhanced DEF")
+                                        await private_channel.send(embed=embedVar)
+                                        turn=1
+                                    else:
+                                        await private_channel.send(f"{o_card} is too tired to block...")
+                                        turn=0
                                     
 
 
-                                if msg.content != "5" and msg.content != "6" and msg.content in options:
+                                if msg.content != "5" and msg.content != "6" and msg.content != "0" and msg.content in options:
                                     # If you have enough stamina for move, use it
                                     if dmg['CAN_USE_MOVE']:
                                         if dmg['ENHANCE']:
@@ -32955,7 +35749,7 @@ class CrownUnlimited(commands.Cog):
                                         else:
                                             if t_universe == "Naruto" and t_stamina == 0:
                                                 t_health = t_health 
-                                                embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{o_card} attack strikes a log", colour=0xe91e63)
+                                                embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{o_card} strikes a log", colour=0xe91e63)
                                                 await ctx.send(embed=embedVar)
                                             else:
                                                 t_health = t_health - dmg['DMG']
@@ -32978,6 +35772,9 @@ class CrownUnlimited(commands.Cog):
                                 return
                     #PLayer 2 Turn Start
                     elif turn == 1:
+                        if t_block_used ==True:
+                            t_block_used=False
+                            t_defense= t_defense/2
                         if t_attack <= 25:
                             t_attack = 25
                         if t_defense <= 30:
@@ -33132,11 +35929,11 @@ class CrownUnlimited(commands.Cog):
                                 await ctx.send(embed=embedVar)
 
                                 if t_used_focus and t_used_resolve:
-                                    options = ["0","1","2","3","4","6"]
+                                    options = ["q","Q","0","1","2","3","4","6"]
                                 elif t_used_focus and not t_used_resolve:
-                                    options = ["0","1","2","3","4","5"]
+                                    options = ["q","Q","0","1","2","3","4","5"]
                                 else:
-                                    options = ["0","1","2","3","4"]
+                                    options = ["q","Q","0","1","2","3","4"]
 
                                 # Make sure user is responding with move
                                 def check(msg):
@@ -33148,7 +35945,7 @@ class CrownUnlimited(commands.Cog):
                                     msg = await self.bot.wait_for("message",timeout=120.0, check=check)
 
                                     # calculate data based on selected move
-                                    if msg.content == "0":
+                                    if msg.content == "q" or msg.content =="Q":
                                         t_health = 0
                                         uid = t_DID
                                         tuser = await self.bot.fetch_user(uid)
@@ -33416,9 +36213,21 @@ class CrownUnlimited(commands.Cog):
                                                 turn=1
                                         else:
                                             await ctx.send(f"{tpet_name} needs a turn to rest...")
+                                    elif msg.content == "0":
+                                        if t_stamina >=20:
+                                            t_stamina = t_stamina - 20
+                                            t_block_used=True
+                                            t_defense = t_defense * 2
+                                            embedVar = discord.Embed(title=f"{t_card.upper()} DEFENDS", colour=0xe91e63)
+                                            embedVar.add_field(name=f"{t_card} used Block!", value =f"Enhanced DEF")
+                                            await private_channel.send(embed=embedVar)
+                                            turn=0
+                                        else:
+                                            await private_channel.send(f"{t_card} is too tired to block...")
+                                            turn=1
  
 
-                                    if msg.content != "5" and msg.content != "6" and msg.content in options:
+                                    if msg.content != "5" and msg.content != "6" and msg.content != "0" and msg.content in options:
                                         # If you have enough stamina for move, use it
                                         if dmg['CAN_USE_MOVE']:
                                             if dmg['ENHANCE']:
@@ -33514,7 +36323,7 @@ class CrownUnlimited(commands.Cog):
                                             else:
                                                 if o_universe == "Naruto" and o_stamina == 0:
                                                     o_health = o_health 
-                                                    embedVar = discord.Embed(title=f"{o_card.upper()}: Substitution Jutsu", description=f"{t_card} attack strikes a log", colour=0xe91e63)
+                                                    embedVar = discord.Embed(title=f"{o_card.upper()}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
                                                     await ctx.send(embed=embedVar)
                                                 else:
                                                     o_health = o_health - int(dmg['DMG'])
