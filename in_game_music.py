@@ -1,5 +1,4 @@
-in_game_music_queue = ['https://www.youtube.com/watch?v=K9840msu1CM',
-'https://www.youtube.com/watch?v=Hmy-fnqBFTE', 
+in_game_music_queue = ['https://www.youtube.com/watch?v=Hmy-fnqBFTE', 
 'https://www.youtube.com/watch?v=hvJ7n2GbOUQ', 
 'https://www.youtube.com/watch?v=QnfUnVQ1Sdc', 
 'https://www.youtube.com/watch?v=FZbxyhwz3ls', 
