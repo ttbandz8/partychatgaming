@@ -446,6 +446,7 @@ class Lookup(commands.Cog):
             tournament_wins = d['TOURNAMENT_WINS']
             crown_tales = d['CROWN_TALES']
             dungeons = d['DUNGEONS']
+            bosses = d['BOSS_WINS']
             pet = d['PET']
             rebirth = d['REBIRTH']
             if rebirth == 0:
@@ -471,6 +472,10 @@ class Lookup(commands.Cog):
                 if dungeon != "":
                     dungeon_list.append(dungeon)
 
+            boss_list =[]
+            for boss in bosses:
+                if boss != "":
+                    boss_list.append(boss)
 
             matches_to_string = dict(ChainMap(*matches))
             ign_to_string = dict(ChainMap(*ign))
@@ -496,16 +501,21 @@ class Lookup(commands.Cog):
             if crown_list:
                 embed4 = discord.Embed(title= f":triangular_flag_on_post: " + f"{name}".format(self), description=":bank: Party Chat Gaming Database™️", colour=000000)
                 embed4.set_thumbnail(url=avatar)
-                embed4.add_field(name="Completed Crown Tales" + " :medal:", value="\n".join(crown_list))
+                embed4.add_field(name="Completed Tales" + " :medal:", value="\n".join(crown_list))
                 if dungeon_list:
-                    embed4.add_field(name="Completed Crown Dungeons" + " :fire: ", value="\n".join(dungeon_list))
+                    embed4.add_field(name="Completed Dungeons" + " :fire: ", value="\n".join(dungeon_list))
+                    if boss_list:
+                        embed4.add_field(name="Boss Souls" + ":japanese_ogre:",value="\n".join(boss_list))
+                    else:
+                        embed4.add_field(name="Boss Souls" + " :japanese_ogre: ", value="No Boss Souls Collected, yet!")
                 else:
-                    embed4.add_field(name="Completed Crown Dungeons" + " :fire: ", value="No Dungeons Completed, yet!")
+                    embed4.add_field(name="Completed Dungeons" + " :fire: ", value="No Dungeons Completed, yet!")
             else:
                 embed4 = discord.Embed(title= f":triangular_flag_on_post: " + f"{name}".format(self), description=":bank: Party Chat Gaming Database™️", colour=000000)
                 embed4.set_thumbnail(url=avatar)
-                embed4.add_field(name="Completed Crown Tales" + " :medal:", value="No completed Tales, yet!")
-                embed4.add_field(name="Completed Crown Dungeons" + " :fire: ", value="No Dungeons Completed, yet!")
+                embed4.add_field(name="Completed Tales" + " :medal:", value="No completed Tales, yet!")
+                embed4.add_field(name="Completed Dungeons" + " :fire: ", value="No Dungeons Completed, yet!")
+                embed4.add_field(name="Boss Souls" + " :japanese_ogre: ", value="No Boss Souls Collected, yet!")
 
             paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
             paginator.add_reaction('⏮️', "first")

@@ -1,5 +1,4 @@
 from dataclasses import field
-import wikipedia
 from discord import player, team
 from discord.ext.commands.errors import CommandOnCooldown
 from discord.flags import Intents
