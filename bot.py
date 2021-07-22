@@ -63,12 +63,17 @@ async def help(ctx):
    embedVar1 = discord.Embed(title= f"Bot Commands", description=h.BOT_COMMANDS, colour=0x7289da)
    embedVar1.set_thumbnail(url=avatar)
    embedVar1.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
-   # embedVar1.set_footer(text=f".senpai - Text Bot Tutorial")
+   embedVar1.set_footer(text=f".senpai - Text Bot Tutorial")
 
    embedVar2 = discord.Embed(title= f"Crown Unlimited Commands", description=h.CROWN_UNLIMITED_COMMANDS, colour=0x7289da)
    embedVar2.set_thumbnail(url=avatar)
    embedVar2.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
-   # embedVar2.set_footer(text=f".senpai - Text Bot Tutorial")
+   embedVar2.set_footer(text=f".senpai - Text Bot Tutorial")
+   
+   embedVar3 = discord.Embed(title= f"CTAP Commands", description=h.CTAP_COMMANDS, colour=0x7289da)
+   embedVar3.set_thumbnail(url=avatar)
+   embedVar3.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
+   embedVar3.set_footer(text=f".senpai - Text Bot Tutorial")
 
    paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
    paginator.add_reaction('⏮️', "first")
@@ -76,7 +81,7 @@ async def help(ctx):
    paginator.add_reaction('🔐', "lock")
    paginator.add_reaction('⏩', "next")
    paginator.add_reaction('⏭️', "last")
-   embeds = [embedVar2, embedVar1]
+   embeds = [embedVar2,embedVar3, embedVar1]
    await paginator.run(embeds)
 
 @bot.group(invoke_without_command=True)
@@ -233,7 +238,6 @@ async def crown(ctx):
    **Destiny Universe Buff** Destiny Cards gain an additional **Buff**.
    **Buff**: **Universe Buff** + 50 **HLT**, 5 **ATK** and 5 **DEF**.
 
-
    **Pets**
    Can assist during battle with an **Enhancer**.
    Earn **Pets** through Tales, Dungeon and Boss **Drops** or through trade with other Players!
@@ -279,7 +283,12 @@ async def crown(ctx):
    **.tales** Single player adventures where you traverse through your favorite universes as characters from various worlds!
    **.dungeon** Hard version of tales with better loot and better drop rates! (Unlocks after completing **Crown Tale**)
    **.boss** End Game battles featuring Iconic Villians from Crown Universes. (Unlocks after completing **Crown Dungeon**)
-
+   
+   **Duo**
+   **.dtales DeckPreset** Battle with your favorite AI preset in this Duo Tale!
+   **.ddungeon DeckPreset** Bring your strongest builds through the Darkest Duo Dungeons.
+   **.dboss DeckPreset** Bring your Dynanmic duo to take on one Incredible Boss.
+ 
    **Multiplayer**
    **.ctales @partner** Take a companion with your through your favorite tales with higher stakes!
    **.cdungeon @partner** Bring a companion through the darkest dungeons to earn awesome loot together.

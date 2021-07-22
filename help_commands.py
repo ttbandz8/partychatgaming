@@ -77,6 +77,26 @@ CROWN_UNLIMITED_COMMANDS = textwrap.dedent(f"""\
 **.savedeck**: Save your Build as Preset
 **.rebirth**: Rebirth Account with permanent increases
 
+**Crown Unlimited PVP Mode**
+**.senpaibattle**: Tutorial Bot
+**.legendbattle**:  Advanced Tutorial Bot
+**.battle @player**: Challenge another Player
+**.start** Start a battle in your current session
+**.wager amount**: Wager amount to battle in current session
+
+**Crown Unlimited Story Mode**
+**.universes**: Show List Of Crown Universes
+**.tales**: Opens Crown Tales Story Mode Menu
+**.dungeon**: Opens Crown Tales Dungeon Menu
+**.boss**: Opens Crown Universe Boss Menu
+**.ctales @companion**: Opens Crown Tales CO-OP Story Mode Menu
+**.cdungeon @companion**: Opens Crown Tales CO-OP Dungeon Menu
+**.cboss @companion**: Opens Crown Universe CO-OP Boss Menu
+**.ctales Preset**: Opens Crown Tales Duo Story Mode Menu
+**.ddungeon Preset**: Opens Crown Tales Duo Dungeon Menu
+**.dboss Preset**: Opens Crown Universe Duo Boss Menu
+""")
+CTAP_COMMANDS = textwrap.dedent(f"""\
 **Card Commands**
 **.cards universe**: View Universe Card List
 **.viewcard**: Preview Card 
@@ -108,20 +128,4 @@ CROWN_UNLIMITED_COMMANDS = textwrap.dedent(f"""\
 **.sell @player item**: Sell Cards, Titles, and Arms
 **.resell item**: Sell Card, Title, Arm back to shop
 **.gift @player amount**: Gift player money
-
-**Crown Unlimited PVP Mode**
-**.senpaibattle**: Tutorial Bot
-**.legendbattle**:  Advanced Tutorial Bot
-**.battle @player**: Challenge another Player
-**.start** Start a battle in your current session
-**.wager amount**: Wager amount to battle in current session
-
-**Crown Unlimited Story Mode**
-**.universes**: Show List Of Crown Universes
-**.tales**: Opens Crown Tales Story Mode Menu
-**.dungeon**: Opens Crown Tales Dungeon Menu
-**.boss**: Opens Crown Universe Boss Menu
-**.ctales @companion**: Opens Crown Tales CO-OP Story Mode Menu
-**.cdungeon @companion**: Opens Crown Tales CO-OP Dungeon Menu
-**.cboss @companion**: Opens Crown Universe CO-OP Boss Menu
 """)

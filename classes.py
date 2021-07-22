@@ -24,6 +24,7 @@ class USER():
     AVAILABLE: bool = field(default_factory=lambda: True)
     CROWN_TALES: list[str] = field(default_factory=lambda: [""])
     DUNGEONS: list[str] = field(default_factory=lambda: [""])
+    BOSS_WINS: list[str] = field(default_factory=lambda: [""])
     REFERRED: bool = field(default_factory=lambda: False)
     REFERRER:str = field(default_factory=lambda: "N/A")
     TIMESTAMP: str = now
