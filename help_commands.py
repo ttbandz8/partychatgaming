@@ -92,7 +92,7 @@ CROWN_UNLIMITED_COMMANDS = textwrap.dedent(f"""\
 **.ctales @companion**: Opens Crown Tales CO-OP Story Mode Menu
 **.cdungeon @companion**: Opens Crown Tales CO-OP Dungeon Menu
 **.cboss @companion**: Opens Crown Universe CO-OP Boss Menu
-**.ctales Preset**: Opens Crown Tales Duo Story Mode Menu
+**.dtales Preset**: Opens Crown Tales Duo Story Mode Menu
 **.ddungeon Preset**: Opens Crown Tales Duo Dungeon Menu
 **.dboss Preset**: Opens Crown Universe Duo Boss Menu
 """)

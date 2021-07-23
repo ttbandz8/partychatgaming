@@ -54,6 +54,7 @@ class CrownUnlimited(commands.Cog):
         cteam = oteam
         ofam = sowner['FAMILY']
         cfam = ofam
+        completed_crown_tales = sowner['CROWN_TALES']
         if sowner['AVAILABLE']:
             response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': False}})
         else:
@@ -13200,6 +13201,7 @@ class CrownUnlimited(commands.Cog):
         cteam = cowner['TEAM']
         ofam = sowner['FAMILY']
         cfam = cowner['FAMILY']
+        completed_crown_tales = sowner['CROWN_TALES']
         if sowner['AVAILABLE']:
             response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': False}})
         else:
