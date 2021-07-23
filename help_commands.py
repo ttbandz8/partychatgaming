@@ -105,6 +105,7 @@ CTAP_COMMANDS = textwrap.dedent(f"""\
 **.analysis card**: View Card Statistics and Optimal Builds
 **.destiny**: Open your Destiny List
 **.destinies universe**: Show Available Universe Destinies
+**.viewboss boss**:Show Boss Description
 
 **Title Commands**
 **.titles universe**: View Universe Title List

@@ -41,9 +41,6 @@ class CrownUnlimited(commands.Cog):
         companion = user_data['DISNAME']
         return companion
 
-    Healer_Enhancer_Check = ['HLT', 'CREATION']
-    # DPS_Enhancer_Check = ['FLOG', 'WITHER', 'LIFE', ]
-    Support_Enhancer_Check = ['DEF', 'ATK']
     @commands.command()
     async def dtales(self, ctx, deck : int):
         private_channel = ctx
@@ -233,10 +230,10 @@ class CrownUnlimited(commands.Cog):
             carm_name=carm['ARM']
 
             cvault = vault
-            cpet = activeDeck['PET']
-            
+                    
+            cpet = {}
             for pet in vault['PETS']:
-                if o_user['PET'] == cpet:
+                if activeDeck['PET'] == pet['NAME']:
                     cpet = pet
             
 
@@ -2758,7 +2755,7 @@ class CrownUnlimited(commands.Cog):
                             aiMove = 1
                         elif c_stamina >= 160 and (c_health >= t_health):
                             if o_health <= t_health:
-                                if omove_enhanced_text in Healer_Enhancer_Check:
+                                if cmove_enhanced_text in Healer_Enhancer_Check:
                                     aiMove = 7
                                 else:
                                     aiMove = 3
@@ -2780,7 +2777,7 @@ class CrownUnlimited(commands.Cog):
                             aiMove = 3                                     
                         elif c_stamina >= 120 and (c_health >= t_health):
                             if o_health <= t_health:
-                                if omove_enhanced_text in Healer_Enhancer_Check:
+                                if cmove_enhanced_text in Healer_Enhancer_Check:
                                     aiMove = 7
                                 else:
                                     aiMove = 2
@@ -2794,12 +2791,12 @@ class CrownUnlimited(commands.Cog):
                             aiMove = 2                                   
                         elif c_stamina >= 100 and (c_health >= t_health):
                             if o_defense < c_defense:
-                                if omove_enhanced_text in Healer_Enhancer_Check:
+                                if cmove_enhanced_text in Healer_Enhancer_Check:
                                     aiMove = 7
                                 else:
                                     aiMove = 8
                             else:
-                                if omove_enhanced_text in Healer_Enhancer_Check:
+                                if cmove_enhanced_text in Healer_Enhancer_Check:
                                     aiMove = 7
                                 else:
                                     aiMove = 2
@@ -2808,7 +2805,7 @@ class CrownUnlimited(commands.Cog):
                                 if c_defense >= o_defense:
                                     aiMove = 8
                                 else:
-                                    if omove_enhanced_text in Healer_Enhancer_Check:
+                                    if cmove_enhanced_text in Healer_Enhancer_Check:
                                         aiMove = 7
                                     else:
                                         aiMove = 2
@@ -2822,17 +2819,20 @@ class CrownUnlimited(commands.Cog):
                                 if o_defense < c_defense:
                                     aiMove = 8
                                 else:
-                                    if omove_enhanced_text in Healer_Enhancer_Check:
+                                    if cmove_enhanced_text in Healer_Enhancer_Check:
                                         aiMove = 7
                                     else:
                                         aiMove = 1
                             else:
                                 aiMove = 3
                         elif c_stamina >= 90:
-                            aiMove = 7
+                            if cmove_enhanced_text in Healer_Enhancer_Check or cmove_enhanced_text in Support_Enhancer_Check:
+                                aiMove = 7
+                            else:
+                                aiMove = 2
                         elif c_stamina >= 80 and (c_health >= t_health):
                             if o_health <= t_health:
-                                if omove_enhanced_text in Healer_Enhancer_Check or omove_enhanced_text in Support_Enhancer_Check:
+                                if cmove_enhanced_text in Healer_Enhancer_Check or cmove_enhanced_text in Support_Enhancer_Check:
                                     aiMove = 7
                                 else:
                                     aiMove = 2
@@ -2840,14 +2840,15 @@ class CrownUnlimited(commands.Cog):
                                 aiMove = 1
                         elif c_stamina >= 80:
                             if o_health <= t_health:
-                                if omove_enhanced_text in Healer_Enhancer_Check:
+                                if cmove_enhanced_text in Healer_Enhancer_Check:
                                     aiMove = 7
                                 else:
                                     aiMove = 2
                             else:
                                 aiMove = 3
                         elif c_stamina >= 70 and (c_health >= t_health):
-                            aiMove = 7
+                            if cmove_enhanced_text in Healer_Enhancer_Check or cmove_enhanced_text in Support_Enhancer_Check:
+                                aiMove = 7
                         elif c_stamina >= 70:
                             aiMove = 1
                         elif c_stamina >= 60 and (c_health >= t_health):
@@ -2866,7 +2867,7 @@ class CrownUnlimited(commands.Cog):
                                 aiMove = 1 
                         elif c_stamina >= 50 and (c_health >= t_health):
                             if c_stamina >= o_stamina:
-                                if omove_enhanced_text in Healer_Enhancer_Check or omove_enhanced_text in Support_Enhancer_Check:
+                                if cmove_enhanced_text in Healer_Enhancer_Check or cmove_enhanced_text in Support_Enhancer_Check:
                                     aiMove = 7
                                 else:
                                     aiMove = 2
@@ -2879,7 +2880,7 @@ class CrownUnlimited(commands.Cog):
                                 if o_defense <= c_defense:
                                     aiMove =8
                                 else:
-                                    if omove_enhanced_text in Healer_Enhancer_Check or omove_enhanced_text in Support_Enhancer_Check:
+                                    if cmove_enhanced_text in Healer_Enhancer_Check or cmove_enhanced_text in Support_Enhancer_Check:
                                         aiMove = 7
                                     else:
                                         aiMove = 2
@@ -2889,7 +2890,7 @@ class CrownUnlimited(commands.Cog):
                             aiMove = 2
                         elif c_stamina >= 30 and (c_health >= t_health):
                             if o_health <= t_health:
-                                if omove_enhanced_text in Healer_Enhancer_Check or omove_enhanced_text in Support_Enhancer_Check:
+                                if cmove_enhanced_text in Healer_Enhancer_Check or cmove_enhanced_text in Support_Enhancer_Check:
                                     aiMove = 7
                                 else:
                                     aiMove = 2
@@ -2904,7 +2905,7 @@ class CrownUnlimited(commands.Cog):
                                 if c_defense >= o_defense:
                                     aiMove = 8
                                 else:
-                                    if omove_enhanced_text in Healer_Enhancer_Check or omove_enhanced_text in Support_Enhancer_Check:
+                                    if cmove_enhanced_text in Healer_Enhancer_Check or cmove_enhanced_text in Support_Enhancer_Check:
                                         aiMove = 7
                                     else:
                                         aiMove = 2
@@ -7109,7 +7110,7 @@ class CrownUnlimited(commands.Cog):
                             aiMove = 5
                         elif c_stamina >= 160 and (c_health >= t_health):
                             if o_health <= t_health:
-                                if omove_enhanced_text in Healer_Enhancer_Check:
+                                if cmove_enhanced_text in Healer_Enhancer_Check:
                                     aiMove = 7
                                 else:
                                     aiMove = 3
@@ -7131,7 +7132,7 @@ class CrownUnlimited(commands.Cog):
                             aiMove = 3                                     
                         elif c_stamina >= 120 and (c_health >= t_health):
                             if o_health <= t_health:
-                                if omove_enhanced_text in Healer_Enhancer_Check:
+                                if cmove_enhanced_text in Healer_Enhancer_Check:
                                     aiMove = 7
                                 else:
                                     aiMove = 2
@@ -7145,12 +7146,12 @@ class CrownUnlimited(commands.Cog):
                             aiMove = 2                                   
                         elif c_stamina >= 100 and (c_health >= t_health):
                             if o_health <= t_health:
-                                if omove_enhanced_text in Healer_Enhancer_Check:
+                                if cmove_enhanced_text in Healer_Enhancer_Check:
                                     aiMove = 7
                                 else:
                                     aiMove = 8
                             else:
-                                if omove_enhanced_text in Healer_Enhancer_Check:
+                                if cmove_enhanced_text in Healer_Enhancer_Check:
                                     aiMove = 7
                                 else:
                                     aiMove = 2
@@ -7164,7 +7165,7 @@ class CrownUnlimited(commands.Cog):
                                 if c_health >= o_health:
                                     aiMove = 8
                                 else:
-                                    if omove_enhanced_text in Healer_Enhancer_Check:
+                                    if cmove_enhanced_text in Healer_Enhancer_Check:
                                         aiMove = 7
                                     else:
                                         aiMove = 2
@@ -7177,13 +7178,13 @@ class CrownUnlimited(commands.Cog):
                             if c_health >= o_health:
                                 aiMove = 8
                             else:
-                                if omove_enhanced_text in Healer_Enhancer_Check or omove_enhanced_text in Support_Enhancer_Check:
+                                if cmove_enhanced_text in Healer_Enhancer_Check or cmove_enhanced_text in Support_Enhancer_Check:
                                     aiMove = 7
                                 else:
                                     aiMove = 2
                         elif c_stamina >= 80 and (c_health >= t_health):
                             if o_health <= t_health:
-                                if omove_enhanced_text in Healer_Enhancer_Check:
+                                if cmove_enhanced_text in Healer_Enhancer_Check:
                                     aiMove = 7
                                 else:
                                     aiMove = 2
@@ -7191,14 +7192,14 @@ class CrownUnlimited(commands.Cog):
                                 aiMove = 1
                         elif c_stamina >= 80:
                             if o_health <= t_health:
-                                if omove_enhanced_text in Healer_Enhancer_Check:
+                                if cmove_enhanced_text in Healer_Enhancer_Check:
                                     aiMove = 7
                                 else:
                                     aiMove = 2
                             else:
                                 aiMove = 3
                         elif c_stamina >= 70 and (c_health >= t_health):
-                            if omove_enhanced_text in Healer_Enhancer_Check:
+                            if cmove_enhanced_text in Healer_Enhancer_Check:
                                 aiMove = 7
                             else:
                                 aiMove = 2
@@ -7223,7 +7224,7 @@ class CrownUnlimited(commands.Cog):
                                 if c_health >= o_health:
                                     aiMove = 8
                                 else:
-                                    if omove_enhanced_text in Healer_Enhancer_Check or omove_enhanced_text in Support_Enhancer_Check:
+                                    if cmove_enhanced_text in Healer_Enhancer_Check or cmove_enhanced_text in Support_Enhancer_Check:
                                         aiMove = 7
                                     else:
                                         aiMove = 2
@@ -7236,7 +7237,7 @@ class CrownUnlimited(commands.Cog):
                             aiMove = 2
                         elif c_stamina >= 40 and (c_health >= t_health):
                             if o_health <= t_health:
-                                if omove_enhanced_text in Healer_Enhancer_Check or omove_enhanced_text in Support_Enhancer_Check:
+                                if cmove_enhanced_text in Healer_Enhancer_Check or cmove_enhanced_text in Support_Enhancer_Check:
                                     aiMove = 7
                                 else:
                                     aiMove = 2
@@ -7246,7 +7247,7 @@ class CrownUnlimited(commands.Cog):
                             aiMove = 2
                         elif c_stamina >= 30 and (c_health >= t_health):
                             if o_health <= t_health:
-                                if omove_enhanced_text in Healer_Enhancer_Check or omove_enhanced_text in Support_Enhancer_Check:
+                                if cmove_enhanced_text in Healer_Enhancer_Check or cmove_enhanced_text in Support_Enhancer_Check:
                                     aiMove = 7
                                 else:
                                     aiMove = 2
@@ -7263,7 +7264,7 @@ class CrownUnlimited(commands.Cog):
                             if c_health >= o_health:
                                 aiMove = 8
                             else:
-                                if omove_enhanced_text in Healer_Enhancer_Check or omove_enhanced_text in Support_Enhancer_Check:
+                                if cmove_enhanced_text in Healer_Enhancer_Check or cmove_enhanced_text in Support_Enhancer_Check:
                                     aiMove = 7
                                 else:
                                     aiMove = 2
@@ -11701,7 +11702,7 @@ class CrownUnlimited(commands.Cog):
                         aiMove = 5
                     elif c_stamina >= 160 and (c_health >= t_health):
                         if o_health <= t_health:
-                            if omove_enhanced_text in Healer_Enhancer_Check:
+                            if cmove_enhanced_text in Healer_Enhancer_Check:
                                 aiMove = 7
                             else:
                                 aiMove = 3
@@ -11723,7 +11724,7 @@ class CrownUnlimited(commands.Cog):
                         aiMove = 3                                     
                     elif c_stamina >= 120 and (c_health >= t_health):
                         if o_health <= t_health:
-                            if omove_enhanced_text in Healer_Enhancer_Check:
+                            if cmove_enhanced_text in Healer_Enhancer_Check:
                                 aiMove = 7
                             else:
                                 aiMove = 2
@@ -11737,12 +11738,12 @@ class CrownUnlimited(commands.Cog):
                         aiMove = 2                                   
                     elif c_stamina >= 100 and (c_health >= t_health):
                         if o_health <= t_health:
-                            if omove_enhanced_text in Healer_Enhancer_Check:
+                            if cmove_enhanced_text in Healer_Enhancer_Check:
                                 aiMove = 7
                             else:
                                 aiMove = 8
                         else:
-                            if omove_enhanced_text in Healer_Enhancer_Check:
+                            if cmove_enhanced_text in Healer_Enhancer_Check:
                                 aiMove = 7
                             else:
                                 aiMove = 2
@@ -11756,7 +11757,7 @@ class CrownUnlimited(commands.Cog):
                             if c_health >= o_health:
                                 aiMove = 8
                             else:
-                                if omove_enhanced_text in Healer_Enhancer_Check:
+                                if cmove_enhanced_text in Healer_Enhancer_Check:
                                     aiMove = 7
                                 else:
                                     aiMove = 2
@@ -11769,13 +11770,13 @@ class CrownUnlimited(commands.Cog):
                         if c_health >= o_health:
                             aiMove = 8
                         else:
-                            if omove_enhanced_text in Healer_Enhancer_Check or omove_enhanced_text in Support_Enhancer_Check:
+                            if cmove_enhanced_text in Healer_Enhancer_Check or cmove_enhanced_text in Support_Enhancer_Check:
                                 aiMove = 7
                             else:
                                 aiMove = 2
                     elif c_stamina >= 80 and (c_health >= t_health):
                         if o_health <= t_health:
-                            if omove_enhanced_text in Healer_Enhancer_Check:
+                            if cmove_enhanced_text in Healer_Enhancer_Check:
                                 aiMove = 7
                             else:
                                 aiMove = 2
@@ -11783,14 +11784,14 @@ class CrownUnlimited(commands.Cog):
                             aiMove = 1
                     elif c_stamina >= 80:
                         if o_health <= t_health:
-                            if omove_enhanced_text in Healer_Enhancer_Check:
+                            if cmove_enhanced_text in Healer_Enhancer_Check:
                                 aiMove = 7
                             else:
                                 aiMove = 2
                         else:
                             aiMove = 3
                     elif c_stamina >= 70 and (c_health >= t_health):
-                        if omove_enhanced_text in Healer_Enhancer_Check:
+                        if cmove_enhanced_text in Healer_Enhancer_Check:
                             aiMove = 7
                         else:
                             aiMove = 2
@@ -11815,7 +11816,7 @@ class CrownUnlimited(commands.Cog):
                             if c_health >= o_health:
                                 aiMove = 8
                             else:
-                                if omove_enhanced_text in Healer_Enhancer_Check or omove_enhanced_text in Support_Enhancer_Check:
+                                if cmove_enhanced_text in Healer_Enhancer_Check or cmove_enhanced_text in Support_Enhancer_Check:
                                     aiMove = 7
                                 else:
                                     aiMove = 2
@@ -11828,7 +11829,7 @@ class CrownUnlimited(commands.Cog):
                         aiMove = 2
                     elif c_stamina >= 40 and (c_health >= t_health):
                         if o_health <= t_health:
-                            if omove_enhanced_text in Healer_Enhancer_Check or omove_enhanced_text in Support_Enhancer_Check:
+                            if cmove_enhanced_text in Healer_Enhancer_Check or cmove_enhanced_text in Support_Enhancer_Check:
                                 aiMove = 7
                             else:
                                 aiMove = 2
@@ -11838,7 +11839,7 @@ class CrownUnlimited(commands.Cog):
                         aiMove = 2
                     elif c_stamina >= 30 and (c_health >= t_health):
                         if o_health <= t_health:
-                            if omove_enhanced_text in Healer_Enhancer_Check or omove_enhanced_text in Support_Enhancer_Check:
+                            if cmove_enhanced_text in Healer_Enhancer_Check or cmove_enhanced_text in Support_Enhancer_Check:
                                 aiMove = 7
                             else:
                                 aiMove = 2
@@ -11855,7 +11856,7 @@ class CrownUnlimited(commands.Cog):
                         if c_health >= o_health:
                             aiMove = 8
                         else:
-                            if omove_enhanced_text in Healer_Enhancer_Check or omove_enhanced_text in Support_Enhancer_Check:
+                            if cmove_enhanced_text in Healer_Enhancer_Check or cmove_enhanced_text in Support_Enhancer_Check:
                                 aiMove = 7
                             else:
                                 aiMove = 2
@@ -38317,3 +38318,8 @@ async def bossdrops(player, universe):
     elif drop_rate <= boss_card_drop and drop_rate > boss_pet_drop:
             response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(boss_card)}})
             await bless(50, player)
+            
+
+Healer_Enhancer_Check = ['HLT', 'CREATION']
+# DPS_Enhancer_Check = ['FLOG', 'WITHER', 'LIFE', ]
+Support_Enhancer_Check = ['DEF', 'ATK']

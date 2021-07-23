@@ -46,6 +46,7 @@ class Boss(commands.Cog):
             boss_arm = boss['ARM']
             boss_desc = boss['DESCRIPTION'][3]
             boss_pic = boss['PATH']
+            boss_pet = boss['PET']
 
             arm = db.queryArm({'ARM': boss_arm})
             arm_passive = arm['ABILITIES'][0]
@@ -56,6 +57,12 @@ class Boss(commands.Cog):
             title_passive = title['ABILITIES'][0]
             title_passive_type = list(title_passive.keys())[0]
             title_passive_value = list(title_passive.values())[0]
+            
+            pet = db.queryPet({'PET': boss_pet})
+            pet_ability = pet['ABILITIES'][0]
+            pet_ability_name = list(pet_ability.keys())[0]
+            pet_ability_type = list(pet_ability.values())[0]
+            pet_ability_value = list(pet_ability.values())[0]
 
 
 
@@ -67,9 +74,9 @@ class Boss(commands.Cog):
             if boss_show != "Unbound":
                 embedVar.set_thumbnail(url=boss_show_img)
             embedVar.set_image(url=boss_pic)
-            embedVar.add_field(name="UNIVERSE", value=f"{boss_show}", inline=False)
-            embedVar.add_field(name="TITLE", value=f"{boss_title}\n`Increases {title_passive_type} by {title_passive_value}`", inline=True)
-            embedVar.add_field(name="ARM", value=f"{boss_arm}\n`Increases {arm_passive_type} by {arm_passive_value}`", inline=True)
+            embedVar.add_field(name="TITLE", value=f"{boss_title}\nIncreases **{title_passive_type}** by **{title_passive_value}**", inline=True)
+            embedVar.add_field(name="ARM", value=f"{boss_arm}\nIncreases **{arm_passive_type}** by **{arm_passive_value}**", inline=True)
+            embedVar.add_field(name="PET", value=f"{boss_pet}\nAbilitiy:**{pet_ability_name}**\nIncreases **{pet_ability_type}** by **{pet_ability_value}**", inline=True)
 
             await ctx.send(embed=embedVar)
 
