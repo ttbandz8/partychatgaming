@@ -2147,4 +2147,245 @@ destiny = [
         "COMPLETED": False,
         "UNIVERSE": "Naruto"
     },
+    {
+        "NAME": "Master Chainsaw!",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Denji",
+        "USE_CARDS": ["Beam"],
+        "EARN": "Denji", 
+        "COMPLETED": False,
+        "UNIVERSE": "Chainsawman"
+    },
+    {
+        "NAME": "I AM POWER",
+        "WINS": 0,
+        "REQUIRED": 8,
+        "DEFEAT": "Bat Devil",
+        "USE_CARDS": ["Denji"],
+        "EARN": "Power", 
+        "COMPLETED": False,
+        "UNIVERSE": "Chainsawman"
+    },
+    {
+        "NAME": "Simple Revenge",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Bat Devil",
+        "USE_CARDS": ["Power"],
+        "EARN": "Bat Devil", 
+        "COMPLETED": False,
+        "UNIVERSE": "Chainsawman"
+    },
+    {
+        "NAME": "For Makima",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Gun Devil",
+        "USE_CARDS": ["Denji"],
+        "EARN": "Full Devil Denji", 
+        "COMPLETED": False,
+        "UNIVERSE": "Chainsawman"
+    },
+    {
+        "NAME": "The End",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Makima",
+        "USE_CARDS": ["Full Devil Denji"],
+        "EARN": "Makima", 
+        "COMPLETED": False,
+        "UNIVERSE": "Chainsawman"
+    },
+    {
+        "NAME": "Perfect Date",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Reze",
+        "USE_CARDS": ["Denji"],
+        "EARN": "Reze", 
+        "COMPLETED": False,
+        "UNIVERSE": "Chainsawman"
+    },
+    {
+        "NAME": "Babysitting",
+        "WINS": 0,
+        "REQUIRED": 8,
+        "DEFEAT": "Aki",
+        "USE_CARDS": ["Power"],
+        "EARN": "Aki", 
+        "COMPLETED": False,
+        "UNIVERSE": "Chainsawman"
+    },
+    {
+        "NAME": "Eternity",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Eternity Devil",
+        "USE_CARDS": ["Denji"],
+        "EARN": "Eternity Devil", 
+        "COMPLETED": False,
+        "UNIVERSE": "Chainsawman"
+    },
+    {
+        "NAME": "Easy Revenge",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Himneno",
+        "USE_CARDS": ["Aki"],
+        "EARN": "Himneno", 
+        "COMPLETED": False,
+        "UNIVERSE": "Chainsawman"
+    },
+    {
+        "NAME": "Ghost Devil Pact",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Ghost Devil",
+        "USE_CARDS": ["Himneno"],
+        "EARN": "Ghost Devil", 
+        "COMPLETED": False,
+        "UNIVERSE": "Chainsawman"
+    },
+    {
+        "NAME": "Fox Devil Pact",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Fox Devil",
+        "USE_CARDS": ["Aki"],
+        "EARN": "Fox Devil", 
+        "COMPLETED": False,
+        "UNIVERSE": "Chainsawman"
+    },
+    {
+        "NAME": "Rivalry",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Katana Devil",
+        "USE_CARDS": ["Denji"],
+        "EARN": "Katana Devil", 
+        "COMPLETED": False,
+        "UNIVERSE": "Chainsawman"
+    },
+    {
+        "NAME": "Calamari",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Hirofumi",
+        "USE_CARDS": ["Katana Devil"],
+        "EARN": "Hirofumi", 
+        "COMPLETED": False,
+        "UNIVERSE": "Chainsawman"
+    },
+    {
+        "NAME": "Fated Faceoff",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Quanxi",
+        "USE_CARDS": ["Hirofumi"],
+        "EARN": "Quanxi", 
+        "COMPLETED": False,
+        "UNIVERSE": "Chainsawman"
+    },
+    {
+        "NAME": "Old Rivalry",
+        "WINS": 0,
+        "REQUIRED": 20,
+        "DEFEAT": "Captain Kishibe",
+        "USE_CARDS": ["Quanxi"],
+        "EARN": "Captain Kishibe", 
+        "COMPLETED": False,
+        "UNIVERSE": "Chainsawman"
+    },
+    {
+        "NAME": "Future Devil Pact",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Future Devil",
+        "USE_CARDS": ["Aki"],
+        "EARN": "Future Devil", 
+        "COMPLETED": False,
+        "UNIVERSE": "Chainsawman"
+    },
+    {
+        "NAME": "Dance Dance",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Kobeni",
+        "USE_CARDS": ["Denji"],
+        "EARN": "Kobeni", 
+        "COMPLETED": False,
+        "UNIVERSE": "Chainsawman"
+    },
+    {
+        "NAME": "Heartfelt",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Galgali",
+        "USE_CARDS": ["Kobeni"],
+        "EARN": "Galgali", 
+        "COMPLETED": False,
+        "UNIVERSE": "Chainsawman"
+    },
+    {
+        "NAME": "Childhood Trama",
+        "WINS": 0,
+        "REQUIRED": 20,
+        "DEFEAT": "Gun Devil",
+        "USE_CARDS": ["Aki"],
+        "EARN": "Gun Devil", 
+        "COMPLETED": False,
+        "UNIVERSE": "Chainsawman"
+    },
+    {
+        "NAME": "Battle Of Power",
+        "WINS": 0,
+        "REQUIRED": 20,
+        "DEFEAT": "Darkness Devil",
+        "USE_CARDS": ["Power"],
+        "EARN": "Darkness Devil", 
+        "COMPLETED": False,
+        "UNIVERSE": "Chainsawman"
+    },
+    {
+        "NAME": "Control Devil Recarnation",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Makima",
+        "USE_CARDS": ["Full Devil Denji"],
+        "EARN": "Nayuta", 
+        "COMPLETED": False,
+        "UNIVERSE": "Chainsawman"
+    },
+    {
+        "NAME": "International Assassin",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Santa Claus",
+        "USE_CARDS": ["Hirofumi"],
+        "EARN": "Santa Claus", 
+        "COMPLETED": False,
+        "UNIVERSE": "Chainsawman"
+    },
+    {
+        "NAME": "Unlikely Friendship",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Angel",
+        "USE_CARDS": ["Aki"],
+        "EARN": "Angel", 
+        "COMPLETED": False,
+        "UNIVERSE": "Chainsawman"
+    },
+    {
+        "NAME": "POWER IS THE BEST",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Prinz",
+        "USE_CARDS": ["Power"],
+        "EARN": "Prinz", 
+        "COMPLETED": False,
+        "UNIVERSE": "Chainsawman"
+    }
+
 ]
