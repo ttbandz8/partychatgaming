@@ -4041,15 +4041,15 @@ class CrownUnlimited(commands.Cog):
                 uid = o_DID
                 ouser = await self.bot.fetch_user(uid)
 
-                cuid = c_DID
-                ouser = await self.bot.fetch_user(cuid)
+                #cuid = c_DID
+                #ouser = await self.bot.fetch_user(cuid)
                 wintime = time.asctime()
                 h_playtime = int(wintime[11:13])
                 m_playtime = int(wintime[14:16])
                 s_playtime = int(wintime[17:19])
                 gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
                 match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']), str(oarm['ARM']), str(selected_universe), "Tales", o['EXCLUSIVE'])
-               # match = await savematch(str(user), str(c_card), str(c_card_path), str(ctitle['TITLE']), str(carm['ARM']), str(selected_universe), "Tales", c['EXCLUSIVE'])
+                #match = await savematch(str(user), str(c_card), str(c_card_path), str(ctitle['TITLE']), str(carm['ARM']), str(selected_universe), "Tales", c['EXCLUSIVE'])
                 teambank = await blessteam(10, oteam)
                 #cteambank = await blessteam(10, cteam)
                 if o_user['RIFT'] == 1:
@@ -4111,7 +4111,7 @@ class CrownUnlimited(commands.Cog):
                     r=db.updateUserNoFilter(upload_query, new_upload_query)
                     if selected_universe in completed_crown_tales:
                         await bless(25, ctx.author)
-                        await bless(25, cuser)
+                        #await bless(25, cuser)
                         await ctx.author.send(embed=embedVar)
                         response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                         await ctx.author.send(f"You were awarded :coin: 25 for completing the {selected_universe} Tale!")
@@ -8598,7 +8598,7 @@ class CrownUnlimited(commands.Cog):
                 #cpetlogger = await petlevel(cpet_name, user)
                 if questlogger:
                     await ctx.author.send(questlogger)
-                if cquestlogger:
+                #if cquestlogger:
                     await user.send(cquestlogger)
                 if currentopponent != (total_legends):
                     
@@ -13153,7 +13153,7 @@ class CrownUnlimited(commands.Cog):
             match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']), str(oarm['ARM']), "N/A", "Boss", o['EXCLUSIVE'])
             #cmatch = await savematch(str(user), str(c_card), str(c_card_path), str(ctitle['TITLE']), str(carm['ARM']), "N/A", "Boss", c['EXCLUSIVE'])
             
-            await bless(50, str(ctx.author))
+            await bless(500, str(ctx.author))
             #await bless(50, str(user))
             ofambank = await blessfamily(50,ofam)
             #cfambank = await blessfamily(50,cfam)
@@ -13163,7 +13163,7 @@ class CrownUnlimited(commands.Cog):
             #cpetlogger = await petlevel(cpet_name, user)
             response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
             #response = db.updateUserNoFilter({'DISNAME': str(user)}, {'$set': {'AVAILABLE': True}})
-            embedVar = discord.Embed(title=f":zap: `{o_card}` and `{c_card}`defeated the {t_universe} Boss {t_card}!\n{t_concede}", description=f"Match concluded in {turn_total} turns!\n\n{drop_response} + :coin: 50!", colour=0xe91e63)
+            embedVar = discord.Embed(title=f":zap: `{o_card}` and `{c_card}`defeated the {t_universe} Boss {t_card}!\n{t_concede}", description=f"Match concluded in {turn_total} turns!\n\n{drop_response} + :coin: 500!", colour=0xe91e63)
             embedVar.set_author(name=f"{t_card} lost", icon_url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236432/PCG%20LOGOS%20AND%20RESOURCES/PCGBot_1.png")
             if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
                 embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[2]} Seconds.")
