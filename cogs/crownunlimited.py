@@ -4357,10 +4357,9 @@ class CrownUnlimited(commands.Cog):
             carm_name=carm['ARM']
 
             cvault = vault
-            cpet = activeDeck['PET']
-            
+            cpet = {}
             for pet in vault['PETS']:
-                if o_user['PET'] == cpet:
+                if activeDeck['PET'] == pet['NAME']:
                     cpet = pet
 
             cpet_passive_type = cpet['TYPE']
@@ -8907,9 +8906,9 @@ class CrownUnlimited(commands.Cog):
         carm_name=carm['ARM']
 
         cvault = vault
-        cpet = activeDeck['PET'] 
+        cpet = {}
         for pet in vault['PETS']:
-            if o_user['PET'] == cpet:
+            if activeDeck['PET'] == pet['NAME']:
                 cpet = pet
 
         cpet_passive_type = cpet['TYPE']
