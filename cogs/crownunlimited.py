@@ -2750,7 +2750,7 @@ class CrownUnlimited(commands.Cog):
                         await private_channel.send(file=companion_card)
                         aiMove = 0
                         
-                        if c_health <= (c_health * .50) and not c_used_resolve and c_used_focus:
+                        if c_health <= (c_health * .50) and c_used_resolve ==False and c_used_focus:
                             aiMove = 5
                         elif t_stamina == 0:
                             aiMove = 1
