@@ -68,7 +68,11 @@ class CrownUnlimited(commands.Cog):
             if uni['PREREQUISITE'] in sowner['CROWN_TALES'] and uni['HAS_CROWN_TALES'] == True:
                 available_universes.append(uni['TITLE'])
                 
-        embedVar = discord.Embed(title=f":crown: DUO! Select A Tales Universe", description="\n".join(available_universes), colour=0xe91e63) 
+        icon = ":crown:"
+        if sowner['RIFT'] == 1:
+            icon = ":crystal_ball:"
+            
+        embedVar = discord.Embed(title=f"{icon} DUO! Select A Tales Universe", description="\n".join(available_universes), colour=0xe91e63) 
         embedVar.set_footer(text="Type Quit to exit Tales selection")
         await private_channel.send(embed=embedVar)
         accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
@@ -13193,6 +13197,7 @@ class CrownUnlimited(commands.Cog):
             await private_channel.send(m.ALREADY_IN_TALES)
             return
 
+
         companion = db.queryUser({'DISNAME': str(user)})
         cteam = companion['TEAM']
 
@@ -13203,7 +13208,11 @@ class CrownUnlimited(commands.Cog):
             if uni['PREREQUISITE'] in sowner['CROWN_TALES'] and uni['HAS_CROWN_TALES'] == True:
                 available_universes.append(uni['TITLE'])
                 
-        embedVar = discord.Embed(title=f":crown: CO-OP! Select A Tales Universe", description="\n".join(available_universes), colour=0xe91e63) 
+        icon = ":crown:"
+        if sowner['RIFT'] == 1:
+            icon = ":crystal_ball:"
+            
+        embedVar = discord.Embed(title=f"{icon} CO-OP! Select A Tales Universe", description="\n".join(available_universes), colour=0xe91e63) 
         embedVar.set_footer(text="Type Quit to exit Tales selection")
         await private_channel.send(embed=embedVar)
         accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
@@ -27877,11 +27886,14 @@ class CrownUnlimited(commands.Cog):
             for uni in all_universes:
                 if uni['PREREQUISITE'] in sowner['CROWN_TALES'] and uni['HAS_CROWN_TALES'] == True and uni['TIER'] != 9:
                     available_universes.append(uni['TITLE'])
-            
+        
+        icon = ":crown:"
+        if sowner['RIFT'] == 1:
+            icon = ":crystal_ball:"
             
         
 
-        embedVar = discord.Embed(title=f":crown: Select A Tales Universe", description="\n".join(available_universes), colour=0xe91e63)
+        embedVar = discord.Embed(title=f"{icon} Select A Tales Universe", description="\n".join(available_universes), colour=0xe91e63)
         embedVar.set_footer(text="Type Quit to exit Tales selection")
         await private_channel.send(embed=embedVar)
         accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
@@ -37125,7 +37137,6 @@ class CrownUnlimited(commands.Cog):
         await ctx.author.send("ALL UNIVERSES")
         await ctx.author.send("\n".join(available_universes))
         await ctx.author.send("\n".join(unavailable_universes))
-
 
     @commands.command()
     async def houses(self, ctx):
