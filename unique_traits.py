@@ -65,7 +65,7 @@ traits = [{
 },{
     'NAME': 'Dragon Ball Z',
     'EFFECT': 'Final Stand',
-    'TRAIT': 'When you die, Resolve with 25% Health and increased ATK and DEF'
+    'TRAIT': 'When you die, Resolve with _75%_ ATK + DEF as Health'
 },{
     'NAME': 'Crown Rift Slayers',
     'EFFECT': 'Follow Up Attack',

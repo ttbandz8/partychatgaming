@@ -56,6 +56,7 @@ class Profile(commands.Cog):
                             db.deleteVault(vault)
                         else:
                             await ctx.send(delete_user_resp, delete_after=5)
+                        team = db.queryTeam()
                     except:
                         await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=3)
                 

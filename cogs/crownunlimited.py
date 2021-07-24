@@ -64,9 +64,14 @@ class CrownUnlimited(commands.Cog):
         all_universes = db.queryAllUniverse()
         available_universes = []
         selected_universe = ""
-        for uni in all_universes:
-            if uni['PREREQUISITE'] in sowner['CROWN_TALES'] and uni['HAS_CROWN_TALES'] == True:
-                available_universes.append(uni['TITLE'])
+        if sowner['RIFT'] == 1:
+            for uni in all_universes:
+                if uni['PREREQUISITE'] in sowner['CROWN_TALES'] and uni['HAS_CROWN_TALES'] == True or uni['TIER'] == 9:
+                    available_universes.append(uni['TITLE'])
+        else:
+            for uni in all_universes:
+                if uni['PREREQUISITE'] in sowner['CROWN_TALES'] and uni['HAS_CROWN_TALES'] == True and uni['TIER'] != 9:
+                    available_universes.append(uni['TITLE'])
                 
         icon = ":crown:"
         if sowner['RIFT'] == 1:
@@ -1987,7 +1992,7 @@ class CrownUnlimited(commands.Cog):
                                                 embedVar = discord.Embed(title=f"{t_card.upper()}'s LAST STAND", description=f"{t_card} FINDS RESOLVE", colour=0xe91e63)
                                                 embedVar.add_field(name=f"{t_card} resolved and continues to fight", value="All stats & stamina increased")
                                                 await private_channel.send(embed=embedVar)
-                                                t_health = int(t_attack + t_defense)
+                                                t_health = int(.75 * (t_attack + t_defense))
                                                 t_attack = t_attack + (.50 * t_attack)
                                                 t_defense = t_defense +(.50 * t_defense)
                                                 t_used_resolve=True
@@ -2516,7 +2521,7 @@ class CrownUnlimited(commands.Cog):
                                                 embedVar = discord.Embed(title=f"{c_card.upper()}'s LAST STAND", description=f"{c_card} FINDS RESOLVE", colour=0xe91e63)
                                                 embedVar.add_field(name=f"{c_card} resolved and continues to fight", value="All stats & stamina increased")
                                                 await private_channel.send(embed=embedVar)
-                                                c_health = int(c_attack + c_defense)
+                                                c_health = int(.75 *(c_attack + c_defense))
                                                 c_attack = c_attack + (.50 * c_attack)
                                                 c_defense = c_defense +(.50 * c_defense)
                                                 c_used_focus=True
@@ -2641,7 +2646,7 @@ class CrownUnlimited(commands.Cog):
                                                 embedVar = discord.Embed(title=f"{o_card.upper()}'s LAST STAND", description=f"{o_card} FINDS RESOLVE", colour=0xe91e63)
                                                 embedVar.add_field(name=f"{o_card} resolved and continues to fight", value="All stats & stamina increased")
                                                 await private_channel.send(embed=embedVar)
-                                                o_health = int(o_attack + o_defense)
+                                                o_health = int(.75* (o_attack + o_defense))
                                                 o_attack = o_attack + (.50 * o_attack)
                                                 o_defense = o_defense +(.50 * o_defense)
                                                 o_stamina=100
@@ -3469,7 +3474,7 @@ class CrownUnlimited(commands.Cog):
                                             embedVar = discord.Embed(title=f"{t_card.upper()}'s LAST STAND", description=f"{t_card} FINDS RESOLVE", colour=0xe91e63)
                                             embedVar.add_field(name=f"{t_card} resolved and continues to fight", value="All stats & stamina increased")
                                             await private_channel.send(embed=embedVar)
-                                            t_health = int(t_attack + t_defense)
+                                            t_health = int(.75 * (t_attack + t_defense))
                                             t_attack = t_attack + (.50 * t_attack)
                                             t_defense = t_defense +(.50 * t_defense)
                                             t_used_resolve=True
@@ -3993,7 +3998,7 @@ class CrownUnlimited(commands.Cog):
                                                 embedVar = discord.Embed(title=f"{o_card.upper()}'s LAST STAND", description=f"{o_card} FINDS RESOLVE", colour=0xe91e63)
                                                 embedVar.add_field(name=f"{o_card} resolved and continues to fight", value="All stats & stamina increased")
                                                 await private_channel.send(embed=embedVar)
-                                                o_health = int(o_attack + o_defense)
+                                                o_health = int(.75* (o_attack + o_defense))
                                                 o_attack = o_attack + (.50 * o_attack)
                                                 o_defense = o_defense +(.50 * o_defense)
                                                 o_stamina=100
@@ -4119,7 +4124,7 @@ class CrownUnlimited(commands.Cog):
                                                 embedVar = discord.Embed(title=f"{c_card.upper()}'s LAST STAND", description=f"{c_card} FINDS RESOLVE", colour=0xe91e63)
                                                 embedVar.add_field(name=f"{c_card} resolved and continues to fight", value="All stats & stamina increased")
                                                 await private_channel.send(embed=embedVar)
-                                                c_health = int(c_attack + c_defense)
+                                                c_health = int(.75 *(c_attack + c_defense))
                                                 c_attack = c_attack + (.50 * c_attack)
                                                 c_defense = c_defense +(.50 * c_defense)
                                                 c_used_resolve=True
@@ -6237,7 +6242,7 @@ class CrownUnlimited(commands.Cog):
                                                 embedVar = discord.Embed(title=f"{t_card.upper()}'s LAST STAND", description=f"{t_card} FINDS RESOLVE", colour=0xe91e63)
                                                 embedVar.add_field(name=f"{t_card} resolved and continues to fight", value="All stats & stamina increased")
                                                 await private_channel.send(embed=embedVar)
-                                                t_health = int(t_attack + t_defense)
+                                                t_health = int(.75 * (t_attack + t_defense))
                                                 t_attack = t_attack + (.50 * t_attack)
                                                 t_defense = t_defense +(.50 * t_defense)
                                                 t_used_resolve=True
@@ -6981,7 +6986,7 @@ class CrownUnlimited(commands.Cog):
                                                 embedVar = discord.Embed(title=f"{c_card.upper()}'s LAST STAND", description=f"{c_card} FINDS RESOLVE", colour=0xe91e63)
                                                 embedVar.add_field(name=f"{c_card} resolved and continues to fight", value="All stats & stamina increased")
                                                 await private_channel.send(embed=embedVar)
-                                                c_health = int(c_attack + c_defense)
+                                                c_health = int(.75 *(c_attack + c_defense))
                                                 c_attack = c_attack + (.50 * c_attack)
                                                 c_defense = c_defense +(.50 * c_defense)
                                                 c_used_resolve=True
@@ -7106,7 +7111,7 @@ class CrownUnlimited(commands.Cog):
                                                 embedVar = discord.Embed(title=f"{o_card.upper()}'s LAST STAND", description=f"{o_card} FINDS RESOLVE", colour=0xe91e63)
                                                 embedVar.add_field(name=f"{o_card} resolved and continues to fight", value="All stats & stamina increased")
                                                 await private_channel.send(embed=embedVar)
-                                                o_health = int(o_attack + o_defense)
+                                                o_health = int(.75* (o_attack + o_defense))
                                                 o_attack = o_attack + (.50 * o_attack)
                                                 o_defense = o_defense +(.50 * o_defense)
                                                 o_stamina=100
@@ -7941,7 +7946,7 @@ class CrownUnlimited(commands.Cog):
                                             embedVar = discord.Embed(title=f"{t_card.upper()}'s LAST STAND", description=f"{t_card} FINDS RESOLVE", colour=0xe91e63)
                                             embedVar.add_field(name=f"{t_card} resolved and continues to fight", value="All stats & stamina increased")
                                             await private_channel.send(embed=embedVar)
-                                            t_health = int(t_attack + t_defense)
+                                            t_health = int(.75 * (t_attack + t_defense))
                                             t_attack = t_attack + (.50 * t_attack)
                                             t_defense = t_defense +(.50 * t_defense)
                                             t_used_resolve=True
@@ -8679,7 +8684,7 @@ class CrownUnlimited(commands.Cog):
                                                 embedVar = discord.Embed(title=f"{o_card.upper()}'s LAST STAND", description=f"{o_card} FINDS RESOLVE", colour=0xe91e63)
                                                 embedVar.add_field(name=f"{o_card} resolved and continues to fight", value="All stats & stamina increased")
                                                 await private_channel.send(embed=embedVar)
-                                                o_health = int(o_attack + o_defense)
+                                                o_health = int(.75* (o_attack + o_defense))
                                                 o_attack = o_attack + (.50 * o_attack)
                                                 o_defense = o_defense +(.50 * o_defense)
                                                 o_stamina=100
@@ -8805,7 +8810,7 @@ class CrownUnlimited(commands.Cog):
                                                 embedVar = discord.Embed(title=f"{c_card.upper()}'s LAST STAND", description=f"{c_card} FINDS RESOLVE", colour=0xe91e63)
                                                 embedVar.add_field(name=f"{c_card} resolved and continues to fight", value="All stats & stamina increased")
                                                 await private_channel.send(embed=embedVar)
-                                                c_health = int(c_attack + c_defense)
+                                                c_health = int(.75 *(c_attack + c_defense))
                                                 c_attack = c_attack + (.50 * c_attack)
                                                 c_defense = c_defense +(.50 * c_defense)
                                                 c_used_resolve=True
@@ -10924,7 +10929,7 @@ class CrownUnlimited(commands.Cog):
                                             embedVar = discord.Embed(title=f"{t_card.upper()}'s LAST STAND", description=f"{t_card} FINDS RESOLVE", colour=0xe91e63)
                                             embedVar.add_field(name=f"{t_card} resolved and continues to fight", value="All stats & stamina increased")
                                             await private_channel.send(embed=embedVar)
-                                            t_health = int(t_attack + t_defense)
+                                            t_health = int(.75 * (t_attack + t_defense))
                                             t_attack = t_attack + (.50 * t_attack)
                                             t_defense = t_defense +(.50 * t_defense)
                                             t_used_resolve=True
@@ -11688,7 +11693,7 @@ class CrownUnlimited(commands.Cog):
                                             embedVar = discord.Embed(title=f"{c_card.upper()}'s LAST STAND", description=f"{c_card} FINDS RESOLVE", colour=0xe91e63)
                                             embedVar.add_field(name=f"{c_card} resolved and continues to fight", value="All stats & stamina increased")
                                             await private_channel.send(embed=embedVar)
-                                            c_health = int(c_attack + c_defense)
+                                            c_health = int(.75 *(c_attack + c_defense))
                                             c_attack = c_attack + (.50 * c_attack)
                                             c_defense = c_defense +(.50 * c_defense)
                                             c_used_resolve=True
@@ -11813,7 +11818,7 @@ class CrownUnlimited(commands.Cog):
                                             embedVar = discord.Embed(title=f"{o_card.upper()}'s LAST STAND", description=f"{o_card} FINDS RESOLVE", colour=0xe91e63)
                                             embedVar.add_field(name=f"{o_card} resolved and continues to fight", value="All stats & stamina increased")
                                             await private_channel.send(embed=embedVar)
-                                            o_health = o_attack + o_defense
+                                            o_health = int(.75*(o_attack + o_defense))
                                             o_attack = o_attack + (.50 * o_attack)
                                             o_defense = o_defense +(.50 * o_defense)
                                             o_stamina=100
@@ -12658,7 +12663,7 @@ class CrownUnlimited(commands.Cog):
                                         embedVar = discord.Embed(title=f"{t_card.upper()}'s LAST STAND", description=f"{t_card} FINDS RESOLVE", colour=0xe91e63)
                                         embedVar.add_field(name=f"{t_card} resolved and continues to fight", value="All stats & stamina increased")
                                         await private_channel.send(embed=embedVar)
-                                        t_health = int(t_attack + t_defense)
+                                        t_health = int(.75 * (t_attack + t_defense))
                                         t_attack = t_attack + (.50 * t_attack)
                                         t_defense = t_defense +(.50 * t_defense)
                                         t_used_resolve=True
@@ -13417,7 +13422,7 @@ class CrownUnlimited(commands.Cog):
                                             embedVar = discord.Embed(title=f"{o_card.upper()}'s LAST STAND", description=f"{o_card} FINDS RESOLVE", colour=0xe91e63)
                                             embedVar.add_field(name=f"{o_card} resolved and continues to fight", value="All stats & stamina increased")
                                             await private_channel.send(embed=embedVar)
-                                            o_health = o_attack + o_defense
+                                            o_health = int(.75*(o_attack + o_defense))
                                             o_attack = o_attack + (.50 * o_attack)
                                             o_defense = o_defense +(.50 * o_defense)
                                             o_stamina=100
@@ -13543,7 +13548,7 @@ class CrownUnlimited(commands.Cog):
                                             embedVar = discord.Embed(title=f"{c_card.upper()}'s LAST STAND", description=f"{c_card} FINDS RESOLVE", colour=0xe91e63)
                                             embedVar.add_field(name=f"{c_card} resolved and continues to fight", value="All stats & stamina increased")
                                             await private_channel.send(embed=embedVar)
-                                            c_health = int(c_attack + c_defense)
+                                            c_health = int(.75 *(c_attack + c_defense))
                                             c_attack = c_attack + (.50 * c_attack)
                                             c_defense = c_defense +(.50 * c_defense)
                                             c_used_resolve=True
@@ -13665,10 +13670,14 @@ class CrownUnlimited(commands.Cog):
         all_universes = db.queryAllUniverse()
         available_universes = []
         selected_universe = ""
-        for uni in all_universes:
-            if uni['PREREQUISITE'] in sowner['CROWN_TALES'] and uni['HAS_CROWN_TALES'] == True:
-                available_universes.append(uni['TITLE'])
-                
+        if sowner['RIFT'] == 1:
+            for uni in all_universes:
+                if uni['PREREQUISITE'] in sowner['CROWN_TALES'] and uni['HAS_CROWN_TALES'] == True or uni['TIER'] == 9:
+                    available_universes.append(uni['TITLE'])
+        else:
+            for uni in all_universes:
+                if uni['PREREQUISITE'] in sowner['CROWN_TALES'] and uni['HAS_CROWN_TALES'] == True and uni['TIER'] != 9:
+                    available_universes.append(uni['TITLE'])              
         icon = ":crown:"
         if sowner['RIFT'] == 1:
             icon = ":crystal_ball:"
@@ -15475,7 +15484,7 @@ class CrownUnlimited(commands.Cog):
                                                 embedVar = discord.Embed(title=f"{t_card.upper()}'s LAST STAND", description=f"{t_card} FINDS RESOLVE", colour=0xe91e63)
                                                 embedVar.add_field(name=f"{t_card} resolved and continues to fight", value="All stats & stamina increased")
                                                 await private_channel.send(embed=embedVar)
-                                                t_health = int(t_attack + t_defense)
+                                                t_health = int(.75 * (t_attack + t_defense))
                                                 t_attack = t_attack + (.50 * t_attack)
                                                 t_defense = t_defense +(.50 * t_defense)
                                                 t_used_resolve=True
@@ -16024,7 +16033,7 @@ class CrownUnlimited(commands.Cog):
                                                 embedVar = discord.Embed(title=f"{c_card.upper()}'s LAST STAND", description=f"{c_card} FINDS RESOLVE", colour=0xe91e63)
                                                 embedVar.add_field(name=f"{c_card} resolved and continues to fight", value="All stats & stamina increased")
                                                 await private_channel.send(embed=embedVar)
-                                                c_health = int(c_attack + c_defense)
+                                                c_health = int(.75 *(c_attack + c_defense))
                                                 c_attack = c_attack + (.50 * c_attack)
                                                 c_defense = c_defense +(.50 * c_defense)
                                                 c_used_resolve=True
@@ -16149,7 +16158,7 @@ class CrownUnlimited(commands.Cog):
                                                 embedVar = discord.Embed(title=f"{o_card.upper()}'s LAST STAND", description=f"{o_card} FINDS RESOLVE", colour=0xe91e63)
                                                 embedVar.add_field(name=f"{o_card} resolved and continues to fight", value="All stats & stamina increased")
                                                 await private_channel.send(embed=embedVar)
-                                                o_health = int(o_attack + o_defense)
+                                                o_health = int(.75* (o_attack + o_defense))
                                                 o_attack = o_attack + (.50 * o_attack)
                                                 o_defense = o_defense +(.50 * o_defense)
                                                 o_stamina=100
@@ -16848,7 +16857,7 @@ class CrownUnlimited(commands.Cog):
                                                 embedVar = discord.Embed(title=f"{t_card.upper()}'s LAST STAND", description=f"{t_card} FINDS RESOLVE", colour=0xe91e63)
                                                 embedVar.add_field(name=f"{t_card} resolved and continues to fight", value="All stats & stamina increased")
                                                 await private_channel.send(embed=embedVar)
-                                                t_health = int(t_attack + t_defense)
+                                                t_health = int(.75 * (t_attack + t_defense))
                                                 t_attack = t_attack + (.50 * t_attack)
                                                 t_defense = t_defense +(.50 * t_defense)
                                                 t_used_resolve=True
@@ -17397,7 +17406,7 @@ class CrownUnlimited(commands.Cog):
                                                 embedVar = discord.Embed(title=f"{o_card.upper()}'s LAST STAND", description=f"{o_card} FINDS RESOLVE", colour=0xe91e63)
                                                 embedVar.add_field(name=f"{o_card} resolved and continues to fight", value="All stats & stamina increased")
                                                 await private_channel.send(embed=embedVar)
-                                                o_health = int(o_attack + o_defense)
+                                                o_health = int(.75* (o_attack + o_defense))
                                                 o_attack = o_attack + (.50 * o_attack)
                                                 o_defense = o_defense +(.50 * o_defense)
                                                 o_stamina=100
@@ -17523,7 +17532,7 @@ class CrownUnlimited(commands.Cog):
                                                 embedVar = discord.Embed(title=f"{c_card.upper()}'s LAST STAND", description=f"{c_card} FINDS RESOLVE", colour=0xe91e63)
                                                 embedVar.add_field(name=f"{c_card} resolved and continues to fight", value="All stats & stamina increased")
                                                 await private_channel.send(embed=embedVar)
-                                                c_health = int(c_attack + c_defense)
+                                                c_health = int(.75 *(c_attack + c_defense))
                                                 c_attack = c_attack + (.50 * c_attack)
                                                 c_defense = c_defense +(.50 * c_defense)
                                                 c_used_resolve=True
@@ -19527,7 +19536,7 @@ class CrownUnlimited(commands.Cog):
                                                 embedVar = discord.Embed(title=f"{t_card.upper()}'s LAST STAND", description=f"{t_card} FINDS RESOLVE", colour=0xe91e63)
                                                 embedVar.add_field(name=f"{t_card} resolved and continues to fight", value="All stats & stamina increased")
                                                 await private_channel.send(embed=embedVar)
-                                                t_health = int(t_attack + t_defense)
+                                                t_health = int(.75 * (t_attack + t_defense))
                                                 t_attack = t_attack + (.50 * t_attack)
                                                 t_defense = t_defense +(.50 * t_defense)
                                                 t_used_resolve=True
@@ -20272,7 +20281,7 @@ class CrownUnlimited(commands.Cog):
                                                 embedVar = discord.Embed(title=f"{c_card.upper()}'s LAST STAND", description=f"{c_card} FINDS RESOLVE", colour=0xe91e63)
                                                 embedVar.add_field(name=f"{c_card} resolved and continues to fight", value="All stats & stamina increased")
                                                 await private_channel.send(embed=embedVar)
-                                                c_health = int(c_attack + c_defense)
+                                                c_health = int(.75 *(c_attack + c_defense))
                                                 c_attack = c_attack + (.50 * c_attack)
                                                 c_defense = c_defense +(.50 * c_defense)
                                                 c_used_resolve=True
@@ -20397,7 +20406,7 @@ class CrownUnlimited(commands.Cog):
                                                 embedVar = discord.Embed(title=f"{o_card.upper()}'s LAST STAND", description=f"{o_card} FINDS RESOLVE", colour=0xe91e63)
                                                 embedVar.add_field(name=f"{o_card} resolved and continues to fight", value="All stats & stamina increased")
                                                 await private_channel.send(embed=embedVar)
-                                                o_health = int(o_attack + o_defense)
+                                                o_health = int(.75* (o_attack + o_defense))
                                                 o_attack = o_attack + (.50 * o_attack)
                                                 o_defense = o_defense +(.50 * o_defense)
                                                 o_stamina=100
@@ -21098,7 +21107,7 @@ class CrownUnlimited(commands.Cog):
                                                 embedVar = discord.Embed(title=f"{t_card.upper()}'s LAST STAND", description=f"{t_card} FINDS RESOLVE", colour=0xe91e63)
                                                 embedVar.add_field(name=f"{t_card} resolved and continues to fight", value="All stats & stamina increased")
                                                 await private_channel.send(embed=embedVar)
-                                                t_health = int(t_attack + t_defense)
+                                                t_health = int(.75 * (t_attack + t_defense))
                                                 t_attack = t_attack + (.50 * t_attack)
                                                 t_defense = t_defense +(.50 * t_defense)
                                                 t_used_resolve=True
@@ -21842,7 +21851,7 @@ class CrownUnlimited(commands.Cog):
                                                 embedVar = discord.Embed(title=f"{o_card.upper()}'s LAST STAND", description=f"{o_card} FINDS RESOLVE", colour=0xe91e63)
                                                 embedVar.add_field(name=f"{o_card} resolved and continues to fight", value="All stats & stamina increased")
                                                 await private_channel.send(embed=embedVar)
-                                                o_health = int(o_attack + o_defense)
+                                                o_health = int(.75* (o_attack + o_defense))
                                                 o_attack = o_attack + (.50 * o_attack)
                                                 o_defense = o_defense +(.50 * o_defense)
                                                 o_stamina=100
@@ -21968,7 +21977,7 @@ class CrownUnlimited(commands.Cog):
                                                 embedVar = discord.Embed(title=f"{c_card.upper()}'s LAST STAND", description=f"{c_card} FINDS RESOLVE", colour=0xe91e63)
                                                 embedVar.add_field(name=f"{c_card} resolved and continues to fight", value="All stats & stamina increased")
                                                 await private_channel.send(embed=embedVar)
-                                                c_health = int(c_attack + c_defense)
+                                                c_health = int(.75 *(c_attack + c_defense))
                                                 c_attack = c_attack + (.50 * c_attack)
                                                 c_defense = c_defense +(.50 * c_defense)
                                                 c_used_resolve=True
@@ -23967,7 +23976,7 @@ class CrownUnlimited(commands.Cog):
                                             embedVar = discord.Embed(title=f"{t_card.upper()}'s LAST STAND", description=f"{t_card} FINDS RESOLVE", colour=0xe91e63)
                                             embedVar.add_field(name=f"{t_card} resolved and continues to fight", value="All stats & stamina increased")
                                             await private_channel.send(embed=embedVar)
-                                            t_health = int(t_attack + t_defense)
+                                            t_health = int(.75 * (t_attack + t_defense))
                                             t_attack = t_attack + (.50 * t_attack)
                                             t_defense = t_defense +(.50 * t_defense)
                                             t_used_resolve=True
@@ -24731,7 +24740,7 @@ class CrownUnlimited(commands.Cog):
                                             embedVar = discord.Embed(title=f"{c_card.upper()}'s LAST STAND", description=f"{c_card} FINDS RESOLVE", colour=0xe91e63)
                                             embedVar.add_field(name=f"{c_card} resolved and continues to fight", value="All stats & stamina increased")
                                             await private_channel.send(embed=embedVar)
-                                            c_health = int(c_attack + c_defense)
+                                            c_health = int(.75 *(c_attack + c_defense))
                                             c_attack = c_attack + (.50 * c_attack)
                                             c_defense = c_defense +(.50 * c_defense)
                                             c_used_resolve=True
@@ -24856,7 +24865,7 @@ class CrownUnlimited(commands.Cog):
                                             embedVar = discord.Embed(title=f"{o_card.upper()}'s LAST STAND", description=f"{o_card} FINDS RESOLVE", colour=0xe91e63)
                                             embedVar.add_field(name=f"{o_card} resolved and continues to fight", value="All stats & stamina increased")
                                             await private_channel.send(embed=embedVar)
-                                            o_health = o_attack + o_defense
+                                            o_health = int(.75*(o_attack + o_defense))
                                             o_attack = o_attack + (.50 * o_attack)
                                             o_defense = o_defense +(.50 * o_defense)
                                             o_stamina=100
@@ -25556,7 +25565,7 @@ class CrownUnlimited(commands.Cog):
                                             embedVar = discord.Embed(title=f"{t_card.upper()}'s LAST STAND", description=f"{t_card} FINDS RESOLVE", colour=0xe91e63)
                                             embedVar.add_field(name=f"{t_card} resolved and continues to fight", value="All stats & stamina increased")
                                             await private_channel.send(embed=embedVar)
-                                            t_health = int(t_attack + t_defense)
+                                            t_health = int(.75 * (t_attack + t_defense))
                                             t_attack = t_attack + (.50 * t_attack)
                                             t_defense = t_defense +(.50 * t_defense)
                                             t_used_resolve=True
@@ -26321,7 +26330,7 @@ class CrownUnlimited(commands.Cog):
                                             embedVar = discord.Embed(title=f"{o_card.upper()}'s LAST STAND", description=f"{o_card} FINDS RESOLVE", colour=0xe91e63)
                                             embedVar.add_field(name=f"{o_card} resolved and continues to fight", value="All stats & stamina increased")
                                             await private_channel.send(embed=embedVar)
-                                            o_health = o_attack + o_defense
+                                            o_health = int(.75*(o_attack + o_defense))
                                             o_attack = o_attack + (.50 * o_attack)
                                             o_defense = o_defense +(.50 * o_defense)
                                             o_stamina=100
@@ -26447,7 +26456,7 @@ class CrownUnlimited(commands.Cog):
                                             embedVar = discord.Embed(title=f"{c_card.upper()}'s LAST STAND", description=f"{c_card} FINDS RESOLVE", colour=0xe91e63)
                                             embedVar.add_field(name=f"{c_card} resolved and continues to fight", value="All stats & stamina increased")
                                             await private_channel.send(embed=embedVar)
-                                            c_health = int(c_attack + c_defense)
+                                            c_health = int(.75 *(c_attack + c_defense))
                                             c_attack = c_attack + (.50 * c_attack)
                                             c_defense = c_defense +(.50 * c_defense)
                                             c_used_resolve=True
@@ -27919,7 +27928,7 @@ class CrownUnlimited(commands.Cog):
                                                 embedVar = discord.Embed(title=f"{t_card.upper()}'s LAST STAND", description=f"{t_card} FINDS RESOLVE", colour=0xe91e63)
                                                 embedVar.add_field(name=f"{t_card} resolved and continues to fight", value="All stats & stamina increased")
                                                 await private_channel.send(embed=embedVar)
-                                                t_health = int(t_attack + t_defense)
+                                                t_health = int(.75 * (t_attack + t_defense))
                                                 t_attack = t_attack + (.50 * t_attack)
                                                 t_defense = t_defense +(.50 * t_defense)
                                                 t_used_resolve=True
@@ -28551,7 +28560,7 @@ class CrownUnlimited(commands.Cog):
                                             embedVar = discord.Embed(title=f"{o_card.upper()}'s LAST STAND", description=f"{o_card} FINDS RESOLVE", colour=0xe91e63)
                                             embedVar.add_field(name=f"{o_card} resolved and continues to fight", value="All stats & stamina increased")
                                             await private_channel.send(embed=embedVar)
-                                            o_health = o_attack + o_defense
+                                            o_health = int(.75*(o_attack + o_defense))
                                             o_attack = o_attack + (.50 * o_attack)
                                             o_defense = o_defense +(.50 * o_defense)
                                             o_stamina=100
@@ -30084,7 +30093,7 @@ class CrownUnlimited(commands.Cog):
                                                 embedVar = discord.Embed(title=f"{t_card.upper()}'s LAST STAND", description=f"{t_card} FINDS RESOLVE", colour=0xe91e63)
                                                 embedVar.add_field(name=f"{t_card} resolved and continues to fight", value="All stats & stamina increased")
                                                 await private_channel.send(embed=embedVar)
-                                                t_health = int(t_attack + t_defense)
+                                                t_health = int(.75 * (t_attack + t_defense))
                                                 t_attack = t_attack + (.50 * t_attack)
                                                 t_defense = t_defense +(.50 * t_defense)
                                                 t_used_resolve=True
@@ -30598,7 +30607,7 @@ class CrownUnlimited(commands.Cog):
                                             embedVar = discord.Embed(title=f"{o_card.upper()}'s LAST STAND", description=f"{o_card} FINDS RESOLVE", colour=0xe91e63)
                                             embedVar.add_field(name=f"{o_card} resolved and continues to fight", value="All stats & stamina increased")
                                             await private_channel.send(embed=embedVar)
-                                            o_health = o_attack + o_defense
+                                            o_health = int(.75*(o_attack + o_defense))
                                             o_attack = o_attack + (.50 * o_attack)
                                             o_defense = o_defense +(.50 * o_defense)
                                             o_stamina=100
@@ -32127,7 +32136,7 @@ class CrownUnlimited(commands.Cog):
                                             embedVar = discord.Embed(title=f"{t_card.upper()}'s LAST STAND", description=f"{t_card} FINDS RESOLVE", colour=0xe91e63)
                                             embedVar.add_field(name=f"{t_card} resolved and continues to fight", value="All stats & stamina increased")
                                             await private_channel.send(embed=embedVar)
-                                            t_health = int(t_attack + t_defense)
+                                            t_health = int(.75 * (t_attack + t_defense))
                                             t_attack = t_attack + (.50 * t_attack)
                                             t_defense = t_defense +(.50 * t_defense)
                                             t_used_resolve=True
@@ -32780,7 +32789,7 @@ class CrownUnlimited(commands.Cog):
                                         embedVar = discord.Embed(title=f"{o_card.upper()}'s LAST STAND", description=f"{o_card} FINDS RESOLVE", colour=0xe91e63)
                                         embedVar.add_field(name=f"{o_card} resolved and continues to fight", value="All stats & stamina increased")
                                         await private_channel.send(embed=embedVar)
-                                        o_health = o_attack + o_defense
+                                        o_health = int(.75*(o_attack + o_defense))
                                         o_attack = o_attack + (.50 * o_attack)
                                         o_defense = o_defense +(.50 * o_defense)
                                         o_stamina=100
@@ -34226,7 +34235,7 @@ class CrownUnlimited(commands.Cog):
                                                     embedVar = discord.Embed(title=f"{t_card.upper()}'s LAST STAND", description=f"{t_card} FINDS RESOLVE", colour=0xe91e63)
                                                     embedVar.add_field(name=f"{t_card} resolved and continues to fight", value="All stats & stamina increased")
                                                     await private_channel.send(embed=embedVar)
-                                                    t_health = int(t_attack + t_defense)
+                                                    t_health = int(.75 * (t_attack + t_defense))
                                                     t_attack = t_attack + (.50 * t_attack)
                                                     t_defense = t_defense +(.50 * t_defense)
                                                     t_used_resolve=True
@@ -34824,7 +34833,7 @@ class CrownUnlimited(commands.Cog):
                                                         embedVar = discord.Embed(title=f"{o_card.upper()}'s LAST STAND", description=f"{o_card} FINDS RESOLVE", colour=0xe91e63)
                                                         embedVar.add_field(name=f"{o_card} resolved and continues to fight", value="All stats & stamina increased")
                                                         await private_channel.send(embed=embedVar)
-                                                        o_health = o_attack + o_defense
+                                                        o_health = int(.75*(o_attack + o_defense))
                                                         o_attack = o_attack + (.50 * o_attack)
                                                         o_defense = o_defense +(.50 * o_defense)
                                                         o_stamina=100
@@ -35310,7 +35319,7 @@ class CrownUnlimited(commands.Cog):
                                                     embedVar = discord.Embed(title=f"{o_card.upper()}'s LAST STAND", description=f"{o_card} FINDS RESOLVE", colour=0xe91e63)
                                                     embedVar.add_field(name=f"{o_card} resolved and continues to fight", value="All stats & stamina increased")
                                                     await private_channel.send(embed=embedVar)
-                                                    o_health = o_attack + o_defense
+                                                    o_health = int(.75*(o_attack + o_defense))
                                                     o_attack = o_attack + (.50 * o_attack)
                                                     o_defense = o_defense +(.50 * o_defense)
                                                     o_stamina=100
@@ -36787,7 +36796,7 @@ class CrownUnlimited(commands.Cog):
                                                     embedVar = discord.Embed(title=f"{t_card.upper()}'s LAST STAND", description=f"{t_card} FINDS RESOLVE", colour=0xe91e63)
                                                     embedVar.add_field(name=f"{t_card} resolved and continues to fight", value="All stats & stamina increased")
                                                     await private_channel.send(embed=embedVar)
-                                                    t_health = int(t_attack + t_defense)
+                                                    t_health = int(.75 * (t_attack + t_defense))
                                                     t_attack = t_attack + (.50 * t_attack)
                                                     t_defense = t_defense +(.50 * t_defense)
                                                     t_used_resolve=True
@@ -37379,7 +37388,7 @@ class CrownUnlimited(commands.Cog):
                                                         embedVar = discord.Embed(title=f"{o_card.upper()}'s LAST STAND", description=f"{o_card} FINDS RESOLVE", colour=0xe91e63)
                                                         embedVar.add_field(name=f"{o_card} resolved and continues to fight", value="All stats & stamina increased")
                                                         await private_channel.send(embed=embedVar)
-                                                        o_health = o_attack + o_defense
+                                                        o_health = int(.75*(o_attack + o_defense))
                                                         o_attack = o_attack + (.50 * o_attack)
                                                         o_defense = o_defense +(.50 * o_defense)
                                                         o_stamina=100
@@ -37740,7 +37749,7 @@ class CrownUnlimited(commands.Cog):
                                                     embedVar = discord.Embed(title=f"{o_card.upper()}'s LAST STAND", description=f"{o_card} FINDS RESOLVE", colour=0xe91e63)
                                                     embedVar.add_field(name=f"{o_card} resolved and continues to fight", value="All stats & stamina increased")
                                                     await private_channel.send(embed=embedVar)
-                                                    o_health = o_attack + o_defense
+                                                    o_health = int(.75*(o_attack + o_defense))
                                                     o_attack = o_attack + (.50 * o_attack)
                                                     o_defense = o_defense +(.50 * o_defense)
                                                     o_stamina=100
