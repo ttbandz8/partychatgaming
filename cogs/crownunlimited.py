@@ -34399,7 +34399,7 @@ class CrownUnlimited(commands.Cog):
                                 embedVar = discord.Embed(title=f"{t_card}, choose your move!", description=textwrap.dedent(f"""\
                         
                                 :cyclone: 10 | **{tmove1_text}** | _1_
-                                :cyclone: 30 | **{tmove1_text}** | _2_
+                                :cyclone: 30 | **{tmove2_text}** | _2_
                                 :cyclone: 80 | **{tmove3_text}** | _3_
                                  :cyclone: 20 **{tmove_enhanced_text}** | _4_
                                 :cyclone: 20 | **Block** | _0_
