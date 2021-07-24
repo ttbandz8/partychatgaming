@@ -63,6 +63,10 @@ traits = [{
     'EFFECT': 'Scheduled Death',
     'TRAIT': 'After 24 Turns You Win'
 },{
+    'NAME': 'Dragon Ball Z',
+    'EFFECT': 'Final Stand',
+    'TRAIT': 'When you die, Resolve with 25% Health and increased ATK and DEF'
+},{
     'NAME': 'Crown Rift Slayers',
     'EFFECT': 'Follow Up Attack',
     'TRAIT': 'If you miss, you connect'

@@ -348,6 +348,16 @@ class CrownUnlimited(commands.Cog):
             else:                    
                 c_max_health = c['HLT']
 
+            #DBZ traits
+            o_final_stand=False
+            c_final_stand=False
+            t_final_stand=False
+            if o['UNIVERSE'] == "Dragon Ball Z":
+                o_final_stand=True
+            if c['UNIVERSE'] == "Dragon Ball Z":
+                c_final_stand=True
+            if t['UNIVERSE'] == "Dragon Ball Z":
+                t_final_stand=True
             if (oarm_universe == o_universe) and (o_title_universe == o_universe):
                 o_attack = o_attack + 20
                 o_defense = o_defense + 20
@@ -1179,6 +1189,8 @@ class CrownUnlimited(commands.Cog):
             o_defense = o_defense + (o_user['REBIRTH'] * 10)
             c_attack = c_attack + (o_user['REBIRTH'] * 10)
             c_defense = c_defense + (o_user['REBIRTH'] * 10)
+            
+            
 
             # START TURNS
             while ((o_health > 0) and (c_health > 0)) and (t_health > 0):
@@ -1970,11 +1982,28 @@ class CrownUnlimited(commands.Cog):
                                             t_health = t_health - dmg['DMG']
                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
                                             await private_channel.send(embed=embedVar)
-                                        if t_health < 0:
-                                            t_health=0
-                                        o_stamina = o_stamina - dmg['STAMINA_USED']                                            
-                                        turn_total= turn_total + 1
-                                        turn=1
+                                        if t_health <= 0:
+                                            if t_final_stand==True:
+                                                embedVar = discord.Embed(title=f"{t_card.upper()}'s LAST STAND", description=f"{t_card} FINDS RESOLVE", colour=0xe91e63)
+                                                embedVar.add_field(name=f"{t_card} resolved and continues to fight", value="All stats & stamina increased")
+                                                await private_channel.send(embed=embedVar)
+                                                t_health = int(t_attack + t_defense)
+                                                t_attack = t_attack + (.50 * t_attack)
+                                                t_defense = t_defense +(.50 * t_defense)
+                                                t_used_resolve=True
+                                                t_used_focus=True
+                                                t_final_stand=False
+                                                o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                                turn_total= turn_total + 1
+                                                turn=1
+                                            else:
+                                                t_health=0
+                                                o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                                turn_total= turn_total + 1
+                                        else:
+                                            o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                            turn_total= turn_total + 1
+                                            turn=1
                                 else:
                                     emessage = m.NOT_ENOUGH_STAMINA
                                     embedVar = discord.Embed(title=emessage, description=f"Use abilities to Increase `STAM` or enter `FOCUS STATE`!", colour=0xe91e63)
@@ -2482,11 +2511,28 @@ class CrownUnlimited(commands.Cog):
                                             c_health = c_health - int(dmg['DMG'])
                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                             await private_channel.send(embed=embedVar)
-                                        if c_health < 0:
-                                            c_health=0
-                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
-                                        turn_total= turn_total + 1
-                                        turn=2
+                                        if c_health <= 0:
+                                            if c_final_stand==True:
+                                                embedVar = discord.Embed(title=f"{c_card.upper()}'s LAST STAND", description=f"{c_card} FINDS RESOLVE", colour=0xe91e63)
+                                                embedVar.add_field(name=f"{c_card} resolved and continues to fight", value="All stats & stamina increased")
+                                                await private_channel.send(embed=embedVar)
+                                                c_health = int(c_attack + c_defense)
+                                                c_attack = c_attack + (.50 * c_attack)
+                                                c_defense = c_defense +(.50 * c_defense)
+                                                c_used_focus=True
+                                                c_used_resolve=True
+                                                c_final_stand=False
+                                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                                turn_total= turn_total + 1
+                                                turn=2
+                                            else:
+                                                c_health=0
+                                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                                turn_total= turn_total + 1
+                                        else:
+                                            t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                            turn_total= turn_total + 1
+                                            turn=2
                                 else:
                                     await private_channel.send(m.NOT_ENOUGH_STAMINA)
                                     turn = 1
@@ -2590,11 +2636,29 @@ class CrownUnlimited(commands.Cog):
                                             o_health = o_health - int(dmg['DMG'])
                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                             await private_channel.send(embed=embedVar)
-                                        if o_health < 0:
-                                            o_health=0
-                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
-                                        turn_total= turn_total + 1
-                                        turn=2
+                                        if o_health <= 0:
+                                            if o_final_stand==True:
+                                                embedVar = discord.Embed(title=f"{o_card.upper()}'s LAST STAND", description=f"{o_card} FINDS RESOLVE", colour=0xe91e63)
+                                                embedVar.add_field(name=f"{o_card} resolved and continues to fight", value="All stats & stamina increased")
+                                                await private_channel.send(embed=embedVar)
+                                                o_health = int(o_attack + o_defense)
+                                                o_attack = o_attack + (.50 * o_attack)
+                                                o_defense = o_defense +(.50 * o_defense)
+                                                o_stamina=100
+                                                o_used_resolve=True
+                                                o_final_stand=False
+                                                o_used_focus=True
+                                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                                turn_total= turn_total + 1
+                                                turn=0
+                                            else:
+                                                o_health=0
+                                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                                turn_total= turn_total + 1
+                                        else:
+                                            t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                            turn_total= turn_total + 1
+                                            turn=2
                                 else:
                                     await private_channel.send(m.NOT_ENOUGH_STAMINA)
                                     turn = 1
@@ -2914,13 +2978,11 @@ class CrownUnlimited(commands.Cog):
                         elif c_stamina >= 10:
                             aiMove = 1
                         else:
-                            aiMove = 0
+                            aiMove = 1
             
 
                         
                             # calculate data based on selected move
-                        if aiMove == 0:
-                            c_health=0
                     
                             if private_channel.guild:
                                 await private_channel.send(f"{user2.mention} has fled the battle...")
@@ -3402,11 +3464,28 @@ class CrownUnlimited(commands.Cog):
                                         t_health = t_health - dmg['DMG']
                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
                                         await private_channel.send(embed=embedVar)
-                                    if t_health < 0:
-                                        t_health=0
-                                    c_stamina = c_stamina - dmg['STAMINA_USED']                                            
-                                    turn_total= turn_total + 1
-                                    turn=3
+                                    if t_health <= 0:
+                                        if t_final_stand==True:
+                                            embedVar = discord.Embed(title=f"{t_card.upper()}'s LAST STAND", description=f"{t_card} FINDS RESOLVE", colour=0xe91e63)
+                                            embedVar.add_field(name=f"{t_card} resolved and continues to fight", value="All stats & stamina increased")
+                                            await private_channel.send(embed=embedVar)
+                                            t_health = int(t_attack + t_defense)
+                                            t_attack = t_attack + (.50 * t_attack)
+                                            t_defense = t_defense +(.50 * t_defense)
+                                            t_used_resolve=True
+                                            t_final_stand=False
+                                            t_used_focus=True
+                                            c_stamina = c_stamina - dmg['STAMINA_USED']                                            
+                                            turn_total= turn_total + 1
+                                            turn=3
+                                        else:
+                                            t_health=0
+                                            c_stamina = c_stamina - dmg['STAMINA_USED']                                            
+                                            turn_total= turn_total + 1
+                                    else:
+                                        c_stamina = c_stamina - dmg['STAMINA_USED']                                            
+                                        turn_total= turn_total + 1
+                                        turn=3
                             else:
                                 emessage = m.NOT_ENOUGH_STAMINA
                                 embedVar = discord.Embed(title=emessage, description=f"Use abilities to Increase `STAM` or enter `FOCUS STATE`!", colour=0xe91e63)
@@ -3909,11 +3988,29 @@ class CrownUnlimited(commands.Cog):
                                             o_health = o_health - int(dmg['DMG'])
                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                             await private_channel.send(embed=embedVar)
-                                        if o_health < 0:
-                                            o_health=0
-                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
-                                        turn_total= turn_total + 1
-                                        turn=0
+                                        if o_health <= 0:
+                                            if o_final_stand==True:
+                                                embedVar = discord.Embed(title=f"{o_card.upper()}'s LAST STAND", description=f"{o_card} FINDS RESOLVE", colour=0xe91e63)
+                                                embedVar.add_field(name=f"{o_card} resolved and continues to fight", value="All stats & stamina increased")
+                                                await private_channel.send(embed=embedVar)
+                                                o_health = int(o_attack + o_defense)
+                                                o_attack = o_attack + (.50 * o_attack)
+                                                o_defense = o_defense +(.50 * o_defense)
+                                                o_stamina=100
+                                                o_used_resolve=True
+                                                o_final_stand=False
+                                                o_used_focus=True
+                                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                                turn_total= turn_total + 1
+                                                turn=0
+                                            else:
+                                                o_health=0
+                                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                                turn_total= turn_total + 1
+                                        else:
+                                            t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                            turn_total= turn_total + 1
+                                            turn=0
                                 else:
                                     await private_channel.send(m.NOT_ENOUGH_STAMINA)
                                     turn = 3
@@ -4017,15 +4114,32 @@ class CrownUnlimited(commands.Cog):
                                             c_health = c_health - int(dmg['DMG'])
                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                             await private_channel.send(embed=embedVar)
-                                        if c_health < 0:
-                                            c_health=0
-                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
-                                        turn_total= turn_total + 1
-                                        turn=0
+                                        if c_health <= 0:
+                                            if c_final_stand==True:
+                                                embedVar = discord.Embed(title=f"{c_card.upper()}'s LAST STAND", description=f"{c_card} FINDS RESOLVE", colour=0xe91e63)
+                                                embedVar.add_field(name=f"{c_card} resolved and continues to fight", value="All stats & stamina increased")
+                                                await private_channel.send(embed=embedVar)
+                                                c_health = int(c_attack + c_defense)
+                                                c_attack = c_attack + (.50 * c_attack)
+                                                c_defense = c_defense +(.50 * c_defense)
+                                                c_used_resolve=True
+                                                c_used_focus=True
+                                                c_final_stand=False
+                                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                                turn_total= turn_total + 1
+                                                turn=2
+                                            else:
+                                                c_health=0
+                                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                                turn_total= turn_total + 1
+                                        else:
+                                            t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                            turn_total= turn_total + 1
+                                            turn=0
                                 else:
                                     await private_channel.send(m.NOT_ENOUGH_STAMINA)
                                     turn = 3
-        
+
             if botActive:
                 end_message="Use the #end command to end the tutorial lobby"
             else:
@@ -4076,8 +4190,7 @@ class CrownUnlimited(commands.Cog):
                     if private_channel.guild:
                         await discord.TextChannel.delete(private_channel, reason=None)
 
-            elif t_health <=0 or t_max_health <= 0:
-                
+            elif t_health <=0 or t_max_health <= 0:                
                 uid = o_DID
                 ouser = await self.bot.fetch_user(uid)
 
@@ -4475,6 +4588,17 @@ class CrownUnlimited(commands.Cog):
             else:                    
                 c_max_health = c['HLT'] - (10 * currentopponent)
 
+            #DBZ traits
+            o_final_stand=False
+            c_final_stand=False
+            t_final_stand=False
+            if o['UNIVERSE'] == "Dragon Ball Z":
+                o_final_stand=True
+            if c['UNIVERSE'] == "Dragon Ball Z":
+                c_final_stand=True
+            if t['UNIVERSE'] == "Dragon Ball Z":
+                t_final_stand=True
+                
             if (oarm_universe == o_universe) and (o_title_universe == o_universe):
                 o_attack = o_attack + 20
                 o_defense = o_defense + 20
@@ -6107,11 +6231,29 @@ class CrownUnlimited(commands.Cog):
                                             t_health = t_health - dmg['DMG']
                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
                                             await private_channel.send(embed=embedVar)
-                                        if t_health < 0:
-                                            t_health=0
-                                        o_stamina = o_stamina - dmg['STAMINA_USED']                                            
-                                        turn_total= turn_total + 1
-                                        turn=1
+                                        if t_health <= 0:
+                                            if t_final_stand==True:
+                                                print("Final Stand")
+                                                embedVar = discord.Embed(title=f"{t_card.upper()}'s LAST STAND", description=f"{t_card} FINDS RESOLVE", colour=0xe91e63)
+                                                embedVar.add_field(name=f"{t_card} resolved and continues to fight", value="All stats & stamina increased")
+                                                await private_channel.send(embed=embedVar)
+                                                t_health = int(t_attack + t_defense)
+                                                t_attack = t_attack + (.50 * t_attack)
+                                                t_defense = t_defense +(.50 * t_defense)
+                                                t_used_resolve=True
+                                                t_used_focus=True
+                                                t_final_stand=False
+                                                o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                                turn_total= turn_total + 1
+                                                turn=1
+                                            else:
+                                                t_health=0
+                                                o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                                turn_total= turn_total + 1
+                                        else:
+                                            o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                            turn_total= turn_total + 1
+                                            turn=1
                                 else:
                                     emessage = m.NOT_ENOUGH_STAMINA
                                     embedVar = discord.Embed(title=emessage, description=f"Use abilities to Increase `STAM` or enter `FOCUS STATE`!", colour=0xe91e63)
@@ -6834,11 +6976,28 @@ class CrownUnlimited(commands.Cog):
                                             c_health = c_health - int(dmg['DMG'])
                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                             await private_channel.send(embed=embedVar)
-                                        if c_health < 0:
-                                            c_health=0
-                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
-                                        turn_total= turn_total + 1
-                                        turn=2
+                                        if c_health <= 0:
+                                            if c_final_stand==True:
+                                                embedVar = discord.Embed(title=f"{c_card.upper()}'s LAST STAND", description=f"{c_card} FINDS RESOLVE", colour=0xe91e63)
+                                                embedVar.add_field(name=f"{c_card} resolved and continues to fight", value="All stats & stamina increased")
+                                                await private_channel.send(embed=embedVar)
+                                                c_health = int(c_attack + c_defense)
+                                                c_attack = c_attack + (.50 * c_attack)
+                                                c_defense = c_defense +(.50 * c_defense)
+                                                c_used_resolve=True
+                                                c_used_focus=True
+                                                c_final_stand=False
+                                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                                turn_total= turn_total + 1
+                                                turn=2
+                                            else:
+                                                c_health=0
+                                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                                turn_total= turn_total + 1
+                                        else:
+                                            t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                            turn_total= turn_total + 1
+                                            turn=2
                                 else:
                                     await private_channel.send(m.NOT_ENOUGH_STAMINA)
                                     turn = 1
@@ -6942,11 +7101,29 @@ class CrownUnlimited(commands.Cog):
                                             o_health = o_health - int(dmg['DMG'])
                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                             await private_channel.send(embed=embedVar)
-                                        if o_health < 0:
-                                            o_health=0
-                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
-                                        turn_total= turn_total + 1
-                                        turn=2
+                                        if o_health <= 0:
+                                            if o_final_stand==True:
+                                                embedVar = discord.Embed(title=f"{o_card.upper()}'s LAST STAND", description=f"{o_card} FINDS RESOLVE", colour=0xe91e63)
+                                                embedVar.add_field(name=f"{o_card} resolved and continues to fight", value="All stats & stamina increased")
+                                                await private_channel.send(embed=embedVar)
+                                                o_health = int(o_attack + o_defense)
+                                                o_attack = o_attack + (.50 * o_attack)
+                                                o_defense = o_defense +(.50 * o_defense)
+                                                o_stamina=100
+                                                o_used_resolve=True
+                                                o_final_stand=False
+                                                o_used_focus=True
+                                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                                turn_total= turn_total + 1
+                                                turn=0
+                                            else:
+                                                o_health=0
+                                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                                turn_total= turn_total + 1
+                                        else:
+                                            t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                            turn_total= turn_total + 1
+                                            turn=2
                                 else:
                                     await private_channel.send(m.NOT_ENOUGH_STAMINA)
                                     turn = 1
@@ -7758,11 +7935,29 @@ class CrownUnlimited(commands.Cog):
                                         t_health = t_health - dmg['DMG']
                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
                                         await private_channel.send(embed=embedVar)
-                                    if t_health < 0:
-                                        t_health=0
-                                    c_stamina = c_stamina - dmg['STAMINA_USED']                                            
-                                    turn_total= turn_total + 1
-                                    turn=3
+                                    if t_health <= 0:
+                                        if t_final_stand==True:
+                                            print("Final Stand")
+                                            embedVar = discord.Embed(title=f"{t_card.upper()}'s LAST STAND", description=f"{t_card} FINDS RESOLVE", colour=0xe91e63)
+                                            embedVar.add_field(name=f"{t_card} resolved and continues to fight", value="All stats & stamina increased")
+                                            await private_channel.send(embed=embedVar)
+                                            t_health = int(t_attack + t_defense)
+                                            t_attack = t_attack + (.50 * t_attack)
+                                            t_defense = t_defense +(.50 * t_defense)
+                                            t_used_resolve=True
+                                            t_final_stand=False
+                                            t_used_focus=True
+                                            o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                            turn_total= turn_total + 1
+                                            turn=1
+                                        else:
+                                            t_health=0
+                                            o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                            turn_total= turn_total + 1
+                                    else:
+                                        o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                        turn_total= turn_total + 1
+                                        turn=3
                             else:
                                 emessage = m.NOT_ENOUGH_STAMINA
                                 embedVar = discord.Embed(title=emessage, description=f"Use abilities to Increase `STAM` or enter `FOCUS STATE`!", colour=0xe91e63)
@@ -8479,11 +8674,29 @@ class CrownUnlimited(commands.Cog):
                                             o_health = o_health - int(dmg['DMG'])
                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                             await private_channel.send(embed=embedVar)
-                                        if o_health < 0:
-                                            o_health=0
-                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
-                                        turn_total= turn_total + 1
-                                        turn=0
+                                        if o_health <= 0:
+                                            if o_final_stand==True:
+                                                embedVar = discord.Embed(title=f"{o_card.upper()}'s LAST STAND", description=f"{o_card} FINDS RESOLVE", colour=0xe91e63)
+                                                embedVar.add_field(name=f"{o_card} resolved and continues to fight", value="All stats & stamina increased")
+                                                await private_channel.send(embed=embedVar)
+                                                o_health = int(o_attack + o_defense)
+                                                o_attack = o_attack + (.50 * o_attack)
+                                                o_defense = o_defense +(.50 * o_defense)
+                                                o_stamina=100
+                                                o_used_resolve=True
+                                                o_final_stand=False
+                                                o_used_focus=True
+                                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                                turn_total= turn_total + 1
+                                                turn=0
+                                            else:
+                                                o_health=0
+                                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                                turn_total= turn_total + 1
+                                        else:
+                                            t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                            turn_total= turn_total + 1
+                                            turn=0
                                 else:
                                     await private_channel.send(m.NOT_ENOUGH_STAMINA)
                                     turn = 3
@@ -8587,11 +8800,28 @@ class CrownUnlimited(commands.Cog):
                                             c_health = c_health - int(dmg['DMG'])
                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                             await private_channel.send(embed=embedVar)
-                                        if c_health < 0:
-                                            c_health=0
-                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
-                                        turn_total= turn_total + 1
-                                        turn=0
+                                        if c_health <= 0:
+                                            if c_final_stand==True:
+                                                embedVar = discord.Embed(title=f"{c_card.upper()}'s LAST STAND", description=f"{c_card} FINDS RESOLVE", colour=0xe91e63)
+                                                embedVar.add_field(name=f"{c_card} resolved and continues to fight", value="All stats & stamina increased")
+                                                await private_channel.send(embed=embedVar)
+                                                c_health = int(c_attack + c_defense)
+                                                c_attack = c_attack + (.50 * c_attack)
+                                                c_defense = c_defense +(.50 * c_defense)
+                                                c_used_resolve=True
+                                                c_used_focus=True
+                                                c_final_stand=False
+                                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                                turn_total= turn_total + 1
+                                                turn=2
+                                            else:
+                                                c_health=0
+                                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                                turn_total= turn_total + 1
+                                        else:
+                                            t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                            turn_total= turn_total + 1
+                                            turn=0
                                 else:
                                     await private_channel.send(m.NOT_ENOUGH_STAMINA)
                                     turn = 3
@@ -9029,6 +9259,16 @@ class CrownUnlimited(commands.Cog):
         else:                    
             c_max_health = c['HLT']
 
+        #DBZ traits
+        o_final_stand=False
+        c_final_stand=False
+        t_final_stand=False
+        if o['UNIVERSE'] == "Dragon Ball Z":
+            o_final_stand=True
+        if c['UNIVERSE'] == "Dragon Ball Z":
+            c_final_stand=True
+        if t['UNIVERSE'] == "Dragon Ball Z":
+            t_final_stand=True
         ################################################################################
         ##world Building
         t_arena = t_user['DESCRIPTION'][0]
@@ -10679,11 +10919,28 @@ class CrownUnlimited(commands.Cog):
                                         t_health = t_health - dmg['DMG']
                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
                                         await private_channel.send(embed=embedVar)
-                                    if t_health < 0:
-                                        t_health=0
-                                    o_stamina = o_stamina - dmg['STAMINA_USED']                                            
-                                    turn_total= turn_total + 1
-                                    turn=1
+                                    if t_health <= 0:
+                                        if t_final_stand==True:
+                                            embedVar = discord.Embed(title=f"{t_card.upper()}'s LAST STAND", description=f"{t_card} FINDS RESOLVE", colour=0xe91e63)
+                                            embedVar.add_field(name=f"{t_card} resolved and continues to fight", value="All stats & stamina increased")
+                                            await private_channel.send(embed=embedVar)
+                                            t_health = int(t_attack + t_defense)
+                                            t_attack = t_attack + (.50 * t_attack)
+                                            t_defense = t_defense +(.50 * t_defense)
+                                            t_used_resolve=True
+                                            t_final_stand=False
+                                            t_used_focus=True
+                                            o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                            turn_total= turn_total + 1
+                                            turn=1
+                                        else:
+                                            t_health=0
+                                            o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                            turn_total= turn_total + 1
+                                    else:
+                                        o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                        turn_total= turn_total + 1
+                                        turn=1
                             else:
                                 emessage = m.NOT_ENOUGH_STAMINA
                                 embedVar = discord.Embed(title=emessage, description=f"Use abilities to Increase `STAM` or enter `FOCUS STATE`!", colour=0xe91e63)
@@ -11426,11 +11683,28 @@ class CrownUnlimited(commands.Cog):
                                         c_health = c_health - int(dmg['DMG'])
                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                         await private_channel.send(embed=embedVar)
-                                    if c_health < 0:
-                                        c_health=0
-                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
-                                    turn_total= turn_total + 1
-                                    turn=2
+                                    if c_health <= 0:
+                                        if c_final_stand==True:
+                                            embedVar = discord.Embed(title=f"{c_card.upper()}'s LAST STAND", description=f"{c_card} FINDS RESOLVE", colour=0xe91e63)
+                                            embedVar.add_field(name=f"{c_card} resolved and continues to fight", value="All stats & stamina increased")
+                                            await private_channel.send(embed=embedVar)
+                                            c_health = int(c_attack + c_defense)
+                                            c_attack = c_attack + (.50 * c_attack)
+                                            c_defense = c_defense +(.50 * c_defense)
+                                            c_used_resolve=True
+                                            c_used_focus=True
+                                            c_final_stand=False
+                                            t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                            turn_total= turn_total + 1
+                                            turn=2
+                                        else:
+                                            c_health=0
+                                            t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                            turn_total= turn_total + 1
+                                    else:
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                        turn_total= turn_total + 1
+                                        turn=2
                             else:
                                 await private_channel.send(m.NOT_ENOUGH_STAMINA)
                                 turn = 1
@@ -11534,11 +11808,29 @@ class CrownUnlimited(commands.Cog):
                                         o_health = o_health - int(dmg['DMG'])
                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                         await private_channel.send(embed=embedVar)
-                                    if o_health < 0:
-                                        o_health=0
-                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
-                                    turn_total= turn_total + 1
-                                    turn=2
+                                    if o_health <= 0:
+                                        if o_final_stand==True:
+                                            embedVar = discord.Embed(title=f"{o_card.upper()}'s LAST STAND", description=f"{o_card} FINDS RESOLVE", colour=0xe91e63)
+                                            embedVar.add_field(name=f"{o_card} resolved and continues to fight", value="All stats & stamina increased")
+                                            await private_channel.send(embed=embedVar)
+                                            o_health = o_attack + o_defense
+                                            o_attack = o_attack + (.50 * o_attack)
+                                            o_defense = o_defense +(.50 * o_defense)
+                                            o_stamina=100
+                                            o_used_resolve=True
+                                            o_used_focus=True
+                                            o_final_stand=False
+                                            t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                            turn_total= turn_total + 1
+                                            turn=0
+                                        else:
+                                            o_health=0
+                                            t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                            turn_total= turn_total + 1
+                                    else:
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                        turn_total= turn_total + 1
+                                        turn=2
                             else:
                                 await private_channel.send(m.NOT_ENOUGH_STAMINA)
                                 turn = 1
@@ -12361,11 +12653,28 @@ class CrownUnlimited(commands.Cog):
                                     t_health = t_health - dmg['DMG']
                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
                                     await private_channel.send(embed=embedVar)
-                                if t_health < 0:
-                                    t_health=0
-                                c_stamina = c_stamina - dmg['STAMINA_USED']                                            
-                                turn_total= turn_total + 1
-                                turn=3
+                                if t_health <= 0:
+                                    if t_final_stand==True:
+                                        embedVar = discord.Embed(title=f"{t_card.upper()}'s LAST STAND", description=f"{t_card} FINDS RESOLVE", colour=0xe91e63)
+                                        embedVar.add_field(name=f"{t_card} resolved and continues to fight", value="All stats & stamina increased")
+                                        await private_channel.send(embed=embedVar)
+                                        t_health = int(t_attack + t_defense)
+                                        t_attack = t_attack + (.50 * t_attack)
+                                        t_defense = t_defense +(.50 * t_defense)
+                                        t_used_resolve=True
+                                        t_final_stand=False
+                                        t_used_focus=True
+                                        o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                        turn_total= turn_total + 1
+                                        turn=1
+                                    else:
+                                        t_health=0
+                                        o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                        turn_total= turn_total + 1
+                                else:
+                                    o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                    turn_total= turn_total + 1
+                                    turn=3
                         else:
                             emessage = m.NOT_ENOUGH_STAMINA
                             embedVar = discord.Embed(title=emessage, description=f"Use abilities to Increase `STAM` or enter `FOCUS STATE`!", colour=0xe91e63)
@@ -13103,11 +13412,29 @@ class CrownUnlimited(commands.Cog):
                                         o_health = o_health - int(dmg['DMG'])
                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                         await private_channel.send(embed=embedVar)
-                                    if o_health < 0:
-                                        o_health=0
-                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
-                                    turn_total= turn_total + 1
-                                    turn=0
+                                    if o_health <= 0:
+                                        if o_final_stand==True:
+                                            embedVar = discord.Embed(title=f"{o_card.upper()}'s LAST STAND", description=f"{o_card} FINDS RESOLVE", colour=0xe91e63)
+                                            embedVar.add_field(name=f"{o_card} resolved and continues to fight", value="All stats & stamina increased")
+                                            await private_channel.send(embed=embedVar)
+                                            o_health = o_attack + o_defense
+                                            o_attack = o_attack + (.50 * o_attack)
+                                            o_defense = o_defense +(.50 * o_defense)
+                                            o_stamina=100
+                                            o_used_resolve=True
+                                            o_used_focus=True
+                                            o_final_stand=False
+                                            t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                            turn_total= turn_total + 1
+                                            turn=0
+                                        else:
+                                            o_health=0
+                                            t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                            turn_total= turn_total + 1
+                                    else:
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                        turn_total= turn_total + 1
+                                        turn=0
                             else:
                                 await private_channel.send(m.NOT_ENOUGH_STAMINA)
                                 turn = 3
@@ -13211,11 +13538,28 @@ class CrownUnlimited(commands.Cog):
                                         c_health = c_health - int(dmg['DMG'])
                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                         await private_channel.send(embed=embedVar)
-                                    if c_health < 0:
-                                        c_health=0
-                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
-                                    turn_total= turn_total + 1
-                                    turn=0
+                                    if c_health <= 0:
+                                        if c_final_stand==True:
+                                            embedVar = discord.Embed(title=f"{c_card.upper()}'s LAST STAND", description=f"{c_card} FINDS RESOLVE", colour=0xe91e63)
+                                            embedVar.add_field(name=f"{c_card} resolved and continues to fight", value="All stats & stamina increased")
+                                            await private_channel.send(embed=embedVar)
+                                            c_health = int(c_attack + c_defense)
+                                            c_attack = c_attack + (.50 * c_attack)
+                                            c_defense = c_defense +(.50 * c_defense)
+                                            c_used_resolve=True
+                                            c_used_focus=True
+                                            c_final_stand=False
+                                            t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                            turn_total= turn_total + 1
+                                            turn=2
+                                        else:
+                                            c_health=0
+                                            t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                            turn_total= turn_total + 1
+                                    else:
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                        turn_total= turn_total + 1
+                                        turn=0
                             else:
                                 await private_channel.send(m.NOT_ENOUGH_STAMINA)
                                 turn = 3
@@ -13597,6 +13941,17 @@ class CrownUnlimited(commands.Cog):
             else:                    
                 c_max_health = c['HLT']
 
+            #DBZ traits
+            o_final_stand=False
+            c_final_stand=False
+            t_final_stand=False
+            if o['UNIVERSE'] == "Dragon Ball Z":
+                o_final_stand=True
+            if c['UNIVERSE'] == "Dragon Ball Z":
+                c_final_stand=True
+            if t['UNIVERSE'] == "Dragon Ball Z":
+                t_final_stand=True
+                
             if (oarm_universe == o_universe) and (o_title_universe == o_universe):
                 o_attack = o_attack + 20
                 o_defense = o_defense + 20
@@ -15115,11 +15470,28 @@ class CrownUnlimited(commands.Cog):
                                             t_health = t_health - dmg['DMG']
                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
                                             await private_channel.send(embed=embedVar)
-                                        if t_health < 0:
-                                            t_health=0
-                                        o_stamina = o_stamina - dmg['STAMINA_USED']                                            
-                                        turn_total= turn_total + 1
-                                        turn=1
+                                        if t_health <= 0:
+                                            if t_final_stand==True:
+                                                embedVar = discord.Embed(title=f"{t_card.upper()}'s LAST STAND", description=f"{t_card} FINDS RESOLVE", colour=0xe91e63)
+                                                embedVar.add_field(name=f"{t_card} resolved and continues to fight", value="All stats & stamina increased")
+                                                await private_channel.send(embed=embedVar)
+                                                t_health = int(t_attack + t_defense)
+                                                t_attack = t_attack + (.50 * t_attack)
+                                                t_defense = t_defense +(.50 * t_defense)
+                                                t_used_resolve=True
+                                                t_used_focus=True
+                                                t_final_stand=False
+                                                o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                                turn_total= turn_total + 1
+                                                turn=1
+                                            else:
+                                                t_health=0
+                                                o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                                turn_total= turn_total + 1
+                                        else:
+                                            o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                            turn_total= turn_total + 1
+                                            turn=1
                                 else:
                                     emessage = m.NOT_ENOUGH_STAMINA
                                     embedVar = discord.Embed(title=emessage, description=f"Use abilities to Increase `STAM` or enter `FOCUS STATE`!", colour=0xe91e63)
@@ -15647,11 +16019,28 @@ class CrownUnlimited(commands.Cog):
                                             c_health = c_health - int(dmg['DMG'])
                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                             await private_channel.send(embed=embedVar)
-                                        if c_health < 0:
-                                            c_health=0
-                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
-                                        turn_total= turn_total + 1
-                                        turn=2
+                                        if c_health <= 0:
+                                            if c_final_stand==True:
+                                                embedVar = discord.Embed(title=f"{c_card.upper()}'s LAST STAND", description=f"{c_card} FINDS RESOLVE", colour=0xe91e63)
+                                                embedVar.add_field(name=f"{c_card} resolved and continues to fight", value="All stats & stamina increased")
+                                                await private_channel.send(embed=embedVar)
+                                                c_health = int(c_attack + c_defense)
+                                                c_attack = c_attack + (.50 * c_attack)
+                                                c_defense = c_defense +(.50 * c_defense)
+                                                c_used_resolve=True
+                                                c_used_focus=True
+                                                c_final_stand=False
+                                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                                turn_total= turn_total + 1
+                                                turn=2
+                                            else:
+                                                c_health=0
+                                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                                turn_total= turn_total + 1
+                                        else:
+                                            t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                            turn_total= turn_total + 1
+                                            turn=2
                                 else:
                                     await private_channel.send(m.NOT_ENOUGH_STAMINA)
                                     turn = 1
@@ -15755,11 +16144,29 @@ class CrownUnlimited(commands.Cog):
                                             o_health = o_health - int(dmg['DMG'])
                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                             await private_channel.send(embed=embedVar)
-                                        if o_health < 0:
-                                            o_health=0
-                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
-                                        turn_total= turn_total + 1
-                                        turn=2
+                                        if o_health <= 0:
+                                            if o_final_stand==True:
+                                                embedVar = discord.Embed(title=f"{o_card.upper()}'s LAST STAND", description=f"{o_card} FINDS RESOLVE", colour=0xe91e63)
+                                                embedVar.add_field(name=f"{o_card} resolved and continues to fight", value="All stats & stamina increased")
+                                                await private_channel.send(embed=embedVar)
+                                                o_health = int(o_attack + o_defense)
+                                                o_attack = o_attack + (.50 * o_attack)
+                                                o_defense = o_defense +(.50 * o_defense)
+                                                o_stamina=100
+                                                o_used_resolve=True
+                                                o_final_stand=False
+                                                o_used_focus=True
+                                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                                turn_total= turn_total + 1
+                                                turn=0
+                                            else:
+                                                o_health=0
+                                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                                turn_total= turn_total + 1
+                                        else:
+                                            t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                            turn_total= turn_total + 1
+                                            turn=2
                                 else:
                                     await private_channel.send(m.NOT_ENOUGH_STAMINA)
                                     turn = 1
@@ -16436,11 +16843,28 @@ class CrownUnlimited(commands.Cog):
                                             t_health = t_health - dmg['DMG']
                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
                                             await private_channel.send(embed=embedVar)
-                                        if t_health < 0:
-                                            t_health=0
-                                        c_stamina = c_stamina - dmg['STAMINA_USED']                                            
-                                        turn_total= turn_total + 1
-                                        turn=3
+                                        if t_health <= 0:
+                                            if t_final_stand==True:
+                                                embedVar = discord.Embed(title=f"{t_card.upper()}'s LAST STAND", description=f"{t_card} FINDS RESOLVE", colour=0xe91e63)
+                                                embedVar.add_field(name=f"{t_card} resolved and continues to fight", value="All stats & stamina increased")
+                                                await private_channel.send(embed=embedVar)
+                                                t_health = int(t_attack + t_defense)
+                                                t_attack = t_attack + (.50 * t_attack)
+                                                t_defense = t_defense +(.50 * t_defense)
+                                                t_used_resolve=True
+                                                t_used_focus=True
+                                                t_final_stand=False
+                                                o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                                turn_total= turn_total + 1
+                                                turn=1
+                                            else:
+                                                t_health=0
+                                                o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                                turn_total= turn_total + 1
+                                        else:
+                                            o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                            turn_total= turn_total + 1
+                                            turn=3
                                 else:
                                     emessage = m.NOT_ENOUGH_STAMINA
                                     embedVar = discord.Embed(title=emessage, description=f"Use abilities to Increase `STAM` or enter `FOCUS STATE`!", colour=0xe91e63)
@@ -16968,11 +17392,29 @@ class CrownUnlimited(commands.Cog):
                                             o_health = o_health - int(dmg['DMG'])
                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                             await private_channel.send(embed=embedVar)
-                                        if o_health < 0:
-                                            o_health=0
-                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
-                                        turn_total= turn_total + 1
-                                        turn=0
+                                        if o_health <= 0:
+                                            if o_final_stand==True:
+                                                embedVar = discord.Embed(title=f"{o_card.upper()}'s LAST STAND", description=f"{o_card} FINDS RESOLVE", colour=0xe91e63)
+                                                embedVar.add_field(name=f"{o_card} resolved and continues to fight", value="All stats & stamina increased")
+                                                await private_channel.send(embed=embedVar)
+                                                o_health = int(o_attack + o_defense)
+                                                o_attack = o_attack + (.50 * o_attack)
+                                                o_defense = o_defense +(.50 * o_defense)
+                                                o_stamina=100
+                                                o_used_resolve=True
+                                                o_final_stand=False
+                                                o_used_focus=True
+                                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                                turn_total= turn_total + 1
+                                                turn=0
+                                            else:
+                                                o_health=0
+                                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                                turn_total= turn_total + 1
+                                        else:
+                                            t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                            turn_total= turn_total + 1
+                                            turn=0
                                 else:
                                     await private_channel.send(m.NOT_ENOUGH_STAMINA)
                                     turn = 3
@@ -17076,11 +17518,28 @@ class CrownUnlimited(commands.Cog):
                                             c_health = c_health - int(dmg['DMG'])
                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                             await private_channel.send(embed=embedVar)
-                                        if c_health < 0:
-                                            c_health=0
-                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
-                                        turn_total= turn_total + 1
-                                        turn=0
+                                        if c_health <= 0:
+                                            if c_final_stand==True:
+                                                embedVar = discord.Embed(title=f"{c_card.upper()}'s LAST STAND", description=f"{c_card} FINDS RESOLVE", colour=0xe91e63)
+                                                embedVar.add_field(name=f"{c_card} resolved and continues to fight", value="All stats & stamina increased")
+                                                await private_channel.send(embed=embedVar)
+                                                c_health = int(c_attack + c_defense)
+                                                c_attack = c_attack + (.50 * c_attack)
+                                                c_defense = c_defense +(.50 * c_defense)
+                                                c_used_resolve=True
+                                                c_used_focus=True
+                                                c_final_stand=False
+                                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                                turn_total= turn_total + 1
+                                                turn=2
+                                            else:
+                                                c_health=0
+                                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                                turn_total= turn_total + 1
+                                        else:
+                                            t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                            turn_total= turn_total + 1
+                                            turn=0
                                 else:
                                     await private_channel.send(m.NOT_ENOUGH_STAMINA)
                                     turn = 3
@@ -17529,6 +17988,17 @@ class CrownUnlimited(commands.Cog):
             else:                    
                 c_max_health = c['HLT'] - (10 * currentopponent)
 
+            #DBZ traits
+            o_final_stand=False
+            c_final_stand=False
+            t_final_stand=False
+            if o['UNIVERSE'] == "Dragon Ball Z":
+                o_final_stand=True
+            if c['UNIVERSE'] == "Dragon Ball Z":
+                c_final_stand=True
+            if t['UNIVERSE'] == "Dragon Ball Z":
+                t_final_stand=True
+                
             if (oarm_universe == o_universe) and (o_title_universe == o_universe):
                 o_attack = o_attack + 20
                 o_defense = o_defense + 20
@@ -19052,11 +19522,28 @@ class CrownUnlimited(commands.Cog):
                                             t_health = t_health - dmg['DMG']
                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
                                             await private_channel.send(embed=embedVar)
-                                        if t_health < 0:
-                                            t_health=0
-                                        o_stamina = o_stamina - dmg['STAMINA_USED']                                            
-                                        turn_total= turn_total + 1
-                                        turn=1
+                                        if t_health <= 0:
+                                            if t_final_stand==True:
+                                                embedVar = discord.Embed(title=f"{t_card.upper()}'s LAST STAND", description=f"{t_card} FINDS RESOLVE", colour=0xe91e63)
+                                                embedVar.add_field(name=f"{t_card} resolved and continues to fight", value="All stats & stamina increased")
+                                                await private_channel.send(embed=embedVar)
+                                                t_health = int(t_attack + t_defense)
+                                                t_attack = t_attack + (.50 * t_attack)
+                                                t_defense = t_defense +(.50 * t_defense)
+                                                t_used_resolve=True
+                                                t_used_focus=True
+                                                t_final_stand=False
+                                                o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                                turn_total= turn_total + 1
+                                                turn=1
+                                            else:
+                                                t_health=0
+                                                o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                                turn_total= turn_total + 1
+                                        else:
+                                            o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                            turn_total= turn_total + 1
+                                            turn=1
                                 else:
                                     emessage = m.NOT_ENOUGH_STAMINA
                                     embedVar = discord.Embed(title=emessage, description=f"Use abilities to Increase `STAM` or enter `FOCUS STATE`!", colour=0xe91e63)
@@ -19780,11 +20267,28 @@ class CrownUnlimited(commands.Cog):
                                             c_health = c_health - int(dmg['DMG'])
                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                             await private_channel.send(embed=embedVar)
-                                        if c_health < 0:
-                                            c_health=0
-                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
-                                        turn_total= turn_total + 1
-                                        turn=2
+                                        if c_health <= 0:
+                                            if c_final_stand==True:
+                                                embedVar = discord.Embed(title=f"{c_card.upper()}'s LAST STAND", description=f"{c_card} FINDS RESOLVE", colour=0xe91e63)
+                                                embedVar.add_field(name=f"{c_card} resolved and continues to fight", value="All stats & stamina increased")
+                                                await private_channel.send(embed=embedVar)
+                                                c_health = int(c_attack + c_defense)
+                                                c_attack = c_attack + (.50 * c_attack)
+                                                c_defense = c_defense +(.50 * c_defense)
+                                                c_used_resolve=True
+                                                c_final_stand=False
+                                                c_used_focus=True
+                                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                                turn_total= turn_total + 1
+                                                turn=2
+                                            else:
+                                                c_health=0
+                                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                                turn_total= turn_total + 1
+                                        else:
+                                            t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                            turn_total= turn_total + 1
+                                            turn=2
                                 else:
                                     await private_channel.send(m.NOT_ENOUGH_STAMINA)
                                     turn = 1
@@ -19888,11 +20392,29 @@ class CrownUnlimited(commands.Cog):
                                             o_health = o_health - int(dmg['DMG'])
                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                             await private_channel.send(embed=embedVar)
-                                        if o_health < 0:
-                                            o_health=0
-                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
-                                        turn_total= turn_total + 1
-                                        turn=2
+                                        if o_health <= 0:
+                                            if o_final_stand==True:
+                                                embedVar = discord.Embed(title=f"{o_card.upper()}'s LAST STAND", description=f"{o_card} FINDS RESOLVE", colour=0xe91e63)
+                                                embedVar.add_field(name=f"{o_card} resolved and continues to fight", value="All stats & stamina increased")
+                                                await private_channel.send(embed=embedVar)
+                                                o_health = int(o_attack + o_defense)
+                                                o_attack = o_attack + (.50 * o_attack)
+                                                o_defense = o_defense +(.50 * o_defense)
+                                                o_stamina=100
+                                                o_used_resolve=True
+                                                o_final_stand=False
+                                                o_used_focus=True
+                                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                                turn_total= turn_total + 1
+                                                turn=0
+                                            else:
+                                                o_health=0
+                                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                                turn_total= turn_total + 1
+                                        else:
+                                            t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                            turn_total= turn_total + 1
+                                            turn=2
                                 else:
                                     await private_channel.send(m.NOT_ENOUGH_STAMINA)
                                     turn = 1
@@ -20571,11 +21093,28 @@ class CrownUnlimited(commands.Cog):
                                             t_health = t_health - dmg['DMG']
                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
                                             await private_channel.send(embed=embedVar)
-                                        if t_health < 0:
-                                            t_health=0
-                                        c_stamina = c_stamina - dmg['STAMINA_USED']                                            
-                                        turn_total= turn_total + 1
-                                        turn=3
+                                        if t_health <= 0:
+                                            if t_final_stand==True:
+                                                embedVar = discord.Embed(title=f"{t_card.upper()}'s LAST STAND", description=f"{t_card} FINDS RESOLVE", colour=0xe91e63)
+                                                embedVar.add_field(name=f"{t_card} resolved and continues to fight", value="All stats & stamina increased")
+                                                await private_channel.send(embed=embedVar)
+                                                t_health = int(t_attack + t_defense)
+                                                t_attack = t_attack + (.50 * t_attack)
+                                                t_defense = t_defense +(.50 * t_defense)
+                                                t_used_resolve=True
+                                                t_used_focus=True
+                                                t_final_stand=False
+                                                o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                                turn_total= turn_total + 1
+                                                turn=1
+                                            else:
+                                                t_health=0
+                                                o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                                turn_total= turn_total + 1
+                                        else:
+                                            o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                            turn_total= turn_total + 1
+                                            turn=3
                                 else:
                                     emessage = m.NOT_ENOUGH_STAMINA
                                     embedVar = discord.Embed(title=emessage, description=f"Use abilities to Increase `STAM` or enter `FOCUS STATE`!", colour=0xe91e63)
@@ -21298,11 +21837,29 @@ class CrownUnlimited(commands.Cog):
                                             o_health = o_health - int(dmg['DMG'])
                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                             await private_channel.send(embed=embedVar)
-                                        if o_health < 0:
-                                            o_health=0
-                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
-                                        turn_total= turn_total + 1
-                                        turn=0
+                                        if o_health <= 0:
+                                            if o_final_stand==True:
+                                                embedVar = discord.Embed(title=f"{o_card.upper()}'s LAST STAND", description=f"{o_card} FINDS RESOLVE", colour=0xe91e63)
+                                                embedVar.add_field(name=f"{o_card} resolved and continues to fight", value="All stats & stamina increased")
+                                                await private_channel.send(embed=embedVar)
+                                                o_health = int(o_attack + o_defense)
+                                                o_attack = o_attack + (.50 * o_attack)
+                                                o_defense = o_defense +(.50 * o_defense)
+                                                o_stamina=100
+                                                o_used_resolve=True
+                                                o_final_stand=False
+                                                o_used_focus=True
+                                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                                turn_total= turn_total + 1
+                                                turn=0
+                                            else:
+                                                o_health=0
+                                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                                turn_total= turn_total + 1
+                                        else:
+                                            t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                            turn_total= turn_total + 1
+                                            turn=0
                                 else:
                                     await private_channel.send(m.NOT_ENOUGH_STAMINA)
                                     turn = 3
@@ -21406,11 +21963,28 @@ class CrownUnlimited(commands.Cog):
                                             c_health = c_health - int(dmg['DMG'])
                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                             await private_channel.send(embed=embedVar)
-                                        if c_health < 0:
-                                            c_health=0
-                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
-                                        turn_total= turn_total + 1
-                                        turn=0
+                                        if c_health <= 0:
+                                            if c_final_stand==True:
+                                                embedVar = discord.Embed(title=f"{c_card.upper()}'s LAST STAND", description=f"{c_card} FINDS RESOLVE", colour=0xe91e63)
+                                                embedVar.add_field(name=f"{c_card} resolved and continues to fight", value="All stats & stamina increased")
+                                                await private_channel.send(embed=embedVar)
+                                                c_health = int(c_attack + c_defense)
+                                                c_attack = c_attack + (.50 * c_attack)
+                                                c_defense = c_defense +(.50 * c_defense)
+                                                c_used_resolve=True
+                                                c_final_stand=False
+                                                c_used_focus=True
+                                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                                turn_total= turn_total + 1
+                                                turn=2
+                                            else:
+                                                c_health=0
+                                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                                turn_total= turn_total + 1
+                                        else:
+                                            t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                            turn_total= turn_total + 1
+                                            turn=0
                                 else:
                                     await private_channel.send(m.NOT_ENOUGH_STAMINA)
                                     turn = 3
@@ -21841,6 +22415,16 @@ class CrownUnlimited(commands.Cog):
         else:                    
             c_max_health = c['HLT']
 
+        #DBZ traits
+        o_final_stand=False
+        c_final_stand=False
+        t_final_stand=False
+        if o['UNIVERSE'] == "Dragon Ball Z":
+            o_final_stand=True
+        if c['UNIVERSE'] == "Dragon Ball Z":
+            c_final_stand=True
+        if t['UNIVERSE'] == "Dragon Ball Z":
+            t_final_stand=True
         ################################################################################
         ##world Building
         t_arena = t_user['DESCRIPTION'][0]
@@ -23378,11 +23962,28 @@ class CrownUnlimited(commands.Cog):
                                         t_health = t_health - dmg['DMG']
                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
                                         await private_channel.send(embed=embedVar)
-                                    if t_health < 0:
-                                        t_health=0
-                                    o_stamina = o_stamina - dmg['STAMINA_USED']                                            
-                                    turn_total= turn_total + 1
-                                    turn=1
+                                    if t_health <= 0:
+                                        if t_final_stand==True:
+                                            embedVar = discord.Embed(title=f"{t_card.upper()}'s LAST STAND", description=f"{t_card} FINDS RESOLVE", colour=0xe91e63)
+                                            embedVar.add_field(name=f"{t_card} resolved and continues to fight", value="All stats & stamina increased")
+                                            await private_channel.send(embed=embedVar)
+                                            t_health = int(t_attack + t_defense)
+                                            t_attack = t_attack + (.50 * t_attack)
+                                            t_defense = t_defense +(.50 * t_defense)
+                                            t_used_resolve=True
+                                            t_final_stand=False
+                                            t_used_focus=True
+                                            o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                            turn_total= turn_total + 1
+                                            turn=1
+                                        else:
+                                            t_health=0
+                                            o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                            turn_total= turn_total + 1
+                                    else:
+                                        o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                        turn_total= turn_total + 1
+                                        turn=1
                             else:
                                 emessage = m.NOT_ENOUGH_STAMINA
                                 embedVar = discord.Embed(title=emessage, description=f"Use abilities to Increase `STAM` or enter `FOCUS STATE`!", colour=0xe91e63)
@@ -24125,11 +24726,28 @@ class CrownUnlimited(commands.Cog):
                                         c_health = c_health - int(dmg['DMG'])
                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                         await private_channel.send(embed=embedVar)
-                                    if c_health < 0:
-                                        c_health=0
-                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
-                                    turn_total= turn_total + 1
-                                    turn=2
+                                    if c_health <= 0:
+                                        if c_final_stand==True:
+                                            embedVar = discord.Embed(title=f"{c_card.upper()}'s LAST STAND", description=f"{c_card} FINDS RESOLVE", colour=0xe91e63)
+                                            embedVar.add_field(name=f"{c_card} resolved and continues to fight", value="All stats & stamina increased")
+                                            await private_channel.send(embed=embedVar)
+                                            c_health = int(c_attack + c_defense)
+                                            c_attack = c_attack + (.50 * c_attack)
+                                            c_defense = c_defense +(.50 * c_defense)
+                                            c_used_resolve=True
+                                            c_used_focus=True
+                                            c_final_stand=False
+                                            t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                            turn_total= turn_total + 1
+                                            turn=2
+                                        else:
+                                            c_health=0
+                                            t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                            turn_total= turn_total + 1
+                                    else:
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                        turn_total= turn_total + 1
+                                        turn=2
                             else:
                                 await private_channel.send(m.NOT_ENOUGH_STAMINA)
                                 turn = 1
@@ -24233,11 +24851,29 @@ class CrownUnlimited(commands.Cog):
                                         o_health = o_health - int(dmg['DMG'])
                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                         await private_channel.send(embed=embedVar)
-                                    if o_health < 0:
-                                        o_health=0
-                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
-                                    turn_total= turn_total + 1
-                                    turn=2
+                                    if o_health <= 0:
+                                        if o_final_stand==True:
+                                            embedVar = discord.Embed(title=f"{o_card.upper()}'s LAST STAND", description=f"{o_card} FINDS RESOLVE", colour=0xe91e63)
+                                            embedVar.add_field(name=f"{o_card} resolved and continues to fight", value="All stats & stamina increased")
+                                            await private_channel.send(embed=embedVar)
+                                            o_health = o_attack + o_defense
+                                            o_attack = o_attack + (.50 * o_attack)
+                                            o_defense = o_defense +(.50 * o_defense)
+                                            o_stamina=100
+                                            o_used_resolve=True
+                                            o_used_focus=True
+                                            o_final_stand=False
+                                            t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                            turn_total= turn_total + 1
+                                            turn=0
+                                        else:
+                                            o_health=0
+                                            t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                            turn_total= turn_total + 1
+                                    else:
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                        turn_total= turn_total + 1
+                                        turn=2
                             else:
                                 await private_channel.send(m.NOT_ENOUGH_STAMINA)
                                 turn = 1
@@ -24915,11 +25551,28 @@ class CrownUnlimited(commands.Cog):
                                         t_health = t_health - dmg['DMG']
                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
                                         await private_channel.send(embed=embedVar)
-                                    if t_health < 0:
-                                        t_health=0
-                                    c_stamina = c_stamina - dmg['STAMINA_USED']                                            
-                                    turn_total= turn_total + 1
-                                    turn=3
+                                    if t_health <= 0:
+                                        if t_final_stand==True:
+                                            embedVar = discord.Embed(title=f"{t_card.upper()}'s LAST STAND", description=f"{t_card} FINDS RESOLVE", colour=0xe91e63)
+                                            embedVar.add_field(name=f"{t_card} resolved and continues to fight", value="All stats & stamina increased")
+                                            await private_channel.send(embed=embedVar)
+                                            t_health = int(t_attack + t_defense)
+                                            t_attack = t_attack + (.50 * t_attack)
+                                            t_defense = t_defense +(.50 * t_defense)
+                                            t_used_resolve=True
+                                            t_final_stand=False
+                                            t_used_focus=True
+                                            o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                            turn_total= turn_total + 1
+                                            turn=1
+                                        else:
+                                            t_health=0
+                                            o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                            turn_total= turn_total + 1
+                                    else:
+                                        o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                        turn_total= turn_total + 1
+                                        turn=3
                             else:
                                 emessage = m.NOT_ENOUGH_STAMINA
                                 embedVar = discord.Embed(title=emessage, description=f"Use abilities to Increase `STAM` or enter `FOCUS STATE`!", colour=0xe91e63)
@@ -25663,11 +26316,29 @@ class CrownUnlimited(commands.Cog):
                                         o_health = o_health - int(dmg['DMG'])
                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                         await private_channel.send(embed=embedVar)
-                                    if o_health < 0:
-                                        o_health=0
-                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
-                                    turn_total= turn_total + 1
-                                    turn=0
+                                    if o_health <= 0:
+                                        if o_final_stand==True:
+                                            embedVar = discord.Embed(title=f"{o_card.upper()}'s LAST STAND", description=f"{o_card} FINDS RESOLVE", colour=0xe91e63)
+                                            embedVar.add_field(name=f"{o_card} resolved and continues to fight", value="All stats & stamina increased")
+                                            await private_channel.send(embed=embedVar)
+                                            o_health = o_attack + o_defense
+                                            o_attack = o_attack + (.50 * o_attack)
+                                            o_defense = o_defense +(.50 * o_defense)
+                                            o_stamina=100
+                                            o_used_resolve=True
+                                            o_used_focus=True
+                                            o_final_stand=False
+                                            t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                            turn_total= turn_total + 1
+                                            turn=0
+                                        else:
+                                            o_health=0
+                                            t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                            turn_total= turn_total + 1
+                                    else:
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                        turn_total= turn_total + 1
+                                        turn=0
                             else:
                                 await private_channel.send(m.NOT_ENOUGH_STAMINA)
                                 turn = 3
@@ -25771,11 +26442,28 @@ class CrownUnlimited(commands.Cog):
                                         c_health = c_health - int(dmg['DMG'])
                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                         await private_channel.send(embed=embedVar)
-                                    if c_health < 0:
-                                        c_health=0
-                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
-                                    turn_total= turn_total + 1
-                                    turn=0
+                                    if c_health <= 0:
+                                        if c_final_stand==True:
+                                            embedVar = discord.Embed(title=f"{c_card.upper()}'s LAST STAND", description=f"{c_card} FINDS RESOLVE", colour=0xe91e63)
+                                            embedVar.add_field(name=f"{c_card} resolved and continues to fight", value="All stats & stamina increased")
+                                            await private_channel.send(embed=embedVar)
+                                            c_health = int(c_attack + c_defense)
+                                            c_attack = c_attack + (.50 * c_attack)
+                                            c_defense = c_defense +(.50 * c_defense)
+                                            c_used_resolve=True
+                                            c_used_focus=True
+                                            c_final_stand=False
+                                            t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                            turn_total= turn_total + 1
+                                            turn=2
+                                        else:
+                                            c_health=0
+                                            t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                            turn_total= turn_total + 1
+                                    else:
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                        turn_total= turn_total + 1
+                                        turn=0
                             else:
                                 await private_channel.send(m.NOT_ENOUGH_STAMINA)
                                 turn = 3
@@ -26082,6 +26770,14 @@ class CrownUnlimited(commands.Cog):
             else:                    
                 t_max_health = t['HLT'] + (25 * currentopponent) + 180
 
+
+            #DBZ traits
+            o_final_stand=False
+            t_final_stand=False
+            if o['UNIVERSE'] == "Dragon Ball Z":
+                o_final_stand=True
+            if t['UNIVERSE'] == "Dragon Ball Z":
+                t_final_stand=True
             if o_card == "Ash Ketchum" and t_universe == "Johto Region":
                 o_health = round(o_health + 150)
                 o_attack = round(o_attack + 50)
@@ -27218,11 +27914,28 @@ class CrownUnlimited(commands.Cog):
                                             t_health = t_health - dmg['DMG']
                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
                                             await private_channel.send(embed=embedVar)
-                                        if t_health < 0:
-                                            t_health=0
-                                        o_stamina = o_stamina - dmg['STAMINA_USED']                                            
-                                        turn_total= turn_total + 1
-                                        turn=1
+                                        if t_health <= 0:
+                                            if t_final_stand==True:
+                                                embedVar = discord.Embed(title=f"{t_card.upper()}'s LAST STAND", description=f"{t_card} FINDS RESOLVE", colour=0xe91e63)
+                                                embedVar.add_field(name=f"{t_card} resolved and continues to fight", value="All stats & stamina increased")
+                                                await private_channel.send(embed=embedVar)
+                                                t_health = int(t_attack + t_defense)
+                                                t_attack = t_attack + (.50 * t_attack)
+                                                t_defense = t_defense +(.50 * t_defense)
+                                                t_used_resolve=True
+                                                t_used_focus=True
+                                                t_final_stand=False
+                                                o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                                turn_total= turn_total + 1
+                                                turn=1
+                                            else:
+                                                t_health=0
+                                                o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                                turn_total= turn_total + 1
+                                        else:
+                                            o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                            turn_total= turn_total + 1
+                                            turn=1
                                 else:
                                     emessage = m.NOT_ENOUGH_STAMINA
                                     embedVar = discord.Embed(title=emessage, description=f"Use abilities to Increase `STAM` or enter `FOCUS STATE`!", colour=0xe91e63)
@@ -27833,11 +28546,29 @@ class CrownUnlimited(commands.Cog):
                                         o_health = o_health - int(dmg['DMG'])
                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                         await private_channel.send(embed=embedVar)
-                                    if o_health < 0:
-                                        o_health=0
-                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
-                                    turn_total= turn_total + 1
-                                    turn=0
+                                    if o_health <= 0:
+                                        if o_final_stand==True:
+                                            embedVar = discord.Embed(title=f"{o_card.upper()}'s LAST STAND", description=f"{o_card} FINDS RESOLVE", colour=0xe91e63)
+                                            embedVar.add_field(name=f"{o_card} resolved and continues to fight", value="All stats & stamina increased")
+                                            await private_channel.send(embed=embedVar)
+                                            o_health = o_attack + o_defense
+                                            o_attack = o_attack + (.50 * o_attack)
+                                            o_defense = o_defense +(.50 * o_defense)
+                                            o_stamina=100
+                                            o_used_resolve=True
+                                            o_used_focus=True
+                                            o_final_stand=False
+                                            t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                            turn_total= turn_total + 1
+                                            turn=0
+                                        else:
+                                            o_health=0
+                                            t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                            turn_total= turn_total + 1
+                                    else:
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                        turn_total= turn_total + 1
+                                        turn=0
 
                             else:
                                 await private_channel.send(m.NOT_ENOUGH_STAMINA)
@@ -28213,6 +28944,13 @@ class CrownUnlimited(commands.Cog):
                 o_attack = round(o_attack + 100)
                 o_defense = round(o_defense + 100)
 
+            #DBZ traits
+            o_final_stand=False
+            t_final_stand=False
+            if o['UNIVERSE'] == "Dragon Ball Z":
+                o_final_stand=True
+            if t['UNIVERSE'] == "Dragon Ball Z":
+                t_final_stand=True
             ################################################################################
 
             if (oarm_universe == o_universe) and (o_title_universe == o_universe):
@@ -29341,11 +30079,29 @@ class CrownUnlimited(commands.Cog):
                                             t_health = t_health - dmg['DMG']
                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
                                             await private_channel.send(embed=embedVar)
-                                        if t_health < 0:
-                                            t_health=0
-                                        o_stamina = o_stamina - dmg['STAMINA_USED']                                            
-                                        turn_total= turn_total + 1
-                                        turn=1
+                                        if t_health <= 0:
+                                            if t_final_stand==True:
+                                                embedVar = discord.Embed(title=f"{t_card.upper()}'s LAST STAND", description=f"{t_card} FINDS RESOLVE", colour=0xe91e63)
+                                                embedVar.add_field(name=f"{t_card} resolved and continues to fight", value="All stats & stamina increased")
+                                                await private_channel.send(embed=embedVar)
+                                                t_health = int(t_attack + t_defense)
+                                                t_attack = t_attack + (.50 * t_attack)
+                                                t_defense = t_defense +(.50 * t_defense)
+                                                t_used_resolve=True
+                                                t_used_focus=True
+                                                t_final_stand=False
+                                                o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                                turn_total= turn_total + 1
+                                                turn=1
+                                            else:
+                                                t_health=0
+                                                o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                                turn_total= turn_total + 1
+                                        else:
+                                            o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                            turn_total= turn_total + 1
+                                            turn=1
+                                            
                                 else:
                                     emessage = m.NOT_ENOUGH_STAMINA
                                     embedVar = discord.Embed(title=emessage, description=f"Use abilities to Increase `STAM` or enter `FOCUS STATE`!", colour=0xe91e63)
@@ -29837,11 +30593,29 @@ class CrownUnlimited(commands.Cog):
                                         o_health = o_health - int(dmg['DMG'])
                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                         await private_channel.send(embed=embedVar)
-                                    if o_health < 0:
-                                        o_health=0
-                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
-                                    turn_total= turn_total + 1
-                                    turn=0
+                                    if o_health <= 0:
+                                        if o_final_stand==True:
+                                            embedVar = discord.Embed(title=f"{o_card.upper()}'s LAST STAND", description=f"{o_card} FINDS RESOLVE", colour=0xe91e63)
+                                            embedVar.add_field(name=f"{o_card} resolved and continues to fight", value="All stats & stamina increased")
+                                            await private_channel.send(embed=embedVar)
+                                            o_health = o_attack + o_defense
+                                            o_attack = o_attack + (.50 * o_attack)
+                                            o_defense = o_defense +(.50 * o_defense)
+                                            o_stamina=100
+                                            o_used_resolve=True
+                                            o_used_focus=True
+                                            o_final_stand=False
+                                            t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                            turn_total= turn_total + 1
+                                            turn=0
+                                        else:
+                                            o_health=0
+                                            t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                            turn_total= turn_total + 1
+                                    else:
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                        turn_total= turn_total + 1
+                                        turn=0
 
                             else:
                                 await private_channel.send(m.NOT_ENOUGH_STAMINA)
@@ -30203,6 +30977,13 @@ class CrownUnlimited(commands.Cog):
         else:                    
             t_max_health = t['HLT'] * 2
 
+        #DBZ traits
+        o_final_stand=False
+        t_final_stand=False
+        if o['UNIVERSE'] == "Dragon Ball Z":
+            o_final_stand=True
+        if t['UNIVERSE'] == "Dragon Ball Z":
+            t_final_stand=True
         ################################################################################
         ##world Building
         t_arena = t_user['DESCRIPTION'][0]
@@ -31341,11 +32122,28 @@ class CrownUnlimited(commands.Cog):
                                         t_health = t_health - dmg['DMG']
                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
                                         await private_channel.send(embed=embedVar)
-                                    if t_health < 0:
-                                        t_health=0
-                                    o_stamina = o_stamina - dmg['STAMINA_USED']                                            
-                                    turn_total= turn_total + 1
-                                    turn=1
+                                    if t_health <= 0:
+                                        if t_final_stand==True:
+                                            embedVar = discord.Embed(title=f"{t_card.upper()}'s LAST STAND", description=f"{t_card} FINDS RESOLVE", colour=0xe91e63)
+                                            embedVar.add_field(name=f"{t_card} resolved and continues to fight", value="All stats & stamina increased")
+                                            await private_channel.send(embed=embedVar)
+                                            t_health = int(t_attack + t_defense)
+                                            t_attack = t_attack + (.50 * t_attack)
+                                            t_defense = t_defense +(.50 * t_defense)
+                                            t_used_resolve=True
+                                            t_final_stand=False
+                                            t_used_focus=True
+                                            o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                            turn_total= turn_total + 1
+                                            turn=1
+                                        else:
+                                            t_health=0
+                                            o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                            turn_total= turn_total + 1
+                                    else:
+                                        o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                        turn_total= turn_total + 1
+                                        turn=1
                             else:
                                 emessage = m.NOT_ENOUGH_STAMINA
                                 embedVar = discord.Embed(title=emessage, description=f"Use abilities to Increase `STAM` or enter `FOCUS STATE`!", colour=0xe91e63)
@@ -31977,11 +32775,29 @@ class CrownUnlimited(commands.Cog):
                                     o_health = o_health - int(dmg['DMG'])
                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                     await private_channel.send(embed=embedVar)
-                                if o_health < 0:
-                                    o_health=0
-                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
-                                turn_total= turn_total + 1
-                                turn=0
+                                if o_health <= 0:
+                                    if o_final_stand==True:
+                                        embedVar = discord.Embed(title=f"{o_card.upper()}'s LAST STAND", description=f"{o_card} FINDS RESOLVE", colour=0xe91e63)
+                                        embedVar.add_field(name=f"{o_card} resolved and continues to fight", value="All stats & stamina increased")
+                                        await private_channel.send(embed=embedVar)
+                                        o_health = o_attack + o_defense
+                                        o_attack = o_attack + (.50 * o_attack)
+                                        o_defense = o_defense +(.50 * o_defense)
+                                        o_stamina=100
+                                        o_used_resolve=True
+                                        o_used_focus=True
+                                        o_final_stand=False
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                        turn_total= turn_total + 1
+                                        turn=0
+                                    else:
+                                        o_health=0
+                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                        turn_total= turn_total + 1
+                                else:
+                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                    turn_total= turn_total + 1
+                                    turn=0
 
                         else:
                             await private_channel.send(m.NOT_ENOUGH_STAMINA)
@@ -32216,7 +33032,14 @@ class CrownUnlimited(commands.Cog):
                     o_health = t['HLT']
                 else:                    
                     o_max_health = o['HLT']
-                    
+ 
+                #DBZ traits
+                o_final_stand=False
+                t_final_stand=False
+                if o['UNIVERSE'] == "Dragon Ball Z":
+                    o_final_stand=True
+                if t['UNIVERSE'] == "Dragon Ball Z":
+                    t_final_stand=True                   
                 ################################################################################
 
                 if (oarm_universe == o_universe) and (o_title_universe == o_universe):
@@ -33398,11 +34221,28 @@ class CrownUnlimited(commands.Cog):
                                                 t_health = t_health - dmg['DMG']
                                                 embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
                                                 await ctx.send(embed=embedVar)
-                                            if t_health < 0:
-                                                t_health=0
-                                            o_stamina = o_stamina - dmg['STAMINA_USED']                                            
-                                            turn_total= turn_total + 1
-                                            turn=1
+                                            if t_health <= 0:
+                                                if t_final_stand==True:
+                                                    embedVar = discord.Embed(title=f"{t_card.upper()}'s LAST STAND", description=f"{t_card} FINDS RESOLVE", colour=0xe91e63)
+                                                    embedVar.add_field(name=f"{t_card} resolved and continues to fight", value="All stats & stamina increased")
+                                                    await private_channel.send(embed=embedVar)
+                                                    t_health = int(t_attack + t_defense)
+                                                    t_attack = t_attack + (.50 * t_attack)
+                                                    t_defense = t_defense +(.50 * t_defense)
+                                                    t_used_resolve=True
+                                                    t_final_stand=False
+                                                    t_used_focus=True
+                                                    o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                                    turn_total= turn_total + 1
+                                                    turn=1
+                                                else:
+                                                    t_health=0
+                                                    o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                                    turn_total= turn_total + 1
+                                            else:
+                                                o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                                turn_total= turn_total + 1
+                                                turn=1
                                     else:
                                         emessage = m.NOT_ENOUGH_STAMINA
                                         embedVar = discord.Embed(title=emessage, description=f"Use abilities to Increase `STAM` or enter `FOCUS STATE`!", colour=0xe91e63)
@@ -33979,11 +34819,29 @@ class CrownUnlimited(commands.Cog):
                                                     o_health = o_health - int(dmg['DMG'])
                                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                                     await ctx.send(embed=embedVar)
-                                                if o_health < 0:
-                                                    o_health=0
-                                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
-                                                turn_total= turn_total + 1
-                                                turn=0
+                                                if o_health <= 0:
+                                                    if o_final_stand==True:
+                                                        embedVar = discord.Embed(title=f"{o_card.upper()}'s LAST STAND", description=f"{o_card} FINDS RESOLVE", colour=0xe91e63)
+                                                        embedVar.add_field(name=f"{o_card} resolved and continues to fight", value="All stats & stamina increased")
+                                                        await private_channel.send(embed=embedVar)
+                                                        o_health = o_attack + o_defense
+                                                        o_attack = o_attack + (.50 * o_attack)
+                                                        o_defense = o_defense +(.50 * o_defense)
+                                                        o_stamina=100
+                                                        o_used_resolve=True                                                       
+                                                        o_used_focus=True
+                                                        o_final_stand=False
+                                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                                        turn_total= turn_total + 1
+                                                        turn=0
+                                                    else:
+                                                        o_health=0
+                                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                                        turn_total= turn_total + 1
+                                                else:
+                                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                                    turn_total= turn_total + 1
+                                                    turn=0
 
                                         else:
                                             emessage = m.NOT_ENOUGH_STAMINA
@@ -34447,11 +35305,29 @@ class CrownUnlimited(commands.Cog):
                                                 o_health = o_health - int(dmg['DMG'])
                                                 embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                                 await ctx.send(embed=embedVar)
-                                            if o_health < 0:
-                                                o_health=0
-                                            t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
-                                            turn_total= turn_total + 1
-                                            turn=0
+                                            if o_health <= 0:
+                                                if o_final_stand==True:
+                                                    embedVar = discord.Embed(title=f"{o_card.upper()}'s LAST STAND", description=f"{o_card} FINDS RESOLVE", colour=0xe91e63)
+                                                    embedVar.add_field(name=f"{o_card} resolved and continues to fight", value="All stats & stamina increased")
+                                                    await private_channel.send(embed=embedVar)
+                                                    o_health = o_attack + o_defense
+                                                    o_attack = o_attack + (.50 * o_attack)
+                                                    o_defense = o_defense +(.50 * o_defense)
+                                                    o_stamina=100
+                                                    o_used_resolve=True
+                                                    o_final_stand=False
+                                                    o_used_focus=True
+                                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                                    turn_total= turn_total + 1
+                                                    turn=0
+                                                else:
+                                                    o_health=0
+                                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                                    turn_total= turn_total + 1
+                                            else:
+                                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                                turn_total= turn_total + 1
+                                                turn=0
 
                                     else:
                                         await ctx.send(m.NOT_ENOUGH_STAMINA)
@@ -34695,6 +35571,13 @@ class CrownUnlimited(commands.Cog):
                 else:                    
                     o_max_health = o['HLT']
 
+                #DBZ traits
+                o_final_stand=False
+                t_final_stand=False
+                if o['UNIVERSE'] == "Dragon Ball Z":
+                    o_final_stand=True
+                if t['UNIVERSE'] == "Dragon Ball Z":
+                    t_final_stand=True
                 ################################################################################
 
                 if (oarm_universe == o_universe) and (o_title_universe == o_universe):
@@ -35898,11 +36781,29 @@ class CrownUnlimited(commands.Cog):
                                                 t_health = t_health - dmg['DMG']
                                                 embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
                                                 await ctx.send(embed=embedVar)
-                                            if t_health < 0:
-                                                t_health=0
-                                            o_stamina = o_stamina - dmg['STAMINA_USED']                                            
-                                            turn_total= turn_total + 1
-                                            turn=1
+                                            if t_health <= 0:
+                                                if t_final_stand==True:
+                                                    print("Final Stand")
+                                                    embedVar = discord.Embed(title=f"{t_card.upper()}'s LAST STAND", description=f"{t_card} FINDS RESOLVE", colour=0xe91e63)
+                                                    embedVar.add_field(name=f"{t_card} resolved and continues to fight", value="All stats & stamina increased")
+                                                    await private_channel.send(embed=embedVar)
+                                                    t_health = int(t_attack + t_defense)
+                                                    t_attack = t_attack + (.50 * t_attack)
+                                                    t_defense = t_defense +(.50 * t_defense)
+                                                    t_used_resolve=True
+                                                    t_final_stand=False
+                                                    t_used_focus=True
+                                                    o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                                    turn_total= turn_total + 1
+                                                    turn=1
+                                                else:
+                                                    t_health=0
+                                                    o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                                    turn_total= turn_total + 1
+                                            else:
+                                                o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                                turn_total= turn_total + 1
+                                                turn=1
                                     else:
                                         emessage = m.NOT_ENOUGH_STAMINA
                                         embedVar = discord.Embed(title=emessage, description=f"Use abilities to Increase `STAM` or enter `FOCUS STATE`!", colour=0xe91e63)
@@ -36473,11 +37374,29 @@ class CrownUnlimited(commands.Cog):
                                                     o_health = o_health - int(dmg['DMG'])
                                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                                     await ctx.send(embed=embedVar)
-                                                if o_health < 0:
-                                                    o_health=0
-                                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
-                                                turn_total= turn_total + 1
-                                                turn=0
+                                                if o_health <= 0:
+                                                    if o_final_stand==True:
+                                                        embedVar = discord.Embed(title=f"{o_card.upper()}'s LAST STAND", description=f"{o_card} FINDS RESOLVE", colour=0xe91e63)
+                                                        embedVar.add_field(name=f"{o_card} resolved and continues to fight", value="All stats & stamina increased")
+                                                        await private_channel.send(embed=embedVar)
+                                                        o_health = o_attack + o_defense
+                                                        o_attack = o_attack + (.50 * o_attack)
+                                                        o_defense = o_defense +(.50 * o_defense)
+                                                        o_stamina=100
+                                                        o_used_resolve=True
+                                                        o_final_stand=False
+                                                        o_used_focus=True
+                                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                                        turn_total= turn_total + 1
+                                                        turn=0
+                                                    else:
+                                                        o_health=0
+                                                        t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                                        turn_total= turn_total + 1
+                                                else:
+                                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                                    turn_total= turn_total + 1
+                                                    turn=0
 
                                         else:
                                             emessage = m.NOT_ENOUGH_STAMINA
@@ -36816,14 +37735,33 @@ class CrownUnlimited(commands.Cog):
                                             turn=0
                                         else:
                                             o_health = o_health - int(dmg['DMG'])
-                                            if o_health < 0:
-                                                o_health=0
-                                            t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-
-                                            embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
-                                            await ctx.send(embed=embedVar)
-                                            turn_total= turn_total + 1
-                                            turn=0
+                                            if o_health <= 0:
+                                                if o_final_stand==True:
+                                                    embedVar = discord.Embed(title=f"{o_card.upper()}'s LAST STAND", description=f"{o_card} FINDS RESOLVE", colour=0xe91e63)
+                                                    embedVar.add_field(name=f"{o_card} resolved and continues to fight", value="All stats & stamina increased")
+                                                    await private_channel.send(embed=embedVar)
+                                                    o_health = o_attack + o_defense
+                                                    o_attack = o_attack + (.50 * o_attack)
+                                                    o_defense = o_defense +(.50 * o_defense)
+                                                    o_stamina=100
+                                                    o_used_resolve=True
+                                                    o_final_stand=False
+                                                    o_used_focus=True
+                                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                                    turn_total= turn_total + 1
+                                                    turn=0
+                                                else:
+                                                    o_health=0
+                                                    t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                                    turn_total= turn_total + 1
+                                                    embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                                    await ctx.send(embed=embedVar)
+                                            else:
+                                                t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
+                                                turn_total= turn_total + 1
+                                                turn=0
+                                                embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                                await ctx.send(embed=embedVar)
 
                                     else:
                                         await ctx.send(m.NOT_ENOUGH_STAMINA)
