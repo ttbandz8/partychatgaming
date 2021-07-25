@@ -268,8 +268,8 @@ class Cards(commands.Cog):
                 tip="Equipping offensive titles and arms would help boost killability"              
 
             embedVar = discord.Embed(title=f":crown:  {o_card}\n{price_message}".format(self), description=textwrap.dedent(f"""
-            **Health:** {o_max_health}
-            **Stamina:** {o_max_stamina}
+            :heart: {o_max_health}
+            :cyclone: {o_max_stamina}
             **Atk:** {o_attack}
             **Def:** {o_defense}
             **Speed:** {o_speed}
