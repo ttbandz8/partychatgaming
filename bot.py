@@ -549,7 +549,12 @@ async def daily(ctx):
    db.updateVaultNoFilter({'OWNER': str(ctx.author)}, {'$set': {'QUESTS': quests}})
 
    await ctx.send(f"Daily bonus :coin:{dailyamount} has been applied for {ctx.author.mention}!\nYour new quests are available on the Quest Board!")
-      
+
+@bot.event
+async def on_command_error(ctx, error):
+    if isinstance(error, commands.CommandOnCooldown):
+        await ctx.send(f'Your Daily Reward is on cooldown! You can use it in {round(error.retry_after/3600)} hours!')
+
 @bot.command()
 @commands.check(validate_user)
 async def vs(ctx, user: User, args1 ):

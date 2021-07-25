@@ -2977,7 +2977,7 @@ class CrownUnlimited(commands.Cog):
                                     if cmove_enhanced_text in Healer_Enhancer_Check or cmove_enhanced_text in Support_Enhancer_Check:
                                         aiMove = 7
                                     else:
-                                        aiMove = 2
+                                        aiMove = 1
                         elif c_stamina >= 20:
                             aiMove = 4
                         elif c_stamina >= 10:
@@ -7448,7 +7448,7 @@ class CrownUnlimited(commands.Cog):
                                 if cmove_enhanced_text in Healer_Enhancer_Check or cmove_enhanced_text in Support_Enhancer_Check:
                                     aiMove = 7
                                 else:
-                                    aiMove = 2
+                                    aiMove = 1
                         elif c_stamina >= 10:
                             aiMove = 1
                         else:
@@ -12155,7 +12155,7 @@ class CrownUnlimited(commands.Cog):
                             if cmove_enhanced_text in Healer_Enhancer_Check or cmove_enhanced_text in Support_Enhancer_Check:
                                 aiMove = 7
                             else:
-                                aiMove = 2
+                                aiMove = 1
                     elif c_stamina >= 10:
                         aiMove = 1
                     else:
@@ -38296,12 +38296,11 @@ async def quest(player, opponent, mode):
             return
         completion = quest_data['GOAL'] - (quest_data['WINS'] + 1)
     
-        print(completion)
         if str(mode) == "Dungeon" and quest_data['TYPE'] == "Dungeon" and completion >= 0:
             message = "Dungeon Quest progressed!"
             if completion == 0:
-                await bless(150, player)
-                message = "Dungeon Quest Completed! :coin:150 has been added to your balance."
+                await bless(1500, player)
+                message = "Dungeon Quest Completed! :coin:1500 has been added to your balance."
 
             query = {'OWNER': str(player)}
             update_query = {'$inc': {'QUESTS.$[type].' + "WINS": 1}}
@@ -38313,11 +38312,11 @@ async def quest(player, opponent, mode):
             message = "Tales Quest progressed!"
             if completion == 0:
                 if quest_data['GOAL'] == 5:
-                    await bless(125, player)
-                    message = "Tales Quest Completed! :coin:125 has been added to your balance."
+                    await bless(1000, player)
+                    message = "Tales Quest Completed! :coin:1000 has been added to your balance."
                 elif quest_data['GOAL'] == 3:
-                    await bless(100, player)
-                    message = "Tales Quest Completed! :coin:100 has been added to your balance."
+                    await bless(500, player)
+                    message = "Tales Quest Completed! :coin:500 has been added to your balance."
 
             query = {'OWNER': str(player)}
             update_query = {'$inc': {'QUESTS.$[type].' + "WINS": 1}}
