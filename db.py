@@ -422,11 +422,11 @@ def queryTournamentCards():
     return data
 
 def queryShopCards():
-    data = cards_col.find({'TOURNAMENT_REQUIREMENTS': 0, 'AVAILABLE': True, 'HAS_COLLECTION': False})
+    data = cards_col.find({'EXCLUSIVE': False, 'AVAILABLE': True, 'HAS_COLLECTION': False})
     return data 
 
 def altQueryShopCards(args):
-    data = cards_col.find({'TOURNAMENT_REQUIREMENTS': 0, 'AVAILABLE': True})
+    data = cards_col.find({'EXCLUSIVE': False, 'AVAILABLE': True})
     return data 
 
 def queryDropCards(args):
@@ -551,7 +551,7 @@ def queryTournamentTitles():
     return data
 
 def queryShopTitles():
-    data = titles_col.find({'TOURNAMENT_REQUIREMENTS': 0, 'AVAILABLE': True})
+    data = titles_col.find({'EXCLUSIVE': False, 'AVAILABLE': True})
     return data 
 
 
@@ -630,7 +630,7 @@ def queryTournamentArms():
     return data
 
 def queryShopArms():
-    data = arm_col.find({'TOURNAMENT_REQUIREMENTS': 0, 'AVAILABLE': True})
+    data = arm_col.find({'EXCLUSIVE': False, 'AVAILABLE': True})
     return data 
 
 

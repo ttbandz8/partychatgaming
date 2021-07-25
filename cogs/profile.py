@@ -829,9 +829,9 @@ class Profile(commands.Cog):
         random_cards = random.sample(cards, min(len(cards), 10))
         for card in random_cards:
             if card['STOCK'] == 0:
-                card_text_list.append(f"{card['NAME']}: :coin:{card['PRICE']} " + f"_{card['UNIVERSE']}_ **Out Of Stock**")
+                card_text_list.append(f"**{card['NAME']}**: :coin:{card['PRICE']} " + f"_{card['UNIVERSE']}_ **Out Of Stock**")
             else:
-                card_text_list.append(f"{card['NAME']}: :coin:{card['PRICE']} " + f"_{card['UNIVERSE']}_")
+                card_text_list.append(f"**{card['NAME']}**: :coin:{card['PRICE']} " + f"_{card['UNIVERSE']}_")
 
         title_resp = db.queryShopTitles()
         titles = []
@@ -845,9 +845,9 @@ class Profile(commands.Cog):
         random_titles = random.sample(titles, min(len(titles), 10))
         for title in random_titles:
             if title['STOCK'] == 0:
-                title_text_list.append(f"{title['TITLE']}: :coin:{title['PRICE']} " + f"_{title['UNIVERSE']}_ **Out Of Stock**")
+                title_text_list.append(f"**{title['TITLE']}**: :coin:{title['PRICE']} " + f"_{title['UNIVERSE']}_ **Out Of Stock**")
             else:
-                title_text_list.append(f"{title['TITLE']}: :coin:{title['PRICE']} " + f"_{title['UNIVERSE']}_")
+                title_text_list.append(f"**{title['TITLE']}**: :coin:{title['PRICE']} " + f"_{title['UNIVERSE']}_")
         
         
         arm_resp = db.queryShopArms()
@@ -862,9 +862,9 @@ class Profile(commands.Cog):
         random_arms = random.sample(arms, min(len(arms), 10))
         for arm in random_arms:
             if arm['STOCK'] == 0:
-                arm_text_list.append(f"{arm['ARM']}: :coin:{arm['PRICE']} " + f"_{arm['UNIVERSE']}_ **Out Of Stock**")
+                arm_text_list.append(f"**{arm['ARM']}**: :coin:{arm['PRICE']} " + f"_{arm['UNIVERSE']}_ **Out Of Stock**")
             else:
-                arm_text_list.append(f"{arm['ARM']}: :coin:{arm['PRICE']} " + f"_{arm['UNIVERSE']}_")
+                arm_text_list.append(f"**{arm['ARM']}**: :coin:{arm['PRICE']} " + f"_{arm['UNIVERSE']}_")
         
         embedVar1 = discord.Embed(title=f"{shopName}", description=textwrap.dedent(f"""
         **Balance:** :coin:{vault['BALANCE']}

@@ -37877,11 +37877,11 @@ class CrownUnlimited(commands.Cog):
             else:
                 available = "🟠"
             if card['EXCLUSIVE'] and not card['HAS_COLLECTION']:
-                dungeon_card_details.append(f"{available} **{card['NAME']}:** _D_")
+                dungeon_card_details.append(f"{available} **{card['NAME']}**: :coin:{card['PRICE']}\n**HLT:** {card['HLT']} **ATK:** {card['ATK']}  **DEF:** {card['DEF']}\n")
             elif not card['HAS_COLLECTION']:
-                tales_card_details.append(f"{available} **{card['NAME']}**: :coin:{card['PRICE']} _T_")
+                tales_card_details.append(f"{available} **{card['NAME']}**: :coin:{card['PRICE']}\n**HLT:** {card['HLT']} **ATK:** {card['ATK']}  **DEF:** {card['DEF']}\n")
             elif card['HAS_COLLECTION']:
-                destiny_card_details.append(f"{available} **{card['NAME']}**: _T_")
+                destiny_card_details.append(f"{available} **{card['NAME']}**: :coin:{card['PRICE']}\n**HLT:** {card['HLT']} **ATK:** {card['ATK']}  **DEF:** {card['DEF']}\n")
 
         all_cards = []
         if tales_card_details:
@@ -37914,13 +37914,13 @@ class CrownUnlimited(commands.Cog):
         # If it's not an array greater than 10, show paginationless embed
         if len(all_cards) < 10:
             embedVar = discord.Embed(title= f"{universe} Card List", description="\n".join(all_cards), colour=0x7289da)
-            embedVar.set_footer(text=f".buycard card name: Buy Card\n.viewcard card name: View Cards Details")
+            embedVar.set_footer(text=f"{total_cards} Total Cards\n🟣 Dungeon Drop\n🟢 Tale Drop\n🔵 Destiny Line")
             await ctx.send(embed=embedVar)
 
         embed_list = []
         for i in range(0, len(cards_broken_up)):
             globals()['embedVar%s' % i] = discord.Embed(title= f"{universe} Card List", description="\n".join(cards_broken_up[i]), colour=0x7289da)
-            globals()['embedVar%s' % i].set_footer(text=f"{total_cards} Total Cards\n.buycard card name: Buy Card\n.viewcard card name: View Cards Details")
+            globals()['embedVar%s' % i].set_footer(text=f"{total_cards} Total Cards\n🟣 Dungeon Drop\n🟢 Tale Drop\n🔵 Destiny Line")
             embed_list.append(globals()['embedVar%s' % i])
 
         paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
@@ -37945,6 +37945,10 @@ class CrownUnlimited(commands.Cog):
         dungeon_titles_details = []
         tales_titles_details = []
         for title in titles:
+            title_passive = title['ABILITIES'][0]
+            title_passive_type = list(title_passive.keys())[0]
+            title_passive_value = list(title_passive.values())[0]
+            
             available = ""
             if title['AVAILABLE'] and title['EXCLUSIVE']:
                 available = ":purple_circle:"
@@ -37953,9 +37957,9 @@ class CrownUnlimited(commands.Cog):
             else:
                 available = ":red_circle:"
             if title['EXCLUSIVE']:
-                dungeon_titles_details.append(f"{available} {title['TITLE']} _D_")
+                dungeon_titles_details.append(f"{available} **{title['TITLE']}**\n**{title_passive_type}:** {title_passive_value}\n")
             else:
-                tales_titles_details.append(f"{available} {title['TITLE']}: :coin:{title['PRICE']} _T_")
+                tales_titles_details.append(f"{available} **{title['TITLE']}**: :coin:{title['PRICE']}\n**{title_passive_type}:** {title_passive_value}\n")
 
         all_titles = []
         if tales_titles_details:
@@ -37980,14 +37984,14 @@ class CrownUnlimited(commands.Cog):
         if len(all_titles) < 10:
             embedVar = discord.Embed(title= f"{universe} Title List", description="\n".join(all_titles), colour=0x7289da)
             # embedVar.set_thumbnail(url={universe_data['PATH']})
-            embedVar.set_footer(text=f".buytitle title name: Buy Title\n.viewtitle title name: View Title Details")
+            embedVar.set_footer(text=f"{total_titles} Total Titles\n🟣 Dungeon Drop\n🟢 Tale Drop")
             await ctx.send(embed=embedVar)
 
         embed_list = []
         for i in range(0, len(titles_broken_up)):
             globals()['embedVar%s' % i] = discord.Embed(title= f"{universe} Title List", description="\n".join(titles_broken_up[i]), colour=0x7289da)
             # globals()['embedVar%s' % i].set_thumbnail(url={universe_data['PATH']})
-            globals()['embedVar%s' % i].set_footer(text=f"{total_titles} Total Titles\n.buytitle title name: Buy Title\n.viewtitle title name: View Title Details")
+            globals()['embedVar%s' % i].set_footer(text=f"{total_titles} Total Titles\n🟣 Dungeon Drop\n🟢 Tale Drop")
             embed_list.append(globals()['embedVar%s' % i])
 
         paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
@@ -38012,6 +38016,9 @@ class CrownUnlimited(commands.Cog):
         dungeon_arms_details = []
         tales_arms_details = []
         for arm in arms:
+            arm_passive = arm['ABILITIES'][0]
+            arm_passive_type = list(arm_passive.keys())[0]
+            arm_passive_value = list(arm_passive.values())[0]
             available = ""
             if arm['AVAILABLE'] and arm['EXCLUSIVE']:
                 available = ":purple_circle:"
@@ -38020,9 +38027,9 @@ class CrownUnlimited(commands.Cog):
             else:
                 available = ":red_circle:"
             if arm['EXCLUSIVE']:
-                dungeon_arms_details.append(f"{available} {arm['ARM']} _D_")
+                dungeon_arms_details.append(f"{available} **{arm['ARM']}**\n**{arm_passive_type}:** {arm_passive_value}\n")
             else:
-                tales_arms_details.append(f"{available} {arm['ARM']}: :coin:{arm['PRICE']} _T_")
+                tales_arms_details.append(f"{available} **{arm['ARM']}**: :coin:{arm['PRICE']}\n**{arm_passive_type}:** {arm_passive_value}\n")
 
         all_arms = []
         if tales_arms_details:
@@ -38045,13 +38052,13 @@ class CrownUnlimited(commands.Cog):
         # If it's not an array greater than 10, show paginationless embed
         if len(all_arms) < 10:
             embedVar = discord.Embed(title= f"{universe} Arms List", description="\n".join(all_arms), colour=0x7289da)
-            embedVar.set_footer(text=f".buyarm arm name: Buy Arm\n.viewarm arm name: View Arm Details")
+            embedVar.set_footer(text=f"{total_arms} Total Arms\n🟣 Dungeon Drop\n🟢 Tale Drop")
             await ctx.send(embed=embedVar)
 
         embed_list = []
         for i in range(0, len(arms_broken_up)):
             globals()['embedVar%s' % i] = discord.Embed(title= f"{universe} Arms List", description="\n".join(arms_broken_up[i]), colour=0x7289da)
-            globals()['embedVar%s' % i].set_footer(text=f"{total_arms} Total Arms\n.buyarm arm name: Buy Arm\n.viewarm arm name: View Arm Details")
+            globals()['embedVar%s' % i].set_footer(text=f"{total_arms} Total Arms\n🟣 Dungeon Drop\n🟢 Tale Drop")
             embed_list.append(globals()['embedVar%s' % i])
 
         paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
@@ -38079,7 +38086,7 @@ class CrownUnlimited(commands.Cog):
         
         destiny_details = []
         for de in destinies:
-            destiny_details.append(f"**{de['NAME']}**\nDefeat {de['DEFEAT']} with {' '.join(de['USE_CARDS'])} {str(de['REQUIRED'])} times: Unlock **{de['EARN']}**")
+            destiny_details.append(f"**{de['NAME']}**\nDefeat {de['DEFEAT']} with {' '.join(de['USE_CARDS'])} {str(de['REQUIRED'])} times: Unlock **{de['EARN']}**\n")
         
         total_destinies = len(destiny_details)
 
@@ -38118,7 +38125,6 @@ class CrownUnlimited(commands.Cog):
 
     @commands.command()
     async def pets(self, ctx, *args):
-        
         universe = " ".join([*args])
         universe_data = db.queryUniverse({'TITLE': str(universe)})
         user = db.queryUser({'DISNAME': str(ctx.author)})
@@ -38130,6 +38136,9 @@ class CrownUnlimited(commands.Cog):
         dungeon_pets_details = []
         tales_pets_details = []
         for pet in pets:
+            pet_ability = list(pet['ABILITIES'][0].keys())[0]
+            pet_ability_power = list(pet['ABILITIES'][0].values())[0]
+            pet_ability_type = list(pet['ABILITIES'][0].values())[1]
             available = ""
             if pet['AVAILABLE'] and pet['EXCLUSIVE'] :
                 available = ":purple_circle:"
@@ -38138,9 +38147,9 @@ class CrownUnlimited(commands.Cog):
             else:
                 available = ":red_circle:"
             if pet['EXCLUSIVE']:
-                dungeon_pets_details.append(f"{available} {pet['PET']} _D_")
+                dungeon_pets_details.append(f"{available} **{pet['PET']}**\n**{pet_ability}:** {pet_ability_power}\n**Type:** {pet_ability_type}\n")
             else:
-                tales_pets_details.append(f"{available} {pet['PET']} _T_")
+                tales_pets_details.append(f"{available} **{pet['PET']}**\n**{pet_ability}:** {pet_ability_power}\n**Type:** {pet_ability_type}\n")
 
         all_pets = []
         if tales_pets_details:
@@ -38165,13 +38174,13 @@ class CrownUnlimited(commands.Cog):
         # If it's not an array greater than 10, show paginationless embed
         if len(all_pets) < 10:
             embedVar = discord.Embed(title= f"{universe} Pet List", description="\n".join(all_pets), colour=0x7289da)
-            embedVar.set_footer(text=f".viewpet pet name: View Pet Details")
+            embedVar.set_footer(text=f"{total_pets} Total Pets\n🟣 Dungeon Drop\n🟢 Tale Drop")
             await ctx.send(embed=embedVar)
 
         embed_list = []
         for i in range(0, len(pets_broken_up)):
             globals()['embedVar%s' % i] = discord.Embed(title= f"{universe} Pet List", description="\n".join(pets_broken_up[i]), colour=0x7289da)
-            globals()['embedVar%s' % i].set_footer(text=f"{total_pets} Total Pets\n.viewpet pet name: View Pet Details")
+            globals()['embedVar%s' % i].set_footer(text=f"{total_pets} Total Pets\n🟣 Dungeon Drop\n🟢 Tale Drop")
             embed_list.append(globals()['embedVar%s' % i])
 
         paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
@@ -38198,9 +38207,46 @@ class CrownUnlimited(commands.Cog):
             else:
                 available = "🟠"
                 unavailable_universes.append(f"{available} {uni['TITLE']}")
-        await ctx.author.send("ALL UNIVERSES")
-        await ctx.author.send("\n".join(available_universes))
-        await ctx.author.send("\n".join(unavailable_universes))
+
+        all_universes = []
+        if available_universes:
+            for a in available_universes:
+                all_universes.append(a)
+        
+        # if unavailable_universes:
+        #     for u in unavailable_universes:
+        #         all_universes.append(u)
+        total_universes = len(all_universes)
+
+        # Adding to array until divisible by 10
+        while len(all_universes) % 10 != 0:
+            all_universes.append("")
+
+        # Check if divisible by 10, then start to split evenly
+        if len(all_universes) % 10 == 0:
+            first_digit = int(str(len(all_universes))[:1])
+            universes_broken_up = np.array_split(all_universes, first_digit)
+        
+        # If it's not an array greater than 10, show paginationless embed
+        if len(all_universes) < 10:
+            embedVar = discord.Embed(title= f"Universe List", description="\n".join(all_universes), colour=0x7289da)
+            embedVar.set_footer(text=f"{total_universes} Total Universes")
+            await ctx.send(embed=embedVar)
+
+        embed_list = []
+        for i in range(0, len(universes_broken_up)):
+            globals()['embedVar%s' % i] = discord.Embed(title= f"Universe List", description="\n".join(universes_broken_up[i]), colour=0x7289da)
+            globals()['embedVar%s' % i].set_footer(text=f"{total_universes} Total Universes")
+            embed_list.append(globals()['embedVar%s' % i])
+
+        paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+        paginator.add_reaction('⏮️', "first")
+        paginator.add_reaction('⏪', "back")
+        paginator.add_reaction('🔐', "lock")
+        paginator.add_reaction('⏩', "next")
+        paginator.add_reaction('⏭️', "last")
+        embeds = embed_list
+        await paginator.run(embeds)
 
     @commands.command()
     async def houses(self, ctx):
