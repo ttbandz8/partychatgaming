@@ -302,12 +302,12 @@ class CrownUnlimited(commands.Cog):
             t_card_path=t['PATH']
             t_rcard_path=t['RPATH']
             
-            t_health = t['HLT'] + (10 * currentopponent) + opponent_scaling
+            t_health = t['HLT'] + (10 * currentopponent) + opponent_scaling + 100
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
-            t_attack = t['ATK']
-            t_defense = t['DEF'] + (8 * currentopponent) + opponent_scaling
+            t_attack = t['ATK'] + 30
+            t_defense = t['DEF'] + (8 * currentopponent) + opponent_scaling + 30
             t_type = t['TYPE']
             t_accuracy = t['ACC']
             t_passive = t['PASS'][0]
@@ -2839,11 +2839,11 @@ class CrownUnlimited(commands.Cog):
                         elif c_stamina >= 150:
                             aiMove = 1                                     
                         elif c_stamina >= 140 and (c_health >= t_health):
-                            aiMove = 1
+                            aiMove = 4
                         elif c_stamina >= 140:
                             aiMove = 3                                      
                         elif c_stamina >= 130 and (c_health >= t_health):
-                            aiMove = 1
+                            aiMove = 4
                         elif c_stamina >= 130:
                             aiMove = 3                                     
                         elif c_stamina >= 120 and (c_health >= t_health):
@@ -2908,7 +2908,7 @@ class CrownUnlimited(commands.Cog):
                                 else:
                                     aiMove = 2
                             else:
-                                aiMove = 1
+                                aiMove = 4
                         elif c_stamina >= 80:
                             if o_health <= t_health:
                                 if cmove_enhanced_text in Healer_Enhancer_Check:
@@ -4551,8 +4551,8 @@ class CrownUnlimited(commands.Cog):
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
-            t_attack = t['ATK'] + (5 * currentopponent) + opponent_scaling
-            t_defense = t['DEF'] + (9 * currentopponent) + opponent_scaling
+            t_attack = t['ATK'] + (5 * currentopponent) + opponent_scaling 
+            t_defense = t['DEF'] + (9 * currentopponent) + opponent_scaling 
             t_type = t['TYPE']
             t_accuracy = t['ACC']
             t_passive = t['PASS'][0]

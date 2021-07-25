@@ -101,8 +101,8 @@ class Senpai(commands.Cog):
     #     embeds = [embed1, embed2, embed3, embed4, embed5, embed6, embed7, embed8, embed9, embed10]
     #     await paginator.run(embeds)
     
-    # @commands.command()
-    # async def bootcamp(self, ctx):
+    @commands.command()
+    async def bootcamp(self, ctx):
 
             # embed11 = discord.Embed(color=ctx.author.color).add_field(name=":woman_teacher: " + "Senpai™️ Says :\n" + "Games !:video_game:\n#lkg , `.ag` and `.uign`", value="Use the `.lk`g command to bring up the available games!\nAdd games using the `.ag` 'gamename' 'InGameName' command.\nCrown Unlimitd has already been added for you\nTry .ag game 'gameIGN'!\n\n*Hint use .uign 'game' 'newIGN' to update your In Game Name.*")
             # embed11.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png")
@@ -147,6 +147,26 @@ class Senpai(commands.Cog):
     #     paginator.add_reaction('⏭️', "last")
     #     embeds = [embed1, embed2, embed3, embed5, embed4, embed6, embed7, embed8, embed9, embed6, embed10, embed11]
     #     await paginator.run(embeds)
+    
+        avatar="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Franchise.png"
+
+
+        embedVar1 = discord.Embed(title= f":military_helmet: " + "Senpai™️",colour=0x7289da)
+        embedVar1.set_thumbnail(url=avatar)
+        embedVar1.add_field(name="Use the Reactions to learn with Senpai™️", value=textwrap.dedent(f"""\
+        Bootcamp tuturial coming soon !
+        use .help to learn 
+        """))
+
+
+        paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+        paginator.add_reaction('⏮️', "first")
+        paginator.add_reaction('⏪', "back")
+        paginator.add_reaction('🔐', "lock")
+        paginator.add_reaction('⏩', "next")
+        paginator.add_reaction('⏭️', "last")
+        embeds = [embedVar1]
+        await paginator.run(embeds)
 
     @commands.command()
     async def senpai(self, ctx):
@@ -308,11 +328,17 @@ class Senpai(commands.Cog):
         embedVar11.add_field(name="Many Game Modes!", value=textwrap.dedent(f"""\
         **Crown Unlimited** includes both **Single Player** and **Multiplayer** Game Modes
         
-        **Single Player** Modes include **.tales**, **.dungeon** and **.boss**
+        **Single Player** consit of **Solo** and **Duo**
+        
+        **Solo** Modes include **.tales**, **.dungeon** and **.boss**
+        
+        **Duo** Modes include **.dtales**, **.ddungeon** and **.dboss**
         
         **Multiplayer** consist of **Ranked** and **Co-Op**
         
         **Co-Op** Modes include **.ctales**, **.cdungeon**, and **.cboss**
+        
+        **Ranked**
         
         Use **.battle** `@User` to start a **Ranked Lobby**
         
@@ -325,8 +351,7 @@ class Senpai(commands.Cog):
         To see your W/L record vs another user: 
         Use **.vs** `@user` `Game`
         *Example: .vs @senpai crown*
-        
-        
+               
         *Hint use .analysis `Card Name` to view optimal PvE and PvP builds for your favorite Cards*"
 
         """))
@@ -337,11 +362,22 @@ class Senpai(commands.Cog):
         Use the **.lookup** `@User`to Lookup other Registered Players!:mag:.
         
         Try **.lookup** `@Senpai`.
-        *Great you should see my **Team**, **Family**, **Title**, **Arm**, and **Pet** as well as **Tournament Wins**!
+        *Great you should see my equipped **Card**, **Title**, **Arm**, and **Pet** as well as **Analytics** and **Alignments**
+        
+        **Analytics**
+        Every Crown Unlimited Match is recorded for analytics!
+        My most used **Card**, **Single Player and **PVP** data
+        Use the .analysis **Card Name** command to view optimal builds and **Card Masters**
+        
+        **Alighment**
+        Align yourself with a **Team** and **Family** to enhance the multiplayer experience
+        Alighments also grant boost in game!
+        We will go over alignments in more detail during **.bootcamp**
+        
         
         On the next page are the **Games** I play frequently followed by my **Stats**
         
-        The final page shows my Completed **Crown Tales** and **Crown Dungeons**
+        The final page shows my Completed **Crown Tales**, **Crown Dungeons** and **Boss Souls**
         
         *Try **.lookup** `@User` on another **User** for practice!*
 

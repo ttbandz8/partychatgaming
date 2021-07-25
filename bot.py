@@ -284,35 +284,58 @@ async def crown(ctx):
    """) ,colour=0x7289da)
    embedVar6.set_thumbnail(url=avatar)
 
-   embedVar7 = discord.Embed(title= f":crown:CROWN Single Player & Multiplayer", description=textwrap.dedent(f"""\
+   embedVar7 = discord.Embed(title= f":crown:CROWN Single Player", description=textwrap.dedent(f"""\
    **Single Player**
+   
+   **Solo**
    **.tales** Single player adventures where you traverse through your favorite universes as characters from various worlds!
    **.dungeon** Hard version of tales with better loot and better drop rates! (Unlocks after completing **Crown Tale**)
    **.boss** End Game battles featuring Iconic Villians from Crown Universes. (Unlocks after completing **Crown Dungeon**)
    
    **Duo**
-   **.dtales DeckPreset** Battle with your favorite AI preset in this Duo Tale!
-   **.ddungeon DeckPreset** Bring your strongest builds through the Darkest Duo Dungeons.
-   **.dboss DeckPreset** Bring your Dynanmic duo to take on one Incredible Boss.
+   **.dtales 1-3** Battle with your favorite AI preset in this Duo Tale!
+   **.ddungeon 1-3** Bring your strongest builds through the Darkest Duo Dungeons.
+   **.dboss 1-3** Bring your Dynanmic duo to take on one Incredible Boss.
  
+   **Crown Rifts**
+   Mash-Up Universes featuring heroes and villians connected through common traits and themes!
+   Pay attention, Rifts will not stay open for long!
+   """),colour=0x7289da)
+   embedVar7.set_thumbnail(url=avatar)
+   
+   embedVar7 = discord.Embed(title= f":crown:CROWN Multiplayer", description=textwrap.dedent(f"""\
    **Multiplayer**
+   
+   **Co-Op**
    **.ctales @partner** Take a companion with your through your favorite tales with higher stakes!
    **.cdungeon @partner** Bring a companion through the darkest dungeons to earn awesome loot together.
    **.cboss @partner** Epic battles between two high level companions and one Incredible Boss.
-   
-   **Co-Op** *must be played in Server*
 
    **PVP**
    **.battle @player:** Select your Build and Challenge any Crown Unlimited Player to join your Game Lobby.
    **.start:** Starts round against current opponent.
    **.wager number:*** In lobby players can wager :coin:.
-   Builds are locked during lobbies, to change your build end the lobby with **.end** .
+   *Builds are locked during lobbies, to change your build end the lobby with **.end** .*
    
    **Crown Rifts**
-   Mash-Up Universes featuring heroes and villians connected through common triats and themes!
-   Pay attention, when the Rift opens it will not stay open for long!
+   Crown Rifts are Co-Op Compatable and Helping other players in Co-Op **WILL NOT** close your open Rift!
+   Grind Those Rifts Together!
+   
    """),colour=0x7289da)
    embedVar7.set_thumbnail(url=avatar)
+   
+   embedVar9 = discord.Embed(title= f":crown: Decks",description=textwrap.dedent(f"""\
+   Save your favorite builds in your **Deck**
+   **.deck** to open the deck menu and select a preset with **1-3**
+   **.savedeck** to save your current build **1-3**
+   
+   **Deck Builds**
+   You can bring your deck builds into Duo Battles!
+   **.abuild 1-3** to view the full preset build
+   
+   Take your **Deck Presets** into Crown Duos!
+   """) ,colour=0x7289da)
+   embedVar9.set_thumbnail(url=avatar)
 
    embedVar8 = discord.Embed(title= f":crown: Economy",description=textwrap.dedent(f"""\
    Crown Unlimited features an in game **Shop** where you can purchase new Cards, Titles, and Arms.
@@ -336,7 +359,7 @@ async def crown(ctx):
    paginator.add_reaction('🔐', "lock")
    paginator.add_reaction('⏩', "next")
    paginator.add_reaction('⏭️', "last")
-   embeds = [embedVar1, embedVar2, embedVar3, embedVar4, embedVar5, embedVar6, embedVar7, embedVar8]
+   embeds = [embedVar1, embedVar2, embedVar3, embedVar4, embedVar5, embedVar6, embedVar7,embedVar9, embedVar8]
    await paginator.run(embeds)
 
 async def validate_user(ctx):

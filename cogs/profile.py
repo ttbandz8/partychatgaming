@@ -966,7 +966,10 @@ class Profile(commands.Cog):
         if riftShopOpen:    
             for uni in all_universes:
                 if uni['PREREQUISITE'] in user['CROWN_TALES']:
-                    available_universes.append(uni['TITLE'])
+                    if uni['TIER'] != 9:
+                        available_universes.append(uni['TITLE'])
+                    elif uni['TITLE'] in user['CROWN_TALES']:
+                        available_universes.append(uni['TITLE'])                      
         else:
             for uni in all_universes:
                 if uni['PREREQUISITE'] in user['CROWN_TALES'] and not uni['TIER'] == 9:

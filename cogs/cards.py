@@ -65,13 +65,16 @@ class Cards(commands.Cog):
             if riftShopOpen:    
                 for uni in all_universes:
                     if uni['PREREQUISITE'] in user['CROWN_TALES']:
-                        available_universes.append(uni['TITLE'])
+                        if uni['TIER'] != 9:
+                            available_universes.append(uni['TITLE'])
+                        elif uni['TITLE'] in user['CROWN_TALES']:
+                            available_universes.append(uni['TITLE'])     
             else:
                 for uni in all_universes:
                     if uni['PREREQUISITE'] in user['CROWN_TALES'] and not uni['TIER'] == 9:
                         available_universes.append(uni['TITLE'])
             if check_card['UNIVERSE'] not in available_universes:
-                await ctx.send("You cannot purchase cards from Universes you haven't unlocked.")
+                await ctx.send("You cannot purchase cards from Universes you haven't unlocked or Rifts yet completed.")
                 return
             if check_card['HAS_COLLECTION']:
                 await ctx.send("This card can not be purchased.")

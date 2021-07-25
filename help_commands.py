@@ -10,10 +10,10 @@ import textwrap
 CROWN_UNLIMITED_GAMES="`.crownhelp` - Crown Unlimited Help Book\n\n`.senpaibattle` - Tutorial Bot\n\n`.legendbattle` -  Advanced Tutorial Bot\n\n`.battle` @`PLAYER` - Challenge another Player\n\n`.start` - To start a battle in your current session\n\n`.wager` `AMOUNT` - Wager amount to battle in current session\n\n`.solo` - Play Crown Unlimited In DMS\n\n`.tales` - Opens Crown Tales Story Mode Menu\n\n`.dungeon` - Opens Crown Tales Dungeon Menu\n\n`.boss` `UNIVERSE` - Opens Crown Universe Boss Fight\n\n`.ctales` @`COMPANION` - Opens Crown Tales CO-OP Story Mode Menu\n\n`.cdungeon` @`COMPANION`- Opens Crown Tales CO-OP Dungeon Menu\n\n`.cboss` @`COMPANION` `UNIVERSE` - Opens Crown Universe CO-OP Boss Fight\n\n`.enhance` - Opens Enhancement Help Menu\n\n"
 
 BOT_COMMANDS = textwrap.dedent(f"""\
-**PROFILE COMMANDS**
+**ACCOUNT COMMANDS**
 **.r**: Account Registration
 **.d @player**IWANTTODELETEMYACCOUNT: Delete your account
-**.lk @player**: Profile lookup
+**.lookup @player**: Profile lookup
 
 **GAME COMMANDS**
 **.vs @player game**: Matchup lookup
@@ -60,7 +60,7 @@ BOT_COMMANDS = textwrap.dedent(f"""\
 """)
 
 CROWN_UNLIMITED_COMMANDS = textwrap.dedent(f"""\
-**PROFILE COMMANDS**
+**CROWN UNLIMITED PROFILE COMMANDS**
 **.solo**: Play Crown Unlimited In DM
 **.crown**: Crown Unlimited Help Book
 **.build**: View your current build
@@ -78,14 +78,14 @@ CROWN_UNLIMITED_COMMANDS = textwrap.dedent(f"""\
 **.savedeck**: Save your Build as Preset
 **.rebirth**: Rebirth Account with permanent increases
 
-**Crown Unlimited PVP Mode**
+**CROWN UNLIMITED PVP COMMANDS**
 **.senpaibattle**: Tutorial Bot
 **.legendbattle**:  Advanced Tutorial Bot
 **.battle @player**: Challenge another Player
 **.start** Start a battle in your current session
 **.wager amount**: Wager amount to battle in current session
 
-**Crown Unlimited Story Mode**
+**CROWN UNLIMITED STORY MODE COMMANDS**
 **.universes**: Show List Of Crown Universes
 **.tales**: Opens Crown Tales Story Mode Menu
 **.dungeon**: Opens Crown Tales Dungeon Menu
@@ -93,12 +93,12 @@ CROWN_UNLIMITED_COMMANDS = textwrap.dedent(f"""\
 **.ctales @companion**: Opens Crown Tales CO-OP Story Mode Menu
 **.cdungeon @companion**: Opens Crown Tales CO-OP Dungeon Menu
 **.cboss @companion**: Opens Crown Universe CO-OP Boss Menu
-**.dtales Preset**: Opens Crown Tales Duo Story Mode Menu
-**.ddungeon Preset**: Opens Crown Tales Duo Dungeon Menu
-**.dboss Preset**: Opens Crown Universe Duo Boss Menu
+**.dtales 1-3**: Opens Crown Tales Duo Story Mode Menu
+**.ddungeon 1-3**: Opens Crown Tales Duo Dungeon Menu
+**.dboss 1-3**: Opens Crown Universe Duo Boss Menu
 """)
 CTAP_COMMANDS = textwrap.dedent(f"""\
-**Card Commands**
+**CARD COMMANDS**
 **.cards universe**: View Universe Card List
 **.viewcard**: Preview Card 
 **.buycard**: Buy Card
@@ -108,24 +108,24 @@ CTAP_COMMANDS = textwrap.dedent(f"""\
 **.destinies universe**: Show Available Universe Destinies
 **.viewboss boss**:Show Boss Description
 
-**Title Commands**
+**TITLE COMMANDS**
 **.titles universe**: View Universe Title List
 **.viewtitle**: Preview Title
 **.buytitle**: Buy Title
 **.equiptitle title**: - Equip title
 
-**Arm Commands**
+**ARM COMMANDS**
 **.arms universe**: View Universe Arm List
 **.viewarm**: Preview Arm
 **.buyarm**: Buy Arm
 **.equiparm arm**: Equip arm
 
-**Pet Commands**
+**PET COMMANDS**
 **.pets universe**: View Universe Pet List
 **.viewpet** Preview Pet
 **.equippet pet**: Equip pet
 
-**Economy Commands**
+**ECONOMY COMMANDS**
 **.trade @player item**: Trade Cards, Titles, Arms, Pets
 **.sell @player item**: Sell Cards, Titles, and Arms
 **.resell item**: Sell Card, Title, Arm back to shop
