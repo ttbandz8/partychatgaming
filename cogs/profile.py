@@ -189,11 +189,11 @@ class Profile(commands.Cog):
 
             embedVar = discord.Embed(title=f"{title_name} {o_card} & {active_pet['NAME']}:".format(self), description=textwrap.dedent(f"""\
             {message}
-            **Health:** {o_max_health} {hlt_buff}
+            :heart: {o_max_health} {hlt_buff}
+            :cyclone: {o_max_stamina}
             **Attack:** {o_attack} {atk_buff}
             **Defense:** {o_defense} {def_buff}
             **Speed:** {o_speed}
-            **Stamina:** {o_max_stamina}
             _Title:_ **{title_name}:** {title_passive_type} {title_passive_value}
             _Arm:_ **{arm_name}:** {arm_passive_type} {arm_passive_value}
             _Pet:_ **{active_pet['NAME']}:** {active_pet['TYPE']} {pet_ability_power}
@@ -351,11 +351,11 @@ class Profile(commands.Cog):
 
             embedVar = discord.Embed(title=f"PRESET: {args}\n{title_name} {o_card} & {active_pet['NAME']}:".format(self), description=textwrap.dedent(f"""\
             {message}
-            **Health:** {o_max_health} {hlt_buff}
+            :heart: {o_max_health} {hlt_buff}
+            :cyclone: {o_max_stamina}
             **Attack:** {o_attack} {atk_buff}
             **Defense:** {o_defense} {def_buff}
             **Speed:** {o_speed}
-            **Stamina:** {o_max_stamina}
             _Title:_ **{title_name}:** {title_passive_type} {title_passive_value}
             _Arm:_ **{arm_name}:** {arm_passive_type} {arm_passive_value}
             _Pet:_ **{active_pet['NAME']}:** {active_pet['TYPE']} {pet_ability_power}

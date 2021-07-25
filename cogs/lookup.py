@@ -474,7 +474,6 @@ class Lookup(commands.Cog):
             match_history_message = ""
 
             if m:
-                print("teti")
                 for match in m:
                     most_played_card.append(match['CARD'])
                     if match['UNIVERSE_TYPE'] == "Tales":
@@ -492,12 +491,12 @@ class Lookup(commands.Cog):
                     most_played_card_message = "_No Data For Analysis_"
                 else:
                     most_played_card_message = f"**Most Played Card: **{card_main}"
-                    match_history_message = textwrap.dedent(f"""\
+                    match_history_message = f"""
                     **Tales Played: **{len(tales_matches)}
                     **Dungeons Played: **{len(dungeon_matches)}
                     **Bosses Played: **{len(boss_matches)}
                     **Pvp Played: **{len(pvp_matches)}
-                    """)
+                    """
 
             crown_list = []
             for crown in crown_tales:
@@ -518,20 +517,26 @@ class Lookup(commands.Cog):
             ign_to_string = dict(ChainMap(*ign))
 
             embed1 = discord.Embed(title= f"{icon} " + f"{name}".format(self), description=textwrap.dedent(f"""\
-            **Card:** {card}
-            **Title: **{titles}
-            **Arm: **{arm}
-            **Pet: **{pet}
+            
+            :flower_playing_cards:**Card:** {card}
+            :crown:**Title: **{titles}
+            :mechanical_arm:**Arm: **{arm}
+            :dog:**Pet: **{pet}
 
             {most_played_card_message}
-            {match_history_message}
-
-            **Team: **{team} 
-            **Family: **{family}
+            
+            **Tales Played: **{len(tales_matches)}
+            **Dungeons Played: **{len(dungeon_matches)}
+            **Bosses Played: **{len(boss_matches)}
+            **Pvp Played: **{len(pvp_matches)}
+            
+            :military_helmet:**Team: **{team} 
+            :family_mwgb:**Family: **{family}
             """), colour=000000)
             embed1.set_thumbnail(url=avatar)
             # embed1.add_field(name="Team" + " :military_helmet:", value=team)
             # embed1.add_field(name="Family" + " :family_mwgb:", value=family)
+            # embed1.add_field(name="Card" + " ::flower_playing_cards: :", value=' '.join(str(x) for x in titles))
             # embed1.add_field(name="Title" + " :crown:", value=' '.join(str(x) for x in titles))
             # embed1.add_field(name="Arm" + " :mechanical_arm: ", value=f"{arm}")
             # embed1.add_field(name="Pet" + " :dog:  ", value=f"{pet}")

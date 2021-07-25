@@ -2169,18 +2169,24 @@ class CrownUnlimited(commands.Cog):
         if sowner['RIFT'] == 1:
             for uni in all_universes:
                 if uni['PREREQUISITE'] in sowner['CROWN_TALES'] and uni['HAS_CROWN_TALES'] == True or uni['TIER'] == 9:
-                    available_universes.append(uni['TITLE'])
+                    if uni['TITLE'] in completed_crown_tales:
+                        available_universes.append(f":green_circle: {uni['TITLE']}")
+                    else:
+                        available_universes.append(f":red_circle: {uni['TITLE']}")
         else:
             for uni in all_universes:
                 if uni['PREREQUISITE'] in sowner['CROWN_TALES'] and uni['HAS_CROWN_TALES'] == True and uni['TIER'] != 9:
-                    available_universes.append(uni['TITLE'])
+                    if uni['TITLE'] in completed_crown_tales:
+                        available_universes.append(f":green_circle: {uni['TITLE']}")
+                    else:
+                        available_universes.append(f":red_circle: {uni['TITLE']}")
                 
         icon = ":crown:"
         if sowner['RIFT'] == 1:
             icon = ":crystal_ball:"
             
         embedVar = discord.Embed(title=f"{icon} DUO! Select A Tales Universe", description="\n".join(available_universes), colour=0xe91e63) 
-        embedVar.set_footer(text="Type Quit to exit Tales selection")
+        embedVar.set_footer(text="Type Quit to exit Tales selection\n🔴 Not Conquered 🟢 Conquered")
         await private_channel.send(embed=embedVar)
         accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
 
@@ -6417,14 +6423,18 @@ class CrownUnlimited(commands.Cog):
         available_universes = []
         selected_universe = ""
         for uni in completed_crown_tales:
-            available_universes.append(uni)
+            if uni != "":
+                if uni in completed_dungeons:
+                    available_universes.append(f":green_circle: {uni}")
+                else:
+                    available_universes.append(f":red_circle: {uni}")
         if len(available_universes) == 1 and "" in available_universes:
             await private_channel.send("No available Dungeons for you at this time!")
             response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
             return
                 
         embedVar = discord.Embed(title=f":fire: DUO! Select A Dungeon", description="\n".join(available_universes), colour=0xe91e63)
-        embedVar.set_footer(text="Type Quit to exit Dungeon selection")
+        embedVar.set_footer(text="Type Quit to exit Dungeon selection\n🔴 Not Conquered 🟢 Conquered")
         await private_channel.send(embed=embedVar)
         accept = await private_channel.send(f"{ctx.author.mention} which Dungeon would you like to explore, Duo!")
 
@@ -15803,17 +15813,23 @@ class CrownUnlimited(commands.Cog):
         if sowner['RIFT'] == 1:
             for uni in all_universes:
                 if uni['PREREQUISITE'] in sowner['CROWN_TALES'] and uni['HAS_CROWN_TALES'] == True or uni['TIER'] == 9:
-                    available_universes.append(uni['TITLE'])
+                    if uni['TITLE'] in completed_crown_tales:
+                        available_universes.append(f":green_circle: {uni['TITLE']}")
+                    else:
+                        available_universes.append(f":red_circle: {uni['TITLE']}")
         else:
             for uni in all_universes:
                 if uni['PREREQUISITE'] in sowner['CROWN_TALES'] and uni['HAS_CROWN_TALES'] == True and uni['TIER'] != 9:
-                    available_universes.append(uni['TITLE'])              
+                    if uni['TITLE'] in completed_crown_tales:
+                        available_universes.append(f":green_circle: {uni['TITLE']}")
+                    else:
+                        available_universes.append(f":red_circle: {uni['TITLE']}")             
         icon = ":crown:"
         if sowner['RIFT'] == 1:
             icon = ":crystal_ball:"
             
         embedVar = discord.Embed(title=f"{icon} CO-OP! Select A Tales Universe", description="\n".join(available_universes), colour=0xe91e63) 
-        embedVar.set_footer(text="Type Quit to exit Tales selection")
+        embedVar.set_footer(text="Type Quit to exit Tales selection\n🔴 Not Conquered 🟢 Conquered")
         await private_channel.send(embed=embedVar)
         accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
 
@@ -19855,14 +19871,18 @@ class CrownUnlimited(commands.Cog):
         available_universes = []
         selected_universe = ""
         for uni in completed_crown_tales:
-            available_universes.append(uni)
+            if uni != "":
+                if uni in completed_dungeons:
+                    available_universes.append(f":green_circle: {uni}")
+                else:
+                    available_universes.append(f":red_circle: {uni}")
         if len(available_universes) == 1 and "" in available_universes:
             await private_channel.send("No available Dungeons for you at this time!")
             response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
             return
                 
         embedVar = discord.Embed(title=f":fire: CO-OP! Select A Dungeon", description="\n".join(available_universes), colour=0xe91e63)
-        embedVar.set_footer(text="Type Quit to exit Dungeon selection")
+        embedVar.set_footer(text="Type Quit to exit Dungeon selection\n🔴 Not Conquered 🟢 Conquered")
         await private_channel.send(embed=embedVar)
         accept = await private_channel.send(f"{ctx.author.mention} which Dungeon would you like to explore, co-op!")
 
@@ -28732,14 +28752,19 @@ class CrownUnlimited(commands.Cog):
         available_universes = []
         selected_universe = ""
         for uni in completed_crown_tales:
-            available_universes.append(uni)
+            if uni != "":
+                if uni in completed_dungeons:
+                    available_universes.append(f":green_circle: {uni}")
+                else:
+                    available_universes.append(f":red_circle: {uni}")
+
         if len(available_universes) == 1 and "" in available_universes:
             await private_channel.send("No available Dungeons for you at this time!")
             response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
             return
 
         embedVar = discord.Embed(title=f":fire: Select A Dungeon", description="\n".join(available_universes), colour=0xe91e63)
-        embedVar.set_footer(text="Type Quit to exit Dungeon selection")
+        embedVar.set_footer(text="Type Quit to exit Dungeon selection\n🔴 Not Conquered 🟢 Conquered")
         await private_channel.send(embed=embedVar)
         accept = await private_channel.send(f"{ctx.author.mention} which Dungeon would you like to explore!")
 
@@ -30900,11 +30925,17 @@ class CrownUnlimited(commands.Cog):
         if sowner['RIFT'] == 1:
             for uni in all_universes:
                 if uni['PREREQUISITE'] in sowner['CROWN_TALES'] and uni['HAS_CROWN_TALES'] == True or uni['TIER'] == 9:
-                    available_universes.append(uni['TITLE'])
+                    if uni['TITLE'] in completed_crown_tales:
+                        available_universes.append(f":green_circle: {uni['TITLE']}")
+                    else:
+                        available_universes.append(f":red_circle: {uni['TITLE']}")
         else:
             for uni in all_universes:
                 if uni['PREREQUISITE'] in sowner['CROWN_TALES'] and uni['HAS_CROWN_TALES'] == True and uni['TIER'] != 9:
-                    available_universes.append(uni['TITLE'])
+                    if uni['TITLE'] in completed_crown_tales:
+                        available_universes.append(f":green_circle: {uni['TITLE']}")
+                    else:
+                        available_universes.append(f":red_circle: {uni['TITLE']}")
         
         icon = ":crown:"
         if sowner['RIFT'] == 1:
@@ -30913,7 +30944,7 @@ class CrownUnlimited(commands.Cog):
         
 
         embedVar = discord.Embed(title=f"{icon} Select A Tales Universe", description="\n".join(available_universes), colour=0xe91e63)
-        embedVar.set_footer(text="Type Quit to exit Tales selection")
+        embedVar.set_footer(text="Type Quit to exit Tales selection\n🔴 Not Conquered 🟢 Conquered")
         await private_channel.send(embed=embedVar)
         accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
 
@@ -40699,10 +40730,10 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, vul, accura
             stam = ap
         elif enh == 'HLT':
             enh_type='HLT'
-            hlt = round(ap + (.12 * health))
+            hlt = round(ap + (.16 * health))
         elif enh == 'LIFE':
             enh_type='LIFE'
-            lifesteal = round(ap + (.07 * op_health))
+            lifesteal = round(ap + (.09 * op_health))
         elif enh == 'DRAIN':
             enh_type='DRAIN'
             drain = ap 
