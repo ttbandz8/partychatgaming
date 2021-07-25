@@ -1646,6 +1646,8 @@ class CrownUnlimited(commands.Cog):
                                         elif opet_type == 'WAVE':
                                             t_health = round(t_health - dmg['DMG'])
                                         elif opet_type == 'BLAST':
+                                            if dmg['DMG'] >= 100:
+                                                dmg['DMG'] = 100
                                             t_health = round(t_health - dmg['DMG'])
                                         elif opet_type == 'CREATION':
                                             o_max_health = round(o_max_health + dmg['DMG'])
@@ -3239,6 +3241,8 @@ class CrownUnlimited(commands.Cog):
                                     elif cpet_type == 'WAVE':
                                         t_health = round(t_health - dmg['DMG'])
                                     elif cpet_type == 'BLAST':
+                                        if dmg['DMG'] >= 100:
+                                            dmg['DMG'] = 100
                                         t_health = round(t_health - dmg['DMG'])
                                     elif cpet_type == 'CREATION':
                                         c_max_health = round(c_max_health + dmg['DMG'])
@@ -5896,6 +5900,8 @@ class CrownUnlimited(commands.Cog):
                                         elif opet_type == 'WAVE':
                                             t_health = round(t_health - dmg['DMG'])
                                         elif opet_type == 'BLAST':
+                                            if dmg['DMG'] >= 100:
+                                                dmg['DMG'] = 100
                                             t_health = round(t_health - dmg['DMG'])
                                         elif opet_type == 'CREATION':
                                             o_max_health = round(o_max_health + dmg['DMG'])
@@ -6764,6 +6770,8 @@ class CrownUnlimited(commands.Cog):
                                         elif tpet_type == 'WAVE':
                                             c_health = round(c_health - dmg['DMG'])
                                         elif tpet_type == 'BLAST':
+                                            if dmg['DMG'] >= 100:
+                                                dmg['DMG'] = 100
                                             c_health = round(c_health - dmg['DMG'])
                                         elif tpet_type == 'CREATION':
                                             t_max_health = round(t_max_health + dmg['DMG'])
@@ -6858,6 +6866,8 @@ class CrownUnlimited(commands.Cog):
                                         elif tpet_type == 'WAVE':
                                             o_health = round(o_health - dmg['DMG'])
                                         elif tpet_type == 'BLAST':
+                                            if dmg['DMG'] >= 100:
+                                                dmg['DMG'] = 100
                                             o_health = round(o_health - dmg['DMG'])
                                         elif tpet_type == 'CREATION':
                                             t_max_health = round(t_max_health + dmg['DMG'])
@@ -7710,6 +7720,8 @@ class CrownUnlimited(commands.Cog):
                                     elif cpet_type == 'WAVE':
                                         t_health = round(t_health - dmg['DMG'])
                                     elif cpet_type == 'BLAST':
+                                        if dmg['DMG'] >= 100:
+                                            dmg['DMG'] = 100
                                         t_health = round(t_health - dmg['DMG'])
                                     elif cpet_type == 'CREATION':
                                         c_max_health = round(c_max_health + dmg['DMG'])
@@ -8463,6 +8475,8 @@ class CrownUnlimited(commands.Cog):
                                         elif tpet_type == 'WAVE':
                                             o_health = round(o_health - dmg['DMG'])
                                         elif tpet_type == 'BLAST':
+                                            if dmg['DMG'] >= 100:
+                                                dmg['DMG'] = 100
                                             o_health = round(o_health - dmg['DMG'])
                                         elif tpet_type == 'CREATION':
                                             t_max_health = round(t_max_health + dmg['DMG'])
@@ -8557,6 +8571,8 @@ class CrownUnlimited(commands.Cog):
                                         elif tpet_type == 'WAVE':
                                             c_health = round(c_health - dmg['DMG'])
                                         elif tpet_type == 'BLAST':
+                                            if dmg['DMG'] >= 100:
+                                                dmg['DMG'] = 100
                                             c_health = round(c_health - dmg['DMG'])
                                         elif tpet_type == 'CREATION':
                                             t_max_health = round(t_max_health + dmg['DMG'])
@@ -10584,6 +10600,8 @@ class CrownUnlimited(commands.Cog):
                                     elif opet_type == 'WAVE':
                                         t_health = round(t_health - dmg['DMG'])
                                     elif opet_type == 'BLAST':
+                                        if dmg['DMG'] >= 100:
+                                            dmg['DMG'] = 100
                                         t_health = round(t_health - dmg['DMG'])
                                     elif opet_type == 'CREATION':
                                         o_max_health = round(o_max_health + dmg['DMG'])
@@ -11472,6 +11490,8 @@ class CrownUnlimited(commands.Cog):
                                     elif tpet_type == 'WAVE':
                                         c_health = round(c_health - dmg['DMG'])
                                     elif tpet_type == 'BLAST':
+                                        if dmg['DMG'] >= 100:
+                                            dmg['DMG'] = 100
                                         c_health = round(c_health - dmg['DMG'])
                                     elif tpet_type == 'CREATION':
                                         t_max_health = round(t_max_health + dmg['DMG'])
@@ -11566,6 +11586,8 @@ class CrownUnlimited(commands.Cog):
                                     elif tpet_type == 'WAVE':
                                         o_health = round(o_health - dmg['DMG'])
                                     elif tpet_type == 'BLAST':
+                                        if dmg['DMG'] >= 100:
+                                            dmg['DMG'] = 100
                                         o_health = round(o_health - dmg['DMG'])
                                     elif tpet_type == 'CREATION':
                                         t_max_health = round(t_max_health + dmg['DMG'])
@@ -12428,6 +12450,8 @@ class CrownUnlimited(commands.Cog):
                                 elif cpet_type == 'WAVE':
                                     t_health = round(t_health - dmg['DMG'])
                                 elif cpet_type == 'BLAST':
+                                    if dmg['DMG'] >= 100:
+                                        dmg['DMG'] = 100
                                     t_health = round(t_health - dmg['DMG'])
                                 elif cpet_type == 'CREATION':
                                     c_max_health = round(c_max_health + dmg['DMG'])
@@ -13201,6 +13225,8 @@ class CrownUnlimited(commands.Cog):
                                     elif tpet_type == 'WAVE':
                                         o_health = round(o_health - dmg['DMG'])
                                     elif tpet_type == 'BLAST':
+                                        if dmg['DMG'] >= 100:
+                                            dmg['DMG'] = 100
                                         o_health = round(o_health - dmg['DMG'])
                                     elif tpet_type == 'CREATION':
                                         t_max_health = round(t_max_health + dmg['DMG'])
@@ -13295,6 +13321,8 @@ class CrownUnlimited(commands.Cog):
                                     elif tpet_type == 'WAVE':
                                         c_health = round(c_health - dmg['DMG'])
                                     elif tpet_type == 'BLAST':
+                                        if dmg['DMG'] >= 100:
+                                            dmg['DMG'] = 100
                                         c_health = round(c_health - dmg['DMG'])
                                     elif tpet_type == 'CREATION':
                                         t_max_health = round(t_max_health + dmg['DMG'])
@@ -15246,6 +15274,8 @@ class CrownUnlimited(commands.Cog):
                                         elif opet_type == 'WAVE':
                                             t_health = round(t_health - dmg['DMG'])
                                         elif opet_type == 'BLAST':
+                                            if dmg['DMG'] >= 100:
+                                                dmg['DMG'] = 100
                                             t_health = round(t_health - dmg['DMG'])
                                         elif opet_type == 'CREATION':
                                             o_max_health = round(o_max_health + dmg['DMG'])
@@ -16619,6 +16649,8 @@ class CrownUnlimited(commands.Cog):
                                         elif cpet_type == 'WAVE':
                                             t_health = round(t_health - dmg['DMG'])
                                         elif cpet_type == 'BLAST':
+                                            if dmg['DMG'] >= 100:
+                                                dmg['DMG'] = 100
                                             t_health = round(t_health - dmg['DMG'])
                                         elif cpet_type == 'CREATION':
                                             c_max_health = round(c_max_health + dmg['DMG'])
@@ -19298,6 +19330,8 @@ class CrownUnlimited(commands.Cog):
                                         elif opet_type == 'WAVE':
                                             t_health = round(t_health - dmg['DMG'])
                                         elif opet_type == 'BLAST':
+                                            if dmg['DMG'] >= 100:
+                                                dmg['DMG'] = 100
                                             t_health = round(t_health - dmg['DMG'])
                                         elif opet_type == 'CREATION':
                                             o_max_health = round(o_max_health + dmg['DMG'])
@@ -20059,6 +20093,8 @@ class CrownUnlimited(commands.Cog):
                                         elif tpet_type == 'WAVE':
                                             c_health = round(c_health - dmg['DMG'])
                                         elif tpet_type == 'BLAST':
+                                            if dmg['DMG'] >= 100:
+                                                dmg['DMG'] = 100
                                             c_health = round(c_health - dmg['DMG'])
                                         elif tpet_type == 'CREATION':
                                             t_max_health = round(t_max_health + dmg['DMG'])
@@ -20153,6 +20189,8 @@ class CrownUnlimited(commands.Cog):
                                         elif tpet_type == 'WAVE':
                                             o_health = round(o_health - dmg['DMG'])
                                         elif tpet_type == 'BLAST':
+                                            if dmg['DMG'] >= 100:
+                                                dmg['DMG'] = 100
                                             o_health = round(o_health - dmg['DMG'])
                                         elif tpet_type == 'CREATION':
                                             t_max_health = round(t_max_health + dmg['DMG'])
@@ -20869,6 +20907,8 @@ class CrownUnlimited(commands.Cog):
                                         elif cpet_type == 'WAVE':
                                             t_health = round(t_health - dmg['DMG'])
                                         elif cpet_type == 'BLAST':
+                                            if dmg['DMG'] >= 100:
+                                                dmg['DMG'] = 100
                                             t_health = round(t_health - dmg['DMG'])
                                         elif cpet_type == 'CREATION':
                                             c_max_health = round(c_max_health + dmg['DMG'])
@@ -21630,6 +21670,8 @@ class CrownUnlimited(commands.Cog):
                                         elif tpet_type == 'WAVE':
                                             o_health = round(o_health - dmg['DMG'])
                                         elif tpet_type == 'BLAST':
+                                            if dmg['DMG'] >= 100:
+                                                dmg['DMG'] = 100
                                             o_health = round(o_health - dmg['DMG'])
                                         elif tpet_type == 'CREATION':
                                             t_max_health = round(t_max_health + dmg['DMG'])
@@ -21724,6 +21766,8 @@ class CrownUnlimited(commands.Cog):
                                         elif tpet_type == 'WAVE':
                                             c_health = round(c_health - dmg['DMG'])
                                         elif tpet_type == 'BLAST':
+                                            if dmg['DMG'] >= 100:
+                                                dmg['DMG'] = 100
                                             c_health = round(c_health - dmg['DMG'])
                                         elif tpet_type == 'CREATION':
                                             t_max_health = round(t_max_health + dmg['DMG'])
@@ -23738,6 +23782,8 @@ class CrownUnlimited(commands.Cog):
                                     elif opet_type == 'WAVE':
                                         t_health = round(t_health - dmg['DMG'])
                                     elif opet_type == 'BLAST':
+                                        if dmg['DMG'] >= 100:
+                                            dmg['DMG'] = 100
                                         t_health = round(t_health - dmg['DMG'])
                                     elif opet_type == 'CREATION':
                                         o_max_health = round(o_max_health + dmg['DMG'])
@@ -24519,6 +24565,8 @@ class CrownUnlimited(commands.Cog):
                                     elif tpet_type == 'WAVE':
                                         c_health = round(c_health - dmg['DMG'])
                                     elif tpet_type == 'BLAST':
+                                        if dmg['DMG'] >= 100:
+                                            dmg['DMG'] = 100
                                         c_health = round(c_health - dmg['DMG'])
                                     elif tpet_type == 'CREATION':
                                         t_max_health = round(t_max_health + dmg['DMG'])
@@ -24613,6 +24661,8 @@ class CrownUnlimited(commands.Cog):
                                     elif tpet_type == 'WAVE':
                                         o_health = round(o_health - dmg['DMG'])
                                     elif tpet_type == 'BLAST':
+                                        if dmg['DMG'] >= 100:
+                                            dmg['DMG'] = 100
                                         o_health = round(o_health - dmg['DMG'])
                                     elif tpet_type == 'CREATION':
                                         t_max_health = round(t_max_health + dmg['DMG'])
@@ -25328,6 +25378,8 @@ class CrownUnlimited(commands.Cog):
                                     elif cpet_type == 'WAVE':
                                         t_health = round(t_health - dmg['DMG'])
                                     elif cpet_type == 'BLAST':
+                                        if dmg['DMG'] >= 100:
+                                            dmg['DMG'] = 100
                                         t_health = round(t_health - dmg['DMG'])
                                     elif cpet_type == 'CREATION':
                                         c_max_health = round(c_max_health + dmg['DMG'])
@@ -26109,6 +26161,8 @@ class CrownUnlimited(commands.Cog):
                                     elif tpet_type == 'WAVE':
                                         o_health = round(o_health - dmg['DMG'])
                                     elif tpet_type == 'BLAST':
+                                        if dmg['DMG'] >= 100:
+                                            dmg['DMG'] = 100
                                         o_health = round(o_health - dmg['DMG'])
                                     elif tpet_type == 'CREATION':
                                         t_max_health = round(t_max_health + dmg['DMG'])
@@ -26203,6 +26257,8 @@ class CrownUnlimited(commands.Cog):
                                     elif tpet_type == 'WAVE':
                                         c_health = round(c_health - dmg['DMG'])
                                     elif tpet_type == 'BLAST':
+                                        if dmg['DMG'] >= 100:
+                                            dmg['DMG'] = 100
                                         c_health = round(c_health - dmg['DMG'])
                                     elif tpet_type == 'CREATION':
                                         t_max_health = round(t_max_health + dmg['DMG'])
@@ -27784,6 +27840,8 @@ class CrownUnlimited(commands.Cog):
                                         elif opet_type == 'WAVE':
                                             t_health = round(t_health - dmg['DMG'])
                                         elif opet_type == 'BLAST':
+                                            if dmg['DMG'] >= 100:
+                                                dmg['DMG'] = 100
                                             t_health = round(t_health - dmg['DMG'])
                                         elif opet_type == 'CREATION':
                                             o_max_health = round(o_max_health + dmg['DMG'])
@@ -28435,6 +28493,8 @@ class CrownUnlimited(commands.Cog):
                                     elif tpet_type == 'WAVE':
                                         o_health = round(o_health - dmg['DMG'])
                                     elif tpet_type == 'BLAST':
+                                        if dmg['DMG'] >= 100:
+                                            dmg['DMG'] = 100
                                         o_health = round(o_health - dmg['DMG'])
                                     elif tpet_type == 'CREATION':
                                         t_max_health = round(t_max_health + dmg['DMG'])
@@ -29950,6 +30010,8 @@ class CrownUnlimited(commands.Cog):
                                         elif opet_type == 'WAVE':
                                             t_health = round(t_health - dmg['DMG'])
                                         elif opet_type == 'BLAST':
+                                            if dmg['DMG'] >= 100:
+                                                dmg['DMG'] = 100
                                             t_health = round(t_health - dmg['DMG'])
                                         elif opet_type == 'CREATION':
                                             o_max_health = round(o_max_health + dmg['DMG'])
@@ -31995,6 +32057,8 @@ class CrownUnlimited(commands.Cog):
                                     elif opet_type == 'WAVE':
                                         t_health = round(t_health - dmg['DMG'])
                                     elif opet_type == 'BLAST':
+                                        if dmg['DMG'] >= 100:
+                                            dmg['DMG'] = 100
                                         t_health = round(t_health - dmg['DMG'])
                                     elif opet_type == 'CREATION':
                                         o_max_health = round(o_max_health + dmg['DMG'])
@@ -32663,6 +32727,8 @@ class CrownUnlimited(commands.Cog):
                                 elif tpet_type == 'WAVE':
                                     o_health = round(o_health - dmg['DMG'])
                                 elif tpet_type == 'BLAST':
+                                    if dmg['DMG'] >= 100:
+                                        dmg['DMG'] = 100
                                     o_health = round(o_health - dmg['DMG'])
                                 elif tpet_type == 'CREATION':
                                     t_max_health = round(t_max_health + dmg['DMG'])
@@ -34093,6 +34159,8 @@ class CrownUnlimited(commands.Cog):
                                             elif opet_type == 'WAVE':
                                                 t_health = round(t_health - dmg['DMG'])
                                             elif opet_type == 'BLAST':
+                                                if dmg['DMG'] >= 100:
+                                                    dmg['DMG'] = 100
                                                 t_health = round(t_health - dmg['DMG'])
                                             elif opet_type == 'CREATION':
                                                 o_max_health = round(o_max_health + dmg['DMG'])
@@ -34692,6 +34760,8 @@ class CrownUnlimited(commands.Cog):
                                                 elif tpet_type == 'WAVE':
                                                     o_health = round(o_health - dmg['DMG'])
                                                 elif tpet_type == 'BLAST':
+                                                    if dmg['DMG'] >= 100:
+                                                        dmg['DMG'] = 100
                                                     o_health = round(o_health - dmg['DMG'])
                                                 elif tpet_type == 'CREATION':
                                                     t_max_health = round(t_max_health + dmg['DMG'])
@@ -35189,6 +35259,8 @@ class CrownUnlimited(commands.Cog):
                                             elif tpet_type == 'WAVE':
                                                 o_health = round(o_health - dmg['DMG'])
                                             elif tpet_type == 'BLAST':
+                                                if dmg['DMG'] >= 100:
+                                                    dmg['DMG'] = 100
                                                 o_health = round(o_health - dmg['DMG'])
                                             elif tpet_type == 'CREATION':
                                                 t_max_health = round(t_max_health + dmg['DMG'])
@@ -36649,6 +36721,8 @@ class CrownUnlimited(commands.Cog):
                                             elif opet_type == 'WAVE':
                                                 t_health = round(t_health - dmg['DMG'])
                                             elif opet_type == 'BLAST':
+                                                if dmg['DMG'] >= 100:
+                                                    dmg['DMG'] = 100
                                                 t_health = round(t_health - dmg['DMG'])
                                             elif opet_type == 'CREATION':
                                                 o_max_health = round(o_max_health + dmg['DMG'])
@@ -37248,6 +37322,8 @@ class CrownUnlimited(commands.Cog):
                                                 elif tpet_type == 'WAVE':
                                                     o_health = round(o_health - dmg['DMG'])
                                                 elif tpet_type == 'BLAST':
+                                                    if dmg['DMG'] >= 100:
+                                                        dmg['DMG'] = 100
                                                     o_health = round(o_health - dmg['DMG'])
                                                 elif tpet_type == 'CREATION':
                                                     t_max_health = round(t_max_health + dmg['DMG'])
@@ -37625,6 +37701,8 @@ class CrownUnlimited(commands.Cog):
                                             elif tpet_type == 'WAVE':
                                                 o_health = round(o_health - dmg['DMG'])
                                             elif tpet_type == 'BLAST':
+                                                if dmg['DMG'] >= 100:
+                                                    dmg['DMG'] = 100
                                                 o_health = round(o_health - dmg['DMG'])
                                             elif tpet_type == 'CREATION':
                                                 t_max_health = round(t_max_health + dmg['DMG'])
