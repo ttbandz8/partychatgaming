@@ -518,7 +518,7 @@ class Lookup(commands.Cog):
             ign_to_string = dict(ChainMap(*ign))
 
             embed1 = discord.Embed(title= f"{icon} " + f"{name}".format(self), description=textwrap.dedent(f"""\
-            **Card:**{card}
+            **Card:** {card}
             **Title: **{titles}
             **Arm: **{arm}
             **Pet: **{pet}
