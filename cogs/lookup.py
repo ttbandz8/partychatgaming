@@ -474,7 +474,6 @@ class Lookup(commands.Cog):
             match_history_message = ""
 
             if m:
-                print("teti")
                 for match in m:
                     most_played_card.append(match['CARD'])
                     if match['UNIVERSE_TYPE'] == "Tales":
@@ -492,12 +491,12 @@ class Lookup(commands.Cog):
                     most_played_card_message = "_No Data For Analysis_"
                 else:
                     most_played_card_message = f"**Most Played Card: **{card_main}"
-                    match_history_message = textwrap.dedent(f"""\
+                    match_history_message = f"""
                     **Tales Played: **{len(tales_matches)}
                     **Dungeons Played: **{len(dungeon_matches)}
                     **Bosses Played: **{len(boss_matches)}
                     **Pvp Played: **{len(pvp_matches)}
-                    """)
+                    """
 
             crown_list = []
             for crown in crown_tales:
@@ -518,14 +517,17 @@ class Lookup(commands.Cog):
             ign_to_string = dict(ChainMap(*ign))
 
             embed1 = discord.Embed(title= f"{icon} " + f"{name}".format(self), description=textwrap.dedent(f"""\
+            
             **Card:** {card}
             **Title: **{titles}
             **Arm: **{arm}
             **Pet: **{pet}
+            \
 
             {most_played_card_message}
+            
             {match_history_message}
-
+            \n
             **Team: **{team} 
             **Family: **{family}
             """), colour=000000)
