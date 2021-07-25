@@ -205,7 +205,7 @@ def queryMatch(matches):
         else:
            return False
     except:
-        print("Find family failed.")
+        print("Find matches failed.")
 
 def queryManyMatches(matches):
     try:
@@ -216,7 +216,18 @@ def queryManyMatches(matches):
         else:
            return False
     except:
-        print("Find family failed.")
+        print("Find matches failed.")
+
+def queryManyMatchesPerPlayer(matches):
+    try:
+        exists = matches_exists({'PLAYER': matches['PLAYER']})
+        if exists:
+            data = matches_col.find(matches)
+            return data
+        else:
+           return False
+    except:
+        print("Find matches failed.")
 
 def queryAllMatches(matches):
     data = matches_col.find()

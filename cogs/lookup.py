@@ -14,6 +14,8 @@ from PIL import Image, ImageFont, ImageDraw
 import requests
 from collections import ChainMap
 import DiscordUtils
+import textwrap
+from collections import Counter
 
 emojis = ['👍', '👎']
 
@@ -432,10 +434,11 @@ class Lookup(commands.Cog):
     async def lookup(self, ctx, user: User):
         query = {'DISNAME': str(user)}
         d = db.queryUser(query)
-
+        m = db.queryManyMatchesPerPlayer({'PLAYER': str(user)})
         if d:
             name = d['DISNAME'].split("#",1)[0]
             games = d['GAMES']
+            card = d['CARD']
             ign = d['IGN']
             team = d['TEAM']
             family = d['FAMILY']
@@ -462,6 +465,40 @@ class Lookup(commands.Cog):
             elif rebirth == 1:
                 icon = ':heart_on_fire::heart_on_fire::heart_on_fire::heart_on_fire::heart_on_fire:'
 
+            pvp_matches = []
+            boss_matches = []
+            dungeon_matches = []
+            tales_matches = []
+            most_played_card = []
+            most_played_card_message = "_No Data For Analysis_"
+            match_history_message = ""
+
+            if m:
+                print("teti")
+                for match in m:
+                    most_played_card.append(match['CARD'])
+                    if match['UNIVERSE_TYPE'] == "Tales":
+                        tales_matches.append(match)
+                    elif match['UNIVERSE_TYPE'] == "Dungeon":
+                        dungeon_matches.append(match)
+                    elif match['UNIVERSE_TYPE'] == "Boss":
+                        boss_matches.append(match)
+                    elif match['UNIVERSE_TYPE'] == "PVP":
+                        pvp_matches.append(match)
+
+                card_main = most_frequent(most_played_card)
+
+                if not most_played_card:
+                    most_played_card_message = "_No Data For Analysis_"
+                else:
+                    most_played_card_message = f"**Most Played Card: **{card_main}"
+                    match_history_message = textwrap.dedent(f"""\
+                    **Tales Played: **{len(tales_matches)}
+                    **Dungeons Played: **{len(dungeon_matches)}
+                    **Bosses Played: **{len(boss_matches)}
+                    **Pvp Played: **{len(pvp_matches)}
+                    """)
+
             crown_list = []
             for crown in crown_tales:
                 if crown != "":
@@ -480,14 +517,25 @@ class Lookup(commands.Cog):
             matches_to_string = dict(ChainMap(*matches))
             ign_to_string = dict(ChainMap(*ign))
 
-            embed1 = discord.Embed(title= f"{icon} " + f"{name}".format(self), description=":bank: Party Chat Gaming Database™️", colour=000000)
+            embed1 = discord.Embed(title= f"{icon} " + f"{name}".format(self), description=textwrap.dedent(f"""\
+            **Card:**{card}
+            **Title: **{titles}
+            **Arm: **{arm}
+            **Pet: **{pet}
+
+            {most_played_card_message}
+            {match_history_message}
+
+            **Team: **{team} 
+            **Family: **{family}
+            """), colour=000000)
             embed1.set_thumbnail(url=avatar)
-            embed1.add_field(name="Team" + " :military_helmet:", value=team)
-            embed1.add_field(name="Family" + " :family_mwgb:", value=family)
-            embed1.add_field(name="Title" + " :crown:", value=' '.join(str(x) for x in titles))
-            embed1.add_field(name="Arm" + " :mechanical_arm: ", value=f"{arm}")
-            embed1.add_field(name="Pet" + " :dog:  ", value=f"{pet}")
-            embed1.add_field(name="Tournament Wins" + " :fireworks:", value=tournament_wins)
+            # embed1.add_field(name="Team" + " :military_helmet:", value=team)
+            # embed1.add_field(name="Family" + " :family_mwgb:", value=family)
+            # embed1.add_field(name="Title" + " :crown:", value=' '.join(str(x) for x in titles))
+            # embed1.add_field(name="Arm" + " :mechanical_arm: ", value=f"{arm}")
+            # embed1.add_field(name="Pet" + " :dog:  ", value=f"{pet}")
+            # embed1.add_field(name="Tournament Wins" + " :fireworks:", value=tournament_wins)
 
             embed2 = discord.Embed(title= f"{icon} " + f"{name}".format(self), description=":bank: Party Chat Gaming Database™️", colour=000000)
             embed2.set_thumbnail(url=avatar)
@@ -624,3 +672,7 @@ class Lookup(commands.Cog):
 
 def setup(bot):
     bot.add_cog(Lookup(bot))
+
+def most_frequent(List):
+    occurence_count = Counter(List)
+    return occurence_count.most_common(1)[0][0]
