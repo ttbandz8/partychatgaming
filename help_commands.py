@@ -64,6 +64,7 @@ CROWN_UNLIMITED_COMMANDS = textwrap.dedent(f"""\
 **.solo**: Play Crown Unlimited In DM
 **.crown**: Crown Unlimited Help Book
 **.build**: View your current build
+**.abuild 1-3**: View a preset build
 **.deck** View your build presets
 **.savedeck**: Save your current build as preset
 **.shop**: Open shop
