@@ -96,6 +96,8 @@ CROWN_UNLIMITED_COMMANDS = textwrap.dedent(f"""\
 **.dtales 1-3**: Opens Crown Tales Duo Story Mode Menu
 **.ddungeon 1-3**: Opens Crown Tales Duo Dungeon Menu
 **.dboss 1-3**: Opens Crown Universe Duo Boss Menu
+**PATREON ONLY**
+**.atales**:Auto-Battle Tales
 """)
 CTAP_COMMANDS = textwrap.dedent(f"""\
 **CARD COMMANDS**

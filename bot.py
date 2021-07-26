@@ -291,11 +291,14 @@ async def crown(ctx):
    **.tales** Single player adventures where you traverse through your favorite universes as characters from various worlds!
    **.dungeon** Hard version of tales with better loot and better drop rates! (Unlocks after completing **Crown Tale**)
    **.boss** End Game battles featuring Iconic Villians from Crown Universes. (Unlocks after completing **Crown Dungeon**)
+   **PATREON ONLY**
+   **.atales**:Auto-Battle Tales
    
    **Duo**
    **.dtales 1-3** Battle with your favorite AI preset in this Duo Tale!
    **.ddungeon 1-3** Bring your strongest builds through the Darkest Duo Dungeons.
    **.dboss 1-3** Bring your Dynanmic duo to take on one Incredible Boss.
+   
  
    **Crown Rifts**
    Mash-Up Universes featuring heroes and villians connected through common traits and themes!
