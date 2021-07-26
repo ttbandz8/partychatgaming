@@ -70,11 +70,17 @@ class CrownUnlimited(commands.Cog):
         if sowner['RIFT'] == 1:
             for uni in all_universes:
                 if uni['PREREQUISITE'] in sowner['CROWN_TALES'] and uni['HAS_CROWN_TALES'] == True or uni['TIER'] == 9:
-                    available_universes.append(uni['TITLE'])
+                    if uni['TITLE'] in completed_crown_tales:
+                        available_universes.append(f":green_circle: {uni['TITLE']}")
+                    else:
+                        available_universes.append(f":red_circle: {uni['TITLE']}")
         else:
             for uni in all_universes:
                 if uni['PREREQUISITE'] in sowner['CROWN_TALES'] and uni['HAS_CROWN_TALES'] == True and uni['TIER'] != 9:
-                    available_universes.append(uni['TITLE'])
+                    if uni['TITLE'] in completed_crown_tales:
+                        available_universes.append(f":green_circle: {uni['TITLE']}")
+                    else:
+                        available_universes.append(f":red_circle: {uni['TITLE']}")
         
         icon = ":crown:"
         if sowner['RIFT'] == 1:
@@ -2142,7 +2148,6 @@ class CrownUnlimited(commands.Cog):
                     if private_channel.guild:
                         await discord.TextChannel.delete(private_channel, reason=None)
 
-
     @commands.command()
     async def dtales(self, ctx, deck : int):
         private_channel = ctx
@@ -2169,18 +2174,18 @@ class CrownUnlimited(commands.Cog):
         if sowner['RIFT'] == 1:
             for uni in all_universes:
                 if uni['PREREQUISITE'] in sowner['CROWN_TALES'] and uni['HAS_CROWN_TALES'] == True or uni['TIER'] == 9:
-                    available_universes.append(uni['TITLE'])
+                    available_universes.append(f":red_circle: {uni['TITLE']}")
         else:
             for uni in all_universes:
                 if uni['PREREQUISITE'] in sowner['CROWN_TALES'] and uni['HAS_CROWN_TALES'] == True and uni['TIER'] != 9:
-                    available_universes.append(uni['TITLE'])
+                    available_universes.append(f":red_circle: {uni['TITLE']}")
                 
         icon = ":crown:"
         if sowner['RIFT'] == 1:
             icon = ":crystal_ball:"
             
         embedVar = discord.Embed(title=f"{icon} DUO! Select A Tales Universe", description="\n".join(available_universes), colour=0xe91e63) 
-        embedVar.set_footer(text="Type Quit to exit Tales selection")
+        embedVar.set_footer(text="Type Quit to exit Tales selection\n🔴 Not Conquered 🟢 Conquered")
         await private_channel.send(embed=embedVar)
         accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
 
@@ -2233,10 +2238,10 @@ class CrownUnlimited(commands.Cog):
         player_scaling = 0
 
         if universe['PREREQUISITE']:
-            opponent_scaling = 6
-            player_scaling = 3
+            opponent_scaling = 8
+            player_scaling = 5
         else:
-            opponent_scaling = 2
+            opponent_scaling = 5
             player_scaling = 1
 
         legends = [x for x in universe['CROWN_TALES']]
@@ -2408,7 +2413,7 @@ class CrownUnlimited(commands.Cog):
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
-            t_attack = t['ATK'] + 10
+            t_attack = t['ATK'] + 30
             t_defense = t['DEF'] + (8 * currentopponent) + opponent_scaling + 10
             t_type = t['TYPE']
             t_accuracy = t['ACC']
@@ -3712,8 +3717,8 @@ class CrownUnlimited(commands.Cog):
                                             o_defense = round(o_defense +(.75 * dmg['DMG']))
                                         elif opet_type == 'GROWTH':
                                             o_max_health = round(o_max_health - dmg['DMG'])
-                                            o_defense = round(o_defense + (.3 * dmg['DMG']))
-                                            o_attack = round(o_attack + (.3 * dmg['DMG']))
+                                            o_defense = round(o_defense + (o_defense * dmg['DMG'])) + (.05 * o_max_health)
+                                            o_attack = round(o_attack + (o_attack * dmg['DMG'])) + (.05 * o_max_health)
                                         elif opet_type == 'STANCE':
                                             tempattack = dmg['DMG']
                                             o_attack = o_defense
@@ -4026,8 +4031,8 @@ class CrownUnlimited(commands.Cog):
                                             o_defense = round(o_defense +(.75 * dmg['DMG']))
                                         elif enh_type == 'GROWTH':
                                             o_max_health = round(o_max_health - dmg['DMG'])
-                                            o_defense = round(o_defense + (.3 * dmg['DMG']))
-                                            o_attack = round(o_attack + (.3 * dmg['DMG']))
+                                            o_defense = round(o_defense + (o_defense * dmg['DMG'])) + (.05 * o_max_health)
+                                            o_attack = round(o_attack + (o_attack * dmg['DMG'])) + (.05 * o_max_health)
                                         elif enh_type == 'STANCE':
                                             tempattack = dmg['DMG']
                                             o_attack = o_defense
@@ -5032,9 +5037,9 @@ class CrownUnlimited(commands.Cog):
                             else:
                                 aiMove = 1 
                         elif c_stamina >= 60:
-                            if t_used_resolve == False and t_used_focus:
+                            if c_used_resolve == False and c_used_focus:
                                 aiMove = 5
-                            elif t_used_focus == False:
+                            elif c_used_focus == False:
                                 aiMove = 2
                             else:
                                 aiMove = 1 
@@ -6418,14 +6423,17 @@ class CrownUnlimited(commands.Cog):
         selected_universe = ""
         for uni in completed_crown_tales:
             if uni != "":
-                available_universes.append(uni)
+                if uni in completed_dungeons:
+                    available_universes.append(f":green_circle: {uni}")
+                else:
+                    available_universes.append(f":red_circle: {uni}")
         if len(available_universes) == 1 and "" in available_universes:
             await private_channel.send("No available Dungeons for you at this time!")
             response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
             return
                 
         embedVar = discord.Embed(title=f":fire: DUO! Select A Dungeon", description="\n".join(available_universes), colour=0xe91e63)
-        embedVar.set_footer(text="Type Quit to exit Dungeon selection")
+        embedVar.set_footer(text="Type Quit to exit Dungeon selection\n🔴 Not Conquered 🟢 Conquered")
         await private_channel.send(embed=embedVar)
         accept = await private_channel.send(f"{ctx.author.mention} which Dungeon would you like to explore, Duo!")
 
@@ -9507,9 +9515,9 @@ class CrownUnlimited(commands.Cog):
                             else:
                                 aiMove = 1 
                         elif c_stamina >= 60:
-                            if c_used_resolve == False and t_used_focus:
+                            if c_used_resolve == False and c_used_focus:
                                 aiMove = 5
-                            elif t_used_focus == False:
+                            elif c_used_focus == False:
                                 aiMove = 2
                             else:
                                 aiMove = 1 
@@ -14226,9 +14234,9 @@ class CrownUnlimited(commands.Cog):
                         else:
                             aiMove = 1 
                     elif c_stamina >= 60:
-                        if c_used_resolve == False and t_used_focus:
+                        if c_used_resolve == False and c_used_focus:
                             aiMove = 5
-                        elif t_used_focus == False:
+                        elif c_used_focus == False:
                             aiMove = 2
                         else:
                             aiMove = 1 
@@ -14281,7 +14289,7 @@ class CrownUnlimited(commands.Cog):
                                 aiMove = 7
                             else:
                                 aiMove = 1
-                    elif c_stamina >= 10:
+                    elif c_stamina >= 10
                         aiMove = 1
                     else:
                         aiMove = 0
@@ -15804,17 +15812,23 @@ class CrownUnlimited(commands.Cog):
         if sowner['RIFT'] == 1:
             for uni in all_universes:
                 if uni['PREREQUISITE'] in sowner['CROWN_TALES'] and uni['HAS_CROWN_TALES'] == True or uni['TIER'] == 9:
-                    available_universes.append(uni['TITLE'])
+                    if uni['TITLE'] in completed_crown_tales:
+                        available_universes.append(f":green_circle: {uni['TITLE']}")
+                    else:
+                        available_universes.append(f":red_circle: {uni['TITLE']}")
         else:
             for uni in all_universes:
                 if uni['PREREQUISITE'] in sowner['CROWN_TALES'] and uni['HAS_CROWN_TALES'] == True and uni['TIER'] != 9:
-                    available_universes.append(uni['TITLE'])     
+                    if uni['TITLE'] in completed_crown_tales:
+                        available_universes.append(f":green_circle: {uni['TITLE']}")
+                    else:
+                        available_universes.append(f":red_circle: {uni['TITLE']}")             
         icon = ":crown:"
         if sowner['RIFT'] == 1:
             icon = ":crystal_ball:"
             
         embedVar = discord.Embed(title=f"{icon} CO-OP! Select A Tales Universe", description="\n".join(available_universes), colour=0xe91e63) 
-        embedVar.set_footer(text="Type Quit to exit Tales selection")
+        embedVar.set_footer(text="Type Quit to exit Tales selection\n🔴 Not Conquered 🟢 Conquered")
         await private_channel.send(embed=embedVar)
         accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
 
@@ -19857,14 +19871,17 @@ class CrownUnlimited(commands.Cog):
         selected_universe = ""
         for uni in completed_crown_tales:
             if uni != "":
-                available_universes.append(uni)
+                if uni in completed_dungeons:
+                    available_universes.append(f":green_circle: {uni}")
+                else:
+                    available_universes.append(f":red_circle: {uni}")
         if len(available_universes) == 1 and "" in available_universes:
             await private_channel.send("No available Dungeons for you at this time!")
             response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
             return
                 
         embedVar = discord.Embed(title=f":fire: CO-OP! Select A Dungeon", description="\n".join(available_universes), colour=0xe91e63)
-        embedVar.set_footer(text="Type Quit to exit Dungeon selection")
+        embedVar.set_footer(text="Type Quit to exit Dungeon selection\n🔴 Not Conquered 🟢 Conquered")
         await private_channel.send(embed=embedVar)
         accept = await private_channel.send(f"{ctx.author.mention} which Dungeon would you like to explore, co-op!")
 
@@ -28735,7 +28752,10 @@ class CrownUnlimited(commands.Cog):
         selected_universe = ""
         for uni in completed_crown_tales:
             if uni != "":
-                    available_universes.append(uni)
+                if uni in completed_dungeons:
+                    available_universes.append(f":green_circle: {uni}")
+                else:
+                    available_universes.append(f":red_circle: {uni}")
 
         if len(available_universes) == 1 and "" in available_universes:
             await private_channel.send("No available Dungeons for you at this time!")
@@ -28743,7 +28763,7 @@ class CrownUnlimited(commands.Cog):
             return
 
         embedVar = discord.Embed(title=f":fire: Select A Dungeon", description="\n".join(available_universes), colour=0xe91e63)
-        embedVar.set_footer(text="Type Quit to exit Dungeon selection")
+        embedVar.set_footer(text="Type Quit to exit Dungeon selection\n🔴 Not Conquered 🟢 Conquered")
         await private_channel.send(embed=embedVar)
         accept = await private_channel.send(f"{ctx.author.mention} which Dungeon would you like to explore!")
 
@@ -30890,7 +30910,7 @@ class CrownUnlimited(commands.Cog):
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
         oteam = sowner['TEAM']
         ofam = sowner['FAMILY']
-   
+        
         if sowner['AVAILABLE']:
             response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': False}})
         else:
@@ -30904,11 +30924,11 @@ class CrownUnlimited(commands.Cog):
         if sowner['RIFT'] == 1:
             for uni in all_universes:
                 if uni['PREREQUISITE'] in sowner['CROWN_TALES'] and uni['HAS_CROWN_TALES'] == True or uni['TIER'] == 9:
-                    available_universes.append(uni['TITLE'])
+                    available_universes.append(f":red_circle: {uni['TITLE']}")
         else:
             for uni in all_universes:
                 if uni['PREREQUISITE'] in sowner['CROWN_TALES'] and uni['HAS_CROWN_TALES'] == True and uni['TIER'] != 9:
-                    available_universes.append(uni['TITLE'])
+                    available_universes.append(f":red_circle: {uni['TITLE']}")
         
         icon = ":crown:"
         if sowner['RIFT'] == 1:
@@ -30917,7 +30937,7 @@ class CrownUnlimited(commands.Cog):
         
 
         embedVar = discord.Embed(title=f"{icon} Select A Tales Universe", description="\n".join(available_universes), colour=0xe91e63)
-        embedVar.set_footer(text="Type Quit to exit Tales selection")
+        embedVar.set_footer(text="Type Quit to exit Tales selection\n🔴 Not Conquered 🟢 Conquered")
         await private_channel.send(embed=embedVar)
         accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
 
