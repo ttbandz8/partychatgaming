@@ -30891,6 +30891,7 @@ class CrownUnlimited(commands.Cog):
         oteam = sowner['TEAM']
         ofam = sowner['FAMILY']
         
+        
         if sowner['AVAILABLE']:
             response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': False}})
         else:
