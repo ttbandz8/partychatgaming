@@ -2458,7 +2458,7 @@ destiny = [
         "UNIVERSE": "Fate"
     },
     {
-        "NAME": "Second Master"
+        "NAME": "Second Master",
         "WINS": 0,
         "REQUIRED": 15,
         "DEFEAT": "Cu Chulainn",
