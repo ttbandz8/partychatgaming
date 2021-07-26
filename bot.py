@@ -407,7 +407,7 @@ async def r(ctx):
       In addition to the tools for tournaments and more, we offer an incredible gaming experience in Crown Unlimited!_See below for Crown Unlimited Details_
       
       **Welcome to Crown Unlimited**!
-      Embark on a journey through Universes filled with characters from your favorite anime and video games! 
+      Embark on a journey through Universes filled with characters from your favorite anime and video games!
       
       **3 Easy Steps for Success**
       1. Collect Cards, Titles, Arms, and Pets
@@ -430,6 +430,7 @@ async def r(ctx):
       **.help** Open Party Chat Gaming Bot Help Page
 
 
+      CHANGING YOUR ACCOUNT INFO WILL BREAK YOUR ACCOUNT IN THE GAME. YOU HAVE BEEN WARNED.
       
       Use .solo to play Crown Unlimited undisturbed. Remember to come back and play with your friends!
       _We do not own the rights to the images used in this game. This is a beta of an experimental bot for the purposes of growing our coding talents and skill. We do not make money from this project._
