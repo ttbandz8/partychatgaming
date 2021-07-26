@@ -2233,10 +2233,10 @@ class CrownUnlimited(commands.Cog):
         player_scaling = 0
 
         if universe['PREREQUISITE']:
-            opponent_scaling = 8
-            player_scaling = 5
+            opponent_scaling = 6
+            player_scaling = 3
         else:
-            opponent_scaling = 5
+            opponent_scaling = 2
             player_scaling = 1
 
         legends = [x for x in universe['CROWN_TALES']]
