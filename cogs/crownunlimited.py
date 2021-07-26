@@ -14289,7 +14289,7 @@ class CrownUnlimited(commands.Cog):
                                 aiMove = 7
                             else:
                                 aiMove = 1
-                    elif c_stamina >= 10
+                    elif c_stamina >= 10:
                         aiMove = 1
                     else:
                         aiMove = 0
