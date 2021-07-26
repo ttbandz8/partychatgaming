@@ -2386,6 +2386,97 @@ destiny = [
         "EARN": "Prinz", 
         "COMPLETED": False,
         "UNIVERSE": "Chainsawman"
-    }
+    },
+    {
+        "NAME": "Love of a homunculus",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Kiritsugu Emiya",
+        "USE_CARDS": ["Irisviel von Einzbern"],
+        "EARN": "Kiritsugu Emiya", 
+        "COMPLETED": False,
+        "UNIVERSE": "Fate"
+    },
+    {
+        "NAME": "Guards Of Avalon",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Artoria Pendragon",
+        "USE_CARDS": ["Kiritsugu Emiya"],
+        "EARN": "Artoria Pendragon", 
+        "COMPLETED": False,
+        "UNIVERSE": "Fate"
+    },
+    {
+        "NAME": "Halfblooded Child",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Illyasviel von Einzbern",
+        "USE_CARDS": ["Irisviel von Einzbern"],
+        "EARN": "Illyasviel von Einzbern", 
+        "COMPLETED": False,
+        "UNIVERSE": "Fate"
+    },
+    {
+        "NAME": "The Labored Protector",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Hercules",
+        "USE_CARDS": ["Illyasviel von Einzbern"],
+        "EARN": "Hercules", 
+        "COMPLETED": False,
+        "UNIVERSE": "Fate"
+    },
+    {
+        "NAME": "Fuyuki Highschool Alliance",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Shirou Emiya",
+        "USE_CARDS": ["Rin Tosaka"],
+        "EARN": "Shirou Emiya", 
+        "COMPLETED": False,
+        "UNIVERSE": "Fate"
+    },
+    {
+        "NAME": "Failed Hero Of Justice",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Archer Emiya",
+        "USE_CARDS": ["Shiro Emiya"],
+        "EARN": "Archer Emiya", 
+        "COMPLETED": False,
+        "UNIVERSE": "Fate"
+    },
+    {
+        "NAME": "Servant Of The Shadow",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Hassan-i-Sabbah",
+        "USE_CARDS": ["Kirei Kotomine"],
+        "EARN": "Hassan-i-Sabbah", 
+        "COMPLETED": False,
+        "UNIVERSE": "Fate"
+    },
+    {
+        "NAME": "Second Master"
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Cu Chulainn",
+        "USE_CARDS": ["Kirei Kotomine"],
+        "EARN": "Cu Chulainn", 
+        "COMPLETED": False,
+        "UNIVERSE": "Fate"
+    },
+    {
+        "NAME": "Playwright Of Rome",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Nero Claudius",
+        "USE_CARDS": ["Hakuno Kishinami"],
+        "EARN": "Nero Claudius", 
+        "COMPLETED": False,
+        "UNIVERSE": "Fate"
+    },
+
 
 ]
