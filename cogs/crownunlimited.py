@@ -1047,7 +1047,7 @@ class CrownUnlimited(commands.Cog):
                         elif o_stamina >= 80:
                             aiMove = 3
                         elif o_stamina >= 70 and (o_health >= t_health):
-                            aiMove = 4
+                            aiMove = 2
                         elif o_stamina >= 70:
                             aiMove = 1
                         elif o_stamina >= 60 and (o_health >= t_health):
@@ -1676,7 +1676,13 @@ class CrownUnlimited(commands.Cog):
                         elif t_stamina >= 90 and (t_health >= o_health):
                             aiMove = 3
                         elif t_stamina >= 90:
-                            aiMove = 4
+                            if t_health < o_health:
+                                    if t_defense < o_defense:
+                                        aiMove = 4
+                                    else:
+                                        aiMove = 2
+                            else:
+                                aiMove = 3
                         elif t_stamina >= 80 and (t_health >= o_health):
                             aiMove = 1
                         elif t_stamina >= 80:
@@ -6328,11 +6334,14 @@ class CrownUnlimited(commands.Cog):
                 ofambank = await blessfamily(10,ofam)
                 #cfambank = await blessfamily(10,cfam)
                 questlogger = await quest(ouser, t_card, "Tales")
+                destinylogger = await destiny(ouser, t_card, "Tales")
                 #cquestlogger = await quest(cuser, t_card, "Tales")
                 petlogger = await petlevel(opet_name, ouser)
                 #cpetlogger = await petlevel(cpet_name, user)
                 if questlogger:
                     await ctx.author.send(questlogger)
+                if destinylogger:
+                    await ctx.author.send(destinylogger)
                 #if cquestlogger:
                     await user.send(cquestlogger)
                 if currentopponent != total_legends:
@@ -11026,11 +11035,14 @@ class CrownUnlimited(commands.Cog):
                 match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']), str(oarm['ARM']), str(selected_universe), "Dungeon", o['EXCLUSIVE'])
                 #cmatch = await savematch(str(user), str(c_card), str(c_card_path), str(ctitle['TITLE']), str(carm['ARM']), str(selected_universe), "Dungeon", c['EXCLUSIVE'])
                 questlogger = await quest(ouser, t_card, "Dungeon")
+                destinylogger = await destiny(ouser, t_card, "Dungeon")
                 #cquestlogger = await quest(user, t_card, "Dungeon")
                 petlogger = await petlevel(opet_name, ouser)
                 #cpetlogger = await petlevel(cpet_name, user)
                 if questlogger:
                     await ctx.author.send(questlogger)
+                if destinylogger:
+                    await ctx.author.send(destinylogger)
                 #if cquestlogger:
                     await user.send(cquestlogger)
                 if currentopponent != (total_legends):
