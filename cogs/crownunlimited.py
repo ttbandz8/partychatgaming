@@ -40911,7 +40911,7 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, vul, accura
             if turn == 0:
                 enhanced = ap
             else:
-                n = round((ap * turn) * .55)
+                n = round((ap / turn) * .55)
                 rand = round(random.randint(1, 100))
                 if turn % 10 == 0:
                     n = ap * .25
@@ -40929,7 +40929,7 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, vul, accura
             if turn == 0:
                 enhanced = ap
             else:
-                n = round((ap * turn) * .55)
+                n = round((ap / turn) * .55)
                 rand = round(random.randint(1, 100))
                 if turn % 10 == 0:
                     n = ap * .15
