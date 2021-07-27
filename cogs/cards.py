@@ -153,28 +153,13 @@ class Cards(commands.Cog):
 
         resp = db.queryCard({'NAME': card_name})
 
-        if resp['TOURNAMENT_REQUIREMENTS'] == 0:
-
-            # Do not Check Tourney wins
-            if card_name in vault['CARDS']:
-                response = db.updateUserNoFilter(user_query, {'$set': {'CARD': str(card_name)}})
-                await ctx.send(response)
-            else:
-                await ctx.send(m.USER_DOESNT_HAVE_THE_CARD, delete_after=5)
+        # Do not Check Tourney wins
+        if card_name in vault['CARDS']:
+            response = db.updateUserNoFilter(user_query, {'$set': {'CARD': str(card_name)}})
+            await ctx.send(response)
         else:
-
-            # Check tourney wins
-            tournament_wins = user['TOURNAMENT_WINS']
-            card_query = {'TOURNAMENT_REQUIREMENTS': tournament_wins}
-
-            if tournament_wins >= resp['TOURNAMENT_REQUIREMENTS']:
-                if card_name in vault['CARDS']:
-                    response = db.updateUserNoFilter(user_query, {'$set': {'CARD': str(card_name)}})
-                    await ctx.send(response)
-                else:
-                    await ctx.send(m.USER_DOESNT_HAVE_THE_CARD, delete_after=5)
-            else:
-                return "Unable to update card."
+            await ctx.send(m.USER_DOESNT_HAVE_THE_CARD, delete_after=5)
+        
 
     @commands.command()
     async def viewcard(self, ctx, *args):
