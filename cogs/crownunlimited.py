@@ -15827,8 +15827,7 @@ class CrownUnlimited(commands.Cog):
         else:
             for uni in all_universes:
                 if uni['PREREQUISITE'] in sowner['CROWN_TALES'] and uni['HAS_CROWN_TALES'] == True and uni['TIER'] != 9:
-                    if uni['TITLE'] in completed_crown_tales:
-                        available_universes.append(uni['TITLE'])           
+                    available_universes.append(uni['TITLE'])           
         icon = ":crown:"
         if sowner['RIFT'] == 1:
             icon = ":crystal_ball:"
