@@ -82,7 +82,7 @@ class CrownUnlimited(commands.Cog):
                     else:
                         available_universes.append(uni['TITLE'])
         
-        icon = ":crown:"
+        icon = ":robot:"
         if sowner['RIFT'] == 1:
             icon = ":crystal_ball:"
             
@@ -858,7 +858,7 @@ class CrownUnlimited(commands.Cog):
                     # Tutorial Instructions
                     if turn_total == 0 and botActive:
                         await private_channel.send(f"{ctx.author.mention}")                    
-                        embedVar = discord.Embed(title=f"`{o_card}` VS `{t_card}` has begun! {lineup}\n{t_universe} Tales Battle", description=f"`{o_card} Says:`\n{o_greeting_description}", colour=0xe91e63)
+                        embedVar = discord.Embed(title=f"`{o_card}` VS `{t_card}` has begun! {lineup}\n{t_universe} Auto-Tales Battle", description=f"`{o_card} Says:`\n{o_greeting_description}", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
 
                     
@@ -3333,7 +3333,7 @@ class CrownUnlimited(commands.Cog):
                     # Tutorial Instructions
                     if turn_total == 0 and botActive:     
                         await private_channel.send(f"{ctx.author.mention}")                 
-                        embedVar = discord.Embed(title=f"`{o_card}` & `{c_card}` VS `{t_card}` has begun! {lineup}\n{t_universe} Co-Op Tales Battle", description=f"`{o_card} Says:`\n{o_greeting_description}", colour=0xe91e63)
+                        embedVar = discord.Embed(title=f"`{o_card}` & `{c_card}` VS `{t_card}` has begun! {lineup}\n{t_universe} Duo Tales Battle", description=f"`{o_card} Says:`\n{o_greeting_description}", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
 
                     
@@ -10073,15 +10073,15 @@ class CrownUnlimited(commands.Cog):
                                             t_used_resolve=True
                                             t_final_stand=False
                                             t_used_focus=True
-                                            o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                            c_stamina = c_stamina - dmg['STAMINA_USED']                                            
                                             turn_total= turn_total + 1
                                             turn=1
                                         else:
                                             t_health=0
-                                            o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                            c_stamina = c_stamina - dmg['STAMINA_USED']                                            
                                             turn_total= turn_total + 1
                                     else:
-                                        o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                        c_stamina = c_stamina - dmg['STAMINA_USED']                                            
                                         turn_total= turn_total + 1
                                         turn=3
                             else:
@@ -14802,15 +14802,15 @@ class CrownUnlimited(commands.Cog):
                                         t_used_resolve=True
                                         t_final_stand=False
                                         t_used_focus=True
-                                        o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                        c_stamina = c_stamina - dmg['STAMINA_USED']                                            
                                         turn_total= turn_total + 1
                                         turn=1
                                     else:
                                         t_health=0
-                                        o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                        c_stamina = c_stamina - dmg['STAMINA_USED']                                            
                                         turn_total= turn_total + 1
                                 else:
-                                    o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                    c_stamina = c_stamina - dmg['STAMINA_USED']                                            
                                     turn_total= turn_total + 1
                                     turn=3
                         else:
@@ -16038,12 +16038,12 @@ class CrownUnlimited(commands.Cog):
             t_card_path=t['PATH']
             t_rcard_path=t['RPATH']
             
-            t_health = t['HLT'] + (15 * currentopponent) + opponent_scaling
+            t_health = t['HLT'] + (15 * currentopponent) + opponent_scaling + 50
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
-            t_attack = t['ATK'] + (4 * currentopponent) + opponent_scaling
-            t_defense = t['DEF'] + (8 * currentopponent) + opponent_scaling
+            t_attack = t['ATK'] + (4 * currentopponent) + opponent_scaling + 15
+            t_defense = t['DEF'] + (8 * currentopponent) + opponent_scaling + 30
             t_type = t['TYPE']
             t_accuracy = t['ACC']
             t_passive = t['PASS'][0]
@@ -16956,7 +16956,7 @@ class CrownUnlimited(commands.Cog):
                     # Tutorial Instructions
                     if turn_total == 0 and botActive:
                         await private_channel.send(f"{ctx.author.mention}")                   
-                        embedVar = discord.Embed(title=f"`{o_card}` & `{c_card}` VS `{t_card}` has begun! {lineup}\n{t_universe} Duo Dungeon Battle", description=f"`{o_card} Says:`\n{o_greeting_description}", colour=0xe91e63)
+                        embedVar = discord.Embed(title=f"`{o_card}` & `{c_card}` VS `{t_card}` has begun! {lineup}\n{t_universe} Co-Op Tales Battle", description=f"`{o_card} Says:`\n{o_greeting_description}", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
 
                     
@@ -19006,15 +19006,15 @@ class CrownUnlimited(commands.Cog):
                                                 t_used_resolve=True
                                                 t_used_focus=True
                                                 t_final_stand=False
-                                                o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                                c_stamina = c_stamina - dmg['STAMINA_USED']                                            
                                                 turn_total= turn_total + 1
                                                 turn=1
                                             else:
                                                 t_health=0
-                                                o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                                c_stamina = c_stamina - dmg['STAMINA_USED']                                            
                                                 turn_total= turn_total + 1
                                         else:
-                                            o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                            c_stamina = c_stamina - dmg['STAMINA_USED']                                            
                                             turn_total= turn_total + 1
                                             turn=3
                                 else:
@@ -21013,7 +21013,7 @@ class CrownUnlimited(commands.Cog):
                     # Tutorial Instructions
                     if turn_total == 0 and botActive:
                         await private_channel.send(f"{ctx.author.mention}")                   
-                        embedVar = discord.Embed(title=f"`{o_card}` & `{c_card}` VS `{t_card}` has begun! {lineup}\n{t_universe} Duo Dungeon Battle", description=f"`{o_card} Says:`\n{o_greeting_description}", colour=0xe91e63)
+                        embedVar = discord.Embed(title=f"`{o_card}` & `{c_card}` VS `{t_card}` has begun! {lineup}\n{t_universe} Co-Op Dungeon Battle", description=f"`{o_card} Says:`\n{o_greeting_description}", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
 
                     
@@ -23266,15 +23266,15 @@ class CrownUnlimited(commands.Cog):
                                                 t_used_resolve=True
                                                 t_used_focus=True
                                                 t_final_stand=False
-                                                o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                                c_stamina = c_stamina - dmg['STAMINA_USED']                                            
                                                 turn_total= turn_total + 1
                                                 turn=1
                                             else:
                                                 t_health=0
-                                                o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                                c_stamina = c_stamina - dmg['STAMINA_USED']                                            
                                                 turn_total= turn_total + 1
                                         else:
-                                            o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                            c_stamina = c_stamina - dmg['STAMINA_USED']                                            
                                             turn_total= turn_total + 1
                                             turn=3
                                 else:
@@ -25465,7 +25465,7 @@ class CrownUnlimited(commands.Cog):
                 # Tutorial Instructions
                 if turn_total == 0 and botActive:
                     await private_channel.send(f"{ctx.author.mention}")                   
-                    embedVar = discord.Embed(title=f"`{o_card}` & `{c_card}` VS `{t_card}` has begun!\n{t_universe} Duo Dungeon Battle", description=f"`{o_card} Says:`\n{o_greeting_description}", colour=0xe91e63)
+                    embedVar = discord.Embed(title=f"`{o_card}` & `{c_card}` VS `{t_card}` has begun!\n{t_universe} Co-Op Boss Battle", description=f"`{o_card} Says:`\n{o_greeting_description}", colour=0xe91e63)
                     await private_channel.send(embed=embedVar)
 
                 
@@ -27736,15 +27736,15 @@ class CrownUnlimited(commands.Cog):
                                             t_used_resolve=True
                                             t_final_stand=False
                                             t_used_focus=True
-                                            o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                            c_stamina = c_stamina - dmg['STAMINA_USED']                                            
                                             turn_total= turn_total + 1
                                             turn=1
                                         else:
                                             t_health=0
-                                            o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                            c_stamina = c_stamina - dmg['STAMINA_USED']                                            
                                             turn_total= turn_total + 1
                                     else:
-                                        o_stamina = o_stamina - dmg['STAMINA_USED']                                            
+                                        c_stamina = c_stamina - dmg['STAMINA_USED']                                            
                                         turn_total= turn_total + 1
                                         turn=3
                             else:
@@ -35832,7 +35832,7 @@ class CrownUnlimited(commands.Cog):
                                 await ctx.send(embed=embedVar)
                             else:
                                 await ctx.send(f"{user1.mention}{user2.mention}")
-                                embedVar = discord.Embed(title=f"**{o_card}** & {opet_name} VS **{t_card}** & {tpet_name} has begun!", description=f"{o_card} Says:\n{o_greeting_description}", colour=0xe91e63)
+                                embedVar = discord.Embed(title=f"**{o_card}** & {opet_name} VS **{t_card}** & {tpet_name} Ranked Battle has begun!", description=f"{o_card} Says:\n{o_greeting_description}", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)                               
 
                         
@@ -38393,7 +38393,7 @@ class CrownUnlimited(commands.Cog):
                                 await ctx.send(embed=embedVar)
                             else:
                                 await ctx.send(f"{user1.mention}{user2.mention}")
-                                embedVar = discord.Embed(title=f"**{o_card}** & {opet_name} VS **{t_card}** & {tpet_name} has begun!", description=f"{o_card} Says:\n{o_greeting_description}", colour=0xe91e63)
+                                embedVar = discord.Embed(title=f"**{o_card}** & {opet_name} VS **{t_card}** & {tpet_name} Wager Match has begun!", description=f"{o_card} Says:\n{o_greeting_description}", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)                               
 
                         
@@ -40449,9 +40449,37 @@ class CrownUnlimited(commands.Cog):
         house_list = []
         for homes in house_data:
             house_list.append(f"{homes['HOUSE']}: :coin:{homes['PRICE']}: :part_alternation_mark:{homes['MULT']}x ")
+            
+        total_houses = len(house_list)
+        while len(house_list) % 10 != 0:
+            house_list.append("")
+        
 
-        await ctx.author.send("ALL HOUSES")
-        await ctx.author.send("\n".join(house_list))
+         # Check if divisible by 10, then start to split evenly
+        if len(house_list) % 10 == 0:
+            first_digit = int(str(len(house_list))[:1])
+            houses_broken_up = np.array_split(house_list, first_digit)
+        
+        # If it's not an array greater than 10, show paginationless embed
+        if len(house_list) < 10:
+            embedVar = discord.Embed(title= f"House List", description="\n".join(house_list), colour=0x7289da)
+            embedVar.set_footer(text=f"{total_houses} Total Universes")
+            await ctx.send(embed=embedVar)
+
+        embed_list = []
+        for i in range(0, len(houses_broken_up)):
+            globals()['embedVar%s' % i] = discord.Embed(title= f"House List", description="\n".join(houses_broken_up[i]), colour=0x7289da)
+            globals()['embedVar%s' % i].set_footer(text=f"{total_houses} Total Houses")
+            embed_list.append(globals()['embedVar%s' % i])
+
+        paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+        paginator.add_reaction('⏮️', "first")
+        paginator.add_reaction('⏪', "back")
+        paginator.add_reaction('🔐', "lock")
+        paginator.add_reaction('⏩', "next")
+        paginator.add_reaction('⏭️', "last")
+        embeds = embed_list
+        await paginator.run(embeds)
 
 
 async def score(owner, user: User):
