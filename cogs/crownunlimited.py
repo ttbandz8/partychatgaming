@@ -238,7 +238,7 @@ class CrownUnlimited(commands.Cog):
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
-            t_attack = t['ATK']
+            t_attack = t['ATK'] + (3 * currentopponent) + opponent_scaling
             t_defense = t['DEF'] + (6 * currentopponent) + opponent_scaling
             t_type = t['TYPE']
             t_accuracy = t['ACC']
@@ -16038,11 +16038,11 @@ class CrownUnlimited(commands.Cog):
             t_card_path=t['PATH']
             t_rcard_path=t['RPATH']
             
-            t_health = t['HLT'] + (10 * currentopponent) + opponent_scaling
+            t_health = t['HLT'] + (15 * currentopponent) + opponent_scaling
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
-            t_attack = t['ATK']
+            t_attack = t['ATK'] + (4 * currentopponent) + opponent_scaling
             t_defense = t['DEF'] + (8 * currentopponent) + opponent_scaling
             t_type = t['TYPE']
             t_accuracy = t['ACC']
@@ -18472,7 +18472,7 @@ class CrownUnlimited(commands.Cog):
                         embedVar = discord.Embed(title=f"{c_card}, choose your move!", description=textwrap.dedent(f"""\
                         **:heart: {c_health}/:cyclone: {c_stamina}**
                         :cyclone: 10 | **{cmove1_text}** | _1_
-                        :cyclone: 30 | **{cmove1_text}** | _2_
+                        :cyclone: 30 | **{cmove2_text}** | _2_
                         :cyclone: 80 | **{cmove3_text}** | _3_
                         :cyclone: 20 **{cmove_enhanced_text}** | _4_
                         **Enhance {o_card}** 20 Stamina _press 7_
@@ -20092,12 +20092,12 @@ class CrownUnlimited(commands.Cog):
             t_gif = t['GIF']
             t_card_path=t['PATH']
             t_rcard_path=t['RPATH']
-            t_health = t['HLT'] + (36 * currentopponent) + 200 
+            t_health = t['HLT'] + (36 * currentopponent) + 250 
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
-            t_attack = t['ATK'] + (5 * currentopponent) + opponent_scaling
-            t_defense = t['DEF'] + (9 * currentopponent) + opponent_scaling
+            t_attack = t['ATK'] + (9 * currentopponent) + opponent_scaling
+            t_defense = t['DEF'] + (16 * currentopponent) + opponent_scaling
             t_type = t['TYPE']
             t_accuracy = t['ACC']
             t_passive = t['PASS'][0]
@@ -22730,7 +22730,7 @@ class CrownUnlimited(commands.Cog):
                         embedVar = discord.Embed(title=f"{c_card}, choose your move!", description=textwrap.dedent(f"""\
                         **:heart: {c_health}/:cyclone: {c_stamina}**
                         :cyclone: 10 | **{cmove1_text}** | _1_
-                        :cyclone: 30 | **{cmove1_text}** | _2_
+                        :cyclone: 30 | **{cmove2_text}** | _2_
                         :cyclone: 80 | **{cmove3_text}** | _3_
                          :cyclone: 20 **{cmove_enhanced_text}** | _4_
                         **Enhance {o_card}** 20 Stamina _press 7_
@@ -27201,7 +27201,7 @@ class CrownUnlimited(commands.Cog):
                     embedVar = discord.Embed(title=f"{c_card}, choose your move!", description=textwrap.dedent(f"""\
                     **:heart: {c_health}/:cyclone: {c_stamina}**
                     :cyclone: 10 | **{cmove1_text}** | _1_
-                    :cyclone: 30 | **{cmove1_text}** | _2_
+                    :cyclone: 30 | **{cmove2_text}** | _2_
                     :cyclone: 80 | **{cmove3_text}** | _3_
                      :cyclone: 20 **{cmove_enhanced_text}** | _4_
                     **Enhance {o_card}** 20 Stamina _press 7_
@@ -28910,8 +28910,8 @@ class CrownUnlimited(commands.Cog):
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
-            t_attack = t['ATK'] + (5 * currentopponent) + 8
-            t_defense = t['DEF'] + (7 * currentopponent) + 8
+            t_attack = t['ATK'] + (5 * currentopponent) + 10
+            t_defense = t['DEF'] + (7 * currentopponent) + 12
             t_type = t['TYPE']
             t_accuracy = t['ACC']
             t_passive = t['PASS'][0]
@@ -31075,8 +31075,8 @@ class CrownUnlimited(commands.Cog):
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
-            t_attack = t['ATK']
-            t_defense = t['DEF'] + (6 * currentopponent) + opponent_scaling
+            t_attack = t['ATK']+ (2 * currentopponent) 
+            t_defense = t['DEF'] + (2 * currentopponent) + opponent_scaling
             t_type = t['TYPE']
             t_accuracy = t['ACC']
             t_passive = t['PASS'][0]
@@ -35994,8 +35994,8 @@ class CrownUnlimited(commands.Cog):
                             :cyclone: 10 | **{omove1_text}** | _1_
                             :cyclone: 30 | **{omove2_text}** | _2_
                             :cyclone: 80 | **{omove3_text}** | _3_
-                             :cyclone: 20 | **{omove_enhanced_text}** | _4_
-                            **Block** 20 Stamind _press 0"
+                            :cyclone: 20 | **{omove_enhanced_text}** | _4_
+                            :cyclone: 20 | **Block** | _0_
                         
                             **{t_card}:** :heart: {t_health}/:cyclone: {t_stamina}
                             """) 
@@ -36580,11 +36580,11 @@ class CrownUnlimited(commands.Cog):
                                 await ctx.send(file=player_2_card)
 
                                 embedVar = discord.Embed(title=f"{t_card}, choose your move!", description=textwrap.dedent(f"""\
-                        
+                                **:heart: {t_health}/:cyclone: {t_stamina}**
                                 :cyclone: 10 | **{tmove1_text}** | _1_
                                 :cyclone: 30 | **{tmove2_text}** | _2_
                                 :cyclone: 80 | **{tmove3_text}** | _3_
-                                 :cyclone: 20 **{tmove_enhanced_text}** | _4_
+                                :cyclone: 20 **{tmove_enhanced_text}** | _4_
                                 :cyclone: 20 | **Block** | _0_
                             
                                 **Opponent {o_card}:** _Health_ {o_health} / _Stamina_ {o_stamina}
@@ -40861,22 +40861,38 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, vul, accura
             if turn == 0:
                 enhanced = ap
             else:
-                enhanced = ap / turn
+                n = ap / turn
+                rand = round(random.randint(5, 50))
+                if turn % 10 == 0:
+                    n = ap * .25
+                if turn % 15 == 0:
+                    n = ap * .35
+                if turn == rand:
+                    n = ap * 2
+                enhanced = n
         elif enh_type == 'BLAST':
             if turn == 0:
                 enhanced = ap
             else:
-                enhanced = ap * turn
+                enhanced = round((ap * turn) * .55)
         elif enh_type == 'CREATION':
             if turn == 0:
                 enhanced = ap
             else:
-                enhanced = ap / turn 
+                n = ap / turn
+                rand = round(random.randint(5, 50))
+                if turn % 10 == 0:
+                    n = ap * .25
+                if turn % 15 == 0:
+                    n = ap * .35
+                if turn == rand:
+                    n = ap * 2
+                enhanced = n
         elif enh_type == 'DESTRUCTION':
             if turn == 0:
                 enhanced = ap
             else:
-                enhanced = ap * turn
+                enhanced = round((ap * turn) * .60)
             if enhanced > op_health:
                 message = f'**{card}** used **{move}**! Opponent has been reduced.'
                 enhanced = op_health - 1
