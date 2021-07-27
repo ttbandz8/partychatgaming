@@ -38565,7 +38565,7 @@ class CrownUnlimited(commands.Cog):
                             :cyclone: 10 | **{omove1_text}** | _1_
                             :cyclone: 30 | **{omove2_text}** | _2_
                             :cyclone: 80 | **{omove3_text}** | _3_
-                             :cyclone: 20 | **{omove_enhanced_text}** | _4_
+                            :cyclone: 20 | **{omove_enhanced_text}** | _4_
                             :cyclone: 20 | **Block** | _0_
                         
                             **{t_card}:** :heart: {t_health}/:cyclone: {t_stamina}
@@ -39168,8 +39168,19 @@ class CrownUnlimited(commands.Cog):
                                 # UNIVERSE CARD
                                 player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus)
                                 await ctx.send(file=player_2_card)
-                                embedVar = discord.Embed(title=f"{t_card} What move will you use?", description=f"{o_card} currently has {o_health} health and {t_stamina} stamina.", colour=embed_color_t)
-                                embedVar.add_field(name=f"{t_card} Move List", value=f"1. {tmove1_text} | 10 STAM\n2. {tmove2_text} | 30 STAM\n3. {tmove3_text} | 80 STAM\n4. {tmove_enhanced_text} | 20 STAM")
+                                embedVar = discord.Embed(title=f"{t_card}, choose your move!", description=textwrap.dedent(f"""\
+                                **:heart: {t_health}/:cyclone: {t_stamina}**
+                                :cyclone: 10 | **{tmove1_text}** | _1_
+                                :cyclone: 30 | **{tmove2_text}** | _2_
+                                :cyclone: 80 | **{tmove3_text}** | _3_
+                                :cyclone: 20 **{tmove_enhanced_text}** | _4_
+                                :cyclone: 20 | **Block** | _0_
+                            
+                                **Opponent {o_card}:** _Health_ {o_health} / _Stamina_ {o_stamina}
+
+                                """)
+
+                                , colour=embed_color_t)
                                 embedVar.set_thumbnail(url=tpet_image)
                                 if t_used_focus and t_used_resolve and not t_pet_used:
                                     embedVar.set_author(name="Press Q to Quit Match. Press 6 to Summon your Pet!")
@@ -40900,12 +40911,12 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, vul, accura
             if turn == 0:
                 enhanced = ap
             else:
-                n = ap / turn
-                rand = round(random.randint(5, 50))
+                n = round((ap * turn) * .55)
+                rand = round(random.randint(1, 100))
                 if turn % 10 == 0:
                     n = ap * .25
                 if turn % 15 == 0:
-                    n = ap * .35
+                    n = ap * .45
                 if turn == rand:
                     n = ap * 2
                 enhanced = n
@@ -40918,12 +40929,12 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, vul, accura
             if turn == 0:
                 enhanced = ap
             else:
-                n = ap / turn
-                rand = round(random.randint(5, 50))
+                n = round((ap * turn) * .55)
+                rand = round(random.randint(1, 100))
                 if turn % 10 == 0:
-                    n = ap * .25
+                    n = ap * .15
                 if turn % 15 == 0:
-                    n = ap * .35
+                    n = ap * .25
                 if turn == rand:
                     n = ap * 2
                 enhanced = n
