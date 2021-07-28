@@ -306,7 +306,7 @@ async def crown(ctx):
    """),colour=0x7289da)
    embedVar7.set_thumbnail(url=avatar)
    
-   embedVar7 = discord.Embed(title= f":crown:CROWN Multiplayer", description=textwrap.dedent(f"""\
+   embedVar8 = discord.Embed(title= f":crown:CROWN Multiplayer", description=textwrap.dedent(f"""\
    **Multiplayer**
    
    **Co-Op**
@@ -325,7 +325,7 @@ async def crown(ctx):
    Grind Those Rifts Together!
    
    """),colour=0x7289da)
-   embedVar7.set_thumbnail(url=avatar)
+   embedVar8.set_thumbnail(url=avatar)
    
    embedVar9 = discord.Embed(title= f":crown: Decks",description=textwrap.dedent(f"""\
    Save your favorite builds in your **Deck**
@@ -340,7 +340,7 @@ async def crown(ctx):
    """) ,colour=0x7289da)
    embedVar9.set_thumbnail(url=avatar)
 
-   embedVar8 = discord.Embed(title= f":crown: Economy",description=textwrap.dedent(f"""\
+   embedVar10 = discord.Embed(title= f":crown: Economy",description=textwrap.dedent(f"""\
    Crown Unlimited features an in game **Shop** where you can purchase new Cards, Titles, and Arms.
    Use .shop to open the **Pop-Up Shop!**
 
@@ -353,7 +353,7 @@ async def crown(ctx):
    **Resell**
    **.resell item** to sell Cards, Titles, and Arms back to the market.
    """) ,colour=0x7289da)
-   embedVar8.set_thumbnail(url=avatar)
+   embedVar10.set_thumbnail(url=avatar)
 
 
    paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
@@ -362,7 +362,7 @@ async def crown(ctx):
    paginator.add_reaction('🔐', "lock")
    paginator.add_reaction('⏩', "next")
    paginator.add_reaction('⏭️', "last")
-   embeds = [embedVar1, embedVar2, embedVar3, embedVar4, embedVar5, embedVar6, embedVar7,embedVar9, embedVar8]
+   embeds = [embedVar1, embedVar2, embedVar3, embedVar4, embedVar5, embedVar6, embedVar7, embedVar8,embedVar9, embedVar10]
    await paginator.run(embeds)
 
 async def validate_user(ctx):
