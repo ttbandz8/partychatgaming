@@ -431,6 +431,8 @@ async def r(ctx):
       **.deck** Check your Starter Presets
 
       **.shop** Purchase new Cards, Titles, and Arms
+      
+      **.universes** See List of Available and Planned Universes !
 
       **.help** Open Party Chat Gaming Bot Help Page
 
