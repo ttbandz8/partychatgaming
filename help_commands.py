@@ -83,6 +83,9 @@ CROWN_UNLIMITED_COMMANDS = textwrap.dedent(f"""\
 **.legendbattle**:  Advanced Tutorial Bot
 **.battle @player**: Challenge another Player
 **.start** Start a battle in your current session
+**.npstart:** Starts round against current opponent and No Pets Allowed.
+**.bstart:** Starts round against current opponent with equal health, attack, and defense.
+**.npbstart:** Starts round against current opponent with equal health, attack, and defense and No Pets are allowed.
 **.wager amount**: Wager amount to battle in current session
 
 **CROWN UNLIMITED STORY MODE COMMANDS**

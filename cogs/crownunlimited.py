@@ -40929,7 +40929,7 @@ class CrownUnlimited(commands.Cog):
                                 await ctx.send(embed=embedVar)
                             else:
                                 await ctx.send(f"{user1.mention}{user2.mention}")
-                                embedVar = discord.Embed(title=f"**{o_card}** & {opet_name} VS **{t_card}** & {tpet_name} Ranked Battle has begun!", description=f"{o_card} Says:\n{o_greeting_description}", colour=0xe91e63)
+                                embedVar = discord.Embed(title=f"**{o_card}** VS **{t_card}** Ranked Battle has begun!", description=f"{o_card} Says:\n{o_greeting_description}", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)                               
 
                         
@@ -43271,7 +43271,7 @@ class CrownUnlimited(commands.Cog):
                                 await ctx.send(embed=embedVar)
                             else:
                                 await ctx.send(f"{user1.mention}{user2.mention}")
-                                embedVar = discord.Embed(title=f"**{o_card}** & {opet_name} VS **{t_card}** & {tpet_name} Ranked Battle has begun!", description=f"{o_card} Says:\n{o_greeting_description}", colour=0xe91e63)
+                                embedVar = discord.Embed(title=f"**{o_card}** VS **{t_card}** Ranked Battle has begun!", description=f"{o_card} Says:\n{o_greeting_description}", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)                               
 
                         
