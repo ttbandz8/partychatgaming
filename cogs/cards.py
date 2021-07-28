@@ -196,10 +196,17 @@ class Cards(commands.Cog):
                 return 
             
             price_message ="" 
+            card_icon =""
             if o_exclusive or o_has_collection:
-                price_message = "_Priceless_"
+                if o_has_collection ==True:
+                    price_message = "_Priceless_"
+                    card_icon= f":sparkles:"
+                else:
+                    price_message = "_Priceless_"
+                    card_icon= f":fire:"
             else:
                 price_message = f":coin: {o_price}"
+                card_icon= f":flower_playing_cards:"
 
             card_file = showcard(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, title, focused)
             mytrait = {}
@@ -245,14 +252,17 @@ class Cards(commands.Cog):
 
             message = ""
             tip = ""
-            if o_attack > o_defense:
+            if o_has_collection==True:
+                message = f"{o_card} is a Destiny card. "
+                tip=f"Complete {o_show} Destiny:  {o_collection} to unlock this card"
+            elif o_attack > o_defense:
                 message = f"{o_card} is an offensive card. "
                 tip="Equipping defensive titles and arms would help boost survivability"
             elif o_defense > o_attack:
                 message = f"{o_card} is a defensive card. "
                 tip="Equipping offensive titles and arms would help boost killability"              
 
-            embedVar = discord.Embed(title=f":crown:  {o_card}\n{price_message}".format(self), description=textwrap.dedent(f"""
+            embedVar = discord.Embed(title=f"{card_icon}  {o_card}\n{price_message}".format(self), description=textwrap.dedent(f"""
             :heart: {o_max_health}
             :cyclone: {o_max_stamina}
             **Atk:** {o_attack}

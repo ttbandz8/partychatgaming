@@ -47361,8 +47361,8 @@ class CrownUnlimited(commands.Cog):
 
         embed_list = []
         for i in range(0, len(cards_broken_up)):
-            globals()['embedVar%s' % i] = discord.Embed(title= f"{universe} Card List", description="\n".join(cards_broken_up[i]), colour=0x7289da)
-            globals()['embedVar%s' % i].set_footer(text=f"{total_cards} Total Cards\n🟣 Dungeon Drop\n🟢 Tale Drop\n🔵 Destiny Line")
+            globals()['embedVar%s' % i] = discord.Embed(title= f":flower_playing_cards: {universe} Card List", description="\n".join(cards_broken_up[i]), colour=0x7289da)
+            globals()['embedVar%s' % i].set_footer(text=f"{total_cards} Total Cards\n🟣 Dungeon Drop\n🟢 Tale Drop\n🔵 Destiny Line\n.viewcard 'Card Name' - View Card Details\n.destinies 'Universe Name' -View Destiny Lines")
             embed_list.append(globals()['embedVar%s' % i])
 
         paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
@@ -47431,9 +47431,9 @@ class CrownUnlimited(commands.Cog):
 
         embed_list = []
         for i in range(0, len(titles_broken_up)):
-            globals()['embedVar%s' % i] = discord.Embed(title= f"{universe} Title List", description="\n".join(titles_broken_up[i]), colour=0x7289da)
+            globals()['embedVar%s' % i] = discord.Embed(title= f":reminder_ribbon: {universe} Title List", description="\n".join(titles_broken_up[i]), colour=0x7289da)
             # globals()['embedVar%s' % i].set_thumbnail(url={universe_data['PATH']})
-            globals()['embedVar%s' % i].set_footer(text=f"{total_titles} Total Titles\n🟣 Dungeon Drop\n🟢 Tale Drop")
+            globals()['embedVar%s' % i].set_footer(text=f"{total_titles} Total Titles\n🟣 Dungeon Drop\n🟢 Tale Drop\n.viewtitle 'Title Name' - View Title Details")
             embed_list.append(globals()['embedVar%s' % i])
 
         paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
@@ -47499,8 +47499,8 @@ class CrownUnlimited(commands.Cog):
 
         embed_list = []
         for i in range(0, len(arms_broken_up)):
-            globals()['embedVar%s' % i] = discord.Embed(title= f"{universe} Arms List", description="\n".join(arms_broken_up[i]), colour=0x7289da)
-            globals()['embedVar%s' % i].set_footer(text=f"{total_arms} Total Arms\n🟣 Dungeon Drop\n🟢 Tale Drop")
+            globals()['embedVar%s' % i] = discord.Embed(title= f":mechanical_arm: {universe} Arms List", description="\n".join(arms_broken_up[i]), colour=0x7289da)
+            globals()['embedVar%s' % i].set_footer(text=f"{total_arms} Total Arms\n🟣 Dungeon Drop\n🟢 Tale Drop\n.viewarm 'Arm Name' - View Arm Details")
             embed_list.append(globals()['embedVar%s' % i])
 
         paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
@@ -47552,7 +47552,7 @@ class CrownUnlimited(commands.Cog):
 
         embed_list = []
         for i in range(0, len(destinies_broken_up)):
-            globals()['embedVar%s' % i] = discord.Embed(title= f"{universe} Destiny List", description="\n".join(destinies_broken_up[i]), colour=0x7289da)
+            globals()['embedVar%s' % i] = discord.Embed(title= f":sparkles: {universe} Destiny List", description="\n".join(destinies_broken_up[i]), colour=0x7289da)
             globals()['embedVar%s' % i].set_footer(text=f"{total_destinies} Total Destiny Lines")
             embed_list.append(globals()['embedVar%s' % i])
 
@@ -47621,8 +47621,8 @@ class CrownUnlimited(commands.Cog):
 
         embed_list = []
         for i in range(0, len(pets_broken_up)):
-            globals()['embedVar%s' % i] = discord.Embed(title= f"{universe} Pet List", description="\n".join(pets_broken_up[i]), colour=0x7289da)
-            globals()['embedVar%s' % i].set_footer(text=f"{total_pets} Total Pets\n🟣 Dungeon Drop\n🟢 Tale Drop")
+            globals()['embedVar%s' % i] = discord.Embed(title= f":dog: {universe} Pet List", description="\n".join(pets_broken_up[i]), colour=0x7289da)
+            globals()['embedVar%s' % i].set_footer(text=f"{total_pets} Total Pets\n🟣 Dungeon Drop\n🟢 Tale Drop\n.viewpet 'Pet Name' - View Pet Details")
             embed_list.append(globals()['embedVar%s' % i])
 
         paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
@@ -47676,9 +47676,12 @@ class CrownUnlimited(commands.Cog):
             await ctx.send(embed=embedVar)
 
         embed_list = []
+        icon = ":crown:"
+        if user['RIFT'] == 1:
+            icon=":crystal_ball:"
         for i in range(0, len(universes_broken_up)):
-            globals()['embedVar%s' % i] = discord.Embed(title= f"Universe List", description="\n".join(universes_broken_up[i]), colour=0x7289da)
-            globals()['embedVar%s' % i].set_footer(text=f"{total_universes} Total Universes")
+            globals()['embedVar%s' % i] = discord.Embed(title= f"{icon} Universe List", description="\n".join(universes_broken_up[i]), colour=0x7289da)
+            globals()['embedVar%s' % i].set_footer(text=f"{total_universes} Total Universes\n.cards 'Universe Name' - View Card List\n.titles 'Universe Name' - View Titles List\n.arms 'Universe Name' - View Arms List\n.pets 'Universe Name' - View Pet List\n.destinies 'Universe Name' - View Destiny List")
             embed_list.append(globals()['embedVar%s' % i])
 
         paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
@@ -47717,7 +47720,7 @@ class CrownUnlimited(commands.Cog):
 
         embed_list = []
         for i in range(0, len(houses_broken_up)):
-            globals()['embedVar%s' % i] = discord.Embed(title= f"House List", description="\n".join(houses_broken_up[i]), colour=0x7289da)
+            globals()['embedVar%s' % i] = discord.Embed(title= f":house: House List", description="\n".join(houses_broken_up[i]), colour=0x7289da)
             globals()['embedVar%s' % i].set_footer(text=f"{total_houses} Total Houses")
             embed_list.append(globals()['embedVar%s' % i])
 

@@ -519,11 +519,11 @@ class Lookup(commands.Cog):
             embed1 = discord.Embed(title= f"{icon} " + f"{name}".format(self), description=textwrap.dedent(f"""\
             
             :flower_playing_cards:**Card:** {card}
-            :crown:**Title: **{titles}
+            :reminder_ribbon:**Title: **{titles}
             :mechanical_arm:**Arm: **{arm}
             :dog:**Pet: **{pet}
 
-            {most_played_card_message}
+            :military_medal:{most_played_card_message}
             
             **Tales Played: **{len(tales_matches)}
             **Dungeons Played: **{len(dungeon_matches)}
@@ -576,7 +576,7 @@ class Lookup(commands.Cog):
             paginator.add_reaction('🔐', "lock")
             paginator.add_reaction('⏩', "next")
             paginator.add_reaction('⏭️', "last")
-            embeds = [embed1, embed2, embed3, embed4]
+            embeds = [embed1, embed4,embed3,embed2 ]
             await paginator.run(embeds)
         else:
             await ctx.send(m.USER_NOT_REGISTERED)

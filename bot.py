@@ -427,6 +427,8 @@ async def r(ctx):
       Start Crown Unlimited Battle Tutorial!
 
       **.build** Check your current build including your equipped Card, Title, Arm, and Pet
+      
+      **.deck** Check your Starter Presets
 
       **.shop** Purchase new Cards, Titles, and Arms
 
