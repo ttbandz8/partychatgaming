@@ -52,8 +52,6 @@ class CrownUnlimited(commands.Cog):
             return
         autoBattle = True
             
-            
-            
         oteam = sowner['TEAM']
         ofam = sowner['FAMILY']
         
