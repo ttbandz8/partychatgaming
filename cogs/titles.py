@@ -25,15 +25,15 @@ class Titles(commands.Cog):
     async def cog_check(self, ctx):
         return await main.validate_user(ctx)
 
-    @commands.command()
-    async def nt(self, ctx, *args):
-        if ctx.author.guild_permissions.administrator == True:
-            title = " ".join([*args])
-            title_query = {'TITLE': str(title), 'TOURNAMENT_REQUIREMENTS': 0, 'PRICE': 500}
-            added = db.createTitle(data.newTitle(title_query))
-            await ctx.send(added)
-        else:
-            print(m.ADMIN_ONLY_COMMAND)
+    # @commands.command()
+    # async def nt(self, ctx, *args):
+    #     if ctx.author.guild_permissions.administrator == True:
+    #         title = " ".join([*args])
+    #         title_query = {'TITLE': str(title), 'TOURNAMENT_REQUIREMENTS': 0, 'PRICE': 500}
+    #         added = db.createTitle(data.newTitle(title_query))
+    #         await ctx.send(added)
+    #     else:
+    #         print(m.ADMIN_ONLY_COMMAND)
 
 
     @commands.command()

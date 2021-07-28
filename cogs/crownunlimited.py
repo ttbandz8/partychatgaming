@@ -37618,7 +37618,7 @@ class CrownUnlimited(commands.Cog):
             await ctx.send(m.SESSION_DOES_NOT_EXIST)
 
     @commands.command()
-    async def bstart(self, ctx):
+    async def brawl(self, ctx):
         private_channel = ctx
         starttime = time.asctime()
         h_gametime = starttime[11:13]
@@ -40161,7 +40161,7 @@ class CrownUnlimited(commands.Cog):
             await ctx.send(m.SESSION_DOES_NOT_EXIST)
 
     @commands.command()
-    async def npbstart(self, ctx):
+    async def arenabrawl(self, ctx):
         private_channel = ctx
         starttime = time.asctime()
         h_gametime = starttime[11:13]
@@ -42503,7 +42503,7 @@ class CrownUnlimited(commands.Cog):
             await ctx.send(m.SESSION_DOES_NOT_EXIST)
     
     @commands.command()
-    async def npstart(self, ctx):
+    async def arena(self, ctx):
         private_channel = ctx
         starttime = time.asctime()
         h_gametime = starttime[11:13]
@@ -47730,6 +47730,17 @@ class CrownUnlimited(commands.Cog):
         embeds = embed_list
         await paginator.run(embeds)
 
+    @commands.command()
+    async def ff(self, ctx):
+        private_channel = ctx
+        ov = private_channel.channel.overwrites
+        validator = False
+        for o in ov:
+            if str(ctx.author) == str(o):
+                validator = True
+        response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+        if private_channel.guild and validator:
+            await discord.TextChannel.delete(private_channel.channel, reason=None)
 
 async def score(owner, user: User):
         session_query = {"OWNER": str(owner), "AVAILABLE": True, "KINGSGAMBIT": False}

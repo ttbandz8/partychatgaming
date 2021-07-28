@@ -317,9 +317,9 @@ async def crown(ctx):
    **PVP**
    **.battle @player:** Select your Build and Challenge any Crown Unlimited Player to join your Game Lobby.
    **.start:** Starts round against current opponent.
-   **.npstart:** Starts round against current opponent and No Pets Allowed.
-   **.bstart:** Starts round against current opponent with equal health, attack, and defense.
-   **.npbstart:** Starts round against current opponent with equal health, attack, and defense and No Pets are allowed.
+   **.arena:** Starts round against current opponent and No Pets Allowed.
+   **.brawl:** Starts round against current opponent with equal health, attack, and defense.
+   **.arenabrawl:** Starts round against current opponent with equal health, attack, and defense and No Pets are allowed.
    **.wager number:*** In lobby players can wager :coin:.
    *Builds are locked during lobbies, to change your build end the lobby with **.end** .*
    

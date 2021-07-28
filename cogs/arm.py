@@ -25,16 +25,15 @@ class Arm(commands.Cog):
     async def cog_check(self, ctx):
         return await main.validate_user(ctx)
 
-    @commands.command()
-    async def na(self, ctx, *args):
-        if ctx.author.guild_permissions.administrator == True:
-            arm = " ".join([*args])
-            arm_query = {'ARM': str(arm), 'TOURNAMENT_REQUIREMENTS': 0, 'PRICE': 500}
-            added = db.createArm(data.newArm(arm_query))
-            await ctx.send(added)
-        else:
-            print(m.ADMIN_ONLY_COMMAND)
-
+    # @commands.command()
+    # async def na(self, ctx, *args):
+    #     if ctx.author.guild_permissions.administrator == True:
+    #         arm = " ".join([*args])
+    #         arm_query = {'ARM': str(arm), 'TOURNAMENT_REQUIREMENTS': 0, 'PRICE': 500}
+    #         added = db.createArm(data.newArm(arm_query))
+    #         await ctx.send(added)
+    #     else:
+    #         print(m.ADMIN_ONLY_COMMAND)
 
     @commands.command()
     async def buyarm(self, ctx, *args: str):
