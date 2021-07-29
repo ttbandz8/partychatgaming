@@ -416,6 +416,9 @@ async def r(ctx):
       1. Collect Cards, Titles, Arms, and Pets
       2. Uniquely Customize your Builds to match your playstyle
       3. Explore Tales, Dungeons, and Bosses solo, or with your friend!
+      
+      **Daily Quest!**
+      First run .daily to get your Quest!
 
       **.crown**
       Read the Crown Unlimited Manual!
