@@ -48555,6 +48555,8 @@ async def drops(player, universe, matchcount):
     for destiny in vault['DESTINY']:
         owned_destinies.append(destiny['NAME'])
 
+
+
     cards = []
     titles = []
     arms = []
@@ -48568,9 +48570,11 @@ async def drops(player, universe, matchcount):
 
     for arm in all_available_drop_arms:
         arms.append(arm['ARM'])
-
+    
     for pet in all_available_drop_pets:
-        pets.append(pet['PET'])
+        for p in vault['PETS']:
+            if p['NAME'] != pet['PET']:
+                pets.append(pet['PET'])
 
     c = len(cards) - 1
     t = len(titles) - 1
