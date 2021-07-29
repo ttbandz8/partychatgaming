@@ -19,6 +19,10 @@ traits = [{
     'EFFECT': 'Substitution',
     'TRAIT': 'If Focused, you cannot be hit.'
 },{
+    'NAME': 'Chainsawman',
+    'EFFECT': 'Devilization',
+    'TRAIT': 'When health reaches _50%_ gain double ATK and double DEF.'
+},{
     'NAME': 'Bleach',
     'EFFECT': 'Bankai',
     'TRAIT': 'Gain double the amount of Attack on Resolve.'

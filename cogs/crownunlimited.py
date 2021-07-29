@@ -866,6 +866,14 @@ class CrownUnlimited(commands.Cog):
                         
                     elif o_health <= (o_max_health * .50):
                         embed_color_o=0xe67e22
+                        if o_chainsaw==True:
+                            if o_atk_chainsaw==False:
+                                o_atk_chainsaw=True
+                                o_chainsaw=False
+                                o_defense = o_defense * 2
+                                o_attack = o_attack * 2
+                                embedVar = discord.Embed(title=f"{o_card.upper()}'s Devilization", description=f"`{o_card}` Doubles ATK and DEF", colour=0xe91e63)
+                                await private_channel.send(embed=embedVar)
                     elif o_health <= (o_max_health * .75):
                         embed_color_o=0xf1c40f
                         
@@ -1515,6 +1523,14 @@ class CrownUnlimited(commands.Cog):
                         
                     elif t_health <= (t_max_health * .50):
                         embed_color_t=0xe67e22
+                        if t_chainsaw==True:
+                            if t_atk_chainsaw==False:
+                                t_atk_chainsaw=True
+                                t_chainsaw=False
+                                t_defense = t_defense * 2
+                                t_attack = t_attack * 2
+                                embedVar = discord.Embed(title=f"{t_card.upper()}'s Devilization", description=f"`{t_card}` Doubles Stats", colour=0xe91e63)
+                                await private_channel.send(embed=embedVar)
                     elif t_health <= (t_max_health * .75):
                         embed_color_t=0xf1c40f
                     else:
@@ -2536,6 +2552,11 @@ class CrownUnlimited(commands.Cog):
             c_pet_used=False
             c_block_used=False
             c_defend_used=False
+            c_chainsaw=False
+            c_def_chainsaw=False
+            c_atk_chainsaw=False
+            if c_universe == "Chainsawman":
+                c_chainsaw=True
 
             cmove1_text = list(c_1.keys())[0]
             cmove2_text = list(c_2.keys())[0]
@@ -3347,6 +3368,14 @@ class CrownUnlimited(commands.Cog):
                         
                     elif o_health <= (o_max_health * .50):
                         embed_color_o=0xe67e22
+                        if o_chainsaw==True:
+                            if o_atk_chainsaw==False:
+                                o_atk_chainsaw=True
+                                o_chainsaw=False
+                                o_defense = o_defense * 2
+                                o_attack = o_attack * 2
+                                embedVar = discord.Embed(title=f"{o_card.upper()}'s Devilization", description=f"`{o_card}` Doubles ATK and DEF", colour=0xe91e63)
+                                await private_channel.send(embed=embedVar)
                     elif o_health <= (o_max_health * .75):
                         embed_color_o=0xf1c40f
                         
@@ -4148,6 +4177,14 @@ class CrownUnlimited(commands.Cog):
                         
                     elif t_health <= (t_max_health * .50):
                         embed_color_t=0xe67e22
+                        if t_chainsaw==True:
+                            if t_atk_chainsaw==False:
+                                t_atk_chainsaw=True
+                                t_chainsaw=False
+                                t_defense = t_defense * 2
+                                t_attack = t_attack * 2
+                                embedVar = discord.Embed(title=f"{t_card.upper()}'s Devilization", description=f"`{t_card}` Doubles Stats", colour=0xe91e63)
+                                await private_channel.send(embed=embedVar)
                     elif t_health <= (t_max_health * .75):
                         embed_color_t=0xf1c40f
                     else:
@@ -4804,6 +4841,14 @@ class CrownUnlimited(commands.Cog):
                         
                     elif c_health <= (c_max_health * .50):
                         embed_color_c=0xe67e22
+                        if c_chainsaw==True:
+                            if c_atk_chainsaw==False:
+                                c_atk_chainsaw=True
+                                c_chainsaw=False
+                                c_defense = c_defense * 2
+                                c_attack = c_attack * 2
+                                embedVar = discord.Embed(title=f"{c_card.upper()}'s Devilization", description=f"`{c_card}` Doubles ATK and DEF", colour=0xe91e63)
+                                await private_channel.send(embed=embedVar)
                     elif c_health <= (c_max_health * .75):
                         embed_color_c=0xf1c40f
                         
@@ -5626,6 +5671,14 @@ class CrownUnlimited(commands.Cog):
                         
                     elif t_health <= (t_max_health * .50):
                         embed_color_t=0xe67e22
+                        if t_chainsaw==True:
+                            if t_atk_chainsaw==False:
+                                t_atk_chainsaw=True
+                                t_chainsaw=False
+                                t_defense = t_defense * 2
+                                t_attack = t_attack * 2
+                                embedVar = discord.Embed(title=f"{t_card.upper()}'s Devilization", description=f"`{t_card}` Doubles Stats", colour=0xe91e63)
+                                await private_channel.send(embed=embedVar)
                     elif t_health <= (t_max_health * .75):
                         embed_color_t=0xf1c40f
                     else:
@@ -6784,6 +6837,11 @@ class CrownUnlimited(commands.Cog):
             c_enhancer_used=False
             c_pet_used=False
             c_block_used=False
+            c_chainsaw=False
+            c_def_chainsaw=False
+            c_atk_chainsaw=False
+            if c_universe == "Chainsawman":
+                c_chainsaw=True
 
             tpetmove_text = list(tpet_passive.keys())[0]
             tpetmove_ap = list(tpet_passive.values())[0]
@@ -7597,6 +7655,14 @@ class CrownUnlimited(commands.Cog):
                         
                     elif o_health <= (o_max_health * .50):
                         embed_color_o=0xe67e22
+                        if o_chainsaw==True:
+                            if o_atk_chainsaw==False:
+                                o_atk_chainsaw=True
+                                o_chainsaw=False
+                                o_defense = o_defense * 2
+                                o_attack = o_attack * 2
+                                embedVar = discord.Embed(title=f"{o_card.upper()}'s Devilization", description=f"`{o_card}` Doubles ATK and DEF", colour=0xe91e63)
+                                await private_channel.send(embed=embedVar)
                     elif o_health <= (o_max_health * .75):
                         embed_color_o=0xf1c40f
                         
@@ -8407,6 +8473,14 @@ class CrownUnlimited(commands.Cog):
                         
                     elif t_health <= (t_max_health * .50):
                         embed_color_t=0xe67e22
+                        if t_chainsaw==True:
+                            if t_atk_chainsaw==False:
+                                t_atk_chainsaw=True
+                                t_chainsaw=False
+                                t_defense = t_defense * 2
+                                t_attack = t_attack * 2
+                                embedVar = discord.Embed(title=f"{t_card.upper()}'s Devilization", description=f"`{t_card}` Doubles Stats", colour=0xe91e63)
+                                await private_channel.send(embed=embedVar)
                     elif t_health <= (t_max_health * .75):
                         embed_color_t=0xf1c40f
                     else:
@@ -9282,6 +9356,14 @@ class CrownUnlimited(commands.Cog):
                         
                     elif c_health <= (c_max_health * .50):
                         embed_color_c=0xe67e22
+                        if c_chainsaw==True:
+                            if c_atk_chainsaw==False:
+                                c_atk_chainsaw=True
+                                c_chainsaw=False
+                                c_defense = c_defense * 2
+                                c_attack = c_attack * 2
+                                embedVar = discord.Embed(title=f"{c_card.upper()}'s Devilization", description=f"`{c_card}` Doubles ATK and DEF", colour=0xe91e63)
+                                await private_channel.send(embed=embedVar)
                     elif c_health <= (c_max_health * .75):
                         embed_color_c=0xf1c40f
                         
@@ -10111,6 +10193,14 @@ class CrownUnlimited(commands.Cog):
                         
                     elif t_health <= (t_max_health * .50):
                         embed_color_t=0xe67e22
+                        if t_chainsaw==True:
+                            if t_atk_chainsaw==False:
+                                t_atk_chainsaw=True
+                                t_chainsaw=False
+                                t_defense = t_defense * 2
+                                t_attack = t_attack * 2
+                                embedVar = discord.Embed(title=f"{t_card.upper()}'s Devilization", description=f"`{t_card}` Doubles Stats", colour=0xe91e63)
+                                await private_channel.send(embed=embedVar)
                     elif t_health <= (t_max_health * .75):
                         embed_color_t=0xf1c40f
                     else:
@@ -11484,6 +11574,11 @@ class CrownUnlimited(commands.Cog):
         c_enhancer_used=False
         c_pet_used=False
         c_block_used=False
+        c_chainsaw=False
+        c_def_chainsaw=False
+        c_atk_chainsaw=False
+        if c_universe == "Chainsawman":
+            c_chainsaw=True
 
         cmove1_text = list(c_1.keys())[0]
         cmove2_text = list(c_2.keys())[0]
@@ -12296,6 +12391,14 @@ class CrownUnlimited(commands.Cog):
                     
                 elif o_health <= (o_max_health * .50):
                     embed_color_o=0xe67e22
+                    if o_chainsaw==True:
+                        if o_atk_chainsaw==False:
+                            o_atk_chainsaw=True
+                            o_chainsaw=False
+                            o_defense = o_defense * 2
+                            o_attack = o_attack * 2
+                            embedVar = discord.Embed(title=f"{o_card.upper()}'s Devilization", description=f"`{o_card}` Doubles ATK and DEF", colour=0xe91e63)
+                            await private_channel.send(embed=embedVar)
                 elif o_health <= (o_max_health * .75):
                     embed_color_o=0xf1c40f
                     
@@ -13115,6 +13218,14 @@ class CrownUnlimited(commands.Cog):
                     
                 elif t_health <= (t_max_health * .50):
                     embed_color_t=0xe67e22
+                    if t_chainsaw==True:
+                        if t_atk_chainsaw==False:
+                            t_atk_chainsaw=True
+                            t_chainsaw=False
+                            t_defense = t_defense * 2
+                            t_attack = t_attack * 2
+                            embedVar = discord.Embed(title=f"{t_card.upper()}'s Devilization", description=f"`{t_card}` Doubles Stats", colour=0xe91e63)
+                            await private_channel.send(embed=embedVar)
                 elif t_health <= (t_max_health * .75):
                     embed_color_t=0xf1c40f
                 else:
@@ -14004,6 +14115,14 @@ class CrownUnlimited(commands.Cog):
                     
                 elif c_health <= (c_max_health * .50):
                     embed_color_c=0xe67e22
+                    if c_chainsaw==True:
+                        if c_atk_chainsaw==False:
+                            c_atk_chainsaw=True
+                            c_chainsaw=False
+                            c_defense = c_defense * 2
+                            c_attack = c_attack * 2
+                            embedVar = discord.Embed(title=f"{c_card.upper()}'s Devilization", description=f"`{c_card}` Doubles ATK and DEF", colour=0xe91e63)
+                            await private_channel.send(embed=embedVar)
                 elif c_health <= (c_max_health * .75):
                     embed_color_c=0xf1c40f
                     
@@ -14850,6 +14969,14 @@ class CrownUnlimited(commands.Cog):
                     
                 elif t_health <= (t_max_health * .50):
                     embed_color_t=0xe67e22
+                    if t_chainsaw==True:
+                        if t_atk_chainsaw==False:
+                            t_atk_chainsaw=True
+                            t_chainsaw=False
+                            t_defense = t_defense * 2
+                            t_attack = t_attack * 2
+                            embedVar = discord.Embed(title=f"{t_card.upper()}'s Devilization", description=f"`{t_card}` Doubles Stats", colour=0xe91e63)
+                            await private_channel.send(embed=embedVar)
                 elif t_health <= (t_max_health * .75):
                     embed_color_t=0xf1c40f
                 else:
@@ -16170,6 +16297,11 @@ class CrownUnlimited(commands.Cog):
             c_enhancer_used=False
             c_pet_used=False
             c_block_used=False
+            c_chainsaw=False
+            c_def_chainsaw=False
+            c_atk_chainsaw=False
+            if c_universe == "Chainsawman":
+                c_chainsaw=True
 
             cmove1_text = list(c_1.keys())[0]
             cmove2_text = list(c_2.keys())[0]
@@ -16975,6 +17107,14 @@ class CrownUnlimited(commands.Cog):
                         
                     elif o_health <= (o_max_health * .50):
                         embed_color_o=0xe67e22
+                        if o_chainsaw==True:
+                            if o_atk_chainsaw==False:
+                                o_atk_chainsaw=True
+                                o_chainsaw=False
+                                o_defense = o_defense * 2
+                                o_attack = o_attack * 2
+                                embedVar = discord.Embed(title=f"{o_card.upper()}'s Devilization", description=f"`{o_card}` Doubles ATK and DEF", colour=0xe91e63)
+                                await private_channel.send(embed=embedVar)
                     elif o_health <= (o_max_health * .75):
                         embed_color_o=0xf1c40f
                         
@@ -17677,6 +17817,14 @@ class CrownUnlimited(commands.Cog):
                         
                     elif t_health <= (t_max_health * .50):
                         embed_color_t=0xe67e22
+                        if t_chainsaw==True:
+                            if t_atk_chainsaw==False:
+                                t_atk_chainsaw=True
+                                t_chainsaw=False
+                                t_defense = t_defense * 2
+                                t_attack = t_attack * 2
+                                embedVar = discord.Embed(title=f"{t_card.upper()}'s Devilization", description=f"`{t_card}` Doubles Stats", colour=0xe91e63)
+                                await private_channel.send(embed=embedVar)
                     elif t_health <= (t_max_health * .75):
                         embed_color_t=0xf1c40f
                     else:
@@ -18353,6 +18501,14 @@ class CrownUnlimited(commands.Cog):
                         
                     elif c_health <= (c_max_health * .50):
                         embed_color_c=0xe67e22
+                        if c_chainsaw==True:
+                            if c_atk_chainsaw==False:
+                                c_atk_chainsaw=True
+                                c_chainsaw=False
+                                c_defense = c_defense * 2
+                                c_attack = c_attack * 2
+                                embedVar = discord.Embed(title=f"{c_card.upper()}'s Devilization", description=f"`{c_card}` Doubles ATK and DEF", colour=0xe91e63)
+                                await private_channel.send(embed=embedVar)
                     elif c_health <= (c_max_health * .75):
                         embed_color_c=0xf1c40f
                         
@@ -19052,6 +19208,14 @@ class CrownUnlimited(commands.Cog):
                         
                     elif t_health <= (t_max_health * .50):
                         embed_color_t=0xe67e22
+                        if t_chainsaw==True:
+                            if t_atk_chainsaw==False:
+                                t_atk_chainsaw=True
+                                t_chainsaw=False
+                                t_defense = t_defense * 2
+                                t_attack = t_attack * 2
+                                embedVar = discord.Embed(title=f"{t_card.upper()}'s Devilization", description=f"`{t_card}` Doubles Stats", colour=0xe91e63)
+                                await private_channel.send(embed=embedVar)
                     elif t_health <= (t_max_health * .75):
                         embed_color_t=0xf1c40f
                     else:
@@ -20222,6 +20386,11 @@ class CrownUnlimited(commands.Cog):
             c_enhancer_used=False
             c_pet_used=False
             c_block_used=False
+            c_chainsaw=False
+            c_def_chainsaw=False
+            c_atk_chainsaw=False
+            if c_universe == "Chainsawman":
+                c_chainsaw=True
 
             tpetmove_text = list(tpet_passive.keys())[0]
             tpetmove_ap = list(tpet_passive.values())[0]
@@ -21032,6 +21201,14 @@ class CrownUnlimited(commands.Cog):
                         
                     elif o_health <= (o_max_health * .50):
                         embed_color_o=0xe67e22
+                        if o_chainsaw==True:
+                            if o_atk_chainsaw==False:
+                                o_atk_chainsaw=True
+                                o_chainsaw=False
+                                o_defense = o_defense * 2
+                                o_attack = o_attack * 2
+                                embedVar = discord.Embed(title=f"{o_card.upper()}'s Devilization", description=f"`{o_card}` Doubles ATK and DEF", colour=0xe91e63)
+                                await private_channel.send(embed=embedVar)
                     elif o_health <= (o_max_health * .75):
                         embed_color_o=0xf1c40f
                         
@@ -21735,6 +21912,14 @@ class CrownUnlimited(commands.Cog):
                         
                     elif t_health <= (t_max_health * .50):
                         embed_color_t=0xe67e22
+                        if t_chainsaw==True:
+                            if t_atk_chainsaw==False:
+                                t_atk_chainsaw=True
+                                t_chainsaw=False
+                                t_defense = t_defense * 2
+                                t_attack = t_attack * 2
+                                embedVar = discord.Embed(title=f"{t_card.upper()}'s Devilization", description=f"`{t_card}` Doubles Stats", colour=0xe91e63)
+                                await private_channel.send(embed=embedVar)
                     elif t_health <= (t_max_health * .75):
                         embed_color_t=0xf1c40f
                     else:
@@ -22611,6 +22796,14 @@ class CrownUnlimited(commands.Cog):
                         
                     elif c_health <= (c_max_health * .50):
                         embed_color_c=0xe67e22
+                        if c_chainsaw==True:
+                            if c_atk_chainsaw==False:
+                                c_atk_chainsaw=True
+                                c_chainsaw=False
+                                c_defense = c_defense * 2
+                                c_attack = c_attack * 2
+                                embedVar = discord.Embed(title=f"{c_card.upper()}'s Devilization", description=f"`{c_card}` Doubles ATK and DEF", colour=0xe91e63)
+                                await private_channel.send(embed=embedVar)
                     elif c_health <= (c_max_health * .75):
                         embed_color_c=0xf1c40f
                         
@@ -23312,6 +23505,14 @@ class CrownUnlimited(commands.Cog):
                         
                     elif t_health <= (t_max_health * .50):
                         embed_color_t=0xe67e22
+                        if t_chainsaw==True:
+                            if t_atk_chainsaw==False:
+                                t_atk_chainsaw=True
+                                t_chainsaw=False
+                                t_defense = t_defense * 2
+                                t_attack = t_attack * 2
+                                embedVar = discord.Embed(title=f"{t_card.upper()}'s Devilization", description=f"`{t_card}` Doubles Stats", colour=0xe91e63)
+                                await private_channel.send(embed=embedVar)
                     elif t_health <= (t_max_health * .75):
                         embed_color_t=0xf1c40f
                     else:
@@ -24675,6 +24876,11 @@ class CrownUnlimited(commands.Cog):
         c_enhancer_used=False
         c_pet_used=False
         c_block_used=False
+        c_chainsaw=False
+        c_def_chainsaw=False
+        c_atk_chainsaw=False
+        if c_universe == "Chainsawman":
+            c_chainsaw=True
 
         cmove1_text = list(c_1.keys())[0]
         cmove2_text = list(c_2.keys())[0]
@@ -25484,6 +25690,14 @@ class CrownUnlimited(commands.Cog):
                     
                 elif o_health <= (o_max_health * .50):
                     embed_color_o=0xe67e22
+                    if o_chainsaw==True:
+                        if o_atk_chainsaw==False:
+                            o_atk_chainsaw=True
+                            o_chainsaw=False
+                            o_defense = o_defense * 2
+                            o_attack = o_attack * 2
+                            embedVar = discord.Embed(title=f"{o_card.upper()}'s Devilization", description=f"`{o_card}` Doubles ATK and DEF", colour=0xe91e63)
+                            await private_channel.send(embed=embedVar)
                 elif o_health <= (o_max_health * .75):
                     embed_color_o=0xf1c40f
                     
@@ -26193,6 +26407,14 @@ class CrownUnlimited(commands.Cog):
                     
                 elif t_health <= (t_max_health * .50):
                     embed_color_t=0xe67e22
+                    if t_chainsaw==True:
+                        if t_atk_chainsaw==False:
+                            t_atk_chainsaw=True
+                            t_chainsaw=False
+                            t_defense = t_defense * 2
+                            t_attack = t_attack * 2
+                            embedVar = discord.Embed(title=f"{t_card.upper()}'s Devilization", description=f"`{t_card}` Doubles Stats", colour=0xe91e63)
+                            await private_channel.send(embed=embedVar)
                 elif t_health <= (t_max_health * .75):
                     embed_color_t=0xf1c40f
                 else:
@@ -27082,6 +27304,14 @@ class CrownUnlimited(commands.Cog):
                     
                 elif c_health <= (c_max_health * .50):
                     embed_color_c=0xe67e22
+                    if c_chainsaw==True:
+                        if c_atk_chainsaw==False:
+                            c_atk_chainsaw=True
+                            c_chainsaw=False
+                            c_defense = c_defense * 2
+                            c_attack = c_attack * 2
+                            embedVar = discord.Embed(title=f"{c_card.upper()}'s Devilization", description=f"`{c_card}` Doubles ATK and DEF", colour=0xe91e63)
+                            await private_channel.send(embed=embedVar)
                 elif c_health <= (c_max_health * .75):
                     embed_color_c=0xf1c40f
                     
@@ -27789,6 +28019,14 @@ class CrownUnlimited(commands.Cog):
                     
                 elif t_health <= (t_max_health * .50):
                     embed_color_t=0xe67e22
+                    if t_chainsaw==True:
+                        if t_atk_chainsaw==False:
+                            t_atk_chainsaw=True
+                            t_chainsaw=False
+                            t_defense = t_defense * 2
+                            t_attack = t_attack * 2
+                            embedVar = discord.Embed(title=f"{t_card.upper()}'s Devilization", description=f"`{t_card}` Doubles Stats", colour=0xe91e63)
+                            await private_channel.send(embed=embedVar)
                 elif t_health <= (t_max_health * .75):
                     embed_color_t=0xf1c40f
                 else:
@@ -29545,6 +29783,14 @@ class CrownUnlimited(commands.Cog):
                         
                     elif o_health <= (o_max_health * .50):
                         embed_color_o=0xe67e22
+                        if o_chainsaw==True:
+                            if o_atk_chainsaw==False:
+                                o_atk_chainsaw=True
+                                o_chainsaw=False
+                                o_defense = o_defense * 2
+                                o_attack = o_attack * 2
+                                embedVar = discord.Embed(title=f"{o_card.upper()}'s Devilization", description=f"`{o_card}` Doubles ATK and DEF", colour=0xe91e63)
+                                await private_channel.send(embed=embedVar)
                     elif o_health <= (o_max_health * .75):
                         embed_color_o=0xf1c40f
                         
@@ -30153,6 +30399,14 @@ class CrownUnlimited(commands.Cog):
                         
                     elif t_health <= (t_max_health * .50):
                         embed_color_t=0xe67e22
+                        if t_chainsaw==True:
+                            if t_atk_chainsaw==False:
+                                t_atk_chainsaw=True
+                                t_chainsaw=False
+                                t_defense = t_defense * 2
+                                t_attack = t_attack * 2
+                                embedVar = discord.Embed(title=f"{t_card.upper()}'s Devilization", description=f"`{t_card}` Doubles Stats", colour=0xe91e63)
+                                await private_channel.send(embed=embedVar)
                     elif t_health <= (t_max_health * .75):
                         embed_color_t=0xf1c40f
                     else:
@@ -31187,6 +31441,11 @@ class CrownUnlimited(commands.Cog):
             o_pet_used=False
             o_defend_used=False
             o_block_used=False
+            o_chainsaw=False
+            o_def_chainsaw=False
+            o_atk_chainsaw=False
+            if o_universe == "Chainsawman":
+                o_chainsaw=True
 
             omove1_text = list(o_1.keys())[0]
             omove2_text = list(o_2.keys())[0]
@@ -31647,6 +31906,13 @@ class CrownUnlimited(commands.Cog):
             t_used_focus=False
             t_resolve = 60
             t_used_resolve=False
+            t_chainsaw=False
+            t_def_chainsaw=False
+            t_atk_chainsaw=False
+            if t_universe == "Chainsawman":
+                t_chainsaw=True
+                
+                
             
             # Turn iterator
             turn = 0
@@ -31714,6 +31980,15 @@ class CrownUnlimited(commands.Cog):
                         
                     elif o_health <= (o_max_health * .50):
                         embed_color_o=0xe67e22
+                        if o_chainsaw==True:
+                            if o_atk_chainsaw==False:
+                                o_atk_chainsaw=True
+                                o_chainsaw=False
+                                o_defense = o_defense * 2
+                                o_attack = o_attack * 2
+                                embedVar = discord.Embed(title=f"{o_card.upper()}'s Devilization", description=f"`{o_card}` Doubles ATK and DEF", colour=0xe91e63)
+                                await private_channel.send(embed=embedVar)
+                        
                     elif o_health <= (o_max_health * .75):
                         embed_color_o=0xf1c40f
                         
@@ -32322,6 +32597,14 @@ class CrownUnlimited(commands.Cog):
                         embed_color_t=0xe74c3c
                         
                     elif t_health <= (t_max_health * .50):
+                        if t_chainsaw==True:
+                            if t_atk_chainsaw==False:
+                                t_atk_chainsaw=True
+                                t_chainsaw=False
+                                t_defense = t_defense * 2
+                                t_attack = t_attack * 2
+                                embedVar = discord.Embed(title=f"{t_card.upper()}'s Devilization", description=f"`{t_card}` Doubles Stats", colour=0xe91e63)
+                                await private_channel.send(embed=embedVar)
                         embed_color_t=0xe67e22
                     elif t_health <= (t_max_health * .75):
                         embed_color_t=0xf1c40f
@@ -33764,6 +34047,14 @@ class CrownUnlimited(commands.Cog):
                     
                 elif o_health <= (o_max_health * .50):
                     embed_color_o=0xe67e22
+                    if o_chainsaw==True:
+                        if o_atk_chainsaw==False:
+                            o_atk_chainsaw=True
+                            o_chainsaw=False
+                            o_defense = o_defense * 2
+                            o_attack = o_attack * 2
+                            embedVar = discord.Embed(title=f"{o_card.upper()}'s Devilization", description=f"`{o_card}` Doubles ATK and DEF", colour=0xe91e63)
+                            await private_channel.send(embed=embedVar)
                 elif o_health <= (o_max_health * .75):
                     embed_color_o=0xf1c40f
                     
@@ -34371,6 +34662,14 @@ class CrownUnlimited(commands.Cog):
                     
                 elif t_health <= (t_max_health * .50):
                     embed_color_t=0xe67e22
+                    if t_chainsaw==True:
+                            if t_atk_chainsaw==False:
+                                t_atk_chainsaw=True
+                                t_chainsaw=False
+                                t_defense = t_defense * 2
+                                t_attack = t_attack * 2
+                                embedVar = discord.Embed(title=f"{t_card.upper()}'s Devilization", description=f"`{t_card}` Doubles Stats", colour=0xe91e63)
+                                await private_channel.send(embed=embedVar)
                 elif t_health <= (t_max_health * .75):
                     embed_color_t=0xf1c40f
                 else:
@@ -35851,6 +36150,14 @@ class CrownUnlimited(commands.Cog):
                             
                         elif o_health <= (o_max_health * .50):
                             embed_color_o=0xe67e22
+                            if o_chainsaw==True:
+                                if o_atk_chainsaw==False:
+                                    o_atk_chainsaw=True
+                                    o_chainsaw=False
+                                    o_defense = o_defense * 2
+                                    o_attack = o_attack * 2
+                                    embedVar = discord.Embed(title=f"{o_card.upper()}'s Devilization", description=f"`{o_card}` Doubles ATK and DEF", colour=0xe91e63)
+                                    await private_channel.send(embed=embedVar)
                         elif o_health <= (o_max_health * .75):
                             embed_color_o=0xf1c40f
                             
@@ -36472,6 +36779,14 @@ class CrownUnlimited(commands.Cog):
                             
                         elif t_health <= (t_max_health * .50):
                             embed_color_t=0xe67e22
+                            if t_chainsaw==True:
+                                if t_atk_chainsaw==False:
+                                    t_atk_chainsaw=True
+                                    t_chainsaw=False
+                                    t_defense = t_defense * 2
+                                    t_attack = t_attack * 2
+                                    embedVar = discord.Embed(title=f"{t_card.upper()}'s Devilization", description=f"`{t_card}` Doubles Stats", colour=0xe91e63)
+                                    await private_channel.send(embed=embedVar)
                         elif t_health <= (t_max_health * .75):
                             embed_color_t=0xf1c40f
                         else:
@@ -38394,6 +38709,14 @@ class CrownUnlimited(commands.Cog):
                             
                         elif o_health <= (o_max_health * .50):
                             embed_color_o=0xe67e22
+                            if o_chainsaw==True:
+                                if o_atk_chainsaw==False:
+                                    o_atk_chainsaw=True
+                                    o_chainsaw=False
+                                    o_defense = o_defense * 2
+                                    o_attack = o_attack * 2
+                                    embedVar = discord.Embed(title=f"{o_card.upper()}'s Devilization", description=f"`{o_card}` Doubles ATK and DEF", colour=0xe91e63)
+                                    await private_channel.send(embed=embedVar)
                         elif o_health <= (o_max_health * .75):
                             embed_color_o=0xf1c40f
                             
@@ -39015,6 +39338,14 @@ class CrownUnlimited(commands.Cog):
                             
                         elif t_health <= (t_max_health * .50):
                             embed_color_t=0xe67e22
+                            if t_chainsaw==True:
+                                if t_atk_chainsaw==False:
+                                    t_atk_chainsaw=True
+                                    t_chainsaw=False
+                                    t_defense = t_defense * 2
+                                    t_attack = t_attack * 2
+                                    embedVar = discord.Embed(title=f"{t_card.upper()}'s Devilization", description=f"`{t_card}` Doubles Stats", colour=0xe91e63)
+                                    await private_channel.send(embed=embedVar)
                         elif t_health <= (t_max_health * .75):
                             embed_color_t=0xf1c40f
                         else:
@@ -40937,6 +41268,14 @@ class CrownUnlimited(commands.Cog):
                             
                         elif o_health <= (o_max_health * .50):
                             embed_color_o=0xe67e22
+                            if o_chainsaw==True:
+                                if o_atk_chainsaw==False:
+                                    o_atk_chainsaw=True
+                                    o_chainsaw=False
+                                    o_defense = o_defense * 2
+                                    o_attack = o_attack * 2
+                                    embedVar = discord.Embed(title=f"{o_card.upper()}'s Devilization", description=f"`{o_card}` Doubles ATK and DEF", colour=0xe91e63)
+                                    await private_channel.send(embed=embedVar)
                         elif o_health <= (o_max_health * .75):
                             embed_color_o=0xf1c40f
                             
@@ -41457,6 +41796,14 @@ class CrownUnlimited(commands.Cog):
                             
                         elif t_health <= (t_max_health * .50):
                             embed_color_t=0xe67e22
+                            if t_chainsaw==True:
+                                if t_atk_chainsaw==False:
+                                    t_atk_chainsaw=True
+                                    t_chainsaw=False
+                                    t_defense = t_defense * 2
+                                    t_attack = t_attack * 2
+                                    embedVar = discord.Embed(title=f"{t_card.upper()}'s Devilization", description=f"`{t_card}` Doubles Stats", colour=0xe91e63)
+                                    await private_channel.send(embed=embedVar)
                         elif t_health <= (t_max_health * .75):
                             embed_color_t=0xf1c40f
                         else:
@@ -43279,6 +43626,14 @@ class CrownUnlimited(commands.Cog):
                             
                         elif o_health <= (o_max_health * .50):
                             embed_color_o=0xe67e22
+                            if o_chainsaw==True:
+                                if o_atk_chainsaw==False:
+                                    o_atk_chainsaw=True
+                                    o_chainsaw=False
+                                    o_defense = o_defense * 2
+                                    o_attack = o_attack * 2
+                                    embedVar = discord.Embed(title=f"{o_card.upper()}'s Devilization", description=f"`{o_card}` Doubles ATK and DEF", colour=0xe91e63)
+                                    await private_channel.send(embed=embedVar)
                         elif o_health <= (o_max_health * .75):
                             embed_color_o=0xf1c40f
                             
@@ -43799,6 +44154,14 @@ class CrownUnlimited(commands.Cog):
                             
                         elif t_health <= (t_max_health * .50):
                             embed_color_t=0xe67e22
+                            if t_chainsaw==True:
+                                if t_atk_chainsaw==False:
+                                    t_atk_chainsaw=True
+                                    t_chainsaw=False
+                                    t_defense = t_defense * 2
+                                    t_attack = t_attack * 2
+                                    embedVar = discord.Embed(title=f"{t_card.upper()}'s Devilization", description=f"`{t_card}` Doubles Stats", colour=0xe91e63)
+                                    await private_channel.send(embed=embedVar)
                         elif t_health <= (t_max_health * .75):
                             embed_color_t=0xf1c40f
                         else:
@@ -45639,6 +46002,14 @@ class CrownUnlimited(commands.Cog):
                             
                         elif o_health <= (o_max_health * .50):
                             embed_color_o=0xe67e22
+                            if o_chainsaw==True:
+                                if o_atk_chainsaw==False:
+                                    o_atk_chainsaw=True
+                                    o_chainsaw=False
+                                    o_defense = o_defense * 2
+                                    o_attack = o_attack * 2
+                                    embedVar = discord.Embed(title=f"{o_card.upper()}'s Devilization", description=f"`{o_card}` Doubles ATK and DEF", colour=0xe91e63)
+                                    await private_channel.send(embed=embedVar)
                         elif o_health <= (o_max_health * .75):
                             embed_color_o=0xf1c40f
                             
@@ -46268,6 +46639,14 @@ class CrownUnlimited(commands.Cog):
                             
                         elif t_health <= (t_max_health * .50):
                             embed_color_t=0xe67e22
+                            if t_chainsaw==True:
+                                if t_atk_chainsaw==False:
+                                    t_atk_chainsaw=True
+                                    t_chainsaw=False
+                                    t_defense = t_defense * 2
+                                    t_attack = t_attack * 2
+                                    embedVar = discord.Embed(title=f"{t_card.upper()}'s Devilization", description=f"`{t_card}` Doubles Stats", colour=0xe91e63)
+                                    await private_channel.send(embed=embedVar)
                         elif t_health <= (t_max_health * .75):
                             embed_color_t=0xf1c40f
                         else:
