@@ -339,6 +339,11 @@ class CrownUnlimited(commands.Cog):
             o_pet_used=False
             o_defend_used=False
             o_block_used=False
+            o_chainsaw=False
+            o_def_chainsaw=False
+            o_atk_chainsaw=False
+            if o_universe == "Chainsawman":
+                o_chainsaw=True
 
             omove1_text = list(o_1.keys())[0]
             omove2_text = list(o_2.keys())[0]
@@ -799,6 +804,11 @@ class CrownUnlimited(commands.Cog):
             t_used_focus=False
             t_resolve = 60
             t_used_resolve=False
+            t_chainsaw=False
+            t_def_chainsaw=False
+            t_atk_chainsaw=False
+            if t_universe == "Chainsawman":
+                t_chainsaw=True
             
             # Turn iterator
             turn = 0
@@ -2807,6 +2817,11 @@ class CrownUnlimited(commands.Cog):
             o_pet_used=False
             o_block_used=False
             o_defend_used=False
+            o_chainsaw=False
+            o_def_chainsaw=False
+            o_atk_chainsaw=False
+            if o_universe == "Chainsawman":
+                o_chainsaw=True
 
             omove1_text = list(o_1.keys())[0]
             omove2_text = list(o_2.keys())[0]
@@ -3300,6 +3315,11 @@ class CrownUnlimited(commands.Cog):
             t_used_focus=False
             t_resolve = 60
             t_used_resolve=False
+            t_chainsaw=False
+            t_def_chainsaw=False
+            t_atk_chainsaw=False
+            if t_universe == "Chainsawman":
+                t_chainsaw=True
             
             # Turn iterator
             turn = 0
@@ -7096,6 +7116,11 @@ class CrownUnlimited(commands.Cog):
             o_pet_used=False
             o_block_used=False
             o_defend_used=False
+            o_chainsaw=False
+            o_def_chainsaw=False
+            o_atk_chainsaw=False
+            if o_universe == "Chainsawman":
+                o_chainsaw=True
 
             omove1_text = list(o_1.keys())[0]
             omove2_text = list(o_2.keys())[0]
@@ -7589,6 +7614,11 @@ class CrownUnlimited(commands.Cog):
             t_used_focus=False
             t_resolve = 60
             t_used_resolve=False
+            t_chainsaw=False
+            t_def_chainsaw=False
+            t_atk_chainsaw=False
+            if t_universe == "Chainsawman":
+                t_chainsaw=True
             
             # Turn iterator
             turn = 0
@@ -11829,6 +11859,11 @@ class CrownUnlimited(commands.Cog):
         o_pet_used=False
         o_block_used=False
         o_defend_used=False
+        o_chainsaw=False
+        o_def_chainsaw=False
+        o_atk_chainsaw=False
+        if o_universe == "Chainsawman":
+            o_chainsaw=True
 
         omove1_text = list(o_1.keys())[0]
         omove2_text = list(o_2.keys())[0]
@@ -12315,6 +12350,11 @@ class CrownUnlimited(commands.Cog):
         t_used_focus=False
         t_resolve = 60
         t_used_resolve=False
+        t_chainsaw=False
+        t_def_chainsaw=False
+        t_atk_chainsaw=False
+        if t_universe == "Chainsawman":
+            t_chainsaw=True
 
         
         # Turn iterator
@@ -16551,6 +16591,11 @@ class CrownUnlimited(commands.Cog):
             o_enhancer_used=False
             o_pet_used=False
             o_defend_used=False
+            o_chainsaw=False
+            o_def_chainsaw=False
+            o_atk_chainsaw=False
+            if o_universe == "Chainsawman":
+                o_chainsaw=True
 
             omove1_text = list(o_1.keys())[0]
             omove2_text = list(o_2.keys())[0]
@@ -17044,6 +17089,11 @@ class CrownUnlimited(commands.Cog):
             t_used_focus=False
             t_resolve = 60
             t_used_resolve=False
+            t_chainsaw=False
+            t_def_chainsaw=False
+            t_atk_chainsaw=False
+            if t_universe == "Chainsawman":
+                t_chainsaw=True
             
             # Turn iterator
             turn = 0
@@ -20645,6 +20695,11 @@ class CrownUnlimited(commands.Cog):
             o_pet_used=False
             o_block_used=False
             o_defend_used=False
+            o_chainsaw=False
+            o_def_chainsaw=False
+            o_atk_chainsaw=False
+            if o_universe == "Chainsawman":
+                o_chainsaw=True
 
             omove1_text = list(o_1.keys())[0]
             omove2_text = list(o_2.keys())[0]
@@ -21138,6 +21193,11 @@ class CrownUnlimited(commands.Cog):
             t_used_focus=False
             t_resolve = 60
             t_used_resolve=False
+            t_chainsaw=False
+            t_def_chainsaw=False
+            t_atk_chainsaw=False
+            if t_universe == "Chainsawman":
+                t_chainsaw=True
             
             # Turn iterator
             turn = 0
@@ -25131,6 +25191,11 @@ class CrownUnlimited(commands.Cog):
         o_pet_used=False
         o_defend_used=False
         o_block_used=False
+        o_chainsaw=False
+        o_def_chainsaw=False
+        o_atk_chainsaw=False
+        if o_universe == "Chainsawman":
+            o_chainsaw=True
 
         omove1_text = list(o_1.keys())[0]
         omove2_text = list(o_2.keys())[0]
@@ -25617,6 +25682,11 @@ class CrownUnlimited(commands.Cog):
         t_used_focus=False
         t_resolve = 60
         t_used_resolve=False
+        t_chainsaw=False
+        t_def_chainsaw=False
+        t_atk_chainsaw=False
+        if t_universe == "Chainsawman":
+            t_chainsaw=True
 
         
         # Turn iterator
@@ -29259,6 +29329,11 @@ class CrownUnlimited(commands.Cog):
             o_enhancer_used=False
             o_pet_used=False
             o_block_used=False
+            o_chainsaw=False
+            o_def_chainsaw=False
+            o_atk_chainsaw=False
+            if o_universe == "Chainsawman":
+                o_chainsaw=True
 
             omove1_text = list(o_1.keys())[0]
             omove2_text = list(o_2.keys())[0]
@@ -29725,6 +29800,11 @@ class CrownUnlimited(commands.Cog):
             t_used_focus=False
             t_resolve = 60
             t_used_resolve=False
+            t_chainsaw=False
+            t_def_chainsaw=False
+            t_atk_chainsaw=False
+            if t_universe == "Chainsawman":
+                t_chainsaw=True
             
             # Turn iterator
             turn = 0
@@ -32597,6 +32677,7 @@ class CrownUnlimited(commands.Cog):
                         embed_color_t=0xe74c3c
                         
                     elif t_health <= (t_max_health * .50):
+                        embed_color_t=0xe67e22
                         if t_chainsaw==True:
                             if t_atk_chainsaw==False:
                                 t_atk_chainsaw=True
@@ -32605,7 +32686,6 @@ class CrownUnlimited(commands.Cog):
                                 t_attack = t_attack * 2
                                 embedVar = discord.Embed(title=f"{t_card.upper()}'s Devilization", description=f"`{t_card}` Doubles Stats", colour=0xe91e63)
                                 await private_channel.send(embed=embedVar)
-                        embed_color_t=0xe67e22
                     elif t_health <= (t_max_health * .75):
                         embed_color_t=0xf1c40f
                     else:
@@ -33519,6 +33599,11 @@ class CrownUnlimited(commands.Cog):
         o_pet_used=False
         o_defend_used=False
         o_block_used=False
+        o_chainsaw=False
+        o_def_chainsaw=False
+        o_atk_chainsaw=False
+        if o_universe == "Chainsawman":
+            o_chainsaw=True
 
         omove1_text = list(o_1.keys())[0]
         omove2_text = list(o_2.keys())[0]
@@ -33984,6 +34069,11 @@ class CrownUnlimited(commands.Cog):
         t_used_focus=False
         t_resolve = 60
         t_used_resolve=False
+        t_chainsaw=False
+        t_def_chainsaw=False
+        t_atk_chainsaw=False
+        if t_universe == "Chainsawman":
+            t_chainsaw=True
 
         
         # Turn iterator
@@ -34663,13 +34753,13 @@ class CrownUnlimited(commands.Cog):
                 elif t_health <= (t_max_health * .50):
                     embed_color_t=0xe67e22
                     if t_chainsaw==True:
-                            if t_atk_chainsaw==False:
-                                t_atk_chainsaw=True
-                                t_chainsaw=False
-                                t_defense = t_defense * 2
-                                t_attack = t_attack * 2
-                                embedVar = discord.Embed(title=f"{t_card.upper()}'s Devilization", description=f"`{t_card}` Doubles Stats", colour=0xe91e63)
-                                await private_channel.send(embed=embedVar)
+                        if t_atk_chainsaw==False:
+                            t_atk_chainsaw=True
+                            t_chainsaw=False
+                            t_defense = t_defense * 2
+                            t_attack = t_attack * 2
+                            embedVar = discord.Embed(title=f"{t_card.upper()}'s Devilization", description=f"`{t_card}` Doubles Stats", colour=0xe91e63)
+                            await private_channel.send(embed=embedVar)
                 elif t_health <= (t_max_health * .75):
                     embed_color_t=0xf1c40f
                 else:
@@ -35582,6 +35672,11 @@ class CrownUnlimited(commands.Cog):
                 o_pet_used=False
                 o_block_used=False
                 o_defend_used=False
+                o_chainsaw=False
+                o_def_chainsaw=False
+                o_atk_chainsaw=False
+                if o_universe == "Chainsawman":
+                    o_chainsaw=True
 
                 omove1_text = list(o_1.keys())[0]
                 omove2_text = list(o_2.keys())[0]
@@ -36056,6 +36151,11 @@ class CrownUnlimited(commands.Cog):
                 t_used_resolve=False
                 t_block_used=False
                 t_defend_used=False
+                t_chainsaw=False
+                t_def_chainsaw=False
+                t_atk_chainsaw=False
+                if t_universe == "Chainsawman":
+                    t_chainsaw=True
 
                 tmove1_text = list(t_1.keys())[0]
                 tmove2_text = list(t_2.keys())[0]
@@ -38141,6 +38241,11 @@ class CrownUnlimited(commands.Cog):
                 o_pet_used=False
                 o_block_used=False
                 o_defend_used=False
+                o_chainsaw=False
+                o_def_chainsaw=False
+                o_atk_chainsaw=False
+                if o_universe == "Chainsawman":
+                    o_chainsaw=True
 
                 omove1_text = list(o_1.keys())[0]
                 omove2_text = list(o_2.keys())[0]
@@ -38615,6 +38720,11 @@ class CrownUnlimited(commands.Cog):
                 t_used_resolve=False
                 t_block_used=False
                 t_defend_used=False
+                t_chainsaw=False
+                t_def_chainsaw=False
+                t_atk_chainsaw=False
+                if t_universe == "Chainsawman":
+                    t_chainsaw=True
 
                 tmove1_text = list(t_1.keys())[0]
                 tmove2_text = list(t_2.keys())[0]
@@ -40700,6 +40810,11 @@ class CrownUnlimited(commands.Cog):
                 o_pet_used=False
                 o_block_used=False
                 o_defend_used=False
+                o_chainsaw=False
+                o_def_chainsaw=False
+                o_atk_chainsaw=False
+                if o_universe == "Chainsawman":
+                    o_chainsaw=True
 
                 omove1_text = list(o_1.keys())[0]
                 omove2_text = list(o_2.keys())[0]
@@ -41174,6 +41289,11 @@ class CrownUnlimited(commands.Cog):
                 t_used_resolve=False
                 t_block_used=False
                 t_defend_used=False
+                t_chainsaw=False
+                t_def_chainsaw=False
+                t_atk_chainsaw=False
+                if t_universe == "Chainsawman":
+                    t_chainsaw=True
 
                 tmove1_text = list(t_1.keys())[0]
                 tmove2_text = list(t_2.keys())[0]
@@ -43058,6 +43178,11 @@ class CrownUnlimited(commands.Cog):
                 o_pet_used=False
                 o_block_used=False
                 o_defend_used=False
+                o_chainsaw=False
+                o_def_chainsaw=False
+                o_atk_chainsaw=False
+                if o_universe == "Chainsawman":
+                    o_chainsaw=True
 
                 omove1_text = list(o_1.keys())[0]
                 omove2_text = list(o_2.keys())[0]
@@ -43532,6 +43657,11 @@ class CrownUnlimited(commands.Cog):
                 t_used_resolve=False
                 t_block_used=False
                 t_defend_used=False
+                t_chainsaw=False
+                t_def_chainsaw=False
+                t_atk_chainsaw=False
+                if t_universe == "Chainsawman":
+                    t_chainsaw=True
 
                 tmove1_text = list(t_1.keys())[0]
                 tmove2_text = list(t_2.keys())[0]
@@ -45440,6 +45570,11 @@ class CrownUnlimited(commands.Cog):
                 o_enhancer_used=False
                 o_pet_used=False
                 o_block_used=False
+                o_chainsaw=False
+                o_def_chainsaw=False
+                o_atk_chainsaw=False
+                if o_universe == "Chainsawman":
+                    o_chainsaw=True
 
                 omove1_text = list(o_1.keys())[0]
                 omove2_text = list(o_2.keys())[0]
@@ -45913,6 +46048,11 @@ class CrownUnlimited(commands.Cog):
                 t_used_focus=False
                 t_resolve = 60
                 t_used_resolve=False
+                t_chainsaw=False
+                t_def_chainsaw=False
+                t_atk_chainsaw=False
+                if t_universe == "Chainsawman":
+                    t_chainsaw=True
 
                 tmove1_text = list(t_1.keys())[0]
                 tmove2_text = list(t_2.keys())[0]
