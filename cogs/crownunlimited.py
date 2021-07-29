@@ -1012,7 +1012,7 @@ class CrownUnlimited(commands.Cog):
                         player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                         await private_channel.send(file=player_1_card)
                         embedVar = discord.Embed(title=f"{o_card}, choose your move!", description=textwrap.dedent(f"""\
-                        **:heart: {o_health}/:cyclone: {o_stamina}**
+                        **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                                                 
                         **{t_card}:** :heart: {t_health}/:cyclone: {t_stamina}
                         """) 
@@ -3515,14 +3515,14 @@ class CrownUnlimited(commands.Cog):
                         player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                         await private_channel.send(file=player_1_card)
                         embedVar = discord.Embed(title=f"{o_card}, choose your move!", description=textwrap.dedent(f"""\
-                        **:heart: {o_health}/:cyclone: {o_stamina}**
+                        **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                         :cyclone: 10 | **{omove1_text}** | _1_
                         :cyclone: 30 | **{omove2_text}** | _2_
                         :cyclone: 80 | **{omove3_text}** | _3_
                         :cyclone: 20 | **{omove_enhanced_text}** | _4_
                         :cyclone: 20 | **Defend Companion** | _0_
                         
-                        **Companion:**:heart: {c_health}/:cyclone: {c_stamina}
+                        **{c_card}:** :heart: {c_health}/:cyclone: {c_stamina} _Companion_ :dagger:{c_attack}/:shield:{c_defense} 
                         **{t_card}:** :heart: {t_health}/:cyclone: {t_stamina}                     
                         """) 
                         , colour=embed_color_o)
@@ -7820,14 +7820,14 @@ class CrownUnlimited(commands.Cog):
                         player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                         await private_channel.send(file=player_1_card)
                         embedVar = discord.Embed(title=f"{o_card}, choose your move!", description=textwrap.dedent(f"""\
-                        **:heart: {o_health}/:cyclone: {o_stamina}**
+                        **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                         :cyclone: 10 | **{omove1_text}** | _1_
                         :cyclone: 30 | **{omove2_text}** | _2_
                         :cyclone: 80 | **{omove3_text}** | _3_
                         :cyclone: 20 | **{omove_enhanced_text}** | _4_
                         :cyclone: 20 | **Defend Companion** | _0_
                         
-                        **Companion:**:heart: {c_health}/:cyclone: {c_stamina}
+                        **{c_card}:** :heart: {c_health}/:cyclone: {c_stamina} _Companion_ :dagger:{c_attack}/:shield:{c_defense} 
                         **{t_card}:** :heart: {t_health}/:cyclone: {t_stamina}                     
                         """) 
                         , colour=embed_color_o)
@@ -12570,14 +12570,14 @@ class CrownUnlimited(commands.Cog):
                     player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                     await private_channel.send(file=player_1_card)
                     embedVar = discord.Embed(title=f"{o_card}, choose your move!", description=textwrap.dedent(f"""\
-                    **:heart: {o_health}/:cyclone: {o_stamina}**
+                    **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                     :cyclone: 10 | **{omove1_text}** | _1_
                     :cyclone: 30 | **{omove2_text}** | _2_
                     :cyclone: 80 | **{omove3_text}** | _3_
                     :cyclone: 20 | **{omove_enhanced_text}** | _4_
                     :cyclone: 20 | **Defend Companion** | _0_
                     
-                    **Companion:**:heart: {c_health}/:cyclone: {c_stamina}
+                    **{c_card}:** :heart: {c_health}/:cyclone: {c_stamina} _Companion_ :dagger:{c_attack}/:shield:{c_defense} 
                     **{t_card}:** :heart: {t_health}/:cyclone: {t_stamina}                     
                     """) 
                     , colour=embed_color_o)
@@ -17292,14 +17292,14 @@ class CrownUnlimited(commands.Cog):
                         player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                         await private_channel.send(file=player_1_card)
                         embedVar = discord.Embed(title=f"{o_card}, choose your move!", description=textwrap.dedent(f"""\
-                        **:heart: {o_health}/:cyclone: {o_stamina}**
+                        **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                         :cyclone: 10 | **{omove1_text}** | _1_
                         :cyclone: 30 | **{omove2_text}** | _2_
                         :cyclone: 80 | **{omove3_text}** | _3_
                         :cyclone: 20 | **{omove_enhanced_text}** | _4_
                         :cyclone: 20 | **Defend Companion** | _0_
                         
-                        **Companion:**:heart: {c_health}/:cyclone: {c_stamina}
+                        **{c_card}:** :heart: {c_health}/:cyclone: {c_stamina} _Companion_|:dagger:{c_attack}/:shield:{c_defense}
                         **{t_card}:** :heart: {t_health}/:cyclone: {t_stamina}                     
                         """) 
                         , colour=embed_color_o)
@@ -18685,7 +18685,7 @@ class CrownUnlimited(commands.Cog):
                         companion = showcard(c, c_max_health, c_health, c_max_stamina, c_stamina, c_used_resolve, ctitle, c_used_focus)
                         await private_channel.send(file=companion)
                         embedVar = discord.Embed(title=f"{c_card}, choose your move!", description=textwrap.dedent(f"""\
-                        **:heart: {c_health}/:cyclone: {c_stamina}**
+                        **:heart: {c_health}/:cyclone: {c_stamina} :dagger:{c_attack}/:shield:{c_defense}**
                         :cyclone: 10 | **{cmove1_text}** | _1_
                         :cyclone: 30 | **{cmove2_text}** | _2_
                         :cyclone: 80 | **{cmove3_text}** | _3_
@@ -18693,7 +18693,7 @@ class CrownUnlimited(commands.Cog):
                         **Enhance {o_card}** 20 Stamina _press 7_
                         :cyclone: 20 | **Defend {o_card}** | _0_
                         
-                        **Companion:**:heart: {o_health}/:cyclone: {o_stamina}
+                        **{o_card}:** {o_health}/{o_stamina} _Companion_ :dagger:{o_attack}/:shield:{o_defense}  
                         **{t_card}:** :heart: {t_health}/:cyclone: {t_stamina}   
                         """) 
                         , colour=embed_color_o)
@@ -21396,7 +21396,7 @@ class CrownUnlimited(commands.Cog):
                         player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                         await private_channel.send(file=player_1_card)
                         embedVar = discord.Embed(title=f"{o_card}, choose your move!", description=textwrap.dedent(f"""\
-                        **:heart: {o_health}/:cyclone: {o_stamina}**
+                        **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                         :cyclone: 10 | **{omove1_text}** | _1_
                         :cyclone: 30 | **{omove2_text}** | _2_
                         :cyclone: 80 | **{omove3_text}** | _3_
@@ -21404,7 +21404,7 @@ class CrownUnlimited(commands.Cog):
                         :cyclone: 20 | **Enhance {c_card}** | _7_
                         **Defend {c_card}**  :cyclone: 20 | _0_
                         
-                        **{c_card}:** :heart: {c_health}/:cyclone: {c_stamina} _Companion_                 
+                        **{c_card}:** :heart: {c_health}/:cyclone: {c_stamina} _Companion_|:dagger:{c_attack}/:shield:{c_defense}                
                         **{t_card}:** :heart: {t_health}/:cyclone: {t_stamina}   
                         """) 
                         , colour=embed_color_o)
@@ -22990,17 +22990,15 @@ class CrownUnlimited(commands.Cog):
                         companion = showcard(c, c_max_health, c_health, c_max_stamina, c_stamina, c_used_resolve, ctitle, c_used_focus)
                         await private_channel.send(file=companion)
                         embedVar = discord.Embed(title=f"{c_card}, choose your move!", description=textwrap.dedent(f"""\
-                        **:heart: {c_health}/:cyclone: {c_stamina}**
+                        **:heart: {c_health}/:cyclone: {c_stamina} :dagger:{c_attack}/:shield:{c_defense}**
                         :cyclone: 10 | **{cmove1_text}** | _1_
                         :cyclone: 30 | **{cmove2_text}** | _2_
                         :cyclone: 80 | **{cmove3_text}** | _3_
-                         :cyclone: 20 **{cmove_enhanced_text}** | _4_
+                        :cyclone: 20 **{cmove_enhanced_text}** | _4_
                         **Enhance {o_card}** 20 Stamina _press 7_
                         :cyclone: 20 | **Defend {o_card}** | _0_
                         
-                        **{o_card}:** {o_health}/{o_stamina} _Companion_
-                        
-                                      
+                        **{o_card}:** {o_health}/{o_stamina} _Companion_ :dagger:{o_attack}/:shield:{o_defense}                                     
                         **{t_card}:** :heart: {t_health}/:cyclone: {t_stamina}   
                         """) 
                         , colour=embed_color_o)
@@ -25895,15 +25893,15 @@ class CrownUnlimited(commands.Cog):
                     player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                     await private_channel.send(file=player_1_card)
                     embedVar = discord.Embed(title=f"{o_card}, choose your move!", description=textwrap.dedent(f"""\
-                    **:heart: {o_health}/:cyclone: {o_stamina}**
+                    **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                     :cyclone: 10 | **{omove1_text}** | _1_
                     :cyclone: 30 | **{omove2_text}** | _2_
                     :cyclone: 80 | **{omove3_text}** | _3_
-                     :cyclone: 20 | **{omove_enhanced_text}** | _4_
+                    :cyclone: 20 | **{omove_enhanced_text}** | _4_
                     :cyclone: 20 | **Enhance {c_card}** | _7_
                     **Defend {c_card}**  :cyclone: 20 | _0_
                     
-                    **{c_card}:** :heart: {c_health}/:cyclone: {c_stamina} _Companion_                 
+                    **{c_card}:** :heart: {c_health}/:cyclone: {c_stamina} _Companion_ :dagger:{c_attack}/:shield:{c_defense}                                                       
                     **{t_card}:** :heart: {t_health}/:cyclone: {t_stamina}   
                     """) 
                     , colour=embed_color_o)
@@ -27508,17 +27506,15 @@ class CrownUnlimited(commands.Cog):
                     companion = showcard(c, c_max_health, c_health, c_max_stamina, c_stamina, c_used_resolve, ctitle, c_used_focus)
                     await private_channel.send(file=companion)
                     embedVar = discord.Embed(title=f"{c_card}, choose your move!", description=textwrap.dedent(f"""\
-                    **:heart: {c_health}/:cyclone: {c_stamina}**
+                    **:heart: {c_health}/:cyclone: {c_stamina} :dagger:{c_attack}/:shield:{c_defense}**
                     :cyclone: 10 | **{cmove1_text}** | _1_
                     :cyclone: 30 | **{cmove2_text}** | _2_
                     :cyclone: 80 | **{cmove3_text}** | _3_
-                     :cyclone: 20 **{cmove_enhanced_text}** | _4_
+                    :cyclone: 20 **{cmove_enhanced_text}** | _4_
                     **Enhance {o_card}** 20 Stamina _press 7_
                     :cyclone: 20 | **Defend {o_card}** | _0_
                     
-                    **{o_card}:** {o_health}/{o_stamina} _Companion_
-                    
-                                    
+                    **{o_card}:** {o_health}/{o_stamina} _Companion_ :dagger:{o_attack}/:shield:{o_defense}                                                      
                     **{t_card}:** :heart: {t_health}/:cyclone: {t_stamina}   
                     """) 
                     , colour=embed_color_o)
@@ -29998,13 +29994,12 @@ class CrownUnlimited(commands.Cog):
                         player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                         await private_channel.send(file=player_1_card)
                         embedVar = discord.Embed(title=f"{o_card}, choose your move!", description=textwrap.dedent(f"""\
-                        **:heart: {o_health}/:cyclone: {o_stamina}**
+                        **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                         :cyclone: 10 | **{omove1_text}** | _1_
                         :cyclone: 30 | **{omove2_text}** | _2_
                         :cyclone: 80 | **{omove3_text}** | _3_
                         :cyclone: 20 | **{omove_enhanced_text}** | _4_
-                        :cyclone: 20 | **Block** | _0_
-                        
+                        :cyclone: 20 | **Block** | _0_                        
                     
                         **{t_card}:** :heart: {t_health}/:cyclone: {t_stamina}
                         """) 
@@ -32198,11 +32193,11 @@ class CrownUnlimited(commands.Cog):
                         player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                         await private_channel.send(file=player_1_card)
                         embedVar = discord.Embed(title=f"{o_card}, choose your move!", description=textwrap.dedent(f"""\
-                        **:heart: {o_health}/:cyclone: {o_stamina}**
+                        **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                         :cyclone: 10 | **{omove1_text}** | _1_
                         :cyclone: 30 | **{omove2_text}** | _2_
                         :cyclone: 80 | **{omove3_text}** | _3_
-                         :cyclone: 20 | **{omove_enhanced_text}** | _4_
+                        :cyclone: 20 | **{omove_enhanced_text}** | _4_
                         :cyclone: 20 | **Block** | _0_
                         
                         **{t_card}:** :heart: {t_health}/:cyclone: {t_stamina}
@@ -34274,11 +34269,11 @@ class CrownUnlimited(commands.Cog):
                     player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                     await private_channel.send(file=player_1_card)
                     embedVar = discord.Embed(title=f"{o_card}, choose your move!", description=textwrap.dedent(f"""\
-                    **:heart: {o_health}/:cyclone: {o_stamina}**
+                    **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                     :cyclone: 10 | **{omove1_text}** | _1_
                     :cyclone: 30 | **{omove2_text}** | _2_
                     :cyclone: 80 | **{omove3_text}** | _3_
-                     :cyclone: 20 | **{omove_enhanced_text}** | _4_
+                    :cyclone: 20 | **{omove_enhanced_text}** | _4_
                     :cyclone: 20 | **Block** | _0_
                 
                     **{t_card}:** :heart: {t_health}/:cyclone: {t_stamina}
@@ -36406,7 +36401,7 @@ class CrownUnlimited(commands.Cog):
                             player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                             await private_channel.send(file=player_1_card)
                             embedVar = discord.Embed(title=f"{o_card}, choose your move!", description=textwrap.dedent(f"""\
-                            **:heart: {o_health}/:cyclone: {o_stamina}**
+                            **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                             :cyclone: 10 | **{omove1_text}** | _1_
                             :cyclone: 30 | **{omove2_text}** | _2_
                             :cyclone: 80 | **{omove3_text}** | _3_
@@ -37004,7 +36999,7 @@ class CrownUnlimited(commands.Cog):
                                 await ctx.send(file=player_2_card)
 
                                 embedVar = discord.Embed(title=f"{t_card}, choose your move!", description=textwrap.dedent(f"""\
-                                **:heart: {t_health}/:cyclone: {t_stamina}**
+                                **:heart: {t_health}/:cyclone: {t_stamina} :dagger:{t_attack}/:shield:{t_defense}**
                                 :cyclone: 10 | **{tmove1_text}** | _1_
                                 :cyclone: 30 | **{tmove2_text}** | _2_
                                 :cyclone: 80 | **{tmove3_text}** | _3_
@@ -38975,7 +38970,7 @@ class CrownUnlimited(commands.Cog):
                             player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                             await private_channel.send(file=player_1_card)
                             embedVar = discord.Embed(title=f"{o_card}, choose your move!", description=textwrap.dedent(f"""\
-                            **:heart: {o_health}/:cyclone: {o_stamina}**
+                            **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                             :cyclone: 10 | **{omove1_text}** | _1_
                             :cyclone: 30 | **{omove2_text}** | _2_
                             :cyclone: 80 | **{omove3_text}** | _3_
@@ -39573,7 +39568,7 @@ class CrownUnlimited(commands.Cog):
                                 await ctx.send(file=player_2_card)
 
                                 embedVar = discord.Embed(title=f"{t_card}, choose your move!", description=textwrap.dedent(f"""\
-                                **:heart: {t_health}/:cyclone: {t_stamina}**
+                                **:heart: {t_health}/:cyclone: {t_stamina} :dagger:{t_attack}/:shield:{t_defense}**
                                 :cyclone: 10 | **{tmove1_text}** | _1_
                                 :cyclone: 30 | **{tmove2_text}** | _2_
                                 :cyclone: 80 | **{tmove3_text}** | _3_
@@ -41544,7 +41539,7 @@ class CrownUnlimited(commands.Cog):
                             player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                             await private_channel.send(file=player_1_card)
                             embedVar = discord.Embed(title=f"{o_card}, choose your move!", description=textwrap.dedent(f"""\
-                            **:heart: {o_health}/:cyclone: {o_stamina}**
+                            **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                             :cyclone: 10 | **{omove1_text}** | _1_
                             :cyclone: 30 | **{omove2_text}** | _2_
                             :cyclone: 80 | **{omove3_text}** | _3_
@@ -42041,7 +42036,7 @@ class CrownUnlimited(commands.Cog):
                                 await ctx.send(file=player_2_card)
 
                                 embedVar = discord.Embed(title=f"{t_card}, choose your move!", description=textwrap.dedent(f"""\
-                                **:heart: {t_health}/:cyclone: {t_stamina}**
+                                **:heart: {t_health}/:cyclone: {t_stamina} :dagger:{t_attack}/:shield:{t_defense}**
                                 :cyclone: 10 | **{tmove1_text}** | _1_
                                 :cyclone: 30 | **{tmove2_text}** | _2_
                                 :cyclone: 80 | **{tmove3_text}** | _3_
@@ -43912,7 +43907,7 @@ class CrownUnlimited(commands.Cog):
                             player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                             await private_channel.send(file=player_1_card)
                             embedVar = discord.Embed(title=f"{o_card}, choose your move!", description=textwrap.dedent(f"""\
-                            **:heart: {o_health}/:cyclone: {o_stamina}**
+                            **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                             :cyclone: 10 | **{omove1_text}** | _1_
                             :cyclone: 30 | **{omove2_text}** | _2_
                             :cyclone: 80 | **{omove3_text}** | _3_
@@ -44409,7 +44404,7 @@ class CrownUnlimited(commands.Cog):
                                 await ctx.send(file=player_2_card)
 
                                 embedVar = discord.Embed(title=f"{t_card}, choose your move!", description=textwrap.dedent(f"""\
-                                **:heart: {t_health}/:cyclone: {t_stamina}**
+                                **:heart: {t_health}/:cyclone: {t_stamina} :dagger:{t_attack}/:shield:{t_defense}**
                                 :cyclone: 10 | **{tmove1_text}** | _1_
                                 :cyclone: 30 | **{tmove2_text}** | _2_
                                 :cyclone: 80 | **{tmove3_text}** | _3_
@@ -46297,7 +46292,7 @@ class CrownUnlimited(commands.Cog):
                             player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                             await private_channel.send(file=player_1_card)
                             embedVar = discord.Embed(title=f"{o_card}, choose your move!", description=textwrap.dedent(f"""\
-                            **:heart: {o_health}/:cyclone: {o_stamina}**
+                            **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                             :cyclone: 10 | **{omove1_text}** | _1_
                             :cyclone: 30 | **{omove2_text}** | _2_
                             :cyclone: 80 | **{omove3_text}** | _3_
@@ -46913,7 +46908,7 @@ class CrownUnlimited(commands.Cog):
                                 player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus)
                                 await ctx.send(file=player_2_card)
                                 embedVar = discord.Embed(title=f"{t_card}, choose your move!", description=textwrap.dedent(f"""\
-                                **:heart: {t_health}/:cyclone: {t_stamina}**
+                                **:heart: {t_health}/:cyclone: {t_stamina} :dagger:{t_attack}/:shield:{t_defense}**
                                 :cyclone: 10 | **{tmove1_text}** | _1_
                                 :cyclone: 30 | **{tmove2_text}** | _2_
                                 :cyclone: 80 | **{tmove3_text}** | _3_
