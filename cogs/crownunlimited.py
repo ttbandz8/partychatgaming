@@ -1989,7 +1989,7 @@ class CrownUnlimited(commands.Cog):
                                         o_attack = round(o_attack - ((dmg['DMG']/100) * o_attack))
                                         o_defense = round(o_defense - ((dmg['DMG']/100) * o_defense))
                                     elif enh_type == 'WAVE':
-                                        o_health = round(t_health - dmg['DMG'])
+                                        o_health = round(o_health - dmg['DMG'])
                                     elif enh_type == 'BLAST':
                                         o_health = round(o_health - dmg['DMG'])
                                     elif enh_type == 'CREATION':
@@ -33204,7 +33204,7 @@ class CrownUnlimited(commands.Cog):
                                         o_attack = round(o_attack - ((dmg['DMG']/100) * o_attack))
                                         o_defense = round(o_defense - ((dmg['DMG']/100) * o_defense))
                                     elif enh_type == 'WAVE':
-                                        o_health = round(t_health - dmg['DMG'])
+                                        o_health = round(o_health - dmg['DMG'])
                                     elif enh_type == 'BLAST':
                                         o_health = round(o_health - dmg['DMG'])
                                     elif enh_type == 'CREATION':
@@ -48786,8 +48786,10 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, vul, accura
             if turn == 0:
                 enhanced = ap
             else:
-                n = round((ap / turn) * .55)
+                n = ap / turn
                 rand = round(random.randint(1, 100))
+                if n <= 0:
+                    n = 30
                 if turn % 10 == 0:
                     n = ap * .25
                 if turn % 15 == 0:
@@ -48799,12 +48801,14 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, vul, accura
             if turn == 0:
                 enhanced = ap
             else:
-                enhanced = round((ap * turn) * .55)
+                enhanced = round((ap * turn) * .60)
         elif enh_type == 'CREATION':
             if turn == 0:
                 enhanced = ap
             else:
-                n = round((ap / turn) * .55)
+                n = ap / turn
+                if n <= 0:
+                    n = 30
                 rand = round(random.randint(1, 100))
                 if turn % 10 == 0:
                     n = ap * .15
