@@ -25,15 +25,15 @@ class Universe(commands.Cog):
     async def cog_check(self, ctx):
         return await main.validate_user(ctx)
 
-    @commands.command()
-    async def newuniverse(self, ctx, path, *args):
-        if ctx.author.guild_permissions.administrator == True:
-            universe = " ".join([*args])
-            universe_query = {'TITLE': str(universe), 'PATH': str(path)}
-            added = db.createUniverse(data.newUniverse(universe_query))
-            await ctx.send(added)
-        else:
-            print(m.ADMIN_ONLY_COMMAND)
+    # @commands.command()
+    # async def newuniverse(self, ctx, path, *args):
+    #     if ctx.author.guild_permissions.administrator == True:
+    #         universe = " ".join([*args])
+    #         universe_query = {'TITLE': str(universe), 'PATH': str(path)}
+    #         added = db.createUniverse(data.newUniverse(universe_query))
+    #         await ctx.send(added)
+    #     else:
+    #         print(m.ADMIN_ONLY_COMMAND)
 
     @commands.command()
     async def viewUniverse(self, ctx, *args):
