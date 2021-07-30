@@ -43,6 +43,7 @@ class Titles(commands.Cog):
         vault = db.altQueryVault(vault_query)
         shop = db.queryShopTitles()
         titles = []
+        rift_universes = ['Crown Rift Slayers', 'Crown Rift Awakening', 'Crown Rift Madness']
         riftShopOpen = False
         check_title = db.queryTitle({'TITLE' : str(title_name)})
         if check_title:
@@ -63,7 +64,10 @@ class Titles(commands.Cog):
                     if uni['PREREQUISITE'] in user['CROWN_TALES'] and not uni['TIER'] == 9:
                         available_universes.append(uni['TITLE'])
             if check_title['UNIVERSE'] not in available_universes:
-                await ctx.send("You cannot purchase titles from Universes you haven't unlocked or Rifts yet completed.")
+                if check_title['UNIVERSE'] in rift_universes:
+                    await ctx.send("You are not connected to the rift...")
+                else:
+                    await ctx.send("You cannot purchase titles from Universes you haven't unlocked or Rifts yet completed.")
                 return
 
         currentBalance = vault['BALANCE']
