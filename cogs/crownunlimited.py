@@ -977,7 +977,7 @@ class CrownUnlimited(commands.Cog):
                         elif o_universe == "Black Clover":
                             embedVar = discord.Embed(title=f"Mana Zone! {o_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            o_stamina = 110
+                            o_stamina = 160
                         
                         elif o_universe == "Death Note":
                             if turn_total >= 24:
@@ -1167,8 +1167,10 @@ class CrownUnlimited(commands.Cog):
 
                                     o_stamina = o_stamina + o_resolve
                                     o_health = o_health + o_resolve_health
-                                    o_attack = round(o_attack + (2 * o_resolve_attack))
+                                    o_attack = round((o_attack + (2 * o_resolve_attack))* 2)
                                     o_defense = round(o_defense - o_resolve_defense)
+                                    if o_defense >= 30:
+                                        o_defense = 30
                                     o_used_resolve = True 
                                     o_pet_used=False
                                     embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
@@ -1629,7 +1631,7 @@ class CrownUnlimited(commands.Cog):
                         elif t_universe == "Black Clover":
                             embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            t_stamina = 110
+                            t_stamina = 160
                             
                         elif t_universe == "Death Note":
                             if turn_total >= 24:
@@ -1810,8 +1812,10 @@ class CrownUnlimited(commands.Cog):
 
                                     t_stamina = t_stamina + t_resolve
                                     t_health = t_health + t_resolve_health
-                                    t_attack = round(t_attack + (2 * t_resolve_attack))
+                                    t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                     t_defense = round(t_defense - t_resolve_defense)
+                                    if t_defense >= 30:
+                                        t_defense = 30
                                     t_used_resolve=True
 
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
@@ -3495,7 +3499,7 @@ class CrownUnlimited(commands.Cog):
                         elif o_universe == "Black Clover":
                             embedVar = discord.Embed(title=f"Mana Zone! {o_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            o_stamina = 110
+                            o_stamina = 160
                         elif o_universe == "Death Note":
                             if turn_total >= 24:
                                 embedVar = discord.Embed(title=f"{t_card.upper()}'s' Scheduled Death", description=f"`{o_card} says:`\n'Delete'", colour=0xe91e63)
@@ -3634,8 +3638,10 @@ class CrownUnlimited(commands.Cog):
 
                                         o_stamina = o_stamina + o_resolve
                                         o_health = o_health + o_resolve_health
-                                        o_attack = round(o_attack + (2 * o_resolve_attack))
+                                        o_attack = round((o_attack + (2 * o_resolve_attack))* 2)
                                         o_defense = round(o_defense - o_resolve_defense)
+                                        if o_defense >= 30:
+                                            o_defense = 30
                                         o_used_resolve = True 
                                         o_pet_used=False
                                         embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
@@ -4305,7 +4311,7 @@ class CrownUnlimited(commands.Cog):
                         elif t_universe == "Black Clover":
                             embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            t_stamina = 110
+                            t_stamina = 160
                             
                         elif t_universe == "Death Note":
                             if turn_total >= 24:
@@ -4490,8 +4496,10 @@ class CrownUnlimited(commands.Cog):
 
                                     t_stamina = t_stamina + t_resolve
                                     t_health = t_health + t_resolve_health
-                                    t_attack = round(t_attack + (2 * t_resolve_attack))
+                                    t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                     t_defense = round(t_defense - t_resolve_defense)
+                                    if t_defense >= 30:
+                                        t_defense = 30
                                     t_used_resolve=True
 
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
@@ -4970,7 +4978,7 @@ class CrownUnlimited(commands.Cog):
                         elif c_universe == "Black Clover":
                             embedVar = discord.Embed(title=f"Mana Zone! {c_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            c_stamina = 110
+                            c_stamina = 160
                         
                         elif c_universe == "Death Note":
                             if turn_total >= 24:
@@ -5246,8 +5254,10 @@ class CrownUnlimited(commands.Cog):
 
                                     c_stamina = c_stamina + c_resolve
                                     c_health = c_health + c_resolve_health
-                                    c_attack = round(c_attack + (2 * c_resolve_attack))
+                                    c_attack = round((c_attack + (2 * c_resolve_attack))* 2)
                                     c_defense = round(c_defense - c_resolve_defense)
+                                    if c_defense >= 30:
+                                        c_defense = 30
                                     c_used_resolve = True 
                                     c_pet_used=False
                                     embedVar = discord.Embed(title=f"{c_card.upper()} STRENGTHENED RESOLVE", description=f"`{c_card} says:`\n{c_resolve_description}", colour=0xe91e63)
@@ -5799,7 +5809,7 @@ class CrownUnlimited(commands.Cog):
                         elif t_universe == "Black Clover":
                             embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            t_stamina = 110
+                            t_stamina = 160
                         
                         elif t_universe == "Death Note":
                             if turn_total >= 24:
@@ -5984,8 +5994,10 @@ class CrownUnlimited(commands.Cog):
 
                                     t_stamina = t_stamina + t_resolve
                                     t_health = t_health + t_resolve_health
-                                    t_attack = round(t_attack + (2 * t_resolve_attack))
+                                    t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                     t_defense = round(t_defense - t_resolve_defense)
+                                    if t_defense >= 30:
+                                        t_defense = 30
                                     t_used_resolve=True
 
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
@@ -7807,7 +7819,7 @@ class CrownUnlimited(commands.Cog):
                         elif o_universe == "Black Clover":
                             embedVar = discord.Embed(title=f"Mana Zone! {o_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            o_stamina = 110
+                            o_stamina = 160
                         elif o_universe == "Death Note":
                             if turn_total >= 24:
                                 embedVar = discord.Embed(title=f"{t_card.upper()}'s' Scheduled Death", description=f"`{o_card} says:`\n'Delete'", colour=0xe91e63)
@@ -7951,8 +7963,10 @@ class CrownUnlimited(commands.Cog):
 
                                         o_stamina = o_stamina + o_resolve
                                         o_health = o_health + o_resolve_health
-                                        o_attack = round(o_attack + (2 * o_resolve_attack))
+                                        o_attack = round((o_attack + (2 * o_resolve_attack))* 2)
                                         o_defense = round(o_defense - o_resolve_defense)
+                                        if o_defense >= 30:
+                                            o_defense = 30
                                         o_used_resolve = True 
                                         o_pet_used=False
                                         embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
@@ -8622,7 +8636,7 @@ class CrownUnlimited(commands.Cog):
                         elif t_universe == "Black Clover":
                             embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            t_stamina = 110
+                            t_stamina = 160
                             
                         elif t_universe == "Death Note":
                             if turn_total >= 24:
@@ -8823,8 +8837,10 @@ class CrownUnlimited(commands.Cog):
 
                                     t_stamina = t_stamina + t_resolve
                                     t_health = t_health + t_resolve_health
-                                    t_attack = round(t_attack + (2 * t_resolve_attack))
+                                    t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                     t_defense = round(t_defense - t_resolve_defense)
+                                    if t_defense >= 30:
+                                        t_defense = 30
                                     t_used_resolve=True
                                     t_pet_used =False
 
@@ -9506,7 +9522,7 @@ class CrownUnlimited(commands.Cog):
                         elif c_universe == "Black Clover":
                             embedVar = discord.Embed(title=f"Mana Zone! {c_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            c_stamina = 110
+                            c_stamina = 160
                         
                         elif c_universe == "Death Note":
                             if turn_total >= 24:
@@ -9788,8 +9804,10 @@ class CrownUnlimited(commands.Cog):
 
                                     c_stamina = c_stamina + c_resolve
                                     c_health = c_health + c_resolve_health
-                                    c_attack = round(c_attack + (2 * c_resolve_attack))
+                                    c_attack = round((c_attack + (2 * c_resolve_attack))* 2)
                                     c_defense = round(c_defense - c_resolve_defense)
+                                    if c_defense >= 30:
+                                        c_defense = 30
                                     c_used_resolve = True 
                                     c_pet_used=False
                                     embedVar = discord.Embed(title=f"{c_card.upper()} STRENGTHENED RESOLVE", description=f"`{c_card} says:`\n{c_resolve_description}", colour=0xe91e63)
@@ -10342,7 +10360,7 @@ class CrownUnlimited(commands.Cog):
                         elif t_universe == "Black Clover":
                             embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            t_stamina = 110
+                            t_stamina = 160
                         
                         
                         elif t_universe == "Death Note":
@@ -10542,8 +10560,10 @@ class CrownUnlimited(commands.Cog):
 
                                     t_stamina = t_stamina + t_resolve
                                     t_health = t_health + t_resolve_health
-                                    t_attack = round(t_attack + (2 * t_resolve_attack))
+                                    t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                     t_defense = round(t_defense - t_resolve_defense)
+                                    if t_defense >= 30:
+                                        t_defense = 30
                                     t_used_resolve=True
                                     t_pet_used =False
 
@@ -12569,7 +12589,7 @@ class CrownUnlimited(commands.Cog):
                     elif o_universe == "Black Clover":
                         embedVar = discord.Embed(title=f"Mana Zone! {o_card} Increased Stamina!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
-                        o_stamina = 110
+                        o_stamina = 160
                     elif o_universe == "Death Note":
                         if turn_total >= 24:
                             embedVar = discord.Embed(title=f"{t_card.upper()}'s' Scheduled Death", description=f"`{o_card} says:`\n'Delete'", colour=0xe91e63)
@@ -12713,8 +12733,10 @@ class CrownUnlimited(commands.Cog):
 
                                     o_stamina = o_stamina + o_resolve
                                     o_health = o_health + o_resolve_health
-                                    o_attack = round(o_attack + (2 * o_resolve_attack))
+                                    o_attack = round((o_attack + (2 * o_resolve_attack))* 2)
                                     o_defense = round(o_defense - o_resolve_defense)
+                                    if o_defense >= 30:
+                                        o_defense = 30
                                     o_used_resolve = True 
                                     o_pet_used=False
                                     embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
@@ -13402,7 +13424,7 @@ class CrownUnlimited(commands.Cog):
                     elif t_universe == "Black Clover":
                         embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
-                        t_stamina = 110                  
+                        t_stamina = 160                  
                     
                     elif t_universe == "Death Note":
                         if turn_total >= 24:
@@ -13605,8 +13627,10 @@ class CrownUnlimited(commands.Cog):
 
                                 t_stamina = t_stamina + t_resolve
                                 t_health = t_health + t_resolve_health
-                                t_attack = round(t_attack + (2 * t_resolve_attack))
+                                t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                 t_defense = round(t_defense - t_resolve_defense)
+                                if t_defense >= 30:
+                                    t_defense = 30
                                 t_used_resolve=True
                                 t_pet_used =False
 
@@ -14287,7 +14311,7 @@ class CrownUnlimited(commands.Cog):
                     elif c_universe == "Black Clover":
                         embedVar = discord.Embed(title=f"Mana Zone! {c_card} Increased Stamina!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
-                        c_stamina = 110
+                        c_stamina = 160
                     
                     elif c_universe == "Death Note":
                         if turn_total >= 24:
@@ -14580,8 +14604,10 @@ class CrownUnlimited(commands.Cog):
 
                                 c_stamina = c_stamina + c_resolve
                                 c_health = c_health + c_resolve_health
-                                c_attack = round(c_attack + (2 * c_resolve_attack))
+                                c_attack = round((c_attack + (2 * c_resolve_attack))* 2)
                                 c_defense = round(c_defense - c_resolve_defense)
+                                if c_defense >= 30:
+                                    c_defense = 30
                                 c_used_resolve = True 
                                 c_pet_used=False
                                 embedVar = discord.Embed(title=f"{c_card.upper()} STRENGTHENED RESOLVE", description=f"`{c_card} says:`\n{c_resolve_description}", colour=0xe91e63)
@@ -15153,7 +15179,7 @@ class CrownUnlimited(commands.Cog):
                     elif t_universe == "Black Clover":
                         embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
-                        t_stamina = 110
+                        t_stamina = 160
                     
                     
                     elif t_universe == "Death Note":
@@ -15355,8 +15381,10 @@ class CrownUnlimited(commands.Cog):
 
                                 t_stamina = t_stamina + t_resolve
                                 t_health = t_health + t_resolve_health
-                                t_attack = round(t_attack + (2 * t_resolve_attack))
+                                t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                 t_defense = round(t_defense - t_resolve_defense)
+                                if t_defense >= 30:
+                                    t_defense = 30
                                 t_used_resolve=True
                                 t_pet_used =False
 
@@ -17302,7 +17330,7 @@ class CrownUnlimited(commands.Cog):
                         elif o_universe == "Black Clover":
                             embedVar = discord.Embed(title=f"Mana Zone! {o_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            o_stamina = 110
+                            o_stamina = 160
                         elif o_universe == "Death Note":
                             if turn_total >= 24:
                                 embedVar = discord.Embed(title=f"{t_card.upper()}'s' Scheduled Death", description=f"`{o_card} says:`\n'Delete'", colour=0xe91e63)
@@ -17446,8 +17474,10 @@ class CrownUnlimited(commands.Cog):
 
                                         o_stamina = o_stamina + o_resolve
                                         o_health = o_health + o_resolve_health
-                                        o_attack = round(o_attack + (2 * o_resolve_attack))
+                                        o_attack = round((o_attack + (2 * o_resolve_attack))* 2)
                                         o_defense = round(o_defense - o_resolve_defense)
+                                        if o_defense >= 30:
+                                            o_defense = 30
                                         o_used_resolve = True 
                                         o_pet_used=False
                                         embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
@@ -18009,7 +18039,7 @@ class CrownUnlimited(commands.Cog):
                         elif t_universe == "Black Clover":
                             embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            t_stamina = 110
+                            t_stamina = 160
                             
                         elif t_universe == "Death Note":
                             if turn_total >= 24:
@@ -18208,8 +18238,10 @@ class CrownUnlimited(commands.Cog):
 
                                     t_stamina = t_stamina + t_resolve
                                     t_health = t_health + t_resolve_health
-                                    t_attack = round(t_attack + (2 * t_resolve_attack))
+                                    t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                     t_defense = round(t_defense - t_resolve_defense)
+                                    if t_defense >= 30:
+                                        t_defense = 30
                                     t_used_resolve=True
                                     t_pet_used =False
 
@@ -18694,7 +18726,7 @@ class CrownUnlimited(commands.Cog):
                         elif c_universe == "Black Clover":
                             embedVar = discord.Embed(title=f"Mana Zone! {c_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            c_stamina = 110
+                            c_stamina = 160
                             
                         elif c_universe == "Death Note":
                             if turn_total >= 24:
@@ -18838,8 +18870,10 @@ class CrownUnlimited(commands.Cog):
 
                                         c_stamina = c_stamina + c_resolve
                                         c_health = c_health + c_resolve_health
-                                        c_attack = round(c_attack + (2 * c_resolve_attack))
+                                        c_attack = round((c_attack + (2 * c_resolve_attack))* 2)
                                         c_defense = round(c_defense - c_resolve_defense)
+                                        if c_defense >= 30:
+                                            c_defense = 30
                                         c_used_resolve = True 
                                         c_pet_used=False
                                         embedVar = discord.Embed(title=f"{c_card.upper()} STRENGTHENED RESOLVE", description=f"`{c_card} says:`\n{c_resolve_description}", colour=0xe91e63)
@@ -19400,7 +19434,7 @@ class CrownUnlimited(commands.Cog):
                         elif t_universe == "Black Clover":
                             embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            t_stamina = 110
+                            t_stamina = 160
                         
                         
                         elif t_universe == "Death Note":
@@ -19600,8 +19634,10 @@ class CrownUnlimited(commands.Cog):
 
                                     t_stamina = t_stamina + t_resolve
                                     t_health = t_health + t_resolve_health
-                                    t_attack = round(t_attack + (2 * t_resolve_attack))
+                                    t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                     t_defense = round(t_defense - t_resolve_defense)
+                                    if t_defense >= 30:
+                                        t_defense = 30
                                     t_used_resolve=True
                                     t_pet_used =False
 
@@ -21417,7 +21453,7 @@ class CrownUnlimited(commands.Cog):
                         elif o_universe == "Black Clover":
                             embedVar = discord.Embed(title=f"Mana Zone! {o_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            o_stamina = 110
+                            o_stamina = 160
                         elif o_universe == "Death Note":
                             if turn_total >= 24:
                                 embedVar = discord.Embed(title=f"{t_card.upper()}'s' Scheduled Death", description=f"`{o_card} says:`\n'Delete'", colour=0xe91e63)
@@ -21562,8 +21598,10 @@ class CrownUnlimited(commands.Cog):
 
                                         o_stamina = o_stamina + o_resolve
                                         o_health = o_health + o_resolve_health
-                                        o_attack = round(o_attack + (2 * o_resolve_attack))
+                                        o_attack = round((o_attack + (2 * o_resolve_attack))* 2)
                                         o_defense = round(o_defense - o_resolve_defense)
+                                        if o_defense >= 30:
+                                            o_defense = 30
                                         o_used_resolve = True 
                                         o_pet_used=False
                                         embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
@@ -22125,7 +22163,7 @@ class CrownUnlimited(commands.Cog):
                         elif t_universe == "Black Clover":
                             embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            t_stamina = 110
+                            t_stamina = 160
                             
                         elif t_universe == "Death Note":
                             if turn_total >= 24:
@@ -22326,8 +22364,10 @@ class CrownUnlimited(commands.Cog):
 
                                     t_stamina = t_stamina + t_resolve
                                     t_health = t_health + t_resolve_health
-                                    t_attack = round(t_attack + (2 * t_resolve_attack))
+                                    t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                     t_defense = round(t_defense - t_resolve_defense)
+                                    if t_defense >= 30:
+                                        t_defense = 30
                                     t_used_resolve=True
                                     t_pet_used =False
 
@@ -23010,7 +23050,7 @@ class CrownUnlimited(commands.Cog):
                         elif c_universe == "Black Clover":
                             embedVar = discord.Embed(title=f"Mana Zone! {c_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            c_stamina = 110
+                            c_stamina = 160
                             
                         elif c_universe == "Death Note":
                             if turn_total >= 24:
@@ -23154,8 +23194,10 @@ class CrownUnlimited(commands.Cog):
 
                                         c_stamina = c_stamina + c_resolve
                                         c_health = c_health + c_resolve_health
-                                        c_attack = round(c_attack + (2 * c_resolve_attack))
+                                        c_attack = round((c_attack + (2 * c_resolve_attack))* 2)
                                         c_defense = round(c_defense - c_resolve_defense)
+                                        if c_defense >= 30:
+                                            c_defense = 30
                                         c_used_resolve = True 
                                         c_pet_used=False
                                         embedVar = discord.Embed(title=f"{c_card.upper()} STRENGTHENED RESOLVE", description=f"`{c_card} says:`\n{c_resolve_description}", colour=0xe91e63)
@@ -23716,7 +23758,7 @@ class CrownUnlimited(commands.Cog):
                         elif t_universe == "Black Clover":
                             embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            t_stamina = 110
+                            t_stamina = 160
                         
                         
                         elif t_universe == "Death Note":
@@ -23917,8 +23959,10 @@ class CrownUnlimited(commands.Cog):
 
                                     t_stamina = t_stamina + t_resolve
                                     t_health = t_health + t_resolve_health
-                                    t_attack = round(t_attack + (2 * t_resolve_attack))
+                                    t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                     t_defense = round(t_defense - t_resolve_defense)
+                                    if t_defense >= 30:
+                                        t_defense = 30
                                     t_used_resolve=True
                                     t_pet_used =False
 
@@ -25926,7 +25970,7 @@ class CrownUnlimited(commands.Cog):
                     elif o_universe == "Black Clover":
                         embedVar = discord.Embed(title=f"Mana Zone! {o_card} Increased Stamina!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
-                        o_stamina = 110
+                        o_stamina = 160
                     elif o_universe == "Death Note":
                         if turn_total >= 24:
                             embedVar = discord.Embed(title=f"{t_card.upper()}'s' Scheduled Death", description=f"`{o_card} says:`\n'Delete'", colour=0xe91e63)
@@ -26071,8 +26115,10 @@ class CrownUnlimited(commands.Cog):
 
                                     o_stamina = o_stamina + o_resolve
                                     o_health = o_health + o_resolve_health
-                                    o_attack = round(o_attack + (2 * o_resolve_attack))
+                                    o_attack = round((o_attack + (2 * o_resolve_attack))* 2)
                                     o_defense = round(o_defense - o_resolve_defense)
+                                    if o_defense >= 30:
+                                        o_defense = 30
                                     o_used_resolve = True 
                                     o_pet_used=False
                                     embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
@@ -26653,7 +26699,7 @@ class CrownUnlimited(commands.Cog):
                     elif t_universe == "Black Clover":
                         embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
-                        t_stamina = 110                  
+                        t_stamina = 160                  
                     
                     elif t_universe == "Death Note":
                         if turn_total >= 24:
@@ -26856,8 +26902,10 @@ class CrownUnlimited(commands.Cog):
 
                                 t_stamina = t_stamina + t_resolve
                                 t_health = t_health + t_resolve_health
-                                t_attack = round(t_attack + (2 * t_resolve_attack))
+                                t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                 t_defense = round(t_defense - t_resolve_defense)
+                                if t_defense >= 30:
+                                    t_defense = 30
                                 t_used_resolve=True
                                 t_pet_used =False
 
@@ -27538,7 +27586,7 @@ class CrownUnlimited(commands.Cog):
                     elif c_universe == "Black Clover":
                         embedVar = discord.Embed(title=f"Mana Zone! {c_card} Increased Stamina!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
-                        c_stamina = 110
+                        c_stamina = 160
                         
                     elif c_universe == "Death Note":
                         if turn_total >= 24:
@@ -27682,8 +27730,10 @@ class CrownUnlimited(commands.Cog):
 
                                     c_stamina = c_stamina + c_resolve
                                     c_health = c_health + c_resolve_health
-                                    c_attack = round(c_attack + (2 * c_resolve_attack))
+                                    c_attack = round((c_attack + (2 * c_resolve_attack))* 2)
                                     c_defense = round(c_defense - c_resolve_defense)
+                                    if c_defense >= 30:
+                                        c_defense = 30
                                     c_used_resolve = True 
                                     c_pet_used=False
                                     embedVar = discord.Embed(title=f"{c_card.upper()} STRENGTHENED RESOLVE", description=f"`{c_card} says:`\n{c_resolve_description}", colour=0xe91e63)
@@ -28263,7 +28313,7 @@ class CrownUnlimited(commands.Cog):
                     elif t_universe == "Black Clover":
                         embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
-                        t_stamina = 110
+                        t_stamina = 160
                     
                     
                     elif t_universe == "Death Note":
@@ -28465,8 +28515,10 @@ class CrownUnlimited(commands.Cog):
 
                                 t_stamina = t_stamina + t_resolve
                                 t_health = t_health + t_resolve_health
-                                t_attack = round(t_attack + (2 * t_resolve_attack))
+                                t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                 t_defense = round(t_defense - t_resolve_defense)
+                                if t_defense >= 30:
+                                    t_defense = 30
                                 t_used_resolve=True
                                 t_pet_used =False
 
@@ -30032,7 +30084,7 @@ class CrownUnlimited(commands.Cog):
                         elif o_universe == "Black Clover":
                             embedVar = discord.Embed(title=f"Mana Zone! {o_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            o_stamina = 110
+                            o_stamina = 160
                         elif o_universe == "Death Note":
                             if turn_total >= 24:
                                 embedVar = discord.Embed(title=f"{t_card.upper()}'s' Scheduled Death", description=f"`{o_card} says:`\n'Delete'", colour=0xe91e63)
@@ -30175,8 +30227,10 @@ class CrownUnlimited(commands.Cog):
 
                                         o_stamina = o_stamina + o_resolve
                                         o_health = o_health + o_resolve_health
-                                        o_attack = round(o_attack + (2 * o_resolve_attack))
+                                        o_attack = round((o_attack + (2 * o_resolve_attack))* 2)
                                         o_defense = round(o_defense - o_resolve_defense)
+                                        if o_defense >= 30:
+                                            o_defense = 30
                                         o_used_resolve = True 
                                         o_pet_used=False
                                         embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
@@ -30643,7 +30697,7 @@ class CrownUnlimited(commands.Cog):
                         elif t_universe == "Black Clover":
                             embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            t_stamina = 110
+                            t_stamina = 160
                             
                         elif t_universe == "Death Note":
                             if turn_total >= 24:
@@ -30833,8 +30887,10 @@ class CrownUnlimited(commands.Cog):
 
                                     t_stamina = t_stamina + t_resolve
                                     t_health = t_health + t_resolve_health
-                                    t_attack = round(t_attack + (2 * t_resolve_attack))
+                                    t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                     t_defense = round(t_defense - t_resolve_defense)
+                                    if t_defense >= 30:
+                                        t_defense = 30
                                     t_used_resolve=True
                                     t_pet_used =False
 
@@ -32235,7 +32291,7 @@ class CrownUnlimited(commands.Cog):
                         elif o_universe == "Black Clover":
                             embedVar = discord.Embed(title=f"Mana Zone! {o_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            o_stamina = 110
+                            o_stamina = 160
                         
                         elif o_universe == "Death Note":
                             if turn_total >= 24:
@@ -32382,8 +32438,10 @@ class CrownUnlimited(commands.Cog):
 
                                         o_stamina = o_stamina + o_resolve
                                         o_health = o_health + o_resolve_health
-                                        o_attack = round(o_attack + (2 * o_resolve_attack))
+                                        o_attack = round((o_attack + (2 * o_resolve_attack))* 2)
                                         o_defense = round(o_defense - o_resolve_defense)
+                                        if o_defense >= 30:
+                                            o_defense = 30
                                         o_used_resolve = True 
                                         o_pet_used=False
                                         embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
@@ -32850,7 +32908,7 @@ class CrownUnlimited(commands.Cog):
                         elif t_universe == "Black Clover":
                             embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            t_stamina = 110
+                            t_stamina = 160
                             
                         elif t_universe == "Death Note":
                             if turn_total >= 24:
@@ -33025,8 +33083,10 @@ class CrownUnlimited(commands.Cog):
 
                                     t_stamina = t_stamina + t_resolve
                                     t_health = t_health + t_resolve_health
-                                    t_attack = round(t_attack + (2 * t_resolve_attack))
+                                    t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                     t_defense = round(t_defense - t_resolve_defense)
+                                    if t_defense >= 30:
+                                        t_defense = 30
                                     t_used_resolve=True
 
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
@@ -34320,7 +34380,7 @@ class CrownUnlimited(commands.Cog):
                     elif o_universe == "Black Clover":
                         embedVar = discord.Embed(title=f"Mana Zone! {o_card} Increased Stamina!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
-                        o_stamina = 110
+                        o_stamina = 160
                         
                     elif o_universe == "Death Note":
                         if turn_total >= 24:
@@ -34461,8 +34521,10 @@ class CrownUnlimited(commands.Cog):
 
                                     o_stamina = o_stamina + o_resolve
                                     o_health = o_health + o_resolve_health
-                                    o_attack = round(o_attack + (2 * o_resolve_attack))
+                                    o_attack = round((o_attack + (2 * o_resolve_attack))* 2)
                                     o_defense = round(o_defense - o_resolve_defense)
+                                    if o_defense >= 30:
+                                        o_defense = 30
                                     o_used_resolve = True 
                                     o_pet_used=False
                                     embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
@@ -34944,7 +35006,7 @@ class CrownUnlimited(commands.Cog):
                     elif t_universe == "Black Clover":
                         embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
-                        t_stamina = 110
+                        t_stamina = 160
                         
                     elif t_universe == "Death Note":
                         if turn_total >= 24:
@@ -35135,8 +35197,10 @@ class CrownUnlimited(commands.Cog):
 
                                 t_stamina = t_stamina + t_resolve
                                 t_health = t_health + t_resolve_health
-                                t_attack = round(t_attack + (2 * t_resolve_attack))
+                                t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                 t_defense = round(t_defense - t_resolve_defense)
+                                if t_defense >= 30:
+                                    t_defense = 30
                                 t_used_resolve=True
                                 t_pet_used =False
 
@@ -36459,7 +36523,7 @@ class CrownUnlimited(commands.Cog):
                             elif o_universe == "Black Clover":
                                 embedVar = discord.Embed(title=f"Mana Zone! {o_card} Increased Stamina!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
-                                o_stamina = 110
+                                o_stamina = 160
                                 
                             elif o_universe == "Death Note":
                                 if turn_total >= 24:
@@ -36595,8 +36659,10 @@ class CrownUnlimited(commands.Cog):
 
                                             o_stamina = o_stamina + o_resolve
                                             o_health = o_health + o_resolve_health
-                                            o_attack = round(o_attack + (2 * o_resolve_attack))
+                                            o_attack = round((o_attack + (2 * o_resolve_attack))* 2)
                                             o_defense = round(o_defense - o_resolve_defense)
+                                            if o_defense >= 30:
+                                                o_defense = 30
                                             o_used_resolve = True 
                                             o_pet_used=False
                                             embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
@@ -37058,7 +37124,7 @@ class CrownUnlimited(commands.Cog):
                             elif t_universe == "Black Clover":
                                 embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
-                                t_stamina = 110
+                                t_stamina = 160
                             elif t_universe == "Death Note":
                                 if turn_total >= 24:
                                     embedVar = discord.Embed(title=f"{o_card.upper()}'s' Scheduled Death", description=f"`{t_card} says:`\n'Delete'", colour=0xe91e63)
@@ -37198,8 +37264,10 @@ class CrownUnlimited(commands.Cog):
 
                                                 t_stamina = t_stamina + t_resolve
                                                 t_health = t_health + t_resolve_health
-                                                t_attack = round(t_attack + (2 * t_resolve_attack))
+                                                t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                                 t_defense = round(t_defense - t_resolve_defense)
+                                                if t_defense >= 30:
+                                                    t_defense = 30
                                                 t_used_resolve=True
                                                 t_pet_used =False
 
@@ -37705,8 +37773,10 @@ class CrownUnlimited(commands.Cog):
 
                                             t_stamina = t_stamina + t_resolve
                                             t_health = t_health + t_resolve_health
-                                            t_attack = round(t_attack + (2 * t_resolve_attack))
+                                            t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                             t_defense = round(t_defense - t_resolve_defense)
+                                            if t_defense >= 30:
+                                                t_defense = 30
                                             t_used_resolve=True
 
                                             embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
@@ -39034,7 +39104,7 @@ class CrownUnlimited(commands.Cog):
                             elif o_universe == "Black Clover":
                                 embedVar = discord.Embed(title=f"Mana Zone! {o_card} Increased Stamina!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
-                                o_stamina = 110
+                                o_stamina = 160
                                 
                             elif o_universe == "Death Note":
                                 if turn_total >= 24:
@@ -39170,8 +39240,10 @@ class CrownUnlimited(commands.Cog):
 
                                             o_stamina = o_stamina + o_resolve
                                             o_health = o_health + o_resolve_health
-                                            o_attack = round(o_attack + (2 * o_resolve_attack))
+                                            o_attack = round((o_attack + (2 * o_resolve_attack))* 2)
                                             o_defense = round(o_defense - o_resolve_defense)
+                                            if o_defense >= 30:
+                                                o_defense = 30
                                             o_used_resolve = True 
                                             o_pet_used=False
                                             embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
@@ -39633,7 +39705,7 @@ class CrownUnlimited(commands.Cog):
                             elif t_universe == "Black Clover":
                                 embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
-                                t_stamina = 110
+                                t_stamina = 160
                             elif t_universe == "Death Note":
                                 if turn_total >= 24:
                                     embedVar = discord.Embed(title=f"{o_card.upper()}'s' Scheduled Death", description=f"`{t_card} says:`\n'Delete'", colour=0xe91e63)
@@ -39773,8 +39845,10 @@ class CrownUnlimited(commands.Cog):
 
                                                 t_stamina = t_stamina + t_resolve
                                                 t_health = t_health + t_resolve_health
-                                                t_attack = round(t_attack + (2 * t_resolve_attack))
+                                                t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                                 t_defense = round(t_defense - t_resolve_defense)
+                                                if t_defense >= 30:
+                                                    t_defense = 30
                                                 t_used_resolve=True
                                                 t_pet_used =False
 
@@ -40280,8 +40354,10 @@ class CrownUnlimited(commands.Cog):
 
                                             t_stamina = t_stamina + t_resolve
                                             t_health = t_health + t_resolve_health
-                                            t_attack = round(t_attack + (2 * t_resolve_attack))
+                                            t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                             t_defense = round(t_defense - t_resolve_defense)
+                                            if t_defense >= 30:
+                                                t_defense = 30
                                             t_used_resolve=True
 
                                             embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
@@ -41609,7 +41685,7 @@ class CrownUnlimited(commands.Cog):
                             elif o_universe == "Black Clover":
                                 embedVar = discord.Embed(title=f"Mana Zone! {o_card} Increased Stamina!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
-                                o_stamina = 110
+                                o_stamina = 160
                                 
                             elif o_universe == "Death Note":
                                 if turn_total >= 24:
@@ -41744,8 +41820,10 @@ class CrownUnlimited(commands.Cog):
 
                                             o_stamina = o_stamina + o_resolve
                                             o_health = o_health + o_resolve_health
-                                            o_attack = round(o_attack + (2 * o_resolve_attack))
+                                            o_attack = round((o_attack + (2 * o_resolve_attack))* 2)
                                             o_defense = round(o_defense - o_resolve_defense)
+                                            if o_defense >= 30:
+                                                o_defense = 30
                                             o_used_resolve = True 
                                             o_pet_used=False
                                             embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
@@ -42107,7 +42185,7 @@ class CrownUnlimited(commands.Cog):
                             elif t_universe == "Black Clover":
                                 embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
-                                t_stamina = 110
+                                t_stamina = 160
                             elif t_universe == "Death Note":
                                 if turn_total >= 24:
                                     embedVar = discord.Embed(title=f"{o_card.upper()}'s' Scheduled Death", description=f"`{t_card} says:`\n'Delete'", colour=0xe91e63)
@@ -42246,8 +42324,10 @@ class CrownUnlimited(commands.Cog):
 
                                                 t_stamina = t_stamina + t_resolve
                                                 t_health = t_health + t_resolve_health
-                                                t_attack = round(t_attack + (2 * t_resolve_attack))
+                                                t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                                 t_defense = round(t_defense - t_resolve_defense)
+                                                if t_defense >= 30:
+                                                    t_defense = 30
                                                 t_used_resolve=True
                                                 t_pet_used =False
 
@@ -42654,8 +42734,10 @@ class CrownUnlimited(commands.Cog):
 
                                             t_stamina = t_stamina + t_resolve
                                             t_health = t_health + t_resolve_health
-                                            t_attack = round(t_attack + (2 * t_resolve_attack))
+                                            t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                             t_defense = round(t_defense - t_resolve_defense)
+                                            if t_defense >= 30:
+                                                t_defense = 30
                                             t_used_resolve=True
 
                                             embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
@@ -43983,7 +44065,7 @@ class CrownUnlimited(commands.Cog):
                             elif o_universe == "Black Clover":
                                 embedVar = discord.Embed(title=f"Mana Zone! {o_card} Increased Stamina!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
-                                o_stamina = 110
+                                o_stamina = 160
                                 
                             elif o_universe == "Death Note":
                                 if turn_total >= 24:
@@ -44118,8 +44200,10 @@ class CrownUnlimited(commands.Cog):
 
                                             o_stamina = o_stamina + o_resolve
                                             o_health = o_health + o_resolve_health
-                                            o_attack = round(o_attack + (2 * o_resolve_attack))
+                                            o_attack = round((o_attack + (2 * o_resolve_attack))* 2)
                                             o_defense = round(o_defense - o_resolve_defense)
+                                            if o_defense >= 30:
+                                                o_defense = 30
                                             o_used_resolve = True 
                                             o_pet_used=False
                                             embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
@@ -44481,7 +44565,7 @@ class CrownUnlimited(commands.Cog):
                             elif t_universe == "Black Clover":
                                 embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
-                                t_stamina = 110
+                                t_stamina = 160
                             elif t_universe == "Death Note":
                                 if turn_total >= 24:
                                     embedVar = discord.Embed(title=f"{o_card.upper()}'s' Scheduled Death", description=f"`{t_card} says:`\n'Delete'", colour=0xe91e63)
@@ -44620,8 +44704,10 @@ class CrownUnlimited(commands.Cog):
 
                                                 t_stamina = t_stamina + t_resolve
                                                 t_health = t_health + t_resolve_health
-                                                t_attack = round(t_attack + (2 * t_resolve_attack))
+                                                t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                                 t_defense = round(t_defense - t_resolve_defense)
+                                                if t_defense >= 30:
+                                                    t_defense = 30
                                                 t_used_resolve=True
                                                 t_pet_used =False
 
@@ -45028,8 +45114,10 @@ class CrownUnlimited(commands.Cog):
 
                                             t_stamina = t_stamina + t_resolve
                                             t_health = t_health + t_resolve_health
-                                            t_attack = round(t_attack + (2 * t_resolve_attack))
+                                            t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                             t_defense = round(t_defense - t_resolve_defense)
+                                            if t_defense >= 30:
+                                                t_defense = 30
                                             t_used_resolve=True
 
                                             embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
@@ -46373,7 +46461,7 @@ class CrownUnlimited(commands.Cog):
                             elif o_universe == "Black Clover":
                                 embedVar = discord.Embed(title=f"Mana Zone! {o_card} Increased Stamina!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
-                                o_stamina = 110
+                                o_stamina = 160
                                 
                             elif o_universe == "Death Note":
                                 if turn_total >= 24:
@@ -46512,8 +46600,10 @@ class CrownUnlimited(commands.Cog):
 
                                             o_stamina = o_stamina + o_resolve
                                             o_health = o_health + o_resolve_health
-                                            o_attack = round(o_attack + (2 * o_resolve_attack))
+                                            o_attack = round((o_attack + (2 * o_resolve_attack))* 2)
                                             o_defense = round(o_defense - o_resolve_defense)
+                                            if o_defense >= 30:
+                                                o_defense = 30
                                             o_used_resolve = True 
                                             o_pet_used=False
                                             embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
@@ -46987,7 +47077,7 @@ class CrownUnlimited(commands.Cog):
                             elif t_universe == "Black Clover":
                                 embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
-                                t_stamina = 110
+                                t_stamina = 160
                                 
                             elif t_universe == "Death Note":
                                 if turn_total >= 24:
@@ -47131,8 +47221,10 @@ class CrownUnlimited(commands.Cog):
 
                                                 t_stamina = t_stamina + t_resolve
                                                 t_health = t_health + t_resolve_health
-                                                t_attack = round(t_attack + (2 * t_resolve_attack))
+                                                t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                                 t_defense = round(t_defense - t_resolve_defense)
+                                                if t_defense >= 30:
+                                                    t_defense = 30
                                                 t_used_resolve=True
 
                                                 embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
