@@ -33,7 +33,7 @@ traits = [{
 },{
     'NAME': 'Black Clover',
     'EFFECT': 'Mana Zone',
-    'TRAIT': 'Gain 110 Mana on Focus'
+    'TRAIT': 'Gain 160 Mana on Focus'
 },{
     'NAME': 'Fate',
     'EFFECT': 'Command Seal',
@@ -41,7 +41,7 @@ traits = [{
 },{
     'NAME': 'Demon Slayer',
     'EFFECT': 'Total Concentration Constant',
-    'TRAIT': 'At match start, your Max Health is equal to Opponent Max Health. Your health starts at your regular base.'
+    'TRAIT': 'At match start, if your oppponent has greater health, Your health = Opponent Max Health.'
 },{
     'NAME': 'God Of War',
     'EFFECT': 'Ascension',
@@ -53,7 +53,7 @@ traits = [{
 },{
     'NAME': 'One Punch Man',
     'EFFECT': 'Hero Reinforcement',
-    'TRAIT': 'When Opponent Focuses, your Health increases by 50.'
+    'TRAIT': 'When Opponent Focuses, your Max Health increases by 50.'
 },{
     'NAME': 'Solo Leveling',
     'EFFECT': 'Rulers Authority',
