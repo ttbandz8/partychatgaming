@@ -3538,7 +3538,7 @@ class CrownUnlimited(commands.Cog):
                         :cyclone: 20 | **{omove_enhanced_text}** | _4_
                         :cyclone: 20 | **Defend Companion** | _0_
                         
-                        **{c_card}:** :heart: {c_health}/:cyclone: {c_stamina} _Companion_ :dagger:{c_attack}/:shield:{c_defense} 
+                        **{c_card}:** :heart: {c_health}/:cyclone: {c_stamina} _Companion_ 
                         **{t_card}:** :heart: {t_health}/:cyclone: {t_stamina}                     
                         """) 
                         , colour=embed_color_o)
@@ -7854,7 +7854,7 @@ class CrownUnlimited(commands.Cog):
                         :cyclone: 20 | **{omove_enhanced_text}** | _4_
                         :cyclone: 20 | **Defend Companion** | _0_
                         
-                        **{c_card}:** :heart: {c_health}/:cyclone: {c_stamina} _Companion_ :dagger:{c_attack}/:shield:{c_defense} 
+                        **{c_card}:** :heart: {c_health}/:cyclone: {c_stamina} _Companion_ 
                         **{t_card}:** :heart: {t_health}/:cyclone: {t_stamina}                     
                         """) 
                         , colour=embed_color_o)
@@ -12616,7 +12616,7 @@ class CrownUnlimited(commands.Cog):
                     :cyclone: 20 | **{omove_enhanced_text}** | _4_
                     :cyclone: 20 | **Defend Companion** | _0_
                     
-                    **{c_card}:** :heart: {c_health}/:cyclone: {c_stamina} _Companion_ :dagger:{c_attack}/:shield:{c_defense} 
+                    **{c_card}:** :heart: {c_health}/:cyclone: {c_stamina} _Companion_ 
                     **{t_card}:** :heart: {t_health}/:cyclone: {t_stamina}                     
                     """) 
                     , colour=embed_color_o)
@@ -17349,7 +17349,7 @@ class CrownUnlimited(commands.Cog):
                         :cyclone: 20 | **{omove_enhanced_text}** | _4_
                         :cyclone: 20 | **Defend Companion** | _0_
                         
-                        **{c_card}:** :heart: {c_health}/:cyclone: {c_stamina} _Companion_|:dagger:{c_attack}/:shield:{c_defense}
+                        **{c_card}:** :heart: {c_health}/:cyclone: {c_stamina} _Companion_
                         **{t_card}:** :heart: {t_health}/:cyclone: {t_stamina}                     
                         """) 
                         , colour=embed_color_o)
@@ -18743,7 +18743,7 @@ class CrownUnlimited(commands.Cog):
                         **Enhance {o_card}** 20 Stamina _press 7_
                         :cyclone: 20 | **Defend {o_card}** | _0_
                         
-                        **{o_card}:** {o_health}/{o_stamina} _Companion_ :dagger:{o_attack}/:shield:{o_defense}  
+                        **{o_card}:** {o_health}/{o_stamina} _Companion_   
                         **{t_card}:** :heart: {t_health}/:cyclone: {t_stamina}   
                         """) 
                         , colour=embed_color_o)
@@ -21465,7 +21465,7 @@ class CrownUnlimited(commands.Cog):
                         :cyclone: 20 | **Enhance {c_card}** | _7_
                         **Defend {c_card}**  :cyclone: 20 | _0_
                         
-                        **{c_card}:** :heart: {c_health}/:cyclone: {c_stamina} _Companion_|:dagger:{c_attack}/:shield:{c_defense}                
+                        **{c_card}:** :heart: {c_health}/:cyclone: {c_stamina} _Companion_              
                         **{t_card}:** :heart: {t_health}/:cyclone: {t_stamina}   
                         """) 
                         , colour=embed_color_o)
@@ -23059,7 +23059,7 @@ class CrownUnlimited(commands.Cog):
                         **Enhance {o_card}** 20 Stamina _press 7_
                         :cyclone: 20 | **Defend {o_card}** | _0_
                         
-                        **{o_card}:** {o_health}/{o_stamina} _Companion_ :dagger:{o_attack}/:shield:{o_defense}                                     
+                        **{o_card}:** {o_health}/{o_stamina} _Companion_                                      
                         **{t_card}:** :heart: {t_health}/:cyclone: {t_stamina}   
                         """) 
                         , colour=embed_color_o)
@@ -25974,7 +25974,7 @@ class CrownUnlimited(commands.Cog):
                     :cyclone: 20 | **Enhance {c_card}** | _7_
                     **Defend {c_card}**  :cyclone: 20 | _0_
                     
-                    **{c_card}:** :heart: {c_health}/:cyclone: {c_stamina} _Companion_ :dagger:{c_attack}/:shield:{c_defense}                                                       
+                    **{c_card}:** :heart: {c_health}/:cyclone: {c_stamina} _Companion_                                                       
                     **{t_card}:** :heart: {t_health}/:cyclone: {t_stamina}   
                     """) 
                     , colour=embed_color_o)
@@ -27587,7 +27587,7 @@ class CrownUnlimited(commands.Cog):
                     **Enhance {o_card}** 20 Stamina _press 7_
                     :cyclone: 20 | **Defend {o_card}** | _0_
                     
-                    **{o_card}:** {o_health}/{o_stamina} _Companion_ :dagger:{o_attack}/:shield:{o_defense}                                                      
+                    **{o_card}:** {o_health}/{o_stamina} _Companion_                                                       
                     **{t_card}:** :heart: {t_health}/:cyclone: {t_stamina}   
                     """) 
                     , colour=embed_color_o)
