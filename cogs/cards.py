@@ -45,6 +45,7 @@ class Cards(commands.Cog):
         vault_query = {'OWNER' : str(ctx.author)}
         vault = db.altQueryVault(vault_query)
         owned_destinies = []
+        rift_universes = ['Crown Rift Slayers', 'Crown Rift Awakening', 'Crown Rift Madness']
         riftShopOpen = False
         for destiny in vault['DESTINY']:
             owned_destinies.append(destiny['NAME'])
@@ -74,7 +75,10 @@ class Cards(commands.Cog):
                     if uni['PREREQUISITE'] in user['CROWN_TALES'] and not uni['TIER'] == 9:
                         available_universes.append(uni['TITLE'])
             if check_card['UNIVERSE'] not in available_universes:
-                await ctx.send("You cannot purchase cards from Universes you haven't unlocked or Rifts yet completed.")
+                if check_card['UNIVERSE'] in rift_universes:
+                    await ctx.send("You are not connected to the rift...")
+                else:                   
+                    await ctx.send("You cannot purchase Cards from Universes you haven't unlocked or Rifts yet completed.")
                 return
             if check_card['HAS_COLLECTION']:
                 await ctx.send("This card can not be purchased.")
