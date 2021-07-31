@@ -1169,8 +1169,8 @@ class CrownUnlimited(commands.Cog):
                                     o_health = o_health + o_resolve_health
                                     o_attack = round((o_attack + (2 * o_resolve_attack))* 2)
                                     o_defense = round(o_defense - o_resolve_defense)
-                                    if o_defense >= 30:
-                                        o_defense = 30
+                                    if o_defense >= 120:
+                                        o_defense = 120
                                     o_used_resolve = True 
                                     o_pet_used=False
                                     embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
@@ -1814,8 +1814,8 @@ class CrownUnlimited(commands.Cog):
                                     t_health = t_health + t_resolve_health
                                     t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                     t_defense = round(t_defense - t_resolve_defense)
-                                    if t_defense >= 30:
-                                        t_defense = 30
+                                    if t_defense >= 120:
+                                        t_defense = 120
                                     t_used_resolve=True
 
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
@@ -1845,7 +1845,7 @@ class CrownUnlimited(commands.Cog):
                                     await private_channel.send(embed=embedVar)
                                     turn_total= turn_total + 1
                                     turn=0
-                                elif t_universe == "Fate": #Bleach Trait
+                                elif t_universe == "Fate": #Fate Trait
                                     #fortitude or luck is based on health  
                                     fortitude = 0.0
                                     low = t_health - (t_health * .75)
@@ -3640,8 +3640,8 @@ class CrownUnlimited(commands.Cog):
                                         o_health = o_health + o_resolve_health
                                         o_attack = round((o_attack + (2 * o_resolve_attack))* 2)
                                         o_defense = round(o_defense - o_resolve_defense)
-                                        if o_defense >= 30:
-                                            o_defense = 30
+                                        if o_defense >= 120:
+                                            o_defense = 120
                                         o_used_resolve = True 
                                         o_pet_used=False
                                         embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
@@ -4498,8 +4498,8 @@ class CrownUnlimited(commands.Cog):
                                     t_health = t_health + t_resolve_health
                                     t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                     t_defense = round(t_defense - t_resolve_defense)
-                                    if t_defense >= 30:
-                                        t_defense = 30
+                                    if t_defense >= 120:
+                                        t_defense = 120
                                     t_used_resolve=True
 
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
@@ -4529,7 +4529,7 @@ class CrownUnlimited(commands.Cog):
                                     await private_channel.send(embed=embedVar)
                                     turn_total= turn_total + 1
                                     turn=2
-                                elif t_universe == "Fate": #Bleach Trait
+                                elif t_universe == "Fate": #Fate Trait
                                     #fortitude or luck is based on health  
                                     fortitude = 0.0
                                     low = t_health - (t_health * .75)
@@ -5256,8 +5256,8 @@ class CrownUnlimited(commands.Cog):
                                     c_health = c_health + c_resolve_health
                                     c_attack = round((c_attack + (2 * c_resolve_attack))* 2)
                                     c_defense = round(c_defense - c_resolve_defense)
-                                    if c_defense >= 30:
-                                        c_defense = 30
+                                    if c_defense >= 120:
+                                        c_defense = 120
                                     c_used_resolve = True 
                                     c_pet_used=False
                                     embedVar = discord.Embed(title=f"{c_card.upper()} STRENGTHENED RESOLVE", description=f"`{c_card} says:`\n{c_resolve_description}", colour=0xe91e63)
@@ -5996,8 +5996,8 @@ class CrownUnlimited(commands.Cog):
                                     t_health = t_health + t_resolve_health
                                     t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                     t_defense = round(t_defense - t_resolve_defense)
-                                    if t_defense >= 30:
-                                        t_defense = 30
+                                    if t_defense >= 120:
+                                        t_defense = 120
                                     t_used_resolve=True
 
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
@@ -6027,7 +6027,7 @@ class CrownUnlimited(commands.Cog):
                                     await private_channel.send(embed=embedVar)
                                     turn_total= turn_total + 1
                                     turn=0
-                                elif t_universe == "Fate": #Bleach Trait
+                                elif t_universe == "Fate": #Fate Trait
                                     #fortitude or luck is based on health  
                                     fortitude = 0.0
                                     low = t_health - (t_health * .75)
@@ -7965,8 +7965,8 @@ class CrownUnlimited(commands.Cog):
                                         o_health = o_health + o_resolve_health
                                         o_attack = round((o_attack + (2 * o_resolve_attack))* 2)
                                         o_defense = round(o_defense - o_resolve_defense)
-                                        if o_defense >= 30:
-                                            o_defense = 30
+                                        if o_defense >= 120:
+                                            o_defense = 120
                                         o_used_resolve = True 
                                         o_pet_used=False
                                         embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
@@ -8824,7 +8824,7 @@ class CrownUnlimited(commands.Cog):
                                         await private_channel.send(embed=embedVar)
                                         turn_total= turn_total + 1
                                         turn=1
-                                elif t_universe == "Bleach": #Bleach Trait
+                                elif t_universe == "Bleach": #Bleach Trai
                                     #fortitude or luck is based on health  
                                     fortitude = 0.0
                                     low = t_health - (t_health * .75)
@@ -8839,8 +8839,8 @@ class CrownUnlimited(commands.Cog):
                                     t_health = t_health + t_resolve_health
                                     t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                     t_defense = round(t_defense - t_resolve_defense)
-                                    if t_defense >= 30:
-                                        t_defense = 30
+                                    if t_defense >= 120:
+                                        t_defense = 120
                                     t_used_resolve=True
                                     t_pet_used =False
 
@@ -8872,7 +8872,7 @@ class CrownUnlimited(commands.Cog):
                                     await private_channel.send(embed=embedVar)
                                     turn_total= turn_total + 1
                                     turn=2
-                                elif t_universe == "Fate": #Bleach Trait
+                                elif t_universe == "Fate": #Fate Trait
                                     #fortitude or luck is based on health  
                                     fortitude = 0.0
                                     low = t_health - (t_health * .75)
@@ -9806,8 +9806,8 @@ class CrownUnlimited(commands.Cog):
                                     c_health = c_health + c_resolve_health
                                     c_attack = round((c_attack + (2 * c_resolve_attack))* 2)
                                     c_defense = round(c_defense - c_resolve_defense)
-                                    if c_defense >= 30:
-                                        c_defense = 30
+                                    if c_defense >= 120:
+                                        c_defense = 120
                                     c_used_resolve = True 
                                     c_pet_used=False
                                     embedVar = discord.Embed(title=f"{c_card.upper()} STRENGTHENED RESOLVE", description=f"`{c_card} says:`\n{c_resolve_description}", colour=0xe91e63)
@@ -10562,8 +10562,8 @@ class CrownUnlimited(commands.Cog):
                                     t_health = t_health + t_resolve_health
                                     t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                     t_defense = round(t_defense - t_resolve_defense)
-                                    if t_defense >= 30:
-                                        t_defense = 30
+                                    if t_defense >= 120:
+                                        t_defense = 120
                                     t_used_resolve=True
                                     t_pet_used =False
 
@@ -10595,7 +10595,7 @@ class CrownUnlimited(commands.Cog):
                                     await private_channel.send(embed=embedVar)
                                     turn_total= turn_total + 1
                                     turn=0
-                                elif t_universe == "Fate": #Bleach Trait
+                                elif t_universe == "Fate": #Fate Trait
                                     #fortitude or luck is based on health  
                                     fortitude = 0.0
                                     low = t_health - (t_health * .75)
@@ -12735,8 +12735,8 @@ class CrownUnlimited(commands.Cog):
                                     o_health = o_health + o_resolve_health
                                     o_attack = round((o_attack + (2 * o_resolve_attack))* 2)
                                     o_defense = round(o_defense - o_resolve_defense)
-                                    if o_defense >= 30:
-                                        o_defense = 30
+                                    if o_defense >= 120:
+                                        o_defense = 120
                                     o_used_resolve = True 
                                     o_pet_used=False
                                     embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
@@ -13629,8 +13629,8 @@ class CrownUnlimited(commands.Cog):
                                 t_health = t_health + t_resolve_health
                                 t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                 t_defense = round(t_defense - t_resolve_defense)
-                                if t_defense >= 30:
-                                    t_defense = 30
+                                if t_defense >= 120:
+                                    t_defense = 120
                                 t_used_resolve=True
                                 t_pet_used =False
 
@@ -13662,7 +13662,7 @@ class CrownUnlimited(commands.Cog):
                                 await private_channel.send(embed=embedVar)
                                 turn_total= turn_total + 1
                                 turn=2
-                            elif t_universe == "Fate": #Bleach Trait
+                            elif t_universe == "Fate": #Fate Trait
                                 #fortitude or luck is based on health  
                                 fortitude = 0.0
                                 low = t_health - (t_health * .75)
@@ -14606,8 +14606,8 @@ class CrownUnlimited(commands.Cog):
                                 c_health = c_health + c_resolve_health
                                 c_attack = round((c_attack + (2 * c_resolve_attack))* 2)
                                 c_defense = round(c_defense - c_resolve_defense)
-                                if c_defense >= 30:
-                                    c_defense = 30
+                                if c_defense >= 120:
+                                    c_defense = 120
                                 c_used_resolve = True 
                                 c_pet_used=False
                                 embedVar = discord.Embed(title=f"{c_card.upper()} STRENGTHENED RESOLVE", description=f"`{c_card} says:`\n{c_resolve_description}", colour=0xe91e63)
@@ -15383,8 +15383,8 @@ class CrownUnlimited(commands.Cog):
                                 t_health = t_health + t_resolve_health
                                 t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                 t_defense = round(t_defense - t_resolve_defense)
-                                if t_defense >= 30:
-                                    t_defense = 30
+                                if t_defense >= 120:
+                                    t_defense = 120
                                 t_used_resolve=True
                                 t_pet_used =False
 
@@ -15416,7 +15416,7 @@ class CrownUnlimited(commands.Cog):
                                 await private_channel.send(embed=embedVar)
                                 turn_total= turn_total + 1
                                 turn=0
-                            elif t_universe == "Fate": #Bleach Trait
+                            elif t_universe == "Fate": #Fate Trait
                                 #fortitude or luck is based on health  
                                 fortitude = 0.0
                                 low = t_health - (t_health * .75)
@@ -17476,8 +17476,8 @@ class CrownUnlimited(commands.Cog):
                                         o_health = o_health + o_resolve_health
                                         o_attack = round((o_attack + (2 * o_resolve_attack))* 2)
                                         o_defense = round(o_defense - o_resolve_defense)
-                                        if o_defense >= 30:
-                                            o_defense = 30
+                                        if o_defense >= 120:
+                                            o_defense = 120
                                         o_used_resolve = True 
                                         o_pet_used=False
                                         embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
@@ -18240,8 +18240,8 @@ class CrownUnlimited(commands.Cog):
                                     t_health = t_health + t_resolve_health
                                     t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                     t_defense = round(t_defense - t_resolve_defense)
-                                    if t_defense >= 30:
-                                        t_defense = 30
+                                    if t_defense >= 120:
+                                        t_defense = 120
                                     t_used_resolve=True
                                     t_pet_used =False
 
@@ -18273,7 +18273,7 @@ class CrownUnlimited(commands.Cog):
                                     await private_channel.send(embed=embedVar)
                                     turn_total= turn_total + 1
                                     turn=2
-                                elif t_universe == "Fate": #Bleach Trait
+                                elif t_universe == "Fate": #Fate Trait
                                     #fortitude or luck is based on health  
                                     fortitude = 0.0
                                     low = t_health - (t_health * .75)
@@ -18872,8 +18872,8 @@ class CrownUnlimited(commands.Cog):
                                         c_health = c_health + c_resolve_health
                                         c_attack = round((c_attack + (2 * c_resolve_attack))* 2)
                                         c_defense = round(c_defense - c_resolve_defense)
-                                        if c_defense >= 30:
-                                            c_defense = 30
+                                        if c_defense >= 120:
+                                            c_defense = 120
                                         c_used_resolve = True 
                                         c_pet_used=False
                                         embedVar = discord.Embed(title=f"{c_card.upper()} STRENGTHENED RESOLVE", description=f"`{c_card} says:`\n{c_resolve_description}", colour=0xe91e63)
@@ -19636,8 +19636,8 @@ class CrownUnlimited(commands.Cog):
                                     t_health = t_health + t_resolve_health
                                     t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                     t_defense = round(t_defense - t_resolve_defense)
-                                    if t_defense >= 30:
-                                        t_defense = 30
+                                    if t_defense >= 120:
+                                        t_defense = 120
                                     t_used_resolve=True
                                     t_pet_used =False
 
@@ -19669,7 +19669,7 @@ class CrownUnlimited(commands.Cog):
                                     await private_channel.send(embed=embedVar)
                                     turn_total= turn_total + 1
                                     turn=0
-                                elif t_universe == "Fate": #Bleach Trait
+                                elif t_universe == "Fate": #Fate Trait
                                     #fortitude or luck is based on health  
                                     fortitude = 0.0
                                     low = t_health - (t_health * .75)
@@ -21600,8 +21600,8 @@ class CrownUnlimited(commands.Cog):
                                         o_health = o_health + o_resolve_health
                                         o_attack = round((o_attack + (2 * o_resolve_attack))* 2)
                                         o_defense = round(o_defense - o_resolve_defense)
-                                        if o_defense >= 30:
-                                            o_defense = 30
+                                        if o_defense >= 120:
+                                            o_defense = 120
                                         o_used_resolve = True 
                                         o_pet_used=False
                                         embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
@@ -22366,8 +22366,8 @@ class CrownUnlimited(commands.Cog):
                                     t_health = t_health + t_resolve_health
                                     t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                     t_defense = round(t_defense - t_resolve_defense)
-                                    if t_defense >= 30:
-                                        t_defense = 30
+                                    if t_defense >= 120:
+                                        t_defense = 120
                                     t_used_resolve=True
                                     t_pet_used =False
 
@@ -22399,7 +22399,7 @@ class CrownUnlimited(commands.Cog):
                                     await private_channel.send(embed=embedVar)
                                     turn_total= turn_total + 1
                                     turn=2
-                                elif t_universe == "Fate": #Bleach Trait
+                                elif t_universe == "Fate": #Fate Trait
                                     #fortitude or luck is based on health  
                                     fortitude = 0.0
                                     low = t_health - (t_health * .75)
@@ -23196,8 +23196,8 @@ class CrownUnlimited(commands.Cog):
                                         c_health = c_health + c_resolve_health
                                         c_attack = round((c_attack + (2 * c_resolve_attack))* 2)
                                         c_defense = round(c_defense - c_resolve_defense)
-                                        if c_defense >= 30:
-                                            c_defense = 30
+                                        if c_defense >= 120:
+                                            c_defense = 120
                                         c_used_resolve = True 
                                         c_pet_used=False
                                         embedVar = discord.Embed(title=f"{c_card.upper()} STRENGTHENED RESOLVE", description=f"`{c_card} says:`\n{c_resolve_description}", colour=0xe91e63)
@@ -23961,8 +23961,8 @@ class CrownUnlimited(commands.Cog):
                                     t_health = t_health + t_resolve_health
                                     t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                     t_defense = round(t_defense - t_resolve_defense)
-                                    if t_defense >= 30:
-                                        t_defense = 30
+                                    if t_defense >= 120:
+                                        t_defense = 120
                                     t_used_resolve=True
                                     t_pet_used =False
 
@@ -23994,7 +23994,7 @@ class CrownUnlimited(commands.Cog):
                                     await private_channel.send(embed=embedVar)
                                     turn_total= turn_total + 1
                                     turn=0
-                                elif t_universe == "Fate": #Bleach Trait
+                                elif t_universe == "Fate": #Fate Trait
                                     #fortitude or luck is based on health  
                                     fortitude = 0.0
                                     low = t_health - (t_health * .75)
@@ -26117,8 +26117,8 @@ class CrownUnlimited(commands.Cog):
                                     o_health = o_health + o_resolve_health
                                     o_attack = round((o_attack + (2 * o_resolve_attack))* 2)
                                     o_defense = round(o_defense - o_resolve_defense)
-                                    if o_defense >= 30:
-                                        o_defense = 30
+                                    if o_defense >= 120:
+                                        o_defense = 120
                                     o_used_resolve = True 
                                     o_pet_used=False
                                     embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
@@ -26904,8 +26904,8 @@ class CrownUnlimited(commands.Cog):
                                 t_health = t_health + t_resolve_health
                                 t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                 t_defense = round(t_defense - t_resolve_defense)
-                                if t_defense >= 30:
-                                    t_defense = 30
+                                if t_defense >= 120:
+                                    t_defense = 120
                                 t_used_resolve=True
                                 t_pet_used =False
 
@@ -26937,7 +26937,7 @@ class CrownUnlimited(commands.Cog):
                                 await private_channel.send(embed=embedVar)
                                 turn_total= turn_total + 1
                                 turn=2
-                            elif t_universe == "Fate": #Bleach Trait
+                            elif t_universe == "Fate": #Fate Trait
                                 #fortitude or luck is based on health  
                                 fortitude = 0.0
                                 low = t_health - (t_health * .75)
@@ -27732,8 +27732,8 @@ class CrownUnlimited(commands.Cog):
                                     c_health = c_health + c_resolve_health
                                     c_attack = round((c_attack + (2 * c_resolve_attack))* 2)
                                     c_defense = round(c_defense - c_resolve_defense)
-                                    if c_defense >= 30:
-                                        c_defense = 30
+                                    if c_defense >= 120:
+                                        c_defense = 120
                                     c_used_resolve = True 
                                     c_pet_used=False
                                     embedVar = discord.Embed(title=f"{c_card.upper()} STRENGTHENED RESOLVE", description=f"`{c_card} says:`\n{c_resolve_description}", colour=0xe91e63)
@@ -28517,8 +28517,8 @@ class CrownUnlimited(commands.Cog):
                                 t_health = t_health + t_resolve_health
                                 t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                 t_defense = round(t_defense - t_resolve_defense)
-                                if t_defense >= 30:
-                                    t_defense = 30
+                                if t_defense >= 120:
+                                    t_defense = 120
                                 t_used_resolve=True
                                 t_pet_used =False
 
@@ -28550,7 +28550,7 @@ class CrownUnlimited(commands.Cog):
                                 await private_channel.send(embed=embedVar)
                                 turn_total= turn_total + 1
                                 turn=0
-                            elif t_universe == "Fate": #Bleach Trait
+                            elif t_universe == "Fate": #Fate Trait
                                 #fortitude or luck is based on health  
                                 fortitude = 0.0
                                 low = t_health - (t_health * .75)
@@ -30229,8 +30229,8 @@ class CrownUnlimited(commands.Cog):
                                         o_health = o_health + o_resolve_health
                                         o_attack = round((o_attack + (2 * o_resolve_attack))* 2)
                                         o_defense = round(o_defense - o_resolve_defense)
-                                        if o_defense >= 30:
-                                            o_defense = 30
+                                        if o_defense >= 120:
+                                            o_defense = 120
                                         o_used_resolve = True 
                                         o_pet_used=False
                                         embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
@@ -30889,8 +30889,8 @@ class CrownUnlimited(commands.Cog):
                                     t_health = t_health + t_resolve_health
                                     t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                     t_defense = round(t_defense - t_resolve_defense)
-                                    if t_defense >= 30:
-                                        t_defense = 30
+                                    if t_defense >= 120:
+                                        t_defense = 120
                                     t_used_resolve=True
                                     t_pet_used =False
 
@@ -30922,7 +30922,7 @@ class CrownUnlimited(commands.Cog):
                                     await private_channel.send(embed=embedVar)
                                     turn_total= turn_total + 1
                                     turn=0
-                                elif t_universe == "Fate": #Bleach Trait
+                                elif t_universe == "Fate": #Fate Trait
                                     #fortitude or luck is based on health  
                                     fortitude = 0.0
                                     low = t_health - (t_health * .75)
@@ -32440,8 +32440,8 @@ class CrownUnlimited(commands.Cog):
                                         o_health = o_health + o_resolve_health
                                         o_attack = round((o_attack + (2 * o_resolve_attack))* 2)
                                         o_defense = round(o_defense - o_resolve_defense)
-                                        if o_defense >= 30:
-                                            o_defense = 30
+                                        if o_defense >= 120:
+                                            o_defense = 120
                                         o_used_resolve = True 
                                         o_pet_used=False
                                         embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
@@ -33085,8 +33085,8 @@ class CrownUnlimited(commands.Cog):
                                     t_health = t_health + t_resolve_health
                                     t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                     t_defense = round(t_defense - t_resolve_defense)
-                                    if t_defense >= 30:
-                                        t_defense = 30
+                                    if t_defense >= 120:
+                                        t_defense = 120
                                     t_used_resolve=True
 
                                     embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
@@ -33116,7 +33116,7 @@ class CrownUnlimited(commands.Cog):
                                     await private_channel.send(embed=embedVar)
                                     turn_total= turn_total + 1
                                     turn=0
-                                elif t_universe == "Fate": #Bleach Trait
+                                elif t_universe == "Fate": #Fate Trait
                                     #fortitude or luck is based on health  
                                     fortitude = 0.0
                                     low = t_health - (t_health * .75)
@@ -34523,8 +34523,8 @@ class CrownUnlimited(commands.Cog):
                                     o_health = o_health + o_resolve_health
                                     o_attack = round((o_attack + (2 * o_resolve_attack))* 2)
                                     o_defense = round(o_defense - o_resolve_defense)
-                                    if o_defense >= 30:
-                                        o_defense = 30
+                                    if o_defense >= 120:
+                                        o_defense = 120
                                     o_used_resolve = True 
                                     o_pet_used=False
                                     embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
@@ -35199,8 +35199,8 @@ class CrownUnlimited(commands.Cog):
                                 t_health = t_health + t_resolve_health
                                 t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                 t_defense = round(t_defense - t_resolve_defense)
-                                if t_defense >= 30:
-                                    t_defense = 30
+                                if t_defense >= 120:
+                                    t_defense = 120
                                 t_used_resolve=True
                                 t_pet_used =False
 
@@ -35232,7 +35232,7 @@ class CrownUnlimited(commands.Cog):
                                 await private_channel.send(embed=embedVar)
                                 turn_total= turn_total + 1
                                 turn=0
-                            elif t_universe == "Fate": #Bleach Trait
+                            elif t_universe == "Fate": #Fate Trait
                                 #fortitude or luck is based on health  
                                 fortitude = 0.0
                                 low = t_health - (t_health * .75)
@@ -36661,8 +36661,8 @@ class CrownUnlimited(commands.Cog):
                                             o_health = o_health + o_resolve_health
                                             o_attack = round((o_attack + (2 * o_resolve_attack))* 2)
                                             o_defense = round(o_defense - o_resolve_defense)
-                                            if o_defense >= 30:
-                                                o_defense = 30
+                                            if o_defense >= 120:
+                                                o_defense = 120
                                             o_used_resolve = True 
                                             o_pet_used=False
                                             embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
@@ -37266,8 +37266,8 @@ class CrownUnlimited(commands.Cog):
                                                 t_health = t_health + t_resolve_health
                                                 t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                                 t_defense = round(t_defense - t_resolve_defense)
-                                                if t_defense >= 30:
-                                                    t_defense = 30
+                                                if t_defense >= 120:
+                                                    t_defense = 120
                                                 t_used_resolve=True
                                                 t_pet_used =False
 
@@ -37299,7 +37299,7 @@ class CrownUnlimited(commands.Cog):
                                                 await ctx.send(embed=embedVar)
                                                 turn_total= turn_total + 1
                                                 turn=0
-                                            elif t_universe == "Fate": #Bleach Trait
+                                            elif t_universe == "Fate": #Fate Trait
                                                 #fortitude or luck is based on health  
                                                 fortitude = 0.0
                                                 low = t_health - (t_health * .75)
@@ -37775,8 +37775,8 @@ class CrownUnlimited(commands.Cog):
                                             t_health = t_health + t_resolve_health
                                             t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                             t_defense = round(t_defense - t_resolve_defense)
-                                            if t_defense >= 30:
-                                                t_defense = 30
+                                            if t_defense >= 120:
+                                                t_defense = 120
                                             t_used_resolve=True
 
                                             embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
@@ -37806,7 +37806,7 @@ class CrownUnlimited(commands.Cog):
                                             await ctx.send(embed=embedVar)
                                             turn_total= turn_total + 1
                                             turn=0
-                                        elif t_universe == "Fate": #Bleach Trait
+                                        elif t_universe == "Fate": #Fate Trait
                                             #fortitude or luck is based on health  
                                             fortitude = 0.0
                                             low = t_health - (t_health * .75)
@@ -39242,8 +39242,8 @@ class CrownUnlimited(commands.Cog):
                                             o_health = o_health + o_resolve_health
                                             o_attack = round((o_attack + (2 * o_resolve_attack))* 2)
                                             o_defense = round(o_defense - o_resolve_defense)
-                                            if o_defense >= 30:
-                                                o_defense = 30
+                                            if o_defense >= 120:
+                                                o_defense = 120
                                             o_used_resolve = True 
                                             o_pet_used=False
                                             embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
@@ -39847,8 +39847,8 @@ class CrownUnlimited(commands.Cog):
                                                 t_health = t_health + t_resolve_health
                                                 t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                                 t_defense = round(t_defense - t_resolve_defense)
-                                                if t_defense >= 30:
-                                                    t_defense = 30
+                                                if t_defense >= 120:
+                                                    t_defense = 120
                                                 t_used_resolve=True
                                                 t_pet_used =False
 
@@ -39880,7 +39880,7 @@ class CrownUnlimited(commands.Cog):
                                                 await ctx.send(embed=embedVar)
                                                 turn_total= turn_total + 1
                                                 turn=0
-                                            elif t_universe == "Fate": #Bleach Trait
+                                            elif t_universe == "Fate": #Fate Trait
                                                 #fortitude or luck is based on health  
                                                 fortitude = 0.0
                                                 low = t_health - (t_health * .75)
@@ -40356,8 +40356,8 @@ class CrownUnlimited(commands.Cog):
                                             t_health = t_health + t_resolve_health
                                             t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                             t_defense = round(t_defense - t_resolve_defense)
-                                            if t_defense >= 30:
-                                                t_defense = 30
+                                            if t_defense >= 120:
+                                                t_defense = 120
                                             t_used_resolve=True
 
                                             embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
@@ -40387,7 +40387,7 @@ class CrownUnlimited(commands.Cog):
                                             await ctx.send(embed=embedVar)
                                             turn_total= turn_total + 1
                                             turn=0
-                                        elif t_universe == "Fate": #Bleach Trait
+                                        elif t_universe == "Fate": #Fate Trait
                                             #fortitude or luck is based on health  
                                             fortitude = 0.0
                                             low = t_health - (t_health * .75)
@@ -41822,8 +41822,8 @@ class CrownUnlimited(commands.Cog):
                                             o_health = o_health + o_resolve_health
                                             o_attack = round((o_attack + (2 * o_resolve_attack))* 2)
                                             o_defense = round(o_defense - o_resolve_defense)
-                                            if o_defense >= 30:
-                                                o_defense = 30
+                                            if o_defense >= 120:
+                                                o_defense = 120
                                             o_used_resolve = True 
                                             o_pet_used=False
                                             embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
@@ -42326,8 +42326,8 @@ class CrownUnlimited(commands.Cog):
                                                 t_health = t_health + t_resolve_health
                                                 t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                                 t_defense = round(t_defense - t_resolve_defense)
-                                                if t_defense >= 30:
-                                                    t_defense = 30
+                                                if t_defense >= 120:
+                                                    t_defense = 120
                                                 t_used_resolve=True
                                                 t_pet_used =False
 
@@ -42359,7 +42359,7 @@ class CrownUnlimited(commands.Cog):
                                                 await ctx.send(embed=embedVar)
                                                 turn_total= turn_total + 1
                                                 turn=0
-                                            elif t_universe == "Fate": #Bleach Trait
+                                            elif t_universe == "Fate": #Fate Trait
                                                 #fortitude or luck is based on health  
                                                 fortitude = 0.0
                                                 low = t_health - (t_health * .75)
@@ -42736,8 +42736,8 @@ class CrownUnlimited(commands.Cog):
                                             t_health = t_health + t_resolve_health
                                             t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                             t_defense = round(t_defense - t_resolve_defense)
-                                            if t_defense >= 30:
-                                                t_defense = 30
+                                            if t_defense >= 120:
+                                                t_defense = 120
                                             t_used_resolve=True
 
                                             embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
@@ -42767,7 +42767,7 @@ class CrownUnlimited(commands.Cog):
                                             await ctx.send(embed=embedVar)
                                             turn_total= turn_total + 1
                                             turn=0
-                                        elif t_universe == "Fate": #Bleach Trait
+                                        elif t_universe == "Fate": #Fate Trait
                                             #fortitude or luck is based on health  
                                             fortitude = 0.0
                                             low = t_health - (t_health * .75)
@@ -44202,8 +44202,8 @@ class CrownUnlimited(commands.Cog):
                                             o_health = o_health + o_resolve_health
                                             o_attack = round((o_attack + (2 * o_resolve_attack))* 2)
                                             o_defense = round(o_defense - o_resolve_defense)
-                                            if o_defense >= 30:
-                                                o_defense = 30
+                                            if o_defense >= 120:
+                                                o_defense = 120
                                             o_used_resolve = True 
                                             o_pet_used=False
                                             embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
@@ -44706,8 +44706,8 @@ class CrownUnlimited(commands.Cog):
                                                 t_health = t_health + t_resolve_health
                                                 t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                                 t_defense = round(t_defense - t_resolve_defense)
-                                                if t_defense >= 30:
-                                                    t_defense = 30
+                                                if t_defense >= 120:
+                                                    t_defense = 120
                                                 t_used_resolve=True
                                                 t_pet_used =False
 
@@ -44739,7 +44739,7 @@ class CrownUnlimited(commands.Cog):
                                                 await ctx.send(embed=embedVar)
                                                 turn_total= turn_total + 1
                                                 turn=0
-                                            elif t_universe == "Fate": #Bleach Trait
+                                            elif t_universe == "Fate": #Fate Trait
                                                 #fortitude or luck is based on health  
                                                 fortitude = 0.0
                                                 low = t_health - (t_health * .75)
@@ -45116,8 +45116,8 @@ class CrownUnlimited(commands.Cog):
                                             t_health = t_health + t_resolve_health
                                             t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                             t_defense = round(t_defense - t_resolve_defense)
-                                            if t_defense >= 30:
-                                                t_defense = 30
+                                            if t_defense >= 120:
+                                                t_defense = 120
                                             t_used_resolve=True
 
                                             embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
@@ -45147,7 +45147,7 @@ class CrownUnlimited(commands.Cog):
                                             await ctx.send(embed=embedVar)
                                             turn_total= turn_total + 1
                                             turn=0
-                                        elif t_universe == "Fate": #Bleach Trait
+                                        elif t_universe == "Fate": #Fate Trait
                                             #fortitude or luck is based on health  
                                             fortitude = 0.0
                                             low = t_health - (t_health * .75)
@@ -46602,8 +46602,8 @@ class CrownUnlimited(commands.Cog):
                                             o_health = o_health + o_resolve_health
                                             o_attack = round((o_attack + (2 * o_resolve_attack))* 2)
                                             o_defense = round(o_defense - o_resolve_defense)
-                                            if o_defense >= 30:
-                                                o_defense = 30
+                                            if o_defense >= 120:
+                                                o_defense = 120
                                             o_used_resolve = True 
                                             o_pet_used=False
                                             embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
@@ -47223,8 +47223,8 @@ class CrownUnlimited(commands.Cog):
                                                 t_health = t_health + t_resolve_health
                                                 t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                                 t_defense = round(t_defense - t_resolve_defense)
-                                                if t_defense >= 30:
-                                                    t_defense = 30
+                                                if t_defense >= 120:
+                                                    t_defense = 120
                                                 t_used_resolve=True
 
                                                 embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
@@ -47254,7 +47254,7 @@ class CrownUnlimited(commands.Cog):
                                                 await ctx.send(embed=embedVar)
                                                 turn_total= turn_total + 1
                                                 turn=0
-                                            elif t_universe == "Fate": #Bleach Trait
+                                            elif t_universe == "Fate": #Fate Trait
                                                 #fortitude or luck is based on health  
                                                 fortitude = 0.0
                                                 low = t_health - (t_health * .75)
