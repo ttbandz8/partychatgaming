@@ -31,6 +31,7 @@ boss_col = db['BOSS']
 pet_col = db['PET']
 vault_col =db["VAULT"]
 house_col =db["HOUSE"]
+menu_col = db['MENU']
 
 '''Check if Collection Exists'''
 def col_exists(col):
@@ -39,6 +40,32 @@ def col_exists(col):
         return True
     else:
         return False
+
+
+''' MENU '''
+def menu_exists(data):
+    collection_exists = col_exists("MENU")
+    if collection_exists:
+        menuexist = menu_col.find_one(data)
+        if menuexist:
+            return True
+        else:
+            return False
+    else:
+        return False
+
+def queryAllMenu():
+    try:
+        data = menu_col.find()
+        return data
+    except:
+        print("Find menu failed.")
+
+def createMenu(menu):
+    try:
+        data = menu_col.insert_one(menu)
+    except Exception as e:
+        return e
 
 #########################################################################
 ''' FAMILY '''

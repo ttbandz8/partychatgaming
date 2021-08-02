@@ -1278,6 +1278,56 @@ async def solo(ctx):
    await ctx.send(f"{ctx.author.mention} check your dms. ")
    await DM(ctx, ctx.author, "Continue your Crown Unlimited journey here, undisturbed. All Crown Unlimited commands are functional here. ")
 
+@bot.command()
+@commands.check(validate_user)
+async def menu(ctx):
+   try:
+      response = db.queryAllMenu()
+      profile, story, pvp = "", "", ""
+      for menu in response:
+         if menu['NAME'] == "Profile":
+            profile = menu['PATH']
+         if menu['NAME'] == "Story":
+            story = menu['PATH']
+         if menu['NAME'] == "PVP":
+            pvp = menu['PATH']
+
+      embedVar1 = discord.Embed(title= f"Story Mode", description="Journey through Universes to defeat powerful foes to unlock vast new worlds, tough boss fights, and new possibilities!", colour=0x7289da)
+      embedVar1.set_image(url=story)
+      embedVar1.set_footer(text=f"use .help for additional assistance")
+
+      embedVar2 = discord.Embed(title= f"Profile Menu", description="View and Edit your Cards, Titles, Arms, and Pets to craft new builds and strategies.", colour=0x7289da)
+      embedVar2.set_image(url=profile)
+      # embedVar2.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
+      embedVar2.set_footer(text=f"use .help for additional assistance")
+      
+      embedVar3 = discord.Embed(title= f"PVP Mode", description="Face off against friend or foe!", colour=0x7289da)
+      embedVar3.set_image(url=pvp)
+      # embedVar3.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
+      embedVar3.set_footer(text=f"use .help for additional assistance")
+
+      paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+      paginator.add_reaction('⏮️', "first")
+      paginator.add_reaction('⏪', "back")
+      paginator.add_reaction('🔐', "lock")
+      paginator.add_reaction('⏩', "next")
+      paginator.add_reaction('⏭️', "last")
+      embeds = [embedVar1,embedVar3, embedVar2]
+      await paginator.run(embeds)
+         
+   except Exception as e:
+      await ctx.send(f"Error has occurred: {e}")
+
+# @bot.command()
+# @commands.check(validate_user)
+# async def newmenu(ctx):
+#    try:
+#       response = db.createMenu({'PATH': 'https://res.cloudinary.com/dkcmq8o15/image/upload/v1627880815/menu/Profile_Mode.jpg', 'NAME': 'Profile'})
+#       await ctx.send("New menu added")
+#    except Exception as e:
+#       print(e)
+#       return
+
 if config('ENV') == "production":
    DISCORD_TOKEN = config('DISCORD_TOKEN_TEST')
 else:

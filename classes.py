@@ -253,6 +253,12 @@ class VAULT():
     QUESTS: list[str] = field(default_factory=lambda: [])
     DESTINY: list[str] = field(default_factory=lambda: [])
 
+@dataclass(frozen=True, order=True) 
+class MENU():
+    PATH: str
+    NAME: str
+    TIMESTAMP: str = now
+
 ''' Data Functions'''
 def newCard(card):
     c = CARDS(**card)
