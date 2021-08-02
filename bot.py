@@ -405,45 +405,24 @@ async def r(ctx):
    response = db.createUsers(data.newUser(user))
    if response:
 
-      embedVar = discord.Embed(title=f"Welcome to Party Chat Gaming!", description=textwrap.dedent(f"""
-      The Party Chat Gaming bot is a multipurpose tool for admins and players alike to run and participate in matches and tournaments in some of your favorite games!
-      In addition to the tools for tournaments and more, we offer an incredible gaming experience in Crown Unlimited!_See below for Crown Unlimited Details_
-      
-      **Welcome to Crown Unlimited**!
+      embedVar = discord.Embed(title=f"**Welcome to Crown Unlimited**!", description=textwrap.dedent(f"""
       Embark on a journey through Universes filled with characters from your favorite anime and video games!
-      
-      **3 Easy Steps for Success**
-      1. Collect Cards, Titles, Arms, and Pets
-      2. Uniquely Customize your Builds to match your playstyle
-      3. Explore Tales, Dungeons, and Bosses solo, or with your friend!
-      
-      **Daily Quest!**
-      First run .daily to get your Quest!
+      First, run **.daily** to get your daily rewards!
 
-      **.crown**
-      Read the Crown Unlimited Manual!
+      Type **.menu** for quick overview on what to do next! Checkout the tutorials below if you need additional assistance!
 
-      **.senpai**
       Start Tutorial!
+      **.senpai**
 
+      Start Battle Tutorial!
       **.senpaibattle**
-      Start Crown Unlimited Battle Tutorial!
-
-      **.build** Check your current build including your equipped Card, Title, Arm, and Pet
       
-      **.deck** Check your Starter Presets
-
-      **.shop** Purchase new Cards, Titles, and Arms
+      Read the manual!
+      **.crown**
       
-      **.universes** See List of Available and Planned Universes !
-
-      **.help** Open Party Chat Gaming Bot Help Page
-
-
-      CHANGING YOUR ACCOUNT INFO WILL BREAK YOUR ACCOUNT IN THE GAME. YOU HAVE BEEN WARNED.
+      **CHANGING YOUR DISCORD ACCOUNT INFO WILL BREAK YOUR ACCOUNT IN THE GAME. YOU HAVE BEEN WARNED.**
       
-      Use .solo to play Crown Unlimited undisturbed. Remember to come back and play with your friends!
-      _We do not own the rights to the images used in this game. This is a beta of an experimental bot for the purposes of growing our coding talents and skill. We do not make money from this project._
+      _We do not own the rights to the images used in this game. This is an open beta of an experimental bot for the purposes of growing our coding talents and skill. We do not and will not make money from this project._
       """), colour=0xe91e63)
       embedVar.set_footer(text=".help to inquire all potential commands and capabilites of the bot")
       await ctx.author.send(embed=embedVar)
