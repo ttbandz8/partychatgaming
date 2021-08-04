@@ -44,6 +44,9 @@ class CrownUnlimited(commands.Cog):
     @commands.command()
     async def atales(self, ctx):
         private_channel = ctx
+        if isinstance(private_channel.channel, discord.channel.DMChannel):
+            await private_channel.send(m.SERVER_FUNCTION_ONLY)
+            return
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
         if sowner['PATRON'] != True:
             embedVar = discord.Embed(title=f"Auto-Battles Locked", description=f"To Unlock Auto-Battles Join Patreon!", colour=0xe91e63)
@@ -2190,6 +2193,9 @@ class CrownUnlimited(commands.Cog):
     @commands.command()
     async def dtales(self, ctx, deck : int):
         private_channel = ctx
+        if isinstance(private_channel.channel, discord.channel.DMChannel):
+            await private_channel.send(m.SERVER_FUNCTION_ONLY)
+            return
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
         if deck != 1 and deck != 2 and deck != 3:
             await private_channel.send("Not a valid Deck Option")
@@ -3548,9 +3554,9 @@ class CrownUnlimited(commands.Cog):
                         , colour=embed_color_o)
                         embedVar.set_thumbnail(url=opet_image)
                         if o_used_focus and o_used_resolve and not o_pet_used:
-                            embedVar.set_author(name="Press Q to Quit Match. Press 6 to Summon your Pet!")                                    
+                            embedVar.set_author(name="Press Q to Quit Match.\nPress 6 to Summon your Pet!")                                    
                         elif o_used_focus and not o_used_resolve:
-                            embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen Resolve!")
+                            embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!")
                         else:
                             embedVar.set_author(name="Press Q to Quit Match")
                         embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer\nUse 7 to Enhance Companion | 20 Stamina\nUse 8 to Request Assistance from Companion | 20 Stamina\nUse 9 to Request Block from Companion | 20 Stamina")
@@ -6507,6 +6513,9 @@ class CrownUnlimited(commands.Cog):
     @commands.command()
     async def ddungeon(self, ctx, deck : int):
         private_channel = ctx
+        if isinstance(private_channel.channel, discord.channel.DMChannel):
+            await private_channel.send(m.SERVER_FUNCTION_ONLY)
+            return
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
         if deck != 1 and deck != 2 and deck != 3:
             await private_channel.send("Not a valid Deck Option")
@@ -7872,9 +7881,9 @@ class CrownUnlimited(commands.Cog):
                         , colour=embed_color_o)
                         embedVar.set_thumbnail(url=opet_image)
                         if o_used_focus and o_used_resolve and not o_pet_used:
-                            embedVar.set_author(name="Press Q to Quit Match. Press 6 to Summon your Pet!")                                    
+                            embedVar.set_author(name="Press Q to Quit Match.\nPress 6 to Summon your Pet!")                                    
                         elif o_used_focus and not o_used_resolve:
-                            embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen Resolve!")
+                            embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!")
                         else:
                             embedVar.set_author(name="Press Q to Quit Match")
                         embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer\nUse 7 to Enhance Companion | 20 Stamina\nUse 8 to Request Assistance from Companion | 20 Stamina\nUse 9 to Request Block from Companion | 20 Stamina")
@@ -11273,6 +11282,9 @@ class CrownUnlimited(commands.Cog):
     @commands.command()
     async def dboss(self, ctx, deck: int):
         private_channel = ctx
+        if isinstance(private_channel.channel, discord.channel.DMChannel):
+            await private_channel.send(m.SERVER_FUNCTION_ONLY)
+            return
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
         if deck != 1 and deck != 2 and deck != 3:
             await private_channel.send("Not a valid Deck Option")
@@ -12642,9 +12654,9 @@ class CrownUnlimited(commands.Cog):
                     , colour=embed_color_o)
                     embedVar.set_thumbnail(url=opet_image)
                     if o_used_focus and o_used_resolve and not o_pet_used:
-                        embedVar.set_author(name="Press Q to Quit Match. Press 6 to Summon your Pet!")                                    
+                        embedVar.set_author(name="Press Q to Quit Match.\nPress 6 to Summon your Pet!")                                    
                     elif o_used_focus and not o_used_resolve:
-                        embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen Resolve!")
+                        embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!")
                     else:
                         embedVar.set_author(name="Press Q to Quit Match")
                     embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer\nUse 7 to Enhance Companion | 20 Stamina\nUse 8 to Request Assistance from Companion | 20 Stamina\nUse 9 to Request Block from Companion | 20 Stamina")
@@ -16031,6 +16043,9 @@ class CrownUnlimited(commands.Cog):
     @commands.command()
     async def ctales(self, ctx, user: User):
         private_channel = ctx
+        if isinstance(private_channel.channel, discord.channel.DMChannel):
+            await private_channel.send(m.SERVER_FUNCTION_ONLY)
+            return
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
         cowner = db.queryUser({'DISNAME': str(user)})
         oteam = sowner['TEAM']
@@ -17383,9 +17398,9 @@ class CrownUnlimited(commands.Cog):
                         , colour=embed_color_o)
                         embedVar.set_thumbnail(url=opet_image)
                         if o_used_focus and o_used_resolve and not o_pet_used:
-                            embedVar.set_author(name="Press Q to Quit Match. Press 6 to Summon your Pet!")                                    
+                            embedVar.set_author(name="Press Q to Quit Match.\nPress 6 to Summon your Pet!")                                    
                         elif o_used_focus and not o_used_resolve:
-                            embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen Resolve!")
+                            embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!")
                         else:
                             embedVar.set_author(name="Press Q to Quit Match")
                         embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer\nUse 7 to Enhance Companion | 20 Stamina")
@@ -18781,9 +18796,9 @@ class CrownUnlimited(commands.Cog):
                         , colour=embed_color_o)
                         embedVar.set_thumbnail(url=opet_image)
                         if c_used_focus and c_used_resolve and not c_pet_used:
-                            embedVar.set_author(name="Press Q to Quit Match. Press 6 to Summon your Pet!")                                    
+                            embedVar.set_author(name="Press Q to Quit Match.\nPress 6 to Summon your Pet!")                                    
                         elif c_used_focus and not c_used_resolve:
-                            embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen Resolve!")
+                            embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!")
                         else:
                             embedVar.set_author(name="Press Q to Quit Match")
                         embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer\nUse 7 to Enhance Companion | 20 Stamina")
@@ -20151,6 +20166,9 @@ class CrownUnlimited(commands.Cog):
     @commands.command()
     async def cdungeon(self, ctx, user: User):
         private_channel = ctx
+        if isinstance(private_channel.channel, discord.channel.DMChannel):
+            await private_channel.send(m.SERVER_FUNCTION_ONLY)
+            return
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
         oteam = sowner['TEAM']
         ofam = sowner['FAMILY']
@@ -21507,9 +21525,9 @@ class CrownUnlimited(commands.Cog):
                         , colour=embed_color_o)
                         embedVar.set_thumbnail(url=opet_image)
                         if o_used_focus and o_used_resolve and not o_pet_used:
-                            embedVar.set_author(name="Press Q to Quit Match. Press 6 to Summon your Pet!")                                    
+                            embedVar.set_author(name="Press Q to Quit Match.\nPress 6 to Summon your Pet!")                                    
                         elif o_used_focus and not o_used_resolve:
-                            embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen Resolve!")
+                            embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!")
                         else:
                             embedVar.set_author(name="Press Q to Quit Match")
                         embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
@@ -23105,9 +23123,9 @@ class CrownUnlimited(commands.Cog):
                         , colour=embed_color_o)
                         embedVar.set_thumbnail(url=opet_image)
                         if c_used_focus and c_used_resolve and not c_pet_used:
-                            embedVar.set_author(name="Press Q to Quit Match. Press 6 to Summon your Pet!")                                    
+                            embedVar.set_author(name="Press Q to Quit Match.\nPress 6 to Summon your Pet!")                                    
                         elif c_used_focus and not c_used_resolve:
-                            embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen Resolve!")
+                            embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!")
                         else:
                             embedVar.set_author(name="Press Q to Quit Match")
                         embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
@@ -24669,6 +24687,9 @@ class CrownUnlimited(commands.Cog):
     async def cboss(self, ctx, user: User):
         companion = db.queryUser({'DISNAME': str(user)})
         private_channel = ctx
+        if isinstance(private_channel.channel, discord.channel.DMChannel):
+            await private_channel.send(m.SERVER_FUNCTION_ONLY)
+            return
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
         oteam = sowner['TEAM']
         ofam = sowner['FAMILY']
@@ -26024,9 +26045,9 @@ class CrownUnlimited(commands.Cog):
                     , colour=embed_color_o)
                     embedVar.set_thumbnail(url=opet_image)
                     if o_used_focus and o_used_resolve and not o_pet_used:
-                        embedVar.set_author(name="Press Q to Quit Match. Press 6 to Summon your Pet!")                                    
+                        embedVar.set_author(name="Press Q to Quit Match.\nPress 6 to Summon your Pet!")                                    
                     elif o_used_focus and not o_used_resolve:
-                        embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen Resolve!")
+                        embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!")
                     else:
                         embedVar.set_author(name="Press Q to Quit Match")
                     embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
@@ -27641,9 +27662,9 @@ class CrownUnlimited(commands.Cog):
                     , colour=embed_color_o)
                     embedVar.set_thumbnail(url=opet_image)
                     if c_used_focus and c_used_resolve and not c_pet_used:
-                        embedVar.set_author(name="Press Q to Quit Match. Press 6 to Summon your Pet!")                                    
+                        embedVar.set_author(name="Press Q to Quit Match.\nPress 6 to Summon your Pet!")                                    
                     elif c_used_focus and not c_used_resolve:
-                        embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen Resolve!")
+                        embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!")
                     else:
                         embedVar.set_author(name="Press Q to Quit Match")
                     embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
@@ -29165,6 +29186,9 @@ class CrownUnlimited(commands.Cog):
     @commands.command()
     async def dungeon(self, ctx):
         private_channel = ctx
+        if isinstance(private_channel.channel, discord.channel.DMChannel):
+            await private_channel.send(m.SERVER_FUNCTION_ONLY)
+            return
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
         oteam = sowner['TEAM']
         ofam = sowner['FAMILY']
@@ -30136,9 +30160,9 @@ class CrownUnlimited(commands.Cog):
                         , colour=embed_color_o)
                         embedVar.set_thumbnail(url=opet_image)
                         if o_used_focus and o_used_resolve and not o_pet_used:
-                            embedVar.set_author(name="Press Q to Quit Match. Press 6 to Summon your Pet!")                                    
+                            embedVar.set_author(name="Press Q to Quit Match.\nPress 6 to Summon your Pet!")                                    
                         elif o_used_focus and not o_used_resolve:
-                            embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen Resolve!")
+                            embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!")
                         else:
                             embedVar.set_author(name="Press Q to Quit Match")
                         embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
@@ -31368,6 +31392,9 @@ class CrownUnlimited(commands.Cog):
     @commands.command()
     async def tales(self, ctx):
         private_channel = ctx
+        if isinstance(private_channel.channel, discord.channel.DMChannel):
+            await private_channel.send(m.SERVER_FUNCTION_ONLY)
+            return
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
         oteam = sowner['TEAM']
         ofam = sowner['FAMILY']
@@ -32347,9 +32374,9 @@ class CrownUnlimited(commands.Cog):
                         , colour=embed_color_o)
                         embedVar.set_thumbnail(url=opet_image)
                         if o_used_focus and o_used_resolve and not o_pet_used:
-                            embedVar.set_author(name="Press Q to Quit Match. Press 6 to Summon your Pet!")                                    
+                            embedVar.set_author(name="Press Q to Quit Match.\nPress 6 to Summon your Pet!")                                    
                         elif o_used_focus and not o_used_resolve:
-                            embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen Resolve!")
+                            embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!")
                         else:
                             embedVar.set_author(name="Press Q to Quit Match")
                         embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
@@ -33461,6 +33488,9 @@ class CrownUnlimited(commands.Cog):
     @commands.command()
     async def boss(self, ctx):
         private_channel = ctx
+        if isinstance(private_channel.channel, discord.channel.DMChannel):
+            await private_channel.send(m.SERVER_FUNCTION_ONLY)
+            return
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
         oteam = sowner['TEAM']
         ofam = sowner['FAMILY']
@@ -34433,9 +34463,9 @@ class CrownUnlimited(commands.Cog):
                     , colour=embed_color_o)
                     embedVar.set_thumbnail(url=opet_image)
                     if o_used_focus and o_used_resolve and not o_pet_used:
-                        embedVar.set_author(name="Press Q to Quit Match. Press 6 to Summon your Pet!")                                    
+                        embedVar.set_author(name="Press Q to Quit Match.\nPress 6 to Summon your Pet!")                                    
                     elif o_used_focus and not o_used_resolve:
-                        embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen Resolve!")
+                        embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!")
                     else:
                         embedVar.set_author(name="Press Q to Quit Match")
                     embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
@@ -36575,9 +36605,9 @@ class CrownUnlimited(commands.Cog):
                             , colour=embed_color_o)
                             embedVar.set_thumbnail(url=opet_image)
                             if o_used_focus and o_used_resolve and not o_pet_used:
-                                embedVar.set_author(name="Press Q to Quit Match. Press 6 to Summon your Pet!")                                    
+                                embedVar.set_author(name="Press Q to Quit Match.\nPress 6 to Summon your Pet!")                                    
                             elif o_used_focus and not o_used_resolve:
-                                embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen Resolve!")
+                                embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!")
                             else:
                                 embedVar.set_author(name="Press Q to Quit Match")
                             embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
@@ -37178,10 +37208,10 @@ class CrownUnlimited(commands.Cog):
 
                                 embedVar.set_thumbnail(url=tpet_image)
                                 if t_used_focus and t_used_resolve and not t_pet_used:
-                                    embedVar.set_author(name="Press Q to Quit Match. Press 6 to Summon your Pet!")
+                                    embedVar.set_author(name="Press Q to Quit Match.\nPress 6 to Summon your Pet!")
                                     
                                 elif t_used_focus and not t_used_resolve:
-                                    embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen Resolve!")
+                                    embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!")
                                 else:
                                     embedVar.set_author(name="Press Q to Quit Match")
                                 embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
@@ -39156,9 +39186,9 @@ class CrownUnlimited(commands.Cog):
                             , colour=embed_color_o)
                             embedVar.set_thumbnail(url=opet_image)
                             if o_used_focus and o_used_resolve and not o_pet_used:
-                                embedVar.set_author(name="Press Q to Quit Match. Press 6 to Summon your Pet!")                                    
+                                embedVar.set_author(name="Press Q to Quit Match.\nPress 6 to Summon your Pet!")                                    
                             elif o_used_focus and not o_used_resolve:
-                                embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen Resolve!")
+                                embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!")
                             else:
                                 embedVar.set_author(name="Press Q to Quit Match")
                             embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
@@ -39759,10 +39789,10 @@ class CrownUnlimited(commands.Cog):
 
                                 embedVar.set_thumbnail(url=tpet_image)
                                 if t_used_focus and t_used_resolve and not t_pet_used:
-                                    embedVar.set_author(name="Press Q to Quit Match. Press 6 to Summon your Pet!")
+                                    embedVar.set_author(name="Press Q to Quit Match.\nPress 6 to Summon your Pet!")
                                     
                                 elif t_used_focus and not t_used_resolve:
-                                    embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen Resolve!")
+                                    embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!")
                                 else:
                                     embedVar.set_author(name="Press Q to Quit Match")
                                 embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
@@ -41736,9 +41766,9 @@ class CrownUnlimited(commands.Cog):
                             """) 
                             , colour=embed_color_o)
                             if o_used_focus and o_used_resolve and not o_pet_used:
-                                embedVar.set_author(name="Press Q to Quit Match. Press 6 to Summon your Pet!")                                    
+                                embedVar.set_author(name="Press Q to Quit Match.\nPress 6 to Summon your Pet!")                                    
                             elif o_used_focus and not o_used_resolve:
-                                embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen Resolve!")
+                                embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!")
                             else:
                                 embedVar.set_author(name="Press Q to Quit Match")
                             embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
@@ -42238,10 +42268,10 @@ class CrownUnlimited(commands.Cog):
                                 , colour=embed_color_t)
 
                                 if t_used_focus and t_used_resolve and not t_pet_used:
-                                    embedVar.set_author(name="Press Q to Quit Match. Press 6 to Summon your Pet!")
+                                    embedVar.set_author(name="Press Q to Quit Match.\nPress 6 to Summon your Pet!")
                                     
                                 elif t_used_focus and not t_used_resolve:
-                                    embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen Resolve!")
+                                    embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!")
                                 else:
                                     embedVar.set_author(name="Press Q to Quit Match")
                                 embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
@@ -44116,9 +44146,9 @@ class CrownUnlimited(commands.Cog):
                             """) 
                             , colour=embed_color_o)
                             if o_used_focus and o_used_resolve and not o_pet_used:
-                                embedVar.set_author(name="Press Q to Quit Match. Press 6 to Summon your Pet!")                                    
+                                embedVar.set_author(name="Press Q to Quit Match.\nPress 6 to Summon your Pet!")                                    
                             elif o_used_focus and not o_used_resolve:
-                                embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen Resolve!")
+                                embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!")
                             else:
                                 embedVar.set_author(name="Press Q to Quit Match")
                             embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
@@ -44618,10 +44648,10 @@ class CrownUnlimited(commands.Cog):
                                 , colour=embed_color_t)
 
                                 if t_used_focus and t_used_resolve and not t_pet_used:
-                                    embedVar.set_author(name="Press Q to Quit Match. Press 6 to Summon your Pet!")
+                                    embedVar.set_author(name="Press Q to Quit Match.\nPress 6 to Summon your Pet!")
                                     
                                 elif t_used_focus and not t_used_resolve:
-                                    embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen Resolve!")
+                                    embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!")
                                 else:
                                     embedVar.set_author(name="Press Q to Quit Match")
                                 embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
@@ -46514,9 +46544,9 @@ class CrownUnlimited(commands.Cog):
                             , colour=embed_color_o)
                             embedVar.set_thumbnail(url=opet_image)
                             if o_used_focus and o_used_resolve and not o_pet_used:
-                                embedVar.set_author(name="Press Q to Quit Match. Press 6 to Summon your Pet!")                                    
+                                embedVar.set_author(name="Press Q to Quit Match.\nPress 6 to Summon your Pet!")                                    
                             elif o_used_focus and not o_used_resolve:
-                                embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen Resolve!")
+                                embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!")
                             else:
                                 embedVar.set_author(name="Press Q to Quit Match")
                             embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
@@ -47134,10 +47164,10 @@ class CrownUnlimited(commands.Cog):
                                 , colour=embed_color_t)
                                 embedVar.set_thumbnail(url=tpet_image)
                                 if t_used_focus and t_used_resolve and not t_pet_used:
-                                    embedVar.set_author(name="Press Q to Quit Match. Press 6 to Summon your Pet!")
+                                    embedVar.set_author(name="Press Q to Quit Match.\nPress 6 to Summon your Pet!")
                                     
                                 elif t_used_focus and not t_used_resolve:
-                                    embedVar.set_author(name="Press Q to Quit Match. Press 5 to Strengthen Resolve!")
+                                    embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!")
                                 else:
                                     embedVar.set_author(name="Press Q to Quit Match")
                                 embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")

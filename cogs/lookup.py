@@ -610,7 +610,7 @@ class Lookup(commands.Cog):
                     team_list.append(f"{members}")
 
 
-            embed1 = discord.Embed(title=f":checkered_flag: {team_name} Team Card - :coin:{balance}".format(self), description=":bank: Party Chat Gaming Database", colour=000000)
+            embed1 = discord.Embed(title=f":checkered_flag: {team_name} Team Card - :coin:{'{:,}'.format(balance)}".format(self), description=":bank: Party Chat Gaming Database", colour=000000)
             if team['LOGO_FLAG']:
                 embed1.set_image(url=logo)
             embed1.add_field(name="Owner :man_detective:", value= owner_name.split("#",1)[0], inline=False)
@@ -647,7 +647,7 @@ class Lookup(commands.Cog):
             family_name = family['HEAD'] + "'s Family"
             head_name = family['HEAD']
             partner_name = family['PARTNER']
-            savings = family['BANK']
+            savings = int(family['BANK'])
             house = family['HOUSE']
             house_info = db.queryHouse({'HOUSE' : house})
             house_img = house_info['PATH']
@@ -656,7 +656,7 @@ class Lookup(commands.Cog):
                 kid_list.append(kids.split("#",1)[0])
 
 
-            embed1 = discord.Embed(title=f":family_mwgb: {family_name} - :coin:{savings}".format(self), description=":bank: Party Chat Gaming Database", colour=000000)
+            embed1 = discord.Embed(title=f":family_mwgb: {family_name} - :coin:{'{:,}'.format(savings)}".format(self), description=":bank: Party Chat Gaming Database", colour=000000)
             # if team['LOGO_FLAG']:
             #     embed1.set_image(url=logo)
             embed1.add_field(name="Head Of Household :brain:", value= head_name.split("#",1)[0], inline=False)

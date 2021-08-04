@@ -258,7 +258,7 @@ class Cards(commands.Cog):
             tip = ""
             if o_has_collection==True:
                 message = f"{o_card} is a Destiny card. "
-                tip=f"Complete {o_show} Destiny:  {o_collection} to unlock this card"
+                tip=f"Complete {o_show} Destiny: {o_collection} to unlock this card"
             elif o_attack > o_defense:
                 message = f"{o_card} is an offensive card. "
                 tip="Equipping defensive titles and arms would help boost survivability"
