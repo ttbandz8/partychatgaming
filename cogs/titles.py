@@ -25,17 +25,6 @@ class Titles(commands.Cog):
     async def cog_check(self, ctx):
         return await main.validate_user(ctx)
 
-    # @commands.command()
-    # async def nt(self, ctx, *args):
-    #     if ctx.author.guild_permissions.administrator == True:
-    #         title = " ".join([*args])
-    #         title_query = {'TITLE': str(title), 'TOURNAMENT_REQUIREMENTS': 0, 'PRICE': 500}
-    #         added = db.createTitle(data.newTitle(title_query))
-    #         await ctx.send(added)
-    #     else:
-    #         print(m.ADMIN_ONLY_COMMAND)
-
-
     @commands.command()
     async def buytitle(self, ctx, *args: str):
         title_name=" ".join([*args])
@@ -114,10 +103,13 @@ class Titles(commands.Cog):
                         await accept.add_reaction(emoji)
 
                     def check(reaction, user):
-                        return user == ctx.author and str(reaction.emoji) == '👍'
+                        return (user == ctx.author and (str(reaction.emoji) == '👍')) or (user == ctx.author and (str(reaction.emoji) == '👎'))
                     try:
                         user_query = {'DISNAME': str(ctx.author)}
                         reaction, user = await self.bot.wait_for('reaction_add', timeout=25.0, check=check)
+                        if str(reaction.emoji) == '👎':
+                            await ctx.send("Maybe another time...")
+                            return
                         response = db.updateUserNoFilter(user_query, {'$set': {'TITLE': str(title_name)}})
                         await ctx.send(response)
                     except:
@@ -240,16 +232,6 @@ class Titles(commands.Cog):
 
         else:
             await ctx.send("That title doesn't exist.", delete_after=3)
-
-    ''' Delete All Titles '''
-    # @commands.command()
-    # async def dat(self, ctx):
-    #     user_query = {"DISNAME": str(ctx.author)}
-    #     if ctx.author.guild_permissions.administrator == True:
-    #         resp = db.deleteAllTitles(user_query)
-    #         await ctx.send(resp)
-    #     else:
-    #         await ctx.send(m.ADMIN_ONLY_COMMAND)
 
 def setup(bot):
     bot.add_cog(Titles(bot))

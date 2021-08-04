@@ -426,7 +426,7 @@ async def r(ctx):
       """), colour=0xe91e63)
       embedVar.set_footer(text=".help to inquire all potential commands and capabilites of the bot")
       await ctx.author.send(embed=embedVar)
-      await ctx.send(f"{ctx.author.mention} Welcome! Check your DMs.")
+      await ctx.send(f"Welcome to Crown Unlimited, {ctx.author.mention}! Use **.daily** to collect your daily reward! Use **.menu** to see what you can do.")
 
       vault = db.queryVault({'OWNER': disname})
       if vault:
@@ -596,7 +596,7 @@ async def daily_error_message(ctx,error):
 @bot.command(pass_context=True)
 @commands.cooldown(1, 60*60*24, commands.BucketType.user)
 async def daily(ctx):
-   dailyamount = 500
+   dailyamount = 550
    await bless(dailyamount, ctx.author)
 
    user_data = db.queryUser({'DISNAME': str(ctx.author)})

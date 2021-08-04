@@ -25,16 +25,6 @@ class Arm(commands.Cog):
     async def cog_check(self, ctx):
         return await main.validate_user(ctx)
 
-    # @commands.command()
-    # async def na(self, ctx, *args):
-    #     if ctx.author.guild_permissions.administrator == True:
-    #         arm = " ".join([*args])
-    #         arm_query = {'ARM': str(arm), 'TOURNAMENT_REQUIREMENTS': 0, 'PRICE': 500}
-    #         added = db.createArm(data.newArm(arm_query))
-    #         await ctx.send(added)
-    #     else:
-    #         print(m.ADMIN_ONLY_COMMAND)
-
     @commands.command()
     async def buyarm(self, ctx, *args: str):
         arm_name=" ".join([*args])
@@ -111,10 +101,13 @@ class Arm(commands.Cog):
                         await accept.add_reaction(emoji)
 
                     def check(reaction, user):
-                        return user == ctx.author and str(reaction.emoji) == '👍'
+                        return (user == ctx.author and (str(reaction.emoji) == '👍')) or (user == ctx.author and (str(reaction.emoji) == '👎'))
                     try:
                         user_query = {'DISNAME': str(ctx.author)}
                         reaction, user = await self.bot.wait_for('reaction_add', timeout=25.0, check=check)
+                        if str(reaction.emoji) == '👎':
+                            await ctx.send("Maybe next time...")
+                            return
                         response = db.updateUserNoFilter(user_query, {'$set': {'ARM': str(arm_name)}})
                         await ctx.send(response)
                     except:

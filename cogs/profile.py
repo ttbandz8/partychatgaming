@@ -45,10 +45,13 @@ class Profile(commands.Cog):
                         await accept.add_reaction(emoji)
 
                     def check(reaction, user):
-                        return user == ctx.author and str(reaction.emoji) == '👍'
+                        return (user == ctx.author and (str(reaction.emoji) == '👍')) or (user == ctx.author and (str(reaction.emoji) == '👎'))
 
                     try:
                         reaction, user = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
+                        if str(reaction.emoji) == '👎':
+                            await ctx.send("You're still here!")
+                            return
 
                         delete_user_resp = db.deleteUser(query)
                         vault = db.queryVault({'OWNER': user_is_validated['DISNAME']})

@@ -35044,7 +35044,7 @@ class CrownUnlimited(commands.Cog):
                 #Play Bot
                 else:
                     # UNIVERSE CARD
-                    player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus)
+                    player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus, t_attack, t_defense)
                     await private_channel.send(file=player_2_card)
 
                     aiMove = 0
@@ -49096,6 +49096,7 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
         # Stamina Meter
         stam = stamina_bar((stamina, 30), 0)
         im.paste(stam, (80, 195), stam)
+        #########################################################################
 
         draw = ImageDraw.Draw(im)
         header = ImageFont.truetype("KomikaTitle-Paint.ttf", 55)
@@ -49153,40 +49154,25 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
             draw.text((280,130), "RESOLVED", (255,215,0), font=r, stroke_width=2, stroke_fill=(0,0,0), align="left")
 
 
-        moveset = d['MOVESET']
-        # Player Moves
-        move1 = moveset[0]
-        move1_text = list(move1.keys())[0]
+        # moveset = d['MOVESET']
+        # # Player Moves
+        # move1 = moveset[0]
+        # move1_text = list(move1.keys())[0]
 
-        move2 = moveset[1]
-        move2_text = list(move2.keys())[0]
+        # move2 = moveset[1]
+        # move2_text = list(move2.keys())[0]
 
-        move3 = moveset[2]
-        move3_text = list(move3.keys())[0]
+        # move3 = moveset[2]
+        # move3_text = list(move3.keys())[0]
 
-        move_enhanced = moveset[3]
-        move_enhanced_text = list(move_enhanced.keys())[0]
+        # move_enhanced = moveset[3]
+        # move_enhanced_text = list(move_enhanced.keys())[0]
 
-        # if resolved:
-        #     draw.text((82,240), f"1. R {move1_text}: 10 STAM",  (255, 255, 255), font=m, align="left")
-        #     draw.text((82,270), f"2. R {move2_text}: 30 STAM",  (255, 255, 255), font=m, align="left")
-        #     draw.text((82,300), f"3. R {move3_text}: 80 STAM",  (255, 255, 255), font=m, align="left")
-        #     draw.text((82,330), f"4. R {move_enhanced_text}: 20 STAM",  (255, 255, 255), font=m, align="left")
-        #     draw.text((82,550), f"0. Quit.",  (255, 255, 255), font=m, align="left")
-        # else:
-        #     if focused:
-        #         draw.text((82,240), f"1. {move1_text}: 10 STAM",  (255, 255, 255), font=m, align="left")
-        #         draw.text((82,270), f"2. {move2_text}: 30 STAM",  (255, 255, 255), font=m, align="left")
-        #         draw.text((82,300), f"3. {move3_text}: 80 STAM",  (255, 255, 255), font=m, align="left")
-        #         draw.text((82,330), f"4. {move_enhanced_text}: 20 STAM",  (255, 255, 255), font=m, align="left")
-        #         draw.text((82,360), f"5. Resolve",  (255, 255, 255), font=m, align="left")
-        #         draw.text((82,550), f"0. Quit.",  (255, 255, 255), font=m, align="left")
-        #     else:
-        #         draw.text((82,240), f"1. {move1_text}: 10 STAM",  (255, 255, 255), font=m, align="left")
-        #         draw.text((82,270), f"2. {move2_text}: 30 STAM",  (255, 255, 255), font=m, align="left")
-        #         draw.text((82,300), f"3. {move3_text}: 80 STAM",  (255, 255, 255), font=m, align="left")
-        #         draw.text((82,330), f"4. {move_enhanced_text}: 20 STAM",  (255, 255, 255), font=m, align="left")
-        #         draw.text((82,550), f"0. Quit.",  (255, 255, 255), font=m, align="left")
+        # draw.text((82,240), f"1 | 🌀 10 | {move1_text}",  (255, 255, 255), font=m, stroke_width=2, stroke_fill=(0,0,0), align="left")
+        # draw.text((82,270), f"2 | 🌀 30 | {move2_text}",  (255, 255, 255), font=m, stroke_width=2, stroke_fill=(0,0,0), align="left")
+        # draw.text((82,300), f"3 | 🌀 80 | {move3_text}",  (255, 255, 255), font=m, stroke_width=2, stroke_fill=(0,0,0), align="left")
+        # draw.text((82,330), f"4 | 🌀 20 | {move_enhanced_text}",  (255, 255, 255), stroke_width=2, stroke_fill=(0,0,0), font=m, align="left")
+        # draw.text((82,550), f"0 | 🌀 20 | Block",  (255, 255, 255), font=m, align="left")
         
 
         # data = io.BytesIO

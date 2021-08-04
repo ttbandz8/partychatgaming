@@ -27,16 +27,6 @@ class Pet(commands.Cog):
         return await main.validate_user(ctx)
 
     @commands.command()
-    async def np(self, ctx, image, *args):
-        if ctx.author.guild_permissions.administrator == True:
-            pet = " ".join([*args])
-            pet_query = {'PET': str(pet), 'PATH': str(image)}
-            added = db.createPet(data.newPet(pet_query))
-            await ctx.send(added)
-        else:
-            print(m.ADMIN_ONLY_COMMAND)
-
-    @commands.command()
     async def equippet(self, ctx, *args):
         pet_name=" ".join([*args])
         user_query = {'DISNAME': str(ctx.author)}
@@ -134,8 +124,6 @@ class Pet(commands.Cog):
 
         else:
             await ctx.send(m.PET_DOESNT_EXIST, delete_after=3)
-
-
 
 def setup(bot):
     bot.add_cog(Pet(bot))

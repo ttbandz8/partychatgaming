@@ -29,20 +29,25 @@ class Teams(commands.Cog):
         return await main.validate_user(ctx)
 
     @commands.command()
-    async def createteam(self, ctx, args1, *args):
-        game_query = {'ALIASES': args1}
-        game = db.queryGame(game_query)['GAME']
+    async def createteam(self, ctx, *args):
         team_name = " ".join([*args])
-        team_query = {'OWNER': str(ctx.author), 'TNAME': team_name, 'MEMBERS': [str(ctx.author)], 'GAMES': [game]}
-        accept = await ctx.send(f"Do you want to create the {game} team {team_name}?".format(self), delete_after=10)
+        if team_name == "":
+            return
+        team_query = {'OWNER': str(ctx.author), 'TNAME': team_name, 'MEMBERS': [str(ctx.author)], 'GAMES': ["Crown Unlimited"]}
+        accept = await ctx.send(f"Do you want to create the team {team_name}?".format(self), delete_after=10)
         for emoji in emojis:
             await accept.add_reaction(emoji)
 
         def check(reaction, user):
-            return user == ctx.author and str(reaction.emoji) == '👍'
+            return (user == ctx.author and (str(reaction.emoji) == '👍')) or (user == ctx.author and (str(reaction.emoji) == '👎'))
 
         try:
-            confirmed = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
+            reaction, user = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
+
+            if str(reaction.emoji) == '👎':
+                await ctx.send("Team not created.")
+                return
+
             response = db.createTeam(data.newTeam(team_query), str(ctx.author))
             await ctx.send(response)
         except:
@@ -132,10 +137,13 @@ class Teams(commands.Cog):
                         await accept.add_reaction(emoji)
 
                     def check(reaction, user):
-                        return user == ctx.author and str(reaction.emoji) == '👍'
+                        return (user == ctx.author and (str(reaction.emoji) == '👍')) or (user == ctx.author and (str(reaction.emoji) == '👎'))
 
                     try:
-                        confirmed = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
+                        reaction, user = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
+                        if str(reaction.emoji) == '👎':
+                            await ctx.send("Member not deleted. ")
+                            return
                         team_query = {'TNAME': team_profile['TNAME']}
                         new_value_query = {'$pull': {'MEMBERS': str(user1)}}
                         response = db.deleteTeamMember(team_query, new_value_query, str(user1))
@@ -185,10 +193,13 @@ class Teams(commands.Cog):
                     await accept.add_reaction(emoji)
 
                 def check(reaction, user):
-                    return user == ctx.author and str(reaction.emoji) == '👍'
+                    return (user == ctx.author and (str(reaction.emoji) == '👍')) or (user == ctx.author and (str(reaction.emoji) == '👎'))
 
                 try:
-                    confirmed = await self.bot.wait_for('reaction_add', timeout=8.0, check=check)
+                    reaction, user = await self.bot.wait_for('reaction_add', timeout=8.0, check=check)
+                    if str(reaction.emoji) == '👎':
+                        await ctx.send("Team not deleted.")
+                        return
                     response = db.deleteTeam(team, str(ctx.author))
 
                     user_query = {'DISNAME': str(ctx.author)}
@@ -196,41 +207,12 @@ class Teams(commands.Cog):
                     db.updateUserNoFilter(user_query, new_value)
 
                     await ctx.send(response)
-                except:
-                    print("Team not created. ")
+                except Exception as e:
+                    print(e)
             else:
                 await ctx.send("Only the owner of the team can delete the team. ")
         else:
             await ctx.send(m.TEAM_DOESNT_EXIST, delete_after=5)
-
-    @commands.command()
-    async def addteamgame(self, ctx, *args):
-        owner = db.queryUser({'DISNAME': str(ctx.author)})
-        team = db.queryTeam({'TNAME': owner['TEAM']})
- 
-        alias = " ".join([*args]).lower()
-        if team:
-            if team['OWNER'] == owner['DISNAME']:
-                aliases = [x for x in db.query_all_games() for x in x['ALIASES']]
-                if alias in aliases:
-                    game_query = {'ALIASES': alias}
-                    game = db.queryGame(game_query)
-                    if game:
-                        title = game['GAME']
-                        for games in team['GAMES']:
-                            if games == title:
-                                await ctx.send(m.TEAM_ALREADY_PLAYS)
-                            else: 
-                                query_to_update_game = {"$push": {"GAMES": title}}
-                                resp = db.updateTeam(team, query_to_update_game)
-                                await ctx.send(resp)
-                else:
-                    await ctx.send(m.GAME_UNAVAILABLE)
-            else:
-                await ctx.send(m.OWNER_ONLY_COMMAND)
-        else:
-            await ctx.send(m.TEAM_DOESNT_EXIST)
-
 
 def setup(bot):
     bot.add_cog(Teams(bot))

@@ -542,15 +542,6 @@ class Lookup(commands.Cog):
             # embed1.add_field(name="Pet" + " :dog:  ", value=f"{pet}")
             # embed1.add_field(name="Tournament Wins" + " :fireworks:", value=tournament_wins)
 
-            embed2 = discord.Embed(title= f"{icon} " + f"{name}".format(self), description=":bank: Party Chat Gaming Database™️", colour=000000)
-            embed2.set_thumbnail(url=avatar)
-            embed2.add_field(name="Game" + " :video_game:" , value='\n'.join(games))
-            embed2.add_field(name="In-Game Name" + " :selfie:", value="\n".join(f'{k}: :video_game: {v}' for k,v in ign_to_string.items()), inline=False)
-
-            embed3 = discord.Embed(title= f"{icon} " + f"{name}".format(self), description=":bank: Party Chat Gaming Database™️", colour=000000)
-            embed3.set_thumbnail(url=avatar)
-            embed3.add_field(name="Stats" + " :medal:", value="\n".join(f'{k}: {"/".join([str(int) for int in v])}' for k,v in matches_to_string.items()))
-            
             if crown_list:
                 embed4 = discord.Embed(title= f":triangular_flag_on_post: " + f"{name}".format(self), description=":bank: Party Chat Gaming Database™️", colour=000000)
                 embed4.set_thumbnail(url=avatar)
@@ -576,7 +567,7 @@ class Lookup(commands.Cog):
             paginator.add_reaction('🔐', "lock")
             paginator.add_reaction('⏩', "next")
             paginator.add_reaction('⏭️', "last")
-            embeds = [embed1, embed4,embed3,embed2 ]
+            embeds = [embed1, embed4 ]
             await paginator.run(embeds)
         else:
             await ctx.send(m.USER_NOT_REGISTERED)
