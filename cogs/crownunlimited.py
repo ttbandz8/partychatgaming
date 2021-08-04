@@ -48460,8 +48460,8 @@ class CrownUnlimited(commands.Cog):
         for o in ov:
             if str(ctx.author) == str(o):
                 validator = True
-        response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
         if private_channel.guild and validator:
+            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
             await discord.TextChannel.delete(private_channel.channel, reason=None)
 
 async def score(owner, user: User):
