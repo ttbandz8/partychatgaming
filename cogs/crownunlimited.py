@@ -1019,7 +1019,7 @@ class CrownUnlimited(commands.Cog):
                         # UNIVERSE CARD
                         player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                         await private_channel.send(file=player_1_card)
-                        embedVar = discord.Embed(title=f"{o_card}, choose your move!", description=textwrap.dedent(f"""\
+                        embedVar = discord.Embed(title=f"{o_card}, choose your move! _Turn_ {turn_total}", description=textwrap.dedent(f"""\
                         **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                                                 
                         **{t_card}:** :heart: {t_health}/:cyclone: {t_stamina}
@@ -2083,7 +2083,7 @@ class CrownUnlimited(commands.Cog):
                     await accept.add_reaction(emoji)
 
                 def check(reaction, user):
-                    return user == user1 and (str(reaction.emoji) == '👍') or (str(reaction.emoji) == '👎')
+                    return (user == user1 and (str(reaction.emoji) == '👍')) or (user == user1 and (str(reaction.emoji) == '👎'))
                 try:
                     reaction, user = await self.bot.wait_for('reaction_add', timeout=45.0, check=check)
 
@@ -2125,48 +2125,11 @@ class CrownUnlimited(commands.Cog):
                 if questlogger:
                     await ctx.author.send(questlogger)
                 if currentopponent != (total_legends):
-                
-                    if private_channel.guild:
-
-                        embedVar = discord.Embed(title=f"VICTORY\n`{o_card} says:`\n{o_win_description}", description=f"The game lasted {turn_total} rounds.\n\n{drop_response}", colour=0xe91e63)
-                        embedVar.set_author(name=f"{t_card} lost!")
-                        await private_channel.send(embed=embedVar)
-
-                        emojis = ['👍', '👎']
-                        accept = await private_channel.send(f"{ctx.author.mention} would you like to continue?")
-                        for emoji in emojis:
-                            await accept.add_reaction(emoji)
-
-                        def check(reaction, user):
-                            return user == user1 and ((str(reaction.emoji) == '👍') or (str(reaction.emoji) == '👎'))
-                        try:
-                            reaction, user = await self.bot.wait_for('reaction_add', timeout=45.0, check=check)
-                          
-                            if str(reaction.emoji) == '👎':
-                                continued = False 
-                                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
-                                if private_channel.guild:
-                                    await discord.TextChannel.delete(private_channel, reason=None)
-                                return
-
-
-                            currentopponent = currentopponent + 1
-                            continued = True
-                        except asyncio.TimeoutError:
-                            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
-                            await private_channel.send(f"{ctx.author.mention} {m.STORY_ENDED}")
-                            if private_channel.guild:
-                                await discord.TextChannel.delete(private_channel, reason=None)
-                            return
-                    else:
-
-                        embedVar = discord.Embed(title=f"VICTORY", description=f"{t_card} has been defeated!\n\n{drop_response}", colour=0xe91e63)
-                        embedVar.set_author(name=f"The match lasted {turn_total} rounds.")
-                        embedVar.set_footer(text=f"{o_card} says:\n{o_win_description}")
-                        await ctx.author.send(embed=embedVar)
-
-                        currentopponent = currentopponent + 1
-                        continued = True
+                    embedVar = discord.Embed(title=f"VICTORY\n`{o_card} says:`\n{o_win_description}", description=f"The game lasted {turn_total} rounds.\n\n{drop_response}", colour=0xe91e63)
+                    embedVar.set_author(name=f"{t_card} lost!")
+                    await private_channel.send(embed=embedVar)
+                    currentopponent = currentopponent + 1
+                    continued = True
 
                 if currentopponent == (total_legends):
                     embedVar = discord.Embed(title=f"UNIVERSE CONQUERED", description=f"Universe {selected_universe} has been conquered\n\n{drop_response}", colour=0xe91e63)
@@ -2177,15 +2140,15 @@ class CrownUnlimited(commands.Cog):
                     new_upload_query={'$addToSet': {'CROWN_TALES': selected_universe}}
                     r=db.updateUserNoFilter(upload_query, new_upload_query)
                     if selected_universe in completed_crown_tales:
-                        await bless(60, ctx.author)
+                        await bless(400, ctx.author)
                         await ctx.author.send(embed=embedVar)
                         response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
-                        await ctx.author.send(f"You were awarded :coin: 25 for completing the {selected_universe} Tale!")
+                        await ctx.author.send(f"You were awarded :coin: 400 for completing the {selected_universe} Tale again!")
                     else:
-                        await bless(500, ctx.author)
+                        await bless(5000, ctx.author)
                         await ctx.author.send(embed=embedVar)
                         response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
-                        await ctx.author.send(f"You were awarded :coin: 500 for completing the {selected_universe} Tale! ")
+                        await ctx.author.send(f"You were awarded :coin: 5000 for completing the {selected_universe} Tale! ")
                     continued=False
                     if private_channel.guild:
                         await discord.TextChannel.delete(private_channel, reason=None)
@@ -3540,7 +3503,7 @@ class CrownUnlimited(commands.Cog):
                         # UNIVERSE CARD
                         player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                         await private_channel.send(file=player_1_card)
-                        embedVar = discord.Embed(title=f"{o_card}, choose your move!", description=textwrap.dedent(f"""\
+                        embedVar = discord.Embed(title=f"{o_card}, choose your move! _Turn_ {turn_total}", description=textwrap.dedent(f"""\
                         **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                         :cyclone: 10 | **{omove1_text}** | _1_
                         :cyclone: 30 | **{omove2_text}** | _2_
@@ -6497,13 +6460,13 @@ class CrownUnlimited(commands.Cog):
                         #await bless(25, cuser)
                         await ctx.author.send(embed=embedVar)
                         response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
-                        await ctx.author.send(f"You were awarded :coin: 25 for completing the {selected_universe} Tale!")
+                        await ctx.author.send(f"You were awarded :coin: 400 for completing the {selected_universe} Tale again!")
                         continued=False
                     else:
-                        await bless(500, ctx.author)
+                        await bless(5000, ctx.author)
                         await ctx.author.send(embed=embedVar)
                         response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
-                        await ctx.author.send(f"You were awarded :coin: 500 for completing the {selected_universe} Tale! ")
+                        await ctx.author.send(f"You were awarded :coin: 5000 for completing the {selected_universe} Tale! ")
                         continued=False
                     if private_channel.guild:
                         response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
@@ -7867,7 +7830,7 @@ class CrownUnlimited(commands.Cog):
                         # UNIVERSE CARD
                         player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                         await private_channel.send(file=player_1_card)
-                        embedVar = discord.Embed(title=f"{o_card}, choose your move!", description=textwrap.dedent(f"""\
+                        embedVar = discord.Embed(title=f"{o_card}, choose your move! _Turn_ {turn_total}", description=textwrap.dedent(f"""\
                         **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                         :cyclone: 10 | **{omove1_text}** | _1_
                         :cyclone: 30 | **{omove2_text}** | _2_
@@ -11264,16 +11227,16 @@ class CrownUnlimited(commands.Cog):
                     new_upload_query={'$addToSet': {'CROWN_TALES': selected_universe}}
                     r=db.updateUserNoFilter(upload_query, new_upload_query)
                     if selected_universe in completed_dungeons:
-                        await bless(125, ctx.author)
+                        await bless(800, ctx.author)
                         #await bless(125, user2)
                         await ctx.author.send(embed=embedVar)
-                        await ctx.author.send(f"You were awarded :coin: 125 for completing the {selected_universe} Dungeon!")
+                        await ctx.author.send(f"You were awarded :coin: 800 for completing the {selected_universe} Dungeon again!")
                         response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                     else:
-                        await bless(800, ctx.author)
+                        await bless(15000, ctx.author)
                         await ctx.author.send(embed=embedVar)
                         response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
-                        await ctx.author.send(f"You were awarded :coin: 800 for completing the {selected_universe} Dungeon! ")
+                        await ctx.author.send(f"You were awarded :coin: 15000 for completing the {selected_universe} Dungeon! ")
                     continued=False
                     if private_channel.guild:
                         response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
@@ -12640,7 +12603,7 @@ class CrownUnlimited(commands.Cog):
                     # UNIVERSE CARD
                     player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                     await private_channel.send(file=player_1_card)
-                    embedVar = discord.Embed(title=f"{o_card}, choose your move!", description=textwrap.dedent(f"""\
+                    embedVar = discord.Embed(title=f"{o_card}, choose your move! _Turn_ {turn_total}", description=textwrap.dedent(f"""\
                     **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                     :cyclone: 10 | **{omove1_text}** | _1_
                     :cyclone: 30 | **{omove2_text}** | _2_
@@ -17384,7 +17347,7 @@ class CrownUnlimited(commands.Cog):
                         # UNIVERSE CARD
                         player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                         await private_channel.send(file=player_1_card)
-                        embedVar = discord.Embed(title=f"{o_card}, choose your move!", description=textwrap.dedent(f"""\
+                        embedVar = discord.Embed(title=f"{o_card}, choose your move! _Turn_ {turn_total}", description=textwrap.dedent(f"""\
                         **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                         :cyclone: 10 | **{omove1_text}** | _1_
                         :cyclone: 30 | **{omove2_text}** | _2_
@@ -18781,7 +18744,7 @@ class CrownUnlimited(commands.Cog):
                         # UNIVERSE CARD
                         companion = showcard(c, c_max_health, c_health, c_max_stamina, c_stamina, c_used_resolve, ctitle, c_used_focus)
                         await private_channel.send(file=companion)
-                        embedVar = discord.Embed(title=f"{c_card}, choose your move!", description=textwrap.dedent(f"""\
+                        embedVar = discord.Embed(title=f"{c_card}, choose your move! _Turn_ {turn_total}", description=textwrap.dedent(f"""\
                         **:heart: {c_health}/:cyclone: {c_stamina} :dagger:{c_attack}/:shield:{c_defense}**
                         :cyclone: 10 | **{cmove1_text}** | _1_
                         :cyclone: 30 | **{cmove2_text}** | _2_
@@ -20150,13 +20113,13 @@ class CrownUnlimited(commands.Cog):
                         await bless(25, cuser)
                         await ctx.author.send(embed=embedVar)
                         response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
-                        await ctx.author.send(f"You were awarded :coin: 25 for completing the {selected_universe} Tale!")
+                        await ctx.author.send(f"You were awarded :coin: 400 for completing the {selected_universe} Tale again!")
                         continued=False
                     else:
-                        await bless(500, ctx.author)
+                        await bless(5000, ctx.author)
                         await ctx.author.send(embed=embedVar)
                         response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
-                        await ctx.author.send(f"You were awarded :coin: 500 for completing the {selected_universe} Tale! ")
+                        await ctx.author.send(f"You were awarded :coin: 5000 for completing the {selected_universe} Tale! ")
                         continued=False
                     if private_channel.guild:
                         response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
@@ -21510,7 +21473,7 @@ class CrownUnlimited(commands.Cog):
                         # UNIVERSE CARD
                         player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                         await private_channel.send(file=player_1_card)
-                        embedVar = discord.Embed(title=f"{o_card}, choose your move!", description=textwrap.dedent(f"""\
+                        embedVar = discord.Embed(title=f"{o_card}, choose your move! _Turn_ {turn_total}", description=textwrap.dedent(f"""\
                         **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                         :cyclone: 10 | **{omove1_text}** | _1_
                         :cyclone: 30 | **{omove2_text}** | _2_
@@ -23108,7 +23071,7 @@ class CrownUnlimited(commands.Cog):
                         # UNIVERSE CARD
                         companion = showcard(c, c_max_health, c_health, c_max_stamina, c_stamina, c_used_resolve, ctitle, c_used_focus)
                         await private_channel.send(file=companion)
-                        embedVar = discord.Embed(title=f"{c_card}, choose your move!", description=textwrap.dedent(f"""\
+                        embedVar = discord.Embed(title=f"{c_card}, choose your move! _Turn_ {turn_total}", description=textwrap.dedent(f"""\
                         **:heart: {c_health}/:cyclone: {c_stamina} :dagger:{c_attack}/:shield:{c_defense}**
                         :cyclone: 10 | **{cmove1_text}** | _1_
                         :cyclone: 30 | **{cmove2_text}** | _2_
@@ -24668,16 +24631,16 @@ class CrownUnlimited(commands.Cog):
                     new_upload_query={'$addToSet': {'CROWN_TALES': selected_universe}}
                     r=db.updateUserNoFilter(upload_query, new_upload_query)
                     if selected_universe in completed_dungeons:
-                        await bless(125, ctx.author)
+                        await bless(800, ctx.author)
                         await bless(125, user2)
                         await ctx.author.send(embed=embedVar)
-                        await ctx.author.send(f"You were awarded :coin: 125 for completing the {selected_universe} Dungeon!")
+                        await ctx.author.send(f"You were awarded :coin: 800 for completing the {selected_universe} Dungeon again!")
                         response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                     else:
-                        await bless(800, ctx.author)
+                        await bless(15000, ctx.author)
                         await ctx.author.send(embed=embedVar)
                         response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
-                        await ctx.author.send(f"You were awarded :coin: 800 for completing the {selected_universe} Dungeon! ")
+                        await ctx.author.send(f"You were awarded :coin: 15000 for completing the {selected_universe} Dungeon! ")
                     continued=False
                     if private_channel.guild:
                         response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
@@ -26030,7 +25993,7 @@ class CrownUnlimited(commands.Cog):
                     # UNIVERSE CARD
                     player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                     await private_channel.send(file=player_1_card)
-                    embedVar = discord.Embed(title=f"{o_card}, choose your move!", description=textwrap.dedent(f"""\
+                    embedVar = discord.Embed(title=f"{o_card}, choose your move! _Turn_ {turn_total}", description=textwrap.dedent(f"""\
                     **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                     :cyclone: 10 | **{omove1_text}** | _1_
                     :cyclone: 30 | **{omove2_text}** | _2_
@@ -27647,7 +27610,7 @@ class CrownUnlimited(commands.Cog):
                     # UNIVERSE CARD
                     companion = showcard(c, c_max_health, c_health, c_max_stamina, c_stamina, c_used_resolve, ctitle, c_used_focus)
                     await private_channel.send(file=companion)
-                    embedVar = discord.Embed(title=f"{c_card}, choose your move!", description=textwrap.dedent(f"""\
+                    embedVar = discord.Embed(title=f"{c_card}, choose your move! _Turn_ {turn_total}", description=textwrap.dedent(f"""\
                     **:heart: {c_health}/:cyclone: {c_stamina} :dagger:{c_attack}/:shield:{c_defense}**
                     :cyclone: 10 | **{cmove1_text}** | _1_
                     :cyclone: 30 | **{cmove2_text}** | _2_
@@ -30147,7 +30110,7 @@ class CrownUnlimited(commands.Cog):
                         # UNIVERSE CARD
                         player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                         await private_channel.send(file=player_1_card)
-                        embedVar = discord.Embed(title=f"{o_card}, choose your move!", description=textwrap.dedent(f"""\
+                        embedVar = discord.Embed(title=f"{o_card}, choose your move! _Turn_ {turn_total}", description=textwrap.dedent(f"""\
                         **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                         :cyclone: 10 | **{omove1_text}** | _1_
                         :cyclone: 30 | **{omove2_text}** | _2_
@@ -31380,10 +31343,10 @@ class CrownUnlimited(commands.Cog):
                         await ctx.author.send(f"You were awarded :coin: 50 for completing the {selected_universe} Dungeon!")
                         response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                     else:
-                        await bless(800, ctx.author)
+                        await bless(15000, ctx.author)
                         await ctx.author.send(embed=embedVar)
                         response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
-                        await ctx.author.send(f"You were awarded :coin: 800 for completing the {selected_universe} Dungeon! ")
+                        await ctx.author.send(f"You were awarded :coin: 15000 for completing the {selected_universe} Dungeon! ")
                     continued=False
                     if private_channel.guild:
                         response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
@@ -32361,7 +32324,7 @@ class CrownUnlimited(commands.Cog):
                         o_fortitude = (o_max_health - o_health) *(2/5)
                         o_attack_power = o_attack/3
                         strength = round((o_fortitude * o_attack_power)/100)
-                        embedVar = discord.Embed(title=f"{o_card}, choose your move!", description=textwrap.dedent(f"""\
+                        embedVar = discord.Embed(title=f"{o_card}, choose your move! _Turn_ {turn_total}", description=textwrap.dedent(f"""\
                         **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                         :cyclone: 10 | **{omove1_text}** | _1_
                         :cyclone: 30 | **{omove2_text}** | _2_
@@ -33472,15 +33435,15 @@ class CrownUnlimited(commands.Cog):
                     new_upload_query={'$addToSet': {'CROWN_TALES': selected_universe}}
                     r=db.updateUserNoFilter(upload_query, new_upload_query)
                     if selected_universe in completed_crown_tales:
-                        await bless(60, ctx.author)
+                        await bless(400, ctx.author)
                         await ctx.author.send(embed=embedVar)
                         response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
-                        await ctx.author.send(f"You were awarded :coin: 25 for completing the {selected_universe} Tale!")
+                        await ctx.author.send(f"You were awarded :coin: 400 for completing the {selected_universe} Tale again!")
                     else:
-                        await bless(500, ctx.author)
+                        await bless(5000, ctx.author)
                         await ctx.author.send(embed=embedVar)
                         response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
-                        await ctx.author.send(f"You were awarded :coin: 500 for completing the {selected_universe} Tale! ")
+                        await ctx.author.send(f"You were awarded :coin: 5000 for completing the {selected_universe} Tale! ")
                     continued=False
                     if private_channel.guild:
                         await discord.TextChannel.delete(private_channel, reason=None)
@@ -34450,7 +34413,7 @@ class CrownUnlimited(commands.Cog):
                     # UNIVERSE CARD
                     player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                     await private_channel.send(file=player_1_card)
-                    embedVar = discord.Embed(title=f"{o_card}, choose your move!", description=textwrap.dedent(f"""\
+                    embedVar = discord.Embed(title=f"{o_card}, choose your move! _Turn_ {turn_total}", description=textwrap.dedent(f"""\
                     **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                     :cyclone: 10 | **{omove1_text}** | _1_
                     :cyclone: 30 | **{omove2_text}** | _2_
@@ -36592,7 +36555,7 @@ class CrownUnlimited(commands.Cog):
                             # UNIVERSE CARD
                             player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                             await private_channel.send(file=player_1_card)
-                            embedVar = discord.Embed(title=f"{o_card}, choose your move!", description=textwrap.dedent(f"""\
+                            embedVar = discord.Embed(title=f"{o_card}, choose your move! _Turn_ {turn_total}", description=textwrap.dedent(f"""\
                             **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                             :cyclone: 10 | **{omove1_text}** | _1_
                             :cyclone: 30 | **{omove2_text}** | _2_
@@ -37192,7 +37155,7 @@ class CrownUnlimited(commands.Cog):
                                 player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus)
                                 await ctx.send(file=player_2_card)
 
-                                embedVar = discord.Embed(title=f"{t_card}, choose your move!", description=textwrap.dedent(f"""\
+                                embedVar = discord.Embed(title=f"{t_card}, choose your move! _Turn_ {turn_total}", description=textwrap.dedent(f"""\
                                 **:heart: {t_health}/:cyclone: {t_stamina} :dagger:{t_attack}/:shield:{t_defense}**
                                 :cyclone: 10 | **{tmove1_text}** | _1_
                                 :cyclone: 30 | **{tmove2_text}** | _2_
@@ -39173,7 +39136,7 @@ class CrownUnlimited(commands.Cog):
                             # UNIVERSE CARD
                             player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                             await private_channel.send(file=player_1_card)
-                            embedVar = discord.Embed(title=f"{o_card}, choose your move!", description=textwrap.dedent(f"""\
+                            embedVar = discord.Embed(title=f"{o_card}, choose your move! _Turn_ {turn_total}", description=textwrap.dedent(f"""\
                             **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                             :cyclone: 10 | **{omove1_text}** | _1_
                             :cyclone: 30 | **{omove2_text}** | _2_
@@ -39773,7 +39736,7 @@ class CrownUnlimited(commands.Cog):
                                 player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus)
                                 await ctx.send(file=player_2_card)
 
-                                embedVar = discord.Embed(title=f"{t_card}, choose your move!", description=textwrap.dedent(f"""\
+                                embedVar = discord.Embed(title=f"{t_card}, choose your move! _Turn_ {turn_total}", description=textwrap.dedent(f"""\
                                 **:heart: {t_health}/:cyclone: {t_stamina} :dagger:{t_attack}/:shield:{t_defense}**
                                 :cyclone: 10 | **{tmove1_text}** | _1_
                                 :cyclone: 30 | **{tmove2_text}** | _2_
@@ -41754,7 +41717,7 @@ class CrownUnlimited(commands.Cog):
                             # UNIVERSE CARD
                             player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                             await private_channel.send(file=player_1_card)
-                            embedVar = discord.Embed(title=f"{o_card}, choose your move!", description=textwrap.dedent(f"""\
+                            embedVar = discord.Embed(title=f"{o_card}, choose your move! _Turn_ {turn_total}", description=textwrap.dedent(f"""\
                             **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                             :cyclone: 10 | **{omove1_text}** | _1_
                             :cyclone: 30 | **{omove2_text}** | _2_
@@ -42253,7 +42216,7 @@ class CrownUnlimited(commands.Cog):
                                 player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus)
                                 await ctx.send(file=player_2_card)
 
-                                embedVar = discord.Embed(title=f"{t_card}, choose your move!", description=textwrap.dedent(f"""\
+                                embedVar = discord.Embed(title=f"{t_card}, choose your move! _Turn_ {turn_total}", description=textwrap.dedent(f"""\
                                 **:heart: {t_health}/:cyclone: {t_stamina} :dagger:{t_attack}/:shield:{t_defense}**
                                 :cyclone: 10 | **{tmove1_text}** | _1_
                                 :cyclone: 30 | **{tmove2_text}** | _2_
@@ -44134,7 +44097,7 @@ class CrownUnlimited(commands.Cog):
                             # UNIVERSE CARD
                             player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                             await private_channel.send(file=player_1_card)
-                            embedVar = discord.Embed(title=f"{o_card}, choose your move!", description=textwrap.dedent(f"""\
+                            embedVar = discord.Embed(title=f"{o_card}, choose your move! _Turn_ {turn_total}", description=textwrap.dedent(f"""\
                             **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                             :cyclone: 10 | **{omove1_text}** | _1_
                             :cyclone: 30 | **{omove2_text}** | _2_
@@ -44633,7 +44596,7 @@ class CrownUnlimited(commands.Cog):
                                 player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus)
                                 await ctx.send(file=player_2_card)
 
-                                embedVar = discord.Embed(title=f"{t_card}, choose your move!", description=textwrap.dedent(f"""\
+                                embedVar = discord.Embed(title=f"{t_card}, choose your move! _Turn_ {turn_total}", description=textwrap.dedent(f"""\
                                 **:heart: {t_health}/:cyclone: {t_stamina} :dagger:{t_attack}/:shield:{t_defense}**
                                 :cyclone: 10 | **{tmove1_text}** | _1_
                                 :cyclone: 30 | **{tmove2_text}** | _2_
@@ -46531,7 +46494,7 @@ class CrownUnlimited(commands.Cog):
                             # UNIVERSE CARD
                             player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus)
                             await private_channel.send(file=player_1_card)
-                            embedVar = discord.Embed(title=f"{o_card}, choose your move!", description=textwrap.dedent(f"""\
+                            embedVar = discord.Embed(title=f"{o_card}, choose your move! _Turn_ {turn_total}", description=textwrap.dedent(f"""\
                             **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                             :cyclone: 10 | **{omove1_text}** | _1_
                             :cyclone: 30 | **{omove2_text}** | _2_
@@ -47149,7 +47112,7 @@ class CrownUnlimited(commands.Cog):
                                 # UNIVERSE CARD
                                 player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus)
                                 await ctx.send(file=player_2_card)
-                                embedVar = discord.Embed(title=f"{t_card}, choose your move!", description=textwrap.dedent(f"""\
+                                embedVar = discord.Embed(title=f"{t_card}, choose your move! _Turn_ {turn_total}", description=textwrap.dedent(f"""\
                                 **:heart: {t_health}/:cyclone: {t_stamina} :dagger:{t_attack}/:shield:{t_defense}**
                                 :cyclone: 10 | **{tmove1_text}** | _1_
                                 :cyclone: 30 | **{tmove2_text}** | _2_
