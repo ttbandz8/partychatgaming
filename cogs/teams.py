@@ -54,7 +54,7 @@ class Teams(commands.Cog):
             print("Team not created. ")
 
     @commands.command()
-    async def addtoteam(self, ctx, user1: User):
+    async def recruit(self, ctx, user1: User):
         owner_profile = db.queryUser({'DISNAME': str(ctx.author)})
         team_profile = db.queryTeam({'TNAME': owner_profile['TEAM']})
 
@@ -99,7 +99,6 @@ class Teams(commands.Cog):
         else:
 
             if owner_profile['DISNAME'] == team_profile['OWNER']:
-
                 member_profile = db.queryUser({'DISNAME': str(user1)})
                 # If user is part of a team you cannot add them to your team
                 if member_profile['TEAM'] != 'PCG':
@@ -115,13 +114,12 @@ class Teams(commands.Cog):
                         confirmed = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
                         team_query = {'TNAME': team_profile['TNAME']}
                         new_value_query = {'$push': {'MEMBERS': str(ctx.author)}}
-                        response = db.addTeamMember(team_query, new_value_query, str(ctx.author), str(user1))
+                        response = db.addTeamMember(team_query, new_value_query, str(user1), str(ctx.author))
                         await ctx.send(response)
                     except:
                         await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=3)
                 else:
                     await ctx.send(m.USER_ALREADY_ON_TEAM, delete_after=5)
-
             else:
                 await ctx.send(m.OWNER_ONLY_COMMAND, delete_after=5)
 

@@ -24,13 +24,12 @@ BOT_COMMANDS = textwrap.dedent(f"""\
 **TEAM COMMANDS**
 **.lookupteam team name**: Team lookup
 **.createteam game team name**: Create team 
-**.addteamgame game**: Add game to your team
 **.deleteteam**: Delete team
-**.addtoteam @player**: Add player to team
+**.recruit @player**: Add player to team
 **.deletemember @player**: Delete team member
 **.apply @player**: Apply for owners team 
 **.leaveteam team**: Leave Team
-**.teamgift @player amount**: Send Team Members coin (Owner Onlu)
+**.pay @player amount**: Send Team Members coin (Owner Onlu)
 **.donate amount team name**: Donate coin to Team Bank
 
 **FAMILY COMMANDS**
@@ -41,7 +40,7 @@ BOT_COMMANDS = textwrap.dedent(f"""\
 **.disown @user**: Remove Child From Family
 **.runaway**: Runaway from family as child
 **.abandon**: Delete Family
-**.familygift @player amount**: Send Family Members coin (Head/Partner Only)
+**.allowance @player amount**: Send Family Members coin (Head/Partner Only)
 **.invest amount**: Invest coin into family Bank
 **.houses**: Show list of available houses
 **.viewhouse**: View House Information
@@ -61,7 +60,6 @@ BOT_COMMANDS = textwrap.dedent(f"""\
 
 CROWN_UNLIMITED_COMMANDS = textwrap.dedent(f"""\
 **CROWN UNLIMITED PROFILE COMMANDS**
-**.solo**: Play Crown Unlimited In DM
 **.crown**: Crown Unlimited Help Book
 **.build**: View your current build
 **.abuild 1-3**: View a preset build

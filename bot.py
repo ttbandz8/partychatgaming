@@ -447,7 +447,7 @@ async def rebirth(ctx):
          rebirthCost = round(150000 * (1 + (rLevel)))
          embedVar1 = discord.Embed(title= f":heart_on_fire:{user_is_validated['NAME']}'s Rebirth",colour=0x7289da)
          embedVar1.set_thumbnail(url=user_is_validated['AVATAR'])
-         embedVar1.add_field(name=f"Rebirth Level: {user_is_validated['REBIRTH']}\nRebirth Cost: {rebirthCost} :coin:", value=textwrap.dedent(f"""\
+         embedVar1.add_field(name=f"Rebirth Level: {user_is_validated['REBIRTH']}\nRebirth Cost: :coin:{'{:,}'.format(rebirthCost)}", value=textwrap.dedent(f"""\
          **Rebirth Effects**
          New Starting Deck
          Starting Pet Bond
@@ -567,7 +567,7 @@ async def rebirth(ctx):
             await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=3)
       else:
          await ctx.send(f"You are at full Rebirth\n:angel:Level: {user_is_validated['REBIRTH']} ", delete_after=5)
-         
+      
       
 @bot.command()
 @commands.check(validate_user)
@@ -1021,25 +1021,26 @@ async def invest(ctx, amount):
 
 @bot.command()
 @commands.check(validate_user)
-async def teamgift(ctx, user2: User, amount):
+async def pay(ctx, user2: User, amount):
    user = db.queryUser({'DISNAME': str(ctx.author)})
-   if user['TEAM'] == 'PCG':
-      await ctx.send("You must be owner of team to gift from team bank. ")
-      return
-
    team = db.queryTeam({'TNAME': user['TEAM']})
+   
+   if user['TEAM'] == 'PCG' or user['DISNAME'] != team['OWNER']:
+      await ctx.send("You must be owner of team to pay members. ")
+      return
 
    if str(user2) not in team['MEMBERS']:
-      await ctx.send("You can only give from bank to team members. ")
+      await ctx.send("You can only pay team members. ")
       return
+      
 
    balance = team['BANK']
    if balance <= int(amount):
-      await ctx.send("You do not have that amount to give.")
+      await ctx.send("You do not have that amount to pay.")
    else:
       await bless(int(amount), user2)
       await curseteam(int(amount), team['TNAME'])
-      await ctx.send(f":coin:{amount} has been gifted to {user2.mention}.")
+      await ctx.send(f":coin:{amount} has been paid to {user2.mention}.")
       return
 
 async def blessteam(amount, team):
@@ -1067,7 +1068,7 @@ async def curseteam(amount, team):
 
 @bot.command()
 @commands.check(validate_user)
-async def familygift(ctx, user2: User, amount):
+async def allowance(ctx, user2: User, amount):
    user = db.queryUser({'DISNAME': str(ctx.author)})
    family = db.queryFamily({'HEAD' : user['FAMILY']})
    if user['FAMILY'] == 'PCG' or (user['FAMILY'] != user['DISNAME'] and user['DISNAME'] != family['PARTNER']):
@@ -1078,11 +1079,11 @@ async def familygift(ctx, user2: User, amount):
    kids = family['KIDS']
 
    if str(user2) not in family['KIDS'] and str(user2) not in family['PARTNER'] and str(user2) not in family['HEAD']:
-      await ctx.send("You can only give from savings to family members. ")
+      await ctx.send("You can only give allowance family members. ")
       return
    balance = family['BANK']
    if balance <= int(amount):
-      await ctx.send("You do not have that amount to give.")
+      await ctx.send("You do not have that amount saved.")
    else:
       await bless(int(amount), user2)
       await cursefamily(int(amount), family['HEAD'])
