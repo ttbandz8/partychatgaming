@@ -1012,7 +1012,7 @@ async def invest(ctx, amount):
       if balance <= int(amount):
          await ctx.send("You do not have that amount to invest.")
       else:
-         await blessfamily(int(amount), user['FAMILY'])
+         await blessfamily_Alt(int(amount), user['FAMILY'])
          await curse(int(amount), ctx.author)
          await ctx.send(f":coin:{amount} invested into {user['NAME']}'s Family'.")
          return
@@ -1100,6 +1100,20 @@ async def blessfamily(amount, family):
       house_data = db.queryHouse({'HOUSE': house})
       multiplier = house_data['MULT']
       posBlessAmount = posBlessAmount * multiplier
+      update_query = {"$inc": {'BANK': posBlessAmount}}
+      db.updateFamily(query, update_query)
+   else:
+      print("Cannot find family")
+      
+async def blessfamily_Alt(amount, family):
+   blessAmount = amount
+   posBlessAmount = 0 + abs(int(blessAmount))
+   query = {'HEAD': str(family)}
+   family_data = db.queryFamily(query)
+   if family_data:
+      house = family_data['HOUSE']
+      house_data = db.queryHouse({'HOUSE': house})
+      posBlessAmount = posBlessAmount
       update_query = {"$inc": {'BANK': posBlessAmount}}
       db.updateFamily(query, update_query)
    else:
