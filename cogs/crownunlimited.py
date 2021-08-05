@@ -914,7 +914,7 @@ class CrownUnlimited(commands.Cog):
                         healmessage = ""
                         messagenumber = 0
                         if o_universe == "Crown Rift Madness":
-                            healmessage = "yet inner madness drags on"
+                            healmessage = "yet inner **Madness** drags on..."
                             messagenumber = 3
                         else:
                             if o_health <= o_max_health:
@@ -1572,7 +1572,7 @@ class CrownUnlimited(commands.Cog):
                         healmessage = ""
                         messagenumber = 0
                         if t_universe == "Crown Rift Madness":
-                            healmessage = "yet inner madness drags on"
+                            healmessage = "yet inner **Madness** drags on..."
                             messagenumber = 3
                         else:   
                             if t_health <= t_max_health:
@@ -3407,7 +3407,7 @@ class CrownUnlimited(commands.Cog):
                         healmessage = ""
                         messagenumber = 0
                         if o_universe == "Crown Rift Madness":
-                            healmessage = "yet inner madness drags on"
+                            healmessage = "yet inner **Madness** drags on..."
                             messagenumber = 3
                         else:
                             if o_health <= o_max_health:
@@ -4217,7 +4217,7 @@ class CrownUnlimited(commands.Cog):
                         healmessage = ""
                         messagenumber = 0
                         if t_universe == "Crown Rift Madness":
-                            healmessage = "yet inner madness drags on"
+                            healmessage = "yet inner **Madness** drags on..."
                             messagenumber = 3
                         else:   
                             if t_health <= t_max_health:
@@ -4420,7 +4420,7 @@ class CrownUnlimited(commands.Cog):
                             else:
                                 dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
                             if t_gif != "N/A":
-                                    await private_channel.send(f"{t_gif}")
+                                await private_channel.send(f"{t_gif}")
                         elif int(aiMove) == 4:
                             t_enhancer_used=True
                             if c_block_used==True:
@@ -4884,7 +4884,7 @@ class CrownUnlimited(commands.Cog):
                         healmessage = ""
                         messagenumber = 0
                         if c_universe == "Crown Rift Madness":
-                                healmessage = "yet inner madness drags on"
+                                healmessage = "yet inner **Madness** drags on..."
                                 messagenumber = 3
                         else:
                             if c_health <= c_max_health:
@@ -5715,7 +5715,7 @@ class CrownUnlimited(commands.Cog):
                         healmessage = ""
                         messagenumber = 0
                         if t_universe == "Crown Rift Madness":
-                            healmessage = "yet inner madness drags on"
+                            healmessage = "yet inner **Madness** drags on..."
                             messagenumber = 3
                         else:   
                             if t_health <= t_max_health:
@@ -5918,7 +5918,7 @@ class CrownUnlimited(commands.Cog):
                             else: 
                                 dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
                             if t_gif != "N/A":
-                                    await private_channel.send(f"{t_gif}")
+                                await private_channel.send(f"{t_gif}")
                         elif int(aiMove) == 4:
                             t_enhancer_used=True
                             if o_defend_used==True:
@@ -7726,7 +7726,7 @@ class CrownUnlimited(commands.Cog):
                         healmessage = ""
                         messagenumber = 0
                         if o_universe == "Crown Rift Madness":
-                            healmessage = "yet inner madness drags on"
+                            healmessage = "yet inner **Madness** drags on..."
                             messagenumber = 3
                         else:
                             if o_health <= o_max_health:
@@ -8545,7 +8545,7 @@ class CrownUnlimited(commands.Cog):
                         healmessage = ""
                         messagenumber = 0
                         if t_universe == "Crown Rift Madness":
-                            healmessage = "yet inner madness drags on"
+                            healmessage = "yet inner **Madness** drags on..."
                             messagenumber = 3
                         else:   
                             if t_health <= t_max_health:
@@ -8762,7 +8762,7 @@ class CrownUnlimited(commands.Cog):
                             else:
                                 dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
                             if t_gif != "N/A":
-                                    await private_channel.send(f"{t_gif}")
+                                await private_channel.send(f"{t_gif}")
                         elif int(aiMove) == 4:
                             t_pet_used =False
                             t_enhancer_used=True
@@ -9431,7 +9431,7 @@ class CrownUnlimited(commands.Cog):
                         healmessage = ""
                         messagenumber = 0
                         if c_universe == "Crown Rift Madness":
-                                healmessage = "yet inner madness drags on"
+                                healmessage = "yet inner **Madness** drags on..."
                                 messagenumber = 3
                         else:
                             if c_health <= c_max_health:
@@ -10269,7 +10269,7 @@ class CrownUnlimited(commands.Cog):
                         healmessage = ""
                         messagenumber = 0
                         if t_universe == "Crown Rift Madness":
-                            healmessage = "yet inner madness drags on"
+                            healmessage = "yet inner **Madness** drags on..."
                             messagenumber = 3
                         else:   
                             if t_health <= t_max_health:
@@ -10485,7 +10485,7 @@ class CrownUnlimited(commands.Cog):
                             else: 
                                 dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
                             if t_gif != "N/A":
-                                    await private_channel.send(f"{t_gif}")
+                                await private_channel.send(f"{t_gif}")
                         elif int(aiMove) == 4:
                             t_pet_used =False
                             t_enhancer_used=True
@@ -11490,12 +11490,12 @@ class CrownUnlimited(commands.Cog):
         t_gif = t['GIF']
         t_card_path=t['PATH']
         t_rcard_path=t['RPATH']
-        t_health = t['HLT'] *3
+        t_health = t['HLT'] * 3
         t_stamina = t['STAM']
         t_max_stamina= t['STAM']
         t_moveset = t['MOVESET']
-        t_attack = t['ATK'] * 2
-        t_defense = t['DEF'] * 2
+        t_attack = t['ATK'] * 3
+        t_defense = t['DEF'] * 4
         t_type = t['TYPE']
         t_accuracy = t['ACC']
         t_passive = t['PASS'][0]
@@ -12500,7 +12500,7 @@ class CrownUnlimited(commands.Cog):
                     healmessage = ""
                     messagenumber = 0
                     if o_universe == "Crown Rift Madness":
-                        healmessage = "yet inner madness drags on"
+                        healmessage = "yet inner **Madness** drags on..."
                         messagenumber = 3
                     else:
                         if o_health <= o_max_health:
@@ -13308,12 +13308,11 @@ class CrownUnlimited(commands.Cog):
                     embed_color_t = 0x2ecc71
 
                 #Focus
-                if t_stamina < 10:
-                    if botActive and not o_used_focus:                    
-                        embedVar = discord.Embed(title=f"`{t_card}` Enters Focus State", description=f"{t_powerup}", colour=0xe91e63)
-                        embedVar.add_field(name=f"A great aura starts to envelop `{t_card}` ",value= f"{t_aura}")
-                        embedVar.set_footer(text=f"{t_card} Says: 'Now, are you ready for a real fight?'")
-                        await private_channel.send(embed=embedVar)
+                if t_stamina < 10:                   
+                    embedVar = discord.Embed(title=f"`{t_card}` Enters Focus State", description=f"{t_powerup}", colour=0xe91e63)
+                    embedVar.add_field(name=f"A great aura starts to envelop `{t_card}` ",value= f"{t_aura}")
+                    embedVar.set_footer(text=f"{t_card} Says: 'Now, are you ready for a real fight?'")
+                    await private_channel.send(embed=embedVar)
 
                     fortitude = 0.0
                     low = t_health - (t_health*.90)
@@ -13328,7 +13327,7 @@ class CrownUnlimited(commands.Cog):
                     healmessage = ""
                     messagenumber = 0
                     if t_universe == "Crown Rift Madness":
-                        healmessage = "yet inner madness drags on"
+                        healmessage = "yet inner **Madness** drags on..."
                         messagenumber = 3
                     else:   
                         if t_health <= t_max_health:
@@ -13348,18 +13347,18 @@ class CrownUnlimited(commands.Cog):
                     t_defense =  t_defense + t_defensecalc
                     t_used_focus=True
                     embedVar = discord.Embed(title=f"{t_card} focused and {healmessage}", description="All stats increased", colour=embed_color_t)
-                    await private_channel.send(embed=embedVar)
+                   # await private_channel.send(embed=embedVar)
 
                     if messagenumber != 2:
                         if messagenumber == 1:
                             embedVar = discord.Embed(title=f"{t_card} Stamina has recovered", colour=embed_color_t)
-                            await private_channel.send(embed=embedVar)
+                        #    await private_channel.send(embed=embedVar)
                         else:
                             embedVar = discord.Embed(title=f"{t_card} Stamina has recovered", colour=embed_color_t)
-                            await private_channel.send(embed=embedVar)
+                     #       await private_channel.send(embed=embedVar)
                     else:
                         embedVar = discord.Embed(title=f"{t_card} Stamina has recovered", colour=embed_color_t)
-                        await private_channel.send(embed=embedVar)
+                    #    await private_channel.send(embed=embedVar)
                     if not t_used_resolve and t_used_focus and t_universe == "Digimon":  #Digimon Universal Trait
                         #fortitude or luck is based on health
                         fortitude = 0.0
@@ -13555,7 +13554,7 @@ class CrownUnlimited(commands.Cog):
                         else:
                             dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
                         if t_gif != "N/A":
-                                await private_channel.send(f"{t_gif}")
+                            await private_channel.send(f"{t_gif}")
                     elif int(aiMove) == 4:
                         t_pet_used =False
                         t_enhancer_used=True
@@ -14223,7 +14222,7 @@ class CrownUnlimited(commands.Cog):
                     healmessage = ""
                     messagenumber = 0
                     if c_universe == "Crown Rift Madness":
-                            healmessage = "yet inner madness drags on"
+                            healmessage = "yet inner **Madness** drags on..."
                             messagenumber = 3
                     else:
                         if c_health <= c_max_health:
@@ -15063,12 +15062,11 @@ class CrownUnlimited(commands.Cog):
                     embed_color_t = 0x2ecc71
 
                 #Focus
-                if t_stamina < 10:
-                    if botActive and not o_used_focus:                    
-                        embedVar = discord.Embed(title=f"`{t_card}` Enters Focus State", description=f"{t_powerup}", colour=0xe91e63)
-                        embedVar.add_field(name=f"A great aura starts to envelop `{t_card}` ",value= f"{t_aura}")
-                        embedVar.set_footer(text=f"{t_card} Says: 'Now, are you ready for a real fight?'")
-                        await private_channel.send(embed=embedVar)
+                if t_stamina < 10:                 
+                    embedVar = discord.Embed(title=f"`{t_card}` Enters Focus State", description=f"{t_powerup}", colour=0xe91e63)
+                    embedVar.add_field(name=f"A great aura starts to envelop `{t_card}` ",value= f"{t_aura}")
+                    embedVar.set_footer(text=f"{t_card} Says: 'Now, are you ready for a real fight?'")
+                    await private_channel.send(embed=embedVar)
 
                     fortitude = 0.0
                     low = t_health - (t_health*.90)
@@ -15083,7 +15081,7 @@ class CrownUnlimited(commands.Cog):
                     healmessage = ""
                     messagenumber = 0
                     if t_universe == "Crown Rift Madness":
-                        healmessage = "yet inner madness drags on"
+                        healmessage = "yet inner **Madness** drags on..."
                         messagenumber = 3
                     else:   
                         if t_health <= t_max_health:
@@ -15103,18 +15101,18 @@ class CrownUnlimited(commands.Cog):
                     t_defense =  t_defense + t_defensecalc
                     t_used_focus=True
                     embedVar = discord.Embed(title=f"{t_card} focused and {healmessage}", description="All stats increased", colour=embed_color_t)
-                    await private_channel.send(embed=embedVar)
+                   # await private_channel.send(embed=embedVar)
 
                     if messagenumber != 2:
                         if messagenumber == 1:
                             embedVar = discord.Embed(title=f"{t_card} Stamina has recovered", colour=embed_color_t)
-                            await private_channel.send(embed=embedVar)
+                         #   await private_channel.send(embed=embedVar)
                         else:
                             embedVar = discord.Embed(title=f"{t_card} Stamina has recovered", colour=embed_color_t)
-                            await private_channel.send(embed=embedVar)
+                         #   await private_channel.send(embed=embedVar)
                     else:
                         embedVar = discord.Embed(title=f"{t_card} Stamina has recovered", colour=embed_color_t)
-                        await private_channel.send(embed=embedVar)
+                        #await private_channel.send(embed=embedVar)
                     if not t_used_resolve and t_used_focus and t_universe == "Digimon":  #Digimon Universal Trait
                         #fortitude or luck is based on health  
                         fortitude = 0.0
@@ -15309,7 +15307,7 @@ class CrownUnlimited(commands.Cog):
                         else: 
                             dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total)
                         if t_gif != "N/A":
-                                await private_channel.send(f"{t_gif}")
+                            await private_channel.send(f"{t_gif}")
                     elif int(aiMove) == 4:
                         t_pet_used =False
                         t_enhancer_used=True
@@ -17243,7 +17241,7 @@ class CrownUnlimited(commands.Cog):
                         healmessage = ""
                         messagenumber = 0
                         if o_universe == "Crown Rift Madness":
-                            healmessage = "yet inner madness drags on"
+                            healmessage = "yet inner **Madness** drags on..."
                             messagenumber = 3
                         else:
                             if o_health <= o_max_health:
@@ -17954,7 +17952,7 @@ class CrownUnlimited(commands.Cog):
                         healmessage = ""
                         messagenumber = 0
                         if t_universe == "Crown Rift Madness":
-                            healmessage = "yet inner madness drags on"
+                            healmessage = "yet inner **Madness** drags on..."
                             messagenumber = 3
                         else:   
                             if t_health <= t_max_health:
@@ -18169,7 +18167,7 @@ class CrownUnlimited(commands.Cog):
                             else:
                                 dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
                             if t_gif != "N/A":
-                                    await private_channel.send(f"{t_gif}")
+                                await private_channel.send(f"{t_gif}")
                         elif int(aiMove) == 4:
                             t_pet_used =False
                             t_enhancer_used=True
@@ -18641,7 +18639,7 @@ class CrownUnlimited(commands.Cog):
                         healmessage = ""
                         messagenumber = 0
                         if c_universe == "Crown Rift Madness":
-                                healmessage = "yet inner madness drags on"
+                                healmessage = "yet inner **Madness** drags on..."
                                 messagenumber = 3
                         else:
                             if c_health <= c_max_health:
@@ -19349,7 +19347,7 @@ class CrownUnlimited(commands.Cog):
                         healmessage = ""
                         messagenumber = 0
                         if t_universe == "Crown Rift Madness":
-                            healmessage = "yet inner madness drags on"
+                            healmessage = "yet inner **Madness** drags on..."
                             messagenumber = 3
                         else:   
                             if t_health <= t_max_health:
@@ -19563,7 +19561,7 @@ class CrownUnlimited(commands.Cog):
                             else: 
                                 dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
                             if t_gif != "N/A":
-                                    await private_channel.send(f"{t_gif}")
+                                await private_channel.send(f"{t_gif}")
                             t_pet_used =False
                         elif int(aiMove) == 4:
                             t_enhancer_used=True
@@ -21369,7 +21367,7 @@ class CrownUnlimited(commands.Cog):
                         healmessage = ""
                         messagenumber = 0
                         if o_universe == "Crown Rift Madness":
-                            healmessage = "yet inner madness drags on"
+                            healmessage = "yet inner **Madness** drags on..."
                             messagenumber = 3
                         else:
                             if o_health <= o_max_health:
@@ -22081,7 +22079,7 @@ class CrownUnlimited(commands.Cog):
                         healmessage = ""
                         messagenumber = 0
                         if t_universe == "Crown Rift Madness":
-                            healmessage = "yet inner madness drags on"
+                            healmessage = "yet inner **Madness** drags on..."
                             messagenumber = 3
                         else:   
                             if t_health <= t_max_health:
@@ -22298,7 +22296,7 @@ class CrownUnlimited(commands.Cog):
                             else:
                                 dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
                             if t_gif != "N/A":
-                                    await private_channel.send(f"{t_gif}")
+                                await private_channel.send(f"{t_gif}")
                         elif int(aiMove) == 4:
                             t_pet_used =False
                             t_enhancer_used=True
@@ -22968,7 +22966,7 @@ class CrownUnlimited(commands.Cog):
                         healmessage = ""
                         messagenumber = 0
                         if c_universe == "Crown Rift Madness":
-                                healmessage = "yet inner madness drags on"
+                                healmessage = "yet inner **Madness** drags on..."
                                 messagenumber = 3
                         else:
                             if c_health <= c_max_health:
@@ -23676,7 +23674,7 @@ class CrownUnlimited(commands.Cog):
                         healmessage = ""
                         messagenumber = 0
                         if t_universe == "Crown Rift Madness":
-                            healmessage = "yet inner madness drags on"
+                            healmessage = "yet inner **Madness** drags on..."
                             messagenumber = 3
                         else:   
                             if t_health <= t_max_health:
@@ -23891,7 +23889,7 @@ class CrownUnlimited(commands.Cog):
                             else: 
                                 dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total)
                             if t_gif != "N/A":
-                                    await private_channel.send(f"{t_gif}")
+                                await private_channel.send(f"{t_gif}")
                             t_pet_used =False
                         elif int(aiMove) == 4:
                             t_enhancer_used=True
@@ -24887,12 +24885,12 @@ class CrownUnlimited(commands.Cog):
         t_gif = t['GIF']
         t_card_path=t['PATH']
         t_rcard_path=t['RPATH']
-        t_health = t['HLT'] *3
+        t_health = t['HLT'] * 4
         t_stamina = t['STAM']
         t_max_stamina= t['STAM']
         t_moveset = t['MOVESET']
-        t_attack = t['ATK'] * 2
-        t_defense = t['DEF'] * 2
+        t_attack = t['ATK'] * 4
+        t_defense = t['DEF'] * 4
         t_type = t['TYPE']
         t_accuracy = t['ACC']
         t_passive = t['PASS'][0]
@@ -25889,7 +25887,7 @@ class CrownUnlimited(commands.Cog):
                     healmessage = ""
                     messagenumber = 0
                     if o_universe == "Crown Rift Madness":
-                        healmessage = "yet inner madness drags on"
+                        healmessage = "yet inner **Madness** drags on..."
                         messagenumber = 3
                     else:
                         if o_health <= o_max_health:
@@ -26592,12 +26590,11 @@ class CrownUnlimited(commands.Cog):
                     embed_color_t = 0x2ecc71
 
                 #Focus
-                if t_stamina < 10:
-                    if botActive and not o_used_focus:                    
-                        embedVar = discord.Embed(title=f"`{t_card}` Enters Focus State", description=f"{t_powerup}", colour=0xe91e63)
-                        embedVar.add_field(name=f"A great aura starts to envelop `{t_card}` ",value= f"{t_aura}")
-                        embedVar.set_footer(text=f"{t_card} Says: 'Now, are you ready for a real fight?'")
-                        await private_channel.send(embed=embedVar)
+                if t_stamina < 10:                   
+                    embedVar = discord.Embed(title=f"`{t_card}` Enters Focus State", description=f"{t_powerup}", colour=0xe91e63)
+                    embedVar.add_field(name=f"A great aura starts to envelop `{t_card}` ",value= f"{t_aura}")
+                    embedVar.set_footer(text=f"{t_card} Says: 'Now, are you ready for a real fight?'")
+                    await private_channel.send(embed=embedVar)
 
                     fortitude = 0.0
                     low = t_health - (t_health*.90)
@@ -26612,7 +26609,7 @@ class CrownUnlimited(commands.Cog):
                     healmessage = ""
                     messagenumber = 0
                     if t_universe == "Crown Rift Madness":
-                        healmessage = "yet inner madness drags on"
+                        healmessage = "yet inner **Madness** drags on..."
                         messagenumber = 3
                     else:   
                         if t_health <= t_max_health:
@@ -26632,18 +26629,18 @@ class CrownUnlimited(commands.Cog):
                     t_defense =  t_defense + t_defensecalc
                     t_used_focus=True
                     embedVar = discord.Embed(title=f"{t_card} focused and {healmessage}", description="All stats increased", colour=embed_color_t)
-                    await private_channel.send(embed=embedVar)
+                    #await private_channel.send(embed=embedVar)
 
                     if messagenumber != 2:
                         if messagenumber == 1:
                             embedVar = discord.Embed(title=f"{t_card} Stamina has recovered", colour=embed_color_t)
-                            await private_channel.send(embed=embedVar)
+                         #   await private_channel.send(embed=embedVar)
                         else:
                             embedVar = discord.Embed(title=f"{t_card} Stamina has recovered", colour=embed_color_t)
-                            await private_channel.send(embed=embedVar)
+                        #    await private_channel.send(embed=embedVar)
                     else:
                         embedVar = discord.Embed(title=f"{t_card} Stamina has recovered", colour=embed_color_t)
-                        await private_channel.send(embed=embedVar)
+                       # await private_channel.send(embed=embedVar)
                     if not t_used_resolve and t_used_focus and t_universe == "Digimon":  #Digimon Universal Trait
                         #fortitude or luck is based on health
                         fortitude = 0.0
@@ -26839,7 +26836,7 @@ class CrownUnlimited(commands.Cog):
                         else:
                             dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
                         if t_gif != "N/A":
-                                await private_channel.send(f"{t_gif}")
+                            await private_channel.send(f"{t_gif}")
                     elif int(aiMove) == 4:
                         t_pet_used =False
                         t_enhancer_used=True
@@ -27507,7 +27504,7 @@ class CrownUnlimited(commands.Cog):
                     healmessage = ""
                     messagenumber = 0
                     if c_universe == "Crown Rift Madness":
-                            healmessage = "yet inner madness drags on"
+                            healmessage = "yet inner **Madness** drags on..."
                             messagenumber = 3
                     else:
                         if c_health <= c_max_health:
@@ -28206,12 +28203,11 @@ class CrownUnlimited(commands.Cog):
                     embed_color_t = 0x2ecc71
 
                 #Focus
-                if t_stamina < 10:
-                    if botActive and not o_used_focus:                    
-                        embedVar = discord.Embed(title=f"`{t_card}` Enters Focus State", description=f"{t_powerup}", colour=0xe91e63)
-                        embedVar.add_field(name=f"A great aura starts to envelop `{t_card}` ",value= f"{t_aura}")
-                        embedVar.set_footer(text=f"{t_card} Says: 'Now, are you ready for a real fight?'")
-                        await private_channel.send(embed=embedVar)
+                if t_stamina < 10:         
+                    embedVar = discord.Embed(title=f"`{t_card}` Enters Focus State", description=f"{t_powerup}", colour=0xe91e63)
+                    embedVar.add_field(name=f"A great aura starts to envelop `{t_card}` ",value= f"{t_aura}")
+                    embedVar.set_footer(text=f"{t_card} Says: 'Now, are you ready for a real fight?'")
+                    await private_channel.send(embed=embedVar)
 
                     fortitude = 0.0
                     low = t_health - (t_health*.90)
@@ -28226,7 +28222,7 @@ class CrownUnlimited(commands.Cog):
                     healmessage = ""
                     messagenumber = 0
                     if t_universe == "Crown Rift Madness":
-                        healmessage = "yet inner madness drags on"
+                        healmessage = "yet inner **Madness** drags on..."
                         messagenumber = 3
                     else:   
                         if t_health <= t_max_health:
@@ -28246,18 +28242,18 @@ class CrownUnlimited(commands.Cog):
                     t_defense =  t_defense + t_defensecalc
                     t_used_focus=True
                     embedVar = discord.Embed(title=f"{t_card} focused and {healmessage}", description="All stats increased", colour=embed_color_t)
-                    await private_channel.send(embed=embedVar)
+                   # await private_channel.send(embed=embedVar)
 
                     if messagenumber != 2:
                         if messagenumber == 1:
                             embedVar = discord.Embed(title=f"{t_card} Stamina has recovered", colour=embed_color_t)
-                            await private_channel.send(embed=embedVar)
+                        #    await private_channel.send(embed=embedVar)
                         else:
                             embedVar = discord.Embed(title=f"{t_card} Stamina has recovered", colour=embed_color_t)
-                            await private_channel.send(embed=embedVar)
+                        #    await private_channel.send(embed=embedVar)
                     else:
                         embedVar = discord.Embed(title=f"{t_card} Stamina has recovered", colour=embed_color_t)
-                        await private_channel.send(embed=embedVar)
+                        #await private_channel.send(embed=embedVar)
                     if not t_used_resolve and t_used_focus and t_universe == "Digimon":  #Digimon Universal Trait
                         #fortitude or luck is based on health  
                         fortitude = 0.0
@@ -28452,7 +28448,7 @@ class CrownUnlimited(commands.Cog):
                         else: 
                             dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total)
                         if t_gif != "N/A":
-                                await private_channel.send(f"{t_gif}")
+                            await private_channel.send(f"{t_gif}")
                     elif int(aiMove) == 4:
                         t_pet_used =False
                         t_enhancer_used=True
@@ -30006,7 +30002,7 @@ class CrownUnlimited(commands.Cog):
                         healmessage = ""
                         messagenumber = 0
                         if o_universe == "Crown Rift Madness":
-                            healmessage = "yet inner madness drags on"
+                            healmessage = "yet inner **Madness** drags on..."
                             messagenumber = 3
                         else:
                             if o_health <= o_max_health:
@@ -30622,7 +30618,7 @@ class CrownUnlimited(commands.Cog):
                         healmessage = ""
                         messagenumber = 0
                         if t_universe == "Crown Rift Madness":
-                            healmessage = "yet inner madness drags on"
+                            healmessage = "yet inner **Madness** drags on..."
                             messagenumber = 3
                         else:   
                             if t_health <= t_max_health:
@@ -30830,7 +30826,7 @@ class CrownUnlimited(commands.Cog):
                             t_pet_used =False
                             dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total)
                             if t_gif != "N/A":
-                                    await private_channel.send(f"{t_gif}")
+                                await private_channel.send(f"{t_gif}")
                         elif int(aiMove) == 4:
                             t_pet_used =False
                             t_enhancer_used=True
@@ -32215,7 +32211,7 @@ class CrownUnlimited(commands.Cog):
                         healmessage = ""
                         messagenumber = 0
                         if o_universe == "Crown Rift Madness":
-                            healmessage = "yet inner madness drags on"
+                            healmessage = "yet inner **Madness** drags on..."
                             messagenumber = 3
                         else:
                             if o_health <= o_max_health:
@@ -32836,7 +32832,7 @@ class CrownUnlimited(commands.Cog):
                         healmessage = ""
                         messagenumber = 0
                         if t_universe == "Crown Rift Madness":
-                            healmessage = "yet inner madness drags on"
+                            healmessage = "yet inner **Madness** drags on..."
                             messagenumber = 3
                         else:   
                             if t_health <= t_max_health:
@@ -33500,7 +33496,7 @@ class CrownUnlimited(commands.Cog):
                 overwrites = {
                             guild.default_role: discord.PermissionOverwrite(read_messages=False),
                             guild.me: discord.PermissionOverwrite(read_messages=True),
-                        ctx.author: discord.PermissionOverwrite(read_messages=True),
+                        ctx.author: discord.PermissionOverwrite(read_messages=True)
                         }
                 private_channel = await guild.create_text_channel(f'{str(ctx.author)}-boss-fight', overwrites=overwrites)
                 await ctx.send(f"{ctx.author.mention} private channel has been opened for you.")
@@ -33582,6 +33578,7 @@ class CrownUnlimited(commands.Cog):
         o_passive = o['PASS'][0]
         o_speed = o['SPD']
         o_universe = o['UNIVERSE']
+        o_destiny = o['HAS_COLLECTION']
         o_title_universe = otitle['UNIVERSE']
         o_title_passive = otitle['ABILITIES'][0]
         o_vul = False
@@ -33629,7 +33626,7 @@ class CrownUnlimited(commands.Cog):
         t_max_stamina= t['STAM']
         t_moveset = t['MOVESET']
         t_attack = t['ATK'] * 2
-        t_defense = t['DEF'] * 2
+        t_defense = t['DEF'] * 4
         t_type = t['TYPE']
         t_accuracy = t['ACC']
         t_passive = t['PASS'][0]
@@ -33717,6 +33714,8 @@ class CrownUnlimited(commands.Cog):
         # Player 1 Passive Config
         if (o_universe == o_title_universe) or (o_title_universe == "Unbound"):
             o_title_passive_bool = True
+            
+
         
         # Player 1 Focus & Resolve
         o_focus = 90
@@ -33757,6 +33756,7 @@ class CrownUnlimited(commands.Cog):
         # Player 1 Card Passive
         o_card_passive_type = list(o_passive.values())[1]
         o_card_passive = list(o_passive.values())[0]
+        
 
         if o_card_passive_type == 'ATK':
             o_attack = o_attack + int(o_card_passive)
@@ -34045,7 +34045,6 @@ class CrownUnlimited(commands.Cog):
 
         
 
-
         # Player 2 Passive Config
         if (t_universe == t_title_universe) or (t_title_universe == "Unbound"):
             t_title_passive_bool = True
@@ -34223,6 +34222,7 @@ class CrownUnlimited(commands.Cog):
         et=0
 
         botActive = True
+        bossfight = True
             
 
         # Vulnerability Check
@@ -34241,8 +34241,10 @@ class CrownUnlimited(commands.Cog):
         o_attack = o_attack + (o_user['REBIRTH'] * 10)
         o_defense = o_defense + (o_user['REBIRTH'] * 10)
 
+
         await private_channel.send(f"{user1.mention}: `{o_card}` VS {t_universe} BOSS : `{t_card}` has begun!")
         # START TURNS
+
         while (o_health > 0) and (t_health > 0) and t_available:
             
             #Player 1 Turn Start
@@ -34291,12 +34293,11 @@ class CrownUnlimited(commands.Cog):
                 else:
                     embed_color_o = 0x2ecc71
 
-                if o_stamina < 10:
-                    if botActive and not o_used_focus:                    
-                        embedVar = discord.Embed(title=f"{t_punish}")
-                        embedVar.add_field(name=f"{t_arena}",value= f"{t_world}", inline=False)
-                        embedVar.set_footer(text=f"{t_assault}")
-                        await private_channel.send(embed=embedVar)
+                if o_stamina < 10:                   
+                    embedVar = discord.Embed(title=f"{t_punish}")
+                    embedVar.add_field(name=f"{t_arena}",value= f"{t_world}", inline=False)
+                    embedVar.set_footer(text=f"{t_assault}")
+                    await private_channel.send(embed=embedVar)
                     #fortitude or luck is based on health  
                     fortitude = 0.0
                     low = o_health - (o_health*.90)
@@ -34330,7 +34331,7 @@ class CrownUnlimited(commands.Cog):
 
                     embedVar = discord.Embed(title=f"{o_card.upper()} FOCUSED", description=f"`{o_card} says:`\n{o_focus_description}", colour=0xe91e63)
                     embedVar.add_field(name=f"{o_card} focused and {healmessage}", value="All stats & stamina increased")
-                    await private_channel.send(embed=embedVar)
+                    #await private_channel.send(embed=embedVar)
                     #Resolve Check and Calculation
                     if not o_used_resolve and o_used_focus and o_universe == "Digimon": # Digimon Universal Trait
                         embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"`{o_card} says:`\n{o_resolve_description}", colour=0xe91e63)
@@ -34475,7 +34476,6 @@ class CrownUnlimited(commands.Cog):
                             dmg = damage_cal(o_universe, o_card, o_enhancer, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
                             o_enhancer_used=False
                         elif msg.content == "5":
-
                             #Resolve Check and Calculation
                             if not o_used_resolve and o_used_focus:
                                 if o_universe == "My Hero Academia": #My Hero Trait
@@ -34909,7 +34909,7 @@ class CrownUnlimited(commands.Cog):
 
                 #Focus
                 if t_stamina < 10:
-                    if botActive and not o_used_focus:                    
+                    if botActive and not t_used_focus:                    
                         embedVar = discord.Embed(title=f"`{t_card}` Enters Focus State", description=f"{t_powerup}", colour=0xe91e63)
                         embedVar.add_field(name=f"A great aura starts to envelop `{t_card}` ",value= f"{t_aura}")
                         embedVar.set_footer(text=f"{t_card} Says: 'Now, are you ready for a real fight?'")
@@ -34928,7 +34928,7 @@ class CrownUnlimited(commands.Cog):
                     healmessage = ""
                     messagenumber = 0
                     if t_universe == "Crown Rift Madness":
-                        healmessage = "yet inner madness drags on"
+                        healmessage = "yet inner **Madness** drags on..."
                         messagenumber = 3
                     else:   
                         if t_health <= t_max_health:
@@ -34948,18 +34948,18 @@ class CrownUnlimited(commands.Cog):
                     t_defense =  t_defense + t_defensecalc
                     t_used_focus=True
                     embedVar = discord.Embed(title=f"{t_card} focused and {healmessage}", description="All stats increased", colour=embed_color_t)
-                    await private_channel.send(embed=embedVar)
+                    #await private_channel.send(embed=embedVar)
 
                     if messagenumber != 2:
                         if messagenumber == 1:
                             embedVar = discord.Embed(title=f"{t_card} Stamina has recovered", colour=embed_color_t)
-                            await private_channel.send(embed=embedVar)
+                           # await private_channel.send(embed=embedVar)
                         else:
                             embedVar = discord.Embed(title=f"{t_card} Stamina has recovered", colour=embed_color_t)
-                            await private_channel.send(embed=embedVar)
+                           # await private_channel.send(embed=embedVar)
                     else:
                         embedVar = discord.Embed(title=f"{t_card} Stamina has recovered", colour=embed_color_t)
-                        await private_channel.send(embed=embedVar)
+                       # await private_channel.send(embed=embedVar)
                     if not t_used_resolve and t_used_focus and t_universe == "Digimon":  #Digimon Universal Trait
                         #fortitude or luck is based on health  
                         fortitude = 0.0
@@ -35037,7 +35037,7 @@ class CrownUnlimited(commands.Cog):
                 #Play Bot
                 else:
                     # UNIVERSE CARD
-                    player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus, t_attack, t_defense)
+                    player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus)
                     await private_channel.send(file=player_2_card)
 
                     aiMove = 0
@@ -35047,7 +35047,7 @@ class CrownUnlimited(commands.Cog):
                     elif o_stamina == 0:
                         aiMove = 1
                     elif t_health <= (.50 * t_max_health) and t_used_resolve == False and t_used_focus:
-                            aiMove = 5
+                        aiMove = 5
                     elif t_stamina >= 160 and (t_health >= o_health):
                         aiMove = 3
                     elif t_stamina >= 160:
@@ -35154,29 +35154,30 @@ class CrownUnlimited(commands.Cog):
                         t_enhancer_used=False
                     elif aiMove == 5:
                         if not t_used_resolve and t_used_focus:
-                            if t_universe == "My Hero Academia": #My hero TRait
-                                    #fortitude or luck is based on health  
-                                    fortitude = 0.0
-                                    low = t_health - (t_health * .75)
-                                    high = t_health- (t_health * .66)
-                                    fortitude = random.randint(int(low), int(high))
-                                    #Resolve Scaling
-                                    t_resolve_health = round(fortitude + (.5 * t_resolve))
-                                    t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
-                                    t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                            if t_universe == "My Hero Academia": 
+                                #My hero TRait
+                                #fortitude or luck is based on health  
+                                fortitude = 0.0
+                                low = t_health - (t_health * .75)
+                                high = t_health- (t_health * .66)
+                                fortitude = random.randint(int(low), int(high))
+                                #Resolve Scaling
+                                t_resolve_health = round(fortitude + (.5 * t_resolve))
+                                t_resolve_attack = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
+                                t_resolve_defense = round((.30 * t_defense) * (t_resolve / (.50 * t_defense)))
 
-                                    t_stamina = t_stamina + t_resolve
-                                    t_health = t_health + t_resolve_health
-                                    t_attack = round(t_attack + t_resolve_attack)
-                                    t_defense = round(t_defense - t_resolve_defense)
-                                    t_used_resolve=True
-                                    t_pet_used =False
+                                t_stamina = t_stamina + t_resolve
+                                t_health = t_health + t_resolve_health
+                                t_attack = round(t_attack + t_resolve_attack)
+                                t_defense = round(t_defense - t_resolve_defense)
+                                t_used_resolve=True
+                                t_pet_used =False
 
-                                    embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
-                                    embedVar.add_field(name=f"Transformation: Plus Ultra", value="All stats & stamina greatly increased")
-                                    await private_channel.send(embed=embedVar)
-                                    turn_total= turn_total + 1
-                                    turn=1
+                                embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"`{t_card} says:`\n{t_resolve_description}", colour=0xe91e63)
+                                embedVar.add_field(name=f"Transformation: Plus Ultra", value="All stats & stamina greatly increased")
+                                await private_channel.send(embed=embedVar)
+                                turn_total= turn_total + 1
+                                turn=1
                             elif t_universe == "Bleach": #Bleach Trait
                                 #fortitude or luck is based on health  
                                 fortitude = 0.0
@@ -36437,7 +36438,7 @@ class CrownUnlimited(commands.Cog):
                             healmessage = ""
                             messagenumber = 0
                             if o_universe == "Crown Rift Madness":
-                                healmessage = "yet inner madness drags on"
+                                healmessage = "yet inner **Madness** drags on..."
                                 messagenumber = 3
                             else:
                                 if o_health <= o_max_health:
@@ -37045,6 +37046,7 @@ class CrownUnlimited(commands.Cog):
                             embed_color_t = 0x2ecc71
 
                         #Focus
+                        print(t_stamina)
                         if t_stamina < 10:
                             t_focus_count = t_focus_count + 1
                             fortitude = 0.0
@@ -37060,7 +37062,7 @@ class CrownUnlimited(commands.Cog):
                             healmessage = ""
                             messagenumber = 0
                             if t_universe == "Crown Rift Madness":
-                                healmessage = "yet inner madness drags on"
+                                healmessage = "yet inner **Madness** drags on..."
                                 messagenumber = 3
                             else:   
                                 if t_health <= t_max_health:
@@ -39018,7 +39020,7 @@ class CrownUnlimited(commands.Cog):
                             healmessage = ""
                             messagenumber = 0
                             if o_universe == "Crown Rift Madness":
-                                healmessage = "yet inner madness drags on"
+                                healmessage = "yet inner **Madness** drags on..."
                                 messagenumber = 3
                             else:
                                 if o_health <= o_max_health:
@@ -39641,7 +39643,7 @@ class CrownUnlimited(commands.Cog):
                             healmessage = ""
                             messagenumber = 0
                             if t_universe == "Crown Rift Madness":
-                                healmessage = "yet inner madness drags on"
+                                healmessage = "yet inner **Madness** drags on..."
                                 messagenumber = 3
                             else:   
                                 if t_health <= t_max_health:
@@ -41599,7 +41601,7 @@ class CrownUnlimited(commands.Cog):
                             healmessage = ""
                             messagenumber = 0
                             if o_universe == "Crown Rift Madness":
-                                healmessage = "yet inner madness drags on"
+                                healmessage = "yet inner **Madness** drags on..."
                                 messagenumber = 3
                             else:
                                 if o_health <= o_max_health:
@@ -42121,7 +42123,7 @@ class CrownUnlimited(commands.Cog):
                             healmessage = ""
                             messagenumber = 0
                             if t_universe == "Crown Rift Madness":
-                                healmessage = "yet inner madness drags on"
+                                healmessage = "yet inner **Madness** drags on..."
                                 messagenumber = 3
                             else:   
                                 if t_health <= t_max_health:
@@ -43979,7 +43981,7 @@ class CrownUnlimited(commands.Cog):
                             healmessage = ""
                             messagenumber = 0
                             if o_universe == "Crown Rift Madness":
-                                healmessage = "yet inner madness drags on"
+                                healmessage = "yet inner **Madness** drags on..."
                                 messagenumber = 3
                             else:
                                 if o_health <= o_max_health:
@@ -44501,7 +44503,7 @@ class CrownUnlimited(commands.Cog):
                             healmessage = ""
                             messagenumber = 0
                             if t_universe == "Crown Rift Madness":
-                                healmessage = "yet inner madness drags on"
+                                healmessage = "yet inner **Madness** drags on..."
                                 messagenumber = 3
                             else:   
                                 if t_health <= t_max_health:
@@ -46376,7 +46378,7 @@ class CrownUnlimited(commands.Cog):
                             healmessage = ""
                             messagenumber = 0
                             if o_universe == "Crown Rift Madness":
-                                healmessage = "yet inner madness drags on"
+                                healmessage = "yet inner **Madness** drags on..."
                                 messagenumber = 3
                             else:
                                 if o_health <= o_max_health:
@@ -47008,7 +47010,7 @@ class CrownUnlimited(commands.Cog):
                             healmessage = ""
                             messagenumber = 0
                             if t_universe == "Crown Rift Madness":
-                                healmessage = "yet inner madness drags on"
+                                healmessage = "yet inner **Madness** drags on..."
                                 messagenumber = 3
                             else:   
                                 if t_health <= t_max_health:
