@@ -17,9 +17,6 @@ BOT_COMMANDS = textwrap.dedent(f"""\
 
 **GAME COMMANDS**
 **.vs @player game**: Matchup lookup
-**.lkg**: Lookup available Games to add to Profile
-**.ag game name**: Add Game to your account
-**.uign game ign**: Update In Game Name for a game
 
 **TEAM COMMANDS**
 **.lookupteam team name**: Team lookup
@@ -87,6 +84,7 @@ CROWN_UNLIMITED_COMMANDS = textwrap.dedent(f"""\
 **.wager amount**: Wager amount to battle in current session
 
 **CROWN UNLIMITED STORY MODE COMMANDS**
+**.ff**: Leave current tale, dungeon, or boss fight
 **.universes**: Show List Of Crown Universes
 **.tales**: Opens Crown Tales Story Mode Menu
 **.dungeon**: Opens Crown Tales Dungeon Menu
