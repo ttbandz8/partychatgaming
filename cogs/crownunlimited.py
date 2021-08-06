@@ -2418,12 +2418,12 @@ class CrownUnlimited(commands.Cog):
             t_card_path=t['PATH']
             t_rcard_path=t['RPATH']
             
-            t_health = t['HLT'] + (10 * currentopponent) + 50
+            t_health = t['HLT'] + (5 * currentopponent) + 50
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
             t_attack = t['ATK'] + (4 * currentopponent) 
-            t_defense = t['DEF'] + (7 * currentopponent) 
+            t_defense = t['DEF'] + (4 * currentopponent) 
             t_type = t['TYPE']
             t_accuracy = t['ACC']
             t_passive = t['PASS'][0]
@@ -16000,8 +16000,8 @@ class CrownUnlimited(commands.Cog):
                 await ctx.author.send(embed=embedVar)
             
             if t_card not in sowner['BOSS_WINS']:
-                await bless(1000, str(ctx.author))
-                #await bless(500, str(user))
+                await bless(40000, str(ctx.author))
+                #await bless(30000, str(user))
                 query = {'DISNAME': sowner['DISNAME']}
                 new_query = {'$addToSet': {'BOSS_WINS': t_card}}
                 resp = db.updateUserNoFilter(query, new_query)
@@ -16266,12 +16266,12 @@ class CrownUnlimited(commands.Cog):
             t_card_path=t['PATH']
             t_rcard_path=t['RPATH']
             
-            t_health = t['HLT'] + (10 * currentopponent) + 50
+            t_health = t['HLT'] + (5 * currentopponent) + 50
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
             t_attack = t['ATK'] + (4 * currentopponent) 
-            t_defense = t['DEF'] + (7 * currentopponent) 
+            t_defense = t['DEF'] + (4 * currentopponent) 
             t_type = t['TYPE']
             t_accuracy = t['ACC']
             t_passive = t['PASS'][0]
@@ -20119,11 +20119,11 @@ class CrownUnlimited(commands.Cog):
                     new_upload_query={'$addToSet': {'CROWN_TALES': selected_universe}}
                     r=db.updateUserNoFilter(upload_query, new_upload_query)
                     if selected_universe in completed_crown_tales:
-                        await bless(25, ctx.author)
-                        await bless(25, cuser)
+                        await bless(400, ctx.author)
+                        await bless(400, cuser)
                         await ctx.author.send(embed=embedVar)
                         response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
-                        await ctx.author.send(f"You were awarded :coin: 400 for completing the {selected_universe} Tale again!")
+                        await ctx.author.send(f"You were both awarded :coin: 400 for completing the {selected_universe} Tale again!")
                         continued=False
                     else:
                         await bless(5000, ctx.author)
@@ -24645,12 +24645,13 @@ class CrownUnlimited(commands.Cog):
                     r=db.updateUserNoFilter(upload_query, new_upload_query)
                     if selected_universe in completed_dungeons:
                         await bless(800, ctx.author)
-                        await bless(125, user2)
+                        await bless(800, user2)
                         await ctx.author.send(embed=embedVar)
-                        await ctx.author.send(f"You were awarded :coin: 800 for completing the {selected_universe} Dungeon again!")
+                        await ctx.author.send(f"You were both awarded :coin: 800 for completing the {selected_universe} Dungeon again!")
                         response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                     else:
                         await bless(15000, ctx.author)
+                        await bless(10000, user2)
                         await ctx.author.send(embed=embedVar)
                         response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                         await ctx.author.send(f"You were awarded :coin: 15000 for completing the {selected_universe} Dungeon! ")
@@ -29149,8 +29150,8 @@ class CrownUnlimited(commands.Cog):
                 await ctx.author.send(embed=embedVar)
             
             if t_card not in sowner['BOSS_WINS']:
-                await bless(1000, str(ctx.author))
-                await bless(500, str(user))
+                await bless(40000, str(ctx.author))
+                await bless(30000, str(user))
                 query = {'DISNAME': sowner['DISNAME']}
                 new_query = {'$addToSet': {'BOSS_WINS': t_card}}
                 resp = db.updateUserNoFilter(query, new_query)
@@ -35620,7 +35621,7 @@ class CrownUnlimited(commands.Cog):
                 await ctx.author.send(embed=embedVar)
             
             if t_card not in sowner['BOSS_WINS']:
-                await bless(1000, str(ctx.author))
+                await bless(40000, str(ctx.author))
                 query = {'DISNAME': sowner['DISNAME']}
                 new_query = {'$addToSet': {'BOSS_WINS': t_card}}
                 resp = db.updateUserNoFilter(query, new_query)

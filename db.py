@@ -468,7 +468,7 @@ def altQueryShopCards(args):
     return data 
 
 def queryDropCards(args):
-    data = cards_col.find({'UNIVERSE': args, 'EXCLUSIVE': False, 'AVAILABLE': True})
+    data = cards_col.find({'UNIVERSE': args, 'EXCLUSIVE': False, 'AVAILABLE': True, 'HAS_COLLECTION': False})
     return data 
 
 def queryExclusiveDropCards(args):
