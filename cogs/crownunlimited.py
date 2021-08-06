@@ -6509,7 +6509,7 @@ class CrownUnlimited(commands.Cog):
             if uni != "":
                 available_universes.append(uni)
 
-        if len(available_universes) == 1 and "" in available_universes:
+        if not available_universes:
             await private_channel.send("No available Dungeons for you at this time!")
             response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
             return
@@ -11281,7 +11281,7 @@ class CrownUnlimited(commands.Cog):
                 searchUni = db.queryUniverse({'TITLE': str(uni)})
                 if searchUni['UNIVERSE_BOSS'] != "":
                     available_universes.append(uni)
-        if len(available_universes) == 1 and "" in available_universes:
+        if not available_universes:
             await private_channel.send("No available Bosses for you at this time!")
             response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
             return
@@ -20167,7 +20167,7 @@ class CrownUnlimited(commands.Cog):
             if uni != "":
                 available_universes.append(uni)
 
-        if len(available_universes) == 1 and "" in available_universes:
+        if not available_universes:
             await private_channel.send("No available Dungeons for you at this time!")
             response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
             return
@@ -24689,7 +24689,7 @@ class CrownUnlimited(commands.Cog):
                 searchUni = db.queryUniverse({'TITLE': str(uni)})
                 if searchUni['UNIVERSE_BOSS'] != "":
                     available_universes.append(uni)
-        if len(available_universes) == 1 and "" in available_universes:
+        if not available_universes:
             await private_channel.send("No available Bosses for you at this time!")
             response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
             return
@@ -29185,11 +29185,10 @@ class CrownUnlimited(commands.Cog):
             if uni != "":
                 available_universes.append(uni)
 
-        if len(available_universes) == 1 and "" in available_universes:
+        if not available_universes:
             await private_channel.send("No available Dungeons for you at this time!")
             response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
             return
-
         embedVar = discord.Embed(title=f":fire: Select A Dungeon", description="\n".join(available_universes), colour=0xe91e63)
         embedVar.set_footer(text="Type Quit to exit Dungeon selection")
         await private_channel.send(embed=embedVar)
@@ -33492,7 +33491,7 @@ class CrownUnlimited(commands.Cog):
                 searchUni = db.queryUniverse({'TITLE': str(uni)})
                 if searchUni['UNIVERSE_BOSS'] != "":
                     available_universes.append(uni)
-        if len(available_universes) == 1 and "" in available_universes:
+        if not available_universes:
             await private_channel.send("No available Bosses for you at this time!")
             response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
             return
