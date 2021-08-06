@@ -417,14 +417,11 @@ async def r(ctx):
       Start Battle Tutorial!
       **.senpaibattle**
       
-      Read the manual!
-      **.crown**
-      
       **CHANGING YOUR DISCORD ACCOUNT INFO WILL BREAK YOUR ACCOUNT IN THE GAME. YOU HAVE BEEN WARNED.**
       
       _We do not own the rights to the images used in this game. This is an open beta of an experimental bot for the purposes of growing our coding talents and skill. We do not and will not make money from this project._
       """), colour=0xe91e63)
-      embedVar.set_footer(text=".help to inquire all potential commands and capabilites of the bot")
+      embedVar.set_footer(text=".crown to inquire all potential commands and capabilites of the bot")
       await ctx.author.send(embed=embedVar)
       await ctx.send(f"Welcome to Crown Unlimited, {ctx.author.mention}! Use **.daily** to collect your daily reward! Use **.menu** to see what you can do.")
 
