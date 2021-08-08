@@ -411,6 +411,9 @@ class Profile(commands.Cog):
             # Check if divisible by 10, then start to split evenly
             if len(cards) % 10 == 0:
                 first_digit = int(str(len(cards))[:1])
+                if len(cards) >= 89:
+                    if first_digit == 1:
+                        first_digit = 10
                 cards_broken_up = np.array_split(cards, first_digit)
             
             # If it's not an array greater than 10, show paginationless embed
@@ -422,7 +425,7 @@ class Profile(commands.Cog):
 
             embed_list = []
             for i in range(0, len(cards_broken_up)):
-                globals()['embedVar%s' % i] = discord.Embed(title= f"Cards\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(cards_broken_up[i]), colour=0x7289da)
+                globals()['embedVar%s' % i] = discord.Embed(title= f":flower_playing_cards: Cards\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(cards_broken_up[i]), colour=0x7289da)
                 globals()['embedVar%s' % i].set_thumbnail(url=avatar)
                 globals()['embedVar%s' % i].set_footer(text=f"{total_cards} Total Cards\n.equipcard card name: Equip Card\n.viewcard card name: View Cards Details")
                 embed_list.append(globals()['embedVar%s' % i])
@@ -467,6 +470,9 @@ class Profile(commands.Cog):
             # Check if divisible by 10, then start to split evenly
             if len(titles) % 10 == 0:
                 first_digit = int(str(len(titles))[:1])
+                if len(titles) >= 89:
+                    if first_digit == 1:
+                        first_digit = 10
                 titles_broken_up = np.array_split(titles, first_digit)
             
             # If it's not an array greater than 10, show paginationless embed
@@ -478,7 +484,7 @@ class Profile(commands.Cog):
 
             embed_list = []
             for i in range(0, len(titles_broken_up)):
-                globals()['embedVar%s' % i] = discord.Embed(title= f"Titles\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(titles_broken_up[i]), colour=0x7289da)
+                globals()['embedVar%s' % i] = discord.Embed(title= f":reminder_ribbon: Titles\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(titles_broken_up[i]), colour=0x7289da)
                 globals()['embedVar%s' % i].set_thumbnail(url=avatar)
                 globals()['embedVar%s' % i].set_footer(text=f"{total_titles} Total Titles\n.equiptitle title name: Equip Title\n.viewtitle title name: View Title Details")
                 embed_list.append(globals()['embedVar%s' % i])
@@ -524,6 +530,9 @@ class Profile(commands.Cog):
             # Check if divisible by 10, then start to split evenly
             if len(arms) % 10 == 0:
                 first_digit = int(str(len(arms))[:1])
+                if len(arms) >= 89:
+                    if first_digit == 1:
+                        first_digit = 10
                 arms_broken_up = np.array_split(arms, first_digit)
             
             # If it's not an array greater than 10, show paginationless embed
@@ -535,7 +544,7 @@ class Profile(commands.Cog):
 
             embed_list = []
             for i in range(0, len(arms_broken_up)):
-                globals()['embedVar%s' % i] = discord.Embed(title= f"Arms\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(arms_broken_up[i]), colour=0x7289da)
+                globals()['embedVar%s' % i] = discord.Embed(title= f":mechanical_arm: Arms\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(arms_broken_up[i]), colour=0x7289da)
                 globals()['embedVar%s' % i].set_thumbnail(url=avatar)
                 globals()['embedVar%s' % i].set_footer(text=f"{total_arms} Total Arms\n.equiparm arm name: Equip Arm\n.viewarm arm name: View Arm Details")
                 embed_list.append(globals()['embedVar%s' % i])
@@ -590,6 +599,9 @@ class Profile(commands.Cog):
             # Check if divisible by 10, then start to split evenly
             if len(pets) % 10 == 0:
                 first_digit = int(str(len(pets))[:1])
+                if len(pets) >= 89:
+                    if first_digit == 1:
+                        first_digit = 10
                 pets_broken_up = np.array_split(pets, first_digit)
             
             # If it's not an array greater than 10, show paginationless embed
@@ -601,7 +613,7 @@ class Profile(commands.Cog):
 
             embed_list = []
             for i in range(0, len(pets_broken_up)):
-                globals()['embedVar%s' % i] = discord.Embed(title= f"Pets\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(pets_broken_up[i]), colour=0x7289da)
+                globals()['embedVar%s' % i] = discord.Embed(title= f":dog: Pets\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(pets_broken_up[i]), colour=0x7289da)
                 globals()['embedVar%s' % i].set_thumbnail(url=avatar)
                 globals()['embedVar%s' % i].set_footer(text=f"{total_pets} Total Pets\n.equippet pet name: Equip Pet\n.viewpet pet name: View Pet Details")
                 embed_list.append(globals()['embedVar%s' % i])
@@ -649,6 +661,9 @@ class Profile(commands.Cog):
             # Check if divisible by 10, then start to split evenly
             if len(destiny_messages) % 10 == 0:
                 first_digit = int(str(len(destiny_messages))[:1])
+                if len(destiny_messages) >= 89:
+                    if first_digit == 1:
+                        first_digit = 10
                 destinies_broken_up = np.array_split(destiny_messages, first_digit)
             
             # If it's not an array greater than 10, show paginationless embed
@@ -660,7 +675,7 @@ class Profile(commands.Cog):
 
             embed_list = []
             for i in range(0, len(destinies_broken_up)):
-                globals()['embedVar%s' % i] = discord.Embed(title= f"Destiny Lines\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(destinies_broken_up[i]), colour=0x7289da)
+                globals()['embedVar%s' % i] = discord.Embed(title= f":sparkles: Destiny Lines\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(destinies_broken_up[i]), colour=0x7289da)
                 globals()['embedVar%s' % i].set_thumbnail(url=avatar)
                 # globals()['embedVar%s' % i].set_footer(text=f"{total_pets} Total Pets\n.equippet pet name: Equip Pet\n.viewpet pet name: View Pet Details")
                 embed_list.append(globals()['embedVar%s' % i])
@@ -703,7 +718,7 @@ class Profile(commands.Cog):
                 
                 """))
             
-            embedVar = discord.Embed(title= f"Quest Board", description=textwrap.dedent(f"""
+            embedVar = discord.Embed(title= f":notepad_spiral: Quest Board", description=textwrap.dedent(f"""
                 **Balance**: :coin:{'{:,}'.format(balance)}
                 \n{"".join(quest_messages)}
                 """), colour=0x7289da)
@@ -717,12 +732,32 @@ class Profile(commands.Cog):
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
         vault = db.queryVault({'OWNER': d['DISNAME']})
+        icon = ":coin:"
         if vault:
             name = d['DISNAME'].split("#",1)[0]
             avatar = d['AVATAR']
             balance = vault['BALANCE']
+            if balance >= 150000:
+                icon = ":money_with_wings:"
+            elif balance >=100000:
+                icon = ":moneybag:"
+            elif balance >= 50000:
+                icon = ":dollar:"
+            if d['TEAM'] != 'PCG':
+                t = db.queryTeam({'TNAME' : d['TEAM']})
+                tbal = t['BANK']
+                if d['FAMILY'] != 'PCG':
+                    f = db.queryFamily({'HEAD': d['FAMILY']})
+                    fbal = f['BANK']
+                    
+                
 
-            embedVar = discord.Embed(title= f":coin:{'{:,}'.format(balance)}", colour=0x7289da)
+            embedVar = discord.Embed(title= f"{icon}{'{:,}'.format(balance)}", colour=0x7289da)
+            # if t:
+            #     embedVar = discord.Embed(title= f":triangular_flag_on_post:{icon}{'{:,}'.format(balance)}", colour=0x7289da)
+            #     embedVar.add_field(name=f":military_helmet:: {t['TNAME']}", value=f":coin:{'{:,}'.format(t['BANK'])}")
+            #     if f:
+            #         embedVar.add_field(name=f":family_mwgb: {f['HEAD']}", value=f":coin:{'{:,}'.format(f['BANK'])}")
 
             await ctx.send(embed=embedVar)
         else:

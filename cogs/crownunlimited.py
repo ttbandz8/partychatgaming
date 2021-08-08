@@ -1060,7 +1060,12 @@ class CrownUnlimited(commands.Cog):
                         elif o_stamina >= 110:
                             aiMove = 2                                   
                         elif o_stamina >= 100 and (o_health >= t_health):
-                            aiMove = 4
+                            if o_enhancer in Healer_Enhancer_Check:
+                                aiMove = 3
+                            elif o_enhancer in Support_Enhancer_Check:
+                                aiMove = 4
+                            else:
+                                aiMove = 1
                         elif o_stamina >= 100:
                             aiMove = 1
                         elif o_stamina >= 90 and (o_health >= t_health):
@@ -48173,6 +48178,9 @@ class CrownUnlimited(commands.Cog):
         # Check if divisible by 10, then start to split evenly
         if len(all_titles) % 10 == 0:
             first_digit = int(str(len(all_titles))[:1])
+            if len(all_titles) >= 89:
+                if first_digit == 1:
+                    first_digit = 10
             titles_broken_up = np.array_split(all_titles, first_digit)
         
         # If it's not an array greater than 10, show paginationless embed
@@ -48242,6 +48250,9 @@ class CrownUnlimited(commands.Cog):
         # Check if divisible by 10, then start to split evenly
         if len(all_arms) % 10 == 0:
             first_digit = int(str(len(all_arms))[:1])
+            if len(all_arms) >= 89:
+                if first_digit == 1:
+                    first_digit = 10
             arms_broken_up = np.array_split(all_arms, first_digit)
         
         # If it's not an array greater than 10, show paginationless embed
@@ -48364,6 +48375,9 @@ class CrownUnlimited(commands.Cog):
         # Check if divisible by 10, then start to split evenly
         if len(all_pets) % 10 == 0:
             first_digit = int(str(len(all_pets))[:1])
+            if len(all_pets) >= 89:
+                if first_digit == 1:
+                    first_digit = 10
             pets_broken_up = np.array_split(all_pets, first_digit)
         
         # If it's not an array greater than 10, show paginationless embed
@@ -49560,4 +49574,4 @@ async def bossdrops(player, universe):
 
 Healer_Enhancer_Check = ['HLT', 'CREATION']
 # DPS_Enhancer_Check = ['FLOG', 'WITHER', 'LIFE', ]
-Support_Enhancer_Check = ['DEF', 'ATK']
+Support_Enhancer_Check = ['DEF', 'ATK', 'WITHER', 'FLOG']
