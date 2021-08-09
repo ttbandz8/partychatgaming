@@ -298,7 +298,7 @@ class Senpai(commands.Cog):
         Equip Arm : **.equiparm** `Arm Name`
         Equip Pet : **.equippet** `Pet Name`
 
-        *Hint Try **.equiparm `Shield`*
+        *Hint Try **.equiparm** `Shield`
 
         """))
 

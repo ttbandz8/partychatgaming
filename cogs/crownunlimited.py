@@ -1060,7 +1060,12 @@ class CrownUnlimited(commands.Cog):
                         elif o_stamina >= 110:
                             aiMove = 2                                   
                         elif o_stamina >= 100 and (o_health >= t_health):
-                            aiMove = 4
+                            if o_enhancer in Healer_Enhancer_Check:
+                                aiMove = 3
+                            elif o_enhancer in Support_Enhancer_Check:
+                                aiMove = 4
+                            else:
+                                aiMove = 1
                         elif o_stamina >= 100:
                             aiMove = 1
                         elif o_stamina >= 90 and (o_health >= t_health):
@@ -3526,7 +3531,7 @@ class CrownUnlimited(commands.Cog):
                             embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!")
                         else:
                             embedVar.set_author(name="Press Q to Quit Match")
-                        embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer\nUse 7 to Enhance Companion | 20 Stamina\nUse 8 to Request Assistance from Companion | 20 Stamina\nUse 9 to Request Block from Companion | 20 Stamina")
+                        embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use .ff to Force Quit this Lobby!\nUse 7 to Enhance Companion | 20 Stamina\nUse 8 to Request Assistance from Companion | 20 Stamina\nUse 9 to Request Block from Companion | 20 Stamina")
                         await private_channel.send(embed=embedVar)
                         
                         if o_used_focus and o_used_resolve:
@@ -7850,7 +7855,7 @@ class CrownUnlimited(commands.Cog):
                             embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!")
                         else:
                             embedVar.set_author(name="Press Q to Quit Match")
-                        embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer\nUse 7 to Enhance Companion | 20 Stamina\nUse 8 to Request Assistance from Companion | 20 Stamina\nUse 9 to Request Block from Companion | 20 Stamina")
+                        embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use .ff to Force Quit this Lobby!\nUse 7 to Enhance Companion | 20 Stamina\nUse 8 to Request Assistance from Companion | 20 Stamina\nUse 9 to Request Block from Companion | 20 Stamina")
                         await private_channel.send(embed=embedVar)
                         
                         if o_used_focus and o_used_resolve:
@@ -12623,7 +12628,7 @@ class CrownUnlimited(commands.Cog):
                         embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!")
                     else:
                         embedVar.set_author(name="Press Q to Quit Match")
-                    embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer\nUse 7 to Enhance Companion | 20 Stamina\nUse 8 to Request Assistance from Companion | 20 Stamina\nUse 9 to Request Block from Companion | 20 Stamina")
+                    embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use .ff to Force Quit this Lobby!\nUse 7 to Enhance Companion | 20 Stamina\nUse 8 to Request Assistance from Companion | 20 Stamina\nUse 9 to Request Block from Companion | 20 Stamina")
                     await private_channel.send(embed=embedVar)
                     
                     if o_used_focus and o_used_resolve:
@@ -17368,7 +17373,7 @@ class CrownUnlimited(commands.Cog):
                             embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!")
                         else:
                             embedVar.set_author(name="Press Q to Quit Match")
-                        embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer\nUse 7 to Enhance Companion | 20 Stamina")
+                        embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use .ff to Force Quit this Lobby!\nUse 7 to Enhance Companion | 20 Stamina")
                         await private_channel.send(embed=embedVar)
                         
                         if o_used_focus and o_used_resolve:
@@ -18766,7 +18771,7 @@ class CrownUnlimited(commands.Cog):
                             embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!")
                         else:
                             embedVar.set_author(name="Press Q to Quit Match")
-                        embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer\nUse 7 to Enhance Companion | 20 Stamina")
+                        embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use .ff to Force Quit this Lobby!\nUse 7 to Enhance Companion | 20 Stamina")
                         await private_channel.send(embed=embedVar)
                         
                         if c_used_focus and c_used_resolve:
@@ -21498,7 +21503,7 @@ class CrownUnlimited(commands.Cog):
                             embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!")
                         else:
                             embedVar.set_author(name="Press Q to Quit Match")
-                        embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
+                        embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use .ff to Force Quit this Lobby!")
                         await private_channel.send(embed=embedVar)
                         
                         if o_used_focus and o_used_resolve:
@@ -23096,7 +23101,7 @@ class CrownUnlimited(commands.Cog):
                             embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!")
                         else:
                             embedVar.set_author(name="Press Q to Quit Match")
-                        embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
+                        embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use .ff to Force Quit this Lobby!")
                         await private_channel.send(embed=embedVar)
                         
                         if c_used_focus and c_used_resolve:
@@ -26021,7 +26026,7 @@ class CrownUnlimited(commands.Cog):
                         embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!")
                     else:
                         embedVar.set_author(name="Press Q to Quit Match")
-                    embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
+                    embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use .ff to Force Quit this Lobby!")
                     await private_channel.send(embed=embedVar)
                     
                     if o_used_focus and o_used_resolve:
@@ -27637,7 +27642,7 @@ class CrownUnlimited(commands.Cog):
                         embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!")
                     else:
                         embedVar.set_author(name="Press Q to Quit Match")
-                    embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
+                    embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use .ff to Force Quit this Lobby!")
                     await private_channel.send(embed=embedVar)
                     
                     if c_used_focus and c_used_resolve:
@@ -30135,7 +30140,7 @@ class CrownUnlimited(commands.Cog):
                             embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!")
                         else:
                             embedVar.set_author(name="Press Q to Quit Match")
-                        embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
+                        embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use .ff to Force Quit this Lobby!")
                         await private_channel.send(embed=embedVar)
                         
                         if o_used_focus and o_used_resolve:
@@ -32351,7 +32356,7 @@ class CrownUnlimited(commands.Cog):
                             embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!")
                         else:
                             embedVar.set_author(name="Press Q to Quit Match")
-                        embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
+                        embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use .ff to Force Quit this Lobby!")
                         await private_channel.send(embed=embedVar)
                         
                         if o_used_focus and o_used_resolve:
@@ -34447,7 +34452,7 @@ class CrownUnlimited(commands.Cog):
                         embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!")
                     else:
                         embedVar.set_author(name="Press Q to Quit Match")
-                    embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
+                    embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use .ff to Force Quit this Lobby!")
                     await private_channel.send(embed=embedVar)
                     
                     # Make sure user is responding with move
@@ -35842,6 +35847,7 @@ class CrownUnlimited(commands.Cog):
                 omove2_text = list(o_2.keys())[0]
                 omove3_text = list(o_3.keys())[0]
                 omove_enhanced_text = list(o_enhancer.keys())[0]
+
                 
 
                 # Player 1 Card Passive
@@ -36402,9 +36408,9 @@ class CrownUnlimited(commands.Cog):
                         # Tutorial Instructions
                         if turn_total == 0:
                             if botActive:                    
-                                embedVar = discord.Embed(title=f"Welcome to `Crown Unlimited`!", description=f"Follow the instructions to learn how to play Crown Unlimited", colour=0xe91e63)
-                                embedVar.add_field(name="How do you play this game?", value="The point of the game is to win the game, duh!\nTo do this, you need to select moves in a strategic order to give you the advantage to secure the win!")
-                                embedVar.set_footer(text="Select a move to get started. Moves will drain your `Stamina` quickly.\n`When your Stamina depletes to 0 your character will Focus`")
+                                embedVar = discord.Embed(title=f"Welcome to **Crown Unlimited**!", description=f"Follow the instructions to learn how to play the Game!", colour=0xe91e63)
+                                embedVar.add_field(name="**How do I play?**", value="The point of the game is to win **Battles**!\n**To do this**, you need to select moves outmanuevering your opponent to **secure the win**!")
+                                embedVar.set_footer(text="Select a move to get started. DON'T WORRY! When your STAMINA depletes to 0 your character will Focus to REPLENISH!")
                                 await ctx.send(embed=embedVar)
                             else:
                                 await ctx.send(f"{user1.mention}{user2.mention}")
@@ -36435,9 +36441,9 @@ class CrownUnlimited(commands.Cog):
                         if o_stamina < 10:
                             o_focus_count = o_focus_count + 1
                             if botActive and not o_used_focus:                    
-                                embedVar = discord.Embed(title=f"You've entered `Focus State`!", description=f"Entering `Focus State` sacrifices a turn to power up and regain `Stamina`!", colour=0xe91e63)
-                                embedVar.add_field(name="Strategy", value="Pay attention to your oppononets `STAM` bar. If they are close to entering `Focus State`, you will have the ability to strike twice if you play your cards right!")
-                                embedVar.set_footer(text="After you entered focus state once, a transformation is possible by strengthening your `Resolve`!")
+                                embedVar = discord.Embed(title=f"You've entered **Focus State**!", description=f"Entering **Focus State** sacrifices a turn to power up and regain **STAMINA**!", colour=0xe91e63)
+                                embedVar.add_field(name="**Strategy**", value="Pay attention to your oppononets **STAMINA** bar. If they are entering **Focus State**, you will have the ability to **strike twice!**")
+                                embedVar.set_footer(text="After you entered focus state once, a transformation is possible by strengthening your RESOLVE! **Press 5**")
                                 await ctx.send(embed=embedVar)
                             #Universal Trait
                             #fortitude or luck is based on health  
@@ -36586,12 +36592,12 @@ class CrownUnlimited(commands.Cog):
                             , colour=embed_color_o)
                             embedVar.set_thumbnail(url=opet_image)
                             if o_used_focus and o_used_resolve and not o_pet_used:
-                                embedVar.set_author(name="Press Q to Quit Match.\nPress 6 to Summon your Pet!")                                    
+                                embedVar.set_author(name="Press Q to Quit Match.\n**Press 6 to Summon your Pet!**")                                    
                             elif o_used_focus and not o_used_resolve:
-                                embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!")
+                                embedVar.set_author(name="Press Q to Quit Match.\n**Press 5 to Strengthen Resolve!**")
                             else:
                                 embedVar.set_author(name="Press Q to Quit Match")
-                            embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
+                            embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use .ff to Force Quit this Lobby!")
                             await ctx.send(embed=embedVar)
 
                             if o_used_focus and o_used_resolve:
@@ -36616,17 +36622,37 @@ class CrownUnlimited(commands.Cog):
                                     await ctx.send(f"{ctx.author.mention} has fled the battle...")
                                     return
                                 if msg.content == "1":
+                                    if botActive:                    
+                                        embedVar = discord.Embed(title=f"Basic Attack!", description=f"Nice Hit! Your Basic Attack cost 10 Stamina to deal Damage!", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Combos!", value="Chain your Basic Attack with Summons And Enhancers To Maximize Damage!")
+                                        embedVar.set_footer(text=f"Basic Attacks are great when you are low on stamina, but don't be afraid to enter focus state and REPLENISH!")
+                                        await ctx.send(embed=embedVar)
                                     dmg = damage_cal(o_universe, o_card, o_1, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
                                     o_pet_used=False
                                 elif msg.content == "2":
+                                    if botActive:                    
+                                        embedVar = discord.Embed(title=f"Special Attack!", description=f"Great Shot! Your Special Attack cost 30 Stamina to deal great Damage!", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Strategy!", value="Special Attacks are the balance between STAMINA cost and Damage output when trying to build Combos!")
+                                        embedVar.set_footer(text=f"Special Attacks are great when you need to control the focus game! Use Them to Maximize your focus and build stronger combos!")
+                                        await ctx.send(embed=embedVar)
                                     dmg = damage_cal(o_universe, o_card, o_2, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
                                     o_pet_used=False
                                 elif msg.content == "3":
+                                    if botActive:                    
+                                        embedVar = discord.Embed(title=f"Ultimate Move!", description=f"Ultimate Moves cost 80 Stamina to deal incredible Damage!", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Ultimate GIF", value="Using your ultimate move also comes with a bonus GIF to deliver that final blow!")
+                                        embedVar.set_footer(text=f"Ultimate moves will consume most of your stamina! Use Them Wisely!")
+                                        await ctx.send(embed=embedVar)
                                     dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
                                     o_pet_used=False
                                     if o_gif != "N/A":
                                         await private_channel.send(f"{o_gif}")
                                 elif msg.content == "4":
+                                    if botActive:                    
+                                        embedVar = discord.Embed(title=f"Enhancers!", description=f"Enhancers cost 20 Stamina to Boost your Character or Debuff Your Opponent!", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Your Enhancer: {omove_enhanced_text} is a {list(o_enhancer.values())[2]}", value="Pay Attention to your enhancer messages to know what effect is being used!")
+                                        embedVar.set_footer(text=f"Use .enhance to view a full list of enhancers! Look for the {list(o_enhancer.values())[2]} Enhancer")
+                                        await ctx.send(embed=embedVar)
                                     o_enhancer_used=True
                                     dmg = damage_cal(o_universe, o_card, o_enhancer, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
                                     o_pet_used=False
@@ -36634,6 +36660,11 @@ class CrownUnlimited(commands.Cog):
                                 elif msg.content == "5":
                                     #Resolve Check and Calculation
                                     if not o_used_resolve and o_used_focus:
+                                        if botActive:                    
+                                            embedVar = discord.Embed(title=f"RESOLVE STATE!", description=f"You've Entered Resolved State! Pay attention to your **STATS**!", colour=0xe91e63)
+                                            embedVar.add_field(name=f"Trade Offs!", value="Resolved Charactes sacrifice **DEFENSE** to **HEAL**, gain **ATK** and the ability to **SUMMON PETS**!")
+                                            embedVar.set_footer(text=f"You can only enter Resolve once per match! Use the Heal Wisely!!!")
+                                            await ctx.send(embed=embedVar)
                                         if o_universe == "My Hero Academia": #My Hero Trait
                                             #fortitude or luck is based on health  
                                             fortitude = 0.0
@@ -36782,7 +36813,12 @@ class CrownUnlimited(commands.Cog):
                                         turn=0
                                 elif msg.content == "6":
                                      #Resolve Check and Calculation
-                                    if o_used_resolve and o_used_focus and not o_pet_used:                                      
+                                    if o_used_resolve and o_used_focus and not o_pet_used:
+                                        if botActive:                    
+                                            embedVar = discord.Embed(title=f"Pet Summons!", description=f"You've summoned {opet_name}", colour=0xe91e63)
+                                            embedVar.add_field(name=f"Pet Enhancers!", value="Pet Enhancers cost 15 Stamina but do not count as the Summoners turn!")
+                                            embedVar.set_footer(text=f"Pets will Level Up and build Bond as you win battles! Train up your pets to perform better in the field!")
+                                            await ctx.send(embed=embedVar)                                      
                                         o_enhancer_used=True
                                         dmg = damage_cal(o_universe, o_card, opet_move, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total)
                                         o_enhancer_used=False
@@ -36883,6 +36919,11 @@ class CrownUnlimited(commands.Cog):
                                         await private_channel.send(f"{opet_name} needs a turn to rest...")
                                 elif msg.content == "0":
                                     if o_stamina >=20:
+                                        if botActive:                    
+                                            embedVar = discord.Embed(title=f"Blocking!", description=f"Blocking cost 20 STAMINA! Double your defense for 1 round", colour=0xe91e63)
+                                            embedVar.add_field(name=f"**Strategy**", value="Sometimes the best Offense is a Stonewall Defense!")
+                                            embedVar.set_footer(text=f"Use block strategically to defend against your opponents strongest abilities!")
+                                            await ctx.send(embed=embedVar)
                                         o_stamina = o_stamina - 20
                                         o_block_used=True
                                         o_defense = o_defense * 2
@@ -37023,7 +37064,7 @@ class CrownUnlimited(commands.Cog):
                                                 turn=1
                                     else:
                                         emessage = m.NOT_ENOUGH_STAMINA
-                                        embedVar = discord.Embed(title=emessage, description=f"Use abilities to Increase `STAM` or enter `FOCUS STATE`!", colour=0xe91e63)
+                                        embedVar = discord.Embed(title=emessage, description=f"Use Enhancers to Increase **STAMINA** or attack to enter **FOCUS STATE**!", colour=0xe91e63)
                                         await ctx.send(embed=embedVar)
                                         turn=0
                             except asyncio.TimeoutError:
@@ -37196,7 +37237,7 @@ class CrownUnlimited(commands.Cog):
                                     embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!")
                                 else:
                                     embedVar.set_author(name="Press Q to Quit Match")
-                                embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
+                                embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use .ff to Force Quit this Lobby!")
                                 await ctx.send(embed=embedVar)
 
                                 if t_used_focus and t_used_resolve:
@@ -37494,6 +37535,7 @@ class CrownUnlimited(commands.Cog):
                                             await ctx.send(f"{tpet_name} needs a turn to rest...")
                                     elif msg.content == "0":
                                         if t_stamina >=20:
+                                            
                                             t_stamina = t_stamina - 20
                                             t_block_used=True
                                             t_defense = t_defense * 2
@@ -38147,7 +38189,7 @@ class CrownUnlimited(commands.Cog):
                     response = await score(sownerctx, tuser)
                     await curse(3, str(ctx.author))
                     await bless(8, tuser)
-                    embedVar = discord.Embed(title=f":zap: `{t_card}` wins the match! Use .Start to Play again or .End to end the session", description=f"Match concluded in {turn_total} turns\n`{t_card} says:`\n`{t_win_description}`", colour=0x1abc9c)
+                    embedVar = discord.Embed(title=f":zap: `{t_card}` wins the match! Use .start to Play again or .end to end the session", description=f"Match concluded in {turn_total} turns\n`{t_card} says:`\n`{t_win_description}`", colour=0x1abc9c)
                     embedVar.set_author(name=f"{o_card} says:\n{o_lose_description}")
                     if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
                         embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[2]} Seconds.")
@@ -38181,7 +38223,7 @@ class CrownUnlimited(commands.Cog):
                     response = await score(sownerctx, ouser)
                     await bless(8, str(ctx.author))
                     match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']), str(oarm['ARM']), "N/A", "PVP", o['EXCLUSIVE'])
-                    embedVar = discord.Embed(title=f":zap: VICTORY\n`{o_card} says:`\n{o_win_description}\n\n Use .Start to Play again or .End to end the session", description=f"The match lasted {turn_total} turns", colour=0xe91e63)
+                    embedVar = discord.Embed(title=f":zap: VICTORY\n`{o_card} says:`\n{o_win_description}\n\n Use .start to Play again or .end to end the session", description=f"The match lasted {turn_total} turns", colour=0xe91e63)
                     embedVar.set_author(name=f"{t_card} says\n{t_lose_description}")
                     if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
                         embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[2]} Seconds.")
@@ -38196,9 +38238,9 @@ class CrownUnlimited(commands.Cog):
                         embedVar.add_field(name="Most Focused", value=f"`{t_card}`")
                     await ctx.send(embed=embedVar)
                     if botActive:                    
-                        embedVar = discord.Embed(title=f"TUTORIAL COMPLETE", description=f"Victories earn `ITEMS` ! Use the .end command to `END` the tutorial lobby\nOR use .start to `PLAY AGAIN`", colour=0xe91e63)
+                        embedVar = discord.Embed(title=f"TUTORIAL COMPLETE", description=f"Victories earn **ITEMS** ! Use the .end command to **END** the tutorial lobby\n**OR** use .start to **PLAY AGAIN**", colour=0xe91e63)
                         embedVar.set_author(name=f"Congratulations You Beat Senpai!")
-                        embedVar.add_field(name="Tips!", value="Equiping stronger `TITLES` and `ARMS` will make you character tougher in a fight!")
+                        embedVar.add_field(name="Tips!", value="Equiping stronger **TITLES** and **ARMS** will make you character tougher in a fight!")
                         embedVar.set_footer(text="The .shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
                         await ctx.send(embed=embedVar)
 
@@ -39174,7 +39216,7 @@ class CrownUnlimited(commands.Cog):
                                 embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!")
                             else:
                                 embedVar.set_author(name="Press Q to Quit Match")
-                            embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
+                            embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use .ff to Force Quit this Lobby!")
                             await ctx.send(embed=embedVar)
 
                             if o_used_focus and o_used_resolve:
@@ -39778,7 +39820,7 @@ class CrownUnlimited(commands.Cog):
                                     embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!")
                                 else:
                                     embedVar.set_author(name="Press Q to Quit Match")
-                                embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
+                                embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use .ff to Force Quit this Lobby!")
                                 await ctx.send(embed=embedVar)
 
                                 if t_used_focus and t_used_resolve:
@@ -40729,7 +40771,7 @@ class CrownUnlimited(commands.Cog):
                     response = await score(sownerctx, tuser)
                     await curse(3, str(ctx.author))
                     await bless(8, tuser)
-                    embedVar = discord.Embed(title=f":zap: `{t_card}` wins the match! Use .Start to Play again or .End to end the session", description=f"Match concluded in {turn_total} turns\n`{t_card} says:`\n`{t_win_description}`", colour=0x1abc9c)
+                    embedVar = discord.Embed(title=f":zap: `{t_card}` wins the match! Use .start to Play again or .end to end the session", description=f"Match concluded in {turn_total} turns\n`{t_card} says:`\n`{t_win_description}`", colour=0x1abc9c)
                     embedVar.set_author(name=f"{o_card} says:\n{o_lose_description}")
                     if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
                         embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[2]} Seconds.")
@@ -40763,7 +40805,7 @@ class CrownUnlimited(commands.Cog):
                     response = await score(sownerctx, ouser)
                     await bless(8, str(ctx.author))
                     match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']), str(oarm['ARM']), "N/A", "PVP", o['EXCLUSIVE'])
-                    embedVar = discord.Embed(title=f":zap: VICTORY\n`{o_card} says:`\n{o_win_description}\n\n Use .Start to Play again or .End to end the session", description=f"The match lasted {turn_total} turns", colour=0xe91e63)
+                    embedVar = discord.Embed(title=f":zap: VICTORY\n`{o_card} says:`\n{o_win_description}\n\n Use .start to Play again or .end to end the session", description=f"The match lasted {turn_total} turns", colour=0xe91e63)
                     embedVar.set_author(name=f"{t_card} says\n{t_lose_description}")
                     if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
                         embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[2]} Seconds.")
@@ -41756,7 +41798,7 @@ class CrownUnlimited(commands.Cog):
                                 embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!")
                             else:
                                 embedVar.set_author(name="Press Q to Quit Match")
-                            embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
+                            embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use .ff to Force Quit this Lobby!")
                             await ctx.send(embed=embedVar)
 
                             if o_used_focus and o_used_resolve:
@@ -42259,7 +42301,7 @@ class CrownUnlimited(commands.Cog):
                                     embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!")
                                 else:
                                     embedVar.set_author(name="Press Q to Quit Match")
-                                embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
+                                embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use .ff to Force Quit this Lobby!")
                                 await ctx.send(embed=embedVar)
 
                                 if t_used_focus and t_used_resolve:
@@ -43111,7 +43153,7 @@ class CrownUnlimited(commands.Cog):
                     response = await score(sownerctx, tuser)
                     await curse(3, str(ctx.author))
                     await bless(8, tuser)
-                    embedVar = discord.Embed(title=f":zap: `{t_card}` wins the match! Use .Start to Play again or .End to end the session", description=f"Match concluded in {turn_total} turns\n`{t_card} says:`\n`{t_win_description}`", colour=0x1abc9c)
+                    embedVar = discord.Embed(title=f":zap: `{t_card}` wins the match! Use .start to Play again or .end to end the session", description=f"Match concluded in {turn_total} turns\n`{t_card} says:`\n`{t_win_description}`", colour=0x1abc9c)
                     embedVar.set_author(name=f"{o_card} says:\n{o_lose_description}")
                     if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
                         embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[2]} Seconds.")
@@ -43145,7 +43187,7 @@ class CrownUnlimited(commands.Cog):
                     response = await score(sownerctx, ouser)
                     await bless(8, str(ctx.author))
                     match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']), str(oarm['ARM']), "N/A", "PVP", o['EXCLUSIVE'])
-                    embedVar = discord.Embed(title=f":zap: VICTORY\n`{o_card} says:`\n{o_win_description}\n\n Use .Start to Play again or .End to end the session", description=f"The match lasted {turn_total} turns", colour=0xe91e63)
+                    embedVar = discord.Embed(title=f":zap: VICTORY\n`{o_card} says:`\n{o_win_description}\n\n Use .start to Play again or .end to end the session", description=f"The match lasted {turn_total} turns", colour=0xe91e63)
                     embedVar.set_author(name=f"{t_card} says\n{t_lose_description}")
                     if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
                         embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[2]} Seconds.")
@@ -44138,7 +44180,7 @@ class CrownUnlimited(commands.Cog):
                                 embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!")
                             else:
                                 embedVar.set_author(name="Press Q to Quit Match")
-                            embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
+                            embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use .ff to Force Quit this Lobby!")
                             await ctx.send(embed=embedVar)
 
                             if o_used_focus and o_used_resolve:
@@ -44641,7 +44683,7 @@ class CrownUnlimited(commands.Cog):
                                     embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!")
                                 else:
                                     embedVar.set_author(name="Press Q to Quit Match")
-                                embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
+                                embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use .ff to Force Quit this Lobby!")
                                 await ctx.send(embed=embedVar)
 
                                 if t_used_focus and t_used_resolve:
@@ -45493,7 +45535,7 @@ class CrownUnlimited(commands.Cog):
                     response = await score(sownerctx, tuser)
                     await curse(3, str(ctx.author))
                     await bless(8, tuser)
-                    embedVar = discord.Embed(title=f":zap: `{t_card}` wins the match! Use .Start to Play again or .End to end the session", description=f"Match concluded in {turn_total} turns\n`{t_card} says:`\n`{t_win_description}`", colour=0x1abc9c)
+                    embedVar = discord.Embed(title=f":zap: `{t_card}` wins the match! Use .start to Play again or .end to end the session", description=f"Match concluded in {turn_total} turns\n`{t_card} says:`\n`{t_win_description}`", colour=0x1abc9c)
                     embedVar.set_author(name=f"{o_card} says:\n{o_lose_description}")
                     if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
                         embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[2]} Seconds.")
@@ -45527,7 +45569,7 @@ class CrownUnlimited(commands.Cog):
                     response = await score(sownerctx, ouser)
                     await bless(8, str(ctx.author))
                     match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']), str(oarm['ARM']), "N/A", "PVP", o['EXCLUSIVE'])
-                    embedVar = discord.Embed(title=f":zap: VICTORY\n`{o_card} says:`\n{o_win_description}\n\n Use .Start to Play again or .End to end the session", description=f"The match lasted {turn_total} turns", colour=0xe91e63)
+                    embedVar = discord.Embed(title=f":zap: VICTORY\n`{o_card} says:`\n{o_win_description}\n\n Use .start to Play again or .end to end the session", description=f"The match lasted {turn_total} turns", colour=0xe91e63)
                     embedVar.set_author(name=f"{t_card} says\n{t_lose_description}")
                     if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
                         embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[2]} Seconds.")
@@ -46538,7 +46580,7 @@ class CrownUnlimited(commands.Cog):
                                 embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!")
                             else:
                                 embedVar.set_author(name="Press Q to Quit Match")
-                            embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
+                            embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use .ff to Force Quit this Lobby!")
                             await ctx.send(embed=embedVar)
 
                             if o_used_focus and o_used_resolve:
@@ -47159,7 +47201,7 @@ class CrownUnlimited(commands.Cog):
                                     embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!")
                                 else:
                                     embedVar.set_author(name="Press Q to Quit Match")
-                                embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer")
+                                embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use .ff to Force Quit this Lobby!")
                                 await ctx.send(embed=embedVar)
 
                                 if t_used_focus and t_used_resolve:
@@ -47982,7 +48024,7 @@ class CrownUnlimited(commands.Cog):
                     response = await score(sownerctx, tuser)
                     await curse(wager, str(ctx.author))
                     await bless(wager, tuser)
-                    embedVar = discord.Embed(title=f":zap: `{t_card}` wins the match! Use .Start to Play again or .End to end the session", description=f"Match concluded in {turn_total} turns\n`{t_card} says:`\n`{t_win_description}`", colour=0x1abc9c)
+                    embedVar = discord.Embed(title=f":zap: `{t_card}` wins the match! Use .start to Play again or .end to end the session", description=f"Match concluded in {turn_total} turns\n`{t_card} says:`\n`{t_win_description}`", colour=0x1abc9c)
                     embedVar.set_author(name=f"{o_card} says:\n{o_lose_description}")
                     if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
                         embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[2]} Seconds.")
@@ -48016,7 +48058,7 @@ class CrownUnlimited(commands.Cog):
                     response = await score(sownerctx, ouser)
                     await bless(wager, str(ctx.author))
                     await curse(wager, user2)
-                    embedVar = discord.Embed(title=f":zap: VICTORY\n`{o_card} says:`\n{o_win_description}\n\n Use .Start to Play again or .End to end the session", description=f"The match lasted {turn_total} turns", colour=0xe91e63)
+                    embedVar = discord.Embed(title=f":zap: VICTORY\n`{o_card} says:`\n{o_win_description}\n\n Use .start to Play again or .end to end the session", description=f"The match lasted {turn_total} turns", colour=0xe91e63)
                     embedVar.set_author(name=f"{t_card} says\n{t_lose_description}")
                     if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
                         embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[2]} Seconds.")
@@ -48165,6 +48207,9 @@ class CrownUnlimited(commands.Cog):
         # Check if divisible by 10, then start to split evenly
         if len(all_titles) % 10 == 0:
             first_digit = int(str(len(all_titles))[:1])
+            if len(all_titles) >= 89:
+                if first_digit == 1:
+                    first_digit = 10
             titles_broken_up = np.array_split(all_titles, first_digit)
         
         # If it's not an array greater than 10, show paginationless embed
@@ -48234,6 +48279,9 @@ class CrownUnlimited(commands.Cog):
         # Check if divisible by 10, then start to split evenly
         if len(all_arms) % 10 == 0:
             first_digit = int(str(len(all_arms))[:1])
+            if len(all_arms) >= 89:
+                if first_digit == 1:
+                    first_digit = 10
             arms_broken_up = np.array_split(all_arms, first_digit)
         
         # If it's not an array greater than 10, show paginationless embed
@@ -48356,6 +48404,9 @@ class CrownUnlimited(commands.Cog):
         # Check if divisible by 10, then start to split evenly
         if len(all_pets) % 10 == 0:
             first_digit = int(str(len(all_pets))[:1])
+            if len(all_pets) >= 89:
+                if first_digit == 1:
+                    first_digit = 10
             pets_broken_up = np.array_split(all_pets, first_digit)
         
         # If it's not an array greater than 10, show paginationless embed
@@ -49552,4 +49603,4 @@ async def bossdrops(player, universe):
 
 Healer_Enhancer_Check = ['HLT', 'CREATION']
 # DPS_Enhancer_Check = ['FLOG', 'WITHER', 'LIFE', ]
-Support_Enhancer_Check = ['DEF', 'ATK']
+Support_Enhancer_Check = ['DEF', 'ATK', 'WITHER', 'FLOG']
