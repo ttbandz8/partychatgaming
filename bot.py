@@ -213,7 +213,7 @@ async def crown(ctx):
    **3:** Ultimate Attack _uses 80 stamina_
    
    **Block**
-   Doubles Defense for 1 turn   
+   Doubles Defense for 1 turn
    **0:** _uses 20 stamina_ 
 
    **Enhancer**
