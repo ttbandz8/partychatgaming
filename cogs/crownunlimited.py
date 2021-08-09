@@ -6398,24 +6398,18 @@ class CrownUnlimited(commands.Cog):
                 match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']), str(oarm['ARM']), str(selected_universe), "Tales", o['EXCLUSIVE'])
                 #match = await savematch(str(user), str(c_card), str(c_card_path), str(ctitle['TITLE']), str(carm['ARM']), str(selected_universe), "Tales", c['EXCLUSIVE'])
                 teambank = await blessteam(10, oteam)
-                #cteambank = await blessteam(10, cteam)
                 if o_user['RIFT'] == 1:
                     response = db.updateUserNoFilter({'DISNAME':str(o_user['DISNAME'])}, {'$set': {'RIFT' : 0}})
                 drop_response = await drops(ctx.author, selected_universe, currentopponent)
-                #cdrop_response = await drops(user, selected_universe, currentopponent)
                 ofambank = await blessfamily(10,ofam)
-                #cfambank = await blessfamily(10,cfam)
                 questlogger = await quest(ouser, t_card, "Tales")
                 destinylogger = await destiny(ouser, t_card, "Tales")
-                #cquestlogger = await quest(cuser, t_card, "Tales")
                 petlogger = await petlevel(opet_name, ouser)
-                #cpetlogger = await petlevel(cpet_name, user)
                 if questlogger:
                     await ctx.author.send(questlogger)
                 if destinylogger:
                     await ctx.author.send(destinylogger)
-                #if cquestlogger:
-                    await user.send(cquestlogger)
+
                 if currentopponent != total_legends:
                     
                     if private_channel.guild:
@@ -11187,8 +11181,6 @@ class CrownUnlimited(commands.Cog):
                     await ctx.author.send(questlogger)
                 if destinylogger:
                     await ctx.author.send(destinylogger)
-                #if cquestlogger:
-                    await user.send(cquestlogger)
                 if currentopponent != (total_legends):
                     
                     if private_channel.guild:
