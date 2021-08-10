@@ -175,35 +175,32 @@ class Profile(commands.Cog):
             passive_num = list(o_passive.values())[0]
             passive_type = list(o_passive.values())[1]
 
-
             atk_buff = ""
             def_buff = ""
             hlt_buff = ""
             message = ""
             if (oarm_universe == o_show) and (o_title_universe == o_show):
-                o_attack = f"{o_attack + 20}"
-                o_defense = f"{o_defense + 20}"
-                o_max_health = f"{o_max_health + 100}"
+                atk_buff = f" / **{o_attack + 20}**"
+                def_buff = f" / **{o_defense + 20}**"
+                hlt_buff = f" / **{o_max_health + 100}**"
                 message = "_Universe Buff Applied_"
                 if o_destiny:
-                    o_attack = f"{o_attack + 25}"
-                    o_defense = f"{o_defense + 25}"
-                    o_max_health = f"{o_max_health + 150}"
+                    atk_buff = f" / **{o_attack + 25}**"
+                    def_buff = f" / **{o_defense + 25}**"
+                    hlt_buff = f" / **{o_max_health + 150}**"
                     message = "_Destiny Buff Applied_"
 
             embedVar = discord.Embed(title=f"{title_name} {o_card} & {active_pet['NAME']}:".format(self), description=textwrap.dedent(f"""\
             {message}
-            :heart: {o_max_health}
-            :cyclone: {o_max_stamina}
-            :dagger: {o_attack}
-            :shield: {o_defense}
+            :heart: {o_max_health} {hlt_buff}   :cyclone: {o_max_stamina}
+            :dagger: {o_attack} {atk_buff} 
+            :shield: {o_defense} {def_buff}
             
-            **Title:** {title_name} | {title_passive_type} {title_passive_value}
-            **Arm:** {arm_name} | {arm_passive_type} {arm_passive_value}
-            **Pet:** {active_pet['NAME']} | {active_pet['TYPE']} {pet_ability_power} | _Bond_ **{bond}** {bond_message} / _Level_ **{lvl}**
+            **Title:** {title_name} ~ {title_passive_type} {title_passive_value}
+            **Arm:** {arm_name} ~ {arm_passive_type} {arm_passive_value}
+            **Pet:** {active_pet['NAME']}:** {active_pet['TYPE']} {pet_ability_power} ~ **Bond** _{bond}_ {bond_message} / **Level** _{lvl}_
 
-            **Rebirth Buff:** +{rebirthBonus}
-            
+            **Rebirth Buff:** +_{rebirthBonus}_
             _**Moveset**_
             **{move1}:** {move1ap}
             **{move2}:** {move2ap}
@@ -211,7 +208,6 @@ class Profile(commands.Cog):
             **{move4}:** {move4enh} by {move4ap}
             
             _Unique Passive:_ **{passive_name}:** {passive_type} by {passive_num}
-
             {traitmessage}
             """)
             
