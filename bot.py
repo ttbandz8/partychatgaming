@@ -1175,10 +1175,9 @@ async def traits(ctx):
 
 @slash.slash(name="Resell", description="Sell items back to the shop")
 @commands.check(validate_user)
-async def resell(ctx, *args):
+async def resell(ctx, item: str):
    user = db.queryUser({'DISNAME': str(ctx.author)})
-   p1_trade_item = " ".join([*args])
-
+   p1_trade_item = item
    p1_vault = db.queryVault({'OWNER' : str(ctx.author)})
    p1_cards = p1_vault['CARDS']
    p1_titles = p1_vault['TITLES']
