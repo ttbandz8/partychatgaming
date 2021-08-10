@@ -32,6 +32,7 @@ class Cards(commands.Cog):
 
     @cog_ext.cog_slash(description="Buy a Card")
     async def buycard(self, ctx, card: str):
+        card_name = card
         vault_query = {'OWNER' : str(ctx.author)}
         vault = db.altQueryVault(vault_query)
         owned_destinies = []
@@ -141,6 +142,7 @@ class Cards(commands.Cog):
 
     @cog_ext.cog_slash(description="Equip a Card")
     async def equipcard(self, ctx, card: str):
+        card_name = card
         user_query = {'DISNAME': str(ctx.author)}
         user = db.queryUser(user_query)
 
@@ -158,6 +160,7 @@ class Cards(commands.Cog):
         
     @cog_ext.cog_slash(description="View a Card")
     async def viewcard(self, ctx, card: str):
+        card_name = card
         card = db.queryCard({'NAME':str(card)})
         if card:
             o_card = card['NAME']
