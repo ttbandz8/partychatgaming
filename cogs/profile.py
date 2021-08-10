@@ -192,15 +192,18 @@ class Profile(commands.Cog):
 
             embedVar = discord.Embed(title=f"{title_name} {o_card} & {active_pet['NAME']}:".format(self), description=textwrap.dedent(f"""\
             {message}
-            :heart: {o_max_health} {hlt_buff}   :cyclone: {o_max_stamina}
+            :heart: {o_max_health} {hlt_buff}
+            :cyclone: {o_max_stamina}
             :dagger: {o_attack} {atk_buff} 
             :shield: {o_defense} {def_buff}
             
             **Title:** {title_name} ~ {title_passive_type} {title_passive_value}
             **Arm:** {arm_name} ~ {arm_passive_type} {arm_passive_value}
-            **Pet:** {active_pet['NAME']}:** {active_pet['TYPE']} {pet_ability_power} ~ **Bond** _{bond}_ {bond_message} / **Level** _{lvl}_
+            **Pet:** {active_pet['NAME']} ~ {active_pet['TYPE']} {pet_ability_power}
+            **Bond** _{bond}_ {bond_message} / **Level** _{lvl}_
 
             **Rebirth Buff:** +_{rebirthBonus}_
+            
             _**Moveset**_
             **{move1}:** {move1ap}
             **{move2}:** {move2ap}
