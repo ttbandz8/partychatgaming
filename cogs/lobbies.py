@@ -15,6 +15,7 @@ from PIL import Image, ImageFont, ImageDraw
 import requests
 from collections import ChainMap
 import DiscordUtils
+from discord_slash import cog_ext, SlashContext
 
 emojis = ['👍', '👎']
 
@@ -31,48 +32,7 @@ class Lobbies(commands.Cog):
     async def cog_check(self, ctx):
         return await main.validate_user(ctx)
 
-    # @commands.command()
-    # async def dal(self, ctx):
-    #     user_query = {"DISNAME": str(ctx.author)}
-    #     if ctx.author.guild_permissions.administrator == True:
-    #         resp = db.deleteAllSessions(user_query)
-    #         await ctx.send(resp)
-    #     else:
-    #         await ctx.send(m.ADMIN_ONLY_COMMAND)
-
-
-    @commands.command()
-    async def createlobby(self, ctx, matchtype, *args):
-        game_name = " ".join([*args])
-        query = {'ALIASES': game_name.lower()}
-        game = db.queryGame(query)
-      
-        if game:
-            name = game['GAME']
-            allowed_types = game['TYPE']
-
-            user_query = {'DISNAME': str(ctx.author)}
-            user = db.queryUser(user_query)
-            if name in user['GAMES']:
-                if int(matchtype) in allowed_types:
-  
-                    session_query = {"OWNER": str(ctx.author), "GAME": name, "TYPE": int(matchtype), "TEAMS": [], 'AVAILABLE': True}
-                    resp = db.createSession(data.newSession(session_query))
-                    await ctx.send(resp)
-                else:
-                    await ctx.send(m.GAME_TYPE_UNSUPPORTED)                    
-            else:
-                await ctx.send(m.ADD_A_GAME)
-        else:
-            await ctx.send(m.GAME_UNAVAILABLE)
-
-    @commands.command()
-    async def deletelobby(self, ctx):
-        session_query = {"OWNER": str(ctx.author), "AVAILABLE": True}
-        response = db.deleteSession(session_query)
-        await ctx.send(response)
-
-    @commands.command()
+    @cog_ext.cog_slash(description="End your Crown PVP Match")
     async def end(self, ctx):
         session_query = {"OWNER": str(ctx.author), "AVAILABLE": True}
         session = db.querySession(session_query)
@@ -308,139 +268,7 @@ class Lobbies(commands.Cog):
                 await main.DM(ctx, user, "You Lost. Get back in there!")
                 await ctx.send(f"Competitor " + f"{user.mention}" + " took an L! :eyes:")
 
-    #@commands.command()
-    async def add(self, ctx, *user: User):
-        if ctx.author.guild_permissions.administrator == True:  
-            session_query = {"OWNER": str(ctx.author), "AVAILABLE": True}
-            session = db.querySession(session_query)
-            match_type = session['TYPE']
-            invalid_user = False
-            for u in user:
-                user_query = ({'DISNAME': str(u)})
-                resp = db.queryUser(user_query)
-                if not resp:
-                    invalid_user = True
-                if session['GAME'] not in resp['GAMES']:
-                    await ctx.send(m.ADD_A_GAME)
-                    return False
-            
-            if invalid_user:
-                await ctx.send("You must first register before joining lobbies. ", delete_after=5)
-            else:
-                if match_type == 1:
-                    join_query = {"TEAM": [str(user[0])], "SCORE": 0, "POSITION": 1}
-                    session_joined = db.joinSession(session_query, join_query)
-                    await ctx.send(session_joined, delete_after=5)
-                if match_type ==2:
-                    join_query = {"TEAM": [str(user[0]), (str(user[1]))], "SCORE": 0, "POSITION": 1}
-                    session_joined = db.joinSession(session_query, join_query)
-                    await ctx.send(session_joined, delete_after=5)
-                if match_type ==3:
-                    join_query = {"TEAM": [str(user[0]), (str(user[1])), str(user[2])], "SCORE": 0, "POSITION": 1}
-                    session_joined = db.joinSession(session_query, join_query)
-                    await ctx.send(session_joined, delete_after=5)
-                if match_type ==4:
-                    join_query = {"TEAM": [str(user[0]), (str(user[1])), str(user[2]), str(user[3])], "SCORE": 0, "POSITION": 1}
-                    session_joined = db.joinSession(session_query, join_query)
-                    await ctx.send(session_joined, delete_after=5)
-                if match_type ==5:
-                    join_query = {"TEAM": [str(user[0]), (str(user[1])), str(user[2]), str(user[3]), str(user[4])], "SCORE": 0, "POSITION": 1}
-                    session_joined = db.joinSession(session_query, join_query)
-                    await ctx.send(session_joined, delete_after=5)
-        else:
-            await ctx.send("Admin Only", delete_after=5)
-
-    @commands.command()
-    async def joinlobby(self, ctx, *user: User):
-        session_query = {"OWNER": str(user[0]), "AVAILABLE": True}
-        session = db.querySession(session_query)
-        if session:
-            match_type = session['TYPE']
-            game = session['GAME']
-            user_query = ({'DISNAME': str(ctx.author)})
-            response = db.queryUser(user_query)
-            card = response['CARD']
-            title = response['TITLE']
-            if game not in response['GAMES']:
-                await ctx.send(m.ADD_A_GAME)
-            else:
-                invalid_user = False
-                for u in user:
-                    user_query = ({'DISNAME': str(u)})
-                    resp = db.queryUser(user_query)
-                    if not resp:
-                        invalid_user = True
-                        await ctx.send(m.USER_NOT_REGISTERED)
-                    if game not in resp['GAMES']:
-                        invalid_user = True
-                        await ctx.send(m.ADD_A_GAME)
-            
-                if invalid_user:
-                    await ctx.send(m.USER_NOT_REGISTERED, delete_after=5)
-                else:
-                    position=0
-                    if bool(session['TEAMS']):
-                        position=1
-                    if match_type == 1 and game == 'Crown Unlimited':
-                        join_query = {"TEAM": [str(ctx.author)], "SCORE": 0, "CARD": card, "TITLE": title, "POSITION": position}
-                        session_joined = db.joinSession(session_query, join_query)
-                        await ctx.send(session_joined)
-                    if match_type == 1 and game != 'Crown Unlimited':
-                        join_query = {"TEAM": [str(ctx.author)], "SCORE": 0, "POSITION": position}
-                        session_joined = db.joinSession(session_query, join_query)
-                        await ctx.send(session_joined)
-                    if match_type == 2:
-                        join_query = {"TEAM": [str(ctx.author), (str(user[1]))], "SCORE": 0, "POSITION": position}
-                        session_joined = db.joinSession(session_query, join_query)
-                        await ctx.send(session_joined)
-                    if match_type == 3:
-                        join_query = {"TEAM": [str(ctx.author), (str(user[1])), str(user[2])], "SCORE": 0, "POSITION": position}
-                        session_joined = db.joinSession(session_query, join_query)
-                        await ctx.send(session_joined)
-                    if match_type ==4:
-                        join_query = {"TEAM": [str(ctx.author), (str(user[1])), str(user[2]), str(user[3])], "SCORE": 0, "POSITION": position}
-                        session_joined = db.joinSession(session_query, join_query)
-                        await ctx.send(session_joined)
-                    if match_type ==5:
-                        join_query = {"TEAM": [str(ctx.author), (str(user[1])), str(user[2]), str(user[3]), str(user[4])], "SCORE": 0, "POSITION": position}
-                        session_joined = db.joinSession(session_query, join_query)
-                        await ctx.send(session_joined)
-                    if match_type >5:
-                        await ctx.send(m.TOO_MANY_PLAYERS_ON_TEAM)                     
-
-        else:
-            await ctx.send(m.SESSION_DOES_NOT_EXIST)
-
-    @commands.command()
-    async def score(self,ctx, user: User):
-        session_query = {"OWNER": str(ctx.author), "AVAILABLE": True, "KINGSGAMBIT": False}
-        session_data = db.querySession(session_query)
-        teams = [x for x in session_data['TEAMS']]
-        winning_team = {}
-        for x in teams:
-            if str(user) in x['TEAM']: 
-                winning_team = x
-        new_score = winning_team['SCORE'] + 1
-        update_query = {'$set': {'TEAMS.$.SCORE': new_score}}
-        query = {"_id": session_data["_id"], "TEAMS.TEAM": str(user)}
-        response = db.updateSession(session_query, query, update_query)
-        reciever = db.queryUser({'DISNAME': str(user)})
-        name = reciever['DISNAME']
-        message = ":one: You Scored, Don't Let Up :one:"
-        await main.DM(ctx, user, message)
-        if response:
-            await ctx.send(f"{user.mention}" +f" + :one:", delete_after=2)
-        else:
-            await ctx.send(f"Score not added. Please, try again. ", delete_after=5)
-
-    # @commands.command()
-    # async def cards(self,ctx, user: User):
-    #     print(ctx.author[])
-    #     await self.cl(self,ctx,1,"Flex")
-    #     await self.jl(self,ctx,ctx.author)
-    #     await self.add(self,ctx,user)
-
-    @commands.command()
+    @cog_ext.cog_slash(description="Setup PVP against player")
     async def battle(self, ctx, user1: User):
         game_name = "Crown Unlimited"
         query = {'ALIASES': game_name.lower()}
@@ -484,17 +312,13 @@ class Lobbies(commands.Cog):
 
                 except:
                     await ctx.send(m.ALREADY_IN_SESSION)  
-                    # session_query = {"OWNER": str(ctx.author), "GAME": name, "TYPE": 1, "TEAMS": [], 'AVAILABLE': True}
-                    # resp = db.createSession(data.newSession(session_query))
-                    # await ctx.send(resp)
+
             else:
                 await ctx.send(m.ADD_A_GAME)
         else:
             await ctx.send(m.GAME_UNAVAILABLE)
 
-
-
-    @commands.command()
+    @cog_ext.cog_slash(description="Tutorial Battle: Normal Difficulty")
     async def senpaibattle(self, ctx):
         #game_name = " ".join([*args])
         query = {'ALIASES': 'crown'}
@@ -549,8 +373,7 @@ class Lobbies(commands.Cog):
         else:
             await ctx.send(m.GAME_UNAVAILABLE)
 
-
-    @commands.command()
+    @cog_ext.cog_slash(description="Tutorial Battle: Hard Difficulty")
     async def legendbattle(self, ctx):
         #game_name = " ".join([*args])
         query = {'ALIASES': 'crown'}

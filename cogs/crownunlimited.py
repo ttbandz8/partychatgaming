@@ -24,6 +24,8 @@ import base64
 from io import BytesIO
 import asyncio
 import textwrap
+from discord import Embed
+from discord_slash import cog_ext, SlashContext
 
 class CrownUnlimited(commands.Cog):
     def __init__(self, bot):
@@ -41,8 +43,9 @@ class CrownUnlimited(commands.Cog):
         companion = user_data['DISNAME']
         return companion
 
-    @commands.command()
-    async def atales(self, ctx):
+    
+    @cog_ext.cog_slash(description="Auto Tales Battler")
+    async def atales(self, ctx: SlashContext):
         private_channel = ctx
         if isinstance(private_channel.channel, discord.channel.DMChannel):
             await private_channel.send(m.SERVER_FUNCTION_ONLY)
@@ -2159,8 +2162,8 @@ class CrownUnlimited(commands.Cog):
                     if private_channel.guild:
                         await discord.TextChannel.delete(private_channel, reason=None)
 
-    @commands.command()
-    async def dtales(self, ctx, deck : int):
+    @cog_ext.cog_slash(description="Duo Tales with AI")
+    async def dtales(self, ctx: SlashContext, deck : int):
         private_channel = ctx
         if isinstance(private_channel.channel, discord.channel.DMChannel):
             await private_channel.send(m.SERVER_FUNCTION_ONLY)
@@ -6476,8 +6479,8 @@ class CrownUnlimited(commands.Cog):
                         await discord.TextChannel.delete(private_channel, reason=None)
                     response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
 
-    @commands.command()
-    async def ddungeon(self, ctx, deck : int):
+    @cog_ext.cog_slash(description="Duo Dungeons with AI")
+    async def ddungeon(self, ctx: SlashContext, deck : int):
         private_channel = ctx
         if isinstance(private_channel.channel, discord.channel.DMChannel):
             await private_channel.send(m.SERVER_FUNCTION_ONLY)
@@ -11246,8 +11249,8 @@ class CrownUnlimited(commands.Cog):
                         response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                         await discord.TextChannel.delete(private_channel, reason=None)
 
-    @commands.command()
-    async def dboss(self, ctx, deck: int):
+    @cog_ext.cog_slash(description="Duo Bosses with AI")
+    async def dboss(self, ctx: SlashContext, deck: int):
         private_channel = ctx
         if isinstance(private_channel.channel, discord.channel.DMChannel):
             await private_channel.send(m.SERVER_FUNCTION_ONLY)
@@ -11499,7 +11502,7 @@ class CrownUnlimited(commands.Cog):
         t_max_stamina= t['STAM']
         t_moveset = t['MOVESET']
         t_attack = t['ATK'] * 3
-        t_defense = t['DEF'] * 4
+        t_defense = t['DEF'] * 8
         t_type = t['TYPE']
         t_accuracy = t['ACC']
         t_passive = t['PASS'][0]
@@ -11665,11 +11668,11 @@ class CrownUnlimited(commands.Cog):
             t_stamina = t_stamina - int(c_card_passive)
             c_stamina = c_stamina + int(c_card_passive)
         elif c_card_passive_type == 'FLOG':
-            c_attack = c_attack + int((((c_card_passive/1.5)/100) *t_attack))
-            t_attack = t_attack - int((((c_card_passive/1.5)/100) *t_attack))
+            c_attack = c_attack + int((((c_card_passive/4)/100) *t_attack))
+            t_attack = t_attack - int((((c_card_passive/4)/100) *t_attack))
         elif c_card_passive_type == 'WITHER':
-            c_defense = c_defense + int((((c_card_passive/1.5)/100) *t_defense))
-            t_defense = t_defense - int((((c_card_passive/1.5)/100) *t_defense))
+            c_defense = c_defense + int((((c_card_passive/4)/100) *t_defense))
+            t_defense = t_defense - int((((c_card_passive/4)/100) *t_defense))
         elif c_card_passive_type == 'RAGE':
             c_attack = c_attack + int(((c_card_passive/100) * c_defense))
             c_defense = c_defense - int(((c_card_passive/100) * c_attack))
@@ -16007,8 +16010,8 @@ class CrownUnlimited(commands.Cog):
             if private_channel.guild:
                 await discord.TextChannel.delete(private_channel, reason=None)
 
-    @commands.command()
-    async def ctales(self, ctx, user: User):
+    @cog_ext.cog_slash(description="Co-op Tales with Friends")
+    async def ctales(self, ctx: SlashContext, user: User):
         private_channel = ctx
         if isinstance(private_channel.channel, discord.channel.DMChannel):
             await private_channel.send(m.SERVER_FUNCTION_ONLY)
@@ -20133,8 +20136,8 @@ class CrownUnlimited(commands.Cog):
                         await discord.TextChannel.delete(private_channel, reason=None)
                     response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
 
-    @commands.command()
-    async def cdungeon(self, ctx, user: User):
+    @cog_ext.cog_slash(description="Co-op Dungeon with Friends")
+    async def cdungeon(self, ctx: SlashContext, user: User):
         private_channel = ctx
         if isinstance(private_channel.channel, discord.channel.DMChannel):
             await private_channel.send(m.SERVER_FUNCTION_ONLY)
@@ -24657,8 +24660,8 @@ class CrownUnlimited(commands.Cog):
                         response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                         await discord.TextChannel.delete(private_channel, reason=None)
 
-    @commands.command()
-    async def cboss(self, ctx, user: User):
+    @cog_ext.cog_slash(description="Co-op Bosses with Friends")
+    async def cboss(self, ctx: SlashContext, user: User):
         companion = db.queryUser({'DISNAME': str(user)})
         private_channel = ctx
         if isinstance(private_channel.channel, discord.channel.DMChannel):
@@ -24903,7 +24906,7 @@ class CrownUnlimited(commands.Cog):
         t_max_stamina= t['STAM']
         t_moveset = t['MOVESET']
         t_attack = t['ATK'] * 4
-        t_defense = t['DEF'] * 4
+        t_defense = t['DEF'] * 8
         t_type = t['TYPE']
         t_accuracy = t['ACC']
         t_passive = t['PASS'][0]
@@ -25069,11 +25072,11 @@ class CrownUnlimited(commands.Cog):
             t_stamina = t_stamina - int(c_card_passive)
             c_stamina = c_stamina + int(c_card_passive)
         elif c_card_passive_type == 'FLOG':
-            c_attack = c_attack + int((((c_card_passive/1.5)/100) *t_attack))
-            t_attack = t_attack - int((((c_card_passive/1.5)/100) *t_attack))
+            c_attack = c_attack + int((((c_card_passive/4)/100) *t_attack))
+            t_attack = t_attack - int((((c_card_passive/4)/100) *t_attack))
         elif c_card_passive_type == 'WITHER':
-            c_defense = c_defense + int((((c_card_passive/1.5)/100) *t_defense))
-            t_defense = t_defense - int((((c_card_passive/1.5)/100) *t_defense))
+            c_defense = c_defense + int((((c_card_passive/4)/100) *t_defense))
+            t_defense = t_defense - int((((c_card_passive/4)/100) *t_defense))
         elif c_card_passive_type == 'RAGE':
             c_attack = c_attack + int(((c_card_passive/100) * c_defense))
             c_defense = c_defense - int(((c_card_passive/100) * c_attack))
@@ -29157,8 +29160,8 @@ class CrownUnlimited(commands.Cog):
             if private_channel.guild:
                 await discord.TextChannel.delete(private_channel, reason=None)
 
-    @commands.command()
-    async def dungeon(self, ctx):
+    @cog_ext.cog_slash(description="Dungeon! Available for Tales you beat")
+    async def dungeon(self, ctx: SlashContext):
         private_channel = ctx
         if isinstance(private_channel.channel, discord.channel.DMChannel):
             await private_channel.send(m.SERVER_FUNCTION_ONLY)
@@ -31364,8 +31367,8 @@ class CrownUnlimited(commands.Cog):
                         response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                         await discord.TextChannel.delete(private_channel, reason=None)
 
-    @commands.command()
-    async def tales(self, ctx):
+    @cog_ext.cog_slash(description="Tales! Defeat Tales to unlock Dungeons")
+    async def tales(self, ctx: SlashContext):
         private_channel = ctx
         if isinstance(private_channel.channel, discord.channel.DMChannel):
             await private_channel.send(m.SERVER_FUNCTION_ONLY)
@@ -33462,8 +33465,8 @@ class CrownUnlimited(commands.Cog):
                     if private_channel.guild:
                         await discord.TextChannel.delete(private_channel, reason=None)
 
-    @commands.command()
-    async def boss(self, ctx):
+    @cog_ext.cog_slash(description="Boss! Defeat Dungeon to unlock Boss")
+    async def boss(self, ctx: SlashContext):
         private_channel = ctx
         if isinstance(private_channel.channel, discord.channel.DMChannel):
             await private_channel.send(m.SERVER_FUNCTION_ONLY)
@@ -33643,8 +33646,8 @@ class CrownUnlimited(commands.Cog):
         t_stamina = t['STAM']
         t_max_stamina= t['STAM']
         t_moveset = t['MOVESET']
-        t_attack = t['ATK'] * 2
-        t_defense = t['DEF'] * 4
+        t_attack = t['ATK'] * 3
+        t_defense = t['DEF'] * 7
         t_type = t['TYPE']
         t_accuracy = t['ACC']
         t_passive = t['PASS'][0]
@@ -33791,11 +33794,11 @@ class CrownUnlimited(commands.Cog):
             o_stamina = o_stamina + int(o_card_passive)
             t_stamina = t_stamina - int(o_card_passive)
         elif o_card_passive_type == 'FLOG':
-            o_attack = o_attack + int((((o_card_passive/1.5)/100) *t_attack))
-            t_attack = t_attack - int((((o_card_passive/1.5)/100) *t_attack))
+            o_attack = o_attack + int((((o_card_passive/4)/100) *t_attack))
+            t_attack = t_attack - int((((o_card_passive/4)/100) *t_attack))
         elif o_card_passive_type == 'WITHER':
-            o_defense = o_defense + int((((o_card_passive/1.5)/100) *t_defense))
-            t_defense = t_defense - int((((o_card_passive/1.5)/100) *t_defense))
+            o_defense = o_defense + int((((o_card_passive/4)/100) *t_defense))
+            t_defense = t_defense - int((((o_card_passive/4)/100) *t_defense))
         elif o_card_passive_type == 'RAGE':
             o_attack = o_attack + int(((o_card_passive/100) * o_defense))
             o_defense = o_defense - int(((o_card_passive/100) *o_attack))
@@ -35626,8 +35629,8 @@ class CrownUnlimited(commands.Cog):
             if private_channel.guild:
                 await discord.TextChannel.delete(private_channel, reason=None)
 
-    @commands.command()
-    async def start(self, ctx):
+    @cog_ext.cog_slash(description="Start Battle")
+    async def start(self, ctx: SlashContext):
         private_channel = ctx
         starttime = time.asctime()
         h_gametime = starttime[11:13]
@@ -38247,8 +38250,8 @@ class CrownUnlimited(commands.Cog):
         else:
             await ctx.send(m.SESSION_DOES_NOT_EXIST)
 
-    @commands.command()
-    async def brawl(self, ctx):
+    @cog_ext.cog_slash(description="Start Balanced Battle")
+    async def brawl(self, ctx: SlashContext):
         private_channel = ctx
         starttime = time.asctime()
         h_gametime = starttime[11:13]
@@ -40829,8 +40832,8 @@ class CrownUnlimited(commands.Cog):
         else:
             await ctx.send(m.SESSION_DOES_NOT_EXIST)
 
-    @commands.command()
-    async def arenabrawl(self, ctx):
+    @cog_ext.cog_slash(description="Start Balanced No-Pet Battle")
+    async def arenabrawl(self, ctx: SlashContext):
         private_channel = ctx
         starttime = time.asctime()
         h_gametime = starttime[11:13]
@@ -43211,8 +43214,8 @@ class CrownUnlimited(commands.Cog):
         else:
             await ctx.send(m.SESSION_DOES_NOT_EXIST)
     
-    @commands.command()
-    async def arena(self, ctx):
+    @cog_ext.cog_slash(description="Start No-Pet Battle")
+    async def arena(self, ctx: SlashContext):
         private_channel = ctx
         starttime = time.asctime()
         h_gametime = starttime[11:13]
@@ -45593,8 +45596,8 @@ class CrownUnlimited(commands.Cog):
         else:
             await ctx.send(m.SESSION_DOES_NOT_EXIST)
 
-    @commands.command()
-    async def wager(self, ctx, wager: int):
+    @cog_ext.cog_slash(description="Start Battle for Money")
+    async def wager(self, ctx: SlashContext, wager: int):
         private_channel = ctx
         starttime = time.asctime()
         h_gametime = starttime[11:13]
@@ -48082,9 +48085,8 @@ class CrownUnlimited(commands.Cog):
         else:
             await ctx.send(m.SESSION_DOES_NOT_EXIST)
 
-    @commands.command()
-    async def cards(self, ctx, *args):
-        universe = " ".join([*args])
+    @cog_ext.cog_slash(description="View all Cards of a Universe you unlocked")
+    async def cards(self, ctx: SlashContext, universe: str):
         universe_data = db.queryUniverse({'TITLE': str(universe)})
         user = db.queryUser({'DISNAME': str(ctx.author)})
         if universe_data['PREREQUISITE'] not in user['CROWN_TALES'] and universe_data['PREREQUISITE'] != "":
@@ -48161,9 +48163,8 @@ class CrownUnlimited(commands.Cog):
         embeds = embed_list
         await paginator.run(embeds)
     
-    @commands.command()
-    async def titles(self, ctx, *args):
-        universe = " ".join([*args])
+    @cog_ext.cog_slash(description="View all Titles of a Universe you unlocked")
+    async def titles(self, ctx: SlashContext, universe: str):
         universe_data = db.queryUniverse({'TITLE': str(universe)})
         user = db.queryUser({'DISNAME': str(ctx.author)})
         if universe_data['PREREQUISITE'] not in user['CROWN_TALES'] and universe_data['PREREQUISITE'] != "":
@@ -48235,9 +48236,8 @@ class CrownUnlimited(commands.Cog):
         embeds = embed_list
         await paginator.run(embeds)
 
-    @commands.command()
-    async def arms(self, ctx, *args):
-        universe = " ".join([*args])
+    @cog_ext.cog_slash(description="View all Arms of a Universe you unlocked")
+    async def arms(self, ctx: SlashContext, universe: str):
         universe_data = db.queryUniverse({'TITLE': str(universe)})
         user = db.queryUser({'DISNAME': str(ctx.author)})
         if universe_data['PREREQUISITE'] not in user['CROWN_TALES'] and universe_data['PREREQUISITE'] != "":
@@ -48305,9 +48305,8 @@ class CrownUnlimited(commands.Cog):
         embeds = embed_list
         await paginator.run(embeds)
 
-    @commands.command()
-    async def destinies(self, ctx, *args):
-        universe = " ".join([*args])
+    @cog_ext.cog_slash(description="View all Destinies of a Universe you unlocked")
+    async def destinies(self, ctx: SlashContext, universe: str):
         universe_data = db.queryUniverse({'TITLE': str(universe)})
         user = db.queryUser({'DISNAME': str(ctx.author)})
         if universe_data['PREREQUISITE'] not in user['CROWN_TALES'] and universe_data['PREREQUISITE'] != "":
@@ -48358,9 +48357,8 @@ class CrownUnlimited(commands.Cog):
         embeds = embed_list
         await paginator.run(embeds)
 
-    @commands.command()
-    async def pets(self, ctx, *args):
-        universe = " ".join([*args])
+    @cog_ext.cog_slash(description="View all Pets of a Universe you unlocked")
+    async def pets(self, ctx: SlashContext, universe: str):
         universe_data = db.queryUniverse({'TITLE': str(universe)})
         user = db.queryUser({'DISNAME': str(ctx.author)})
         if universe_data['PREREQUISITE'] not in user['CROWN_TALES'] and universe_data['PREREQUISITE'] != "":
@@ -48430,8 +48428,8 @@ class CrownUnlimited(commands.Cog):
         embeds = embed_list
         await paginator.run(embeds)
 
-    @commands.command()
-    async def universes(self, ctx):
+    @cog_ext.cog_slash(description="View all available Universes")
+    async def universes(self, ctx: SlashContext):
         universe_data = db.queryAllUniverse()
         user = db.queryUser({'DISNAME': str(ctx.author)})
 
@@ -48477,7 +48475,7 @@ class CrownUnlimited(commands.Cog):
             icon=":crystal_ball:"
         for i in range(0, len(universes_broken_up)):
             globals()['embedVar%s' % i] = discord.Embed(title= f"{icon} Universe List", description="\n".join(universes_broken_up[i]), colour=0x7289da)
-            globals()['embedVar%s' % i].set_footer(text=f"{total_universes} Total Universes\n.cards 'Universe Name' - View Card List\n.titles 'Universe Name' - View Titles List\n.arms 'Universe Name' - View Arms List\n.pets 'Universe Name' - View Pet List\n.destinies 'Universe Name' - View Destiny List")
+            globals()['embedVar%s' % i].set_footer(text=f"{total_universes} Total Universes\n.cards Universe Name - View Card List\n.titles Universe Name - View Titles List\n.arms Universe Name - View Arms List\n.pets Universe Name - View Pet List\n.destinies Universe Name - View Destiny List")
             embed_list.append(globals()['embedVar%s' % i])
 
         paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
@@ -48489,8 +48487,8 @@ class CrownUnlimited(commands.Cog):
         embeds = embed_list
         await paginator.run(embeds)
 
-    @commands.command()
-    async def houses(self, ctx):
+    @cog_ext.cog_slash(description="View all Homes for purchase")
+    async def houses(self, ctx: SlashContext):
         house_data = db.queryAllHouses()
         user = db.queryUser({'DISNAME': str(ctx.author)})
 
@@ -48529,8 +48527,8 @@ class CrownUnlimited(commands.Cog):
         embeds = embed_list
         await paginator.run(embeds)
 
-    @commands.command()
-    async def ff(self, ctx):
+    @cog_ext.cog_slash(description="Quit Match")
+    async def ff(self, ctx: SlashContext):
         private_channel = ctx
         ov = private_channel.channel.overwrites
         validator = False

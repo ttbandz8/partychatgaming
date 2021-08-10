@@ -16,6 +16,7 @@ from collections import ChainMap
 import DiscordUtils
 import textwrap
 from collections import Counter
+from discord_slash import cog_ext, SlashContext
 
 emojis = ['👍', '👎']
 
@@ -32,7 +33,7 @@ class Lookup(commands.Cog):
     async def cog_check(self, ctx):
         return await main.validate_user(ctx)
 
-    @commands.command()
+    @cog_ext.cog_slash(description="Find owner of Lobby")
     async def owner(self, ctx, user: User):
         session_owner = {'OWNER': str(user), "AVAILABLE": True}
         session = db.querySession(session_owner)
@@ -157,7 +158,7 @@ class Lookup(commands.Cog):
         else:
             await ctx.send(m.SESSION_DOES_NOT_EXIST, delete_after=5)
 
-    @commands.command()
+    @cog_ext.cog_slash(description="View current Lobby")
     async def lobby(self, ctx):  
         session_owner = {'OWNER': str(ctx.author), "AVAILABLE": True}
         session = db.querySession(session_owner)
@@ -298,7 +299,7 @@ class Lookup(commands.Cog):
         else:
             await ctx.send(m.SESSION_DOES_NOT_EXIST)
 
-    @commands.command()
+    @cog_ext.cog_slash(description="Check if player is in Lobby")
     async def check(self, ctx, user: User):
         current_session = {'TEAMS.TEAM': str(user), "AVAILABLE": True}
         session = db.querySessionMembers(current_session)
@@ -430,7 +431,7 @@ class Lookup(commands.Cog):
         else:
             await ctx.send(m.SESSION_DOES_NOT_EXIST, delete_after=5)
 
-    @commands.command()
+    @cog_ext.cog_slash(description="Lookup player stats")
     async def lookup(self, ctx, user: User):
         query = {'DISNAME': str(user)}
         d = db.queryUser(query)
@@ -572,7 +573,7 @@ class Lookup(commands.Cog):
         else:
             await ctx.send(m.USER_NOT_REGISTERED)
 
-    @commands.command()
+    @cog_ext.cog_slash(description="Lookup team stats")
     async def lookupteam(self, ctx, *args):
         team_name = " ".join([*args])
         team_query = {'TNAME': team_name}
@@ -629,8 +630,7 @@ class Lookup(commands.Cog):
         else:
             await ctx.send(m.TEAM_DOESNT_EXIST)
 
-
-    @commands.command()
+    @cog_ext.cog_slash(description="Lookup player family")
     async def lookupfamily(self, ctx, user: User):
         user_profile = db.queryUser({'DISNAME': str(user)})
         family = db.queryFamily({'HEAD': user_profile['FAMILY']})

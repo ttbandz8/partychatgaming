@@ -15,6 +15,7 @@ from discord import Member
 from PIL import Image, ImageFont, ImageDraw
 import requests
 from .crownunlimited import showcard
+from discord_slash import cog_ext, SlashContext
 
 class Cards(commands.Cog):
     def __init__(self, bot):
@@ -29,9 +30,8 @@ class Cards(commands.Cog):
     async def cog_check(self, ctx):
         return await main.validate_user(ctx)
 
-    @commands.command()
-    async def buycard(self, ctx, *args: str):
-        card_name = " ".join([*args])
+    @cog_ext.cog_slash(description="Buy a Card")
+    async def buycard(self, ctx, card: str):
         vault_query = {'OWNER' : str(ctx.author)}
         vault = db.altQueryVault(vault_query)
         owned_destinies = []
@@ -43,7 +43,7 @@ class Cards(commands.Cog):
         shop = db.queryShopCards()
         cards = []
 
-        check_card = db.queryCard({'NAME' : str(card_name)})
+        check_card = db.queryCard({'NAME' : str(card)})
         if check_card:
             if check_card['UNIVERSE'] == 'Unbound':
                 await ctx.send("You cannot purchase this card.")
@@ -139,29 +139,26 @@ class Cards(commands.Cog):
         else:
             await ctx.send(m.CARD_OUT_OF_STOCK)
 
-    @commands.command()
-    async def equipcard(self, ctx, *args):
-        card_name = " ".join([*args])
+    @cog_ext.cog_slash(description="Equip a Card")
+    async def equipcard(self, ctx, card: str):
         user_query = {'DISNAME': str(ctx.author)}
         user = db.queryUser(user_query)
 
         vault_query = {'OWNER' : str(ctx.author)}
         vault = db.altQueryVault(vault_query)
 
-        resp = db.queryCard({'NAME': card_name})
+        resp = db.queryCard({'NAME': card})
 
         # Do not Check Tourney wins
-        if card_name in vault['CARDS']:
-            response = db.updateUserNoFilter(user_query, {'$set': {'CARD': str(card_name)}})
+        if card in vault['CARDS']:
+            response = db.updateUserNoFilter(user_query, {'$set': {'CARD': str(card)}})
             await ctx.send(response)
         else:
             await ctx.send(m.USER_DOESNT_HAVE_THE_CARD, delete_after=5)
         
-    @commands.command()
-    async def viewcard(self, ctx, *args):
-        card_name = " ".join([*args])
-        card = db.queryCard({'NAME':str(card_name)})
-
+    @cog_ext.cog_slash(description="View a Card")
+    async def viewcard(self, ctx, card: str):
+        card = db.queryCard({'NAME':str(card)})
         if card:
             o_card = card['NAME']
             o_card_path=card['PATH']

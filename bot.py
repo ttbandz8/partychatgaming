@@ -18,6 +18,7 @@ import destiny as d
 # Converters
 from discord import User
 from discord import Member
+from discord_slash import SlashCommand
 
 
 import os
@@ -56,6 +57,8 @@ else:
    # TEST
    bot = commands.Bot(command_prefix=",", intents=intents)
 
+slash = SlashCommand(bot, sync_commands=True)
+
 bot.remove_command("help")
 
 @bot.group(invoke_without_command=True)
@@ -86,7 +89,42 @@ async def help(ctx):
    embeds = [embedVar2,embedVar3, embedVar1]
    await paginator.run(embeds)
 
-@bot.group(invoke_without_command=True)
+guild_ids = [839352855000776735]
+
+@slash.slash(name="Ping", description="Ping server speed")
+async def ping(ctx):
+   await ctx.send(f'Bot speed = {round(bot.latency * 1000)}ms')
+
+
+async def validate_user(ctx):
+   query = {'DISNAME': str(ctx.author)}
+   valid = db.queryUser(query)
+
+   if valid:
+      return True
+   else:
+      msg = await ctx.send(m.USER_NOT_REGISTERED, delete_after=5)
+      return False
+
+async def load(ctx, extension):
+   # Goes into cogs folder and looks for extension
+   bot.load_extension(f'cogs.{extension}')
+
+async def unload(ctx, extension):
+   # Goes into cogs folder and looks for extension
+   bot.unload_extension(f'cogs.{extension}')
+
+for filename in os.listdir('./cogs'):
+   if filename.endswith('.py'):
+      # :-3 removes .py from filename
+      bot.load_extension(f'cogs.{filename[:-3]}')
+
+@bot.event
+async def on_ready():
+   print('Bot is ready! ')
+
+
+@slash.slash(name="Enhancers", description="List of Enhancers")
 async def enhance(ctx):
    avatar="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png"
 
@@ -170,7 +208,7 @@ async def enhance(ctx):
    embeds = [embedVar1, embedVar2, embedVar3, embedVar4, embedVar5, embedVar6, embedVar8, embedVar9, embedVar7]
    await paginator.run(embeds)
 
-@bot.group(invoke_without_command=True)
+@slash.slash(name="Crown", description="Crown Unlimited Tutorial")
 async def crown(ctx):
    avatar="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png"
 
@@ -369,36 +407,7 @@ async def crown(ctx):
    embeds = [embedVar1, embedVar2, embedVar3, embedVar4, embedVar5, embedVar6, embedVar7, embedVar8,embedVar9, embedVar10]
    await paginator.run(embeds)
 
-async def validate_user(ctx):
-   query = {'DISNAME': str(ctx.author)}
-   valid = db.queryUser(query)
-
-   if valid:
-      return True
-   else:
-      msg = await ctx.send(m.USER_NOT_REGISTERED, delete_after=5)
-      return False
-
-@bot.command()
-async def load(ctx, extension):
-   # Goes into cogs folder and looks for extension
-   bot.load_extension(f'cogs.{extension}')
-
-@bot.command()
-async def unload(ctx, extension):
-   # Goes into cogs folder and looks for extension
-   bot.unload_extension(f'cogs.{extension}')
-
-for filename in os.listdir('./cogs'):
-   if filename.endswith('.py'):
-      # :-3 removes .py from filename
-      bot.load_extension(f'cogs.{filename[:-3]}')
-
-@bot.event
-async def on_ready():
-   print('Bot is ready! ')
-
-@bot.command()
+@slash.slash(name="Register", description="Register for Crown Unlimited")
 async def r(ctx):
    disname = str(ctx.author)
    name = disname.split("#",1)[0]
@@ -435,7 +444,7 @@ async def r(ctx):
    else:
       await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=3) 
 
-@bot.command()
+@slash.slash(name="Rebirth", description="Rebirth for permanent buffs")
 async def rebirth(ctx):
    query = {'DISNAME': str(ctx.author)}
    user_is_validated = db.queryUser(query)
@@ -638,7 +647,8 @@ async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandOnCooldown):
         await ctx.send(f'Your Daily Reward is on cooldown! You can use it in {round(error.retry_after/3600)} hours!')
 
-@bot.command()
+
+@slash.slash(name="Vs", description="How many times you defeated opponent")
 @commands.check(validate_user)
 async def vs(ctx, user: User, args1 ):
 
@@ -700,12 +710,12 @@ async def curse(amount, user):
       else:
          print("cant find vault")
 
-@bot.command()
+@slash.slash(name="Trade", description="Trade Cards, Titles, Arms, and Pets")
 @commands.check(validate_user)
-async def trade(ctx, user2: User, *args):
+async def trade(ctx, user2: User, item: str):
    user = db.queryUser({'DISNAME': str(ctx.author)})
    traded_to = db.queryUser({'DISNAME': str(user2)})
-   p1_trade_item = " ".join([*args])
+   p1_trade_item = item
    p1_vault = db.queryVault({'OWNER' : str(ctx.author)})
    p1_cards = p1_vault['CARDS']
    p1_titles = p1_vault['TITLES']
@@ -790,10 +800,14 @@ async def trade(ctx, user2: User, *args):
             await accept.add_reaction(emoji)
 
          def check(reaction, user):
-            return user == ctx.author and str(reaction.emoji) == '👍'
+            return user == ctx.author and ((str(reaction.emoji) == '👍') or (str(reaction.emoji) == '👎'))
 
          try:
             reaction, user = await bot.wait_for('reaction_add', timeout=8.0, check=check)
+            if str(reaction.emoji) == '👎':
+               await ctx.send("Trade ended.")
+               return
+
             if p2_trade_item in p2_arms:
                db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'ARMS': str(p1_trade_item)}})
                response = db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$addToSet':{'ARMS': str(p2_trade_item)}})
@@ -847,11 +861,11 @@ async def trade(ctx, user2: User, *args):
          except:
             await ctx.send("Trade ended. ")
 
-@bot.command()
+@slash.slash(name="Sell", description="Sell Cards, Titles, Arms, and Pets")
 @commands.check(validate_user)
-async def sell(ctx, user2: User, *args):
+async def sell(ctx, user2: User, item: str):
    user = db.queryUser({'DISNAME': str(ctx.author)})
-   p1_trade_item = " ".join([*args])
+   p1_trade_item = item
    p1_vault = db.queryVault({'OWNER' : str(ctx.author)})
    p1_cards = p1_vault['CARDS']
    p1_titles = p1_vault['TITLES']
@@ -925,10 +939,14 @@ async def sell(ctx, user2: User, *args):
                await accept.add_reaction(emoji)
 
             def check(reaction, user):
-               return user == ctx.author and str(reaction.emoji) == '👍'
+               return user == ctx.author and ((str(reaction.emoji) == '👍') or (str(reaction.emoji) == '👎'))
 
             try:
                reaction, user = await bot.wait_for('reaction_add', timeout=20.0, check=check)
+               
+               if str(reaction.emoji) == '👎':
+                  await ctx.send("Sell ended.")
+                  return
 
                if p1_trade_item in p1_arms:
                   db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'ARMS': str(p1_trade_item)}})
@@ -980,7 +998,7 @@ async def sell(ctx, user2: User, *args):
             except:
                await ctx.send("Trade ended. ")
 
-@bot.command()
+@slash.slash(name="Gift", description="Give money to friend")
 @commands.check(validate_user)
 async def gift(ctx, user2: User, amount):
    vault = db.queryVault({'OWNER': str(ctx.author)})
@@ -994,7 +1012,7 @@ async def gift(ctx, user2: User, amount):
       await ctx.send(f":coin:{amount} has been gifted to {user2.mention}.")
       return
    
-@bot.command()
+@slash.slash(name="Donate", description="Donate money to Guild")
 @commands.check(validate_user)
 async def donate(ctx, amount, *args):
    vault = db.queryVault({'OWNER': str(ctx.author)})
@@ -1013,7 +1031,7 @@ async def donate(ctx, amount, *args):
    else:
       await ctx.send(f"Team: {team} does not exist")
       
-@bot.command()
+@slash.slash(name="Invest", description="Invest money in your Family")
 @commands.check(validate_user)
 async def invest(ctx, amount):
    user = db.queryUser({'DISNAME': str(ctx.author)})
@@ -1031,7 +1049,7 @@ async def invest(ctx, amount):
    else:
       await ctx.send(f"Family does not exist")
 
-@bot.command()
+@slash.slash(name="Pay", description="Pay a Team Member")
 @commands.check(validate_user)
 async def pay(ctx, user2: User, amount):
    user = db.queryUser({'DISNAME': str(ctx.author)})
@@ -1078,7 +1096,7 @@ async def curseteam(amount, team):
          print("cant find team")
 
 
-@bot.command()
+@slash.slash(name="Allowance", description="Gift Family member an allowance")
 @commands.check(validate_user)
 async def allowance(ctx, user2: User, amount):
    user = db.queryUser({'DISNAME': str(ctx.author)})
@@ -1143,7 +1161,7 @@ async def cursefamily(amount, family):
       else:
          print("cant find family")
 
-@bot.command()
+@slash.slash(name="Traits", description="See full list of Universe Traits")
 @commands.check(validate_user)
 async def traits(ctx):
    traits = ut.traits
@@ -1155,7 +1173,7 @@ async def traits(ctx):
 
    await ctx.send(embed=embedVar)
 
-@bot.command()
+@slash.slash(name="Resell", description="Sell items back to the shop")
 @commands.check(validate_user)
 async def resell(ctx, *args):
    user = db.queryUser({'DISNAME': str(ctx.author)})
@@ -1267,24 +1285,7 @@ async def referred(ctx, user: User):
    else:
       await ctx.send("You're already referred!")
 
-
-@bot.command()
-async def about(ctx, *args):
-   name = " ".join([*args])
-   message = wikipedia.summary(str(name), sentences=5)
-   if message:
-      await ctx.send(message)
-   else:
-      await ctx.send("Sorry! There's no info for that.")
-
-
-@bot.command()
-@commands.check(validate_user)
-async def solo(ctx):
-   await ctx.send(f"{ctx.author.mention} check your dms. ")
-   await DM(ctx, ctx.author, "Continue your Crown Unlimited journey here, undisturbed. All Crown Unlimited commands are functional here. ")
-
-@bot.command()
+@slash.slash(name="Menu", description="Menu Options for things to do")
 @commands.check(validate_user)
 async def menu(ctx):
    try:

@@ -19,6 +19,7 @@ from .crownunlimited import showcard
 import random
 import textwrap
 from collections import Counter
+from discord_slash import cog_ext, SlashContext
 
 emojis = ['👍', '👎']
 
@@ -33,10 +34,9 @@ class Matches(commands.Cog):
     async def cog_check(self, ctx):
         return await main.validate_user(ctx)
 
-    @commands.command()
-    async def analysis(self, ctx, *args):
-        name = " ".join([*args])
-        match_query = {"CARD": name}
+    @cog_ext.cog_slash(description="Analysis on Card")
+    async def analysis(self, ctx, card: str):
+        match_query = {"CARD": card}
         response = db.queryManyMatches(match_query)
         if response:
             card = db.queryCard({"NAME": name})

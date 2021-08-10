@@ -11,6 +11,7 @@ from discord import User
 from discord import Member
 from PIL import Image, ImageFont, ImageDraw
 import requests
+from discord_slash import cog_ext, SlashContext
 
 class House(commands.Cog):
     def __init__(self, bot):
@@ -25,23 +26,22 @@ class House(commands.Cog):
     async def cog_check(self, ctx):
         return await main.validate_user(ctx)
 
-    @commands.command()
-    async def nh(self, ctx, path, *args):
-        if ctx.author.guild_permissions.administrator == True:
-            house = " ".join([*args])
-            house_query = {'HOUSE': str(house), 'PATH':path, 'PRICE': 500}
-            added = db.createHouse(data.newHouse(house_query))
-            await ctx.send(added)
-        else:
-            print(m.ADMIN_ONLY_COMMAND)
+    # @commands.command()
+    # async def nh(self, ctx, path, *args):
+    #     if ctx.author.guild_permissions.administrator == True:
+    #         house = " ".join([*args])
+    #         house_query = {'HOUSE': str(house), 'PATH':path, 'PRICE': 500}
+    #         added = db.createHouse(data.newHouse(house_query))
+    #         await ctx.send(added)
+    #     else:
+    #         print(m.ADMIN_ONLY_COMMAND)
 
 
-    @commands.command()
-    async def buyhouse(self, ctx, *args: str):
-        house_name=" ".join([*args])
+    @cog_ext.cog_slash(description="Buy a House for your family")
+    async def buyhouse(self, ctx, house: str):
         family_query = {'HEAD' : str(ctx.author)}
         family = db.queryFamily(family_query)
-        house = db.queryHouse({'HOUSE': house_name})
+        house = db.queryHouse({'HOUSE': house})
         currentBalance = family['BANK']
         cost = house['PRICE']
 
@@ -62,10 +62,9 @@ class House(commands.Cog):
         else:
             await ctx.send(m.HOUSE_DOESNT_EXIST)
 
-    @commands.command()
-    async def viewhouse(self, ctx, *args):
-        house_name = " ".join([*args])
-        house = db.queryHouse({'HOUSE': str(house_name)})
+    @cog_ext.cog_slash(description="View a House")
+    async def viewhouse(self, ctx, house: str):
+        house = db.queryHouse({'HOUSE': str(house)})
         if house:
             house_house = house['HOUSE']
             house_price = house['PRICE']
