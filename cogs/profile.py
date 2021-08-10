@@ -181,27 +181,29 @@ class Profile(commands.Cog):
             hlt_buff = ""
             message = ""
             if (oarm_universe == o_show) and (o_title_universe == o_show):
-                atk_buff = f" / **{o_attack + 20}**"
-                def_buff = f" / **{o_defense + 20}**"
-                hlt_buff = f" / **{o_max_health + 100}**"
+                o_attack = f"{o_attack + 20}"
+                o_defense = f"{o_defense + 20}"
+                o_max_health = f"{o_max_health + 100}"
                 message = "_Universe Buff Applied_"
                 if o_destiny:
-                    atk_buff = f" / **{o_attack + 25}**"
-                    def_buff = f" / **{o_defense + 25}**"
-                    hlt_buff = f" / **{o_max_health + 150}**"
+                    o_attack = f"{o_attack + 25}"
+                    o_defense = f"{o_defense + 25}"
+                    o_max_health = f"{o_max_health + 150}"
                     message = "_Destiny Buff Applied_"
 
             embedVar = discord.Embed(title=f"{title_name} {o_card} & {active_pet['NAME']}:".format(self), description=textwrap.dedent(f"""\
             {message}
-            :heart: {o_max_health} {hlt_buff}   :cyclone: {o_max_stamina}
-            **ATK:** {atk_buff} **DEF:** {def_buff} **SPD:** {o_speed}  
+            :heart: {o_max_health}
+            :cyclone: {o_max_stamina}
+            :dagger: {o_attack}
+            :shield: {o_defense}
             
-            **Title:** {title_name}: {title_passive_type} {title_passive_value}
-            _Arm:_ **{arm_name}:** {arm_passive_type} {arm_passive_value}
-            _Pet:_ **{active_pet['NAME']}:** {active_pet['TYPE']} {pet_ability_power}
-            _Pet Level:_ _B_ **{bond}** {bond_message} / _L_ **{lvl}**
-            _Rebirth Buff:_ +**{rebirthBonus}**
+            **Title:** {title_name} | {title_passive_type} {title_passive_value}
+            **Arm:** {arm_name} | {arm_passive_type} {arm_passive_value}
+            **Pet:** {active_pet['NAME']} | {active_pet['TYPE']} {pet_ability_power} | _Bond_ **{bond}** {bond_message} / _Level_ **{lvl}**
 
+            **Rebirth Buff:** +{rebirthBonus}
+            
             _**Moveset**_
             **{move1}:** {move1ap}
             **{move2}:** {move2ap}
