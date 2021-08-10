@@ -12,6 +12,7 @@ from discord import User
 from discord import Member
 from PIL import Image, ImageFont, ImageDraw
 import requests
+from discord_slash import cog_ext, SlashContext
 
 class Pet(commands.Cog):
     def __init__(self, bot):
@@ -26,9 +27,8 @@ class Pet(commands.Cog):
     async def cog_check(self, ctx):
         return await main.validate_user(ctx)
 
-    @commands.command()
-    async def equippet(self, ctx, *args):
-        pet_name=" ".join([*args])
+    @cog_ext.cog_slash(description="Equip Pet")
+    async def equippet(self, ctx, pet: str):
         user_query = {'DISNAME': str(ctx.author)}
         user = db.queryUser(user_query)
 
@@ -37,9 +37,9 @@ class Pet(commands.Cog):
 
         selected_pet = ""
 
-        for pet in vault['PETS']:
-            if pet_name == pet['NAME']:
-                selected_pet = pet_name
+        for pet_name in vault['PETS']:
+            if pet == pet_name['NAME']:
+                selected_pet = pet
 
         # Do not Check Tourney wins
         if selected_pet:
@@ -49,10 +49,9 @@ class Pet(commands.Cog):
             await ctx.send(m.USER_DOESNT_HAVE_THE_PET, delete_after=5)
             return
 
-    @commands.command()
-    async def viewpet(self, ctx, *args):
-        pet_name = " ".join([*args])
-        pet = db.queryPet({'PET': str(pet_name)})
+    @cog_ext.cog_slash(description="View a Pet")
+    async def viewpet(self, ctx, pet: str):
+        pet = db.queryPet({'PET': str(pet)})
         if pet:
             pet_pet = pet['PET']
             pet_show = pet['UNIVERSE']

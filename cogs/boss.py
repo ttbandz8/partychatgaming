@@ -11,6 +11,7 @@ from discord import User
 from discord import Member
 from PIL import Image, ImageFont, ImageDraw
 import requests
+from discord_slash import cog_ext, SlashContext
 
 class Boss(commands.Cog):
     def __init__(self, bot):

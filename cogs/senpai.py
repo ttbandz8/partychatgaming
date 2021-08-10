@@ -8,6 +8,7 @@ import messages as m
 import numpy as np
 import help_commands as h
 import textwrap
+from discord_slash import cog_ext, SlashContext
 
 
 
@@ -168,7 +169,7 @@ class Senpai(commands.Cog):
         embeds = [embedVar1]
         await paginator.run(embeds)
 
-    @commands.command()
+    @cog_ext.cog_slash(description="Interactive Tutorial")
     async def senpai(self, ctx):
         avatar="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png"
 

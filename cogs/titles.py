@@ -11,6 +11,7 @@ from discord import User
 from discord import Member
 from PIL import Image, ImageFont, ImageDraw
 import requests
+from discord_slash import cog_ext, SlashContext
 
 class Titles(commands.Cog):
     def __init__(self, bot):
@@ -25,9 +26,9 @@ class Titles(commands.Cog):
     async def cog_check(self, ctx):
         return await main.validate_user(ctx)
 
-    @commands.command()
-    async def buytitle(self, ctx, *args: str):
-        title_name=" ".join([*args])
+    @cog_ext.cog_slash(description="Buy a Title")
+    async def buytitle(self, ctx, title: str):
+        title_name = title
         vault_query = {'OWNER' : str(ctx.author)}
         vault = db.altQueryVault(vault_query)
         shop = db.queryShopTitles()
@@ -120,9 +121,9 @@ class Titles(commands.Cog):
         else:
             await ctx.send(m.TITLE_OUT_OF_STOCK)
 
-    @commands.command()
-    async def equiptitle(self, ctx, *args):
-        title_name=" ".join([*args])
+    @cog_ext.cog_slash(description="Equip a Title")
+    async def equiptitle(self, ctx, title: str):
+        title_name = title
         user_query = {'DISNAME': str(ctx.author)}
         user = db.queryUser(user_query)
 
@@ -154,9 +155,9 @@ class Titles(commands.Cog):
             else:
                 return "Unable to update Title."
 
-    @commands.command()
-    async def viewtitle(self, ctx, *args):
-        title_name = " ".join([*args])
+    @cog_ext.cog_slash(description="View a Title")
+    async def viewtitle(self, ctx, title: str):
+        title_name = title
         title = db.queryTitle({'TITLE': str(title_name)})
         if title:
             title_title = title['TITLE']

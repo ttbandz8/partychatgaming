@@ -18,6 +18,7 @@ import DiscordUtils
 from .crownunlimited import showcard
 import random
 import textwrap
+from discord_slash import cog_ext, SlashContext
 
 emojis = ['👍', '👎']
 
@@ -32,9 +33,9 @@ class Profile(commands.Cog):
     async def cog_check(self, ctx):
         return await main.validate_user(ctx)
 
-    @commands.command()
-    async def d(self, ctx, user: User, args):
-        if args == 'IWANTTODELETEMYACCOUNT':
+    @cog_ext.cog_slash(description="Delete your account")
+    async def d(self, ctx, user: User, password: str):
+        if password == 'IWANTTODELETEMYACCOUNT':
             if str(ctx.author) == str(user):
                 query = {'DISNAME': str(ctx.author)}
                 user_is_validated = db.queryUser(query)
@@ -66,7 +67,7 @@ class Profile(commands.Cog):
             else:
                 await ctx.send("Invalid command", delete_after=5)
 
-    @commands.command()
+    @cog_ext.cog_slash(description="View your current build")
     async def build(self, ctx):
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
@@ -192,12 +193,10 @@ class Profile(commands.Cog):
 
             embedVar = discord.Embed(title=f"{title_name} {o_card} & {active_pet['NAME']}:".format(self), description=textwrap.dedent(f"""\
             {message}
-            :heart: {o_max_health} {hlt_buff}
-            :cyclone: {o_max_stamina}
-            **Attack:** {o_attack} {atk_buff}
-            **Defense:** {o_defense} {def_buff}
-            **Speed:** {o_speed}
-            _Title:_ **{title_name}:** {title_passive_type} {title_passive_value}
+            :heart: {o_max_health} {hlt_buff}   :cyclone: {o_max_stamina}
+            **ATK:** {atk_buff} **DEF:** {def_buff} **SPD:** {o_speed}  
+            
+            **Title:** {title_name}: {title_passive_type} {title_passive_value}
             _Arm:_ **{arm_name}:** {arm_passive_type} {arm_passive_value}
             _Pet:_ **{active_pet['NAME']}:** {active_pet['TYPE']} {pet_ability_power}
             _Pet Level:_ _B_ **{bond}** {bond_message} / _L_ **{lvl}**
@@ -223,12 +222,12 @@ class Profile(commands.Cog):
         else:
             await ctx.send(m.USER_NOT_REGISTERED, delete_after=3)
 
-    @commands.command()
-    async def abuild(self, ctx, args: int):
-        if args >= 4:
+    @cog_ext.cog_slash(description="View a build from your deck")
+    async def abuild(self, ctx, deck: int):
+        if deck >= 4:
             await ctx.send("Select deck 1-3.")
             return
-        selection = args - 1
+        selection = deck - 1
         vault = db.queryVault({'OWNER': str(ctx.author)})
         decks = vault['DECK']
         query = {'DISNAME': str(ctx.author)}
@@ -352,7 +351,7 @@ class Profile(commands.Cog):
                     hlt_buff = f" / **{o_max_health + 150}**"
                     message = "_Destiny Buff Applied_"
 
-            embedVar = discord.Embed(title=f"PRESET: {args}\n{title_name} {o_card} & {active_pet['NAME']}:".format(self), description=textwrap.dedent(f"""\
+            embedVar = discord.Embed(title=f"PRESET: {deck}\n{title_name} {o_card} & {active_pet['NAME']}:".format(self), description=textwrap.dedent(f"""\
             {message}
             :heart: {o_max_health} {hlt_buff}
             :cyclone: {o_max_stamina}
@@ -385,7 +384,7 @@ class Profile(commands.Cog):
         else:
             await ctx.send(m.USER_NOT_REGISTERED, delete_after=3)
 
-    @commands.command()
+    @cog_ext.cog_slash(description="Check all your cards")
     async def cvault(self, ctx):
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
@@ -441,7 +440,7 @@ class Profile(commands.Cog):
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
-    @commands.command()
+    @cog_ext.cog_slash(description="Check all your titles")
     async def tvault(self, ctx):
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
@@ -500,7 +499,7 @@ class Profile(commands.Cog):
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
-    @commands.command()
+    @cog_ext.cog_slash(description="Check all your arms")
     async def avault(self, ctx):
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
@@ -560,7 +559,7 @@ class Profile(commands.Cog):
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
-    @commands.command()
+    @cog_ext.cog_slash(description="Check all your pets")
     async def pvault(self, ctx):
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
@@ -629,7 +628,7 @@ class Profile(commands.Cog):
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
-    @commands.command()
+    @cog_ext.cog_slash(description="Check all your destiny lines")
     async def destiny(self, ctx):
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
@@ -691,7 +690,7 @@ class Profile(commands.Cog):
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
-    @commands.command()
+    @cog_ext.cog_slash(description="Check all your quests")
     async def quest(self, ctx):
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
@@ -727,7 +726,7 @@ class Profile(commands.Cog):
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
-    @commands.command()
+    @cog_ext.cog_slash(description="Check your balance")
     async def bal(self, ctx):
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
@@ -763,7 +762,7 @@ class Profile(commands.Cog):
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
-    @commands.command()
+    @cog_ext.cog_slash(description="Check your decks")
     async def deck(self, ctx):
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
@@ -909,7 +908,7 @@ class Profile(commands.Cog):
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
-    @commands.command()
+    @cog_ext.cog_slash(description="Check your deck")
     async def savedeck(self, ctx):
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
@@ -990,7 +989,7 @@ class Profile(commands.Cog):
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
-    @commands.command()
+    @cog_ext.cog_slash(description="Open pop up shop")
     async def shop(self, ctx):
         all_universes = db.queryAllUniverse()
         user = db.queryUser({'DISNAME': str(ctx.author)})

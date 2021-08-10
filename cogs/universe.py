@@ -11,6 +11,7 @@ from discord import User
 from discord import Member
 from PIL import Image, ImageFont, ImageDraw
 import requests
+from discord_slash import cog_ext, SlashContext
 
 class Universe(commands.Cog):
     def __init__(self, bot):
@@ -25,19 +26,9 @@ class Universe(commands.Cog):
     async def cog_check(self, ctx):
         return await main.validate_user(ctx)
 
-    # @commands.command()
-    # async def newuniverse(self, ctx, path, *args):
-    #     if ctx.author.guild_permissions.administrator == True:
-    #         universe = " ".join([*args])
-    #         universe_query = {'TITLE': str(universe), 'PATH': str(path)}
-    #         added = db.createUniverse(data.newUniverse(universe_query))
-    #         await ctx.send(added)
-    #     else:
-    #         print(m.ADMIN_ONLY_COMMAND)
-
-    @commands.command()
-    async def viewUniverse(self, ctx, *args):
-        universe_name = " ".join([*args])
+    @cog_ext.cog_slash(description="View a universe")
+    async def viewUniverse(self, ctx, universe: str):
+        universe_name = universe
         universe = db.queryUniverse({'TITLE': str(universe_name)})
         if universe:
             universe_title= universe['TITLE']

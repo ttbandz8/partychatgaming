@@ -11,13 +11,12 @@ from discord import User
 from discord import Member
 from PIL import Image, ImageFont, ImageDraw
 import requests
+from discord_slash import cog_ext, SlashContext
 
 class Arm(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-
-
-
+        
     @commands.Cog.listener()
     async def on_ready(self):
         print('Arm Cog is ready!')
@@ -25,9 +24,9 @@ class Arm(commands.Cog):
     async def cog_check(self, ctx):
         return await main.validate_user(ctx)
 
-    @commands.command()
-    async def buyarm(self, ctx, *args: str):
-        arm_name=" ".join([*args])
+    @cog_ext.cog_slash(description="Buy an Arm")
+    async def buyarm(self, ctx, arm: str):
+        arm_name = arm
         vault_query = {'OWNER' : str(ctx.author)}
         vault = db.altQueryVault(vault_query)
         shop = db.queryShopArms()
@@ -118,9 +117,9 @@ class Arm(commands.Cog):
         else:
             await ctx.send(m.ARM_OUT_OF_STOCK)
 
-    @commands.command()
-    async def equiparm(self, ctx, *args):
-        arm_name=" ".join([*args])
+    @cog_ext.cog_slash(description="Equip an Arm")
+    async def equiparm(self, ctx, arm: str):
+        arm_name = arm
         user_query = {'DISNAME': str(ctx.author)}
         user = db.queryUser(user_query)
 
@@ -152,9 +151,9 @@ class Arm(commands.Cog):
             else:
                 return "Unable to update Arm."
 
-    @commands.command()
-    async def viewarm(self, ctx, *args):
-        arm_name = " ".join([*args])
+    @cog_ext.cog_slash(description="View an Arm")
+    async def viewarm(self, ctx, arm: str):
+        arm_name = arm
         arm = db.queryArm({'ARM': str(arm_name)})
         if arm:
             arm_arm = arm['ARM']
@@ -231,8 +230,6 @@ class Arm(commands.Cog):
 
         else:
             await ctx.send(m.ARM_DOESNT_EXIST, delete_after=3)
-
-
 
 def setup(bot):
     bot.add_cog(Arm(bot))

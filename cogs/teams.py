@@ -14,6 +14,7 @@ from PIL import Image, ImageFont, ImageDraw
 import requests
 from collections import ChainMap
 import DiscordUtils
+from discord_slash import cog_ext, SlashContext
 
 emojis = ['👍', '👎']
 
@@ -28,9 +29,9 @@ class Teams(commands.Cog):
     async def cog_check(self, ctx):
         return await main.validate_user(ctx)
 
-    @commands.command()
-    async def createteam(self, ctx, *args):
-        team_name = " ".join([*args])
+    @cog_ext.cog_slash(description="Create a new team")
+    async def createteam(self, ctx, team: str):
+        team_name = team
         if team_name == "":
             return
         team_query = {'OWNER': str(ctx.author), 'TNAME': team_name, 'MEMBERS': [str(ctx.author)], 'GAMES': ["Crown Unlimited"]}
@@ -53,7 +54,7 @@ class Teams(commands.Cog):
         except:
             print("Team not created. ")
 
-    @commands.command()
+    @cog_ext.cog_slash(description="Recruit team member")
     async def recruit(self, ctx, user1: User):
         owner_profile = db.queryUser({'DISNAME': str(ctx.author)})
         team_profile = db.queryTeam({'TNAME': owner_profile['TEAM']})
@@ -89,7 +90,7 @@ class Teams(commands.Cog):
             else:
                 await ctx.send(m.OWNER_ONLY_COMMAND, delete_after=5)
 
-    @commands.command()
+    @cog_ext.cog_slash(description="Apply for a team")
     async def apply(self, ctx, user1: User):
         owner_profile = db.queryUser({'DISNAME': str(user1)})
         team_profile = db.queryTeam({'TNAME': owner_profile['TEAM']})
@@ -123,7 +124,7 @@ class Teams(commands.Cog):
             else:
                 await ctx.send(m.OWNER_ONLY_COMMAND, delete_after=5)
 
-    @commands.command()
+    @cog_ext.cog_slash(description="Delete team member")
     async def deletemember(self, ctx, user1: User):
         owner_profile = db.queryUser({'DISNAME': str(ctx.author)})
         team_profile = db.queryTeam({'TNAME': owner_profile['TEAM']})
@@ -153,7 +154,7 @@ class Teams(commands.Cog):
         else:
             await ctx.send(m.TEAM_DOESNT_EXIST, delete_after=5)
 
-    @commands.command()
+    @cog_ext.cog_slash(description="Leave a team")
     async def leaveteam(self, ctx):
         member_profile = db.queryUser({'DISNAME': str(ctx.author)})
         team_profile = db.queryTeam({'TNAME': member_profile['TEAM']})
@@ -178,8 +179,7 @@ class Teams(commands.Cog):
         else:
             await ctx.send(m.TEAM_DOESNT_EXIST, delete_after=5)
 
-
-    @commands.command()
+    @cog_ext.cog_slash(description="Delete a team")
     async def deleteteam(self, ctx, *args):
         team_name = " ".join([*args])
         team_query = {'OWNER': str(ctx.author), 'TNAME': team_name}
