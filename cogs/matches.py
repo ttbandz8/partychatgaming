@@ -36,6 +36,7 @@ class Matches(commands.Cog):
 
     @cog_ext.cog_slash(description="Analysis on Card")
     async def analysis(self, ctx, card: str):
+        name = card
         match_query = {"CARD": card}
         response = db.queryManyMatches(match_query)
         if response:
