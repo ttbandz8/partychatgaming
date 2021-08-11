@@ -46,6 +46,7 @@ handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w'
 handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
 logger.addHandler(handler)
 emojis = ['👍', '👎']
+guild_ids = []
 
 intents = discord.Intents.all()
 client = discord.Client()
@@ -56,6 +57,7 @@ if config('ENV') == "production":
 else:
    # TEST
    bot = commands.Bot(command_prefix=",", intents=intents)
+   guild_ids = [839352855000776735]
 
 slash = SlashCommand(bot, sync_commands=True)
 
@@ -89,12 +91,9 @@ async def help(ctx):
    embeds = [embedVar2,embedVar3, embedVar1]
    await paginator.run(embeds)
 
-guild_ids = [839352855000776735]
-
-@slash.slash(name="Ping", description="Ping server speed")
+@slash.slash(name="Ping", description="Ping server speed", guild_ids=guild_ids)
 async def ping(ctx):
    await ctx.send(f'Bot speed = {round(bot.latency * 1000)}ms')
-
 
 async def validate_user(ctx):
    query = {'DISNAME': str(ctx.author)}
@@ -122,7 +121,6 @@ for filename in os.listdir('./cogs'):
 @bot.event
 async def on_ready():
    print('Bot is ready! ')
-
 
 @slash.slash(name="Enhancers", description="List of Enhancers")
 async def enhance(ctx):
@@ -574,7 +572,6 @@ async def rebirth(ctx):
             await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=3)
       else:
          await ctx.send(f"You are at full Rebirth\n:angel:Level: {user_is_validated['REBIRTH']} ", delete_after=5)
-      
       
 @bot.command()
 @commands.check(validate_user)
