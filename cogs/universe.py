@@ -26,7 +26,7 @@ class Universe(commands.Cog):
     async def cog_check(self, ctx):
         return await main.validate_user(ctx)
 
-    @cog_ext.cog_slash(description="View a universe")
+    @cog_ext.cog_slash(description="View a universe", guild_ids=main.guild_ids)
     async def viewUniverse(self, ctx, universe: str):
         universe_name = universe
         universe = db.queryUniverse({'TITLE': str(universe_name)})

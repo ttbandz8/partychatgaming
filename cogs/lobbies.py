@@ -32,7 +32,7 @@ class Lobbies(commands.Cog):
     async def cog_check(self, ctx):
         return await main.validate_user(ctx)
 
-    @cog_ext.cog_slash(description="End your Crown PVP Match")
+    @cog_ext.cog_slash(description="End your Crown PVP Match", guild_ids=main.guild_ids)
     async def end(self, ctx):
         session_query = {"OWNER": str(ctx.author), "AVAILABLE": True}
         session = db.querySession(session_query)
@@ -268,7 +268,7 @@ class Lobbies(commands.Cog):
                 await main.DM(ctx, user, "You Lost. Get back in there!")
                 await ctx.send(f"Competitor " + f"{user.mention}" + " took an L! :eyes:")
 
-    @cog_ext.cog_slash(description="Setup PVP against player")
+    @cog_ext.cog_slash(description="Setup PVP against player", guild_ids=main.guild_ids)
     async def battle(self, ctx, user1: User):
         game_name = "Crown Unlimited"
         query = {'ALIASES': game_name.lower()}
@@ -318,7 +318,7 @@ class Lobbies(commands.Cog):
         else:
             await ctx.send(m.GAME_UNAVAILABLE)
 
-    @cog_ext.cog_slash(description="Tutorial Battle: Normal Difficulty")
+    @cog_ext.cog_slash(description="Tutorial Battle: Normal Difficulty", guild_ids=main.guild_ids)
     async def senpaibattle(self, ctx):
         #game_name = " ".join([*args])
         query = {'ALIASES': 'crown'}
@@ -373,7 +373,7 @@ class Lobbies(commands.Cog):
         else:
             await ctx.send(m.GAME_UNAVAILABLE)
 
-    @cog_ext.cog_slash(description="Tutorial Battle: Hard Difficulty")
+    @cog_ext.cog_slash(description="Tutorial Battle: Hard Difficulty", guild_ids=main.guild_ids)
     async def legendbattle(self, ctx):
         #game_name = " ".join([*args])
         query = {'ALIASES': 'crown'}

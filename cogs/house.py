@@ -37,7 +37,7 @@ class House(commands.Cog):
     #         print(m.ADMIN_ONLY_COMMAND)
 
 
-    @cog_ext.cog_slash(description="Buy a House for your family")
+    @cog_ext.cog_slash(description="Buy a House for your family", guild_ids=main.guild_ids)
     async def buyhouse(self, ctx, house: str):
         family_query = {'HEAD' : str(ctx.author)}
         family = db.queryFamily(family_query)
@@ -62,7 +62,7 @@ class House(commands.Cog):
         else:
             await ctx.send(m.HOUSE_DOESNT_EXIST)
 
-    @cog_ext.cog_slash(description="View a House")
+    @cog_ext.cog_slash(description="View a House", guild_ids=main.guild_ids)
     async def viewhouse(self, ctx, house: str):
         house = db.queryHouse({'HOUSE': str(house)})
         if house:

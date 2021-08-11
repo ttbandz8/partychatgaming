@@ -30,7 +30,7 @@ class Cards(commands.Cog):
     async def cog_check(self, ctx):
         return await main.validate_user(ctx)
 
-    @cog_ext.cog_slash(description="Buy a Card")
+    @cog_ext.cog_slash(description="Buy a Card", guild_ids=main.guild_ids)
     async def buycard(self, ctx, card: str):
         card_name = card
         vault_query = {'OWNER' : str(ctx.author)}
@@ -140,7 +140,7 @@ class Cards(commands.Cog):
         else:
             await ctx.send(m.CARD_OUT_OF_STOCK)
 
-    @cog_ext.cog_slash(description="Equip a Card")
+    @cog_ext.cog_slash(description="Equip a Card", guild_ids=main.guild_ids)
     async def equipcard(self, ctx, card: str):
         card_name = card
         user_query = {'DISNAME': str(ctx.author)}
@@ -158,7 +158,7 @@ class Cards(commands.Cog):
         else:
             await ctx.send(m.USER_DOESNT_HAVE_THE_CARD, delete_after=5)
         
-    @cog_ext.cog_slash(description="View a Card")
+    @cog_ext.cog_slash(description="View a Card", guild_ids=main.guild_ids)
     async def viewcard(self, ctx, card: str):
         card_name = card
         card = db.queryCard({'NAME':str(card)})

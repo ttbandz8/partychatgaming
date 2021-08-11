@@ -93,8 +93,7 @@ async def help(ctx):
 
 @slash.slash(name="Ping", description="Ping server speed", guild_ids=guild_ids)
 async def ping(ctx):
-   print("THIS IS A TEST")
-   await ctx.send(f'TEST Bot speed = {round(bot.latency * 1000)}ms')
+   await ctx.send(f'Local Test Bot speed = {round(bot.latency * 1000)}ms')
 
 async def validate_user(ctx):
    query = {'DISNAME': str(ctx.author)}
@@ -123,7 +122,7 @@ for filename in os.listdir('./cogs'):
 async def on_ready():
    print('Bot is ready! ')
 
-@slash.slash(name="Enhancers", description="List of Enhancers")
+@slash.slash(name="Enhancers", description="List of Enhancers", guild_ids=guild_ids)
 async def enhance(ctx):
    avatar="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png"
 
@@ -207,7 +206,7 @@ async def enhance(ctx):
    embeds = [embedVar1, embedVar2, embedVar3, embedVar4, embedVar5, embedVar6, embedVar8, embedVar9, embedVar7]
    await paginator.run(embeds)
 
-@slash.slash(name="Crown", description="Crown Unlimited Tutorial")
+@slash.slash(name="Crown", description="Crown Unlimited Tutorial", guild_ids=guild_ids)
 async def crown(ctx):
    avatar="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png"
 
@@ -406,7 +405,7 @@ async def crown(ctx):
    embeds = [embedVar1, embedVar2, embedVar3, embedVar4, embedVar5, embedVar6, embedVar7, embedVar8,embedVar9, embedVar10]
    await paginator.run(embeds)
 
-@slash.slash(name="Register", description="Register for Crown Unlimited")
+@slash.slash(name="Register", description="Register for Crown Unlimited", guild_ids=guild_ids)
 async def r(ctx):
    disname = str(ctx.author)
    name = disname.split("#",1)[0]
@@ -443,7 +442,7 @@ async def r(ctx):
    else:
       await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=3) 
 
-@slash.slash(name="Rebirth", description="Rebirth for permanent buffs")
+@slash.slash(name="Rebirth", description="Rebirth for permanent buffs", guild_ids=guild_ids)
 async def rebirth(ctx):
    query = {'DISNAME': str(ctx.author)}
    user_is_validated = db.queryUser(query)
@@ -646,7 +645,7 @@ async def on_command_error(ctx, error):
         await ctx.send(f'Your Daily Reward is on cooldown! You can use it in {round(error.retry_after/3600)} hours!')
 
 
-@slash.slash(name="Vs", description="How many times you defeated opponent")
+@slash.slash(name="Vs", description="How many times you defeated opponent", guild_ids=guild_ids)
 @commands.check(validate_user)
 async def vs(ctx, user: User, args1 ):
 
@@ -708,7 +707,7 @@ async def curse(amount, user):
       else:
          print("cant find vault")
 
-@slash.slash(name="Trade", description="Trade Cards, Titles, Arms, and Pets")
+@slash.slash(name="Trade", description="Trade Cards, Titles, Arms, and Pets", guild_ids=guild_ids)
 @commands.check(validate_user)
 async def trade(ctx, user2: User, item: str):
    user = db.queryUser({'DISNAME': str(ctx.author)})
@@ -859,7 +858,7 @@ async def trade(ctx, user2: User, item: str):
          except:
             await ctx.send("Trade ended. ")
 
-@slash.slash(name="Sell", description="Sell Cards, Titles, Arms, and Pets")
+@slash.slash(name="Sell", description="Sell Cards, Titles, Arms, and Pets", guild_ids=guild_ids)
 @commands.check(validate_user)
 async def sell(ctx, user2: User, item: str):
    user = db.queryUser({'DISNAME': str(ctx.author)})
@@ -996,7 +995,7 @@ async def sell(ctx, user2: User, item: str):
             except:
                await ctx.send("Trade ended. ")
 
-@slash.slash(name="Gift", description="Give money to friend")
+@slash.slash(name="Gift", description="Give money to friend", guild_ids=guild_ids)
 @commands.check(validate_user)
 async def gift(ctx, user2: User, amount):
    vault = db.queryVault({'OWNER': str(ctx.author)})
@@ -1010,7 +1009,7 @@ async def gift(ctx, user2: User, amount):
       await ctx.send(f":coin:{amount} has been gifted to {user2.mention}.")
       return
    
-@slash.slash(name="Donate", description="Donate money to Guild")
+@slash.slash(name="Donate", description="Donate money to Guild", guild_ids=guild_ids)
 @commands.check(validate_user)
 async def donate(ctx, amount, *args):
    vault = db.queryVault({'OWNER': str(ctx.author)})
@@ -1029,7 +1028,7 @@ async def donate(ctx, amount, *args):
    else:
       await ctx.send(f"Team: {team} does not exist")
       
-@slash.slash(name="Invest", description="Invest money in your Family")
+@slash.slash(name="Invest", description="Invest money in your Family", guild_ids=guild_ids)
 @commands.check(validate_user)
 async def invest(ctx, amount):
    user = db.queryUser({'DISNAME': str(ctx.author)})
@@ -1047,7 +1046,7 @@ async def invest(ctx, amount):
    else:
       await ctx.send(f"Family does not exist")
 
-@slash.slash(name="Pay", description="Pay a Team Member")
+@slash.slash(name="Pay", description="Pay a Team Member", guild_ids=guild_ids)
 @commands.check(validate_user)
 async def pay(ctx, user2: User, amount):
    user = db.queryUser({'DISNAME': str(ctx.author)})
@@ -1094,7 +1093,7 @@ async def curseteam(amount, team):
          print("cant find team")
 
 
-@slash.slash(name="Allowance", description="Gift Family member an allowance")
+@slash.slash(name="Allowance", description="Gift Family member an allowance", guild_ids=guild_ids)
 @commands.check(validate_user)
 async def allowance(ctx, user2: User, amount):
    user = db.queryUser({'DISNAME': str(ctx.author)})
@@ -1159,7 +1158,7 @@ async def cursefamily(amount, family):
       else:
          print("cant find family")
 
-@slash.slash(name="Traits", description="See full list of Universe Traits")
+@slash.slash(name="Traits", description="See full list of Universe Traits", guild_ids=guild_ids)
 @commands.check(validate_user)
 async def traits(ctx):
    traits = ut.traits
@@ -1171,7 +1170,7 @@ async def traits(ctx):
 
    await ctx.send(embed=embedVar)
 
-@slash.slash(name="Resell", description="Sell items back to the shop")
+@slash.slash(name="Resell", description="Sell items back to the shop", guild_ids=guild_ids)
 @commands.check(validate_user)
 async def resell(ctx, item: str):
    user = db.queryUser({'DISNAME': str(ctx.author)})
@@ -1282,7 +1281,7 @@ async def referred(ctx, user: User):
    else:
       await ctx.send("You're already referred!")
 
-@slash.slash(name="Menu", description="Menu Options for things to do")
+@slash.slash(name="Menu", description="Menu Options for things to do", guild_ids=guild_ids)
 @commands.check(validate_user)
 async def menu(ctx):
    try:

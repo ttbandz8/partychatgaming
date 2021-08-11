@@ -34,7 +34,7 @@ class Matches(commands.Cog):
     async def cog_check(self, ctx):
         return await main.validate_user(ctx)
 
-    @cog_ext.cog_slash(description="Analysis on Card")
+    @cog_ext.cog_slash(description="Analysis on Card", guild_ids=main.guild_ids)
     async def analysis(self, ctx, card: str):
         name = card
         match_query = {"CARD": card}

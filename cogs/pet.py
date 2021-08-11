@@ -27,7 +27,7 @@ class Pet(commands.Cog):
     async def cog_check(self, ctx):
         return await main.validate_user(ctx)
 
-    @cog_ext.cog_slash(description="Equip Pet")
+    @cog_ext.cog_slash(description="Equip Pet", guild_ids=main.guild_ids)
     async def equippet(self, ctx, pet: str):
         user_query = {'DISNAME': str(ctx.author)}
         user = db.queryUser(user_query)
@@ -49,7 +49,7 @@ class Pet(commands.Cog):
             await ctx.send(m.USER_DOESNT_HAVE_THE_PET, delete_after=5)
             return
 
-    @cog_ext.cog_slash(description="View a Pet")
+    @cog_ext.cog_slash(description="View a Pet", guild_ids=main.guild_ids)
     async def viewpet(self, ctx, pet: str):
         pet = db.queryPet({'PET': str(pet)})
         if pet:

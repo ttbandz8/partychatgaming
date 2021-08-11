@@ -26,7 +26,7 @@ class Titles(commands.Cog):
     async def cog_check(self, ctx):
         return await main.validate_user(ctx)
 
-    @cog_ext.cog_slash(description="Buy a Title")
+    @cog_ext.cog_slash(description="Buy a Title", guild_ids=main.guild_ids)
     async def buytitle(self, ctx, title: str):
         title_name = title
         vault_query = {'OWNER' : str(ctx.author)}
@@ -121,7 +121,7 @@ class Titles(commands.Cog):
         else:
             await ctx.send(m.TITLE_OUT_OF_STOCK)
 
-    @cog_ext.cog_slash(description="Equip a Title")
+    @cog_ext.cog_slash(description="Equip a Title", guild_ids=main.guild_ids)
     async def equiptitle(self, ctx, title: str):
         title_name = title
         user_query = {'DISNAME': str(ctx.author)}
@@ -155,7 +155,7 @@ class Titles(commands.Cog):
             else:
                 return "Unable to update Title."
 
-    @cog_ext.cog_slash(description="View a Title")
+    @cog_ext.cog_slash(description="View a Title", guild_ids=main.guild_ids)
     async def viewtitle(self, ctx, title: str):
         title_name = title
         title = db.queryTitle({'TITLE': str(title_name)})

@@ -44,7 +44,7 @@ class CrownUnlimited(commands.Cog):
         return companion
 
     
-    @cog_ext.cog_slash(description="Auto Tales Battler")
+    @cog_ext.cog_slash(description="Auto Tales Battler", guild_ids=main.guild_ids)
     async def atales(self, ctx: SlashContext):
         private_channel = ctx
         if isinstance(private_channel.channel, discord.channel.DMChannel):
@@ -2162,7 +2162,7 @@ class CrownUnlimited(commands.Cog):
                     if private_channel.guild:
                         await discord.TextChannel.delete(private_channel, reason=None)
 
-    @cog_ext.cog_slash(description="Duo Tales with AI")
+    @cog_ext.cog_slash(description="Duo Tales with AI", guild_ids=main.guild_ids)
     async def dtales(self, ctx: SlashContext, deck : int):
         private_channel = ctx
         if isinstance(private_channel.channel, discord.channel.DMChannel):
@@ -6479,7 +6479,7 @@ class CrownUnlimited(commands.Cog):
                         await discord.TextChannel.delete(private_channel, reason=None)
                     response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
 
-    @cog_ext.cog_slash(description="Duo Dungeons with AI")
+    @cog_ext.cog_slash(description="Duo Dungeons with AI", guild_ids=main.guild_ids)
     async def ddungeon(self, ctx: SlashContext, deck : int):
         private_channel = ctx
         if isinstance(private_channel.channel, discord.channel.DMChannel):
@@ -11249,7 +11249,7 @@ class CrownUnlimited(commands.Cog):
                         response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                         await discord.TextChannel.delete(private_channel, reason=None)
 
-    @cog_ext.cog_slash(description="Duo Bosses with AI")
+    @cog_ext.cog_slash(description="Duo Bosses with AI", guild_ids=main.guild_ids)
     async def dboss(self, ctx: SlashContext, deck: int):
         private_channel = ctx
         if isinstance(private_channel.channel, discord.channel.DMChannel):
@@ -16010,7 +16010,7 @@ class CrownUnlimited(commands.Cog):
             if private_channel.guild:
                 await discord.TextChannel.delete(private_channel, reason=None)
 
-    @cog_ext.cog_slash(description="Co-op Tales with Friends")
+    @cog_ext.cog_slash(description="Co-op Tales with Friends", guild_ids=main.guild_ids)
     async def ctales(self, ctx: SlashContext, user: User):
         private_channel = ctx
         if isinstance(private_channel.channel, discord.channel.DMChannel):
@@ -20136,7 +20136,7 @@ class CrownUnlimited(commands.Cog):
                         await discord.TextChannel.delete(private_channel, reason=None)
                     response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
 
-    @cog_ext.cog_slash(description="Co-op Dungeon with Friends")
+    @cog_ext.cog_slash(description="Co-op Dungeon with Friends", guild_ids=main.guild_ids)
     async def cdungeon(self, ctx: SlashContext, user: User):
         private_channel = ctx
         if isinstance(private_channel.channel, discord.channel.DMChannel):
@@ -24660,7 +24660,7 @@ class CrownUnlimited(commands.Cog):
                         response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                         await discord.TextChannel.delete(private_channel, reason=None)
 
-    @cog_ext.cog_slash(description="Co-op Bosses with Friends")
+    @cog_ext.cog_slash(description="Co-op Bosses with Friends", guild_ids=main.guild_ids)
     async def cboss(self, ctx: SlashContext, user: User):
         companion = db.queryUser({'DISNAME': str(user)})
         private_channel = ctx
@@ -29160,7 +29160,7 @@ class CrownUnlimited(commands.Cog):
             if private_channel.guild:
                 await discord.TextChannel.delete(private_channel, reason=None)
 
-    @cog_ext.cog_slash(description="Dungeon! Available for Tales you beat")
+    @cog_ext.cog_slash(description="Dungeon! Available for Tales you beat", guild_ids=main.guild_ids)
     async def dungeon(self, ctx: SlashContext):
         private_channel = ctx
         if isinstance(private_channel.channel, discord.channel.DMChannel):
@@ -31367,7 +31367,7 @@ class CrownUnlimited(commands.Cog):
                         response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                         await discord.TextChannel.delete(private_channel, reason=None)
 
-    @cog_ext.cog_slash(description="Tales! Defeat Tales to unlock Dungeons")
+    @cog_ext.cog_slash(description="Tales! Defeat Tales to unlock Dungeons", guild_ids=main.guild_ids)
     async def tales(self, ctx: SlashContext):
         private_channel = ctx
         if isinstance(private_channel.channel, discord.channel.DMChannel):
@@ -33465,7 +33465,7 @@ class CrownUnlimited(commands.Cog):
                     if private_channel.guild:
                         await discord.TextChannel.delete(private_channel, reason=None)
 
-    @cog_ext.cog_slash(description="Boss! Defeat Dungeon to unlock Boss")
+    @cog_ext.cog_slash(description="Boss! Defeat Dungeon to unlock Boss", guild_ids=main.guild_ids)
     async def boss(self, ctx: SlashContext):
         private_channel = ctx
         if isinstance(private_channel.channel, discord.channel.DMChannel):
@@ -35629,7 +35629,7 @@ class CrownUnlimited(commands.Cog):
             if private_channel.guild:
                 await discord.TextChannel.delete(private_channel, reason=None)
 
-    @cog_ext.cog_slash(description="Start Battle")
+    @cog_ext.cog_slash(description="Start Battle", guild_ids=main.guild_ids)
     async def start(self, ctx: SlashContext):
         private_channel = ctx
         starttime = time.asctime()
@@ -38250,7 +38250,7 @@ class CrownUnlimited(commands.Cog):
         else:
             await ctx.send(m.SESSION_DOES_NOT_EXIST)
 
-    @cog_ext.cog_slash(description="Start Balanced Battle")
+    @cog_ext.cog_slash(description="Start Balanced Battle", guild_ids=main.guild_ids)
     async def brawl(self, ctx: SlashContext):
         private_channel = ctx
         starttime = time.asctime()
@@ -40832,7 +40832,7 @@ class CrownUnlimited(commands.Cog):
         else:
             await ctx.send(m.SESSION_DOES_NOT_EXIST)
 
-    @cog_ext.cog_slash(description="Start Balanced No-Pet Battle")
+    @cog_ext.cog_slash(description="Start Balanced No-Pet Battle", guild_ids=main.guild_ids)
     async def arenabrawl(self, ctx: SlashContext):
         private_channel = ctx
         starttime = time.asctime()
@@ -43214,7 +43214,7 @@ class CrownUnlimited(commands.Cog):
         else:
             await ctx.send(m.SESSION_DOES_NOT_EXIST)
     
-    @cog_ext.cog_slash(description="Start No-Pet Battle")
+    @cog_ext.cog_slash(description="Start No-Pet Battle", guild_ids=main.guild_ids)
     async def arena(self, ctx: SlashContext):
         private_channel = ctx
         starttime = time.asctime()
@@ -45596,7 +45596,7 @@ class CrownUnlimited(commands.Cog):
         else:
             await ctx.send(m.SESSION_DOES_NOT_EXIST)
 
-    @cog_ext.cog_slash(description="Start Battle for Money")
+    @cog_ext.cog_slash(description="Start Battle for Money", guild_ids=main.guild_ids)
     async def wager(self, ctx: SlashContext, wager: int):
         private_channel = ctx
         starttime = time.asctime()
@@ -48085,7 +48085,7 @@ class CrownUnlimited(commands.Cog):
         else:
             await ctx.send(m.SESSION_DOES_NOT_EXIST)
 
-    @cog_ext.cog_slash(description="View all Cards of a Universe you unlocked")
+    @cog_ext.cog_slash(description="View all Cards of a Universe you unlocked", guild_ids=main.guild_ids)
     async def cards(self, ctx: SlashContext, universe: str):
         universe_data = db.queryUniverse({'TITLE': str(universe)})
         user = db.queryUser({'DISNAME': str(ctx.author)})
@@ -48163,7 +48163,7 @@ class CrownUnlimited(commands.Cog):
         embeds = embed_list
         await paginator.run(embeds)
     
-    @cog_ext.cog_slash(description="View all Titles of a Universe you unlocked")
+    @cog_ext.cog_slash(description="View all Titles of a Universe you unlocked", guild_ids=main.guild_ids)
     async def titles(self, ctx: SlashContext, universe: str):
         universe_data = db.queryUniverse({'TITLE': str(universe)})
         user = db.queryUser({'DISNAME': str(ctx.author)})
@@ -48236,7 +48236,7 @@ class CrownUnlimited(commands.Cog):
         embeds = embed_list
         await paginator.run(embeds)
 
-    @cog_ext.cog_slash(description="View all Arms of a Universe you unlocked")
+    @cog_ext.cog_slash(description="View all Arms of a Universe you unlocked", guild_ids=main.guild_ids)
     async def arms(self, ctx: SlashContext, universe: str):
         universe_data = db.queryUniverse({'TITLE': str(universe)})
         user = db.queryUser({'DISNAME': str(ctx.author)})
@@ -48305,7 +48305,7 @@ class CrownUnlimited(commands.Cog):
         embeds = embed_list
         await paginator.run(embeds)
 
-    @cog_ext.cog_slash(description="View all Destinies of a Universe you unlocked")
+    @cog_ext.cog_slash(description="View all Destinies of a Universe you unlocked", guild_ids=main.guild_ids)
     async def destinies(self, ctx: SlashContext, universe: str):
         universe_data = db.queryUniverse({'TITLE': str(universe)})
         user = db.queryUser({'DISNAME': str(ctx.author)})
@@ -48357,7 +48357,7 @@ class CrownUnlimited(commands.Cog):
         embeds = embed_list
         await paginator.run(embeds)
 
-    @cog_ext.cog_slash(description="View all Pets of a Universe you unlocked")
+    @cog_ext.cog_slash(description="View all Pets of a Universe you unlocked", guild_ids=main.guild_ids)
     async def pets(self, ctx: SlashContext, universe: str):
         universe_data = db.queryUniverse({'TITLE': str(universe)})
         user = db.queryUser({'DISNAME': str(ctx.author)})
@@ -48428,7 +48428,7 @@ class CrownUnlimited(commands.Cog):
         embeds = embed_list
         await paginator.run(embeds)
 
-    @cog_ext.cog_slash(description="View all available Universes")
+    @cog_ext.cog_slash(description="View all available Universes", guild_ids=main.guild_ids)
     async def universes(self, ctx: SlashContext):
         universe_data = db.queryAllUniverse()
         user = db.queryUser({'DISNAME': str(ctx.author)})
@@ -48487,7 +48487,7 @@ class CrownUnlimited(commands.Cog):
         embeds = embed_list
         await paginator.run(embeds)
 
-    @cog_ext.cog_slash(description="View all Homes for purchase")
+    @cog_ext.cog_slash(description="View all Homes for purchase", guild_ids=main.guild_ids)
     async def houses(self, ctx: SlashContext):
         house_data = db.queryAllHouses()
         user = db.queryUser({'DISNAME': str(ctx.author)})
@@ -48527,7 +48527,7 @@ class CrownUnlimited(commands.Cog):
         embeds = embed_list
         await paginator.run(embeds)
 
-    @cog_ext.cog_slash(description="Quit Match")
+    @cog_ext.cog_slash(description="Quit Match", guild_ids=main.guild_ids)
     async def ff(self, ctx: SlashContext):
         private_channel = ctx
         ov = private_channel.channel.overwrites

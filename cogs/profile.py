@@ -33,7 +33,7 @@ class Profile(commands.Cog):
     async def cog_check(self, ctx):
         return await main.validate_user(ctx)
 
-    @cog_ext.cog_slash(description="Delete your account")
+    @cog_ext.cog_slash(description="Delete your account", guild_ids=main.guild_ids)
     async def d(self, ctx, user: User, password: str):
         if password == 'IWANTTODELETEMYACCOUNT':
             if str(ctx.author) == str(user):
@@ -67,7 +67,7 @@ class Profile(commands.Cog):
             else:
                 await ctx.send("Invalid command", delete_after=5)
 
-    @cog_ext.cog_slash(description="View your current build")
+    @cog_ext.cog_slash(description="View your current build", guild_ids=main.guild_ids)
     async def build(self, ctx):
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
@@ -223,7 +223,7 @@ class Profile(commands.Cog):
         else:
             await ctx.send(m.USER_NOT_REGISTERED, delete_after=3)
 
-    @cog_ext.cog_slash(description="View a build from your deck")
+    @cog_ext.cog_slash(description="View a build from your deck", guild_ids=main.guild_ids)
     async def abuild(self, ctx, deck: int):
         if deck >= 4:
             await ctx.send("Select deck 1-3.")
@@ -385,7 +385,7 @@ class Profile(commands.Cog):
         else:
             await ctx.send(m.USER_NOT_REGISTERED, delete_after=3)
 
-    @cog_ext.cog_slash(description="Check all your cards")
+    @cog_ext.cog_slash(description="Check all your cards", guild_ids=main.guild_ids)
     async def cvault(self, ctx):
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
@@ -441,7 +441,7 @@ class Profile(commands.Cog):
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
-    @cog_ext.cog_slash(description="Check all your titles")
+    @cog_ext.cog_slash(description="Check all your titles", guild_ids=main.guild_ids)
     async def tvault(self, ctx):
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
@@ -500,7 +500,7 @@ class Profile(commands.Cog):
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
-    @cog_ext.cog_slash(description="Check all your arms")
+    @cog_ext.cog_slash(description="Check all your arms", guild_ids=main.guild_ids)
     async def avault(self, ctx):
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
@@ -560,7 +560,7 @@ class Profile(commands.Cog):
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
-    @cog_ext.cog_slash(description="Check all your pets")
+    @cog_ext.cog_slash(description="Check all your pets", guild_ids=main.guild_ids)
     async def pvault(self, ctx):
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
@@ -629,7 +629,7 @@ class Profile(commands.Cog):
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
-    @cog_ext.cog_slash(description="Check all your destiny lines")
+    @cog_ext.cog_slash(description="Check all your destiny lines", guild_ids=main.guild_ids)
     async def destiny(self, ctx):
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
@@ -691,7 +691,7 @@ class Profile(commands.Cog):
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
-    @cog_ext.cog_slash(description="Check all your quests")
+    @cog_ext.cog_slash(description="Check all your quests", guild_ids=main.guild_ids)
     async def quest(self, ctx):
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
@@ -727,7 +727,7 @@ class Profile(commands.Cog):
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
-    @cog_ext.cog_slash(description="Check your balance")
+    @cog_ext.cog_slash(description="Check your balance", guild_ids=main.guild_ids)
     async def bal(self, ctx):
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
@@ -763,7 +763,7 @@ class Profile(commands.Cog):
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
-    @cog_ext.cog_slash(description="Check your decks")
+    @cog_ext.cog_slash(description="Check your decks", guild_ids=main.guild_ids)
     async def deck(self, ctx):
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
@@ -909,7 +909,7 @@ class Profile(commands.Cog):
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
-    @cog_ext.cog_slash(description="Check your deck")
+    @cog_ext.cog_slash(description="Check your deck", guild_ids=main.guild_ids)
     async def savedeck(self, ctx):
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
@@ -990,7 +990,7 @@ class Profile(commands.Cog):
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
-    @cog_ext.cog_slash(description="Open pop up shop")
+    @cog_ext.cog_slash(description="Open pop up shop", guild_ids=main.guild_ids)
     async def shop(self, ctx):
         all_universes = db.queryAllUniverse()
         user = db.queryUser({'DISNAME': str(ctx.author)})
