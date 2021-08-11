@@ -250,6 +250,7 @@ class VAULT():
     ARMS: list[str] = field(default_factory=lambda: ['Stock'])
     PETS: list[str] = field(default_factory=lambda: [{'NAME': 'Chick', 'LVL': 1, 'EXP': 0, 'Heal': 3, 'TYPE': 'HLT', 'BOND': 0, 'BONDEXP': 0, 'PATH': "https://res.cloudinary.com/dkcmq8o15/image/upload/v1622307902/Pets/chick.jpg"}])
     DECK: list[str] = field(default_factory=lambda: [{'CARD': 'Eevee', 'TITLE': 'Starter', 'ARM': 'Stock', 'PET': 'Chick'}, {'CARD': 'Ochaco Uraraka', 'TITLE': 'Starter', 'ARM': 'Stock', 'PET': 'Chick'}, {'CARD': 'Garen', 'TITLE': 'Starter', 'ARM': 'Stock', 'PET': 'Chick'}])
+    CARD_LEVELS: list[str] = field(default_factory=lambda: [{'CARD': 'Eevee', 'LVL': 0, 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0}, {'CARD': 'Ochaco Uraraka', 'LVL': 0, 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0}, {'CARD': 'Garen', 'LVL': 0, 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0}])
     QUESTS: list[str] = field(default_factory=lambda: [])
     DESTINY: list[str] = field(default_factory=lambda: [])
 
