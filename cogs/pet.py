@@ -29,6 +29,7 @@ class Pet(commands.Cog):
 
     @cog_ext.cog_slash(description="Equip Pet", guild_ids=main.guild_ids)
     async def equippet(self, ctx, pet: str):
+        pet_name = pet
         user_query = {'DISNAME': str(ctx.author)}
         user = db.queryUser(user_query)
 
@@ -37,8 +38,8 @@ class Pet(commands.Cog):
 
         selected_pet = ""
 
-        for pet_name in vault['PETS']:
-            if pet == pet_name['NAME']:
+        for pet in vault['PETS']:
+            if pet_name == pet['NAME']:
                 selected_pet = pet
 
         # Do not Check Tourney wins
