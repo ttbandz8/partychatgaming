@@ -46,7 +46,7 @@ handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w'
 handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
 logger.addHandler(handler)
 emojis = ['👍', '👎']
-guild_ids = []
+guild_ids = None
 
 intents = discord.Intents.all()
 client = discord.Client()
@@ -93,7 +93,8 @@ async def help(ctx):
 
 @slash.slash(name="Ping", description="Ping server speed", guild_ids=guild_ids)
 async def ping(ctx):
-   await ctx.send(f'Bot speed = {round(bot.latency * 1000)}ms')
+   print("THIS IS A TEST")
+   await ctx.send(f'TEST Bot speed = {round(bot.latency * 1000)}ms')
 
 async def validate_user(ctx):
    query = {'DISNAME': str(ctx.author)}
