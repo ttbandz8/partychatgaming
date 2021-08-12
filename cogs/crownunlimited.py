@@ -49894,7 +49894,9 @@ async def drops(player, universe, matchcount):
     pets= []
 
     for card in all_available_drop_cards:
-        cards.append(card['NAME'])
+        for c in vault['CARDS']:
+            if c != card['NAME']:
+                cards.append(card['NAME'])
 
     for title in all_available_drop_titles:
         titles.append(title['TITLE'])
@@ -49952,7 +49954,12 @@ async def drops(player, universe, matchcount):
         await bless(50, player)
         return f"You earned _Pet:_ **{pets[rand_pet]}** + :coin: 50!"
     elif drop_rate <= card_drop and drop_rate > pet_drop:
+            card_data = db.queryCard({'NAME': str(cards[rand_card])})
+            uni = db.queryUniverse({'TITLE': card_data['UNIVERSE']})
+            tier = uni['TIER']
+            update_query = {'$addToSet': {'CARD_LEVELS': {'CARD': str(cards[rand_card]), 'LVL': 0, 'TIER': int(tier), 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
             response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(cards[rand_card])}})
+            r = db.updateVaultNoFilter(vault_query, update_query)
             message = ""
             for destiny in d.destiny:
                 if cards[rand_card] in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
@@ -49982,7 +49989,9 @@ async def dungeondrops(player, universe, matchcount):
     pets= []
 
     for card in all_available_drop_cards:
-        cards.append(card['NAME'])
+        for c in vault['CARDS']:
+            if c != card['NAME']:
+                cards.append(card['NAME'])
 
     for title in all_available_drop_titles:
         titles.append(title['TITLE'])
@@ -49991,7 +50000,9 @@ async def dungeondrops(player, universe, matchcount):
         arms.append(arm['ARM'])
 
     for pet in all_available_drop_pets:
-        pets.append(pet['PET'])
+        for p in vault['PETS']:
+            if p['NAME'] != pet['PET']:
+                pets.append(pet['PET'])
 
     c = len(cards) - 1
     t = len(titles) - 1
@@ -50037,7 +50048,12 @@ async def dungeondrops(player, universe, matchcount):
         await bless(80, player)
         return f"You earned _Pet:_ **{pets[rand_pet]}** + :coin: 80!"
     elif drop_rate <= card_drop and drop_rate > pet_drop:
+            card_data = db.queryCard({'NAME': str(cards[rand_card])})
+            uni = db.queryUniverse({'TITLE': card_data['UNIVERSE']})
+            tier = uni['TIER']
+            update_query = {'$addToSet': {'CARD_LEVELS': {'CARD': str(cards[rand_card]), 'LVL': 0, 'TIER': int(tier), 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}            
             response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(cards[rand_card])}})
+            r = db.updateVaultNoFilter(vault_query, update_query)
             message = ""
             for destiny in d.destiny:
                 if cards[rand_card] in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
