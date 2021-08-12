@@ -130,42 +130,42 @@ async def enhance(ctx):
    embedVar1 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
    embedVar1.set_thumbnail(url=avatar)
    embedVar1.add_field(name="`INCREASES`", value="`ATK` - Increase `ATK`\n\n`DEF` - Increase `DEF`\n\n`HLT` - Increase `HLT`\n\n`STAM` - Increase `STAM`\n\n")
-   embedVar1.set_footer(text=f".help - Bot Help")
+   embedVar1.set_footer(text=f"/help - Bot Help")
 
    embedVar2 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
    embedVar2.set_thumbnail(url=avatar)
    embedVar2.add_field(name="`STEALS`", value="`FLOG`- `ATK` Steal\n\n`WITHER`- `DEF` Steal\n\n`LIFE` - `LIFE` Steal\n\n`DRAIN` - `STAM` Steal\n\n")
-   embedVar2.set_footer(text=f".help - Bot Help")
+   embedVar2.set_footer(text=f"/help - Bot Help")
 
    embedVar3 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
    embedVar3.set_thumbnail(url=avatar)
    embedVar3.add_field(name="`SACRIFICE`", value="`RAGE` - Decrease `DEF`, Increase `ATK`\n\n`BRACE` - Decrease `ATK`, Increase `DEF`\n\n`BZRK` - Decrease `HLT`,  Increase `ATK`\n\n`CRYSTAL`- Decrease `HLT`, Increase `DEF`\n\n`GROWTH`- Decrease `MAXHLT`, Increase `STATS`\n\n")
-   embedVar3.set_footer(text=f".help - Bot Help")
+   embedVar3.set_footer(text=f"/help - Bot Help")
 
    embedVar4 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
    embedVar4.set_thumbnail(url=avatar)
    embedVar4.add_field(name="`TRADE`", value="`STANCE` - Swap `ATK` and `DEF`\n\n`CONFUSE` - Swap `OPP ATK` and  `OPP DEF`\n\n")
-   embedVar4.set_footer(text=f".help - Bot Help")
+   embedVar4.set_footer(text=f"/help - Bot Help")
 
    embedVar5 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
    embedVar5.set_thumbnail(url=avatar)
    embedVar5.add_field(name="`TIME`", value="`BLINK`  - Decrease  `STAM`, Increase `OPP STAM`\n\n`SLOW` - Decrease `STAM`, Swap `OPP STAM`\n\n`HASTE` - Increase `STAM`, Swap `OPP STAM`\n\n")
-   embedVar5.set_footer(text=f".help - Bot Help")
+   embedVar5.set_footer(text=f"/help - Bot Help")
 
    embedVar6 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
    embedVar6.set_thumbnail(url=avatar)
    embedVar6.add_field(name="`CONTROL`", value="`SOULCHAIN` - Both `PLAYERS` `STAM` = \n\n`GAMBLE` - Both `PLAYERS` `HEALTH` =\n\n`FEAR` - Decrease `MAXHLT`, Decrease `OPP ATK` & `OPP DEF`\n\n")
-   embedVar6.set_footer(text=f".help - Bot Help")
+   embedVar6.set_footer(text=f"/help - Bot Help")
 
    embedVar8 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
    embedVar8.set_thumbnail(url=avatar)
    embedVar8.add_field(name="`DAMAGE`", value="`WAVE` - Decreasing Turn Count Based AP DMG \n\n`BLAST` - Increasing Turn Count Based AP DMG\n\n")
-   embedVar8.set_footer(text=f".help - Bot Help")
+   embedVar8.set_footer(text=f"/help - Bot Help")
 
    embedVar9 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
    embedVar9.set_thumbnail(url=avatar)
    embedVar9.add_field(name="`DIVINITY`", value="`CREATION` - Increase `MAXHEALTH`\n\n`DESTRUCTION` - Decrease `OPP MAXHEALTH`\n\n")
-   embedVar9.set_footer(text=f".help - Bot Help")
+   embedVar9.set_footer(text=f"/help - Bot Help")
 
    embedVar7 = discord.Embed(title= f":trident:ENHANCE DETAILS:", description=textwrap.dedent(f"""
    **ATK:** AP Percentage Based Attack Increased
@@ -195,7 +195,7 @@ async def enhance(ctx):
    **DESTRUCTION:** Decreases AP * Turn Count Max Health that increases as the Turn Count increases
    """) ,colour=0x7289da)
    embedVar7.set_thumbnail(url=avatar)
-   embedVar7.set_footer(text=f".help - Bot Help")
+   embedVar7.set_footer(text=f"/help - Bot Help")
 
    paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
    paginator.add_reaction('⏮️', "first")
@@ -325,16 +325,16 @@ async def crown(ctx):
    **Single Player**
    
    **Solo**
-   **.tales** Single player adventures where you traverse through your favorite universes as characters from various worlds!
-   **.dungeon** Hard version of tales with better loot and better drop rates! (Unlocks after completing **Crown Tale**)
-   **.boss** End Game battles featuring Iconic Villians from Crown Universes. (Unlocks after completing **Crown Dungeon**)
+   **/tales** Single player adventures where you traverse through your favorite universes as characters from various worlds!
+   **/dungeon** Hard version of tales with better loot and better drop rates! (Unlocks after completing **Crown Tale**)
+   **/boss** End Game battles featuring Iconic Villians from Crown Universes. (Unlocks after completing **Crown Dungeon**)
    **PATREON ONLY**
-   **.atales**:Auto-Battle Tales
+   **/atales**:Auto-Battle Tales
    
    **Duo**
-   **.dtales 1-3** Battle with your favorite AI preset in this Duo Tale!
-   **.ddungeon 1-3** Bring your strongest builds through the Darkest Duo Dungeons.
-   **.dboss 1-3** Bring your Dynanmic duo to take on one Incredible Boss.
+   **/dtales 1-3** Battle with your favorite AI preset in this Duo Tale!
+   **/ddungeon 1-3** Bring your strongest builds through the Darkest Duo Dungeons.
+   **/dboss 1-3** Bring your Dynanmic duo to take on one Incredible Boss.
    
  
    **Crown Rifts**
@@ -347,18 +347,18 @@ async def crown(ctx):
    **Multiplayer**
    
    **Co-Op**
-   **.ctales @partner** Take a companion with your through your favorite tales with higher stakes!
-   **.cdungeon @partner** Bring a companion through the darkest dungeons to earn awesome loot together.
-   **.cboss @partner** Epic battles between two high level companions and one Incredible Boss.
+   **/ctales @partner** Take a companion with your through your favorite tales with higher stakes!
+   **/cdungeon @partner** Bring a companion through the darkest dungeons to earn awesome loot together.
+   **/cboss @partner** Epic battles between two high level companions and one Incredible Boss.
 
    **PVP**
-   **.battle @player:** Select your Build and Challenge any Crown Unlimited Player to join your Game Lobby.
-   **.start:** Starts round against current opponent.
-   **.arena:** Starts round against current opponent and No Pets Allowed.
-   **.brawl:** Starts round against current opponent with equal health, attack, and defense.
-   **.arenabrawl:** Starts round against current opponent with equal health, attack, and defense and No Pets are allowed.
-   **.wager number:*** In lobby players can wager :coin:.
-   *Builds are locked during lobbies, to change your build end the lobby with **.end** .*
+   **/battle @player:** Select your Build and Challenge any Crown Unlimited Player to join your Game Lobby.
+   **/start:** Starts round against current opponent.
+   **/arena:** Starts round against current opponent and No Pets Allowed.
+   **/brawl:** Starts round against current opponent with equal health, attack, and defense.
+   **/arenabrawl:** Starts round against current opponent with equal health, attack, and defense and No Pets are allowed.
+   **/wager number:*** In lobby players can wager :coin:.
+   *Builds are locked during lobbies, to change your build end the lobby with **/end** .*
    
    **Crown Rifts**
    Crown Rifts are Co-Op Compatable and Helping other players in Co-Op **WILL NOT** close your open Rift!
@@ -369,12 +369,12 @@ async def crown(ctx):
    
    embedVar9 = discord.Embed(title= f":crown: Decks",description=textwrap.dedent(f"""\
    Save your favorite builds in your **Deck**
-   **.deck** to open the deck menu and select a preset with **1-3**
-   **.savedeck** to save your current build **1-3**
+   **/deck** to open the deck menu and select a preset with **1-3**
+   **/savedeck** to save your current build **1-3**
    
    **Deck Builds**
    You can bring your deck builds into Duo Battles!
-   **.abuild 1-3** to view the full preset build
+   **/abuild 1-3** to view the full preset build
    
    Take your **Deck Presets** into Crown Duos!
    """) ,colour=0x7289da)
@@ -382,16 +382,16 @@ async def crown(ctx):
 
    embedVar10 = discord.Embed(title= f":crown: Economy",description=textwrap.dedent(f"""\
    Crown Unlimited features an in game **Shop** where you can purchase new Cards, Titles, and Arms.
-   Use .shop to open the **Pop-Up Shop!**
+   Use /shop to open the **Pop-Up Shop!**
 
    **Stock**
    Items in the shop have a **Stock**. When they are sold out they become unavailable.
 
    **Sell & Trade**
-   **.sell** and **.trade** will allow you to trade Cards, Titles, Arms and Pets with other players.
+   **/sell** and **/trade** will allow you to trade Cards, Titles, Arms and Pets with other players.
 
    **Resell**
-   **.resell item** to sell Cards, Titles, and Arms back to the market.
+   **/resell item** to sell Cards, Titles, and Arms back to the market.
    """) ,colour=0x7289da)
    embedVar10.set_thumbnail(url=avatar)
 
@@ -417,13 +417,13 @@ async def r(ctx):
       Embark on a journey through Universes filled with characters from your favorite anime and video games!
       First, run **.daily** to get your daily rewards!
 
-      Type **.menu** for quick overview on what to do next! Checkout the tutorials below if you need additional assistance!
+      Type **/menu** for quick overview on what to do next! Checkout the tutorials below if you need additional assistance!
 
       Start Tutorial!
-      **.senpai**
+      **/senpai**
 
       Start Battle Tutorial!
-      **.senpaibattle**
+      **/senpaibattle**
       
       **CHANGING YOUR DISCORD ACCOUNT INFO WILL BREAK YOUR ACCOUNT IN THE GAME. YOU HAVE BEEN WARNED.**
       
@@ -431,7 +431,7 @@ async def r(ctx):
       """), colour=0xe91e63)
       embedVar.set_footer(text=".crown to inquire all potential commands and capabilites of the bot")
       await ctx.author.send(embed=embedVar)
-      await ctx.send(f"Welcome to Crown Unlimited, {ctx.author.mention}! Use **.daily** to collect your daily reward! Use **.menu** to see what you can do.")
+      await ctx.send(f"Welcome to Crown Unlimited, {ctx.author.mention}! Use **/daily** to collect your daily reward! Use **/menu** to see what you can do.")
 
       vault = db.queryVault({'OWNER': disname})
       if vault:
