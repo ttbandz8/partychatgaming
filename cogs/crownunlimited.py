@@ -3562,7 +3562,7 @@ class CrownUnlimited(commands.Cog):
                         **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                         :cyclone: 10 | **:boom: {omove1_text}** | _1_
                         :cyclone: 30 | **:comet: {omove2_text}** | _2_
-                        :cyclone: 80 | **:sparkles: {omove3_text}** | _3_
+                        :cyclone: 80 | **:rosette: {omove3_text}** | _3_
                         :cyclone: 20 | **:microbe: {omove_enhanced_text}** | _4_
                         :cyclone: 20 | **Defend Companion** | _0_
                         
@@ -7909,7 +7909,7 @@ class CrownUnlimited(commands.Cog):
                         **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                         :cyclone: 10 | **:boom: {omove1_text}** | _1_
                         :cyclone: 30 | **:comet: {omove2_text}** | _2_
-                        :cyclone: 80 | **:sparkles: {omove3_text}** | _3_
+                        :cyclone: 80 | **:rosette: {omove3_text}** | _3_
                         :cyclone: 20 | **:microbe: {omove_enhanced_text}** | _4_
                         :cyclone: 20 | **Defend Companion** | _0_
                         
@@ -12701,7 +12701,7 @@ class CrownUnlimited(commands.Cog):
                     **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                     :cyclone: 10 | **:boom: {omove1_text}** | _1_
                     :cyclone: 30 | **:comet: {omove2_text}** | _2_
-                    :cyclone: 80 | **:sparkles: {omove3_text}** | _3_
+                    :cyclone: 80 | **:rosette: {omove3_text}** | _3_
                     :cyclone: 20 | **:microbe: {omove_enhanced_text}** | _4_
                     :cyclone: 20 | **Defend Companion** | _0_
                     
@@ -17489,7 +17489,7 @@ class CrownUnlimited(commands.Cog):
                         **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                         :cyclone: 10 | **:boom: {omove1_text}** | _1_
                         :cyclone: 30 | **:comet: {omove2_text}** | _2_
-                        :cyclone: 80 | **:sparkles: {omove3_text}** | _3_
+                        :cyclone: 80 | **:rosette: {omove3_text}** | _3_
                         :cyclone: 20 | **:microbe: {omove_enhanced_text}** | _4_
                         :cyclone: 20 | **Defend Companion** | _0_
                         
@@ -18886,7 +18886,7 @@ class CrownUnlimited(commands.Cog):
                         **:heart: {c_health}/:cyclone: {c_stamina} :dagger:{c_attack}/:shield:{c_defense}**
                         :cyclone: 10 | **:boom: {cmove1_text}** | _1_
                         :cyclone: 30 | **:comet: {cmove2_text}** | _2_
-                        :cyclone: 80 | **:sparkles: {cmove3_text}** | _3_
+                        :cyclone: 80 | **:rosette: {cmove3_text}** | _3_
                         :cyclone: 20 **:microbe: {cmove_enhanced_text}** | _4_
                         **Enhance {o_card}** 20 Stamina _press 7_
                         :cyclone: 20 | **Defend {o_card}** | _0_
@@ -21664,7 +21664,7 @@ class CrownUnlimited(commands.Cog):
                         **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                         :cyclone: 10 | **:boom: {omove1_text}** | _1_
                         :cyclone: 30 | **:comet: {omove2_text}** | _2_
-                        :cyclone: 80 | **:sparkles: {omove3_text}** | _3_
+                        :cyclone: 80 | **:rosette: {omove3_text}** | _3_
                         :cyclone: 20 | **:microbe: {omove_enhanced_text}** | _4_
                         :cyclone: 20 | **Enhance {c_card}** | _7_
                         **Defend {c_card}**  :cyclone: 20 | _0_
@@ -23262,7 +23262,7 @@ class CrownUnlimited(commands.Cog):
                         **:heart: {c_health}/:cyclone: {c_stamina} :dagger:{c_attack}/:shield:{c_defense}**
                         :cyclone: 10 | **:boom: {cmove1_text}** | _1_
                         :cyclone: 30 | **:comet: {cmove2_text}** | _2_
-                        :cyclone: 80 | **:sparkles: {cmove3_text}** | _3_
+                        :cyclone: 80 | **:rosette: {cmove3_text}** | _3_
                         :cyclone: 20 **:microbe: {cmove_enhanced_text}** | _4_
                         **Enhance {o_card}** 20 Stamina _press 7_
                         :cyclone: 20 | **Defend {o_card}** | _0_
@@ -26228,7 +26228,7 @@ class CrownUnlimited(commands.Cog):
                     **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                     :cyclone: 10 | **:boom: {omove1_text}** | _1_
                     :cyclone: 30 | **:comet: {omove2_text}** | _2_
-                    :cyclone: 80 | **:sparkles: {omove3_text}** | _3_
+                    :cyclone: 80 | **:rosette: {omove3_text}** | _3_
                     :cyclone: 20 | **:microbe: {omove_enhanced_text}** | _4_
                     :cyclone: 20 | **Enhance {c_card}** | _7_
                     **Defend {c_card}**  :cyclone: 20 | _0_
@@ -27844,7 +27844,7 @@ class CrownUnlimited(commands.Cog):
                     **:heart: {c_health}/:cyclone: {c_stamina} :dagger:{c_attack}/:shield:{c_defense}**
                     :cyclone: 10 | **:boom: {cmove1_text}** | _1_
                     :cyclone: 30 | **:comet: {cmove2_text}** | _2_
-                    :cyclone: 80 | **:sparkles: {cmove3_text}** | _3_
+                    :cyclone: 80 | **:rosette: {cmove3_text}** | _3_
                     :cyclone: 20 **:microbe: {cmove_enhanced_text}** | _4_
                     **Enhance {o_card}** 20 Stamina _press 7_
                     :cyclone: 20 | **Defend {o_card}** | _0_
@@ -30370,7 +30370,7 @@ class CrownUnlimited(commands.Cog):
                         **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                         :cyclone: 10 | **:boom: {omove1_text}** | _1_
                         :cyclone: 30 | **:comet: {omove2_text}** | _2_
-                        :cyclone: 80 | **:sparkles: {omove3_text}** | _3_
+                        :cyclone: 80 | **:rosette: {omove3_text}** | _3_
                         :cyclone: 20 | **:microbe: {omove_enhanced_text}** | _4_
                         :cyclone: 20 | **Block** | _0_                        
                     
@@ -32608,7 +32608,7 @@ class CrownUnlimited(commands.Cog):
                         **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                         :cyclone: 10 | **:boom: {omove1_text}** | _1_
                         :cyclone: 30 | **:comet: {omove2_text}** | _2_
-                        :cyclone: 80 | **:sparkles: {omove3_text}** | _3_
+                        :cyclone: 80 | **:rosette: {omove3_text}** | _3_
                         :cyclone: 20 | **:microbe: {omove_enhanced_text}** | _4_
                         :cyclone: 20 | **Block** | _0_
                         
@@ -34726,7 +34726,7 @@ class CrownUnlimited(commands.Cog):
                     **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                     :cyclone: 10 | **:boom: {omove1_text}** | _1_
                     :cyclone: 30 | **:comet: {omove2_text}** | _2_
-                    :cyclone: 80 | **:sparkles: {omove3_text}** | _3_
+                    :cyclone: 80 | **:rosette: {omove3_text}** | _3_
                     :cyclone: 20 | **:microbe: {omove_enhanced_text}** | _4_
                     :cyclone: 20 | **Block** | _0_
                 
@@ -36916,7 +36916,7 @@ class CrownUnlimited(commands.Cog):
                             **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                             :cyclone: 10 | **:boom: {omove1_text}** | _1_
                             :cyclone: 30 | **:comet: {omove2_text}** | _2_
-                            :cyclone: 80 | **:sparkles: {omove3_text}** | _3_
+                            :cyclone: 80 | **:rosette: {omove3_text}** | _3_
                             :cyclone: 20 | **:microbe: {omove_enhanced_text}** | _4_
                             :cyclone: 20 | **Block** | _0_
                         
@@ -37552,7 +37552,7 @@ class CrownUnlimited(commands.Cog):
                                 **:heart: {t_health}/:cyclone: {t_stamina} :dagger:{t_attack}/:shield:{t_defense}**
                                 :cyclone: 10 | **:boom: {tmove1_text}** | _1_
                                 :cyclone: 30 | **:comet: {tmove2_text}** | _2_
-                                :cyclone: 80 | **:sparkles: {tmove3_text}** | _3_
+                                :cyclone: 80 | **:rosette: {tmove3_text}** | _3_
                                 :cyclone: 20 **:microbe: {tmove_enhanced_text}** | _4_
                                 :cyclone: 20 | **Block** | _0_
                             
@@ -39576,7 +39576,7 @@ class CrownUnlimited(commands.Cog):
                             **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                             :cyclone: 10 | **:boom: {omove1_text}** | _1_
                             :cyclone: 30 | **:comet: {omove2_text}** | _2_
-                            :cyclone: 80 | **:sparkles: {omove3_text}** | _3_
+                            :cyclone: 80 | **:rosette: {omove3_text}** | _3_
                             :cyclone: 20 | **:microbe: {omove_enhanced_text}** | _4_
                             :cyclone: 20 | **Block** | _0_
                         
@@ -40176,7 +40176,7 @@ class CrownUnlimited(commands.Cog):
                                 **:heart: {t_health}/:cyclone: {t_stamina} :dagger:{t_attack}/:shield:{t_defense}**
                                 :cyclone: 10 | **:boom: {tmove1_text}** | _1_
                                 :cyclone: 30 | **:comet: {tmove2_text}** | _2_
-                                :cyclone: 80 | **:sparkles: {tmove3_text}** | _3_
+                                :cyclone: 80 | **:rosette: {tmove3_text}** | _3_
                                 :cyclone: 20 **:microbe: {tmove_enhanced_text}** | _4_
                                 :cyclone: 20 | **Block** | _0_
                             
@@ -42201,7 +42201,7 @@ class CrownUnlimited(commands.Cog):
                             **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                             :cyclone: 10 | **:boom: {omove1_text}** | _1_
                             :cyclone: 30 | **:comet: {omove2_text}** | _2_
-                            :cyclone: 80 | **:sparkles: {omove3_text}** | _3_
+                            :cyclone: 80 | **:rosette: {omove3_text}** | _3_
                             :cyclone: 20 | **:microbe: {omove_enhanced_text}** | _4_
                             :cyclone: 20 | **Block** | _0_
                         
@@ -42700,7 +42700,7 @@ class CrownUnlimited(commands.Cog):
                                 **:heart: {t_health}/:cyclone: {t_stamina} :dagger:{t_attack}/:shield:{t_defense}**
                                 :cyclone: 10 | **:boom: {tmove1_text}** | _1_
                                 :cyclone: 30 | **:comet: {tmove2_text}** | _2_
-                                :cyclone: 80 | **:sparkles: {tmove3_text}** | _3_
+                                :cyclone: 80 | **:rosette: {tmove3_text}** | _3_
                                 :cyclone: 20 **:microbe: {tmove_enhanced_text}** | _4_
                                 :cyclone: 20 | **Block** | _0_
                             
@@ -44626,7 +44626,7 @@ class CrownUnlimited(commands.Cog):
                             **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                             :cyclone: 10 | **:boom: {omove1_text}** | _1_
                             :cyclone: 30 | **:comet: {omove2_text}** | _2_
-                            :cyclone: 80 | **:sparkles: {omove3_text}** | _3_
+                            :cyclone: 80 | **:rosette: {omove3_text}** | _3_
                             :cyclone: 20 | **:microbe: {omove_enhanced_text}** | _4_
                             :cyclone: 20 | **Block** | _0_
                         
@@ -45125,7 +45125,7 @@ class CrownUnlimited(commands.Cog):
                                 **:heart: {t_health}/:cyclone: {t_stamina} :dagger:{t_attack}/:shield:{t_defense}**
                                 :cyclone: 10 | **:boom: {tmove1_text}** | _1_
                                 :cyclone: 30 | **:comet: {tmove2_text}** | _2_
-                                :cyclone: 80 | **:sparkles: {tmove3_text}** | _3_
+                                :cyclone: 80 | **:rosette: {tmove3_text}** | _3_
                                 :cyclone: 20 **:microbe: {tmove_enhanced_text}** | _4_
                                 :cyclone: 20 | **Block** | _0_
                             
@@ -47067,7 +47067,7 @@ class CrownUnlimited(commands.Cog):
                             **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                             :cyclone: 10 | **:boom: {omove1_text}** | _1_
                             :cyclone: 30 | **:comet: {omove2_text}** | _2_
-                            :cyclone: 80 | **:sparkles: {omove3_text}** | _3_
+                            :cyclone: 80 | **:rosette: {omove3_text}** | _3_
                             :cyclone: 20 | **:microbe: {omove_enhanced_text}** | _4_
                             :cyclone: 20 | **Block** | _0_
                         
@@ -47685,7 +47685,7 @@ class CrownUnlimited(commands.Cog):
                                 **:heart: {t_health}/:cyclone: {t_stamina} :dagger:{t_attack}/:shield:{t_defense}**
                                 :cyclone: 10 | **:boom: {tmove1_text}** | _1_
                                 :cyclone: 30 | **:comet: {tmove2_text}** | _2_
-                                :cyclone: 80 | **:sparkles: {tmove3_text}** | _3_
+                                :cyclone: 80 | **:rosette: {tmove3_text}** | _3_
                                 :cyclone: 20 **:microbe: {tmove_enhanced_text}** | _4_
                                 :cyclone: 20 | **Block** | _0_
                             
@@ -48842,7 +48842,7 @@ class CrownUnlimited(commands.Cog):
 
         embed_list = []
         for i in range(0, len(destinies_broken_up)):
-            globals()['embedVar%s' % i] = discord.Embed(title= f":sparkles: {universe} Destiny List", description="\n".join(destinies_broken_up[i]), colour=0x7289da)
+            globals()['embedVar%s' % i] = discord.Embed(title= f":rosette: {universe} Destiny List", description="\n".join(destinies_broken_up[i]), colour=0x7289da)
             globals()['embedVar%s' % i].set_footer(text=f"{total_destinies} Total Destiny Lines")
             embed_list.append(globals()['embedVar%s' % i])
 

@@ -228,7 +228,7 @@ class Profile(commands.Cog):
             _**Moveset**_
             :boom: **{move1}:** {move1ap}
             :comet: **{move2}:** {move2ap}
-            :sparkles: **{move3}:** {move3ap}
+            :rosette: **{move3}:** {move3ap}
             :microbe: **{move4}:** {move4enh} by {move4ap}
             
             :drop_of_blood: _Passive:_ **{passive_name}:** {passive_type} by {passive_num}
