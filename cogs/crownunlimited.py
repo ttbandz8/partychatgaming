@@ -13629,30 +13629,30 @@ class CrownUnlimited(commands.Cog):
                     if int(aiMove) == 1:
                         t_pet_used =False
                         if c_block_used==True:
-                            dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total)
+                            dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                         else:
-                            dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                            dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                     elif int(aiMove) == 2:
                         t_pet_used =False
                         if c_block_used==True:
-                            dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total)
+                            dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                         else:
-                            dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                            dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                     elif int(aiMove) == 3:
                         t_pet_used =False
                         if c_block_used==True:
-                            dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total)
+                            dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                         else:
-                            dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                            dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                         if t_gif != "N/A":
                             await private_channel.send(f"{t_gif}")
                     elif int(aiMove) == 4:
                         t_pet_used =False
                         t_enhancer_used=True
                         if c_block_used==True:
-                            dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total)
+                            dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                         else:
-                            dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                            dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                         t_enhancer_used=False
                     elif int(aiMove) == 5:
                         if not t_used_resolve and t_used_focus:
@@ -13748,9 +13748,9 @@ class CrownUnlimited(commands.Cog):
                                 embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
                                 await private_channel.send(embed=embedVar)
                                 if c_block_used==True:
-                                    dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina,t_max_health, c_attack, boss_special_move_default_msg, turn_total)
+                                    dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina,t_max_health, c_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                                 else:
-                                    dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                                    dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                                 t_pet_used =False
                                 c_health = c_health - int(dmg['DMG'])
                                 embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
@@ -13812,7 +13812,7 @@ class CrownUnlimited(commands.Cog):
                         if t_used_resolve and t_used_focus and not t_pet_used:
                             if c_block_used==True:
                                 t_enhancer_used=True
-                                dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total)
+                                dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                                 t_enhancer_used=False
                                 t_pet_used =True
                                 tpet_dmg = dmg['DMG']
@@ -13908,7 +13908,7 @@ class CrownUnlimited(commands.Cog):
                                     turn=1
                             else:                                  
                                 t_enhancer_used=True
-                                dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                                dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                                 t_enhancer_used=False
                                 t_pet_used =True
                                 tpet_dmg = dmg['DMG']
@@ -15382,30 +15382,30 @@ class CrownUnlimited(commands.Cog):
                     if int(aiMove) == 1:
                         t_pet_used =False
                         if o_defend_used==True:
-                            dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                            dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                         else:
-                            dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total)
+                            dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                     elif int(aiMove) == 2:
                         t_pet_used =False
                         if o_defend_used==True:
-                            dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                            dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                         else:
-                            dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total)
+                            dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                     elif int(aiMove) == 3:
                         t_pet_used =False
                         if o_defend_used==True:
-                            dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                            dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                         else: 
-                            dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total)
+                            dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                         if t_gif != "N/A":
                             await private_channel.send(f"{t_gif}")
                     elif int(aiMove) == 4:
                         t_pet_used =False
                         t_enhancer_used=True
                         if o_defend_used==True:
-                            dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                            dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                         else:
-                            dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total)
+                            dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                         t_enhancer_used=False
                     elif int(aiMove) == 5:
                         if not t_used_resolve and t_used_focus:
@@ -15501,10 +15501,10 @@ class CrownUnlimited(commands.Cog):
                                 embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
                                 await private_channel.send(embed=embedVar)
                                 if o_defend_used==True:
-                                    dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                                    dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                                     o_health = o_health - int(dmg['DMG'])
                                 else:
-                                    dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina,t_max_health, c_attack, boss_special_move_default_msg, turn_total)
+                                    dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina,t_max_health, c_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                                     c_health = c_health - int(dmg['DMG'])
                                 t_pet_used =False                                    
                                 embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
@@ -15566,7 +15566,7 @@ class CrownUnlimited(commands.Cog):
                         if t_used_resolve and t_used_focus and not t_pet_used:
                             if o_defend_used==True:
                                 t_enhancer_used=True
-                                dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                                dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                                 t_enhancer_used=False
                                 t_pet_used =True
                                 tpet_dmg = dmg['DMG']
@@ -15662,7 +15662,7 @@ class CrownUnlimited(commands.Cog):
                                     turn=1
                             else:                                      
                                 t_enhancer_used=True
-                                dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total)
+                                dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                                 t_enhancer_used=False
                                 t_pet_used =True
                                 tpet_dmg = dmg['DMG']
@@ -27048,30 +27048,30 @@ class CrownUnlimited(commands.Cog):
                     if int(aiMove) == 1:
                         t_pet_used =False
                         if c_block_used==True:
-                            dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total)
+                            dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                         else:
-                            dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                            dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                     elif int(aiMove) == 2:
                         t_pet_used =False
                         if c_block_used==True:
-                            dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total)
+                            dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                         else:
-                            dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                            dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                     elif int(aiMove) == 3:
                         t_pet_used =False
                         if c_block_used==True:
-                            dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total)
+                            dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                         else:
-                            dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                            dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                         if t_gif != "N/A":
                             await private_channel.send(f"{t_gif}")
                     elif int(aiMove) == 4:
                         t_pet_used =False
                         t_enhancer_used=True
                         if c_block_used==True:
-                            dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total)
+                            dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                         else:
-                            dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                            dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                         t_enhancer_used=False
                     elif int(aiMove) == 5:
                         if not t_used_resolve and t_used_focus:
@@ -27167,9 +27167,9 @@ class CrownUnlimited(commands.Cog):
                                 embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
                                 await private_channel.send(embed=embedVar)
                                 if c_block_used==True:
-                                    dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina,t_max_health, c_attack, boss_special_move_default_msg, turn_total)
+                                    dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina,t_max_health, c_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                                 else:
-                                    dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                                    dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                                 t_pet_used =False
                                 c_health = c_health - int(dmg['DMG'])
                                 embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
@@ -27231,7 +27231,7 @@ class CrownUnlimited(commands.Cog):
                         if t_used_resolve and t_used_focus and not t_pet_used:
                             if c_block_used==True:
                                 t_enhancer_used=True
-                                dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total)
+                                dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                                 t_enhancer_used=False
                                 t_pet_used =True
                                 tpet_dmg = dmg['DMG']
@@ -27327,7 +27327,7 @@ class CrownUnlimited(commands.Cog):
                                     turn=1
                             else:                                  
                                 t_enhancer_used=True
-                                dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                                dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                                 t_enhancer_used=False
                                 t_pet_used =True
                                 tpet_dmg = dmg['DMG']
@@ -28660,30 +28660,30 @@ class CrownUnlimited(commands.Cog):
                     if int(aiMove) == 1:
                         t_pet_used =False
                         if o_defend_used==True:
-                            dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                            dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                         else:
-                            dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total)
+                            dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                     elif int(aiMove) == 2:
                         t_pet_used =False
                         if o_defend_used==True:
-                            dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                            dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                         else:
-                            dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total)
+                            dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                     elif int(aiMove) == 3:
                         t_pet_used =False
                         if o_defend_used==True:
-                            dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                            dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                         else: 
-                            dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total)
+                            dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                         if t_gif != "N/A":
                             await private_channel.send(f"{t_gif}")
                     elif int(aiMove) == 4:
                         t_pet_used =False
                         t_enhancer_used=True
                         if o_defend_used==True:
-                            dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                            dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                         else:
-                            dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total)
+                            dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                         t_enhancer_used=False
                     elif int(aiMove) == 5:
                         if not t_used_resolve and t_used_focus:
@@ -28779,10 +28779,10 @@ class CrownUnlimited(commands.Cog):
                                 embedVar.add_field(name=f"Transformation: Command Seal", value="All stats & stamina greatly increased")
                                 await private_channel.send(embed=embedVar)
                                 if o_defend_used==True:
-                                    dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                                    dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                                     o_health = o_health - int(dmg['DMG'])
                                 else:
-                                    dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina,t_max_health, c_attack, boss_special_move_default_msg, turn_total)
+                                    dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina,t_max_health, c_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                                     c_health = c_health - int(dmg['DMG'])
                                 t_pet_used =False                                    
                                 embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
@@ -28844,7 +28844,7 @@ class CrownUnlimited(commands.Cog):
                         if t_used_resolve and t_used_focus and not t_pet_used:
                             if o_defend_used==True:
                                 t_enhancer_used=True
-                                dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                                dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                                 t_enhancer_used=False
                                 t_pet_used =True
                                 tpet_dmg = dmg['DMG']
@@ -28940,7 +28940,7 @@ class CrownUnlimited(commands.Cog):
                                     turn=1
                             else:                                      
                                 t_enhancer_used=True
-                                dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total)
+                                dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                                 t_enhancer_used=False
                                 t_pet_used =True
                                 tpet_dmg = dmg['DMG']
@@ -35440,17 +35440,17 @@ class CrownUnlimited(commands.Cog):
                         t_health=0
                     elif aiMove == 1:
                         t_pet_used =False
-                        dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                        dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                     elif aiMove == 2:
                         t_pet_used =False
-                        dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                        dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                     elif aiMove == 3:
                         t_pet_used =False
-                        dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                        dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                     elif aiMove == 4:
                         t_enhancer_used=True
                         t_pet_used =False
-                        dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                        dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                         t_enhancer_used=False
                     elif aiMove == 5:
                         if not t_used_resolve and t_used_focus:
@@ -35609,7 +35609,7 @@ class CrownUnlimited(commands.Cog):
                         #Resolve Check and Calculation
                         if t_used_resolve and t_used_focus and not t_pet_used:                                      
                             t_enhancer_used=True
-                            dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total)
+                            dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, boss_special_move_default_msg, turn_total, tcard_lvl_ap_buff)
                             t_enhancer_used=False
                             t_pet_used =True
                             tpet_dmg = dmg['DMG']
