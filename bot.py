@@ -623,7 +623,7 @@ async def daily(ctx):
    quests = [{'OPPONENT': opponents[q1], 'TYPE': 'Tales', 'GOAL': 3, 'WINS': 0, 'REWARD': 500 },{'OPPONENT': opponents[q2], 'TYPE': 'Tales', 'GOAL': 5, 'WINS': 0, 'REWARD': 1000 }, {'OPPONENT': opponents[q3], 'TYPE': 'Dungeon', 'GOAL': 3, 'WINS': 0, 'REWARD': 1500 }]
    db.updateVaultNoFilter({'OWNER': str(ctx.author)}, {'$set': {'QUESTS': quests}})
 
-   await ctx.send(f"Daily bonus :coin:{dailyamount} has been applied for {ctx.author.mention}!\nYour new quests are available!\n**use .quest to open the Quest Board**!")
+   await ctx.send(f"Daily bonus :coin:{dailyamount} has been applied for {ctx.author.mention}!\nYour new quests are available!\n**use /quest to open the Quest Board**!")
 
 @bot.command()
 @commands.check(validate_user)
@@ -1324,22 +1324,22 @@ async def menu(ctx):
 
       embedVar1 = discord.Embed(title= f"Story Mode", description="Journey through Universes to defeat powerful foes to unlock vast new worlds, tough boss fights, and new possibilities!", colour=0x7289da)
       embedVar1.set_image(url=story)
-      embedVar1.set_footer(text=f"use .crown for additional assistance")
+      embedVar1.set_footer(text=f"use /crown for additional assistance")
 
       embedVar2 = discord.Embed(title= f"Profile Menu", description="View and Edit your Cards, Titles, Arms, and Pets to craft new builds and strategies.", colour=0x7289da)
       embedVar2.set_image(url=profile)
       # embedVar2.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
-      embedVar2.set_footer(text=f"use .crown for additional assistance")
+      embedVar2.set_footer(text=f"use /crown for additional assistance")
       
       embedVar3 = discord.Embed(title= f"PVP Mode", description="Face off against friend or foe!", colour=0x7289da)
       embedVar3.set_image(url=pvp)
       # embedVar3.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
-      embedVar3.set_footer(text=f"use .crown for additional assistance")
+      embedVar3.set_footer(text=f"use /crown for additional assistance")
 
       embedVar4 = discord.Embed(title= f"Crown Unlimited Menu", description="5 Primary Objectives of Crown Unlimited. Click arrow below to go to the next page!", colour=0x7289da)
       embedVar4.set_image(url=objectives)
       # embedVar4.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
-      embedVar4.set_footer(text=f"use .crown for additional assistance")
+      embedVar4.set_footer(text=f"use /crown for additional assistance")
 
       paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
       paginator.add_reaction('⏮️', "first")

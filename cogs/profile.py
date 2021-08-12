@@ -450,14 +450,14 @@ class Profile(commands.Cog):
             if len(cards) < 10:
                 embedVar = discord.Embed(title= f"Cards\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(cards), colour=0x7289da)
                 embedVar.set_thumbnail(url=avatar)
-                embedVar.set_footer(text=f".equipcard card name: Equip Card\n.viewcard card name: View Cards Details")
+                embedVar.set_footer(text=f"/equipcard card name: Equip Card\n/viewcard card name: View Cards Details")
                 await ctx.send(embed=embedVar)
 
             embed_list = []
             for i in range(0, len(cards_broken_up)):
                 globals()['embedVar%s' % i] = discord.Embed(title= f":flower_playing_cards: Cards\n**Balance**: {icon}{'{:,}'.format(balance)}", description="\n".join(cards_broken_up[i]), colour=0x7289da)
                 globals()['embedVar%s' % i].set_thumbnail(url=avatar)
-                globals()['embedVar%s' % i].set_footer(text=f"{total_cards} Total Cards\n.equipcard card name: Equip Card\n.viewcard card name: View Cards Details")
+                globals()['embedVar%s' % i].set_footer(text=f"{total_cards} Total Cards\n/equipcard card name: Equip Card\n/viewcard card name: View Cards Details")
                 embed_list.append(globals()['embedVar%s' % i])
 
             paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
@@ -516,14 +516,14 @@ class Profile(commands.Cog):
             if len(titles) < 10:
                 embedVar = discord.Embed(title= f"Titles\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(titles), colour=0x7289da)
                 embedVar.set_thumbnail(url=avatar)
-                embedVar.set_footer(text=f".equiptitle title name: Equip Title\n.viewtitle title name: View Title Details")
+                embedVar.set_footer(text=f"/equiptitle title name: Equip Title\n/viewtitle title name: View Title Details")
                 await ctx.send(embed=embedVar)
 
             embed_list = []
             for i in range(0, len(titles_broken_up)):
                 globals()['embedVar%s' % i] = discord.Embed(title= f":reminder_ribbon: Titles\n**Balance**: {icon}{'{:,}'.format(balance)}", description="\n".join(titles_broken_up[i]), colour=0x7289da)
                 globals()['embedVar%s' % i].set_thumbnail(url=avatar)
-                globals()['embedVar%s' % i].set_footer(text=f"{total_titles} Total Titles\n.equiptitle title name: Equip Title\n.viewtitle title name: View Title Details")
+                globals()['embedVar%s' % i].set_footer(text=f"{total_titles} Total Titles\n/equiptitle title name: Equip Title\n/viewtitle title name: View Title Details")
                 embed_list.append(globals()['embedVar%s' % i])
 
             paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
@@ -583,14 +583,14 @@ class Profile(commands.Cog):
             if len(arms) < 10:
                 embedVar = discord.Embed(title= f"Arms\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(arms), colour=0x7289da)
                 embedVar.set_thumbnail(url=avatar)
-                embedVar.set_footer(text=f".equiparm arm name: Equip Arm\n.viewarm arm name: View Arm Details")
+                embedVar.set_footer(text=f"/equiparm arm name: Equip Arm\n/viewarm arm name: View Arm Details")
                 await ctx.send(embed=embedVar)
 
             embed_list = []
             for i in range(0, len(arms_broken_up)):
                 globals()['embedVar%s' % i] = discord.Embed(title= f":mechanical_arm: Arms\n**Balance**: {icon}{'{:,}'.format(balance)}", description="\n".join(arms_broken_up[i]), colour=0x7289da)
                 globals()['embedVar%s' % i].set_thumbnail(url=avatar)
-                globals()['embedVar%s' % i].set_footer(text=f"{total_arms} Total Arms\n.equiparm arm name: Equip Arm\n.viewarm arm name: View Arm Details")
+                globals()['embedVar%s' % i].set_footer(text=f"{total_arms} Total Arms\n/equiparm arm name: Equip Arm\n/viewarm arm name: View Arm Details")
                 embed_list.append(globals()['embedVar%s' % i])
 
             paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
@@ -659,14 +659,14 @@ class Profile(commands.Cog):
             if len(pets) < 10:
                 embedVar = discord.Embed(title= f"Pets\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(pets), colour=0x7289da)
                 embedVar.set_thumbnail(url=avatar)
-                embedVar.set_footer(text=f".equippet pet name: Equip Pet\n.viewpet pet name: View Pet Details")
+                embedVar.set_footer(text=f"/equippet pet name: Equip Pet\n/viewpet pet name: View Pet Details")
                 await ctx.send(embed=embedVar)
 
             embed_list = []
             for i in range(0, len(pets_broken_up)):
                 globals()['embedVar%s' % i] = discord.Embed(title= f":bird: Pets\n**Balance**: {icon}{'{:,}'.format(balance)}", description="\n".join(pets_broken_up[i]), colour=0x7289da)
                 globals()['embedVar%s' % i].set_thumbnail(url=avatar)
-                globals()['embedVar%s' % i].set_footer(text=f"{total_pets} Total Pets\n.equippet pet name: Equip Pet\n.viewpet pet name: View Pet Details")
+                globals()['embedVar%s' % i].set_footer(text=f"{total_pets} Total Pets\n/equippet pet name: Equip Pet\n/viewpet pet name: View Pet Details")
                 embed_list.append(globals()['embedVar%s' % i])
 
             paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
