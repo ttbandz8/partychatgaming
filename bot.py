@@ -325,16 +325,16 @@ async def crown(ctx):
    **Single Player**
    
    **Solo**
-   **.tales** Single player adventures where you traverse through your favorite universes as characters from various worlds!
-   **.dungeon** Hard version of tales with better loot and better drop rates! (Unlocks after completing **Crown Tale**)
-   **.boss** End Game battles featuring Iconic Villians from Crown Universes. (Unlocks after completing **Crown Dungeon**)
+   **/tales** Single player adventures where you traverse through your favorite universes as characters from various worlds!
+   **/dungeon** Hard version of tales with better loot and better drop rates! (Unlocks after completing **Crown Tale**)
+   **/boss** End Game battles featuring Iconic Villians from Crown Universes. (Unlocks after completing **Crown Dungeon**)
    **PATREON ONLY**
-   **.atales**:Auto-Battle Tales
+   **/atales**:Auto-Battle Tales
    
    **Duo**
-   **.dtales 1-3** Battle with your favorite AI preset in this Duo Tale!
-   **.ddungeon 1-3** Bring your strongest builds through the Darkest Duo Dungeons.
-   **.dboss 1-3** Bring your Dynanmic duo to take on one Incredible Boss.
+   **/dtales 1-3** Battle with your favorite AI preset in this Duo Tale!
+   **/ddungeon 1-3** Bring your strongest builds through the Darkest Duo Dungeons.
+   **/dboss 1-3** Bring your Dynanmic duo to take on one Incredible Boss.
    
  
    **Crown Rifts**
@@ -347,18 +347,18 @@ async def crown(ctx):
    **Multiplayer**
    
    **Co-Op**
-   **.ctales @partner** Take a companion with your through your favorite tales with higher stakes!
-   **.cdungeon @partner** Bring a companion through the darkest dungeons to earn awesome loot together.
-   **.cboss @partner** Epic battles between two high level companions and one Incredible Boss.
+   **/ctales @partner** Take a companion with your through your favorite tales with higher stakes!
+   **/cdungeon @partner** Bring a companion through the darkest dungeons to earn awesome loot together.
+   **/cboss @partner** Epic battles between two high level companions and one Incredible Boss.
 
    **PVP**
-   **.battle @player:** Select your Build and Challenge any Crown Unlimited Player to join your Game Lobby.
-   **.start:** Starts round against current opponent.
-   **.arena:** Starts round against current opponent and No Pets Allowed.
-   **.brawl:** Starts round against current opponent with equal health, attack, and defense.
-   **.arenabrawl:** Starts round against current opponent with equal health, attack, and defense and No Pets are allowed.
-   **.wager number:*** In lobby players can wager :coin:.
-   *Builds are locked during lobbies, to change your build end the lobby with **.end** .*
+   **/battle @player:** Select your Build and Challenge any Crown Unlimited Player to join your Game Lobby.
+   **/start:** Starts round against current opponent.
+   **/arena:** Starts round against current opponent and No Pets Allowed.
+   **/brawl:** Starts round against current opponent with equal health, attack, and defense.
+   **/arenabrawl:** Starts round against current opponent with equal health, attack, and defense and No Pets are allowed.
+   **/wager number:*** In lobby players can wager :coin:.
+   *Builds are locked during lobbies, to change your build end the lobby with **/end** .*
    
    **Crown Rifts**
    Crown Rifts are Co-Op Compatable and Helping other players in Co-Op **WILL NOT** close your open Rift!
@@ -369,12 +369,12 @@ async def crown(ctx):
    
    embedVar9 = discord.Embed(title= f":crown: Decks",description=textwrap.dedent(f"""\
    Save your favorite builds in your **Deck**
-   **.deck** to open the deck menu and select a preset with **1-3**
-   **.savedeck** to save your current build **1-3**
+   **/deck** to open the deck menu and select a preset with **1-3**
+   **/savedeck** to save your current build **1-3**
    
    **Deck Builds**
    You can bring your deck builds into Duo Battles!
-   **.abuild 1-3** to view the full preset build
+   **/abuild 1-3** to view the full preset build
    
    Take your **Deck Presets** into Crown Duos!
    """) ,colour=0x7289da)
@@ -382,16 +382,16 @@ async def crown(ctx):
 
    embedVar10 = discord.Embed(title= f":crown: Economy",description=textwrap.dedent(f"""\
    Crown Unlimited features an in game **Shop** where you can purchase new Cards, Titles, and Arms.
-   Use .shop to open the **Pop-Up Shop!**
+   Use /shop to open the **Pop-Up Shop!**
 
    **Stock**
    Items in the shop have a **Stock**. When they are sold out they become unavailable.
 
    **Sell & Trade**
-   **.sell** and **.trade** will allow you to trade Cards, Titles, Arms and Pets with other players.
+   **/sell** and **/trade** will allow you to trade Cards, Titles, Arms and Pets with other players.
 
    **Resell**
-   **.resell item** to sell Cards, Titles, and Arms back to the market.
+   **/resell item** to sell Cards, Titles, and Arms back to the market.
    """) ,colour=0x7289da)
    embedVar10.set_thumbnail(url=avatar)
 
