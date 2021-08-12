@@ -411,6 +411,7 @@ class Profile(commands.Cog):
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
         vault = db.queryVault({'OWNER': d['DISNAME']})
+        
         if vault:
             name = d['DISNAME'].split("#",1)[0]
             avatar = d['AVATAR']
@@ -418,6 +419,14 @@ class Profile(commands.Cog):
             cards_list = vault['CARDS']
             total_cards = len(cards_list)
             cards=[]
+            icon = ":coin:"
+            if balance >= 150000:
+                icon = ":money_with_wings:"
+            elif balance >=100000:
+                icon = ":moneybag:"
+            elif balance >= 50000:
+                icon = ":dollar:"
+            
 
             for card in cards_list:
                 resp = db.queryCard({"NAME": str(card)})
@@ -446,7 +455,7 @@ class Profile(commands.Cog):
 
             embed_list = []
             for i in range(0, len(cards_broken_up)):
-                globals()['embedVar%s' % i] = discord.Embed(title= f":flower_playing_cards: Cards\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(cards_broken_up[i]), colour=0x7289da)
+                globals()['embedVar%s' % i] = discord.Embed(title= f":flower_playing_cards: Cards\n**Balance**: {icon}{'{:,}'.format(balance)}", description="\n".join(cards_broken_up[i]), colour=0x7289da)
                 globals()['embedVar%s' % i].set_thumbnail(url=avatar)
                 globals()['embedVar%s' % i].set_footer(text=f"{total_cards} Total Cards\n.equipcard card name: Equip Card\n.viewcard card name: View Cards Details")
                 embed_list.append(globals()['embedVar%s' % i])
@@ -474,6 +483,13 @@ class Profile(commands.Cog):
             titles_list = vault['TITLES']
             total_titles = len(titles_list)
             titles=[]
+            icon = ":coin:"
+            if balance >= 150000:
+                icon = ":money_with_wings:"
+            elif balance >=100000:
+                icon = ":moneybag:"
+            elif balance >= 50000:
+                icon = ":dollar:"
 
             for title in titles_list:
                 resp = db.queryTitle({"TITLE": str(title)})
@@ -505,7 +521,7 @@ class Profile(commands.Cog):
 
             embed_list = []
             for i in range(0, len(titles_broken_up)):
-                globals()['embedVar%s' % i] = discord.Embed(title= f":reminder_ribbon: Titles\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(titles_broken_up[i]), colour=0x7289da)
+                globals()['embedVar%s' % i] = discord.Embed(title= f":reminder_ribbon: Titles\n**Balance**: {icon}{'{:,}'.format(balance)}", description="\n".join(titles_broken_up[i]), colour=0x7289da)
                 globals()['embedVar%s' % i].set_thumbnail(url=avatar)
                 globals()['embedVar%s' % i].set_footer(text=f"{total_titles} Total Titles\n.equiptitle title name: Equip Title\n.viewtitle title name: View Title Details")
                 embed_list.append(globals()['embedVar%s' % i])
@@ -534,6 +550,13 @@ class Profile(commands.Cog):
             total_arms = len(arms_list)
 
             arms=[]
+            icon = ":coin:"
+            if balance >= 150000:
+                icon = ":money_with_wings:"
+            elif balance >=100000:
+                icon = ":moneybag:"
+            elif balance >= 50000:
+                icon = ":dollar:"
 
             for arm in arms_list:
                 resp = db.queryArm({"ARM": str(arm)})
@@ -565,7 +588,7 @@ class Profile(commands.Cog):
 
             embed_list = []
             for i in range(0, len(arms_broken_up)):
-                globals()['embedVar%s' % i] = discord.Embed(title= f":mechanical_arm: Arms\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(arms_broken_up[i]), colour=0x7289da)
+                globals()['embedVar%s' % i] = discord.Embed(title= f":mechanical_arm: Arms\n**Balance**: {icon}{'{:,}'.format(balance)}", description="\n".join(arms_broken_up[i]), colour=0x7289da)
                 globals()['embedVar%s' % i].set_thumbnail(url=avatar)
                 globals()['embedVar%s' % i].set_footer(text=f"{total_arms} Total Arms\n.equiparm arm name: Equip Arm\n.viewarm arm name: View Arm Details")
                 embed_list.append(globals()['embedVar%s' % i])
@@ -595,6 +618,13 @@ class Profile(commands.Cog):
             total_pets = len(pets_list)
 
             pets=[]
+            icon = ":coin:"
+            if balance >= 150000:
+                icon = ":money_with_wings:"
+            elif balance >=100000:
+                icon = ":moneybag:"
+            elif balance >= 50000:
+                icon = ":dollar:"
             bond_message = ""
             lvl_message = ""
             for pet in pets_list:
@@ -634,7 +664,7 @@ class Profile(commands.Cog):
 
             embed_list = []
             for i in range(0, len(pets_broken_up)):
-                globals()['embedVar%s' % i] = discord.Embed(title= f":dog: Pets\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(pets_broken_up[i]), colour=0x7289da)
+                globals()['embedVar%s' % i] = discord.Embed(title= f":bird: Pets\n**Balance**: {icon}{'{:,}'.format(balance)}", description="\n".join(pets_broken_up[i]), colour=0x7289da)
                 globals()['embedVar%s' % i].set_thumbnail(url=avatar)
                 globals()['embedVar%s' % i].set_footer(text=f"{total_pets} Total Pets\n.equippet pet name: Equip Pet\n.viewpet pet name: View Pet Details")
                 embed_list.append(globals()['embedVar%s' % i])
@@ -665,6 +695,13 @@ class Profile(commands.Cog):
             destiny = vault['DESTINY']
 
             destiny_messages = []
+            icon = ":coin:"
+            if balance >= 150000:
+                icon = ":money_with_wings:"
+            elif balance >=100000:
+                icon = ":moneybag:"
+            elif balance >= 50000:
+                icon = ":dollar:"
             for d in destiny:
                 if not d['COMPLETED']:
                     destiny_messages.append(textwrap.dedent(f"""\
@@ -696,7 +733,7 @@ class Profile(commands.Cog):
 
             embed_list = []
             for i in range(0, len(destinies_broken_up)):
-                globals()['embedVar%s' % i] = discord.Embed(title= f":sparkles: Destiny Lines\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(destinies_broken_up[i]), colour=0x7289da)
+                globals()['embedVar%s' % i] = discord.Embed(title= f":sparkles: Destiny Lines\n**Balance**: {icon}{'{:,}'.format(balance)}", description="\n".join(destinies_broken_up[i]), colour=0x7289da)
                 globals()['embedVar%s' % i].set_thumbnail(url=avatar)
                 # globals()['embedVar%s' % i].set_footer(text=f"{total_pets} Total Pets\n.equippet pet name: Equip Pet\n.viewpet pet name: View Pet Details")
                 embed_list.append(globals()['embedVar%s' % i])
@@ -1041,6 +1078,14 @@ class Profile(commands.Cog):
         #
         vault_query = {'OWNER' : str(ctx.author)}
         vault = db.altQueryVault(vault_query)
+        balance = vault['BALANCE']
+        icon = ":coin:"
+        if balance >= 150000:
+            icon = ":money_with_wings:"
+        elif balance >=100000:
+            icon = ":moneybag:"
+        elif balance >= 50000:
+            icon = ":dollar:"
         cards = []
         card_text_list = []
         for card in resp:
@@ -1091,7 +1136,7 @@ class Profile(commands.Cog):
                 arm_text_list.append(f"**{arm['ARM']}**: :coin:{arm['PRICE']} " + f"_{arm['UNIVERSE']}_")
         
         embedVar1 = discord.Embed(title=f"{shopName}", description=textwrap.dedent(f"""
-        **Balance:** :coin:{vault['BALANCE']}
+        **Balance:** {icon}{vault['BALANCE']}
         **.cards universe:** View Universe Card List
         **.viewcard card name:** View Cards
         **.buycard card name:** Buy Card

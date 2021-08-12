@@ -522,7 +522,7 @@ class Lookup(commands.Cog):
             :flower_playing_cards:**Card:** {card}
             :reminder_ribbon:**Title: **{titles}
             :mechanical_arm:**Arm: **{arm}
-            :dog:**Pet: **{pet}
+            :bird:**Pet: **{pet}
 
             :military_medal:{most_played_card_message}
             
@@ -590,6 +590,14 @@ class Lookup(commands.Cog):
             tournament_wins = team['TOURNAMENT_WINS']
             logo = team['LOGO_URL']
             balance = team['BANK']
+            icon = ":coin:"
+            if balance >= 150000:
+                icon = ":money_with_wings:"
+            elif balance >=100000:
+                icon = ":moneybag:"
+            elif balance >= 50000:
+                icon = ":dollar:"
+            
 
             team_list = []
             for members in team['MEMBERS']:
@@ -602,7 +610,7 @@ class Lookup(commands.Cog):
                     team_list.append(f"{members}")
 
 
-            embed1 = discord.Embed(title=f":checkered_flag: {team_name} Team Card - :coin:{'{:,}'.format(balance)}".format(self), description=":bank: Party Chat Gaming Database", colour=000000)
+            embed1 = discord.Embed(title=f":checkered_flag: {team_name} Team Card - {icon}{'{:,}'.format(balance)}".format(self), description=":bank: Party Chat Gaming Database", colour=000000)
             if team['LOGO_FLAG']:
                 embed1.set_image(url=logo)
             embed1.add_field(name="Owner :man_detective:", value= owner_name.split("#",1)[0], inline=False)
@@ -645,9 +653,16 @@ class Lookup(commands.Cog):
             kid_list = []
             for kids in family['KIDS']:
                 kid_list.append(kids.split("#",1)[0])
+            icon = ":coin:"
+            if savings >= 150000:
+                icon = ":money_with_wings:"
+            elif savings >=100000:
+                icon = ":moneybag:"
+            elif savings >= 50000:
+                icon = ":dollar:"
 
 
-            embed1 = discord.Embed(title=f":family_mwgb: {family_name} - :coin:{'{:,}'.format(savings)}".format(self), description=":bank: Party Chat Gaming Database", colour=000000)
+            embed1 = discord.Embed(title=f":family_mwgb: {family_name} - {icon}{'{:,}'.format(savings)}".format(self), description=":bank: Party Chat Gaming Database", colour=000000)
             # if team['LOGO_FLAG']:
             #     embed1.set_image(url=logo)
             embed1.add_field(name="Head Of Household :brain:", value= head_name.split("#",1)[0], inline=False)
