@@ -228,7 +228,7 @@ class Profile(commands.Cog):
             _**Moveset**_
             :boom: **{move1}:** {move1ap}
             :comet: **{move2}:** {move2ap}
-            :sparkles: **{move3}:** {move3ap}
+            :rosette: **{move3}:** {move3ap}
             :microbe: **{move4}:** {move4enh} by {move4ap}
             
             :drop_of_blood: _Passive:_ **{passive_name}:** {passive_type} by {passive_num}
@@ -238,7 +238,7 @@ class Profile(commands.Cog):
             , colour=000000)
             embedVar.set_thumbnail(url=active_pet['PATH'])
             embedVar.set_image(url=o_card_path)
-            embedVar.set_footer(text=f"EXP Until Next Level: {100 - card_exp}\nRebirth Buff: +{rebirthBonus}", icon_url="https://cdn.discordapp.com/emojis/841486485826961448.gif?v=1")
+            embedVar.set_footer(text=f"EXP Until Next Level: {150 - card_exp}\nRebirth Buff: +{rebirthBonus}", icon_url="https://cdn.discordapp.com/emojis/841486485826961448.gif?v=1")
 
             await ctx.send(embed=embedVar)
         else:

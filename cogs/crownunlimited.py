@@ -447,9 +447,9 @@ class CrownUnlimited(commands.Cog):
                 o_stamina = o_card_passive
                 t_stamina = o_card_passive
             elif o_card_passive_type == 'FEAR':
-                o_health = o_health - int((o_card_passive/100 * o_health))
-                t_attack = t_attack - int((o_card_passive/100 * t_attack))
-                t_defense = t_defense - int((o_card_passive/100 * t_defense))
+                o_health = o_health - int((o_card_passive/1000 * o_health))
+                t_attack = t_attack - int((o_card_passive/1000 * o_health))
+                t_defense = t_defense - int((o_card_passive/1000 * o_health))
             elif o_card_passive_type == 'GAMBLE':
                 o_health = o_card_passive
                 t_health = o_card_passive   
@@ -521,9 +521,9 @@ class CrownUnlimited(commands.Cog):
                     o_stamina = o_title_passive_value
                     t_stamina = o_title_passive_value
                 elif o_title_passive_type == 'FEAR':
-                    o_health = o_health - int((o_title_passive_value/100 * o_health))
-                    t_attack = t_attack - int((o_title_passive_value/100 * t_attack))
-                    t_defense = t_defense - int((o_title_passive_value/100 * t_defense))
+                    o_health = o_health - int((.25 * o_title_passive_value))
+                    t_attack = t_attack - int((.25 * o_title_passive_value))
+                    t_defense = t_defense - int((.25 * o_title_passive_value))
                 elif o_title_passive_type == 'GAMBLE':
                     t_health = o_title_passive_value
                     o_health = o_title_passive_value
@@ -593,9 +593,9 @@ class CrownUnlimited(commands.Cog):
                 o_stamina = oarm_passive_value
                 t_stamina = oarm_passive_value
             elif oarm_passive_type == 'FEAR':
-                o_health = o_health - int((oarm_passive_value/100 * o_health))
-                t_attack = t_attack - int((oarm_passive_value/100 * t_attack))
-                t_defense = t_defense - int((oarm_passive_value/100 * t_defense))
+                o_health = o_health - int((.25 * oarm_passive_value))
+                t_attack = t_attack - int((.25 * oarm_passive_value))
+                t_defense = t_defense - int((.25 * oarm_passive_value))
             elif oarm_passive_type == 'GAMBLE':
                 t_health = oarm_passive_value
                 o_health = oarm_passive_value
@@ -637,9 +637,9 @@ class CrownUnlimited(commands.Cog):
                 t_defense = t_defense + int(((tarm_passive_value/100) *t_health))
                 t_health = t_health - int((t_defense))
             elif tarm_passive_type == 'GROWTH':            
-                t_attack = t_attack + int((tarm_passive_value/100) * t_attack)
-                t_defense = t_defense + int((tarm_passive_value/100) * t_defense)
-                t_max_health = t_max_health - int((tarm_passive_value/100) * t_max_health)
+                t_attack = t_attack + int(((tarm_passive_value/100) * t_max_health) * .2)
+                t_defense = t_defense + int(((tarm_passive_value/100) * t_max_health) * .2)
+                t_max_health = t_max_health - int(((tarm_passive_value/100) * t_max_health) * .2)
             elif tarm_passive_type == 'STANCE':
                 tempattack = t_attack + tarm_passive_value
                 t_attack = t_defense  + tarm_passive_value         
@@ -665,9 +665,9 @@ class CrownUnlimited(commands.Cog):
                 t_stamina = tarm_passive_value
                 o_stamina = tarm_passive_value
             elif tarm_passive_type == 'FEAR':
-                o_attack = o_attack + int((tarm_passive_value/100) * o_attack)
-                o_defense = o_defense + int((tarm_passive_value/100) * o_defense)
-                t_max_health = t_max_health - int((tarm_passive_value/100) * t_max_health)
+                t_health = t_health - int((.25 * tarm_passive_value))
+                o_attack = o_attack - int((.25 * tarm_passive_value))
+                o_defense = o_defense - int((.25 * tarm_passive_value))
             elif tarm_passive_type == 'GAMBLE':
                 t_health = tarm_passive_value
                 o_health = tarm_passive_value
@@ -714,9 +714,10 @@ class CrownUnlimited(commands.Cog):
                 t_defense = t_defense + int(((t_card_passive/100) *t_health))
                 t_health = t_health - int((t_defense))
             elif t_card_passive_type == 'GROWTH':            
-                t_attack = t_attack + int((t_card_passive/100) * t_attack)
-                t_defense = t_defense + int((t_card_passive/100) * t_defense)
-                t_max_health = t_max_health - int((t_card_passive/100) * t_max_health)
+                t_attack =  t_attack + int(((t_card_passive/100) * t_max_health))
+                t_defense = t_defense + int(((t_card_passive/100) * t_max_health))
+                t_max_health = t_max_health - int(((t_card_passive/100) * t_max_health))
+                t_health = t_health - int(((t_card_passive/100) * t_max_health))
             elif t_card_passive_type == 'STANCE':
                 tempattack = t_attack + t_card_passive
                 t_attack = t_defense + t_card_passive            
@@ -742,9 +743,9 @@ class CrownUnlimited(commands.Cog):
                 t_stamina = t_card_passive
                 o_stamina = t_card_passive
             elif t_card_passive_type == 'FEAR':
-                o_attack = o_attack + int((t_card_passive/100) * o_attack)
-                o_defense = o_defense + int((t_card_passive/100) * o_defense)
-                t_max_health = t_max_health - int((t_card_passive/100) * t_max_health)
+                t_health = t_health - int((t_card_passive/1000 * t_health))
+                o_attack = o_attack - int((t_card_passive/1000 * t_health))
+                o_defense = o_defense - int((t_card_passive/1000 * t_health))
             elif t_card_passive_type == 'GAMBLE':
                 t_health = t_card_passive 
                 o_health = t_card_passive
@@ -787,9 +788,9 @@ class CrownUnlimited(commands.Cog):
                     t_defense = t_defense + int(((t_title_passive_value/100) *t_health))
                     t_health = t_health - int((t_defense))
                 elif t_title_passive_type == 'GROWTH':            
-                    t_attack = t_attack + int((t_title_passive_value/100) * t_attack)
-                    t_defense = t_defense + int((t_title_passive_value/100) * t_defense)
-                    t_max_health = t_max_health - int((t_title_passive_value/100) * t_max_health)
+                    t_attack = t_attack + int(((t_title_passive_value/100) * t_max_health) * .2)
+                    t_defense = t_defense + int(((t_title_passive_value/100) * t_max_health) * .2)
+                    t_max_health = t_max_health - int(((t_title_passive_value/100) * t_max_health) * .2)
                 elif t_title_passive_type == 'STANCE':
                     tempattack = t_attack + t_title_passive_value
                     t_attack = t_defense  + t_title_passive_value          
@@ -815,9 +816,9 @@ class CrownUnlimited(commands.Cog):
                     t_stamina = t_title_passive_value
                     o_stamina = t_title_passive_value
                 elif t_title_passive_type == 'FEAR':
-                    o_attack = o_attack + int((t_title_passive_value/100) * o_attack)
-                    o_defense = o_defense + int((t_title_passive_value/100) * o_defense)
-                    t_max_health = t_max_health - int((t_title_passive_value/100) * t_max_health)
+                    t_health = t_health - int((.25 * t_title_passive_value))
+                    o_attack = o_attack - int((.25 * t_title_passive_value))
+                    o_defense = o_defense - int((.25 * t_title_passive_value))
                 elif t_title_passive_type == 'GAMBLE':
                     t_health = t_title_passive_value
                     o_health = t_title_passive_value
@@ -1353,7 +1354,7 @@ class CrownUnlimited(commands.Cog):
                                         o_defense = round(o_defense + (.75 * dmg['DMG']))
                                     elif opet_type == 'GROWTH':
                                         o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
-                                        o_defense = round(o_defense + (o_defense * dmg['DMG']))
+                                        o_defense = round(o_defense + (o_defense* dmg['DMG']))
                                         o_attack = round(o_attack + (o_attack * dmg['DMG']))
                                     elif opet_type == 'STANCE':
                                         tempattack = dmg['DMG']
@@ -1990,9 +1991,9 @@ class CrownUnlimited(commands.Cog):
                                         t_health = round(t_health - dmg['DMG'])
                                         t_defense = round(t_defense + (.75 * dmg['DMG']))
                                     elif enh_type == 'GROWTH':
-                                        t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                        t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                        t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                        t_max_health = round(t_max_health - dmg['DMG'])
+                                        t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                        t_attack = round(t_attack+ (.3 * dmg['DMG']))
                                     elif enh_type == 'STANCE':
                                         tempattack = dmg['DMG']
                                         t_attack = t_defense
@@ -2645,8 +2646,8 @@ class CrownUnlimited(commands.Cog):
                 c_defense = c_defense + int(((c_card_passive/100) *c_health))
                 c_health = c_health - int((c_defense))
             elif c_card_passive_type == 'GROWTH':            
-                c_attack = c_attack + int(((c_card_passive/100) * c_attack))
-                c_defense = c_defense + int(((c_card_passive/100) * c_defense))
+                c_attack = c_attack + int(((c_card_passive/100) * c_max_health))
+                c_defense = c_defense + int(((c_card_passive/100) * c_max_health))
                 c_max_health = c_max_health - int(((c_card_passive/100) * c_max_health))
                 c_health = c_health - int(((c_card_passive/100) * c_max_health))
             elif c_card_passive_type == 'STANCE':
@@ -2674,9 +2675,9 @@ class CrownUnlimited(commands.Cog):
                 c_stamina = c_card_passive
                 t_stamina = c_card_passive
             elif c_card_passive_type == 'FEAR':
-                c_health = c_health - int((c_card_passive/100 * c_health))
-                t_attack = t_attack - int((c_card_passive/100 * t_attack))
-                t_defense = t_defense - int((c_card_passive/100 * t_defense))
+                c_health = c_health - int((c_card_passive/1000 * c_health))
+                t_attack = t_attack - int((c_card_passive/1000 * c_health))
+                t_defense = t_defense - int((c_card_passive/1000 * c_health))
             elif c_card_passive_type == 'GAMBLE':
                 c_health = c_card_passive
                 t_health = c_card_passive
@@ -2720,9 +2721,9 @@ class CrownUnlimited(commands.Cog):
                     c_defense = c_defense + int(((c_title_passive_value/100) *c_health))
                     c_health = c_health - int((c_defense))
                 elif c_title_passive_type == 'GROWTH':            
-                    c_attack = c_attack + int(((c_title_passive_value/100) * c_attack))
-                    c_defense = c_defense + int(((c_title_passive_value/100) * c_defense))
-                    c_max_health = c_max_health - int(((c_title_passive_value/100) * c_max_health))
+                    c_attack = c_attack + int(((c_title_passive_value/100) * c_max_health) * .2)
+                    c_defense = c_defense + int(((c_title_passive_value/100) * c_max_health) * .2)
+                    c_max_health = c_max_health - int(((c_title_passive_value/100) * c_max_health) * .2)
                 elif c_title_passive_type == 'STANCE':
                     tempattack = c_attack
                     c_attack = c_defense            
@@ -2748,9 +2749,9 @@ class CrownUnlimited(commands.Cog):
                     c_stamina = c_title_passive_value
                     t_stamina = c_title_passive_value
                 elif c_title_passive_type == 'FEAR':
-                    c_health = c_health - int((c_title_passive_value/100 * c_health))
-                    t_attack = t_attack - int((c_title_passive_value/100 * t_attack))
-                    t_defense = t_defense - int((c_title_passive_value/100 * t_defense))
+                    c_health = c_health - int((.25 * c_title_passive_value))
+                    t_attack = t_attack - int((.25 * c_title_passive_value))
+                    t_defense = t_defense - int((.25 * c_title_passive_value))
                 elif c_title_passive_type == 'GAMBLE':
                     t_health = c_title_passive_value
                     c_health = c_title_passive_value
@@ -2793,9 +2794,9 @@ class CrownUnlimited(commands.Cog):
                 c_defense = c_defense + int(((carm_passive_value/100) *c_health))
                 c_health = c_health - int((c_defense))
             elif carm_passive_type == 'GROWTH':            
-                c_attack = c_attack + int(((carm_passive_value/100) * c_attack))
-                c_defense = c_defense + int(((carm_passive_value/100) * c_defense))
-                c_max_health = c_max_health - int(((carm_passive_value/100) * c_max_health))
+                c_attack = c_attack + int(((carm_passive_value/100) * c_max_health) * .2)
+                c_defense = c_defense + int(((carm_passive_value/100) * c_max_health) * .2)
+                c_max_health = c_max_health - int(((carm_passive_value/100) * c_max_health) * .2)
             elif carm_passive_type == 'STANCE':
                 tempattack = c_attack + carm_passive_value
                 c_attack = c_defense  + carm_passive_value         
@@ -2821,9 +2822,9 @@ class CrownUnlimited(commands.Cog):
                 c_stamina = carm_passive_value
                 t_stamina = carm_passive_value
             elif carm_passive_type == 'FEAR':
-                c_health = c_health - int((c_card_passive/100 * c_health))
-                t_attack = t_attack - int((c_card_passive/100 * t_attack))
-                t_defense = t_defense - int((c_card_passive/100 * t_defense))
+                c_health = c_health - int((.25 * carm_passive_value))
+                t_attack = t_attack - int((.25 * carm_passive_value))
+                t_defense = t_defense - int((.25 * carm_passive_value))
             elif carm_passive_type == 'GAMBLE':
                 t_health = carm_passive_value
                 c_health = carm_passive_value
@@ -2932,9 +2933,9 @@ class CrownUnlimited(commands.Cog):
                 o_stamina = o_card_passive
                 t_stamina = o_card_passive
             elif o_card_passive_type == 'FEAR':
-                o_health = o_health - int((o_card_passive/100 * o_health))
-                t_attack = t_attack - int((o_card_passive/100 * t_attack))
-                t_defense = t_defense - int((o_card_passive/100 * t_defense))
+                o_health = o_health - int((o_card_passive/1000 * o_health))
+                t_attack = t_attack - int((o_card_passive/1000 * o_health))
+                t_defense = t_defense - int((o_card_passive/1000 * o_health))
             elif o_card_passive_type == 'GAMBLE':
                 o_health = o_card_passive
                 t_health = o_card_passive   
@@ -3006,9 +3007,9 @@ class CrownUnlimited(commands.Cog):
                     o_stamina = o_title_passive_value
                     t_stamina = o_title_passive_value
                 elif o_title_passive_type == 'FEAR':
-                    o_health = o_health - int((o_title_passive_value/100 * o_health))
-                    t_attack = t_attack - int((o_title_passive_value/100 * t_attack))
-                    t_defense = t_defense - int((o_title_passive_value/100 * t_defense))
+                    o_health = o_health - int((.25 * o_title_passive_value))
+                    t_attack = t_attack - int((.25 * o_title_passive_value))
+                    t_defense = t_defense - int((.25 * o_title_passive_value))
                 elif o_title_passive_type == 'GAMBLE':
                     t_health = o_title_passive_value
                     o_health = o_title_passive_value
@@ -3079,9 +3080,9 @@ class CrownUnlimited(commands.Cog):
                 o_stamina = oarm_passive_value
                 t_stamina = oarm_passive_value
             elif oarm_passive_type == 'FEAR':
-                o_health = o_health - int((oarm_passive_value/100 * o_health))
-                t_attack = t_attack - int((oarm_passive_value/100 * t_attack))
-                t_defense = t_defense - int((oarm_passive_value/100 * t_defense))
+                o_health = o_health - int((.25 * oarm_passive_value))
+                t_attack = t_attack - int((.25 * oarm_passive_value))
+                t_defense = t_defense - int((.25 * oarm_passive_value))
             elif oarm_passive_type == 'GAMBLE':
                 t_health = oarm_passive_value
                 o_health = oarm_passive_value
@@ -3131,9 +3132,9 @@ class CrownUnlimited(commands.Cog):
                 t_defense = t_defense + int(((tarm_passive_value/100) *t_health))
                 t_health = t_health - int((t_defense))
             elif tarm_passive_type == 'GROWTH':            
-                t_attack = t_attack + int((tarm_passive_value/100) * t_attack)
-                t_defense = t_defense + int((tarm_passive_value/100) * t_defense)
-                t_max_health = t_max_health - int((tarm_passive_value/100) * t_max_health)
+                t_attack = t_attack + int(((tarm_passive_value/100) * t_max_health) * .2)
+                t_defense = t_defense + int(((tarm_passive_value/100) * t_max_health) * .2)
+                t_max_health = t_max_health - int(((tarm_passive_value/100) * t_max_health) * .2)
             elif tarm_passive_type == 'STANCE':
                 tempattack = t_attack + tarm_passive_value
                 t_attack = t_defense  + tarm_passive_value         
@@ -3164,11 +3165,11 @@ class CrownUnlimited(commands.Cog):
                 o_stamina = tarm_passive_value
                 c_stamina = tarm_passive_value
             elif tarm_passive_type == 'FEAR':
-                o_attack = o_attack + int((tarm_passive_value/100) * o_attack)
-                o_defense = o_defense + int((tarm_passive_value/100) * o_defense)
-                c_attack = c_attack + int((tarm_passive_value/100) * c_attack)
-                c_defense = c_defense + int((tarm_passive_value/100) * c_defense)
-                t_max_health = t_max_health - int((tarm_passive_value/100) * t_max_health)
+                t_health = t_health - int((.25 * tarm_passive_value))
+                o_attack = o_attack - int((.25 * tarm_passive_value))
+                o_defense = o_defense - int((.25 * tarm_passive_value))
+                c_attack = c_attack - int((.25 * tarm_passive_value))
+                c_defense = c_defense - int((.25 * tarm_passive_value))
             elif tarm_passive_type == 'GAMBLE':
                 t_health = tarm_passive_value
                 o_health = tarm_passive_value
@@ -3219,9 +3220,10 @@ class CrownUnlimited(commands.Cog):
                 t_defense = t_defense + int(((t_card_passive/100) * t_health))
                 t_health = t_health - int((t_defense))
             elif t_card_passive_type == 'GROWTH':            
-                t_attack = t_attack + int((t_card_passive/100) * t_attack)
-                t_defense = t_defense + int((t_card_passive/100) * t_defense)
-                t_max_health = t_max_health - int((t_card_passive/100) * t_max_health)
+                t_attack =  t_attack + int(((t_card_passive/100) * t_max_health))
+                t_defense = t_defense + int(((t_card_passive/100) * t_max_health))
+                t_max_health = t_max_health - int(((t_card_passive/100) * t_max_health))
+                t_health = t_health - int(((t_card_passive/100) * t_max_health))
             elif t_card_passive_type == 'STANCE':
                 tempattack = t_attack + t_card_passive
                 t_attack = t_defense + t_card_passive            
@@ -3248,11 +3250,11 @@ class CrownUnlimited(commands.Cog):
                 o_stamina = t_card_passive
                 c_stamina = t_card_passive
             elif t_card_passive_type == 'FEAR':
-                o_attack = o_attack + int((t_card_passive/100) * o_attack)
-                o_defense = o_defense + int((t_card_passive/100) * o_defense)
-                c_attack = c_attack + int((t_card_passive/100) * c_attack)
-                c_defense = c_defense + int((t_card_passive/100) * c_defense)
-                t_max_health = t_max_health - int((t_card_passive/100) * t_max_health)
+                t_health = t_health - int((t_card_passive/1000 * t_health))
+                o_attack = o_attack - int((t_card_passive/1000 * t_health))
+                o_defense = o_defense - int((t_card_passive/1000 * t_health))
+                c_attack = c_attack - int((t_card_passive/1000 * t_health))
+                c_defense = c_defense - int((t_card_passive/1000 * t_health))
             elif t_card_passive_type == 'GAMBLE':
                 t_health = t_card_passive
                 o_health = t_card_passive
@@ -3299,9 +3301,9 @@ class CrownUnlimited(commands.Cog):
                     t_defense = t_defense + int(((t_title_passive_value/100) *t_health))
                     t_health = t_health - int((t_defense))
                 elif t_title_passive_type == 'GROWTH':            
-                    t_attack = t_attack + int((t_title_passive_value/100) * t_attack)
-                    t_defense = t_defense + int((t_title_passive_value/100) * t_defense)
-                    t_max_health = t_max_health - int((t_title_passive_value/100) * t_max_health)
+                    t_attack = t_attack + int(((t_title_passive_value/100) * t_max_health) * .2)
+                    t_defense = t_defense + int(((t_title_passive_value/100) * t_max_health) * .2)
+                    t_max_health = t_max_health - int(((t_title_passive_value/100) * t_max_health) * .2)
                 elif t_title_passive_type == 'STANCE':
                     tempattack = t_attack + t_title_passive_value
                     t_attack = t_defense  + t_title_passive_value          
@@ -3333,11 +3335,11 @@ class CrownUnlimited(commands.Cog):
                     o_stamina = t_title_passive_value
                     c_stamina = t_title_passive_value
                 elif t_title_passive_type == 'FEAR':
-                    o_attack = o_attack + int((t_title_passive_value/100) * o_attack)
-                    o_defense = o_defense + int((t_title_passive_value/100) * o_defense)
-                    c_attack = c_attack + int((t_title_passive_value/100) * c_attack)
-                    c_defense = c_defense + int((t_title_passive_value/100) * c_defense)
-                    t_max_health = t_max_health - int((t_title_passive_value/100) * t_max_health)
+                    t_health = t_health - int((.25 * t_title_passive_value))
+                    o_attack = o_attack - int((.25 * t_title_passive_value))
+                    o_defense = o_defense - int((.25 * t_title_passive_value))
+                    c_attack = c_attack - int((.25 * t_title_passive_value))
+                    c_defense = c_defense - int((.25 * t_title_passive_value))
                 elif t_title_passive_type == 'GAMBLE':
                     t_health = t_title_passive_value
                     o_health = t_title_passive_value
@@ -3560,7 +3562,7 @@ class CrownUnlimited(commands.Cog):
                         **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                         :cyclone: 10 | **:boom: {omove1_text}** | _1_
                         :cyclone: 30 | **:comet: {omove2_text}** | _2_
-                        :cyclone: 80 | **:sparkles: {omove3_text}** | _3_
+                        :cyclone: 80 | **:rosette: {omove3_text}** | _3_
                         :cyclone: 20 | **:microbe: {omove_enhanced_text}** | _4_
                         :cyclone: 20 | **Defend Companion** | _0_
                         
@@ -3911,9 +3913,9 @@ class CrownUnlimited(commands.Cog):
                                         c_health = round(c_health - dmg['DMG'])
                                         c_defense = round(c_defense +(.75 * dmg['DMG']))
                                     elif comp_enh == 'GROWTH':
-                                        c_max_health = round(c_max_health - (c_max_health * dmg['DMG']))
-                                        c_defense = round(c_defense + (c_defense * dmg['DMG']))
-                                        c_attack = round(c_attack + (c_attack * dmg['DMG']))
+                                        c_max_health = round(c_max_health - dmg['DMG'])
+                                        c_defense = round(c_defense + (.3 * dmg['DMG']))
+                                        c_attack = round(c_attack + (.3 * dmg['DMG']))
                                     elif comp_enh == 'STANCE':
                                         tempattack = dmg['DMG']
                                         c_attack = c_defense
@@ -4005,9 +4007,9 @@ class CrownUnlimited(commands.Cog):
                                         o_health = round(o_health - dmg['DMG'])
                                         o_defense = round(o_defense +(.75 * dmg['DMG']))
                                     elif cenh_type == 'GROWTH':
-                                        o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
-                                        o_defense = round(o_defense + (o_defense* dmg['DMG']))
-                                        o_attack = round(o_attack + (o_attack * dmg['DMG']))
+                                        o_max_health = round(o_max_health - dmg['DMG'])
+                                        o_defense = round(o_defense + (.3 * dmg['DMG']))
+                                        o_attack = round(o_attack + (.3 * dmg['DMG']))
                                     elif cenh_type == 'STANCE':
                                         tempattack = dmg['DMG']
                                         o_attack = o_defense
@@ -4669,9 +4671,9 @@ class CrownUnlimited(commands.Cog):
                                             t_health = round(t_health - dmg['DMG'])
                                             t_defense = round(t_defense + (.75 * dmg['DMG']))
                                         elif enh_type == 'GROWTH':
-                                            t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                            t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                            t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                            t_attack = round(t_attack+ (.3 * dmg['DMG']))
                                         elif enh_type == 'STANCE':
                                             tempattack = dmg['DMG']
                                             t_attack = t_defense
@@ -4794,9 +4796,9 @@ class CrownUnlimited(commands.Cog):
                                             t_health = round(t_health - dmg['DMG'])
                                             t_defense = round(t_defense + (.75 * dmg['DMG']))
                                         elif enh_type == 'GROWTH':
-                                            t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                            t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                            t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                            t_attack = round(t_attack+ (.3 * dmg['DMG']))
                                         elif enh_type == 'STANCE':
                                             tempattack = dmg['DMG']
                                             t_attack = t_defense
@@ -5428,9 +5430,9 @@ class CrownUnlimited(commands.Cog):
                                         c_health = round(c_health - dmg['DMG'])
                                         c_defense = round(c_defense +(.75 * dmg['DMG']))
                                     elif cpet_type == 'GROWTH':
-                                        c_max_health = round(c_max_health - (c_max_health * dmg['DMG']))
-                                        c_defense = round(c_defense + (c_defense * dmg['DMG']))
-                                        c_attack = round(c_attack + (c_attack * dmg['DMG']))
+                                        c_max_health = round(c_max_health - dmg['DMG'])
+                                        c_defense = round(c_defense + (.3 * dmg['DMG']))
+                                        c_attack = round(c_attack + (.3 * dmg['DMG']))
                                     elif cpet_type == 'STANCE':
                                         tempattack = dmg['DMG']
                                         c_attack = c_defense
@@ -5526,9 +5528,9 @@ class CrownUnlimited(commands.Cog):
                                     o_health = round(o_health - dmg['DMG'])
                                     o_defense = round(o_defense +(.75 * dmg['DMG']))
                                 elif cenh_type == 'GROWTH':
-                                    o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
-                                    o_defense = round(o_defense + (o_defense* dmg['DMG']))
-                                    o_attack = round(o_attack + (o_attack * dmg['DMG']))
+                                    o_max_health = round(o_max_health - dmg['DMG'])
+                                    o_defense = round(o_defense + (.3 * dmg['DMG']))
+                                    o_attack = round(o_attack + (.3 * dmg['DMG']))
                                 elif cenh_type == 'STANCE':
                                     tempattack = dmg['DMG']
                                     o_attack = o_defense
@@ -5631,9 +5633,9 @@ class CrownUnlimited(commands.Cog):
                                         c_health = round(c_health - dmg['DMG'])
                                         c_defense = round(c_defense +(.75 * dmg['DMG']))
                                     elif enh_type == 'GROWTH':
-                                        c_max_health = round(c_max_health - (c_max_health * dmg['DMG']))
-                                        c_defense = round(c_defense + (c_defense * dmg['DMG']))
-                                        c_attack = round(c_attack + (c_attack * dmg['DMG']))
+                                        c_max_health = round(c_max_health - dmg['DMG'])
+                                        c_defense = round(c_defense + (.3 * dmg['DMG']))
+                                        c_attack = round(c_attack + (.3 * dmg['DMG']))
                                     elif enh_type == 'STANCE':
                                         tempattack = dmg['DMG']
                                         c_attack = c_defense
@@ -6168,9 +6170,9 @@ class CrownUnlimited(commands.Cog):
                                             t_health = round(t_health - dmg['DMG'])
                                             t_defense = round(t_defense + (.75 * dmg['DMG']))
                                         elif enh_type == 'GROWTH':
-                                            t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                            t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                            t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                            t_attack = round(t_attack+ (.3 * dmg['DMG']))
                                         elif enh_type == 'STANCE':
                                             tempattack = dmg['DMG']
                                             t_attack = t_defense
@@ -6294,9 +6296,9 @@ class CrownUnlimited(commands.Cog):
                                             t_health = round(t_health - dmg['DMG'])
                                             t_defense = round(t_defense + (.75 * dmg['DMG']))
                                         elif enh_type == 'GROWTH':
-                                            t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                            t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                            t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                            t_attack = round(t_attack+ (.3 * dmg['DMG']))
                                         elif enh_type == 'STANCE':
                                             tempattack = dmg['DMG']
                                             t_attack = t_defense
@@ -6985,8 +6987,8 @@ class CrownUnlimited(commands.Cog):
                 c_defense = c_defense + int(((c_card_passive/100) *c_health))
                 c_health = c_health - int((c_defense))
             elif c_card_passive_type == 'GROWTH':            
-                c_attack = c_attack + int(((c_card_passive/100) * c_attack))
-                c_defense = c_defense + int(((c_card_passive/100) * c_defense))
+                c_attack = c_attack + int(((c_card_passive/100) * c_max_health))
+                c_defense = c_defense + int(((c_card_passive/100) * c_max_health))
                 c_max_health = c_max_health - int(((c_card_passive/100) * c_max_health))
                 c_health = c_health - int(((c_card_passive/100) * c_max_health))
             elif c_card_passive_type == 'STANCE':
@@ -7014,9 +7016,9 @@ class CrownUnlimited(commands.Cog):
                 c_stamina = c_card_passive
                 t_stamina = c_card_passive
             elif c_card_passive_type == 'FEAR':
-                c_health = c_health - int((c_card_passive/100 * c_health))
-                t_attack = t_attack - int((c_card_passive/100 * t_attack))
-                t_defense = t_defense - int((c_card_passive/100 * t_defense))
+                c_health = c_health - int((c_card_passive/1000 * c_health))
+                t_attack = t_attack - int((c_card_passive/1000 * c_health))
+                t_defense = t_defense - int((c_card_passive/1000 * c_health))
             elif c_card_passive_type == 'GAMBLE':
                 c_health = c_card_passive
                 t_health = c_card_passive * 2
@@ -7060,9 +7062,9 @@ class CrownUnlimited(commands.Cog):
                     c_defense = c_defense + int(((c_title_passive_value/100) *c_health))
                     c_health = c_health - int((c_defense))
                 elif c_title_passive_type == 'GROWTH':            
-                    c_attack = c_attack + int(((c_title_passive_value/100) * c_attack))
-                    c_defense = c_defense + int(((c_title_passive_value/100) * c_defense))
-                    c_max_health = c_max_health - int(((c_title_passive_value/100) * c_max_health))
+                    c_attack = c_attack + int(((c_title_passive_value/100) * c_max_health) * .2)
+                    c_defense = c_defense + int(((c_title_passive_value/100) * c_max_health) * .2)
+                    c_max_health = c_max_health - int(((c_title_passive_value/100) * c_max_health) * .2)
                 elif c_title_passive_type == 'STANCE':
                     tempattack = c_attack
                     c_attack = c_defense            
@@ -7088,9 +7090,9 @@ class CrownUnlimited(commands.Cog):
                     c_stamina = c_title_passive_value
                     t_stamina = c_title_passive_value
                 elif c_title_passive_type == 'FEAR':
-                    c_health = c_health - int((c_title_passive_value/100 * c_health))
-                    t_attack = t_attack - int((c_title_passive_value/100 * t_attack))
-                    t_defense = t_defense - int((c_title_passive_value/100 * t_defense))
+                    c_health = c_health - int((.25 * c_title_passive_value))
+                    t_attack = t_attack - int((.25 * c_title_passive_value))
+                    t_defense = t_defense - int((.25 * c_title_passive_value))
                 elif c_title_passive_type == 'GAMBLE':
                     t_health = c_title_passive_value * 2
                     c_health = c_title_passive_value
@@ -7133,9 +7135,9 @@ class CrownUnlimited(commands.Cog):
                 c_defense = c_defense + int(((carm_passive_value/100) *c_health))
                 c_health = c_health - int((c_defense))
             elif carm_passive_type == 'GROWTH':            
-                c_attack = c_attack + int(((carm_passive_value/100) * c_attack))
-                c_defense = c_defense + int(((carm_passive_value/100) * c_defense))
-                c_max_health = c_max_health - int(((carm_passive_value/100) * c_max_health))
+                c_attack = c_attack + int(((carm_passive_value/100) * c_max_health) * .2)
+                c_defense = c_defense + int(((carm_passive_value/100) * c_max_health) * .2)
+                c_max_health = c_max_health - int(((carm_passive_value/100) * c_max_health) * .2)
             elif carm_passive_type == 'STANCE':
                 tempattack = c_attack + carm_passive_value
                 c_attack = c_defense  + carm_passive_value         
@@ -7161,9 +7163,9 @@ class CrownUnlimited(commands.Cog):
                 c_stamina = carm_passive_value
                 t_stamina = carm_passive_value
             elif carm_passive_type == 'FEAR':
-                c_health = c_health - int((c_card_passive/100 * c_health))
-                t_attack = t_attack - int((c_card_passive/100 * t_attack))
-                t_defense = t_defense - int((c_card_passive/100 * t_defense))
+                c_health = c_health - int((.25 * carm_passive_value))
+                t_attack = t_attack - int((.25 * carm_passive_value))
+                t_defense = t_defense - int((.25 * carm_passive_value))
             elif carm_passive_type == 'GAMBLE':
                 t_health = carm_passive_value * 2
                 c_health = carm_passive_value
@@ -7272,9 +7274,9 @@ class CrownUnlimited(commands.Cog):
                 o_stamina = o_card_passive
                 t_stamina = o_card_passive
             elif o_card_passive_type == 'FEAR':
-                o_health = o_health - int((o_card_passive/100 * o_health))
-                t_attack = t_attack - int((o_card_passive/100 * t_attack))
-                t_defense = t_defense - int((o_card_passive/100 * t_defense))
+                o_health = o_health - int((o_card_passive/1000 * o_health))
+                t_attack = t_attack - int((o_card_passive/1000 * o_health))
+                t_defense = t_defense - int((o_card_passive/1000 * o_health))
             elif o_card_passive_type == 'GAMBLE':
                 o_health = o_card_passive
                 t_health = o_card_passive * 2  
@@ -7346,9 +7348,9 @@ class CrownUnlimited(commands.Cog):
                     o_stamina = o_title_passive_value
                     t_stamina = o_title_passive_value
                 elif o_title_passive_type == 'FEAR':
-                    o_health = o_health - int((o_title_passive_value/100 * o_health))
-                    t_attack = t_attack - int((o_title_passive_value/100 * t_attack))
-                    t_defense = t_defense - int((o_title_passive_value/100 * t_defense))
+                    o_health = o_health - int((.25 * o_title_passive_value))
+                    t_attack = t_attack - int((.25 * o_title_passive_value))
+                    t_defense = t_defense - int((.25 * o_title_passive_value))
                 elif o_title_passive_type == 'GAMBLE':
                     t_health = o_title_passive_value * 2
                     o_health = o_title_passive_value
@@ -7419,9 +7421,9 @@ class CrownUnlimited(commands.Cog):
                 o_stamina = oarm_passive_value
                 t_stamina = oarm_passive_value
             elif oarm_passive_type == 'FEAR':
-                o_health = o_health - int((oarm_passive_value/100 * o_health))
-                t_attack = t_attack - int((oarm_passive_value/100 * t_attack))
-                t_defense = t_defense - int((oarm_passive_value/100 * t_defense))
+                o_health = o_health - int((.25 * oarm_passive_value))
+                t_attack = t_attack - int((.25 * oarm_passive_value))
+                t_defense = t_defense - int((.25 * oarm_passive_value))
             elif oarm_passive_type == 'GAMBLE':
                 t_health = oarm_passive_value * 2
                 o_health = oarm_passive_value
@@ -7465,15 +7467,15 @@ class CrownUnlimited(commands.Cog):
                 t_defense = t_defense + int(((tarm_passive_value/100) *t_attack))
                 t_attack = t_attack - int(((tarm_passive_value/100) * t_defense))
             elif tarm_passive_type == 'BZRK':            
-                t_attack = t_attack + int(((tarm_passive_value/100)* t_health))
-                t_health = t_health - int((t_attack))
+                t_attack = t_attack + int((.25*tarm_passive_value))
+                t_health = t_health - int((tarm_passive_value))
             elif tarm_passive_type == 'CRYSTAL':            
-                t_defense = t_defense + int(((tarm_passive_value/100) *t_health))
-                t_health = t_health - int((t_defense))
+                t_defense = t_defense + int((.25*tarm_passive_value))
+                t_health = t_health - int((tarm_passive_value))
             elif tarm_passive_type == 'GROWTH':            
-                t_attack = t_attack + int((tarm_passive_value/100) * t_attack)
-                t_defense = t_defense + int((tarm_passive_value/100) * t_defense)
-                t_max_health = t_max_health - int((tarm_passive_value/100) * t_max_health)
+                t_attack = t_attack + int(((tarm_passive_value/100) * t_max_health) * .2)
+                t_defense = t_defense + int(((tarm_passive_value/100) * t_max_health) * .2)
+                t_max_health = t_max_health - int(((tarm_passive_value/100) * t_max_health) * .2)
             elif tarm_passive_type == 'STANCE':
                 tempattack = t_attack + tarm_passive_value
                 t_attack = t_defense  + tarm_passive_value         
@@ -7504,11 +7506,11 @@ class CrownUnlimited(commands.Cog):
                 o_stamina = tarm_passive_value
                 c_stamina = tarm_passive_value
             elif tarm_passive_type == 'FEAR':
-                o_attack = o_attack + int((tarm_passive_value/100) * o_attack)
-                o_defense = o_defense + int((tarm_passive_value/100) * o_defense)
-                c_attack = c_attack + int((tarm_passive_value/100) * c_attack)
-                c_defense = c_defense + int((tarm_passive_value/100) * c_defense)
-                t_max_health = t_max_health - int((tarm_passive_value/100) * t_max_health)
+                t_health = t_health - int((.25 * tarm_passive_value))
+                o_attack = o_attack - int((.25 * tarm_passive_value))
+                o_defense = o_defense - int((.25 * tarm_passive_value))
+                c_attack = c_attack - int((.25 * tarm_passive_value))
+                c_defense = c_defense - int((.25 * tarm_passive_value))
             elif tarm_passive_type == 'GAMBLE':
                 t_health = tarm_passive_value * 2
                 o_health = tarm_passive_value
@@ -7559,9 +7561,10 @@ class CrownUnlimited(commands.Cog):
                 t_defense = t_defense + int(((t_card_passive/100) *t_health))
                 t_health = t_health - int((t_defense))
             elif t_card_passive_type == 'GROWTH':            
-                t_attack = t_attack + int((t_card_passive/100) * t_attack)
-                t_defense = t_defense + int((t_card_passive/100) * t_defense)
-                t_max_health = t_max_health - int((t_card_passive/100) * t_max_health)
+                t_attack =  t_attack + int(((t_card_passive/100) * t_max_health))
+                t_defense = t_defense + int(((t_card_passive/100) * t_max_health))
+                t_max_health = t_max_health - int(((t_card_passive/100) * t_max_health))
+                t_health = t_health - int(((t_card_passive/100) * t_max_health))
             elif t_card_passive_type == 'STANCE':
                 tempattack = t_attack + t_card_passive
                 t_attack = t_defense + t_card_passive            
@@ -7588,11 +7591,11 @@ class CrownUnlimited(commands.Cog):
                 o_stamina = t_card_passive
                 c_stamina = t_card_passive
             elif t_card_passive_type == 'FEAR':
-                o_attack = o_attack + int((t_card_passive/100) * o_attack)
-                o_defense = o_defense + int((t_card_passive/100) * o_defense)
-                c_attack = c_attack + int((t_card_passive/100) * c_attack)
-                c_defense = c_defense + int((t_card_passive/100) * c_defense)
-                t_max_health = t_max_health - int((t_card_passive/100) * t_max_health)
+                t_health = t_health - int((t_card_passive/1000 * t_health))
+                o_attack = o_attack - int((t_card_passive/1000 * t_health))
+                o_defense = o_defense - int((t_card_passive/1000 * t_health))
+                c_attack = o_attack - int((t_card_passive/1000 * t_health))
+                c_defense = o_defense - int((t_card_passive/1000 * t_health))
             elif t_card_passive_type == 'GAMBLE':
                 t_health = t_card_passive * 2
                 o_health = t_card_passive
@@ -7639,9 +7642,9 @@ class CrownUnlimited(commands.Cog):
                     t_defense = t_defense + int(((t_title_passive_value/100) *t_health))
                     t_health = t_health - int((t_defense))
                 elif t_title_passive_type == 'GROWTH':            
-                    t_attack = t_attack + int((t_title_passive_value/100) * t_attack)
-                    t_defense = t_defense + int((t_title_passive_value/100) * t_defense)
-                    t_max_health = t_max_health - int((t_title_passive_value/100) * t_max_health)
+                    t_attack = t_attack + int(((t_title_passive_value/100) * t_max_health) * .2)
+                    t_defense = t_defense + int(((t_title_passive_value/100) * t_max_health) * .2)
+                    t_max_health = t_max_health - int(((t_title_passive_value/100) * t_max_health) * .2)
                 elif t_title_passive_type == 'STANCE':
                     tempattack = t_attack + t_title_passive_value
                     t_attack = t_defense  + t_title_passive_value          
@@ -7673,11 +7676,11 @@ class CrownUnlimited(commands.Cog):
                     o_stamina = t_title_passive_value
                     c_stamina = t_title_passive_value
                 elif t_title_passive_type == 'FEAR':
-                    o_attack = o_attack + int((t_title_passive_value/100) * o_attack)
-                    o_defense = o_defense + int((t_title_passive_value/100) * o_defense)
-                    c_attack = c_attack + int((t_title_passive_value/100) * c_attack)
-                    c_defense = c_defense + int((t_title_passive_value/100) * c_defense)
-                    t_max_health = t_max_health - int((t_title_passive_value/100) * t_max_health)
+                    t_health = t_health - int((.25 * t_title_passive_value))
+                    o_attack = o_attack - int((.25 * t_title_passive_value))
+                    o_defense = o_defense - int((.25 * t_title_passive_value))
+                    c_attack = c_attack - int((.25 * t_title_passive_value))
+                    c_defense = c_defense - int((.25 * t_title_passive_value))
                 elif t_title_passive_type == 'GAMBLE':
                     t_health = t_title_passive_value * 2
                     o_health = t_title_passive_value
@@ -7906,7 +7909,7 @@ class CrownUnlimited(commands.Cog):
                         **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                         :cyclone: 10 | **:boom: {omove1_text}** | _1_
                         :cyclone: 30 | **:comet: {omove2_text}** | _2_
-                        :cyclone: 80 | **:sparkles: {omove3_text}** | _3_
+                        :cyclone: 80 | **:rosette: {omove3_text}** | _3_
                         :cyclone: 20 | **:microbe: {omove_enhanced_text}** | _4_
                         :cyclone: 20 | **Defend Companion** | _0_
                         
@@ -8258,9 +8261,9 @@ class CrownUnlimited(commands.Cog):
                                         c_health = round(c_health - dmg['DMG'])
                                         c_defense = round(c_defense +(.75 * dmg['DMG']))
                                     elif comp_enh == 'GROWTH':
-                                        c_max_health = round(c_max_health - (c_max_health * dmg['DMG']))
-                                        c_defense = round(c_defense + (c_defense * dmg['DMG']))
-                                        c_attack = round(c_attack + (c_attack * dmg['DMG']))
+                                        c_max_health = round(c_max_health - dmg['DMG'])
+                                        c_defense = round(c_defense + (.3 * dmg['DMG']))
+                                        c_attack = round(c_attack + (.3 * dmg['DMG']))
                                     elif comp_enh == 'STANCE':
                                         tempattack = dmg['DMG']
                                         c_attack = c_defense
@@ -8352,9 +8355,9 @@ class CrownUnlimited(commands.Cog):
                                         o_health = round(o_health - dmg['DMG'])
                                         o_defense = round(o_defense +(.75 * dmg['DMG']))
                                     elif cenh_type == 'GROWTH':
-                                        o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
-                                        o_defense = round(o_defense + (o_defense* dmg['DMG']))
-                                        o_attack = round(o_attack + (o_attack * dmg['DMG']))
+                                        o_max_health = round(o_max_health - dmg['DMG'])
+                                        o_defense = round(o_defense + (.3 * dmg['DMG']))
+                                        o_attack = round(o_attack + (.3 * dmg['DMG']))
                                     elif cenh_type == 'STANCE':
                                         tempattack = dmg['DMG']
                                         o_attack = o_defense
@@ -9040,9 +9043,9 @@ class CrownUnlimited(commands.Cog):
                                             t_health = round(t_health - dmg['DMG'])
                                             t_defense = round(t_defense + (.75 * dmg['DMG']))
                                         elif tpet_type == 'GROWTH':
-                                            t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                            t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                            t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                            t_attack = round(t_attack+ (.3 * dmg['DMG']))
                                         elif tpet_type == 'STANCE':
                                             tempattack = dmg['DMG']
                                             t_attack = t_defense
@@ -9136,9 +9139,9 @@ class CrownUnlimited(commands.Cog):
                                             t_health = round(t_health - dmg['DMG'])
                                             t_defense = round(t_defense + (.75 * dmg['DMG']))
                                         elif tpet_type == 'GROWTH':
-                                            t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                            t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                            t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                            t_attack = round(t_attack+ (.3 * dmg['DMG']))
                                         elif tpet_type == 'STANCE':
                                             tempattack = dmg['DMG']
                                             t_attack = t_defense
@@ -9235,9 +9238,9 @@ class CrownUnlimited(commands.Cog):
                                             t_health = round(t_health - dmg['DMG'])
                                             t_defense = round(t_defense + (.75 * dmg['DMG']))
                                         elif enh_type == 'GROWTH':
-                                            t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                            t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                            t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                            t_attack = round(t_attack+ (.3 * dmg['DMG']))
                                         elif enh_type == 'STANCE':
                                             tempattack = dmg['DMG']
                                             t_attack = t_defense
@@ -9360,9 +9363,9 @@ class CrownUnlimited(commands.Cog):
                                             t_health = round(t_health - dmg['DMG'])
                                             t_defense = round(t_defense + (.75 * dmg['DMG']))
                                         elif enh_type == 'GROWTH':
-                                            t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                            t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                            t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                            t_attack = round(t_attack+ (.3 * dmg['DMG']))
                                         elif enh_type == 'STANCE':
                                             tempattack = dmg['DMG']
                                             t_attack = t_defense
@@ -10000,9 +10003,9 @@ class CrownUnlimited(commands.Cog):
                                         c_health = round(c_health - dmg['DMG'])
                                         c_defense = round(c_defense +(.75 * dmg['DMG']))
                                     elif cpet_type == 'GROWTH':
-                                        c_max_health = round(c_max_health - (c_max_health * dmg['DMG']))
-                                        c_defense = round(c_defense + (c_defense * dmg['DMG']))
-                                        c_attack = round(c_attack + (c_attack * dmg['DMG']))
+                                        c_max_health = round(c_max_health - dmg['DMG'])
+                                        c_defense = round(c_defense + (.3 * dmg['DMG']))
+                                        c_attack = round(c_attack + (.3 * dmg['DMG']))
                                     elif cpet_type == 'STANCE':
                                         tempattack = dmg['DMG']
                                         c_attack = c_defense
@@ -10098,9 +10101,9 @@ class CrownUnlimited(commands.Cog):
                                     o_health = round(o_health - dmg['DMG'])
                                     o_defense = round(o_defense +(.75 * dmg['DMG']))
                                 elif cenh_type == 'GROWTH':
-                                    o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
-                                    o_defense = round(o_defense + (o_defense* dmg['DMG']))
-                                    o_attack = round(o_attack + (o_attack * dmg['DMG']))
+                                    o_max_health = round(o_max_health - dmg['DMG'])
+                                    o_defense = round(o_defense + (.3 * dmg['DMG']))
+                                    o_attack = round(o_attack + (.3 * dmg['DMG']))
                                 elif cenh_type == 'STANCE':
                                     tempattack = dmg['DMG']
                                     o_attack = o_defense
@@ -10203,9 +10206,9 @@ class CrownUnlimited(commands.Cog):
                                         c_health = round(c_health - dmg['DMG'])
                                         c_defense = round(c_defense +(.75 * dmg['DMG']))
                                     elif enh_type == 'GROWTH':
-                                        c_max_health = round(c_max_health - (c_max_health * dmg['DMG']))
-                                        c_defense = round(c_defense + (c_defense * dmg['DMG']))
-                                        c_attack = round(c_attack + (c_attack * dmg['DMG']))
+                                        c_max_health = round(c_max_health - dmg['DMG'])
+                                        c_defense = round(c_defense + (.3 * dmg['DMG']))
+                                        c_attack = round(c_attack + (.3 * dmg['DMG']))
                                     elif enh_type == 'STANCE':
                                         tempattack = dmg['DMG']
                                         c_attack = c_defense
@@ -10765,9 +10768,9 @@ class CrownUnlimited(commands.Cog):
                                             t_health = round(t_health - dmg['DMG'])
                                             t_defense = round(t_defense + (.75 * dmg['DMG']))
                                         elif tpet_type == 'GROWTH':
-                                            t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                            t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                            t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                            t_attack = round(t_attack+ (.3 * dmg['DMG']))
                                         elif tpet_type == 'STANCE':
                                             tempattack = dmg['DMG']
                                             t_attack = t_defense
@@ -10861,9 +10864,9 @@ class CrownUnlimited(commands.Cog):
                                             t_health = round(t_health - dmg['DMG'])
                                             t_defense = round(t_defense + (.75 * dmg['DMG']))
                                         elif tpet_type == 'GROWTH':
-                                            t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                            t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                            t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                            t_attack = round(t_attack+ (.3 * dmg['DMG']))
                                         elif tpet_type == 'STANCE':
                                             tempattack = dmg['DMG']
                                             t_attack = t_defense
@@ -10959,9 +10962,9 @@ class CrownUnlimited(commands.Cog):
                                             t_health = round(t_health - dmg['DMG'])
                                             t_defense = round(t_defense + (.75 * dmg['DMG']))
                                         elif enh_type == 'GROWTH':
-                                            t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                            t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                            t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                            t_attack = round(t_attack+ (.3 * dmg['DMG']))
                                         elif enh_type == 'STANCE':
                                             tempattack = dmg['DMG']
                                             t_attack = t_defense
@@ -11085,9 +11088,9 @@ class CrownUnlimited(commands.Cog):
                                             t_health = round(t_health - dmg['DMG'])
                                             t_defense = round(t_defense + (.75 * dmg['DMG']))
                                         elif enh_type == 'GROWTH':
-                                            t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                            t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                            t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                            t_attack = round(t_attack+ (.3 * dmg['DMG']))
                                         elif enh_type == 'STANCE':
                                             tempattack = dmg['DMG']
                                             t_attack = t_defense
@@ -11753,11 +11756,11 @@ class CrownUnlimited(commands.Cog):
             t_stamina = t_stamina - int(c_card_passive)
             c_stamina = c_stamina + int(c_card_passive)
         elif c_card_passive_type == 'FLOG':
-            c_attack = c_attack + int((((c_card_passive/1.5)/100) *t_attack))
-            t_attack = t_attack - int((((c_card_passive/1.5)/100) *t_attack))
+            c_attack = c_attack + int((((c_card_passive/4)/100) *t_attack))
+            t_attack = t_attack - int((((c_card_passive/4)/100) *t_attack))
         elif c_card_passive_type == 'WITHER':
-            c_defense = c_defense + int((((c_card_passive/1.5)/100) *t_defense))
-            t_defense = t_defense - int((((c_card_passive/1.5)/100) *t_defense))
+            c_defense = c_defense + int((((c_card_passive/4)/100) *t_defense))
+            t_defense = t_defense - int((((c_card_passive/4)/100) *t_defense))
         elif c_card_passive_type == 'RAGE':
             c_attack = c_attack + int(((c_card_passive/100) * c_defense))
             c_defense = c_defense - int(((c_card_passive/100) * c_attack))
@@ -11771,10 +11774,9 @@ class CrownUnlimited(commands.Cog):
             c_defense = c_defense + int(((c_card_passive/100) *c_health))
             c_health = c_health - int((c_defense))
         elif c_card_passive_type == 'GROWTH':            
-            c_attack = c_attack + int(((c_card_passive/100) * c_attack))
-            c_defense = c_defense + int(((c_card_passive/100) * c_defense))
+            c_attack = c_attack + int(((c_card_passive/100) * c_max_health))
+            c_defense = c_defense + int(((c_card_passive/100) * c_max_health))
             c_max_health = c_max_health - int(((c_card_passive/100) * c_max_health))
-            c_health = c_health - int(((c_card_passive/100) * c_max_health))
         elif c_card_passive_type == 'STANCE':
             tempattack = c_attack + c_card_passive
             c_attack = c_defense  + c_card_passive          
@@ -11800,9 +11802,9 @@ class CrownUnlimited(commands.Cog):
             c_stamina = c_card_passive
             t_stamina = c_card_passive
         elif c_card_passive_type == 'FEAR':
-            c_health = c_health - int((c_card_passive/100 * c_health))
-            t_attack = t_attack - int((c_card_passive/100 * t_attack))
-            t_defense = t_defense - int((c_card_passive/100 * t_defense))
+            c_health = c_health - int((c_card_passive/1000 * c_health))
+            t_attack = t_attack - int((c_card_passive/1000 * c_health))
+            t_defense = t_defense - int((c_card_passive/1000 * c_health))
         elif c_card_passive_type == 'GAMBLE':
             c_health = c_card_passive
             t_health = c_card_passive * 5  
@@ -11834,21 +11836,21 @@ class CrownUnlimited(commands.Cog):
                 c_defense = c_defense + int((((c_title_passive_value/1.5)/100) *t_defense))
                 t_defense = t_defense - int((((c_title_passive_value/1.5)/100) *t_defense))
             elif c_title_passive_type == 'RAGE':
-                c_attack = c_attack + int(((c_title_passive_value/100) * c_defense))
-                c_defense = c_defense - int(((c_title_passive_value/100) * c_attack))
+                c_attack = c_attack + int((.25 * c_title_passive_value))
+                c_defense = c_defense - int((.25 * c_title_passive_value))
             elif c_title_passive_type == 'BRACE':            
-                c_defense = c_defense + int(((c_title_passive_value/100) * c_attack))
-                c_attack = c_attack - int(((c_title_passive_value/100) * c_defense))
+                c_defense = c_defense + int((.25 *c_title_passive_value))
+                c_attack = c_attack - int((.25 * c_title_passive_value))
             elif c_title_passive_type == 'BZRK':            
-                c_attack = c_attack + int(((c_title_passive_value/100) * c_health))
-                c_health = c_health - int((c_attack))
+                c_attack = c_attack + int((.75 *c_title_passive_value))
+                c_health = c_health - int((c_title_passive_value))
             elif c_title_passive_type == 'CRYSTAL':            
-                c_defense = c_defense + int(((c_title_passive_value/100) *c_health))
-                c_health = c_health - int((c_defense))
+                c_defense = c_defense + int((.75 *c_title_passive_value))
+                c_health = c_health - int((c_title_passive_value))
             elif c_title_passive_type == 'GROWTH':            
-                c_attack = c_attack + int(((c_title_passive_value/100) * c_attack))
-                c_defense = c_defense + int(((c_title_passive_value/100) * c_defense))
-                c_max_health = c_max_health - int(((c_title_passive_value/100) * c_max_health))
+                c_attack = c_attack + int((.25 * c_title_passive_value))
+                c_defense = c_defense + int((.25 * c_title_passive_value))
+                c_max_health = c_max_health - int((.25 * c_title_passive_value))
             elif c_title_passive_type == 'STANCE':
                 tempattack = c_attack
                 c_attack = c_defense            
@@ -11874,9 +11876,9 @@ class CrownUnlimited(commands.Cog):
                 c_stamina = c_title_passive_value
                 t_stamina = c_title_passive_value
             elif c_title_passive_type == 'FEAR':
-                c_health = c_health - int((c_title_passive_value/100 * c_health))
-                t_attack = t_attack - int((c_title_passive_value/100 * t_attack))
-                t_defense = t_defense - int((c_title_passive_value/100 * t_defense))
+                c_health = c_health - int((.25 * c_title_passive_value))
+                t_attack = t_attack - int((.25 * c_title_passive_value))
+                t_defense = t_defense - int((.25 * c_title_passive_value))
             elif c_title_passive_type == 'GAMBLE':
                 t_health = c_title_passive_value * 5
                 c_health = c_title_passive_value
@@ -11907,21 +11909,21 @@ class CrownUnlimited(commands.Cog):
             c_defense = c_defense + int((((carm_passive_value/1.5)/100) *t_defense))
             t_defense = t_defense - int((((carm_passive_value/1.5)/100) *t_defense))
         elif carm_passive_type == 'RAGE':
-            c_attack = c_attack + int(((carm_passive_value/100) * c_defense))
-            c_defense = c_defense - int(((carm_passive_value/100) * c_attack))
+            c_attack = c_attack + int((.20 * carm_passive_value))
+            c_defense = c_defense - int((.20 *carm_passive_value))
         elif carm_passive_type == 'BRACE':            
-            c_defense = c_defense + int(((carm_passive_value/100) * c_attack))
-            c_attack = c_attack - int(((carm_passive_value/100) * c_defense))
+            c_defense = c_defense + int((.20 *carm_passive_value))
+            c_attack = c_attack - int((.20 * carm_passive_value))
         elif carm_passive_type == 'BZRK':            
-            c_attack = c_attack + int(((carm_passive_value/100) * c_health))
-            c_health = c_health - int((c_attack))
+            c_attack = c_attack + int((.25 * carm_passive_value))
+            c_health = c_health - int((carm_passive_value))
         elif carm_passive_type == 'CRYSTAL':            
-            c_defense = c_defense + int(((carm_passive_value/100) *c_health))
-            c_health = c_health - int((c_defense))
+            c_defense = c_defense + int((.75 *carm_passive_value))
+            c_health = c_health - int((carm_passive_value))
         elif carm_passive_type == 'GROWTH':            
-            c_attack = c_attack + int(((carm_passive_value/100) * c_attack))
-            c_defense = c_defense + int(((carm_passive_value/100) * c_defense))
-            c_max_health = c_max_health - int(((carm_passive_value/100) * c_max_health))
+            c_attack = c_attack + int((.25 * carm_passive_value))
+            c_defense = c_defense + int((.25 * carm_passive_value))
+            c_max_health = c_max_health - int((.25 * carm_passive_value))
         elif carm_passive_type == 'STANCE':
             tempattack = c_attack + carm_passive_value
             c_attack = c_defense  + carm_passive_value         
@@ -11947,9 +11949,9 @@ class CrownUnlimited(commands.Cog):
             c_stamina = carm_passive_value
             t_stamina = carm_passive_value
         elif carm_passive_type == 'FEAR':
-            c_health = c_health - int((c_card_passive/100 * c_health))
-            t_attack = t_attack - int((c_card_passive/100 * t_attack))
-            t_defense = t_defense - int((c_card_passive/100 * t_defense))
+            c_health = c_health - int((.25 * carm_passive_value))
+            t_attack = t_attack - int((.25 * carm_passive_value))
+            t_defense = t_defense - int((.25 * carm_passive_value))
         elif carm_passive_type == 'GAMBLE':
             t_health = carm_passive_value * 5
             c_health = carm_passive_value
@@ -12064,12 +12066,12 @@ class CrownUnlimited(commands.Cog):
             o_stamina = o_card_passive
             t_stamina = o_card_passive
         elif o_card_passive_type == 'FEAR':
-            o_health = o_health - int((o_card_passive/100 * o_health))
-            t_attack = t_attack - int((o_card_passive/100 * t_attack))
-            t_defense = t_defense - int((o_card_passive/100 * t_defense))
+            o_health = o_health - int((o_card_passive/1000 * o_health))
+            t_attack = t_attack - int((o_card_passive/1000 * o_health))
+            t_defense = t_defense - int((o_card_passive/1000 * o_health))
         elif o_card_passive_type == 'GAMBLE':
             o_health = o_card_passive
-            t_health = o_card_passive * 5
+            t_health = o_card_passive   
             c_health = o_card_passive              
 
         # Title Passive
@@ -12138,11 +12140,11 @@ class CrownUnlimited(commands.Cog):
                 o_stamina = o_title_passive_value
                 t_stamina = o_title_passive_value
             elif o_title_passive_type == 'FEAR':
-                o_health = o_health - int((o_title_passive_value/100 * o_health))
-                t_attack = t_attack - int((o_title_passive_value/100 * t_attack))
-                t_defense = t_defense - int((o_title_passive_value/100 * t_defense))
+                o_health = o_health - int((.25 * o_title_passive_value))
+                t_attack = t_attack - int((.25 * o_title_passive_value))
+                t_defense = t_defense - int((.25 * o_title_passive_value))
             elif o_title_passive_type == 'GAMBLE':
-                t_health = o_title_passive_value * 5
+                t_health = o_title_passive_value
                 o_health = o_title_passive_value
 
         # Arm Passive Player 1
@@ -12210,11 +12212,11 @@ class CrownUnlimited(commands.Cog):
             o_stamina = oarm_passive_value
             t_stamina = oarm_passive_value
         elif oarm_passive_type == 'FEAR':
-            o_health = o_health - int((oarm_passive_value/100 * o_health))
-            t_attack = t_attack - int((oarm_passive_value/100 * t_attack))
-            t_defense = t_defense - int((oarm_passive_value/100 * t_defense))
+            o_health = o_health - int((.25 * oarm_passive_value))
+            t_attack = t_attack - int((.25 * oarm_passive_value))
+            t_defense = t_defense - int((.25 * oarm_passive_value))
         elif oarm_passive_type == 'GAMBLE':
-            t_health = oarm_passive_value * 5
+            t_health = oarm_passive_value
             o_health = oarm_passive_value
         # Arm Passive Player 2
         tarm_passive_type = list(tarm_passive.keys())[0]
@@ -12244,21 +12246,22 @@ class CrownUnlimited(commands.Cog):
             o_defense = o_defense - int(((tarm_passive_value/1.5)/100) *o_defense)
             c_defense = c_defense - int(((tarm_passive_value/1.5)/100) *c_defense)
         elif tarm_passive_type == 'RAGE':
-            t_attack = t_attack + int(((tarm_passive_value/100) * t_defense))
-            t_defense = t_defense - int(((tarm_passive_value/100) *t_attack))
+            t_attack = t_attack + int((.25 * tarm_passive_value))
+            t_defense = t_defense - int((.25*tarm_passive_value))
         elif tarm_passive_type == 'BRACE':            
-            t_defense = t_defense + int(((tarm_passive_value/100) *t_attack))
-            t_attack = t_attack - int(((tarm_passive_value/100) * t_defense))
+            t_defense = t_defense + int((.25*tarm_passive_value))
+            t_attack = t_attack - int((.25 * tarm_passive_value))
         elif tarm_passive_type == 'BZRK':            
-            t_attack = t_attack + int(((tarm_passive_value/100)* t_health))
-            t_health = t_health - int((t_attack))
+            t_attack = t_attack + int((.75 *tarm_passive_value))
+            t_health = t_health - int((tarm_passive_value))
         elif tarm_passive_type == 'CRYSTAL':            
-            t_defense = t_defense + int(((tarm_passive_value/100) *t_health))
-            t_health = t_health - int((t_defense))
+            t_defense = t_defense + int((.75 *tarm_passive_value))
+            t_health = t_health - int((tarm_passive_value))
         elif tarm_passive_type == 'GROWTH':            
-            t_attack = t_attack + int((tarm_passive_value/100) * t_attack)
-            t_defense = t_defense + int((tarm_passive_value/100) * t_defense)
-            t_max_health = t_max_health - int((tarm_passive_value/100) * t_max_health)
+            t_attack = t_attack + int((.25 * tarm_passive_value))
+            t_defense = t_defense + int((.25 * tarm_passive_value))
+            t_max_health = t_max_health - int((.25 * tarm_passive_value))
+            t_health = t_health - int((.25 * tarm_passive_value))
         elif tarm_passive_type == 'STANCE':
             tempattack = t_attack + tarm_passive_value
             t_attack = t_defense  + tarm_passive_value         
@@ -12285,11 +12288,11 @@ class CrownUnlimited(commands.Cog):
             o_stamina = tarm_passive_value
             c_stamina = tarm_passive_value
         elif tarm_passive_type == 'FEAR':
-            o_attack = o_attack + int((tarm_passive_value/100) * o_attack)
-            o_defense = o_defense + int((tarm_passive_value/100) * o_defense)
-            c_attack = c_attack + int((tarm_passive_value/100) * c_attack)
-            c_defense = c_defense + int((tarm_passive_value/100) * c_defense)
-            t_max_health = t_max_health - int((tarm_passive_value/100) * t_max_health)
+            t_health = t_health - int((.25 * tarm_passive_value))
+            o_attack = o_attack - int((.25 * tarm_passive_value))
+            o_defense = o_defense - int((.25 * tarm_passive_value))
+            c_attack = c_attack - int((.25 * tarm_passive_value))
+            c_defense = c_defense - int((.25 * tarm_passive_value))
         elif tarm_passive_type == 'GAMBLE':
             t_health = tarm_passive_value * 5
             o_health = tarm_passive_value
@@ -12342,9 +12345,9 @@ class CrownUnlimited(commands.Cog):
             t_defense = t_defense + int(((t_card_passive/100) *t_health))
             t_health = t_health - int((t_defense))
         elif t_card_passive_type == 'GROWTH':            
-            t_attack = t_attack + int((t_card_passive/100) * t_attack)
-            t_defense = t_defense + int((t_card_passive/100) * t_defense)
-            t_max_health = t_max_health - int((t_card_passive/100) * t_max_health)
+            t_attack = t_attack + int(((t_card_passive/100) * t_max_health))
+            t_defense = t_defense + int(((t_card_passive/100) * t_max_health))
+            t_max_health = t_max_health - int(((t_card_passive/100) * t_max_health))
         elif t_card_passive_type == 'STANCE':
             tempattack = t_attack + t_card_passive
             t_attack = t_defense + t_card_passive            
@@ -12371,11 +12374,11 @@ class CrownUnlimited(commands.Cog):
             o_stamina = t_card_passive
             c_stamina = t_card_passive
         elif t_card_passive_type == 'FEAR':
-            o_attack = o_attack + int((t_card_passive/100) * o_attack)
-            o_defense = o_defense + int((t_card_passive/100) * o_defense)
-            c_attack = c_attack + int((t_card_passive/100) * c_attack)
-            c_defense = c_defense + int((t_card_passive/100) * c_defense)
-            t_max_health = t_max_health - int((t_card_passive/100) * t_max_health)
+            t_health = t_health - int((t_card_passive/1000 * t_health))
+            o_attack = o_attack - int((t_card_passive/1000 * t_health))
+            o_defense = o_defense - int((t_card_passive/1000 * t_health))
+            c_attack = c_attack - int((t_card_passive/1000 * t_health))
+            c_defense = c_defense - int((t_card_passive/1000 * t_health))
         elif t_card_passive_type == 'GAMBLE':
             t_health = t_card_passive * 5
             o_health = t_card_passive
@@ -12410,21 +12413,21 @@ class CrownUnlimited(commands.Cog):
                 o_defense = o_defense - int(((t_title_passive_value/1.5)/100) *o_defense)
                 c_defense = c_defense - int(((t_title_passive_value/1.5)/100) *c_defense)
             elif t_title_passive_type == 'RAGE':
-                t_attack = t_attack + int(((t_title_passive_value/100) * t_defense))
-                t_defense = t_defense - int(((t_title_passive_value/100) *t_attack))
+                t_attack = t_attack + int((.25 * t_title_passive_value))
+                t_defense = t_defense - int((.25 * t_title_passive_value))
             elif t_title_passive_type == 'BRACE':            
-                t_defense = t_defense + int(((t_title_passive_value/100) *t_attack))
-                t_attack = t_attack - int(((t_title_passive_value/100) * t_defense))
+                t_defense = t_defense + int((.25 * t_title_passive_value))
+                t_attack = t_attack - int((.25 * t_title_passive_value))
             elif t_title_passive_type == 'BZRK':            
-                t_attack = t_attack + int(((t_title_passive_value/100)* t_health))
-                t_health = t_health - int((t_attack))
+                t_attack = t_attack + int((.25 * t_title_passive_value))
+                t_health = t_health - int((t_title_passive_value))
             elif t_title_passive_type == 'CRYSTAL':            
-                t_defense = t_defense + int(((t_title_passive_value/100) *t_health))
-                t_health = t_health - int((t_defense))
+                t_defense = t_defense + int((.25 * t_title_passive_value))
+                t_health = t_health - int((t_title_passive_value))
             elif t_title_passive_type == 'GROWTH':            
-                t_attack = t_attack + int((t_title_passive_value/100) * t_attack)
-                t_defense = t_defense + int((t_title_passive_value/100) * t_defense)
-                t_max_health = t_max_health - int((t_title_passive_value/100) * t_max_health)
+                t_attack = t_attack + int((.25 * t_title_passive_value))
+                t_defense = t_defense + int((.25 * t_title_passive_value))
+                t_max_health = t_max_health - int((.25 * t_title_passive_value))
             elif t_title_passive_type == 'STANCE':
                 tempattack = t_attack + t_title_passive_value
                 t_attack = t_defense  + t_title_passive_value          
@@ -12451,11 +12454,11 @@ class CrownUnlimited(commands.Cog):
                 o_stamina = t_title_passive_value
                 c_stamina = t_title_passive_value
             elif t_title_passive_type == 'FEAR':
-                o_attack = o_attack + int((t_title_passive_value/100) * o_attack)
-                o_defense = o_defense + int((t_title_passive_value/100) * o_defense)
-                c_attack = c_attack + int((t_title_passive_value/100) * c_attack)
-                c_defense = c_defense + int((t_title_passive_value/100) * c_defense)
-                t_max_health = t_max_health - int((t_title_passive_value/100) * t_max_health)
+                t_health = t_health - int((.25 * t_title_passive_value))
+                o_attack = o_attack - int((.25 * t_title_passive_value))
+                o_defense = o_defense - int((.25 * t_title_passive_value))
+                c_attack = c_attack - int((.25 * t_title_passive_value))
+                c_defense = c_defense - int((.25 * t_title_passive_value))
             elif t_title_passive_type == 'GAMBLE':
                 t_health = t_title_passive_value * 5
                 o_health = t_title_passive_value
@@ -12698,7 +12701,7 @@ class CrownUnlimited(commands.Cog):
                     **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                     :cyclone: 10 | **:boom: {omove1_text}** | _1_
                     :cyclone: 30 | **:comet: {omove2_text}** | _2_
-                    :cyclone: 80 | **:sparkles: {omove3_text}** | _3_
+                    :cyclone: 80 | **:rosette: {omove3_text}** | _3_
                     :cyclone: 20 | **:microbe: {omove_enhanced_text}** | _4_
                     :cyclone: 20 | **Defend Companion** | _0_
                     
@@ -13050,9 +13053,9 @@ class CrownUnlimited(commands.Cog):
                                     c_health = round(c_health - dmg['DMG'])
                                     c_defense = round(c_defense +(.75 * dmg['DMG']))
                                 elif comp_enh == 'GROWTH':
-                                    c_max_health = round(c_max_health - (c_max_health * dmg['DMG']))
-                                    c_defense = round(c_defense + (c_defense * dmg['DMG']))
-                                    c_attack = round(c_attack + (c_attack * dmg['DMG']))
+                                    c_max_health = round(c_max_health - dmg['DMG'])
+                                    c_defense = round(c_defense + (.3 * dmg['DMG']))
+                                    c_attack = round(c_attack + (.3 * dmg['DMG']))
                                 elif comp_enh == 'STANCE':
                                     tempattack = dmg['DMG']
                                     c_attack = c_defense
@@ -13144,9 +13147,9 @@ class CrownUnlimited(commands.Cog):
                                     o_health = round(o_health - dmg['DMG'])
                                     o_defense = round(o_defense +(.75 * dmg['DMG']))
                                 elif cenh_type == 'GROWTH':
-                                    o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
-                                    o_defense = round(o_defense + (o_defense* dmg['DMG']))
-                                    o_attack = round(o_attack + (o_attack * dmg['DMG']))
+                                    o_max_health = round(o_max_health - dmg['DMG'])
+                                    o_defense = round(o_defense + (.3 * dmg['DMG']))
+                                    o_attack = round(o_attack + (.3 * dmg['DMG']))
                                 elif cenh_type == 'STANCE':
                                     tempattack = dmg['DMG']
                                     o_attack = o_defense
@@ -13851,9 +13854,9 @@ class CrownUnlimited(commands.Cog):
                                         t_health = round(t_health - dmg['DMG'])
                                         t_defense = round(t_defense + (.75 * dmg['DMG']))
                                     elif tpet_type == 'GROWTH':
-                                        t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                        t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                        t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                        t_max_health = round(t_max_health - dmg['DMG'])
+                                        t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                        t_attack = round(t_attack+ (.3 * dmg['DMG']))
                                     elif tpet_type == 'STANCE':
                                         tempattack = dmg['DMG']
                                         t_attack = t_defense
@@ -13947,9 +13950,9 @@ class CrownUnlimited(commands.Cog):
                                         t_health = round(t_health - dmg['DMG'])
                                         t_defense = round(t_defense + (.75 * dmg['DMG']))
                                     elif tpet_type == 'GROWTH':
-                                        t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                        t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                        t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                        t_max_health = round(t_max_health - dmg['DMG'])
+                                        t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                        t_attack = round(t_attack+ (.3 * dmg['DMG']))
                                     elif tpet_type == 'STANCE':
                                         tempattack = dmg['DMG']
                                         t_attack = t_defense
@@ -14045,9 +14048,9 @@ class CrownUnlimited(commands.Cog):
                                         t_health = round(t_health - dmg['DMG'])
                                         t_defense = round(t_defense + (.75 * dmg['DMG']))
                                     elif enh_type == 'GROWTH':
-                                        t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                        t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                        t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                        t_max_health = round(t_max_health - dmg['DMG'])
+                                        t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                        t_attack = round(t_attack+ (.3 * dmg['DMG']))
                                     elif enh_type == 'STANCE':
                                         tempattack = dmg['DMG']
                                         t_attack = t_defense
@@ -14170,9 +14173,9 @@ class CrownUnlimited(commands.Cog):
                                         t_health = round(t_health - dmg['DMG'])
                                         t_defense = round(t_defense + (.75 * dmg['DMG']))
                                     elif enh_type == 'GROWTH':
-                                        t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                        t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                        t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                        t_max_health = round(t_max_health - dmg['DMG'])
+                                        t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                        t_attack = round(t_attack+ (.3 * dmg['DMG']))
                                     elif enh_type == 'STANCE':
                                         tempattack = dmg['DMG']
                                         t_attack = t_defense
@@ -14821,9 +14824,9 @@ class CrownUnlimited(commands.Cog):
                                     c_health = round(c_health - dmg['DMG'])
                                     c_defense = round(c_defense +(.75 * dmg['DMG']))
                                 elif cpet_type == 'GROWTH':
-                                    c_max_health = round(c_max_health - (c_max_health * dmg['DMG']))
-                                    c_defense = round(c_defense + (c_defense * dmg['DMG']))
-                                    c_attack = round(c_attack + (c_attack * dmg['DMG']))
+                                    c_max_health = round(c_max_health - dmg['DMG'])
+                                    c_defense = round(c_defense + (.3 * dmg['DMG']))
+                                    c_attack = round(c_attack + (.3 * dmg['DMG']))
                                 elif cpet_type == 'STANCE':
                                     tempattack = dmg['DMG']
                                     c_attack = c_defense
@@ -14919,9 +14922,9 @@ class CrownUnlimited(commands.Cog):
                                 o_health = round(o_health - dmg['DMG'])
                                 o_defense = round(o_defense +(.75 * dmg['DMG']))
                             elif cenh_type == 'GROWTH':
-                                o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
-                                o_defense = round(o_defense + (o_defense* dmg['DMG']))
-                                o_attack = round(o_attack + (o_attack * dmg['DMG']))
+                                o_max_health = round(o_max_health - dmg['DMG'])
+                                o_defense = round(o_defense + (.3 * dmg['DMG']))
+                                o_attack = round(o_attack + (.3 * dmg['DMG']))
                             elif cenh_type == 'STANCE':
                                 tempattack = dmg['DMG']
                                 o_attack = o_defense
@@ -15024,9 +15027,9 @@ class CrownUnlimited(commands.Cog):
                                     c_health = round(c_health - dmg['DMG'])
                                     c_defense = round(c_defense +(.75 * dmg['DMG']))
                                 elif enh_type == 'GROWTH':
-                                    c_max_health = round(c_max_health - (c_max_health * dmg['DMG']))
-                                    c_defense = round(c_defense + (c_defense * dmg['DMG']))
-                                    c_attack = round(c_attack + (c_attack * dmg['DMG']))
+                                    c_max_health = round(c_max_health - dmg['DMG'])
+                                    c_defense = round(c_defense + (.3 * dmg['DMG']))
+                                    c_attack = round(c_attack + (.3 * dmg['DMG']))
                                 elif enh_type == 'STANCE':
                                     tempattack = dmg['DMG']
                                     c_attack = c_defense
@@ -15605,9 +15608,9 @@ class CrownUnlimited(commands.Cog):
                                         t_health = round(t_health - dmg['DMG'])
                                         t_defense = round(t_defense + (.75 * dmg['DMG']))
                                     elif tpet_type == 'GROWTH':
-                                        t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                        t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                        t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                        t_max_health = round(t_max_health - dmg['DMG'])
+                                        t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                        t_attack = round(t_attack+ (.3 * dmg['DMG']))
                                     elif tpet_type == 'STANCE':
                                         tempattack = dmg['DMG']
                                         t_attack = t_defense
@@ -15701,9 +15704,9 @@ class CrownUnlimited(commands.Cog):
                                         t_health = round(t_health - dmg['DMG'])
                                         t_defense = round(t_defense + (.75 * dmg['DMG']))
                                     elif tpet_type == 'GROWTH':
-                                        t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                        t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                        t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                        t_max_health = round(t_max_health - dmg['DMG'])
+                                        t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                        t_attack = round(t_attack+ (.3 * dmg['DMG']))
                                     elif tpet_type == 'STANCE':
                                         tempattack = dmg['DMG']
                                         t_attack = t_defense
@@ -15799,9 +15802,9 @@ class CrownUnlimited(commands.Cog):
                                         t_health = round(t_health - dmg['DMG'])
                                         t_defense = round(t_defense + (.75 * dmg['DMG']))
                                     elif enh_type == 'GROWTH':
-                                        t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                        t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                        t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                        t_max_health = round(t_max_health - dmg['DMG'])
+                                        t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                        t_attack = round(t_attack+ (.3 * dmg['DMG']))
                                     elif enh_type == 'STANCE':
                                         tempattack = dmg['DMG']
                                         t_attack = t_defense
@@ -15925,9 +15928,9 @@ class CrownUnlimited(commands.Cog):
                                         t_health = round(t_health - dmg['DMG'])
                                         t_defense = round(t_defense + (.75 * dmg['DMG']))
                                     elif enh_type == 'GROWTH':
-                                        t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                        t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                        t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                        t_max_health = round(t_max_health - dmg['DMG'])
+                                        t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                        t_attack = round(t_attack+ (.3 * dmg['DMG']))
                                     elif enh_type == 'STANCE':
                                         tempattack = dmg['DMG']
                                         t_attack = t_defense
@@ -16568,8 +16571,8 @@ class CrownUnlimited(commands.Cog):
                 c_defense = c_defense + int(((c_card_passive/100) *c_health))
                 c_health = c_health - int((c_defense))
             elif c_card_passive_type == 'GROWTH':            
-                c_attack = c_attack + int(((c_card_passive/100) * c_attack))
-                c_defense = c_defense + int(((c_card_passive/100) * c_defense))
+                c_attack = c_attack + int(((c_card_passive/100) * c_max_health))
+                c_defense = c_defense + int(((c_card_passive/100) * c_max_health))
                 c_max_health = c_max_health - int(((c_card_passive/100) * c_max_health))
                 c_health = c_health - int(((c_card_passive/100) * c_max_health))
             elif c_card_passive_type == 'STANCE':
@@ -16597,9 +16600,9 @@ class CrownUnlimited(commands.Cog):
                 c_stamina = c_card_passive
                 t_stamina = c_card_passive
             elif c_card_passive_type == 'FEAR':
-                c_health = c_health - int((c_card_passive/100 * c_health))
-                t_attack = t_attack - int((c_card_passive/100 * t_attack))
-                t_defense = t_defense - int((c_card_passive/100 * t_defense))
+                c_health = c_health - int((c_card_passive/1000 * c_health))
+                t_attack = t_attack - int((c_card_passive/1000 * c_health))
+                t_defense = t_defense - int((c_card_passive/1000 * c_health))
             elif c_card_passive_type == 'GAMBLE':
                 c_health = c_card_passive
                 t_health = c_card_passive
@@ -16643,9 +16646,9 @@ class CrownUnlimited(commands.Cog):
                     c_defense = c_defense + int(((c_title_passive_value/100) *c_health))
                     c_health = c_health - int((c_defense))
                 elif c_title_passive_type == 'GROWTH':            
-                    c_attack = c_attack + int(((c_title_passive_value/100) * c_attack))
-                    c_defense = c_defense + int(((c_title_passive_value/100) * c_defense))
-                    c_max_health = c_max_health - int(((c_title_passive_value/100) * c_max_health))
+                    c_attack = c_attack + int(((c_title_passive_value/100) * c_max_health) * .2)
+                    c_defense = c_defense + int(((c_title_passive_value/100) * c_max_health) * .2)
+                    c_max_health = c_max_health - int(((c_title_passive_value/100) * c_max_health) * .2)
                 elif c_title_passive_type == 'STANCE':
                     tempattack = c_attack
                     c_attack = c_defense            
@@ -16671,9 +16674,9 @@ class CrownUnlimited(commands.Cog):
                     c_stamina = c_title_passive_value
                     t_stamina = c_title_passive_value
                 elif c_title_passive_type == 'FEAR':
-                    c_health = c_health - int((c_title_passive_value/100 * c_health))
-                    t_attack = t_attack - int((c_title_passive_value/100 * t_attack))
-                    t_defense = t_defense - int((c_title_passive_value/100 * t_defense))
+                    c_health = c_health - int((.25 * c_title_passive_value))
+                    t_attack = t_attack - int((.25 * c_title_passive_value))
+                    t_defense = t_defense - int((.25 * c_title_passive_value))
                 elif c_title_passive_type == 'GAMBLE':
                     t_health = c_title_passive_value
                     c_health = c_title_passive_value
@@ -16716,9 +16719,9 @@ class CrownUnlimited(commands.Cog):
                 c_defense = c_defense + int(((carm_passive_value/100) *c_health))
                 c_health = c_health - int((c_defense))
             elif carm_passive_type == 'GROWTH':            
-                c_attack = c_attack + int(((carm_passive_value/100) * c_attack))
-                c_defense = c_defense + int(((carm_passive_value/100) * c_defense))
-                c_max_health = c_max_health - int(((carm_passive_value/100) * c_max_health))
+                c_attack = c_attack + int(((carm_passive_value/100) * c_max_health) * .2)
+                c_defense = c_defense + int(((carm_passive_value/100) * c_max_health) * .2)
+                c_max_health = c_max_health - int(((carm_passive_value/100) * c_max_health) * .2)
             elif carm_passive_type == 'STANCE':
                 tempattack = c_attack + carm_passive_value
                 c_attack = c_defense  + carm_passive_value         
@@ -16744,9 +16747,9 @@ class CrownUnlimited(commands.Cog):
                 c_stamina = carm_passive_value
                 t_stamina = carm_passive_value
             elif carm_passive_type == 'FEAR':
-                c_health = c_health - int((c_card_passive/100 * c_health))
-                t_attack = t_attack - int((c_card_passive/100 * t_attack))
-                t_defense = t_defense - int((c_card_passive/100 * t_defense))
+                c_health = c_health - int((.25 * carm_passive_value))
+                t_attack = t_attack - int((.25 * carm_passive_value))
+                t_defense = t_defense - int((.25 * carm_passive_value))
             elif carm_passive_type == 'GAMBLE':
                 t_health = carm_passive_value
                 c_health = carm_passive_value
@@ -16854,9 +16857,9 @@ class CrownUnlimited(commands.Cog):
                 o_stamina = o_card_passive
                 t_stamina = o_card_passive
             elif o_card_passive_type == 'FEAR':
-                o_health = o_health - int((o_card_passive/100 * o_health))
-                t_attack = t_attack - int((o_card_passive/100 * t_attack))
-                t_defense = t_defense - int((o_card_passive/100 * t_defense))
+                o_health = o_health - int((o_card_passive/1000 * o_health))
+                t_attack = t_attack - int((o_card_passive/1000 * o_health))
+                t_defense = t_defense - int((o_card_passive/1000 * o_health))
             elif o_card_passive_type == 'GAMBLE':
                 o_health = o_card_passive
                 t_health = o_card_passive   
@@ -16928,9 +16931,9 @@ class CrownUnlimited(commands.Cog):
                     o_stamina = o_title_passive_value
                     t_stamina = o_title_passive_value
                 elif o_title_passive_type == 'FEAR':
-                    o_health = o_health - int((o_title_passive_value/100 * o_health))
-                    t_attack = t_attack - int((o_title_passive_value/100 * t_attack))
-                    t_defense = t_defense - int((o_title_passive_value/100 * t_defense))
+                    o_health = o_health - int((.25 * o_title_passive_value))
+                    t_attack = t_attack - int((.25 * o_title_passive_value))
+                    t_defense = t_defense - int((.25 * o_title_passive_value))
                 elif o_title_passive_type == 'GAMBLE':
                     t_health = o_title_passive_value
                     o_health = o_title_passive_value
@@ -17001,9 +17004,9 @@ class CrownUnlimited(commands.Cog):
                 o_stamina = oarm_passive_value
                 t_stamina = oarm_passive_value
             elif oarm_passive_type == 'FEAR':
-                o_health = o_health - int((oarm_passive_value/100 * o_health))
-                t_attack = t_attack - int((oarm_passive_value/100 * t_attack))
-                t_defense = t_defense - int((oarm_passive_value/100 * t_defense))
+                o_health = o_health - int((.25 * oarm_passive_value))
+                t_attack = t_attack - int((.25 * oarm_passive_value))
+                t_defense = t_defense - int((.25 * oarm_passive_value))
             elif oarm_passive_type == 'GAMBLE':
                 t_health = oarm_passive_value
                 o_health = oarm_passive_value
@@ -17053,9 +17056,9 @@ class CrownUnlimited(commands.Cog):
                 t_defense = t_defense + int(((tarm_passive_value/100) *t_health))
                 t_health = t_health - int((t_defense))
             elif tarm_passive_type == 'GROWTH':            
-                t_attack = t_attack + int((tarm_passive_value/100) * t_attack)
-                t_defense = t_defense + int((tarm_passive_value/100) * t_defense)
-                t_max_health = t_max_health - int((tarm_passive_value/100) * t_max_health)
+                t_attack = t_attack + int(((tarm_passive_value/100) * t_max_health) * .2)
+                t_defense = t_defense + int(((tarm_passive_value/100) * t_max_health) * .2)
+                t_max_health = t_max_health - int(((tarm_passive_value/100) * t_max_health) * .2)
             elif tarm_passive_type == 'STANCE':
                 tempattack = t_attack + tarm_passive_value
                 t_attack = t_defense  + tarm_passive_value         
@@ -17086,11 +17089,11 @@ class CrownUnlimited(commands.Cog):
                 o_stamina = tarm_passive_value
                 c_stamina = tarm_passive_value
             elif tarm_passive_type == 'FEAR':
-                o_attack = o_attack + int((tarm_passive_value/100) * o_attack)
-                o_defense = o_defense + int((tarm_passive_value/100) * o_defense)
-                c_attack = c_attack + int((tarm_passive_value/100) * c_attack)
-                c_defense = c_defense + int((tarm_passive_value/100) * c_defense)
-                t_max_health = t_max_health - int((tarm_passive_value/100) * t_max_health)
+                t_health = t_health - int((.25 * tarm_passive_value))
+                o_attack = o_attack - int((.25 * tarm_passive_value))
+                o_defense = o_defense - int((.25 * tarm_passive_value))
+                c_attack = c_attack - int((.25 * tarm_passive_value))
+                c_defense = c_defense - int((.25 * tarm_passive_value))
             elif tarm_passive_type == 'GAMBLE':
                 t_health = tarm_passive_value
                 o_health = tarm_passive_value
@@ -17141,9 +17144,10 @@ class CrownUnlimited(commands.Cog):
                 t_defense = t_defense + int(((t_card_passive/100) * t_health))
                 t_health = t_health - int((t_defense))
             elif t_card_passive_type == 'GROWTH':            
-                t_attack = t_attack + int((t_card_passive/100) * t_attack)
-                t_defense = t_defense + int((t_card_passive/100) * t_defense)
-                t_max_health = t_max_health - int((t_card_passive/100) * t_max_health)
+                t_attack =  t_attack + int(((t_card_passive/100) * t_max_health))
+                t_defense = t_defense + int(((t_card_passive/100) * t_max_health))
+                t_max_health = t_max_health - int(((t_card_passive/100) * t_max_health))
+                t_health = t_health - int(((t_card_passive/100) * t_max_health))
             elif t_card_passive_type == 'STANCE':
                 tempattack = t_attack + t_card_passive
                 t_attack = t_defense + t_card_passive            
@@ -17170,11 +17174,11 @@ class CrownUnlimited(commands.Cog):
                 o_stamina = t_card_passive
                 c_stamina = t_card_passive
             elif t_card_passive_type == 'FEAR':
-                o_attack = o_attack + int((t_card_passive/100) * o_attack)
-                o_defense = o_defense + int((t_card_passive/100) * o_defense)
-                c_attack = c_attack + int((t_card_passive/100) * c_attack)
-                c_defense = c_defense + int((t_card_passive/100) * c_defense)
-                t_max_health = t_max_health - int((t_card_passive/100) * t_max_health)
+                t_health = t_health - int((t_card_passive/1000 * t_health))
+                o_attack = o_attack - int((t_card_passive/1000 * t_health))
+                o_defense = o_defense - int((t_card_passive/1000 * t_health))
+                c_attack = c_attack - int((t_card_passive/1000 * t_health))
+                c_defense = c_defense - int((t_card_passive/1000 * t_health))
             elif t_card_passive_type == 'GAMBLE':
                 t_health = t_card_passive
                 o_health = t_card_passive
@@ -17221,9 +17225,9 @@ class CrownUnlimited(commands.Cog):
                     t_defense = t_defense + int(((t_title_passive_value/100) *t_health))
                     t_health = t_health - int((t_defense))
                 elif t_title_passive_type == 'GROWTH':            
-                    t_attack = t_attack + int((t_title_passive_value/100) * t_attack)
-                    t_defense = t_defense + int((t_title_passive_value/100) * t_defense)
-                    t_max_health = t_max_health - int((t_title_passive_value/100) * t_max_health)
+                    t_attack = t_attack + int(((t_title_passive_value/100) * t_max_health) * .2)
+                    t_defense = t_defense + int(((t_title_passive_value/100) * t_max_health) * .2)
+                    t_max_health = t_max_health - int(((t_title_passive_value/100) * t_max_health) * .2)
                 elif t_title_passive_type == 'STANCE':
                     tempattack = t_attack + t_title_passive_value
                     t_attack = t_defense  + t_title_passive_value          
@@ -17255,11 +17259,11 @@ class CrownUnlimited(commands.Cog):
                     o_stamina = t_title_passive_value
                     c_stamina = t_title_passive_value
                 elif t_title_passive_type == 'FEAR':
-                    o_attack = o_attack + int((t_title_passive_value/100) * o_attack)
-                    o_defense = o_defense + int((t_title_passive_value/100) * o_defense)
-                    c_attack = c_attack + int((t_title_passive_value/100) * c_attack)
-                    c_defense = c_defense + int((t_title_passive_value/100) * c_defense)
-                    t_max_health = t_max_health - int((t_title_passive_value/100) * t_max_health)
+                    t_health = t_health - int((.25 * t_title_passive_value))
+                    o_attack = o_attack - int((.25 * t_title_passive_value))
+                    o_defense = o_defense - int((.25 * t_title_passive_value))
+                    c_attack = c_attack - int((.25 * t_title_passive_value))
+                    c_defense = c_defense - int((.25 * t_title_passive_value))
                 elif t_title_passive_type == 'GAMBLE':
                     t_health = t_title_passive_value
                     o_health = t_title_passive_value
@@ -17485,7 +17489,7 @@ class CrownUnlimited(commands.Cog):
                         **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                         :cyclone: 10 | **:boom: {omove1_text}** | _1_
                         :cyclone: 30 | **:comet: {omove2_text}** | _2_
-                        :cyclone: 80 | **:sparkles: {omove3_text}** | _3_
+                        :cyclone: 80 | **:rosette: {omove3_text}** | _3_
                         :cyclone: 20 | **:microbe: {omove_enhanced_text}** | _4_
                         :cyclone: 20 | **Defend Companion** | _0_
                         
@@ -17837,9 +17841,9 @@ class CrownUnlimited(commands.Cog):
                                         c_health = round(c_health - dmg['DMG'])
                                         c_defense = round(c_defense +(.75 * dmg['DMG']))
                                     elif comp_enh == 'GROWTH':
-                                        c_max_health = round(c_max_health - (c_max_health * dmg['DMG']))
-                                        c_defense = round(c_defense + (c_defense * dmg['DMG']))
-                                        c_attack = round(c_attack + (c_attack * dmg['DMG']))
+                                        c_max_health = round(c_max_health - dmg['DMG'])
+                                        c_defense = round(c_defense + (.3 * dmg['DMG']))
+                                        c_attack = round(c_attack + (.3 * dmg['DMG']))
                                     elif comp_enh == 'STANCE':
                                         tempattack = dmg['DMG']
                                         c_attack = c_defense
@@ -18507,9 +18511,9 @@ class CrownUnlimited(commands.Cog):
                                             t_health = round(t_health - dmg['DMG'])
                                             t_defense = round(t_defense + (.75 * dmg['DMG']))
                                         elif enh_type == 'GROWTH':
-                                            t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                            t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                            t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                            t_attack = round(t_attack+ (.3 * dmg['DMG']))
                                         elif enh_type == 'STANCE':
                                             tempattack = dmg['DMG']
                                             t_attack = t_defense
@@ -18632,9 +18636,9 @@ class CrownUnlimited(commands.Cog):
                                             t_health = round(t_health - dmg['DMG'])
                                             t_defense = round(t_defense + (.75 * dmg['DMG']))
                                         elif enh_type == 'GROWTH':
-                                            t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                            t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                            t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                            t_attack = round(t_attack+ (.3 * dmg['DMG']))
                                         elif enh_type == 'STANCE':
                                             tempattack = dmg['DMG']
                                             t_attack = t_defense
@@ -18882,7 +18886,7 @@ class CrownUnlimited(commands.Cog):
                         **:heart: {c_health}/:cyclone: {c_stamina} :dagger:{c_attack}/:shield:{c_defense}**
                         :cyclone: 10 | **:boom: {cmove1_text}** | _1_
                         :cyclone: 30 | **:comet: {cmove2_text}** | _2_
-                        :cyclone: 80 | **:sparkles: {cmove3_text}** | _3_
+                        :cyclone: 80 | **:rosette: {cmove3_text}** | _3_
                         :cyclone: 20 **:microbe: {cmove_enhanced_text}** | _4_
                         **Enhance {o_card}** 20 Stamina _press 7_
                         :cyclone: 20 | **Defend {o_card}** | _0_
@@ -19134,9 +19138,9 @@ class CrownUnlimited(commands.Cog):
                                             c_health = round(c_health - dmg['DMG'])
                                             c_defense = round(c_defense +(.75 * dmg['DMG']))
                                         elif cpet_type == 'GROWTH':
-                                            c_max_health = round(c_max_health - (c_max_health * dmg['DMG']))
+                                            c_max_health = round(c_max_health - dmg['DMG'])
                                             c_defense = round(c_defense + (c_defense * dmg['DMG']))
-                                            c_attack = round(c_attack + (c_attack * dmg['DMG']))
+                                            c_attack = round(c_attack + (c_attack *  (.75 * dmg['DMG'])))
                                         elif cpet_type == 'STANCE':
                                             tempattack = dmg['DMG']
                                             c_attack = c_defense
@@ -19232,9 +19236,9 @@ class CrownUnlimited(commands.Cog):
                                         o_health = round(o_health - dmg['DMG'])
                                         o_defense = round(o_defense +(.75 * dmg['DMG']))
                                     elif cenh_type == 'GROWTH':
-                                        o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
-                                        o_defense = round(o_defense + (o_defense* dmg['DMG']))
-                                        o_attack = round(o_attack + (o_attack * dmg['DMG']))
+                                        o_max_health = round(o_max_health - dmg['DMG'])
+                                        o_defense = round(o_defense + (.3 * dmg['DMG']))
+                                        o_attack = round(o_attack + (.3 * dmg['DMG']))
                                     elif cenh_type == 'STANCE':
                                         tempattack = dmg['DMG']
                                         o_attack = o_defense
@@ -19340,9 +19344,9 @@ class CrownUnlimited(commands.Cog):
                                             c_health = round(c_health - dmg['DMG'])
                                             c_defense = round(c_defense +(.75 * dmg['DMG']))
                                         elif enh_type == 'GROWTH':
-                                            c_max_health = round(c_max_health - (c_max_health * dmg['DMG']))
-                                            c_defense = round(c_defense + (c_defense * dmg['DMG']))
-                                            c_attack = round(c_attack + (c_attack * dmg['DMG']))
+                                            c_max_health = round(c_max_health - dmg['DMG'])
+                                            c_defense = round(c_defense + (.3 * dmg['DMG']))
+                                            c_attack = round(c_attack + (.3 * dmg['DMG']))
                                         elif enh_type == 'STANCE':
                                             tempattack = dmg['DMG']
                                             c_attack = c_defense
@@ -19902,9 +19906,9 @@ class CrownUnlimited(commands.Cog):
                                             t_health = round(t_health - dmg['DMG'])
                                             t_defense = round(t_defense + (.75 * dmg['DMG']))
                                         elif enh_type == 'GROWTH':
-                                            t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                            t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                            t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                            t_attack = round(t_attack+ (.3 * dmg['DMG']))
                                         elif enh_type == 'STANCE':
                                             tempattack = dmg['DMG']
                                             t_attack = t_defense
@@ -20028,9 +20032,9 @@ class CrownUnlimited(commands.Cog):
                                             t_health = round(t_health - dmg['DMG'])
                                             t_defense = round(t_defense + (.75 * dmg['DMG']))
                                         elif enh_type == 'GROWTH':
-                                            t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                            t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                            t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                            t_attack = round(t_attack+ (.3 * dmg['DMG']))
                                         elif enh_type == 'STANCE':
                                             tempattack = dmg['DMG']
                                             t_attack = t_defense
@@ -20741,8 +20745,8 @@ class CrownUnlimited(commands.Cog):
                 c_defense = c_defense + int(((c_card_passive/100) *c_health))
                 c_health = c_health - int((c_defense))
             elif c_card_passive_type == 'GROWTH':            
-                c_attack = c_attack + int(((c_card_passive/100) * c_attack))
-                c_defense = c_defense + int(((c_card_passive/100) * c_defense))
+                c_attack = c_attack + int(((c_card_passive/100) * c_max_health))
+                c_defense = c_defense + int(((c_card_passive/100) * c_max_health))
                 c_max_health = c_max_health - int(((c_card_passive/100) * c_max_health))
                 c_health = c_health - int(((c_card_passive/100) * c_max_health))
             elif c_card_passive_type == 'STANCE':
@@ -20770,9 +20774,9 @@ class CrownUnlimited(commands.Cog):
                 c_stamina = c_card_passive
                 t_stamina = c_card_passive
             elif c_card_passive_type == 'FEAR':
-                c_health = c_health - int((c_card_passive/100 * c_health))
-                t_attack = t_attack - int((c_card_passive/100 * t_attack))
-                t_defense = t_defense - int((c_card_passive/100 * t_defense))
+                c_health = c_health - int((c_card_passive/1000 * c_health))
+                t_attack = t_attack - int((c_card_passive/1000 * c_health))
+                t_defense = t_defense - int((c_card_passive/1000 * c_health))
             elif c_card_passive_type == 'GAMBLE':
                 c_health = c_card_passive
                 t_health = c_card_passive * 2
@@ -20816,9 +20820,9 @@ class CrownUnlimited(commands.Cog):
                     c_defense = c_defense + int(((c_title_passive_value/100) *c_health))
                     c_health = c_health - int((c_defense))
                 elif c_title_passive_type == 'GROWTH':            
-                    c_attack = c_attack + int(((c_title_passive_value/100) * c_attack))
-                    c_defense = c_defense + int(((c_title_passive_value/100) * c_defense))
-                    c_max_health = c_max_health - int(((c_title_passive_value/100) * c_max_health))
+                    c_attack = c_attack + int(((c_title_passive_value/100) * c_max_health) * .2)
+                    c_defense = c_defense + int(((c_title_passive_value/100) * c_max_health) * .2)
+                    c_max_health = c_max_health - int(((c_title_passive_value/100) * c_max_health) * .2)
                 elif c_title_passive_type == 'STANCE':
                     tempattack = c_attack
                     c_attack = c_defense            
@@ -20844,9 +20848,9 @@ class CrownUnlimited(commands.Cog):
                     c_stamina = c_title_passive_value
                     t_stamina = c_title_passive_value
                 elif c_title_passive_type == 'FEAR':
-                    c_health = c_health - int((c_title_passive_value/100 * c_health))
-                    t_attack = t_attack - int((c_title_passive_value/100 * t_attack))
-                    t_defense = t_defense - int((c_title_passive_value/100 * t_defense))
+                    c_health = c_health - int((.25 * c_title_passive_value))
+                    t_attack = t_attack - int((.25 * c_title_passive_value))
+                    t_defense = t_defense - int((.25 * c_title_passive_value))
                 elif c_title_passive_type == 'GAMBLE':
                     t_health = c_title_passive_value * 2
                     c_health = c_title_passive_value
@@ -20889,9 +20893,9 @@ class CrownUnlimited(commands.Cog):
                 c_defense = c_defense + int(((carm_passive_value/100) *c_health))
                 c_health = c_health - int((c_defense))
             elif carm_passive_type == 'GROWTH':            
-                c_attack = c_attack + int(((carm_passive_value/100) * c_attack))
-                c_defense = c_defense + int(((carm_passive_value/100) * c_defense))
-                c_max_health = c_max_health - int(((carm_passive_value/100) * c_max_health))
+                c_attack = c_attack + int(((carm_passive_value/100) * c_max_health) * .2)
+                c_defense = c_defense + int(((carm_passive_value/100) * c_max_health) * .2)
+                c_max_health = c_max_health - int(((carm_passive_value/100) * c_max_health) * .2)
             elif carm_passive_type == 'STANCE':
                 tempattack = c_attack + carm_passive_value
                 c_attack = c_defense  + carm_passive_value         
@@ -20917,9 +20921,9 @@ class CrownUnlimited(commands.Cog):
                 c_stamina = carm_passive_value
                 t_stamina = carm_passive_value
             elif carm_passive_type == 'FEAR':
-                c_health = c_health - int((c_card_passive/100 * c_health))
-                t_attack = t_attack - int((c_card_passive/100 * t_attack))
-                t_defense = t_defense - int((c_card_passive/100 * t_defense))
+                c_health = c_health - int((.25 * carm_passive_value))
+                t_attack = t_attack - int((.25 * carm_passive_value))
+                t_defense = t_defense - int((.25 * carm_passive_value))
             elif carm_passive_type == 'GAMBLE':
                 t_health = carm_passive_value * 2
                 c_health = carm_passive_value
@@ -21028,9 +21032,9 @@ class CrownUnlimited(commands.Cog):
                 o_stamina = o_card_passive
                 t_stamina = o_card_passive
             elif o_card_passive_type == 'FEAR':
-                o_health = o_health - int((o_card_passive/100 * o_health))
-                t_attack = t_attack - int((o_card_passive/100 * t_attack))
-                t_defense = t_defense - int((o_card_passive/100 * t_defense))
+                o_health = o_health - int((o_card_passive/1000 * o_health))
+                t_attack = t_attack - int((o_card_passive/1000 * o_health))
+                t_defense = t_defense - int((o_card_passive/1000 * o_health))
             elif o_card_passive_type == 'GAMBLE':
                 o_health = o_card_passive
                 t_health = o_card_passive * 2  
@@ -21102,9 +21106,9 @@ class CrownUnlimited(commands.Cog):
                     o_stamina = o_title_passive_value
                     t_stamina = o_title_passive_value
                 elif o_title_passive_type == 'FEAR':
-                    o_health = o_health - int((o_title_passive_value/100 * o_health))
-                    t_attack = t_attack - int((o_title_passive_value/100 * t_attack))
-                    t_defense = t_defense - int((o_title_passive_value/100 * t_defense))
+                    o_health = o_health - int((.25 * o_title_passive_value))
+                    t_attack = t_attack - int((.25 * o_title_passive_value))
+                    t_defense = t_defense - int((.25 * o_title_passive_value))
                 elif o_title_passive_type == 'GAMBLE':
                     t_health = o_title_passive_value * 2
                     o_health = o_title_passive_value
@@ -21175,9 +21179,9 @@ class CrownUnlimited(commands.Cog):
                 o_stamina = oarm_passive_value
                 t_stamina = oarm_passive_value
             elif oarm_passive_type == 'FEAR':
-                o_health = o_health - int((oarm_passive_value/100 * o_health))
-                t_attack = t_attack - int((oarm_passive_value/100 * t_attack))
-                t_defense = t_defense - int((oarm_passive_value/100 * t_defense))
+                o_health = o_health - int((.25 * oarm_passive_value))
+                t_attack = t_attack - int((.25 * oarm_passive_value))
+                t_defense = t_defense - int((.25 * oarm_passive_value))
             elif oarm_passive_type == 'GAMBLE':
                 t_health = oarm_passive_value * 2
                 o_health = oarm_passive_value
@@ -21221,15 +21225,15 @@ class CrownUnlimited(commands.Cog):
                 t_defense = t_defense + int(((tarm_passive_value/100) *t_attack))
                 t_attack = t_attack - int(((tarm_passive_value/100) * t_defense))
             elif tarm_passive_type == 'BZRK':            
-                t_attack = t_attack + int(((tarm_passive_value/100)* t_health))
-                t_health = t_health - int((t_attack))
+                t_attack = t_attack + int((.25*tarm_passive_value))
+                t_health = t_health - int((tarm_passive_value))
             elif tarm_passive_type == 'CRYSTAL':            
-                t_defense = t_defense + int(((tarm_passive_value/100) *t_health))
-                t_health = t_health - int((t_defense))
+                t_defense = t_defense + int((.25*tarm_passive_value))
+                t_health = t_health - int((tarm_passive_value))
             elif tarm_passive_type == 'GROWTH':            
-                t_attack = t_attack + int((tarm_passive_value/100) * t_attack)
-                t_defense = t_defense + int((tarm_passive_value/100) * t_defense)
-                t_max_health = t_max_health - int((tarm_passive_value/100) * t_max_health)
+                t_attack = t_attack + int(((tarm_passive_value/100) * t_max_health) * .2)
+                t_defense = t_defense + int(((tarm_passive_value/100) * t_max_health) * .2)
+                t_max_health = t_max_health - int(((tarm_passive_value/100) * t_max_health) * .2)
             elif tarm_passive_type == 'STANCE':
                 tempattack = t_attack + tarm_passive_value
                 t_attack = t_defense  + tarm_passive_value         
@@ -21260,11 +21264,11 @@ class CrownUnlimited(commands.Cog):
                 o_stamina = tarm_passive_value
                 c_stamina = tarm_passive_value
             elif tarm_passive_type == 'FEAR':
-                o_attack = o_attack + int((tarm_passive_value/100) * o_attack)
-                o_defense = o_defense + int((tarm_passive_value/100) * o_defense)
-                c_attack = c_attack + int((tarm_passive_value/100) * c_attack)
-                c_defense = c_defense + int((tarm_passive_value/100) * c_defense)
-                t_max_health = t_max_health - int((tarm_passive_value/100) * t_max_health)
+                t_health = t_health - int((.25 * tarm_passive_value))
+                o_attack = o_attack - int((.25 * tarm_passive_value))
+                o_defense = o_defense - int((.25 * tarm_passive_value))
+                c_attack = c_attack - int((.25 * tarm_passive_value))
+                c_defense = c_defense - int((.25 * tarm_passive_value))
             elif tarm_passive_type == 'GAMBLE':
                 t_health = tarm_passive_value * 2
                 o_health = tarm_passive_value
@@ -21315,9 +21319,10 @@ class CrownUnlimited(commands.Cog):
                 t_defense = t_defense + int(((t_card_passive/100) *t_health))
                 t_health = t_health - int((t_defense))
             elif t_card_passive_type == 'GROWTH':            
-                t_attack = t_attack + int((t_card_passive/100) * t_attack)
-                t_defense = t_defense + int((t_card_passive/100) * t_defense)
-                t_max_health = t_max_health - int((t_card_passive/100) * t_max_health)
+                t_attack =  t_attack + int(((t_card_passive/100) * t_max_health))
+                t_defense = t_defense + int(((t_card_passive/100) * t_max_health))
+                t_max_health = t_max_health - int(((t_card_passive/100) * t_max_health))
+                t_health = t_health - int(((t_card_passive/100) * t_max_health))
             elif t_card_passive_type == 'STANCE':
                 tempattack = t_attack + t_card_passive
                 t_attack = t_defense + t_card_passive            
@@ -21344,11 +21349,11 @@ class CrownUnlimited(commands.Cog):
                 o_stamina = t_card_passive
                 c_stamina = t_card_passive
             elif t_card_passive_type == 'FEAR':
-                o_attack = o_attack + int((t_card_passive/100) * o_attack)
-                o_defense = o_defense + int((t_card_passive/100) * o_defense)
-                c_attack = c_attack + int((t_card_passive/100) * c_attack)
-                c_defense = c_defense + int((t_card_passive/100) * c_defense)
-                t_max_health = t_max_health - int((t_card_passive/100) * t_max_health)
+                t_health = t_health - int((t_card_passive/1000 * t_health))
+                o_attack = o_attack - int((t_card_passive/1000 * t_health))
+                o_defense = o_defense - int((t_card_passive/1000 * t_health))
+                c_attack = o_attack - int((t_card_passive/1000 * t_health))
+                c_defense = o_defense - int((t_card_passive/1000 * t_health))
             elif t_card_passive_type == 'GAMBLE':
                 t_health = t_card_passive * 2
                 o_health = t_card_passive
@@ -21395,9 +21400,9 @@ class CrownUnlimited(commands.Cog):
                     t_defense = t_defense + int(((t_title_passive_value/100) *t_health))
                     t_health = t_health - int((t_defense))
                 elif t_title_passive_type == 'GROWTH':            
-                    t_attack = t_attack + int((t_title_passive_value/100) * t_attack)
-                    t_defense = t_defense + int((t_title_passive_value/100) * t_defense)
-                    t_max_health = t_max_health - int((t_title_passive_value/100) * t_max_health)
+                    t_attack = t_attack + int(((t_title_passive_value/100) * t_max_health) * .2)
+                    t_defense = t_defense + int(((t_title_passive_value/100) * t_max_health) * .2)
+                    t_max_health = t_max_health - int(((t_title_passive_value/100) * t_max_health) * .2)
                 elif t_title_passive_type == 'STANCE':
                     tempattack = t_attack + t_title_passive_value
                     t_attack = t_defense  + t_title_passive_value          
@@ -21429,11 +21434,11 @@ class CrownUnlimited(commands.Cog):
                     o_stamina = t_title_passive_value
                     c_stamina = t_title_passive_value
                 elif t_title_passive_type == 'FEAR':
-                    o_attack = o_attack + int((t_title_passive_value/100) * o_attack)
-                    o_defense = o_defense + int((t_title_passive_value/100) * o_defense)
-                    c_attack = c_attack + int((t_title_passive_value/100) * c_attack)
-                    c_defense = c_defense + int((t_title_passive_value/100) * c_defense)
-                    t_max_health = t_max_health - int((t_title_passive_value/100) * t_max_health)
+                    t_health = t_health - int((.25 * t_title_passive_value))
+                    o_attack = o_attack - int((.25 * t_title_passive_value))
+                    o_defense = o_defense - int((.25 * t_title_passive_value))
+                    c_attack = c_attack - int((.25 * t_title_passive_value))
+                    c_defense = c_defense - int((.25 * t_title_passive_value))
                 elif t_title_passive_type == 'GAMBLE':
                     t_health = t_title_passive_value * 2
                     o_health = t_title_passive_value
@@ -21659,7 +21664,7 @@ class CrownUnlimited(commands.Cog):
                         **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                         :cyclone: 10 | **:boom: {omove1_text}** | _1_
                         :cyclone: 30 | **:comet: {omove2_text}** | _2_
-                        :cyclone: 80 | **:sparkles: {omove3_text}** | _3_
+                        :cyclone: 80 | **:rosette: {omove3_text}** | _3_
                         :cyclone: 20 | **:microbe: {omove_enhanced_text}** | _4_
                         :cyclone: 20 | **Enhance {c_card}** | _7_
                         **Defend {c_card}**  :cyclone: 20 | _0_
@@ -22012,9 +22017,9 @@ class CrownUnlimited(commands.Cog):
                                         c_health = round(c_health - dmg['DMG'])
                                         c_defense = round(c_defense +(.75 * dmg['DMG']))
                                     elif comp_enh == 'GROWTH':
-                                        c_max_health = round(c_max_health - (c_max_health * dmg['DMG']))
-                                        c_defense = round(c_defense + (c_defense * dmg['DMG']))
-                                        c_attack = round(c_attack + (c_attack * dmg['DMG']))
+                                        c_max_health = round(c_max_health - dmg['DMG'])
+                                        c_defense = round(c_defense + (.3 * dmg['DMG']))
+                                        c_attack = round(c_attack + (.3 * dmg['DMG']))
                                     elif comp_enh == 'STANCE':
                                         tempattack = dmg['DMG']
                                         c_attack = c_defense
@@ -22687,9 +22692,9 @@ class CrownUnlimited(commands.Cog):
                                             t_health = round(t_health - dmg['DMG'])
                                             t_defense = round(t_defense + (.75 * dmg['DMG']))
                                         elif tpet_type == 'GROWTH':
-                                            t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                            t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                            t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                            t_attack = round(t_attack+ (.3 * dmg['DMG']))
                                         elif tpet_type == 'STANCE':
                                             tempattack = dmg['DMG']
                                             t_attack = t_defense
@@ -22783,9 +22788,9 @@ class CrownUnlimited(commands.Cog):
                                             t_health = round(t_health - dmg['DMG'])
                                             t_defense = round(t_defense + (.75 * dmg['DMG']))
                                         elif tpet_type == 'GROWTH':
-                                            t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                            t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                            t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                            t_attack = round(t_attack+ (.3 * dmg['DMG']))
                                         elif tpet_type == 'STANCE':
                                             tempattack = dmg['DMG']
                                             t_attack = t_defense
@@ -22882,9 +22887,9 @@ class CrownUnlimited(commands.Cog):
                                             t_health = round(t_health - dmg['DMG'])
                                             t_defense = round(t_defense + (.75 * dmg['DMG']))
                                         elif enh_type == 'GROWTH':
-                                            t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                            t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                            t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                            t_attack = round(t_attack+ (.3 * dmg['DMG']))
                                         elif enh_type == 'STANCE':
                                             tempattack = dmg['DMG']
                                             t_attack = t_defense
@@ -23007,9 +23012,9 @@ class CrownUnlimited(commands.Cog):
                                             t_health = round(t_health - dmg['DMG'])
                                             t_defense = round(t_defense + (.75 * dmg['DMG']))
                                         elif enh_type == 'GROWTH':
-                                            t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                            t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                            t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                            t_attack = round(t_attack+ (.3 * dmg['DMG']))
                                         elif enh_type == 'STANCE':
                                             tempattack = dmg['DMG']
                                             t_attack = t_defense
@@ -23257,7 +23262,7 @@ class CrownUnlimited(commands.Cog):
                         **:heart: {c_health}/:cyclone: {c_stamina} :dagger:{c_attack}/:shield:{c_defense}**
                         :cyclone: 10 | **:boom: {cmove1_text}** | _1_
                         :cyclone: 30 | **:comet: {cmove2_text}** | _2_
-                        :cyclone: 80 | **:sparkles: {cmove3_text}** | _3_
+                        :cyclone: 80 | **:rosette: {cmove3_text}** | _3_
                         :cyclone: 20 **:microbe: {cmove_enhanced_text}** | _4_
                         **Enhance {o_card}** 20 Stamina _press 7_
                         :cyclone: 20 | **Defend {o_card}** | _0_
@@ -23509,9 +23514,9 @@ class CrownUnlimited(commands.Cog):
                                             c_health = round(c_health - dmg['DMG'])
                                             c_defense = round(c_defense +(.75 * dmg['DMG']))
                                         elif cpet_type == 'GROWTH':
-                                            c_max_health = round(c_max_health - (c_max_health * dmg['DMG']))
+                                            c_max_health = round(c_max_health - dmg['DMG'])
                                             c_defense = round(c_defense + (c_defense * dmg['DMG']))
-                                            c_attack = round(c_attack + (c_attack * dmg['DMG']))
+                                            c_attack = round(c_attack + (c_attack *  (.75 * dmg['DMG'])))
                                         elif cpet_type == 'STANCE':
                                             tempattack = dmg['DMG']
                                             c_attack = c_defense
@@ -23607,9 +23612,9 @@ class CrownUnlimited(commands.Cog):
                                         o_health = round(o_health - dmg['DMG'])
                                         o_defense = round(o_defense +(.75 * dmg['DMG']))
                                     elif cenh_type == 'GROWTH':
-                                        o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
-                                        o_defense = round(o_defense + (o_defense* dmg['DMG']))
-                                        o_attack = round(o_attack + (o_attack * dmg['DMG']))
+                                        o_max_health = round(o_max_health - dmg['DMG'])
+                                        o_defense = round(o_defense + (.3 * dmg['DMG']))
+                                        o_attack = round(o_attack + (.3 * dmg['DMG']))
                                     elif cenh_type == 'STANCE':
                                         tempattack = dmg['DMG']
                                         o_attack = o_defense
@@ -23715,9 +23720,9 @@ class CrownUnlimited(commands.Cog):
                                             c_health = round(c_health - dmg['DMG'])
                                             c_defense = round(c_defense +(.75 * dmg['DMG']))
                                         elif enh_type == 'GROWTH':
-                                            c_max_health = round(c_max_health - (c_max_health * dmg['DMG']))
-                                            c_defense = round(c_defense + (c_defense * dmg['DMG']))
-                                            c_attack = round(c_attack + (c_attack * dmg['DMG']))
+                                            c_max_health = round(c_max_health - dmg['DMG'])
+                                            c_defense = round(c_defense + (.3 * dmg['DMG']))
+                                            c_attack = round(c_attack + (.3 * dmg['DMG']))
                                         elif enh_type == 'STANCE':
                                             tempattack = dmg['DMG']
                                             c_attack = c_defense
@@ -24282,9 +24287,9 @@ class CrownUnlimited(commands.Cog):
                                             t_health = round(t_health - dmg['DMG'])
                                             t_defense = round(t_defense + (.75 * dmg['DMG']))
                                         elif tpet_type == 'GROWTH':
-                                            t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                            t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                            t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                            t_attack = round(t_attack+ (.3 * dmg['DMG']))
                                         elif tpet_type == 'STANCE':
                                             tempattack = dmg['DMG']
                                             t_attack = t_defense
@@ -24378,9 +24383,9 @@ class CrownUnlimited(commands.Cog):
                                             t_health = round(t_health - dmg['DMG'])
                                             t_defense = round(t_defense + (.75 * dmg['DMG']))
                                         elif tpet_type == 'GROWTH':
-                                            t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                            t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                            t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                            t_attack = round(t_attack+ (.3 * dmg['DMG']))
                                         elif tpet_type == 'STANCE':
                                             tempattack = dmg['DMG']
                                             t_attack = t_defense
@@ -24476,9 +24481,9 @@ class CrownUnlimited(commands.Cog):
                                             t_health = round(t_health - dmg['DMG'])
                                             t_defense = round(t_defense + (.75 * dmg['DMG']))
                                         elif enh_type == 'GROWTH':
-                                            t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                            t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                            t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                            t_attack = round(t_attack+ (.3 * dmg['DMG']))
                                         elif enh_type == 'STANCE':
                                             tempattack = dmg['DMG']
                                             t_attack = t_defense
@@ -24602,9 +24607,9 @@ class CrownUnlimited(commands.Cog):
                                             t_health = round(t_health - dmg['DMG'])
                                             t_defense = round(t_defense + (.75 * dmg['DMG']))
                                         elif enh_type == 'GROWTH':
-                                            t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                            t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                            t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                            t_max_health = round(t_max_health - dmg['DMG'])
+                                            t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                            t_attack = round(t_attack+ (.3 * dmg['DMG']))
                                         elif enh_type == 'STANCE':
                                             tempattack = dmg['DMG']
                                             t_attack = t_defense
@@ -25285,11 +25290,11 @@ class CrownUnlimited(commands.Cog):
             t_stamina = t_stamina - int(c_card_passive)
             c_stamina = c_stamina + int(c_card_passive)
         elif c_card_passive_type == 'FLOG':
-            c_attack = c_attack + int((((c_card_passive/1.5)/100) *t_attack))
-            t_attack = t_attack - int((((c_card_passive/1.5)/100) *t_attack))
+            c_attack = c_attack + int((((c_card_passive/4)/100) *t_attack))
+            t_attack = t_attack - int((((c_card_passive/4)/100) *t_attack))
         elif c_card_passive_type == 'WITHER':
-            c_defense = c_defense + int((((c_card_passive/1.5)/100) *t_defense))
-            t_defense = t_defense - int((((c_card_passive/1.5)/100) *t_defense))
+            c_defense = c_defense + int((((c_card_passive/4)/100) *t_defense))
+            t_defense = t_defense - int((((c_card_passive/4)/100) *t_defense))
         elif c_card_passive_type == 'RAGE':
             c_attack = c_attack + int(((c_card_passive/100) * c_defense))
             c_defense = c_defense - int(((c_card_passive/100) * c_attack))
@@ -25303,10 +25308,9 @@ class CrownUnlimited(commands.Cog):
             c_defense = c_defense + int(((c_card_passive/100) *c_health))
             c_health = c_health - int((c_defense))
         elif c_card_passive_type == 'GROWTH':            
-            c_attack = c_attack + int(((c_card_passive/100) * c_attack))
-            c_defense = c_defense + int(((c_card_passive/100) * c_defense))
+            c_attack = c_attack + int(((c_card_passive/100) * c_max_health))
+            c_defense = c_defense + int(((c_card_passive/100) * c_max_health))
             c_max_health = c_max_health - int(((c_card_passive/100) * c_max_health))
-            c_health = c_health - int(((c_card_passive/100) * c_max_health))
         elif c_card_passive_type == 'STANCE':
             tempattack = c_attack + c_card_passive
             c_attack = c_defense  + c_card_passive          
@@ -25332,9 +25336,9 @@ class CrownUnlimited(commands.Cog):
             c_stamina = c_card_passive
             t_stamina = c_card_passive
         elif c_card_passive_type == 'FEAR':
-            c_health = c_health - int((c_card_passive/100 * c_health))
-            t_attack = t_attack - int((c_card_passive/100 * t_attack))
-            t_defense = t_defense - int((c_card_passive/100 * t_defense))
+            c_health = c_health - int((c_card_passive/1000 * c_health))
+            t_attack = t_attack - int((c_card_passive/1000 * c_health))
+            t_defense = t_defense - int((c_card_passive/1000 * c_health))
         elif c_card_passive_type == 'GAMBLE':
             c_health = c_card_passive
             t_health = c_card_passive * 5  
@@ -25366,21 +25370,21 @@ class CrownUnlimited(commands.Cog):
                 c_defense = c_defense + int((((c_title_passive_value/1.5)/100) *t_defense))
                 t_defense = t_defense - int((((c_title_passive_value/1.5)/100) *t_defense))
             elif c_title_passive_type == 'RAGE':
-                c_attack = c_attack + int(((c_title_passive_value/100) * c_defense))
-                c_defense = c_defense - int(((c_title_passive_value/100) * c_attack))
+                c_attack = c_attack + int((.25 * c_title_passive_value))
+                c_defense = c_defense - int((.25 * c_title_passive_value))
             elif c_title_passive_type == 'BRACE':            
-                c_defense = c_defense + int(((c_title_passive_value/100) * c_attack))
-                c_attack = c_attack - int(((c_title_passive_value/100) * c_defense))
+                c_defense = c_defense + int((.25 *c_title_passive_value))
+                c_attack = c_attack - int((.25 * c_title_passive_value))
             elif c_title_passive_type == 'BZRK':            
-                c_attack = c_attack + int(((c_title_passive_value/100) * c_health))
-                c_health = c_health - int((c_attack))
+                c_attack = c_attack + int((.75 *c_title_passive_value))
+                c_health = c_health - int((c_title_passive_value))
             elif c_title_passive_type == 'CRYSTAL':            
-                c_defense = c_defense + int(((c_title_passive_value/100) *c_health))
-                c_health = c_health - int((c_defense))
+                c_defense = c_defense + int((.75 *c_title_passive_value))
+                c_health = c_health - int((c_title_passive_value))
             elif c_title_passive_type == 'GROWTH':            
-                c_attack = c_attack + int(((c_title_passive_value/100) * c_attack))
-                c_defense = c_defense + int(((c_title_passive_value/100) * c_defense))
-                c_max_health = c_max_health - int(((c_title_passive_value/100) * c_max_health))
+                c_attack = c_attack + int((.25 * c_title_passive_value))
+                c_defense = c_defense + int((.25 * c_title_passive_value))
+                c_max_health = c_max_health - int((.25 * c_title_passive_value))
             elif c_title_passive_type == 'STANCE':
                 tempattack = c_attack
                 c_attack = c_defense            
@@ -25406,9 +25410,9 @@ class CrownUnlimited(commands.Cog):
                 c_stamina = c_title_passive_value
                 t_stamina = c_title_passive_value
             elif c_title_passive_type == 'FEAR':
-                c_health = c_health - int((c_title_passive_value/100 * c_health))
-                t_attack = t_attack - int((c_title_passive_value/100 * t_attack))
-                t_defense = t_defense - int((c_title_passive_value/100 * t_defense))
+                c_health = c_health - int((.25 * c_title_passive_value))
+                t_attack = t_attack - int((.25 * c_title_passive_value))
+                t_defense = t_defense - int((.25 * c_title_passive_value))
             elif c_title_passive_type == 'GAMBLE':
                 t_health = c_title_passive_value * 5
                 c_health = c_title_passive_value
@@ -25439,21 +25443,21 @@ class CrownUnlimited(commands.Cog):
             c_defense = c_defense + int((((carm_passive_value/1.5)/100) *t_defense))
             t_defense = t_defense - int((((carm_passive_value/1.5)/100) *t_defense))
         elif carm_passive_type == 'RAGE':
-            c_attack = c_attack + int(((carm_passive_value/100) * c_defense))
-            c_defense = c_defense - int(((carm_passive_value/100) * c_attack))
+            c_attack = c_attack + int((.20 * carm_passive_value))
+            c_defense = c_defense - int((.20 *carm_passive_value))
         elif carm_passive_type == 'BRACE':            
-            c_defense = c_defense + int(((carm_passive_value/100) * c_attack))
-            c_attack = c_attack - int(((carm_passive_value/100) * c_defense))
+            c_defense = c_defense + int((.20 *carm_passive_value))
+            c_attack = c_attack - int((.20 * carm_passive_value))
         elif carm_passive_type == 'BZRK':            
-            c_attack = c_attack + int(((carm_passive_value/100) * c_health))
-            c_health = c_health - int((c_attack))
+            c_attack = c_attack + int((.25 * carm_passive_value))
+            c_health = c_health - int((carm_passive_value))
         elif carm_passive_type == 'CRYSTAL':            
-            c_defense = c_defense + int(((carm_passive_value/100) *c_health))
-            c_health = c_health - int((c_defense))
+            c_defense = c_defense + int((.75 *carm_passive_value))
+            c_health = c_health - int((carm_passive_value))
         elif carm_passive_type == 'GROWTH':            
-            c_attack = c_attack + int(((carm_passive_value/100) * c_attack))
-            c_defense = c_defense + int(((carm_passive_value/100) * c_defense))
-            c_max_health = c_max_health - int(((carm_passive_value/100) * c_max_health))
+            c_attack = c_attack + int((.25 * carm_passive_value))
+            c_defense = c_defense + int((.25 * carm_passive_value))
+            c_max_health = c_max_health - int((.25 * carm_passive_value))
         elif carm_passive_type == 'STANCE':
             tempattack = c_attack + carm_passive_value
             c_attack = c_defense  + carm_passive_value         
@@ -25479,9 +25483,9 @@ class CrownUnlimited(commands.Cog):
             c_stamina = carm_passive_value
             t_stamina = carm_passive_value
         elif carm_passive_type == 'FEAR':
-            c_health = c_health - int((c_card_passive/100 * c_health))
-            t_attack = t_attack - int((c_card_passive/100 * t_attack))
-            t_defense = t_defense - int((c_card_passive/100 * t_defense))
+            c_health = c_health - int((.25 * carm_passive_value))
+            t_attack = t_attack - int((.25 * carm_passive_value))
+            t_defense = t_defense - int((.25 * carm_passive_value))
         elif carm_passive_type == 'GAMBLE':
             t_health = carm_passive_value * 5
             c_health = carm_passive_value
@@ -25596,12 +25600,12 @@ class CrownUnlimited(commands.Cog):
             o_stamina = o_card_passive
             t_stamina = o_card_passive
         elif o_card_passive_type == 'FEAR':
-            o_health = o_health - int((o_card_passive/100 * o_health))
-            t_attack = t_attack - int((o_card_passive/100 * t_attack))
-            t_defense = t_defense - int((o_card_passive/100 * t_defense))
+            o_health = o_health - int((o_card_passive/1000 * o_health))
+            t_attack = t_attack - int((o_card_passive/1000 * o_health))
+            t_defense = t_defense - int((o_card_passive/1000 * o_health))
         elif o_card_passive_type == 'GAMBLE':
             o_health = o_card_passive
-            t_health = o_card_passive * 5
+            t_health = o_card_passive   
             c_health = o_card_passive              
 
         # Title Passive
@@ -25670,11 +25674,11 @@ class CrownUnlimited(commands.Cog):
                 o_stamina = o_title_passive_value
                 t_stamina = o_title_passive_value
             elif o_title_passive_type == 'FEAR':
-                o_health = o_health - int((o_title_passive_value/100 * o_health))
-                t_attack = t_attack - int((o_title_passive_value/100 * t_attack))
-                t_defense = t_defense - int((o_title_passive_value/100 * t_defense))
+                o_health = o_health - int((.25 * o_title_passive_value))
+                t_attack = t_attack - int((.25 * o_title_passive_value))
+                t_defense = t_defense - int((.25 * o_title_passive_value))
             elif o_title_passive_type == 'GAMBLE':
-                t_health = o_title_passive_value * 5
+                t_health = o_title_passive_value
                 o_health = o_title_passive_value
 
         # Arm Passive Player 1
@@ -25742,11 +25746,11 @@ class CrownUnlimited(commands.Cog):
             o_stamina = oarm_passive_value
             t_stamina = oarm_passive_value
         elif oarm_passive_type == 'FEAR':
-            o_health = o_health - int((oarm_passive_value/100 * o_health))
-            t_attack = t_attack - int((oarm_passive_value/100 * t_attack))
-            t_defense = t_defense - int((oarm_passive_value/100 * t_defense))
+            o_health = o_health - int((.25 * oarm_passive_value))
+            t_attack = t_attack - int((.25 * oarm_passive_value))
+            t_defense = t_defense - int((.25 * oarm_passive_value))
         elif oarm_passive_type == 'GAMBLE':
-            t_health = oarm_passive_value * 5
+            t_health = oarm_passive_value
             o_health = oarm_passive_value
         # Arm Passive Player 2
         tarm_passive_type = list(tarm_passive.keys())[0]
@@ -25776,21 +25780,22 @@ class CrownUnlimited(commands.Cog):
             o_defense = o_defense - int(((tarm_passive_value/1.5)/100) *o_defense)
             c_defense = c_defense - int(((tarm_passive_value/1.5)/100) *c_defense)
         elif tarm_passive_type == 'RAGE':
-            t_attack = t_attack + int(((tarm_passive_value/100) * t_defense))
-            t_defense = t_defense - int(((tarm_passive_value/100) *t_attack))
+            t_attack = t_attack + int((.25 * tarm_passive_value))
+            t_defense = t_defense - int((.25*tarm_passive_value))
         elif tarm_passive_type == 'BRACE':            
-            t_defense = t_defense + int(((tarm_passive_value/100) *t_attack))
-            t_attack = t_attack - int(((tarm_passive_value/100) * t_defense))
+            t_defense = t_defense + int((.25*tarm_passive_value))
+            t_attack = t_attack - int((.25 * tarm_passive_value))
         elif tarm_passive_type == 'BZRK':            
-            t_attack = t_attack + int(((tarm_passive_value/100)* t_health))
-            t_health = t_health - int((t_attack))
+            t_attack = t_attack + int((.75 *tarm_passive_value))
+            t_health = t_health - int((tarm_passive_value))
         elif tarm_passive_type == 'CRYSTAL':            
-            t_defense = t_defense + int(((tarm_passive_value/100) *t_health))
-            t_health = t_health - int((t_defense))
+            t_defense = t_defense + int((.75 *tarm_passive_value))
+            t_health = t_health - int((tarm_passive_value))
         elif tarm_passive_type == 'GROWTH':            
-            t_attack = t_attack + int((tarm_passive_value/100) * t_attack)
-            t_defense = t_defense + int((tarm_passive_value/100) * t_defense)
-            t_max_health = t_max_health - int((tarm_passive_value/100) * t_max_health)
+            t_attack = t_attack + int((.25 * tarm_passive_value))
+            t_defense = t_defense + int((.25 * tarm_passive_value))
+            t_max_health = t_max_health - int((.25 * tarm_passive_value))
+            t_health = t_health - int((.25 * tarm_passive_value))
         elif tarm_passive_type == 'STANCE':
             tempattack = t_attack + tarm_passive_value
             t_attack = t_defense  + tarm_passive_value         
@@ -25817,11 +25822,11 @@ class CrownUnlimited(commands.Cog):
             o_stamina = tarm_passive_value
             c_stamina = tarm_passive_value
         elif tarm_passive_type == 'FEAR':
-            o_attack = o_attack + int((tarm_passive_value/100) * o_attack)
-            o_defense = o_defense + int((tarm_passive_value/100) * o_defense)
-            c_attack = c_attack + int((tarm_passive_value/100) * c_attack)
-            c_defense = c_defense + int((tarm_passive_value/100) * c_defense)
-            t_max_health = t_max_health - int((tarm_passive_value/100) * t_max_health)
+            t_health = t_health - int((.25 * tarm_passive_value))
+            o_attack = o_attack - int((.25 * tarm_passive_value))
+            o_defense = o_defense - int((.25 * tarm_passive_value))
+            c_attack = c_attack - int((.25 * tarm_passive_value))
+            c_defense = c_defense - int((.25 * tarm_passive_value))
         elif tarm_passive_type == 'GAMBLE':
             t_health = tarm_passive_value * 5
             o_health = tarm_passive_value
@@ -25874,9 +25879,9 @@ class CrownUnlimited(commands.Cog):
             t_defense = t_defense + int(((t_card_passive/100) *t_health))
             t_health = t_health - int((t_defense))
         elif t_card_passive_type == 'GROWTH':            
-            t_attack = t_attack + int((t_card_passive/100) * t_attack)
-            t_defense = t_defense + int((t_card_passive/100) * t_defense)
-            t_max_health = t_max_health - int((t_card_passive/100) * t_max_health)
+            t_attack = t_attack + int(((t_card_passive/100) * t_max_health))
+            t_defense = t_defense + int(((t_card_passive/100) * t_max_health))
+            t_max_health = t_max_health - int(((t_card_passive/100) * t_max_health))
         elif t_card_passive_type == 'STANCE':
             tempattack = t_attack + t_card_passive
             t_attack = t_defense + t_card_passive            
@@ -25903,11 +25908,11 @@ class CrownUnlimited(commands.Cog):
             o_stamina = t_card_passive
             c_stamina = t_card_passive
         elif t_card_passive_type == 'FEAR':
-            o_attack = o_attack + int((t_card_passive/100) * o_attack)
-            o_defense = o_defense + int((t_card_passive/100) * o_defense)
-            c_attack = c_attack + int((t_card_passive/100) * c_attack)
-            c_defense = c_defense + int((t_card_passive/100) * c_defense)
-            t_max_health = t_max_health - int((t_card_passive/100) * t_max_health)
+            t_health = t_health - int((t_card_passive/1000 * t_health))
+            o_attack = o_attack - int((t_card_passive/1000 * t_health))
+            o_defense = o_defense - int((t_card_passive/1000 * t_health))
+            c_attack = c_attack - int((t_card_passive/1000 * t_health))
+            c_defense = c_defense - int((t_card_passive/1000 * t_health))
         elif t_card_passive_type == 'GAMBLE':
             t_health = t_card_passive * 5
             o_health = t_card_passive
@@ -25942,21 +25947,21 @@ class CrownUnlimited(commands.Cog):
                 o_defense = o_defense - int(((t_title_passive_value/1.5)/100) *o_defense)
                 c_defense = c_defense - int(((t_title_passive_value/1.5)/100) *c_defense)
             elif t_title_passive_type == 'RAGE':
-                t_attack = t_attack + int(((t_title_passive_value/100) * t_defense))
-                t_defense = t_defense - int(((t_title_passive_value/100) *t_attack))
+                t_attack = t_attack + int((.25 * t_title_passive_value))
+                t_defense = t_defense - int((.25 * t_title_passive_value))
             elif t_title_passive_type == 'BRACE':            
-                t_defense = t_defense + int(((t_title_passive_value/100) *t_attack))
-                t_attack = t_attack - int(((t_title_passive_value/100) * t_defense))
+                t_defense = t_defense + int((.25 * t_title_passive_value))
+                t_attack = t_attack - int((.25 * t_title_passive_value))
             elif t_title_passive_type == 'BZRK':            
-                t_attack = t_attack + int(((t_title_passive_value/100)* t_health))
-                t_health = t_health - int((t_attack))
+                t_attack = t_attack + int((.25 * t_title_passive_value))
+                t_health = t_health - int((t_title_passive_value))
             elif t_title_passive_type == 'CRYSTAL':            
-                t_defense = t_defense + int(((t_title_passive_value/100) *t_health))
-                t_health = t_health - int((t_defense))
+                t_defense = t_defense + int((.25 * t_title_passive_value))
+                t_health = t_health - int((t_title_passive_value))
             elif t_title_passive_type == 'GROWTH':            
-                t_attack = t_attack + int((t_title_passive_value/100) * t_attack)
-                t_defense = t_defense + int((t_title_passive_value/100) * t_defense)
-                t_max_health = t_max_health - int((t_title_passive_value/100) * t_max_health)
+                t_attack = t_attack + int((.25 * t_title_passive_value))
+                t_defense = t_defense + int((.25 * t_title_passive_value))
+                t_max_health = t_max_health - int((.25 * t_title_passive_value))
             elif t_title_passive_type == 'STANCE':
                 tempattack = t_attack + t_title_passive_value
                 t_attack = t_defense  + t_title_passive_value          
@@ -25983,11 +25988,11 @@ class CrownUnlimited(commands.Cog):
                 o_stamina = t_title_passive_value
                 c_stamina = t_title_passive_value
             elif t_title_passive_type == 'FEAR':
-                o_attack = o_attack + int((t_title_passive_value/100) * o_attack)
-                o_defense = o_defense + int((t_title_passive_value/100) * o_defense)
-                c_attack = c_attack + int((t_title_passive_value/100) * c_attack)
-                c_defense = c_defense + int((t_title_passive_value/100) * c_defense)
-                t_max_health = t_max_health - int((t_title_passive_value/100) * t_max_health)
+                t_health = t_health - int((.25 * t_title_passive_value))
+                o_attack = o_attack - int((.25 * t_title_passive_value))
+                o_defense = o_defense - int((.25 * t_title_passive_value))
+                c_attack = c_attack - int((.25 * t_title_passive_value))
+                c_defense = c_defense - int((.25 * t_title_passive_value))
             elif t_title_passive_type == 'GAMBLE':
                 t_health = t_title_passive_value * 5
                 o_health = t_title_passive_value
@@ -26223,7 +26228,7 @@ class CrownUnlimited(commands.Cog):
                     **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                     :cyclone: 10 | **:boom: {omove1_text}** | _1_
                     :cyclone: 30 | **:comet: {omove2_text}** | _2_
-                    :cyclone: 80 | **:sparkles: {omove3_text}** | _3_
+                    :cyclone: 80 | **:rosette: {omove3_text}** | _3_
                     :cyclone: 20 | **:microbe: {omove_enhanced_text}** | _4_
                     :cyclone: 20 | **Enhance {c_card}** | _7_
                     **Defend {c_card}**  :cyclone: 20 | _0_
@@ -26576,9 +26581,9 @@ class CrownUnlimited(commands.Cog):
                                     c_health = round(c_health - dmg['DMG'])
                                     c_defense = round(c_defense +(.75 * dmg['DMG']))
                                 elif comp_enh == 'GROWTH':
-                                    c_max_health = round(c_max_health - (c_max_health * dmg['DMG']))
-                                    c_defense = round(c_defense + (c_defense * dmg['DMG']))
-                                    c_attack = round(c_attack + (c_attack * dmg['DMG']))
+                                    c_max_health = round(c_max_health - dmg['DMG'])
+                                    c_defense = round(c_defense + (.3 * dmg['DMG']))
+                                    c_attack = round(c_attack + (.3 * dmg['DMG']))
                                 elif comp_enh == 'STANCE':
                                     tempattack = dmg['DMG']
                                     c_attack = c_defense
@@ -27270,9 +27275,9 @@ class CrownUnlimited(commands.Cog):
                                         t_health = round(t_health - dmg['DMG'])
                                         t_defense = round(t_defense + (.75 * dmg['DMG']))
                                     elif tpet_type == 'GROWTH':
-                                        t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                        t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                        t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                        t_max_health = round(t_max_health - dmg['DMG'])
+                                        t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                        t_attack = round(t_attack+ (.3 * dmg['DMG']))
                                     elif tpet_type == 'STANCE':
                                         tempattack = dmg['DMG']
                                         t_attack = t_defense
@@ -27366,9 +27371,9 @@ class CrownUnlimited(commands.Cog):
                                         t_health = round(t_health - dmg['DMG'])
                                         t_defense = round(t_defense + (.75 * dmg['DMG']))
                                     elif tpet_type == 'GROWTH':
-                                        t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                        t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                        t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                        t_max_health = round(t_max_health - dmg['DMG'])
+                                        t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                        t_attack = round(t_attack+ (.3 * dmg['DMG']))
                                     elif tpet_type == 'STANCE':
                                         tempattack = dmg['DMG']
                                         t_attack = t_defense
@@ -27464,9 +27469,9 @@ class CrownUnlimited(commands.Cog):
                                         t_health = round(t_health - dmg['DMG'])
                                         t_defense = round(t_defense + (.75 * dmg['DMG']))
                                     elif enh_type == 'GROWTH':
-                                        t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                        t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                        t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                        t_max_health = round(t_max_health - dmg['DMG'])
+                                        t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                        t_attack = round(t_attack+ (.3 * dmg['DMG']))
                                     elif enh_type == 'STANCE':
                                         tempattack = dmg['DMG']
                                         t_attack = t_defense
@@ -27589,9 +27594,9 @@ class CrownUnlimited(commands.Cog):
                                         t_health = round(t_health - dmg['DMG'])
                                         t_defense = round(t_defense + (.75 * dmg['DMG']))
                                     elif enh_type == 'GROWTH':
-                                        t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                        t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                        t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                        t_max_health = round(t_max_health - dmg['DMG'])
+                                        t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                        t_attack = round(t_attack+ (.3 * dmg['DMG']))
                                     elif enh_type == 'STANCE':
                                         tempattack = dmg['DMG']
                                         t_attack = t_defense
@@ -27839,7 +27844,7 @@ class CrownUnlimited(commands.Cog):
                     **:heart: {c_health}/:cyclone: {c_stamina} :dagger:{c_attack}/:shield:{c_defense}**
                     :cyclone: 10 | **:boom: {cmove1_text}** | _1_
                     :cyclone: 30 | **:comet: {cmove2_text}** | _2_
-                    :cyclone: 80 | **:sparkles: {cmove3_text}** | _3_
+                    :cyclone: 80 | **:rosette: {cmove3_text}** | _3_
                     :cyclone: 20 **:microbe: {cmove_enhanced_text}** | _4_
                     **Enhance {o_card}** 20 Stamina _press 7_
                     :cyclone: 20 | **Defend {o_card}** | _0_
@@ -28091,9 +28096,9 @@ class CrownUnlimited(commands.Cog):
                                         c_health = round(c_health - dmg['DMG'])
                                         c_defense = round(c_defense +(.75 * dmg['DMG']))
                                     elif cpet_type == 'GROWTH':
-                                        c_max_health = round(c_max_health - (c_max_health * dmg['DMG']))
+                                        c_max_health = round(c_max_health - dmg['DMG'])
                                         c_defense = round(c_defense + (c_defense * dmg['DMG']))
-                                        c_attack = round(c_attack + (c_attack * dmg['DMG']))
+                                        c_attack = round(c_attack + (c_attack *  (.75 * dmg['DMG'])))
                                     elif cpet_type == 'STANCE':
                                         tempattack = dmg['DMG']
                                         c_attack = c_defense
@@ -28189,9 +28194,9 @@ class CrownUnlimited(commands.Cog):
                                     o_health = round(o_health - dmg['DMG'])
                                     o_defense = round(o_defense +(.75 * dmg['DMG']))
                                 elif cenh_type == 'GROWTH':
-                                    o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
-                                    o_defense = round(o_defense + (o_defense* dmg['DMG']))
-                                    o_attack = round(o_attack + (o_attack * dmg['DMG']))
+                                    o_max_health = round(o_max_health - dmg['DMG'])
+                                    o_defense = round(o_defense + (.3 * dmg['DMG']))
+                                    o_attack = round(o_attack + (.3 * dmg['DMG']))
                                 elif cenh_type == 'STANCE':
                                     tempattack = dmg['DMG']
                                     o_attack = o_defense
@@ -28296,9 +28301,9 @@ class CrownUnlimited(commands.Cog):
                                         c_health = round(c_health - dmg['DMG'])
                                         c_defense = round(c_defense +(.75 * dmg['DMG']))
                                     elif enh_type == 'GROWTH':
-                                        c_max_health = round(c_max_health - (c_max_health * dmg['DMG']))
-                                        c_defense = round(c_defense + (c_defense * dmg['DMG']))
-                                        c_attack = round(c_attack + (c_attack * dmg['DMG']))
+                                        c_max_health = round(c_max_health - dmg['DMG'])
+                                        c_defense = round(c_defense + (.3 * dmg['DMG']))
+                                        c_attack = round(c_attack + (.3 * dmg['DMG']))
                                     elif enh_type == 'STANCE':
                                         tempattack = dmg['DMG']
                                         c_attack = c_defense
@@ -28883,9 +28888,9 @@ class CrownUnlimited(commands.Cog):
                                         t_health = round(t_health - dmg['DMG'])
                                         t_defense = round(t_defense + (.75 * dmg['DMG']))
                                     elif tpet_type == 'GROWTH':
-                                        t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                        t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                        t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                        t_max_health = round(t_max_health - dmg['DMG'])
+                                        t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                        t_attack = round(t_attack+ (.3 * dmg['DMG']))
                                     elif tpet_type == 'STANCE':
                                         tempattack = dmg['DMG']
                                         t_attack = t_defense
@@ -28979,9 +28984,9 @@ class CrownUnlimited(commands.Cog):
                                         t_health = round(t_health - dmg['DMG'])
                                         t_defense = round(t_defense + (.75 * dmg['DMG']))
                                     elif tpet_type == 'GROWTH':
-                                        t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                        t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                        t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                        t_max_health = round(t_max_health - dmg['DMG'])
+                                        t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                        t_attack = round(t_attack+ (.3 * dmg['DMG']))
                                     elif tpet_type == 'STANCE':
                                         tempattack = dmg['DMG']
                                         t_attack = t_defense
@@ -29077,9 +29082,9 @@ class CrownUnlimited(commands.Cog):
                                         t_health = round(t_health - dmg['DMG'])
                                         t_defense = round(t_defense + (.75 * dmg['DMG']))
                                     elif enh_type == 'GROWTH':
-                                        t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                        t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                        t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                        t_max_health = round(t_max_health - dmg['DMG'])
+                                        t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                        t_attack = round(t_attack+ (.3 * dmg['DMG']))
                                     elif enh_type == 'STANCE':
                                         tempattack = dmg['DMG']
                                         t_attack = t_defense
@@ -29203,9 +29208,9 @@ class CrownUnlimited(commands.Cog):
                                         t_health = round(t_health - dmg['DMG'])
                                         t_defense = round(t_defense + (.75 * dmg['DMG']))
                                     elif enh_type == 'GROWTH':
-                                        t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                        t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                        t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                        t_max_health = round(t_max_health - dmg['DMG'])
+                                        t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                        t_attack = round(t_attack+ (.3 * dmg['DMG']))
                                     elif enh_type == 'STANCE':
                                         tempattack = dmg['DMG']
                                         t_attack = t_defense
@@ -29773,9 +29778,9 @@ class CrownUnlimited(commands.Cog):
                 o_stamina = o_card_passive
                 t_stamina = o_card_passive
             elif o_card_passive_type == 'FEAR':
-                o_health = o_health - int((o_card_passive/100 * o_health))
-                t_attack = t_attack - int((o_card_passive/100 * t_attack))
-                t_defense = t_defense - int((o_card_passive/100 * t_defense))
+                o_health = o_health - int((o_card_passive/1000 * o_health))
+                t_attack = t_attack - int((o_card_passive/1000 * o_health))
+                t_defense = t_defense - int((o_card_passive/1000 * o_health))
             elif o_card_passive_type == 'GAMBLE':
                 o_health = o_card_passive
                 t_health = o_card_passive * 2           
@@ -29846,9 +29851,9 @@ class CrownUnlimited(commands.Cog):
                     o_stamina = o_title_passive_value
                     t_stamina = o_title_passive_value
                 elif o_title_passive_type == 'FEAR':
-                    o_health = o_health - int((o_title_passive_value/100 * o_health))
-                    t_attack = t_attack - int((o_title_passive_value/100 * t_attack))
-                    t_defense = t_defense - int((o_title_passive_value/100 * t_defense))
+                    o_health = o_health - int((.25 * o_title_passive_value))
+                    t_attack = t_attack - int((.25 * o_title_passive_value))
+                    t_defense = t_defense - int((.25 * o_title_passive_value))
                 elif o_title_passive_type == 'GAMBLE':
                     t_health = o_title_passive_value * 2
                     o_health = o_title_passive_value
@@ -29918,9 +29923,9 @@ class CrownUnlimited(commands.Cog):
                 o_stamina = oarm_passive_value
                 t_stamina = oarm_passive_value
             elif oarm_passive_type == 'FEAR':
-                o_health = o_health - int((oarm_passive_value/100 * o_health))
-                t_attack = t_attack - int((oarm_passive_value/100 * t_attack))
-                t_defense = t_defense - int((oarm_passive_value/100 * t_defense))
+                o_health = o_health - int((.25 * oarm_passive_value))
+                t_attack = t_attack - int((.25 * oarm_passive_value))
+                t_defense = t_defense - int((.25 * oarm_passive_value))
             elif oarm_passive_type == 'GAMBLE':
                 t_health = oarm_passive_value * 2
                 o_health = oarm_passive_value
@@ -29962,9 +29967,9 @@ class CrownUnlimited(commands.Cog):
                 t_defense = t_defense + int(((tarm_passive_value/100) *t_health))
                 t_health = t_health - int((t_defense))
             elif tarm_passive_type == 'GROWTH':            
-                t_attack = t_attack + int((tarm_passive_value/100) * t_attack)
-                t_defense = t_defense + int((tarm_passive_value/100) * t_defense)
-                t_max_health = t_max_health - int((tarm_passive_value/100) * t_max_health)
+                t_attack = t_attack + int(((tarm_passive_value/100) * t_max_health) * .2)
+                t_defense = t_defense + int(((tarm_passive_value/100) * t_max_health) * .2)
+                t_max_health = t_max_health - int(((tarm_passive_value/100) * t_max_health) * .2)
             elif tarm_passive_type == 'STANCE':
                 tempattack = t_attack + tarm_passive_value
                 t_attack = t_defense  + tarm_passive_value         
@@ -29990,9 +29995,9 @@ class CrownUnlimited(commands.Cog):
                 t_stamina = tarm_passive_value
                 o_stamina = tarm_passive_value
             elif tarm_passive_type == 'FEAR':
-                o_attack = o_attack + int((tarm_passive_value/100) * o_attack)
-                o_defense = o_defense + int((tarm_passive_value/100) * o_defense)
-                t_max_health = t_max_health - int((tarm_passive_value/100) * t_max_health)
+                t_health = t_health - int((.25 * tarm_passive_value))
+                o_attack = o_attack - int((.25 * tarm_passive_value))
+                o_defense = o_defense - int((.25 * tarm_passive_value))
             elif tarm_passive_type == 'GAMBLE':
                 t_health = tarm_passive_value * 2
                 o_health = tarm_passive_value
@@ -30041,9 +30046,10 @@ class CrownUnlimited(commands.Cog):
                 t_defense = t_defense + int(((t_card_passive/100) *t_health))
                 t_health = t_health - int((t_defense))
             elif t_card_passive_type == 'GROWTH':            
-                t_attack = t_attack + int((t_card_passive/100) * t_attack)
-                t_defense = t_defense + int((t_card_passive/100) * t_defense)
-                t_max_health = t_max_health - int((t_card_passive/100) * t_max_health)
+                t_attack =  t_attack + int(((t_card_passive/100) * t_max_health))
+                t_defense = t_defense + int(((t_card_passive/100) * t_max_health))
+                t_max_health = t_max_health - int(((t_card_passive/100) * t_max_health))
+                t_health = t_health - int(((t_card_passive/100) * t_max_health))
             elif t_card_passive_type == 'STANCE':
                 tempattack = t_attack + t_card_passive
                 t_attack = t_defense + t_card_passive            
@@ -30069,9 +30075,9 @@ class CrownUnlimited(commands.Cog):
                 t_stamina = t_card_passive
                 o_stamina = t_card_passive
             elif t_card_passive_type == 'FEAR':
-                o_attack = o_attack + int((t_card_passive/100) * o_attack)
-                o_defense = o_defense + int((t_card_passive/100) * o_defense)
-                t_max_health = t_max_health - int((t_card_passive/100) * t_max_health)
+                t_health = t_health - int((t_card_passive/1000 * t_health))
+                o_attack = o_attack - int((t_card_passive/1000 * t_health))
+                o_defense = o_defense - int((t_card_passive/1000 * t_health))
             elif t_card_passive_type == 'GAMBLE':
                 t_health = t_card_passive * 2
                 o_health = t_card_passive
@@ -30114,9 +30120,9 @@ class CrownUnlimited(commands.Cog):
                     t_defense = t_defense + int(((t_title_passive_value/100) *t_health))
                     t_health = t_health - int((t_defense))
                 elif t_title_passive_type == 'GROWTH':            
-                    t_attack = t_attack + int((t_title_passive_value/100) * t_attack)
-                    t_defense = t_defense + int((t_title_passive_value/100) * t_defense)
-                    t_max_health = t_max_health - int((t_title_passive_value/100) * t_max_health)
+                    t_attack = t_attack + int(((t_title_passive_value/100) * t_max_health) * .2)
+                    t_defense = t_defense + int(((t_title_passive_value/100) * t_max_health) * .2)
+                    t_max_health = t_max_health - int(((t_title_passive_value/100) * t_max_health) * .2)
                 elif t_title_passive_type == 'STANCE':
                     tempattack = t_attack + t_title_passive_value
                     t_attack = t_defense  + t_title_passive_value          
@@ -30142,9 +30148,9 @@ class CrownUnlimited(commands.Cog):
                     t_stamina = t_title_passive_value
                     o_stamina = t_title_passive_value
                 elif t_title_passive_type == 'FEAR':
-                    o_attack = o_attack + int((t_title_passive_value/100) * o_attack)
-                    o_defense = o_defense + int((t_title_passive_value/100) * o_defense)
-                    t_max_health = t_max_health - int((t_title_passive_value/100) * t_max_health)
+                    t_health = t_health - int((.25 * t_title_passive_value))
+                    o_attack = o_attack - int((.25 * t_title_passive_value))
+                    o_defense = o_defense - int((.25 * t_title_passive_value))
                 elif t_title_passive_type == 'GAMBLE':
                     t_health = t_title_passive_value * 2
                     o_health = t_title_passive_value
@@ -30364,7 +30370,7 @@ class CrownUnlimited(commands.Cog):
                         **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                         :cyclone: 10 | **:boom: {omove1_text}** | _1_
                         :cyclone: 30 | **:comet: {omove2_text}** | _2_
-                        :cyclone: 80 | **:sparkles: {omove3_text}** | _3_
+                        :cyclone: 80 | **:rosette: {omove3_text}** | _3_
                         :cyclone: 20 | **:microbe: {omove_enhanced_text}** | _4_
                         :cyclone: 20 | **Block** | _0_                        
                     
@@ -31280,9 +31286,9 @@ class CrownUnlimited(commands.Cog):
                                         t_health = round(t_health - dmg['DMG'])
                                         t_defense = round(t_defense + (.75 * dmg['DMG']))
                                     elif tpet_type == 'GROWTH':
-                                        t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                        t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                        t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                        t_max_health = round(t_max_health - dmg['DMG'])
+                                        t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                        t_attack = round(t_attack+ (.3 * dmg['DMG']))
                                     elif tpet_type == 'STANCE':
                                         tempattack = dmg['DMG']
                                         t_attack = t_defense
@@ -31376,9 +31382,9 @@ class CrownUnlimited(commands.Cog):
                                         t_health = round(t_health - dmg['DMG'])
                                         t_defense = round(t_defense + (.75 * dmg['DMG']))
                                     elif enh_type == 'GROWTH':
-                                        t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                        t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                        t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                        t_max_health = round(t_max_health - dmg['DMG'])
+                                        t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                        t_attack = round(t_attack+ (.3 * dmg['DMG']))
                                     elif enh_type == 'STANCE':
                                         tempattack = dmg['DMG']
                                         t_attack = t_defense
@@ -31994,9 +32000,9 @@ class CrownUnlimited(commands.Cog):
                 o_stamina = o_card_passive
                 t_stamina = o_card_passive
             elif o_card_passive_type == 'FEAR':
-                o_health = o_health - int((o_card_passive/100 * o_health))
-                t_attack = t_attack - int((o_card_passive/100 * t_attack))
-                t_defense = t_defense - int((o_card_passive/100 * t_defense))
+                o_health = o_health - int((o_card_passive/1000 * o_health))
+                t_attack = t_attack - int((o_card_passive/1000 * o_health))
+                t_defense = t_defense - int((o_card_passive/1000 * o_health))
             elif o_card_passive_type == 'GAMBLE':
                 o_health = o_card_passive
                 t_health = o_card_passive   
@@ -32068,9 +32074,9 @@ class CrownUnlimited(commands.Cog):
                     o_stamina = o_title_passive_value
                     t_stamina = o_title_passive_value
                 elif o_title_passive_type == 'FEAR':
-                    o_health = o_health - int((o_title_passive_value/100 * o_health))
-                    t_attack = t_attack - int((o_title_passive_value/100 * t_attack))
-                    t_defense = t_defense - int((o_title_passive_value/100 * t_defense))
+                    o_health = o_health - int((.25 * o_title_passive_value))
+                    t_attack = t_attack - int((.25 * o_title_passive_value))
+                    t_defense = t_defense - int((.25 * o_title_passive_value))
                 elif o_title_passive_type == 'GAMBLE':
                     t_health = o_title_passive_value
                     o_health = o_title_passive_value
@@ -32140,9 +32146,9 @@ class CrownUnlimited(commands.Cog):
                 o_stamina = oarm_passive_value
                 t_stamina = oarm_passive_value
             elif oarm_passive_type == 'FEAR':
-                o_health = o_health - int((oarm_passive_value/100 * o_health))
-                t_attack = t_attack - int((oarm_passive_value/100 * t_attack))
-                t_defense = t_defense - int((oarm_passive_value/100 * t_defense))
+                o_health = o_health - int((.25 * oarm_passive_value))
+                t_attack = t_attack - int((.25 * oarm_passive_value))
+                t_defense = t_defense - int((.25 * oarm_passive_value))
             elif oarm_passive_type == 'GAMBLE':
                 t_health = oarm_passive_value
                 o_health = oarm_passive_value
@@ -32184,9 +32190,9 @@ class CrownUnlimited(commands.Cog):
                 t_defense = t_defense + int(((tarm_passive_value/100) *t_health))
                 t_health = t_health - int((t_defense))
             elif tarm_passive_type == 'GROWTH':            
-                t_attack = t_attack + int((tarm_passive_value/100) * t_attack)
-                t_defense = t_defense + int((tarm_passive_value/100) * t_defense)
-                t_max_health = t_max_health - int((tarm_passive_value/100) * t_max_health)
+                t_attack = t_attack + int(((tarm_passive_value/100) * t_max_health) * .2)
+                t_defense = t_defense + int(((tarm_passive_value/100) * t_max_health) * .2)
+                t_max_health = t_max_health - int(((tarm_passive_value/100) * t_max_health) * .2)
             elif tarm_passive_type == 'STANCE':
                 tempattack = t_attack + tarm_passive_value
                 t_attack = t_defense  + tarm_passive_value         
@@ -32212,9 +32218,9 @@ class CrownUnlimited(commands.Cog):
                 t_stamina = tarm_passive_value
                 o_stamina = tarm_passive_value
             elif tarm_passive_type == 'FEAR':
-                o_attack = o_attack + int((tarm_passive_value/100) * o_attack)
-                o_defense = o_defense + int((tarm_passive_value/100) * o_defense)
-                t_max_health = t_max_health - int((tarm_passive_value/100) * t_max_health)
+                t_health = t_health - int((.25 * tarm_passive_value))
+                o_attack = o_attack - int((.25 * tarm_passive_value))
+                o_defense = o_defense - int((.25 * tarm_passive_value))
             elif tarm_passive_type == 'GAMBLE':
                 t_health = tarm_passive_value
                 o_health = tarm_passive_value
@@ -32261,9 +32267,10 @@ class CrownUnlimited(commands.Cog):
                 t_defense = t_defense + int(((t_card_passive/100) *t_health))
                 t_health = t_health - int((t_defense))
             elif t_card_passive_type == 'GROWTH':            
-                t_attack = t_attack + int((t_card_passive/100) * t_attack)
-                t_defense = t_defense + int((t_card_passive/100) * t_defense)
-                t_max_health = t_max_health - int((t_card_passive/100) * t_max_health)
+                t_attack =  t_attack + int(((t_card_passive/100) * t_max_health))
+                t_defense = t_defense + int(((t_card_passive/100) * t_max_health))
+                t_max_health = t_max_health - int(((t_card_passive/100) * t_max_health))
+                t_health = t_health - int(((t_card_passive/100) * t_max_health))
             elif t_card_passive_type == 'STANCE':
                 tempattack = t_attack + t_card_passive
                 t_attack = t_defense + t_card_passive            
@@ -32289,9 +32296,9 @@ class CrownUnlimited(commands.Cog):
                 t_stamina = t_card_passive
                 o_stamina = t_card_passive
             elif t_card_passive_type == 'FEAR':
-                o_attack = o_attack + int((t_card_passive/100) * o_attack)
-                o_defense = o_defense + int((t_card_passive/100) * o_defense)
-                t_max_health = t_max_health - int((t_card_passive/100) * t_max_health)
+                t_health = t_health - int((t_card_passive/1000 * t_health))
+                o_attack = o_attack - int((t_card_passive/1000 * t_health))
+                o_defense = o_defense - int((t_card_passive/1000 * t_health))
             elif t_card_passive_type == 'GAMBLE':
                 t_health = t_card_passive 
                 o_health = t_card_passive
@@ -32334,9 +32341,9 @@ class CrownUnlimited(commands.Cog):
                     t_defense = t_defense + int(((t_title_passive_value/100) *t_health))
                     t_health = t_health - int((t_defense))
                 elif t_title_passive_type == 'GROWTH':            
-                    t_attack = t_attack + int((t_title_passive_value/100) * t_attack)
-                    t_defense = t_defense + int((t_title_passive_value/100) * t_defense)
-                    t_max_health = t_max_health - int((t_title_passive_value/100) * t_max_health)
+                    t_attack = t_attack + int(((t_title_passive_value/100) * t_max_health) * .2)
+                    t_defense = t_defense + int(((t_title_passive_value/100) * t_max_health) * .2)
+                    t_max_health = t_max_health - int(((t_title_passive_value/100) * t_max_health) * .2)
                 elif t_title_passive_type == 'STANCE':
                     tempattack = t_attack + t_title_passive_value
                     t_attack = t_defense  + t_title_passive_value          
@@ -32362,9 +32369,9 @@ class CrownUnlimited(commands.Cog):
                     t_stamina = t_title_passive_value
                     o_stamina = t_title_passive_value
                 elif t_title_passive_type == 'FEAR':
-                    o_attack = o_attack + int((t_title_passive_value/100) * o_attack)
-                    o_defense = o_defense + int((t_title_passive_value/100) * o_defense)
-                    t_max_health = t_max_health - int((t_title_passive_value/100) * t_max_health)
+                    t_health = t_health - int((.25 * t_title_passive_value))
+                    o_attack = o_attack - int((.25 * t_title_passive_value))
+                    o_defense = o_defense - int((.25 * t_title_passive_value))
                 elif t_title_passive_type == 'GAMBLE':
                     t_health = t_title_passive_value
                     o_health = t_title_passive_value
@@ -32601,7 +32608,7 @@ class CrownUnlimited(commands.Cog):
                         **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                         :cyclone: 10 | **:boom: {omove1_text}** | _1_
                         :cyclone: 30 | **:comet: {omove2_text}** | _2_
-                        :cyclone: 80 | **:sparkles: {omove3_text}** | _3_
+                        :cyclone: 80 | **:rosette: {omove3_text}** | _3_
                         :cyclone: 20 | **:microbe: {omove_enhanced_text}** | _4_
                         :cyclone: 20 | **Block** | _0_
                         
@@ -33492,9 +33499,9 @@ class CrownUnlimited(commands.Cog):
                                         t_health = round(t_health - dmg['DMG'])
                                         t_defense = round(t_defense + (.75 * dmg['DMG']))
                                     elif enh_type == 'GROWTH':
-                                        t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                        t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                        t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                        t_max_health = round(t_max_health - dmg['DMG'])
+                                        t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                        t_attack = round(t_attack+ (.3 * dmg['DMG']))
                                     elif enh_type == 'STANCE':
                                         tempattack = dmg['DMG']
                                         t_attack = t_defense
@@ -34118,12 +34125,12 @@ class CrownUnlimited(commands.Cog):
             o_stamina = o_card_passive
             t_stamina = o_card_passive
         elif o_card_passive_type == 'FEAR':
-            o_health = o_health - int((o_card_passive/100 * o_health))
-            t_attack = t_attack - int((o_card_passive/100 * t_attack))
-            t_defense = t_defense - int((o_card_passive/100 * t_defense))
+            o_health = o_health - int((o_card_passive/1000 * o_health))
+            t_attack = t_attack - int((o_card_passive/1000 * o_health))
+            t_defense = t_defense - int((o_card_passive/1000 * o_health))
         elif o_card_passive_type == 'GAMBLE':
             o_health = o_card_passive
-            t_health = o_card_passive * 5   
+            t_health = o_card_passive   
             c_health = o_card_passive              
 
         # Title Passive
@@ -34192,11 +34199,11 @@ class CrownUnlimited(commands.Cog):
                 o_stamina = o_title_passive_value
                 t_stamina = o_title_passive_value
             elif o_title_passive_type == 'FEAR':
-                o_health = o_health - int((o_title_passive_value/100 * o_health))
-                t_attack = t_attack - int((o_title_passive_value/100 * t_attack))
-                t_defense = t_defense - int((o_title_passive_value/100 * t_defense))
+                o_health = o_health - int((.25 * o_title_passive_value))
+                t_attack = t_attack - int((.25 * o_title_passive_value))
+                t_defense = t_defense - int((.25 * o_title_passive_value))
             elif o_title_passive_type == 'GAMBLE':
-                t_health = o_title_passive_value * 5
+                t_health = o_title_passive_value
                 o_health = o_title_passive_value
 
         # Arm Passive Player 1
@@ -34264,11 +34271,11 @@ class CrownUnlimited(commands.Cog):
             o_stamina = oarm_passive_value
             t_stamina = oarm_passive_value
         elif oarm_passive_type == 'FEAR':
-            o_health = o_health - int((oarm_passive_value/100 * o_health))
-            t_attack = t_attack - int((oarm_passive_value/100 * t_attack))
-            t_defense = t_defense - int((oarm_passive_value/100 * t_defense))
+            o_health = o_health - int((.25 * oarm_passive_value))
+            t_attack = t_attack - int((.25 * oarm_passive_value))
+            t_defense = t_defense - int((.25 * oarm_passive_value))
         elif oarm_passive_type == 'GAMBLE':
-            t_health = oarm_passive_value * 5
+            t_health = oarm_passive_value
             o_health = oarm_passive_value
 
         # Arm Passive Player 2
@@ -34296,21 +34303,22 @@ class CrownUnlimited(commands.Cog):
             t_defense = t_defense + int(((tarm_passive_value/1.5)/100) *o_defense)
             o_defense = o_defense - int(((tarm_passive_value/1.5)/100) *o_defense)
         elif tarm_passive_type == 'RAGE':
-            t_attack = t_attack + int(((tarm_passive_value/100) * t_defense))
-            t_defense = t_defense - int(((tarm_passive_value/100) *t_attack))
+            t_attack = t_attack + int((.25 * tarm_passive_value))
+            t_defense = t_defense - int((.25*tarm_passive_value))
         elif tarm_passive_type == 'BRACE':            
-            t_defense = t_defense + int(((tarm_passive_value/100) *t_attack))
-            t_attack = t_attack - int(((tarm_passive_value/100) * t_defense))
+            t_defense = t_defense + int((.25*tarm_passive_value))
+            t_attack = t_attack - int((.25 * tarm_passive_value))
         elif tarm_passive_type == 'BZRK':            
-            t_attack = t_attack + int(((tarm_passive_value/100)* t_health))
-            t_health = t_health - int((t_attack))
+            t_attack = t_attack + int((.75 *tarm_passive_value))
+            t_health = t_health - int((tarm_passive_value))
         elif tarm_passive_type == 'CRYSTAL':            
-            t_defense = t_defense + int(((tarm_passive_value/100) *t_health))
-            t_health = t_health - int((t_defense))
+            t_defense = t_defense + int((.75 *tarm_passive_value))
+            t_health = t_health - int((tarm_passive_value))
         elif tarm_passive_type == 'GROWTH':            
-            t_attack = t_attack + int((tarm_passive_value/100) * t_attack)
-            t_defense = t_defense + int((tarm_passive_value/100) * t_defense)
-            t_max_health = t_max_health - int((tarm_passive_value/100) * t_max_health)
+            t_attack = t_attack + int((.25 * tarm_passive_value))
+            t_defense = t_defense + int((.25 * tarm_passive_value))
+            t_max_health = t_max_health - int((.25 * tarm_passive_value))
+            t_health = t_health - int((.25 * tarm_passive_value))
         elif tarm_passive_type == 'STANCE':
             tempattack = t_attack + tarm_passive_value
             t_attack = t_defense  + tarm_passive_value         
@@ -34336,9 +34344,9 @@ class CrownUnlimited(commands.Cog):
             t_stamina = tarm_passive_value
             o_stamina = tarm_passive_value
         elif tarm_passive_type == 'FEAR':
-            o_attack = o_attack + int((tarm_passive_value/100) * o_attack)
-            o_defense = o_defense + int((tarm_passive_value/100) * o_defense)
-            t_max_health = t_max_health - int((tarm_passive_value/100) * t_max_health)
+            t_health = t_health - int((.25 * tarm_passive_value))
+            o_attack = o_attack - int((.25 * tarm_passive_value))
+            o_defense = o_defense - int((.25 * tarm_passive_value))
         elif tarm_passive_type == 'GAMBLE':
             t_health = tarm_passive_value * 5
             o_health = tarm_passive_value
@@ -34386,9 +34394,9 @@ class CrownUnlimited(commands.Cog):
             t_defense = t_defense + int(((t_card_passive/100) *t_health))
             t_health = t_health - int((t_defense))
         elif t_card_passive_type == 'GROWTH':            
-            t_attack = t_attack + int((t_card_passive/100) * t_attack)
-            t_defense = t_defense + int((t_card_passive/100) * t_defense)
-            t_max_health = t_max_health - int((t_card_passive/100) * t_max_health)
+            t_attack = t_attack + int(((t_card_passive/100) * t_max_health))
+            t_defense = t_defense + int(((t_card_passive/100) * t_max_health))
+            t_max_health = t_max_health - int(((t_card_passive/100) * t_max_health))
         elif t_card_passive_type == 'STANCE':
             tempattack = t_attack + t_card_passive
             t_attack = t_defense + t_card_passive            
@@ -34414,11 +34422,11 @@ class CrownUnlimited(commands.Cog):
             t_stamina = t_card_passive
             o_stamina = t_card_passive
         elif t_card_passive_type == 'FEAR':
-            o_attack = o_attack + int((t_card_passive/100) * o_attack)
-            o_defense = o_defense + int((t_card_passive/100) * o_defense)
-            t_max_health = t_max_health - int((t_card_passive/100) * t_max_health)
+            t_health = t_health - int((t_card_passive/1000 * t_health))
+            o_attack = o_attack - int((t_card_passive/1000 * t_health))
+            o_defense = o_defense - int((t_card_passive/1000 * t_health))
         elif t_card_passive_type == 'GAMBLE':
-            t_health = t_card_passive * 5
+            t_health = t_card_passive
             o_health = t_card_passive
 
         # Title Passive
@@ -34447,21 +34455,21 @@ class CrownUnlimited(commands.Cog):
                 t_defense = t_defense + int(((t_title_passive_value/1.5)/100) *o_defense)
                 o_defense = o_defense - int(((t_title_passive_value/1.5)/100) *o_defense)
             elif t_title_passive_type == 'RAGE':
-                t_attack = t_attack + int(((t_title_passive_value/100) * t_defense))
-                t_defense = t_defense - int(((t_title_passive_value/100) *t_attack))
+                t_attack = t_attack + int((.25 * t_title_passive_value))
+                t_defense = t_defense - int((.25 * t_title_passive_value))
             elif t_title_passive_type == 'BRACE':            
-                t_defense = t_defense + int(((t_title_passive_value/100) *t_attack))
-                t_attack = t_attack - int(((t_title_passive_value/100) * t_defense))
+                t_defense = t_defense + int((.25 * t_title_passive_value))
+                t_attack = t_attack - int((.25 * t_title_passive_value))
             elif t_title_passive_type == 'BZRK':            
-                t_attack = t_attack + int(((t_title_passive_value/100)* t_health))
-                t_health = t_health - int((t_attack))
+                t_attack = t_attack + int((.25 * t_title_passive_value))
+                t_health = t_health - int((t_title_passive_value))
             elif t_title_passive_type == 'CRYSTAL':            
-                t_defense = t_defense + int(((t_title_passive_value/100) *t_health))
-                t_health = t_health - int((t_defense))
+                t_defense = t_defense + int((.25 * t_title_passive_value))
+                t_health = t_health - int((t_title_passive_value))
             elif t_title_passive_type == 'GROWTH':            
-                t_attack = t_attack + int((t_title_passive_value/100) * t_attack)
-                t_defense = t_defense + int((t_title_passive_value/100) * t_defense)
-                t_max_health = t_max_health - int((t_title_passive_value/100) * t_max_health)
+                t_attack = t_attack + int((.25 * t_title_passive_value))
+                t_defense = t_defense + int((.25 * t_title_passive_value))
+                t_max_health = t_max_health - int((.25 * t_title_passive_value))
             elif t_title_passive_type == 'STANCE':
                 tempattack = t_attack + t_title_passive_value
                 t_attack = t_defense  + t_title_passive_value          
@@ -34487,9 +34495,9 @@ class CrownUnlimited(commands.Cog):
                 t_stamina = t_title_passive_value
                 o_stamina = t_title_passive_value
             elif t_title_passive_type == 'FEAR':
-                o_attack = o_attack + int((t_title_passive_value/100) * o_attack)
-                o_defense = o_defense + int((t_title_passive_value/100) * o_defense)
-                t_max_health = t_max_health - int((t_title_passive_value/100) * t_max_health)
+                t_health = t_health - int((.25 * t_title_passive_value))
+                o_attack = o_attack - int((.25 * t_title_passive_value))
+                o_defense = o_defense - int((.25 * t_title_passive_value))
             elif t_title_passive_type == 'GAMBLE':
                 t_health = t_title_passive_value * 5
                 o_health = t_title_passive_value
@@ -34718,7 +34726,7 @@ class CrownUnlimited(commands.Cog):
                     **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                     :cyclone: 10 | **:boom: {omove1_text}** | _1_
                     :cyclone: 30 | **:comet: {omove2_text}** | _2_
-                    :cyclone: 80 | **:sparkles: {omove3_text}** | _3_
+                    :cyclone: 80 | **:rosette: {omove3_text}** | _3_
                     :cyclone: 20 | **:microbe: {omove_enhanced_text}** | _4_
                     :cyclone: 20 | **Block** | _0_
                 
@@ -35648,9 +35656,9 @@ class CrownUnlimited(commands.Cog):
                                     t_health = round(t_health - dmg['DMG'])
                                     t_defense = round(t_defense + (.75 * dmg['DMG']))
                                 elif tpet_type == 'GROWTH':
-                                    t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                    t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                    t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                    t_max_health = round(t_max_health - dmg['DMG'])
+                                    t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                    t_attack = round(t_attack + (.3 * dmg['DMG']))
                                 elif tpet_type == 'STANCE':
                                     tempattack = dmg['DMG']
                                     t_attack = t_defense
@@ -35745,9 +35753,9 @@ class CrownUnlimited(commands.Cog):
                                     t_health = round(t_health - dmg['DMG'])
                                     t_defense = round(t_defense + (.75 * dmg['DMG']))
                                 elif enh_type == 'GROWTH':
-                                    t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                    t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                    t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                    t_max_health = round(t_max_health - dmg['DMG'])
+                                    t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                    t_attack = round(t_attack + (.3 * dmg['DMG']))
                                 elif enh_type == 'STANCE':
                                     tempattack = dmg['DMG']
                                     t_attack = t_defense
@@ -36235,9 +36243,10 @@ class CrownUnlimited(commands.Cog):
                     t_defense = t_defense + int(((t_card_passive/100) *t_health))
                     t_health = t_health - int((t_defense))
                 elif t_card_passive_type == 'GROWTH':            
-                    t_attack = t_attack + int((t_card_passive/100) * t_attack)
-                    t_defense = t_defense + int((t_card_passive/100) * t_defense)
-                    t_max_health = t_max_health - int((t_card_passive/100) * t_max_health)
+                    t_attack = t_attack + int(((t_card_passive/100) * t_max_health))
+                    t_defense = t_defense + int(((t_card_passive/100) * t_max_health))
+                    t_max_health = t_max_health - int(((t_card_passive/100) * t_max_health))
+                    t_health = t_health - int(((t_card_passive/100) * t_max_health))
                 elif t_card_passive_type == 'STANCE':
                     tempattack = t_attack + t_card_passive
                     t_attack = t_defense + t_card_passive            
@@ -36263,9 +36272,9 @@ class CrownUnlimited(commands.Cog):
                     t_stamina = t_card_passive
                     o_stamina = t_card_passive
                 elif t_card_passive_type == 'FEAR':
-                    o_attack = o_attack + int((t_card_passive/100) * o_attack)
-                    o_defense = o_defense + int((t_card_passive/100) * o_defense)
-                    t_max_health = t_max_health - int((t_card_passive/100) * t_max_health)
+                    t_health = t_health - int((t_card_passive/1000 * t_health))
+                    o_attack = o_attack - int((t_card_passive/1000 * t_health))
+                    o_defense = o_defense - int((t_card_passive/1000 * t_health))
                 elif t_card_passive_type == 'GAMBLE':
                     t_health = t_card_passive
                     o_health = t_card_passive
@@ -36308,9 +36317,9 @@ class CrownUnlimited(commands.Cog):
                         t_defense = t_defense + int(((t_title_passive_value/100) *t_health))
                         t_health = t_health - int((t_defense))
                     elif t_title_passive_type == 'GROWTH':            
-                        t_attack = t_attack + int((t_title_passive_value/100) * t_attack)
-                        t_defense = t_defense + int((t_title_passive_value/100) * t_defense)
-                        t_max_health = t_max_health - int((t_title_passive_value/100) * t_max_health)
+                        t_attack = t_attack + int(((t_title_passive_value/100) * t_max_health) * .2)
+                        t_defense = t_defense + int(((t_title_passive_value/100) * t_max_health) * .2)
+                        t_max_health = t_max_health - int(((t_title_passive_value/100) * t_max_health) * .2)
                     elif t_title_passive_type == 'STANCE':
                         tempattack = t_attack + t_title_passive_value
                         t_attack = t_defense  + t_title_passive_value          
@@ -36336,9 +36345,9 @@ class CrownUnlimited(commands.Cog):
                         t_stamina = t_title_passive_value
                         o_stamina = t_title_passive_value
                     elif t_title_passive_type == 'FEAR':
-                        o_attack = o_attack + int((t_title_passive_value/100) * o_attack)
-                        o_defense = o_defense + int((t_title_passive_value/100) * o_defense)
-                        t_max_health = t_max_health - int((t_title_passive_value/100) * t_max_health)
+                        t_health = t_health - int((.25 * t_title_passive_value))
+                        o_attack = o_attack - int((.25 * t_title_passive_value))
+                        o_defense = o_defense - int((.25 * t_title_passive_value))
                     elif t_title_passive_type == 'GAMBLE':
                         t_health = t_title_passive_value
                         o_health = t_title_passive_value
@@ -36381,9 +36390,9 @@ class CrownUnlimited(commands.Cog):
                     t_defense = t_defense + int(((tarm_passive_value/100) *t_health))
                     t_health = t_health - int((t_defense))
                 elif tarm_passive_type == 'GROWTH':            
-                    t_attack = t_attack + int((tarm_passive_value/100) * t_attack)
-                    t_defense = t_defense + int((tarm_passive_value/100) * t_defense)
-                    t_max_health = t_max_health - int((tarm_passive_value/100) * t_max_health)
+                    t_attack = t_attack + int(((tarm_passive_value/100) * t_max_health) * .2)
+                    t_defense = t_defense + int(((tarm_passive_value/100) * t_max_health) * .2)
+                    t_max_health = t_max_health - int(((tarm_passive_value/100) * t_max_health) * .2)
                 elif tarm_passive_type == 'STANCE':
                     tempattack = t_attack + tarm_passive_value
                     t_attack = t_defense  + tarm_passive_value         
@@ -36409,9 +36418,9 @@ class CrownUnlimited(commands.Cog):
                     t_stamina = tarm_passive_value
                     o_stamina = tarm_passive_value
                 elif tarm_passive_type == 'FEAR':
-                    o_attack = o_attack + int((tarm_passive_value/100) * o_attack)
-                    o_defense = o_defense + int((tarm_passive_value/100) * o_defense)
-                    t_max_health = t_max_health - int((tarm_passive_value/100) * t_max_health)
+                    t_health = t_health - int((.25 * tarm_passive_value))
+                    o_attack = o_attack - int((.25 * tarm_passive_value))
+                    o_defense = o_defense - int((.25 * tarm_passive_value))
                 elif tarm_passive_type == 'GAMBLE':
                     t_health = tarm_passive_value
                     o_health = tarm_passive_value
@@ -36480,9 +36489,9 @@ class CrownUnlimited(commands.Cog):
                     o_stamina = o_card_passive
                     t_stamina = o_card_passive
                 elif o_card_passive_type == 'FEAR':
-                    o_health = o_health - int((o_card_passive/100 * o_health))
-                    t_attack = t_attack - int((o_card_passive/100 * t_attack))
-                    t_defense = t_defense - int((o_card_passive/100 * t_defense))
+                    o_health = o_health - int((o_card_passive/1000 * o_health))
+                    t_attack = t_attack - int((o_card_passive/1000 * o_health))
+                    t_defense = t_defense - int((o_card_passive/1000 * o_health))
                 elif o_card_passive_type == 'GAMBLE':
                     o_health = o_card_passive
                     t_health = o_card_passive              
@@ -36553,9 +36562,9 @@ class CrownUnlimited(commands.Cog):
                         o_stamina = o_title_passive_value
                         t_stamina = o_title_passive_value
                     elif o_title_passive_type == 'FEAR':
-                        o_health = o_health - int((o_title_passive_value/100 * o_health))
-                        t_attack = t_attack - int((o_title_passive_value/100 * t_attack))
-                        t_defense = t_defense - int((o_title_passive_value/100 * t_defense))
+                        o_health = o_health - int((.25 * o_title_passive_value))
+                        t_attack = t_attack - int((.25 * o_title_passive_value))
+                        t_defense = t_defense - int((.25 * o_title_passive_value))
                     elif o_title_passive_type == 'GAMBLE':
                         t_health = o_title_passive_value
                         o_health = o_title_passive_value
@@ -36625,9 +36634,9 @@ class CrownUnlimited(commands.Cog):
                     o_stamina = oarm_passive_value
                     t_stamina = oarm_passive_value
                 elif oarm_passive_type == 'FEAR':
-                    o_health = o_health - int((oarm_passive_value/100 * o_health))
-                    t_attack = t_attack - int((oarm_passive_value/100 * t_attack))
-                    t_defense = t_defense - int((oarm_passive_value/100 * t_defense))
+                    o_health = o_health - int((.25 * oarm_passive_value))
+                    t_attack = t_attack - int((.25 * oarm_passive_value))
+                    t_defense = t_defense - int((.25 * oarm_passive_value))
                 elif oarm_passive_type == 'GAMBLE':
                     t_health = oarm_passive_value
                     o_health = oarm_passive_value
@@ -36907,7 +36916,7 @@ class CrownUnlimited(commands.Cog):
                             **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                             :cyclone: 10 | **:boom: {omove1_text}** | _1_
                             :cyclone: 30 | **:comet: {omove2_text}** | _2_
-                            :cyclone: 80 | **:sparkles: {omove3_text}** | _3_
+                            :cyclone: 80 | **:rosette: {omove3_text}** | _3_
                             :cyclone: 20 | **:microbe: {omove_enhanced_text}** | _4_
                             :cyclone: 20 | **Block** | _0_
                         
@@ -37543,7 +37552,7 @@ class CrownUnlimited(commands.Cog):
                                 **:heart: {t_health}/:cyclone: {t_stamina} :dagger:{t_attack}/:shield:{t_defense}**
                                 :cyclone: 10 | **:boom: {tmove1_text}** | _1_
                                 :cyclone: 30 | **:comet: {tmove2_text}** | _2_
-                                :cyclone: 80 | **:sparkles: {tmove3_text}** | _3_
+                                :cyclone: 80 | **:rosette: {tmove3_text}** | _3_
                                 :cyclone: 20 **:microbe: {tmove_enhanced_text}** | _4_
                                 :cyclone: 20 | **Block** | _0_
                             
@@ -37800,9 +37809,9 @@ class CrownUnlimited(commands.Cog):
                                                     t_health = round(t_health - dmg['DMG'])
                                                     t_defense = round(t_defense + (.75 * dmg['DMG']))
                                                 elif tpet_type == 'GROWTH':
-                                                    t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                                    t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                                    t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                                    t_max_health = round(t_max_health - dmg['DMG'])
+                                                    t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                                    t_attack = round(t_attack + (.3 * dmg['DMG']))
                                                 elif tpet_type == 'STANCE':
                                                     tempattack = dmg['DMG']
                                                     t_attack = t_defense
@@ -37913,9 +37922,9 @@ class CrownUnlimited(commands.Cog):
                                                     t_health = round(t_health - dmg['DMG'])
                                                     t_defense = round(t_defense + (.75 * dmg['DMG']))
                                                 elif enh_type == 'GROWTH':
-                                                    t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                                    t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                                    t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                                    t_max_health = round(t_max_health - dmg['DMG'])
+                                                    t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                                    t_attack = round(t_attack + (.3 * dmg['DMG']))
                                                 elif enh_type == 'STANCE':
                                                     tempattack = dmg['DMG']
                                                     t_attack = t_defense
@@ -38302,9 +38311,9 @@ class CrownUnlimited(commands.Cog):
                                                 t_health = round(t_health - dmg['DMG'])
                                                 t_defense = round(t_defense + (.75 * dmg['DMG']))
                                             elif tpet_type == 'GROWTH':
-                                                t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                                t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                                t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                                t_max_health = round(t_max_health - dmg['DMG'])
+                                                t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                                t_attack = round(t_attack + (.3 * dmg['DMG']))
                                             elif tpet_type == 'STANCE':
                                                 tempattack = dmg['DMG']
                                                 t_attack = t_defense
@@ -38398,9 +38407,9 @@ class CrownUnlimited(commands.Cog):
                                                 t_health = round(t_health - dmg['DMG'])
                                                 t_defense = round(t_defense + (.75 * dmg['DMG']))
                                             elif enh_type == 'GROWTH':
-                                                t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                                t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                                t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                                t_max_health = round(t_max_health - dmg['DMG'])
+                                                t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                                t_attack = round(t_attack + (.3 * dmg['DMG']))
                                             elif enh_type == 'STANCE':
                                                 tempattack = dmg['DMG']
                                                 t_attack = t_defense
@@ -38894,9 +38903,10 @@ class CrownUnlimited(commands.Cog):
                     t_defense = t_defense + int(((t_card_passive/100) *t_health))
                     t_health = t_health - int((t_defense))
                 elif t_card_passive_type == 'GROWTH':
-                    t_attack = t_attack + int((t_card_passive/100) * t_attack)
-                    t_defense = t_defense + int((t_card_passive/100) * t_defense)
-                    t_max_health = t_max_health - int((t_card_passive/100) * t_max_health)
+                    t_attack = t_attack + int(((t_card_passive/100) * t_max_health))
+                    t_defense = t_defense + int(((t_card_passive/100) * t_max_health))
+                    t_max_health = t_max_health - int(((t_card_passive/100) * t_max_health))
+                    t_health = t_health - int(((t_card_passive/100) * t_max_health))
                 elif t_card_passive_type == 'STANCE':
                     tempattack = t_attack + t_card_passive
                     t_attack = t_defense + t_card_passive            
@@ -38922,9 +38932,9 @@ class CrownUnlimited(commands.Cog):
                     t_stamina = t_card_passive
                     o_stamina = t_card_passive
                 elif t_card_passive_type == 'FEAR':
-                    o_attack = o_attack + int((t_card_passive/100) * o_attack)
-                    o_defense = o_defense + int((t_card_passive/100) * o_defense)
-                    t_max_health = t_max_health - int((t_card_passive/100) * t_max_health)
+                    t_health = t_health - int((t_card_passive/1000 * t_health))
+                    o_attack = o_attack - int((t_card_passive/1000 * t_health))
+                    o_defense = o_defense - int((t_card_passive/1000 * t_health))
                 elif t_card_passive_type == 'GAMBLE':
                     t_health = t_card_passive
                     o_health = t_card_passive
@@ -38967,9 +38977,9 @@ class CrownUnlimited(commands.Cog):
                         t_defense = t_defense + int(((t_title_passive_value/100) *t_health))
                         t_health = t_health - int((t_defense))
                     elif t_title_passive_type == 'GROWTH':            
-                        t_attack = t_attack + int((t_title_passive_value/100) * t_attack)
-                        t_defense = t_defense + int((t_title_passive_value/100) * t_defense)
-                        t_max_health = t_max_health - int((t_title_passive_value/100) * t_max_health)
+                        t_attack = t_attack + int(((t_title_passive_value/100) * t_max_health) * .2)
+                        t_defense = t_defense + int(((t_title_passive_value/100) * t_max_health) * .2)
+                        t_max_health = t_max_health - int(((t_title_passive_value/100) * t_max_health) * .2)
                     elif t_title_passive_type == 'STANCE':
                         tempattack = t_attack + t_title_passive_value
                         t_attack = t_defense  + t_title_passive_value          
@@ -38995,9 +39005,9 @@ class CrownUnlimited(commands.Cog):
                         t_stamina = t_title_passive_value
                         o_stamina = t_title_passive_value
                     elif t_title_passive_type == 'FEAR':
-                        o_attack = o_attack + int((t_title_passive_value/100) * o_attack)
-                        o_defense = o_defense + int((t_title_passive_value/100) * o_defense)
-                        t_max_health = t_max_health - int((t_title_passive_value/100) * t_max_health)
+                        t_health = t_health - int((.25 * t_title_passive_value))
+                        o_attack = o_attack - int((.25 * t_title_passive_value))
+                        o_defense = o_defense - int((.25 * t_title_passive_value))
                     elif t_title_passive_type == 'GAMBLE':
                         t_health = t_title_passive_value
                         o_health = t_title_passive_value
@@ -39040,9 +39050,9 @@ class CrownUnlimited(commands.Cog):
                     t_defense = t_defense + int(((tarm_passive_value/100) *t_health))
                     t_health = t_health - int((t_defense))
                 elif tarm_passive_type == 'GROWTH':            
-                    t_attack = t_attack + int((tarm_passive_value/100) * t_attack)
-                    t_defense = t_defense + int((tarm_passive_value/100) * t_defense)
-                    t_max_health = t_max_health - int((tarm_passive_value/100) * t_max_health)
+                    t_attack = t_attack + int(((tarm_passive_value/100) * t_max_health) * .2)
+                    t_defense = t_defense + int(((tarm_passive_value/100) * t_max_health) * .2)
+                    t_max_health = t_max_health - int(((tarm_passive_value/100) * t_max_health) * .2)
                 elif tarm_passive_type == 'STANCE':
                     tempattack = t_attack + tarm_passive_value
                     t_attack = t_defense  + tarm_passive_value         
@@ -39068,9 +39078,9 @@ class CrownUnlimited(commands.Cog):
                     t_stamina = tarm_passive_value
                     o_stamina = tarm_passive_value
                 elif tarm_passive_type == 'FEAR':
-                    o_attack = o_attack + int((tarm_passive_value/100) * o_attack)
-                    o_defense = o_defense + int((tarm_passive_value/100) * o_defense)
-                    t_max_health = t_max_health - int((tarm_passive_value/100) * t_max_health)
+                    t_health = t_health - int((.25 * tarm_passive_value))
+                    o_attack = o_attack - int((.25 * tarm_passive_value))
+                    o_defense = o_defense - int((.25 * tarm_passive_value))
                 elif tarm_passive_type == 'GAMBLE':
                     t_health = tarm_passive_value
                     o_health = tarm_passive_value
@@ -39139,9 +39149,9 @@ class CrownUnlimited(commands.Cog):
                     o_stamina = o_card_passive
                     t_stamina = o_card_passive
                 elif o_card_passive_type == 'FEAR':
-                    o_health = o_health - int((o_card_passive/100 * o_health))
-                    t_attack = t_attack - int((o_card_passive/100 * t_attack))
-                    t_defense = t_defense - int((o_card_passive/100 * t_defense))
+                    o_health = o_health - int((o_card_passive/1000 * o_health))
+                    t_attack = t_attack - int((o_card_passive/1000 * o_health))
+                    t_defense = t_defense - int((o_card_passive/1000 * o_health))
                 elif o_card_passive_type == 'GAMBLE':
                     o_health = o_card_passive
                     t_health = o_card_passive              
@@ -39212,9 +39222,9 @@ class CrownUnlimited(commands.Cog):
                         o_stamina = o_title_passive_value
                         t_stamina = o_title_passive_value
                     elif o_title_passive_type == 'FEAR':
-                        o_health = o_health - int((o_title_passive_value/100 * o_health))
-                        t_attack = t_attack - int((o_title_passive_value/100 * t_attack))
-                        t_defense = t_defense - int((o_title_passive_value/100 * t_defense))
+                        o_health = o_health - int((.25 * o_title_passive_value))
+                        t_attack = t_attack - int((.25 * o_title_passive_value))
+                        t_defense = t_defense - int((.25 * o_title_passive_value))
                     elif o_title_passive_type == 'GAMBLE':
                         t_health = o_title_passive_value
                         o_health = o_title_passive_value
@@ -39284,9 +39294,9 @@ class CrownUnlimited(commands.Cog):
                     o_stamina = oarm_passive_value
                     t_stamina = oarm_passive_value
                 elif oarm_passive_type == 'FEAR':
-                    o_health = o_health - int((oarm_passive_value/100 * o_health))
-                    t_attack = t_attack - int((oarm_passive_value/100 * t_attack))
-                    t_defense = t_defense - int((oarm_passive_value/100 * t_defense))
+                    o_health = o_health - int((.25 * oarm_passive_value))
+                    t_attack = t_attack - int((.25 * oarm_passive_value))
+                    t_defense = t_defense - int((.25 * oarm_passive_value))
                 elif oarm_passive_type == 'GAMBLE':
                     t_health = oarm_passive_value
                     o_health = oarm_passive_value
@@ -39566,7 +39576,7 @@ class CrownUnlimited(commands.Cog):
                             **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                             :cyclone: 10 | **:boom: {omove1_text}** | _1_
                             :cyclone: 30 | **:comet: {omove2_text}** | _2_
-                            :cyclone: 80 | **:sparkles: {omove3_text}** | _3_
+                            :cyclone: 80 | **:rosette: {omove3_text}** | _3_
                             :cyclone: 20 | **:microbe: {omove_enhanced_text}** | _4_
                             :cyclone: 20 | **Block** | _0_
                         
@@ -40166,7 +40176,7 @@ class CrownUnlimited(commands.Cog):
                                 **:heart: {t_health}/:cyclone: {t_stamina} :dagger:{t_attack}/:shield:{t_defense}**
                                 :cyclone: 10 | **:boom: {tmove1_text}** | _1_
                                 :cyclone: 30 | **:comet: {tmove2_text}** | _2_
-                                :cyclone: 80 | **:sparkles: {tmove3_text}** | _3_
+                                :cyclone: 80 | **:rosette: {tmove3_text}** | _3_
                                 :cyclone: 20 **:microbe: {tmove_enhanced_text}** | _4_
                                 :cyclone: 20 | **Block** | _0_
                             
@@ -40423,9 +40433,9 @@ class CrownUnlimited(commands.Cog):
                                                     t_health = round(t_health - dmg['DMG'])
                                                     t_defense = round(t_defense + (.75 * dmg['DMG']))
                                                 elif tpet_type == 'GROWTH':
-                                                    t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                                    t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                                    t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                                    t_max_health = round(t_max_health - dmg['DMG'])
+                                                    t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                                    t_attack = round(t_attack + (.3 * dmg['DMG']))
                                                 elif tpet_type == 'STANCE':
                                                     tempattack = dmg['DMG']
                                                     t_attack = t_defense
@@ -40535,9 +40545,9 @@ class CrownUnlimited(commands.Cog):
                                                     t_health = round(t_health - dmg['DMG'])
                                                     t_defense = round(t_defense + (.75 * dmg['DMG']))
                                                 elif enh_type == 'GROWTH':
-                                                    t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                                    t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                                    t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                                    t_max_health = round(t_max_health - dmg['DMG'])
+                                                    t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                                    t_attack = round(t_attack + (.3 * dmg['DMG']))
                                                 elif enh_type == 'STANCE':
                                                     tempattack = dmg['DMG']
                                                     t_attack = t_defense
@@ -40924,9 +40934,9 @@ class CrownUnlimited(commands.Cog):
                                                 t_health = round(t_health - dmg['DMG'])
                                                 t_defense = round(t_defense + (.75 * dmg['DMG']))
                                             elif tpet_type == 'GROWTH':
-                                                t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                                t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                                t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                                t_max_health = round(t_max_health - dmg['DMG'])
+                                                t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                                t_attack = round(t_attack + (.3 * dmg['DMG']))
                                             elif tpet_type == 'STANCE':
                                                 tempattack = dmg['DMG']
                                                 t_attack = t_defense
@@ -41020,9 +41030,9 @@ class CrownUnlimited(commands.Cog):
                                                 t_health = round(t_health - dmg['DMG'])
                                                 t_defense = round(t_defense + (.75 * dmg['DMG']))
                                             elif enh_type == 'GROWTH':
-                                                t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                                t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                                t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                                t_max_health = round(t_max_health - dmg['DMG'])
+                                                t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                                t_attack = round(t_attack + (.3 * dmg['DMG']))
                                             elif enh_type == 'STANCE':
                                                 tempattack = dmg['DMG']
                                                 t_attack = t_defense
@@ -41518,9 +41528,10 @@ class CrownUnlimited(commands.Cog):
                     t_defense = t_defense + int(((t_card_passive/100) *t_health))
                     t_health = t_health - int((t_defense))
                 elif t_card_passive_type == 'GROWTH':            
-                    t_attack = t_attack + int((t_card_passive/100) * t_attack)
-                    t_defense = t_defense + int((t_card_passive/100) * t_defense)
-                    t_max_health = t_max_health - int((t_card_passive/100) * t_max_health)
+                    t_attack = t_attack + int(((t_card_passive/100) * t_max_health))
+                    t_defense = t_defense + int(((t_card_passive/100) * t_max_health))
+                    t_max_health = t_max_health - int(((t_card_passive/100) * t_max_health))
+                    t_health = t_health - int(((t_card_passive/100) * t_max_health))
                 elif t_card_passive_type == 'STANCE':
                     tempattack = t_attack + t_card_passive
                     t_attack = t_defense + t_card_passive            
@@ -41546,9 +41557,9 @@ class CrownUnlimited(commands.Cog):
                     t_stamina = t_card_passive
                     o_stamina = t_card_passive
                 elif t_card_passive_type == 'FEAR':
-                    o_attack = o_attack + int((t_card_passive/100) * o_attack)
-                    o_defense = o_defense + int((t_card_passive/100) * o_defense)
-                    t_max_health = t_max_health - int((t_card_passive/100) * t_max_health)
+                    t_health = t_health - int((t_card_passive/1000 * t_health))
+                    o_attack = o_attack - int((t_card_passive/1000 * t_health))
+                    o_defense = o_defense - int((t_card_passive/1000 * t_health))
                 elif t_card_passive_type == 'GAMBLE':
                     t_health = t_card_passive
                     o_health = t_card_passive
@@ -41591,9 +41602,9 @@ class CrownUnlimited(commands.Cog):
                         t_defense = t_defense + int(((t_title_passive_value/100) *t_health))
                         t_health = t_health - int((t_defense))
                     elif t_title_passive_type == 'GROWTH':            
-                        t_attack = t_attack + int((t_title_passive_value/100) * t_attack)
-                        t_defense = t_defense + int((t_title_passive_value/100) * t_defense)
-                        t_max_health = t_max_health - int((t_title_passive_value/100) * t_max_health)
+                        t_attack = t_attack + int(((t_title_passive_value/100) * t_max_health) * .2)
+                        t_defense = t_defense + int(((t_title_passive_value/100) * t_max_health) * .2)
+                        t_max_health = t_max_health - int(((t_title_passive_value/100) * t_max_health) * .2)
                     elif t_title_passive_type == 'STANCE':
                         tempattack = t_attack + t_title_passive_value
                         t_attack = t_defense  + t_title_passive_value          
@@ -41619,9 +41630,9 @@ class CrownUnlimited(commands.Cog):
                         t_stamina = t_title_passive_value
                         o_stamina = t_title_passive_value
                     elif t_title_passive_type == 'FEAR':
-                        o_attack = o_attack + int((t_title_passive_value/100) * o_attack)
-                        o_defense = o_defense + int((t_title_passive_value/100) * o_defense)
-                        t_max_health = t_max_health - int((t_title_passive_value/100) * t_max_health)
+                        t_health = t_health - int((.25 * t_title_passive_value))
+                        o_attack = o_attack - int((.25 * t_title_passive_value))
+                        o_defense = o_defense - int((.25 * t_title_passive_value))
                     elif t_title_passive_type == 'GAMBLE':
                         t_health = t_title_passive_value
                         o_health = t_title_passive_value
@@ -41664,9 +41675,9 @@ class CrownUnlimited(commands.Cog):
                     t_defense = t_defense + int(((tarm_passive_value/100) *t_health))
                     t_health = t_health - int((t_defense))
                 elif tarm_passive_type == 'GROWTH':            
-                    t_attack = t_attack + int((tarm_passive_value/100) * t_attack)
-                    t_defense = t_defense + int((tarm_passive_value/100) * t_defense)
-                    t_max_health = t_max_health - int((tarm_passive_value/100) * t_max_health)
+                    t_attack = t_attack + int(((tarm_passive_value/100) * t_max_health) * .2)
+                    t_defense = t_defense + int(((tarm_passive_value/100) * t_max_health) * .2)
+                    t_max_health = t_max_health - int(((tarm_passive_value/100) * t_max_health) * .2)
                 elif tarm_passive_type == 'STANCE':
                     tempattack = t_attack + tarm_passive_value
                     t_attack = t_defense  + tarm_passive_value         
@@ -41692,9 +41703,9 @@ class CrownUnlimited(commands.Cog):
                     t_stamina = tarm_passive_value
                     o_stamina = tarm_passive_value
                 elif tarm_passive_type == 'FEAR':
-                    o_attack = o_attack + int((tarm_passive_value/100) * o_attack)
-                    o_defense = o_defense + int((tarm_passive_value/100) * o_defense)
-                    t_max_health = t_max_health - int((tarm_passive_value/100) * t_max_health)
+                    t_health = t_health - int((.25 * tarm_passive_value))
+                    o_attack = o_attack - int((.25 * tarm_passive_value))
+                    o_defense = o_defense - int((.25 * tarm_passive_value))
                 elif tarm_passive_type == 'GAMBLE':
                     t_health = tarm_passive_value
                     o_health = tarm_passive_value
@@ -41763,9 +41774,9 @@ class CrownUnlimited(commands.Cog):
                     o_stamina = o_card_passive
                     t_stamina = o_card_passive
                 elif o_card_passive_type == 'FEAR':
-                    o_health = o_health - int((o_card_passive/100 * o_health))
-                    t_attack = t_attack - int((o_card_passive/100 * t_attack))
-                    t_defense = t_defense - int((o_card_passive/100 * t_defense))
+                    o_health = o_health - int((o_card_passive/1000 * o_health))
+                    t_attack = t_attack - int((o_card_passive/1000 * o_health))
+                    t_defense = t_defense - int((o_card_passive/1000 * o_health))
                 elif o_card_passive_type == 'GAMBLE':
                     o_health = o_card_passive
                     t_health = o_card_passive              
@@ -41836,9 +41847,9 @@ class CrownUnlimited(commands.Cog):
                         o_stamina = o_title_passive_value
                         t_stamina = o_title_passive_value
                     elif o_title_passive_type == 'FEAR':
-                        o_health = o_health - int((o_title_passive_value/100 * o_health))
-                        t_attack = t_attack - int((o_title_passive_value/100 * t_attack))
-                        t_defense = t_defense - int((o_title_passive_value/100 * t_defense))
+                        o_health = o_health - int((.25 * o_title_passive_value))
+                        t_attack = t_attack - int((.25 * o_title_passive_value))
+                        t_defense = t_defense - int((.25 * o_title_passive_value))
                     elif o_title_passive_type == 'GAMBLE':
                         t_health = o_title_passive_value
                         o_health = o_title_passive_value
@@ -41908,9 +41919,9 @@ class CrownUnlimited(commands.Cog):
                     o_stamina = oarm_passive_value
                     t_stamina = oarm_passive_value
                 elif oarm_passive_type == 'FEAR':
-                    o_health = o_health - int((oarm_passive_value/100 * o_health))
-                    t_attack = t_attack - int((oarm_passive_value/100 * t_attack))
-                    t_defense = t_defense - int((oarm_passive_value/100 * t_defense))
+                    o_health = o_health - int((.25 * oarm_passive_value))
+                    t_attack = t_attack - int((.25 * oarm_passive_value))
+                    t_defense = t_defense - int((.25 * oarm_passive_value))
                 elif oarm_passive_type == 'GAMBLE':
                     t_health = oarm_passive_value
                     o_health = oarm_passive_value
@@ -42190,7 +42201,7 @@ class CrownUnlimited(commands.Cog):
                             **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                             :cyclone: 10 | **:boom: {omove1_text}** | _1_
                             :cyclone: 30 | **:comet: {omove2_text}** | _2_
-                            :cyclone: 80 | **:sparkles: {omove3_text}** | _3_
+                            :cyclone: 80 | **:rosette: {omove3_text}** | _3_
                             :cyclone: 20 | **:microbe: {omove_enhanced_text}** | _4_
                             :cyclone: 20 | **Block** | _0_
                         
@@ -42689,7 +42700,7 @@ class CrownUnlimited(commands.Cog):
                                 **:heart: {t_health}/:cyclone: {t_stamina} :dagger:{t_attack}/:shield:{t_defense}**
                                 :cyclone: 10 | **:boom: {tmove1_text}** | _1_
                                 :cyclone: 30 | **:comet: {tmove2_text}** | _2_
-                                :cyclone: 80 | **:sparkles: {tmove3_text}** | _3_
+                                :cyclone: 80 | **:rosette: {tmove3_text}** | _3_
                                 :cyclone: 20 **:microbe: {tmove_enhanced_text}** | _4_
                                 :cyclone: 20 | **Block** | _0_
                             
@@ -42958,9 +42969,9 @@ class CrownUnlimited(commands.Cog):
                                                     t_health = round(t_health - dmg['DMG'])
                                                     t_defense = round(t_defense + (.75 * dmg['DMG']))
                                                 elif enh_type == 'GROWTH':
-                                                    t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                                    t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                                    t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                                    t_max_health = round(t_max_health - dmg['DMG'])
+                                                    t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                                    t_attack = round(t_attack + (.3 * dmg['DMG']))
                                                 elif enh_type == 'STANCE':
                                                     tempattack = dmg['DMG']
                                                     t_attack = t_defense
@@ -43347,9 +43358,9 @@ class CrownUnlimited(commands.Cog):
                                                 t_health = round(t_health - dmg['DMG'])
                                                 t_defense = round(t_defense + (.75 * dmg['DMG']))
                                             elif tpet_type == 'GROWTH':
-                                                t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                                t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                                t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                                t_max_health = round(t_max_health - dmg['DMG'])
+                                                t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                                t_attack = round(t_attack + (.3 * dmg['DMG']))
                                             elif tpet_type == 'STANCE':
                                                 tempattack = dmg['DMG']
                                                 t_attack = t_defense
@@ -43443,9 +43454,9 @@ class CrownUnlimited(commands.Cog):
                                                 t_health = round(t_health - dmg['DMG'])
                                                 t_defense = round(t_defense + (.75 * dmg['DMG']))
                                             elif enh_type == 'GROWTH':
-                                                t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                                t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                                t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                                t_max_health = round(t_max_health - dmg['DMG'])
+                                                t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                                t_attack = round(t_attack + (.3 * dmg['DMG']))
                                             elif enh_type == 'STANCE':
                                                 tempattack = dmg['DMG']
                                                 t_attack = t_defense
@@ -43942,9 +43953,10 @@ class CrownUnlimited(commands.Cog):
                     t_defense = t_defense + int(((t_card_passive/100) *t_health))
                     t_health = t_health - int((t_defense))
                 elif t_card_passive_type == 'GROWTH':            
-                    t_attack = t_attack + int((t_card_passive/100) * t_attack)
-                    t_defense = t_defense + int((t_card_passive/100) * t_defense)
-                    t_max_health = t_max_health - int((t_card_passive/100) * t_max_health)
+                    t_attack = t_attack + int(((t_card_passive/100) * t_max_health))
+                    t_defense = t_defense + int(((t_card_passive/100) * t_max_health))
+                    t_max_health = t_max_health - int(((t_card_passive/100) * t_max_health))
+                    t_health = t_health - int(((t_card_passive/100) * t_max_health))
                 elif t_card_passive_type == 'STANCE':
                     tempattack = t_attack + t_card_passive
                     t_attack = t_defense + t_card_passive            
@@ -43970,9 +43982,9 @@ class CrownUnlimited(commands.Cog):
                     t_stamina = t_card_passive
                     o_stamina = t_card_passive
                 elif t_card_passive_type == 'FEAR':
-                    o_attack = o_attack + int((t_card_passive/100) * o_attack)
-                    o_defense = o_defense + int((t_card_passive/100) * o_defense)
-                    t_max_health = t_max_health - int((t_card_passive/100) * t_max_health)
+                    t_health = t_health - int((t_card_passive/1000 * t_health))
+                    o_attack = o_attack - int((t_card_passive/1000 * t_health))
+                    o_defense = o_defense - int((t_card_passive/1000 * t_health))
                 elif t_card_passive_type == 'GAMBLE':
                     t_health = t_card_passive
                     o_health = t_card_passive
@@ -44015,9 +44027,9 @@ class CrownUnlimited(commands.Cog):
                         t_defense = t_defense + int(((t_title_passive_value/100) *t_health))
                         t_health = t_health - int((t_defense))
                     elif t_title_passive_type == 'GROWTH':            
-                        t_attack = t_attack + int((t_title_passive_value/100) * t_attack)
-                        t_defense = t_defense + int((t_title_passive_value/100) * t_defense)
-                        t_max_health = t_max_health - int((t_title_passive_value/100) * t_max_health)
+                        t_attack = t_attack + int(((t_title_passive_value/100) * t_max_health) * .2)
+                        t_defense = t_defense + int(((t_title_passive_value/100) * t_max_health) * .2)
+                        t_max_health = t_max_health - int(((t_title_passive_value/100) * t_max_health) * .2)
                     elif t_title_passive_type == 'STANCE':
                         tempattack = t_attack + t_title_passive_value
                         t_attack = t_defense  + t_title_passive_value          
@@ -44043,9 +44055,9 @@ class CrownUnlimited(commands.Cog):
                         t_stamina = t_title_passive_value
                         o_stamina = t_title_passive_value
                     elif t_title_passive_type == 'FEAR':
-                        o_attack = o_attack + int((t_title_passive_value/100) * o_attack)
-                        o_defense = o_defense + int((t_title_passive_value/100) * o_defense)
-                        t_max_health = t_max_health - int((t_title_passive_value/100) * t_max_health)
+                        t_health = t_health - int((.25 * t_title_passive_value))
+                        o_attack = o_attack - int((.25 * t_title_passive_value))
+                        o_defense = o_defense - int((.25 * t_title_passive_value))
                     elif t_title_passive_type == 'GAMBLE':
                         t_health = t_title_passive_value
                         o_health = t_title_passive_value
@@ -44088,9 +44100,9 @@ class CrownUnlimited(commands.Cog):
                     t_defense = t_defense + int(((tarm_passive_value/100) *t_health))
                     t_health = t_health - int((t_defense))
                 elif tarm_passive_type == 'GROWTH':            
-                    t_attack = t_attack + int((tarm_passive_value/100) * t_attack)
-                    t_defense = t_defense + int((tarm_passive_value/100) * t_defense)
-                    t_max_health = t_max_health - int((tarm_passive_value/100) * t_max_health)
+                    t_attack = t_attack + int(((tarm_passive_value/100) * t_max_health) * .2)
+                    t_defense = t_defense + int(((tarm_passive_value/100) * t_max_health) * .2)
+                    t_max_health = t_max_health - int(((tarm_passive_value/100) * t_max_health) * .2)
                 elif tarm_passive_type == 'STANCE':
                     tempattack = t_attack + tarm_passive_value
                     t_attack = t_defense  + tarm_passive_value         
@@ -44116,9 +44128,9 @@ class CrownUnlimited(commands.Cog):
                     t_stamina = tarm_passive_value
                     o_stamina = tarm_passive_value
                 elif tarm_passive_type == 'FEAR':
-                    o_attack = o_attack + int((tarm_passive_value/100) * o_attack)
-                    o_defense = o_defense + int((tarm_passive_value/100) * o_defense)
-                    t_max_health = t_max_health - int((tarm_passive_value/100) * t_max_health)
+                    t_health = t_health - int((.25 * tarm_passive_value))
+                    o_attack = o_attack - int((.25 * tarm_passive_value))
+                    o_defense = o_defense - int((.25 * tarm_passive_value))
                 elif tarm_passive_type == 'GAMBLE':
                     t_health = tarm_passive_value
                     o_health = tarm_passive_value
@@ -44187,9 +44199,9 @@ class CrownUnlimited(commands.Cog):
                     o_stamina = o_card_passive
                     t_stamina = o_card_passive
                 elif o_card_passive_type == 'FEAR':
-                    o_health = o_health - int((o_card_passive/100 * o_health))
-                    t_attack = t_attack - int((o_card_passive/100 * t_attack))
-                    t_defense = t_defense - int((o_card_passive/100 * t_defense))
+                    o_health = o_health - int((o_card_passive/1000 * o_health))
+                    t_attack = t_attack - int((o_card_passive/1000 * o_health))
+                    t_defense = t_defense - int((o_card_passive/1000 * o_health))
                 elif o_card_passive_type == 'GAMBLE':
                     o_health = o_card_passive
                     t_health = o_card_passive              
@@ -44260,9 +44272,9 @@ class CrownUnlimited(commands.Cog):
                         o_stamina = o_title_passive_value
                         t_stamina = o_title_passive_value
                     elif o_title_passive_type == 'FEAR':
-                        o_health = o_health - int((o_title_passive_value/100 * o_health))
-                        t_attack = t_attack - int((o_title_passive_value/100 * t_attack))
-                        t_defense = t_defense - int((o_title_passive_value/100 * t_defense))
+                        o_health = o_health - int((.25 * o_title_passive_value))
+                        t_attack = t_attack - int((.25 * o_title_passive_value))
+                        t_defense = t_defense - int((.25 * o_title_passive_value))
                     elif o_title_passive_type == 'GAMBLE':
                         t_health = o_title_passive_value
                         o_health = o_title_passive_value
@@ -44332,9 +44344,9 @@ class CrownUnlimited(commands.Cog):
                     o_stamina = oarm_passive_value
                     t_stamina = oarm_passive_value
                 elif oarm_passive_type == 'FEAR':
-                    o_health = o_health - int((oarm_passive_value/100 * o_health))
-                    t_attack = t_attack - int((oarm_passive_value/100 * t_attack))
-                    t_defense = t_defense - int((oarm_passive_value/100 * t_defense))
+                    o_health = o_health - int((.25 * oarm_passive_value))
+                    t_attack = t_attack - int((.25 * oarm_passive_value))
+                    t_defense = t_defense - int((.25 * oarm_passive_value))
                 elif oarm_passive_type == 'GAMBLE':
                     t_health = oarm_passive_value
                     o_health = oarm_passive_value
@@ -44614,7 +44626,7 @@ class CrownUnlimited(commands.Cog):
                             **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                             :cyclone: 10 | **:boom: {omove1_text}** | _1_
                             :cyclone: 30 | **:comet: {omove2_text}** | _2_
-                            :cyclone: 80 | **:sparkles: {omove3_text}** | _3_
+                            :cyclone: 80 | **:rosette: {omove3_text}** | _3_
                             :cyclone: 20 | **:microbe: {omove_enhanced_text}** | _4_
                             :cyclone: 20 | **Block** | _0_
                         
@@ -45113,7 +45125,7 @@ class CrownUnlimited(commands.Cog):
                                 **:heart: {t_health}/:cyclone: {t_stamina} :dagger:{t_attack}/:shield:{t_defense}**
                                 :cyclone: 10 | **:boom: {tmove1_text}** | _1_
                                 :cyclone: 30 | **:comet: {tmove2_text}** | _2_
-                                :cyclone: 80 | **:sparkles: {tmove3_text}** | _3_
+                                :cyclone: 80 | **:rosette: {tmove3_text}** | _3_
                                 :cyclone: 20 **:microbe: {tmove_enhanced_text}** | _4_
                                 :cyclone: 20 | **Block** | _0_
                             
@@ -45382,9 +45394,9 @@ class CrownUnlimited(commands.Cog):
                                                     t_health = round(t_health - dmg['DMG'])
                                                     t_defense = round(t_defense + (.75 * dmg['DMG']))
                                                 elif enh_type == 'GROWTH':
-                                                    t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                                    t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                                    t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                                    t_max_health = round(t_max_health - dmg['DMG'])
+                                                    t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                                    t_attack = round(t_attack + (.3 * dmg['DMG']))
                                                 elif enh_type == 'STANCE':
                                                     tempattack = dmg['DMG']
                                                     t_attack = t_defense
@@ -45771,9 +45783,9 @@ class CrownUnlimited(commands.Cog):
                                                 t_health = round(t_health - dmg['DMG'])
                                                 t_defense = round(t_defense + (.75 * dmg['DMG']))
                                             elif tpet_type == 'GROWTH':
-                                                t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                                t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                                t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                                t_max_health = round(t_max_health - dmg['DMG'])
+                                                t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                                t_attack = round(t_attack + (.3 * dmg['DMG']))
                                             elif tpet_type == 'STANCE':
                                                 tempattack = dmg['DMG']
                                                 t_attack = t_defense
@@ -45867,9 +45879,9 @@ class CrownUnlimited(commands.Cog):
                                                 t_health = round(t_health - dmg['DMG'])
                                                 t_defense = round(t_defense + (.75 * dmg['DMG']))
                                             elif enh_type == 'GROWTH':
-                                                t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                                t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                                t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                                t_max_health = round(t_max_health - dmg['DMG'])
+                                                t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                                t_attack = round(t_attack + (.3 * dmg['DMG']))
                                             elif enh_type == 'STANCE':
                                                 tempattack = dmg['DMG']
                                                 t_attack = t_defense
@@ -46389,9 +46401,10 @@ class CrownUnlimited(commands.Cog):
                     t_defense = t_defense + int(((t_card_passive/100) *t_health))
                     t_health = t_health - int((t_defense))
                 elif t_card_passive_type == 'GROWTH':            
-                    t_attack = t_attack + int((t_card_passive/100) * t_attack)
-                    t_defense = t_defense + int((t_card_passive/100) * t_defense)
-                    t_max_health = t_max_health - int((t_card_passive/100) * t_max_health)
+                    t_attack = t_attack + int(((t_card_passive/100) * t_max_health))
+                    t_defense = t_defense + int(((t_card_passive/100) * t_max_health))
+                    t_max_health = t_max_health - int(((t_card_passive/100) * t_max_health))
+                    t_health = t_health - int(((t_card_passive/100) * t_max_health))
                 elif t_card_passive_type == 'STANCE':
                     tempattack = t_attack + t_card_passive
                     t_attack = t_defense + t_card_passive            
@@ -46417,9 +46430,9 @@ class CrownUnlimited(commands.Cog):
                     t_stamina = t_card_passive
                     o_stamina = t_card_passive
                 elif t_card_passive_type == 'FEAR':
-                    o_attack = o_attack + int((t_card_passive/100) * o_attack)
-                    o_defense = o_defense + int((t_card_passive/100) * o_defense)
-                    t_max_health = t_max_health - int((t_card_passive/100) * t_max_health)
+                    t_health = t_health - int((t_card_passive/1000 * t_health))
+                    o_attack = o_attack - int((t_card_passive/1000 * t_health))
+                    o_defense = o_defense - int((t_card_passive/1000 * t_health))
                 elif t_card_passive_type == 'GAMBLE':
                     t_health = t_card_passive
                     o_health = t_card_passive
@@ -46462,9 +46475,9 @@ class CrownUnlimited(commands.Cog):
                         t_defense = t_defense + int(((t_title_passive_value/100) *t_health))
                         t_health = t_health - int((t_defense))
                     elif t_title_passive_type == 'GROWTH':            
-                        t_attack = t_attack + int((t_title_passive_value/100) * t_attack)
-                        t_defense = t_defense + int((t_title_passive_value/100) * t_defense)
-                        t_max_health = t_max_health - int((t_title_passive_value/100) * t_max_health)
+                        t_attack = t_attack + int(((t_title_passive_value/100) * t_max_health) * .2)
+                        t_defense = t_defense + int(((t_title_passive_value/100) * t_max_health) * .2)
+                        t_max_health = t_max_health - int(((t_title_passive_value/100) * t_max_health) * .2)
                     elif t_title_passive_type == 'STANCE':
                         tempattack = t_attack + t_title_passive_value
                         t_attack = t_defense  + t_title_passive_value          
@@ -46490,9 +46503,9 @@ class CrownUnlimited(commands.Cog):
                         t_stamina = t_title_passive_value
                         o_stamina = t_title_passive_value
                     elif t_title_passive_type == 'FEAR':
-                        o_attack = o_attack + int((t_title_passive_value/100) * o_attack)
-                        o_defense = o_defense + int((t_title_passive_value/100) * o_defense)
-                        t_max_health = t_max_health - int((t_title_passive_value/100) * t_max_health)
+                        t_health = t_health - int((.25 * t_title_passive_value))
+                        o_attack = o_attack - int((.25 * t_title_passive_value))
+                        o_defense = o_defense - int((.25 * t_title_passive_value))
                     elif t_title_passive_type == 'GAMBLE':
                         t_health = t_title_passive_value
                         o_health = t_title_passive_value
@@ -46535,9 +46548,9 @@ class CrownUnlimited(commands.Cog):
                     t_defense = t_defense + int(((tarm_passive_value/100) *t_health))
                     t_health = t_health - int((t_defense))
                 elif tarm_passive_type == 'GROWTH':            
-                    t_attack = t_attack + int((tarm_passive_value/100) * t_attack)
-                    t_defense = t_defense + int((tarm_passive_value/100) * t_defense)
-                    t_max_health = t_max_health - int((tarm_passive_value/100) * t_max_health)
+                    t_attack = t_attack + int(((tarm_passive_value/100) * t_max_health) * .2)
+                    t_defense = t_defense + int(((tarm_passive_value/100) * t_max_health) * .2)
+                    t_max_health = t_max_health - int(((tarm_passive_value/100) * t_max_health) * .2)
                 elif tarm_passive_type == 'STANCE':
                     tempattack = t_attack + tarm_passive_value
                     t_attack = t_defense  + tarm_passive_value         
@@ -46563,9 +46576,9 @@ class CrownUnlimited(commands.Cog):
                     t_stamina = tarm_passive_value
                     o_stamina = tarm_passive_value
                 elif tarm_passive_type == 'FEAR':
-                    o_attack = o_attack + int((tarm_passive_value/100) * o_attack)
-                    o_defense = o_defense + int((tarm_passive_value/100) * o_defense)
-                    t_max_health = t_max_health - int((tarm_passive_value/100) * t_max_health)
+                    t_health = t_health - int((.25 * tarm_passive_value))
+                    o_attack = o_attack - int((.25 * tarm_passive_value))
+                    o_defense = o_defense - int((.25 * tarm_passive_value))
                 elif tarm_passive_type == 'GAMBLE':
                     t_health = tarm_passive_value
                     o_health = tarm_passive_value
@@ -46707,9 +46720,9 @@ class CrownUnlimited(commands.Cog):
                         o_stamina = o_title_passive_value
                         t_stamina = o_title_passive_value
                     elif o_title_passive_type == 'FEAR':
-                        o_health = o_health - int((o_title_passive_value/100 * o_health))
-                        t_attack = t_attack - int((o_title_passive_value/100 * t_attack))
-                        t_defense = t_defense - int((o_title_passive_value/100 * t_defense))
+                        o_health = o_health - int((.25 * o_title_passive_value))
+                        t_attack = t_attack - int((.25 * o_title_passive_value))
+                        t_defense = t_defense - int((.25 * o_title_passive_value))
                     elif o_title_passive_type == 'GAMBLE':
                         t_health = o_title_passive_value
                         o_health = o_title_passive_value
@@ -46779,9 +46792,9 @@ class CrownUnlimited(commands.Cog):
                     o_stamina = oarm_passive_value
                     t_stamina = oarm_passive_value
                 elif oarm_passive_type == 'FEAR':
-                    o_health = o_health - int((oarm_passive_value/100 * o_health))
-                    t_attack = t_attack - int((oarm_passive_value/100 * t_attack))
-                    t_defense = t_defense - int((oarm_passive_value/100 * t_defense))
+                    o_health = o_health - int((.25 * oarm_passive_value))
+                    t_attack = t_attack - int((.25 * oarm_passive_value))
+                    t_defense = t_defense - int((.25 * oarm_passive_value))
                 elif oarm_passive_type == 'GAMBLE':
                     t_health = oarm_passive_value
                     o_health = oarm_passive_value
@@ -47054,7 +47067,7 @@ class CrownUnlimited(commands.Cog):
                             **:heart: {o_health}/:cyclone: {o_stamina} :dagger:{o_attack}/:shield:{o_defense}**
                             :cyclone: 10 | **:boom: {omove1_text}** | _1_
                             :cyclone: 30 | **:comet: {omove2_text}** | _2_
-                            :cyclone: 80 | **:sparkles: {omove3_text}** | _3_
+                            :cyclone: 80 | **:rosette: {omove3_text}** | _3_
                             :cyclone: 20 | **:microbe: {omove_enhanced_text}** | _4_
                             :cyclone: 20 | **Block** | _0_
                         
@@ -47672,7 +47685,7 @@ class CrownUnlimited(commands.Cog):
                                 **:heart: {t_health}/:cyclone: {t_stamina} :dagger:{t_attack}/:shield:{t_defense}**
                                 :cyclone: 10 | **:boom: {tmove1_text}** | _1_
                                 :cyclone: 30 | **:comet: {tmove2_text}** | _2_
-                                :cyclone: 80 | **:sparkles: {tmove3_text}** | _3_
+                                :cyclone: 80 | **:rosette: {tmove3_text}** | _3_
                                 :cyclone: 20 **:microbe: {tmove_enhanced_text}** | _4_
                                 :cyclone: 20 | **Block** | _0_
                             
@@ -47924,9 +47937,9 @@ class CrownUnlimited(commands.Cog):
                                                     t_health = round(t_health - dmg['DMG'])
                                                     t_defense = round(t_defense + (.75 * dmg['DMG']))
                                                 elif tpet_type == 'GROWTH':
-                                                    t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                                    t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                                    t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                                    t_max_health = round(t_max_health - dmg['DMG'])
+                                                    t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                                    t_attack = round(t_attack + (.3 * dmg['DMG']))
                                                 elif tpet_type == 'STANCE':
                                                     tempattack = dmg['DMG']
                                                     t_attack = t_defense
@@ -48035,9 +48048,9 @@ class CrownUnlimited(commands.Cog):
                                                     t_health = round(t_health - dmg['DMG'])
                                                     t_defense = round(t_defense + (.75 * dmg['DMG']))
                                                 elif enh_type == 'GROWTH':
-                                                    t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                                    t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                                    t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                                    t_max_health = round(t_max_health - dmg['DMG'])
+                                                    t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                                    t_attack = round(t_attack + (.3 * dmg['DMG']))
                                                 elif enh_type == 'STANCE':
                                                     tempattack = dmg['DMG']
                                                     t_attack = t_defense
@@ -48303,9 +48316,9 @@ class CrownUnlimited(commands.Cog):
                                                 t_health = round(t_health - dmg['DMG'])
                                                 t_defense = round(t_defense + (.75 * dmg['DMG']))
                                             elif tpet_type == 'GROWTH':
-                                                t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                                t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                                t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                                t_max_health = round(t_max_health - dmg['DMG'])
+                                                t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                                t_attack = round(t_attack + (.3 * dmg['DMG']))
                                             elif tpet_type == 'STANCE':
                                                 tempattack = dmg['DMG']
                                                 t_attack = t_defense
@@ -48400,9 +48413,9 @@ class CrownUnlimited(commands.Cog):
                                                 t_health = round(t_health - dmg['DMG'])
                                                 t_defense = round(t_defense + (.75 * dmg['DMG']))
                                             elif enh_type == 'GROWTH':
-                                                t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                                t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                                t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                                t_max_health = round(t_max_health - dmg['DMG'])
+                                                t_defense = round(t_defense + (.3 * dmg['DMG']))
+                                                t_attack = round(t_attack + (.3 * dmg['DMG']))
                                             elif enh_type == 'STANCE':
                                                 tempattack = dmg['DMG']
                                                 t_attack = t_defense
@@ -48829,7 +48842,7 @@ class CrownUnlimited(commands.Cog):
 
         embed_list = []
         for i in range(0, len(destinies_broken_up)):
-            globals()['embedVar%s' % i] = discord.Embed(title= f":sparkles: {universe} Destiny List", description="\n".join(destinies_broken_up[i]), colour=0x7289da)
+            globals()['embedVar%s' % i] = discord.Embed(title= f":rosette: {universe} Destiny List", description="\n".join(destinies_broken_up[i]), colour=0x7289da)
             globals()['embedVar%s' % i].set_footer(text=f"{total_destinies} Total Destiny Lines")
             embed_list.append(globals()['embedVar%s' % i])
 
@@ -49216,7 +49229,7 @@ async def cardlevel(card, player, universe):
             cardinfo = x
     
     lvl = cardinfo['LVL']
-    lvl_req = 150
+    lvl_req = 125
     exp = cardinfo['EXP']
     exp_gain = 0
     if tier == 1:
@@ -49881,7 +49894,9 @@ async def drops(player, universe, matchcount):
     pets= []
 
     for card in all_available_drop_cards:
-        cards.append(card['NAME'])
+        for c in vault['CARDS']:
+            if c != card['NAME']:
+                cards.append(card['NAME'])
 
     for title in all_available_drop_titles:
         titles.append(title['TITLE'])
@@ -49939,7 +49954,12 @@ async def drops(player, universe, matchcount):
         await bless(50, player)
         return f"You earned _Pet:_ **{pets[rand_pet]}** + :coin: 50!"
     elif drop_rate <= card_drop and drop_rate > pet_drop:
+            card_data = db.queryCard({'NAME': str(cards[rand_card])})
+            uni = db.queryUniverse({'TITLE': card_data['UNIVERSE']})
+            tier = uni['TIER']
+            update_query = {'$addToSet': {'CARD_LEVELS': {'CARD': str(cards[rand_card]), 'LVL': 0, 'TIER': int(tier), 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
             response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(cards[rand_card])}})
+            r = db.updateVaultNoFilter(vault_query, update_query)
             message = ""
             for destiny in d.destiny:
                 if cards[rand_card] in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
@@ -49969,7 +49989,9 @@ async def dungeondrops(player, universe, matchcount):
     pets= []
 
     for card in all_available_drop_cards:
-        cards.append(card['NAME'])
+        for c in vault['CARDS']:
+            if c != card['NAME']:
+                cards.append(card['NAME'])
 
     for title in all_available_drop_titles:
         titles.append(title['TITLE'])
@@ -49978,7 +50000,9 @@ async def dungeondrops(player, universe, matchcount):
         arms.append(arm['ARM'])
 
     for pet in all_available_drop_pets:
-        pets.append(pet['PET'])
+        for p in vault['PETS']:
+            if p['NAME'] != pet['PET']:
+                pets.append(pet['PET'])
 
     c = len(cards) - 1
     t = len(titles) - 1
@@ -50024,7 +50048,12 @@ async def dungeondrops(player, universe, matchcount):
         await bless(80, player)
         return f"You earned _Pet:_ **{pets[rand_pet]}** + :coin: 80!"
     elif drop_rate <= card_drop and drop_rate > pet_drop:
+            card_data = db.queryCard({'NAME': str(cards[rand_card])})
+            uni = db.queryUniverse({'TITLE': card_data['UNIVERSE']})
+            tier = uni['TIER']
+            update_query = {'$addToSet': {'CARD_LEVELS': {'CARD': str(cards[rand_card]), 'LVL': 0, 'TIER': int(tier), 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}            
             response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(cards[rand_card])}})
+            r = db.updateVaultNoFilter(vault_query, update_query)
             message = ""
             for destiny in d.destiny:
                 if cards[rand_card] in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:

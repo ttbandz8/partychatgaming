@@ -574,8 +574,8 @@ class Lookup(commands.Cog):
             await ctx.send(m.USER_NOT_REGISTERED)
 
     @cog_ext.cog_slash(description="Lookup team stats", guild_ids=main.guild_ids)
-    async def lookupteam(self, ctx, *args):
-        team_name = " ".join([*args])
+    async def lookupteam(self, ctx, team: str):
+        team_name = team
         team_query = {'TNAME': team_name}
         team = db.queryTeam(team_query)
         owner_name = ""
