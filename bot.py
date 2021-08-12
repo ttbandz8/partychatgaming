@@ -130,42 +130,42 @@ async def enhance(ctx):
    embedVar1 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
    embedVar1.set_thumbnail(url=avatar)
    embedVar1.add_field(name="`INCREASES`", value="`ATK` - Increase `ATK`\n\n`DEF` - Increase `DEF`\n\n`HLT` - Increase `HLT`\n\n`STAM` - Increase `STAM`\n\n")
-   embedVar1.set_footer(text=f".help - Bot Help")
+   embedVar1.set_footer(text=f"/help - Bot Help")
 
    embedVar2 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
    embedVar2.set_thumbnail(url=avatar)
    embedVar2.add_field(name="`STEALS`", value="`FLOG`- `ATK` Steal\n\n`WITHER`- `DEF` Steal\n\n`LIFE` - `LIFE` Steal\n\n`DRAIN` - `STAM` Steal\n\n")
-   embedVar2.set_footer(text=f".help - Bot Help")
+   embedVar2.set_footer(text=f"/help - Bot Help")
 
    embedVar3 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
    embedVar3.set_thumbnail(url=avatar)
    embedVar3.add_field(name="`SACRIFICE`", value="`RAGE` - Decrease `DEF`, Increase `ATK`\n\n`BRACE` - Decrease `ATK`, Increase `DEF`\n\n`BZRK` - Decrease `HLT`,  Increase `ATK`\n\n`CRYSTAL`- Decrease `HLT`, Increase `DEF`\n\n`GROWTH`- Decrease `MAXHLT`, Increase `STATS`\n\n")
-   embedVar3.set_footer(text=f".help - Bot Help")
+   embedVar3.set_footer(text=f"/help - Bot Help")
 
    embedVar4 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
    embedVar4.set_thumbnail(url=avatar)
    embedVar4.add_field(name="`TRADE`", value="`STANCE` - Swap `ATK` and `DEF`\n\n`CONFUSE` - Swap `OPP ATK` and  `OPP DEF`\n\n")
-   embedVar4.set_footer(text=f".help - Bot Help")
+   embedVar4.set_footer(text=f"/help - Bot Help")
 
    embedVar5 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
    embedVar5.set_thumbnail(url=avatar)
    embedVar5.add_field(name="`TIME`", value="`BLINK`  - Decrease  `STAM`, Increase `OPP STAM`\n\n`SLOW` - Decrease `STAM`, Swap `OPP STAM`\n\n`HASTE` - Increase `STAM`, Swap `OPP STAM`\n\n")
-   embedVar5.set_footer(text=f".help - Bot Help")
+   embedVar5.set_footer(text=f"/help - Bot Help")
 
    embedVar6 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
    embedVar6.set_thumbnail(url=avatar)
    embedVar6.add_field(name="`CONTROL`", value="`SOULCHAIN` - Both `PLAYERS` `STAM` = \n\n`GAMBLE` - Both `PLAYERS` `HEALTH` =\n\n`FEAR` - Decrease `MAXHLT`, Decrease `OPP ATK` & `OPP DEF`\n\n")
-   embedVar6.set_footer(text=f".help - Bot Help")
+   embedVar6.set_footer(text=f"/help - Bot Help")
 
    embedVar8 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
    embedVar8.set_thumbnail(url=avatar)
    embedVar8.add_field(name="`DAMAGE`", value="`WAVE` - Decreasing Turn Count Based AP DMG \n\n`BLAST` - Increasing Turn Count Based AP DMG\n\n")
-   embedVar8.set_footer(text=f".help - Bot Help")
+   embedVar8.set_footer(text=f"/help - Bot Help")
 
    embedVar9 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
    embedVar9.set_thumbnail(url=avatar)
    embedVar9.add_field(name="`DIVINITY`", value="`CREATION` - Increase `MAXHEALTH`\n\n`DESTRUCTION` - Decrease `OPP MAXHEALTH`\n\n")
-   embedVar9.set_footer(text=f".help - Bot Help")
+   embedVar9.set_footer(text=f"/help - Bot Help")
 
    embedVar7 = discord.Embed(title= f":trident:ENHANCE DETAILS:", description=textwrap.dedent(f"""
    **ATK:** AP Percentage Based Attack Increased
@@ -195,7 +195,7 @@ async def enhance(ctx):
    **DESTRUCTION:** Decreases AP * Turn Count Max Health that increases as the Turn Count increases
    """) ,colour=0x7289da)
    embedVar7.set_thumbnail(url=avatar)
-   embedVar7.set_footer(text=f".help - Bot Help")
+   embedVar7.set_footer(text=f"/help - Bot Help")
 
    paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
    paginator.add_reaction('⏮️', "first")
@@ -417,13 +417,13 @@ async def r(ctx):
       Embark on a journey through Universes filled with characters from your favorite anime and video games!
       First, run **.daily** to get your daily rewards!
 
-      Type **.menu** for quick overview on what to do next! Checkout the tutorials below if you need additional assistance!
+      Type **/menu** for quick overview on what to do next! Checkout the tutorials below if you need additional assistance!
 
       Start Tutorial!
-      **.senpai**
+      **/senpai**
 
       Start Battle Tutorial!
-      **.senpaibattle**
+      **/senpaibattle**
       
       **CHANGING YOUR DISCORD ACCOUNT INFO WILL BREAK YOUR ACCOUNT IN THE GAME. YOU HAVE BEEN WARNED.**
       
@@ -431,7 +431,7 @@ async def r(ctx):
       """), colour=0xe91e63)
       embedVar.set_footer(text=".crown to inquire all potential commands and capabilites of the bot")
       await ctx.author.send(embed=embedVar)
-      await ctx.send(f"Welcome to Crown Unlimited, {ctx.author.mention}! Use **.daily** to collect your daily reward! Use **.menu** to see what you can do.")
+      await ctx.send(f"Welcome to Crown Unlimited, {ctx.author.mention}! Use **/daily** to collect your daily reward! Use **/menu** to see what you can do.")
 
       vault = db.queryVault({'OWNER': disname})
       if vault:

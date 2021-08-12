@@ -253,6 +253,7 @@ class VAULT():
     CARD_LEVELS: list[str] = field(default_factory=lambda: [{'CARD': 'Eevee', 'LVL': 0, 'TIER': 1, 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}, {'CARD': 'Ochaco Uraraka', 'LVL': 0, 'TIER': 1, 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}, {'CARD': 'Garen', 'LVL': 0, 'TIER': 1, 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}])
     QUESTS: list[str] = field(default_factory=lambda: [])
     DESTINY: list[str] = field(default_factory=lambda: [])
+    
 
 @dataclass(frozen=True, order=True) 
 class MENU():
