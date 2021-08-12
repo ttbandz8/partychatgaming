@@ -714,6 +714,7 @@ async def trade(ctx, user2: User, item: str):
    traded_to = db.queryUser({'DISNAME': str(user2)})
    p1_trade_item = item
    p1_vault = db.queryVault({'OWNER' : str(ctx.author)})
+   p1_card_levels = p1_vault['CARD_LEVELS']
    p1_cards = p1_vault['CARDS']
    p1_titles = p1_vault['TITLES']
    p1_arms = p1_vault['ARMS']
@@ -734,6 +735,7 @@ async def trade(ctx, user2: User, item: str):
 
 
    p2_vault = db.queryVault({'OWNER' : str(user2)})
+   p2_card_levels = p2_vault['CARD_LEVELS']
    p2_cards = p2_vault['CARDS']
    p2_titles = p2_vault['TITLES']
    p2_arms = p2_vault['ARMS']
@@ -814,6 +816,19 @@ async def trade(ctx, user2: User, item: str):
                response = db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$addToSet':{'TITLES': str(p2_trade_item)}})
                await ctx.send(f"{p2_trade_item} has been added to {ctx.author.mention}'s vault: TITLES")
             elif p2_trade_item in p2_cards:
+               # CARD_LEVEL Configuration 
+               card_2 = db.queryCard({'NAME': str(p2_trade_item)})
+               card_2_uni = db.queryUniverse({'TITLE': card_2['UNIVERSE']})
+               card_2_tier = card_2_uni['TIER']
+               update_query = {'$addToSet': {'CARD_LEVELS': {'CARD': str(p2_trade_item), 'LVL': 0, 'TIER': int(card_2_tier), 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
+               card_2_level_exist = False
+               for card in p1_card_levels:
+                  if card['CARD'] == str(p2_trade_item):
+                     card_2_level_exist = True
+               if card_2_level_exist == False:
+                  vault_query = {'OWNER' : str(ctx.author)}
+                  response = db.updateVaultNoFilter(vault_query, update_query)
+
                db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'CARDS': str(p1_trade_item)}})
                response = db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$addToSet':{'CARDS': str(p2_trade_item)}})
 
@@ -839,6 +854,19 @@ async def trade(ctx, user2: User, item: str):
                response = db.updateVaultNoFilter({'OWNER': str(user2)},{'$addToSet':{'TITLES': str(p1_trade_item)}})
                await ctx.send(f"{p1_trade_item} has been added to {user2.mention}'s vault: TITLES")
             elif p1_trade_item in p1_cards:
+               # CARD_LEVEL Configuration 
+               card_1 = db.queryCard({'NAME': str(p1_trade_item)})
+               card_1_uni = db.queryUniverse({'TITLE': card_1['UNIVERSE']})
+               card_1_tier = card_1_uni['TIER']
+               cupdate_query = {'$addToSet': {'CARD_LEVELS': {'CARD': str(p1_trade_item), 'LVL': 0, 'TIER': int(card_1_tier), 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
+               card_1_level_exist = False
+               for card in p2_card_levels:
+                  if card['CARD'] == str(p1_trade_item):
+                     card_1_level_exist = True
+               if card_1_level_exist == False:
+                  cvault_query = {'OWNER' : str(user2)}
+                  response = db.updateVaultNoFilter(cvault_query, cupdate_query)
+
                db.updateVaultNoFilter({'OWNER': str(user2)},{'$pull':{'CARDS': str(p2_trade_item)}})
                response = db.updateVaultNoFilter({'OWNER': str(user2)},{'$addToSet':{'CARDS': str(p1_trade_item)}})
 
@@ -864,6 +892,7 @@ async def sell(ctx, user2: User, item: str):
    user = db.queryUser({'DISNAME': str(ctx.author)})
    p1_trade_item = item
    p1_vault = db.queryVault({'OWNER' : str(ctx.author)})
+   p1_card_levels = p1_vault['CARD_LEVELS']
    p1_cards = p1_vault['CARDS']
    p1_titles = p1_vault['TITLES']
    p1_arms = p1_vault['ARMS']
@@ -881,6 +910,7 @@ async def sell(ctx, user2: User, item: str):
             p1_active_pet = {'NAME': pet['NAME'], 'LVL': pet['LVL'], 'EXP': pet['EXP'], pet_ability: pet_ability_power, 'TYPE': pet['TYPE'], 'BOND': 0, 'BONDEXP': 0, 'PATH': pet['PATH']}
 
    p2_vault = db.queryVault({'OWNER' : str(user2)})
+   p2_card_levels = p2_vault['CARD_LEVELS']
    p2_cards = p2_vault['CARDS']
    p2_titles = p2_vault['TITLES']
    p2_arms = p2_vault['ARMS']
@@ -954,6 +984,7 @@ async def sell(ctx, user2: User, item: str):
                   await bless(p2_trade_item, ctx.author)
                   await ctx.send(f"{p2_trade_item} has been added to {ctx.author.mention}'s balance.")
                elif p1_trade_item in p1_cards:
+               
                   db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'CARDS': str(p1_trade_item)}})
                   await bless(p2_trade_item, ctx.author)
                   await ctx.send(f"{p2_trade_item} has been added to {ctx.author.mention}'s balance.")
@@ -973,6 +1004,19 @@ async def sell(ctx, user2: User, item: str):
                   await ctx.send(f"{p1_trade_item} has been added to {user2.mention}'s vault: TITLES")
                elif p1_trade_item in p1_cards:
                   await curse(p2_trade_item, user2)
+                  # CARD_LEVEL Configuration 
+                  card_1 = db.queryCard({'NAME': str(p1_trade_item)})
+                  card_1_uni = db.queryUniverse({'TITLE': card_1['UNIVERSE']})
+                  card_1_tier = card_1_uni['TIER']
+                  cupdate_query = {'$addToSet': {'CARD_LEVELS': {'CARD': str(p1_trade_item), 'LVL': 0, 'TIER': int(card_1_tier), 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
+                  card_1_level_exist = False
+                  for card in p2_card_levels:
+                     if card['CARD'] == str(p1_trade_item):
+                        card_1_level_exist = True
+                  if card_1_level_exist == False:
+                     cvault_query = {'OWNER' : str(user2)}
+                     response = db.updateVaultNoFilter(cvault_query, cupdate_query)
+
                   response = db.updateVaultNoFilter({'OWNER': str(user2)},{'$addToSet':{'CARDS': str(p1_trade_item)}})
 
                   for destiny in d.destiny:
@@ -1234,60 +1278,60 @@ async def resell(ctx, item: str):
          except:
             await ctx.send("Resell ended. ")
 
-@bot.command()
-@commands.check(validate_user)
-async def addfield(ctx, collection, new_field, field_type):
-   if ctx.author.guild_permissions.administrator == True:
+# @bot.command()
+# @commands.check(validate_user)
+# async def addfield(ctx, collection, new_field, field_type):
+#    if ctx.author.guild_permissions.administrator == True:
 
-      if field_type == 'string':
-         field_type = "N/A"
-      elif field_type == 'int':
-         field_type = 0
-      elif field_type == 'list':
-         field_type = []
-      elif field_type == 'bool':
-         field_type = False
+#       if field_type == 'string':
+#          field_type = "N/A"
+#       elif field_type == 'int':
+#          field_type = 0
+#       elif field_type == 'list':
+#          field_type = []
+#       elif field_type == 'bool':
+#          field_type = False
       
-      if collection == 'cards':
-         response = db.updateManyCards({'$set': {new_field: field_type}})
-      elif collection == 'titles':
-         response = db.updateManyTitles({'$set': {new_field: field_type}})
-      elif collection == 'vaults':
-         response = db.updateManyVaults({'$set': {new_field: field_type}})
-      elif collection == 'users':
-         response = db.updateManyUsers({'$set': {new_field: field_type}})
-      elif collection == 'universe':
-         response = db.updateManyUniverses({'$set': {new_field: field_type}})
-      elif collection == 'boss':
-         response = db.updateManyBosses({'$set': {new_field: field_type}})
-      elif collection == 'arms':
-         response = db.updateManyArms({'$set': {new_field: field_type}})
-      elif collection == 'pets':
-         response = db.updateManyPets({'$set': {new_field: field_type}})
-      elif collection == 'teams':
-         response = db.updateManyTeams({'$set': {new_field: field_type}})
-   else:
-      print(m.ADMIN_ONLY_COMMAND)
+#       if collection == 'cards':
+#          response = db.updateManyCards({'$set': {new_field: field_type}})
+#       elif collection == 'titles':
+#          response = db.updateManyTitles({'$set': {new_field: field_type}})
+#       elif collection == 'vaults':
+#          response = db.updateManyVaults({'$set': {new_field: field_type}})
+#       elif collection == 'users':
+#          response = db.updateManyUsers({'$set': {new_field: field_type}})
+#       elif collection == 'universe':
+#          response = db.updateManyUniverses({'$set': {new_field: field_type}})
+#       elif collection == 'boss':
+#          response = db.updateManyBosses({'$set': {new_field: field_type}})
+#       elif collection == 'arms':
+#          response = db.updateManyArms({'$set': {new_field: field_type}})
+#       elif collection == 'pets':
+#          response = db.updateManyPets({'$set': {new_field: field_type}})
+#       elif collection == 'teams':
+#          response = db.updateManyTeams({'$set': {new_field: field_type}})
+#    else:
+#       print(m.ADMIN_ONLY_COMMAND)
 
-@bot.command()
-@commands.check(validate_user)
-async def sync(ctx):
-   all_vaults = db.queryAllVault()
-   players = []
-   vaults = []
-   try:
-      for vault in all_vaults:
-         player = vault['OWNER']
-         cards = vault['CARDS']
-         vault_query = {'OWNER' : player}
-         for card in cards:
-            resp = db.queryCard({'NAME': card})
-            universe = db.queryUniverse({'TITLE': resp['UNIVERSE']})
-            tier = universe['TIER']
-            update_query = {'$addToSet': {'CARD_LEVELS': {'CARD': card, 'LVL': 0, 'TIER': int(tier), 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
-            db.updateVaultNoFilter(vault_query, update_query)
-   except Exception as e:
-      print(e)
+# @bot.command()
+# @commands.check(validate_user)
+# async def sync(ctx):
+#    all_vaults = db.queryAllVault()
+#    players = []
+#    vaults = []
+#    try:
+#       for vault in all_vaults:
+#          player = vault['OWNER']
+#          cards = vault['CARDS']
+#          vault_query = {'OWNER' : player}
+#          for card in cards:
+#             resp = db.queryCard({'NAME': card})
+#             universe = db.queryUniverse({'TITLE': resp['UNIVERSE']})
+#             tier = universe['TIER']
+#             update_query = {'$addToSet': {'CARD_LEVELS': {'CARD': card, 'LVL': 0, 'TIER': int(tier), 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
+#             db.updateVaultNoFilter(vault_query, update_query)
+#    except Exception as e:
+#       print(e)
    
 
 

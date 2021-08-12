@@ -43,6 +43,7 @@ class Cards(commands.Cog):
 
         shop = db.queryShopCards()
         cards = []
+        tier = 0
 
         check_card = db.queryCard({'NAME' : str(card)})
         if check_card:
@@ -52,6 +53,7 @@ class Cards(commands.Cog):
             all_universes = db.queryAllUniverse()
             user = db.queryUser({'DISNAME': str(ctx.author)})
             available_universes = []
+            
             if user['RIFT'] == 1:
                 riftShopOpen = True
             if riftShopOpen:    
@@ -65,6 +67,9 @@ class Cards(commands.Cog):
                 for uni in all_universes:
                     if uni['PREREQUISITE'] in user['CROWN_TALES'] and not uni['TIER'] == 9:
                         available_universes.append(uni['TITLE'])
+                        # Add Tier
+                    if uni['TITLE'] == check_card['UNIVERSE']:
+                        tier = uni['TIER']
             if check_card['UNIVERSE'] not in available_universes:
                 if check_card['UNIVERSE'] in rift_universes:
                     await ctx.send("You are not connected to the rift...")
@@ -111,6 +116,10 @@ class Cards(commands.Cog):
                     response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(card_name)}})
                     await ctx.send(m.PURCHASE_COMPLETE_1 + f"`{newstock}` `{mintedCard}` CARDS left in the Shop!")
                     
+                    # Add Card Level config
+                    update_query = {'$addToSet': {'CARD_LEVELS': {'CARD': str(card_name), 'LVL': 0, 'TIER': int(tier), 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}            
+                    r = db.updateVaultNoFilter(vault_query, update_query)
+                    # Add Destiny
                     for destiny in d.destiny:
                         if card_name in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
                             db.updateVaultNoFilter(vault_query,{'$addToSet':{'DESTINY': destiny}})
@@ -267,7 +276,7 @@ class Cards(commands.Cog):
             _**Moveset**_
             :boom: **{move1}:** {move1ap}
             :comet: **{move2}:** {move2ap}
-            :sparkles: **{move3}:** {move3ap}
+            :rosette: **{move3}:** {move3ap}
             :microbe: **{move4}:** {move4enh} by {move4ap}
 
             :drop_of_blood: _Passive:_ **{passive_name}:** {passive_type} by {passive_num}
