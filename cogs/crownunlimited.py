@@ -447,9 +447,9 @@ class CrownUnlimited(commands.Cog):
                 o_stamina = o_card_passive
                 t_stamina = o_card_passive
             elif o_card_passive_type == 'FEAR':
-                o_health = o_health - int((o_card_passive/1000 * o_health))
-                t_attack = t_attack - int((o_card_passive/1000 * o_health))
-                t_defense = t_defense - int((o_card_passive/1000 * o_health))
+                o_health = o_health - int((o_card_passive/100 * o_health))
+                t_attack = t_attack - int((o_card_passive/100 * o_health))
+                t_defense = t_defense - int((o_card_passive/100 * o_health))
             elif o_card_passive_type == 'GAMBLE':
                 o_health = o_card_passive
                 t_health = o_card_passive   
@@ -743,9 +743,9 @@ class CrownUnlimited(commands.Cog):
                 t_stamina = t_card_passive
                 o_stamina = t_card_passive
             elif t_card_passive_type == 'FEAR':
-                t_health = t_health - int((t_card_passive/1000 * t_health))
-                o_attack = o_attack - int((t_card_passive/1000 * t_health))
-                o_defense = o_defense - int((t_card_passive/1000 * t_health))
+                t_health = t_health - int((t_card_passive/100 * t_health))
+                o_attack = o_attack - int((t_card_passive/100 * t_health))
+                o_defense = o_defense - int((t_card_passive/100 * t_health))
             elif t_card_passive_type == 'GAMBLE':
                 t_health = t_card_passive 
                 o_health = t_card_passive
@@ -2675,9 +2675,9 @@ class CrownUnlimited(commands.Cog):
                 c_stamina = c_card_passive
                 t_stamina = c_card_passive
             elif c_card_passive_type == 'FEAR':
-                c_health = c_health - int((c_card_passive/1000 * c_health))
-                t_attack = t_attack - int((c_card_passive/1000 * c_health))
-                t_defense = t_defense - int((c_card_passive/1000 * c_health))
+                c_health = c_health - int((c_card_passive/100 * c_health))
+                t_attack = t_attack - int((c_card_passive/100 * c_health))
+                t_defense = t_defense - int((c_card_passive/100 * c_health))
             elif c_card_passive_type == 'GAMBLE':
                 c_health = c_card_passive
                 t_health = c_card_passive
@@ -2933,9 +2933,9 @@ class CrownUnlimited(commands.Cog):
                 o_stamina = o_card_passive
                 t_stamina = o_card_passive
             elif o_card_passive_type == 'FEAR':
-                o_health = o_health - int((o_card_passive/1000 * o_health))
-                t_attack = t_attack - int((o_card_passive/1000 * o_health))
-                t_defense = t_defense - int((o_card_passive/1000 * o_health))
+                o_health = o_health - int((o_card_passive/100 * o_health))
+                t_attack = t_attack - int((o_card_passive/100 * o_health))
+                t_defense = t_defense - int((o_card_passive/100 * o_health))
             elif o_card_passive_type == 'GAMBLE':
                 o_health = o_card_passive
                 t_health = o_card_passive   
@@ -3250,11 +3250,11 @@ class CrownUnlimited(commands.Cog):
                 o_stamina = t_card_passive
                 c_stamina = t_card_passive
             elif t_card_passive_type == 'FEAR':
-                t_health = t_health - int((t_card_passive/1000 * t_health))
-                o_attack = o_attack - int((t_card_passive/1000 * t_health))
-                o_defense = o_defense - int((t_card_passive/1000 * t_health))
-                c_attack = c_attack - int((t_card_passive/1000 * t_health))
-                c_defense = c_defense - int((t_card_passive/1000 * t_health))
+                t_health = t_health - int((t_card_passive/100 * t_health))
+                o_attack = o_attack - int((t_card_passive/100 * t_health))
+                o_defense = o_defense - int((t_card_passive/100 * t_health))
+                c_attack = c_attack - int((t_card_passive/100 * t_health))
+                c_defense = c_defense - int((t_card_passive/100 * t_health))
             elif t_card_passive_type == 'GAMBLE':
                 t_health = t_card_passive
                 o_health = t_card_passive
@@ -7016,9 +7016,9 @@ class CrownUnlimited(commands.Cog):
                 c_stamina = c_card_passive
                 t_stamina = c_card_passive
             elif c_card_passive_type == 'FEAR':
-                c_health = c_health - int((c_card_passive/1000 * c_health))
-                t_attack = t_attack - int((c_card_passive/1000 * c_health))
-                t_defense = t_defense - int((c_card_passive/1000 * c_health))
+                c_health = c_health - int((c_card_passive/100 * c_health))
+                t_attack = t_attack - int((c_card_passive/100 * c_health))
+                t_defense = t_defense - int((c_card_passive/100 * c_health))
             elif c_card_passive_type == 'GAMBLE':
                 c_health = c_card_passive
                 t_health = c_card_passive * 2
@@ -7274,9 +7274,9 @@ class CrownUnlimited(commands.Cog):
                 o_stamina = o_card_passive
                 t_stamina = o_card_passive
             elif o_card_passive_type == 'FEAR':
-                o_health = o_health - int((o_card_passive/1000 * o_health))
-                t_attack = t_attack - int((o_card_passive/1000 * o_health))
-                t_defense = t_defense - int((o_card_passive/1000 * o_health))
+                o_health = o_health - int((o_card_passive/100 * o_health))
+                t_attack = t_attack - int((o_card_passive/100 * o_health))
+                t_defense = t_defense - int((o_card_passive/100 * o_health))
             elif o_card_passive_type == 'GAMBLE':
                 o_health = o_card_passive
                 t_health = o_card_passive * 2  
@@ -7591,11 +7591,11 @@ class CrownUnlimited(commands.Cog):
                 o_stamina = t_card_passive
                 c_stamina = t_card_passive
             elif t_card_passive_type == 'FEAR':
-                t_health = t_health - int((t_card_passive/1000 * t_health))
-                o_attack = o_attack - int((t_card_passive/1000 * t_health))
-                o_defense = o_defense - int((t_card_passive/1000 * t_health))
-                c_attack = o_attack - int((t_card_passive/1000 * t_health))
-                c_defense = o_defense - int((t_card_passive/1000 * t_health))
+                t_health = t_health - int((t_card_passive/100 * t_health))
+                o_attack = o_attack - int((t_card_passive/100 * t_health))
+                o_defense = o_defense - int((t_card_passive/100 * t_health))
+                c_attack = o_attack - int((t_card_passive/100 * t_health))
+                c_defense = o_defense - int((t_card_passive/100 * t_health))
             elif t_card_passive_type == 'GAMBLE':
                 t_health = t_card_passive * 2
                 o_health = t_card_passive
@@ -11802,9 +11802,9 @@ class CrownUnlimited(commands.Cog):
             c_stamina = c_card_passive
             t_stamina = c_card_passive
         elif c_card_passive_type == 'FEAR':
-            c_health = c_health - int((c_card_passive/1000 * c_health))
-            t_attack = t_attack - int((c_card_passive/1000 * c_health))
-            t_defense = t_defense - int((c_card_passive/1000 * c_health))
+            c_health = c_health - int((c_card_passive/100 * c_health))
+            t_attack = t_attack - int((c_card_passive/100 * c_health))
+            t_defense = t_defense - int((c_card_passive/100 * c_health))
         elif c_card_passive_type == 'GAMBLE':
             c_health = c_card_passive
             t_health = c_card_passive * 5  
@@ -12066,9 +12066,9 @@ class CrownUnlimited(commands.Cog):
             o_stamina = o_card_passive
             t_stamina = o_card_passive
         elif o_card_passive_type == 'FEAR':
-            o_health = o_health - int((o_card_passive/1000 * o_health))
-            t_attack = t_attack - int((o_card_passive/1000 * o_health))
-            t_defense = t_defense - int((o_card_passive/1000 * o_health))
+            o_health = o_health - int((o_card_passive/100 * o_health))
+            t_attack = t_attack - int((o_card_passive/100 * o_health))
+            t_defense = t_defense - int((o_card_passive/100 * o_health))
         elif o_card_passive_type == 'GAMBLE':
             o_health = o_card_passive
             t_health = o_card_passive   
@@ -12374,11 +12374,11 @@ class CrownUnlimited(commands.Cog):
             o_stamina = t_card_passive
             c_stamina = t_card_passive
         elif t_card_passive_type == 'FEAR':
-            t_health = t_health - int((t_card_passive/1000 * t_health))
-            o_attack = o_attack - int((t_card_passive/1000 * t_health))
-            o_defense = o_defense - int((t_card_passive/1000 * t_health))
-            c_attack = c_attack - int((t_card_passive/1000 * t_health))
-            c_defense = c_defense - int((t_card_passive/1000 * t_health))
+            t_health = t_health - int((t_card_passive/100 * t_health))
+            o_attack = o_attack - int((t_card_passive/100 * t_health))
+            o_defense = o_defense - int((t_card_passive/100 * t_health))
+            c_attack = c_attack - int((t_card_passive/100 * t_health))
+            c_defense = c_defense - int((t_card_passive/100 * t_health))
         elif t_card_passive_type == 'GAMBLE':
             t_health = t_card_passive * 5
             o_health = t_card_passive
@@ -16600,9 +16600,9 @@ class CrownUnlimited(commands.Cog):
                 c_stamina = c_card_passive
                 t_stamina = c_card_passive
             elif c_card_passive_type == 'FEAR':
-                c_health = c_health - int((c_card_passive/1000 * c_health))
-                t_attack = t_attack - int((c_card_passive/1000 * c_health))
-                t_defense = t_defense - int((c_card_passive/1000 * c_health))
+                c_health = c_health - int((c_card_passive/100 * c_health))
+                t_attack = t_attack - int((c_card_passive/100 * c_health))
+                t_defense = t_defense - int((c_card_passive/100 * c_health))
             elif c_card_passive_type == 'GAMBLE':
                 c_health = c_card_passive
                 t_health = c_card_passive
@@ -16857,9 +16857,9 @@ class CrownUnlimited(commands.Cog):
                 o_stamina = o_card_passive
                 t_stamina = o_card_passive
             elif o_card_passive_type == 'FEAR':
-                o_health = o_health - int((o_card_passive/1000 * o_health))
-                t_attack = t_attack - int((o_card_passive/1000 * o_health))
-                t_defense = t_defense - int((o_card_passive/1000 * o_health))
+                o_health = o_health - int((o_card_passive/100 * o_health))
+                t_attack = t_attack - int((o_card_passive/100 * o_health))
+                t_defense = t_defense - int((o_card_passive/100 * o_health))
             elif o_card_passive_type == 'GAMBLE':
                 o_health = o_card_passive
                 t_health = o_card_passive   
@@ -17174,11 +17174,11 @@ class CrownUnlimited(commands.Cog):
                 o_stamina = t_card_passive
                 c_stamina = t_card_passive
             elif t_card_passive_type == 'FEAR':
-                t_health = t_health - int((t_card_passive/1000 * t_health))
-                o_attack = o_attack - int((t_card_passive/1000 * t_health))
-                o_defense = o_defense - int((t_card_passive/1000 * t_health))
-                c_attack = c_attack - int((t_card_passive/1000 * t_health))
-                c_defense = c_defense - int((t_card_passive/1000 * t_health))
+                t_health = t_health - int((t_card_passive/100 * t_health))
+                o_attack = o_attack - int((t_card_passive/100 * t_health))
+                o_defense = o_defense - int((t_card_passive/100 * t_health))
+                c_attack = c_attack - int((t_card_passive/100 * t_health))
+                c_defense = c_defense - int((t_card_passive/100 * t_health))
             elif t_card_passive_type == 'GAMBLE':
                 t_health = t_card_passive
                 o_health = t_card_passive
@@ -20774,9 +20774,9 @@ class CrownUnlimited(commands.Cog):
                 c_stamina = c_card_passive
                 t_stamina = c_card_passive
             elif c_card_passive_type == 'FEAR':
-                c_health = c_health - int((c_card_passive/1000 * c_health))
-                t_attack = t_attack - int((c_card_passive/1000 * c_health))
-                t_defense = t_defense - int((c_card_passive/1000 * c_health))
+                c_health = c_health - int((c_card_passive/100 * c_health))
+                t_attack = t_attack - int((c_card_passive/100 * c_health))
+                t_defense = t_defense - int((c_card_passive/100 * c_health))
             elif c_card_passive_type == 'GAMBLE':
                 c_health = c_card_passive
                 t_health = c_card_passive * 2
@@ -21032,9 +21032,9 @@ class CrownUnlimited(commands.Cog):
                 o_stamina = o_card_passive
                 t_stamina = o_card_passive
             elif o_card_passive_type == 'FEAR':
-                o_health = o_health - int((o_card_passive/1000 * o_health))
-                t_attack = t_attack - int((o_card_passive/1000 * o_health))
-                t_defense = t_defense - int((o_card_passive/1000 * o_health))
+                o_health = o_health - int((o_card_passive/100 * o_health))
+                t_attack = t_attack - int((o_card_passive/100 * o_health))
+                t_defense = t_defense - int((o_card_passive/100 * o_health))
             elif o_card_passive_type == 'GAMBLE':
                 o_health = o_card_passive
                 t_health = o_card_passive * 2  
@@ -21349,11 +21349,11 @@ class CrownUnlimited(commands.Cog):
                 o_stamina = t_card_passive
                 c_stamina = t_card_passive
             elif t_card_passive_type == 'FEAR':
-                t_health = t_health - int((t_card_passive/1000 * t_health))
-                o_attack = o_attack - int((t_card_passive/1000 * t_health))
-                o_defense = o_defense - int((t_card_passive/1000 * t_health))
-                c_attack = o_attack - int((t_card_passive/1000 * t_health))
-                c_defense = o_defense - int((t_card_passive/1000 * t_health))
+                t_health = t_health - int((t_card_passive/100 * t_health))
+                o_attack = o_attack - int((t_card_passive/100 * t_health))
+                o_defense = o_defense - int((t_card_passive/100 * t_health))
+                c_attack = o_attack - int((t_card_passive/100 * t_health))
+                c_defense = o_defense - int((t_card_passive/100 * t_health))
             elif t_card_passive_type == 'GAMBLE':
                 t_health = t_card_passive * 2
                 o_health = t_card_passive
@@ -25336,9 +25336,9 @@ class CrownUnlimited(commands.Cog):
             c_stamina = c_card_passive
             t_stamina = c_card_passive
         elif c_card_passive_type == 'FEAR':
-            c_health = c_health - int((c_card_passive/1000 * c_health))
-            t_attack = t_attack - int((c_card_passive/1000 * c_health))
-            t_defense = t_defense - int((c_card_passive/1000 * c_health))
+            c_health = c_health - int((c_card_passive/100 * c_health))
+            t_attack = t_attack - int((c_card_passive/100 * c_health))
+            t_defense = t_defense - int((c_card_passive/100 * c_health))
         elif c_card_passive_type == 'GAMBLE':
             c_health = c_card_passive
             t_health = c_card_passive * 5  
@@ -25600,9 +25600,9 @@ class CrownUnlimited(commands.Cog):
             o_stamina = o_card_passive
             t_stamina = o_card_passive
         elif o_card_passive_type == 'FEAR':
-            o_health = o_health - int((o_card_passive/1000 * o_health))
-            t_attack = t_attack - int((o_card_passive/1000 * o_health))
-            t_defense = t_defense - int((o_card_passive/1000 * o_health))
+            o_health = o_health - int((o_card_passive/100 * o_health))
+            t_attack = t_attack - int((o_card_passive/100 * o_health))
+            t_defense = t_defense - int((o_card_passive/100 * o_health))
         elif o_card_passive_type == 'GAMBLE':
             o_health = o_card_passive
             t_health = o_card_passive   
@@ -25908,11 +25908,11 @@ class CrownUnlimited(commands.Cog):
             o_stamina = t_card_passive
             c_stamina = t_card_passive
         elif t_card_passive_type == 'FEAR':
-            t_health = t_health - int((t_card_passive/1000 * t_health))
-            o_attack = o_attack - int((t_card_passive/1000 * t_health))
-            o_defense = o_defense - int((t_card_passive/1000 * t_health))
-            c_attack = c_attack - int((t_card_passive/1000 * t_health))
-            c_defense = c_defense - int((t_card_passive/1000 * t_health))
+            t_health = t_health - int((t_card_passive/100 * t_health))
+            o_attack = o_attack - int((t_card_passive/100 * t_health))
+            o_defense = o_defense - int((t_card_passive/100 * t_health))
+            c_attack = c_attack - int((t_card_passive/100 * t_health))
+            c_defense = c_defense - int((t_card_passive/100 * t_health))
         elif t_card_passive_type == 'GAMBLE':
             t_health = t_card_passive * 5
             o_health = t_card_passive
@@ -29778,9 +29778,9 @@ class CrownUnlimited(commands.Cog):
                 o_stamina = o_card_passive
                 t_stamina = o_card_passive
             elif o_card_passive_type == 'FEAR':
-                o_health = o_health - int((o_card_passive/1000 * o_health))
-                t_attack = t_attack - int((o_card_passive/1000 * o_health))
-                t_defense = t_defense - int((o_card_passive/1000 * o_health))
+                o_health = o_health - int((o_card_passive/100 * o_health))
+                t_attack = t_attack - int((o_card_passive/100 * o_health))
+                t_defense = t_defense - int((o_card_passive/100 * o_health))
             elif o_card_passive_type == 'GAMBLE':
                 o_health = o_card_passive
                 t_health = o_card_passive * 2           
@@ -30075,9 +30075,9 @@ class CrownUnlimited(commands.Cog):
                 t_stamina = t_card_passive
                 o_stamina = t_card_passive
             elif t_card_passive_type == 'FEAR':
-                t_health = t_health - int((t_card_passive/1000 * t_health))
-                o_attack = o_attack - int((t_card_passive/1000 * t_health))
-                o_defense = o_defense - int((t_card_passive/1000 * t_health))
+                t_health = t_health - int((t_card_passive/100 * t_health))
+                o_attack = o_attack - int((t_card_passive/100 * t_health))
+                o_defense = o_defense - int((t_card_passive/100 * t_health))
             elif t_card_passive_type == 'GAMBLE':
                 t_health = t_card_passive * 2
                 o_health = t_card_passive
@@ -32000,9 +32000,9 @@ class CrownUnlimited(commands.Cog):
                 o_stamina = o_card_passive
                 t_stamina = o_card_passive
             elif o_card_passive_type == 'FEAR':
-                o_health = o_health - int((o_card_passive/1000 * o_health))
-                t_attack = t_attack - int((o_card_passive/1000 * o_health))
-                t_defense = t_defense - int((o_card_passive/1000 * o_health))
+                o_health = o_health - int((o_card_passive/100 * o_health))
+                t_attack = t_attack - int((o_card_passive/100 * o_health))
+                t_defense = t_defense - int((o_card_passive/100 * o_health))
             elif o_card_passive_type == 'GAMBLE':
                 o_health = o_card_passive
                 t_health = o_card_passive   
@@ -32296,9 +32296,9 @@ class CrownUnlimited(commands.Cog):
                 t_stamina = t_card_passive
                 o_stamina = t_card_passive
             elif t_card_passive_type == 'FEAR':
-                t_health = t_health - int((t_card_passive/1000 * t_health))
-                o_attack = o_attack - int((t_card_passive/1000 * t_health))
-                o_defense = o_defense - int((t_card_passive/1000 * t_health))
+                t_health = t_health - int((t_card_passive/100 * t_health))
+                o_attack = o_attack - int((t_card_passive/100 * t_health))
+                o_defense = o_defense - int((t_card_passive/100 * t_health))
             elif t_card_passive_type == 'GAMBLE':
                 t_health = t_card_passive 
                 o_health = t_card_passive
@@ -34125,9 +34125,9 @@ class CrownUnlimited(commands.Cog):
             o_stamina = o_card_passive
             t_stamina = o_card_passive
         elif o_card_passive_type == 'FEAR':
-            o_health = o_health - int((o_card_passive/1000 * o_health))
-            t_attack = t_attack - int((o_card_passive/1000 * o_health))
-            t_defense = t_defense - int((o_card_passive/1000 * o_health))
+            o_health = o_health - int((o_card_passive/100 * o_health))
+            t_attack = t_attack - int((o_card_passive/100 * o_health))
+            t_defense = t_defense - int((o_card_passive/100 * o_health))
         elif o_card_passive_type == 'GAMBLE':
             o_health = o_card_passive
             t_health = o_card_passive   
@@ -34422,9 +34422,9 @@ class CrownUnlimited(commands.Cog):
             t_stamina = t_card_passive
             o_stamina = t_card_passive
         elif t_card_passive_type == 'FEAR':
-            t_health = t_health - int((t_card_passive/1000 * t_health))
-            o_attack = o_attack - int((t_card_passive/1000 * t_health))
-            o_defense = o_defense - int((t_card_passive/1000 * t_health))
+            t_health = t_health - int((t_card_passive/100 * t_health))
+            o_attack = o_attack - int((t_card_passive/100 * t_health))
+            o_defense = o_defense - int((t_card_passive/100 * t_health))
         elif t_card_passive_type == 'GAMBLE':
             t_health = t_card_passive
             o_health = t_card_passive
@@ -36272,9 +36272,9 @@ class CrownUnlimited(commands.Cog):
                     t_stamina = t_card_passive
                     o_stamina = t_card_passive
                 elif t_card_passive_type == 'FEAR':
-                    t_health = t_health - int((t_card_passive/1000 * t_health))
-                    o_attack = o_attack - int((t_card_passive/1000 * t_health))
-                    o_defense = o_defense - int((t_card_passive/1000 * t_health))
+                    t_health = t_health - int((t_card_passive/100 * t_health))
+                    o_attack = o_attack - int((t_card_passive/100 * t_health))
+                    o_defense = o_defense - int((t_card_passive/100 * t_health))
                 elif t_card_passive_type == 'GAMBLE':
                     t_health = t_card_passive
                     o_health = t_card_passive
@@ -36489,9 +36489,9 @@ class CrownUnlimited(commands.Cog):
                     o_stamina = o_card_passive
                     t_stamina = o_card_passive
                 elif o_card_passive_type == 'FEAR':
-                    o_health = o_health - int((o_card_passive/1000 * o_health))
-                    t_attack = t_attack - int((o_card_passive/1000 * o_health))
-                    t_defense = t_defense - int((o_card_passive/1000 * o_health))
+                    o_health = o_health - int((o_card_passive/100 * o_health))
+                    t_attack = t_attack - int((o_card_passive/100 * o_health))
+                    t_defense = t_defense - int((o_card_passive/100 * o_health))
                 elif o_card_passive_type == 'GAMBLE':
                     o_health = o_card_passive
                     t_health = o_card_passive              
@@ -38932,9 +38932,9 @@ class CrownUnlimited(commands.Cog):
                     t_stamina = t_card_passive
                     o_stamina = t_card_passive
                 elif t_card_passive_type == 'FEAR':
-                    t_health = t_health - int((t_card_passive/1000 * t_health))
-                    o_attack = o_attack - int((t_card_passive/1000 * t_health))
-                    o_defense = o_defense - int((t_card_passive/1000 * t_health))
+                    t_health = t_health - int((t_card_passive/100 * t_health))
+                    o_attack = o_attack - int((t_card_passive/100 * t_health))
+                    o_defense = o_defense - int((t_card_passive/100 * t_health))
                 elif t_card_passive_type == 'GAMBLE':
                     t_health = t_card_passive
                     o_health = t_card_passive
@@ -39149,9 +39149,9 @@ class CrownUnlimited(commands.Cog):
                     o_stamina = o_card_passive
                     t_stamina = o_card_passive
                 elif o_card_passive_type == 'FEAR':
-                    o_health = o_health - int((o_card_passive/1000 * o_health))
-                    t_attack = t_attack - int((o_card_passive/1000 * o_health))
-                    t_defense = t_defense - int((o_card_passive/1000 * o_health))
+                    o_health = o_health - int((o_card_passive/100 * o_health))
+                    t_attack = t_attack - int((o_card_passive/100 * o_health))
+                    t_defense = t_defense - int((o_card_passive/100 * o_health))
                 elif o_card_passive_type == 'GAMBLE':
                     o_health = o_card_passive
                     t_health = o_card_passive              
@@ -41557,9 +41557,9 @@ class CrownUnlimited(commands.Cog):
                     t_stamina = t_card_passive
                     o_stamina = t_card_passive
                 elif t_card_passive_type == 'FEAR':
-                    t_health = t_health - int((t_card_passive/1000 * t_health))
-                    o_attack = o_attack - int((t_card_passive/1000 * t_health))
-                    o_defense = o_defense - int((t_card_passive/1000 * t_health))
+                    t_health = t_health - int((t_card_passive/100 * t_health))
+                    o_attack = o_attack - int((t_card_passive/100 * t_health))
+                    o_defense = o_defense - int((t_card_passive/100 * t_health))
                 elif t_card_passive_type == 'GAMBLE':
                     t_health = t_card_passive
                     o_health = t_card_passive
@@ -41774,9 +41774,9 @@ class CrownUnlimited(commands.Cog):
                     o_stamina = o_card_passive
                     t_stamina = o_card_passive
                 elif o_card_passive_type == 'FEAR':
-                    o_health = o_health - int((o_card_passive/1000 * o_health))
-                    t_attack = t_attack - int((o_card_passive/1000 * o_health))
-                    t_defense = t_defense - int((o_card_passive/1000 * o_health))
+                    o_health = o_health - int((o_card_passive/100 * o_health))
+                    t_attack = t_attack - int((o_card_passive/100 * o_health))
+                    t_defense = t_defense - int((o_card_passive/100 * o_health))
                 elif o_card_passive_type == 'GAMBLE':
                     o_health = o_card_passive
                     t_health = o_card_passive              
@@ -43982,9 +43982,9 @@ class CrownUnlimited(commands.Cog):
                     t_stamina = t_card_passive
                     o_stamina = t_card_passive
                 elif t_card_passive_type == 'FEAR':
-                    t_health = t_health - int((t_card_passive/1000 * t_health))
-                    o_attack = o_attack - int((t_card_passive/1000 * t_health))
-                    o_defense = o_defense - int((t_card_passive/1000 * t_health))
+                    t_health = t_health - int((t_card_passive/100 * t_health))
+                    o_attack = o_attack - int((t_card_passive/100 * t_health))
+                    o_defense = o_defense - int((t_card_passive/100 * t_health))
                 elif t_card_passive_type == 'GAMBLE':
                     t_health = t_card_passive
                     o_health = t_card_passive
@@ -44199,9 +44199,9 @@ class CrownUnlimited(commands.Cog):
                     o_stamina = o_card_passive
                     t_stamina = o_card_passive
                 elif o_card_passive_type == 'FEAR':
-                    o_health = o_health - int((o_card_passive/1000 * o_health))
-                    t_attack = t_attack - int((o_card_passive/1000 * o_health))
-                    t_defense = t_defense - int((o_card_passive/1000 * o_health))
+                    o_health = o_health - int((o_card_passive/100 * o_health))
+                    t_attack = t_attack - int((o_card_passive/100 * o_health))
+                    t_defense = t_defense - int((o_card_passive/100 * o_health))
                 elif o_card_passive_type == 'GAMBLE':
                     o_health = o_card_passive
                     t_health = o_card_passive              
@@ -46430,9 +46430,9 @@ class CrownUnlimited(commands.Cog):
                     t_stamina = t_card_passive
                     o_stamina = t_card_passive
                 elif t_card_passive_type == 'FEAR':
-                    t_health = t_health - int((t_card_passive/1000 * t_health))
-                    o_attack = o_attack - int((t_card_passive/1000 * t_health))
-                    o_defense = o_defense - int((t_card_passive/1000 * t_health))
+                    t_health = t_health - int((t_card_passive/100 * t_health))
+                    o_attack = o_attack - int((t_card_passive/100 * t_health))
+                    o_defense = o_defense - int((t_card_passive/100 * t_health))
                 elif t_card_passive_type == 'GAMBLE':
                     t_health = t_card_passive
                     o_health = t_card_passive
@@ -46647,9 +46647,9 @@ class CrownUnlimited(commands.Cog):
                     o_stamina = o_card_passive
                     t_stamina = o_card_passive
                 elif o_card_passive_type == 'FEAR':
-                    o_health = o_health - int((o_card_passive/1000 * o_health))
-                    t_attack = t_attack - int((o_card_passive/1000 * o_health))
-                    t_defense = t_defense - int((o_card_passive/1000 * o_health))
+                    o_health = o_health - int((o_card_passive/100 * o_health))
+                    t_attack = t_attack - int((o_card_passive/100 * o_health))
+                    t_defense = t_defense - int((o_card_passive/100 * o_health))
                 elif o_card_passive_type == 'GAMBLE':
                     o_health = o_card_passive
                     t_health = o_card_passive              
