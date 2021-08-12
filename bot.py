@@ -154,7 +154,7 @@ async def enhance(ctx):
 
    embedVar6 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
    embedVar6.set_thumbnail(url=avatar)
-   embedVar6.add_field(name="`CONTROL`", value="`SOULCHAIN` - Both `PLAYERS` `STAM` = \n\n`GAMBLE` - Both `PLAYERS` `HEALTH` =\n\n`FEAR` - Decrease `HLT`, Decrease `OPP ATK` & `OPP DEF`\n\n")
+   embedVar6.add_field(name="`CONTROL`", value="`SOULCHAIN` - Both `PLAYERS` `STAM` = \n\n`GAMBLE` - Both `PLAYERS` `HEALTH` =\n\n`FEAR` - Decrease `MAXHLT`, Decrease `OPP ATK` & `OPP DEF`\n\n")
    embedVar6.set_footer(text=f".help - Bot Help")
 
    embedVar8 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
@@ -180,7 +180,7 @@ async def enhance(ctx):
    **BRACE:** GAIN DEF but Lose ATK based on 50% AP Percentage Of Your ATK
    **BZRK:** Gain ATK Based on 50% of your  AP Percentage of Your HLT
    **CRYSTAL:** Gain DEF Based on 50% of your AP Percentage Of Your Health
-   **GROWTH:** Lower Max Health, Increase Defense and Attack based on 50% of AP Percentage
+   **GROWTH:** Lower Max Health, Increase Defense and Attack based on AP Percentage
    **STANCE:** Swaps your ATK and your DEF, and gives you additional DEF based on AP Value
    **CONFUSE:** Swaps ATK and DEF of opponent and saps additional DEF based on AP Value
    **BLINK:** Decreases Your Stamina by AP Value and gives opponent Stamina by AP Value
