@@ -76,17 +76,38 @@ class Profile(commands.Cog):
         arm = db.queryArm({'ARM': str(d['ARM'])})
         vault = db.queryVault({'OWNER': d['DISNAME']})
         if card:
+
+            # Acquire Card Levels data
+            card_lvl = 0
+            card_tier = 0
+            card_exp = 0
+            card_lvl_attack_buff = 0
+            card_lvl_defense_buff = 0
+            card_lvl_ap_buff = 0
+            card_lvl_hlt_buff = 0
+
+
+            for x in vault['CARD_LEVELS']:
+                if x['CARD'] == card['NAME']:
+                    card_lvl = x['LVL']
+                    card_tier = x['TIER']
+                    card_exp = x['EXP']
+                    card_lvl_ap_buff = x['AP']
+                    card_lvl_attack_buff = x['ATK']
+                    card_lvl_defense_buff = x['DEF']
+                    card_lvl_hlt_buff = x['HLT']
+
             oarm_universe = arm['UNIVERSE']
             o_title_universe = title['UNIVERSE']
             o_card = card['NAME']
             o_card_path=card['PATH']
-            o_max_health = card['HLT']
-            o_health = card['HLT']
+            o_max_health = card['HLT'] + card_lvl_hlt_buff
+            o_health = card['HLT'] + card_lvl_hlt_buff
             o_stamina = card['STAM']
             o_max_stamina = card['STAM']
             o_moveset = card['MOVESET']
-            o_attack = card['ATK']
-            o_defense = card['DEF']
+            o_attack = card['ATK'] + card_lvl_attack_buff
+            o_defense = card['DEF'] + card_lvl_defense_buff
             o_type = card['TYPE']
             o_accuracy = card['ACC']
             o_passive = card['PASS'][0]
@@ -95,6 +116,7 @@ class Profile(commands.Cog):
             o_collection = card['COLLECTION']
             o_destiny = card['HAS_COLLECTION']
             o_rebirth = d['REBIRTH']
+    
             rebirthBonus = o_rebirth * 10
             traits = ut.traits
             mytrait = {}
@@ -130,6 +152,7 @@ class Profile(commands.Cog):
             if lvl == 10:
                 lvl_message = ":star:"
 
+            # Arm Information
             arm_name = arm['ARM']
             arm_passive = arm['ABILITIES'][0]
             arm_passive_type = list(arm_passive.keys())[0]
@@ -146,17 +169,17 @@ class Profile(commands.Cog):
             
             # Move 1
             move1 = list(o_1.keys())[0]
-            move1ap = list(o_1.values())[0]
+            move1ap = list(o_1.values())[0] + card_lvl_ap_buff
             move1_stamina = list(o_1.values())[1]
             
             # Move 2
             move2 = list(o_2.keys())[0]
-            move2ap = list(o_2.values())[0]
+            move2ap = list(o_2.values())[0] + card_lvl_ap_buff
             move2_stamina = list(o_2.values())[1]
 
             # Move 3
             move3 = list(o_3.keys())[0]
-            move3ap = list(o_3.values())[0]
+            move3ap = list(o_3.values())[0] + card_lvl_ap_buff
             move3_stamina = list(o_3.values())[1]
 
             # Move Enhancer
@@ -180,44 +203,42 @@ class Profile(commands.Cog):
             hlt_buff = ""
             message = ""
             if (oarm_universe == o_show) and (o_title_universe == o_show):
-                atk_buff = f" / **{o_attack + 20}**"
-                def_buff = f" / **{o_defense + 20}**"
-                hlt_buff = f" / **{o_max_health + 100}**"
+                atk_buff = f" / {o_attack + 20}"
+                def_buff = f" / {o_defense + 20}"
+                hlt_buff = f" / {o_max_health + 100}"
                 message = "_Universe Buff Applied_"
                 if o_destiny:
-                    atk_buff = f" / **{o_attack + 25}**"
-                    def_buff = f" / **{o_defense + 25}**"
-                    hlt_buff = f" / **{o_max_health + 150}**"
+                    atk_buff = f" / {o_attack + 25}"
+                    def_buff = f" / {o_defense + 25}"
+                    hlt_buff = f" / {o_max_health + 150}"
                     message = "_Destiny Buff Applied_"
 
-            embedVar = discord.Embed(title=f"{title_name} {o_card} & {active_pet['NAME']}:".format(self), description=textwrap.dedent(f"""\
+            embedVar = discord.Embed(title=f":trident: {card_lvl} | {title_name} {o_card} & {active_pet['NAME']}:".format(self), description=textwrap.dedent(f"""\
             {message}
-            :heart: {o_max_health} {hlt_buff}
-            :cyclone: {o_max_stamina}
-            :dagger: {o_attack} {atk_buff} 
-            :shield: {o_defense} {def_buff}
+            :heart: **Health** - {o_max_health} {hlt_buff}
+            :cyclone: **Stamina** - {o_max_stamina}
+            :dagger: **Attack** - {o_attack} {atk_buff}
+            :shield: **Shield** - {o_defense} {def_buff}
             
-            **Title:** {title_name} ~ {title_passive_type} {title_passive_value}
-            **Arm:** {arm_name} ~ {arm_passive_type} {arm_passive_value}
-            **Pet:** {active_pet['NAME']} ~ {active_pet['TYPE']} {pet_ability_power}
+            :reminder_ribbon: **Title** - {title_name} ~ {title_passive_type} | {title_passive_value}
+            :mechanical_arm: **Arm** - {arm_name} ~ {arm_passive_type} | {arm_passive_value}
+            :bird: **Pet** - {active_pet['NAME']} ~ {active_pet['TYPE']} | {pet_ability_power} 
             **Bond** _{bond}_ {bond_message} / **Level** _{lvl}_
-
-            **Rebirth Buff:** +_{rebirthBonus}_
-            
+        
             _**Moveset**_
-            **{move1}:** {move1ap}
-            **{move2}:** {move2ap}
-            **{move3}:** {move3ap}
-            **{move4}:** {move4enh} by {move4ap}
+            :boom: **{move1}:** {move1ap}
+            :comet: **{move2}:** {move2ap}
+            :sparkles: **{move3}:** {move3ap}
+            :microbe: **{move4}:** {move4enh} by {move4ap}
             
-            _Unique Passive:_ **{passive_name}:** {passive_type} by {passive_num}
-            {traitmessage}
+            :drop_of_blood: _Passive:_ **{passive_name}:** {passive_type} by {passive_num}
+            :infinity: {traitmessage}
             """)
             
             , colour=000000)
             embedVar.set_thumbnail(url=active_pet['PATH'])
             embedVar.set_image(url=o_card_path)
-            embedVar.set_footer(text=f".enhance - Enhancement Menu")
+            embedVar.set_footer(text=f"EXP Until Next Level: {100 - card_exp}\nRebirth Buff: +{rebirthBonus}", icon_url="https://cdn.discordapp.com/emojis/841486485826961448.gif?v=1")
 
             await ctx.send(embed=embedVar)
         else:

@@ -2432,7 +2432,7 @@ destiny = [
         "WINS": 0,
         "REQUIRED": 10,
         "DEFEAT": "Shirou Emiya",
-        "USE_CARDS": ["Rin Tosaka"],
+        "USE_CARDS": ["Rin Toshaka"],
         "EARN": "Shirou Emiya", 
         "COMPLETED": False,
         "UNIVERSE": "Fate"

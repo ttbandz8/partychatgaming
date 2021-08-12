@@ -1271,6 +1271,31 @@ async def addfield(ctx, collection, new_field, field_type):
 
 @bot.command()
 @commands.check(validate_user)
+async def sync(ctx):
+   all_vaults = db.queryAllVault()
+   players = []
+   vaults = []
+   try:
+      for vault in all_vaults:
+         player = vault['OWNER']
+         cards = vault['CARDS']
+         vault_query = {'OWNER' : player}
+         for card in cards:
+            resp = db.queryCard({'NAME': card})
+            universe = db.queryUniverse({'TITLE': resp['UNIVERSE']})
+            tier = universe['TIER']
+            update_query = {'$addToSet': {'CARD_LEVELS': {'CARD': card, 'LVL': 0, 'TIER': int(tier), 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
+            db.updateVaultNoFilter(vault_query, update_query)
+   except Exception as e:
+      print(e)
+   
+
+
+   
+
+
+@bot.command()
+@commands.check(validate_user)
 async def referred(ctx, user: User):
    referred = db.queryUser({"DISNAME": str(ctx.author)})
    if not referred['REFERRED']:

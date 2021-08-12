@@ -259,21 +259,19 @@ class Cards(commands.Cog):
                 tip="Equipping offensive titles and arms would help boost killability"              
 
             embedVar = discord.Embed(title=f"{card_icon}  {o_card}\n{price_message}".format(self), description=textwrap.dedent(f"""
-            :heart: {o_max_health}
-            :cyclone: {o_max_stamina}
-            **Atk:** {o_attack}
-            **Def:** {o_defense}
-            **Speed:** {o_speed}
+            :heart: **Health** - {o_max_health}
+            :cyclone: **Stamina** - {o_max_stamina}
+            :dagger: **Attack** - {o_attack}
+            :shield: **Shield** - {o_defense}
 
-            _**Move List**_
-            **{move1}:** {move1ap}
-            **{move2}:** {move2ap}
-            **{move3}:** {move3ap}
-            **{move4}:** {move4enh} By {move4ap}
+            _**Moveset**_
+            :boom: **{move1}:** {move1ap}
+            :comet: **{move2}:** {move2ap}
+            :sparkles: **{move3}:** {move3ap}
+            :microbe: **{move4}:** {move4enh} by {move4ap}
 
-            _Unique Passive_ **{passive_name}:** {passive_type} By {passive_num}
-
-            {traitmessage}
+            :drop_of_blood: _Passive:_ **{passive_name}:** {passive_type} by {passive_num}
+            :infinity: {traitmessage}
             """), colour=000000)
             if o_show != "Unbound":
                 embedVar.set_thumbnail(url=show_img)
