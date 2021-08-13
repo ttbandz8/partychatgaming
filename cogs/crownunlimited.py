@@ -18887,7 +18887,6 @@ class CrownUnlimited(commands.Cog):
                         :cyclone: 30 | **:comet: {cmove2_text}** | _2_
                         :cyclone: 80 | **:rosette: {cmove3_text}** | _3_
                         :cyclone: 20 **:microbe: {cmove_enhanced_text}** | _4_
-                        **Enhance {o_card}** 20 Stamina _press 7_
                         :cyclone: 20 | **Defend {o_card}** | _0_
                         
                         **{o_card}:** {o_health}/{o_stamina} _Companion_   
@@ -23263,7 +23262,6 @@ class CrownUnlimited(commands.Cog):
                         :cyclone: 30 | **:comet: {cmove2_text}** | _2_
                         :cyclone: 80 | **:rosette: {cmove3_text}** | _3_
                         :cyclone: 20 **:microbe: {cmove_enhanced_text}** | _4_
-                        **Enhance {o_card}** 20 Stamina _press 7_
                         :cyclone: 20 | **Defend {o_card}** | _0_
                         
                         **{o_card}:** {o_health}/{o_stamina} _Companion_                                      
@@ -27844,7 +27842,6 @@ class CrownUnlimited(commands.Cog):
                     :cyclone: 30 | **:comet: {cmove2_text}** | _2_
                     :cyclone: 80 | **:rosette: {cmove3_text}** | _3_
                     :cyclone: 20 **:microbe: {cmove_enhanced_text}** | _4_
-                    **Enhance {o_card}** 20 Stamina _press 7_
                     :cyclone: 20 | **Defend {o_card}** | _0_
                     
                     **{o_card}:** {o_health}/{o_stamina} _Companion_                                                       
