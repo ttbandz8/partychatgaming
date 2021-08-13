@@ -415,6 +415,7 @@ class Profile(commands.Cog):
         if vault:
             name = d['DISNAME'].split("#",1)[0]
             avatar = d['AVATAR']
+            card_levels = vault['CARD_LEVELS']
             balance = vault['BALANCE']
             cards_list = vault['CARDS']
             total_cards = len(cards_list)
@@ -430,8 +431,12 @@ class Profile(commands.Cog):
 
             for card in cards_list:
                 resp = db.queryCard({"NAME": str(card)})
+                lvl = ""
+                for cl in card_levels:
+                    if card == cl['CARD']:
+                        lvl = f":trident: **{cl['LVL']}**"
                 cards.append(textwrap.dedent(f"""
-                **{resp['NAME']}**
+                **{resp['NAME']}** | {lvl}
                 **HLT:** {resp['HLT']} **ATK:** {resp['ATK']} **DEF:** {resp['DEF']}
                 **Universe:** {resp['UNIVERSE']}"""))
 
