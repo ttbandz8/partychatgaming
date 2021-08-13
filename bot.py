@@ -405,7 +405,7 @@ async def crown(ctx):
    embeds = [embedVar1, embedVar2, embedVar3, embedVar4, embedVar5, embedVar6, embedVar7, embedVar8,embedVar9, embedVar10]
    await paginator.run(embeds)
 
-@slash.slash(name="Register", description="Register for Crown Unlimited", guild_ids=guild_ids)
+@slash.slash(description="Register for Crown Unlimited", guild_ids=guild_ids)
 async def r(ctx):
    disname = str(ctx.author)
    name = disname.split("#",1)[0]
