@@ -629,9 +629,10 @@ class Profile(commands.Cog):
             lvl_message = ""
             for pet in pets_list:
                 #cpetmove_ap= (cpet_bond * cpet_lvl) + list(cpet.values())[3] # Ability Power
+                bond_message = ""
                 if pet['BOND'] == 3:
                     bond_message = ":star2:"
-                
+                lvl_message = ""
                 if pet['LVL'] == 10:
                     lvl_message = ":star:"
                 
@@ -639,7 +640,7 @@ class Profile(commands.Cog):
                 pet_ability_power = list(pet.values())[3]
                 power = (pet['BOND'] * pet['LVL']) + pet_ability_power
                 pets.append(textwrap.dedent(f"""
-                **{pet['NAME']}** | _B_ **{pet['BOND']}** {bond_message} / _L_ **{pet['LVL']}**
+                **{pet['NAME']}** | _B_ **{pet['BOND']}** {bond_message} / _L_ **{pet['LVL']} {lvl_message}**
                 **{pet_ability}:** {power}
                 **Type:** {pet['TYPE']}"""))
 
