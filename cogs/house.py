@@ -39,13 +39,12 @@ class House(commands.Cog):
 
     @cog_ext.cog_slash(description="Buy a House for your family", guild_ids=main.guild_ids)
     async def buyhouse(self, ctx, house: str):
+        house_name = house
         family_query = {'HEAD' : str(ctx.author)}
         family = db.queryFamily(family_query)
         house = db.queryHouse({'HOUSE': house})
         currentBalance = family['BANK']
         cost = house['PRICE']
-
-
 
         if house:
             if house_name in family['HOUSE']:
