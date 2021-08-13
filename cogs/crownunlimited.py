@@ -49125,20 +49125,8 @@ async def destiny(player, opponent, mode):
                     card_data = db.queryCard({'NAME': str(destiny['EARN'])})
                     uni = db.queryUniverse({'TITLE': card_data['UNIVERSE']})
                     tier = uni['TIER']
-                    exp_gain = 0
-                    if tier == 1:
-                        exp_gain = 18
-                    if tier == 2:
-                        exp_gain = 16
-                    if tier == 3:
-                        exp_gain = 14
-                    if tier == 4:
-                        exp_gain = 12
-                    if tier == 5:
-                        exp_gain = 12
-                    update_query = {'$inc': {'CARD_LEVELS.$[type].' + "EXP": exp_gain}}
-                    filter_query = [{'type.'+ "CARD": str(destiny['EARN'])}]
-                    response = db.updateVault(vault_query, update_query, filter_query)
+                    update_query = {'$addToSet': {'CARD_LEVELS': {'CARD': str(destiny['EARN']), 'LVL': 0, 'TIER': int(tier), 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
+                    db.updateVaultNoFilter(vault_query, update_query)
                     #
                     response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(destiny['EARN'])}})
                     message = f"**{destiny['NAME']}** completed! **{destiny['EARN']}** has been added to your vault!"
@@ -49924,16 +49912,11 @@ async def drops(player, universe, matchcount):
     for pet in all_available_drop_pets:
         pets.append(pet['PET'])
 
-    # for c in vault['CARDS']:
-    #     if c != card['NAME']:
-                
+    for pet in all_available_drop_pets:
+        for p in vault['PETS']:
+            if p['NAME'] != pet['PET']:
+                pets.append(pet['PET'])
 
-    # for p in vault['PETS']:
-    #     if p['NAME'] != pet['PET']:
-                
-    
-    if pets == []:
-        pets = 
 
     c = len(cards) - 1
     t = len(titles) - 1
@@ -49982,7 +49965,7 @@ async def drops(player, universe, matchcount):
     elif drop_rate <= card_drop and drop_rate > pet_drop:
         # Check if already owned
         card_owned = False
-        for c in vault['CARDS_LEVELS']:
+        for c in vault['CARD_LEVELS']:
             if c['CARD'] == cards[rand_card]:
                 card_owned = True
         
@@ -50101,7 +50084,7 @@ async def dungeondrops(player, universe, matchcount):
         return f"You earned _Pet:_ **{pets[rand_pet]}** + :coin: 80!"
     elif drop_rate <= card_drop and drop_rate > pet_drop:
         card_owned = False
-        for c in vault['CARDS_LEVELS']:
+        for c in vault['CARD_LEVELS']:
             if c['CARD'] == cards[rand_card]:
                 card_owned = True
         
