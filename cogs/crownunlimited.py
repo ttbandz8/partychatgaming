@@ -50193,25 +50193,25 @@ async def bossdrops(player, universe):
         await bless(80, player)
         return f"You earned the Exclusive Boss Pet:  {boss['PET']} + :coin: 80!"
     elif drop_rate <= boss_card_drop and drop_rate > boss_pet_drop:
-            card_owned = False
-            for c in vault['CARD_LEVELS']:
-                if c['CARD'] == str(boss_card):
-                    card_owned = True
-            
-            if card_owned:
-                await cardlevel(str(boss_card), player, universe)
-                message = ""
-                await bless(200, player)
-            else:
-                card_data = db.queryCard({'NAME': str(boss_card)})
-                uni = db.queryUniverse({'TITLE': card_data['UNIVERSE']})
-                tier = uni['TIER']
-                update_query = {'$addToSet': {'CARD_LEVELS': {'CARD': str(boss_card), 'LVL': 0, 'TIER': int(tier), 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
-                response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(boss_card)}})
-                r = db.updateVaultNoFilter(vault_query, update_query)
+        card_owned = False
+        for c in vault['CARD_LEVELS']:
+            if c['CARD'] == str(boss_card):
+                card_owned = True
+        
+        if card_owned:
+            await cardlevel(str(boss_card), player, universe)
+            message = ""
+            await bless(200, player)
+        else:
+            card_data = db.queryCard({'NAME': str(boss_card)})
+            uni = db.queryUniverse({'TITLE': card_data['UNIVERSE']})
+            tier = uni['TIER']
+            update_query = {'$addToSet': {'CARD_LEVELS': {'CARD': str(boss_card), 'LVL': 0, 'TIER': int(tier), 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
+            response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(boss_card)}})
+            r = db.updateVaultNoFilter(vault_query, update_query)
 
-                response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(boss_card)}})
-                await bless(50, player)
+            response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(boss_card)}})
+            await bless(50, player)
 
 Healer_Enhancer_Check = ['HLT', 'CREATION']
 # DPS_Enhancer_Check = ['FLOG', 'WITHER', 'LIFE', ]
