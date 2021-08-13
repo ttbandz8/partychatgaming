@@ -36,7 +36,7 @@ class Boss(commands.Cog):
         else:
             print(m.ADMIN_ONLY_COMMAND)
 
-    @commands.command()
+    @cog_ext.cog_slash(description="View a Boss", guild_ids=main.guild_ids)
     async def viewboss(self, ctx, *args):
         boss_name = " ".join([*args])
         boss = db.queryBoss({'NAME': str(boss_name)})
@@ -62,7 +62,7 @@ class Boss(commands.Cog):
             pet = db.queryPet({'PET': boss_pet})
             pet_ability = pet['ABILITIES'][0]
             pet_ability_name = list(pet_ability.keys())[0]
-            pet_ability_type = list(pet_ability.values())[0]
+            pet_ability_type = list(pet_ability.values())[1]
             pet_ability_value = list(pet_ability.values())[0]
 
 
