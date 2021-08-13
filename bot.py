@@ -93,7 +93,7 @@ async def help(ctx):
 
 @slash.slash(name="Ping", description="Ping server speed", guild_ids=guild_ids)
 async def ping(ctx):
-   await ctx.send(f'Local Test Bot speed = {round(bot.latency * 1000)}ms')
+   await ctx.send(f'Bot speed = {round(bot.latency * 1000)}ms')
 
 async def validate_user(ctx):
    query = {'DISNAME': str(ctx.author)}
