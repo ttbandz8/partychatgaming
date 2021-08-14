@@ -33200,7 +33200,7 @@ class CrownUnlimited(commands.Cog):
                                             o_defense = round(o_defense +(.75 * dmg['DMG']))
                                         elif enh_type == 'GROWTH':
                                             o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
-                                            o_defense = round(o_defense + (o_defense* dmg['DMG']))
+                                            o_defense = round(o_defense + (o_defense * dmg['DMG']))
                                             o_attack = round(o_attack + (o_attack * dmg['DMG']))
                                         elif enh_type == 'STANCE':
                                             tempattack = dmg['DMG']
@@ -49707,7 +49707,7 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, vul, accura
             crystal = round(((ap/1.5)/100) * health)
         elif enh == 'GROWTH':
             enh_type="GROWTH"
-            growth = round((ap/100))
+            growth = (ap/100)
         elif enh == 'STANCE':
             enh_type="STANCE"
             stance = attack + ap
