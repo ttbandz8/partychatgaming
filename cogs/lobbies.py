@@ -419,6 +419,7 @@ class Lobbies(commands.Cog):
         else:
             await ctx.send(m.GAME_UNAVAILABLE)
 
+
 def setup(bot):
     bot.add_cog(Lobbies(bot))
 

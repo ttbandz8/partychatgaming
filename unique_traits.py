@@ -25,7 +25,7 @@ traits = [{
 },{
     'NAME': 'Bleach',
     'EFFECT': 'Bankai',
-    'TRAIT': 'Gain double the amount of Attack on Resolve.'
+    'TRAIT': 'Gain double Attack on Resolve.'
 },{
     'NAME': 'Attack On Titan',
     'EFFECT': 'Rally',
@@ -37,7 +37,7 @@ traits = [{
 },{
     'NAME': 'Fate',
     'EFFECT': 'Command Seal',
-    'TRAIT': 'On Resolve, use Ult, then Focus.'
+    'TRAIT': 'On Resolve, Strike with Ultimate, then Focus.'
 },{
     'NAME': 'Demon Slayer',
     'EFFECT': 'Total Concentration Constant',
@@ -45,7 +45,7 @@ traits = [{
 },{
     'NAME': 'God Of War',
     'EFFECT': 'Ascension',
-    'TRAIT': 'On Resolve refill your Health.'
+    'TRAIT': 'On Resolve Refill Health.'
 },{
     'NAME': '7ds',
     'EFFECT': 'Increase Power',

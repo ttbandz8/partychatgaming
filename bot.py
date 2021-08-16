@@ -431,7 +431,7 @@ async def r(ctx):
       """), colour=0xe91e63)
       embedVar.set_footer(text=".crown to inquire all potential commands and capabilites of the bot")
       await ctx.author.send(embed=embedVar)
-      await ctx.send(f"Welcome to Crown Unlimited, {ctx.author.mention}! Use **/daily** to collect your daily reward! Use **/menu** to see what you can do.")
+      await ctx.send(f"Welcome to Crown Unlimited, {ctx.author.mention}! Use **.daily** to collect your daily reward! Use **/menu** to see what you can do.")
 
       vault = db.queryVault({'OWNER': disname})
       if vault:
@@ -1122,24 +1122,24 @@ async def gift(ctx, user2: User, amount):
       await ctx.send(f":coin:{amount} has been gifted to {user2.mention}.")
       return
    
-@slash.slash(name="Donate", description="Donate money to Guild", guild_ids=guild_ids)
+@slash.slash(name="Donate", description="Donate money to Team", guild_ids=guild_ids)
 @commands.check(validate_user)
-async def donate(ctx, amount, *args):
+async def donate(ctx, amount, team: str):
    vault = db.queryVault({'OWNER': str(ctx.author)})
    balance = vault['BALANCE']
-   team = " ".join([*args])
-   query = {'TNAME': str(team)}
+   dteam = team
+   query = {'TNAME': str(dteam)}
    team_data = db.queryTeam(query)
    if team_data:
       if balance <= int(amount):
          await ctx.send("You do not have that amount to donate.")
       else:
-         await blessteam(int(amount), team)
+         await blessteam(int(amount), dteam)
          await curse(int(amount), ctx.author)
-         await ctx.send(f":coin:{amount} has been gifted to {team}.")
+         await ctx.send(f":coin:{amount} has been gifted to {dteam}.")
          return
    else:
-      await ctx.send(f"Team: {team} does not exist")
+      await ctx.send(f"Team: {dteam} does not exist")
       
 @slash.slash(name="Invest", description="Invest money in your Family", guild_ids=guild_ids)
 @commands.check(validate_user)
@@ -1265,11 +1265,130 @@ async def cursefamily(amount, family):
       query = {'HEAD': str(family)}
       family_data = db.queryFamily(query)
       if family_data:
-         print(family_data)
          update_query = {"$inc": {'BANK': int(negCurseAmount)}}
          db.updateFamily(query, update_query)
       else:
          print("cant find family")
+
+
+@slash.slash(name="Bounty", description="Set Guild Bounty", guild_ids=guild_ids)
+@commands.check(validate_user)
+async def bounty(ctx, amount):
+   negCurseAmount = 0 - abs(int(amount))
+   user = db.queryUser({'DISNAME': str(ctx.author)})
+   guild_name = user['GUILD']
+   if guild_name == 'PCG':
+      await ctx.send(m.GUILD_DOESNT_EXIST, delete_after=5)
+      return
+   guild_query = {'GNAME' :guild_name}
+   guild = db.queryGuildAlt(guild_query)
+   founder = guild['FOUNDER']
+   sworn = guild['SWORN']
+   if user['DISNAME'] != founder and user['DISNAME'] != sworn:
+      await ctx.send(m.NOT_LEADER, delete_after=5)
+      return
+   
+   guild_bank = guild['BANK']
+   guild_bounty = guild['BOUNTY']
+   if int(amount) < guild_bounty:
+      await ctx.send(f"Cannot Lower Bounty", delete_after=5)
+      return
+   elif int(amount) == guild_bounty:
+      await ctx.send(f"Current Bounty : :yen:{guild_bounty}", delete_after=5)
+      return
+   elif int(amount) >= guild['BANK']:
+      await ctx.send(f"Guild does not have that much :coin:", delete_after=5)
+      return
+   else:
+      update_query = {"$set": {'BOUNTY': int(amount)}, '$inc': {'BANK' : int(negCurseAmount)}}
+      db.updateGuildAlt(guild_query, update_query)
+      await ctx.send(f"New {guild['GNAME']} Bounty: :yen: {amount}! Use /raid `guild`{guild['GNAME']} to claim the Bounty!")
+      return
+   
+   
+
+@slash.slash(name="Sponsor", description="Sponsor Team with Guild Funds", guild_ids=guild_ids)
+@commands.check(validate_user)
+async def sponsor(ctx, team: str, amount):
+   user = db.queryUser({'DISNAME': str(ctx.author)})
+   guild_name = user['GUILD']
+   if guild_name == 'PCG':
+      await ctx.send(m.GUILD_DOESNT_EXIST, delete_after=5)
+      return
+   guild_query = {'GNAME' :guild_name}
+   guild = db.queryGuildAlt(guild_query)
+   founder = guild['FOUNDER']
+   sworn = guild['SWORN']
+   guild_bank = guild['BANK']
+   if int(amount) >= guild['BANK']:
+      await ctx.send("Guild does not have that much :coin:", delete_after=5)
+      return
+   
+   if user['DISNAME'] != founder and user['DISNAME'] != sworn:
+      await ctx.send(m.NOT_LEADER, delete_after=5)
+      return
+   
+   team_name = team
+   team_data = db.queryTeam({'TNAME' : team_name})
+   
+   if not team_data:
+      await ctx.send(m.TEAM_DOESNT_EXIST, delete_after=5)
+      return
+   
+   sword_list = []
+   for sword in guild['SWORDS']:
+      sword_list.append(sword)
+      
+   if team_name not in sword_list:
+      await ctx.send(m.USER_NOT_IN_GUILD, delete_after=5)
+      return
+   
+   team_bank = team_data['BANK']
+
+   await blessteam(int(amount), team_name)
+   await curseguild(int(amount), guild['GNAME'])
+   await ctx.send(f"{guild_name} sponsored {team_name} :coin:{amount}!!!")
+   return
+
+async def blessguild(amount, guild):
+   blessAmount = amount
+   posBlessAmount = 0 + abs(int(blessAmount))
+   query = {'GNAME': str(guild)}
+   guild_data = db.queryGuildAlt(query)
+   if guild_data:
+      house = guild_data['HALL']
+      house_data = db.queryHouse({'HOUSE': house})
+      multiplier = house_data['MULT']
+      posBlessAmount = posBlessAmount * multiplier
+      update_query = {"$inc": {'BANK': int(posBlessAmount)}}
+      db.updateGuildAlt(query, update_query)
+   else:
+      print("Cannot find guild")
+      
+async def blessguild_Alt(amount, guild):
+   blessAmount = amount
+   posBlessAmount = 0 + abs(int(blessAmount))
+   query = {'GNAME': str(guild)}
+   guild_data = db.queryGuildAlt(query)
+   if guild_data:
+      house = guild_data['HALL']
+      house_data = db.queryHouse({'HOUSE': house})
+      multiplier = house_data['MULT']
+      update_query = {"$inc": {'BANK': posBlessAmount}}
+      db.updateGuildAlt(query, update_query)
+   else:
+      print("Cannot find guild")
+
+async def curseguild(amount, guild):
+      curseAmount = amount
+      negCurseAmount = 0 - abs(int(curseAmount))
+      query = {'GNAME': str(guild)}
+      guild_data = db.queryGuildAlt(query)
+      if guild_data:
+         update_query = {"$inc": {'BANK': int(negCurseAmount)}}
+         db.updateGuildAlt(query, update_query)
+      else:
+         print("cant find guild")
 
 @slash.slash(name="Traits", description="See full list of Universe Traits", guild_ids=guild_ids)
 @commands.check(validate_user)
@@ -1279,7 +1398,7 @@ async def traits(ctx):
    for trait in traits:
       traitmessages.append(f"_{trait['NAME']}_\n**{trait['EFFECT']}**: {trait['TRAIT']}\n")
 
-   embedVar = discord.Embed(title="Universe Traits", description="\n".join(traitmessages))
+   embedVar = discord.Embed(title=":infinity: | Universe Traits", description="\n".join(traitmessages))
 
    await ctx.send(embed=embedVar)
 

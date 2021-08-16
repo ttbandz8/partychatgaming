@@ -11,6 +11,7 @@ class USER():
     AVATAR: list[str] = field(default_factory=lambda: [''])
     IGN: list[str] = field(default_factory=lambda: [{'DEFAULT': 'PCG'}])
     GAMES: list[str] = field(default_factory=lambda: ['Crown Unlimited'])
+    GUILD: str = field(default_factory=lambda: 'PCG')
     TEAM: str = field(default_factory=lambda: 'PCG')
     FAMILY: str = field(default_factory=lambda: 'PCG')
     TITLE: str = field(default_factory=lambda: 'Starter')
@@ -33,12 +34,27 @@ class USER():
     REBIRTH: int = field(default_factory=lambda: 0)
     PATRON: bool = field(default_factory=lambda: False)
     
+@dataclass(frozen=True, order=True)
+class GUILD():
+    GNAME: str = field(default_factory=lambda: '')
+    FOUNDER: str = field(default_factory=lambda: '')
+    SWORN: str = field(default_factory=lambda: '')
+    SHIELD: str = field(default_factory=lambda: '')
+    SWORDS: list[str] = field(default_factory=lambda: [])
+    STREAK: int = field(default_factory=lambda: 0)
+    BANK: int = field(default_factory=lambda: 0)
+    BOUNTY: int = field(default_factory=lambda: 1000)
+    CREST:str = field(default_factory=lambda: 'FF')
+    HALL:str = field(default_factory=lambda: 'Cave')
+    TIMESTAMP: str = now
+    
 
 @dataclass(frozen=True, order=True)
 class TEAMS():
     OWNER: str
     TNAME: str
     MEMBERS: list
+    GUILD: str = field(default_factory=lambda: 'PCG')
     TOURNAMENT_WINS: int = field(default_factory=lambda: 0)
     BANK: int = field(default_factory=lambda: 0)
     SCRIM_WINS: int = field(default_factory=lambda: 0)
@@ -65,6 +81,16 @@ class HOUSE():
     PRICE: int = field(default_factory=lambda: 0)
     TIMESTAMP: str = now
     MULT: float = field(default_factory=lambda: 1.0)
+    AVAILABLE: bool = field(default_factory=lambda: False)
+    
+@dataclass(frozen=True, order=True) 
+class HALL():
+    PATH: str
+    HALL: str
+    PRICE: int = field(default_factory=lambda: 0)
+    TIMESTAMP: str = now
+    MULT: float = field(default_factory=lambda: 1.0)
+    FEE: int = field(default_factory=lambda: 1000)
     AVAILABLE: bool = field(default_factory=lambda: False)
 
 
@@ -330,3 +356,7 @@ def newMatch(match):
 def newHouse(house):
     h = HOUSE(**house)
     return asdict(h)
+
+def newGuild(guild):
+    gu = GUILD(**guild)
+    return asdict(gu)

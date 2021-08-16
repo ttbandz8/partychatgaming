@@ -215,24 +215,24 @@ class Profile(commands.Cog):
 
             embedVar = discord.Embed(title=f":trident: {card_lvl} | {title_name} {o_card} & {active_pet['NAME']}:".format(self), description=textwrap.dedent(f"""\
             {message}
-            :heart: **Health** - {o_max_health} {hlt_buff}
-            :cyclone: **Stamina** - {o_max_stamina}
-            :dagger: **Attack** - {o_attack} {atk_buff}
-            :shield: **Shield** - {o_defense} {def_buff}
+            :heart: | **Health** - {o_max_health} {hlt_buff}
+            :cyclone: | **Stamina** - {o_max_stamina}
+            :dagger: | **Attack** - {o_attack} {atk_buff}
+            :shield: | **Shield** - {o_defense} {def_buff}
             
-            :reminder_ribbon: **Title** - {title_name} ~ {title_passive_type} | {title_passive_value}
-            :mechanical_arm: **Arm** - {arm_name} ~ {arm_passive_type} | {arm_passive_value}
-            :bird: **Pet** - {active_pet['NAME']} ~ {active_pet['TYPE']} | {pet_ability_power} 
+            :reminder_ribbon: | **Title** - {title_name} ~ {title_passive_type} | {title_passive_value}
+            :mechanical_arm: | **Arm** - {arm_name} ~ {arm_passive_type} | {arm_passive_value}
+            :bird: | **Pet** - {active_pet['NAME']} ~ {active_pet['TYPE']} | {pet_ability_power} 
             **Bond** _{bond}_ {bond_message} / **Level** _{lvl}_
         
             _**Moveset**_
-            :boom: **{move1}:** {move1ap}
-            :comet: **{move2}:** {move2ap}
-            :rosette: **{move3}:** {move3ap}
-            :microbe: **{move4}:** {move4enh} by {move4ap}
+            :boom: | **{move1}:** {move1ap}
+            :comet: | **{move2}:** {move2ap}
+            :rosette: | **{move3}:** {move3ap}
+            :microbe: | **{move4}:** {move4enh} by {move4ap}
             
-            :drop_of_blood: _Passive:_ **{passive_name}:** {passive_type} by {passive_num}
-            :infinity: {traitmessage}
+            :drop_of_blood: | _Passive:_ **{passive_name}:** {passive_type} by {passive_num}
+            :infinity: | {traitmessage}
             """)
             
             , colour=000000)
@@ -258,6 +258,25 @@ class Profile(commands.Cog):
         title = db.queryTitle({'TITLE': str(decks[selection]['TITLE'])})
         arm = db.queryArm({'ARM': str(decks[selection]['ARM'])})
         if card:
+            # Acquire Card Levels data
+            card_lvl = 0
+            card_tier = 0
+            card_exp = 0
+            card_lvl_attack_buff = 0
+            card_lvl_defense_buff = 0
+            card_lvl_ap_buff = 0
+            card_lvl_hlt_buff = 0
+
+
+            for x in vault['CARD_LEVELS']:
+                if x['CARD'] == card['NAME']:
+                    card_lvl = x['LVL']
+                    card_tier = x['TIER']
+                    card_exp = x['EXP']
+                    card_lvl_ap_buff = x['AP']
+                    card_lvl_attack_buff = x['ATK']
+                    card_lvl_defense_buff = x['DEF']
+                    card_lvl_hlt_buff = x['HLT']
             oarm_universe = arm['UNIVERSE']
             o_title_universe = title['UNIVERSE']
             o_card = card['NAME']
@@ -373,28 +392,26 @@ class Profile(commands.Cog):
                     hlt_buff = f" / **{o_max_health + 150}**"
                     message = "_Destiny Buff Applied_"
 
-            embedVar = discord.Embed(title=f"PRESET: {deck}\n{title_name} {o_card} & {active_pet['NAME']}:".format(self), description=textwrap.dedent(f"""\
+            embedVar = discord.Embed(title=f"**PRESET {deck}**\n:trident: {card_lvl} | {title_name} {o_card} & {active_pet['NAME']}:".format(self), description=textwrap.dedent(f"""\
             {message}
-            :heart: {o_max_health} {hlt_buff}
-            :cyclone: {o_max_stamina}
-            **Attack:** {o_attack} {atk_buff}
-            **Defense:** {o_defense} {def_buff}
-            **Speed:** {o_speed}
-            _Title:_ **{title_name}:** {title_passive_type} {title_passive_value}
-            _Arm:_ **{arm_name}:** {arm_passive_type} {arm_passive_value}
-            _Pet:_ **{active_pet['NAME']}:** {active_pet['TYPE']} {pet_ability_power}
-            _Pet Level:_ _B_ **{bond}** {bond_message} / _L_ **{lvl}**
-            _Rebirth Buff:_ +**{rebirthBonus}**
-
-            _**Moveset**_
-            **{move1}:** {move1ap}
-            **{move2}:** {move2ap}
-            **{move3}:** {move3ap}
-            **{move4}:** {move4enh} by {move4ap}
+            :heart: | **Health** - {o_max_health} {hlt_buff}
+            :cyclone: | **Stamina** - {o_max_stamina}
+            :dagger: | **Attack** - {o_attack} {atk_buff}
+            :shield: | **Shield** - {o_defense} {def_buff}
             
-            _Unique Passive:_ **{passive_name}:** {passive_type} by {passive_num}
-
-            {traitmessage}
+            :reminder_ribbon: | **Title** - {title_name} ~ {title_passive_type} | {title_passive_value}
+            :mechanical_arm: | **Arm** - {arm_name} ~ {arm_passive_type} | {arm_passive_value}
+            :bird: | **Pet** - {active_pet['NAME']} ~ {active_pet['TYPE']} | {pet_ability_power} 
+            **Bond** _{bond}_ {bond_message} / **Level** _{lvl}_
+        
+            _**Moveset**_
+            :boom: | **{move1}:** {move1ap}
+            :comet: | **{move2}:** {move2ap}
+            :rosette: | **{move3}:** {move3ap}
+            :microbe: | **{move4}:** {move4enh} by {move4ap}
+            
+            :drop_of_blood: | _Passive:_ **{passive_name}:** {passive_type} by {passive_num}
+            :infinity: | {traitmessage}
             """)
             
             , colour=000000)
@@ -407,7 +424,7 @@ class Profile(commands.Cog):
             await ctx.send(m.USER_NOT_REGISTERED, delete_after=3)
 
     @cog_ext.cog_slash(description="Check all your cards", guild_ids=main.guild_ids)
-    async def cvault(self, ctx):
+    async def cards(self, ctx):
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
         vault = db.queryVault({'OWNER': d['DISNAME']})
@@ -477,7 +494,7 @@ class Profile(commands.Cog):
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
     @cog_ext.cog_slash(description="Check all your titles", guild_ids=main.guild_ids)
-    async def tvault(self, ctx):
+    async def titles(self, ctx):
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
         vault = db.queryVault({'OWNER': d['DISNAME']})
@@ -543,7 +560,7 @@ class Profile(commands.Cog):
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
     @cog_ext.cog_slash(description="Check all your arms", guild_ids=main.guild_ids)
-    async def avault(self, ctx):
+    async def arms(self, ctx):
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
         vault = db.queryVault({'OWNER': d['DISNAME']})
@@ -610,7 +627,7 @@ class Profile(commands.Cog):
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
     @cog_ext.cog_slash(description="Check all your pets", guild_ids=main.guild_ids)
-    async def pvault(self, ctx):
+    async def pets(self, ctx):
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
         vault = db.queryVault({'OWNER': d['DISNAME']})

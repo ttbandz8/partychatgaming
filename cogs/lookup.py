@@ -453,6 +453,8 @@ class Lookup(commands.Cog):
             bosses = d['BOSS_WINS']
             pet = d['PET']
             rebirth = d['REBIRTH']
+            guild = d['GUILD']
+            icon = ':triangular_flag_on_post:'
             if rebirth == 0:
                 icon = ':triangular_flag_on_post:'
             elif rebirth == 1:
@@ -463,7 +465,7 @@ class Lookup(commands.Cog):
                 icon = ':heart_on_fire::heart_on_fire::heart_on_fire:'
             elif rebirth == 4:
                 icon = ':heart_on_fire::heart_on_fire::heart_on_fire::heart_on_fire:'
-            elif rebirth == 1:
+            elif rebirth == 5:
                 icon = ':heart_on_fire::heart_on_fire::heart_on_fire::heart_on_fire::heart_on_fire:'
 
             pvp_matches = []
@@ -517,22 +519,24 @@ class Lookup(commands.Cog):
             matches_to_string = dict(ChainMap(*matches))
             ign_to_string = dict(ChainMap(*ign))
 
-            embed1 = discord.Embed(title= f"{icon} " + f"{name}".format(self), description=textwrap.dedent(f"""\
+            embed1 = discord.Embed(title= f"{icon} | " + f"{name}".format(self), description=textwrap.dedent(f"""\
             
-            :flower_playing_cards:**Card:** {card}
-            :reminder_ribbon:**Title: **{titles}
-            :mechanical_arm:**Arm: **{arm}
-            :bird:**Pet: **{pet}
+            :flower_playing_cards: | **Card:** {card}
+            :reminder_ribbon:** | Title: **{titles}
+            :mechanical_arm: | **Arm: **{arm}
+            :bird: | **Pet: **{pet}
 
-            :military_medal:{most_played_card_message}
+            :military_medal: | {most_played_card_message}
             
             **Tales Played: **{len(tales_matches)}
             **Dungeons Played: **{len(dungeon_matches)}
             **Bosses Played: **{len(boss_matches)}
             **Pvp Played: **{len(pvp_matches)}
             
-            :military_helmet:**Team: **{team} 
-            :family_mwgb:**Family: **{family}
+            :flags: | **Guild: **{guild}
+            :military_helmet: | **Team: **{team} 
+            :family_mwgb: | **Family: **{family}
+            
             """), colour=000000)
             embed1.set_thumbnail(url=avatar)
             # embed1.add_field(name="Team" + " :military_helmet:", value=team)
@@ -544,7 +548,7 @@ class Lookup(commands.Cog):
             # embed1.add_field(name="Tournament Wins" + " :fireworks:", value=tournament_wins)
 
             if crown_list:
-                embed4 = discord.Embed(title= f":triangular_flag_on_post: " + f"{name}".format(self), description=":bank: Party Chat Gaming Database™️", colour=000000)
+                embed4 = discord.Embed(title= f":triangular_flag_on_post: | " + f"{name}".format(self), description=":bank: | Party Chat Gaming Database™️", colour=000000)
                 embed4.set_thumbnail(url=avatar)
                 embed4.add_field(name="Completed Tales" + " :medal:", value="\n".join(crown_list))
                 if dungeon_list:
@@ -591,11 +595,12 @@ class Lookup(commands.Cog):
             logo = team['LOGO_URL']
             balance = team['BANK']
             icon = ":coin:"
-            if balance >= 150000:
+            guild = team['GUILD']
+            if balance >= 500000:
                 icon = ":money_with_wings:"
-            elif balance >=100000:
+            elif balance >=300000:
                 icon = ":moneybag:"
-            elif balance >= 50000:
+            elif balance >= 150000:
                 icon = ":dollar:"
             
 
@@ -610,23 +615,24 @@ class Lookup(commands.Cog):
                     team_list.append(f"{members}")
 
 
-            embed1 = discord.Embed(title=f":checkered_flag: {team_name} Team Card - {icon}{'{:,}'.format(balance)}".format(self), description=":bank: Party Chat Gaming Database", colour=000000)
+            embed1 = discord.Embed(title=f":checkered_flag: | {team_name} Team Card - {icon} | {'{:,}'.format(balance)}".format(self), description=":bank: | Party Chat Gaming Database", colour=000000)
             if team['LOGO_FLAG']:
                 embed1.set_image(url=logo)
-            embed1.add_field(name="Owner :man_detective:", value= owner_name.split("#",1)[0], inline=False)
-            embed1.add_field(name="Scrim Wins :medal:", value=scrim_wins)
-            embed1.add_field(name="Scrim Losses :crossed_swords:", value=scrim_losses)
-            embed1.add_field(name="Tournament Wins :fireworks:", value=tournament_wins, inline=False)
+            embed1.add_field(name=":man_detective: | **~ Owner ~**", value= owner_name.split("#",1)[0], inline=True)
+            embed1.add_field(name=":flags: | **~ Guild ~** ", value= guild, inline=False)
+            embed1.add_field(name=":medal: | **~ Scrim Wins ~**", value=scrim_wins)
+            embed1.add_field(name=":crossed_swords: | **~ Scrim Losses ~**", value=scrim_losses)
+            embed1.add_field(name=":fireworks: | **~ Tournament Wins ~**", value=tournament_wins, inline=False)
             
-            embed2 = discord.Embed(title=f":checkered_flag: {team_name} Team Members - :coin:{balance}".format(self), description=":bank: Party Chat Gaming Database", colour=000000)
+            embed2 = discord.Embed(title=f":checkered_flag: | {team_name} Team Members - :coin: |{balance}".format(self), description=":bank: | Party Chat Gaming Database", colour=000000)
             if team['LOGO_FLAG']:
                 embed2.set_image(url=logo)
-            embed2.add_field(name="Members :military_helmet:", value="\n".join(f'{t}'.format(self) for t in team_list), inline=False)
+            embed2.add_field(name=":military_helmet: | **~ Members ~**", value="\n".join(f'{t}'.format(self) for t in team_list), inline=False)
 
-            embed3 = discord.Embed(title=f":checkered_flag: {team_name} Team Members - :coin:{balance}".format(self), description=":bank: Party Chat Gaming Database", colour=000000)
+            embed3 = discord.Embed(title=f":checkered_flag: | {team_name} Team Members - :coin: | {balance}".format(self), description=":bank: | Party Chat Gaming Database", colour=000000)
             if team['LOGO_FLAG']:
                 embed3.set_image(url=logo)
-            embed3.add_field(name="Games :video_game:", value="\n".join(games), inline=False)
+            embed3.add_field(name=":video_game: | Games ", value="\n".join(games), inline=False)
             paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
             paginator.add_reaction('⏮️', "first")
             paginator.add_reaction('⏪', "back")
@@ -637,6 +643,113 @@ class Lookup(commands.Cog):
             await paginator.run(embeds)
         else:
             await ctx.send(m.TEAM_DOESNT_EXIST)
+
+    @cog_ext.cog_slash(description="Lookup Guild", guild_ids=main.guild_ids)
+    async def lookupguild(self, ctx, guild: str):
+        guild_name = guild
+        guild_query = {'GNAME': guild_name}
+        guild = db.queryGuildAlt(guild_query)
+        founder_name = ""
+        if guild:
+            hall = db.queryHouse({'HOUSE' : guild['HALL']})
+            hall_name = hall['HOUSE']
+            hall_multipler = hall['MULT']
+            hall_img = hall['PATH']
+            guild_name = guild['GNAME']
+            founder_name = guild['FOUNDER']
+            sworn_name = guild['SWORN']
+            shield_name = guild['SHIELD']
+            shield_info = db.queryUser({'DISNAME' : str(shield_name)})
+            shield_card = shield_info['CARD']
+            shield_arm = shield_info['ARM']
+            shield_title = shield_info['TITLE']
+            shield_rebirth = shield_info['REBIRTH']
+            streak = guild['STREAK']
+            # games = guild['GAMES']
+            # avatar = game['IMAGE_URL']
+            crest = guild['CREST']
+            balance = guild['BANK']
+            bounty = guild['BOUNTY']
+            bonus = int((streak/100) * bounty)
+            picon = ":shield:"
+            sicon = ":beginner:"
+            icon = ":coin:"
+            if balance >= 1000000:
+                icon = ":money_with_wings:"
+            elif balance >=500000:
+                icon = ":moneybag:"
+            elif balance >= 300000:
+                icon = ":dollar:"
+                
+            if streak >= 100:
+                sicon = ":skull_crossbones:"     
+            elif streak >= 50:
+                sicon = ":skull:"
+            elif streak >=25:
+                sicon = ":ghost:"
+            elif streak >= 10:
+                sicon = ":diamond_shape_with_a_dot_inside:"
+                
+            # if shield_rebirth > 0:
+            #     picon = "::heart_on_fire::"
+            
+
+            sword_list = []
+            sword_count = 0
+            blade_count = 0
+            for swords in guild['SWORDS']:
+                blade_count = 0
+                sword_count = sword_count + 1
+                sword_team = db.queryTeam({'TNAME': swords})
+                dubs = sword_team['SCRIM_WINS']
+                els = sword_team['SCRIM_LOSSES']
+                for blades in sword_team['MEMBERS']:
+                    blade_count = blade_count + 1
+                sword_bank = sword_team['BANK']
+                sword_list.append(f"~ {swords} ~ **{dubs}**/**{els}**\n:man_detective: | **Owner: **{sword_team['OWNER']}\n:coin: | **Bank: **{'{:,}'.format(sword_bank)}\n:knife: | **Blades: **{blade_count}")
+                
+
+
+
+            # embed1 = discord.Embed(title=f":flags: {guild_name} Guild Card - {icon}{'{:,}'.format(balance)}".format(self), description=":bank: Party Chat Gaming Database", colour=000000)
+            # if guild['LOGO_FLAG']:
+            #     embed1.set_image(url=logo)
+            # embed1.add_field(name="Founder :dolls:", value= founder_name.split("#",1)[0], inline=True)
+            # embed1.add_field(name="Sworn :dolls:", value= sworn_name.split("#",1)[0], inline=True)
+            embed1 = discord.Embed(title= f":flags: |{guild_name} Alliance Card - {icon} |{'{:,}'.format(balance)}".format(self), description=textwrap.dedent(f"""\
+            
+            {founder_name.split("#",1)[0]} **~ Founder** | :dolls: | **Sworn ~** {sworn_name.split("#",1)[0]}
+            
+            :ninja: | **Swords: **{sword_count}
+            
+            :japanese_goblin: | **Shield: ~**{shield_name.split("#",1)[0].format(self)} ~ {sicon} | **Victories: **{streak}
+            :yen: | **Bounty: **{'{:,}'.format(bounty)} + :moneybag: **Bonus: **{'{:,}'.format(bonus)}
+            :flower_playing_cards: | **Card: **{shield_card}
+            :reminder_ribbon: | **Title: **{shield_title}
+            :mechanical_arm: | **Arm: **{shield_arm}
+            
+            
+            
+            :shinto_shrine: | **Hall: **{hall_name} 
+            """), colour=000000)
+            embed1.set_image(url=hall_img)
+            
+            embed3 = discord.Embed(title=f":flags: |  {guild_name} Sword List".format(self), description=":bank: |  Party Chat Gaming Database", colour=000000)
+            embed3.add_field(name=f"**Swords: | ** :ninja: ~ {sword_count}", value="\n".join(f'**{t}**'.format(self) for t in sword_list), inline=False)
+            # if guild['LOGO_FLAG']:
+            #     embed3.set_image(url=logo)
+            
+            paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+            paginator.add_reaction('⏮️', "first")
+            paginator.add_reaction('⏪', "back")
+            paginator.add_reaction('🔐', "lock")
+            paginator.add_reaction('⏩', "next")
+            paginator.add_reaction('⏭️', "last")
+            embeds = [embed1, embed3]
+            await paginator.run(embeds)
+        else:
+            await ctx.send(m.GUILD_DOESNT_EXIST)
+
 
     @cog_ext.cog_slash(description="Lookup player family", guild_ids=main.guild_ids)
     async def lookupfamily(self, ctx, user: User):
@@ -654,23 +767,23 @@ class Lookup(commands.Cog):
             for kids in family['KIDS']:
                 kid_list.append(kids.split("#",1)[0])
             icon = ":coin:"
-            if savings >= 150000:
+            if savings >= 300000:
                 icon = ":money_with_wings:"
-            elif savings >=100000:
+            elif savings >=150000:
                 icon = ":moneybag:"
-            elif savings >= 50000:
+            elif savings >= 100000:
                 icon = ":dollar:"
 
 
-            embed1 = discord.Embed(title=f":family_mwgb: {family_name} - {icon}{'{:,}'.format(savings)}".format(self), description=":bank: Party Chat Gaming Database", colour=000000)
+            embed1 = discord.Embed(title=f":family_mwgb: | {family_name} - {icon}{'{:,}'.format(savings)}".format(self), description=":bank: | Party Chat Gaming Database", colour=000000)
             # if team['LOGO_FLAG']:
             #     embed1.set_image(url=logo)
-            embed1.add_field(name="Head Of Household :brain:", value= head_name.split("#",1)[0], inline=False)
+            embed1.add_field(name=":brain: | Head Of Household", value= head_name.split("#",1)[0], inline=False)
             if partner_name:
-                embed1.add_field(name="Partner :anatomical_heart:", value= partner_name.split("#",1)[0], inline=False)
+                embed1.add_field(name=":anatomical_heart: | Partner", value= partner_name.split("#",1)[0], inline=False)
             if kid_list:
-                embed1.add_field(name="Kids :baby:", value="\n".join(f'{k}'.format(self) for k in kid_list), inline=False)
-            embed1.add_field(name="House :house:", value=house, inline=False)
+                embed1.add_field(name=":baby: | Kids", value="\n".join(f'{k}'.format(self) for k in kid_list), inline=False)
+            embed1.add_field(name=":house: | House", value=house, inline=False)
             embed1.set_image(url=house_img)
     
             
