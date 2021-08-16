@@ -881,7 +881,7 @@ class CrownUnlimited(commands.Cog):
                 if turn == 0:
                     if o_block_used==True:
                         o_block_used=False
-                        o_defense = o_defense/2
+                        o_defense = int(o_defense/2)
                     if o_universe == "Death Note" and turn_total == 0:
                         embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death", description=f"**{o_card} says**\nYou will die in 24 turns...", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
@@ -3417,7 +3417,7 @@ class CrownUnlimited(commands.Cog):
                         o_defense = co_defense/2
                         o_block_used=False
                     if o_defend_used==True:
-                        o_defense = o_defense/2
+                        o_defense = int(o_defense/2)
                         o_defend_used=False
                     if o_universe == "Death Note" and turn_total == 0:
                         embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death", description=f"**{o_card} says**\nYou will die in 24 turns...", colour=0xe91e63)
@@ -4921,7 +4921,7 @@ class CrownUnlimited(commands.Cog):
                 #Companion Turn Start
                 if turn == 2:
                     if c_block_used==True:
-                        c_defense = c_defense/2
+                        c_defense = int(c_defense/2)
                         c_block_used=False
                     if c_attack <= 25:
                         c_attack = 25
@@ -7785,10 +7785,10 @@ class CrownUnlimited(commands.Cog):
                 #Player 1 Turn Start
                 if turn == 0:
                     if o_block_used==True:
-                        o_defense = o_defense/2
+                        o_defense = int(o_defense/2)
                         o_block_used=False
                     if o_defend_used==True:
-                        o_defense = o_defense/2
+                        o_defense = int(o_defense/2)
                         o_defend_used=False
                     if o_universe == "Death Note" and turn_total == 0:
                         embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death", description=f"**{o_card} says**\nYou will die in 24 turns...", colour=0xe91e63)
@@ -9520,7 +9520,7 @@ class CrownUnlimited(commands.Cog):
                 #Companion Turn Start
                 if turn == 2:
                     if c_block_used==True:
-                        c_defense = c_defense/2
+                        c_defense = int(c_defense/2)
                         c_block_used=False
                     if c_attack <= 25:
                         c_attack = 25
@@ -12603,10 +12603,10 @@ class CrownUnlimited(commands.Cog):
             #Player 1 Turn Start
             if turn == 0:
                 if o_block_used==True:
-                    o_defense = o_defense/2
+                    o_defense = int(o_defense/2)
                     o_block_used=False
                 if o_defend_used==True:
-                    o_defense = o_defense/2
+                    o_defense = int(o_defense/2)
                     o_defend_used=False
                 if o_universe == "Death Note" and turn_total == 0:
                     embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death", description=f"**{o_card} says**\nYou will die in 24 turns...", colour=0xe91e63)
@@ -14360,7 +14360,7 @@ class CrownUnlimited(commands.Cog):
             #Companion Turn Start
             if turn == 2:
                 if c_block_used==True:
-                    c_defense = c_defense/2
+                    c_defense = int(c_defense/2)
                     c_block_used=False
                 if c_attack <= 25:
                     c_attack = 25
@@ -17430,7 +17430,7 @@ class CrownUnlimited(commands.Cog):
                 #Player 1 Turn Start
                 if turn == 0:
                     if o_defend_used==True:
-                        o_defense = o_defense/2
+                        o_defense = int(o_defense/2)
                         o_defend_used=False
                     if o_universe == "Death Note" and turn_total == 0:
                         embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death", description=f"**{o_card} says**\nYou will die in 24 turns...", colour=0xe91e63)
@@ -18855,7 +18855,7 @@ class CrownUnlimited(commands.Cog):
                 #Companion Turn Start
                 if turn == 2:
                     if c_block_used==True:
-                        c_defense = c_defense/2
+                        c_defense = int(c_defense/2)
                         c_block_used=False
                     if c_attack <= 25:
                         c_attack = 25
@@ -21636,7 +21636,7 @@ class CrownUnlimited(commands.Cog):
                 #Player 1 Turn Start
                 if turn == 0:
                     if o_defend_used==True:
-                        o_defense = o_defense/2
+                        o_defense = int(o_defense/2)
                         o_defend_used=False
                     if o_universe == "Death Note" and turn_total == 0:
                         embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death", description=f"**{o_card} says**\nYou will die in 24 turns...", colour=0xe91e63)
@@ -23261,7 +23261,7 @@ class CrownUnlimited(commands.Cog):
                 #Companion Turn Start
                 if turn == 2:
                     if c_block_used==True:
-                        c_defense = c_defense/2
+                        c_defense = int(c_defense/2)
                         c_block_used=False
                     if c_attack <= 25:
                         c_attack = 25
@@ -26229,7 +26229,7 @@ class CrownUnlimited(commands.Cog):
             #Player 1 Turn Start
             if turn == 0:
                 if o_defend_used==True:
-                    o_defense = o_defense/2
+                    o_defense = int(o_defense/2)
                     o_defend_used=False
                 if o_universe == "Death Note" and turn_total == 0:
                     embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death", description=f"**{o_card} says**\nYou will die in 24 turns...", colour=0xe91e63)
@@ -27873,7 +27873,7 @@ class CrownUnlimited(commands.Cog):
             #Companion Turn Start
             if turn == 2:
                 if c_block_used==True:
-                    c_defense = c_defense/2
+                    c_defense = int(c_defense/2)
                     c_block_used=False
                 if c_attack <= 25:
                     c_attack = 25
@@ -30407,7 +30407,7 @@ class CrownUnlimited(commands.Cog):
                 if turn == 0:
                     if o_block_used==True:
                         o_block_used=False
-                        o_defense = o_defense/2
+                        o_defense = int(o_defense/2)
                     if o_universe == "Death Note" and turn_total == 0:
                         embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death", description=f"**{o_card} says**\nYou will die in 24 turns...", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
@@ -32653,7 +32653,7 @@ class CrownUnlimited(commands.Cog):
                 if turn == 0:
                     if o_block_used==True:
                         o_block_used=False
-                        o_defense = o_defense/2
+                        o_defense = int(o_defense/2)
                     if o_universe == "Death Note" and turn_total == 0:
                         embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death", description=f"**{o_card} says**\nYou will die in 24 turns...", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
@@ -37667,7 +37667,7 @@ class CrownUnlimited(commands.Cog):
                     elif turn == 1:
                         if t_block_used==True:
                             t_block_used = False
-                            t_defense = t_defense/2
+                            t_defense = int(t_defense/2)
                         if t_attack <= 25:
                             t_attack = 25
                         if t_defense <= 30:
@@ -40328,7 +40328,7 @@ class CrownUnlimited(commands.Cog):
                     elif turn == 1:
                         if t_block_used==True:
                             t_block_used = False
-                            t_defense = t_defense/2
+                            t_defense = int(t_defense/2)
                         if t_attack <= 25:
                             t_attack = 25
                         if t_defense <= 30:
@@ -42886,7 +42886,7 @@ class CrownUnlimited(commands.Cog):
                     elif turn == 1:
                         if t_block_used==True:
                             t_block_used = False
-                            t_defense = t_defense/2
+                            t_defense = int(t_defense/2)
                         if t_attack <= 25:
                             t_attack = 25
                         if t_defense <= 30:
@@ -45346,7 +45346,7 @@ class CrownUnlimited(commands.Cog):
                     elif turn == 1:
                         if t_block_used==True:
                             t_block_used = False
-                            t_defense = t_defense/2
+                            t_defense = int(t_defense/2)
                         if t_attack <= 25:
                             t_attack = 25
                         if t_defense <= 30:
@@ -50355,7 +50355,7 @@ class CrownUnlimited(commands.Cog):
                     elif turn == 1:
                         if t_block_used==True:
                             t_block_used = False
-                            t_defense = t_defense/2
+                            t_defense = int(t_defense/2)
                         if t_attack <= 25:
                             t_attack = 25
                         if t_defense <= 30:
