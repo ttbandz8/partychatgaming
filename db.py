@@ -32,6 +32,7 @@ boss_col = db['BOSS']
 pet_col = db['PET']
 vault_col =db["VAULT"]
 house_col =db["HOUSE"]
+hall_col =db["HALL"]
 menu_col = db['MENU']
 
 '''Check if Collection Exists'''
@@ -904,6 +905,64 @@ def queryTournamentArms():
 def queryShopArms():
     data = arm_col.find({'EXCLUSIVE': False, 'AVAILABLE': True})
     return data 
+
+''' HALL '''
+def hall_exist(data):
+    collection_exists = col_exists("HALL")
+    if collection_exists:
+        hall_does_exist = hall_col.col.find_one(data)
+        if hall_does_exist:
+            return True
+        else:
+            return False
+    else:
+        return False
+
+def createHall(hall):
+    try:
+        hallexists = hall_exist({'HALL': hall['HALL']})
+        if hallexists:
+            return "HALL already exists."
+        else:
+            hall_col.insert_one(hall)
+            return "New HALL created."
+    except:
+        return "Cannot create HALL."
+
+def updateHall(query, new_value):
+    try:
+        hallexists = hall_exist({'HALL': query['HALL']})
+        if hallexists:
+            hall_col.update_one(query, new_value)
+            return True
+        else:
+            return False
+    except:
+        return False
+
+def updateManyHalls(new_value):
+    hall_col.update_many({}, new_value)
+    return True
+
+def deleteHall(query):
+    try:
+        hallexists = hall_exist({'HALL': query['HALL']})
+        if hallexists:
+            hall_col.delete_one(query)
+            return True
+        else:
+            return False
+    except:
+        return False
+
+def queryAllHalls():
+    data = hall_col.find()
+    return data
+
+
+def queryHall(query):
+    data = hall_col.find_one(query)
+    return data
 
 
 ''' HOUSE '''

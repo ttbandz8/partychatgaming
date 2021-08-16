@@ -210,7 +210,7 @@ class Cards(commands.Cog):
                     price_message = "_Priceless_"
                     card_icon= f":fire:"
             else:
-                price_message = f":coin: {o_price}"
+                price_message = f":coin: {'{:,}'.format(o_price)}"
                 card_icon= f":flower_playing_cards:"
 
             card_file = showcard(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, title, focused)
@@ -285,7 +285,7 @@ class Cards(commands.Cog):
             if o_show != "Unbound":
                 embedVar.set_thumbnail(url=show_img)
             embedVar.set_image(url=o_card_path)
-            embedVar.set_footer(text=f"{tip}\n.enhance - Enhancement Menu")
+            embedVar.set_footer(text=f"{tip}\n/enhance - Enhancement Menu")
             await ctx.send(embed=embedVar)
 
         else:

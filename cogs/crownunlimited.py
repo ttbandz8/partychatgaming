@@ -38790,10 +38790,12 @@ class CrownUnlimited(commands.Cog):
                     if tguild:                        
                         await bless(15, str(tuser))
                         await blessteam(25, tteam)
+                        await teamwin(tteam)
                         await blessguild(60, tguild)
                         if oguild:
                             await curse(7, str(tuser))
                             await curseteam(15, oteam)
+                            await teamloss(oteam)
                             await curseguild(30, oguild)
                         
                     embedVar = discord.Embed(title=f":zap: **{t_card}** wins the match! Use /start to Play again or /end to end the session", description=f"Match concluded in {turn_total} turns\n**{t_card} says**\n`{t_win_description}`", colour=0x1abc9c)
@@ -38834,10 +38836,12 @@ class CrownUnlimited(commands.Cog):
                     if oguild:                        
                         await bless(15, str(ctx.author))
                         await blessteam(25, oteam)
+                        await teamwin(oteam)
                         await blessguild(60, oguild)
                         if tguild:
                             await curse(7, str(tuser))
                             await curseteam(15, tteam)
+                            await teamloss(tteam)
                             await curseguild(30, tguild)
                     match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']), str(oarm['ARM']), "N/A", "PVP", o['EXCLUSIVE'])
                     embedVar = discord.Embed(title=f":zap: VICTORY\n**{o_card} says**\n{o_win_description}\n\n Use /start to Play again or /end to end the session", description=f"The match lasted {turn_total} turns", colour=0xe91e63)
@@ -41448,10 +41452,12 @@ class CrownUnlimited(commands.Cog):
                     if tguild:                        
                         await bless(15, str(tuser))
                         await blessteam(25, tteam)
+                        await teamwin(tteam)
                         await blessguild(60, tguild)
                         if oguild:
                             await curse(7, str(tuser))
                             await curseteam(15, oteam)
+                            await teamloss(oteam)
                             await curseguild(30, oguild)
                     embedVar = discord.Embed(title=f":zap: **{t_card}** wins the match! Use /start to Play again or /end to end the session", description=f"Match concluded in {turn_total} turns\n**{t_card} says**\n`{t_win_description}`", colour=0x1abc9c)
                     embedVar.set_author(name=f"{o_card} says:\n{o_lose_description}")
@@ -41491,10 +41497,12 @@ class CrownUnlimited(commands.Cog):
                     if oguild:                        
                         await bless(15, str(ctx.author))
                         await blessteam(25, oteam)
+                        await teamwin(oteam)
                         await blessguild(60, oguild)
                         if tguild:
                             await curse(7, str(tuser))
                             await curseteam(15, tteam)
+                            await teamloss(tteam)
                             await curseguild(30, tguild)
                     match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']), str(oarm['ARM']), "N/A", "PVP", o['EXCLUSIVE'])
                     embedVar = discord.Embed(title=f":zap: VICTORY\n**{o_card} says**\n{o_win_description}\n\n Use /start to Play again or /end to end the session", description=f"The match lasted {turn_total} turns", colour=0xe91e63)
@@ -43907,10 +43915,12 @@ class CrownUnlimited(commands.Cog):
                     if tguild:                        
                         await bless(15, str(tuser))
                         await blessteam(25, tteam)
+                        await teamwin(tteam)
                         await blessguild(60, tguild)
                         if oguild:
                             await curse(7, str(tuser))
                             await curseteam(15, oteam)
+                            await teamloss(oteam)
                             await curseguild(30, oguild)
                     embedVar = discord.Embed(title=f":zap: **{t_card}** wins the match! Use /start to Play again or /end to end the session", description=f"Match concluded in {turn_total} turns\n**{t_card} says**\n`{t_win_description}`", colour=0x1abc9c)
                     embedVar.set_author(name=f"{o_card} says:\n{o_lose_description}")
@@ -43950,10 +43960,12 @@ class CrownUnlimited(commands.Cog):
                     if oguild:                        
                         await bless(15, str(ctx.author))
                         await blessteam(25, oteam)
+                        await teamwin(oteam)
                         await blessguild(60, oguild)
                         if tguild:
                             await curse(7, str(tuser))
                             await curseteam(15, tteam)
+                            await teamloss(tteam)
                             await curseguild(30, tguild)
                     match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']), str(oarm['ARM']), "N/A", "PVP", o['EXCLUSIVE'])
                     embedVar = discord.Embed(title=f":zap: VICTORY\n**{o_card} says**\n{o_win_description}\n\n Use /start to Play again or /end to end the session", description=f"The match lasted {turn_total} turns", colour=0xe91e63)
@@ -46367,10 +46379,12 @@ class CrownUnlimited(commands.Cog):
                     if tguild:                        
                         await bless(15, str(tuser))
                         await blessteam(25, tteam)
+                        await teamwin(tteam)
                         await blessguild(60, tguild)
                         if oguild:
                             await curse(7, str(tuser))
                             await curseteam(15, oteam)
+                            await teamloss(oteam)
                             await curseguild(30, oguild)
                     embedVar = discord.Embed(title=f":zap: **{t_card}** wins the match! Use /start to Play again or /end to end the session", description=f"Match concluded in {turn_total} turns\n**{t_card} says**\n`{t_win_description}`", colour=0x1abc9c)
                     embedVar.set_author(name=f"{o_card} says:\n{o_lose_description}")
@@ -46410,10 +46424,12 @@ class CrownUnlimited(commands.Cog):
                     if oguild:                        
                         await bless(15, str(ctx.author))
                         await blessteam(25, oteam)
+                        await teamwin(oteam)
                         await blessguild(60, oguild)
                         if tguild:
                             await curse(7, str(tuser))
                             await curseteam(15, tteam)
+                            await teamloss(tteam)
                             await curseguild(30, tguild)
                     match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']), str(oarm['ARM']), "N/A", "PVP", o['EXCLUSIVE'])
                     embedVar = discord.Embed(title=f":zap: VICTORY\n**{o_card} says**\n{o_win_description}\n\n Use /start to Play again or /end to end the session", description=f"The match lasted {turn_total} turns", colour=0xe91e63)
@@ -51376,10 +51392,12 @@ class CrownUnlimited(commands.Cog):
                     if tguild:                        
                         await bless(15, str(tuser))
                         await blessteam(25, tteam)
+                        await teamwin(tteam)
                         await blessguild(60, tguild)
                         if oguild:
                             await curse(7, str(tuser))
                             await curseteam(15, oteam)
+                            await teamloss(oteam)
                             await curseguild(30, oguild)
                     embedVar = discord.Embed(title=f":zap: **{t_card}** wins the match! Use /start to Play again or /end to end the session", description=f"Match concluded in {turn_total} turns\n**{t_card} says**\n`{t_win_description}`", colour=0x1abc9c)
                     embedVar.set_author(name=f"{o_card} says:\n{o_lose_description}")
@@ -51419,10 +51437,12 @@ class CrownUnlimited(commands.Cog):
                     if oguild:                        
                         await bless(15, str(ctx.author))
                         await blessteam(25, oteam)
+                        await teamwin(oteam)
                         await blessguild(60, oguild)
                         if tguild:
                             await curse(7, str(tuser))
                             await curseteam(15, tteam)
+                            await teamloss(tteam)
                             await curseguild(30, tguild)
                     match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']), str(oarm['ARM']), "N/A", "PVP", o['EXCLUSIVE'])
                     embedVar = discord.Embed(title=f":zap: VICTORY\n**{o_card} says**\n{o_win_description}\n\n Use /start to Play again or /end to end the session", description=f"The match lasted {turn_total} turns", colour=0xe91e63)
@@ -51466,7 +51486,7 @@ class CrownUnlimited(commands.Cog):
             oguild = db.queryGuildAlt({'GNAME' : oguild_name})
         player_guild = sowner['GUILD']
         
-        if oguild == "PCG":
+        if oguild_name == "PCG":
             await ctx.send(m.NO_GUILD, delete_after=5)
             return
         if player_guild == oguild_name:
@@ -51480,10 +51500,13 @@ class CrownUnlimited(commands.Cog):
         if not guild_info:
             await ctx.send(m.GUILD_DOESNT_EXIST, delete_after=5)
         guild_shield = guild_info['SHIELD']
-        
+        guild_hall = guild_info['HALL']
+        hall_info = db.queryHall({'HALL' : str(guild_hall)})
+        hall_def = hall_info['DEFENSE']
         t_user = db.queryUser({'DISNAME': guild_shield})
         tteam = t_user['TEAM']
         tteam_info = db.queryTeam({'TNAME' : tteam})
+        thall = 'Mine'
         if tteam_info:
             tguild = tteam_info['GUILD']
         tarm = db.queryArm({'ARM': t_user['ARM']})
@@ -51491,7 +51514,7 @@ class CrownUnlimited(commands.Cog):
 
         #Guild Fees
         title_match_active=False
-        fee = 1000
+        fee = hall_info['FEE']
         if oguild_name == tguild:
             title_match_active=True
         o = db.queryCard({'NAME': sowner['CARD']})
@@ -51644,7 +51667,7 @@ class CrownUnlimited(commands.Cog):
         t_max_stamina= t['STAM']
         t_moveset = t['MOVESET']
         t_attack = t['ATK'] + tcard_lvl_attack_buff
-        t_defense = t['DEF'] + tcard_lvl_defense_buff
+        t_defense = t['DEF'] * hall_def + tcard_lvl_defense_buff
         t_type = t['TYPE']
         t_accuracy = t['ACC']
         t_passive = t['PASS'][0]
@@ -53383,7 +53406,7 @@ class CrownUnlimited(commands.Cog):
             match = await savematch(str(tuser), str(t_card), str(t_card_path), str(ttitle['TITLE']), str(tarm['ARM']), "N/A", "PVP", o['EXCLUSIVE'])
             ouid = sowner['DID']
             sownerctx = await self.bot.fetch_user(ouid)
-            response = await score(sownerctx, tuser)
+            #response = await score(sownerctx, tuser)
             guild_query = {'FOUNDER' : guild_info['FOUNDER']}
             guildwin = db.updateGuild(guild_query,{'$inc' : {'BOUNTY' : fee , 'STREAK' : 1}})
             bounty = guild_info['BOUNTY']
@@ -53396,10 +53419,12 @@ class CrownUnlimited(commands.Cog):
             if tguild:                        
                 await bless(wage, str(t_user))
                 await blessteam(wage, tteam)
+                await teamwin(tteam)
                 await blessguild(fee, tguild)
                 if oguild:
                     await curse(7, str(ctx.author))
                     await curseteam(15, oteam)
+                    await teamloss(oteam)
                     await curseguild(30, oguild)
             embedVar = discord.Embed(title=f":shield: **{t_card}** defended the {guild_info['GNAME']}", description=f"Match concluded in {turn_total} turns\n**{t_card} says**\n`{t_win_description}`", colour=0x1abc9c)
             embedVar.set_author(name=f"{o_card} says:\n{o_lose_description}")
@@ -53433,7 +53458,7 @@ class CrownUnlimited(commands.Cog):
             gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
             ouid = sowner['DID']
             sownerctx = await self.bot.fetch_user(ouid)
-            response = await score(sownerctx, ouser)
+            #response = await score(sownerctx, ouser)
             guild_query = {'FOUNDER' : guild_info['FOUNDER']}
             bounty = guild_info['BOUNTY']
             bonus = guild_info['STREAK']
@@ -53457,10 +53482,12 @@ class CrownUnlimited(commands.Cog):
             if oguild:                        
                 await bless(wage, str(ctx.author))
                 await blessteam(wage, oteam)
+                await teamwin(oteam)
                 await blessguild(wage, str(oguild_name))
                 if tguild:
                     await curse(7, str(t_user))
                     await curseteam(15, tteam)
+                    await teamloss(tteam)
                     await curseguild(30, tguild)
             match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']), str(oarm['ARM']), "N/A", "PVP", o['EXCLUSIVE'])
             embedVar = discord.Embed(title=f"{endmessage}\n**{o_card} says**\n{o_win_description}\n\n You have defeated the {guild_info['GNAME']} SHIELD!", description=f"The match lasted {turn_total} turns", colour=0xe91e63)
@@ -53486,7 +53513,7 @@ class CrownUnlimited(commands.Cog):
 
     
     @cog_ext.cog_slash(description="View all Cards of a Universe you unlocked", guild_ids=main.guild_ids)
-    async def cards(self, ctx: SlashContext, universe: str):
+    async def cardlist(self, ctx: SlashContext, universe: str):
         universe_data = db.queryUniverse({'TITLE': str(universe)})
         user = db.queryUser({'DISNAME': str(ctx.author)})
         if universe_data['PREREQUISITE'] not in user['CROWN_TALES'] and universe_data['PREREQUISITE'] != "":
@@ -53564,7 +53591,7 @@ class CrownUnlimited(commands.Cog):
         await paginator.run(embeds)
     
     @cog_ext.cog_slash(description="View all Titles of a Universe you unlocked", guild_ids=main.guild_ids)
-    async def titles(self, ctx: SlashContext, universe: str):
+    async def titlelist(self, ctx: SlashContext, universe: str):
         universe_data = db.queryUniverse({'TITLE': str(universe)})
         user = db.queryUser({'DISNAME': str(ctx.author)})
         if universe_data['PREREQUISITE'] not in user['CROWN_TALES'] and universe_data['PREREQUISITE'] != "":
@@ -53637,7 +53664,7 @@ class CrownUnlimited(commands.Cog):
         await paginator.run(embeds)
 
     @cog_ext.cog_slash(description="View all Arms of a Universe you unlocked", guild_ids=main.guild_ids)
-    async def arms(self, ctx: SlashContext, universe: str):
+    async def armlist(self, ctx: SlashContext, universe: str):
         universe_data = db.queryUniverse({'TITLE': str(universe)})
         user = db.queryUser({'DISNAME': str(ctx.author)})
         if universe_data['PREREQUISITE'] not in user['CROWN_TALES'] and universe_data['PREREQUISITE'] != "":
@@ -53758,7 +53785,7 @@ class CrownUnlimited(commands.Cog):
         await paginator.run(embeds)
 
     @cog_ext.cog_slash(description="View all Pets of a Universe you unlocked", guild_ids=main.guild_ids)
-    async def pets(self, ctx: SlashContext, universe: str):
+    async def petlist(self, ctx: SlashContext, universe: str):
         universe_data = db.queryUniverse({'TITLE': str(universe)})
         user = db.queryUser({'DISNAME': str(ctx.author)})
         if universe_data['PREREQUISITE'] not in user['CROWN_TALES'] and universe_data['PREREQUISITE'] != "":
@@ -53894,7 +53921,7 @@ class CrownUnlimited(commands.Cog):
 
         house_list = []
         for homes in house_data:
-            house_list.append(f"{homes['HOUSE']}: :coin:{'{:,}'.format(homes['PRICE'])}: :part_alternation_mark:{homes['MULT']}x ")
+            house_list.append(f":house: | {homes['HOUSE']}\n:coin: | **COST: **{'{:,}'.format(homes['PRICE'])}\n:part_alternation_mark: | **MULT: **{homes['MULT']}x\n_______________")
             
         total_houses = len(house_list)
         while len(house_list) % 10 != 0:
@@ -53909,13 +53936,13 @@ class CrownUnlimited(commands.Cog):
         # If it's not an array greater than 10, show paginationless embed
         if len(house_list) < 10:
             embedVar = discord.Embed(title= f"House List", description="\n".join(house_list), colour=0x7289da)
-            embedVar.set_footer(text=f"{total_houses} Total Universes")
+            embedVar.set_footer(text=f"{total_houses} Total Houses\n/viewhouse - View House Details")
             await ctx.send(embed=embedVar)
 
         embed_list = []
         for i in range(0, len(houses_broken_up)):
             globals()['embedVar%s' % i] = discord.Embed(title= f":house: House List", description="\n".join(houses_broken_up[i]), colour=0x7289da)
-            globals()['embedVar%s' % i].set_footer(text=f"{total_houses} Total Houses")
+            globals()['embedVar%s' % i].set_footer(text=f"{total_houses} Total Houses\n/viewhouse - View House Details")
             embed_list.append(globals()['embedVar%s' % i])
 
         paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
@@ -53926,6 +53953,47 @@ class CrownUnlimited(commands.Cog):
         paginator.add_reaction('⏭️', "last")
         embeds = embed_list
         await paginator.run(embeds)
+
+    @cog_ext.cog_slash(description="View all Guild Halls for purchase", guild_ids=main.guild_ids)
+    async def halls(self, ctx: SlashContext):
+        hall_data = db.queryAllHalls()
+        user = db.queryUser({'DISNAME': str(ctx.author)})
+
+        hall_list = []
+        for homes in hall_data:
+            hall_list.append(f":shinto_shrine: | {homes['HALL']}\n:shield: | **DEF: **{homes['DEFENSE']}\n:coin: | **COST: **{'{:,}'.format(homes['PRICE'])}\n:part_alternation_mark: | **MULT: **{homes['MULT']}x\n:moneybag: | **SPLIT: **{'{:,}'.format(homes['SPLIT'])}x\n:yen: | **FEE: **{'{:,}'.format(homes['FEE'])}\n_______________")
+            
+        total_halls = len(hall_list)
+        while len(hall_list) % 10 != 0:
+            hall_list.append("")
+        
+
+         # Check if divisible by 10, then start to split evenly
+        if len(hall_list) % 10 == 0:
+            first_digit = int(str(len(hall_list))[:1])
+            halls_broken_up = np.array_split(hall_list, first_digit)
+        
+        # If it's not an array greater than 10, show paginationless embed
+        if len(hall_list) < 10:
+            embedVar = discord.Embed(title= f"Hall List", description="\n".join(hall_list), colour=0x7289da)
+            embedVar.set_footer(text=f"{total_halls} Total Halls\n/viewhall - View Hall Details")
+            await ctx.send(embed=embedVar)
+
+        embed_list = []
+        for i in range(0, len(halls_broken_up)):
+            globals()['embedVar%s' % i] = discord.Embed(title= f":shinto_shrine: Hall List", description="\n".join(halls_broken_up[i]), colour=0x7289da)
+            globals()['embedVar%s' % i].set_footer(text=f"{total_halls} Total Halls\n/viewhall - View Hall Details")
+            embed_list.append(globals()['embedVar%s' % i])
+
+        paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+        paginator.add_reaction('⏮️', "first")
+        paginator.add_reaction('⏪', "back")
+        paginator.add_reaction('🔐', "lock")
+        paginator.add_reaction('⏩', "next")
+        paginator.add_reaction('⏭️', "last")
+        embeds = embed_list
+        await paginator.run(embeds)
+
 
     @cog_ext.cog_slash(description="Quit Match", guild_ids=main.guild_ids)
     async def ff(self, ctx: SlashContext):
@@ -54745,10 +54813,20 @@ async def blessteam(amount, team):
    query = {'TNAME': str(team)}
    team_data = db.queryTeam(query)
    if team_data:
-      update_query = {"$inc": {'BANK': posBlessAmount}}
-      db.updateTeam(query, update_query)
+        guild_mult = 1.0
+        if team_data['GUILD'] != 'PCG':   
+            guild_query = {'GNAME' : str(team_data['GUILD'])}
+            guild_info = db.queryGuildAlt(guild_query)
+            guild_hall = guild_info['HALL']
+            hall_query = {'HALL' : str(guild_hall)}
+            hall_info = db.queryHall(hall_query)
+            guild_mult = hall_info['SPLIT']
+            blessAmount = amount * guild_mult
+            posBlessAmount = 0 + abs(int(blessAmount))
+        update_query = {"$inc": {'BANK': posBlessAmount}}
+        db.updateTeam(query, update_query)
    else:
-      print("Cannot find Team")
+        print("Cannot find Team")
 
 async def blessfamily(amount, family):
    blessAmount = amount
@@ -54771,9 +54849,9 @@ async def blessguild(amount, guild):
    query = {'GNAME': str(guild)}
    guild_data = db.queryGuildAlt(query)
    if guild_data:
-      house = guild_data['HALL']
-      house_data = db.queryHouse({'HOUSE': house})
-      multiplier = house_data['MULT']
+      hall = guild_data['HALL']
+      hall_data = db.queryHall({'HALL': hall})
+      multiplier = hall_data['MULT']
       posBlessAmount = posBlessAmount * multiplier
       update_query = {"$inc": {'BANK': int(posBlessAmount)}}
       db.updateGuildAlt(query, update_query)
@@ -54814,6 +54892,24 @@ async def curseguild(amount, guild):
          db.updateGuildAlt(query, update_query)
       else:
          print("cant find guild")
+
+async def teamwin(team):
+   query = {'TNAME': str(team)}
+   team_data = db.queryTeam(query)
+   if team_data:
+    update_query = {"$inc": {'SCRIM_WINS': 1}}
+    db.updateTeam(query, update_query)
+   else:
+        print("Cannot find Team")
+
+async def teamloss(team):
+   query = {'TNAME': str(team)}
+   team_data = db.queryTeam(query)
+   if team_data:
+    update_query = {"$inc": {'SCRIM_LOSSES': 1}}
+    db.updateTeam(query, update_query)
+   else:
+        print("Cannot find Team")
 
 
 async def drops(player, universe, matchcount):

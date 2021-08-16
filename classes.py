@@ -45,7 +45,7 @@ class GUILD():
     BANK: int = field(default_factory=lambda: 0)
     BOUNTY: int = field(default_factory=lambda: 1000)
     CREST:str = field(default_factory=lambda: 'FF')
-    HALL:str = field(default_factory=lambda: 'Cave')
+    HALL:str = field(default_factory=lambda: 'Mine')
     TIMESTAMP: str = now
     
 
@@ -88,10 +88,12 @@ class HALL():
     PATH: str
     HALL: str
     PRICE: int = field(default_factory=lambda: 0)
-    TIMESTAMP: str = now
     MULT: float = field(default_factory=lambda: 1.0)
+    SPLIT: float = field(default_factory=lambda: 1.0)
+    DEFENSE: float = field(default_factory=lambda: 1.0)
     FEE: int = field(default_factory=lambda: 1000)
     AVAILABLE: bool = field(default_factory=lambda: False)
+    TIMESTAMP: str = now
 
 
 @dataclass(frozen=True, order=True)
@@ -360,3 +362,7 @@ def newHouse(house):
 def newGuild(guild):
     gu = GUILD(**guild)
     return asdict(gu)
+
+def newHall(hall):
+    ha = HALL(**hall)
+    return asdict(ha)

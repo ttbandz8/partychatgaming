@@ -321,10 +321,9 @@ class Guild(commands.Cog):
 
             try:
                 confirmed2 = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
-                newvalue = {'$set': {'SHIELD': str(user1)}}
+                newvalue = {'$set': {'SHIELD': str(user1), 'STREAK' : 0}}
                 response = db.addGuildShield(new_query, newvalue, str(ctx.author), str(user1))
                 await ctx.send(response)
-                newvictory = {'$set': {'STREAK': 0}}
                 
             except:
                 await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=3)
