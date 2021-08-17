@@ -223,7 +223,7 @@ class Profile(commands.Cog):
             :reminder_ribbon: | **Title** - {title_name} ~ {title_passive_type} | {title_passive_value}
             :mechanical_arm: | **Arm** - {arm_name} ~ {arm_passive_type} | {arm_passive_value}
             :bird: | **Pet** - {active_pet['NAME']} ~ {active_pet['TYPE']} | {pet_ability_power} 
-            **Bond** _{bond}_ {bond_message} / **Level** _{lvl}_
+            **Bond** _{bond}_ {bond_message} / **Level** _{lvl}_ {lvl_message}
         
             _**Moveset**_
             :boom: | **{move1}:** {move1ap}
@@ -402,7 +402,7 @@ class Profile(commands.Cog):
             :reminder_ribbon: | **Title** - {title_name} ~ {title_passive_type} | {title_passive_value}
             :mechanical_arm: | **Arm** - {arm_name} ~ {arm_passive_type} | {arm_passive_value}
             :bird: | **Pet** - {active_pet['NAME']} ~ {active_pet['TYPE']} | {pet_ability_power} 
-            **Bond** _{bond}_ {bond_message} / **Level** _{lvl}_
+            **Bond** _{bond}_ {bond_message} / **Level** _{lvl}_ {lvl_message}
         
             _**Moveset**_
             :boom: | **{move1}:** {move1ap}
