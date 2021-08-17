@@ -711,40 +711,40 @@ async def on_command_error(ctx, error):
         await ctx.send(f'Your Daily Reward is on cooldown! You can use it in {round(error.retry_after/3600)} hours!')
 
 
-@slash.slash(name="Vs", description="How many times you defeated opponent", guild_ids=guild_ids)
-@commands.check(validate_user)
-async def vs(ctx, player: User):
-   user = player
-   args1 = "crown"
-   aliases = [x for x in db.query_all_games() for x in x['ALIASES']]
-   game = {}
-   if args1 in aliases:
-      game_query = {'ALIASES': args1}
-      game = db.queryGame(game_query)
+# @slash.slash(name="Vs", description="How many times you defeated opponent", guild_ids=guild_ids)
+# @commands.check(validate_user)
+# async def vs(ctx, player: User):
+#    user = player
+#    args1 = "crown"
+#    aliases = [x for x in db.query_all_games() for x in x['ALIASES']]
+#    game = {}
+#    if args1 in aliases:
+#       game_query = {'ALIASES': args1}
+#       game = db.queryGame(game_query)
 
-      win_query = {'GAME': game['GAME'], 'WINNER.TEAM': [str(ctx.author)], 'LOSER.TEAM': [str(user)]}
-      win_count = 0
-      win_sessions = db.querySessionForUser(win_query)
-      for x in win_sessions:
-         win_count +=1
+#       win_query = {'GAME': game['GAME'], 'WINNER.TEAM': [str(ctx.author)], 'LOSER.TEAM': [str(user)]}
+#       win_count = 0
+#       win_sessions = db.querySessionForUser(win_query)
+#       for x in win_sessions:
+#          win_count +=1
 
-      loss_query = {'GAME': game['GAME'], 'WINNER.TEAM': [str(user)], 'LOSER.TEAM': [str(ctx.author)]}
-      loss_count = 0
-      loss_sessions = db.querySessionForUser(loss_query)
-      for x in loss_sessions:
-         loss_count +=1
+#       loss_query = {'GAME': game['GAME'], 'WINNER.TEAM': [str(user)], 'LOSER.TEAM': [str(ctx.author)]}
+#       loss_count = 0
+#       loss_sessions = db.querySessionForUser(loss_query)
+#       for x in loss_sessions:
+#          loss_count +=1
 
-      total_games = win_count + loss_count
-      if win_count > 0:
-         message = f"{str(ctx.author.mention)} has defeated {str(user.mention)} {win_count} out of {total_games} matches in {game['GAME']}!"
-      else:
-         message = f"{str(ctx.author.mention)} has never defeated {str(user.mention)} in {game['GAME']}!"
+#       total_games = win_count + loss_count
+#       if win_count > 0:
+#          message = f"{str(ctx.author.mention)} has defeated {str(user.mention)} {win_count} out of {total_games} matches in {game['GAME']}!"
+#       else:
+#          message = f"{str(ctx.author.mention)} has never defeated {str(user.mention)} in {game['GAME']}!"
 
-      if total_games == 0:
-         message = "You two have not played each other. "
-      await ctx.send(message)
-   else:
-      await ctx.send(m.GAME_NOT_DETECTED, delete_after=5)
+#       if total_games == 0:
+#          message = "You two have not played each other. "
+#       await ctx.send(message)
+#    else:
+#       await ctx.send(m.GAME_NOT_DETECTED, delete_after=5)
 
 async def DM(ctx, user : User, m,  message=None):
     message = message or "This Message is sent via DM"
@@ -1503,28 +1503,6 @@ async def addfield(ctx, collection, new_field, field_type):
          response = db.updateManyTeams({'$set': {new_field: field_type}})
    else:
       print(m.ADMIN_ONLY_COMMAND)
-
-# @bot.command()
-# @commands.check(validate_user)
-# async def sync(ctx):
-#    all_vaults = db.queryAllVault()
-#    players = []
-#    vaults = []
-#    try:
-#       for vault in all_vaults:
-#          player = vault['OWNER']
-#          cards = vault['CARDS']
-#          vault_query = {'OWNER' : player}
-#          for card in cards:
-#             resp = db.queryCard({'NAME': card})
-#             universe = db.queryUniverse({'TITLE': resp['UNIVERSE']})
-#             tier = universe['TIER']
-#             update_query = {'$addToSet': {'CARD_LEVELS': {'CARD': card, 'LVL': 0, 'TIER': int(tier), 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
-#             db.updateVaultNoFilter(vault_query, update_query)
-#    except Exception as e:
-#       print(e)
-   
-
 
 @slash.slash(name="Referred", description="Let us know if someone referred you the game", guild_ids=guild_ids)
 @commands.check(validate_user)
