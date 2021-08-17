@@ -19,7 +19,7 @@ BOT_COMMANDS = textwrap.dedent(f"""\
 **/vs @player**: Matchup lookup
 
 **TEAM COMMANDS**
-**/lookupteam team name**: Team lookup
+**/team team name**: Team lookup
 **/createteam game team name**: Create team 
 **/deleteteam**: Delete team
 **/recruit @player**: Add player to team
@@ -28,6 +28,21 @@ BOT_COMMANDS = textwrap.dedent(f"""\
 **/leaveteam team**: Leave Team
 **/pay @player amount**: Send Team Members coin (Owner Onlu)
 **/donate amount team name**: Donate coin to Team Bank
+
+**GUILD COMMANDS**
+**/guild guild name**: Guild lookup
+**/oath player guild name**: Create Guild/Reswear Guild
+**/disband**: Delete Guild (Founder Only)
+**/betray**: Leave Guild (Sworn Only)
+**/knight @player**: Set Guild Shield to Player (Guild Owners Only)
+**/ally @player**: Add Team To Guild (Guild Owners Only)
+**/exile @player**: Kick Team from Guild (Guild Owners Only)
+**/renounce**: Leave Guild (Team Owner Only)
+**/sponsor team name amount**: Send Team Guild coin (Guild Owners Onlu)
+**/donate amount team name**: Donate coin to Team Bank
+**/bounty amount**: Set Guild Bounty (Guild Owners Only)
+**/viewhall**: View Hall Information
+**/buyhall**: Buy and move into a new Guild Hall
 
 **FAMILY COMMANDS**
 **/family @user**: Family lookup
@@ -75,6 +90,7 @@ CROWN_UNLIMITED_COMMANDS = textwrap.dedent(f"""\
 **/brawl:** Starts round against current opponent with equal health, attack, and defense/
 **/arenabrawl:** Starts round against current opponent with equal health, attack, and defense and No Pets are allowed/
 **/wager amount**: Wager amount to battle in current session
+**/raid guild**: Start Guild Raid Battle
 
 **CROWN UNLIMITED STORY MODE COMMANDS**
 **/ff**: Leave current tale, dungeon, or boss fight
@@ -103,19 +119,19 @@ CTAP_COMMANDS = textwrap.dedent(f"""\
 **/viewboss boss**:Show Boss Description
 
 **TITLE COMMANDS**
-**/titles universe**: View Universe Title List
+**/titlelist universe**: View Universe Title List
 **/viewtitle**: Preview Title
 **/buytitle**: Buy Title
 **/equiptitle title**: - Equip title
 
 **ARM COMMANDS**
-**/arms universe**: View Universe Arm List
+**/armlist universe**: View Universe Arm List
 **/viewarm**: Preview Arm
 **/buyarm**: Buy Arm
 **/equiparm arm**: Equip arm
 
 **PET COMMANDS**
-**/pets universe**: View Universe Pet List
+**/petlist universe**: View Universe Pet List
 **/viewpet** Preview Pet
 **/equippet pet**: Equip pet
 
