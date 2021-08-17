@@ -177,6 +177,10 @@ class Lookup(commands.Cog):
             card = d['CARD']
             ign = d['IGN']
             team = d['TEAM']
+            guild = d['GUILD']
+            if team != "PCG":
+                team_info = db.queryTeam({'TNAME' : str(team)})
+                guild = team_info['GUILD']
             family = d['FAMILY']
             titles = d['TITLE']
             arm = d['ARM']
@@ -188,7 +192,6 @@ class Lookup(commands.Cog):
             bosses = d['BOSS_WINS']
             pet = d['PET']
             rebirth = d['REBIRTH']
-            guild = d['GUILD']
             icon = ':triangular_flag_on_post:'
             if rebirth == 0:
                 icon = ':triangular_flag_on_post:'
