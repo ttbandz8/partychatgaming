@@ -1427,13 +1427,13 @@ async def resell(ctx, item: str):
          return
       else:
          if p1_trade_item in p1_cards:
-            card = db.queryCard({'NAME':str(p1_trade_item)})
+            card = db.queryCard({'NAME':{"$regex": str(p1_trade_item), "$options": "i"}})
             sell_price = card['PRICE'] * .07
          elif p1_trade_item in p1_titles:
-            title = db.queryTitle({'TITLE': str(p1_trade_item)})
+            title = db.queryTitle({'TITLE': {"$regex": str(p1_trade_item), "$options": "i"}})
             sell_price = title['PRICE'] * .07
          elif p1_trade_item in p1_arms:
-            arm = db.queryArm({'ARM': str(p1_trade_item)})
+            arm = db.queryArm({'ARM': {"$regex": str(p1_trade_item), "$options": "i"}})
             sell_price = arm['PRICE'] * .07
 
          if (p1_trade_item == user['CARD']) or (p1_trade_item == user['TITLE']) or (p1_trade_item == user['ARM']):

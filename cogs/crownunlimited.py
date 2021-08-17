@@ -2321,7 +2321,7 @@ class CrownUnlimited(commands.Cog):
                 return
 
             #Universe Cost
-            selected_universe = msg.content
+            selected_universe = _selected
             universe = db.queryUniverse({'TITLE': str(selected_universe)})
             universe_tier = universe['TIER']
             entrance_fee = 250
@@ -6790,7 +6790,7 @@ class CrownUnlimited(commands.Cog):
                 return
 
             #Universe Cost
-            selected_universe = msg.content
+            selected_universe = _selected
             universe = db.queryUniverse({'TITLE': str(selected_universe)})
             universe_tier = universe['TIER']
             entrance_fee = 500
@@ -11714,7 +11714,7 @@ class CrownUnlimited(commands.Cog):
                 return
 
             #Universe Cost
-            selected_universe = msg.content
+            selected_universe = _selected
             universe = db.queryUniverse({'TITLE': str(selected_universe)})
             universe_tier = universe['TIER']
             entrance_fee = 1000
@@ -16627,7 +16627,7 @@ class CrownUnlimited(commands.Cog):
                 return
 
             #Universe Cost
-            selected_universe = msg.content
+            selected_universe = _selected
             universe = db.queryUniverse({'TITLE': str(selected_universe)})
             universe_tier = universe['TIER']
             entrance_fee = 250
@@ -20961,7 +20961,7 @@ class CrownUnlimited(commands.Cog):
                 return
 
             #Universe Cost
-            selected_universe = msg.content
+            selected_universe = _selected
             universe = db.queryUniverse({'TITLE': str(selected_universe)})
             universe_tier = universe['TIER']
             entrance_fee = 500
@@ -25693,7 +25693,7 @@ class CrownUnlimited(commands.Cog):
                 return
 
             #Universe Cost
-            selected_universe = msg.content
+            selected_universe = _selected
             universe = db.queryUniverse({'TITLE': str(selected_universe)})
             universe_tier = universe['TIER']
             entrance_fee = 1000
@@ -30392,7 +30392,7 @@ class CrownUnlimited(commands.Cog):
                 return
 
             #Universe Cost
-            selected_universe = msg.content
+            selected_universe = _selected
             universe = db.queryUniverse({'TITLE': str(selected_universe)})
             universe_tier = universe['TIER']
             entrance_fee = 500
@@ -32728,7 +32728,7 @@ class CrownUnlimited(commands.Cog):
                 return
 
             #Universe Cost
-            selected_universe = msg.content
+            selected_universe = _selected
             universe = db.queryUniverse({'TITLE': str(selected_universe)})
             universe_tier = universe['TIER']
             entrance_fee = 250
@@ -34935,7 +34935,7 @@ class CrownUnlimited(commands.Cog):
                 return
 
             #Universe Cost
-            selected_universe = msg.content
+            selected_universe = _selected
             universe = db.queryUniverse({'TITLE': str(selected_universe)})
             universe_tier = universe['TIER']
             entrance_fee = 1000
