@@ -1404,9 +1404,6 @@ async def resell(ctx, item: str):
    
 
 
-   
-
-
 @bot.command()
 @commands.check(validate_user)
 async def referred(ctx, user: User):

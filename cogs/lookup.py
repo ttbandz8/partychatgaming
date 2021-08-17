@@ -432,10 +432,10 @@ class Lookup(commands.Cog):
             await ctx.send(m.SESSION_DOES_NOT_EXIST, delete_after=5)
 
     @cog_ext.cog_slash(description="Lookup player stats", guild_ids=main.guild_ids)
-    async def lookup(self, ctx, user: User):
-        query = {'DISNAME': str(user)}
+    async def lookup(self, ctx, player: User):
+        query = {'DISNAME': str(player)}
         d = db.queryUser(query)
-        m = db.queryManyMatchesPerPlayer({'PLAYER': str(user)})
+        m = db.queryManyMatchesPerPlayer({'PLAYER': str(player)})
         if d:
             name = d['DISNAME'].split("#",1)[0]
             games = d['GAMES']
@@ -574,7 +574,7 @@ class Lookup(commands.Cog):
             await ctx.send(m.USER_NOT_REGISTERED)
 
     @cog_ext.cog_slash(description="Lookup team stats", guild_ids=main.guild_ids)
-    async def lookupteam(self, ctx, team: str):
+    async def team(self, ctx, team: str):
         team_name = team
         team_query = {'TNAME': team_name}
         team = db.queryTeam(team_query)
@@ -639,8 +639,8 @@ class Lookup(commands.Cog):
             await ctx.send(m.TEAM_DOESNT_EXIST)
 
     @cog_ext.cog_slash(description="Lookup player family", guild_ids=main.guild_ids)
-    async def lookupfamily(self, ctx, user: User):
-        user_profile = db.queryUser({'DISNAME': str(user)})
+    async def family(self, ctx, member: User):
+        user_profile = db.queryUser({'DISNAME': str(member)})
         family = db.queryFamily({'HEAD': user_profile['FAMILY']})
         if family:
             family_name = family['HEAD'] + "'s Family"
@@ -673,9 +673,6 @@ class Lookup(commands.Cog):
             embed1.add_field(name="House :house:", value=house, inline=False)
             embed1.set_image(url=house_img)
     
-            
-            
-            
             await ctx.send(embed = embed1)
         else:
             await ctx.send(m.FAMILY_DOESNT_EXIST)
