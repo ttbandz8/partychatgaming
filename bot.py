@@ -363,16 +363,15 @@ async def crown(ctx):
    """),colour=0x7289da)
    embedVar8.set_thumbnail(url=avatar)
    
-   embedVar9 = discord.Embed(title= f":crown: Decks",description=textwrap.dedent(f"""\
-   Save your favorite builds in your **Deck**
-   **/deck** to open the deck menu and select a preset with **1-3**
-   **/savedeck** to save your current build **1-3**
+   embedVar9 = discord.Embed(title= f":crown: Presets",description=textwrap.dedent(f"""\
+   Save your favorite builds in your **Preset**
+   **/preset** to open the deck menu and select a preset with **1-3**
+   **/savepreset** to save your current build **1-3**
    
-   **Deck Builds**
-   You can bring your deck builds into Duo Battles!
-   **/abuild 1-3** to view the full preset build
+   **Preset Builds**
+   You can bring your preset builds into Duo Battles!
    
-   Take your **Deck Presets** into Crown Duos!
+   Take your **Preset Presets** into Crown Duos!
    """) ,colour=0x7289da)
    embedVar9.set_thumbnail(url=avatar)
 
