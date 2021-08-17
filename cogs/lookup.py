@@ -727,20 +727,20 @@ class Lookup(commands.Cog):
             :nesting_dolls: | **Founder ~** {founder_name.split("#",1)[0]}
             :dolls: | **Sworn ~** {sworn_name.split("#",1)[0]}
             
-            *Guilds can select Shields to defend the Hall from **Raids**! Use /raid*
+            *Guilds Owners can /knight a **Shield** to defend the Hall from **Raids**! Use /raid*
             :japanese_goblin: | **Shield: ~**{shield_name.split("#",1)[0].format(self)} ~ {sicon} | **Victories: **{streak}
             :flower_playing_cards: | **Card: **{shield_card}
             :reminder_ribbon: | **Title: **{shield_title}
             :mechanical_arm: | **Arm: **{shield_arm}
               
-            *Swords are employed by the guild to win PVP battles! They can claim the **Shield** by defeating them in a /raid*
+            ***Swords** are employed by the guild to win PVP battles! They can claim the **Shield** by defeating them in a /raid*
             :ninja: | **Swords: **{sword_count}
             :dollar: | **Split: **{hall_split} *Team Income Multiplier*
-            :secret: | **Crest: **{len(crest_list)} *Current Crest Holdings*
+            :secret: | **Crest: **{len(crest_list)} *Current Crest Holdings. Run /dungeons to Claim **Universe Crest***
               
             
             :coin: | **Raid Fee: **{'{:,}'.format(hall_fee)} *Cost to /raid*
-            :yen: | **Bounty: **{'{:,}'.format(bounty)} *use /bounty to set*
+            :yen: | **Bounty: **{'{:,}'.format(bounty)} *use /bounty to set Guild Bounty*
             :moneybag: | **Bonus: **{'{:,}'.format(bonus)} *Victory Bonus Multiplier*
                    
             
@@ -754,8 +754,8 @@ class Lookup(commands.Cog):
             embed2.add_field(name=f"**Swords: | ** :ninja: ~ {sword_count}", value="\n".join(f'**{t}**'.format(self) for t in sword_list), inline=False)
             embed2.set_footer(text=f"/lookupteam - Lookup Guild Teams")
             
-            embed3 = discord.Embed(title=f":flags: |  {guild_name} **UNIVERSE CREST**".format(self), description=":bank: |  Party Chat Gaming Database", colour=000000)
-            embed3.add_field(name=f":secret: | **CREST** ~ ", value="\n".join(f'**{c}**'.format(self) for c in crest_list), inline=False)
+            embed3 = discord.Embed(title=f":flags: |  {guild_name} **OWNED CREST**".format(self), description=":bank: |  Party Chat Gaming Database", colour=000000)
+            embed3.add_field(name=f":secret: | **CREST**", value="\n".join(f'**{c}**'.format(self) for c in crest_list), inline=False)
             embed3.set_footer(text=f"/dungeons - Earn Universe Crest!")
             # if guild['LOGO_FLAG']:
             #     embed3.set_image(url=logo)

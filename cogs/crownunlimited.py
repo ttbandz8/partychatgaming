@@ -2215,9 +2215,6 @@ class CrownUnlimited(commands.Cog):
                 if currentopponent == (total_legends):
                     embedVar = discord.Embed(title=f"UNIVERSE CONQUERED", description=f"Universe {selected_universe} has been conquered\n\n{drop_response}", colour=0xe91e63)
                     embedVar.set_author(name=f"New Universes have been unlocked to explore!")
-                    if crestsearch:
-                        await movecrest(selected_universe, oguild['GNAME'])
-                        embedVar.add_field(name=f"{selected_universe} CREST CLAIMED!", value=f"{oguild['GNAME']} earned the {selected_universe} **Crest**")
                     embedVar.add_field(name="Additional Reward", value=f"You earned additional rewards in your vault! Take a look.")
                     embedVar.set_footer(text="The .shop has been updated with new CARDS, TITLES and ARMS!")
                     upload_query={'DISNAME': str(ctx.author)}
@@ -3672,7 +3669,7 @@ class CrownUnlimited(commands.Cog):
                             embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!", icon_url="https://cdn.discordapp.com/emojis/841487085424214046.gif?v=1")
                         else:
                             embedVar.set_author(name="Press Q to Quit Match")
-                        embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use .ff to Force Quit this Lobby!\nUse 7 to Enhance Companion | 20 Stamina\nUse 8 to Request Assistance from Companion | 20 Stamina\nUse 9 to Request Block from Companion | 20 Stamina")
+                        embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use /ff to Force Quit this Lobby!\nUse 7 to Enhance Companion | 20 Stamina\nUse 8 to Request Assistance from Companion | 20 Stamina\nUse 9 to Request Block from Companion | 20 Stamina")
                         await private_channel.send(embed=embedVar)
                         
                         if o_used_focus and o_used_resolve:
@@ -8088,7 +8085,7 @@ class CrownUnlimited(commands.Cog):
                             embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!", icon_url="https://cdn.discordapp.com/emojis/841487085424214046.gif?v=1")
                         else:
                             embedVar.set_author(name="Press Q to Quit Match")
-                        embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use .ff to Force Quit this Lobby!\nUse 7 to Enhance Companion | 20 Stamina\nUse 8 to Request Assistance from Companion | 20 Stamina\nUse 9 to Request Block from Companion | 20 Stamina")
+                        embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use /ff to Force Quit this Lobby!\nUse 7 to Enhance Companion | 20 Stamina\nUse 8 to Request Assistance from Companion | 20 Stamina\nUse 9 to Request Block from Companion | 20 Stamina")
                         await private_channel.send(embed=embedVar)
                         
                         if o_used_focus and o_used_resolve:
@@ -12947,7 +12944,7 @@ class CrownUnlimited(commands.Cog):
                         embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!", icon_url="https://cdn.discordapp.com/emojis/841487085424214046.gif?v=1")
                     else:
                         embedVar.set_author(name="Press Q to Quit Match")
-                    embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use .ff to Force Quit this Lobby!\nUse 7 to Enhance Companion | 20 Stamina\nUse 8 to Request Assistance from Companion | 20 Stamina\nUse 9 to Request Block from Companion | 20 Stamina")
+                    embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use /ff to Force Quit this Lobby!\nUse 7 to Enhance Companion | 20 Stamina\nUse 8 to Request Assistance from Companion | 20 Stamina\nUse 9 to Request Block from Companion | 20 Stamina")
                     await private_channel.send(embed=embedVar)
                     
                     if o_used_focus and o_used_resolve:
@@ -17803,7 +17800,7 @@ class CrownUnlimited(commands.Cog):
                             embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!", icon_url="https://cdn.discordapp.com/emojis/841487085424214046.gif?v=1")
                         else:
                             embedVar.set_author(name="Press Q to Quit Match")
-                        embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use .ff to Force Quit this Lobby!\nUse 7 to Enhance Companion | 20 Stamina")
+                        embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use /ff to Force Quit this Lobby!\nUse 7 to Enhance Companion | 20 Stamina")
                         await private_channel.send(embed=embedVar)
                         
                         if o_used_focus and o_used_resolve:
@@ -19216,7 +19213,7 @@ class CrownUnlimited(commands.Cog):
                             embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!", icon_url="https://cdn.discordapp.com/emojis/841487085424214046.gif?v=1")
                         else:
                             embedVar.set_author(name="Press Q to Quit Match")
-                        embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use .ff to Force Quit this Lobby!\nUse 7 to Enhance Companion | 20 Stamina")
+                        embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use /ff to Force Quit this Lobby!\nUse 7 to Enhance Companion | 20 Stamina")
                         await private_channel.send(embed=embedVar)
                         
                         if c_used_focus and c_used_resolve:
@@ -22047,7 +22044,7 @@ class CrownUnlimited(commands.Cog):
                             embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!", icon_url="https://cdn.discordapp.com/emojis/841487085424214046.gif?v=1")
                         else:
                             embedVar.set_author(name="Press Q to Quit Match")
-                        embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use .ff to Force Quit this Lobby!")
+                        embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use /ff to Force Quit this Lobby!")
                         await private_channel.send(embed=embedVar)
                         
                         if o_used_focus and o_used_resolve:
@@ -23659,7 +23656,7 @@ class CrownUnlimited(commands.Cog):
                             embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!", icon_url="https://cdn.discordapp.com/emojis/841487085424214046.gif?v=1")
                         else:
                             embedVar.set_author(name="Press Q to Quit Match")
-                        embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use .ff to Force Quit this Lobby!")
+                        embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use /ff to Force Quit this Lobby!")
                         await private_channel.send(embed=embedVar)
                         
                         if c_used_focus and c_used_resolve:
@@ -26676,7 +26673,7 @@ class CrownUnlimited(commands.Cog):
                         embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!", icon_url="https://cdn.discordapp.com/emojis/841487085424214046.gif?v=1")
                     else:
                         embedVar.set_author(name="Press Q to Quit Match")
-                    embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use .ff to Force Quit this Lobby!")
+                    embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use /ff to Force Quit this Lobby!")
                     await private_channel.send(embed=embedVar)
                     
                     if o_used_focus and o_used_resolve:
@@ -28307,7 +28304,7 @@ class CrownUnlimited(commands.Cog):
                         embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!", icon_url="https://cdn.discordapp.com/emojis/841487085424214046.gif?v=1")
                     else:
                         embedVar.set_author(name="Press Q to Quit Match")
-                    embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use .ff to Force Quit this Lobby!")
+                    embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use /ff to Force Quit this Lobby!")
                     await private_channel.send(embed=embedVar)
                     
                     if c_used_focus and c_used_resolve:
@@ -30881,7 +30878,7 @@ class CrownUnlimited(commands.Cog):
                             embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!", icon_url="https://cdn.discordapp.com/emojis/841487085424214046.gif?v=1")
                         else:
                             embedVar.set_author(name="Press Q to Quit Match")
-                        embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use .ff to Force Quit this Lobby!")
+                        embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use /ff to Force Quit this Lobby!")
                         await private_channel.send(embed=embedVar)
                         
                         if o_used_focus and o_used_resolve:
@@ -33172,7 +33169,7 @@ class CrownUnlimited(commands.Cog):
                             embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!", icon_url="https://cdn.discordapp.com/emojis/841487085424214046.gif?v=1")
                         else:
                             embedVar.set_author(name="Press Q to Quit Match")
-                        embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use .ff to Force Quit this Lobby!")
+                        embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use /ff to Force Quit this Lobby!")
                         await private_channel.send(embed=embedVar)
                         
                         if o_used_focus and o_used_resolve:
@@ -34268,9 +34265,6 @@ class CrownUnlimited(commands.Cog):
                 if currentopponent == (total_legends):
                     embedVar = discord.Embed(title=f"UNIVERSE CONQUERED", description=f"Universe {selected_universe} has been conquered\n\n{drop_response}", colour=0xe91e63)
                     embedVar.set_author(name=f"New Universes have been unlocked to explore!")
-                    if crestsearch:
-                        await movecrest(selected_universe, oguild['GNAME'])
-                        embedVar.add_field(name=f"{selected_universe} CREST CLAIMED!", value=f"{oguild['GNAME']} earned the {selected_universe} **Crest**")
                     embedVar.add_field(name="Additional Reward", value=f"You earned additional rewards in your vault! Take a look.")
                     embedVar.set_footer(text="The .shop has been updated with new CARDS, TITLES and ARMS!")
                     upload_query={'DISNAME': str(ctx.author)}
@@ -35342,7 +35336,7 @@ class CrownUnlimited(commands.Cog):
                         embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!", icon_url="https://cdn.discordapp.com/emojis/841487085424214046.gif?v=1")
                     else:
                         embedVar.set_author(name="Press Q to Quit Match")
-                    embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use .ff to Force Quit this Lobby!")
+                    embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use /ff to Force Quit this Lobby!")
                     await private_channel.send(embed=embedVar)
                     
                     # Make sure user is responding with move
@@ -37560,7 +37554,7 @@ class CrownUnlimited(commands.Cog):
                                 embedVar.set_author(name="Press Q to Quit Match.\n**Press 5 to Strengthen Resolve!**")
                             else:
                                 embedVar.set_author(name="Press Q to Quit Match")
-                            embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use .ff to Force Quit this Lobby!")
+                            embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use /ff to Force Quit this Lobby!")
                             await ctx.send(embed=embedVar)
 
                             if o_used_focus and o_used_resolve:
@@ -38208,7 +38202,7 @@ class CrownUnlimited(commands.Cog):
                                     embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!", icon_url="https://cdn.discordapp.com/emojis/841487085424214046.gif?v=1")
                                 else:
                                     embedVar.set_author(name="Press Q to Quit Match")
-                                embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use .ff to Force Quit this Lobby!")
+                                embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use /ff to Force Quit this Lobby!")
                                 await ctx.send(embed=embedVar)
 
                                 if t_used_focus and t_used_resolve:
@@ -40266,7 +40260,7 @@ class CrownUnlimited(commands.Cog):
                                 embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!", icon_url="https://cdn.discordapp.com/emojis/841487085424214046.gif?v=1")
                             else:
                                 embedVar.set_author(name="Press Q to Quit Match")
-                            embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use .ff to Force Quit this Lobby!")
+                            embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use /ff to Force Quit this Lobby!")
                             await ctx.send(embed=embedVar)
 
                             if o_used_focus and o_used_resolve:
@@ -40877,7 +40871,7 @@ class CrownUnlimited(commands.Cog):
                                     embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!", icon_url="https://cdn.discordapp.com/emojis/841487085424214046.gif?v=1")
                                 else:
                                     embedVar.set_author(name="Press Q to Quit Match")
-                                embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use .ff to Force Quit this Lobby!")
+                                embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use /ff to Force Quit this Lobby!")
                                 await ctx.send(embed=embedVar)
 
                                 if t_used_focus and t_used_resolve:
@@ -42934,7 +42928,7 @@ class CrownUnlimited(commands.Cog):
                                 embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!", icon_url="https://cdn.discordapp.com/emojis/841487085424214046.gif?v=1")
                             else:
                                 embedVar.set_author(name="Press Q to Quit Match")
-                            embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use .ff to Force Quit this Lobby!")
+                            embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use /ff to Force Quit this Lobby!")
                             await ctx.send(embed=embedVar)
 
                             if o_used_focus and o_used_resolve:
@@ -43445,7 +43439,7 @@ class CrownUnlimited(commands.Cog):
                                     embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!", icon_url="https://cdn.discordapp.com/emojis/841487085424214046.gif?v=1")
                                 else:
                                     embedVar.set_author(name="Press Q to Quit Match")
-                                embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use .ff to Force Quit this Lobby!")
+                                embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use /ff to Force Quit this Lobby!")
                                 await ctx.send(embed=embedVar)
 
                                 if t_used_focus and t_used_resolve:
@@ -45404,7 +45398,7 @@ class CrownUnlimited(commands.Cog):
                                 embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!", icon_url="https://cdn.discordapp.com/emojis/841487085424214046.gif?v=1")
                             else:
                                 embedVar.set_author(name="Press Q to Quit Match")
-                            embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use .ff to Force Quit this Lobby!")
+                            embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use /ff to Force Quit this Lobby!")
                             await ctx.send(embed=embedVar)
 
                             if o_used_focus and o_used_resolve:
@@ -45915,7 +45909,7 @@ class CrownUnlimited(commands.Cog):
                                     embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!", icon_url="https://cdn.discordapp.com/emojis/841487085424214046.gif?v=1")
                                 else:
                                     embedVar.set_author(name="Press Q to Quit Match")
-                                embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use .ff to Force Quit this Lobby!")
+                                embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use /ff to Force Quit this Lobby!")
                                 await ctx.send(embed=embedVar)
 
                                 if t_used_focus and t_used_resolve:
@@ -47891,7 +47885,7 @@ class CrownUnlimited(commands.Cog):
                                 embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!", icon_url="https://cdn.discordapp.com/emojis/841487085424214046.gif?v=1")
                             else:
                                 embedVar.set_author(name="Press Q to Quit Match")
-                            embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use .ff to Force Quit this Lobby!")
+                            embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use /ff to Force Quit this Lobby!")
                             await ctx.send(embed=embedVar)
 
                             if o_used_focus and o_used_resolve:
@@ -48520,7 +48514,7 @@ class CrownUnlimited(commands.Cog):
                                     embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!", icon_url="https://cdn.discordapp.com/emojis/841487085424214046.gif?v=1")
                                 else:
                                     embedVar.set_author(name="Press Q to Quit Match")
-                                embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use .ff to Force Quit this Lobby!")
+                                embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use /ff to Force Quit this Lobby!")
                                 await ctx.send(embed=embedVar)
 
                                 if t_used_focus and t_used_resolve:
@@ -50429,7 +50423,7 @@ class CrownUnlimited(commands.Cog):
                                 embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!", icon_url="https://cdn.discordapp.com/emojis/841487085424214046.gif?v=1")
                             else:
                                 embedVar.set_author(name="Press Q to Quit Match")
-                            embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use .ff to Force Quit this Lobby!")
+                            embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use /ff to Force Quit this Lobby!")
                             await ctx.send(embed=embedVar)
 
                             if o_used_focus and o_used_resolve:
@@ -50940,7 +50934,7 @@ class CrownUnlimited(commands.Cog):
                                     embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!", icon_url="https://cdn.discordapp.com/emojis/841487085424214046.gif?v=1")
                                 else:
                                     embedVar.set_author(name="Press Q to Quit Match")
-                                embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use .ff to Force Quit this Lobby!")
+                                embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use /ff to Force Quit this Lobby!")
                                 await ctx.send(embed=embedVar)
 
                                 if t_used_focus and t_used_resolve:
@@ -52928,7 +52922,7 @@ class CrownUnlimited(commands.Cog):
                         embedVar.set_author(name="Press Q to Quit Match.\nPress 5 to Strengthen Resolve!", icon_url="https://cdn.discordapp.com/emojis/841487085424214046.gif?v=1")
                     else:
                         embedVar.set_author(name="Press Q to Quit Match")
-                    embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use .ff to Force Quit this Lobby!")
+                    embedVar.set_footer(text="Use 1 for Basic Attack, 2 for Special Attack, 3 for Ultimate Move, and 4 for Enhancer. Use /ff to Force Quit this Lobby!")
                     await ctx.send(embed=embedVar)
 
                     if o_used_focus and o_used_resolve:
@@ -54264,10 +54258,10 @@ class CrownUnlimited(commands.Cog):
         for uni in universe_data:
             available = ""
             if len(uni['CROWN_TALES']) > 2:
-                available = "🟢"
+                available = f"🟢 |{Crest_dict[uni]}"
                 available_universes.append(f"{available} {uni['TITLE']}")
             else:
-                available = "🟠"
+                available = f"🟠 |{Crest_dict[uni]}"
                 unavailable_universes.append(f"{available} {uni['TITLE']}")
 
         all_universes = []
@@ -54393,6 +54387,7 @@ class CrownUnlimited(commands.Cog):
         embeds = embed_list
         await paginator.run(embeds)
 
+    @cog_ext.cog_slash(description="View all Guild Halls for purchase", guild_ids=main.guild_ids)
 
     @cog_ext.cog_slash(description="Quit Match", guild_ids=main.guild_ids)
     async def ff(self, ctx: SlashContext):
@@ -55326,8 +55321,7 @@ async def movecrest(universe, guild):
         universe_guild = db.updateUniverse({'TITLE' : universe_name}, {'$set' : {'GUILD' : guild_name}})
     else:
         print("Guild not found: Crest")
-    
-    
+       
 async def drops(player, universe, matchcount):
     all_available_drop_cards = db.queryDropCards(universe)
     all_available_drop_titles = db.queryDropTitles(universe)
