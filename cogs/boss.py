@@ -26,16 +26,6 @@ class Boss(commands.Cog):
     async def cog_check(self, ctx):
         return await main.validate_user(ctx)
 
-    # @commands.command()
-    # async def nb(self, ctx, image: str, *args):
-    #     if ctx.author.guild_permissions.administrator == True:
-    #         boss = " ".join([*args])
-    #         boss_query = {'NAME': str(boss), 'PATH' : str(image)}
-    #         added = db.createBoss(data.newBoss(boss_query))
-    #         await ctx.send(added)
-    #     else:
-    #         print(m.ADMIN_ONLY_COMMAND)
-
     @cog_ext.cog_slash(description="View a Boss", guild_ids=main.guild_ids)
     async def viewboss(self, ctx, boss : str):
         uboss_name = boss

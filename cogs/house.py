@@ -26,16 +26,6 @@ class House(commands.Cog):
     async def cog_check(self, ctx):
         return await main.validate_user(ctx)
 
-    # @commands.command()
-    # async def nh(self, ctx, path, *args):
-    #     if ctx.author.guild_permissions.administrator == True:
-    #         house = " ".join([*args])
-    #         house_query = {'HOUSE': str(house), 'PATH':path, 'PRICE': 500}
-    #         added = db.createHouse(data.newHouse(house_query))
-    #         await ctx.send(added)
-    #     else:
-    #         print(m.ADMIN_ONLY_COMMAND)
-
 
     @cog_ext.cog_slash(description="Buy a House for your family", guild_ids=main.guild_ids)
     async def buyhouse(self, ctx, house: str):

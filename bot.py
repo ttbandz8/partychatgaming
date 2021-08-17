@@ -91,10 +91,6 @@ async def help(ctx):
    embeds = [embedVar2,embedVar3, embedVar1]
    await paginator.run(embeds)
 
-@slash.slash(name="Ping", description="Ping server speed", guild_ids=guild_ids)
-async def ping(ctx):
-   await ctx.send(f'Local Test Bot speed = {round(bot.latency * 1000)}ms')
-
 async def validate_user(ctx):
    query = {'DISNAME': str(ctx.author)}
    valid = db.queryUser(query)
@@ -415,12 +411,12 @@ async def r(ctx):
 
       embedVar = discord.Embed(title=f"**Welcome to Crown Unlimited**!", description=textwrap.dedent(f"""
       Embark on a journey through Universes filled with characters from your favorite anime and video games!
-      First, run **.daily** to get your daily rewards!
+      First, run **/daily** to get your daily rewards!
 
       Type **/menu** for quick overview on what to do next! Checkout the tutorials below if you need additional assistance!
 
       Start Tutorial!
-      **/senpai**
+      **/crown**
 
       Start Battle Tutorial!
       **/senpaibattle**
@@ -641,15 +637,15 @@ async def rebirth(ctx):
             await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=3)
       else:
          await ctx.send(f"You are at full Rebirth\n:angel:Level: {user_is_validated['REBIRTH']} ", delete_after=5)
-      
-@bot.command()
-@commands.check(validate_user)
-async def purge(ctx, amount: int):
-   if ctx.author.guild_permissions.administrator == True:
-      await ctx.channel.purge(limit=amount)
-      await ctx.send(f"{amount} messages have been purged.")
-   else:
-      print(m.ADMIN_ONLY_COMMAND)
+
+# @bot.command()
+# @commands.check(validate_user)
+# async def purge(ctx, amount: int):
+#    if ctx.author.guild_permissions.administrator == True:
+#       await ctx.channel.purge(limit=amount)
+#       await ctx.send(f"{amount} messages have been purged.")
+#    else:
+#       print(m.ADMIN_ONLY_COMMAND)
 
 @bot.command()
 @commands.check(validate_user)
@@ -662,9 +658,9 @@ async def fix(ctx, player: User):
       print(m.ADMIN_ONLY_COMMAND)
 
 @bot.event
-async def daily_error_message(ctx,error):
-   if isinstance(error, commands.CommandOnCooldown): # Checks Cooldown
-      msg = 'You have already claimed your daily. Try again in {:.2f}s'.format(error.retry_after)
+async def on_slash_command_error(ctx, ex):
+   if isinstance(ex, commands.CommandOnCooldown): # Checks Cooldown
+      msg = 'You have already claimed your daily. Try again in {:.2f}s'.format(ex.retry_after)
       await ctx.author.send(msg)
 
 @slash.slash(name="Daily", description="Receive your daily reward and quests", guild_ids=guild_ids)
@@ -1531,7 +1527,7 @@ async def addfield(ctx, collection, new_field, field_type):
    
 
 
-@bot.command()
+@slash.slash(name="Referred", description="Let us know if someone referred you the game", guild_ids=guild_ids)
 @commands.check(validate_user)
 async def referred(ctx, player: User):
    user = player
@@ -1591,15 +1587,6 @@ async def menu(ctx):
    except Exception as e:
       await ctx.send(f"Error has occurred: {e}")
 
-# @bot.command()
-# @commands.check(validate_user)
-# async def newmenu(ctx):
-#    try:
-#       response = db.createMenu({'PATH': 'https://res.cloudinary.com/dkcmq8o15/image/upload/v1627880815/menu/Profile_Mode.jpg', 'NAME': 'Profile'})
-#       await ctx.send("New menu added")
-#    except Exception as e:
-#       print(e)
-#       return
 
 if config('ENV') == "production":
    DISCORD_TOKEN = config('DISCORD_TOKEN_TEST')
