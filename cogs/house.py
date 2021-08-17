@@ -73,13 +73,13 @@ class House(commands.Cog):
             message=""
             
             price_message ="" 
-            price_message = f":coin: {house_price}"
+            price_message = f":coin: {'{:,}'.format(house_price)}"
 
 
             embedVar = discord.Embed(title=f"{house_house}\n{price_message}".format(self), colour=000000)
             embedVar.set_thumbnail(url=house_img)
-            embedVar.add_field(name="Multiplier", value=f"Family earns {house_multiplier}x :coin: per match!", inline=False)
-            embedVar.set_footer(text=f".houses - House Menu")
+            embedVar.add_field(name="Income Multiplier", value=f"Family earns **{house_multiplier}x** :coin: per match!", inline=False)
+            embedVar.set_footer(text=f"/houses - House Menu")
 
             await ctx.send(embed=embedVar)
 

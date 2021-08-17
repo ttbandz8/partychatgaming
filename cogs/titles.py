@@ -178,7 +178,7 @@ class Titles(commands.Cog):
             if exclusive:
                 price_message = "_Priceless_"
             else:
-                price_message = f":coin: {title_price}"
+                price_message = f":coin: {'{:,}'.format(title_price)}"
 
             if o_title_passive_type == 'ATK':
                 message=f"{title_title} is an ATK title"

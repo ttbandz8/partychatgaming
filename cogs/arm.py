@@ -174,7 +174,7 @@ class Arm(commands.Cog):
             if exclusive:
                 price_message = "_Priceless_"
             else:
-                price_message = f":coin: {arm_price}"
+                price_message = f":coin: {'{:,}'.format(arm_price)}"
 
             if o_arm_passive_type == 'ATK':
                 message=f"{arm_arm} is an ATK arm"

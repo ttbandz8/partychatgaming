@@ -18,6 +18,7 @@ db = mongo[use_database]
 users_col = db["USERS"]
 teams_col = db["TEAMS"]
 family_col = db["FAMILY"]
+guild_col = db["GUILD"]
 sessions_col = db["SESSIONS"]
 games_col = db["GAMES"]
 matches_col = db["MATCHES"]
@@ -31,6 +32,7 @@ boss_col = db['BOSS']
 pet_col = db['PET']
 vault_col =db["VAULT"]
 house_col =db["HOUSE"]
+hall_col =db["HALL"]
 menu_col = db['MENU']
 
 '''Check if Collection Exists'''
@@ -68,6 +70,239 @@ def createMenu(menu):
         return e
 
 #########################################################################
+''' GUILD '''
+def guild_exists(data):
+    collection_exists = col_exists("GUILD")
+    if collection_exists:
+        guild = guild_col.find_one(data)
+        if guild:
+            return True
+        else:
+            return False
+    else:
+        return False
+
+def updateManyGuild(new_value):
+    guild_col.update_many({}, new_value)
+    return True
+
+def queryGuild(guild):
+    try:
+        exists = guild_exists({'FOUNDER': guild['FOUNDER']})
+        if exists:
+            data = guild_col.find_one(guild)
+            return data
+        else:
+           return False
+    except:
+        print("Find guild failed.")
+        
+def queryGuildAlt(guild):
+    try:
+        exists = guild_exists({'GNAME': guild['GNAME']})
+        if exists:
+            data = guild_col.find_one(guild)
+            return data
+        else:
+           return False
+    except:
+        print("Find guild failed.")
+
+def updateGuild(query, new_value):
+    try:
+        exists = guild_exists({'FOUNDER': query['FOUNDER']})
+        if exists:
+            data = guild_col.update_one(query, new_value)
+            return data
+        else:
+           return False
+    except:
+        print("Find guild failed.")
+        
+def updateGuildAlt(query, new_value):
+    try:
+        exists = guild_exists({'GNAME': query['GNAME']})
+        if exists:
+            data = guild_col.update_one(query, new_value)
+            return data
+        else:
+           return False
+    except:
+        print("Find guild failed.")
+
+def queryAllGuild(guild):
+    data = guild_col.find()
+    return data
+
+def createGuild(guild, user, name):
+    guild_name = name
+    try:
+        find_user = queryUser({'DISNAME': user})
+        if find_user['GUILD'] and find_user['GUILD'] != 'PCG':
+            return "User is already part of a Guild. "
+        else:
+            exists = guild_exists({'FOUNDER': guild['FOUNDER']})
+            if exists:
+                return "Guild already exists."
+            else:
+                print("Inserting new Guild.")
+                guild_col.insert_one(guild)
+
+                # Add Team to User Profile as well
+                query = {'DISNAME': user}
+                new_value = {'$set': {'GUILD': guild_name}}
+                users_col.update_one(query, new_value)
+                find_user = queryUser({'DISNAME': user})
+                return f"{user} has founded the Guild: {find_user['GUILD']} . "
+    except:
+        return "Cannot create Guild."
+
+def deleteGuild(guild, user):
+    try:
+        exists = guild_exists({'FOUNDER': guild['FOUNDER']})
+        if exists:
+            guild = guild_col.find_one(guild)
+            if user == guild['FOUNDER']:
+                users_col.update_many({'GUILD': guild['GNAME']}, {'$set': {'GUILD': 'PCG'}})
+                teams_col.update_many({'GUILD': guild['GNAME']}, {'$set': {'GUILD': 'PCG'}})
+                guild_col.delete_one({'FOUNDER': guild['FOUNDER']})
+                return f"Guild {guild['GNAME']} deleted."
+            else:
+                return "This user is not a member of the Guild."
+        else:
+            return "Guild does not exist."
+
+    except:
+        return "Delete Guild failed."
+
+def deleteGuildSworn(query, value, user, new_user):
+    try:
+        exists = guild_exists({'FOUNDER': query['FOUNDER']})
+        if exists:
+            guild = guild_col.find_one(query)
+            if user == guild['FOUNDER']:
+                update = guild_col.update_one(query, value, upsert=True)
+                # Add Team to User Profile as well
+                query = {'DISNAME': str(new_user)}
+                new_value = {'$set': {'GUILD': 'PCG'}}
+                users_col.update_one(query, new_value)
+                return f"{new_user} has been removed from {guild['GNAME']}. "
+            else:
+                return "This user is not a member of the guild."
+        else:
+            return "Guild does not exist."
+
+    except:
+        print("Delete Team Member failed.")
+
+def deleteGuildSwornAlt(query, value, user):
+    try:
+        exists = guild_exists({'FOUNDER': query['FOUNDER']})
+        if exists:
+            guild = guild_col.find_one(query)
+            if user in guild['SWORN']:
+                update = guild_col.update_one(query, value, upsert=True)
+                # Add Team to User Profile as well
+                query = {'DISNAME': str(user)}
+                new_value = {'$set': {'GUILD': 'PCG'}}
+                users_col.update_one(query, new_value)
+                return f"{new_user} has been removed from {guild['GNAME']}."
+            else:
+                return "This user is not a member of the guild."
+        else:
+            return "Guild does not exist."
+
+    except:
+        print("Delete Team Member failed.")
+
+def addGuildShield(query, add_to_guild_query, user, new_user):
+    exists = guild_exists({'FOUNDER': query['FOUNDER']})
+    if exists:
+        guild = guild_col.find_one(query)
+        if user == guild['FOUNDER'] or guild['SWORN']:
+            guild_col.update_one(query, add_to_guild_query, upsert=True)
+
+             # Add Team to User Profile as well
+            query = {'DISNAME': new_user}
+            new_value = {'$set': {'GUILD': guild['GNAME']}}
+            users_col.update_one(query, new_value)
+            return f"{new_user} became the Shield of {guild['GNAME']}. "
+        else:
+            return "The Owner of the Guild can add new members. "
+    else:
+        return "Cannot add user to the Guild."
+
+def addGuildSworn(query, add_to_guild_query, user, new_user):
+    exists = guild_exists({'FOUNDER': query['FOUNDER']})
+    if exists:
+        guild = guild_col.find_one(query)
+        if user == guild['FOUNDER']:
+            guild_col.update_one(query, add_to_guild_query, upsert=True)
+
+             # Add Team to User Profile as well
+            query = {'DISNAME': new_user}
+            new_value = {'$set': {'GUILD': guild['GNAME']}}
+            users_col.update_one(query, new_value)
+            return f"{new_user} became the Sworn of {guild['GNAME']}. "
+        else:
+            return "The Owner of the Guild can add new members. "
+    else:
+        return "Cannot add user to the Guild."
+    
+def addGuildSword(query, add_to_guild_query, user, new_team):
+    exists = guild_exists({'FOUNDER': query['FOUNDER']})
+    if exists:
+        guild = guild_col.find_one(query)
+        if user == guild['FOUNDER'] or guild['SWORN']:
+            guild_col.update_one(query, add_to_guild_query, upsert=True)
+
+             # Add Guild to Team Profile as well
+            query = {'TNAME': new_team}
+            new_value = {'$set': {'GUILD': guild['GNAME']}}
+            teams_col.update_one(query, new_value) 
+            return f"{new_team} enlisted as a {guild['GNAME']} Sword!. "
+        else:
+            return "The Owner of the Guild can add new members. "
+    else:
+        return "Cannot add user to the Guild."
+    
+def deleteGuildSword(query, value, user, new_team):
+    try:
+        exists = guild_exists({'FOUNDER': query['FOUNDER']})
+        if exists:
+            guild = guild_col.find_one(query)
+            if user == guild['FOUNDER'] or guild['SWORN']:
+                update = guild_col.update_one(query, value, upsert=True)
+                # Add Team to User Profile as well
+                query = {'TNAME': new_team}
+                new_value = {'$set': {'GUILD': 'PCG'}}
+                teams_col.update_one(query, new_value) 
+                return f"{new_team} renounced their oath to {guild['GNAME']}!."
+            else:
+                return "This user is not a member of the guild."
+        else:
+            return "Guild does not exist."
+
+    except:
+        print("Delete Team Member failed.")
+        
+def deleteGuildSwordAlt(query, value, new_team):
+    try:
+        exists = guild_exists({'GNAME': query['GNAME']})
+        if exists:
+            guild = guild_col.find_one(query)
+            update = guild_col.update_one(query, value, upsert=True)
+            # Add Team to User Profile as well
+            query = {'TNAME': new_team}
+            new_value = {'$set': {'GUILD': 'PCG'}}
+            teams_col.update_one(query, new_value) 
+            return f"{new_team} renounced their oath to {guild['GNAME']}!."
+        else:
+            return "Guild does not exist."
+
+    except:
+        print("Delete Team Member failed.")
+        
 ''' FAMILY '''
 def family_exists(data):
     collection_exists = col_exists("FAMILY")
@@ -670,6 +905,64 @@ def queryTournamentArms():
 def queryShopArms():
     data = arm_col.find({'EXCLUSIVE': False, 'AVAILABLE': True})
     return data 
+
+''' HALL '''
+def hall_exist(data):
+    collection_exists = col_exists("HALL")
+    if collection_exists:
+        hall_does_exist = hall_col.col.find_one(data)
+        if hall_does_exist:
+            return True
+        else:
+            return False
+    else:
+        return False
+
+def createHall(hall):
+    try:
+        hallexists = hall_exist({'HALL': hall['HALL']})
+        if hallexists:
+            return "HALL already exists."
+        else:
+            hall_col.insert_one(hall)
+            return "New HALL created."
+    except:
+        return "Cannot create HALL."
+
+def updateHall(query, new_value):
+    try:
+        hallexists = hall_exist({'HALL': query['HALL']})
+        if hallexists:
+            hall_col.update_one(query, new_value)
+            return True
+        else:
+            return False
+    except:
+        return False
+
+def updateManyHalls(new_value):
+    hall_col.update_many({}, new_value)
+    return True
+
+def deleteHall(query):
+    try:
+        hallexists = hall_exist({'HALL': query['HALL']})
+        if hallexists:
+            hall_col.delete_one(query)
+            return True
+        else:
+            return False
+    except:
+        return False
+
+def queryAllHalls():
+    data = hall_col.find()
+    return data
+
+
+def queryHall(query):
+    data = hall_col.find_one(query)
+    return data
 
 
 ''' HOUSE '''

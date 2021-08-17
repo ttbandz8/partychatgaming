@@ -33,10 +33,11 @@ class Profile(commands.Cog):
     async def cog_check(self, ctx):
         return await main.validate_user(ctx)
 
-    @cog_ext.cog_slash(description="Delete your account", guild_ids=main.guild_ids)
-    async def d(self, ctx, user: User, password: str):
+    @cog_ext.cog_slash(description="Delete your account (password - IWANTTODELETEMYACCOUNT)", guild_ids=main.guild_ids)
+    async def deleteaccount(self, ctx, account: User, password: str):
+        user = account
         if password == 'IWANTTODELETEMYACCOUNT':
-            if str(ctx.author) == str(user):
+            if str(ctx.author) == str(account):
                 query = {'DISNAME': str(ctx.author)}
                 user_is_validated = db.queryUser(query)
                 if user_is_validated:
@@ -192,7 +193,10 @@ class Profile(commands.Cog):
             resolved = False
             focused = False
             cardtitle = {'TITLE': 'CARD PREVIEW'}
-            card_file = showcard(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, cardtitle, focused)
+            att = 0
+            defe = 0
+            turn = 0
+            card_file = showcard(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, cardtitle, focused, att, defe, turn)
 
             passive_name = list(o_passive.keys())[0]
             passive_num = list(o_passive.values())[0]
@@ -215,24 +219,24 @@ class Profile(commands.Cog):
 
             embedVar = discord.Embed(title=f":trident: {card_lvl} | {title_name} {o_card} & {active_pet['NAME']}:".format(self), description=textwrap.dedent(f"""\
             {message}
-            :heart: **Health** - {o_max_health} {hlt_buff}
-            :cyclone: **Stamina** - {o_max_stamina}
-            :dagger: **Attack** - {o_attack} {atk_buff}
-            :shield: **Shield** - {o_defense} {def_buff}
+            :heart: | **Health** - {o_max_health} {hlt_buff}
+            :cyclone: | **Stamina** - {o_max_stamina}
+            :dagger: | **Attack** - {o_attack} {atk_buff}
+            :shield: | **Shield** - {o_defense} {def_buff}
             
-            :reminder_ribbon: **Title** - {title_name} ~ {title_passive_type} | {title_passive_value}
-            :mechanical_arm: **Arm** - {arm_name} ~ {arm_passive_type} | {arm_passive_value}
-            :bird: **Pet** - {active_pet['NAME']} ~ {active_pet['TYPE']} | {pet_ability_power} 
-            **Bond** _{bond}_ {bond_message} / **Level** _{lvl}_
+            :reminder_ribbon: | **Title** - {title_name} ~ {title_passive_type} | {title_passive_value}
+            :mechanical_arm: | **Arm** - {arm_name} ~ {arm_passive_type} | {arm_passive_value}
+            :bird: | **Pet** - {active_pet['NAME']} ~ {active_pet['TYPE']} | {pet_ability_power} 
+            **Bond** _{bond}_ {bond_message} / **Level** _{lvl}_ {lvl_message}
         
             _**Moveset**_
-            :boom: **{move1}:** {move1ap}
-            :comet: **{move2}:** {move2ap}
-            :rosette: **{move3}:** {move3ap}
-            :microbe: **{move4}:** {move4enh} by {move4ap}
+            :boom: | **{move1}:** {move1ap}
+            :comet: | **{move2}:** {move2ap}
+            :rosette: | **{move3}:** {move3ap}
+            :microbe: | **{move4}:** {move4enh} by {move4ap}
             
-            :drop_of_blood: _Passive:_ **{passive_name}:** {passive_type} by {passive_num}
-            :infinity: {traitmessage}
+            :drop_of_blood: | _Passive:_ **{passive_name}:** {passive_type} by {passive_num}
+            :infinity: | {traitmessage}
             """)
             
             , colour=000000)
@@ -244,170 +248,8 @@ class Profile(commands.Cog):
         else:
             await ctx.send(m.USER_NOT_REGISTERED, delete_after=3)
 
-    @cog_ext.cog_slash(description="View a build from your deck", guild_ids=main.guild_ids)
-    async def abuild(self, ctx, deck: int):
-        if deck >= 4:
-            await ctx.send("Select deck 1-3.")
-            return
-        selection = deck - 1
-        vault = db.queryVault({'OWNER': str(ctx.author)})
-        decks = vault['DECK']
-        query = {'DISNAME': str(ctx.author)}
-        d = db.queryUser(query)
-        card = db.queryCard({'NAME':str(decks[selection]['CARD'])})
-        title = db.queryTitle({'TITLE': str(decks[selection]['TITLE'])})
-        arm = db.queryArm({'ARM': str(decks[selection]['ARM'])})
-        if card:
-            oarm_universe = arm['UNIVERSE']
-            o_title_universe = title['UNIVERSE']
-            o_card = card['NAME']
-            o_card_path=card['PATH']
-            o_max_health = card['HLT']
-            o_health = card['HLT']
-            o_stamina = card['STAM']
-            o_max_stamina = card['STAM']
-            o_moveset = card['MOVESET']
-            o_attack = card['ATK']
-            o_defense = card['DEF']
-            o_type = card['TYPE']
-            o_accuracy = card['ACC']
-            o_passive = card['PASS'][0]
-            o_speed = card['SPD']
-            o_show = card['UNIVERSE']
-            o_collection = card['COLLECTION']
-            o_destiny = card['HAS_COLLECTION']
-            o_rebirth = d['REBIRTH']
-            rebirthBonus = o_rebirth * 10
-            traits = ut.traits
-            mytrait = {}
-            traitmessage = ''
-            for trait in traits:
-                if trait['NAME'] == o_show:
-                    mytrait = trait
-                if o_show == 'Kanto Region' or o_show == 'Johto Region' or o_show == 'Kalos Region' or o_show == 'Unova Region' or o_show == 'Sinnoh Region' or o_show == 'Hoenn Region' or o_show == 'Galar Region' or o_show == 'Alola Region':
-                    if trait['NAME'] == 'Pokemon':
-                        mytrait = trait
-            if mytrait:
-                traitmessage = f"**{mytrait['EFFECT']}**: {mytrait['TRAIT']}"
-
-            pets = vault['PETS']
-            active_pet = {}
-            pet_names = []
-
-            for pet in pets:
-                pet_names.append(pet['NAME'])
-                if pet['NAME'] == decks[selection]['PET']:
-                    active_pet = pet
-
-            power = list(active_pet.values())[3]
-            pet_ability_power = (active_pet['BOND'] * active_pet['LVL']) + power
-            bond = active_pet['BOND']
-            lvl = active_pet['LVL']
-
-            bond_message = ""
-            lvl_message = ""
-            if bond == 3:
-                bond_message = ":star2:"
-            
-            if lvl == 10:
-                lvl_message = ":star:"
-
-            arm_name = arm['ARM']
-            arm_passive = arm['ABILITIES'][0]
-            arm_passive_type = list(arm_passive.keys())[0]
-            arm_passive_value = list(arm_passive.values())[0]
-            title_name= title['TITLE']
-            title_passive = title['ABILITIES'][0]
-            title_passive_type = list(title_passive.keys())[0]
-            title_passive_value = list(title_passive.values())[0]
-
-            o_1 = o_moveset[0]
-            o_2 = o_moveset[1]
-            o_3 = o_moveset[2]
-            o_enhancer = o_moveset[3]
-            
-            # Move 1
-            move1 = list(o_1.keys())[0]
-            move1ap = list(o_1.values())[0]
-            move1_stamina = list(o_1.values())[1]
-            
-            # Move 2
-            move2 = list(o_2.keys())[0]
-            move2ap = list(o_2.values())[0]
-            move2_stamina = list(o_2.values())[1]
-
-            # Move 3
-            move3 = list(o_3.keys())[0]
-            move3ap = list(o_3.values())[0]
-            move3_stamina = list(o_3.values())[1]
-
-            # Move Enhancer
-            move4 = list(o_enhancer.keys())[0]
-            move4ap = list(o_enhancer.values())[0]
-            move4_stamina = list(o_enhancer.values())[1]
-            move4enh = list(o_enhancer.values())[2]
-
-
-            resolved = False
-            focused = False
-            cardtitle = {'TITLE': 'CARD PREVIEW'}
-            card_file = showcard(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, cardtitle, focused)
-
-            passive_name = list(o_passive.keys())[0]
-            passive_num = list(o_passive.values())[0]
-            passive_type = list(o_passive.values())[1]
-
-
-            atk_buff = ""
-            def_buff = ""
-            hlt_buff = ""
-            message = ""
-            if (oarm_universe == o_show) and (o_title_universe == o_show):
-                atk_buff = f" / **{o_attack + 20}**"
-                def_buff = f" / **{o_defense + 20}**"
-                hlt_buff = f" / **{o_max_health + 100}**"
-                message = "_Universe Buff Applied_"
-                if o_destiny:
-                    atk_buff = f" / **{o_attack + 25}**"
-                    def_buff = f" / **{o_defense + 25}**"
-                    hlt_buff = f" / **{o_max_health + 150}**"
-                    message = "_Destiny Buff Applied_"
-
-            embedVar = discord.Embed(title=f"PRESET: {deck}\n{title_name} {o_card} & {active_pet['NAME']}:".format(self), description=textwrap.dedent(f"""\
-            {message}
-            :heart: {o_max_health} {hlt_buff}
-            :cyclone: {o_max_stamina}
-            **Attack:** {o_attack} {atk_buff}
-            **Defense:** {o_defense} {def_buff}
-            **Speed:** {o_speed}
-            _Title:_ **{title_name}:** {title_passive_type} {title_passive_value}
-            _Arm:_ **{arm_name}:** {arm_passive_type} {arm_passive_value}
-            _Pet:_ **{active_pet['NAME']}:** {active_pet['TYPE']} {pet_ability_power}
-            _Pet Level:_ _B_ **{bond}** {bond_message} / _L_ **{lvl}**
-            _Rebirth Buff:_ +**{rebirthBonus}**
-
-            _**Moveset**_
-            **{move1}:** {move1ap}
-            **{move2}:** {move2ap}
-            **{move3}:** {move3ap}
-            **{move4}:** {move4enh} by {move4ap}
-            
-            _Unique Passive:_ **{passive_name}:** {passive_type} by {passive_num}
-
-            {traitmessage}
-            """)
-            
-            , colour=000000)
-            embedVar.set_thumbnail(url=active_pet['PATH'])
-            embedVar.set_image(url=o_card_path)
-            embedVar.set_footer(text=f".enhance - Enhancement Menu")
-
-            await ctx.send(embed=embedVar)
-        else:
-            await ctx.send(m.USER_NOT_REGISTERED, delete_after=3)
-
     @cog_ext.cog_slash(description="Check all your cards", guild_ids=main.guild_ids)
-    async def cvault(self, ctx):
+    async def cards(self, ctx):
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
         vault = db.queryVault({'OWNER': d['DISNAME']})
@@ -477,7 +319,7 @@ class Profile(commands.Cog):
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
     @cog_ext.cog_slash(description="Check all your titles", guild_ids=main.guild_ids)
-    async def tvault(self, ctx):
+    async def titles(self, ctx):
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
         vault = db.queryVault({'OWNER': d['DISNAME']})
@@ -543,7 +385,7 @@ class Profile(commands.Cog):
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
     @cog_ext.cog_slash(description="Check all your arms", guild_ids=main.guild_ids)
-    async def avault(self, ctx):
+    async def arms(self, ctx):
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
         vault = db.queryVault({'OWNER': d['DISNAME']})
@@ -610,7 +452,7 @@ class Profile(commands.Cog):
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
     @cog_ext.cog_slash(description="Check all your pets", guild_ids=main.guild_ids)
-    async def pvault(self, ctx):
+    async def pets(self, ctx):
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
         vault = db.queryVault({'OWNER': d['DISNAME']})
@@ -687,7 +529,7 @@ class Profile(commands.Cog):
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
     @cog_ext.cog_slash(description="Check all your destiny lines", guild_ids=main.guild_ids)
-    async def destiny(self, ctx):
+    async def destinies(self, ctx):
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
         vault = db.queryVault({'OWNER': d['DISNAME']})
@@ -756,7 +598,7 @@ class Profile(commands.Cog):
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
     @cog_ext.cog_slash(description="Check all your quests", guild_ids=main.guild_ids)
-    async def quest(self, ctx):
+    async def quests(self, ctx):
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
         vault = db.queryVault({'OWNER': d['DISNAME']})
@@ -827,8 +669,8 @@ class Profile(commands.Cog):
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
-    @cog_ext.cog_slash(description="Check your decks", guild_ids=main.guild_ids)
-    async def deck(self, ctx):
+    @cog_ext.cog_slash(description="Check your build presets", guild_ids=main.guild_ids)
+    async def preset(self, ctx):
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
         vault_query = {'OWNER': d['DISNAME']}
@@ -973,8 +815,8 @@ class Profile(commands.Cog):
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
-    @cog_ext.cog_slash(description="Check your deck", guild_ids=main.guild_ids)
-    async def savedeck(self, ctx):
+    @cog_ext.cog_slash(description="Save your current build as preset", guild_ids=main.guild_ids)
+    async def savepreset(self, ctx):
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
         vault_query = {'OWNER': d['DISNAME']}

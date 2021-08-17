@@ -268,8 +268,9 @@ class Lobbies(commands.Cog):
                 await main.DM(ctx, user, "You Lost. Get back in there!")
                 await ctx.send(f"Competitor " + f"{user.mention}" + " took an L! :eyes:")
 
-    @cog_ext.cog_slash(description="Setup PVP against player", guild_ids=main.guild_ids)
-    async def battle(self, ctx, user1: User):
+    @cog_ext.cog_slash(description="PVP against player", guild_ids=main.guild_ids)
+    async def battle(self, ctx, player: User):
+        user1 = player
         game_name = "Crown Unlimited"
         query = {'ALIASES': game_name.lower()}
         game = db.queryGame(query)
@@ -418,6 +419,7 @@ class Lobbies(commands.Cog):
                 await ctx.send(m.ADD_A_GAME)
         else:
             await ctx.send(m.GAME_UNAVAILABLE)
+
 
 def setup(bot):
     bot.add_cog(Lobbies(bot))
