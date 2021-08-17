@@ -26,17 +26,6 @@ class Hall(commands.Cog):
     async def cog_check(self, ctx):
         return await main.validate_user(ctx)
 
-    @cog_ext.cog_slash(description="New Hall", guild_ids=main.guild_ids)
-    async def xyznh(self, ctx, path: str, hallname: str):
-        if ctx.author.guild_permissions.administrator == True:
-            hall = hallname
-            hall_query = {'HALL': str(hall), 'PATH':path, 'PRICE': 500}
-            added = db.createHall(data.newHall(hall_query))
-            await ctx.send(added)
-        else:
-            print(m.ADMIN_ONLY_COMMAND)
-
-
     @cog_ext.cog_slash(description="Buy a Hall for your guild", guild_ids=main.guild_ids)
     async def buyhall(self, ctx, hall: str):
         hall_name = hall
@@ -49,10 +38,10 @@ class Hall(commands.Cog):
             return
         guild_query = {'GNAME' : guildname}
         guild = db.queryGuildAlt(guild_query)
-        hall = db.queryHall({'HALL': hall})
+        hall = db.queryHall({'HALL': {"$regex": hall, "$options": "i"}})
         currentBalance = guild['BANK']
         cost = hall['PRICE']
-
+        hall_name = hall['HALL']
         if hall:
             if hall_name in guild['HALL']:
                 await ctx.send(m.USERS_ALREADY_HAS_HALL, delete_after=5)
@@ -70,7 +59,7 @@ class Hall(commands.Cog):
 
     @cog_ext.cog_slash(description="View a Hall", guild_ids=main.guild_ids)
     async def viewhall(self, ctx, hall: str):
-        hall = db.queryHall({'HALL': str(hall)})
+        hall = db.queryHall({'HALL':{"$regex": hall, "$options": "i"}})
         if hall:
             hall_hall = hall['HALL']
             hall_price = hall['PRICE']
@@ -98,7 +87,6 @@ class Hall(commands.Cog):
 
         else:
             await ctx.send(m.ARM_DOESNT_EXIST, delete_after=3)
-
 
 
 def setup(bot):

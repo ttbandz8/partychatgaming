@@ -112,11 +112,19 @@ class CrownUnlimited(commands.Cog):
         embedVar.set_footer(text="Type Quit to exit Tales selection")
         await private_channel.send(embed=embedVar)
         accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
-
+        
         def check(msg):
-            return msg.author == ctx.author and (msg.content in available_universes) or (msg.content == "Quit") 
+            _selected = ""
+            for uni in available_universes:
+                if uni.upper() == msg.content.upper():
+                    _selected = uni
+            return msg.author == ctx.author and (_selected in available_universes) or (msg.content == "Quit") 
         try:
             msg = await self.bot.wait_for('message', timeout=30.0, check=check)
+            _selected = ""
+            for uni in available_universes:
+                if uni.upper() == msg.content.upper():
+                    _selected = uni
 
             if msg.content == "Quit":
                 await private_channel.send("Quit Tales selection. ")
@@ -124,7 +132,7 @@ class CrownUnlimited(commands.Cog):
                 return
 
             #Universe Cost
-            selected_universe = msg.content
+            selected_universe = _selected
             universe = db.queryUniverse({'TITLE': str(selected_universe)})
             universe_tier = universe['TIER']
             entrance_fee = 250
@@ -2295,10 +2303,17 @@ class CrownUnlimited(commands.Cog):
         accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
 
         def check(msg):
-
-            return msg.author == ctx.author and (msg.content in available_universes) or (msg.content == "Quit")
+            _selected = ""
+            for uni in available_universes:
+                if uni.upper() == msg.content.upper():
+                    _selected = uni
+            return msg.author == ctx.author and (_selected in available_universes) or (msg.content == "Quit") 
         try:
             msg = await self.bot.wait_for('message', timeout=30.0, check=check)
+            _selected = ""
+            for uni in available_universes:
+                if uni.upper() == msg.content.upper():
+                    _selected = uni
 
             if msg.content == "Quit":
                 await private_channel.send("Quit Tales selection. ")
@@ -6757,10 +6772,17 @@ class CrownUnlimited(commands.Cog):
         accept = await private_channel.send(f"{ctx.author.mention} which Dungeon would you like to explore, Duo!")
 
         def check(msg):
-
-            return msg.author == ctx.author and (msg.content in available_universes) or (msg.content == "Quit") 
+            _selected = ""
+            for uni in available_universes:
+                if uni.upper() == msg.content.upper():
+                    _selected = uni
+            return msg.author == ctx.author and (_selected in available_universes) or (msg.content == "Quit") 
         try:
-            msg = await self.bot.wait_for('message', timeout=60.0, check=check)
+            msg = await self.bot.wait_for('message', timeout=30.0, check=check)
+            _selected = ""
+            for uni in available_universes:
+                if uni.upper() == msg.content.upper():
+                    _selected = uni
 
             if msg.content == "Quit":
                 await private_channel.send("Quit Dungeon selection. ")
@@ -11674,12 +11696,20 @@ class CrownUnlimited(commands.Cog):
         accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
 
         def check(msg):
-            return msg.author == ctx.author and (msg.content in available_universes) or (msg.content == "Quit") 
+            _selected = ""
+            for uni in available_universes:
+                if uni.upper() == msg.content.upper():
+                    _selected = uni
+            return msg.author == ctx.author and (_selected in available_universes) or (msg.content == "Quit") 
         try:
             msg = await self.bot.wait_for('message', timeout=30.0, check=check)
+            _selected = ""
+            for uni in available_universes:
+                if uni.upper() == msg.content.upper():
+                    _selected = uni
 
             if msg.content == "Quit":
-                await private_channel.send("Quit Boss  selection. ")
+                await private_channel.send("Quit Boss selection. ")
                 db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                 return
 
@@ -16579,10 +16609,17 @@ class CrownUnlimited(commands.Cog):
         accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
 
         def check(msg):
-
-            return msg.author == ctx.author and (msg.content in available_universes) or (msg.content == "Quit")
+            _selected = ""
+            for uni in available_universes:
+                if uni.upper() == msg.content.upper():
+                    _selected = uni
+            return msg.author == ctx.author and (_selected in available_universes) or (msg.content == "Quit") 
         try:
             msg = await self.bot.wait_for('message', timeout=30.0, check=check)
+            _selected = ""
+            for uni in available_universes:
+                if uni.upper() == msg.content.upper():
+                    _selected = uni
 
             if msg.content == "Quit":
                 await private_channel.send("Quit Tales selection. ")
@@ -20906,10 +20943,17 @@ class CrownUnlimited(commands.Cog):
         accept = await private_channel.send(f"{ctx.author.mention} which Dungeon would you like to explore, co-op!")
 
         def check(msg):
-
-            return msg.author == ctx.author and (msg.content in available_universes) or (msg.content == "Quit") 
+            _selected = ""
+            for uni in available_universes:
+                if uni.upper() == msg.content.upper():
+                    _selected = uni
+            return msg.author == ctx.author and (_selected in available_universes) or (msg.content == "Quit") 
         try:
-            msg = await self.bot.wait_for('message', timeout=60.0, check=check)
+            msg = await self.bot.wait_for('message', timeout=30.0, check=check)
+            _selected = ""
+            for uni in available_universes:
+                if uni.upper() == msg.content.upper():
+                    _selected = uni
 
             if msg.content == "Quit":
                 await private_channel.send("Quit Dungeon selection. ")
@@ -25631,12 +25675,20 @@ class CrownUnlimited(commands.Cog):
         accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
 
         def check(msg):
-            return msg.author == ctx.author and (msg.content in available_universes) or (msg.content == "Quit") 
+            _selected = ""
+            for uni in available_universes:
+                if uni.upper() == msg.content.upper():
+                    _selected = uni
+            return msg.author == ctx.author and (_selected in available_universes) or (msg.content == "Quit") 
         try:
             msg = await self.bot.wait_for('message', timeout=30.0, check=check)
+            _selected = ""
+            for uni in available_universes:
+                if uni.upper() == msg.content.upper():
+                    _selected = uni
 
             if msg.content == "Quit":
-                await private_channel.send("Quit Boss  selection. ")
+                await private_channel.send("Quit Boss selection. ")
                 db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                 return
 
@@ -30322,9 +30374,17 @@ class CrownUnlimited(commands.Cog):
         accept = await private_channel.send(f"{ctx.author.mention} which Dungeon would you like to explore!")
 
         def check(msg):
-            return msg.author == ctx.author and (msg.content in available_universes) or (msg.content == "Quit") 
+            _selected = ""
+            for uni in available_universes:
+                if uni.upper() == msg.content.upper():
+                    _selected = uni
+            return msg.author == ctx.author and (_selected in available_universes) or (msg.content == "Quit") 
         try:
             msg = await self.bot.wait_for('message', timeout=30.0, check=check)
+            _selected = ""
+            for uni in available_universes:
+                if uni.upper() == msg.content.upper():
+                    _selected = uni
 
             if msg.content == "Quit":
                 await private_channel.send("Quit Dungeon selection. ")
@@ -32650,9 +32710,17 @@ class CrownUnlimited(commands.Cog):
         accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
 
         def check(msg):
-            return msg.author == ctx.author and (msg.content in available_universes) or (msg.content == "Quit") 
+            _selected = ""
+            for uni in available_universes:
+                if uni.upper() == msg.content.upper():
+                    _selected = uni
+            return msg.author == ctx.author and (_selected in available_universes) or (msg.content == "Quit") 
         try:
             msg = await self.bot.wait_for('message', timeout=30.0, check=check)
+            _selected = ""
+            for uni in available_universes:
+                if uni.upper() == msg.content.upper():
+                    _selected = uni
 
             if msg.content == "Quit":
                 await private_channel.send("Quit Tales selection. ")
@@ -34849,12 +34917,20 @@ class CrownUnlimited(commands.Cog):
         accept = await private_channel.send(f"{ctx.author.mention} which Universe would you like to explore!")
 
         def check(msg):
-            return msg.author == ctx.author and (msg.content in available_universes) or (msg.content == "Quit") 
+            _selected = ""
+            for uni in available_universes:
+                if uni.upper() == msg.content.upper():
+                    _selected = uni
+            return msg.author == ctx.author and (_selected in available_universes) or (msg.content == "Quit") 
         try:
             msg = await self.bot.wait_for('message', timeout=30.0, check=check)
+            _selected = ""
+            for uni in available_universes:
+                if uni.upper() == msg.content.upper():
+                    _selected = uni
 
             if msg.content == "Quit":
-                await private_channel.send("Quit Boss Selection. ")
+                await private_channel.send("Quit Boss selection. ")
                 db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                 return
 
@@ -52364,12 +52440,12 @@ class CrownUnlimited(commands.Cog):
     
     @cog_ext.cog_slash(description="View all Cards of a Universe you unlocked", guild_ids=main.guild_ids)
     async def cardlist(self, ctx: SlashContext, universe: str):
-        universe_data = db.queryUniverse({'TITLE': str(universe)})
+        universe_data = db.queryUniverse({'TITLE': {"$regex": str(universe), "$options": "i"}})
         user = db.queryUser({'DISNAME': str(ctx.author)})
         if universe_data['PREREQUISITE'] not in user['CROWN_TALES'] and universe_data['PREREQUISITE'] != "":
             await ctx.send("You have not unlocked this universe!")
             return
-        list_of_cards = db.queryAllCardsBasedOnUniverse({'UNIVERSE': universe})
+        list_of_cards = db.queryAllCardsBasedOnUniverse({'UNIVERSE': {"$regex": str(universe), "$options": "i"}})
         cards = [x for x in list_of_cards]
         dungeon_card_details = []
         tales_card_details = []
@@ -52427,7 +52503,7 @@ class CrownUnlimited(commands.Cog):
 
         embed_list = []
         for i in range(0, len(cards_broken_up)):
-            globals()['embedVar%s' % i] = discord.Embed(title= f":flower_playing_cards: {universe} Card List", description="\n".join(cards_broken_up[i]), colour=0x7289da)
+            globals()['embedVar%s' % i] = discord.Embed(title= f":flower_playing_cards: {universe_data['TITLE']} Card List", description="\n".join(cards_broken_up[i]), colour=0x7289da)
             globals()['embedVar%s' % i].set_footer(text=f"{total_cards} Total Cards\n🟣 Dungeon Drop\n🟢 Tale Drop\n🔵 Destiny Line\n/viewcard 'Card Name' - View Card Details\n/destinies 'Universe Name' -View Destiny Lines")
             embed_list.append(globals()['embedVar%s' % i])
 
@@ -52442,12 +52518,12 @@ class CrownUnlimited(commands.Cog):
     
     @cog_ext.cog_slash(description="View all Titles of a Universe you unlocked", guild_ids=main.guild_ids)
     async def titlelist(self, ctx: SlashContext, universe: str):
-        universe_data = db.queryUniverse({'TITLE': str(universe)})
+        universe_data = db.queryUniverse({'TITLE': {"$regex": universe, "$options": "i"}})
         user = db.queryUser({'DISNAME': str(ctx.author)})
         if universe_data['PREREQUISITE'] not in user['CROWN_TALES'] and universe_data['PREREQUISITE'] != "":
             await ctx.send("You have not unlocked this universe!")
             return
-        list_of_titles = db.queryAllTitlesBasedOnUniverses({'UNIVERSE': universe})
+        list_of_titles = db.queryAllTitlesBasedOnUniverses({'UNIVERSE': {"$regex": str(universe), "$options": "i"}})
         titles = [x for x in list_of_titles]
         dungeon_titles_details = []
         tales_titles_details = []
@@ -52499,7 +52575,7 @@ class CrownUnlimited(commands.Cog):
 
         embed_list = []
         for i in range(0, len(titles_broken_up)):
-            globals()['embedVar%s' % i] = discord.Embed(title= f":reminder_ribbon: {universe} Title List", description="\n".join(titles_broken_up[i]), colour=0x7289da)
+            globals()['embedVar%s' % i] = discord.Embed(title= f":reminder_ribbon: {universe_data['TITLE']} Title List", description="\n".join(titles_broken_up[i]), colour=0x7289da)
             # globals()['embedVar%s' % i].set_thumbnail(url={universe_data['PATH']})
             globals()['embedVar%s' % i].set_footer(text=f"{total_titles} Total Titles\n🟣 Dungeon Drop\n🟢 Tale Drop\n/viewtitle 'Title Name' - View Title Details")
             embed_list.append(globals()['embedVar%s' % i])
@@ -52515,12 +52591,12 @@ class CrownUnlimited(commands.Cog):
 
     @cog_ext.cog_slash(description="View all Arms of a Universe you unlocked", guild_ids=main.guild_ids)
     async def armlist(self, ctx: SlashContext, universe: str):
-        universe_data = db.queryUniverse({'TITLE': str(universe)})
+        universe_data = db.queryUniverse({'TITLE': {"$regex": universe, "$options": "i"}})
         user = db.queryUser({'DISNAME': str(ctx.author)})
         if universe_data['PREREQUISITE'] not in user['CROWN_TALES'] and universe_data['PREREQUISITE'] != "":
             await ctx.send("You have not unlocked this universe!")
             return
-        list_of_arms = db.queryAllArmsBasedOnUniverses({'UNIVERSE': universe})
+        list_of_arms = db.queryAllArmsBasedOnUniverses({'UNIVERSE': {"$regex": str(universe), "$options": "i"}})
         arms = [x for x in list_of_arms]
         dungeon_arms_details = []
         tales_arms_details = []
@@ -52569,7 +52645,7 @@ class CrownUnlimited(commands.Cog):
 
         embed_list = []
         for i in range(0, len(arms_broken_up)):
-            globals()['embedVar%s' % i] = discord.Embed(title= f":mechanical_arm: {universe} Arms List", description="\n".join(arms_broken_up[i]), colour=0x7289da)
+            globals()['embedVar%s' % i] = discord.Embed(title= f":mechanical_arm: {universe_data['TITLE']} Arms List", description="\n".join(arms_broken_up[i]), colour=0x7289da)
             globals()['embedVar%s' % i].set_footer(text=f"{total_arms} Total Arms\n🟣 Dungeon Drop\n🟢 Tale Drop\n/viewarm 'Arm Name' - View Arm Details")
             embed_list.append(globals()['embedVar%s' % i])
 
@@ -52584,7 +52660,7 @@ class CrownUnlimited(commands.Cog):
 
     @cog_ext.cog_slash(description="View all Destinies of a Universe you unlocked", guild_ids=main.guild_ids)
     async def destinylist(self, ctx: SlashContext, universe: str):
-        universe_data = db.queryUniverse({'TITLE': str(universe)})
+        universe_data = db.queryUniverse({'TITLE': {"$regex": universe, "$options": "i"}})
         user = db.queryUser({'DISNAME': str(ctx.author)})
         if universe_data['PREREQUISITE'] not in user['CROWN_TALES'] and universe_data['PREREQUISITE'] != "":
             await ctx.send("You have not unlocked this universe!")
@@ -52592,7 +52668,7 @@ class CrownUnlimited(commands.Cog):
 
         destinies = []
         for destiny in d.destiny:
-            if destiny["UNIVERSE"] == universe:
+            if destiny["UNIVERSE"].upper() == universe.upper():
                 destinies.append(destiny)
         
         destiny_details = []
@@ -52621,7 +52697,7 @@ class CrownUnlimited(commands.Cog):
 
         embed_list = []
         for i in range(0, len(destinies_broken_up)):
-            globals()['embedVar%s' % i] = discord.Embed(title= f":rosette: {universe} Destiny List", description="\n".join(destinies_broken_up[i]), colour=0x7289da)
+            globals()['embedVar%s' % i] = discord.Embed(title= f":rosette: {universe_data['TITLE']} Destiny List", description="\n".join(destinies_broken_up[i]), colour=0x7289da)
             globals()['embedVar%s' % i].set_footer(text=f"{total_destinies} Total Destiny Lines")
             embed_list.append(globals()['embedVar%s' % i])
 
@@ -52636,12 +52712,12 @@ class CrownUnlimited(commands.Cog):
 
     @cog_ext.cog_slash(description="View all Pets of a Universe you unlocked", guild_ids=main.guild_ids)
     async def petlist(self, ctx: SlashContext, universe: str):
-        universe_data = db.queryUniverse({'TITLE': str(universe)})
+        universe_data = db.queryUniverse({'TITLE': {"$regex": universe, "$options": "i"}})
         user = db.queryUser({'DISNAME': str(ctx.author)})
         if universe_data['PREREQUISITE'] not in user['CROWN_TALES'] and universe_data['PREREQUISITE'] != "":
             await ctx.send("You have not unlocked this universe!")
             return
-        list_of_pets = db.queryAllPetsBasedOnUniverses({'UNIVERSE': universe})
+        list_of_pets = db.queryAllPetsBasedOnUniverses({'UNIVERSE': {"$regex": str(universe), "$options": "i"}})
         pets = [x for x in list_of_pets]
         dungeon_pets_details = []
         tales_pets_details = []
@@ -52692,7 +52768,7 @@ class CrownUnlimited(commands.Cog):
 
         embed_list = []
         for i in range(0, len(pets_broken_up)):
-            globals()['embedVar%s' % i] = discord.Embed(title= f":dog: {universe} Pet List", description="\n".join(pets_broken_up[i]), colour=0x7289da)
+            globals()['embedVar%s' % i] = discord.Embed(title= f":dog: {universe_data['TITLE']} Pet List", description="\n".join(pets_broken_up[i]), colour=0x7289da)
             globals()['embedVar%s' % i].set_footer(text=f"{total_pets} Total Pets\n🟣 Dungeon Drop\n🟢 Tale Drop\n/viewpet 'Pet Name' - View Pet Details")
             embed_list.append(globals()['embedVar%s' % i])
 

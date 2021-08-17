@@ -45,7 +45,8 @@ class Cards(commands.Cog):
         cards = []
         tier = 0
 
-        check_card = db.queryCard({'NAME' : str(card)})
+        check_card = db.queryCard({'NAME' : {"$regex": str(card), "$options": "i"}})
+        card_name = check_card['NAME']
         if check_card:
             if check_card['UNIVERSE'] == 'Unbound':
                 await ctx.send("You cannot purchase this card.")
@@ -158,10 +159,11 @@ class Cards(commands.Cog):
         vault_query = {'OWNER' : str(ctx.author)}
         vault = db.altQueryVault(vault_query)
 
-        resp = db.queryCard({'NAME': card})
+        resp = db.queryCard({'NAME': {"$regex": card, "$options": "i"}})
 
+        card_name = resp["NAME"]
         # Do not Check Tourney wins
-        if card in vault['CARDS']:
+        if card_name in vault['CARDS']:
             response = db.updateUserNoFilter(user_query, {'$set': {'CARD': str(card)}})
             await ctx.send(response)
         else:
@@ -170,7 +172,7 @@ class Cards(commands.Cog):
     @cog_ext.cog_slash(description="View a Card", guild_ids=main.guild_ids)
     async def viewcard(self, ctx, card: str):
         card_name = card
-        card = db.queryCard({'NAME':str(card)})
+        card = db.queryCard({'NAME': {"$regex": str(card_name), "$options": "i"}})
         if card:
             o_card = card['NAME']
             o_card_path=card['PATH']
@@ -212,8 +214,10 @@ class Cards(commands.Cog):
             else:
                 price_message = f":coin: {'{:,}'.format(o_price)}"
                 card_icon= f":flower_playing_cards:"
-
-            card_file = showcard(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, title, focused)
+            att = 0
+            defe = 0
+            turn = 0
+            card_file = showcard(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, title, focused, att, defe, turn)
             mytrait = {}
             traitmessage = ''
             for trait in traits:

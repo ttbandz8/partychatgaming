@@ -29,7 +29,8 @@ class Universe(commands.Cog):
     @cog_ext.cog_slash(description="View a universe", guild_ids=main.guild_ids)
     async def viewUniverse(self, ctx, universe: str):
         universe_name = universe
-        universe = db.queryUniverse({'TITLE': str(universe_name)})
+        universe = db.queryUniverse({'TITLE': {"$regex": universe, "$options": "i"}})
+        universe_name = universe['TITLE']
         if universe:
             universe_title= universe['TITLE']
             universe_image = universe['PATH']

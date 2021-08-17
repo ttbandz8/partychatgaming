@@ -35,7 +35,8 @@ class Titles(commands.Cog):
         titles = []
         rift_universes = ['Crown Rift Slayers', 'Crown Rift Awakening', 'Crown Rift Madness']
         riftShopOpen = False
-        check_title = db.queryTitle({'TITLE' : str(title_name)})
+        check_title = db.queryTitle({'TITLE' : {"$regex": title, "$options": "i"}})
+        title_name = check_title['TITLE']
         if check_title:
             all_universes = db.queryAllUniverse()
             user = db.queryUser({'DISNAME': str(ctx.author)})
@@ -130,35 +131,29 @@ class Titles(commands.Cog):
         vault_query = {'OWNER' : str(ctx.author)}
         vault = db.altQueryVault(vault_query)
 
-        resp = db.queryTitle({'TITLE': str(title_name)})
+        resp = db.queryTitle({'TITLE': {"$regex": str(title_name), "$options": "i"}})
+        title_name = resp['TITLE']
 
-        if resp['TOURNAMENT_REQUIREMENTS'] == 0:
+        if resp:
 
-            # Do not Check Tourney wins
             if title_name in vault['TITLES']:
-                response = db.updateUserNoFilter(user_query, {'$set': {'TITLE': str(title_name)}})
+                response = db.updateUserNoFilter(user_query, {'$set': {'TITLE': title_name}})
                 await ctx.send(response)
             else:
                 await ctx.send(m.USER_DOESNT_HAVE_THE_Title)
         else:
 
-            # Check tourney wins
-            tournament_wins = user['TOURNAMENT_WINS']
-            title_query = {'TOURNAMENT_REQUIREMENTS': tournament_wins}
-
-            if tournament_wins >= resp['TOURNAMENT_REQUIREMENTS']:
-                if title_name in vault['TITLES']:
-                    response = db.updateUserNoFilter(user_query, {'$set': {'TITLE': str(title_name)}})
-                    await ctx.send(response)
-                else:
-                    await ctx.send(m.USER_DOESNT_HAVE_THE_Title)
+            if title_name in vault['TITLES']:
+                response = db.updateUserNoFilter(user_query, {'$set': {'TITLE': str(title_name)}})
+                await ctx.send(response)
             else:
-                return "Unable to update Title."
+                await ctx.send(m.USER_DOESNT_HAVE_THE_Title)
+
 
     @cog_ext.cog_slash(description="View a Title", guild_ids=main.guild_ids)
     async def viewtitle(self, ctx, title: str):
         title_name = title
-        title = db.queryTitle({'TITLE': str(title_name)})
+        title = db.queryTitle({'TITLE': {"$regex": title, "$options": "i"}})
         if title:
             title_title = title['TITLE']
             title_show = title['UNIVERSE']

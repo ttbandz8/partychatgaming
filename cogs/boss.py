@@ -29,7 +29,7 @@ class Boss(commands.Cog):
     @cog_ext.cog_slash(description="View a Boss", guild_ids=main.guild_ids)
     async def viewboss(self, ctx, boss : str):
         uboss_name = boss
-        uboss = db.queryBoss({'NAME': str(uboss_name)})
+        uboss = db.queryBoss({'NAME': {"$regex": str(uboss_name), "$options": "i"}})
         if uboss:
             uboss_name = uboss['NAME']
             uboss_show = uboss['UNIVERSE']

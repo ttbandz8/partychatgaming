@@ -39,20 +39,20 @@ class Pet(commands.Cog):
         selected_pet = ""
 
         for pet in vault['PETS']:
-            if pet_name == pet['NAME']:
+            if pet_name.upper() == pet['NAME'].upper():
                 selected_pet = pet
 
         # Do not Check Tourney wins
         if selected_pet:
-            response = db.updateUserNoFilter(user_query, {'$set': {'PET': str(pet_name)}})
-            await ctx.send(f"{pet_name} is ready for battle!")
+            response = db.updateUserNoFilter(user_query, {'$set': {'PET': str(selected_pet['NAME'])}})
+            await ctx.send(f"{selected_pet['NAME']} is ready for battle!")
         else:
             await ctx.send(m.USER_DOESNT_HAVE_THE_PET, delete_after=5)
             return
 
     @cog_ext.cog_slash(description="View a Pet", guild_ids=main.guild_ids)
     async def viewpet(self, ctx, pet: str):
-        pet = db.queryPet({'PET': str(pet)})
+        pet = db.queryPet({'PET': {"$regex": pet, "$options": "i"}})
         if pet:
             pet_pet = pet['PET']
             pet_show = pet['UNIVERSE']
