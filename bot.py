@@ -1466,40 +1466,40 @@ async def resell(ctx, item: str):
          except:
             await ctx.send("Resell ended. ")
 
-# @bot.command()
-# @commands.check(validate_user)
-# async def addfield(ctx, collection, new_field, field_type):
-#    if ctx.author.guild_permissions.administrator == True:
+@bot.command()
+@commands.check(validate_user)
+async def addfield(ctx, collection, new_field, field_type):
+   if ctx.author.guild_permissions.administrator == True:
 
-#       if field_type == 'string':
-#          field_type = "N/A"
-#       elif field_type == 'int':
-#          field_type = 0
-#       elif field_type == 'list':
-#          field_type = []
-#       elif field_type == 'bool':
-#          field_type = False
+      if field_type == 'string':
+         field_type = "N/A"
+      elif field_type == 'int':
+         field_type = 0
+      elif field_type == 'list':
+         field_type = []
+      elif field_type == 'bool':
+         field_type = False
       
-#       if collection == 'cards':
-#          response = db.updateManyCards({'$set': {new_field: field_type}})
-#       elif collection == 'titles':
-#          response = db.updateManyTitles({'$set': {new_field: field_type}})
-#       elif collection == 'vaults':
-#          response = db.updateManyVaults({'$set': {new_field: field_type}})
-#       elif collection == 'users':
-#          response = db.updateManyUsers({'$set': {new_field: field_type}})
-#       elif collection == 'universe':
-#          response = db.updateManyUniverses({'$set': {new_field: field_type}})
-#       elif collection == 'boss':
-#          response = db.updateManyBosses({'$set': {new_field: field_type}})
-#       elif collection == 'arms':
-#          response = db.updateManyArms({'$set': {new_field: field_type}})
-#       elif collection == 'pets':
-#          response = db.updateManyPets({'$set': {new_field: field_type}})
-#       elif collection == 'teams':
-#          response = db.updateManyTeams({'$set': {new_field: field_type}})
-#    else:
-#       print(m.ADMIN_ONLY_COMMAND)
+      if collection == 'cards':
+         response = db.updateManyCards({'$set': {new_field: field_type}})
+      elif collection == 'titles':
+         response = db.updateManyTitles({'$set': {new_field: field_type}})
+      elif collection == 'vaults':
+         response = db.updateManyVaults({'$set': {new_field: field_type}})
+      elif collection == 'users':
+         response = db.updateManyUsers({'$set': {new_field: field_type}})
+      elif collection == 'universe':
+         response = db.updateManyUniverses({'$set': {new_field: field_type}})
+      elif collection == 'boss':
+         response = db.updateManyBosses({'$set': {new_field: field_type}})
+      elif collection == 'arms':
+         response = db.updateManyArms({'$set': {new_field: field_type}})
+      elif collection == 'pets':
+         response = db.updateManyPets({'$set': {new_field: field_type}})
+      elif collection == 'teams':
+         response = db.updateManyTeams({'$set': {new_field: field_type}})
+   else:
+      print(m.ADMIN_ONLY_COMMAND)
 
 # @bot.command()
 # @commands.check(validate_user)

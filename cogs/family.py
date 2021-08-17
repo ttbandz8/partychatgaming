@@ -30,16 +30,16 @@ class Family(commands.Cog):
 
 
     @cog_ext.cog_slash(description="Marry a player", guild_ids=main.guild_ids)
-    async def marry(self, ctx, user1: User):
+    async def marry(self, ctx, player: User):
         head_profile = db.queryUser({'DISNAME': str(ctx.author)})
-        partner_profile = db.queryUser({'DISNAME': str(user1)})
+        partner_profile = db.queryUser({'DISNAME': str(player)})
         if head_profile['FAMILY'] != 'PCG' and head_profile['FAMILY'] != 'N/A' and head_profile['FAMILY'] != head_profile['DISNAME'] :
             await ctx.send(m.USER_IN_FAMILY, delete_after=3)
         elif partner_profile['FAMILY'] != 'PCG' and partner_profile['FAMILY'] != 'N/A':
             await ctx.send(m.USER_IN_FAMILY, delete_after=3)
         else:
             family_query = {'HEAD': str(ctx.author)}
-            accept = await ctx.send(f"Do you want to propose to {user1.mention}?".format(self), delete_after=10)
+            accept = await ctx.send(f"Do you want to propose to {player.mention}?".format(self), delete_after=10)
             for emoji in emojis:
                 await accept.add_reaction(emoji)
 
@@ -48,20 +48,20 @@ class Family(commands.Cog):
 
             try:
                 confirmed1 = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
-                await main.DM(ctx, user1, f"{ctx.author.mention}" + f" proposed to you !" + f" React in server to join their family" )
-                accept = await ctx.send(f"{user1.mention}" +f" do you accept the proposal?".format(self), delete_after=10)
+                await main.DM(ctx, player, f"{ctx.author.mention}" + f" proposed to you !" + f" React in server to join their family" )
+                accept = await ctx.send(f"{player.mention}" +f" do you accept the proposal?".format(self), delete_after=10)
                 for emoji in emojis:
                     await accept.add_reaction(emoji)
 
                 def check(reaction, partner):
-                    return partner == user1 and str(reaction.emoji) == '👍'
+                    return partner == player and str(reaction.emoji) == '👍'
 
                 try:
                     confirmed2 = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
                     response = db.createFamily(data.newFamily(family_query), str(ctx.author))
                     await ctx.send(response)
-                    newvalue = {'$set': {'PARTNER': str(user1)}}
-                    nextresponse = db.addFamilyMember(family_query, newvalue, str(ctx.author), str(user1))
+                    newvalue = {'$set': {'PARTNER': str(player)}}
+                    nextresponse = db.addFamilyMember(family_query, newvalue, str(ctx.author), str(player))
                     await ctx.send(nextresponse)
                 except:
                     await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=3)
@@ -69,7 +69,7 @@ class Family(commands.Cog):
                 print("No proposal Sent") 
 
     @cog_ext.cog_slash(description="Divorce your partner", guild_ids=main.guild_ids)
-    async def divorce(self, ctx, user1: User):
+    async def divorce(self, ctx, partner: User):
         head_profile = db.queryUser({'DISNAME': str(ctx.author)})
         family_profile = db.queryFamily({'HEAD': head_profile['FAMILY']})
         family_bank = family_profile['BANK']
@@ -77,7 +77,7 @@ class Family(commands.Cog):
         family_query = {'HEAD': str(ctx.author)}
         if family_profile:
             if head_profile['DISNAME'] == family_profile['HEAD'] or head_profile['DISNAME'] == family_profile['PARTNER']:
-                accept = await ctx.send(f"Do you want to divorce {user1.mention}?".format(self), delete_after=8)
+                accept = await ctx.send(f"Do you want to divorce {partner.mention}?".format(self), delete_after=8)
                 for emoji in emojis:
                     await accept.add_reaction(emoji)
 
@@ -86,20 +86,20 @@ class Family(commands.Cog):
 
                 try:
                     confirmed = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
-                    accept1 = await ctx.send(f"{user1.mention} do you accept the divorce?")
+                    accept1 = await ctx.send(f"{partner.mention} do you accept the divorce?")
                     for emoji in emojis:
                         await accept1.add_reaction(emoji)
 
                     def check(reaction, partner):
-                        return partner == user1 and str(reaction.emoji) == '👍'
+                        return partner == partner and str(reaction.emoji) == '👍'
 
                     try:
                         confirmed2 = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
                         new_value_query = {'$set': {'PARTNER': '' }}
-                        response = db.deleteFamilyMember(family_query, new_value_query, str(ctx.author), str(user1))
+                        response = db.deleteFamilyMember(family_query, new_value_query, str(ctx.author), str(partner))
                         await ctx.send(response)
                         main.cursefamily(divorce_split,family_profile)
-                        main.bless(divorce_split, user1)
+                        main.bless(divorce_split, partner)
                     except:
                         print("Divorce Not Accepted ")
                 except:
@@ -110,9 +110,9 @@ class Family(commands.Cog):
             await ctx.send(m.TEAM_DOESNT_EXIST, delete_after=5)
 
     @cog_ext.cog_slash(description="Adopt a kid", guild_ids=main.guild_ids)
-    async def adopt(self, ctx, user1: User):
+    async def adopt(self, ctx, player: User):
         head_profile = db.queryUser({'DISNAME': str(ctx.author)})
-        kid_profile = db.queryUser({'DISNAME': str(user1)})
+        kid_profile = db.queryUser({'DISNAME': str(player)})
         if head_profile['FAMILY'] == 'PCG':
             await ctx.send(m.USER_NOT_IN_FAMILY, delete_after=3)
         elif kid_profile['FAMILY'] != 'PCG':
@@ -127,7 +127,7 @@ class Family(commands.Cog):
                 await ctx.send(m.MAX_CHILDREN, delete_after=3)
                 return
 
-            accept = await ctx.send(f"Do you want to adopt {user1.mention}?".format(self), delete_after=10)
+            accept = await ctx.send(f"Do you want to adopt {player.mention}?".format(self), delete_after=10)
             for emoji in emojis:
                 await accept.add_reaction(emoji)
 
@@ -136,18 +136,18 @@ class Family(commands.Cog):
 
             try:
                 confirmed1 = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
-                await main.DM(ctx, user1, f"{ctx.author.mention}" + f" would like to adopt yo!" + f" React in server to join their family" )
-                accept = await ctx.send(f"{user1.mention}" +f" would you like to be adopted ?".format(self), delete_after=10)
+                await main.DM(ctx, player, f"{ctx.author.mention}" + f" would like to adopt yo!" + f" React in server to join their family" )
+                accept = await ctx.send(f"{player.mention}" +f" would you like to be adopted ?".format(self), delete_after=10)
                 for emoji in emojis:
                     await accept.add_reaction(emoji)
 
                 def check(reaction, kid):
-                    return kid == user1 and str(reaction.emoji) == '👍'
+                    return kid == player and str(reaction.emoji) == '👍'
 
                 try:
                     confirmed2 = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
-                    newvalue = {'$push': {'KIDS': str(user1)}}
-                    response = db.addFamilyMember(family_query, newvalue, str(ctx.author), str(user1))
+                    newvalue = {'$push': {'KIDS': str(player)}}
+                    response = db.addFamilyMember(family_query, newvalue, str(ctx.author), str(player))
                     await ctx.send(response)
                     
                 except:
@@ -156,13 +156,13 @@ class Family(commands.Cog):
                 print("No proposal Sent") 
 
     @cog_ext.cog_slash(description="Disown your kid", guild_ids=main.guild_ids)
-    async def disown(self, ctx, user1: User):
+    async def disown(self, ctx, kid: User):
         head_profile = db.queryUser({'DISNAME': str(ctx.author)})
         family_profile = db.queryFamily({'HEAD': head_profile['FAMILY']})
         family_query = {'HEAD': str(ctx.author)}
         if family_profile:
             if head_profile['DISNAME'] == family_profile['HEAD']:
-                accept = await ctx.send(f"Do you want to disown {user1.mention}?".format(self), delete_after=8)
+                accept = await ctx.send(f"Do you want to disown {kid.mention}?".format(self), delete_after=8)
                 for emoji in emojis:
                     await accept.add_reaction(emoji)
 
@@ -171,8 +171,8 @@ class Family(commands.Cog):
 
                 try:
                     confirmed = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
-                    new_value_query = {'$pull': {'KIDS': str(user1) }}
-                    response = db.deleteFamilyMember(family_query, new_value_query, str(ctx.author), str(user1))
+                    new_value_query = {'$pull': {'KIDS': str(kid) }}
+                    response = db.deleteFamilyMember(family_query, new_value_query, str(ctx.author), str(kid))
                     await ctx.send(response)
                 except:
                     print("No Divorce")

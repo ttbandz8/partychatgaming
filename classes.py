@@ -44,7 +44,7 @@ class GUILD():
     STREAK: int = field(default_factory=lambda: 0)
     BANK: int = field(default_factory=lambda: 0)
     BOUNTY: int = field(default_factory=lambda: 1000)
-    CREST:str = field(default_factory=lambda: 'FF')
+    CREST: list[str] = field(default_factory=lambda: ['Unbound'])
     HALL:str = field(default_factory=lambda: 'Mine')
     TIMESTAMP: str = now
     
@@ -224,6 +224,7 @@ class UNIVERSE():
     UPET: str = field(default_factory=lambda: "")
     DPET: str = field(default_factory=lambda: "")
     TIER: int = field(default_factory=lambda: 0)
+    GUILD: str = field(default_factory=lambda: "PCG")
 
 @dataclass(frozen=True, order=True) 
 class BOSS():

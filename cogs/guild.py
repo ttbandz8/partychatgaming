@@ -30,8 +30,8 @@ class Guild(commands.Cog):
 
 
     @cog_ext.cog_slash(description="Swear into Guild!", guild_ids=main.guild_ids)
-    async def oath(self, ctx, user1: User, name: str):
-        guild_name = name
+    async def oath(self, ctx, owner: User, guildname: str):
+        guild_name = guildname
         cost = 10000
         founder_profile = db.queryUser({'DISNAME': str(ctx.author)})
         guildsearch_name = founder_profile['GUILD']
@@ -43,7 +43,7 @@ class Guild(commands.Cog):
                     await ctx.send(m.FOUNDER_LEAVE)
                     return
                 await ctx.send(f"{guildsearch_name} NEW OATH!")
-                sworn_profile = db.queryUser({'DISNAME': str(user1)})              
+                sworn_profile = db.queryUser({'DISNAME': str(owner)})              
                 if sworn_profile['GUILD'] != 'PCG' and sworn_profile['GUILD'] != 'N/A':
                     await ctx.send(m.USER_IN_GUILD, delete_after=3)
                     return
@@ -66,7 +66,7 @@ class Guild(commands.Cog):
                         return
                     
                         guild_query = {'FOUNDER': str(ctx.author)}
-                        accept = await ctx.send(f"Do you wish to swear an oath with {user1.mention}?".format(self), delete_after=10)
+                        accept = await ctx.send(f"Do you wish to swear an oath with {owner.mention}?".format(self), delete_after=10)
                         for emoji in emojis:
                             await accept.add_reaction(emoji)
 
@@ -75,24 +75,24 @@ class Guild(commands.Cog):
 
                         try:
                             confirmed1 = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
-                            await main.DM(ctx, user1, f"{ctx.author.mention}" + f" would like to join the Guild {guild_name}" + f" React in server to join their Guild" )
-                            accept = await ctx.send(f"{user1.mention}" +f" will you swear the oath?".format(self), delete_after=10)
+                            await main.DM(ctx, owner, f"{ctx.author.mention}" + f" would like to join the Guild {guild_name}" + f" React in server to join their Guild" )
+                            accept = await ctx.send(f"{owner.mention}" +f" will you swear the oath?".format(self), delete_after=10)
                             for emoji in emojis:
                                 await accept.add_reaction(emoji)
 
                             def check(reaction, partner):
-                                return partner == user1 and str(reaction.emoji) == '👍'
+                                return partner == owner and str(reaction.emoji) == '👍'
 
                             try:
                                 sword_list = []
                                 for sword in guildsearch['SWORDS']:
                                     sword_list.append(sword)
-                                newvalue = {'$set': {'SWORN': str(user1)}}
-                                nextresponse = db.addGuildSworn(guild_query, newvalue, str(ctx.author), str(user1))
+                                newvalue = {'$set': {'SWORN': str(owner)}}
+                                nextresponse = db.addGuildSworn(guild_query, newvalue, str(ctx.author), str(owner))
                                 await ctx.send(nextresponse)
-                                shield = db.updateGuild(guild_query, {'$set' : {'SHIELD' : str(user1) }})
-                                newvalue = {'$set': {'SHIELD': str(user1)}}
-                                response = db.addGuildShield(guild_query, newvalue, str(ctx.author), str(user1))
+                                shield = db.updateGuild(guild_query, {'$set' : {'SHIELD' : str(owner) }})
+                                newvalue = {'$set': {'SHIELD': str(owner)}}
+                                response = db.addGuildShield(guild_query, newvalue, str(ctx.author), str(owner))
                                 await ctx.send(response)
                                 if sworn_team['TNAME'] not in sword_list:
                                     newvalue = {'$push': {'SWORDS': str(sworn_team['TNAME'])}}
@@ -107,7 +107,7 @@ class Guild(commands.Cog):
                         except:
                             print("No Oath Sent")                           
         else:
-            sworn_profile = db.queryUser({'DISNAME': str(user1)})
+            sworn_profile = db.queryUser({'DISNAME': str(owner)})
             investment = cost * 2
             if founder_profile['GUILD'] != 'PCG' and founder_profile['GUILD'] != 'N/A' and founder_profile['GUILD'] != founder_profile['DISNAME'] :
                 await ctx.send(m.USER_IN_GUILD, delete_after=3)
@@ -134,7 +134,7 @@ class Guild(commands.Cog):
                         return
                                     
                     guild_query = {'FOUNDER': str(ctx.author)}
-                    accept = await ctx.send(f"Do you wish to swear an oath with {user1.mention}?".format(self), delete_after=10)
+                    accept = await ctx.send(f"Do you wish to swear an oath with {owner.mention}?".format(self), delete_after=10)
                     for emoji in emojis:
                         await accept.add_reaction(emoji)
 
@@ -143,25 +143,25 @@ class Guild(commands.Cog):
 
                     try:
                         confirmed1 = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
-                        await main.DM(ctx, user1, f"{ctx.author.mention}" + f" would like to form the Guild {guild_name}" + f" React in server to join their Guild" )
-                        accept = await ctx.send(f"{user1.mention}" +f" will you swear the oath?".format(self), delete_after=10)
+                        await main.DM(ctx, owner, f"{ctx.author.mention}" + f" would like to form the Guild {guild_name}" + f" React in server to join their Guild" )
+                        accept = await ctx.send(f"{owner.mention}" +f" will you swear the oath?".format(self), delete_after=10)
                         for emoji in emojis:
                             await accept.add_reaction(emoji)
 
                         def check(reaction, partner):
-                            return partner == user1 and str(reaction.emoji) == '👍'
+                            return partner == owner and str(reaction.emoji) == '👍'
 
                         try:
                             confirmed2 = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
                             response = db.createGuild(data.newGuild(guild_query), str(ctx.author), str(guild_name))
                             await ctx.send(response)
                             nameguild = db.updateGuild(guild_query,{'$set' : {'GNAME' : str(guild_name)}})
-                            newvalue = {'$set': {'SWORN': str(user1)}}
-                            nextresponse = db.addGuildSworn(guild_query, newvalue, str(ctx.author), str(user1))
+                            newvalue = {'$set': {'SWORN': str(owner)}}
+                            nextresponse = db.addGuildSworn(guild_query, newvalue, str(ctx.author), str(owner))
                             await ctx.send(nextresponse)
-                            shield = db.updateGuild(guild_query, {'$set' : {'SHIELD' : str(user1) }})
-                            newvalue = {'$set': {'SHIELD': str(user1)}}
-                            response = db.addGuildShield(guild_query, newvalue, str(ctx.author), str(user1))
+                            shield = db.updateGuild(guild_query, {'$set' : {'SHIELD' : str(owner) }})
+                            newvalue = {'$set': {'SHIELD': str(owner)}}
+                            response = db.addGuildShield(guild_query, newvalue, str(ctx.author), str(owner))
                             await ctx.send(response)
                             newvalue = {'$push': {'SWORDS': str(founder_team['TNAME'])}}
                             swordaddition = db.addGuildSword(guild_query, newvalue, str(ctx.author), str(founder_team['TNAME']))
@@ -185,13 +185,13 @@ class Guild(commands.Cog):
                         print("No oath Sent") 
 
     @cog_ext.cog_slash(description="Betray your Guild (Guild Sworn)", guild_ids=main.guild_ids)
-    async def betray(self, ctx, user1: User):
+    async def betray(self, ctx, founder: User):
         sworn_profile = db.queryUser({'DISNAME': str(ctx.author)})
-        founder_profile = db.queryUser({'DISNAME': str(user1)})
+        founder_profile = db.queryUser({'DISNAME': str(founder)})
         if sworn_profile['GUILD'] != founder_profile['GUILD']:
             await ctx.send(m.GUILD_DOESNT_EXIST, delete_after=5)
             return
-        guild_query = {'FOUNDER': str(user1)}
+        guild_query = {'FOUNDER': str(founder)}
         guild_profile = db.queryGuild(guild_query)
         guild_bank = guild_profile['BANK']
         team_name = sworn_profile['TEAM']
@@ -212,8 +212,8 @@ class Guild(commands.Cog):
                     newvalue = {'$pull': {'SWORDS': str(team_name)}}
                     response2 = db.deleteGuildSword(guild_query, newvalue, str(ctx.author), str(team_name))
                     await ctx.send(response2)
-                    new_value_query = {'$set': {'SWORN': 'BETRAYED' }}
-                    response = db.deleteGuildSworn(guild_query, new_value_query, str(user1), str(ctx.author))
+                    new_value_query = {'$set': {'SWORN': 'BETRAYED', 'SHIELD' : str(founder)}}
+                    response = db.deleteGuildSworn(guild_query, new_value_query, str(founder), str(ctx.author))
                     await ctx.send(response)                  
                     
                 except:
@@ -224,10 +224,10 @@ class Guild(commands.Cog):
             await ctx.send(m.GUILD_DOESNT_EXIST, delete_after=5)
 
     @cog_ext.cog_slash(description="Ask Team Owner to join Guild! (Guild Owner)", guild_ids=main.guild_ids)
-    async def ally(self, ctx, user1: User):
+    async def ally(self, ctx, owner: User):
         founder_profile = db.queryUser({'DISNAME': str(ctx.author)})
         guildname = founder_profile['GUILD']
-        sword_profile = db.queryUser({'DISNAME': str(user1)})
+        sword_profile = db.queryUser({'DISNAME': str(owner)})
         team_profile = db.queryTeam({'TNAME': sword_profile['TEAM']})
         team_name = team_profile['TNAME']
         team_owner = team_profile['OWNER']
@@ -256,13 +256,13 @@ class Guild(commands.Cog):
 
             try:
                 confirmed1 = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
-                await main.DM(ctx, user1, f"{ctx.author.mention}" + f" would like to ally with your team!" + f" React in server to join their Guild" )
-                accept = await ctx.send(f"{user1.mention}" +f" will you join {guild_name}?".format(self), delete_after=10)
+                await main.DM(ctx, owner, f"{ctx.author.mention}" + f" would like to ally with your team!" + f" React in server to join their Guild" )
+                accept = await ctx.send(f"{owner.mention}" +f" will you join {guild_name}?".format(self), delete_after=10)
                 for emoji in emojis:
                     await accept.add_reaction(emoji)
 
                 def check(reaction, kid):
-                    return kid == user1 and str(reaction.emoji) == '👍'
+                    return kid == owner and str(reaction.emoji) == '👍'
 
                 try:
                     confirmed2 = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
@@ -276,9 +276,9 @@ class Guild(commands.Cog):
                 print("No proposal Sent") 
                 
     @cog_ext.cog_slash(description="Knight your Guild Shield! (Guild Owner)", guild_ids=main.guild_ids)
-    async def knight(self, ctx, user1: User):
+    async def knight(self, ctx, blade: User):
         founder_profile = db.queryUser({'DISNAME': str(ctx.author)})
-        shield_profile = db.queryUser({'DISNAME' : str(user1)})
+        shield_profile = db.queryUser({'DISNAME' : str(blade)})
         if not shield_profile:
             await ctx.send(m.USER_NOT_REGISTERED)
         shield_team_name = shield_profile['TEAM']
@@ -302,7 +302,7 @@ class Guild(commands.Cog):
         if founder_profile['DISNAME'] != f_profile and founder_profile['DISNAME'] != s_profile:
             await ctx.send(m.KNIGHT_GUILD_FOUNDER, delete_after=3)
             return
-        accept = await ctx.send(f"Do you wish to knight {user1.mention}?".format(self), delete_after=10)
+        accept = await ctx.send(f"Do you wish to knight {blade.mention}?".format(self), delete_after=10)
         for emoji in emojis:
             await accept.add_reaction(emoji)
 
@@ -311,18 +311,18 @@ class Guild(commands.Cog):
 
         try:
             confirmed1 = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
-            await main.DM(ctx, user1, f"{ctx.author.mention}" + f" would like you to serve as the Guild Shield!" + f" React in server to protect the Guild" )
-            accept = await ctx.send(f"{user1.mention}" +f" will you defend {guild_name}?".format(self), delete_after=10)
+            await main.DM(ctx, blade, f"{ctx.author.mention}" + f" would like you to serve as the Guild Shield!" + f" React in server to protect the Guild" )
+            accept = await ctx.send(f"{blade.mention}" +f" will you defend {guild_name}?".format(self), delete_after=10)
             for emoji in emojis:
                 await accept.add_reaction(emoji)
 
             def check(reaction, kid):
-                return kid == user1 and str(reaction.emoji) == '👍'
+                return kid == blade and str(reaction.emoji) == '👍'
 
             try:
                 confirmed2 = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
-                newvalue = {'$set': {'SHIELD': str(user1), 'STREAK' : 0}}
-                response = db.addGuildShield(new_query, newvalue, str(ctx.author), str(user1))
+                newvalue = {'$set': {'SHIELD': str(blade), 'STREAK' : 0}}
+                response = db.addGuildShield(new_query, newvalue, str(ctx.author), str(blade))
                 await ctx.send(response)
                 
             except:
@@ -331,9 +331,9 @@ class Guild(commands.Cog):
             print("No proposal Sent")
         
     @cog_ext.cog_slash(description="Exile Team from Guild (Guild Owner)", guild_ids=main.guild_ids)
-    async def exile(self, ctx, user1: User):
+    async def exile(self, ctx, owner: User):
         leader_profile = db.queryUser({'DISNAME': str(ctx.author)})
-        exiled_profile = db.queryUser({'DISNAME': str(user1)})
+        exiled_profile = db.queryUser({'DISNAME': str(owner)})
         if not exiled_profile:
             await ctx.send(m.USER_DOESNT_EXIST, delete_after=5)
             return
@@ -347,7 +347,7 @@ class Guild(commands.Cog):
         
         if guild_profile:
             if leader_profile['DISNAME'] == guild_profile['FOUNDER'] or leader_profile['DISNAME'] == guild_profile['SWORN']:
-                accept = await ctx.send(f"Do you wish to Exile {user1.mention} and {exiled_profile['TEAM']}?".format(self), delete_after=8)
+                accept = await ctx.send(f"Do you wish to Exile {owner.mention} and {exiled_profile['TEAM']}?".format(self), delete_after=8)
                 for emoji in emojis:
                     await accept.add_reaction(emoji)
 

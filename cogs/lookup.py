@@ -624,12 +624,12 @@ class Lookup(commands.Cog):
             embed1.add_field(name=":crossed_swords: | **~ Scrim Losses ~**", value=scrim_losses)
             embed1.add_field(name=":fireworks: | **~ Tournament Wins ~**", value=tournament_wins, inline=False)
             
-            embed2 = discord.Embed(title=f":checkered_flag: | {team_name} Team Members - :coin: {balance}".format(self), description=":bank: | Party Chat Gaming Database", colour=000000)
+            embed2 = discord.Embed(title=f":checkered_flag: | {team_name} Team Members - {icon} {'{:,}'.format(balance)}".format(self), description=":bank: | Party Chat Gaming Database", colour=000000)
             if team['LOGO_FLAG']:
                 embed2.set_image(url=logo)
             embed2.add_field(name=":military_helmet: | **~ Members ~**", value="\n".join(f'{t}'.format(self) for t in team_list), inline=False)
 
-            embed3 = discord.Embed(title=f":checkered_flag: | {team_name} Team Members - :coin: {balance}".format(self), description=":bank: | Party Chat Gaming Database", colour=000000)
+            embed3 = discord.Embed(title=f":checkered_flag: | {team_name} Team Members - {icon} {'{:,}'.format(balance)}".format(self), description=":bank: | Party Chat Gaming Database", colour=000000)
             if team['LOGO_FLAG']:
                 embed3.set_image(url=logo)
             embed3.add_field(name=":video_game: | Games ", value="\n".join(games), inline=False)
@@ -645,7 +645,7 @@ class Lookup(commands.Cog):
             await ctx.send(m.TEAM_DOESNT_EXIST)
 
     @cog_ext.cog_slash(description="Lookup Guild", guild_ids=main.guild_ids)
-    async def lookupguild(self, ctx, guild: str):
+    async def guild(self, ctx, guild: str):
         guild_name = guild
         guild_query = {'GNAME': guild_name}
         guild = db.queryGuildAlt(guild_query)
@@ -710,7 +710,10 @@ class Lookup(commands.Cog):
                     blade_count = blade_count + 1
                 sword_bank = sword_team['BANK']
                 sword_list.append(f"~ {swords} ~ W**{dubs}** / L**{els}**\n:man_detective: | **Owner: **{sword_team['OWNER']}\n:coin: | **Bank: **{'{:,}'.format(sword_bank)}\n:knife: | **Blades: **{blade_count}\n_______________________")
-                
+            crest_list = []
+            for c in crest:
+                crest_list.append(f"{Crest_dict[c]} | {c}")
+
 
 
 
@@ -724,31 +727,36 @@ class Lookup(commands.Cog):
             :nesting_dolls: | **Founder ~** {founder_name.split("#",1)[0]}
             :dolls: | **Sworn ~** {sworn_name.split("#",1)[0]}
             
-            
+            *Guilds can select Shields to defend the Hall from **Raids**! Use /raid*
             :japanese_goblin: | **Shield: ~**{shield_name.split("#",1)[0].format(self)} ~ {sicon} | **Victories: **{streak}
             :flower_playing_cards: | **Card: **{shield_card}
             :reminder_ribbon: | **Title: **{shield_title}
             :mechanical_arm: | **Arm: **{shield_arm}
               
-                  
+            *Swords are employed by the guild to win PVP battles! They can claim the **Shield** by defeating them in a /raid*
             :ninja: | **Swords: **{sword_count}
-            :dollar: | **Split: **{hall_split}
+            :dollar: | **Split: **{hall_split} *Team Income Multiplier*
+            :secret: | **Crest: **{len(crest_list)} *Current Crest Holdings*
               
             
-            :coin: | **Bounty Fee: **{'{:,}'.format(hall_fee)}
-            :yen: | **Bounty: **{'{:,}'.format(bounty)}
-            :moneybag: | **Bonus: **{'{:,}'.format(bonus)}
+            :coin: | **Raid Fee: **{'{:,}'.format(hall_fee)} *Cost to /raid*
+            :yen: | **Bounty: **{'{:,}'.format(bounty)} *use /bounty to set*
+            :moneybag: | **Bonus: **{'{:,}'.format(bonus)} *Victory Bonus Multiplier*
                    
             
-            :shinto_shrine: | **Hall: **{hall_name} 
-            :shield: | **Defenses: **{hall_def}
+            :shinto_shrine: | **Hall: **{hall_name} *Current Guild Hall*
+            :shield: | **Defenses: **{hall_def} *Current Raid Defense Multiplier*
             """), colour=000000)
             embed1.set_image(url=hall_img)
             embed1.set_footer(text=f"/raid {guild_name} - Raid Guild")
             
-            embed3 = discord.Embed(title=f":flags: |  {guild_name} **Sword** List".format(self), description=":bank: |  Party Chat Gaming Database", colour=000000)
-            embed3.add_field(name=f"**Swords: | ** :ninja: ~ {sword_count}", value="\n".join(f'**{t}**'.format(self) for t in sword_list), inline=False)
-            embed3.set_footer(text=f"/lookupteam - Lookup Guild Teams")
+            embed2 = discord.Embed(title=f":flags: |  {guild_name} **Sword** List".format(self), description=":bank: |  Party Chat Gaming Database", colour=000000)
+            embed2.add_field(name=f"**Swords: | ** :ninja: ~ {sword_count}", value="\n".join(f'**{t}**'.format(self) for t in sword_list), inline=False)
+            embed2.set_footer(text=f"/lookupteam - Lookup Guild Teams")
+            
+            embed3 = discord.Embed(title=f":flags: |  {guild_name} **UNIVERSE CREST**".format(self), description=":bank: |  Party Chat Gaming Database", colour=000000)
+            embed3.add_field(name=f":secret: | **CREST** ~ ", value="\n".join(f'**{c}**'.format(self) for c in crest_list), inline=False)
+            embed3.set_footer(text=f"/dungeons - Earn Universe Crest!")
             # if guild['LOGO_FLAG']:
             #     embed3.set_image(url=logo)
             
@@ -758,7 +766,7 @@ class Lookup(commands.Cog):
             paginator.add_reaction('🔐', "lock")
             paginator.add_reaction('⏩', "next")
             paginator.add_reaction('⏭️', "last")
-            embeds = [embed1, embed3]
+            embeds = [embed1,embed2, embed3]
             await paginator.run(embeds)
         else:
             await ctx.send(m.GUILD_DOESNT_EXIST)
@@ -813,3 +821,27 @@ def setup(bot):
 def most_frequent(List):
     occurence_count = Counter(List)
     return occurence_count.most_common(1)[0][0]
+
+Crest_dict = {'Unbound': ':ideograph_advantage:',
+              'My Hero Academia': ':sparkle:',
+              'League Of Legends': ':u6307:',
+              'Kanto Region': ':chart:',
+              'Naruto': ':u7121:',
+              'Bleach': ':u6709:',
+              'God Of War': ':u7533:',
+              'One Punch Man': ':u55b6:',
+              'Johto Region': ':u6708:',
+              'Black Clover': ':ophiuchus:',
+              'Demon Slayer': ':aries:',
+              'Attack On Titan': ':taurus:',
+              '7ds': ':capricorn:',
+              'Hoenn Region': ':leo:',
+              'Fate': ':u6e80:',
+              'Solo Leveling': ':u5408:',
+              'Souls': ':sos:',
+              'Dragon Ball Z': ':u5272:',
+              'Sinnoh Region': ':u7981:',
+              'Death Note': ':white_flower:',
+              'Crown Rift Awakening': ':u7a7a:',
+              'Crown Rift Slayers': ':sa:',
+              'Crown Rift Madness': ':loop:'}

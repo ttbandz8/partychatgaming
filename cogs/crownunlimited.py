@@ -51,6 +51,20 @@ class CrownUnlimited(commands.Cog):
             await private_channel.send(m.SERVER_FUNCTION_ONLY)
             return
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
+        oteam = sowner['TEAM']
+        ofam = sowner['FAMILY']
+        prevault = db.queryVault({'OWNER': str(ctx.author)})
+        balance = prevault['BALANCE']
+        crestlist = []
+        crestsearch=False
+        if oteam != 'PCG':
+            team_info = db.queryTeam({'TNAME' : oteam})
+            guildname = team_info['GUILD']
+            if guildname != "PCG":
+                oguild = db.queryGuildAlt({'GNAME' : guildname})
+                if oguild:
+                    crestlist = oguild['CREST']
+                    crestsearch=True
         if sowner['PATRON'] != True:
             embedVar = discord.Embed(title=f"Auto-Battles Locked", description=f"To Unlock Auto-Battles Join Patreon!", colour=0xe91e63)
             embedVar.add_field(name=f"Check out the #patreon channel!\nThank you for supporting the development of future games!", value="-Party Chat Dev Team")
@@ -107,7 +121,27 @@ class CrownUnlimited(commands.Cog):
                 db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                 return
 
+            #Universe Cost
             selected_universe = msg.content
+            universe = db.queryUniverse({'TITLE': str(selected_universe)})
+            universe_tier = universe['TIER']
+            entrance_fee = 250
+            if selected_universe in crestlist:
+                await private_channel.send(f"{Crest_dict[selected_universe]} | :flags: {guildname} {selected_universe} Crest Activated! No entrance fee!")
+            else:
+                if universe_tier >= 3:
+                    entrance_fee = entrance_fee * universe_tier
+                    if balance <= entrance_fee:
+                            await private_channel.send(f"Tier {universe_tier} Tales require an :coin: {'{:,}'.format(entrance_fee)} entrance fee!", delete_after=5)
+                            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                            return
+                    else:
+                        await curse(entrance_fee, str(ctx.author))
+                        if universe['GUILD'] != 'PCG':
+                            crest_guild = db.queryGuildAlt({'GNAME' : universe['GUILD']})
+                            if crest_guild:
+                                await blessguild(entrance_fee, universe['GUILD'])
+                                await private_channel.send(f"{Crest_dict[selected_universe]} | {crest_guild['GNAME']} Universe Toll Paid!")
             guild = ctx.guild
             if guild:
                 overwrites = {
@@ -2181,6 +2215,9 @@ class CrownUnlimited(commands.Cog):
                 if currentopponent == (total_legends):
                     embedVar = discord.Embed(title=f"UNIVERSE CONQUERED", description=f"Universe {selected_universe} has been conquered\n\n{drop_response}", colour=0xe91e63)
                     embedVar.set_author(name=f"New Universes have been unlocked to explore!")
+                    if crestsearch:
+                        await movecrest(selected_universe, oguild['GNAME'])
+                        embedVar.add_field(name=f"{selected_universe} CREST CLAIMED!", value=f"{oguild['GNAME']} earned the {selected_universe} **Crest**")
                     embedVar.add_field(name="Additional Reward", value=f"You earned additional rewards in your vault! Take a look.")
                     embedVar.set_footer(text="The .shop has been updated with new CARDS, TITLES and ARMS!")
                     upload_query={'DISNAME': str(ctx.author)}
@@ -2207,6 +2244,20 @@ class CrownUnlimited(commands.Cog):
             await private_channel.send(m.SERVER_FUNCTION_ONLY)
             return
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
+        oteam = sowner['TEAM']
+        ofam = sowner['FAMILY']
+        prevault = db.queryVault({'OWNER': str(ctx.author)})
+        balance = prevault['BALANCE']
+        crestlist = []
+        crestsearch=False
+        if oteam != 'PCG':
+            team_info = db.queryTeam({'TNAME' : oteam})
+            guildname = team_info['GUILD']
+            if guildname != "PCG":
+                oguild = db.queryGuildAlt({'GNAME' : guildname})
+                if oguild:
+                    crestlist = oguild['CREST']
+                    crestsearch=True
         if deck != 1 and deck != 2 and deck != 3:
             await private_channel.send("Not a valid Deck Option")
             return           
@@ -2255,7 +2306,27 @@ class CrownUnlimited(commands.Cog):
                 db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                 return
 
+            #Universe Cost
             selected_universe = msg.content
+            universe = db.queryUniverse({'TITLE': str(selected_universe)})
+            universe_tier = universe['TIER']
+            entrance_fee = 250
+            if selected_universe in crestlist:
+                await private_channel.send(f"{Crest_dict[selected_universe]} | :flags: {guildname} {selected_universe} Crest Activated! No entrance fee!")
+            else:
+                if universe_tier >= 3:
+                    entrance_fee = entrance_fee * universe_tier
+                    if balance <= entrance_fee:
+                            await private_channel.send(f"Tier {universe_tier} Tales require an :coin: {'{:,}'.format(entrance_fee)} entrance fee!", delete_after=5)
+                            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                            return
+                    else:
+                        await curse(entrance_fee, str(ctx.author))
+                        if universe['GUILD'] != 'PCG':
+                            crest_guild = db.queryGuildAlt({'GNAME' : universe['GUILD']})
+                            if crest_guild:
+                                await blessguild(entrance_fee, universe['GUILD'])
+                                await private_channel.send(f"{Crest_dict[selected_universe]} | {crest_guild['GNAME']} Universe Toll Paid!")
             guild = ctx.guild
             if guild:
                 overwrites = {
@@ -6548,6 +6619,9 @@ class CrownUnlimited(commands.Cog):
                 if currentopponent == total_legends:
                     embedVar = discord.Embed(title=f"UNIVERSE CONQUERED", description=f"Universe {selected_universe} has been conquered\n\n{drop_response}", colour=0xe91e63)
                     embedVar.set_author(name=f"New Universes have been unlocked to explore!")
+                    if crestsearch:
+                        await movecrest(selected_universe, oguild['GNAME'])
+                        embedVar.add_field(name=f"{selected_universe} CREST CLAIMED!", value=f"{oguild['GNAME']} earned the {selected_universe} **Crest**")
                     embedVar.add_field(name="Additional Reward", value=f"You earned additional rewards in your vault! Take a look.")
                     embedVar.set_footer(text="The .shop has been updated with new CARDS, TITLES and ARMS!")
                     upload_query={'DISNAME': str(ctx.author)}
@@ -6578,6 +6652,20 @@ class CrownUnlimited(commands.Cog):
             await private_channel.send(m.SERVER_FUNCTION_ONLY)
             return
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
+        oteam = sowner['TEAM']
+        ofam = sowner['FAMILY']
+        prevault = db.queryVault({'OWNER': str(ctx.author)})
+        balance = prevault['BALANCE']
+        crestlist = []
+        crestsearch=False
+        if oteam != 'PCG':
+            team_info = db.queryTeam({'TNAME' : oteam})
+            guildname = team_info['GUILD']
+            if guildname != "PCG":
+                oguild = db.queryGuildAlt({'GNAME' : guildname})
+                if oguild:
+                    crestlist = oguild['CREST']
+                    crestsearch=True
         if deck != 1 and deck != 2 and deck != 3:
             await private_channel.send("Not a valid Deck Option")
             return           
@@ -6624,7 +6712,27 @@ class CrownUnlimited(commands.Cog):
                 db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                 return
 
+            #Universe Cost
             selected_universe = msg.content
+            universe = db.queryUniverse({'TITLE': str(selected_universe)})
+            universe_tier = universe['TIER']
+            entrance_fee = 500
+            if selected_universe in crestlist:
+                await private_channel.send(f"{Crest_dict[selected_universe]} | :flags: {guildname} {selected_universe} Crest Activated! No entrance fee!")
+            else:
+                if universe_tier >= 3:
+                    entrance_fee = entrance_fee * universe_tier
+                    if balance <= entrance_fee:
+                            await private_channel.send(f"Tier {universe_tier} Dungeons require an :coin: {'{:,}'.format(entrance_fee)} entrance fee!", delete_after=5)
+                            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                            return
+                    else:
+                        await curse(entrance_fee, str(ctx.author))
+                        if universe['GUILD'] != 'PCG':
+                            crest_guild = db.queryGuildAlt({'GNAME' : universe['GUILD']})
+                            if crest_guild:
+                                await blessguild(entrance_fee, universe['GUILD'])
+                                await private_channel.send(f"{Crest_dict[selected_universe]} | {crest_guild['GNAME']} Universe Toll Paid!")
             guild = ctx.guild
             if guild:
                 overwrites = {
@@ -11374,6 +11482,9 @@ class CrownUnlimited(commands.Cog):
                 if currentopponent == (total_legends):
                     embedVar = discord.Embed(title=f"DUNGEON CONQUERED", description=f"Universe {selected_universe} has been conquered\n\n{drop_response}", colour=0xe91e63)
                     embedVar.set_author(name=f"New Universes have been unlocked to explore!")
+                    if crestsearch:
+                        await movecrest(selected_universe, oguild['GNAME'])
+                        embedVar.add_field(name=f"{selected_universe} CREST CLAIMED!", value=f"{oguild['GNAME']} earned the {selected_universe} **Crest**")
                     embedVar.add_field(name="Additional Reward", value=f"You earned additional rewards in your vault! Take a look.")
                     embedVar.set_footer(text="The .shop has been updated with new CARDS, TITLES and ARMS!")
                     upload_query={'DISNAME': str(ctx.author)}
@@ -11402,6 +11513,20 @@ class CrownUnlimited(commands.Cog):
             await private_channel.send(m.SERVER_FUNCTION_ONLY)
             return
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
+        oteam = sowner['TEAM']
+        ofam = sowner['FAMILY']
+        prevault = db.queryVault({'OWNER': str(ctx.author)})
+        balance = prevault['BALANCE']
+        crestlist = []
+        crestsearch=False
+        if oteam != 'PCG':
+            team_info = db.queryTeam({'TNAME' : oteam})
+            guildname = team_info['GUILD']
+            if guildname != "PCG":
+                oguild = db.queryGuildAlt({'GNAME' : guildname})
+                if oguild:
+                    crestlist = oguild['CREST']
+                    crestsearch=True
         if deck != 1 and deck != 2 and deck != 3:
             await private_channel.send("Not a valid Deck Option")
             return           
@@ -11447,7 +11572,27 @@ class CrownUnlimited(commands.Cog):
                 db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                 return
 
+            #Universe Cost
             selected_universe = msg.content
+            universe = db.queryUniverse({'TITLE': str(selected_universe)})
+            universe_tier = universe['TIER']
+            entrance_fee = 1000
+            if selected_universe in crestlist:
+                await private_channel.send(f"{Crest_dict[selected_universe]} | :flags: {guildname} {selected_universe} Crest Activated! No entrance fee!")
+            else:
+                if universe_tier >= 3:
+                    entrance_fee = entrance_fee * universe_tier
+                    if balance <= entrance_fee:
+                            await private_channel.send(f"Tier {universe_tier} Bosses require an :coin: {'{:,}'.format(entrance_fee)} entrance fee!", delete_after=5)
+                            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                            return
+                    else:
+                        await curse(entrance_fee, str(ctx.author))
+                        if universe['GUILD'] != 'PCG':
+                            crest_guild = db.queryGuildAlt({'GNAME' : universe['GUILD']})
+                            if crest_guild:
+                                await blessguild(entrance_fee, universe['GUILD'])
+                                await private_channel.send(f"{Crest_dict[selected_universe]} | {crest_guild['GNAME']} Universe Toll Paid!") 
             guild = ctx.guild
             if guild:
                 overwrites = {
@@ -16179,6 +16324,8 @@ class CrownUnlimited(commands.Cog):
             response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
             #response = db.updateUserNoFilter({'DISNAME': str(user)}, {'$set': {'AVAILABLE': True}})
             embedVar = discord.Embed(title=f":zap: **{o_card}** and **{c_card}**defeated the {t_universe} Boss {t_card}!", description=f"Match concluded in {turn_total} turns!\n\n{drop_response} + :coin: 500!\n{t_concede}", colour=0xe91e63)
+            if crestsearch:
+                await movecrest(selected_universe, oguild['GNAME'])
             embedVar.set_author(name=f"{t_card} lost", icon_url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236432/PCG%20LOGOS%20AND%20RESOURCES/PCGBot_1.png")
             if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
                 embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[2]} Seconds.")
@@ -16213,6 +16360,20 @@ class CrownUnlimited(commands.Cog):
             await private_channel.send(m.SERVER_FUNCTION_ONLY)
             return
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
+        oteam = sowner['TEAM']
+        ofam = sowner['FAMILY']
+        prevault = db.queryVault({'OWNER': str(ctx.author)})
+        balance = prevault['BALANCE']
+        crestlist = []
+        crestsearch=False
+        if oteam != 'PCG':
+            team_info = db.queryTeam({'TNAME' : oteam})
+            guildname = team_info['GUILD']
+            if guildname != "PCG":
+                oguild = db.queryGuildAlt({'GNAME' : guildname})
+                if oguild:
+                    crestlist = oguild['CREST']
+                    crestsearch=True
         cowner = db.queryUser({'DISNAME': str(user)})
         oteam = sowner['TEAM']
         cteam = cowner['TEAM']
@@ -16261,7 +16422,27 @@ class CrownUnlimited(commands.Cog):
                 db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                 return
 
+            #Universe Cost
             selected_universe = msg.content
+            universe = db.queryUniverse({'TITLE': str(selected_universe)})
+            universe_tier = universe['TIER']
+            entrance_fee = 250
+            if selected_universe in crestlist:
+                await private_channel.send(f"{Crest_dict[selected_universe]} | :flags: {guildname} {selected_universe} Crest Activated! No entrance fee!")
+            else:
+                if universe_tier >= 3:
+                    entrance_fee = entrance_fee * universe_tier
+                    if balance <= entrance_fee:
+                            await private_channel.send(f"Tier {universe_tier} Tales require an :coin: {'{:,}'.format(entrance_fee)} entrance fee!", delete_after=5)
+                            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                            return
+                    else:
+                        await curse(entrance_fee, str(ctx.author))
+                        if universe['GUILD'] != 'PCG':
+                            crest_guild = db.queryGuildAlt({'GNAME' : universe['GUILD']})
+                            if crest_guild:
+                                await blessguild(entrance_fee, universe['GUILD'])
+                                await private_channel.send(f"{Crest_dict[selected_universe]} | {crest_guild['GNAME']} Universe Toll Paid!")
             guild = ctx.guild
             if guild:
                 overwrites = {
@@ -20384,6 +20565,9 @@ class CrownUnlimited(commands.Cog):
                 if currentopponent == total_legends:
                     embedVar = discord.Embed(title=f"UNIVERSE CONQUERED", description=f"Universe {selected_universe} has been conquered\n\n{drop_response}", colour=0xe91e63)
                     embedVar.set_author(name=f"New Universes have been unlocked to explore!")
+                    if crestsearch:
+                        await movecrest(selected_universe, oguild['GNAME'])
+                        embedVar.add_field(name=f"{selected_universe} CREST CLAIMED!", value=f"{oguild['GNAME']} earned the {selected_universe} **Crest**")
                     embedVar.add_field(name="Additional Reward", value=f"You earned additional rewards in your vault! Take a look.")
                     embedVar.set_footer(text="The .shop has been updated with new CARDS, TITLES and ARMS!")
                     upload_query={'DISNAME': str(ctx.author)}
@@ -20414,6 +20598,20 @@ class CrownUnlimited(commands.Cog):
             await private_channel.send(m.SERVER_FUNCTION_ONLY)
             return
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
+        oteam = sowner['TEAM']
+        ofam = sowner['FAMILY']
+        prevault = db.queryVault({'OWNER': str(ctx.author)})
+        balance = prevault['BALANCE']
+        crestlist = []
+        crestsearch=False
+        if oteam != 'PCG':
+            team_info = db.queryTeam({'TNAME' : oteam})
+            guildname = team_info['GUILD']
+            if guildname != "PCG":
+                oguild = db.queryGuildAlt({'GNAME' : guildname})
+                if oguild:
+                    crestlist = oguild['CREST']
+                    crestsearch=True
         oteam = sowner['TEAM']
         ofam = sowner['FAMILY']
         
@@ -20459,7 +20657,27 @@ class CrownUnlimited(commands.Cog):
                 db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                 return
 
+            #Universe Cost
             selected_universe = msg.content
+            universe = db.queryUniverse({'TITLE': str(selected_universe)})
+            universe_tier = universe['TIER']
+            entrance_fee = 500
+            if selected_universe in crestlist:
+                await private_channel.send(f"{Crest_dict[selected_universe]} | :flags: {guildname} {selected_universe} Crest Activated! No entrance fee!")
+            else:
+                if universe_tier >= 3:
+                    entrance_fee = entrance_fee * universe_tier
+                    if balance <= entrance_fee:
+                            await private_channel.send(f"Tier {universe_tier} Dungeons require an :coin: {'{:,}'.format(entrance_fee)} entrance fee!", delete_after=5)
+                            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                            return
+                    else:
+                        await curse(entrance_fee, str(ctx.author))
+                        if universe['GUILD'] != 'PCG':
+                            crest_guild = db.queryGuildAlt({'GNAME' : universe['GUILD']})
+                            if crest_guild:
+                                await blessguild(entrance_fee, universe['GUILD'])
+                                await private_channel.send(f"{Crest_dict[selected_universe]} | :flags: {crest_guild['GNAME']} **Crest** Toll Paid!")
             guild = ctx.guild
             if guild:
                 overwrites = {
@@ -24985,6 +25203,8 @@ class CrownUnlimited(commands.Cog):
                 if currentopponent == (total_legends):
                     embedVar = discord.Embed(title=f"DUNGEON CONQUERED", description=f"Universe {selected_universe} has been conquered\n\n{drop_response}\n{cdrop_response}", colour=0xe91e63)
                     embedVar.set_author(name=f"New Universes have been unlocked to explore!")
+                    if crestsearch:
+                        await movecrest(selected_universe, oguild['GNAME'])
                     embedVar.add_field(name="Additional Reward", value=f"You earned additional rewards in your vault! Take a look.")
                     embedVar.set_footer(text="The .shop has been updated with new CARDS, TITLES and ARMS!")
                     upload_query={'DISNAME': str(ctx.author)}
@@ -25015,6 +25235,20 @@ class CrownUnlimited(commands.Cog):
             await private_channel.send(m.SERVER_FUNCTION_ONLY)
             return
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
+        oteam = sowner['TEAM']
+        ofam = sowner['FAMILY']
+        prevault = db.queryVault({'OWNER': str(ctx.author)})
+        balance = prevault['BALANCE']
+        crestlist = []
+        crestsearch=False
+        if oteam != 'PCG':
+            team_info = db.queryTeam({'TNAME' : oteam})
+            guildname = team_info['GUILD']
+            if guildname != "PCG":
+                oguild = db.queryGuildAlt({'GNAME' : guildname})
+                if oguild:
+                    crestlist = oguild['CREST']
+                    crestsearch=True
         oteam = sowner['TEAM']
         ofam = sowner['FAMILY']
         cteam = companion['TEAM']
@@ -25056,7 +25290,27 @@ class CrownUnlimited(commands.Cog):
                 db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                 return
 
+            #Universe Cost
             selected_universe = msg.content
+            universe = db.queryUniverse({'TITLE': str(selected_universe)})
+            universe_tier = universe['TIER']
+            entrance_fee = 1000
+            if selected_universe in crestlist:
+                await private_channel.send(f"{Crest_dict[selected_universe]} | :flags: {guildname} {selected_universe} Crest Activated! No entrance fee!")
+            else:
+                if universe_tier >= 3:
+                    entrance_fee = entrance_fee * universe_tier
+                    if balance <= entrance_fee:
+                            await private_channel.send(f"Tier {universe_tier} Bosses require an :coin: {'{:,}'.format(entrance_fee)} entrance fee!", delete_after=5)
+                            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                            return
+                    else:
+                        await curse(entrance_fee, str(ctx.author))
+                        if universe['GUILD'] != 'PCG':
+                            crest_guild = db.queryGuildAlt({'GNAME' : universe['GUILD']})
+                            if crest_guild:
+                                await blessguild(entrance_fee, universe['GUILD'])
+                                await private_channel.send(f"{Crest_dict[selected_universe]} | {crest_guild['GNAME']} Universe Toll Paid!")
             guild = ctx.guild
             if guild:
                 overwrites = {
@@ -29551,6 +29805,8 @@ class CrownUnlimited(commands.Cog):
             response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
             response = db.updateUserNoFilter({'DISNAME': str(user)}, {'$set': {'AVAILABLE': True}})
             embedVar = discord.Embed(title=f":zap: **{o_card}** and **{c_card}**defeated the {t_universe} Boss {t_card}!", description=f"Match concluded in {turn_total} turns!\n\n{drop_response} + :coin: 50!\n\n{c_user['NAME']} got :coin:50!\n{t_concede}", colour=0xe91e63)
+            if crestsearch:
+                await movecrest(selected_universe, oguild['GNAME'])
             embedVar.set_author(name=f"{t_card} lost", icon_url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236432/PCG%20LOGOS%20AND%20RESOURCES/PCGBot_1.png")
             if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
                 embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[2]} Seconds.")
@@ -29587,6 +29843,18 @@ class CrownUnlimited(commands.Cog):
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
         oteam = sowner['TEAM']
         ofam = sowner['FAMILY']
+        prevault = db.queryVault({'OWNER': str(ctx.author)})
+        balance = prevault['BALANCE']
+        crestlist = []
+        crestsearch=False
+        if oteam != 'PCG':
+            team_info = db.queryTeam({'TNAME' : oteam})
+            guildname = team_info['GUILD']
+            if guildname != "PCG":
+                oguild = db.queryGuildAlt({'GNAME' : guildname})
+                if oguild:
+                    crestlist = oguild['CREST']
+                    crestsearch=True
 
         if sowner['AVAILABLE']:
             response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': False}})
@@ -29622,7 +29890,27 @@ class CrownUnlimited(commands.Cog):
                 db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                 return
 
+            #Universe Cost
             selected_universe = msg.content
+            universe = db.queryUniverse({'TITLE': str(selected_universe)})
+            universe_tier = universe['TIER']
+            entrance_fee = 500
+            if selected_universe in crestlist:
+                await private_channel.send(f"{Crest_dict[selected_universe]} | :flags: {guildname} {selected_universe} Crest Activated! No entrance fee!")
+            else:
+                if universe_tier >= 3:
+                    entrance_fee = entrance_fee * universe_tier
+                    if balance <= entrance_fee:
+                            await private_channel.send(f"Tier {universe_tier} Dungeons require an :coin: {'{:,}'.format(entrance_fee)} entrance fee!", delete_after=5)
+                            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                            return
+                    else:
+                        await curse(entrance_fee, str(ctx.author))
+                        if universe['GUILD'] != 'PCG':
+                            crest_guild = db.queryGuildAlt({'GNAME' : universe['GUILD']})
+                            if crest_guild:
+                                await blessguild(entrance_fee, universe['GUILD'])
+                                await private_channel.send(f"{Crest_dict[selected_universe]} | {crest_guild['GNAME']} Universe Toll Paid!")
             guild = ctx.guild
             if guild:
                 overwrites = {
@@ -31806,6 +32094,9 @@ class CrownUnlimited(commands.Cog):
                 if currentopponent == (total_legends):
                     embedVar = discord.Embed(title=f"UNIVERSE CONQUERED", description=f"Universe {selected_universe} has been conquered\n\n{drop_response}", colour=0xe91e63)
                     embedVar.set_author(name=f"New Universes have been unlocked to explore!")
+                    if crestsearch:
+                        await movecrest(selected_universe, oguild['GNAME'])
+                        embedVar.add_field(name=f"{selected_universe} CREST CLAIMED!", value=f"{oguild['GNAME']} earned the {selected_universe} **Crest**")
                     embedVar.add_field(name="Additional Reward", value=f"You earned additional rewards in your vault! Take a look.")
                     embedVar.set_footer(text="The .shop has been updated with new CARDS, TITLES and ARMS!")
                     upload_query={'DISNAME': str(ctx.author)}
@@ -31835,6 +32126,19 @@ class CrownUnlimited(commands.Cog):
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
         oteam = sowner['TEAM']
         ofam = sowner['FAMILY']
+        prevault = db.queryVault({'OWNER': str(ctx.author)})
+        balance = prevault['BALANCE']
+        crestlist = []
+        crestsearch=False
+        if oteam != 'PCG':
+            team_info = db.queryTeam({'TNAME' : oteam})
+            guildname = team_info['GUILD']
+            if guildname != "PCG":
+                oguild = db.queryGuildAlt({'GNAME' : guildname})
+                if oguild:
+                    crestlist = oguild['CREST']
+                    crestsearch=True
+        
         
         if sowner['AVAILABLE']:
             response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': False}})
@@ -31876,7 +32180,27 @@ class CrownUnlimited(commands.Cog):
                 db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                 return
 
+            #Universe Cost
             selected_universe = msg.content
+            universe = db.queryUniverse({'TITLE': str(selected_universe)})
+            universe_tier = universe['TIER']
+            entrance_fee = 250
+            if selected_universe in crestlist:
+                await private_channel.send(f"{Crest_dict[selected_universe]} | :flags: {guildname} {selected_universe} Crest Activated! No entrance fee!")
+            else:
+                if universe_tier >= 3:
+                    entrance_fee = entrance_fee * universe_tier
+                    if balance <= entrance_fee:
+                            await private_channel.send(f"Tier {universe_tier} Tales require an :coin: {'{:,}'.format(entrance_fee)} entrance fee!", delete_after=5)
+                            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                            return
+                    else:
+                        await curse(entrance_fee, str(ctx.author))
+                        if universe['GUILD'] != 'PCG':
+                            crest_guild = db.queryGuildAlt({'GNAME' : universe['GUILD']})
+                            if crest_guild:
+                                await blessguild(entrance_fee, str(universe['GUILD']))
+                                await private_channel.send(f"{Crest_dict[selected_universe]} | {crest_guild['GNAME']} Universe Toll Paid!")
             guild = ctx.guild
             if guild:
                 overwrites = {
@@ -31898,7 +32222,6 @@ class CrownUnlimited(commands.Cog):
         m_gametime = starttime[14:16]
         s_gametime = starttime[17:19]
 
-        universe = db.queryUniverse({'TITLE': str(selected_universe)})
 
         if not universe['CROWN_TALES']:
             db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
@@ -31908,6 +32231,8 @@ class CrownUnlimited(commands.Cog):
             return
 
         boss = db.queryBoss({'NAME': str(universe['UNIVERSE_BOSS'])})
+        
+        
 
         opponent_scaling = 0
         player_scaling = 0
@@ -33943,6 +34268,9 @@ class CrownUnlimited(commands.Cog):
                 if currentopponent == (total_legends):
                     embedVar = discord.Embed(title=f"UNIVERSE CONQUERED", description=f"Universe {selected_universe} has been conquered\n\n{drop_response}", colour=0xe91e63)
                     embedVar.set_author(name=f"New Universes have been unlocked to explore!")
+                    if crestsearch:
+                        await movecrest(selected_universe, oguild['GNAME'])
+                        embedVar.add_field(name=f"{selected_universe} CREST CLAIMED!", value=f"{oguild['GNAME']} earned the {selected_universe} **Crest**")
                     embedVar.add_field(name="Additional Reward", value=f"You earned additional rewards in your vault! Take a look.")
                     embedVar.set_footer(text="The .shop has been updated with new CARDS, TITLES and ARMS!")
                     upload_query={'DISNAME': str(ctx.author)}
@@ -33969,6 +34297,20 @@ class CrownUnlimited(commands.Cog):
             await private_channel.send(m.SERVER_FUNCTION_ONLY)
             return
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
+        oteam = sowner['TEAM']
+        ofam = sowner['FAMILY']
+        prevault = db.queryVault({'OWNER': str(ctx.author)})
+        balance = prevault['BALANCE']
+        crestlist = []
+        crestsearch=False
+        if oteam != 'PCG':
+            team_info = db.queryTeam({'TNAME' : oteam})
+            guildname = team_info['GUILD']
+            if guildname != "PCG":
+                oguild = db.queryGuildAlt({'GNAME' : guildname})
+                if oguild:
+                    crestlist = oguild['CREST']
+                    crestsearch=True
         oteam = sowner['TEAM']
         ofam = sowner['FAMILY']
 
@@ -34008,7 +34350,27 @@ class CrownUnlimited(commands.Cog):
                 db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                 return
 
+            #Universe Cost
             selected_universe = msg.content
+            universe = db.queryUniverse({'TITLE': str(selected_universe)})
+            universe_tier = universe['TIER']
+            entrance_fee = 1000
+            if selected_universe in crestlist:
+                await private_channel.send(f"{Crest_dict[selected_universe]} | :flags: {guildname} {selected_universe} Crest Activated! No entrance fee!")
+            else:
+                if universe_tier >= 3:
+                    entrance_fee = entrance_fee * universe_tier
+                    if balance <= entrance_fee:
+                            await private_channel.send(f"Tier {universe_tier} Bosses require an :coin: {'{:,}'.format(entrance_fee)} entrance fee!", delete_after=5)
+                            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                            return
+                    else:
+                        await curse(entrance_fee, str(ctx.author))
+                        if universe['GUILD'] != 'PCG':
+                            crest_guild = db.queryGuildAlt({'GNAME' : universe['GUILD']})
+                            if crest_guild:
+                                await blessguild(entrance_fee, universe['GUILD'])
+                                await private_channel.send(f"{Crest_dict[selected_universe]} | {crest_guild['GNAME']} Universe Toll Paid!")
             guild = ctx.guild
             if guild:
                 overwrites = {
@@ -36137,6 +36499,8 @@ class CrownUnlimited(commands.Cog):
             fambank = await blessfamily(10,ofam)
             response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
             embedVar = discord.Embed(title=f":zap: **{o_card}**defeated the {t_universe} Boss {t_card}!", description=f"Match concluded in {turn_total} turns!\n\n{drop_response} + :coin: 50!\n{t_concede}", colour=0xe91e63)
+            if crestsearch:
+                await movecrest(selected_universe, oguild['GNAME'])
             embedVar.set_author(name=f"{t_card} lost", icon_url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236432/PCG%20LOGOS%20AND%20RESOURCES/PCGBot_1.png")
             if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
                 embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[2]} Seconds.")
@@ -36195,6 +36559,10 @@ class CrownUnlimited(commands.Cog):
 
                 # Player 1 Data
                 o_user = db.queryUser({'DISNAME': team_1['TEAM'][0]})
+                oteam_name = o_user['TEAM']
+                oteam_info = db.queryTeam({'TNAME' : oteam_name})
+                oteam = oteam_info['TNAME']
+                oguild = oteam_info['GUILD']
                 oarm = db.queryArm({'ARM': o_user['ARM']})
                 oarm_universe=oarm['UNIVERSE']
                 oarm_passive = oarm['ABILITIES'][0]
@@ -36276,8 +36644,10 @@ class CrownUnlimited(commands.Cog):
 
                 # Player 2 Data
                 t_user = db.queryUser({'DISNAME': team_2['TEAM'][0]})
-                tteam = t_user['TEAM']
-                tguild = t_user['GUILD']
+                tteam_name = t_user['TEAM']
+                tteam_info = db.queryTeam({'TNAME' : tteam_name})
+                tteam = tteam_info['TNAME']
+                tguild = tteam_info['GUILD']
                 tarm = db.queryArm({'ARM': t_user['ARM']})
                 tarm_universe=tarm['UNIVERSE']
                 tarm_passive = tarm['ABILITIES'][0]
@@ -38900,6 +39270,10 @@ class CrownUnlimited(commands.Cog):
 
                 # Player 1 Data
                 o_user = db.queryUser({'DISNAME': team_1['TEAM'][0]})
+                oteam_name = o_user['TEAM']
+                oteam_info = db.queryTeam({'TNAME' : oteam_name})
+                oteam = oteam_info['TNAME']
+                oguild = oteam_info['GUILD']
                 oarm = db.queryArm({'ARM': o_user['ARM']})
                 oarm_universe=oarm['UNIVERSE']
                 oarm_passive = oarm['ABILITIES'][0]
@@ -38979,8 +39353,10 @@ class CrownUnlimited(commands.Cog):
 
                 # Player 2 Data
                 t_user = db.queryUser({'DISNAME': team_2['TEAM'][0]})
-                tteam = t_user['TEAM']
-                tguild = t_user['GUILD']
+                tteam_name = t_user['TEAM']
+                tteam_info = db.queryTeam({'TNAME' : tteam_name})
+                tteam = tteam_info['TNAME']
+                tguild = tteam_info['GUILD']
                 tarm = db.queryArm({'ARM': t_user['ARM']})
                 tarm_universe=tarm['UNIVERSE']
                 tarm_passive = tarm['ABILITIES'][0]
@@ -41561,6 +41937,10 @@ class CrownUnlimited(commands.Cog):
 
                 # Player 1 Data
                 o_user = db.queryUser({'DISNAME': team_1['TEAM'][0]})
+                oteam_name = o_user['TEAM']
+                oteam_info = db.queryTeam({'TNAME' : oteam_name})
+                oteam = oteam_info['TNAME']
+                oguild = oteam_info['GUILD']
                 oarm = db.queryArm({'ARM': o_user['ARM']})
                 oarm_universe=oarm['UNIVERSE']
                 oarm_passive = oarm['ABILITIES'][0]
@@ -41641,8 +42021,10 @@ class CrownUnlimited(commands.Cog):
 
                 # Player 2 Data
                 t_user = db.queryUser({'DISNAME': team_2['TEAM'][0]})
-                tteam = t_user['TEAM']
-                tguild = t_user['GUILD']
+                tteam_name = t_user['TEAM']
+                tteam_info = db.queryTeam({'TNAME' : tteam_name})
+                tteam = tteam_info['TNAME']
+                tguild = tteam_info['GUILD']
                 tarm = db.queryArm({'ARM': t_user['ARM']})
                 tarm_universe=tarm['UNIVERSE']
                 tarm_passive = tarm['ABILITIES'][0]
@@ -44024,6 +44406,10 @@ class CrownUnlimited(commands.Cog):
 
                 # Player 1 Data
                 o_user = db.queryUser({'DISNAME': team_1['TEAM'][0]})
+                oteam_name = o_user['TEAM']
+                oteam_info = db.queryTeam({'TNAME' : oteam_name})
+                oteam = oteam_info['TNAME']
+                oguild = oteam_info['GUILD']
                 oarm = db.queryArm({'ARM': o_user['ARM']})
                 oarm_universe=oarm['UNIVERSE']
                 oarm_passive = oarm['ABILITIES'][0]
@@ -44105,8 +44491,10 @@ class CrownUnlimited(commands.Cog):
 
                 # Player 2 Data
                 t_user = db.queryUser({'DISNAME': team_2['TEAM'][0]})
-                tteam = t_user['TEAM']
-                tguild = t_user['GUILD']
+                tteam_name = t_user['TEAM']
+                tteam_info = db.queryTeam({'TNAME' : tteam_name})
+                tteam = tteam_info['TNAME']
+                tguild = tteam_info['GUILD']
                 tarm = db.queryArm({'ARM': t_user['ARM']})
                 tarm_universe=tarm['UNIVERSE']
                 tarm_passive = tarm['ABILITIES'][0]
@@ -46488,6 +46876,10 @@ class CrownUnlimited(commands.Cog):
 
                 # Player 1 Data
                 o_user = db.queryUser({'DISNAME': team_1['TEAM'][0]})
+                oteam_name = o_user['TEAM']
+                oteam_info = db.queryTeam({'TNAME' : oteam_name})
+                oteam = oteam_info['TNAME']
+                oguild = oteam_info['GUILD']
                 oarm = db.queryArm({'ARM': o_user['ARM']})
                 oarm_universe=oarm['UNIVERSE']
                 oarm_passive = oarm['ABILITIES'][0]
@@ -46569,8 +46961,10 @@ class CrownUnlimited(commands.Cog):
 
                 # Player 2 Data
                 t_user = db.queryUser({'DISNAME': team_2['TEAM'][0]})
-                tteam = t_user['TEAM']
-                tguild = t_user['GUILD']
+                tteam_name = t_user['TEAM']
+                tteam_info = db.queryTeam({'TNAME' : tteam_name})
+                tteam = tteam_info['TNAME']
+                tguild = tteam_info['GUILD']
                 tarm = db.queryArm({'ARM': t_user['ARM']})
                 tarm_universe=tarm['UNIVERSE']
                 tarm_passive = tarm['ABILITIES'][0]
@@ -49037,6 +49431,10 @@ class CrownUnlimited(commands.Cog):
 
                 # Player 1 Data
                 o_user = db.queryUser({'DISNAME': team_1['TEAM'][0]})
+                oteam_name = o_user['TEAM']
+                oteam_info = db.queryTeam({'TNAME' : oteam_name})
+                oteam = oteam_info['TNAME']
+                oguild = oteam_info['GUILD']
                 oarm = db.queryArm({'ARM': o_user['ARM']})
                 oarm_universe=oarm['UNIVERSE']
                 oarm_passive = oarm['ABILITIES'][0]
@@ -49118,8 +49516,10 @@ class CrownUnlimited(commands.Cog):
 
                 # Player 2 Data
                 t_user = db.queryUser({'DISNAME': team_2['TEAM'][0]})
-                tteam = t_user['TEAM']
-                tguild = t_user['GUILD']
+                tteam_name = t_user['TEAM']
+                tteam_info = db.queryTeam({'TNAME' : tteam_name})
+                tteam = tteam_info['TNAME']
+                tguild = tteam_info['GUILD']
                 tarm = db.queryArm({'ARM': t_user['ARM']})
                 tarm_universe=tarm['UNIVERSE']
                 tarm_passive = tarm['ABILITIES'][0]
@@ -51471,6 +51871,7 @@ class CrownUnlimited(commands.Cog):
 
     @cog_ext.cog_slash(description="Start a Guild Raid", guild_ids=main.guild_ids)
     async def raid(self, ctx: SlashContext, guild : str):
+        guildname = guild
         private_channel = ctx
         starttime = time.asctime()
         h_gametime = starttime[11:13]
@@ -51489,10 +51890,10 @@ class CrownUnlimited(commands.Cog):
         if oguild_name == "PCG":
             await ctx.send(m.NO_GUILD, delete_after=5)
             return
-        if player_guild == oguild_name:
+        if player_guild == guildname:
             await ctx.send("You cannot raid your own Guild!", delete_after=5)
             return
-        guildname = guild
+        
         guild_query = {'GNAME' : guildname}
         guild_info = db.queryGuildAlt(guild_query)
         guild_shield = ""
@@ -51504,9 +51905,11 @@ class CrownUnlimited(commands.Cog):
         hall_info = db.queryHall({'HALL' : str(guild_hall)})
         hall_def = hall_info['DEFENSE']
         t_user = db.queryUser({'DISNAME': guild_shield})
-        tteam = t_user['TEAM']
+        tteam_name = t_user['TEAM']
+        tteam_info = db.queryTeam({'TNAME' : tteam_name})
+        tteam = tteam_info['TNAME']
+        tguild = tteam_info['GUILD']
         tteam_info = db.queryTeam({'TNAME' : tteam})
-        thall = 'Mine'
         if tteam_info:
             tguild = tteam_info['GUILD']
         tarm = db.queryArm({'ARM': t_user['ARM']})
@@ -53434,18 +53837,12 @@ class CrownUnlimited(commands.Cog):
                 embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
             else: 
                 embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
-            embedVar.add_field(name="Focus Count", value=f"**{o_card}**`: {o_focus_count}\n**{t_card}**`: {t_focus_count}")
+            embedVar.add_field(name="Focus Count", value=f"**{o_card}**: {o_focus_count}\n**{t_card}**: {t_focus_count}")
             if o_focus_count >= t_focus_count:
                 embedVar.add_field(name="Most Focused", value=f"**{o_card}**")
             else:
                 embedVar.add_field(name="Most Focused", value=f"**{t_card}**")
             await ctx.send(embed=embedVar)
-            if botActive:                    
-                embedVar = discord.Embed(title=f"PLAY AGAIN", description=f"Don't Worry! Losing is apart of the game. Use the /end command to **END** the tutorial lobby OR use /start to **PLAY AGAIN**", colour=0xe74c3c)
-                embedVar.set_author(name=f"You Lost...")
-                embedVar.add_field(name="Tips!", value="Equiping stronger `TITLES` and `ARMS` will make you character tougher in a fight!")
-                embedVar.set_footer(text="The .shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
-                await ctx.send(embed=embedVar)
 
         elif t_health <=0 or t_max_health <= 0:
             uid = o_DID
@@ -53464,12 +53861,14 @@ class CrownUnlimited(commands.Cog):
             bonus = guild_info['STREAK']
             total_bounty = (bounty + ((bonus/100) * bounty))
             winbonus = int(((bonus/100) * bounty))
+            if winbonus == 0:
+                winbonus =bounty
             wage = int(total_bounty /3)
             endmessage = ":yen: SHIELD BOUNTY CLAIMED"
             if title_match_active:
                 newshield = db.updateGuild(guild_query, {'$set' : {'SHIELD' : str(ctx.author)}})
                 guildwin = db.updateGuild(guild_query,{'$set' : {'BOUNTY' : winbonus , 'STREAK' : 1}})
-                endmessage = f":shinto_shrine: {guild_info['GNAME']} SHIELD CLAIMED!"
+                endmessage = f":flags: {guild_info['GNAME']} SHIELD CLAIMED!"
             else:
                 guildloss = db.updateGuild(guild_query,{'$set' : {'BOUNTY' : fee , 'STREAK' : 0}})
             
@@ -53961,7 +54360,7 @@ class CrownUnlimited(commands.Cog):
 
         hall_list = []
         for homes in hall_data:
-            hall_list.append(f":shinto_shrine: | {homes['HALL']}\n:shield: | **DEF: **{homes['DEFENSE']}\n:coin: | **COST: **{'{:,}'.format(homes['PRICE'])}\n:part_alternation_mark: | **MULT: **{homes['MULT']}x\n:moneybag: | **SPLIT: **{'{:,}'.format(homes['SPLIT'])}x\n:yen: | **FEE: **{'{:,}'.format(homes['FEE'])}\n_______________")
+            hall_list.append(f":flags: | {homes['HALL']}\n:shield: | **DEF: **{homes['DEFENSE']}\n:coin: | **COST: **{'{:,}'.format(homes['PRICE'])}\n:part_alternation_mark: | **MULT: **{homes['MULT']}x\n:moneybag: | **SPLIT: **{'{:,}'.format(homes['SPLIT'])}x\n:yen: | **FEE: **{'{:,}'.format(homes['FEE'])}\n_______________")
             
         total_halls = len(hall_list)
         while len(hall_list) % 10 != 0:
@@ -53981,7 +54380,7 @@ class CrownUnlimited(commands.Cog):
 
         embed_list = []
         for i in range(0, len(halls_broken_up)):
-            globals()['embedVar%s' % i] = discord.Embed(title= f":shinto_shrine: Hall List", description="\n".join(halls_broken_up[i]), colour=0x7289da)
+            globals()['embedVar%s' % i] = discord.Embed(title= f":flags: Hall List", description="\n".join(halls_broken_up[i]), colour=0x7289da)
             globals()['embedVar%s' % i].set_footer(text=f"{total_halls} Total Halls\n/viewhall - View Hall Details")
             embed_list.append(globals()['embedVar%s' % i])
 
@@ -54881,15 +55280,14 @@ async def curseteam(amount, team):
       else:
          print("cant find team")
 
-
 async def curseguild(amount, guild):
       curseAmount = amount
       negCurseAmount = 0 - abs(int(curseAmount))
       query = {'GNAME': str(guild)}
       guild_data = db.queryGuildAlt(query)
       if guild_data:
-         update_query = {"$inc": {'BANK': int(negCurseAmount)}}
-         db.updateGuildAlt(query, update_query)
+        update_query = {"$inc": {'BANK': int(negCurseAmount)}}
+        db.updateGuildAlt(query, update_query)
       else:
          print("cant find guild")
 
@@ -54911,7 +55309,23 @@ async def teamloss(team):
    else:
         print("Cannot find Team")
 
-
+async def movecrest(universe, guild):
+    guild_name = guild
+    universe_name = universe
+    guild_query = {'GNAME' : guild_name}
+    guild_info = db.queryGuildAlt(guild_query)
+    if guild_info:
+        alt_query = {'FOUNDER' : guild_info['FOUNDER']}
+        crest_list = guild_info['CREST']
+        pull_query = {'$pull' : {'CREST' : universe_name}}
+        pull = db.updateManyGuild(pull_query)
+        update_query = {'$push' :{'CREST' : universe_name}}
+        update = db.updateGuild(alt_query, update_query)
+        universe_guild = db.updateUniverse({'TITLE' : universe_name}, {'$set' : {'GUILD' : guild_name}})
+    else:
+        print("Guild not found: Crest")
+    
+    
 async def drops(player, universe, matchcount):
     all_available_drop_cards = db.queryDropCards(universe)
     all_available_drop_titles = db.queryDropTitles(universe)
@@ -55254,3 +55668,26 @@ async def bossdrops(player, universe):
 Healer_Enhancer_Check = ['HLT', 'CREATION']
 # DPS_Enhancer_Check = ['FLOG', 'WITHER', 'LIFE', ]
 Support_Enhancer_Check = ['DEF', 'ATK', 'WITHER', 'FLOG']
+Crest_dict = {'Unbound': ':ideograph_advantage:',
+              'My Hero Academia': ':sparkle:',
+              'League Of Legends': ':u6307:',
+              'Kanto Region': ':chart:',
+              'Naruto': ':u7121:',
+              'Bleach': ':u6709:',
+              'God Of War': ':u7533:',
+              'One Punch Man': ':u55b6:',
+              'Johto Region': ':u6708:',
+              'Black Clover': ':ophiuchus:',
+              'Demon Slayer': ':aries:',
+              'Attack On Titan': ':taurus:',
+              '7ds': ':capricorn:',
+              'Hoenn Region': ':leo:',
+              'Fate': ':u6e80:',
+              'Solo Leveling': ':u5408:',
+              'Souls': ':sos:',
+              'Dragon Ball Z': ':u5272:',
+              'Sinnoh Region': ':u7981:',
+              'Death Note': ':white_flower:',
+              'Crown Rift Awakening': ':u7a7a:',
+              'Crown Rift Slayers': ':sa:',
+              'Crown Rift Madness': ':loop:'}
