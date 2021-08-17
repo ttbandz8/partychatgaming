@@ -54482,12 +54482,14 @@ async def destiny(player, opponent, mode):
     for destiny in vault['DESTINY']:
         owned_destinies.append(destiny['NAME'])
     message = ""
+    completion = 1
     if vault['DESTINY']:
         #TALES
         for destiny in vault['DESTINY']:
             if user['CARD'] in destiny['USE_CARDS'] and opponent == destiny['DEFEAT'] and mode == "Tales":
-                message = f"Secured a win toward **{destiny['NAME']}**. Keep it up!"
-                completion = destiny['REQUIRED'] - (destiny['WINS'] + 1)
+                if destiny['WINS'] < destiny['REQUIRED']:
+                    message = f"Secured a win toward **{destiny['NAME']}**. Keep it up!"
+                    completion = destiny['REQUIRED'] - (destiny['WINS'] + 1)
                 
                 if completion == 0:
                     # Add the CARD_LEVELS for Destiny Card 
