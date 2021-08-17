@@ -164,7 +164,7 @@ class Cards(commands.Cog):
         card_name = resp["NAME"]
         # Do not Check Tourney wins
         if card_name in vault['CARDS']:
-            response = db.updateUserNoFilter(user_query, {'$set': {'CARD': str(card)}})
+            response = db.updateUserNoFilter(user_query, {'$set': {'CARD': str(card_name)}})
             await ctx.send(response)
         else:
             await ctx.send(m.USER_DOESNT_HAVE_THE_CARD, delete_after=5)
