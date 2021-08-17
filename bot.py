@@ -1391,17 +1391,17 @@ async def curseguild(amount, guild):
       else:
          print("cant find guild")
 
-@slash.slash(name="Traits", description="See full list of Universe Traits", guild_ids=guild_ids)
-@commands.check(validate_user)
-async def traits(ctx):
-   traits = ut.traits
-   traitmessages = []
-   for trait in traits:
-      traitmessages.append(f"_{trait['NAME']}_\n**{trait['EFFECT']}**: {trait['TRAIT']}\n")
+# @slash.slash(name="Traits", description="See full list of Universe Traits", guild_ids=guild_ids)
+# @commands.check(validate_user)
+# async def traits(ctx):
+#    traits = ut.traits
+#    traitmessages = []
+#    for trait in traits:
+#       traitmessages.append(f"_{trait['NAME']}_\n**{trait['EFFECT']}**: {trait['TRAIT']}\n")
 
-   embedVar = discord.Embed(title=":infinity: | Universe Traits", description="\n".join(traitmessages))
+#    embedVar = discord.Embed(title=":infinity: | Universe Traits", description="\n".join(traitmessages))
 
-   await ctx.send(embed=embedVar)
+#    await ctx.send(embed=embedVar)
 
 @slash.slash(name="Resell", description="Sell items back to the shop", guild_ids=guild_ids)
 @commands.check(validate_user)
