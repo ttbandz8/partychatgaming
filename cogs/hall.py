@@ -38,7 +38,7 @@ class Hall(commands.Cog):
             return
         guild_query = {'GNAME' : guildname}
         guild = db.queryGuildAlt(guild_query)
-        hall = db.queryHall({'HALL': {"$regex": hall, "$options": "i"}})
+        hall = db.queryHall({'HALL': {"$regex": f"^{str(hall)}$", "$options": "i"}})
         currentBalance = guild['BANK']
         cost = hall['PRICE']
         hall_name = hall['HALL']
@@ -59,7 +59,7 @@ class Hall(commands.Cog):
 
     @cog_ext.cog_slash(description="View a Hall", guild_ids=main.guild_ids)
     async def viewhall(self, ctx, hall: str):
-        hall = db.queryHall({'HALL':{"$regex": hall, "$options": "i"}})
+        hall = db.queryHall({'HALL':{"$regex": f"^{str(hall)}$", "$options": "i"}})
         if hall:
             hall_hall = hall['HALL']
             hall_price = hall['PRICE']

@@ -33,7 +33,7 @@ class Arm(commands.Cog):
         arms = []
         rift_universes = ['Crown Rift Slayers', 'Crown Rift Awakening', 'Crown Rift Madness']
         riftShopOpen = False
-        check_arm = db.queryArm({'ARM' : {"$regex": str(arm_name), "$options": "i"}})
+        check_arm = db.queryArm({'ARM' : {"$regex": f"^{str(arm_name)}$", "$options": "i"}})
         arm_name = check_arm['ARM']
         if check_arm:
             all_universes = db.queryAllUniverse()
@@ -127,7 +127,7 @@ class Arm(commands.Cog):
         vault_query = {'OWNER' : str(ctx.author)}
         vault = db.altQueryVault(vault_query)
 
-        resp = db.queryArm({'ARM': {"$regex": str(arm_name), "$options": "i"}})
+        resp = db.queryArm({'ARM': {"$regex": f"^{str(arm_name)}$", "$options": "i"}})
         arm_name = resp['ARM']
         if resp['TOURNAMENT_REQUIREMENTS'] == 0:
 
@@ -155,7 +155,7 @@ class Arm(commands.Cog):
     @cog_ext.cog_slash(description="View an Arm")
     async def viewarm(self, ctx, arm: str):
         arm_name = arm
-        arm = db.queryArm({'ARM': {"$regex": str(arm_name), "$options": "i"}})
+        arm = db.queryArm({'ARM': {"$regex": f"^{str(arm_name)}$", "$options": "i"}})
         if arm:
             arm_arm = arm['ARM']
             arm_show = arm['UNIVERSE']

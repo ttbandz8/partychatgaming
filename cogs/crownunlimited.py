@@ -155,7 +155,7 @@ class CrownUnlimited(commands.Cog):
             guild = ctx.guild
             if guild:
                 overwrites = {
-                            guild.default_role: discord.PermissionOverwrite(read_messages=False),
+                            guild.default_role: discord.PermissionOverwrite(read_messages=True, manage_channels=False, kick_members=False, mention_everyone=False, read_message_history=True, send_messages=False, view_channel=True),
                             guild.me: discord.PermissionOverwrite(read_messages=True),
                         ctx.author: discord.PermissionOverwrite(read_messages=True),
                         }
@@ -2344,7 +2344,7 @@ class CrownUnlimited(commands.Cog):
             guild = ctx.guild
             if guild:
                 overwrites = {
-                            guild.default_role: discord.PermissionOverwrite(read_messages=False),
+                            guild.default_role: discord.PermissionOverwrite(read_messages=True, manage_channels=False, kick_members=False, mention_everyone=False, read_message_history=True, send_messages=False, view_channel=True),
                             guild.me: discord.PermissionOverwrite(read_messages=True),
                             ctx.author: discord.PermissionOverwrite(read_messages=True)
                         }
@@ -6813,7 +6813,7 @@ class CrownUnlimited(commands.Cog):
             guild = ctx.guild
             if guild:
                 overwrites = {
-                            guild.default_role: discord.PermissionOverwrite(read_messages=False),
+                            guild.default_role: discord.PermissionOverwrite(read_messages=True, manage_channels=False, kick_members=False, mention_everyone=False, read_message_history=True, send_messages=False, view_channel=True),
                             guild.me: discord.PermissionOverwrite(read_messages=True),
                             ctx.author: discord.PermissionOverwrite(read_messages=True)
                         }
@@ -11737,7 +11737,7 @@ class CrownUnlimited(commands.Cog):
             guild = ctx.guild
             if guild:
                 overwrites = {
-                            guild.default_role: discord.PermissionOverwrite(read_messages=False),
+                            guild.default_role: discord.PermissionOverwrite(read_messages=True, manage_channels=False, kick_members=False, mention_everyone=False, read_message_history=True, send_messages=False, view_channel=True),
                             guild.me: discord.PermissionOverwrite(read_messages=True),
                             ctx.author: discord.PermissionOverwrite(read_messages=True)
                         }
@@ -16650,7 +16650,7 @@ class CrownUnlimited(commands.Cog):
             guild = ctx.guild
             if guild:
                 overwrites = {
-                            guild.default_role: discord.PermissionOverwrite(read_messages=False),
+                            guild.default_role: discord.PermissionOverwrite(read_messages=True, manage_channels=False, kick_members=False, mention_everyone=False, read_message_history=True, send_messages=False, view_channel=True),
                             guild.me: discord.PermissionOverwrite(read_messages=True),
                             ctx.author: discord.PermissionOverwrite(read_messages=True),
                             user: discord.PermissionOverwrite(read_messages=True),
@@ -20984,7 +20984,7 @@ class CrownUnlimited(commands.Cog):
             guild = ctx.guild
             if guild:
                 overwrites = {
-                            guild.default_role: discord.PermissionOverwrite(read_messages=False),
+                            guild.default_role: discord.PermissionOverwrite(read_messages=True, manage_channels=False, kick_members=False, mention_everyone=False, read_message_history=True, send_messages=False, view_channel=True),
                             guild.me: discord.PermissionOverwrite(read_messages=True),
                             ctx.author: discord.PermissionOverwrite(read_messages=True),
                             user: discord.PermissionOverwrite(read_messages=True),
@@ -25716,7 +25716,7 @@ class CrownUnlimited(commands.Cog):
             guild = ctx.guild
             if guild:
                 overwrites = {
-                            guild.default_role: discord.PermissionOverwrite(read_messages=False),
+                            guild.default_role: discord.PermissionOverwrite(read_messages=True, manage_channels=False, kick_members=False, mention_everyone=False, read_message_history=True, send_messages=False, view_channel=True),
                             guild.me: discord.PermissionOverwrite(read_messages=True),
                         ctx.author: discord.PermissionOverwrite(read_messages=True),
                             user: discord.PermissionOverwrite(read_messages=True),
@@ -30415,7 +30415,7 @@ class CrownUnlimited(commands.Cog):
             guild = ctx.guild
             if guild:
                 overwrites = {
-                            guild.default_role: discord.PermissionOverwrite(read_messages=False),
+                            guild.default_role: discord.PermissionOverwrite(read_messages=True, manage_channels=False, kick_members=False, mention_everyone=False, read_message_history=True, send_messages=False, view_channel=True),
                             guild.me: discord.PermissionOverwrite(read_messages=True),
                         ctx.author: discord.PermissionOverwrite(read_messages=True),
                         }
@@ -32751,7 +32751,7 @@ class CrownUnlimited(commands.Cog):
             guild = ctx.guild
             if guild:
                 overwrites = {
-                            guild.default_role: discord.PermissionOverwrite(read_messages=False),
+                            guild.default_role: discord.PermissionOverwrite(read_messages=True, manage_channels=False, kick_members=False, mention_everyone=False, read_message_history=True, send_messages=False, view_channel=True),
                             guild.me: discord.PermissionOverwrite(read_messages=True),
                         ctx.author: discord.PermissionOverwrite(read_messages=True),
                         }
@@ -34958,7 +34958,7 @@ class CrownUnlimited(commands.Cog):
             guild = ctx.guild
             if guild:
                 overwrites = {
-                            guild.default_role: discord.PermissionOverwrite(read_messages=False),
+                            guild.default_role: discord.PermissionOverwrite(read_messages=True, manage_channels=False, kick_members=False, mention_everyone=False, read_message_history=True, send_messages=False, view_channel=True),
                             guild.me: discord.PermissionOverwrite(read_messages=True),
                         ctx.author: discord.PermissionOverwrite(read_messages=True)
                         }

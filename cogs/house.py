@@ -32,7 +32,7 @@ class House(commands.Cog):
         house_name = house
         family_query = {'HEAD' : str(ctx.author)}
         family = db.queryFamily(family_query)
-        house = db.queryHouse({'HOUSE': {"$regex": house, "$options": "i"}})
+        house = db.queryHouse({'HOUSE': {"$regex": f"^{str(house)}$", "$options": "i"}})
         currentBalance = family['BANK']
         cost = house['PRICE']
         house_name = house['HOUSE']
@@ -53,7 +53,7 @@ class House(commands.Cog):
 
     @cog_ext.cog_slash(description="View a House", guild_ids=main.guild_ids)
     async def viewhouse(self, ctx, house: str):
-        house = db.queryHouse({'HOUSE': {"$regex": house, "$options": "i"}})
+        house = db.queryHouse({'HOUSE': {"$regex": f"^{str(house)}$", "$options": "i"}})
         if house:
             house_house = house['HOUSE']
             house_price = house['PRICE']

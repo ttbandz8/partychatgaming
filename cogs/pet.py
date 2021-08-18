@@ -52,7 +52,7 @@ class Pet(commands.Cog):
 
     @cog_ext.cog_slash(description="View a Pet", guild_ids=main.guild_ids)
     async def viewpet(self, ctx, pet: str):
-        pet = db.queryPet({'PET': {"$regex": pet, "$options": "i"}})
+        pet = db.queryPet({'PET': {"$regex": f"^{str(pet)}$", "$options": "i"}})
         if pet:
             pet_pet = pet['PET']
             pet_show = pet['UNIVERSE']

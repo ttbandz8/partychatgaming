@@ -45,7 +45,7 @@ class Cards(commands.Cog):
         cards = []
         tier = 0
 
-        check_card = db.queryCard({'NAME' : {"$regex": str(card), "$options": "i"}})
+        check_card = db.queryCard({'NAME' : {"$regex": f"^{str(card)}$", "$options": "i"}})
         card_name = check_card['NAME']
         if check_card:
             if check_card['UNIVERSE'] == 'Unbound':
@@ -159,7 +159,7 @@ class Cards(commands.Cog):
         vault_query = {'OWNER' : str(ctx.author)}
         vault = db.altQueryVault(vault_query)
 
-        resp = db.queryCard({'NAME': {"$regex": card, "$options": "i"}})
+        resp = db.queryCard({'NAME': {"$regex": f"^{str(card)}$", "$options": "i"}})
 
         card_name = resp["NAME"]
         # Do not Check Tourney wins
@@ -172,7 +172,7 @@ class Cards(commands.Cog):
     @cog_ext.cog_slash(description="View a Card", guild_ids=main.guild_ids)
     async def viewcard(self, ctx, card: str):
         card_name = card
-        card = db.queryCard({'NAME': {"$regex": str(card_name), "$options": "i"}})
+        card = db.queryCard({'NAME': {"$regex": f"^{str(card_name)}$", "$options": "i"}})
         if card:
             o_card = card['NAME']
             o_card_path=card['PATH']

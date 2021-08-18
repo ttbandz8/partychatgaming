@@ -35,7 +35,7 @@ class Titles(commands.Cog):
         titles = []
         rift_universes = ['Crown Rift Slayers', 'Crown Rift Awakening', 'Crown Rift Madness']
         riftShopOpen = False
-        check_title = db.queryTitle({'TITLE' : {"$regex": title, "$options": "i"}})
+        check_title = db.queryTitle({'TITLE' : {"$regex": f"^{str(title)}$", "$options": "i"}})
         title_name = check_title['TITLE']
         if check_title:
             all_universes = db.queryAllUniverse()
@@ -131,7 +131,7 @@ class Titles(commands.Cog):
         vault_query = {'OWNER' : str(ctx.author)}
         vault = db.altQueryVault(vault_query)
 
-        resp = db.queryTitle({'TITLE': {"$regex": str(title_name), "$options": "i"}})
+        resp = db.queryTitle({'TITLE': {"$regex": f"^{str(title_name)}$", "$options": "i"}})
         title_name = resp['TITLE']
 
         if resp:
@@ -153,7 +153,7 @@ class Titles(commands.Cog):
     @cog_ext.cog_slash(description="View a Title", guild_ids=main.guild_ids)
     async def viewtitle(self, ctx, title: str):
         title_name = title
-        title = db.queryTitle({'TITLE': {"$regex": title, "$options": "i"}})
+        title = db.queryTitle({'TITLE': {"$regex": f"^{str(title)}$", "$options": "i"}})
         if title:
             title_title = title['TITLE']
             title_show = title['UNIVERSE']
