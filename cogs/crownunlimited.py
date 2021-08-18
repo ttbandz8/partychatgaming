@@ -50370,6 +50370,9 @@ class CrownUnlimited(commands.Cog):
     async def raid(self, ctx: SlashContext, guild: str):
         guildname = guild
         private_channel = ctx
+        if isinstance(private_channel.channel, discord.channel.DMChannel):
+            await private_channel.send(m.SERVER_FUNCTION_ONLY)
+            return
         starttime = time.asctime()
         h_gametime = starttime[11:13]
         m_gametime = starttime[14:16]
@@ -50417,6 +50420,7 @@ class CrownUnlimited(commands.Cog):
         fee = hall_info['FEE']
         if oguild_name == tguild:
             title_match_active=True
+            
         o = db.queryCard({'NAME': sowner['CARD']})
         otitle = db.queryTitle({'TITLE': sowner['TITLE']})
         

@@ -44,7 +44,7 @@ class Guild(commands.Cog):
                     return
                 await ctx.send(f"{guildsearch_name} NEW OATH!")
                 sworn_profile = db.queryUser({'DISNAME': str(owner)})              
-                if sworn_profile['GUILD'] != 'PCG' and sworn_profile['GUILD'] != 'N/A':
+                if sworn_profile['GUILD'] != 'PCG' and guildsearch['SHIELD'] != sworn_profile['DISNAME']:
                     await ctx.send(m.USER_IN_GUILD, delete_after=3)
                     return
                 else:
@@ -63,7 +63,7 @@ class Guild(commands.Cog):
                             return
                         if sbal < cost:
                             await ctx.send(m.NBROKE_TEAM, delete_after=3)
-                        return
+                            return
                     
                         guild_query = {'FOUNDER': str(ctx.author)}
                         accept = await ctx.send(f"Do you wish to swear an oath with {owner.mention}?".format(self), delete_after=10)
