@@ -157,7 +157,7 @@ class CrownUnlimited(commands.Cog):
                 overwrites = {
                             guild.default_role: discord.PermissionOverwrite(read_messages=True, manage_channels=False, kick_members=False, mention_everyone=False, read_message_history=True, send_messages=False, view_channel=True),
                             guild.me: discord.PermissionOverwrite(read_messages=True),
-                        ctx.author: discord.PermissionOverwrite(read_messages=True),
+                        ctx.author: discord.PermissionOverwrite(read_messages=True, send_messages=True),
                         }
                 private_channel = await guild.create_text_channel(f'{str(ctx.author)}-tale-run', overwrites=overwrites)
                 await ctx.send(f"{ctx.author.mention} private channel has been opened for you. Good luck!")
@@ -2346,7 +2346,7 @@ class CrownUnlimited(commands.Cog):
                 overwrites = {
                             guild.default_role: discord.PermissionOverwrite(read_messages=True, manage_channels=False, kick_members=False, mention_everyone=False, read_message_history=True, send_messages=False, view_channel=True),
                             guild.me: discord.PermissionOverwrite(read_messages=True),
-                            ctx.author: discord.PermissionOverwrite(read_messages=True)
+                            ctx.author: discord.PermissionOverwrite(read_messages=True, send_messages=True)
                         }
 
                 private_channel = await guild.create_text_channel(f'{str(ctx.author)}-duo-tale-run', overwrites=overwrites)
@@ -3666,7 +3666,7 @@ class CrownUnlimited(commands.Cog):
 
                         # UNIVERSE CARD
                         player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus, o_attack, o_defense, turn_total)
-                        await private_channel.send(file=player_1_card)
+                        # await private_channel.send(file=player_1_card)
                         
                         if o_used_focus and o_used_resolve:
                             options = ["q","Q","0","1","2","3","4","6", "7", "8", "9"]
@@ -3753,7 +3753,7 @@ class CrownUnlimited(commands.Cog):
                         util_action_row = manage_components.create_actionrow(*util_buttons)
                         coop_util_action_row = manage_components.create_actionrow(*coop_util_buttons)
 
-                        await private_channel.send(f"Choose your move! **|** _Turn_ {turn_total} :dagger:**{o_attack}**/:shield:**{o_defense}**", components=[battle_action_row, util_action_row, coop_util_action_row])
+                        await private_channel.send(f"Choose your move! **|** _Turn_ {turn_total} :dagger:**{o_attack}**/:shield:**{o_defense}**", components=[battle_action_row, util_action_row, coop_util_action_row], file=player_1_card)
                         # Make sure user is responding with move
                         def check(button_ctx):
                             return button_ctx.author == user1 and button_ctx.custom_id in options
@@ -6815,7 +6815,7 @@ class CrownUnlimited(commands.Cog):
                 overwrites = {
                             guild.default_role: discord.PermissionOverwrite(read_messages=True, manage_channels=False, kick_members=False, mention_everyone=False, read_message_history=True, send_messages=False, view_channel=True),
                             guild.me: discord.PermissionOverwrite(read_messages=True),
-                            ctx.author: discord.PermissionOverwrite(read_messages=True)
+                            ctx.author: discord.PermissionOverwrite(read_messages=True, send_messages=True)
                         }
 
                 private_channel = await guild.create_text_channel(f'{str(ctx.author)}-duo-dungeon-run', overwrites=overwrites)
@@ -8145,7 +8145,7 @@ class CrownUnlimited(commands.Cog):
 
                         # UNIVERSE CARD
                         player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus, o_attack, o_defense, turn_total)
-                        await private_channel.send(file=player_1_card)
+                        # await private_channel.send(file=player_1_card)
                         
                         if o_used_focus and o_used_resolve:
                             options = ["q","Q","0","1","2","3","4","6", "7", "8", "9"]
@@ -8232,7 +8232,7 @@ class CrownUnlimited(commands.Cog):
                         util_action_row = manage_components.create_actionrow(*util_buttons)
                         coop_util_action_row = manage_components.create_actionrow(*coop_util_buttons)
 
-                        await private_channel.send(f"Choose your move! **|** _Turn_ {turn_total} :dagger:**{o_attack}**/:shield:**{o_defense}**", components=[battle_action_row, util_action_row, coop_util_action_row])
+                        await private_channel.send(f"Choose your move! **|** _Turn_ {turn_total} :dagger:**{o_attack}**/:shield:**{o_defense}**", components=[battle_action_row, util_action_row, coop_util_action_row], file=player_1_card)
                         # Make sure user is responding with move
                         def check(button_ctx):
                             return button_ctx.author == user1 and button_ctx.custom_id in options
@@ -11739,7 +11739,7 @@ class CrownUnlimited(commands.Cog):
                 overwrites = {
                             guild.default_role: discord.PermissionOverwrite(read_messages=True, manage_channels=False, kick_members=False, mention_everyone=False, read_message_history=True, send_messages=False, view_channel=True),
                             guild.me: discord.PermissionOverwrite(read_messages=True),
-                            ctx.author: discord.PermissionOverwrite(read_messages=True)
+                            ctx.author: discord.PermissionOverwrite(read_messages=True, send_messages=True)
                         }
                 private_channel = await guild.create_text_channel(f'{str(ctx.author)}-duo-boss-fight', overwrites=overwrites)
                 await ctx.send(f"{ctx.author.mention} private channel has been opened for you. Good luck!")
@@ -13068,7 +13068,7 @@ class CrownUnlimited(commands.Cog):
 
                     # UNIVERSE CARD
                     player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus, o_attack, o_defense, turn_total)
-                    await private_channel.send(file=player_1_card)
+                    # await private_channel.send(file=player_1_card)
                     
                     if o_used_focus and o_used_resolve:
                             options = ["q","Q","0","1","2","3","4","6", "7", "8", "9"]
@@ -13155,7 +13155,7 @@ class CrownUnlimited(commands.Cog):
                     util_action_row = manage_components.create_actionrow(*util_buttons)
                     coop_util_action_row = manage_components.create_actionrow(*coop_util_buttons)
 
-                    await private_channel.send(f"Choose your move! **|** _Turn_ {turn_total} :dagger:**{o_attack}**/:shield:**{o_defense}**", components=[battle_action_row, util_action_row, coop_util_action_row])
+                    await private_channel.send(f"Choose your move! **|** _Turn_ {turn_total} :dagger:**{o_attack}**/:shield:**{o_defense}**", components=[battle_action_row, util_action_row, coop_util_action_row], file=player_1_card)
                     # Make sure user is responding with move
                     def check(button_ctx):
                         return button_ctx.author == user1 and button_ctx.custom_id in options
@@ -16652,8 +16652,8 @@ class CrownUnlimited(commands.Cog):
                 overwrites = {
                             guild.default_role: discord.PermissionOverwrite(read_messages=True, manage_channels=False, kick_members=False, mention_everyone=False, read_message_history=True, send_messages=False, view_channel=True),
                             guild.me: discord.PermissionOverwrite(read_messages=True),
-                            ctx.author: discord.PermissionOverwrite(read_messages=True),
-                            user: discord.PermissionOverwrite(read_messages=True),
+                            ctx.author: discord.PermissionOverwrite(read_messages=True, send_messages=True),
+                            user: discord.PermissionOverwrite(read_messages=True, send_messages=True),
                         }
 
                 private_channel = await guild.create_text_channel(f'{str(ctx.author)}&{user}-co-tale-run', overwrites=overwrites)
@@ -17987,7 +17987,7 @@ class CrownUnlimited(commands.Cog):
 
                         # UNIVERSE CARD
                         player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus, o_attack, o_defense, turn_total)
-                        await private_channel.send(file=player_1_card)
+                        # await private_channel.send(file=player_1_card)
                         
                         if o_used_focus and o_used_resolve:
                             options = ["q","Q","0","1","2","3","4","6", "7"]
@@ -18064,7 +18064,7 @@ class CrownUnlimited(commands.Cog):
                         util_action_row = manage_components.create_actionrow(*util_buttons)
                         coop_util_action_row = manage_components.create_actionrow(*coop_util_buttons)
 
-                        await private_channel.send(f"Choose your move! **|** _Turn_ {turn_total} :dagger:**{o_attack}**/:shield:**{o_defense}**", components=[battle_action_row, util_action_row, coop_util_action_row])
+                        await private_channel.send(f"Choose your move! **|** _Turn_ {turn_total} :dagger:**{o_attack}**/:shield:**{o_defense}**", components=[battle_action_row, util_action_row, coop_util_action_row], file=player_1_card)
                         # Make sure user is responding with move
                         def check(button_ctx):
                             return button_ctx.author == user1 and button_ctx.custom_id in options
@@ -19446,7 +19446,7 @@ class CrownUnlimited(commands.Cog):
 
                         # UNIVERSE CARD
                         companion = showcard(c, c_max_health, c_health, c_max_stamina, c_stamina, c_used_resolve, ctitle, c_used_focus, c_attack, c_defense, turn_total)
-                        await private_channel.send(file=companion)
+                        # await private_channel.send(file=companion)
                         
                         if c_used_focus and c_used_resolve:
                             options = ["q","Q","0","1","2","3","4","6", "7"]
@@ -19523,7 +19523,7 @@ class CrownUnlimited(commands.Cog):
                         util_action_row = manage_components.create_actionrow(*util_buttons)
                         coop_util_action_row = manage_components.create_actionrow(*coop_util_buttons)
 
-                        await private_channel.send(f"Choose your move! **|** _Turn_ {turn_total} :dagger:**{c_attack}**/:shield:**{c_defense}**", components=[battle_action_row, util_action_row, coop_util_action_row])
+                        await private_channel.send(f"Choose your move! **|** _Turn_ {turn_total} :dagger:**{c_attack}**/:shield:**{c_defense}**", components=[battle_action_row, util_action_row, coop_util_action_row], file=companion)
                         # Make sure user is responding with move
                         def check(button_ctx):
                             return button_ctx.author == user and button_ctx.custom_id in options
@@ -20986,8 +20986,8 @@ class CrownUnlimited(commands.Cog):
                 overwrites = {
                             guild.default_role: discord.PermissionOverwrite(read_messages=True, manage_channels=False, kick_members=False, mention_everyone=False, read_message_history=True, send_messages=False, view_channel=True),
                             guild.me: discord.PermissionOverwrite(read_messages=True),
-                            ctx.author: discord.PermissionOverwrite(read_messages=True),
-                            user: discord.PermissionOverwrite(read_messages=True),
+                            ctx.author: discord.PermissionOverwrite(read_messages=True, send_messages=True),
+                            user: discord.PermissionOverwrite(read_messages=True, send_messages=True),
                         }
 
                 private_channel = await guild.create_text_channel(f'{str(ctx.author)}&{user}-co-dungeon-run', overwrites=overwrites)
@@ -22329,7 +22329,7 @@ class CrownUnlimited(commands.Cog):
 
                         # UNIVERSE CARD
                         player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus, o_attack, o_defense, turn_total)
-                        await private_channel.send(file=player_1_card)
+                        # await private_channel.send(file=player_1_card)
                         
                         if o_used_focus and o_used_resolve:
                             options = ["q","Q","0","1","2","3","4","6", "7"]
@@ -22406,7 +22406,7 @@ class CrownUnlimited(commands.Cog):
                         util_action_row = manage_components.create_actionrow(*util_buttons)
                         coop_util_action_row = manage_components.create_actionrow(*coop_util_buttons)
 
-                        await private_channel.send(f"Choose your move! **|** _Turn_ {turn_total} :dagger:**{o_attack}**/:shield:**{o_defense}**", components=[battle_action_row, util_action_row, coop_util_action_row])
+                        await private_channel.send(f"Choose your move! **|** _Turn_ {turn_total} :dagger:**{o_attack}**/:shield:**{o_defense}**", components=[battle_action_row, util_action_row, coop_util_action_row], file=player_1_card)
                         # Make sure user is responding with move
                         def check(button_ctx):
                             return button_ctx.author == user1 and button_ctx.custom_id in options
@@ -23987,7 +23987,7 @@ class CrownUnlimited(commands.Cog):
 
                         # UNIVERSE CARD
                         companion = showcard(c, c_max_health, c_health, c_max_stamina, c_stamina, c_used_resolve, ctitle, c_used_focus, c_attack, c_defense, turn_total)
-                        await private_channel.send(file=companion)
+                        # await private_channel.send(file=companion)
                         
                         if c_used_focus and c_used_resolve:
                             options = ["q","Q","0","1","2","3","4","6", "7"]
@@ -24064,7 +24064,7 @@ class CrownUnlimited(commands.Cog):
                         util_action_row = manage_components.create_actionrow(*util_buttons)
                         coop_util_action_row = manage_components.create_actionrow(*coop_util_buttons)
 
-                        await private_channel.send(f"Choose your move! **|** _Turn_ {turn_total} :dagger:**{c_attack}**/:shield:**{c_defense}**", components=[battle_action_row, util_action_row, coop_util_action_row])
+                        await private_channel.send(f"Choose your move! **|** _Turn_ {turn_total} :dagger:**{c_attack}**/:shield:**{c_defense}**", components=[battle_action_row, util_action_row, coop_util_action_row], file=companion)
                         # Make sure user is responding with move
                         def check(button_ctx):
                             return button_ctx.author == user and button_ctx.custom_id in options
@@ -25718,8 +25718,8 @@ class CrownUnlimited(commands.Cog):
                 overwrites = {
                             guild.default_role: discord.PermissionOverwrite(read_messages=True, manage_channels=False, kick_members=False, mention_everyone=False, read_message_history=True, send_messages=False, view_channel=True),
                             guild.me: discord.PermissionOverwrite(read_messages=True),
-                        ctx.author: discord.PermissionOverwrite(read_messages=True),
-                            user: discord.PermissionOverwrite(read_messages=True),
+                        ctx.author: discord.PermissionOverwrite(read_messages=True, send_messages=True),
+                            user: discord.PermissionOverwrite(read_messages=True, send_messages=True),
                         }
                 private_channel = await guild.create_text_channel(f'{str(ctx.author)}&{user}-co-boss-fight', overwrites=overwrites)
                 await ctx.send(f"{ctx.author.mention} private channel has been opened for you. Good luck!")
@@ -27057,7 +27057,7 @@ class CrownUnlimited(commands.Cog):
 
                     # UNIVERSE CARD
                     player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus, o_attack, o_defense, turn_total)
-                    await private_channel.send(file=player_1_card)
+                    # await private_channel.send(file=player_1_card)
                     
                     if o_used_focus and o_used_resolve:
                         options = ["q","Q","0","1","2","3","4","6", "7"]
@@ -27134,7 +27134,7 @@ class CrownUnlimited(commands.Cog):
                     util_action_row = manage_components.create_actionrow(*util_buttons)
                     coop_util_action_row = manage_components.create_actionrow(*coop_util_buttons)
 
-                    await private_channel.send(f"Choose your move! **|** _Turn_ {turn_total} :dagger:**{o_attack}**/:shield:**{o_defense}**", components=[battle_action_row, util_action_row, coop_util_action_row])
+                    await private_channel.send(f"Choose your move! **|** _Turn_ {turn_total} :dagger:**{o_attack}**/:shield:**{o_defense}**", components=[battle_action_row, util_action_row, coop_util_action_row], file=player_1_card)
                     # Make sure user is responding with move
                     def check(button_ctx):
                         return button_ctx.author == user1 and button_ctx.custom_id in options
@@ -28734,7 +28734,7 @@ class CrownUnlimited(commands.Cog):
 
                     # UNIVERSE CARD
                     companion = showcard(c, c_max_health, c_health, c_max_stamina, c_stamina, c_used_resolve, ctitle, c_used_focus, c_attack, c_defense, turn_total)
-                    await private_channel.send(file=companion)
+                    # await private_channel.send(file=companion)
                     
                     if c_used_focus and c_used_resolve:
                         options = ["q","Q","0","1","2","3","4","6", "7"]
@@ -28811,7 +28811,7 @@ class CrownUnlimited(commands.Cog):
                     util_action_row = manage_components.create_actionrow(*util_buttons)
                     coop_util_action_row = manage_components.create_actionrow(*coop_util_buttons)
 
-                    await private_channel.send(f"Choose your move! **|** _Turn_ {turn_total} :dagger:**{c_attack}**/:shield:**{c_defense}**", components=[battle_action_row, util_action_row, coop_util_action_row])
+                    await private_channel.send(f"Choose your move! **|** _Turn_ {turn_total} :dagger:**{c_attack}**/:shield:**{c_defense}**", components=[battle_action_row, util_action_row, coop_util_action_row], file=companion)
                     # Make sure user is responding with move
                     def check(button_ctx):
                         return button_ctx.author == user and button_ctx.custom_id in options
@@ -30417,7 +30417,7 @@ class CrownUnlimited(commands.Cog):
                 overwrites = {
                             guild.default_role: discord.PermissionOverwrite(read_messages=True, manage_channels=False, kick_members=False, mention_everyone=False, read_message_history=True, send_messages=False, view_channel=True),
                             guild.me: discord.PermissionOverwrite(read_messages=True),
-                        ctx.author: discord.PermissionOverwrite(read_messages=True),
+                        ctx.author: discord.PermissionOverwrite(read_messages=True, send_messages=True),
                         }
                 private_channel = await guild.create_text_channel(f'{str(ctx.author)}-dungeon-run', overwrites=overwrites)
                 await ctx.send(f"{ctx.author.mention} private channel has been opened for you. Good luck!")
@@ -31363,7 +31363,7 @@ class CrownUnlimited(commands.Cog):
 
                          # UNIVERSE CARD
                         player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus, o_attack, o_defense, turn_total)
-                        await private_channel.send(file=player_1_card)
+                        # await private_channel.send(file=player_1_card)
                         
                         if o_used_focus and o_used_resolve:
                             options = ["q","Q","0","1","2","3","4","6"]
@@ -31431,7 +31431,7 @@ class CrownUnlimited(commands.Cog):
                         battle_action_row = manage_components.create_actionrow(*battle_buttons)
                         util_action_row = manage_components.create_actionrow(*util_buttons)
 
-                        await private_channel.send(f"Choose your move! **|** _Turn_ {turn_total} :dagger:**{o_attack}**/:shield:**{o_defense}**", components=[battle_action_row, util_action_row])
+                        await private_channel.send(f"Choose your move! **|** _Turn_ {turn_total} :dagger:**{o_attack}**/:shield:**{o_defense}**", components=[battle_action_row, util_action_row], file=player_1_card)
                         # Make sure user is responding with move
                         def check(button_ctx):
                             return button_ctx.author == user1 and button_ctx.custom_id in options
@@ -32753,7 +32753,7 @@ class CrownUnlimited(commands.Cog):
                 overwrites = {
                             guild.default_role: discord.PermissionOverwrite(read_messages=True, manage_channels=False, kick_members=False, mention_everyone=False, read_message_history=True, send_messages=False, view_channel=True),
                             guild.me: discord.PermissionOverwrite(read_messages=True),
-                        ctx.author: discord.PermissionOverwrite(read_messages=True),
+                        ctx.author: discord.PermissionOverwrite(read_messages=True, send_messages=True),
                         }
                 private_channel = await guild.create_text_channel(f'{str(ctx.author)}-tale-run', overwrites=overwrites)
                 await ctx.send(f"{ctx.author.mention} private channel has been opened for you. Good luck!")
@@ -33694,7 +33694,7 @@ class CrownUnlimited(commands.Cog):
 
                         # UNIVERSE CARD
                         player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus, o_attack, o_defense, turn_total)
-                        await private_channel.send(file=player_1_card)
+                        # await private_channel.send(file=player_1_card)
                         
                         if o_used_focus and o_used_resolve:
                             options = ["q","Q","0","1","2","3","4","6"]
@@ -33762,7 +33762,7 @@ class CrownUnlimited(commands.Cog):
                         battle_action_row = manage_components.create_actionrow(*battle_buttons)
                         util_action_row = manage_components.create_actionrow(*util_buttons)
 
-                        await private_channel.send(f"Choose your move! **|** _Turn_ {turn_total} :dagger:**{o_attack}**/:shield:**{o_defense}**", components=[battle_action_row, util_action_row])
+                        await private_channel.send(f"Choose your move! **|** _Turn_ {turn_total} :dagger:**{o_attack}**/:shield:**{o_defense}**", components=[battle_action_row, util_action_row], file=player_1_card)
                         # Make sure user is responding with move
                         def check(button_ctx):
                             return button_ctx.author == user1 and button_ctx.custom_id in options
@@ -34960,7 +34960,7 @@ class CrownUnlimited(commands.Cog):
                 overwrites = {
                             guild.default_role: discord.PermissionOverwrite(read_messages=True, manage_channels=False, kick_members=False, mention_everyone=False, read_message_history=True, send_messages=False, view_channel=True),
                             guild.me: discord.PermissionOverwrite(read_messages=True),
-                        ctx.author: discord.PermissionOverwrite(read_messages=True)
+                        ctx.author: discord.PermissionOverwrite(read_messages=True, send_messages=True)
                         }
                 private_channel = await guild.create_text_channel(f'{str(ctx.author)}-boss-fight', overwrites=overwrites)
                 await ctx.send(f"{ctx.author.mention} private channel has been opened for you.")
@@ -35907,7 +35907,7 @@ class CrownUnlimited(commands.Cog):
 
                     # UNIVERSE CARD
                     player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus, o_attack, o_defense, turn_total)
-                    await private_channel.send(file=player_1_card)
+                    # await private_channel.send(file=player_1_card)
                     
                     if o_used_focus and o_used_resolve:
                         options = ["q","Q","0","1","2","3","4","6"]
@@ -35975,7 +35975,7 @@ class CrownUnlimited(commands.Cog):
                     battle_action_row = manage_components.create_actionrow(*battle_buttons)
                     util_action_row = manage_components.create_actionrow(*util_buttons)
 
-                    await private_channel.send(f"Choose your move! **|** _Turn_ {turn_total} :dagger:**{o_attack}**/:shield:**{o_defense}**", components=[battle_action_row, util_action_row])
+                    await private_channel.send(f"Choose your move! **|** _Turn_ {turn_total} :dagger:**{o_attack}**/:shield:**{o_defense}**", components=[battle_action_row, util_action_row], file=player_1_card)
                     # Make sure user is responding with move
                     def check(button_ctx):
                         return button_ctx.author == user1 and button_ctx.custom_id in options
@@ -38164,7 +38164,7 @@ class CrownUnlimited(commands.Cog):
 
                             # UNIVERSE CARD
                             player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus, o_attack, o_defense, turn_total)
-                            await private_channel.send(file=player_1_card)
+                            # await private_channel.send(file=player_1_card)
                             
                             if o_used_focus and o_used_resolve:
                                 options = ["q","Q","0","1","2","3","4","6"]
@@ -38232,7 +38232,7 @@ class CrownUnlimited(commands.Cog):
                             battle_action_row = manage_components.create_actionrow(*battle_buttons)
                             util_action_row = manage_components.create_actionrow(*util_buttons)
 
-                            await private_channel.send(f"Choose your move! **|** _Turn_ {turn_total} :dagger:**{o_attack}**/:shield:**{o_defense}**", components=[battle_action_row, util_action_row])
+                            await private_channel.send(content=f"Choose your move! **|** _Turn_ {turn_total} :dagger:**{o_attack}**/:shield:**{o_defense}**", components=[battle_action_row, util_action_row], file=player_1_card)
                             # Make sure user is responding with move
                             def check(button_ctx):
                                 return button_ctx.author == user1 and button_ctx.custom_id in options
@@ -38845,7 +38845,7 @@ class CrownUnlimited(commands.Cog):
                                 #PlayUser
                                 # UNIVERSE CARD
                                 player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus, t_attack, t_defense, turn_total)
-                                await private_channel.send(file=player_2_card)
+                                # await private_channel.send(file=player_2_card)
                                 
                                 if t_used_focus and t_used_resolve:
                                     options = ["q","Q","0","1","2","3","4","6"]
@@ -38913,7 +38913,7 @@ class CrownUnlimited(commands.Cog):
                                 battle_action_row = manage_components.create_actionrow(*battle_buttons)
                                 util_action_row = manage_components.create_actionrow(*util_buttons)
 
-                                await private_channel.send(f"Choose your move! **|** _Turn_ {turn_total} :dagger:**{t_attack}**/:shield:**{t_defense}**", components=[battle_action_row, util_action_row])
+                                await private_channel.send(f"Choose your move! **|** _Turn_ {turn_total} :dagger:**{t_attack}**/:shield:**{t_defense}**", components=[battle_action_row, util_action_row], file=player_2_card)
                                 # Make sure user is responding with move
                                 def check(button_ctx):
                                     return button_ctx.author == user2 and button_ctx.custom_id in options
@@ -40941,7 +40941,7 @@ class CrownUnlimited(commands.Cog):
 
                             # UNIVERSE CARD
                             player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus, o_attack, o_defense, turn_total)
-                            await private_channel.send(file=player_1_card)
+                            # await private_channel.send(file=player_1_card)
                             
                             if o_used_focus and o_used_resolve:
                                 options = ["q","Q","0","1","2","3","4","6"]
@@ -41009,7 +41009,7 @@ class CrownUnlimited(commands.Cog):
                             battle_action_row = manage_components.create_actionrow(*battle_buttons)
                             util_action_row = manage_components.create_actionrow(*util_buttons)
 
-                            await private_channel.send(f"Choose your move! **|** _Turn_ {turn_total} :dagger:**{o_attack}**/:shield:**{o_defense}**", components=[battle_action_row, util_action_row])
+                            await private_channel.send(f"Choose your move! **|** _Turn_ {turn_total} :dagger:**{o_attack}**/:shield:**{o_defense}**", components=[battle_action_row, util_action_row], file=player_1_card)
                             # Make sure user is responding with move
                             def check(button_ctx):
                                 return button_ctx.author == user1 and button_ctx.custom_id in options
@@ -41586,7 +41586,7 @@ class CrownUnlimited(commands.Cog):
                                 #PlayUser
                                 # UNIVERSE CARD
                                 player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus, t_attack, t_defense, turn_total)
-                                await private_channel.send(file=player_2_card)
+                                # await private_channel.send(file=player_2_card)
                                 
                                 if t_used_focus and t_used_resolve:
                                     options = ["q","Q","0","1","2","3","4","6"]
@@ -41654,7 +41654,7 @@ class CrownUnlimited(commands.Cog):
                                 battle_action_row = manage_components.create_actionrow(*battle_buttons)
                                 util_action_row = manage_components.create_actionrow(*util_buttons)
 
-                                await private_channel.send(f"Choose your move! **|** _Turn_ {turn_total} :dagger:**{t_attack}**/:shield:**{t_defense}**", components=[battle_action_row, util_action_row])
+                                await private_channel.send(f"Choose your move! **|** _Turn_ {turn_total} :dagger:**{t_attack}**/:shield:**{t_defense}**", components=[battle_action_row, util_action_row], file=player_2_card)
                                 # Make sure user is responding with move
                                 def check(button_ctx):
                                     return button_ctx.author == user2 and button_ctx.custom_id in options
@@ -43682,7 +43682,7 @@ class CrownUnlimited(commands.Cog):
 
                             # UNIVERSE CARD
                             player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus, o_attack, o_defense, turn_total)
-                            await private_channel.send(file=player_1_card)
+                            # await private_channel.send(file=player_1_card)
                             
                             if o_used_focus and o_used_resolve:
                                 options = ["q","Q","0","1","2","3","4","6"]
@@ -43742,7 +43742,7 @@ class CrownUnlimited(commands.Cog):
                             battle_action_row = manage_components.create_actionrow(*battle_buttons)
                             util_action_row = manage_components.create_actionrow(*util_buttons)
 
-                            await private_channel.send(f"Choose your move! **|** _Turn_ {turn_total} :dagger:**{o_attack}**/:shield:**{o_defense}**", components=[battle_action_row, util_action_row])
+                            await private_channel.send(f"Choose your move! **|** _Turn_ {turn_total} :dagger:**{o_attack}**/:shield:**{o_defense}**", components=[battle_action_row, util_action_row], file=player_1_card)
                             # Make sure user is responding with move
                             def check(button_ctx):
                                 return button_ctx.author == user1 and button_ctx.custom_id in options
@@ -44219,7 +44219,7 @@ class CrownUnlimited(commands.Cog):
                                 #PlayUser
                                 # UNIVERSE CARD
                                 player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus, t_attack, t_defense, turn_total)
-                                await private_channel.send(file=player_2_card)
+                                # await private_channel.send(file=player_2_card)
                                 
                                 if t_used_focus and t_used_resolve:
                                     options = ["q","Q","0","1","2","3","4","6"]
@@ -44287,7 +44287,7 @@ class CrownUnlimited(commands.Cog):
                                 battle_action_row = manage_components.create_actionrow(*battle_buttons)
                                 util_action_row = manage_components.create_actionrow(*util_buttons)
 
-                                await private_channel.send(f"Choose your move! **|** _Turn_ {turn_total} :dagger:**{t_attack}**/:shield:**{t_defense}**", components=[battle_action_row, util_action_row])
+                                await private_channel.send(f"Choose your move! **|** _Turn_ {turn_total} :dagger:**{t_attack}**/:shield:**{t_defense}**", components=[battle_action_row, util_action_row], file=player_2_card)
                                 # Make sure user is responding with move
                                 def check(button_ctx):
                                     return button_ctx.author == user2 and button_ctx.custom_id in options
@@ -46217,7 +46217,7 @@ class CrownUnlimited(commands.Cog):
 
                             # UNIVERSE CARD
                             player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus, o_attack, o_defense, turn_total)
-                            await private_channel.send(file=player_1_card)
+                            # await private_channel.send(file=player_1_card)
                             
                             if o_used_focus and o_used_resolve:
                                 options = ["q","Q","0","1","2","3","4","6"]
@@ -46276,7 +46276,7 @@ class CrownUnlimited(commands.Cog):
                             battle_action_row = manage_components.create_actionrow(*battle_buttons)
                             util_action_row = manage_components.create_actionrow(*util_buttons)
 
-                            await private_channel.send(f"Choose your move! **|** _Turn_ {turn_total} :dagger:**{o_attack}**/:shield:**{o_defense}**", components=[battle_action_row, util_action_row])
+                            await private_channel.send(f"Choose your move! **|** _Turn_ {turn_total} :dagger:**{o_attack}**/:shield:**{o_defense}**", components=[battle_action_row, util_action_row], file=player_1_card)
                             # Make sure user is responding with move
                             def check(button_ctx):
                                 return button_ctx.author == user1 and button_ctx.custom_id in options
@@ -46753,7 +46753,7 @@ class CrownUnlimited(commands.Cog):
                                 #PlayUser
                                 # UNIVERSE CARD
                                 player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus, t_attack, t_defense, turn_total)
-                                await private_channel.send(file=player_2_card)
+                                # await private_channel.send(file=player_2_card)
                                 
                                 if t_used_focus and t_used_resolve:
                                     options = ["q","Q","0","1","2","3","4","6"]
@@ -46821,7 +46821,7 @@ class CrownUnlimited(commands.Cog):
                                 battle_action_row = manage_components.create_actionrow(*battle_buttons)
                                 util_action_row = manage_components.create_actionrow(*util_buttons)
 
-                                await private_channel.send(f"Choose your move! **|** _Turn_ {turn_total} :dagger:**{t_attack}**/:shield:**{t_defense}**", components=[battle_action_row, util_action_row])
+                                await private_channel.send(f"Choose your move! **|** _Turn_ {turn_total} :dagger:**{t_attack}**/:shield:**{t_defense}**", components=[battle_action_row, util_action_row], file=player_2_card)
                                 # Make sure user is responding with move
                                 def check(button_ctx):
                                     return button_ctx.author == user2 and button_ctx.custom_id in options
@@ -48767,7 +48767,7 @@ class CrownUnlimited(commands.Cog):
 
                             # UNIVERSE CARD
                             player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus, o_attack, o_defense, turn_total)
-                            await private_channel.send(file=player_1_card)
+                            # await private_channel.send(file=player_1_card)
                             
                             if o_used_focus and o_used_resolve:
                                 options = ["q","Q","0","1","2","3","4","6"]
@@ -48835,7 +48835,7 @@ class CrownUnlimited(commands.Cog):
                             battle_action_row = manage_components.create_actionrow(*battle_buttons)
                             util_action_row = manage_components.create_actionrow(*util_buttons)
 
-                            await private_channel.send(f"Choose your move! **|** _Turn_ {turn_total} :dagger:**{o_attack}**/:shield:**{o_defense}**", components=[battle_action_row, util_action_row])
+                            await private_channel.send(f"Choose your move! **|** _Turn_ {turn_total} :dagger:**{o_attack}**/:shield:**{o_defense}**", components=[battle_action_row, util_action_row], file=player_1_card)
                             # Make sure user is responding with move
                             def check(button_ctx):
                                 return button_ctx.author == user1 and button_ctx.custom_id in options
@@ -49430,7 +49430,7 @@ class CrownUnlimited(commands.Cog):
                             if botActive != True:
                                 # UNIVERSE CARD
                                 player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus, t_attack, t_defense, turn_total)
-                                await private_channel.send(file=player_2_card)
+                                # await private_channel.send(file=player_2_card)
                                 
                                 if t_used_focus and t_used_resolve:
                                     options = ["q","Q","0","1","2","3","4","6"]
@@ -49498,7 +49498,7 @@ class CrownUnlimited(commands.Cog):
                                 battle_action_row = manage_components.create_actionrow(*battle_buttons)
                                 util_action_row = manage_components.create_actionrow(*util_buttons)
 
-                                await private_channel.send(f"Choose your move! **|** _Turn_ {turn_total} :dagger:**{t_attack}**/:shield:**{t_defense}**", components=[battle_action_row, util_action_row])
+                                await private_channel.send(f"Choose your move! **|** _Turn_ {turn_total} :dagger:**{t_attack}**/:shield:**{t_defense}**", components=[battle_action_row, util_action_row], file=player_2_card)
                                 # Make sure user is responding with move
                                 def check(button_ctx):
                                     return button_ctx.author == user2 and button_ctx.custom_id in options
@@ -50367,7 +50367,7 @@ class CrownUnlimited(commands.Cog):
             await ctx.send(m.SESSION_DOES_NOT_EXIST)
 
     @cog_ext.cog_slash(description="Start a Guild Raid", guild_ids=main.guild_ids)
-    async def raid(self, ctx: SlashContext, guild : str):
+    async def raid(self, ctx: SlashContext, guild: str):
         guildname = guild
         private_channel = ctx
         starttime = time.asctime()
@@ -50607,7 +50607,6 @@ class CrownUnlimited(commands.Cog):
             o_health = t['HLT']
         else:                    
             o_max_health = o['HLT'] + ocard_lvl_hlt_buff
-
 
         #DBZ traits
         o_final_stand=False
@@ -51198,8 +51197,7 @@ class CrownUnlimited(commands.Cog):
         # Count Turns
         turn_total = 0
         
-        
-        #Rebirth Scaling
+        # #Rebirth Scaling
         o_attack = o_attack + (o_user['REBIRTH'] * 10)
         o_defense = o_defense + (o_user['REBIRTH'] * 10)
         t_attack = t_attack + (t_user['REBIRTH'] * 10)
@@ -51209,11 +51207,12 @@ class CrownUnlimited(commands.Cog):
         
         # START TURNS
         while (o_health > 0) and (t_health > 0):
+            
             #Player 1 Turn Start
             if turn == 0:
                 if o_block_used==True:
                     o_block_used=False
-                    o_defense = o_defense/ 2
+                    o_defense = o_defense / 2
                 if o_universe == "Death Note" and turn_total == 0:
                     embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death", description=f"**{o_card} says**\nYou will die in 24 turns...", colour=0xe91e63)
                     await private_channel.send(embed=embedVar)
@@ -51230,16 +51229,13 @@ class CrownUnlimited(commands.Cog):
                 # Tutorial Instructions
                 if turn_total == 0:
                     if title_match_active:                    
-                        await ctx.send(f"{user1.mention}{user2.mention}")
                         embedVar = discord.Embed(title=f"**{o_card}** VS **{t_card}** Shield Defense has begun!", description=f"{o_card} Says:\n{o_greeting_description}", colour=0xe91e63)
                         await ctx.send(embed=embedVar)    
                     else:
-                        await ctx.send(f"{user1.mention}{user2.mention}")
                         embedVar = discord.Embed(title=f"**{o_card}** VS **{t_card}** {tguild} Raid has begun!", description=f"{o_card} Says:\n{o_greeting_description}", colour=0xe91e63)
                         await ctx.send(embed=embedVar)                               
 
-                
-
+            
                 if o_health <= (o_max_health * .25):
                     embed_color_o=0xe74c3c
                     if o_chainsaw==True:
@@ -51407,7 +51403,7 @@ class CrownUnlimited(commands.Cog):
 
                     # UNIVERSE CARD
                     player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus, o_attack, o_defense, turn_total)
-                    await private_channel.send(file=player_1_card)
+                    # await private_channel.send(file=player_1_card)
                     
                     if o_used_focus and o_used_resolve:
                         options = ["q","Q","0","1","2","3","4","6"]
@@ -51466,7 +51462,7 @@ class CrownUnlimited(commands.Cog):
                     battle_action_row = manage_components.create_actionrow(*battle_buttons)
                     util_action_row = manage_components.create_actionrow(*util_buttons)
 
-                    await private_channel.send(f"Choose your move! **|** _Turn_ {turn_total} :dagger:**{o_attack}**/:shield:**{o_defense}**", components=[battle_action_row, util_action_row])
+                    await private_channel.send(f"Choose your move! **|** _Turn_ {turn_total} :dagger:**{o_attack}**/:shield:**{o_defense}**", components=[battle_action_row, util_action_row], file=player_1_card)
                     # Make sure user is responding with move
                     def check(button_ctx):
                         return button_ctx.author == user1 and button_ctx.custom_id in options
@@ -51945,7 +51941,7 @@ class CrownUnlimited(commands.Cog):
                         turn = 1
                 else:
                     # UNIVERSE CARD
-                    player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus)
+                    player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus, t_attack, t_defense, turn_total)
                     await private_channel.send(file=player_2_card)
                     aiMove = 0
                     
