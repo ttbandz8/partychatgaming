@@ -2209,7 +2209,7 @@ class CrownUnlimited(commands.Cog):
                 questlogger = await quest(ouser, t_card, "Tales")
                 destinylogger = await destiny(ouser, t_card, "Tales")
                 petlogger = await petlevel(opet_name, ouser)
-                cardlogger = await cardlevel(o_card, ouser, o_universe)
+                cardlogger = await cardlevel(o_card, ouser, o_universe, selected_universe, "Tales")
                 match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']), str(oarm['ARM']), str(selected_universe), "Tales", o['EXCLUSIVE'])
                 if destinylogger:
                     await ctx.author.send(destinylogger)
@@ -6645,7 +6645,7 @@ class CrownUnlimited(commands.Cog):
                 questlogger = await quest(ouser, t_card, "Tales")
                 destinylogger = await destiny(ouser, t_card, "Tales")
                 petlogger = await petlevel(opet_name, ouser)
-                cardlogger = await cardlevel(o_card, ouser, o_universe)
+                cardlogger = await cardlevel(o_card, ouser, o_universe, selected_universe, "Dungeon")
                 if questlogger:
                     await ctx.author.send(questlogger)
                 if destinylogger:
@@ -11570,7 +11570,7 @@ class CrownUnlimited(commands.Cog):
                 destinylogger = await destiny(ouser, t_card, "Dungeon")
                 #cquestlogger = await quest(user, t_card, "Dungeon")
                 petlogger = await petlevel(opet_name, ouser)
-                cardlogger = await cardlevel(o_card, ouser, o_universe)
+                cardlogger = await cardlevel(o_card, ouser, o_universe, selected_universe, "Dungeon")
                 #cpetlogger = await petlevel(cpet_name, user)
                 if questlogger:
                     await ctx.author.send(questlogger)
@@ -16516,7 +16516,7 @@ class CrownUnlimited(commands.Cog):
             oteambank = await blessteam(50,oteam)
             #cteambank = await blessteam(50,cteam)
             petlogger = await petlevel(opet_name, ouser)
-            cardlogger = await cardlevel(o_card, ouser, o_universe)
+            cardlogger = await cardlevel(o_card, ouser, o_universe, selected_universe, "Tales")
             #cpetlogger = await petlevel(cpet_name, user)
             response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
             #response = db.updateUserNoFilter({'DISNAME': str(user)}, {'$set': {'AVAILABLE': True}})
@@ -20815,8 +20815,8 @@ class CrownUnlimited(commands.Cog):
                 cquestlogger = await quest(cuser, t_card, "Tales")
                 petlogger = await petlevel(opet_name, ouser)
                 cpetlogger = await petlevel(cpet_name, user)
-                cardlogger = await cardlevel(o_card, ouser, o_universe)
-                ccardlogger = await cardlevel(c_card, user, c_universe)
+                cardlogger = await cardlevel(o_card, ouser, o_universe, selected_universe, "Tales")
+                ccardlogger = await cardlevel(c_card, user, c_universe, selected_universe, "Tales")
                 if questlogger:
                     await ctx.author.send(questlogger)
                 if cquestlogger:
@@ -25550,8 +25550,8 @@ class CrownUnlimited(commands.Cog):
                 cmatch = await savematch(str(user), str(c_card), str(c_card_path), str(ctitle['TITLE']), str(carm['ARM']), str(selected_universe), "Dungeon", c['EXCLUSIVE'])
                 questlogger = await quest(ouser, t_card, "Dungeon")
                 cquestlogger = await quest(user, t_card, "Dungeon")
-                cardlogger = await cardlevel(o_card, ouser, o_universe)
-                ccardlogger = await cardlevel(c_card, user, c_universe)
+                cardlogger = await cardlevel(o_card, ouser, o_universe, selected_universe, "Dungeon")
+                ccardlogger = await cardlevel(c_card, user, c_universe, selected_universe, "Dungeon")
                 petlogger = await petlevel(opet_name, ouser)
                 cpetlogger = await petlevel(cpet_name, user)
                 if questlogger:
@@ -30292,9 +30292,9 @@ class CrownUnlimited(commands.Cog):
             oteambank = await blessteam(50,oteam)
             cteambank = await blessteam(50,cteam)
             petlogger = await petlevel(opet_name, ouser)
-            cardlogger = await cardlevel(o_card, ouser, o_universe)
+            cardlogger = await cardlevel(o_card, ouser, o_universe, selected_universe, "Tales")
             cpetlogger = await petlevel(cpet_name, user)
-            ccardlogger = await cardlevel(c_card, user, c_universe)
+            ccardlogger = await cardlevel(c_card, user, c_universe, selected_universe, "Tales")
             response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
             response = db.updateUserNoFilter({'DISNAME': str(user)}, {'$set': {'AVAILABLE': True}})
             embedVar = discord.Embed(title=f":zap: **{o_card}** and **{c_card}**defeated the {t_universe} Boss {t_card}!", description=f"Match concluded in {turn_total} turns!\n\n{drop_response} + :coin: 50!\n\n{c_user['NAME']} got :coin:50!\n{t_concede}", colour=0xe91e63)
@@ -32583,7 +32583,7 @@ class CrownUnlimited(commands.Cog):
                 questlogger = await quest(ouser, t_card, "Dungeon")
                 destinylogger = await destiny(ouser, t_card, "Dungeon")
                 petlogger = await petlevel(opet_name, ouser)
-                cardlogger = await cardlevel(o_card, ouser, o_universe)
+                cardlogger = await cardlevel(o_card, ouser, o_universe, selected_universe, "Tales")
                 match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']), str(oarm['ARM']), str(selected_universe), "Dungeon", o['EXCLUSIVE'])
                 if destinylogger:
                     await ctx.author.send(destinylogger)
@@ -34794,7 +34794,7 @@ class CrownUnlimited(commands.Cog):
                 questlogger = await quest(ouser, t_card, "Tales")
                 destinylogger = await destiny(ouser, t_card, "Tales")
                 petlogger = await petlevel(opet_name, ouser)
-                cardlogger = await cardlevel(o_card, ouser, o_universe)
+                cardlogger = await cardlevel(o_card, ouser, o_universe, selected_universe, "Tales")
                 match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']), str(oarm['ARM']), str(selected_universe), "Tales", o['EXCLUSIVE'])
                 if destinylogger:
                     await ctx.author.send(destinylogger)
@@ -37115,7 +37115,7 @@ class CrownUnlimited(commands.Cog):
             gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
             drop_response = await bossdrops(ctx.author, t_universe)
             petlogger = await petlevel(opet_name, ouser)
-            cardlogger = await cardlevel(o_card, ouser, o_universe)
+            cardlogger = await cardlevel(o_card, ouser, o_universe, selected_universe, "Tales")
             match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']), str(oarm['ARM']), "N/A", "Boss", o['EXCLUSIVE'])
             await bless(50, str(ctx.author))
             teambank = await blessteam(10, oteam)
@@ -53123,9 +53123,11 @@ async def petlevel(pet, player):
             filter_query = [{'type.'+ "NAME": str(pet)}]
             response = db.updateVault(query, update_query, filter_query)
 
-async def cardlevel(card, player, universe):
+async def cardlevel(card: str, player: str, card_universe: str, mode_universe: str, mode: str):
     vault = db.queryVault({'OWNER': str(player)})
-    uni = db.queryUniverse({'TITLE': universe})
+    carduni_data = db.queryUniverse({'TITLE': carduni})
+    
+    uni = db.queryUniverse({'TITLE': card_universe})
     tier = uni['TIER']
     cardinfo = {}
     for x in vault['CARD_LEVELS']:
