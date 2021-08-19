@@ -33,6 +33,7 @@ class USER():
     RIFT: int = field(default_factory=lambda: 0)
     REBIRTH: int = field(default_factory=lambda: 0)
     PATRON: bool = field(default_factory=lambda: False)
+    LEVEL: int = field(default_factory=lambda: 0)
     
 @dataclass(frozen=True, order=True)
 class GUILD():

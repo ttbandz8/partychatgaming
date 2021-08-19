@@ -53138,7 +53138,7 @@ async def cardlevel(card: str, player: str, card_universe: str, mode_universe: s
             cardinfo = x
     
     lvl = cardinfo['LVL']
-    lvl_req = 125
+    lvl_req = 150
     exp = cardinfo['EXP']
     exp_gain = 0
     if tier == 1:
