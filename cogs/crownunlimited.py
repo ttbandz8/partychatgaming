@@ -53146,6 +53146,8 @@ async def cardlevel(card, player, universe):
         exp_gain = 1
     if tier == 5:
         exp_gain = 1
+    if tier == 9:
+        exp_gain = 3
     
     hlt_buff = 0
     atk_def_buff = 0
