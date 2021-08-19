@@ -32583,7 +32583,7 @@ class CrownUnlimited(commands.Cog):
                 questlogger = await quest(ouser, t_card, "Dungeon")
                 destinylogger = await destiny(ouser, t_card, "Dungeon")
                 petlogger = await petlevel(opet_name, ouser)
-                cardlogger = await cardlevel(o_card, ouser, o_universe, selected_universe, "Tales")
+                cardlogger = await cardlevel(o_card, ouser, o_universe, selected_universe, "Dungeon")
                 match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']), str(oarm['ARM']), str(selected_universe), "Dungeon", o['EXCLUSIVE'])
                 if destinylogger:
                     await ctx.author.send(destinylogger)
@@ -53125,8 +53125,11 @@ async def petlevel(pet, player):
 
 async def cardlevel(card: str, player: str, card_universe: str, mode_universe: str, mode: str):
     vault = db.queryVault({'OWNER': str(player)})
-    carduni_data = db.queryUniverse({'TITLE': carduni})
-    
+    mode_uni = db.queryUniverse({'TITLE': mode_universe})
+    mode_tier = mode_uni['TIER']
+    multiplier = 0
+    if mode == "Dungeon":
+        multiplier = mode_tier
     uni = db.queryUniverse({'TITLE': card_universe})
     tier = uni['TIER']
     cardinfo = {}
@@ -53139,17 +53142,17 @@ async def cardlevel(card: str, player: str, card_universe: str, mode_universe: s
     exp = cardinfo['EXP']
     exp_gain = 0
     if tier == 1:
-        exp_gain = 6
+        exp_gain = 6 + mode_tier + multiplier
     if tier == 2:
-        exp_gain = 4
+        exp_gain = 4 + mode_tier + multiplier
     if tier == 3:
-        exp_gain = 2
+        exp_gain = 2 + mode_tier + multiplier
     if tier == 4:
-        exp_gain = 1
+        exp_gain = 1 + mode_tier + multiplier
     if tier == 5:
-        exp_gain = 1
+        exp_gain = 1 + mode_tier + multiplier
     if tier == 9:
-        exp_gain = 3
+        exp_gain = 3 + mode_tier + multiplier
     
     hlt_buff = 0
     atk_def_buff = 0
