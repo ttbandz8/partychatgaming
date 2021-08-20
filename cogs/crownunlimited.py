@@ -27752,32 +27752,64 @@ class CrownUnlimited(commands.Cog):
         if isinstance(private_channel.channel, discord.channel.DMChannel):
             await private_channel.send(m.SERVER_FUNCTION_ONLY)
             return
-        sowner = db.queryUser({'DISNAME': str(ctx.author)})
 
-        guild = ctx.guild
-        if guild:
-            overwrites = {
-                        guild.default_role: discord.PermissionOverwrite(read_messages=True, manage_channels=False, kick_members=False, mention_everyone=False, read_message_history=True, send_messages=False, view_channel=True),
-                        guild.me: discord.PermissionOverwrite(read_messages=True),
-                    ctx.author: discord.PermissionOverwrite(read_messages=True, send_messages=True),
-                    }
-            private_channel = await guild.create_text_channel(f'{str(ctx.author)}-ABYSS', overwrites=overwrites)
-            await ctx.send(f"{ctx.author.mention} Abyss has been opened for you. Good luck!")
+        try:
+            sowner = db.queryUser({'DISNAME': str(ctx.author)})
+            checks = db.queryCard({'NAME': sowner['CARD']})
+            checks_uni = db.queryUniverse({'TITLE': checks['UNIVERSE']})
+            uni_tier = checks_uni['TIER']
 
-        abyss = db.queryAbyss({'FLOOR': int(sowner['LEVEL'])})
-        enemies = abyss['ENEMIES']
-        scaling = abyss['SPECIAL_BUFF']
-        floor = abyss['FLOOR']
-        title = abyss['TITLE']
-        arm = abyss['ARM']
-        pet = abyss['PET']
+            abyss = db.queryAbyss({'FLOOR': sowner['LEVEL']})
+            enemies = abyss['ENEMIES']
+            scaling = abyss['SPECIAL_BUFF']
+            floor = abyss['FLOOR']
+            title = abyss['TITLE']
+            arm = abyss['ARM']
+            abyss_pet = abyss['PET']
+            banned_cards = abyss['BANNED_CARDS']
+            banned_titles = abyss['BANNED_TITLES']
+            banned_arms = abyss['BANNED_ARMS']
+            banned_universes = abyss['BANNED_UNIVERSES']
+            banned_universe_tiers = abyss['BANNED_TIERS']
+            banned_pets = abyss['BANNED_PETS']
+            
+            if sowner['CARD'] in banned_cards:
+                await private_channel.send(f":x: **{sowner['CARD']}** is banned on floor {floor}. Use another card.")
+                return
+            if sowner['TITLE'] in banned_titles:
+                await private_channel.send(f":x: **{sowner['TITLE']}** is banned on floor {floor}. Use another title.")
+                return
+            if sowner['ARM'] in banned_arms:
+                await private_channel.send(f":x: **{sowner['ARM']}** is banned on floor {floor}. Use another arm.")
+                return
+            if sowner['PET'] in banned_pets:
+                await private_channel.send(f":x: **{sowner['PET']}** is banned on floor {floor}. Use another pet.")
+                return
+            if checks['UNIVERSE'] in banned_universes:
+                await private_channel.send(f":x: **{checks['UNIVERSE']}** cards are banned on floor {floor}. Use another card.")
+                return
+            if uni_tier in banned_universe_tiers:
+                await private_channel.send(f":x: **Tier {uni_tier}** cards are banned on floor {floor}. Use another card.")
+                return
+            
+            guild = ctx.guild
+            if guild:
+                overwrites = {
+                            guild.default_role: discord.PermissionOverwrite(read_messages=True, manage_channels=False, kick_members=False, mention_everyone=False, read_message_history=True, send_messages=False, view_channel=True),
+                            guild.me: discord.PermissionOverwrite(read_messages=True),
+                        ctx.author: discord.PermissionOverwrite(read_messages=True, send_messages=True),
+                        }
+                private_channel = await guild.create_text_channel(f'{str(ctx.author)}-ABYSS', overwrites=overwrites)
+                await ctx.send(f"{ctx.author.mention} Abyss has been opened for you. Good luck!")
+        except Exception as e:
+            await ctx.send(f"Error: {e}")
 
         starttime = time.asctime()
         h_gametime = starttime[11:13]
         m_gametime = starttime[14:16]
         s_gametime = starttime[17:19]
-        boss = db.queryBoss({'NAME': str(universe['UNIVERSE_BOSS'])})
         legends = [x for x in enemies]
+        
         total_legends = len(legends)
         currentopponent = 0
         continued = True
@@ -27787,12 +27819,11 @@ class CrownUnlimited(commands.Cog):
 
             o = db.queryCard({'NAME': sowner['CARD']})
             otitle = db.queryTitle({'TITLE': sowner['TITLE']})
-            
+
             t = db.queryCard({'NAME': legends[currentopponent]})
             ttitle = db.queryTitle({'TITLE': title})
-            
-            ####################################################################
 
+            ####################################################################
             # Player 1 Data
             o_user = sowner
             oarm = db.queryArm({'ARM': o_user['ARM']})
@@ -27877,17 +27908,13 @@ class CrownUnlimited(commands.Cog):
                 o_win_description = "Too easy. Come back when you're truly prepared."
                 o_lose_description = "I can't believe I lost..."
 
-
-
             # Player 2 Data
-            t_user = boss
             tarm = db.queryArm({'ARM': arm})
             tarm_universe = tarm['UNIVERSE']
-            t_destiny = t['HAS_COLLECTION']
-            tpet = db.queryPet({'PET': pet})
+            tpet = db.queryPet({'PET': abyss_pet})
             tpet_passive = tpet['ABILITIES'][0]
             tpet_name = tpet['PET']
-            tpet_image =tpet['PATH']
+            tpet_image = tpet['PATH']
             tarm_passive = tarm['ABILITIES'][0]
             tarm_name=tarm['ARM']
             t_card = t['NAME']
@@ -27938,7 +27965,7 @@ class CrownUnlimited(commands.Cog):
             else:                    
                 t_max_health = t['HLT'] + (3 * currentopponent) + floor
 
-
+            
             #DBZ traits
             o_final_stand=False
             t_final_stand=False
@@ -28492,7 +28519,7 @@ class CrownUnlimited(commands.Cog):
 
             # START TURNS
             while (o_health > 0) and (t_health > 0):
-                print("Game reached start")
+
                 #Player 1 Turn Start
                 if turn == 0:
                     if o_block_used==True:
@@ -28513,7 +28540,7 @@ class CrownUnlimited(commands.Cog):
                     # Tutorial Instructions
                     if turn_total == 0 and botActive:
                         await private_channel.send(f"{ctx.author.mention}")                
-                        embedVar = discord.Embed(title=f"**{o_card}** VS **{t_card}** has begun! {lineup}\n{t_universe} Abyss Battle", description=f"`{o_card} Says:`\n{o_greeting_description}", colour=0xe91e63)
+                        embedVar = discord.Embed(title=f":new_moon: **ABYSS FLOOR {floor}**\n\n**{o_card}** VS **{t_card}** has begun! {lineup}", description=f"`{o_card} Says:`\n{o_greeting_description}", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
 
                     
@@ -29872,8 +29899,6 @@ class CrownUnlimited(commands.Cog):
                 m_playtime = int(wintime[14:16])
                 s_playtime = int(wintime[17:19])
                 gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
-
-                match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']), str(oarm['ARM']), str(selected_universe), "Abyss", o['EXCLUSIVE'])
 
                 if currentopponent != (total_legends):
                     if private_channel.guild:

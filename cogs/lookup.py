@@ -174,6 +174,7 @@ class Lookup(commands.Cog):
         if d:
             name = d['DISNAME'].split("#",1)[0]
             games = d['GAMES']
+            abyss_level = d['LEVEL']
             card = d['CARD']
             ign = d['IGN']
             team = d['TEAM']
@@ -258,7 +259,7 @@ class Lookup(commands.Cog):
             ign_to_string = dict(ChainMap(*ign))
 
             embed1 = discord.Embed(title= f"{icon} | " + f"{name}".format(self), description=textwrap.dedent(f"""\
-            
+            :new_moon: | **Abyss Rank**: {abyss_level}
             :flower_playing_cards: | **Card:** {card}
             :reminder_ribbon:** | Title: **{titles}
             :mechanical_arm: | **Arm: **{arm}
