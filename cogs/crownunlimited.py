@@ -51537,7 +51537,7 @@ Crest_dict = {'Unbound': ':ideograph_advantage:',
               'Naruto': ':u7121:',
               'Bleach': ':u6709:',
               'God Of War': ':u7533:',
-              'Chainsawman' : ':accept:'
+              'Chainsawman' : ':accept:',
               'One Punch Man': ':u55b6:',
               'Johto Region': ':u6708:',
               'Black Clover': ':ophiuchus:',
