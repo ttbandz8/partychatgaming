@@ -1183,13 +1183,19 @@ class CrownUnlimited(commands.Cog):
                         elif o_stamina >= 40:
                             aiMove = 2
                         elif o_stamina >= 30 and (o_health >= t_health):
-                            aiMove = 4
+                            if o_enhancer in Control_Enhancer_Check:
+                                aiMove = 3
+                            else:
+                                aiMove = 4
                         elif o_stamina >= 30:
                             aiMove = 2
                         elif o_stamina >= 20 and (o_health >= t_health):
                             aiMove = 1
                         elif o_stamina >= 20:
-                            aiMove = 4
+                            if o_enhancer in Control_Enhancer_Check:
+                                aiMove = 1
+                            else:
+                                aiMove = 4
                         elif o_stamina >= 10:
                             aiMove = 1
                         else:
@@ -1842,13 +1848,19 @@ class CrownUnlimited(commands.Cog):
                         elif t_stamina >= 40:
                             aiMove = 2
                         elif t_stamina >= 30 and (t_health >= o_health):
-                            aiMove = 4
+                            if t_enhancer in Control_Enhancer_Check:
+                                aiMove = 3
+                            else:
+                                aiMove = 4
                         elif t_stamina >= 30:
                             aiMove = 2
                         elif t_stamina >= 20 and (t_health >= o_health):
                             aiMove = 1
                         elif t_stamina >= 20:
-                            aiMove = 4
+                            if t_enhancer in Control_Enhancer_Check:
+                                aiMove = 3
+                            else:
+                                aiMove = 4
                         elif t_stamina >= 10:
                             aiMove = 1
                         else:
@@ -51513,6 +51525,7 @@ async def bossdrops(player, universe):
 Healer_Enhancer_Check = ['HLT', 'CREATION']
 # DPS_Enhancer_Check = ['FLOG', 'WITHER', 'LIFE', ]
 Support_Enhancer_Check = ['DEF', 'ATK', 'WITHER', 'FLOG']
+Control_Enhancer_Check = ['SOUL']
 Crest_dict = {'Unbound': ':ideograph_advantage:',
               'My Hero Academia': ':sparkle:',
               'League Of Legends': ':u6307:',
