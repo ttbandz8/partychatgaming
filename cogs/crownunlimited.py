@@ -1139,7 +1139,7 @@ class CrownUnlimited(commands.Cog):
                         elif o_stamina >= 100 and (o_health >= t_health):
                             if o_enhancer in Healer_Enhancer_Check:
                                 aiMove = 3
-                            elif o_enhancer in Support_Enhancer_Check:
+                            elif o_enhancer in Support_Enhancer_Check or o_enhancer in Stamina_Enhancer_Check:
                                 aiMove = 4
                             else:
                                 aiMove = 1
@@ -51522,10 +51522,14 @@ async def bossdrops(player, universe):
             response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(boss_card)}})
             await bless(50, player)
 
-Healer_Enhancer_Check = ['HLT', 'CREATION']
+Healer_Enhancer_Check = ['HLT', 'LIFE']
 # DPS_Enhancer_Check = ['FLOG', 'WITHER', 'LIFE', ]
 Support_Enhancer_Check = ['DEF', 'ATK', 'WITHER', 'FLOG']
+Sacrifice_Enhancer_Check = ['BZRK', 'CRYSTAL', 'GROWTH', 'FEAR']
+Stamina_Enhancer_Check = ['STAM', 'DRAIN']
 Control_Enhancer_Check = ['SOUL']
+Damage_Enhancer_Check = ['DESTRUCTION', 'BLAST']
+Turn_Enhancer_Check = ['WAVE', 'CREATION']
 Crest_dict = {'Unbound': ':ideograph_advantage:',
               'My Hero Academia': ':sparkle:',
               'League Of Legends': ':u6307:',
@@ -51533,6 +51537,7 @@ Crest_dict = {'Unbound': ':ideograph_advantage:',
               'Naruto': ':u7121:',
               'Bleach': ':u6709:',
               'God Of War': ':u7533:',
+              'Chainsawman' : ':accept:'
               'One Punch Man': ':u55b6:',
               'Johto Region': ':u6708:',
               'Black Clover': ':ophiuchus:',
