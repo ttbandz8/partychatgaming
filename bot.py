@@ -1467,53 +1467,40 @@ async def resell(ctx, item: str):
          except:
             await ctx.send("Resell ended. ")
 
-# @bot.command()
-# @commands.check(validate_user)
-# async def addfield(ctx, collection, new_field, field_type):
-#    if ctx.author.guild_permissions.administrator == True:
+@bot.command()
+@commands.check(validate_user)
+async def addfield(ctx, collection, new_field, field_type):
+   if ctx.author.guild_permissions.administrator == True:
 
-#       if field_type == 'string':
-#          field_type = "PCG"
-#       elif field_type == 'int':
-#          field_type = 0
-#       elif field_type == 'list':
-#          field_type = []
-#       elif field_type == 'bool':
-#          field_type = False
+      if field_type == 'string':
+         field_type = "PCG"
+      elif field_type == 'int':
+         field_type = 0
+      elif field_type == 'list':
+         field_type = []
+      elif field_type == 'bool':
+         field_type = False
       
-#       if collection == 'cards':
-#          response = db.updateManyCards({'$set': {new_field: field_type}})
-#       elif collection == 'titles':
-#          response = db.updateManyTitles({'$set': {new_field: field_type}})
-#       elif collection == 'vaults':
-#          response = db.updateManyVaults({'$set': {new_field: field_type}})
-#       elif collection == 'users':
-#          response = db.updateManyUsers({'$set': {new_field: field_type}})
-#       elif collection == 'universe':
-#          response = db.updateManyUniverses({'$set': {new_field: field_type}})
-#       elif collection == 'boss':
-#          response = db.updateManyBosses({'$set': {new_field: field_type}})
-#       elif collection == 'arms':
-#          response = db.updateManyArms({'$set': {new_field: field_type}})
-#       elif collection == 'pets':
-#          response = db.updateManyPets({'$set': {new_field: field_type}})
-#       elif collection == 'teams':
-#          response = db.updateManyTeams({'$set': {new_field: field_type}})
-#    else:
-#       print(m.ADMIN_ONLY_COMMAND)
-
-# @slash.slash(name="Referred", description="Let us know if someone referred you the game", guild_ids=guild_ids)
-# @commands.check(validate_user)
-# async def referred(ctx, player: User):
-#    user = player
-#    referred = db.queryUser({"DISNAME": str(ctx.author)})
-#    if not referred['REFERRED']:
-#       resp = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'REFERRED': True, 'REFERRER': str(user)}})
-#       await bless(500, str(ctx.author))
-#       await bless(1000, str(user))
-#       await ctx.send(f"Congrats & Welcome newcomer! You were awarded :coin: 500 and {user.mention} was awarded :coin:1000.")
-#    else:
-#       await ctx.send("You're already referred!")
+      if collection == 'cards':
+         response = db.updateManyCards({'$set': {new_field: field_type}})
+      elif collection == 'titles':
+         response = db.updateManyTitles({'$set': {new_field: field_type}})
+      elif collection == 'vaults':
+         response = db.updateManyVaults({'$set': {new_field: field_type}})
+      elif collection == 'users':
+         response = db.updateManyUsers({'$set': {new_field: field_type}})
+      elif collection == 'universe':
+         response = db.updateManyUniverses({'$set': {new_field: field_type}})
+      elif collection == 'boss':
+         response = db.updateManyBosses({'$set': {new_field: field_type}})
+      elif collection == 'arms':
+         response = db.updateManyArms({'$set': {new_field: field_type}})
+      elif collection == 'pets':
+         response = db.updateManyPets({'$set': {new_field: field_type}})
+      elif collection == 'teams':
+         response = db.updateManyTeams({'$set': {new_field: field_type}})
+   else:
+      print(m.ADMIN_ONLY_COMMAND)
 
 @slash.slash(name="Menu", description="Menu Options for things to do", guild_ids=guild_ids)
 @commands.check(validate_user)

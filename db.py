@@ -34,6 +34,8 @@ vault_col =db["VAULT"]
 house_col =db["HOUSE"]
 hall_col =db["HALL"]
 menu_col = db['MENU']
+abyss_col = db['ABYSS']
+
 
 '''Check if Collection Exists'''
 def col_exists(col):
@@ -54,6 +56,21 @@ def menu_exists(data):
         else:
             return False
     else:
+        return False
+
+def queryAllAbyss():
+    try:
+        data = abyss_col.find()
+        return data
+    except:
+        return False
+
+
+def queryAbyss(query):
+    try:
+        data = abyss_col.find_one(query)
+        return data
+    except:
         return False
 
 def queryAllMenu():
