@@ -27760,6 +27760,8 @@ class CrownUnlimited(commands.Cog):
 
     @cog_ext.cog_slash(description="Enter the Abyss", guild_ids=main.guild_ids)
     async def abyss(self, ctx: SlashContext):
+        await ctx.send("The Abyss has opened. Floors to travel deep into the Abyss are starting to form. Check back later for entry.")
+        return
         private_channel = ctx
         if isinstance(private_channel.channel, discord.channel.DMChannel):
             await private_channel.send(m.SERVER_FUNCTION_ONLY)
@@ -27932,6 +27934,8 @@ class CrownUnlimited(commands.Cog):
             tpet_passive = tpet['ABILITIES'][0]
             tpet_name = tpet['PET']
             tpet_image = tpet['PATH']
+            tpet_bond = 3
+            tpet_lvl = 6
             tarm_passive = tarm['ABILITIES'][0]
             tarm_name=tarm['ARM']
             t_card = t['NAME']
@@ -28048,7 +28052,7 @@ class CrownUnlimited(commands.Cog):
             opet_move = {str(opetmove_text): int(opetmove_ap), 'STAM': 15, 'TYPE': str(opet_passive_type)}
 
             tpetmove_text = list(tpet_passive.keys())[0]
-            tpetmove_ap = list(tpet_passive.values())[0]
+            tpetmove_ap = (tpet_bond * tpet_lvl) + list(tpet_passive.values())[0]
             tpetmove_type = list(tpet_passive.values())[1]
             tpet_move = {str(tpetmove_text):int(tpetmove_ap), 'STAM': 15, 'TYPE':tpetmove_type}
 
@@ -50557,6 +50561,7 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, vul, accura
 
     enh_type=""
     if enhancer:
+        ap = ap - ap_buff
         if enh == 'ATK':
             enh_type="ATK"
             atk = round(((ap/1.5)/100) * attack)
