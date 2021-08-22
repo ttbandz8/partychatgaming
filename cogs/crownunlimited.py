@@ -27832,16 +27832,66 @@ class CrownUnlimited(commands.Cog):
             if uni_tier in banned_universe_tiers:
                 await private_channel.send(f":x: **Tier {uni_tier}** cards are banned on floor {floor}. Use another card.")
                 return
+
+            abyss_buttons = [
+                manage_components.create_button(
+                    style=ButtonStyle.blue,
+                    label="Yes",
+                    custom_id="Yes"
+                ),
+                manage_components.create_button(
+                    style=ButtonStyle.red,
+                    label="No",
+                    custom_id="No"
+                )
+            ]
+
+            abyss_buttons_action_row = manage_components.create_actionrow(*abyss_buttons)
+
+            # Convert tiers into strings from ints
+            tier_conversion = [str(tier) for tier in banned_universe_tiers]
+
+            embedVar = discord.Embed(title=f":new_moon: Abyss Floor {floor}", colour=000000)
+            if banned_cards:
+                embedVar.add_field(name=":flower_playing_cards: Banned Cards", value="\n".join(banned_cards), inline=True)
+            if banned_titles:
+                embedVar.add_field(name=":reminder_ribbon: Banned Titles", value="\n".join(banned_titles), inline=True)
+            if banned_arms:
+                embedVar.add_field(name=":mechanical_arm: Banned Arms", value="\n".join(banned_arms), inline=True)
+            if banned_pets:
+                embedVar.add_field(name=":bird: Banned Pets", value="\n".join(banned_pets))
             
-            guild = ctx.guild
-            if guild:
-                overwrites = {
-                            guild.default_role: discord.PermissionOverwrite(read_messages=True, manage_channels=False, kick_members=False, mention_everyone=False, read_message_history=True, send_messages=False, view_channel=True),
-                            guild.me: discord.PermissionOverwrite(read_messages=True),
-                        ctx.author: discord.PermissionOverwrite(read_messages=True, send_messages=True),
-                        }
-                private_channel = await guild.create_text_channel(f'{str(ctx.author)}-ABYSS', overwrites=overwrites)
-                await ctx.send(f"{ctx.author.mention} Abyss has been opened for you. Good luck!")
+            if banned_universes:
+                embedVar.add_field(name=":ringed_planet: Banned Universes", value="\n".join(banned_universes), inline=True)
+            if banned_universe_tiers:
+                embedVar.add_field(name=":white_flower: Banned Universe Tiers", value="\n".join(tier_conversion), inline=True)
+
+            await private_channel.send(embed=embedVar, components=[abyss_buttons_action_row])
+
+            def check(button_ctx):
+                return button_ctx.author == ctx.author
+            
+            try:
+                button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[abyss_buttons_action_row, abyss_buttons], check=check)
+                
+                if button_ctx.custom_id == "Yes":
+                    guild = ctx.guild
+                    if guild:
+                        overwrites = {
+                                    guild.default_role: discord.PermissionOverwrite(read_messages=True, manage_channels=False, kick_members=False, mention_everyone=False, read_message_history=True, send_messages=False, view_channel=True),
+                                    guild.me: discord.PermissionOverwrite(read_messages=True),
+                                ctx.author: discord.PermissionOverwrite(read_messages=True, send_messages=True),
+                                }
+                        private_channel = await guild.create_text_channel(f'{str(ctx.author)}-ABYSS', overwrites=overwrites)
+                        await button_ctx.send(f"{ctx.author.mention} Abyss has been opened for you. Good luck!")
+                elif button_ctx.custom_id == "No":
+                    await button_ctx.send("Leaving the Abyss...")
+                    return
+                else:
+                    await button_ctx.send("Leaving the Abyss...")
+                    return
+            except Exception as e:
+                print(f"Error in Abyss Agreement: {e}")
         except Exception as e:
             await ctx.send(f"Error: {e}")
 
