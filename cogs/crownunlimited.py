@@ -27760,6 +27760,8 @@ class CrownUnlimited(commands.Cog):
 
     @cog_ext.cog_slash(description="Enter the Abyss", guild_ids=main.guild_ids)
     async def abyss(self, ctx: SlashContext):
+        await ctx.send("The Abyss has opened. Floors to travel deep into the Abyss are starting to form. Check back later for entry.")
+        return
         private_channel = ctx
         if isinstance(private_channel.channel, discord.channel.DMChannel):
             await private_channel.send(m.SERVER_FUNCTION_ONLY)
@@ -27772,6 +27774,11 @@ class CrownUnlimited(commands.Cog):
             uni_tier = checks_uni['TIER']
 
             abyss = db.queryAbyss({'FLOOR': sowner['LEVEL']})
+
+            if not abyss:
+                await ctx.send("The Abyss has shifted. More floors will be available soon.")
+                return
+
             enemies = abyss['ENEMIES']
             scaling = abyss['SPECIAL_BUFF']
             floor = abyss['FLOOR']
@@ -27927,10 +27934,12 @@ class CrownUnlimited(commands.Cog):
             tpet_passive = tpet['ABILITIES'][0]
             tpet_name = tpet['PET']
             tpet_image = tpet['PATH']
+            tpet_bond = 3
+            tpet_lvl = 6
             tarm_passive = tarm['ABILITIES'][0]
             tarm_name=tarm['ARM']
             t_card = t['NAME']
-            tcard_lvl_ap_buff = 0
+            tcard_lvl_ap_buff = scaling
             t_gif = t['GIF']
             t_card_path=t['PATH']
             t_rcard_path=t['RPATH']
@@ -27938,8 +27947,8 @@ class CrownUnlimited(commands.Cog):
             t_stamina = t['STAM']
             t_max_stamina= t['STAM']
             t_moveset = t['MOVESET']
-            t_attack = t['ATK'] + (3 * currentopponent) + floor
-            t_defense = t['DEF'] + (3 * currentopponent) + floor
+            t_attack = t['ATK'] + (scaling * currentopponent) + floor
+            t_defense = t['DEF'] + (scaling * currentopponent) + floor
             t_type = t['TYPE']
             t_accuracy = t['ACC']
             t_passive = t['PASS'][0]
@@ -28043,7 +28052,7 @@ class CrownUnlimited(commands.Cog):
             opet_move = {str(opetmove_text): int(opetmove_ap), 'STAM': 15, 'TYPE': str(opet_passive_type)}
 
             tpetmove_text = list(tpet_passive.keys())[0]
-            tpetmove_ap = list(tpet_passive.values())[0]
+            tpetmove_ap = (tpet_bond * tpet_lvl) + list(tpet_passive.values())[0]
             tpetmove_type = list(tpet_passive.values())[1]
             tpet_move = {str(tpetmove_text):int(tpetmove_ap), 'STAM': 15, 'TYPE':tpetmove_type}
 
@@ -50552,6 +50561,7 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, vul, accura
 
     enh_type=""
     if enhancer:
+        ap = ap - ap_buff
         if enh == 'ATK':
             enh_type="ATK"
             atk = round(((ap/1.5)/100) * attack)
