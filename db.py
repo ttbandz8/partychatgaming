@@ -319,7 +319,8 @@ def deleteGuildSwordAlt(query, value, new_team):
 
     except:
         print("Delete Team Member failed.")
-        
+
+########################################################################      
 ''' FAMILY '''
 def family_exists(data):
     collection_exists = col_exists("FAMILY")
@@ -532,7 +533,6 @@ def user_exists(data):
     else:
         return False
 
-
 '''Check If Vault exist'''
 def vault_exist(data):
     collection_exists = col_exists("VAULT")
@@ -548,7 +548,6 @@ def vault_exist(data):
 def updateManyVaults(new_value):
     vault_col.update_many({}, new_value)
     return True
-
 
 '''New Vault'''
 def createVault(vault):
@@ -613,7 +612,6 @@ def updateVaultNoFilter(query, new_value):
         return "Update completed. "
     else:
         return "Update failed. "
-
 
 def gods_exists(data):
     collection_exists = col_exists("GODS")
