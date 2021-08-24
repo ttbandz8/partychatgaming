@@ -1148,7 +1148,10 @@ class CrownUnlimited(commands.Cog):
                         elif o_stamina >= 90 and (o_health >= t_health):
                             aiMove = 3
                         elif o_stamina >= 90:
-                            aiMove = 2
+                            if o_enhancer in Control_Enhancer_Check:
+                                aiMove = 4
+                            else:
+                                aiMove = 2
                         elif o_stamina >= 80 and (o_health >= t_health):
                             aiMove = 1
                         elif o_stamina >= 80:
@@ -1173,7 +1176,10 @@ class CrownUnlimited(commands.Cog):
                                 aiMove = 1 
                         elif o_stamina >= 50 and (o_health >= t_health):
                             if o_stamina >= o_stamina:
-                                aiMove = 4
+                                if o_enhancer in Control_Enhancer_Check:
+                                    aiMove = 2
+                                else:
+                                    aiMove = 4
                             else:
                                 aiMove = 1
                         elif o_stamina >= 50:
@@ -1184,7 +1190,7 @@ class CrownUnlimited(commands.Cog):
                             aiMove = 2
                         elif o_stamina >= 30 and (o_health >= t_health):
                             if o_enhancer in Control_Enhancer_Check:
-                                aiMove = 3
+                                aiMove = 2
                             else:
                                 aiMove = 4
                         elif o_stamina >= 30:
