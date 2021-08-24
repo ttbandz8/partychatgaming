@@ -35,6 +35,9 @@ class Cards(commands.Cog):
         card_name = card
         vault_query = {'OWNER' : str(ctx.author)}
         vault = db.altQueryVault(vault_query)
+        owned_card_levels_list = []
+        for card in vault['CARD_LEVELS']:
+            owned_card_levels_list.append(card['CARD'])
         owned_destinies = []
         rift_universes = ['Crown Rift Slayers', 'Crown Rift Awakening', 'Crown Rift Madness']
         riftShopOpen = False
@@ -118,8 +121,9 @@ class Cards(commands.Cog):
                     await ctx.send(m.PURCHASE_COMPLETE_1 + f"`{newstock}` `{mintedCard}` CARDS left in the Shop!")
                     
                     # Add Card Level config
-                    update_query = {'$addToSet': {'CARD_LEVELS': {'CARD': str(card_name), 'LVL': 0, 'TIER': int(tier), 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}            
-                    r = db.updateVaultNoFilter(vault_query, update_query)
+                    if card_name not in owned_card_levels_list: 
+                        update_query = {'$addToSet': {'CARD_LEVELS': {'CARD': str(card_name), 'LVL': 0, 'TIER': int(tier), 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}            
+                        r = db.updateVaultNoFilter(vault_query, update_query)
                     # Add Destiny
                     for destiny in d.destiny:
                         if card_name in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
