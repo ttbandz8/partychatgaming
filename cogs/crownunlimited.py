@@ -50426,6 +50426,10 @@ async def destiny(player, opponent, mode):
     owned_destinies = []
     for destiny in vault['DESTINY']:
         owned_destinies.append(destiny['NAME'])
+    
+    owned_card_levels_list = []
+    for c in vault['CARD_LEVELS']:
+        owned_card_levels_list.append(c['CARD'])
     message = ""
     completion = 1
     if vault['DESTINY']:
@@ -50437,13 +50441,14 @@ async def destiny(player, opponent, mode):
                     completion = destiny['REQUIRED'] - (destiny['WINS'] + 1)
                 
                 if completion == 0:
-                    # Add the CARD_LEVELS for Destiny Card 
-                    card_data = db.queryCard({'NAME': str(destiny['EARN'])})
-                    uni = db.queryUniverse({'TITLE': card_data['UNIVERSE']})
-                    tier = uni['TIER']
-                    update_query = {'$addToSet': {'CARD_LEVELS': {'CARD': str(destiny['EARN']), 'LVL': 0, 'TIER': int(tier), 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
-                    db.updateVaultNoFilter(vault_query, update_query)
-                    #
+                    if str(destiny['EARN']) not in owned_card_levels_list: 
+                        # Add the CARD_LEVELS for Destiny Card 
+                        card_data = db.queryCard({'NAME': str(destiny['EARN'])})
+                        uni = db.queryUniverse({'TITLE': card_data['UNIVERSE']})
+                        tier = uni['TIER']
+                        update_query = {'$addToSet': {'CARD_LEVELS': {'CARD': str(destiny['EARN']), 'LVL': 0, 'TIER': int(tier), 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
+                        db.updateVaultNoFilter(vault_query, update_query)
+                        #
                     response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(destiny['EARN'])}})
                     message = f"**{destiny['NAME']}** completed! **{destiny['EARN']}** has been added to your vault!"
                     query = {'OWNER': str(player)}

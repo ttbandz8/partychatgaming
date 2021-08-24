@@ -32,127 +32,130 @@ class Cards(commands.Cog):
 
     @cog_ext.cog_slash(description="Buy a Card", guild_ids=main.guild_ids)
     async def buycard(self, ctx, card: str):
-        card_name = card
-        vault_query = {'OWNER' : str(ctx.author)}
-        vault = db.altQueryVault(vault_query)
-        owned_card_levels_list = []
-        for card in vault['CARD_LEVELS']:
-            owned_card_levels_list.append(card['CARD'])
-        owned_destinies = []
-        rift_universes = ['Crown Rift Slayers', 'Crown Rift Awakening', 'Crown Rift Madness']
-        riftShopOpen = False
-        for destiny in vault['DESTINY']:
-            owned_destinies.append(destiny['NAME'])
+        try:
+            card_name = card
+            vault_query = {'OWNER' : str(ctx.author)}
+            vault = db.altQueryVault(vault_query)
+            owned_card_levels_list = []
+            for c in vault['CARD_LEVELS']:
+                owned_card_levels_list.append(c['CARD'])
 
-        shop = db.queryShopCards()
-        cards = []
-        tier = 0
+            owned_destinies = []
+            rift_universes = ['Crown Rift Slayers', 'Crown Rift Awakening', 'Crown Rift Madness']
+            riftShopOpen = False
+            for destiny in vault['DESTINY']:
+                owned_destinies.append(destiny['NAME'])
 
-        check_card = db.queryCard({'NAME' : {"$regex": f"^{str(card)}$", "$options": "i"}})
-        card_name = check_card['NAME']
-        if check_card:
-            if check_card['UNIVERSE'] == 'Unbound':
-                await ctx.send("You cannot purchase this card.")
-                return
-            all_universes = db.queryAllUniverse()
-            user = db.queryUser({'DISNAME': str(ctx.author)})
-            available_universes = []
-            
-            if user['RIFT'] == 1:
-                riftShopOpen = True
-            if riftShopOpen:    
-                for uni in all_universes:
-                    if uni['PREREQUISITE'] in user['CROWN_TALES']:
-                        if uni['TIER'] != 9:
-                            available_universes.append(uni['TITLE'])
-                        elif uni['TITLE'] in user['CROWN_TALES']:
-                            available_universes.append(uni['TITLE'])     
-            else:
-                for uni in all_universes:
-                    if uni['PREREQUISITE'] in user['CROWN_TALES'] and not uni['TIER'] == 9:
-                        available_universes.append(uni['TITLE'])
-                        # Add Tier
-                    if uni['TITLE'] == check_card['UNIVERSE']:
-                        tier = uni['TIER']
-            if check_card['UNIVERSE'] not in available_universes:
-                if check_card['UNIVERSE'] in rift_universes:
-                    await ctx.send("You are not connected to the rift...")
-                else:                   
-                    await ctx.send("You cannot purchase Cards from Universes you haven't unlocked or Rifts yet completed.")
-                return
-            if check_card['HAS_COLLECTION']:
-                await ctx.send("This card can not be purchased.")
-                return
+            shop = db.queryShopCards()
+            cards = []
+            tier = 0
 
-        currentBalance = vault['BALANCE']
-        cost = 0
-        mintedCard = ""
-        stock = 0
-        newstock = 0
-        cardInStock = False
-        checkout = True
-        for card in shop:
-            if card_name == card['NAME']:
-                if stock == card['STOCK']:
-                    checkout = cardInStock
-                else:        
-                    cardInStock == True           
-                    mintedCard = card['NAME']
-                    cost = card['PRICE']
-                    stock = card['STOCK']
-                    newstock = stock - 1
-                    
-
-        if bool(mintedCard):
-            if mintedCard in vault['CARDS']:
-                await ctx.send(m.USER_ALREADY_HAS_CARD, delete_after=5)
-            else:
-                newBalance = currentBalance - cost
-
-                if newBalance < 0 :
-                    await ctx.send("You have an insufficent Balance")
+            check_card = db.queryCard({'NAME' : {"$regex": f"^{str(card)}$", "$options": "i"}})
+            card_name = check_card['NAME']
+            if check_card:
+                if check_card['UNIVERSE'] == 'Unbound':
+                    await ctx.send("You cannot purchase this card.")
+                    return
+                all_universes = db.queryAllUniverse()
+                user = db.queryUser({'DISNAME': str(ctx.author)})
+                available_universes = []
+                
+                if user['RIFT'] == 1:
+                    riftShopOpen = True
+                if riftShopOpen:    
+                    for uni in all_universes:
+                        if uni['PREREQUISITE'] in user['CROWN_TALES']:
+                            if uni['TIER'] != 9:
+                                available_universes.append(uni['TITLE'])
+                            elif uni['TITLE'] in user['CROWN_TALES']:
+                                available_universes.append(uni['TITLE'])     
                 else:
-                    await main.curse(cost, str(ctx.author))
-                    card_query = {'NAME' : str(mintedCard)}
-                    cardInventory = db.queryCard(card_query)
-                    update_query = {"$set": {"STOCK": newstock}} 
-                    response = db.updateCard(cardInventory, update_query)
-                    response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(card_name)}})
-                    await ctx.send(m.PURCHASE_COMPLETE_1 + f"`{newstock}` `{mintedCard}` CARDS left in the Shop!")
-                    
-                    # Add Card Level config
-                    if card_name not in owned_card_levels_list: 
-                        update_query = {'$addToSet': {'CARD_LEVELS': {'CARD': str(card_name), 'LVL': 0, 'TIER': int(tier), 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}            
-                        r = db.updateVaultNoFilter(vault_query, update_query)
-                    # Add Destiny
-                    for destiny in d.destiny:
-                        if card_name in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
-                            db.updateVaultNoFilter(vault_query,{'$addToSet':{'DESTINY': destiny}})
-                            await ctx.send(f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.")
+                    for uni in all_universes:
+                        if uni['PREREQUISITE'] in user['CROWN_TALES'] and not uni['TIER'] == 9:
+                            available_universes.append(uni['TITLE'])
+                            # Add Tier
+                        if uni['TITLE'] == check_card['UNIVERSE']:
+                            tier = uni['TIER']
+                if check_card['UNIVERSE'] not in available_universes:
+                    if check_card['UNIVERSE'] in rift_universes:
+                        await ctx.send("You are not connected to the rift...")
+                    else:                   
+                        await ctx.send("You cannot purchase Cards from Universes you haven't unlocked or Rifts yet completed.")
+                    return
+                if check_card['HAS_COLLECTION']:
+                    await ctx.send("This card can not be purchased.")
+                    return
 
-                    accept = await ctx.send(f"{ctx.author.mention} would you like to equip this Card?")
-                    emojis = ['👍', '👎']
-                    for emoji in emojis:
-                        await accept.add_reaction(emoji)
+            currentBalance = vault['BALANCE']
+            cost = 0
+            mintedCard = ""
+            stock = 0
+            newstock = 0
+            cardInStock = False
+            checkout = True
+            for card in shop:
+                if card_name == card['NAME']:
+                    if stock == card['STOCK']:
+                        checkout = cardInStock
+                    else:        
+                        cardInStock == True           
+                        mintedCard = card['NAME']
+                        cost = card['PRICE']
+                        stock = card['STOCK']
+                        newstock = stock - 1
+                        
 
-                    def check(reaction, user):
-                        return (user == ctx.author and (str(reaction.emoji) == '👍')) or (user == ctx.author and (str(reaction.emoji) == '👎'))
-                    try:
-                        user_query = {'DISNAME': str(ctx.author)}
-                        reaction, user = await self.bot.wait_for('reaction_add', timeout=25.0, check=check)
-                        if str(reaction.emoji) == '👎':
-                            await ctx.send("Maybe next time...")
+            if bool(mintedCard):
+                if mintedCard in vault['CARDS']:
+                    await ctx.send(m.USER_ALREADY_HAS_CARD, delete_after=5)
+                else:
+                    newBalance = currentBalance - cost
+
+                    if newBalance < 0 :
+                        await ctx.send("You have an insufficent Balance")
+                    else:
+                        await main.curse(cost, str(ctx.author))
+                        card_query = {'NAME' : str(mintedCard)}
+                        cardInventory = db.queryCard(card_query)
+                        update_query = {"$set": {"STOCK": newstock}} 
+                        response = db.updateCard(cardInventory, update_query)
+                        response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(card_name)}})
+                        await ctx.send(m.PURCHASE_COMPLETE_1 + f"`{newstock}` `{mintedCard}` CARDS left in the Shop!")
+                        
+                        # Add Card Level config
+                        if card_name not in owned_card_levels_list: 
+                            update_query = {'$addToSet': {'CARD_LEVELS': {'CARD': str(card_name), 'LVL': 0, 'TIER': int(tier), 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}            
+                            r = db.updateVaultNoFilter(vault_query, update_query)
+                        # Add Destiny
+                        for destiny in d.destiny:
+                            if card_name in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
+                                db.updateVaultNoFilter(vault_query,{'$addToSet':{'DESTINY': destiny}})
+                                await ctx.send(f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.")
+
+                        accept = await ctx.send(f"{ctx.author.mention} would you like to equip this Card?")
+                        emojis = ['👍', '👎']
+                        for emoji in emojis:
+                            await accept.add_reaction(emoji)
+
+                        def check(reaction, user):
+                            return (user == ctx.author and (str(reaction.emoji) == '👍')) or (user == ctx.author and (str(reaction.emoji) == '👎'))
+                        try:
+                            user_query = {'DISNAME': str(ctx.author)}
+                            reaction, user = await self.bot.wait_for('reaction_add', timeout=25.0, check=check)
+                            if str(reaction.emoji) == '👎':
+                                await ctx.send("Maybe next time...")
+                                return
+                            response = db.updateUserNoFilter(user_query, {'$set': {'CARD': str(card_name)}})
+                            await ctx.send(response)
+                        except:
                             return
-                        response = db.updateUserNoFilter(user_query, {'$set': {'CARD': str(card_name)}})
-                        await ctx.send(response)
-                    except:
-                        return
-
-
-        elif checkout == True:
-            await ctx.send(m.CARD_DOESNT_EXIST)
-        else:
-            await ctx.send(m.CARD_OUT_OF_STOCK)
+            elif checkout == True:
+                await ctx.send(m.CARD_DOESNT_EXIST)
+            else:
+                await ctx.send(m.CARD_OUT_OF_STOCK)
+        except Exception as e:
+            await ctx.send(f"Failure to purchase card: {e}")
+            return
 
     @cog_ext.cog_slash(description="Equip a Card", guild_ids=main.guild_ids)
     async def equipcard(self, ctx, card: str):
