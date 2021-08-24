@@ -924,7 +924,7 @@ class CrownUnlimited(commands.Cog):
                 #     o_health == 0
                 #Player 1 Turn Start
                 if turn == 0:
-                    await asyncio.sleep(1)
+                    await asyncio.sleep(2)
                     if o_block_used==True:
                         o_block_used=False
                         o_defense = int(o_defense/2)
@@ -1619,7 +1619,7 @@ class CrownUnlimited(commands.Cog):
                                 turn=0
                 #PLayer 2 Turn Start
                 elif turn == 1:
-                    await asyncio.sleep(1)
+                    await asyncio.sleep(2)
                     if t_attack <= 25:
                         t_attack = 25
                     if t_defense <= 30:
@@ -3512,7 +3512,7 @@ class CrownUnlimited(commands.Cog):
             while ((o_health > 0) and (c_health > 0)) and (t_health > 0):
                 #Player 1 Turn Start
                 if turn == 0:
-                    await asyncio.sleep(1)
+                    await asyncio.sleep(2)
                     if o_block_used==True:
                         o_defense = co_defense/2
                         o_block_used=False
@@ -4410,7 +4410,7 @@ class CrownUnlimited(commands.Cog):
 
                 #Opponent Turn Start
                 elif turn == 1:
-                    await asyncio.sleep(1)
+                    await asyncio.sleep(2)
                     if t_attack <= 25:
                         t_attack = 25
                     if t_defense <= 30:
@@ -5076,7 +5076,7 @@ class CrownUnlimited(commands.Cog):
 
                 #Companion Turn Start
                 if turn == 2:
-                    await asyncio.sleep(1)
+                    await asyncio.sleep(2)
                     if c_block_used==True:
                         c_defense = int(c_defense/2)
                         c_block_used=False
@@ -5926,7 +5926,7 @@ class CrownUnlimited(commands.Cog):
 
                 #Opponent Turn Start
                 elif turn == 3:
-                    await asyncio.sleep(1)
+                    await asyncio.sleep(2)
                     if t_attack <= 25:
                         t_attack = 25
                     if t_defense <= 30:
@@ -7986,7 +7986,7 @@ class CrownUnlimited(commands.Cog):
             while ((o_health > 0) and (c_health > 0)) and (t_health > 0):
                 #Player 1 Turn Start
                 if turn == 0:
-                    await asyncio.sleep(1)
+                    await asyncio.sleep(2)
                     if o_block_used==True:
                         o_defense = int(o_defense/2)
                         o_block_used=False
@@ -8894,7 +8894,7 @@ class CrownUnlimited(commands.Cog):
 
                 #Opponent Turn Start
                 elif turn == 1:
-                    await asyncio.sleep(1)
+                    await asyncio.sleep(2)
                     if t_attack <= 25:
                         t_attack = 25
                     if t_defense <= 30:
@@ -9779,7 +9779,7 @@ class CrownUnlimited(commands.Cog):
 
                 #Companion Turn Start
                 if turn == 2:
-                    await asyncio.sleep(1)
+                    await asyncio.sleep(2)
                     if c_block_used==True:
                         c_defense = int(c_defense/2)
                         c_block_used=False
@@ -10635,7 +10635,7 @@ class CrownUnlimited(commands.Cog):
     
                 #Opponent Turn Start
                 elif turn == 3:
-                    await asyncio.sleep(1)
+                    await asyncio.sleep(2)
                     if t_attack <= 25:
                         t_attack = 25
                     if t_defense <= 30:
@@ -12924,7 +12924,7 @@ class CrownUnlimited(commands.Cog):
             while ((o_health > 0) and (c_health > 0)) and (t_health > 0):
                 #Player 1 Turn Start
                 if turn == 0:
-                    await asyncio.sleep(1)
+                    await asyncio.sleep(2)
                     if o_defend_used==True:
                         o_defense = int(o_defense/2)
                         o_defend_used=False
@@ -13711,7 +13711,7 @@ class CrownUnlimited(commands.Cog):
 
                 #Opponent Turn Start
                 elif turn == 1:
-                    await asyncio.sleep(1)
+                    await asyncio.sleep(2)
                     if t_attack <= 25:
                         t_attack = 25
                     if t_defense <= 30:
@@ -14397,7 +14397,7 @@ class CrownUnlimited(commands.Cog):
 
                 #Companion Turn Start
                 if turn == 2:
-                    await asyncio.sleep(1)
+                    await asyncio.sleep(2)
                     if c_block_used==True:
                         c_defense = int(c_defense/2)
                         c_block_used=False
@@ -15169,7 +15169,7 @@ class CrownUnlimited(commands.Cog):
         
                 #Opponent Turn Start
                 elif turn == 3:
-                    await asyncio.sleep(1)
+                    await asyncio.sleep(2)
                     if t_attack <= 25:
                         t_attack = 25
                     if t_defense <= 30:
@@ -17270,7 +17270,7 @@ class CrownUnlimited(commands.Cog):
             while ((o_health > 0) and (c_health > 0)) and (t_health > 0):
                 #Player 1 Turn Start
                 if turn == 0:
-                    await asyncio.sleep(1)
+                    await asyncio.sleep(2)
                     if o_defend_used==True:
                         o_defense = int(o_defense/2)
                         o_defend_used=False
@@ -18057,7 +18057,7 @@ class CrownUnlimited(commands.Cog):
 
                 #Opponent Turn Start
                 elif turn == 1:
-                    await asyncio.sleep(1)
+                    await asyncio.sleep(2)
                     if t_attack <= 25:
                         t_attack = 25
                     if t_defense <= 30:
@@ -18942,7 +18942,7 @@ class CrownUnlimited(commands.Cog):
 
                 #Companion Turn Start
                 if turn == 2:
-                    await asyncio.sleep(1)
+                    await asyncio.sleep(2)
                     if c_block_used==True:
                         c_defense = int(c_defense/2)
                         c_block_used=False
@@ -19714,7 +19714,7 @@ class CrownUnlimited(commands.Cog):
         
                 #Opponent Turn Start
                 elif turn == 3:
-                    await asyncio.sleep(1)
+                    await asyncio.sleep(2)
                     if t_attack <= 25:
                         t_attack = 25
                     if t_defense <= 30:
@@ -22002,7 +22002,7 @@ class CrownUnlimited(commands.Cog):
             
             #Player 1 Turn Start
             if turn == 0:
-                await asyncio.sleep(1)
+                await asyncio.sleep(2)
                 if o_defend_used==True:
                     o_defense = int(o_defense/2)
                     o_defend_used=False
@@ -22789,7 +22789,7 @@ class CrownUnlimited(commands.Cog):
            
             #Boss Turn Start
             elif turn == 1:
-                await asyncio.sleep(1)
+                await asyncio.sleep(2)
                 if t_attack <= 25:
                     t_attack = 25
                 if t_defense <= 30:
@@ -23693,7 +23693,7 @@ class CrownUnlimited(commands.Cog):
 
             #Companion Turn Start
             if turn == 2:
-                await asyncio.sleep(1)
+                await asyncio.sleep(2)
                 if c_block_used==True:
                     c_defense = int(c_defense/2)
                     c_block_used=False
@@ -24464,7 +24464,7 @@ class CrownUnlimited(commands.Cog):
 
             #Boss Turn Start
             elif turn == 3:
-                await asyncio.sleep(1)
+                await asyncio.sleep(2)
                 if t_attack <= 25:
                     t_attack = 25
                 if t_defense <= 30:
@@ -26316,7 +26316,7 @@ class CrownUnlimited(commands.Cog):
             while (o_health > 0) and (t_health > 0):
                 #Player 1 Turn Start
                 if turn == 0:
-                    await asyncio.sleep(1)
+                    await asyncio.sleep(2)
                     if o_block_used==True:
                         o_block_used=False
                         o_defense = int(o_defense/2)
@@ -26995,7 +26995,7 @@ class CrownUnlimited(commands.Cog):
                             return
                 #PLayer 2 Turn Start
                 elif turn == 1:
-                    await asyncio.sleep(1)
+                    await asyncio.sleep(2)
                     if t_attack <= 25:
                         t_attack = 25
                     if t_defense <= 30:
@@ -28617,7 +28617,7 @@ class CrownUnlimited(commands.Cog):
             
                 #Player 1 Turn Start
                 if turn == 0:
-                    await asyncio.sleep(1)
+                    await asyncio.sleep(2)
                     if o_block_used==True:
                         o_block_used=False
                         o_defense = int(o_defense/2)
@@ -29297,7 +29297,7 @@ class CrownUnlimited(commands.Cog):
                 #PLayer 2 Turn Start
                 elif turn == 1:
                     try:
-                        await asyncio.sleep(1)
+                        await asyncio.sleep(2)
                         if t_attack <= 25:
                             t_attack = 25
                         if t_defense <= 30:
@@ -30917,7 +30917,7 @@ class CrownUnlimited(commands.Cog):
                 #     o_health == 0
                 #Player 1 Turn Start
                 if turn == 0:
-                    await asyncio.sleep(1)
+                    await asyncio.sleep(2)
                     if o_block_used==True:
                         o_block_used=False
                         o_defense = int(o_defense/2)
@@ -31601,7 +31601,7 @@ class CrownUnlimited(commands.Cog):
                             return
                 #PLayer 2 Turn Start
                 elif turn == 1:
-                    await asyncio.sleep(1)
+                    await asyncio.sleep(2)
                     if t_attack <= 25:
                         t_attack = 25
                     if t_defense <= 30:
@@ -33134,7 +33134,7 @@ class CrownUnlimited(commands.Cog):
             
             #Player 1 Turn Start
             if turn == 0:
-                await asyncio.sleep(1)
+                await asyncio.sleep(2)
                 if o_block_used==True:
                     o_block_used=False
                     o_defense= o_defense/2
@@ -33809,7 +33809,7 @@ class CrownUnlimited(commands.Cog):
                         return
             #PLayer 2 Turn Start
             elif turn == 1:
-                await asyncio.sleep(1)
+                await asyncio.sleep(2)
                 if t_attack <= 25:
                     t_attack = 25
                 if t_defense <= 30:
@@ -35368,7 +35368,7 @@ class CrownUnlimited(commands.Cog):
                 while (o_health > 0) and (t_health > 0):
                     #Player 1 Turn Start
                     if turn == 0:
-                        await asyncio.sleep(1)
+                        await asyncio.sleep(2)
                         if o_block_used==True:
                             o_block_used=False
                             o_defense = o_defense/ 2
@@ -36098,7 +36098,7 @@ class CrownUnlimited(commands.Cog):
                                 return
                     #PLayer 2 Turn Start
                     elif turn == 1:
-                        await asyncio.sleep(1)
+                        await asyncio.sleep(2)
                         if t_block_used==True:
                             t_block_used = False
                             t_defense = int(t_defense/2)
@@ -38147,7 +38147,7 @@ class CrownUnlimited(commands.Cog):
                 while (o_health > 0) and (t_health > 0):
                     #Player 1 Turn Start
                     if turn == 0:
-                        await asyncio.sleep(1)
+                        await asyncio.sleep(2)
                         if o_block_used==True:
                             o_block_used=False
                             o_defense = o_defense/ 2
@@ -38842,7 +38842,7 @@ class CrownUnlimited(commands.Cog):
                                 return
                     #PLayer 2 Turn Start
                     elif turn == 1:
-                        await asyncio.sleep(1)
+                        await asyncio.sleep(2)
                         if t_block_used==True:
                             t_block_used = False
                             t_defense = int(t_defense/2)
@@ -40890,7 +40890,7 @@ class CrownUnlimited(commands.Cog):
                 while (o_health > 0) and (t_health > 0):
                     #Player 1 Turn Start
                     if turn == 0:
-                        await asyncio.sleep(1)
+                        await asyncio.sleep(2)
                         if o_block_used==True:
                             o_block_used=False
                             o_defense = o_defense/ 2
@@ -41477,7 +41477,7 @@ class CrownUnlimited(commands.Cog):
                                 return
                     #PLayer 2 Turn Start
                     elif turn == 1:
-                        await asyncio.sleep(1)
+                        await asyncio.sleep(2)
                         if t_block_used==True:
                             t_block_used = False
                             t_defense = int(t_defense/2)
@@ -43427,7 +43427,7 @@ class CrownUnlimited(commands.Cog):
                 while (o_health > 0) and (t_health > 0):
                     #Player 1 Turn Start
                     if turn == 0:
-                        await asyncio.sleep(1)
+                        await asyncio.sleep(2)
                         if o_block_used==True:
                             o_block_used=False
                             o_defense = o_defense/ 2
@@ -44013,7 +44013,7 @@ class CrownUnlimited(commands.Cog):
                                 return
                     #PLayer 2 Turn Start
                     elif turn == 1:
-                        await asyncio.sleep(1)
+                        await asyncio.sleep(2)
                         if t_block_used==True:
                             t_block_used = False
                             t_defense = int(t_defense/2)
@@ -45980,7 +45980,7 @@ class CrownUnlimited(commands.Cog):
                 while (o_health > 0) and (t_health > 0):
                     #Player 1 Turn Start
                     if turn == 0:
-                        await asyncio.sleep(1)
+                        await asyncio.sleep(2)
                         if o_block_used==True:
                             o_block_used =False
                             o_defense= o_defense/2
@@ -46683,7 +46683,7 @@ class CrownUnlimited(commands.Cog):
                                 return
                     #PLayer 2 Turn Start
                     elif turn == 1:
-                        await asyncio.sleep(1)
+                        await asyncio.sleep(2)
                         if t_block_used ==True:
                             t_block_used=False
                             t_defense= t_defense/2
@@ -48625,7 +48625,7 @@ class CrownUnlimited(commands.Cog):
             
             #Player 1 Turn Start
             if turn == 0:
-                await asyncio.sleep(1)
+                await asyncio.sleep(2)
                 if o_block_used==True:
                     o_block_used=False
                     o_defense = o_defense / 2
@@ -49208,7 +49208,7 @@ class CrownUnlimited(commands.Cog):
             
             #PLayer 2 Turn Start
             elif turn == 1:
-                await asyncio.sleep(1)
+                await asyncio.sleep(2)
                 if t_attack <= 25:
                     t_attack = 25
                 if t_defense <= 30:
