@@ -3947,9 +3947,9 @@ class CrownUnlimited(commands.Cog):
                                         o_defense = round(o_defense - o_resolve_defense)
                                         o_used_resolve = True 
                                         o_pet_used=False
-                                        # embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
-                                        # embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
-                                        # await button_ctx.send(embed=embedVar)
+                                        embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
+                                        await button_ctx.send(embed=embedVar)
                                         turn_total= turn_total + 1
                                         turn=1
                                 else:
@@ -8431,9 +8431,9 @@ class CrownUnlimited(commands.Cog):
                                         o_defense = round(o_defense - o_resolve_defense)
                                         o_used_resolve = True 
                                         o_pet_used=False
-                                        # embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
-                                        # embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
-                                        # await button_ctx.send(embed=embedVar)
+                                        embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
+                                        await button_ctx.send(embed=embedVar)
                                         turn_total= turn_total + 1
                                         turn=1
                                 else:
@@ -13356,9 +13356,9 @@ class CrownUnlimited(commands.Cog):
                                         o_defense = round(o_defense - o_resolve_defense)
                                         o_used_resolve = True 
                                         o_pet_used=False
-                                        # embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
-                                        # embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
-                                        # await button_ctx.send(embed=embedVar)
+                                        embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
+                                        await button_ctx.send(embed=embedVar)
                                         turn_total= turn_total + 1
                                         turn=1
                                 else:
@@ -17702,9 +17702,9 @@ class CrownUnlimited(commands.Cog):
                                         o_defense = round(o_defense - o_resolve_defense)
                                         o_used_resolve = True 
                                         o_pet_used=False
-                                        # embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
-                                        # embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
-                                        # await button_ctx.send(embed=embedVar)
+                                        embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
+                                        await button_ctx.send(embed=embedVar)
                                         turn_total= turn_total + 1
                                         turn=1
                                 else:
@@ -24111,9 +24111,9 @@ class CrownUnlimited(commands.Cog):
                                     c_defense = round(c_defense - c_resolve_defense)
                                     c_used_resolve = True 
                                     c_pet_used=False
-                                    # embedVar = discord.Embed(title=f"{c_card.upper()} STRENGTHENED RESOLVE", description=f"**{c_card} says**\n{c_resolve_description}", colour=0xe91e63)
-                                    # embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
-                                    # await button_ctx.send(embed=embedVar)
+                                    embedVar = discord.Embed(title=f"{c_card.upper()} STRENGTHENED RESOLVE", description=f"**{c_card} says**\n{c_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
+                                    await button_ctx.send(embed=embedVar)
                                     turn_total= turn_total + 1
                                     turn=3
                             else:
@@ -26735,9 +26735,9 @@ class CrownUnlimited(commands.Cog):
                                         o_defense = round(o_defense - o_resolve_defense)
                                         o_used_resolve = True 
                                         o_pet_used=False
-                                        # embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
-                                        # embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
-                                        # await button_ctx.send(embed=embedVar)
+                                        embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
+                                        await button_ctx.send(embed=embedVar)
                                         turn_total= turn_total + 1
                                         turn=1
                                 else:
@@ -27819,7 +27819,6 @@ class CrownUnlimited(commands.Cog):
             banned_universes = abyss['BANNED_UNIVERSES']
             banned_universe_tiers = abyss['BANNED_TIERS']
             banned_pets = abyss['BANNED_PETS']
-            
             if sowner['CARD'] in banned_cards:
                 await private_channel.send(f":x: **{sowner['CARD']}** is banned on floor {floor}. Use another card.")
                 return
@@ -28025,8 +28024,8 @@ class CrownUnlimited(commands.Cog):
                 t_stamina = t['STAM']
                 t_max_stamina= t['STAM']
                 t_moveset = t['MOVESET']
-                t_attack = t['ATK'] + (scaling * currentopponent)
-                t_defense = t['DEF'] + (scaling * currentopponent) + floor
+                t_attack = t['ATK'] + scaling
+                t_defense = t['DEF'] + scaling
                 t_type = t['TYPE']
                 t_accuracy = t['ACC']
                 t_passive = t['PASS'][0]
@@ -29036,9 +29035,9 @@ class CrownUnlimited(commands.Cog):
                                         o_defense = round(o_defense - o_resolve_defense)
                                         o_used_resolve = True 
                                         o_pet_used=False
-                                        # embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
-                                        # embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
-                                        # await button_ctx.send(embed=embedVar)
+                                        embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
+                                        await button_ctx.send(embed=embedVar)
                                         turn_total= turn_total + 1
                                         turn=1
                                 else:
@@ -31341,9 +31340,9 @@ class CrownUnlimited(commands.Cog):
                                         o_defense = round(o_defense - o_resolve_defense)
                                         o_used_resolve = True 
                                         o_pet_used=False
-                                        # embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
-                                        # embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
-                                        # await button_ctx.send(embed=embedVar)
+                                        embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
+                                        await button_ctx.send(embed=embedVar)
                                         turn_total= turn_total + 1
                                         turn=1
                                 else:
@@ -31599,7 +31598,8 @@ class CrownUnlimited(commands.Cog):
                                     embedVar = discord.Embed(title=emessage, description=f"Use abilities to Increase `STAM` or enter `FOCUS STATE`!", colour=0xe91e63)
                                     await button_ctx.send(embed=embedVar)
                                     turn=0
-                        except asyncio.TimeoutError:
+                        except Exception as e:
+                            await private_channel.send(f"Error in Tales on O Turn: {e}")
                             response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                             await private_channel.send(f"{ctx.author.mention} {m.STORY_ENDED}")
                             if private_channel.guild:
@@ -35833,9 +35833,9 @@ class CrownUnlimited(commands.Cog):
                                             o_defense = round(o_defense - o_resolve_defense)
                                             o_used_resolve = True 
                                             o_pet_used=False
-                                            # embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
-                                            # embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
-                                            # await button_ctx.send(embed=embedVar)
+                                            embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
+                                            embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
+                                            await button_ctx.send(embed=embedVar)
                                             turn_total= turn_total + 1
                                             turn=1
                                     else:
@@ -38587,9 +38587,9 @@ class CrownUnlimited(commands.Cog):
                                             o_defense = round(o_defense - o_resolve_defense)
                                             o_used_resolve = True 
                                             o_pet_used=False
-                                            # embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
-                                            # embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
-                                            # await button_ctx.send(embed=embedVar)
+                                            embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
+                                            embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
+                                            await button_ctx.send(embed=embedVar)
                                             turn_total= turn_total + 1
                                             turn=1
                                     else:
@@ -41322,9 +41322,9 @@ class CrownUnlimited(commands.Cog):
                                             o_defense = round(o_defense - o_resolve_defense)
                                             o_used_resolve = True 
                                             o_pet_used=False
-                                            # embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
-                                            # embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
-                                            # await button_ctx.send(embed=embedVar)
+                                            embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
+                                            embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
+                                            await button_ctx.send(embed=embedVar)
                                             turn_total= turn_total + 1
                                             turn=1
                                     else:
@@ -43858,9 +43858,9 @@ class CrownUnlimited(commands.Cog):
                                             o_defense = round(o_defense - o_resolve_defense)
                                             o_used_resolve = True 
                                             o_pet_used=False
-                                            # embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
-                                            # embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
-                                            # await button_ctx.send(embed=embedVar)
+                                            embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
+                                            embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
+                                            await button_ctx.send(embed=embedVar)
                                             turn_total= turn_total + 1
                                             turn=1
                                     else:
@@ -46421,9 +46421,9 @@ class CrownUnlimited(commands.Cog):
                                             o_defense = round(o_defense - o_resolve_defense)
                                             o_used_resolve = True 
                                             o_pet_used=False
-                                            # embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
-                                            # embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
-                                            # await button_ctx.send(embed=embedVar)
+                                            embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
+                                            embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
+                                            await button_ctx.send(embed=embedVar)
                                             turn_total= turn_total + 1
                                             turn=1
                                     else:
@@ -49052,9 +49052,9 @@ class CrownUnlimited(commands.Cog):
                                     o_defense = round(o_defense - o_resolve_defense)
                                     o_used_resolve = True 
                                     o_pet_used=False
-                                    # embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
-                                    # embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
-                                    # await button_ctx.send(embed=embedVar)
+                                    embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
+                                    embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
+                                    await button_ctx.send(embed=embedVar)
                                     turn_total= turn_total + 1
                                     turn=1
                             else:
@@ -50426,6 +50426,10 @@ async def destiny(player, opponent, mode):
     owned_destinies = []
     for destiny in vault['DESTINY']:
         owned_destinies.append(destiny['NAME'])
+    
+    owned_card_levels_list = []
+    for c in vault['CARD_LEVELS']:
+        owned_card_levels_list.append(c['CARD'])
     message = ""
     completion = 1
     if vault['DESTINY']:
@@ -50437,13 +50441,14 @@ async def destiny(player, opponent, mode):
                     completion = destiny['REQUIRED'] - (destiny['WINS'] + 1)
                 
                 if completion == 0:
-                    # Add the CARD_LEVELS for Destiny Card 
-                    card_data = db.queryCard({'NAME': str(destiny['EARN'])})
-                    uni = db.queryUniverse({'TITLE': card_data['UNIVERSE']})
-                    tier = uni['TIER']
-                    update_query = {'$addToSet': {'CARD_LEVELS': {'CARD': str(destiny['EARN']), 'LVL': 0, 'TIER': int(tier), 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
-                    db.updateVaultNoFilter(vault_query, update_query)
-                    #
+                    if str(destiny['EARN']) not in owned_card_levels_list: 
+                        # Add the CARD_LEVELS for Destiny Card 
+                        card_data = db.queryCard({'NAME': str(destiny['EARN'])})
+                        uni = db.queryUniverse({'TITLE': card_data['UNIVERSE']})
+                        tier = uni['TIER']
+                        update_query = {'$addToSet': {'CARD_LEVELS': {'CARD': str(destiny['EARN']), 'LVL': 0, 'TIER': int(tier), 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
+                        db.updateVaultNoFilter(vault_query, update_query)
+                        #
                     response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(destiny['EARN'])}})
                     message = f"**{destiny['NAME']}** completed! **{destiny['EARN']}** has been added to your vault!"
                     query = {'OWNER': str(player)}
