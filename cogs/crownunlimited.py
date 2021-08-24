@@ -1725,7 +1725,7 @@ class CrownUnlimited(commands.Cog):
                             o_defense = round(o_defense - (15 + turn_total))
                             
                         elif t_universe == "Attack On Titan":
-                            embedVar = discord.Embed(title=f"Rally!{t_card} Increased Max Health!", colour=0xe91e63)
+                            embedVar = discord.Embed(title=f"Rally! {t_card} Increased Max Health!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_max_health = round(t_max_health + 50)
                            
@@ -4516,7 +4516,7 @@ class CrownUnlimited(commands.Cog):
                             o_defense = round(o_defense - (15 + turn_total))
                             
                         elif t_universe == "Attack On Titan":
-                            embedVar = discord.Embed(title=f"Rally!{t_card} Increased Max Health!", colour=0xe91e63)
+                            embedVar = discord.Embed(title=f"Rally! {t_card} Increased Max Health!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_max_health = round(t_max_health + 50)
                             
@@ -6032,7 +6032,7 @@ class CrownUnlimited(commands.Cog):
                             c_defense = round(c_defense - (15 + turn_total))
                           
                         elif t_universe == "Attack On Titan":
-                            embedVar = discord.Embed(title=f"Rally!{t_card} Increased Max Health!", colour=0xe91e63)
+                            embedVar = discord.Embed(title=f"Rally! {t_card} Increased Max Health!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_max_health = round(t_max_health + 50)
                           
@@ -9000,7 +9000,7 @@ class CrownUnlimited(commands.Cog):
                             t_defense = round(t_defense - (15 + turn_total))
                            
                         elif t_universe == "Attack On Titan":
-                            embedVar = discord.Embed(title=f"Rally!{t_card} Increased Max Health!", colour=0xe91e63)
+                            embedVar = discord.Embed(title=f"Rally! {t_card} Increased Max Health!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_max_health = round(t_max_health + 50)
                             
@@ -10741,7 +10741,7 @@ class CrownUnlimited(commands.Cog):
                             c_defense = round(c_defense - (15 + turn_total))
                             
                         elif t_universe == "Attack On Titan":
-                            embedVar = discord.Embed(title=f"Rally!{t_card} Increased Max Health!", colour=0xe91e63)
+                            embedVar = discord.Embed(title=f"Rally! {t_card} Increased Max Health!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_max_health = round(t_max_health + 50)
                             
@@ -13817,7 +13817,7 @@ class CrownUnlimited(commands.Cog):
                             t_defense = round(t_defense - (15 + turn_total))
                            
                         elif t_universe == "Attack On Titan":
-                            embedVar = discord.Embed(title=f"Rally!{t_card} Increased Max Health!", colour=0xe91e63)
+                            embedVar = discord.Embed(title=f"Rally! {t_card} Increased Max Health!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_max_health = round(t_max_health + 50)
                             
@@ -15275,7 +15275,7 @@ class CrownUnlimited(commands.Cog):
                             c_defense = round(c_defense - (15 + turn_total))
                             
                         elif t_universe == "Attack On Titan":
-                            embedVar = discord.Embed(title=f"Rally!{t_card} Increased Max Health!", colour=0xe91e63)
+                            embedVar = discord.Embed(title=f"Rally! {t_card} Increased Max Health!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_max_health = round(t_max_health + 50)
                             
@@ -18163,7 +18163,7 @@ class CrownUnlimited(commands.Cog):
                             t_defense = round(t_defense - (15 + turn_total))
                            
                         elif t_universe == "Attack On Titan":
-                            embedVar = discord.Embed(title=f"Rally!{t_card} Increased Max Health!", colour=0xe91e63)
+                            embedVar = discord.Embed(title=f"Rally! {t_card} Increased Max Health!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_max_health = round(t_max_health + 50)
                             
@@ -19820,7 +19820,7 @@ class CrownUnlimited(commands.Cog):
                             c_defense = round(c_defense - (15 + turn_total))
                             
                         elif t_universe == "Attack On Titan":
-                            embedVar = discord.Embed(title=f"Rally!{t_card} Increased Max Health!", colour=0xe91e63)
+                            embedVar = discord.Embed(title=f"Rally! {t_card} Increased Max Health!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_max_health = round(t_max_health + 50)
                             
@@ -22913,7 +22913,7 @@ class CrownUnlimited(commands.Cog):
                         o_defense = round(o_defense - (15 + turn_total))
                       
                     elif t_universe == "Attack On Titan":
-                        embedVar = discord.Embed(title=f"Rally!{t_card} Increased Max Health!", colour=0xe91e63)
+                        embedVar = discord.Embed(title=f"Rally! {t_card} Increased Max Health!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         t_max_health = round(t_max_health + 50)
                         
@@ -24589,7 +24589,7 @@ class CrownUnlimited(commands.Cog):
                         c_defense = round(c_defense - (15 + turn_total))
                         
                     elif t_universe == "Attack On Titan":
-                        embedVar = discord.Embed(title=f"Rally!{t_card} Increased Max Health!", colour=0xe91e63)
+                        embedVar = discord.Embed(title=f"Rally! {t_card} Increased Max Health!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         t_max_health = round(t_max_health + 50)
                         
@@ -27101,7 +27101,7 @@ class CrownUnlimited(commands.Cog):
                             o_defense = round(o_defense - (15 + turn_total))
                           
                         elif t_universe == "Attack On Titan":
-                            embedVar = discord.Embed(title=f"Rally!{t_card} Increased Max Health!", colour=0xe91e63)
+                            embedVar = discord.Embed(title=f"Rally! {t_card} Increased Max Health!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_max_health = round(t_max_health + 50)
                           
@@ -29403,7 +29403,7 @@ class CrownUnlimited(commands.Cog):
                                 o_defense = round(o_defense - (15 + turn_total))
                             
                             elif t_universe == "Attack On Titan":
-                                embedVar = discord.Embed(title=f"Rally!{t_card} Increased Max Health!", colour=0xe91e63)
+                                embedVar = discord.Embed(title=f"Rally! {t_card} Increased Max Health!", colour=0xe91e63)
                                 await private_channel.send(embed=embedVar)
                                 t_max_health = round(t_max_health + 50)
                             
@@ -31707,7 +31707,7 @@ class CrownUnlimited(commands.Cog):
                             o_defense = round(o_defense - (15 + turn_total))
                             
                         elif t_universe == "Attack On Titan":
-                            embedVar = discord.Embed(title=f"Rally!{t_card} Increased Max Health!", colour=0xe91e63)
+                            embedVar = discord.Embed(title=f"Rally! {t_card} Increased Max Health!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_max_health = round(t_max_health + 50)
                            
@@ -33934,7 +33934,7 @@ class CrownUnlimited(commands.Cog):
                         o_defense = round(o_defense - (15 + turn_total))
                         
                     elif t_universe == "Attack On Titan":
-                        embedVar = discord.Embed(title=f"Rally!{t_card} Increased Max Health!", colour=0xe91e63)
+                        embedVar = discord.Embed(title=f"Rally! {t_card} Increased Max Health!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         t_max_health = round(t_max_health + 50)
                       
@@ -36206,7 +36206,7 @@ class CrownUnlimited(commands.Cog):
                                 await ctx.send(embed=embedVar)
                                 o_defense = round(o_defense - (15 + turn_total))
                             elif t_universe == "Attack On Titan":
-                                embedVar = discord.Embed(title=f"Rally!{t_card} Increased Max Health!", colour=0xe91e63)
+                                embedVar = discord.Embed(title=f"Rally! {t_card} Increased Max Health!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
                                 t_max_health = round(t_max_health + 50)
                             elif t_universe == "Black Clover":
@@ -38949,7 +38949,7 @@ class CrownUnlimited(commands.Cog):
                                 await ctx.send(embed=embedVar)
                                 o_defense = round(o_defense - (15 + turn_total))
                             elif t_universe == "Attack On Titan":
-                                embedVar = discord.Embed(title=f"Rally!{t_card} Increased Max Health!", colour=0xe91e63)
+                                embedVar = discord.Embed(title=f"Rally! {t_card} Increased Max Health!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
                                 t_max_health = round(t_max_health + 50)
                             elif t_universe == "Black Clover":
@@ -41584,7 +41584,7 @@ class CrownUnlimited(commands.Cog):
                                 await ctx.send(embed=embedVar)
                                 o_defense = round(o_defense - (15 + turn_total))
                             elif t_universe == "Attack On Titan":
-                                embedVar = discord.Embed(title=f"Rally!{t_card} Increased Max Health!", colour=0xe91e63)
+                                embedVar = discord.Embed(title=f"Rally! {t_card} Increased Max Health!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
                                 t_max_health = round(t_max_health + 50)
                             elif t_universe == "Black Clover":
@@ -44120,7 +44120,7 @@ class CrownUnlimited(commands.Cog):
                                 await ctx.send(embed=embedVar)
                                 o_defense = round(o_defense - (15 + turn_total))
                             elif t_universe == "Attack On Titan":
-                                embedVar = discord.Embed(title=f"Rally!{t_card} Increased Max Health!", colour=0xe91e63)
+                                embedVar = discord.Embed(title=f"Rally! {t_card} Increased Max Health!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
                                 t_max_health = round(t_max_health + 50)
                             elif t_universe == "Black Clover":
@@ -46794,7 +46794,7 @@ class CrownUnlimited(commands.Cog):
                                 o_defense = round(o_defense - (15 + turn_total))
                                
                             elif t_universe == "Attack On Titan":
-                                embedVar = discord.Embed(title=f"Rally!{t_card} Increased Max Health!", colour=0xe91e63)
+                                embedVar = discord.Embed(title=f"Rally! {t_card} Increased Max Health!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
                                 t_max_health = round(t_max_health + 50)
                                 
@@ -49314,7 +49314,7 @@ class CrownUnlimited(commands.Cog):
                         o_defense = round(o_defense - (15 + turn_total))
                         
                     elif t_universe == "Attack On Titan":
-                        embedVar = discord.Embed(title=f"Rally!{t_card} Increased Max Health!", colour=0xe91e63)
+                        embedVar = discord.Embed(title=f"Rally! {t_card} Increased Max Health!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         t_max_health = round(t_max_health + 50)
                         
