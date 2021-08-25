@@ -49,6 +49,9 @@ class CrownUnlimited(commands.Cog):
 
     @cog_ext.cog_slash(description="Auto Tales Battler", guild_ids=main.guild_ids)
     async def atales(self, ctx: SlashContext):
+        await ctx.send("atales Command has been turned off at this time. Please use Tales instead. Thank you!")
+        return
+        
         private_channel = ctx
         if isinstance(private_channel.channel, discord.channel.DMChannel):
             await private_channel.send(m.SERVER_FUNCTION_ONLY)
@@ -31599,7 +31602,7 @@ class CrownUnlimited(commands.Cog):
                                     await button_ctx.send(embed=embedVar)
                                     turn=0
                         except Exception as e:
-                            await private_channel.send(f"Error in Tales on O Turn: {e}")
+                            print(f"Error in Tales on O Turn: {e}")
                             response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                             await private_channel.send(f"{ctx.author.mention} {m.STORY_ENDED}")
                             if private_channel.guild:
