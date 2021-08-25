@@ -51379,8 +51379,6 @@ async def bless(amount, user):
       vault = db.queryVault({'OWNER' : vaultOwner['DISNAME']})
       update_query = {"$inc": {'BALANCE': posBlessAmount}}
       db.updateVaultNoFilter(vault, update_query)
-   else:
-      print("cant find vault")
 
 async def blessteam(amount, team):
    blessAmount = amount
