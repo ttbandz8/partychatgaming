@@ -1545,17 +1545,17 @@ destiny = [
         "REQUIRED": 5,
         "DEFEAT": "Viral",
         "USE_CARDS": ["Kamina"],
-        "EARN": "Gurenn",
+        "EARN": "Gurren",
         "COMPLETED": False,
         "UNIVERSE": "Crown Rift Slayers"
     },
     {
-        "NAME": "Team Gurenn Lagann",
+        "NAME": "Team Gurren Lagann",
         "WINS": 0,
         "REQUIRED": 10,
         "DEFEAT": "Viral",
-        "USE_CARDS": ["Gurenn"],
-        "EARN": "Gurenn Lagann",
+        "USE_CARDS": ["Gurren"],
+        "EARN": "Gurren Lagann",
         "COMPLETED": False,
         "UNIVERSE": "Crown Rift Slayers"
     },
@@ -1564,7 +1564,7 @@ destiny = [
         "WINS": 0,
         "REQUIRED": 10,
         "DEFEAT": "Viral",
-        "USE_CARDS": ["Gurenn Lagann"],
+        "USE_CARDS": ["Gurren Lagann"],
         "EARN": "Viral",
         "COMPLETED": False,
         "UNIVERSE": "Crown Rift Slayers"
@@ -1584,7 +1584,7 @@ destiny = [
         "WINS": 0,
         "REQUIRED": 5,
         "DEFEAT": "Spiral King",
-        "USE_CARDS": ["Gurenn"],
+        "USE_CARDS": ["Gurren"],
         "EARN": "Spiral King",
         "COMPLETED": False,
         "UNIVERSE": "Crown Rift Slayers"

@@ -77,174 +77,191 @@ class Profile(commands.Cog):
         arm = db.queryArm({'ARM': str(d['ARM'])})
         vault = db.queryVault({'OWNER': d['DISNAME']})
         if card:
-
-            # Acquire Card Levels data
-            card_lvl = 0
-            card_tier = 0
-            card_exp = 0
-            card_lvl_attack_buff = 0
-            card_lvl_defense_buff = 0
-            card_lvl_ap_buff = 0
-            card_lvl_hlt_buff = 0
-
-
-            for x in vault['CARD_LEVELS']:
-                if x['CARD'] == card['NAME']:
-                    card_lvl = x['LVL']
-                    card_tier = x['TIER']
-                    card_exp = x['EXP']
-                    card_lvl_ap_buff = x['AP']
-                    card_lvl_attack_buff = x['ATK']
-                    card_lvl_defense_buff = x['DEF']
-                    card_lvl_hlt_buff = x['HLT']
-
-            oarm_universe = arm['UNIVERSE']
-            o_title_universe = title['UNIVERSE']
-            o_card = card['NAME']
-            o_card_path=card['PATH']
-            o_max_health = card['HLT'] + card_lvl_hlt_buff
-            o_health = card['HLT'] + card_lvl_hlt_buff
-            o_stamina = card['STAM']
-            o_max_stamina = card['STAM']
-            o_moveset = card['MOVESET']
-            o_attack = card['ATK'] + card_lvl_attack_buff
-            o_defense = card['DEF'] + card_lvl_defense_buff
-            o_type = card['TYPE']
-            o_accuracy = card['ACC']
-            o_passive = card['PASS'][0]
-            o_speed = card['SPD']
-            o_show = card['UNIVERSE']
-            o_collection = card['COLLECTION']
-            o_destiny = card['HAS_COLLECTION']
-            o_rebirth = d['REBIRTH']
-    
-            rebirthBonus = o_rebirth * 10
-            traits = ut.traits
-            mytrait = {}
-            traitmessage = ''
-            for trait in traits:
-                if trait['NAME'] == o_show:
-                    mytrait = trait
-                if o_show == 'Kanto Region' or o_show == 'Johto Region' or o_show == 'Kalos Region' or o_show == 'Unova Region' or o_show == 'Sinnoh Region' or o_show == 'Hoenn Region' or o_show == 'Galar Region' or o_show == 'Alola Region':
-                    if trait['NAME'] == 'Pokemon':
-                        mytrait = trait
-            if mytrait:
-                traitmessage = f"**{mytrait['EFFECT']}**: {mytrait['TRAIT']}"
-
-            pets = vault['PETS']
-            active_pet = {}
-            pet_names = []
-
-            for pet in pets:
-                pet_names.append(pet['NAME'])
-                if pet['NAME'] == d['PET']:
-                    active_pet = pet
-
-            power = list(active_pet.values())[3]
-            pet_ability_power = (active_pet['BOND'] * active_pet['LVL']) + power
-            bond = active_pet['BOND']
-            lvl = active_pet['LVL']
-
-            bond_message = ""
-            lvl_message = ""
-            if bond == 3:
-                bond_message = ":star2:"
-            
-            if lvl == 10:
-                lvl_message = ":star:"
-
-            # Arm Information
-            arm_name = arm['ARM']
-            arm_passive = arm['ABILITIES'][0]
-            arm_passive_type = list(arm_passive.keys())[0]
-            arm_passive_value = list(arm_passive.values())[0]
-            title_name= title['TITLE']
-            title_passive = title['ABILITIES'][0]
-            title_passive_type = list(title_passive.keys())[0]
-            title_passive_value = list(title_passive.values())[0]
-
-            o_1 = o_moveset[0]
-            o_2 = o_moveset[1]
-            o_3 = o_moveset[2]
-            o_enhancer = o_moveset[3]
-            
-            # Move 1
-            move1 = list(o_1.keys())[0]
-            move1ap = list(o_1.values())[0] + card_lvl_ap_buff
-            move1_stamina = list(o_1.values())[1]
-            
-            # Move 2
-            move2 = list(o_2.keys())[0]
-            move2ap = list(o_2.values())[0] + card_lvl_ap_buff
-            move2_stamina = list(o_2.values())[1]
-
-            # Move 3
-            move3 = list(o_3.keys())[0]
-            move3ap = list(o_3.values())[0] + card_lvl_ap_buff
-            move3_stamina = list(o_3.values())[1]
-
-            # Move Enhancer
-            move4 = list(o_enhancer.keys())[0]
-            move4ap = list(o_enhancer.values())[0]
-            move4_stamina = list(o_enhancer.values())[1]
-            move4enh = list(o_enhancer.values())[2]
+            try:
+                # Acquire Card Levels data
+                card_lvl = 0
+                card_tier = 0
+                card_exp = 0
+                card_lvl_attack_buff = 0
+                card_lvl_defense_buff = 0
+                card_lvl_ap_buff = 0
+                card_lvl_hlt_buff = 0
 
 
-            resolved = False
-            focused = False
-            cardtitle = {'TITLE': 'CARD PREVIEW'}
-            att = 0
-            defe = 0
-            turn = 0
-            card_file = showcard(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, cardtitle, focused, att, defe, turn)
+                for x in vault['CARD_LEVELS']:
+                    if x['CARD'] == card['NAME']:
+                        card_lvl = x['LVL']
+                        card_tier = x['TIER']
+                        card_exp = x['EXP']
+                        card_lvl_ap_buff = x['AP']
+                        card_lvl_attack_buff = x['ATK']
+                        card_lvl_defense_buff = x['DEF']
+                        card_lvl_hlt_buff = x['HLT']
 
-            passive_name = list(o_passive.keys())[0]
-            passive_num = list(o_passive.values())[0]
-            passive_type = list(o_passive.values())[1]
-
-            atk_buff = ""
-            def_buff = ""
-            hlt_buff = ""
-            message = ""
-            if (oarm_universe == o_show) and (o_title_universe == o_show):
-                atk_buff = f" / {o_attack + 20}"
-                def_buff = f" / {o_defense + 20}"
-                hlt_buff = f" / {o_max_health + 100}"
-                message = "_Universe Buff Applied_"
-                if o_destiny:
-                    atk_buff = f" / {o_attack + 25}"
-                    def_buff = f" / {o_defense + 25}"
-                    hlt_buff = f" / {o_max_health + 150}"
-                    message = "_Destiny Buff Applied_"
-
-            embedVar = discord.Embed(title=f":trident: {card_lvl} | {title_name} {o_card} & {active_pet['NAME']}:".format(self), description=textwrap.dedent(f"""\
-            {message}
-            :heart: | **Health** - {o_max_health} {hlt_buff}
-            :cyclone: | **Stamina** - {o_max_stamina}
-            :dagger: | **Attack** - {o_attack} {atk_buff}
-            :shield: | **Shield** - {o_defense} {def_buff}
-            
-            :reminder_ribbon: | **Title** - {title_name} ~ {title_passive_type} | {title_passive_value}
-            :mechanical_arm: | **Arm** - {arm_name} ~ {arm_passive_type} | {arm_passive_value}
-            :bird: | **Pet** - {active_pet['NAME']} ~ {active_pet['TYPE']} | {pet_ability_power} 
-            **Bond** _{bond}_ {bond_message} / **Level** _{lvl}_ {lvl_message}
+                oarm_universe = arm['UNIVERSE']
+                o_title_universe = title['UNIVERSE']
+                o_card = card['NAME']
+                o_card_path=card['PATH']
+                o_max_health = card['HLT'] + card_lvl_hlt_buff
+                o_health = card['HLT'] + card_lvl_hlt_buff
+                o_stamina = card['STAM']
+                o_max_stamina = card['STAM']
+                o_moveset = card['MOVESET']
+                o_attack = card['ATK'] + card_lvl_attack_buff
+                o_defense = card['DEF'] + card_lvl_defense_buff
+                o_type = card['TYPE']
+                o_accuracy = card['ACC']
+                o_passive = card['PASS'][0]
+                o_speed = card['SPD']
+                o_show = card['UNIVERSE']
+                o_collection = card['COLLECTION']
+                o_destiny = card['HAS_COLLECTION']
+                o_rebirth = d['REBIRTH']
         
-            _**Moveset**_
-            :boom: | **{move1}:** {move1ap}
-            :comet: | **{move2}:** {move2ap}
-            :rosette: | **{move3}:** {move3ap}
-            :microbe: | **{move4}:** {move4enh} by {move4ap}
-            
-            :drop_of_blood: | _Passive:_ **{passive_name}:** {passive_type} by {passive_num}
-            :infinity: | {traitmessage}
-            """)
-            
-            , colour=000000)
-            embedVar.set_thumbnail(url=active_pet['PATH'])
-            embedVar.set_image(url=o_card_path)
-            embedVar.set_footer(text=f"EXP Until Next Level: {150 - card_exp}\nRebirth Buff: +{rebirthBonus}", icon_url="https://cdn.discordapp.com/emojis/841486485826961448.gif?v=1")
+                rebirthBonus = o_rebirth * 10
+                traits = ut.traits
+                mytrait = {}
+                traitmessage = ''
+                for trait in traits:
+                    if trait['NAME'] == o_show:
+                        mytrait = trait
+                    if o_show == 'Kanto Region' or o_show == 'Johto Region' or o_show == 'Kalos Region' or o_show == 'Unova Region' or o_show == 'Sinnoh Region' or o_show == 'Hoenn Region' or o_show == 'Galar Region' or o_show == 'Alola Region':
+                        if trait['NAME'] == 'Pokemon':
+                            mytrait = trait
+                if mytrait:
+                    traitmessage = f"**{mytrait['EFFECT']}**: {mytrait['TRAIT']}"
 
-            await ctx.send(embed=embedVar)
+                pets = vault['PETS']
+                active_pet = {}
+                pet_names = []
+
+                for pet in pets:
+                    pet_names.append(pet['NAME'])
+                    if pet['NAME'] == d['PET']:
+                        active_pet = pet
+
+                power = list(active_pet.values())[3]
+                pet_ability_power = (active_pet['BOND'] * active_pet['LVL']) + power
+                bond = active_pet['BOND']
+                lvl = active_pet['LVL']
+
+                bond_message = ""
+                lvl_message = ""
+                if bond == 3:
+                    bond_message = ":star2:"
+                
+                if lvl == 10:
+                    lvl_message = ":star:"
+
+                # Arm Information
+                arm_name = arm['ARM']
+                arm_passive = arm['ABILITIES'][0]
+                arm_passive_type = list(arm_passive.keys())[0]
+                arm_passive_value = list(arm_passive.values())[0]
+                title_name= title['TITLE']
+                title_passive = title['ABILITIES'][0]
+                title_passive_type = list(title_passive.keys())[0]
+                title_passive_value = list(title_passive.values())[0]
+
+                o_1 = o_moveset[0]
+                o_2 = o_moveset[1]
+                o_3 = o_moveset[2]
+                o_enhancer = o_moveset[3]
+                
+                # Move 1
+                move1 = list(o_1.keys())[0]
+                move1ap = list(o_1.values())[0] + card_lvl_ap_buff
+                move1_stamina = list(o_1.values())[1]
+                
+                # Move 2
+                move2 = list(o_2.keys())[0]
+                move2ap = list(o_2.values())[0] + card_lvl_ap_buff
+                move2_stamina = list(o_2.values())[1]
+
+                # Move 3
+                move3 = list(o_3.keys())[0]
+                move3ap = list(o_3.values())[0] + card_lvl_ap_buff
+                move3_stamina = list(o_3.values())[1]
+
+                # Move Enhancer
+                move4 = list(o_enhancer.keys())[0]
+                move4ap = list(o_enhancer.values())[0]
+                move4_stamina = list(o_enhancer.values())[1]
+                move4enh = list(o_enhancer.values())[2]
+
+
+                resolved = False
+                focused = False
+                cardtitle = {'TITLE': 'CARD PREVIEW'}
+                att = 0
+                defe = 0
+                turn = 0
+                card_file = showcard(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, cardtitle, focused, att, defe, turn)
+
+                passive_name = list(o_passive.keys())[0]
+                passive_num = list(o_passive.values())[0]
+                passive_type = list(o_passive.values())[1]
+
+                atk_buff = ""
+                def_buff = ""
+                hlt_buff = ""
+                message = ""
+                if (oarm_universe == o_show) and (o_title_universe == o_show):
+                    atk_buff = f" / {o_attack + 20}"
+                    def_buff = f" / {o_defense + 20}"
+                    hlt_buff = f" / {o_max_health + 100}"
+                    message = "_Universe Buff Applied_"
+                    if o_destiny:
+                        atk_buff = f" / {o_attack + 25}"
+                        def_buff = f" / {o_defense + 25}"
+                        hlt_buff = f" / {o_max_health + 150}"
+                        message = "_Destiny Buff Applied_"
+
+                embedVar = discord.Embed(title=f":trident: {card_lvl} | {title_name} {o_card} & {active_pet['NAME']}:".format(self), description=textwrap.dedent(f"""\
+                {message}
+                :heart: | **Health** - {o_max_health} {hlt_buff}
+                :cyclone: | **Stamina** - {o_max_stamina}
+                :dagger: | **Attack** - {o_attack} {atk_buff}
+                :shield: | **Shield** - {o_defense} {def_buff}
+                
+                :reminder_ribbon: | **Title** - {title_name} ~ {title_passive_type} | {title_passive_value}
+                :mechanical_arm: | **Arm** - {arm_name} ~ {arm_passive_type} | {arm_passive_value}
+                :bird: | **Pet** - {active_pet['NAME']} ~ {active_pet['TYPE']} | {pet_ability_power} 
+                **Bond** _{bond}_ {bond_message} / **Level** _{lvl}_ {lvl_message}
+            
+                _**Moveset**_
+                :boom: | **{move1}:** {move1ap}
+                :comet: | **{move2}:** {move2ap}
+                :rosette: | **{move3}:** {move3ap}
+                :microbe: | **{move4}:** {move4enh} by {move4ap}
+                
+                :drop_of_blood: | _Passive:_ **{passive_name}:** {passive_type} by {passive_num}
+                :infinity: | {traitmessage}
+                """)
+                
+                , colour=000000)
+                embedVar.set_thumbnail(url=active_pet['PATH'])
+                embedVar.set_image(url=o_card_path)
+                embedVar.set_footer(text=f"EXP Until Next Level: {150 - card_exp}\nRebirth Buff: +{rebirthBonus}", icon_url="https://cdn.discordapp.com/emojis/841486485826961448.gif?v=1")
+
+                await ctx.send(embed=embedVar)
+            except Exception as ex:
+                trace = []
+                tb = ex.__traceback__
+                while tb is not None:
+                    trace.append({
+                        "filename": tb.tb_frame.f_code.co_filename,
+                        "name": tb.tb_frame.f_code.co_name,
+                        "lineno": tb.tb_lineno
+                    })
+                    tb = tb.tb_next
+                print(str({
+                    'type': type(ex).__name__,
+                    'message': str(ex),
+                    'trace': trace
+                }))
+                await ctx.send("There's an issue with your build. Check with support.")
+                return
         else:
             await ctx.send(m.USER_NOT_REGISTERED, delete_after=3)
 
@@ -255,66 +272,84 @@ class Profile(commands.Cog):
         vault = db.queryVault({'OWNER': d['DISNAME']})
         
         if vault:
-            name = d['DISNAME'].split("#",1)[0]
-            avatar = d['AVATAR']
-            card_levels = vault['CARD_LEVELS']
-            balance = vault['BALANCE']
-            cards_list = vault['CARDS']
-            total_cards = len(cards_list)
-            cards=[]
-            icon = ":coin:"
-            if balance >= 150000:
-                icon = ":money_with_wings:"
-            elif balance >=100000:
-                icon = ":moneybag:"
-            elif balance >= 50000:
-                icon = ":dollar:"
-            
+            try:
+                name = d['DISNAME'].split("#",1)[0]
+                avatar = d['AVATAR']
+                card_levels = vault['CARD_LEVELS']
+                balance = vault['BALANCE']
+                cards_list = vault['CARDS']
+                total_cards = len(cards_list)
+                cards=[]
+                icon = ":coin:"
+                if balance >= 150000:
+                    icon = ":money_with_wings:"
+                elif balance >=100000:
+                    icon = ":moneybag:"
+                elif balance >= 50000:
+                    icon = ":dollar:"
+                
 
-            for card in cards_list:
-                resp = db.queryCard({"NAME": str(card)})
-                lvl = ""
-                for cl in card_levels:
-                    if card == cl['CARD']:
-                        lvl = f":trident: **{cl['LVL']}**"
-                cards.append(textwrap.dedent(f"""
-                **{resp['NAME']}** | {lvl}
-                **HLT:** {resp['HLT']} **ATK:** {resp['ATK']} **DEF:** {resp['DEF']}
-                **Universe:** {resp['UNIVERSE']}"""))
+                for card in cards_list:
+                    resp = db.queryCard({"NAME": str(card)})
+                    lvl = ""
+                    for cl in card_levels:
+                        if card == cl['CARD']:
+                            lvl = f":trident: **{cl['LVL']}**"
+                    cards.append(textwrap.dedent(f"""
+                    **{resp['NAME']}** | {lvl}
+                    **HLT:** {resp['HLT']} **ATK:** {resp['ATK']} **DEF:** {resp['DEF']}
+                    **Universe:** {resp['UNIVERSE']}"""))
 
-            # Adding to array until divisible by 10
-            while len(cards) % 10 != 0:
-                cards.append("")
-            # Check if divisible by 10, then start to split evenly
-            if len(cards) % 10 == 0:
-                first_digit = int(str(len(cards))[:1])
-                if len(cards) >= 89:
-                    if first_digit == 1:
-                        first_digit = 10
-                cards_broken_up = np.array_split(cards, first_digit)
-            
-            # If it's not an array greater than 10, show paginationless embed
-            if len(cards) < 10:
-                embedVar = discord.Embed(title= f"Cards\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(cards), colour=0x7289da)
-                embedVar.set_thumbnail(url=avatar)
-                embedVar.set_footer(text=f"/equipcard card name: Equip Card\n/viewcard card name: View Cards Details")
-                await ctx.send(embed=embedVar)
+                # Adding to array until divisible by 10
+                while len(cards) % 10 != 0:
+                    cards.append("")
+                # Check if divisible by 10, then start to split evenly
+                if len(cards) % 10 == 0:
+                    first_digit = int(str(len(cards))[:1])
+                    if len(cards) >= 89:
+                        if first_digit == 1:
+                            first_digit = 10
+                    cards_broken_up = np.array_split(cards, first_digit)
+                
+                # If it's not an array greater than 10, show paginationless embed
+                if len(cards) < 10:
+                    embedVar = discord.Embed(title= f"Cards\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(cards), colour=0x7289da)
+                    embedVar.set_thumbnail(url=avatar)
+                    embedVar.set_footer(text=f"/equipcard card name: Equip Card\n/viewcard card name: View Cards Details")
+                    await ctx.send(embed=embedVar)
 
-            embed_list = []
-            for i in range(0, len(cards_broken_up)):
-                globals()['embedVar%s' % i] = discord.Embed(title= f":flower_playing_cards: Cards\n**Balance**: {icon}{'{:,}'.format(balance)}", description="\n".join(cards_broken_up[i]), colour=0x7289da)
-                globals()['embedVar%s' % i].set_thumbnail(url=avatar)
-                globals()['embedVar%s' % i].set_footer(text=f"{total_cards} Total Cards\n/equipcard card name: Equip Card\n/viewcard card name: View Cards Details")
-                embed_list.append(globals()['embedVar%s' % i])
+                embed_list = []
+                for i in range(0, len(cards_broken_up)):
+                    globals()['embedVar%s' % i] = discord.Embed(title= f":flower_playing_cards: Cards\n**Balance**: {icon}{'{:,}'.format(balance)}", description="\n".join(cards_broken_up[i]), colour=0x7289da)
+                    globals()['embedVar%s' % i].set_thumbnail(url=avatar)
+                    globals()['embedVar%s' % i].set_footer(text=f"{total_cards} Total Cards\n/equipcard card name: Equip Card\n/viewcard card name: View Cards Details")
+                    embed_list.append(globals()['embedVar%s' % i])
 
-            paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
-            paginator.add_reaction('⏮️', "first")
-            paginator.add_reaction('⏪', "back")
-            paginator.add_reaction('🔐', "lock")
-            paginator.add_reaction('⏩', "next")
-            paginator.add_reaction('⏭️', "last")
-            embeds = embed_list
-            await paginator.run(embeds)
+                paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+                paginator.add_reaction('⏮️', "first")
+                paginator.add_reaction('⏪', "back")
+                paginator.add_reaction('🔐', "lock")
+                paginator.add_reaction('⏩', "next")
+                paginator.add_reaction('⏭️', "last")
+                embeds = embed_list
+                await paginator.run(embeds)
+            except Exception as ex:
+                trace = []
+                tb = ex.__traceback__
+                while tb is not None:
+                    trace.append({
+                        "filename": tb.tb_frame.f_code.co_filename,
+                        "name": tb.tb_frame.f_code.co_name,
+                        "lineno": tb.tb_lineno
+                    })
+                    tb = tb.tb_next
+                print(str({
+                    'type': type(ex).__name__,
+                    'message': str(ex),
+                    'trace': trace
+                }))
+                await ctx.send("There's an issue with loading your cards. Check with support.")
+                return
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
@@ -324,63 +359,81 @@ class Profile(commands.Cog):
         d = db.queryUser(query)
         vault = db.queryVault({'OWNER': d['DISNAME']})
         if vault:
-            name = d['DISNAME'].split("#",1)[0]
-            avatar = d['AVATAR']
-            balance = vault['BALANCE']
-            titles_list = vault['TITLES']
-            total_titles = len(titles_list)
-            titles=[]
-            icon = ":coin:"
-            if balance >= 150000:
-                icon = ":money_with_wings:"
-            elif balance >=100000:
-                icon = ":moneybag:"
-            elif balance >= 50000:
-                icon = ":dollar:"
+            try:
+                name = d['DISNAME'].split("#",1)[0]
+                avatar = d['AVATAR']
+                balance = vault['BALANCE']
+                titles_list = vault['TITLES']
+                total_titles = len(titles_list)
+                titles=[]
+                icon = ":coin:"
+                if balance >= 150000:
+                    icon = ":money_with_wings:"
+                elif balance >=100000:
+                    icon = ":moneybag:"
+                elif balance >= 50000:
+                    icon = ":dollar:"
 
-            for title in titles_list:
-                resp = db.queryTitle({"TITLE": str(title)})
-                title_passive = resp['ABILITIES'][0]
-                title_passive_type = list(title_passive.keys())[0]
-                title_passive_value = list(title_passive.values())[0]
-                titles.append(textwrap.dedent(f"""
-                **{resp['TITLE']}**
-                **{title_passive_type}:** {title_passive_value}
-                **Universe:** {resp['UNIVERSE']}"""))
+                for title in titles_list:
+                    resp = db.queryTitle({"TITLE": str(title)})
+                    title_passive = resp['ABILITIES'][0]
+                    title_passive_type = list(title_passive.keys())[0]
+                    title_passive_value = list(title_passive.values())[0]
+                    titles.append(textwrap.dedent(f"""
+                    **{resp['TITLE']}**
+                    **{title_passive_type}:** {title_passive_value}
+                    **Universe:** {resp['UNIVERSE']}"""))
 
-            # Adding to array until divisible by 10
-            while len(titles) % 10 != 0:
-                titles.append("")
-            # Check if divisible by 10, then start to split evenly
-            if len(titles) % 10 == 0:
-                first_digit = int(str(len(titles))[:1])
-                if len(titles) >= 89:
-                    if first_digit == 1:
-                        first_digit = 10
-                titles_broken_up = np.array_split(titles, first_digit)
-            
-            # If it's not an array greater than 10, show paginationless embed
-            if len(titles) < 10:
-                embedVar = discord.Embed(title= f"Titles\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(titles), colour=0x7289da)
-                embedVar.set_thumbnail(url=avatar)
-                embedVar.set_footer(text=f"/equiptitle title name: Equip Title\n/viewtitle title name: View Title Details")
-                await ctx.send(embed=embedVar)
+                # Adding to array until divisible by 10
+                while len(titles) % 10 != 0:
+                    titles.append("")
+                # Check if divisible by 10, then start to split evenly
+                if len(titles) % 10 == 0:
+                    first_digit = int(str(len(titles))[:1])
+                    if len(titles) >= 89:
+                        if first_digit == 1:
+                            first_digit = 10
+                    titles_broken_up = np.array_split(titles, first_digit)
+                
+                # If it's not an array greater than 10, show paginationless embed
+                if len(titles) < 10:
+                    embedVar = discord.Embed(title= f"Titles\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(titles), colour=0x7289da)
+                    embedVar.set_thumbnail(url=avatar)
+                    embedVar.set_footer(text=f"/equiptitle title name: Equip Title\n/viewtitle title name: View Title Details")
+                    await ctx.send(embed=embedVar)
 
-            embed_list = []
-            for i in range(0, len(titles_broken_up)):
-                globals()['embedVar%s' % i] = discord.Embed(title= f":reminder_ribbon: Titles\n**Balance**: {icon}{'{:,}'.format(balance)}", description="\n".join(titles_broken_up[i]), colour=0x7289da)
-                globals()['embedVar%s' % i].set_thumbnail(url=avatar)
-                globals()['embedVar%s' % i].set_footer(text=f"{total_titles} Total Titles\n/equiptitle title name: Equip Title\n/viewtitle title name: View Title Details")
-                embed_list.append(globals()['embedVar%s' % i])
+                embed_list = []
+                for i in range(0, len(titles_broken_up)):
+                    globals()['embedVar%s' % i] = discord.Embed(title= f":reminder_ribbon: Titles\n**Balance**: {icon}{'{:,}'.format(balance)}", description="\n".join(titles_broken_up[i]), colour=0x7289da)
+                    globals()['embedVar%s' % i].set_thumbnail(url=avatar)
+                    globals()['embedVar%s' % i].set_footer(text=f"{total_titles} Total Titles\n/equiptitle title name: Equip Title\n/viewtitle title name: View Title Details")
+                    embed_list.append(globals()['embedVar%s' % i])
 
-            paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
-            paginator.add_reaction('⏮️', "first")
-            paginator.add_reaction('⏪', "back")
-            paginator.add_reaction('🔐', "lock")
-            paginator.add_reaction('⏩', "next")
-            paginator.add_reaction('⏭️', "last")
-            embeds = embed_list
-            await paginator.run(embeds)
+                paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+                paginator.add_reaction('⏮️', "first")
+                paginator.add_reaction('⏪', "back")
+                paginator.add_reaction('🔐', "lock")
+                paginator.add_reaction('⏩', "next")
+                paginator.add_reaction('⏭️', "last")
+                embeds = embed_list
+                await paginator.run(embeds)
+            except Exception as ex:
+                trace = []
+                tb = ex.__traceback__
+                while tb is not None:
+                    trace.append({
+                        "filename": tb.tb_frame.f_code.co_filename,
+                        "name": tb.tb_frame.f_code.co_name,
+                        "lineno": tb.tb_lineno
+                    })
+                    tb = tb.tb_next
+                print(str({
+                    'type': type(ex).__name__,
+                    'message': str(ex),
+                    'trace': trace
+                }))
+                await ctx.send("There's an issue with your Titles list. Check with support.")
+                return
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
@@ -390,64 +443,82 @@ class Profile(commands.Cog):
         d = db.queryUser(query)
         vault = db.queryVault({'OWNER': d['DISNAME']})
         if vault:
-            name = d['DISNAME'].split("#",1)[0]
-            avatar = d['AVATAR']
-            balance = vault['BALANCE']
-            arms_list = vault['ARMS']
-            total_arms = len(arms_list)
+            try:
+                name = d['DISNAME'].split("#",1)[0]
+                avatar = d['AVATAR']
+                balance = vault['BALANCE']
+                arms_list = vault['ARMS']
+                total_arms = len(arms_list)
 
-            arms=[]
-            icon = ":coin:"
-            if balance >= 150000:
-                icon = ":money_with_wings:"
-            elif balance >=100000:
-                icon = ":moneybag:"
-            elif balance >= 50000:
-                icon = ":dollar:"
+                arms=[]
+                icon = ":coin:"
+                if balance >= 150000:
+                    icon = ":money_with_wings:"
+                elif balance >=100000:
+                    icon = ":moneybag:"
+                elif balance >= 50000:
+                    icon = ":dollar:"
 
-            for arm in arms_list:
-                resp = db.queryArm({"ARM": str(arm)})
-                arm_passive = resp['ABILITIES'][0]
-                arm_passive_type = list(arm_passive.keys())[0]
-                arm_passive_value = list(arm_passive.values())[0]
-                arms.append(textwrap.dedent(f"""
-                **{resp['ARM']}**
-                **{arm_passive_type}:** {arm_passive_value}
-                **Universe:** {resp['UNIVERSE']}"""))
+                for arm in arms_list:
+                    resp = db.queryArm({"ARM": str(arm)})
+                    arm_passive = resp['ABILITIES'][0]
+                    arm_passive_type = list(arm_passive.keys())[0]
+                    arm_passive_value = list(arm_passive.values())[0]
+                    arms.append(textwrap.dedent(f"""
+                    **{resp['ARM']}**
+                    **{arm_passive_type}:** {arm_passive_value}
+                    **Universe:** {resp['UNIVERSE']}"""))
 
-            # Adding to array until divisible by 10
-            while len(arms) % 10 != 0:
-                arms.append("")
-            # Check if divisible by 10, then start to split evenly
-            if len(arms) % 10 == 0:
-                first_digit = int(str(len(arms))[:1])
-                if len(arms) >= 89:
-                    if first_digit == 1:
-                        first_digit = 10
-                arms_broken_up = np.array_split(arms, first_digit)
-            
-            # If it's not an array greater than 10, show paginationless embed
-            if len(arms) < 10:
-                embedVar = discord.Embed(title= f"Arms\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(arms), colour=0x7289da)
-                embedVar.set_thumbnail(url=avatar)
-                embedVar.set_footer(text=f"/equiparm arm name: Equip Arm\n/viewarm arm name: View Arm Details")
-                await ctx.send(embed=embedVar)
+                # Adding to array until divisible by 10
+                while len(arms) % 10 != 0:
+                    arms.append("")
+                # Check if divisible by 10, then start to split evenly
+                if len(arms) % 10 == 0:
+                    first_digit = int(str(len(arms))[:1])
+                    if len(arms) >= 89:
+                        if first_digit == 1:
+                            first_digit = 10
+                    arms_broken_up = np.array_split(arms, first_digit)
+                
+                # If it's not an array greater than 10, show paginationless embed
+                if len(arms) < 10:
+                    embedVar = discord.Embed(title= f"Arms\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(arms), colour=0x7289da)
+                    embedVar.set_thumbnail(url=avatar)
+                    embedVar.set_footer(text=f"/equiparm arm name: Equip Arm\n/viewarm arm name: View Arm Details")
+                    await ctx.send(embed=embedVar)
 
-            embed_list = []
-            for i in range(0, len(arms_broken_up)):
-                globals()['embedVar%s' % i] = discord.Embed(title= f":mechanical_arm: Arms\n**Balance**: {icon}{'{:,}'.format(balance)}", description="\n".join(arms_broken_up[i]), colour=0x7289da)
-                globals()['embedVar%s' % i].set_thumbnail(url=avatar)
-                globals()['embedVar%s' % i].set_footer(text=f"{total_arms} Total Arms\n/equiparm arm name: Equip Arm\n/viewarm arm name: View Arm Details")
-                embed_list.append(globals()['embedVar%s' % i])
+                embed_list = []
+                for i in range(0, len(arms_broken_up)):
+                    globals()['embedVar%s' % i] = discord.Embed(title= f":mechanical_arm: Arms\n**Balance**: {icon}{'{:,}'.format(balance)}", description="\n".join(arms_broken_up[i]), colour=0x7289da)
+                    globals()['embedVar%s' % i].set_thumbnail(url=avatar)
+                    globals()['embedVar%s' % i].set_footer(text=f"{total_arms} Total Arms\n/equiparm arm name: Equip Arm\n/viewarm arm name: View Arm Details")
+                    embed_list.append(globals()['embedVar%s' % i])
 
-            paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
-            paginator.add_reaction('⏮️', "first")
-            paginator.add_reaction('⏪', "back")
-            paginator.add_reaction('🔐', "lock")
-            paginator.add_reaction('⏩', "next")
-            paginator.add_reaction('⏭️', "last")
-            embeds = embed_list
-            await paginator.run(embeds)
+                paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+                paginator.add_reaction('⏮️', "first")
+                paginator.add_reaction('⏪', "back")
+                paginator.add_reaction('🔐', "lock")
+                paginator.add_reaction('⏩', "next")
+                paginator.add_reaction('⏭️', "last")
+                embeds = embed_list
+                await paginator.run(embeds)
+            except Exception as ex:
+                trace = []
+                tb = ex.__traceback__
+                while tb is not None:
+                    trace.append({
+                        "filename": tb.tb_frame.f_code.co_filename,
+                        "name": tb.tb_frame.f_code.co_name,
+                        "lineno": tb.tb_lineno
+                    })
+                    tb = tb.tb_next
+                print(str({
+                    'type': type(ex).__name__,
+                    'message': str(ex),
+                    'trace': trace
+                }))
+                await ctx.send("There's an issue with your Arms list. Check with support.")
+                return
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
@@ -457,74 +528,92 @@ class Profile(commands.Cog):
         d = db.queryUser(query)
         vault = db.queryVault({'OWNER': d['DISNAME']})
         if vault:
-            name = d['DISNAME'].split("#",1)[0]
-            avatar = d['AVATAR']
-            balance = vault['BALANCE']
-            pets_list = vault['PETS']
+            try:
+                name = d['DISNAME'].split("#",1)[0]
+                avatar = d['AVATAR']
+                balance = vault['BALANCE']
+                pets_list = vault['PETS']
 
-            total_pets = len(pets_list)
+                total_pets = len(pets_list)
 
-            pets=[]
-            icon = ":coin:"
-            if balance >= 150000:
-                icon = ":money_with_wings:"
-            elif balance >=100000:
-                icon = ":moneybag:"
-            elif balance >= 50000:
-                icon = ":dollar:"
-            bond_message = ""
-            lvl_message = ""
-            for pet in pets_list:
-                #cpetmove_ap= (cpet_bond * cpet_lvl) + list(cpet.values())[3] # Ability Power
+                pets=[]
+                icon = ":coin:"
+                if balance >= 150000:
+                    icon = ":money_with_wings:"
+                elif balance >=100000:
+                    icon = ":moneybag:"
+                elif balance >= 50000:
+                    icon = ":dollar:"
                 bond_message = ""
-                if pet['BOND'] == 3:
-                    bond_message = ":star2:"
                 lvl_message = ""
-                if pet['LVL'] == 10:
-                    lvl_message = ":star:"
+                for pet in pets_list:
+                    #cpetmove_ap= (cpet_bond * cpet_lvl) + list(cpet.values())[3] # Ability Power
+                    bond_message = ""
+                    if pet['BOND'] == 3:
+                        bond_message = ":star2:"
+                    lvl_message = ""
+                    if pet['LVL'] == 10:
+                        lvl_message = ":star:"
+                    
+                    pet_ability = list(pet.keys())[3]
+                    pet_ability_power = list(pet.values())[3]
+                    power = (pet['BOND'] * pet['LVL']) + pet_ability_power
+                    pets.append(textwrap.dedent(f"""
+                    **{pet['NAME']}** | _B_ **{pet['BOND']}** {bond_message} / _L_ **{pet['LVL']} {lvl_message}**
+                    **{pet_ability}:** {power}
+                    **Type:** {pet['TYPE']}"""))
+
+                # Adding to array until divisible by 10
+                while len(pets) % 10 != 0:
+                    pets.append("")
+
+                # Check if divisible by 10, then start to split evenly
+                if len(pets) % 10 == 0:
+                    first_digit = int(str(len(pets))[:1])
+                    if len(pets) >= 89:
+                        if first_digit == 1:
+                            first_digit = 10
+                    pets_broken_up = np.array_split(pets, first_digit)
                 
-                pet_ability = list(pet.keys())[3]
-                pet_ability_power = list(pet.values())[3]
-                power = (pet['BOND'] * pet['LVL']) + pet_ability_power
-                pets.append(textwrap.dedent(f"""
-                **{pet['NAME']}** | _B_ **{pet['BOND']}** {bond_message} / _L_ **{pet['LVL']} {lvl_message}**
-                **{pet_ability}:** {power}
-                **Type:** {pet['TYPE']}"""))
+                # If it's not an array greater than 10, show paginationless embed
+                if len(pets) < 10:
+                    embedVar = discord.Embed(title= f"Pets\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(pets), colour=0x7289da)
+                    embedVar.set_thumbnail(url=avatar)
+                    embedVar.set_footer(text=f"/equippet pet name: Equip Pet\n/viewpet pet name: View Pet Details")
+                    await ctx.send(embed=embedVar)
 
-            # Adding to array until divisible by 10
-            while len(pets) % 10 != 0:
-                pets.append("")
+                embed_list = []
+                for i in range(0, len(pets_broken_up)):
+                    globals()['embedVar%s' % i] = discord.Embed(title= f":bird: Pets\n**Balance**: {icon}{'{:,}'.format(balance)}", description="\n".join(pets_broken_up[i]), colour=0x7289da)
+                    globals()['embedVar%s' % i].set_thumbnail(url=avatar)
+                    globals()['embedVar%s' % i].set_footer(text=f"{total_pets} Total Pets\n/equippet pet name: Equip Pet\n/viewpet pet name: View Pet Details")
+                    embed_list.append(globals()['embedVar%s' % i])
 
-            # Check if divisible by 10, then start to split evenly
-            if len(pets) % 10 == 0:
-                first_digit = int(str(len(pets))[:1])
-                if len(pets) >= 89:
-                    if first_digit == 1:
-                        first_digit = 10
-                pets_broken_up = np.array_split(pets, first_digit)
-            
-            # If it's not an array greater than 10, show paginationless embed
-            if len(pets) < 10:
-                embedVar = discord.Embed(title= f"Pets\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(pets), colour=0x7289da)
-                embedVar.set_thumbnail(url=avatar)
-                embedVar.set_footer(text=f"/equippet pet name: Equip Pet\n/viewpet pet name: View Pet Details")
-                await ctx.send(embed=embedVar)
-
-            embed_list = []
-            for i in range(0, len(pets_broken_up)):
-                globals()['embedVar%s' % i] = discord.Embed(title= f":bird: Pets\n**Balance**: {icon}{'{:,}'.format(balance)}", description="\n".join(pets_broken_up[i]), colour=0x7289da)
-                globals()['embedVar%s' % i].set_thumbnail(url=avatar)
-                globals()['embedVar%s' % i].set_footer(text=f"{total_pets} Total Pets\n/equippet pet name: Equip Pet\n/viewpet pet name: View Pet Details")
-                embed_list.append(globals()['embedVar%s' % i])
-
-            paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
-            paginator.add_reaction('⏮️', "first")
-            paginator.add_reaction('⏪', "back")
-            paginator.add_reaction('🔐', "lock")
-            paginator.add_reaction('⏩', "next")
-            paginator.add_reaction('⏭️', "last")
-            embeds = embed_list
-            await paginator.run(embeds)
+                paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+                paginator.add_reaction('⏮️', "first")
+                paginator.add_reaction('⏪', "back")
+                paginator.add_reaction('🔐', "lock")
+                paginator.add_reaction('⏩', "next")
+                paginator.add_reaction('⏭️', "last")
+                embeds = embed_list
+                await paginator.run(embeds)
+            except Exception as ex:
+                trace = []
+                tb = ex.__traceback__
+                while tb is not None:
+                    trace.append({
+                        "filename": tb.tb_frame.f_code.co_filename,
+                        "name": tb.tb_frame.f_code.co_name,
+                        "lineno": tb.tb_lineno
+                    })
+                    tb = tb.tb_next
+                print(str({
+                    'type': type(ex).__name__,
+                    'message': str(ex),
+                    'trace': trace
+                }))
+                await ctx.send("There's an issue with your Pets list. Check with support.")
+                return
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
@@ -537,63 +626,81 @@ class Profile(commands.Cog):
             await ctx.send("No Destiny Lines available at this time!")
             return
         if vault:
-            name = d['DISNAME'].split("#",1)[0]
-            avatar = d['AVATAR']
-            balance = vault['BALANCE']
-            destiny = vault['DESTINY']
+            try:
+                name = d['DISNAME'].split("#",1)[0]
+                avatar = d['AVATAR']
+                balance = vault['BALANCE']
+                destiny = vault['DESTINY']
 
-            destiny_messages = []
-            icon = ":coin:"
-            if balance >= 150000:
-                icon = ":money_with_wings:"
-            elif balance >=100000:
-                icon = ":moneybag:"
-            elif balance >= 50000:
-                icon = ":dollar:"
-            for d in destiny:
-                if not d['COMPLETED']:
-                    destiny_messages.append(textwrap.dedent(f"""\
-                    **{d["NAME"]}**
-                    Defeat **{d['DEFEAT']}** with **{" ".join(d['USE_CARDS'])}** | **Current Progress:** {d['WINS']}/{d['REQUIRED']}
-                    """))
+                destiny_messages = []
+                icon = ":coin:"
+                if balance >= 150000:
+                    icon = ":money_with_wings:"
+                elif balance >=100000:
+                    icon = ":moneybag:"
+                elif balance >= 50000:
+                    icon = ":dollar:"
+                for d in destiny:
+                    if not d['COMPLETED']:
+                        destiny_messages.append(textwrap.dedent(f"""\
+                        **{d["NAME"]}**
+                        Defeat **{d['DEFEAT']}** with **{" ".join(d['USE_CARDS'])}** | **Current Progress:** {d['WINS']}/{d['REQUIRED']}
+                        """))
 
-            if not destiny_messages:
-                await ctx.send("No Destiny Lines available at this time!")
+                if not destiny_messages:
+                    await ctx.send("No Destiny Lines available at this time!")
+                    return
+                # Adding to array until divisible by 10
+                while len(destiny_messages) % 10 != 0:
+                    destiny_messages.append("")
+
+                # Check if divisible by 10, then start to split evenly
+                if len(destiny_messages) % 10 == 0:
+                    first_digit = int(str(len(destiny_messages))[:1])
+                    if len(destiny_messages) >= 89:
+                        if first_digit == 1:
+                            first_digit = 10
+                    destinies_broken_up = np.array_split(destiny_messages, first_digit)
+                
+                # If it's not an array greater than 10, show paginationless embed
+                if len(destiny_messages) < 10:
+                    embedVar = discord.Embed(title= f"Destiny Lines\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(destiny_messages), colour=0x7289da)
+                    embedVar.set_thumbnail(url=avatar)
+                    # embedVar.set_footer(text=f".equippet pet name: Equip Pet\n.viewpet pet name: View Pet Details")
+                    await ctx.send(embed=embedVar)
+
+                embed_list = []
+                for i in range(0, len(destinies_broken_up)):
+                    globals()['embedVar%s' % i] = discord.Embed(title= f":sparkles: Destiny Lines\n**Balance**: {icon}{'{:,}'.format(balance)}", description="\n".join(destinies_broken_up[i]), colour=0x7289da)
+                    globals()['embedVar%s' % i].set_thumbnail(url=avatar)
+                    # globals()['embedVar%s' % i].set_footer(text=f"{total_pets} Total Pets\n.equippet pet name: Equip Pet\n.viewpet pet name: View Pet Details")
+                    embed_list.append(globals()['embedVar%s' % i])
+
+                paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+                paginator.add_reaction('⏮️', "first")
+                paginator.add_reaction('⏪', "back")
+                paginator.add_reaction('🔐', "lock")
+                paginator.add_reaction('⏩', "next")
+                paginator.add_reaction('⏭️', "last")
+                embeds = embed_list
+                await paginator.run(embeds)
+            except Exception as ex:
+                trace = []
+                tb = ex.__traceback__
+                while tb is not None:
+                    trace.append({
+                        "filename": tb.tb_frame.f_code.co_filename,
+                        "name": tb.tb_frame.f_code.co_name,
+                        "lineno": tb.tb_lineno
+                    })
+                    tb = tb.tb_next
+                print(str({
+                    'type': type(ex).__name__,
+                    'message': str(ex),
+                    'trace': trace
+                }))
+                await ctx.send("There's an issue with your Destiny Line list. Check with support.")
                 return
-            # Adding to array until divisible by 10
-            while len(destiny_messages) % 10 != 0:
-                destiny_messages.append("")
-
-            # Check if divisible by 10, then start to split evenly
-            if len(destiny_messages) % 10 == 0:
-                first_digit = int(str(len(destiny_messages))[:1])
-                if len(destiny_messages) >= 89:
-                    if first_digit == 1:
-                        first_digit = 10
-                destinies_broken_up = np.array_split(destiny_messages, first_digit)
-            
-            # If it's not an array greater than 10, show paginationless embed
-            if len(destiny_messages) < 10:
-                embedVar = discord.Embed(title= f"Destiny Lines\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(destiny_messages), colour=0x7289da)
-                embedVar.set_thumbnail(url=avatar)
-                # embedVar.set_footer(text=f".equippet pet name: Equip Pet\n.viewpet pet name: View Pet Details")
-                await ctx.send(embed=embedVar)
-
-            embed_list = []
-            for i in range(0, len(destinies_broken_up)):
-                globals()['embedVar%s' % i] = discord.Embed(title= f":sparkles: Destiny Lines\n**Balance**: {icon}{'{:,}'.format(balance)}", description="\n".join(destinies_broken_up[i]), colour=0x7289da)
-                globals()['embedVar%s' % i].set_thumbnail(url=avatar)
-                # globals()['embedVar%s' % i].set_footer(text=f"{total_pets} Total Pets\n.equippet pet name: Equip Pet\n.viewpet pet name: View Pet Details")
-                embed_list.append(globals()['embedVar%s' % i])
-
-            paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
-            paginator.add_reaction('⏮️', "first")
-            paginator.add_reaction('⏪', "back")
-            paginator.add_reaction('🔐', "lock")
-            paginator.add_reaction('⏩', "next")
-            paginator.add_reaction('⏭️', "last")
-            embeds = embed_list
-            await paginator.run(embeds)
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
@@ -606,30 +713,47 @@ class Profile(commands.Cog):
             await ctx.send("No Quests available at this time!")
             return
         if vault:
-            name = d['DISNAME'].split("#",1)[0]
-            avatar = d['AVATAR']
-            balance = vault['BALANCE']
-            quests = vault['QUESTS']
+            try:
+                name = d['DISNAME'].split("#",1)[0]
+                avatar = d['AVATAR']
+                balance = vault['BALANCE']
+                quests = vault['QUESTS']
 
-            quest_messages = []
-            for quest in quests:
-                completed = ""
-                if quest['GOAL'] == quest['WINS']:
-                    completed = "🟢"
-                else:
-                    completed = "🔴"
-                quest_messages.append(textwrap.dedent(f"""\
-                Defeat **{quest['OPPONENT']}** {quest['GOAL']} times in {quest['TYPE']} for :coin:{quest['REWARD']}! : {completed}
-                **Current Progress:** {quest['WINS']}/{quest['GOAL']}
+                quest_messages = []
+                for quest in quests:
+                    completed = ""
+                    if quest['GOAL'] == quest['WINS']:
+                        completed = "🟢"
+                    else:
+                        completed = "🔴"
+                    quest_messages.append(textwrap.dedent(f"""\
+                    Defeat **{quest['OPPONENT']}** {quest['GOAL']} times in {quest['TYPE']} for :coin:{quest['REWARD']}! : {completed}
+                    **Current Progress:** {quest['WINS']}/{quest['GOAL']}
+                    
+                    """))
                 
-                """))
-            
-            embedVar = discord.Embed(title= f":notepad_spiral: Quest Board", description=textwrap.dedent(f"""
-                **Balance**: :coin:{'{:,}'.format(balance)}
-                \n{"".join(quest_messages)}
-                """), colour=0x7289da)
-            await ctx.send(embed=embedVar)
-            
+                embedVar = discord.Embed(title= f":notepad_spiral: Quest Board", description=textwrap.dedent(f"""
+                    **Balance**: :coin:{'{:,}'.format(balance)}
+                    \n{"".join(quest_messages)}
+                    """), colour=0x7289da)
+                await ctx.send(embed=embedVar)
+            except Exception as ex:
+                trace = []
+                tb = ex.__traceback__
+                while tb is not None:
+                    trace.append({
+                        "filename": tb.tb_frame.f_code.co_filename,
+                        "name": tb.tb_frame.f_code.co_name,
+                        "lineno": tb.tb_lineno
+                    })
+                    tb = tb.tb_next
+                print(str({
+                    'type': type(ex).__name__,
+                    'message': str(ex),
+                    'trace': trace
+                }))
+                await ctx.send("There's an issue with your Quest list. Check with support.")
+                return
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
