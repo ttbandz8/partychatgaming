@@ -6753,9 +6753,6 @@ class CrownUnlimited(commands.Cog):
                 if currentopponent == total_legends:
                     embedVar = discord.Embed(title=f"UNIVERSE CONQUERED", description=f"Universe {selected_universe} has been conquered\n\n{drop_response}", colour=0xe91e63)
                     embedVar.set_author(name=f"New Universes have been unlocked to explore!")
-                    if crestsearch:
-                        await movecrest(selected_universe, oguild['GNAME'])
-                        embedVar.add_field(name=f"{selected_universe} CREST CLAIMED!", value=f"{oguild['GNAME']} earned the {selected_universe} **Crest**")
                     embedVar.add_field(name="Additional Reward", value=f"You earned additional rewards in your vault! Take a look.")
                     embedVar.set_footer(text="The .shop has been updated with new CARDS, TITLES and ARMS!")
                     upload_query={'DISNAME': str(ctx.author)}
@@ -16022,9 +16019,6 @@ class CrownUnlimited(commands.Cog):
                 if currentopponent == total_legends:
                     embedVar = discord.Embed(title=f"UNIVERSE CONQUERED", description=f"Universe {selected_universe} has been conquered\n\n{drop_response}", colour=0xe91e63)
                     embedVar.set_author(name=f"New Universes have been unlocked to explore!")
-                    if crestsearch:
-                        await movecrest(selected_universe, oguild['GNAME'])
-                        embedVar.add_field(name=f"{selected_universe} CREST CLAIMED!", value=f"{oguild['GNAME']} earned the {selected_universe} **Crest**")
                     embedVar.add_field(name="Additional Reward", value=f"You earned additional rewards in your vault! Take a look.")
                     embedVar.set_footer(text="The .shop has been updated with new CARDS, TITLES and ARMS!")
                     upload_query={'DISNAME': str(ctx.author)}
@@ -35920,7 +35914,7 @@ class CrownUnlimited(commands.Cog):
                                             o_used_resolve = True 
                                             o_pet_used=False
                                             embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
-                                            embedVar.add_field(name=f"Transformation: Plus Ultra", value="You do not lose a turn after you Resolve.")
+                                            embedVar.add_field(name=f"Transformation: Evolution", value="When you Resolve you do not lose Defense.")
                                             await button_ctx.send(embed=embedVar)
                                             turn_total= turn_total + 1
                                             turn=1
@@ -38674,7 +38668,7 @@ class CrownUnlimited(commands.Cog):
                                             o_used_resolve = True 
                                             o_pet_used=False
                                             embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
-                                            embedVar.add_field(name=f"Transformation: Plus Ultra", value="You do not lose a turn after you Resolve.")
+                                            embedVar.add_field(name=f"Transformation: Evolution", value="When you Resolve you do not lose Defense.")
                                             await button_ctx.send(embed=embedVar)
                                             turn_total= turn_total + 1
                                             turn=1
@@ -41409,7 +41403,7 @@ class CrownUnlimited(commands.Cog):
                                             o_used_resolve = True 
                                             o_pet_used=False
                                             embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
-                                            embedVar.add_field(name=f"Transformation: Plus Ultra", value="You do not lose a turn after you Resolve.")
+                                            embedVar.add_field(name=f"Transformation: Evolution", value="When you Resolve you do not lose Defense.")
                                             await button_ctx.send(embed=embedVar)
                                             turn_total= turn_total + 1
                                             turn=1
@@ -43945,7 +43939,7 @@ class CrownUnlimited(commands.Cog):
                                             o_used_resolve = True 
                                             o_pet_used=False
                                             embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
-                                            embedVar.add_field(name=f"Transformation: Plus Ultra", value="You do not lose a turn after you Resolve.")
+                                            embedVar.add_field(name=f"Transformation: Evolution", value="When you Resolve you do not lose Defense.")
                                             await button_ctx.send(embed=embedVar)
                                             turn_total= turn_total + 1
                                             turn=1
@@ -46508,7 +46502,7 @@ class CrownUnlimited(commands.Cog):
                                             o_used_resolve = True 
                                             o_pet_used=False
                                             embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
-                                            embedVar.add_field(name=f"Transformation: Plus Ultra", value="You do not lose a turn after you Resolve.")
+                                            embedVar.add_field(name=f"Transformation: Evolution", value="When you Resolve you do not lose Defense.")
                                             await button_ctx.send(embed=embedVar)
                                             turn_total= turn_total + 1
                                             turn=1

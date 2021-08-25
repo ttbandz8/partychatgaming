@@ -2496,5 +2496,375 @@ destiny = [
         "EARN": "Nero Claudius", 
         "COMPLETED": False,
         "UNIVERSE": "Fate"
-    }
+    },
+    {
+        "NAME": "Trained By Roshi",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Goku",
+        "USE_CARDS": ["Master Roshi"],
+        "EARN": "Goku", 
+        "COMPLETED": False,
+        "UNIVERSE": "Dragon Ball Z"
+    },
+    {
+        "NAME": "Red Ribbon 13",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Android 13",
+        "USE_CARDS": ["Dr. Gero"],
+        "EARN": "Android 13", 
+        "COMPLETED": False,
+        "UNIVERSE": "Dragon Ball Z"
+    },
+    {
+        "NAME": "The Ultimate Battle Of All Universes",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Jiren",
+        "USE_CARDS": ["Ultra Instinct Goku"],
+        "EARN": "Jiren", 
+        "COMPLETED": False,
+        "UNIVERSE": "Dragon Ball Z"
+    },
+    {
+        "NAME": "Universe 6 Legendary Saiyan",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Kale",
+        "USE_CARDS": ["Ultra Instinct Goku"],
+        "EARN": "Kale", 
+        "COMPLETED": False,
+        "UNIVERSE": "Dragon Ball Z"
+    },
+    {
+        "NAME": "Buu Time Loop",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Kid Buu",
+        "USE_CARDS": ["Majin Buu"],
+        "EARN": "Kid Buu", 
+        "COMPLETED": False,
+        "UNIVERSE": "Dragon Ball Z"
+    },
+    {
+        "NAME": "Red Ribbon 16",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Android 16",
+        "USE_CARDS": ["Dr. Gero"],
+        "EARN": "Android 16", 
+        "COMPLETED": False,
+        "UNIVERSE": "Dragon Ball Z"
+    },
+    {
+        "NAME": "Pink Menace",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Majin Buu",
+        "USE_CARDS": ["Vegito"],
+        "EARN": "Majin buu", 
+        "COMPLETED": False,
+        "UNIVERSE": "Dragon Ball Z"
+    },
+    {
+        "NAME": "Red Ribbon 17",
+        "WINS": 0,
+        "REQUIRED": 20,
+        "DEFEAT": "Android 17",
+        "USE_CARDS": ["Dr. Gero"],
+        "EARN": "Android 17", 
+        "COMPLETED": False,
+        "UNIVERSE": "Dragon Ball Z"
+    },
+    {
+        "NAME": "Android Waifu",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Android 18",
+        "USE_CARDS": ["Krillin"],
+        "EARN": "Android 18", 
+        "COMPLETED": False,
+        "UNIVERSE": "Dragon Ball Z"
+    },
+    {
+        "NAME": "Red Ribbon 19",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Android 19",
+        "USE_CARDS": ["Dr. Gero"],
+        "EARN": "Android 19", 
+        "COMPLETED": False,
+        "UNIVERSE": "Dragon Ball Z"
+    },
+    {
+        "NAME": "Partner In Combat",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Nappa",
+        "USE_CARDS": ["Vegeta"],
+        "EARN": "Nappa", 
+        "COMPLETED": False,
+        "UNIVERSE": "Dragon Ball Z"
+    },
+    {
+        "NAME": "Reincarnated Student",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Uub",
+        "USE_CARDS": ["Goku"],
+        "EARN": "Uub", 
+        "COMPLETED": False,
+        "UNIVERSE": "Dragon Ball Z"
+    },
+    {
+        "NAME": "The Anti Heroes Journey",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Vegeta",
+        "USE_CARDS": ["Goku"],
+        "EARN": "Majin Vegeta", 
+        "COMPLETED": False,
+        "UNIVERSE": "Dragon Ball Z"
+    },
+    {
+        "NAME": "Fu-Sion-Ha",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Majin Buu",
+        "USE_CARDS": ["Kid Trunks"],
+        "EARN": "Gotenks", 
+        "COMPLETED": False,
+        "UNIVERSE": "Dragon Ball Z"
+    },
+    {
+        "NAME": "Fu-Sion-Ha",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Majin Buu",
+        "USE_CARDS": ["Goten"],
+        "EARN": "Gotenks", 
+        "COMPLETED": False,
+        "UNIVERSE": "Dragon Ball Z"
+    },
+    {
+        "NAME": "More Than Just A Haircut",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Majin Buu",
+        "USE_CARDS": ["Goku"],
+        "EARN": "SSJ2 Goku", 
+        "COMPLETED": False,
+        "UNIVERSE": "Dragon Ball Z"
+    },
+    {
+        "NAME": "Fallen By The Saiyan Prince",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Zarbon",
+        "USE_CARDS": ["Vegeta"],
+        "EARN": "Zarbon", 
+        "COMPLETED": False,
+        "UNIVERSE": "Dragon Ball Z"
+    },
+    {
+        "NAME": "Ginyu Force J",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Jeice",
+        "USE_CARDS": ["Captain Ginyu"],
+        "EARN": "Jeice", 
+        "COMPLETED": False,
+        "UNIVERSE": "Dragon Ball Z"
+    },
+    {
+        "NAME": "Goku Doesn't Have To Be The Strongest",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Lord Slug",
+        "USE_CARDS": ["Goku"],
+        "EARN": "Lord Slug", 
+        "COMPLETED": False,
+        "UNIVERSE": "Dragon Ball Z"
+    },
+    {
+        "NAME": "Burning Attack!",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Turles",
+        "USE_CARDS": ["Teen Trunks"],
+        "EARN": "Turles", 
+        "COMPLETED": False,
+        "UNIVERSE": "Dragon Ball Z"
+    },
+    {
+        "NAME": "Trained Under Piccolo",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Piccolo",
+        "USE_CARDS": ["Kid Gohan"],
+        "EARN": "Teen Gohan", 
+        "COMPLETED": False,
+        "UNIVERSE": "Dragon Ball Z"
+    },
+    {
+        "NAME": "Super Fusion",
+        "WINS": 0,
+        "REQUIRED": 17,
+        "DEFEAT": "Android 17",
+        "USE_CARDS": ["Android 17"],
+        "EARN": "Super 17", 
+        "COMPLETED": False,
+        "UNIVERSE": "Dragon Ball Z"
+    },
+    {
+        "NAME": "Goku's Sacrifice",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Raditz",
+        "USE_CARDS": ["Piccolo"],
+        "EARN": "Raditz", 
+        "COMPLETED": False,
+        "UNIVERSE": "Dragon Ball Z"
+    },
+    {
+        "NAME": "Winner Of The Cell Games",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Imperfect Cell",
+        "USE_CARDS": ["Teen Gohan"],
+        "EARN": "Imperfect Cell", 
+        "COMPLETED": False,
+        "UNIVERSE": "Dragon Ball Z"
+    },
+    {
+        "NAME": "The Perfect Cell",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Android 16",
+        "USE_CARDS": ["Imperfect Cell"],
+        "EARN": "Perfect Cell", 
+        "COMPLETED": False,
+        "UNIVERSE": "Dragon Ball Z"
+    },
+    {
+        "NAME": "Son of Son Goku",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Perfect Cell",
+        "USE_CARDS": ["Teen Gohan"],
+        "EARN": "Gohan", 
+        "COMPLETED": False,
+        "UNIVERSE": "Dragon Ball Z"
+    },
+    {
+        "NAME": "Quarter Saiyan",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Gohan",
+        "USE_CARDS": ["Videl"],
+        "EARN": "Pan", 
+        "COMPLETED": False,
+        "UNIVERSE": "Dragon Ball Z"
+    },
+    {
+        "NAME": "Is This Canon?",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Omega Shenron",
+        "USE_CARDS": ["SSJ4 Goku"],
+        "EARN": "Omega Shenron", 
+        "COMPLETED": False,
+        "UNIVERSE": "Dragon Ball Z"
+    },
+    {
+        "NAME": "Is This Canon?",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Omega Shenron",
+        "USE_CARDS": ["SSJ4 Vegeta"],
+        "EARN": "Omega Shenron", 
+        "COMPLETED": False,
+        "UNIVERSE": "Dragon Ball Z"
+    },
+    {
+        "NAME": "A Real Anime Dad",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Majin Vegeta",
+        "USE_CARDS": ["Vegeta"],
+        "EARN": "Kid Trunks", 
+        "COMPLETED": False,
+        "UNIVERSE": "Dragon Ball Z"
+    },
+    {
+        "NAME": "Ginyu Force Assembled R!",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Recoome",
+        "USE_CARDS": ["Captain Ginyu"],
+        "EARN": "Recoome", 
+        "COMPLETED": False,
+        "UNIVERSE": "Dragon Ball Z"
+    },
+    {
+        "NAME": "Ginyu Force Assembled B!",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Burter",
+        "USE_CARDS": ["Captain Ginyu"],
+        "EARN": "Burter", 
+        "COMPLETED": False,
+        "UNIVERSE": "Dragon Ball Z"
+    },
+    {
+        "NAME": "Ginyu Force Assembled J!",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Jeice",
+        "USE_CARDS": ["Captain Ginyu"],
+        "EARN": "Jeice", 
+        "COMPLETED": False,
+        "UNIVERSE": "Dragon Ball Z"
+    },
+    {
+        "NAME": "Clean Punch",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Bojack",
+        "USE_CARDS": ["Gohan"],
+        "EARN": "Bojack", 
+        "COMPLETED": False,
+        "UNIVERSE": "Dragon Ball Z"
+    },
+    {
+        "NAME": "Dimensional Demon",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Janemba",
+        "USE_CARDS": ["Gogeta"],
+        "EARN": "Janemba", 
+        "COMPLETED": False,
+        "UNIVERSE": "Dragon Ball Z"
+    },
+    {
+        "NAME": "Assembly The Z Fighters Y",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Yamcha",
+        "USE_CARDS": ["Krillin"],
+        "EARN": "Yamcha", 
+        "COMPLETED": False,
+        "UNIVERSE": "Dragon Ball Z"
+    },
+    {
+        "NAME": "Assembly The Z Fighters T",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Tien",
+        "USE_CARDS": ["Krillin"],
+        "EARN": "Tien", 
+        "COMPLETED": False,
+        "UNIVERSE": "Dragon Ball Z"
+    },
 ]
