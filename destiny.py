@@ -2866,5 +2866,5 @@ destiny = [
         "EARN": "Tien", 
         "COMPLETED": False,
         "UNIVERSE": "Dragon Ball Z"
-    },
+    }
 ]
