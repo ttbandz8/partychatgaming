@@ -27823,8 +27823,8 @@ class CrownUnlimited(commands.Cog):
 
     @cog_ext.cog_slash(description="Enter the Abyss", guild_ids=main.guild_ids)
     async def abyss(self, ctx: SlashContext):
-        await ctx.send("The Abyss has opened. Floors to travel deep into the Abyss are starting to form. Check back later for entry.")
-        return
+        # await ctx.send("The Abyss has opened. Floors to travel deep into the Abyss are starting to form. Check back later for entry.")
+        # return
         private_channel = ctx
         if isinstance(private_channel.channel, discord.channel.DMChannel):
             await private_channel.send(m.SERVER_FUNCTION_ONLY)
