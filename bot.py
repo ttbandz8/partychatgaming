@@ -757,8 +757,6 @@ async def bless(amount, user):
       vault = db.queryVault({'OWNER' : vaultOwner['DISNAME']})
       update_query = {"$inc": {'BALANCE': posBlessAmount}}
       db.updateVaultNoFilter(vault, update_query)
-   else:
-      print("cant find vault")
 
 async def curse(amount, user):
       curseAmount = amount
@@ -769,8 +767,6 @@ async def curse(amount, user):
          vault = db.queryVault({'OWNER' : vaultOwner['DISNAME']})
          update_query = {"$inc": {'BALANCE': int(negCurseAmount)}}
          db.updateVaultNoFilter(vault, update_query)
-      else:
-         print("cant find vault")
 
 @slash.slash(name="Trade", description="Trade Cards, Titles, Arms, and Pets for other items", guild_ids=guild_ids)
 @commands.check(validate_user)
@@ -1108,16 +1104,18 @@ async def sell(ctx, player: User, item: str):
 
 @slash.slash(name="Gift", description="Give money to friend", guild_ids=guild_ids)
 @commands.check(validate_user)
-async def gift(ctx, player: User, amount):
+async def gift(ctx, player: User, amount: int):
    user2 = player
    vault = db.queryVault({'OWNER': str(ctx.author)})
    balance = vault['BALANCE']
+   tax = amount * .09
+   amount_plus_tax = amount + tax
    
    if balance <= int(amount):
       await ctx.send("You do not have that amount to gift.")
    else:
       await bless(int(amount), user2)
-      await curse(int(amount), ctx.author)
+      await curse(amount_plus_tax, ctx.author)
       await ctx.send(f":coin:{amount} has been gifted to {user2.mention}.")
       return
    
