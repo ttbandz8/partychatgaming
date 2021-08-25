@@ -50432,71 +50432,80 @@ async def destiny(player, opponent, mode):
         owned_card_levels_list.append(c['CARD'])
     message = ""
     completion = 1
-    if vault['DESTINY']:
-        #TALES
-        for destiny in vault['DESTINY']:
-            if user['CARD'] in destiny['USE_CARDS'] and opponent == destiny['DEFEAT'] and mode == "Tales":
-                if destiny['WINS'] < destiny['REQUIRED']:
+    try:
+        if vault['DESTINY']:
+            #TALES
+            for destiny in vault['DESTINY']:
+                if user['CARD'] in destiny['USE_CARDS'] and opponent == destiny['DEFEAT'] and mode == "Tales":
+                    if destiny['WINS'] < destiny['REQUIRED']:
+                        message = f"Secured a win toward **{destiny['NAME']}**. Keep it up!"
+                        completion = destiny['REQUIRED'] - (destiny['WINS'] + 1)
+                    
+                    if completion == 0:
+                        try:
+                            if destiny['EARN'] not in owned_card_levels_list: 
+                                # Add the CARD_LEVELS for Destiny Card 
+                                card_data = db.queryCard({'NAME': str(destiny['EARN'])})
+                                uni = db.queryUniverse({'TITLE': card_data['UNIVERSE']})
+                                tier = uni['TIER']
+                                update_query = {'$addToSet': {'CARD_LEVELS': {'CARD': str(destiny['EARN']), 'LVL': 0, 'TIER': int(tier), 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
+                                db.updateVaultNoFilter(vault_query, update_query)
+                                #
+                        except Exception as ex:
+                            print(f"Error in Completing Destiny: {ex}")
+                        
+                        response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(destiny['EARN'])}})
+                        message = f"**{destiny['NAME']}** completed! **{destiny['EARN']}** has been added to your vault!"
+                        query = {'OWNER': str(player)}
+                        update_query = {'$inc': {'DESTINY.$[type].' + "WINS": 1}, '$set': {'DESTINY.$[type].' + "COMPLETED": True}}
+                        filter_query = [{'type.'+ "DEFEAT": opponent}]
+                        resp = db.updateVault(query, update_query, filter_query)
+                        
+                        for dest in d.destiny:
+                            if destiny['EARN'] in dest["USE_CARDS"] and dest['NAME'] not in owned_destinies:
+                                db.updateVaultNoFilter(vault_query,{'$addToSet':{'DESTINY': dest}})
+                                message =  f"**DESTINY AWAITS!**\n**New Destinies** have been added to your vault."
+                        return message
+                        
+            
+                    query = {'OWNER': str(player)}
+                    update_query = {'$inc': {'DESTINY.$[type].' + "WINS": 1}}
+                    filter_query = [{'type.'+ "DEFEAT": opponent}]
+                    resp = db.updateVault(query, update_query, filter_query)
+                    return message
+            
+            #Dungeon
+            for destiny in vault['DESTINY']:
+                if user['CARD'] in destiny['USE_CARDS'] and opponent == destiny['DEFEAT'] and mode == "Dungeon":
                     message = f"Secured a win toward **{destiny['NAME']}**. Keep it up!"
-                    completion = destiny['REQUIRED'] - (destiny['WINS'] + 1)
-                
-                if completion == 0:
-                    if str(destiny['EARN']) not in owned_card_levels_list: 
-                        # Add the CARD_LEVELS for Destiny Card 
-                        card_data = db.queryCard({'NAME': str(destiny['EARN'])})
-                        uni = db.queryUniverse({'TITLE': card_data['UNIVERSE']})
-                        tier = uni['TIER']
-                        update_query = {'$addToSet': {'CARD_LEVELS': {'CARD': str(destiny['EARN']), 'LVL': 0, 'TIER': int(tier), 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
-                        db.updateVaultNoFilter(vault_query, update_query)
-                        #
-                    response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(destiny['EARN'])}})
-                    message = f"**{destiny['NAME']}** completed! **{destiny['EARN']}** has been added to your vault!"
+                    completion = destiny['REQUIRED'] - (destiny['WINS'] + 3)
+                    
+                    if completion <= 0:
+                        response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(destiny['EARN'])}})
+                        message = f"**{destiny['NAME']}** completed! **{destiny['EARN']}** has been added to your vault!"
+                        query = {'OWNER': str(player)}
+                        update_query = {'$inc': {'DESTINY.$[type].' + "WINS": 3}, '$set': {'DESTINY.$[type].' + "COMPLETED": True}}
+                        filter_query = [{'type.'+ "DEFEAT": opponent}]
+                        resp = db.updateVault(query, update_query, filter_query)
+
+                        for dest in d.destiny:
+                            if destiny['EARN'] in dest["USE_CARDS"] and dest['NAME'] not in owned_destinies:
+                                db.updateVaultNoFilter(vault_query,{'$addToSet':{'DESTINY': dest}})
+                                message =  f"**DESTINY AWAITS!**\n**New Destinies** have been added to your vault."
+
+                        return message
+
                     query = {'OWNER': str(player)}
-                    update_query = {'$inc': {'DESTINY.$[type].' + "WINS": 1}, '$set': {'DESTINY.$[type].' + "COMPLETED": True}}
+                    update_query = {'$inc': {'DESTINY.$[type].' + "WINS": 3}}
                     filter_query = [{'type.'+ "DEFEAT": opponent}]
                     resp = db.updateVault(query, update_query, filter_query)
-                    
-                    for dest in d.destiny:
-                        if destiny['EARN'] in dest["USE_CARDS"] and dest['NAME'] not in owned_destinies:
-                            db.updateVaultNoFilter(vault_query,{'$addToSet':{'DESTINY': dest}})
-                            message =  f"**DESTINY AWAITS!**\n**New Destinies** have been added to your vault."
                     return message
-                    
-        
-                query = {'OWNER': str(player)}
-                update_query = {'$inc': {'DESTINY.$[type].' + "WINS": 1}}
-                filter_query = [{'type.'+ "DEFEAT": opponent}]
-                resp = db.updateVault(query, update_query, filter_query)
-                return message
-        
-        #Dungeon
-        for destiny in vault['DESTINY']:
-            if user['CARD'] in destiny['USE_CARDS'] and opponent == destiny['DEFEAT'] and mode == "Dungeon":
-                message = f"Secured a win toward **{destiny['NAME']}**. Keep it up!"
-                completion = destiny['REQUIRED'] - (destiny['WINS'] + 3)
-                
-                if completion <= 0:
-                    response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(destiny['EARN'])}})
-                    message = f"**{destiny['NAME']}** completed! **{destiny['EARN']}** has been added to your vault!"
-                    query = {'OWNER': str(player)}
-                    update_query = {'$inc': {'DESTINY.$[type].' + "WINS": 3}, '$set': {'DESTINY.$[type].' + "COMPLETED": True}}
-                    filter_query = [{'type.'+ "DEFEAT": opponent}]
-                    resp = db.updateVault(query, update_query, filter_query)
-
-                    for dest in d.destiny:
-                        if destiny['EARN'] in dest["USE_CARDS"] and dest['NAME'] not in owned_destinies:
-                            db.updateVaultNoFilter(vault_query,{'$addToSet':{'DESTINY': dest}})
-                            message =  f"**DESTINY AWAITS!**\n**New Destinies** have been added to your vault."
-
-                    return message
-
-                query = {'OWNER': str(player)}
-                update_query = {'$inc': {'DESTINY.$[type].' + "WINS": 3}}
-                filter_query = [{'type.'+ "DEFEAT": opponent}]
-                resp = db.updateVault(query, update_query, filter_query)
-                return message
-    else:
-        return False
+        else:
+            return False
+    except Exception as e:
+        print(f"Destiny Function Error: {e}")
+        await ctx.send(f"Destiny Function Error: {e}")
+        return
 
 async def petlevel(pet, player):
     vault = db.queryVault({'OWNER': str(player)})
