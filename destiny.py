@@ -1540,6 +1540,26 @@ destiny = [
         "UNIVERSE": "Crown Rift Slayers"
     },
     {
+        "NAME": "The Handsome Monster",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Dr. Frankenstein",
+        "USE_CARDS": ["Maka"],
+        "EARN": "Dr. Frankenstein",
+        "COMPLETED": False,
+        "UNIVERSE": "Crown Rift Slayers"
+    },
+    {
+        "NAME": "Daddy Death",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Lord Death",
+        "USE_CARDS": ["Death The Kid"],
+        "EARN": "Lord Death",
+        "COMPLETED": False,
+        "UNIVERSE": "Crown Rift Slayers"
+    },
+    {
         "NAME": "Dad Was Right",
         "WINS": 0,
         "REQUIRED": 5,
@@ -2476,7 +2496,5 @@ destiny = [
         "EARN": "Nero Claudius", 
         "COMPLETED": False,
         "UNIVERSE": "Fate"
-    },
-
-
+    }
 ]
