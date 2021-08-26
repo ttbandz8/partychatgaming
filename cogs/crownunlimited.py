@@ -27854,24 +27854,6 @@ class CrownUnlimited(commands.Cog):
             banned_universes = abyss['BANNED_UNIVERSES']
             banned_universe_tiers = abyss['BANNED_TIERS']
             banned_pets = abyss['BANNED_PETS']
-            if sowner['CARD'] in banned_cards:
-                await private_channel.send(f":x: **{sowner['CARD']}** is banned on floor {floor}. Use another card.")
-                return
-            if sowner['TITLE'] in banned_titles:
-                await private_channel.send(f":x: **{sowner['TITLE']}** is banned on floor {floor}. Use another title.")
-                return
-            if sowner['ARM'] in banned_arms:
-                await private_channel.send(f":x: **{sowner['ARM']}** is banned on floor {floor}. Use another arm.")
-                return
-            if sowner['PET'] in banned_pets:
-                await private_channel.send(f":x: **{sowner['PET']}** is banned on floor {floor}. Use another pet.")
-                return
-            if checks['UNIVERSE'] in banned_universes:
-                await private_channel.send(f":x: **{checks['UNIVERSE']}** cards are banned on floor {floor}. Use another card.")
-                return
-            if uni_tier in banned_universe_tiers:
-                await private_channel.send(f":x: **Tier {uni_tier}** cards are banned on floor {floor}. Use another card.")
-                return
 
             abyss_buttons = [
                 manage_components.create_button(
@@ -27915,6 +27897,25 @@ class CrownUnlimited(commands.Cog):
                 button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[abyss_buttons_action_row, abyss_buttons], check=check)
                 
                 if button_ctx.custom_id == "Yes":
+                    if sowner['CARD'] in banned_cards:
+                        await private_channel.send(f":x: **{sowner['CARD']}** is banned on floor {floor}. Use another card.")
+                        return
+                    if sowner['TITLE'] in banned_titles:
+                        await private_channel.send(f":x: **{sowner['TITLE']}** is banned on floor {floor}. Use another title.")
+                        return
+                    if sowner['ARM'] in banned_arms:
+                        await private_channel.send(f":x: **{sowner['ARM']}** is banned on floor {floor}. Use another arm.")
+                        return
+                    if sowner['PET'] in banned_pets:
+                        await private_channel.send(f":x: **{sowner['PET']}** is banned on floor {floor}. Use another pet.")
+                        return
+                    if checks['UNIVERSE'] in banned_universes:
+                        await private_channel.send(f":x: **{checks['UNIVERSE']}** cards are banned on floor {floor}. Use another card.")
+                        return
+                    if uni_tier in banned_universe_tiers:
+                        await private_channel.send(f":x: **Tier {uni_tier}** cards are banned on floor {floor}. Use another card.")
+                        return
+                        
                     guild = ctx.guild
                     if guild:
                         overwrites = {
