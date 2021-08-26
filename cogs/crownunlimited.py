@@ -47885,7 +47885,7 @@ class CrownUnlimited(commands.Cog):
 
         else:
             await ctx.send(m.SESSION_DOES_NOT_EXIST)
-        
+
     @cog_ext.cog_slash(description="Start a Guild Raid", guild_ids=main.guild_ids)
     async def raid(self, ctx: SlashContext, guild: str):
         guildname = guild
@@ -49958,6 +49958,7 @@ class CrownUnlimited(commands.Cog):
                 embedVar.add_field(name="Tips!", value="Equiping stronger `TITLES` and `ARMS` will make you character tougher in a fight!")
                 embedVar.set_footer(text="The .shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
                 await ctx.send(embed=embedVar)
+
 
     @cog_ext.cog_slash(description="View all Cards of a Universe you unlocked", guild_ids=main.guild_ids)
     async def cardlist(self, ctx: SlashContext, universe: str):
