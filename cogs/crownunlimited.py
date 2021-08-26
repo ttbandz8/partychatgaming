@@ -47885,7 +47885,7 @@ class CrownUnlimited(commands.Cog):
 
         else:
             await ctx.send(m.SESSION_DOES_NOT_EXIST)
-
+        
     @cog_ext.cog_slash(description="Start a Guild Raid", guild_ids=main.guild_ids)
     async def raid(self, ctx: SlashContext, guild: str):
         guildname = guild
@@ -49959,7 +49959,6 @@ class CrownUnlimited(commands.Cog):
                 embedVar.set_footer(text="The .shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
                 await ctx.send(embed=embedVar)
 
-    
     @cog_ext.cog_slash(description="View all Cards of a Universe you unlocked", guild_ids=main.guild_ids)
     async def cardlist(self, ctx: SlashContext, universe: str):
         universe_data = db.queryUniverse({'TITLE': {"$regex": str(universe), "$options": "i"}})
@@ -49983,11 +49982,11 @@ class CrownUnlimited(commands.Cog):
             else:
                 available = "🟠"
             if card['EXCLUSIVE'] and not card['HAS_COLLECTION']:
-                dungeon_card_details.append(f"{available} **{card['NAME']}**: :coin:{card['PRICE']}\n**HLT:** {card['HLT']} **ATK:** {card['ATK']}  **DEF:** {card['DEF']}\n")
+                dungeon_card_details.append(f"{available} **{card['NAME']}**: :coin:{'{:,}'.format(card['PRICE'])}\n**HLT:** {card['HLT']} **ATK:** {card['ATK']}  **DEF:** {card['DEF']}\n")
             elif not card['HAS_COLLECTION']:
-                tales_card_details.append(f"{available} **{card['NAME']}**: :coin:{card['PRICE']}\n**HLT:** {card['HLT']} **ATK:** {card['ATK']}  **DEF:** {card['DEF']}\n")
+                tales_card_details.append(f"{available} **{card['NAME']}**: :coin:{'{:,}'.format(card['PRICE'])}\n**HLT:** {card['HLT']} **ATK:** {card['ATK']}  **DEF:** {card['DEF']}\n")
             elif card['HAS_COLLECTION']:
-                destiny_card_details.append(f"{available} **{card['NAME']}**: :coin:{card['PRICE']}\n**HLT:** {card['HLT']} **ATK:** {card['ATK']}  **DEF:** {card['DEF']}\n")
+                destiny_card_details.append(f"{available} **{card['NAME']}**: :coin:{'{:,}'.format(card['PRICE'])}\n**HLT:** {card['HLT']} **ATK:** {card['ATK']}  **DEF:** {card['DEF']}\n")
 
         all_cards = []
         if tales_card_details:
@@ -50064,7 +50063,7 @@ class CrownUnlimited(commands.Cog):
             if title['EXCLUSIVE']:
                 dungeon_titles_details.append(f"{available} **{title['TITLE']}**\n**{title_passive_type}:** {title_passive_value}\n")
             else:
-                tales_titles_details.append(f"{available} **{title['TITLE']}**: :coin:{title['PRICE']}\n**{title_passive_type}:** {title_passive_value}\n")
+                tales_titles_details.append(f"{available} **{title['TITLE']}**: :coin:{'{:,}'.format(title['PRICE'])}\n**{title_passive_type}:** {title_passive_value}\n")
 
         all_titles = []
         if tales_titles_details:
@@ -50136,7 +50135,7 @@ class CrownUnlimited(commands.Cog):
             if arm['EXCLUSIVE']:
                 dungeon_arms_details.append(f"{available} **{arm['ARM']}**\n**{arm_passive_type}:** {arm_passive_value}\n")
             else:
-                tales_arms_details.append(f"{available} **{arm['ARM']}**: :coin:{arm['PRICE']}\n**{arm_passive_type}:** {arm_passive_value}\n")
+                tales_arms_details.append(f"{available} **{arm['ARM']}**: :coin:{'{:,}'.format(arm['PRICE'])}\n**{arm_passive_type}:** {arm_passive_value}\n")
 
         all_arms = []
         if tales_arms_details:
@@ -51374,6 +51373,8 @@ async def bless(amount, user):
       vault = db.queryVault({'OWNER' : vaultOwner['DISNAME']})
       update_query = {"$inc": {'BALANCE': posBlessAmount}}
       db.updateVaultNoFilter(vault, update_query)
+   else:
+      print("cant find vault")
 
 async def blessteam(amount, team):
    blessAmount = amount

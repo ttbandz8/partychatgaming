@@ -203,6 +203,7 @@ class Cards(commands.Cog):
             o_collection = card['COLLECTION']
             resolved = False
             focused = False
+            dungeon = False
             title = {'TITLE': 'CARD PREVIEW'}
 
             if o_show == "Unbound":
@@ -218,6 +219,7 @@ class Cards(commands.Cog):
                 else:
                     price_message = "_Priceless_"
                     card_icon= f":fire:"
+                    dungeon = True
             else:
                 price_message = f":coin: {'{:,}'.format(o_price)}"
                 card_icon= f":flower_playing_cards:"
@@ -268,15 +270,19 @@ class Cards(commands.Cog):
 
             message = ""
             tip = ""
-            if o_has_collection==True:
-                message = f"{o_card} is a Destiny card. "
-                tip=f"Complete {o_show} Destiny: {o_collection} to unlock this card"
+            if o_has_collection==True or dungeon== True:
+                if o_has_collection:
+                    message = f"{o_card} is a Destiny card. "
+                    tip=f"Complete {o_show} Destiny: {o_collection} to unlock this card"
+                else:
+                    message = f"{o_card} is a Dungeon card. "
+                    tip=f"Find this card in the {o_show} /dungeon"
             elif o_attack > o_defense:
                 message = f"{o_card} is an offensive card. "
-                tip="Equipping defensive titles and arms would help boost survivability"
+                tip="Equipping defensive /titles and /arms would help boost survivability"
             elif o_defense > o_attack:
                 message = f"{o_card} is a defensive card. "
-                tip="Equipping offensive titles and arms would help boost killability"              
+                tip="Equipping offensive /titles and /arms would help boost killability"              
 
             embedVar = discord.Embed(title=f"{card_icon}  {o_card}\n{price_message}".format(self), description=textwrap.dedent(f"""
             :heart: **Health** - {o_max_health}
@@ -289,6 +295,7 @@ class Cards(commands.Cog):
             :comet: **{move2}:** {move2ap}
             :rosette: **{move3}:** {move3ap}
             :microbe: **{move4}:** {move4enh} by {move4ap}
+            *Use /enhance to learn about the {move4enh} Enhancement!*
 
             :drop_of_blood: _Passive:_ **{passive_name}:** {passive_type} by {passive_num}
             :infinity: {traitmessage}
@@ -296,7 +303,7 @@ class Cards(commands.Cog):
             if o_show != "Unbound":
                 embedVar.set_thumbnail(url=show_img)
             embedVar.set_image(url=o_card_path)
-            embedVar.set_footer(text=f"{tip}\n/enhance - Enhancement Menu")
+            embedVar.set_footer(text=f"{tip}")
             await ctx.send(embed=embedVar)
 
         else:
