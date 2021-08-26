@@ -215,6 +215,9 @@ class Lookup(commands.Cog):
             most_played_card_message = "_No Data For Analysis_"
             match_history_message = ""
 
+            wlmatches = list(d['MATCHES'][0].values())[0]
+            wins = wlmatches[0]
+            losses = wlmatches[1]
             if m:
                 for match in m:
                     most_played_card.append(match['CARD'])
@@ -271,6 +274,7 @@ class Lookup(commands.Cog):
             **Dungeons Played: **{len(dungeon_matches)}
             **Bosses Played: **{len(boss_matches)}
             **Pvp Played: **{len(pvp_matches)}
+            **W/L:** {wins}**/**{losses}
             
             :flags: | **Guild: **{guild}
             :military_helmet: | **Team: **{team} 
@@ -287,7 +291,7 @@ class Lookup(commands.Cog):
             # embed1.add_field(name="Tournament Wins" + " :fireworks:", value=tournament_wins)
 
             if crown_list:
-                embed4 = discord.Embed(title= f":triangular_flag_on_post: | " + f"{name}".format(self), description=":bank: | Party Chat Gaming Database™️", colour=000000)
+                embed4 = discord.Embed(title= f"{icon} | " + f"{name}".format(self), description=":bank: | Party Chat Gaming Database™️", colour=000000)
                 embed4.set_thumbnail(url=avatar)
                 embed4.add_field(name="Completed Tales" + " :medal:", value="\n".join(crown_list))
                 if dungeon_list:
@@ -299,7 +303,7 @@ class Lookup(commands.Cog):
                 else:
                     embed4.add_field(name="Completed Dungeons" + " :fire: ", value="No Dungeons Completed, yet!")
             else:
-                embed4 = discord.Embed(title= f":triangular_flag_on_post: " + f"{name}".format(self), description=":bank: Party Chat Gaming Database™️", colour=000000)
+                embed4 = discord.Embed(title= f"{icon} " + f"{name}".format(self), description=":bank: Party Chat Gaming Database™️", colour=000000)
                 embed4.set_thumbnail(url=avatar)
                 embed4.add_field(name="Completed Tales" + " :medal:", value="No completed Tales, yet!")
                 embed4.add_field(name="Completed Dungeons" + " :fire: ", value="No Dungeons Completed, yet!")

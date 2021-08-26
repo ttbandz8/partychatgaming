@@ -455,10 +455,11 @@ async def rebirth(ctx):
          **Rebirth Effects**
          New Starting Deck
          Starting Pet Bond
-         Increase Base ATK
-         Increase Base DEF
-         Increased :coin: drops
-         Increased Item Drop Rates
+         Increase Base ATK + 10
+         Increase Base DEF + 10
+         Increased :coin: drops + %10
+         Increased Item Drop Rates + 50%
+         Keep All Card Levels
          
          You will lose all of your equipped and vaulted items.
          
