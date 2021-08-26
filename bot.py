@@ -124,72 +124,78 @@ async def enhancers(ctx):
    embedVar1 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
    embedVar1.set_thumbnail(url=avatar)
    embedVar1.add_field(name="`INCREASES`", value="`ATK` - Increase `ATK`\n\n`DEF` - Increase `DEF`\n\n`HLT` - Increase `HLT`\n\n`STAM` - Increase `STAM`\n\n")
-   embedVar1.set_footer(text=f"/help - Bot Help")
+   embedVar1.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
 
    embedVar2 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
    embedVar2.set_thumbnail(url=avatar)
    embedVar2.add_field(name="`STEALS`", value="`FLOG`- `ATK` Steal\n\n`WITHER`- `DEF` Steal\n\n`LIFE` - `LIFE` Steal\n\n`DRAIN` - `STAM` Steal\n\n")
-   embedVar2.set_footer(text=f"/help - Bot Help")
+   embedVar2.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
 
    embedVar3 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
    embedVar3.set_thumbnail(url=avatar)
-   embedVar3.add_field(name="`SACRIFICE`", value="`RAGE` - Decrease `DEF`, Increase `ATK`\n\n`BRACE` - Decrease `ATK`, Increase `DEF`\n\n`BZRK` - Decrease `HLT`,  Increase `ATK`\n\n`CRYSTAL`- Decrease `HLT`, Increase `DEF`\n\n`GROWTH`- Decrease `MAXHLT`, Increase `STATS`\n\n")
-   embedVar3.set_footer(text=f"/help - Bot Help")
+   embedVar3.add_field(name="`SACRIFICE`", value="`RAGE` - Decrease `DEF`, Increase `ATK`\n\n`BRACE` - Decrease `ATK`, Increase `DEF`\n\n`BZRK` - Decrease `HLT`,  Increase `ATK`\n\n`CRYSTAL`- Decrease `HLT`, Increase `DEF`\n\n")
+   embedVar3.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
 
    embedVar4 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
    embedVar4.set_thumbnail(url=avatar)
    embedVar4.add_field(name="`TRADE`", value="`STANCE` - Swap `ATK` and `DEF`\n\n`CONFUSE` - Swap `OPP ATK` and  `OPP DEF`\n\n")
-   embedVar4.set_footer(text=f"/help - Bot Help")
+   embedVar4.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
 
    embedVar5 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
    embedVar5.set_thumbnail(url=avatar)
    embedVar5.add_field(name="`TIME`", value="`BLINK`  - Decrease  `STAM`, Increase `OPP STAM`\n\n`SLOW` - Decrease `STAM`, Swap `OPP STAM`\n\n`HASTE` - Increase `STAM`, Swap `OPP STAM`\n\n")
-   embedVar5.set_footer(text=f"/help - Bot Help")
+   embedVar5.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
 
    embedVar6 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
    embedVar6.set_thumbnail(url=avatar)
-   embedVar6.add_field(name="`CONTROL`", value="`SOULCHAIN` - Both `PLAYERS` `STAM` = \n\n`GAMBLE` - Both `PLAYERS` `HEALTH` =\n\n`FEAR` - Decrease `MAXHLT`, Decrease `OPP ATK` & `OPP DEF`\n\n")
-   embedVar6.set_footer(text=f"/help - Bot Help")
+   embedVar6.add_field(name="`CONTROL`", value="`SOULCHAIN` - Both `PLAYERS` `STAM` = `AP`\n\n`GAMBLE` - Both `PLAYERS` `HEALTH` = `AP`\n\n")
+   embedVar6.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
+   
+   embedVar7 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
+   embedVar7.set_thumbnail(url=avatar)
+   embedVar7.add_field(name="`FORTITUDE`", value="`GROWTH`- Decrease `MAXHLT`, Increase `ATK` & `DEF`\n\n`FEAR` - Decrease `MAXHLT`, Decrease `OPP ATK` & `OPP DEF`\n\n")
+   embedVar7.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
 
    embedVar8 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
    embedVar8.set_thumbnail(url=avatar)
-   embedVar8.add_field(name="`DAMAGE`", value="`WAVE` - Decreasing Turn Count Based AP DMG \n\n`BLAST` - Increasing Turn Count Based AP DMG\n\n")
-   embedVar8.set_footer(text=f"/help - Bot Help")
+   embedVar8.add_field(name="`DAMAGE`", value="`WAVE` - Decreasing `Turn Count` Based `AP DMG` \n\n`BLAST` - Increasing `Turn Count` Based `AP DMG`\n\n")
+   embedVar8.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
 
    embedVar9 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
    embedVar9.set_thumbnail(url=avatar)
-   embedVar9.add_field(name="`DIVINITY`", value="`CREATION` - Increase `MAXHEALTH`\n\n`DESTRUCTION` - Decrease `OPP MAXHEALTH`\n\n")
-   embedVar9.set_footer(text=f"/help - Bot Help")
+   embedVar9.add_field(name="`DIVINITY`", value="`CREATION` - Increase `MAXHEALTH` Decreasing by `Turn Count`\n\n`DESTRUCTION` - Decrease `OPP MAXHEALTH` Increasing By `Turn Count`\n\n")
+   embedVar9.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
 
-   embedVar7 = discord.Embed(title= f":trident:ENHANCE DETAILS:", description=textwrap.dedent(f"""
+   embedVar10 = discord.Embed(title= f":trident:ENHANCE DETAILS:", description=textwrap.dedent(f"""
+   **AP:** **Ability Power**                                                                                           
    **ATK:** AP Percentage Based Attack Increased
    **DEF:** AP Percentage Based Attack Increased
    **STAM:** Increased Stamina based on AP Value
    **HLT:** Increased Health based on AP Value
-   **LIFE:** Lifesteals based on AP Value and 5% of Opponent Health
+   **LIFE:** Lifesteals based on AP Value + 9% of Opponent Health
    **DRAIN:** Steals Opponent Stamina based on AP Value
    **FLOG:** Steals Attack based on 30% of AP Percentage
    **WITHER:** Steals Defense based on 30% of AP Percentage
-   **RAGE:** Gain ATK but Lose DEF based on 50% of AP Percentage Of Your DEF
-   **BRACE:** GAIN DEF but Lose ATK based on 50% AP Percentage Of Your ATK
-   **BZRK:** Gain ATK Based on 50% of your  AP Percentage of Your HLT
-   **CRYSTAL:** Gain DEF Based on 50% of your AP Percentage Of Your Health
-   **GROWTH:** Lower Max Health, Increase Defense and Attack based on AP Percentage
-   **STANCE:** Swaps your ATK and your DEF, and gives you additional DEF based on AP Value
-   **CONFUSE:** Swaps ATK and DEF of opponent and saps additional DEF based on AP Value
+   **RAGE:** Gain ATK but Lose DEF based on 30% of AP Percentage Of Your DEF
+   **BRACE:** GAIN DEF but Lose ATK based on 30% AP Percentage Of Your ATK
+   **BZRK:** Gain ATK but lose Health based on AP Percentage
+   **CRYSTAL:** Gain DEF Bbut lose Health based on AP Percentage
+   **STANCE:** Increase DEF by AP, Then Swaps ATK and DEF
+   **CONFUSE:** Decreasee Opponent DEF by AP, Then Swaps Opponent ATK and DEF
    **BLINK:** Decreases Your Stamina by AP Value and gives opponent Stamina by AP Value
-   **SLOW:** Increases Your Stamina by AP Value, Decreases your Opponent Stamina by AP Value, then swaps your and your opponents Stamina
-   **HASTE:** Decreases your opponent Stamina, Increases your stamina, swap your and your opponent stamina
-   **SOUL:** CHAIN - Make you and your opponent Stamina the same based on AP Value
-   **GAMBLE:** Make you and your opponent health the same based on AP Value
+   **SLOW:** Increases Your Stamina by AP, Decreases your Opponent Stamina by AP, Then swaps you and your opponents Stamina
+   **HASTE:** Decreases your Stamina by AP, Increases your Opponent stamina by AP, Then swap you and your opponent Stamina 
+   **SOUL:** CHAIN - Make you and your opponent Stamina equal AP
+   **GAMBLE:** Make you and your opponent health equal AP 
+   **GROWTH:** Lower Max Health, Increase Defense and Attack based on AP Percentage
    **FEAR:** Lower your Health by AP Percentage, Lower your opponent ATK and DEF by AP Percentage
-   **WAVE:** Deals AP / Turn Count Damage to Opponent that decreases as the Turn Count increases
+   **WAVE:** Deals AP / Turn Count Damage to Opponent that decreases as the Turn Count increases (Crits on 10's and 15's)
    **BLAST:** Deals AP * Turn Count Damage to Opponent that increases as the Turn Count increases
-   **CREATION:** Increases AP / Turn Count Max Health & Health that decreases as the Turn Count increases
+   **CREATION:** Increases AP / Turn Count Max Health & Health that decreases as the Turn Count increases (Crits on 10's and 15's)
    **DESTRUCTION:** Decreases AP * Turn Count Max Health that increases as the Turn Count increases
    """) ,colour=0x7289da)
-   embedVar7.set_thumbnail(url=avatar)
-   embedVar7.set_footer(text=f"/help - Bot Help")
+   embedVar10.set_thumbnail(url=avatar)
+   embedVar10.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
 
    paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
    paginator.add_reaction('⏮️', "first")
@@ -197,7 +203,7 @@ async def enhancers(ctx):
    paginator.add_reaction('🔐', "lock")
    paginator.add_reaction('⏩', "next")
    paginator.add_reaction('⏭️', "last")
-   embeds = [embedVar1, embedVar2, embedVar3, embedVar4, embedVar5, embedVar6, embedVar8, embedVar9, embedVar7]
+   embeds = [embedVar1, embedVar2, embedVar3, embedVar4, embedVar5, embedVar6, embedVar7, embedVar8, embedVar9, embedVar10]
    await paginator.run(embeds)
 
 @slash.slash(name="Crown", description="Crown Unlimited Tutorial", guild_ids=guild_ids)
@@ -424,7 +430,7 @@ async def r(ctx):
       """), colour=0xe91e63)
       embedVar.set_footer(text=".crown to inquire all potential commands and capabilites of the bot")
       await ctx.author.send(embed=embedVar)
-      await ctx.send(f"Welcome to Crown Unlimited, {ctx.author.mention}! Use **.daily** to collect your daily reward! Use **/menu** to see what you can do.")
+      await ctx.send(f"Welcome to Crown Unlimited, {ctx.author.mention}! Use **/daily** to collect your daily reward! Use **/menu** to see what you can do.")
 
       vault = db.queryVault({'OWNER': disname})
       if vault:
@@ -1274,6 +1280,7 @@ async def cursefamily(amount, family):
 @commands.check(validate_user)
 async def bounty(ctx, amount):
    negCurseAmount = 0 - abs(int(amount))
+   posCurseAmount = 0 + abs(int(amount))
    user = db.queryUser({'DISNAME': str(ctx.author)})
    guild_name = user['GUILD']
    if guild_name == 'PCG':
@@ -1289,19 +1296,15 @@ async def bounty(ctx, amount):
    
    guild_bank = guild['BANK']
    guild_bounty = guild['BOUNTY']
-   if int(amount) < guild_bounty:
-      await ctx.send(f"Cannot Lower Bounty", delete_after=5)
-      return
-   elif int(amount) == guild_bounty:
-      await ctx.send(f"Current Bounty : :yen:{guild_bounty}", delete_after=5)
-      return
-   elif int(amount) >= guild['BANK']:
+   finalBount = guild_bounty + posCurseAmount
+   finalBal = guild_bank + negCurseAmount
+   if finalBal < 0:
       await ctx.send(f"Guild does not have that much :coin:", delete_after=5)
       return
    else:
-      update_query = {"$set": {'BOUNTY': int(amount)}, '$inc': {'BANK' : int(negCurseAmount)}}
+      update_query = {"$set": {'BOUNTY': int(finalBount)}, '$inc': {'BANK' : int(negCurseAmount)}}
       db.updateGuildAlt(guild_query, update_query)
-      await ctx.send(f"New {guild['GNAME']} Bounty: :yen: {amount}! Use /raid `guild`{guild['GNAME']} to claim the Bounty!")
+      await ctx.send(f"New {guild['GNAME']} Bounty: :yen: {'{:,}'.format(finalBount)}! Use /raid `guild`{guild['GNAME']} to claim the Bounty!")
       return
    
    
