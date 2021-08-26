@@ -28,20 +28,38 @@ class Universe(commands.Cog):
 
     @cog_ext.cog_slash(description="View a universe", guild_ids=main.guild_ids)
     async def viewUniverse(self, ctx, universe: str):
-        universe_name = universe
-        universe = db.queryUniverse({'TITLE': {"$regex": universe_name, "$options": "i"}})
-        universe_name = universe['TITLE']
-        if universe:
-            universe_title= universe['TITLE']
-            universe_image = universe['PATH']
+        try:
+            universe_name = universe
+            universe = db.queryUniverse({'TITLE': {"$regex": f"^{universe_name}$", "$options": "i"}})
+            universe_name = universe['TITLE']
+            if universe:
+                universe_title= universe['TITLE']
+                universe_image = universe['PATH']
 
-            embedVar = discord.Embed(universe=f"{universe}".format(self), description=f"Crown Unlimited Universe", colour=000000)
-            embedVar.set_image(url=universe_image)
+                embedVar = discord.Embed(title=f"{universe_name}".format(self), description=f"Crown Unlimited Universe")
+                embedVar.set_image(url=universe_image)
 
-            await ctx.send(embed=embedVar)
+                await ctx.send(embed=embedVar)
 
-        else:
-            await ctx.send(m.UNIVERSE_DOES_NOT_EXIST)
+            else:
+                await ctx.send(m.UNIVERSE_DOES_NOT_EXIST)
+        except Exception as ex:
+            trace = []
+            tb = ex.__traceback__
+            while tb is not None:
+                trace.append({
+                    "filename": tb.tb_frame.f_code.co_filename,
+                    "name": tb.tb_frame.f_code.co_name,
+                    "lineno": tb.tb_lineno
+                })
+                tb = tb.tb_next
+            print(str({
+                'type': type(ex).__name__,
+                'message': str(ex),
+                'trace': trace
+            }))
+            await ctx.send(f"Error when viewing universe. Alert support. Thank you!")
+            return
 
 def setup(bot):
     bot.add_cog(Universe(bot))
