@@ -300,21 +300,11 @@ destiny = [
         "UNIVERSE": "7ds"
     },
     {
-        "NAME": "Bloody Bros Finale",
-        "WINS": 0,
-        "REQUIRED": 50,
-        "DEFEAT": "Demon King Meliodas",
-        "USE_CARDS": ["Ban"],
-        "EARN": "Demon King Meliodas",
-        "COMPLETED": False,
-        "UNIVERSE": "7ds"
-    },
-    {
-        "NAME": "Bloody Bros Finale",
+        "NAME": "I Am Your Father",
         "WINS": 0,
         "REQUIRED": 25,
-        "DEFEAT": "Demon King Meliodas",
-        "USE_CARDS": ["Meliodas"],
+        "DEFEAT": "Meliodas",
+        "USE_CARDS": ["Demon King"],
         "EARN": "Demon King Meliodas",
         "COMPLETED": False,
         "UNIVERSE": "7ds"
