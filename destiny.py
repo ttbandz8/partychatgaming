@@ -280,12 +280,42 @@ destiny = [
         "UNIVERSE": "7ds"
     },
     {
+        "NAME": "The Angel Of Death Returns",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Chandler And Cusack",
+        "USE_CARDS": ["Angel Of Death"],
+        "EARN": "Chandler And Cusack",
+        "COMPLETED": False,
+        "UNIVERSE": "7ds"
+    },
+    {
         "NAME": "Bloody Bros",
         "WINS": 0,
         "REQUIRED": 10,
         "DEFEAT": "Meliodas",
         "USE_CARDS": ["Ban"],
         "EARN": "Meliodas",
+        "COMPLETED": False,
+        "UNIVERSE": "7ds"
+    },
+    {
+        "NAME": "Bloody Bros Finale",
+        "WINS": 0,
+        "REQUIRED": 50,
+        "DEFEAT": "Demon King Meliodas",
+        "USE_CARDS": ["Ban"],
+        "EARN": "Demon King Meliodas",
+        "COMPLETED": False,
+        "UNIVERSE": "7ds"
+    },
+    {
+        "NAME": "Bloody Bros Finale",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Demon King Meliodas",
+        "USE_CARDS": ["Meliodas"],
+        "EARN": "Demon King Meliodas",
         "COMPLETED": False,
         "UNIVERSE": "7ds"
     },
