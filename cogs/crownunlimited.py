@@ -53,9 +53,16 @@ class CrownUnlimited(commands.Cog):
         # return
         
         private_channel = ctx
+        mode = "ATales"
         if isinstance(private_channel.channel, discord.channel.DMChannel):
             await private_channel.send(m.SERVER_FUNCTION_ONLY)
             return
+
+        channel_exists_response = existing_channel_check(self, ctx)
+        if channel_exists_response:
+            await private_channel.send(m.ALREADY_IN_TALES)
+            return
+
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
         oteam = sowner['TEAM']
         ofam = sowner['FAMILY']
@@ -81,11 +88,6 @@ class CrownUnlimited(commands.Cog):
         oteam = sowner['TEAM']
         ofam = sowner['FAMILY']
         
-        if sowner['AVAILABLE']:
-            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': False}})
-        else:
-            await private_channel.send(m.ALREADY_IN_TALES)
-            return
 
         completed_crown_tales = sowner['CROWN_TALES']
         all_universes = db.queryAllUniverse()
@@ -132,7 +134,7 @@ class CrownUnlimited(commands.Cog):
 
             if msg.content == "Quit":
                 await private_channel.send("Quit Tales selection. ")
-                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                
                 return
 
             #Universe Cost
@@ -147,7 +149,7 @@ class CrownUnlimited(commands.Cog):
                     entrance_fee = entrance_fee * universe_tier
                     if balance <= entrance_fee:
                             await private_channel.send(f"Tier {universe_tier} Tales require an :coin: {'{:,}'.format(entrance_fee)} entrance fee!", delete_after=5)
-                            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                            
                             return
                     else:
                         await curse(entrance_fee, str(ctx.author))
@@ -167,7 +169,7 @@ class CrownUnlimited(commands.Cog):
                 await ctx.send(f"{ctx.author.mention} private channel has been opened for you. Good luck!")
 
         except:
-            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+            
             embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", colour=0xe91e63)
             await private_channel.send(embed=embedVar)
             return
@@ -180,7 +182,7 @@ class CrownUnlimited(commands.Cog):
         universe = db.queryUniverse({'TITLE': str(selected_universe)})
 
         if not universe['CROWN_TALES']:
-            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+            
             await ctx.author.send(f"{selected_universe} is not ready to be explored! Check back later!")
             if private_channel.guild:
                 await discord.TextChannel.delete(private_channel, reason=None)
@@ -1642,7 +1644,7 @@ class CrownUnlimited(commands.Cog):
                                 'message': str(ex),
                                 'trace': trace
                             }))
-                            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                            
                             await discord.TextChannel.delete(private_channel, reason=None)
                             return
                 #PLayer 2 Turn Start
@@ -2199,7 +2201,7 @@ class CrownUnlimited(commands.Cog):
                                 'message': str(ex),
                                 'trace': trace
                             }))
-                            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                            
                             await discord.TextChannel.delete(private_channel, reason=None)
                             return
             if botActive:
@@ -2240,7 +2242,7 @@ class CrownUnlimited(commands.Cog):
 
                     if str(reaction.emoji) == '👎':
                         continued = False 
-                        db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                        
                         if private_channel.guild:
                             await discord.TextChannel.delete(private_channel, reason=None)
                         return
@@ -2249,7 +2251,7 @@ class CrownUnlimited(commands.Cog):
                     continued = True
                 except asyncio.TimeoutError:
                     continued = False
-                    response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                    
                     if private_channel.guild:
                         await discord.TextChannel.delete(private_channel, reason=None)
 
@@ -2294,12 +2296,12 @@ class CrownUnlimited(commands.Cog):
                     if selected_universe in completed_crown_tales:
                         await bless(400, ctx.author)
                         await ctx.author.send(embed=embedVar)
-                        response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                        
                         await ctx.author.send(f"You were awarded :coin: 400 for completing the {selected_universe} Tale again!")
                     else:
                         await bless(5000, ctx.author)
                         await ctx.author.send(embed=embedVar)
-                        response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                        
                         await ctx.author.send(f"You were awarded :coin: 5000 for completing the {selected_universe} Tale! ")
                     continued=False
                     if private_channel.guild:
@@ -2308,9 +2310,16 @@ class CrownUnlimited(commands.Cog):
     @cog_ext.cog_slash(description="Duo Tales with AI", guild_ids=main.guild_ids)
     async def dtales(self, ctx: SlashContext, deck : int):
         private_channel = ctx
+        mode = "DTales"
         if isinstance(private_channel.channel, discord.channel.DMChannel):
             await private_channel.send(m.SERVER_FUNCTION_ONLY)
             return
+
+        channel_exists_response = existing_channel_check(self, ctx)
+        if channel_exists_response:
+            await private_channel.send(m.ALREADY_IN_TALES)
+            return
+
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
         oteam = sowner['TEAM']
         ofam = sowner['FAMILY']
@@ -2336,11 +2345,7 @@ class CrownUnlimited(commands.Cog):
         ofam = sowner['FAMILY']
         cfam = ofam
         completed_crown_tales = sowner['CROWN_TALES']
-        if sowner['AVAILABLE']:
-            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': False}})
-        else:
-            await private_channel.send(m.ALREADY_IN_TALES)
-            return
+
 
         all_universes = db.queryAllUniverse()
         available_universes = []
@@ -2378,7 +2383,7 @@ class CrownUnlimited(commands.Cog):
 
             if msg.content == "Quit":
                 await private_channel.send("Quit Tales selection. ")
-                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                
                 return
 
             #Universe Cost
@@ -2393,7 +2398,7 @@ class CrownUnlimited(commands.Cog):
                     entrance_fee = entrance_fee * universe_tier
                     if balance <= entrance_fee:
                             await private_channel.send(f"Tier {universe_tier} Tales require an :coin: {'{:,}'.format(entrance_fee)} entrance fee!", delete_after=5)
-                            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                            
                             return
                     else:
                         await curse(entrance_fee, str(ctx.author))
@@ -2415,7 +2420,7 @@ class CrownUnlimited(commands.Cog):
             
         except:
             embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", colour=0xe91e63)
-            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+            
             await private_channel.send(embed=embedVar)
             return
 
@@ -2427,7 +2432,7 @@ class CrownUnlimited(commands.Cog):
         universe = db.queryUniverse({'TITLE': str(selected_universe)})
 
         if not universe['CROWN_TALES']:
-            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+            
             await ctx.author.send(f"{selected_universe} is not ready to be explored! Check back later!")
             if private_channel.guild:
                 await discord.TextChannel.delete(private_channel, reason=None)
@@ -3828,10 +3833,10 @@ class CrownUnlimited(commands.Cog):
                         
                                 if private_channel.guild:
                                     await button_ctx.send(f"{ctx.author.mention} has fled the battle...")
-                                    response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                                    
                                     await discord.TextChannel.delete(private_channel, reason=None)
                                 else:
-                                    response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                                    
                                     await private_channel.send(f"You fled the battle...")
                                 return
                             if button_ctx.custom_id == "1":
@@ -4449,7 +4454,7 @@ class CrownUnlimited(commands.Cog):
                                     await private_channel.send(embed=embedVar)
                                     turn=0
                         except asyncio.TimeoutError:
-                            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                            
                             await private_channel.send(f"{ctx.author.mention} {m.STORY_ENDED}")
                             if private_channel.guild:
                                 await discord.TextChannel.delete(private_channel, reason=None)
@@ -5461,10 +5466,10 @@ class CrownUnlimited(commands.Cog):
                     
                             if private_channel.guild:
                                 await private_channel.send(f"{user2.mention} has fled the battle...")
-                                response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                                
                                 await discord.TextChannel.delete(private_channel, reason=None)
                             else:
-                                response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                                
                                 await private_channel.send(f"You fled the battle...")
                             return
                         if aiMove == 1:
@@ -6675,7 +6680,7 @@ class CrownUnlimited(commands.Cog):
 
                     if str(reaction.emoji) == '👎':
                         continued = False 
-                        db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                        
                         if private_channel.guild:
                             await discord.TextChannel.delete(private_channel, reason=None)
                         return
@@ -6684,7 +6689,7 @@ class CrownUnlimited(commands.Cog):
                     continued = True
                 except asyncio.TimeoutError:
                     continued = False
-                    response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                    
                     if private_channel.guild:
                         await discord.TextChannel.delete(private_channel, reason=None)
 
@@ -6715,40 +6720,13 @@ class CrownUnlimited(commands.Cog):
                 if destinylogger:
                     await ctx.author.send(destinylogger)
 
-                if currentopponent != total_legends:
-                    
-                    if private_channel.guild:
+                if currentopponent != total_legends:                    
+                    embedVar = discord.Embed(title=f"VICTORY\n**{o_card} says**\n{o_win_description}", description=f"The game lasted {turn_total} rounds.\n\n{drop_response}", colour=0xe91e63)
+                    embedVar.set_author(name=f"{t_card} lost!")
+                    await private_channel.send(embed=embedVar)
 
-                        embedVar = discord.Embed(title=f"VICTORY\n**{o_card} says**\n{o_win_description}", description=f"The game lasted {turn_total} rounds.\n\n{drop_response}", colour=0xe91e63)
-                        embedVar.set_author(name=f"{t_card} lost!")
-                        await private_channel.send(embed=embedVar)
-
-                        emojis = ['👍', '👎']
-                        accept = await private_channel.send(f"Congratulations {ctx.author.mention}!\nWill you continue through the Duo-tale?")
-                        for emoji in emojis:
-                            await accept.add_reaction(emoji)
-
-                        def check(reaction, user):
-                            return user == user and str(reaction.emoji) == '👍'
-                        try:
-                            reaction, user = await self.bot.wait_for('reaction_add', timeout=45.0, check=check)
-                            currentopponent = currentopponent + 1
-                            continued = True
-                        except asyncio.TimeoutError:
-                            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
-                            await private_channel.send(f"{ctx.author.mention} {m.STORY_ENDED}")
-                            if private_channel.guild:
-                                await discord.TextChannel.delete(private_channel, reason=None)
-                            return
-                    else:
-
-                        embedVar = discord.Embed(title=f"VICTORY", description=f"{t_card} has been defeated!\n\n{drop_response}", colour=0xe91e63)
-                        embedVar.set_author(name=f"The match lasted {turn_total} rounds.")
-                        embedVar.set_footer(text=f"{o_card} says:\n{o_win_description}")
-                        await ctx.author.send(embed=embedVar)
-
-                        currentopponent = currentopponent + 1
-                        continued = True
+                    currentopponent = currentopponent + 1
+                    continued = True
 
                 if currentopponent == total_legends:
                     embedVar = discord.Embed(title=f"UNIVERSE CONQUERED", description=f"Universe {selected_universe} has been conquered\n\n{drop_response}", colour=0xe91e63)
@@ -6762,23 +6740,23 @@ class CrownUnlimited(commands.Cog):
                         await bless(25, ctx.author)
                         #await bless(25, cuser)
                         await ctx.author.send(embed=embedVar)
-                        response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                        
                         await ctx.author.send(f"You were awarded :coin: 400 for completing the {selected_universe} Tale again!")
                         continued=False
                     else:
                         await bless(5000, ctx.author)
                         await ctx.author.send(embed=embedVar)
-                        response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                        
                         await ctx.author.send(f"You were awarded :coin: 5000 for completing the {selected_universe} Tale! ")
                         continued=False
                     if private_channel.guild:
-                        response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                        
                         await discord.TextChannel.delete(private_channel, reason=None)
-                    response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
-
+                    
     @cog_ext.cog_slash(description="Duo Dungeons with AI", guild_ids=main.guild_ids)
     async def ddungeon(self, ctx: SlashContext, deck : int):
         private_channel = ctx
+        mode = "DDungeon"
         if isinstance(private_channel.channel, discord.channel.DMChannel):
             await private_channel.send(m.SERVER_FUNCTION_ONLY)
             return
@@ -6804,11 +6782,6 @@ class CrownUnlimited(commands.Cog):
         oteam = sowner['TEAM']
         ofam = sowner['FAMILY']
         
-        if sowner['AVAILABLE']:
-            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': False}})
-        else:
-            await private_channel.send(m.ALREADY_IN_TALES)
-            return
 
         cteam = oteam
         cfam = ofam
@@ -6824,7 +6797,7 @@ class CrownUnlimited(commands.Cog):
 
         if not available_universes:
             await private_channel.send("No available Dungeons for you at this time!")
-            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+            
             return
                 
         embedVar = discord.Embed(title=f":fire: DUO! Select A Dungeon", description="\n".join(available_universes), colour=0xe91e63)
@@ -6847,7 +6820,7 @@ class CrownUnlimited(commands.Cog):
 
             if msg.content == "Quit":
                 await private_channel.send("Quit Dungeon selection. ")
-                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                
                 return
 
             #Universe Cost
@@ -6862,7 +6835,7 @@ class CrownUnlimited(commands.Cog):
                     entrance_fee = entrance_fee * universe_tier
                     if balance <= entrance_fee:
                             await private_channel.send(f"Tier {universe_tier} Dungeons require an :coin: {'{:,}'.format(entrance_fee)} entrance fee!", delete_after=5)
-                            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                            
                             return
                     else:
                         await curse(entrance_fee, str(ctx.author))
@@ -6884,7 +6857,7 @@ class CrownUnlimited(commands.Cog):
             
         except:
             embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", colour=0xe91e63)
-            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+            
             await private_channel.send(embed=embedVar)
             return
 
@@ -6896,7 +6869,7 @@ class CrownUnlimited(commands.Cog):
         universe = db.queryUniverse({'TITLE': str(selected_universe)})
 
         if not universe['CROWN_TALES']:
-            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+            
             await ctx.author.send(f"{selected_universe} is not ready to be explored! Check back later!")
             if private_channel.guild:
                 await discord.TextChannel.delete(private_channel, reason=None)
@@ -8308,10 +8281,10 @@ class CrownUnlimited(commands.Cog):
                         
                                 if private_channel.guild:
                                     await button_ctx.send(f"{ctx.author.mention} has fled the battle...")
-                                    response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                                    
                                     await discord.TextChannel.delete(private_channel, reason=None)
                                 else:
-                                    response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                                    
                                     await button_ctx.send(f"You fled the battle...")
                                 return
                             if button_ctx.custom_id == "1":
@@ -8930,7 +8903,7 @@ class CrownUnlimited(commands.Cog):
                                     await button_ctx.send(embed=embedVar)
                                     turn=0
                         except asyncio.TimeoutError:
-                            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                            
                             await private_channel.send(f"{ctx.author.mention} {m.STORY_ENDED}")
                             if private_channel.guild:
                                 await discord.TextChannel.delete(private_channel, reason=None)
@@ -10167,10 +10140,10 @@ class CrownUnlimited(commands.Cog):
                     
                             if private_channel.guild:
                                 await private_channel.send(f"{user2.mention} has fled the battle...")
-                                response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                                
                                 await discord.TextChannel.delete(private_channel, reason=None)
                             else:
-                                response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                                
                                 await private_channel.send(f"You fled the battle...")
                             return
                         if aiMove == 1:
@@ -11599,7 +11572,7 @@ class CrownUnlimited(commands.Cog):
 
                     if str(reaction.emoji) == '👎':
                         continued = False 
-                        db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                        
                         if private_channel.guild:
                             await discord.TextChannel.delete(private_channel, reason=None)
                         return
@@ -11608,7 +11581,7 @@ class CrownUnlimited(commands.Cog):
                     continued = True
                 except asyncio.TimeoutError:
                     continued = False
-                    response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                    
                     if private_channel.guild:
                         await discord.TextChannel.delete(private_channel, reason=None)
 
@@ -11622,60 +11595,27 @@ class CrownUnlimited(commands.Cog):
                 s_playtime = int(wintime[17:19])
                 gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
                 teambank = await blessteam(15, oteam)
-                #cteambank = await blessteam(15, cteam)
                 if o_user['RIFT'] == 1:
                     response = db.updateUserNoFilter({'DISNAME':str(o_user['DISNAME'])}, {'$set': {'RIFT' : 0}})
                 drop_response = await dungeondrops(ctx.author, selected_universe, currentopponent)
-                #cdrop_response = await dungeondrops(user, selected_universe, currentopponent)
                 ofambank = await blessfamily(15,ofam)
-                #cfambank = await blessfamily(15,cfam)
                 match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']), str(oarm['ARM']), str(selected_universe), "Dungeon", o['EXCLUSIVE'])
-                #cmatch = await savematch(str(user), str(c_card), str(c_card_path), str(ctitle['TITLE']), str(carm['ARM']), str(selected_universe), "Dungeon", c['EXCLUSIVE'])
                 questlogger = await quest(ouser, t_card, "Dungeon")
                 destinylogger = await destiny(ouser, t_card, "Dungeon")
-                #cquestlogger = await quest(user, t_card, "Dungeon")
                 petlogger = await petlevel(opet_name, ouser)
                 cardlogger = await cardlevel(o_card, ouser, o_universe, selected_universe, "Dungeon")
-                #cpetlogger = await petlevel(cpet_name, user)
                 if questlogger:
                     await ctx.author.send(questlogger)
                 if destinylogger:
                     await ctx.author.send(destinylogger)
+
                 if currentopponent != (total_legends):
-                    
-                    if private_channel.guild:
+                    embedVar = discord.Embed(title=f"VICTORY\n**{o_card} says**\n{o_win_description}", description=f"The game lasted {turn_total} rounds.\n\n{drop_response}", colour=0xe91e63)
+                    embedVar.set_author(name=f"{t_card} lost!")
+                    await private_channel.send(embed=embedVar)
 
-                        embedVar = discord.Embed(title=f"VICTORY\n**{o_card} says**\n{o_win_description}", description=f"The game lasted {turn_total} rounds.\n\n{drop_response}", colour=0xe91e63)
-                        embedVar.set_author(name=f"{t_card} lost!")
-                        await private_channel.send(embed=embedVar)
-
-                        emojis = ['👍', '👎']
-                        accept = await private_channel.send(f"Congratulations {ctx.author.mention}!\nWill you continue through the Duo Dungeon?")
-                        for emoji in emojis:
-                            await accept.add_reaction(emoji)
-
-                        def check(reaction, user):
-                            return user == user and str(reaction.emoji) == '👍'
-                        try:
-                            reaction, user = await self.bot.wait_for('reaction_add', timeout=45.0, check=check)
-
-                            currentopponent = currentopponent + 1
-                            continued = True
-                        except asyncio.TimeoutError:
-                            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
-                            await private_channel.send(f"{ctx.author.mention} {m.STORY_ENDED}")
-                            if private_channel.guild:
-                                await discord.TextChannel.delete(private_channel, reason=None)
-                            return
-                    else:
-
-                        embedVar = discord.Embed(title=f"VICTORY", description=f"{t_card} has been defeated!\n\n{drop_response}", colour=0xe91e63)
-                        embedVar.set_author(name=f"The match lasted {turn_total} rounds.")
-                        embedVar.set_footer(text=f"{o_card} says:\n{o_win_description}")
-                        await ctx.author.send(embed=embedVar)
-
-                        currentopponent = currentopponent + 1
-                        continued = True
+                    currentopponent = currentopponent + 1
+                    continued = True
 
                 if currentopponent == (total_legends):
                     embedVar = discord.Embed(title=f"DUNGEON CONQUERED", description=f"Universe {selected_universe} has been conquered\n\n{drop_response}", colour=0xe91e63)
@@ -11693,23 +11633,30 @@ class CrownUnlimited(commands.Cog):
                         #await bless(125, user2)
                         await ctx.author.send(embed=embedVar)
                         await ctx.author.send(f"You were awarded :coin: 800 for completing the {selected_universe} Dungeon again!")
-                        response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                        
                     else:
                         await bless(15000, ctx.author)
                         await ctx.author.send(embed=embedVar)
-                        response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                        
                         await ctx.author.send(f"You were awarded :coin: 15000 for completing the {selected_universe} Dungeon! ")
                     continued=False
                     if private_channel.guild:
-                        response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                        
                         await discord.TextChannel.delete(private_channel, reason=None)
 
     @cog_ext.cog_slash(description="Co-op Tales with Friends", guild_ids=main.guild_ids)
     async def ctales(self, ctx: SlashContext, user: User):
         private_channel = ctx
+        mode = "CTales"
         if isinstance(private_channel.channel, discord.channel.DMChannel):
             await private_channel.send(m.SERVER_FUNCTION_ONLY)
             return
+
+        channel_exists_response = existing_channel_check(self, ctx)
+        if channel_exists_response:
+            await private_channel.send(m.ALREADY_IN_TALES)
+            return
+
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
         oteam = sowner['TEAM']
         ofam = sowner['FAMILY']
@@ -11731,12 +11678,6 @@ class CrownUnlimited(commands.Cog):
         ofam = sowner['FAMILY']
         cfam = cowner['FAMILY']
         completed_crown_tales = sowner['CROWN_TALES']
-        if sowner['AVAILABLE']:
-            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': False}})
-        else:
-            await private_channel.send(m.ALREADY_IN_TALES)
-            return
-
 
         companion = db.queryUser({'DISNAME': str(user)})
         cteam = companion['TEAM']
@@ -11777,7 +11718,7 @@ class CrownUnlimited(commands.Cog):
 
             if msg.content == "Quit":
                 await private_channel.send("Quit Tales selection. ")
-                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                
                 return
 
             #Universe Cost
@@ -11792,7 +11733,7 @@ class CrownUnlimited(commands.Cog):
                     entrance_fee = entrance_fee * universe_tier
                     if balance <= entrance_fee:
                             await private_channel.send(f"Tier {universe_tier} Tales require an :coin: {'{:,}'.format(entrance_fee)} entrance fee!", delete_after=5)
-                            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                            
                             return
                     else:
                         await curse(entrance_fee, str(ctx.author))
@@ -11815,7 +11756,7 @@ class CrownUnlimited(commands.Cog):
             
         except:
             embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", colour=0xe91e63)
-            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+            
             await private_channel.send(embed=embedVar)
             return
 
@@ -11827,7 +11768,7 @@ class CrownUnlimited(commands.Cog):
         universe = db.queryUniverse({'TITLE': str(selected_universe)})
 
         if not universe['CROWN_TALES']:
-            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+            
             await ctx.author.send(f"{selected_universe} is not ready to be explored! Check back later!")
             if private_channel.guild:
                 await discord.TextChannel.delete(private_channel, reason=None)
@@ -13233,10 +13174,10 @@ class CrownUnlimited(commands.Cog):
                         
                                 if private_channel.guild:
                                     await private_channel.send(f"{ctx.author.mention} has fled the battle...")
-                                    response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                                    
                                     await discord.TextChannel.delete(private_channel, reason=None)
                                 else:
-                                    response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                                    
                                     await private_channel.send(f"You fled the battle...")
                                 return
                             if button_ctx.custom_id == "1":
@@ -13747,7 +13688,7 @@ class CrownUnlimited(commands.Cog):
                                     await button_ctx.send(embed=embedVar)
                                     turn=0
                         except asyncio.TimeoutError:
-                            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                            
                             await private_channel.send(f"{ctx.author.mention} {m.STORY_ENDED}")
                             if private_channel.guild:
                                 await discord.TextChannel.delete(private_channel, reason=None)
@@ -14691,7 +14632,7 @@ class CrownUnlimited(commands.Cog):
                             # calculate data based on selected move
                             if button_ctx.custom_id == "q" or button_ctx.custom_id == "Q" :
                                 c_health=0
-                                response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                                
                                 if private_channel.guild:
                                     await private_channel.send(f"{user2.mention} has fled the battle...")
                                     await discord.TextChannel.delete(private_channel, reason=None)
@@ -15205,7 +15146,7 @@ class CrownUnlimited(commands.Cog):
                                     await button_ctx.send(embed=embedVar)
                                     turn=2
                         except asyncio.TimeoutError:
-                            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                            
                             await private_channel.send(f"{ctx.author.mention} {m.STORY_ENDED}")
                             if private_channel.guild:
                                 await discord.TextChannel.delete(private_channel, reason=None)
@@ -15934,7 +15875,7 @@ class CrownUnlimited(commands.Cog):
 
                     if str(reaction.emoji) == '👎':
                         continued = False 
-                        db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                        
                         if private_channel.guild:
                             await discord.TextChannel.delete(private_channel, reason=None)
                         return
@@ -15943,7 +15884,7 @@ class CrownUnlimited(commands.Cog):
                     continued = True
                 except asyncio.TimeoutError:
                     continued = False
-                    response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                    
                     if private_channel.guild:
                         await discord.TextChannel.delete(private_channel, reason=None)
 
@@ -16001,7 +15942,7 @@ class CrownUnlimited(commands.Cog):
                             currentopponent = currentopponent + 1
                             continued = True
                         except asyncio.TimeoutError:
-                            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                            
                             await private_channel.send(f"{ctx.author.mention} {m.STORY_ENDED}")
                             if private_channel.guild:
                                 await discord.TextChannel.delete(private_channel, reason=None)
@@ -16028,26 +15969,32 @@ class CrownUnlimited(commands.Cog):
                         await bless(400, ctx.author)
                         await bless(400, cuser)
                         await ctx.author.send(embed=embedVar)
-                        response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                        
                         await ctx.author.send(f"You were both awarded :coin: 400 for completing the {selected_universe} Tale again!")
                         continued=False
                     else:
                         await bless(5000, ctx.author)
                         await ctx.author.send(embed=embedVar)
-                        response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                        
                         await ctx.author.send(f"You were awarded :coin: 5000 for completing the {selected_universe} Tale! ")
                         continued=False
                     if private_channel.guild:
-                        response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                        
                         await discord.TextChannel.delete(private_channel, reason=None)
-                    response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
-
+                    
     @cog_ext.cog_slash(description="Co-op Dungeon with Friends", guild_ids=main.guild_ids)
     async def cdungeon(self, ctx: SlashContext, user: User):
         private_channel = ctx
+        mode = "CDungeon"
         if isinstance(private_channel.channel, discord.channel.DMChannel):
             await private_channel.send(m.SERVER_FUNCTION_ONLY)
             return
+
+        channel_exists_response = existing_channel_check(self, ctx)
+        if channel_exists_response:
+            await private_channel.send(m.ALREADY_IN_TALES)
+            return
+
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
         oteam = sowner['TEAM']
         ofam = sowner['FAMILY']
@@ -16066,13 +16013,6 @@ class CrownUnlimited(commands.Cog):
         oteam = sowner['TEAM']
         ofam = sowner['FAMILY']
         
-        if sowner['AVAILABLE']:
-            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': False}})
-        else:
-            await private_channel.send(m.ALREADY_IN_TALES)
-            return
-
-
         companion = db.queryUser({'DISNAME': str(user)})
 
         cteam = companion['TEAM']
@@ -16089,7 +16029,7 @@ class CrownUnlimited(commands.Cog):
 
         if not available_universes:
             await private_channel.send("No available Dungeons for you at this time!")
-            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+            
             return
                 
         embedVar = discord.Embed(title=f":fire: CO-OP! Select A Dungeon", description="\n".join(available_universes), colour=0xe91e63)
@@ -16112,7 +16052,7 @@ class CrownUnlimited(commands.Cog):
 
             if msg.content == "Quit":
                 await private_channel.send("Quit Dungeon selection. ")
-                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                
                 return
 
             #Universe Cost
@@ -16127,7 +16067,7 @@ class CrownUnlimited(commands.Cog):
                     entrance_fee = entrance_fee * universe_tier
                     if balance <= entrance_fee:
                             await private_channel.send(f"Tier {universe_tier} Dungeons require an :coin: {'{:,}'.format(entrance_fee)} entrance fee!", delete_after=5)
-                            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                            
                             return
                     else:
                         await curse(entrance_fee, str(ctx.author))
@@ -16150,7 +16090,7 @@ class CrownUnlimited(commands.Cog):
             
         except:
             embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", colour=0xe91e63)
-            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+            
             await private_channel.send(embed=embedVar)
             return
 
@@ -16162,23 +16102,13 @@ class CrownUnlimited(commands.Cog):
         universe = db.queryUniverse({'TITLE': str(selected_universe)})
 
         if not universe['CROWN_TALES']:
-            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+            
             await ctx.author.send(f"{selected_universe} is not ready to be explored! Check back later!")
             if private_channel.guild:
                 await discord.TextChannel.delete(private_channel, reason=None)
             return
 
         boss = db.queryBoss({'NAME': str(universe['UNIVERSE_BOSS'])})
-
-        opponent_scaling = 0
-        player_scaling = 0
-
-        if universe['PREREQUISITE']:
-            opponent_scaling = 16
-            player_scaling = 5
-        else:
-            opponent_scaling = 12
-            player_scaling = 1
 
         legends = [x for x in universe['CROWN_TALES']]
         total_legends = len(legends)
@@ -16197,1089 +16127,7 @@ class CrownUnlimited(commands.Cog):
 
             c = db.queryCard({'NAME': companion['CARD']})
             ctitle = db.queryTitle({'TITLE': companion['TITLE']})
-            #################################################################### PLAYER DATA
-            # Player 1 Data
-            o_user = sowner
-            oarm = db.queryArm({'ARM': o_user['ARM']})
-            oarm_universe=oarm['UNIVERSE']
-            oarm_passive = oarm['ABILITIES'][0]
-            oarm_name=oarm['ARM']
-
-            vault = db.queryVault({'OWNER': str(ctx.author) , 'PETS.NAME': o_user['PET']})
-            opet = {}
-            for pet in vault['PETS']:
-                if o_user['PET'] == pet['NAME']:
-                    opet = pet
-
-            opet_passive_type = opet['TYPE']
-            opet_name = opet['NAME']
-            opet_image = opet['PATH']
-            opet_exp = opet['EXP']
-            opet_lvl = opet['LVL']
-            opet_bond = opet['BOND']
             
-
-            o_DID = o_user['DID']
-            o_card = o['NAME']
-
-            ocard_lvl = 0
-            ocard_tier = 0
-            ocard_exp = 0
-            ocard_lvl_attack_buff = 0
-            ocard_lvl_defense_buff = 0
-            ocard_lvl_ap_buff = 0
-            ocard_lvl_hlt_buff = 0
-
-
-            for x in vault['CARD_LEVELS']:
-                if x['CARD'] == o_card:
-                    ocard_lvl = x['LVL']
-                    ocard_tier = x['TIER']
-                    ocard_exp = x['EXP']
-                    ocard_lvl_ap_buff = x['AP']
-                    ocard_lvl_attack_buff = x['ATK']
-                    ocard_lvl_defense_buff = x['DEF']
-                    ocard_lvl_hlt_buff = x['HLT']
-
-            o_gif = o['GIF']
-            o_destiny = o['HAS_COLLECTION']
-            o_card_path=o['PATH']
-            o_rcard_path=o['RPATH']
-            
-            o_health = o['HLT'] + ocard_lvl_hlt_buff
-            o_max_health = o['HLT'] + ocard_lvl_hlt_buff
-            o_stamina = o['STAM']
-            o_max_stamina = o['STAM']
-            o_moveset = o['MOVESET']
-            o_attack = o['ATK'] + ocard_lvl_attack_buff
-            o_defense = o['DEF'] + ocard_lvl_defense_buff
-            o_type = o['TYPE']
-            o_accuracy = o['ACC']
-            o_passive = o['PASS'][0]
-            o_speed = o['SPD']
-            o_universe = o['UNIVERSE']
-            o_title_universe = otitle['UNIVERSE']
-            o_title_passive = otitle['ABILITIES'][0]
-            o_vul = False
-            user1 = await self.bot.fetch_user(o_DID)
-            o_title_passive_bool = False
-            o_descriptions = []
-            if o['DESCRIPTIONS']:
-                o_descriptions = o['DESCRIPTIONS']
-                o_greeting_description = o_descriptions[0]
-                o_focus_description =  o_descriptions[1]
-                o_resolve_description = o_descriptions[2]
-                o_special_move_description = o_descriptions[3]
-                o_win_description = o_descriptions[4]
-                o_lose_description = o_descriptions[5]
-            else:
-                o_greeting_description = "Are you ready to battle!"
-                o_focus_description =  "I still have more in the tank!"
-                o_resolve_description = "Power up!"
-                o_special_move_description = "Take this!"
-                o_win_description = "Too easy. Come back when you're truly prepared."
-                o_lose_description = "I can't believe I lost..."
-
-
-
-            # Companion Data
-
-             # Player 1 Data
-            c_user = companion
-            carm = db.queryArm({'ARM': c_user['ARM']})
-            carm_universe=carm['UNIVERSE']
-            carm_passive = carm['ABILITIES'][0]
-            carm_name=carm['ARM']
-
-            cvault = db.queryVault({'OWNER': c_user['DISNAME'] , 'PETS.NAME': c_user['PET']})
-            cpet = {}
-            for pet in cvault['PETS']:
-                if c_user['PET'] == pet['NAME']:
-                    cpet = pet
-
-            cpet_passive_type = cpet['TYPE']
-            cpet_name = cpet['NAME']
-            cpet_image = cpet['PATH']
-            cpet_exp = cpet['EXP']
-            cpet_lvl = cpet['LVL']
-            cpet_bond = cpet['BOND']
-            
-
-            c_DID = c_user['DID']
-            c_card = c['NAME']
-
-            ccard_lvl = 0
-            ccard_tier = 0
-            ccard_exp = 0
-            ccard_lvl_attack_buff = 0
-            ccard_lvl_defense_buff = 0
-            ccard_lvl_ap_buff = 0
-            ccard_lvl_hlt_buff = 0
-
-
-            for x in vault['CARD_LEVELS']:
-                if x['CARD'] == c_card:
-                    ccard_lvl = x['LVL']
-                    ccard_tier = x['TIER']
-                    ccard_exp = x['EXP']
-                    ccard_lvl_ap_buff = x['AP']
-                    ccard_lvl_attack_buff = x['ATK']
-                    ccard_lvl_defense_buff = x['DEF']
-                    ccard_lvl_hlt_buff = x['HLT']
-
-            c_gif = c['GIF']
-            c_destiny = c['HAS_COLLECTION']            
-            c_card_path=c['PATH']
-            c_rcard_path= c['RPATH']
-            c_health = c['HLT'] + ccard_lvl_hlt_buff
-            c_max_health = c['HLT'] + ccard_lvl_hlt_buff
-
-            c_stamina = c['STAM']
-            c_max_stamina = c['STAM']
-            c_moveset = c['MOVESET']
-            c_attack = c['ATK'] + ccard_lvl_attack_buff
-            c_defense = c['DEF'] + ccard_lvl_defense_buff
-            c_type = c['TYPE']
-            c_accuracy = c['ACC']
-            c_passive = c['PASS'][0]
-            c_speed = c['SPD']
-            c_universe = c['UNIVERSE']
-            c_title_universe = ctitle['UNIVERSE']
-            c_title_passive = ctitle['ABILITIES'][0]
-            c_vul = False
-            user2 = await self.bot.fetch_user(c_DID)
-            c_title_passive_bool = False
-            c_descriptions = []
-            if c['DESCRIPTIONS']:
-                c_descriptions = c['DESCRIPTIONS']
-                c_greeting_description = c_descriptions[0]
-                c_focus_description =  c_descriptions[1]
-                c_resolve_description = c_descriptions[2]
-                c_special_move_description = c_descriptions[3]
-                c_win_description = c_descriptions[4]
-                c_lose_description = c_descriptions[5]
-            else:
-                c_greeting_description = "Are you ready to battle!"
-                c_focus_description =  "I still have more in the tank!"
-                c_resolve_description = "Power up!"
-                c_special_move_description = "Take this!"
-                c_win_description = "Too easy. Come back when you're truly prepared."
-                c_lose_description = "I can't believe I lost..."
-
-
-            # Player 2 Data
-            t_user = boss
-            tarm = db.queryArm({'ARM': universe['DARM']})
-            tarm_universe = tarm['UNIVERSE']
-            t_destiny = t['HAS_COLLECTION']
-            tpet = db.queryPet({'PET': universe['DPET']})
-            tpet_passive = tpet['ABILITIES'][0]
-            tpet_name = tpet['PET']
-            tpet_image =tpet['PATH']
-            tarm_passive = tarm['ABILITIES'][0]
-            tarm_name=tarm['ARM']
-            tcard_lvl_ap_buff = 0
-            t_card = t['NAME']
-            t_gif = t['GIF']
-            t_card_path=t['PATH']
-            t_rcard_path=t['RPATH']
-            t_health = t['HLT'] + (36 * currentopponent) + 250 
-            t_stamina = t['STAM']
-            t_max_stamina= t['STAM']
-            t_moveset = t['MOVESET']
-            t_attack = t['ATK'] + (9 * currentopponent) + opponent_scaling
-            t_defense = t['DEF'] + (16 * currentopponent) + opponent_scaling
-            t_type = t['TYPE']
-            t_accuracy = t['ACC']
-            t_passive = t['PASS'][0]
-            t_speed = t['SPD']
-            t_universe = t['UNIVERSE']
-            t_title_universe = ttitle['UNIVERSE']
-            t_title_passive = ttitle['ABILITIES'][0]
-            t_vul = False
-            #user2 = await self.bot.fetch_user(t_DID)
-            t_title_passive_bool = False
-            if t['DESCRIPTIONS']:
-                t_descriptions = t['DESCRIPTIONS']
-                t_greeting_description = t_descriptions[0]
-                t_focus_description =  t_descriptions[1]
-                t_resolve_description = t_descriptions[2]
-                t_special_move_description = t_descriptions[3]
-                t_win_description = t_descriptions[4]
-                t_lose_description = t_descriptions[5]
-            else:
-                t_greeting_description = "Are you ready to battle!"
-                t_focus_description =  "I still have more in the tank!"
-                t_resolve_description = "Power up!"
-                t_special_move_description = "Take this!"
-                t_win_description = "Too easy. Come back when you're truly prepared."
-                t_lose_description = "I can't believe I lost..."
-
-            if o['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= o['HLT']: # Demon Slayer Universal Trait
-                o_max_health = t['HLT']  - (10 * currentopponent)
-                o_health = t['HLT'] - (10 * currentopponent)
-            else:                    
-                o_max_health = o['HLT'] - (10 * currentopponent) + ocard_lvl_hlt_buff
-
-            if t['UNIVERSE'] == "Demon Slayer" and o_max_health >= t['HLT']: #Demon Slayer Universal Trait
-                t_max_health = o_max_health + (20 * currentopponent) + 200
-                t_health = o_max_health + (20 * currentopponent) + 200
-            else:                    
-                t_max_health = t['HLT'] + (20 * currentopponent) + 200
-
-            if c['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= c['HLT']: # Demon Slayer Universal Trait
-                c_max_health = t['HLT'] - (10 * currentopponent)
-                c_health = t['HLT'] - (10 * currentopponent)
-            else:                    
-                c_max_health = c['HLT'] - (10 * currentopponent) + ccard_lvl_hlt_buff
-
-            #DBZ traits
-            o_final_stand=False
-            c_final_stand=False
-            t_final_stand=False
-            if o['UNIVERSE'] == "Dragon Ball Z":
-                o_final_stand=True
-            if c['UNIVERSE'] == "Dragon Ball Z":
-                c_final_stand=True
-            if t['UNIVERSE'] == "Dragon Ball Z":
-                t_final_stand=True
-                
-            if (oarm_universe == o_universe) and (o_title_universe == o_universe):
-                o_attack = o_attack + 20
-                o_defense = o_defense + 20
-                o_max_health = o_max_health + 100
-                o_health = o_health + 100
-                if o_destiny:
-                    o_attack = o_attack + 5
-                    o_defense = o_defense + 5
-                    o_max_health = o_max_health + 50
-                    o_health = o_health + 50
-            
-            if (tarm_universe == t_universe) and (t_title_universe == t_universe):
-                t_attack = t_attack + 20
-                t_defense = t_defense + 20
-                t_max_health = t_max_health + 100
-                t_health = t_health + 100
-                if t_destiny:
-                    t_attack = t_attack + 5
-                    t_defense = t_defense + 5
-                    t_max_health = t_max_health + 50
-                    t_health = t_health + 50
-
-            if (carm_universe == c_universe) and (c_title_universe == c_universe):
-                c_attack = c_attack + 20
-                c_defense = c_defense + 20
-                c_max_health = c_max_health + 100
-                c_health = c_health + 100
-                if c_destiny:
-                    c_attack = c_attack + 5
-                    c_defense = c_defense + 5
-                    c_max_health = c_max_health +  50
-                    c_health = c_health + 50
-
-            if oteam == cteam:
-                o_defense = o_defense + 10
-                c_defense = c_defense + 10
-            if ofam == cfam:
-                o_health = o_health + 50
-                c_health = c_health + 50
-                o_max_health = o_max_health + 50
-                c_max_health = c_max_health + 50
-            
-            # Companion Passive Config
-            if (c_universe == c_title_universe) or (c_title_universe == "Unbound"):
-                c_title_passive_bool = True
-            
-            # Player 1 Focus & Resolve
-            c_focus = 90
-            c_used_focus=False
-            c_resolve = 60
-            c_used_resolve=False
-
-            # Companion Moves
-            c_1 = c_moveset[0]
-            c_2 = c_moveset[1]
-            c_3 = c_moveset[2]
-            c_enhancer = c_moveset[3]
-            c_enhancer_used=False
-            c_pet_used=False
-            c_block_used=False
-            c_chainsaw=False
-            c_def_chainsaw=False
-            c_atk_chainsaw=False
-            if c_universe == "Chainsawman":
-                c_chainsaw=True
-
-            tpetmove_text = list(tpet_passive.keys())[0]
-            tpetmove_ap = list(tpet_passive.values())[0]
-            tpetmove_type = list(tpet_passive.values())[1]
-            tpet_move = {str(tpetmove_text):int(tpetmove_ap), 'STAM': 15, 'TYPE':tpetmove_type}
-
-            cmove1_text = list(c_1.keys())[0]
-            cmove2_text = list(c_2.keys())[0]
-            cmove3_text = list(c_3.keys())[0]
-            cmove_enhanced_text = list(c_enhancer.keys())[0]
-
-            cpetmove_text= list(cpet.keys())[3] # Name of the ability
-            cpetmove_ap= (cpet_bond * cpet_lvl) + list(cpet.values())[3] # Ability Power
-
-            cpet_move = {str(cpetmove_text): int(cpetmove_ap), 'STAM': 15, 'TYPE': str(cpet_passive_type)}
-
-            # Player 1 Card Passive
-            c_card_passive_type = list(c_passive.values())[1]
-            c_card_passive = list(c_passive.values())[0]
-
-            if c_card_passive_type == 'ATK':
-                c_attack = c_attack + int(c_card_passive)
-            elif c_card_passive_type == 'DEF':
-                c_defense = o_defense + int(c_card_passive)
-            elif c_card_passive_type == 'STAM':
-                c_stamina = o_stamina + int(c_card_passive)
-            elif c_card_passive_type == 'HLT':
-                c_max_health = c_max_health + int(c_card_passive)
-                c_health = c_health + int(c_card_passive)
-            elif c_card_passive_type == 'LIFE':
-                c_max_health = c_max_health + int((c_card_passive/100) * t_health)
-            elif c_card_passive_type == 'DRAIN':
-                t_stamina = t_stamina - int(c_card_passive)
-                c_stamina = c_stamina + int(c_card_passive)
-            elif c_card_passive_type == 'FLOG':
-                c_attack = c_attack + int((c_card_passive/100) *t_attack)
-                t_attack = t_attack - int((c_card_passive/100) *t_attack)
-            elif c_card_passive_type == 'WITHER':
-                c_defense = c_defense + int((c_card_passive/100) *t_defense)
-                t_defense = t_defense - int((c_card_passive/100) *t_defense)
-            elif c_card_passive_type == 'RAGE':
-                c_attack = c_attack + int(((c_card_passive/100) * c_defense))
-                c_defense = c_defense - int(((c_card_passive/100) * c_attack))
-            elif c_card_passive_type == 'BRACE':            
-                c_defense = c_defense + int(((c_card_passive/100) * c_attack))
-                c_attack = c_attack - int(((c_card_passive/100) * c_defense))
-            elif c_card_passive_type == 'BZRK':            
-                c_attack = c_attack + int(((c_card_passive/100) * c_health))
-                c_health = c_health - int((c_attack))
-            elif c_card_passive_type == 'CRYSTAL':            
-                c_defense = c_defense + int(((c_card_passive/100) *c_health))
-                c_health = c_health - int((c_defense))
-            elif c_card_passive_type == 'GROWTH':            
-                c_attack = c_attack + int(((c_card_passive/100) * c_attack))
-                c_defense = c_defense + int(((c_card_passive/100) * c_defense))
-                c_max_health = c_max_health - int(((c_card_passive/100) * c_max_health))
-                c_health = c_health - int(((c_card_passive/100) * c_max_health))
-            elif c_card_passive_type == 'STANCE':
-                tempattack = c_attack + c_card_passive
-                c_attack = c_defense  + c_card_passive          
-                c_defense = tempattack
-            elif c_card_passive_type == 'CONFUSE':
-                tempattack = t_attack - c_card_passive
-                t_attack = t_defense  - c_card_passive          
-                t_defense = tempattack
-            elif c_card_passive_type == 'BLINK':
-                c_stamina = c_stamina - c_card_passive         
-                t_stamina = t_stamina + c_card_passive - 10
-            elif c_card_passive_type == 'SLOW':
-                tempstam = t_stamina + o_card_passive 
-                c_stamina = c_stamina - (2 * c_card_passive)      
-                t_stamina = c_stamina
-                o_stamina = tempstam  
-            elif c_card_passive_type == 'HASTE':
-                tempstam = t_stamina - c_card_passive    
-                c_stamina = c_stamina + (2 * c_card_passive)      
-                t_stamina = c_stamina 
-                c_stamina = tempstam  
-            elif c_card_passive_type == 'SOULCHAIN':
-                c_stamina = c_card_passive
-                t_stamina = c_card_passive
-            elif c_card_passive_type == 'FEAR':
-                c_health = c_health - int((c_card_passive/100) * c_health)
-                t_attack = t_attack - int((c_card_passive/100) * t_attack)
-                t_defense = t_defense - int((c_card_passive/100) * t_defense)
-            elif c_card_passive_type == 'GAMBLE':
-                c_health = c_card_passive
-                t_health = c_card_passive * 2
-                o_health = c_card_passive            
-   
-            # Title Passive
-            c_title_passive_type = list(c_title_passive.keys())[0]
-            c_title_passive_value = list(c_title_passive.values())[0]
-
-            if c_title_passive_bool:
-                if c_title_passive_type == 'ATK':
-                    c_attack = c_attack + int(c_title_passive_value)
-                elif c_title_passive_type == 'DEF':
-                    c_defense = c_defense + int(c_title_passive_value)
-                elif c_title_passive_type == 'STAM':
-                    c_stamina = c_stamina + int(c_title_passive_value)
-                elif c_title_passive_type == 'HLT':
-                    c_max_health = c_max_health + int(c_title_passive_value)
-                    c_health = c_health + int(c_title_passive_value)
-                elif c_title_passive_type == 'LIFE':
-                    c_max_health = c_max_health + int(c_title_passive_value)
-                elif c_title_passive_type == 'DRAIN':
-                    t_stamina = t_stamina - int(c_title_passive_value)
-                    c_stamina = c_stamina + int(c_title_passive_value)
-                elif c_title_passive_type == 'FLOG':
-                    c_attack = c_attack + int((c_title_passive_value/100) *t_attack)
-                    t_attack = t_attack - int((c_title_passive_value/100) *t_attack)
-                elif c_title_passive_type == 'WITHER':
-                    c_defense = c_defense + int((c_title_passive_value/100) *t_defense)
-                    t_defense = t_defense - int((c_title_passive_value/100) *t_defense)
-                elif c_title_passive_type == 'RAGE':
-                    c_attack = c_attack + int(((c_title_passive_value/100) * c_defense))
-                    c_defense = c_defense - int(((c_title_passive_value/100) * c_attack))
-                elif c_title_passive_type == 'BRACE':            
-                    c_defense = c_defense + int(((c_title_passive_value/100) * c_attack))
-                    c_attack = c_attack - int(((c_title_passive_value/100) * c_defense))
-                elif c_title_passive_type == 'BZRK':            
-                    c_attack = c_attack + int(((c_title_passive_value/100) * c_health))
-                    c_health = c_health - int((c_attack))
-                elif c_title_passive_type == 'CRYSTAL':            
-                    c_defense = c_defense + int(((c_title_passive_value/100) *c_health))
-                    c_health = c_health - int((c_defense))
-                elif c_title_passive_type == 'GROWTH':            
-                    c_attack = c_attack + int(((c_title_passive_value/100) * c_attack))
-                    c_defense = c_defense + int(((c_title_passive_value/100) * c_defense))
-                    c_max_health = c_max_health - int(((c_title_passive_value/100) * c_max_health))
-                elif c_title_passive_type == 'STANCE':
-                    tempattack = c_attack
-                    c_attack = c_defense            
-                    c_defense = tempattack
-                elif c_title_passive_type == 'CONFUSE':
-                    tempattack = t_attack
-                    t_attack = t_defense            
-                    t_defense = tempattack
-                elif c_title_passive_type == 'BLINK':
-                    c_stamina = c_stamina - c_title_passive_value         
-                    t_stamina = t_stamina + c_title_passive_value
-                elif c_title_passive_type == 'SLOW':
-                    tempstam = t_stamina + c_title_passive_value 
-                    c_stamina = c_stamina - c_title_passive_value      
-                    t_stamina = c_stamina
-                    c_stamina = tempstam  
-                elif c_title_passive_type == 'HASTE':
-                    tempstam = t_stamina - c_title_passive_value    
-                    c_stamina = c_stamina + c_title_passive_value      
-                    t_stamina = c_stamina 
-                    c_stamina = tempstam  
-                elif c_title_passive_type == 'SOULCHAIN':
-                    c_stamina = c_title_passive_value
-                    t_stamina = c_title_passive_value
-                elif c_title_passive_type == 'FEAR':
-                    c_health = c_health - int((c_title_passive_value/100) * c_health)
-                    t_attack = t_attack - int((c_title_passive_value/100) * t_attack)
-                    t_defense = t_defense - int((c_title_passive_value/100) * t_defense)
-                elif c_title_passive_type == 'GAMBLE':
-                    t_health = c_title_passive_value * 2
-                    c_health = c_title_passive_value
-                    o_health = c_title_passive_value
-
-            # Arm Passive Player 1
-            carm_passive_type = list(carm_passive.keys())[0]
-            carm_passive_value = list(carm_passive.values())[0]
-
-            if carm_passive_type == 'ATK':
-                c_attack = c_attack + int(carm_passive_value)
-            elif carm_passive_type == 'DEF':
-                c_defense = c_defense + int(carm_passive_value)
-            elif carm_passive_type == 'STAM':
-                c_stamina = c_stamina + int(carm_passive_value)
-            elif carm_passive_type == 'HLT':
-                c_max_health = c_max_health + int(carm_passive_value)
-                c_health = c_health + int(carm_passive_value)
-            elif carm_passive_type == 'LIFE':
-                c_max_health = c_max_health + int((carm_passive_value/100) * t_health)
-            elif carm_passive_type == 'DRAIN':
-                t_stamina = t_stamina - int(carm_passive_value)
-                c_stamina = c_stamina + int(carm_passive_value)
-            elif carm_passive_type == 'FLOG':
-                c_attack = c_attack + int((carm_passive_value/100) *t_attack)
-                t_attack = t_attack - int((carm_passive_value/100) *t_attack)
-            elif carm_passive_type == 'WITHER':
-                c_defense = c_defense + int((carm_passive_value/100) *t_defense)
-                t_defense = t_defense - int((carm_passive_value/100) *t_defense)
-            elif carm_passive_type == 'RAGE':
-                c_attack = c_attack + int(((carm_passive_value/100) * c_defense))
-                c_defense = c_defense - int(((carm_passive_value/100) * c_attack))
-            elif carm_passive_type == 'BRACE':            
-                c_defense = c_defense + int(((carm_passive_value/100) * c_attack))
-                c_attack = c_attack - int(((carm_passive_value/100) * c_defense))
-            elif carm_passive_type == 'BZRK':            
-                c_attack = c_attack + int(((carm_passive_value/100) * c_health))
-                c_health = c_health - int((c_attack))
-            elif carm_passive_type == 'CRYSTAL':            
-                c_defense = c_defense + int(((carm_passive_value/100) *c_health))
-                c_health = c_health - int((c_defense))
-            elif carm_passive_type == 'GROWTH':            
-                c_attack = c_attack + int(((carm_passive_value/100) * c_attack))
-                c_defense = c_defense + int(((carm_passive_value/100) * c_defense))
-                c_max_health = c_max_health - int(((carm_passive_value/100) * c_max_health))
-            elif carm_passive_type == 'STANCE':
-                tempattack = c_attack + carm_passive_value
-                c_attack = c_defense  + carm_passive_value         
-                c_defense = tempattack
-            elif carm_passive_type == 'CONFUSE':
-                tempattack = c_attack - carm_passive_value
-                t_attack = t_defense  - carm_passive_value           
-                t_defense = tempattack
-            elif carm_passive_type == 'BLINK':
-                c_stamina = c_stamina - carm_passive_value         
-                t_stamina = t_stamina + carm_passive_value
-            elif carm_passive_type == 'SLOW':
-                tempstam = t_stamina + carm_passive_value 
-                c_stamina = c_stamina - carm_passive_value      
-                t_stamina = c_stamina
-                c_stamina = tempstam  
-            elif carm_passive_type == 'HASTE':
-                tempstam = t_stamina - carm_passive_value    
-                c_stamina = c_stamina + carm_passive_value      
-                t_stamina = c_stamina 
-                c_stamina = tempstam  
-            elif carm_passive_type == 'SOULCHAIN':
-                c_stamina = carm_passive_value
-                t_stamina = carm_passive_value
-            elif carm_passive_type == 'FEAR':
-                c_health = c_health - int((carm_passive_value/100) * c_health)
-                t_attack = t_attack - int((carm_passive_value/100) * t_attack)
-                t_defense = t_defense - int((carm_passive_value/100) * t_defense)
-            elif carm_passive_type == 'GAMBLE':
-                t_health = carm_passive_value * 2
-                c_health = carm_passive_value
-                o_health = carm_passive_value
-
-            ################################################################################
-
-            # Player 1 Passive Config
-            if (o_universe == o_title_universe) or (o_title_universe == "Unbound"):
-                o_title_passive_bool = True
-            
-            # Player 1 Focus & Resolve
-            o_focus = 90
-            o_used_focus=False
-            o_resolve = 60
-            o_used_resolve=False
-
-            # Player 1 Moves
-            o_1 = o_moveset[0]
-            o_2 = o_moveset[1]
-            o_3 = o_moveset[2]
-            o_enhancer = o_moveset[3]
-            o_enhancer_used=False
-            o_pet_used=False
-            o_block_used=False
-            o_defend_used=False
-            o_chainsaw=False
-            o_def_chainsaw=False
-            o_atk_chainsaw=False
-            if o_universe == "Chainsawman":
-                o_chainsaw=True
-
-            omove1_text = list(o_1.keys())[0]
-            omove2_text = list(o_2.keys())[0]
-            omove3_text = list(o_3.keys())[0]
-            omove_enhanced_text = list(o_enhancer.keys())[0]
-
-            opetmove_text= list(opet.keys())[3] # Name of the ability
-            opetmove_ap= (opet_bond * opet_lvl) + list(opet.values())[3] # Ability Power
-
-            opet_move = {str(opetmove_text): int(opetmove_ap), 'STAM': 15, 'TYPE': str(opet_passive_type)}
-
-            # Player 1 Card Passive
-            o_card_passive_type = list(o_passive.values())[1]
-            o_card_passive = list(o_passive.values())[0]
-
-            if o_card_passive_type == 'ATK':
-                o_attack = o_attack + int(o_card_passive)
-            elif o_card_passive_type == 'DEF':
-                o_defense = o_defense + int(o_card_passive)
-            elif o_card_passive_type == 'STAM':
-                o_stamina = o_stamina + int(o_card_passive)
-            elif o_card_passive_type == 'HLT':
-                o_max_health = o_max_health + int(o_card_passive)
-                o_health = o_health + int(o_card_passive)
-            elif o_card_passive_type == 'LIFE':
-                o_max_health = o_max_health + int((o_card_passive/100) * t_health)
-            elif o_card_passive_type == 'DRAIN':
-                o_stamina = o_stamina + int(o_card_passive)
-                t_stamina = t_stamina - int(o_card_passive)
-            elif o_card_passive_type == 'FLOG':
-                o_attack = o_attack + int((o_card_passive/100) *t_attack)
-                t_attack = t_attack - int((o_card_passive/100) *t_attack)
-            elif o_card_passive_type == 'WITHER':
-                o_defense = o_defense + int((o_card_passive/100) *t_defense)
-                t_defense = t_defense - int((o_card_passive/100) *t_defense)
-            elif o_card_passive_type == 'RAGE':
-                o_attack = o_attack + int(((o_card_passive/100) * o_defense))
-                o_defense = o_defense - int(((o_card_passive/100) *o_attack))
-            elif o_card_passive_type == 'BRACE':            
-                o_defense = o_defense + int(((o_card_passive/100) *o_attack))
-                o_attack = o_attack - int(((o_card_passive/100) * o_defense))
-            elif o_card_passive_type == 'BZRK':            
-                o_attack = o_attack + int(((o_card_passive/100) *o_health))
-                o_health = o_health - int((o_attack))
-            elif o_card_passive_type == 'CRYSTAL':            
-                o_defense = o_defense + int(((o_card_passive/100) *o_health))
-                o_health = o_health - int((o_defense))
-            elif o_card_passive_type == 'GROWTH':            
-                o_attack = o_attack + int(((o_card_passive/100) * o_attack))
-                o_defense = o_defense + int(((o_card_passive/100) * o_defense))
-                o_max_health = o_max_health - int(((o_card_passive/100) * o_max_health))
-                o_health = o_health - int(((o_card_passive/100) * o_max_health))
-            elif o_card_passive_type == 'STANCE':
-                tempattack = o_attack + o_card_passive
-                o_attack = o_defense  + o_card_passive          
-                o_defense = tempattack
-            elif o_card_passive_type == 'CONFUSE':
-                tempattack = t_attack - o_card_passive
-                t_attack = t_defense  - o_card_passive          
-                t_defense = tempattack
-            elif o_card_passive_type == 'BLINK':
-                o_stamina = o_stamina - o_card_passive         
-                t_stamina = t_stamina + o_card_passive - 10
-            elif o_card_passive_type == 'SLOW':
-                tempstam = t_stamina + o_card_passive 
-                o_stamina = o_stamina - (2 * o_card_passive)      
-                t_stamina = o_stamina
-                o_stamina = tempstam  
-            elif o_card_passive_type == 'HASTE':
-                tempstam = t_stamina - o_card_passive    
-                o_stamina = o_stamina + (2 * o_card_passive)      
-                t_stamina = o_stamina 
-                o_stamina = tempstam  
-            elif o_card_passive_type == 'SOULCHAIN':
-                o_stamina = o_card_passive
-                t_stamina = o_card_passive
-            elif o_card_passive_type == 'FEAR':
-                o_health = o_health - int((o_card_passive/100) * o_health)
-                t_attack = t_attack - int((o_card_passive/100) * t_attack)
-                t_defense = t_defense - int((o_card_passive/100) * t_defense)
-            elif o_card_passive_type == 'GAMBLE':
-                o_health = o_card_passive
-                t_health = o_card_passive * 2  
-                c_health = o_card_passive              
-
-            # Title Passive
-            o_title_passive_type = list(o_title_passive.keys())[0]
-            o_title_passive_value = list(o_title_passive.values())[0]
-
-            if o_title_passive_bool:
-                if o_title_passive_type == 'ATK':
-                    o_attack = o_attack + int(o_title_passive_value)
-                elif o_title_passive_type == 'DEF':
-                    o_defense = o_defense + int(o_title_passive_value)
-                elif o_title_passive_type == 'STAM':
-                    o_stamina = o_stamina + int(o_title_passive_value)
-                elif o_title_passive_type == 'HLT':
-                    o_max_health = o_max_health + int(o_title_passive_value)
-                    o_health = o_health + int(o_title_passive_value)
-                elif o_title_passive_type == 'LIFE':
-                    _max_health = o_max_health + int((o_title_passive_value/100) * t_health)
-                elif o_title_passive_type == 'DRAIN':
-                    t_stamina = t_stamina - int(o_title_passive_value)
-                    o_stamina = o_stamina + int(o_title_passive_value)
-                elif o_title_passive_type == 'FLOG':
-                    o_attack = o_attack + int((o_title_passive_value/100) *t_attack)
-                    t_attack = t_attack - int((o_title_passive_value/100) *t_attack)
-                elif o_title_passive_type == 'WITHER':
-                    o_defense = o_defense + int((o_title_passive_value/100) *t_defense)
-                    t_defense = t_defense - int((o_title_passive_value/100) *t_defense)
-                elif o_title_passive_type == 'RAGE':
-                    o_attack = o_attack + int(((o_title_passive_value/100) * o_defense))
-                    o_defense = o_defense - int(((o_title_passive_value/100) *o_attack))
-                elif o_title_passive_type == 'BRACE':            
-                    o_defense = o_defense + int(((o_title_passive_value/100) *o_attack))
-                    o_attack = o_attack - int(((o_title_passive_value/100) * o_defense))
-                elif o_title_passive_type == 'BZRK':            
-                    o_attack = o_attack + int(((o_title_passive_value/100) *o_health))
-                    o_health = o_health - int((o_attack))
-                elif o_title_passive_type == 'CRYSTAL':            
-                    o_defense = o_defense + int(((o_title_passive_value/100) * o_health))
-                    o_health = o_health - int((o_defense))
-                elif o_title_passive_type == 'GROWTH':            
-                    o_attack = o_attack + int((o_title_passive_value/100) * o_attack)
-                    o_defense = o_defense + int((o_title_passive_value/100) * o_defense)
-                    o_max_health = o_max_health - int((o_title_passive_value/100) * o_max_health) 
-                elif o_title_passive_type == 'STANCE':
-                    tempattack = o_attack
-                    o_attack = o_defense            
-                    o_defense = tempattack
-                elif o_title_passive_type == 'CONFUSE':
-                    tempattack = t_attack
-                    t_attack = t_defense            
-                    t_defense = tempattack
-                elif o_title_passive_type == 'BLINK':
-                    o_stamina = o_stamina - o_title_passive_value         
-                    t_stamina = t_stamina + o_title_passive_value
-                elif o_title_passive_type == 'SLOW':
-                    tempstam = t_stamina + o_title_passive_value 
-                    o_stamina = o_stamina - o_title_passive_value      
-                    t_stamina = o_stamina
-                    o_stamina = tempstam  
-                elif o_title_passive_type == 'HASTE':
-                    tempstam = t_stamina - o_title_passive_value    
-                    o_stamina = o_stamina + o_title_passive_value      
-                    t_stamina = o_stamina 
-                    o_stamina = tempstam  
-                elif o_title_passive_type == 'SOULCHAIN':
-                    o_stamina = o_title_passive_value
-                    t_stamina = o_title_passive_value
-                elif o_title_passive_type == 'FEAR':
-                    o_health = o_health - int((o_title_passive_value/100) * o_health)
-                    t_attack = t_attack - int((o_title_passive_value/100) * t_attack)
-                    t_defense = t_defense - int((o_title_passive_value/100) * t_defense)
-                elif o_title_passive_type == 'GAMBLE':
-                    t_health = o_title_passive_value * 2
-                    o_health = o_title_passive_value
-                    c_health = o_title_passive_value
-
-            # Arm Passive Player 1
-            oarm_passive_type = list(oarm_passive.keys())[0]
-            oarm_passive_value = list(oarm_passive.values())[0]
-
-            if oarm_passive_type == 'ATK':
-                o_attack = o_attack + int(oarm_passive_value)
-            elif oarm_passive_type == 'DEF':
-                o_defense = o_defense + int(oarm_passive_value)
-            elif oarm_passive_type == 'STAM':
-                o_stamina = o_stamina + int(oarm_passive_value)
-            elif oarm_passive_type == 'HLT':
-                o_max_health = o_max_health + int(oarm_passive_value)
-                o_health = o_health + int(oarm_passive_value)
-            elif oarm_passive_type == 'LIFE':
-                o_max_health = o_max_health + int((oarm_passive_value/100) * t_health)
-            elif oarm_passive_type == 'DRAIN':
-                t_stamina = t_stamina - int(oarm_passive_value)
-                o_stamina = o_stamina + int(oarm_passive_value)
-            elif oarm_passive_type == 'FLOG':
-                o_attack = o_attack + int((oarm_passive_value/100) *t_attack)
-                t_attack = t_attack - int((oarm_passive_value/100) *t_attack)
-            elif oarm_passive_type == 'WITHER':
-                o_defense = o_defense + int((oarm_passive_value/100) *t_defense)
-                t_defense = t_defense - int((oarm_passive_value/100) *t_defense)
-            elif oarm_passive_type == 'RAGE':
-                o_attack = o_attack + int(((oarm_passive_value/100) * o_defense))
-                o_defense = o_defense- int(((oarm_passive_value/100) *o_attack))
-            elif oarm_passive_type == 'BRACE':            
-                o_defense = o_defense + int(((oarm_passive_value/100) *o_attack))
-                o_attack = o_attack - int(((oarm_passive_value/100) * o_defense))
-            elif oarm_passive_type == 'BZRK':            
-                o_attack = o_attack + int(((oarm_passive_value/100) *o_health))
-                o_health = o_health - int((o_attack))
-            elif oarm_passive_type == 'CRYSTAL':            
-                o_defense = o_defense + int(((oarm_passive_value/100) * o_health))
-                o_health = o_health - int((o_defense))
-            elif oarm_passive_type == 'GROWTH':            
-                o_attack = o_attack + int((oarm_passive_value/100) * o_attack)
-                o_defense = o_defense + int((oarm_passive_value/100) * o_defense)
-                o_max_health = o_max_health - int((oarm_passive_value/100) * o_max_health)
-            elif oarm_passive_type == 'STANCE':
-                tempattack = o_attack + oarm_passive_value
-                o_attack = o_defense  + oarm_passive_value         
-                o_defense = tempattack
-            elif oarm_passive_type == 'CONFUSE':
-                tempattack = o_attack - oarm_passive_value
-                t_attack = t_defense  - oarm_passive_value           
-                t_defense = tempattack
-            elif oarm_passive_type == 'BLINK':
-                o_stamina = o_stamina - oarm_passive_value         
-                t_stamina = t_stamina + oarm_passive_value
-            elif oarm_passive_type == 'SLOW':
-                tempstam = t_stamina + oarm_passive_value 
-                o_stamina = o_stamina - oarm_passive_value      
-                t_stamina = o_stamina
-                o_stamina = tempstam  
-            elif oarm_passive_type == 'HASTE':
-                tempstam = t_stamina - oarm_passive_value    
-                o_stamina = o_stamina + oarm_passive_value      
-                t_stamina = o_stamina 
-                o_stamina = tempstam  
-            elif oarm_passive_type == 'SOULCHAIN':
-                o_stamina = oarm_passive_value
-                t_stamina = oarm_passive_value
-            elif oarm_passive_type == 'FEAR':
-                o_health = o_health - int((oarm_passive_value/100) * o_health)
-                t_attack = t_attack - int((oarm_passive_value/100) * t_attack)
-                t_defense = t_defense - int((oarm_passive_value/100) * t_defense)
-            elif oarm_passive_type == 'GAMBLE':
-                t_health = oarm_passive_value * 2
-                o_health = oarm_passive_value
-                c_health = oarm_passive_value
-
-
-            ################################################################################
-
-
-            # Arm Passive Player 2
-            tarm_passive_type = list(tarm_passive.keys())[0]
-            tarm_passive_value = list(tarm_passive.values())[0]
-
-            if tarm_passive_type == 'ATK':
-                t_attack = t_attack + int(tarm_passive_value)
-            elif tarm_passive_type == 'DEF':
-                t_defense = t_defense + int(tarm_passive_value)
-            elif tarm_passive_type == 'STAM':
-                t_stamina = t_stamina + int(tarm_passive_value)
-            elif tarm_passive_type == 'HLT':
-                t_max_health = t_max_health + int(tarm_passive_value)
-                t_health = t_health + int(tarm_passive_value)
-            elif tarm_passive_type == 'LIFE':
-                t_max_health = t_max_health + int((tarm_passive_value/100) * o_health)
-            elif tarm_passive_type == 'DRAIN':
-                c_stamina = c_stamina - int(tarm_passive_value)
-                o_stamina = o_stamina - int(tarm_passive_value)
-                t_stamina = t_stamina + int(tarm_passive_value)
-            elif tarm_passive_type == 'FLOG':
-                t_attack = t_attack + int((tarm_passive_value/100) * o_attack)
-                o_attack = o_attack - int((tarm_passive_value/100) * o_attack)
-                c_attack = c_attack - int((tarm_passive_value/100) * c_attack)
-            elif tarm_passive_type == 'WITHER':
-                t_defense = t_defense + int((tarm_passive_value/100) *o_defense)
-                o_defense = o_defense - int((tarm_passive_value/100) *o_defense)
-                c_defense = c_defense - int((tarm_passive_value/100) *c_defense)
-            elif tarm_passive_type == 'RAGE':
-                t_attack = t_attack + int((tarm_passive_value/100) * t_defense)
-                t_defense = t_defense - int((tarm_passive_value/100) *t_attack)
-            elif tarm_passive_type == 'BRACE':            
-                t_defense = t_defense + int((tarm_passive_value/100) *t_attack)
-                t_attack = t_attack - int((tarm_passive_value/100) * t_defense)
-            elif tarm_passive_type == 'BZRK':            
-                t_attack = t_attack + int((.25*tarm_passive_value))
-                t_health = t_health - int((tarm_passive_value))
-            elif tarm_passive_type == 'CRYSTAL':            
-                t_defense = t_defense + int((.25*tarm_passive_value))
-                t_health = t_health - int((tarm_passive_value))
-            elif tarm_passive_type == 'GROWTH':            
-                t_attack = t_attack + int((tarm_passive_value/100) * t_attack)
-                t_defense = t_defense + int((tarm_passive_value/100) * t_defense)
-                t_max_health = t_max_health - int(((tarm_passive_value/100) * t_max_health))
-            elif tarm_passive_type == 'STANCE':
-                tempattack = t_attack + tarm_passive_value
-                t_attack = t_defense  + tarm_passive_value         
-                t_defense = tempattack
-            elif tarm_passive_type == 'CONFUSE':
-                tempattack = o_attack - tarm_passive_value
-                o_attack = o_defense  - tarm_passive_value           
-                o_defense = tempattack
-                c_defense = tempattack
-            elif tarm_passive_type == 'BLINK':
-                t_stamina = t_stamina - tarm_passive_value         
-                o_stamina = o_stamina + tarm_passive_value
-                c_stamina = c_stamina + tarm_passive_value
-            elif tarm_passive_type == 'SLOW':
-                tempstam = o_stamina + tarm_passive_value 
-                t_stamina = t_stamina - tarm_passive_value      
-                o_stamina = t_stamina
-                c_stamina = t_stamina
-                t_stamina = tempstam  
-            elif tarm_passive_type == 'HASTE':
-                tempstam = o_stamina - tarm_passive_value    
-                t_stamina = t_stamina + tarm_passive_value      
-                o_stamina = t_stamina
-                c_stamina = t_stamina 
-                t_stamina = tempstam  
-            elif tarm_passive_type == 'SOULCHAIN':
-                t_stamina = tarm_passive_value
-                o_stamina = tarm_passive_value
-                c_stamina = tarm_passive_value
-            elif tarm_passive_type == 'FEAR':
-                t_health = t_health - int((tarm_passive_value/100) * t_health)
-                o_attack = o_attack - int((tarm_passive_value/100) * o_attack)
-                o_defense = o_defense - int((tarm_passive_value/100) * o_defense)
-                c_attack = c_attack - int((tarm_passive_value/100) * c_attack)
-                c_defense = c_defense - int((tarm_passive_value/100) * c_defense)
-            elif tarm_passive_type == 'GAMBLE':
-                t_health = tarm_passive_value * 2
-                o_health = tarm_passive_value
-                c_health = tarm_passive_value
-
-
-            # Player 2 Passive Config
-            if (t_universe == t_title_universe) or (t_title_universe == "Unbound"):
-                t_title_passive_bool = True
-            
-            # Player 1 Card Passive
-            t_card_passive_type = list(t_passive.values())[1]
-            t_card_passive = list(t_passive.values())[0]
-
-            if t_card_passive_type == 'ATK':
-                t_attack = t_attack + int(t_card_passive)
-            elif t_card_passive_type == 'DEF':
-                t_defense = t_defense + int(t_card_passive)
-            elif t_card_passive_type == 'STAM':
-                t_stamina = t_stamina + int(t_card_passive)
-            elif t_card_passive_type == 'HLT':
-                t_max_health = t_max_health + int(t_card_passive)
-                t_health = t_health + int(t_card_passive)
-            elif t_card_passive_type == 'LIFE':
-                t_max_health = t_max_health + int((t_card_passive/100) * o_health)
-            elif t_card_passive_type == 'DRAIN':
-                c_stamina = c_stamina - int(t_card_passive)
-                o_stamina = o_stamina - int(t_card_passive)
-                t_stamina = t_stamina + int(t_card_passive)
-            elif t_card_passive_type == 'FLOG':
-                t_attack = t_attack + int((t_card_passive/100) * o_attack)
-                o_attack = o_attack - int((t_card_passive/100) * o_attack)
-                c_attack = c_attack - int((t_card_passive/100) * c_attack)
-            elif t_card_passive_type == 'WITHER':
-                t_defense = t_defense + int((t_card_passive/100) *o_defense)
-                o_defense = o_defense - int((t_card_passive/100) *o_defense)
-                c_defense = c_defense - int((t_card_passive/100) *c_defense)
-            elif t_card_passive_type == 'RAGE':
-                t_attack = t_attack + int((t_card_passive/100) * t_defense)
-                t_defense = t_defense - int((t_card_passive/100) *t_attack)
-            elif t_card_passive_type == 'BRACE':            
-                t_defense = t_defense + int((t_card_passive/100) *t_attack)
-                t_attack = t_attack - int((t_card_passive/100) * t_defense)
-            elif t_card_passive_type == 'BZRK':            
-                t_attack = t_attack + int(((t_card_passive/100)* t_health))
-                t_health = t_health - int((t_attack))
-            elif t_card_passive_type == 'CRYSTAL':            
-                t_defense = t_defense + int((t_card_passive/100) *t_health)
-                t_health = t_health - int(t_defense)
-            elif t_card_passive_type == 'GROWTH':            
-                t_attack =  t_attack + int((t_card_passive/100) * t_attack)
-                t_defense = t_defense + int((t_card_passive/100) * t_defense)
-                t_max_health = t_max_health - int(((t_card_passive/100) * t_max_health))
-                t_health = t_health - int(((t_card_passive/100) * t_health ))
-            elif t_card_passive_type == 'STANCE':
-                tempattack = t_attack + t_card_passive
-                t_attack = t_defense + t_card_passive            
-                t_defense = tempattack
-            elif t_card_passive_type == 'CONFUSE':
-                tempattack = o_attack - t_card_passive
-                o_attack = o_defense  - t_card_passive          
-                o_defense = tempattack
-            elif t_card_passive_type == 'BLINK':
-                t_stamina = t_stamina - t_card_passive         
-                o_stamina = o_stamina + t_card_passive - 10
-            elif t_card_passive_type == 'SLOW':
-                tempstam = o_stamina + t_card_passive 
-                t_stamina = t_stamina - (2 * t_card_passive)     
-                o_stamina = t_stamina
-                t_stamina = tempstam  
-            elif t_card_passive_type == 'HASTE':
-                tempstam = o_stamina - t_card_passive    
-                t_stamina = t_stamina + (2 * t_card_passive)      
-                o_stamina = t_stamina 
-                t_stamina = tempstam  
-            elif t_card_passive_type == 'SOULCHAIN':
-                t_stamina = t_card_passive
-                o_stamina = t_card_passive
-                c_stamina = t_card_passive
-            elif t_card_passive_type == 'FEAR':
-                t_health = t_health - int((t_card_passive/100) * t_health)
-                o_attack = o_attack - int((t_card_passive/100) * o_attack)
-                o_defense = o_defense - int((t_card_passive/100) * o_defense)
-                c_attack = o_attack - int((t_card_passive/100 * o_attack))
-                c_defense = o_defense - int((t_card_passive/100 * o_defense))
-            elif t_card_passive_type == 'GAMBLE':
-                t_health = t_card_passive * 2
-                o_health = t_card_passive
-                c_health = t_card_passive
-
-            # Title Passive
-            t_title_passive_type = list(t_title_passive.keys())[0]
-            t_title_passive_value = list(t_title_passive.values())[0]
-
-            if t_title_passive_bool:
-                if t_title_passive_type == 'ATK':
-                    t_attack = t_attack + int(t_title_passive_value)
-                elif t_title_passive_type == 'DEF':
-                    t_defense = t_defense + int(t_title_passive_value)
-                elif t_title_passive_type == 'STAM':
-                    t_stamina = t_stamina + int(t_title_passive_value)
-                elif t_title_passive_type == 'HLT':
-                    t_max_health = t_max_health + int(t_title_passive_value)
-                    t_health = t_health + int(t_title_passive_value)
-                elif t_title_passive_type == 'LIFE':
-                    t_max_health = t_max_health + int((t_title_passive_value/100) * o_health)
-                elif t_title_passive_type == 'DRAIN':
-                    c_stamina = c_stamina - int(t_title_passive_value)
-                    o_stamina = o_stamina - int(t_title_passive_value)
-                    t_stamina = t_stamina + int(t_title_passive_value)
-                elif t_title_passive_type == 'FLOG':
-                    t_attack = t_attack + int((t_title_passive_value/100) * o_attack)
-                    o_attack = o_attack - int((t_title_passive_value/100) * o_attack)
-                    c_attack = c_attack - int((t_title_passive_value/100) * c_attack)
-                elif t_title_passive_type == 'WITHER':
-                    t_defense = t_defense + int((t_title_passive_value/100) *o_defense)
-                    o_defense = o_defense - int((t_title_passive_value/100) *o_defense)
-                    c_defense = c_defense - int((t_title_passive_value/100) *c_defense)
-                elif t_title_passive_type == 'RAGE':
-                    t_attack = t_attack + int(((t_title_passive_value/100) * t_defense))
-                    t_defense = t_defense - int(((t_title_passive_value/100) *t_attack))
-                elif t_title_passive_type == 'BRACE':            
-                    t_defense = t_defense + int(((t_title_passive_value/100) *t_attack))
-                    t_attack = t_attack - int(((t_title_passive_value/100) * t_defense))
-                elif t_title_passive_type == 'BZRK':            
-                    t_attack = t_attack + int(((t_title_passive_value/100)* t_health))
-                    t_health = t_health - int((t_attack))
-                elif t_title_passive_type == 'CRYSTAL':            
-                    t_defense = t_defense + int(((t_title_passive_value/100) *t_health))
-                    t_health = t_health - int(t_defense)
-                elif t_title_passive_type == 'GROWTH':            
-                    t_attack = t_attack + int(((t_title_passive_value/100) * t_attack))
-                    t_defense = t_defense + int(((t_title_passive_value/100) * t_defense))
-                    t_max_health = t_max_health - int(((t_title_passive_value/100) * t_max_health))
-                elif t_title_passive_type == 'STANCE':
-                    tempattack = t_attack + t_title_passive_value
-                    t_attack = t_defense  + t_title_passive_value          
-                    t_defense = tempattack
-                elif t_title_passive_type == 'CONFUSE':
-                    tempattack = o_attack - t_title_passive_value
-                    o_attack = o_defense  - t_title_passive_value           
-                    o_defense = tempattack
-                    c_attack = c_defense  - t_title_passive_value           
-                    c_defense = tempattack
-                elif t_title_passive_type == 'BLINK':
-                    t_stamina = t_stamina - t_title_passive_value         
-                    o_stamina = o_stamina + t_title_passive_value
-                    c_stamina = c_stamina + t_title_passive_value
-                elif t_title_passive_type == 'SLOW':
-                    tempstam = o_stamina + t_title_passive_value 
-                    t_stamina = t_stamina - t_title_passive_value      
-                    o_stamina = t_stamina
-                    c_stamina = t_stamina
-                    t_stamina = tempstam  
-                elif t_title_passive_type == 'HASTE':
-                    tempstam = o_stamina - t_title_passive_value    
-                    t_stamina = t_stamina + t_title_passive_value      
-                    o_stamina = t_stamina 
-                    c_stamina = t_stamina
-                    t_stamina = tempstam  
-                elif t_title_passive_type == 'SOULCHAIN':
-                    t_stamina = t_title_passive_value
-                    o_stamina = t_title_passive_value
-                    c_stamina = t_title_passive_value
-                elif t_title_passive_type == 'FEAR':
-                    t_health = t_health - int((t_title_passive_value/100) * t_health)
-                    o_attack = o_attack - int((t_title_passive_value/100) * o_attack)
-                    o_defense = o_defense - int((t_title_passive_value/100) * o_defense)
-                    c_attack = o_attack - int((t_title_passive_value/100) * o_attack)
-                    c_defense = o_defense - int((t_title_passive_value/100) * o_defense)
-                elif t_title_passive_type == 'GAMBLE':
-                    t_health = t_title_passive_value * 2
-                    o_health = t_title_passive_value
-                    c_health = t_title_passive_value
-
-
-            # Player 2 Moves
-            t_1 = t_moveset[0]
-            t_2 = t_moveset[1]
-            t_3 = t_moveset[2]
-            t_enhancer = t_moveset[3]
-            t_enhancer_used=False
-            t_pet_used=False
-
-            # Player 1 Focus & Resolve
-            t_focus = 90
-            t_used_focus=False
-            t_resolve = 60
-            t_used_resolve=False
-            t_chainsaw=False
-            t_def_chainsaw=False
-            t_atk_chainsaw=False
-            if t_universe == "Chainsawman":
-                t_chainsaw=True
             
             # Turn iterator
             turn = 0
@@ -17300,12 +16148,6 @@ class CrownUnlimited(commands.Cog):
 
             # Count Turns
             turn_total = 0
-            
-            #Rebirth Scaling
-            o_attack = o_attack + (o_user['REBIRTH'] * 10)
-            o_defense = o_defense + (o_user['REBIRTH'] * 10)
-            c_attack = c_attack + (c_user['REBIRTH'] * 10)
-            c_defense = c_defense + (c_user['REBIRTH'] * 10)
 
             # START TURNS
             while ((o_health > 0) and (c_health > 0)) and (t_health > 0):
@@ -17576,10 +16418,10 @@ class CrownUnlimited(commands.Cog):
                         
                                 if private_channel.guild:
                                     await private_channel.send(f"{ctx.author.mention} has fled the battle...")
-                                    response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                                    
                                     await discord.TextChannel.delete(private_channel, reason=None)
                                 else:
-                                    response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                                    
                                     await private_channel.send(f"You fled the battle...")
                                 return
                             if button_ctx.custom_id == "1":
@@ -18090,7 +16932,7 @@ class CrownUnlimited(commands.Cog):
                                     await button_ctx.send(embed=embedVar)
                                     turn=0
                         except asyncio.TimeoutError:
-                            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                            
                             await private_channel.send(f"{ctx.author.mention} {m.STORY_ENDED}")
                             if private_channel.guild:
                                 await discord.TextChannel.delete(private_channel, reason=None)
@@ -19233,7 +18075,7 @@ class CrownUnlimited(commands.Cog):
                             # calculate data based on selected move
                             if button_ctx.custom_id == "q" or button_ctx.custom_id == "Q" :
                                 c_health=0
-                                response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                                
                                 if private_channel.guild:
                                     await private_channel.send(f"{user2.mention} has fled the battle...")
                                     await discord.TextChannel.delete(private_channel, reason=None)
@@ -19747,7 +18589,7 @@ class CrownUnlimited(commands.Cog):
                                     await button_ctx.send(embed=embedVar)
                                     turn=2
                         except asyncio.TimeoutError:
-                            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                            
                             await private_channel.send(f"{ctx.author.mention} {m.STORY_ENDED}")
                             if private_channel.guild:
                                 await discord.TextChannel.delete(private_channel, reason=None)
@@ -20675,7 +19517,7 @@ class CrownUnlimited(commands.Cog):
 
                     if str(reaction.emoji) == '👎':
                         continued = False 
-                        db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                        
                         if private_channel.guild:
                             await discord.TextChannel.delete(private_channel, reason=None)
                         return
@@ -20684,7 +19526,7 @@ class CrownUnlimited(commands.Cog):
                     continued = True
                 except asyncio.TimeoutError:
                     continued = False
-                    response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                    
                     if private_channel.guild:
                         await discord.TextChannel.delete(private_channel, reason=None)
 
@@ -20738,7 +19580,7 @@ class CrownUnlimited(commands.Cog):
                             currentopponent = currentopponent + 1
                             continued = True
                         except asyncio.TimeoutError:
-                            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                            
                             await private_channel.send(f"{ctx.author.mention} {m.STORY_ENDED}")
                             if private_channel.guild:
                                 await discord.TextChannel.delete(private_channel, reason=None)
@@ -20768,25 +19610,32 @@ class CrownUnlimited(commands.Cog):
                         await bless(800, user2)
                         await ctx.author.send(embed=embedVar)
                         await ctx.author.send(f"You were both awarded :coin: 800 for completing the {selected_universe} Dungeon again!")
-                        response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                        
                     else:
                         await bless(15000, ctx.author)
                         await bless(10000, user2)
                         await ctx.author.send(embed=embedVar)
-                        response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                        
                         await ctx.author.send(f"You were awarded :coin: 15000 for completing the {selected_universe} Dungeon! ")
                     continued=False
                     if private_channel.guild:
-                        response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                        
                         await discord.TextChannel.delete(private_channel, reason=None)
 
     @cog_ext.cog_slash(description="Co-op Bosses with Friends", guild_ids=main.guild_ids)
     async def cboss(self, ctx: SlashContext, user: User):
         companion = db.queryUser({'DISNAME': str(user)})
         private_channel = ctx
+        mode = "CBoss"
         if isinstance(private_channel.channel, discord.channel.DMChannel):
             await private_channel.send(m.SERVER_FUNCTION_ONLY)
             return
+
+        channel_exists_response = existing_channel_check(self, ctx)
+        if channel_exists_response:
+            await private_channel.send(m.ALREADY_IN_TALES)
+            return
+
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
         oteam = sowner['TEAM']
         ofam = sowner['FAMILY']
@@ -20807,11 +19656,6 @@ class CrownUnlimited(commands.Cog):
         cteam = companion['TEAM']
         cfam = companion['FAMILY']
 
-        if sowner['AVAILABLE']:
-            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': False}})
-        else:
-            await private_channel.send(m.ALREADY_IN_TALES)
-            return
         
         completed_crown_tales = sowner['CROWN_TALES']
         completed_dungeons = sowner['DUNGEONS']
@@ -20825,7 +19669,7 @@ class CrownUnlimited(commands.Cog):
                     available_universes.append(uni)
         if not available_universes:
             await private_channel.send("No available Bosses for you at this time!")
-            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+            
             return
 
         embedVar = discord.Embed(title=f":japanese_ogre: CO-OP! Select A Boss Arena", description="\n".join(available_universes), colour=0xe91e63) 
@@ -20848,7 +19692,7 @@ class CrownUnlimited(commands.Cog):
 
             if msg.content == "Quit":
                 await private_channel.send("Quit Boss selection. ")
-                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                
                 return
 
             #Universe Cost
@@ -20863,7 +19707,7 @@ class CrownUnlimited(commands.Cog):
                     entrance_fee = entrance_fee * universe_tier
                     if balance <= entrance_fee:
                             await private_channel.send(f"Tier {universe_tier} Bosses require an :coin: {'{:,}'.format(entrance_fee)} entrance fee!", delete_after=5)
-                            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                            
                             return
                     else:
                         await curse(entrance_fee, str(ctx.author))
@@ -20884,14 +19728,14 @@ class CrownUnlimited(commands.Cog):
                 await ctx.send(f"{ctx.author.mention} private channel has been opened for you. Good luck!")
             
         except:
-            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+            
             embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", colour=0xe91e63)
             await private_channel.send(embed=embedVar)
             return
 
         universe = db.queryUniverse({'TITLE': str(selected_universe)})
         if not universe['CROWN_TALES']:
-            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+            
             await ctx.author.send(f"{selected_universe} Boss Arena not yet available! Check back later!")
             if private_channel.guild:
                 await discord.TextChannel.delete(private_channel, reason=None)
@@ -22308,10 +21152,10 @@ class CrownUnlimited(commands.Cog):
                     
                             if private_channel.guild:
                                 await private_channel.send(f"{ctx.author.mention} has fled the battle...")
-                                response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                                
                                 await discord.TextChannel.delete(private_channel, reason=None)
                             else:
-                                response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                                
                                 await private_channel.send(f"You fled the battle...")
                             return
                         if button_ctx.custom_id == "1":
@@ -22822,7 +21666,7 @@ class CrownUnlimited(commands.Cog):
                                 await private_channel.send(embed=embedVar)
                                 turn=0
                     except asyncio.TimeoutError:
-                        db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                        
                         await private_channel.send(f"{ctx.author.mention} {m.STORY_ENDED}")
                         if private_channel.guild:
                             await discord.TextChannel.delete(private_channel, reason=None)
@@ -23984,7 +22828,7 @@ class CrownUnlimited(commands.Cog):
                         # calculate data based on selected move
                         if button_ctx.custom_id == "q" or button_ctx.custom_id == "Q" :
                             c_health=0
-                            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                            
                             if private_channel.guild:
                                 await private_channel.send(f"{user2.mention} has fled the battle...")
                                 await discord.TextChannel.delete(private_channel, reason=None)
@@ -24497,7 +23341,7 @@ class CrownUnlimited(commands.Cog):
                                 await button_ctx.send(embed=embedVar)
                                 turn=2
                     except asyncio.TimeoutError:
-                        db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                        
                         await private_channel.send(f"{ctx.author.mention} {m.STORY_ENDED}")
                         if private_channel.guild:
                             await discord.TextChannel.delete(private_channel, reason=None)
@@ -25416,7 +24260,7 @@ class CrownUnlimited(commands.Cog):
             m_playtime = int(wintime[14:16])
             s_playtime = int(wintime[17:19])
             gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
-            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+            
             embedVar = discord.Embed(title=f":zap: **{t_card}** Wins...", description=f"Match concluded in {turn_total} turns!\n{t_wins}", colour=0x1abc9c)
             embedVar.set_author(name=f"{o_card} says:\n{o_lose_description}", icon_url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236432/PCG%20LOGOS%20AND%20RESOURCES/PCGBot_1.png")
             if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
@@ -25458,7 +24302,7 @@ class CrownUnlimited(commands.Cog):
             cardlogger = await cardlevel(o_card, ouser, o_universe, selected_universe, "Tales")
             cpetlogger = await petlevel(cpet_name, user)
             ccardlogger = await cardlevel(c_card, user, c_universe, selected_universe, "Tales")
-            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+            
             response = db.updateUserNoFilter({'DISNAME': str(user)}, {'$set': {'AVAILABLE': True}})
             embedVar = discord.Embed(title=f":zap: **{o_card}** and **{c_card}**defeated the {t_universe} Boss {t_card}!", description=f"Match concluded in {turn_total} turns!\n\n{drop_response} + :coin: 50!\n\n{c_user['NAME']} got :coin:50!\n{t_concede}", colour=0xe91e63)
             if crestsearch:
@@ -25493,9 +24337,16 @@ class CrownUnlimited(commands.Cog):
     @cog_ext.cog_slash(description="Dungeon! Available for Tales you beat", guild_ids=main.guild_ids)
     async def dungeon(self, ctx: SlashContext):
         private_channel = ctx
+        mode = "Dungeon"
         if isinstance(private_channel.channel, discord.channel.DMChannel):
             await private_channel.send(m.SERVER_FUNCTION_ONLY)
             return
+
+        channel_exists_response = existing_channel_check(self, ctx)
+        if channel_exists_response:
+            await private_channel.send(m.ALREADY_IN_TALES)
+            return
+
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
         oteam = sowner['TEAM']
         ofam = sowner['FAMILY']
@@ -25512,12 +24363,6 @@ class CrownUnlimited(commands.Cog):
                     crestlist = oguild['CREST']
                     crestsearch=True
 
-        if sowner['AVAILABLE']:
-            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': False}})
-        else:
-            await private_channel.send(m.ALREADY_IN_TALES)
-            return
-
         completed_dungeons = sowner['DUNGEONS']
         completed_crown_tales = sowner['CROWN_TALES']
         all_universes = db.queryAllUniverse()
@@ -25529,7 +24374,7 @@ class CrownUnlimited(commands.Cog):
 
         if not available_universes:
             await private_channel.send("No available Dungeons for you at this time!")
-            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+            
             return
         embedVar = discord.Embed(title=f":fire: Select A Dungeon", description="\n".join(available_universes), colour=0xe91e63)
         embedVar.set_footer(text="Type Quit to exit Dungeon selection")
@@ -25551,7 +24396,7 @@ class CrownUnlimited(commands.Cog):
 
             if msg.content == "Quit":
                 await private_channel.send("Quit Dungeon selection. ")
-                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                
                 return
 
             #Universe Cost
@@ -25566,7 +24411,7 @@ class CrownUnlimited(commands.Cog):
                     entrance_fee = entrance_fee * universe_tier
                     if balance <= entrance_fee:
                             await private_channel.send(f"Tier {universe_tier} Dungeons require an :coin: {'{:,}'.format(entrance_fee)} entrance fee!", delete_after=5)
-                            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                            
                             return
                     else:
                         await curse(entrance_fee, str(ctx.author))
@@ -25586,7 +24431,7 @@ class CrownUnlimited(commands.Cog):
                 await ctx.send(f"{ctx.author.mention} private channel has been opened for you. Good luck!")
             
         except:
-            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+            
             embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", colour=0xe91e63)
             await private_channel.send(embed=embedVar)
             return
@@ -25599,7 +24444,7 @@ class CrownUnlimited(commands.Cog):
         universe = db.queryUniverse({'TITLE': str(selected_universe)})
 
         if not universe['CROWN_TALES']:
-            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+            
             await ctx.author.send(f"{selected_universe} is not ready to be explored! Check back later!")
             if private_channel.guild:
                 await discord.TextChannel.delete(private_channel, reason=None)
@@ -25631,703 +24476,97 @@ class CrownUnlimited(commands.Cog):
             t = db.queryCard({'NAME': legends[currentopponent]})
             ttitle = db.queryTitle({'TITLE': universe['DTITLE']})
 
-            ####################################################################
-            # Player Data
-
-
-
-            # Player 1 Data
-            o_user = sowner
-            oarm = db.queryArm({'ARM': o_user['ARM']})
-            oarm_universe=oarm['UNIVERSE']
-            oarm_passive = oarm['ABILITIES'][0]
-            oarm_name=oarm['ARM']
-
-            vault = db.queryVault({'OWNER': str(ctx.author) , 'PETS.NAME': o_user['PET']})
-            opet = {}
-            for pet in vault['PETS']:
-                if o_user['PET'] == pet['NAME']:
-                    opet = pet
-
-            opet_passive_type = opet['TYPE']
-            opet_name = opet['NAME']
-            opet_image = opet['PATH']
-            opet_exp = opet['EXP']
-            opet_lvl = opet['LVL']
-            opet_bond = opet['BOND']
+            stats = await build_player_stats(self, ctx, sowner, o, otitle, t, ttitle, mode, universe, currentopponent, None, None, None, None)  
             
+            o_card = stats['o_card']
+            o_card_path = stats['o_card_path']
+            oarm = stats['oarm']
+            o_user = stats['o_user']
+            o_universe = stats['o_universe']
+            o_attack = stats['o_attack']
+            o_defense = stats['o_defense']
+            o_stamina = stats['o_stamina']
+            o_max_stamina = stats['o_max_stamina']
+            o_health = stats['o_health']
+            o_max_health = stats['o_max_health']
+            o_DID = stats['o_DID']
+            o_chainsaw = stats['o_chainsaw']
+            o_atk_chainsaw = stats['o_atk_chainsaw']
+            o_def_chainsaw = stats['o_def_chainsaw']
+            omove1_text = stats['omove1_text']
+            omove2_text = stats['omove2_text']
+            omove3_text = stats['omove3_text']
+            omove_enhanced_text = stats['omove_enhanced_text']
+            o_enhancer_used = stats['o_enhancer_used']
+            o_1 = stats['o_1']
+            o_2 = stats['o_2']
+            o_3 = stats['o_3']
+            o_gif = stats['o_gif']
+            o_enhancer = stats['o_enhancer']
+            o_vul = stats['o_vul']
+            o_accuracy = stats['o_accuracy']
+            o_speed = stats['o_speed']
+            o_special_move_description = stats['o_special_move_description']
+            o_greeting_description = stats['o_greeting_description']
+            o_focus_description = stats['o_focus_description']
+            o_resolve_description = stats['o_resolve_description']
+            o_special_move_description = stats['o_special_move_description']
+            o_win_description = stats['o_win_description']
+            o_lose_description = stats['o_lose_description']
+            ocard_lvl_ap_buff = stats['ocard_lvl_ap_buff']
+            opet_name = stats['opet_name']
+            opet_move = stats['opet_move']
+            opetmove_text = stats['opetmove_text']
+            opet_image = stats['opet_image']
+            o_pet_used = stats['o_pet_used']
+            user1 = stats['user1']
+            o_focus = stats['o_focus']
+            o_used_focus = stats['o_used_focus']
+            o_resolve = stats['o_resolve']
+            o_used_resolve = stats['o_used_resolve']
+            o_block_used = stats['o_block_used']
+            o_defend_used = stats['o_defend_used']
+            o_final_stand = stats['o_final_stand']
 
-            o_DID = o_user['DID']
-            o_card = o['NAME']
+            t_card = stats['t_card']
+            t_universe = stats['t_universe']
+            t_attack = stats['t_attack']
+            t_defense = stats['t_defense']
+            t_health = stats['t_health']
+            t_max_health = stats['t_max_health']
+            t_chainsaw = stats['t_chainsaw']
+            t_atk_chainsaw = stats['t_atk_chainsaw']
+            t_def_chainsaw = stats['t_def_chainsaw']
+            t_stamina = stats['t_stamina']
+            t_max_stamina = stats['t_max_stamina']
+            t_1 = stats['t_1']
+            t_2 = stats['t_2']
+            t_3 = stats['t_3']
+            t_enhancer = stats['t_enhancer']
+            t_enhancer_used = stats['t_enhancer_used']
+            t_vul = stats['t_vul']
+            t_accuracy = stats['t_accuracy']
+            t_speed = stats['t_speed']
+            t_special_move_description = stats['t_special_move_description']
+            t_gif = stats['t_gif']
+            t_greeting_description = stats['t_greeting_description']
+            t_focus_description = stats['t_focus_description']
+            t_resolve_description = stats['t_resolve_description']
+            t_special_move_description = stats['t_special_move_description']
+            t_win_description = stats['t_win_description']
+            t_lose_description = stats['t_lose_description']
+            t_focus = stats['t_focus']
+            t_used_focus = stats['t_used_focus']
+            t_resolve = stats['t_resolve']
+            t_used_resolve = stats['t_used_resolve']
+            t_final_stand = stats['t_final_stand']
+            tcard_lvl_ap_buff = stats['tcard_lvl_ap_buff']
+            tpet_move = stats['tpet_move']
+            tpet_name = stats['tpet_name']
+            tpet_image = stats['tpet_image']
+            t_pet_used = stats['t_pet_used']
+            tpetmove_text = stats['tpetmove_text']
 
-
-            ocard_lvl = 0
-            ocard_tier = 0
-            ocard_exp = 0
-            ocard_lvl_attack_buff = 0
-            ocard_lvl_defense_buff = 0
-            ocard_lvl_ap_buff = 0
-            ocard_lvl_hlt_buff = 0
-
-
-            for x in vault['CARD_LEVELS']:
-                if x['CARD'] == o_card:
-                    ocard_lvl = x['LVL']
-                    ocard_tier = x['TIER']
-                    ocard_exp = x['EXP']
-                    ocard_lvl_ap_buff = x['AP']
-                    ocard_lvl_attack_buff = x['ATK']
-                    ocard_lvl_defense_buff = x['DEF']
-                    ocard_lvl_hlt_buff = x['HLT']
-
-
-            o_gif = o['GIF']
-            o_destiny = o['HAS_COLLECTION']
-            o_card_path=o['PATH']
-            o_rcard_path=o['RPATH']
-            
-            o_health = o['HLT'] + ocard_lvl_hlt_buff
-            o_max_health = o['HLT'] + ocard_lvl_hlt_buff
-            o_stamina = o['STAM']
-            o_max_stamina = o['STAM']
-            o_moveset = o['MOVESET']
-            o_attack = o['ATK'] + ocard_lvl_attack_buff
-            o_defense = o['DEF'] + ocard_lvl_defense_buff
-            o_type = o['TYPE']
-            o_accuracy = o['ACC']
-            o_passive = o['PASS'][0]
-            o_speed = o['SPD']
-            o_universe = o['UNIVERSE']
-            o_title_universe = otitle['UNIVERSE']
-            o_title_passive = otitle['ABILITIES'][0]
-            o_vul = False
-            user1 = await self.bot.fetch_user(o_DID)
-            o_title_passive_bool = False
-            o_descriptions = []
-            if o['DESCRIPTIONS']:
-                o_descriptions = o['DESCRIPTIONS']
-                o_greeting_description = o_descriptions[0]
-                o_focus_description =  o_descriptions[1]
-                o_resolve_description = o_descriptions[2]
-                o_special_move_description = o_descriptions[3]
-                o_win_description = o_descriptions[4]
-                o_lose_description = o_descriptions[5]
-            else:
-                o_greeting_description = "Are you ready to battle!"
-                o_focus_description =  "I still have more in the tank!"
-                o_resolve_description = "Power up!"
-                o_special_move_description = "Take this!"
-                o_win_description = "Too easy. Come back when you're truly prepared."
-                o_lose_description = "I can't believe I lost..."
-
-
-
-            # Player 2 Data
-            t_user = boss
-            tarm = db.queryArm({'ARM': universe['DARM']})
-            tarm_universe = tarm['UNIVERSE']
-            t_destiny = t['HAS_COLLECTION']
-            tpet = db.queryPet({'PET': universe['DPET']})
-            tpet_passive = tpet['ABILITIES'][0]
-            tpet_name = tpet['PET']
-            tpet_image =tpet['PATH']
-            tarm_passive = tarm['ABILITIES'][0]
-            tarm_name=tarm['ARM']
-            t_card = t['NAME']
-            tcard_lvl_ap_buff = 0
-            t_gif = t['GIF']
-            t_card_path=t['PATH']
-            t_rcard_path=t['RPATH']
-            t_health = t['HLT'] + (25 * currentopponent) + 180
-            t_stamina = t['STAM']
-            t_max_stamina= t['STAM']
-            t_moveset = t['MOVESET']
-            t_attack = t['ATK'] + (5 * currentopponent) + 10
-            t_defense = t['DEF'] + (7 * currentopponent) + 12
-            t_type = t['TYPE']
-            t_accuracy = t['ACC']
-            t_passive = t['PASS'][0]
-            t_speed = t['SPD']
-            t_universe = t['UNIVERSE']
-            t_title_universe = ttitle['UNIVERSE']
-            t_title_passive = ttitle['ABILITIES'][0]
-            t_vul = False
-            #user2 = await self.bot.fetch_user(t_DID)
-            t_title_passive_bool = False
-            if t['DESCRIPTIONS']:
-                t_descriptions = t['DESCRIPTIONS']
-                t_greeting_description = t_descriptions[0]
-                t_focus_description =  t_descriptions[1]
-                t_resolve_description = t_descriptions[2]
-                t_special_move_description = t_descriptions[3]
-                t_win_description = t_descriptions[4]
-                t_lose_description = t_descriptions[5]
-            else:
-                t_greeting_description = "Are you ready to battle!"
-                t_focus_description =  "I still have more in the tank!"
-                t_resolve_description = "Power up!"
-                t_special_move_description = "Take this!"
-                t_win_description = "Too easy. Come back when you're truly prepared."
-                t_lose_description = "I can't believe I lost..."
-
-            if o['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= o['HLT']: # Demon Slayer Universal Trait
-                o_max_health = t['HLT'] - (10 * currentopponent)
-                o_health = t['HLT'] - (10 * currentopponent)
-            else:                    
-                o_max_health = o['HLT'] - (10 * currentopponent) + ocard_lvl_hlt_buff
-
-            if t['UNIVERSE'] == "Demon Slayer" and o_max_health >= t['HLT']: #Demon Slayer Universal Trait
-                t_max_health = o_max_health + (25 * currentopponent) + 180
-                t_health = o_max_health + (25 * currentopponent) + 180
-            else:                    
-                t_max_health = t['HLT'] + (25 * currentopponent) + 180
-
-
-            #DBZ traits
-            o_final_stand=False
-            t_final_stand=False
-            if o['UNIVERSE'] == "Dragon Ball Z":
-                o_final_stand=True
-            if t['UNIVERSE'] == "Dragon Ball Z":
-                t_final_stand=True
-            if o_card == "Ash Ketchum" and t_universe == "Johto Region":
-                o_health = round(o_health + 150)
-                o_attack = round(o_attack + 50)
-                o_defense = round(o_defense + 50)
-            elif o_card == "Ash Ketchum" and t_universe == "Hoenn Region":
-                o_health = round(o_health + 200)
-                o_attack = round(o_attack + 75)
-                o_defense = round(o_defense + 75)
-            elif o_card == "Ash Ketchum" and t_universe == "Sinnoh Region":
-                o_health = round(o_health + 300)
-                o_attack = round(o_attack + 100)
-                o_defense = round(o_defense + 100)
-            ################################################################################
-
-            if (oarm_universe == o_universe) and (o_title_universe == o_universe):
-                o_attack = o_attack + 20
-                o_defense = o_defense + 20
-                o_max_health = o_max_health + 100
-                o_health = o_health + 100
-                if o_destiny:
-                    o_attack = o_attack + 5
-                    o_defense = o_defense + 5
-                    o_max_health = o_max_health + 50
-                    o_health = o_health + 50
-            
-            if (tarm_universe == t_universe) and (t_title_universe == t_universe):
-                t_attack = t_attack + 20
-                t_defense = t_defense + 20
-                t_max_health = t_max_health + 100
-                t_health = t_health + 100
-                if t_destiny:
-                    t_attack = t_attack + 5
-                    t_defense = t_defense + 5
-                    t_max_health = t_max_health + 50
-                    t_health = t_health + 50
-
-            # Player 1 Passive Config
-            if (o_universe == o_title_universe) or (o_title_universe == "Unbound"):
-                o_title_passive_bool = True
-
-            # Player 1 Focus & Resolve
-            o_focus = 90
-            o_used_focus=False
-            o_resolve = 60
-            o_used_resolve=False
-
-            # Player 1 Moves
-            o_1 = o_moveset[0]
-            o_2 = o_moveset[1]
-            o_3 = o_moveset[2]
-            o_enhancer = o_moveset[3]
-            o_enhancer_used=False
-            o_pet_used=False
-            o_block_used=False
-            o_chainsaw=False
-            o_def_chainsaw=False
-            o_atk_chainsaw=False
-            if o_universe == "Chainsawman":
-                o_chainsaw=True
-
-            omove1_text = list(o_1.keys())[0]
-            omove2_text = list(o_2.keys())[0]
-            omove3_text = list(o_3.keys())[0]
-            omove_enhanced_text = list(o_enhancer.keys())[0]
-
-            opetmove_text= list(opet.keys())[3] # Name of the ability
-            opetmove_ap= (opet_bond * opet_lvl) + list(opet.values())[3] # Ability Power
-
-            opet_move = {str(opetmove_text): int(opetmove_ap), 'STAM': 15, 'TYPE': str(opet_passive_type)}
-
-            tpetmove_text = list(tpet_passive.keys())[0]
-            tpetmove_ap = list(tpet_passive.values())[0]
-            tpetmove_type = list(tpet_passive.values())[1]
-            tpet_move = {str(tpetmove_text):int(tpetmove_ap), 'STAM': 15, 'TYPE':tpetmove_type}
-
-            # Player 1 Card Passive
-            o_card_passive_type = list(o_passive.values())[1]
-            o_card_passive = list(o_passive.values())[0]
-
-            if o_card_passive_type == 'ATK':
-                o_attack = o_attack + int(o_card_passive)
-            elif o_card_passive_type == 'DEF':
-                o_defense = o_defense + int(o_card_passive)
-            elif o_card_passive_type == 'STAM':
-                o_stamina = o_stamina + int(o_card_passive)
-            elif o_card_passive_type == 'HLT':
-                o_max_health = o_max_health + int(o_card_passive)
-                o_health = o_health + int(o_card_passive)
-            elif o_card_passive_type == 'LIFE':
-                o_max_health = o_max_health + int((o_card_passive/100) * t_health)
-            elif o_card_passive_type == 'DRAIN':
-                o_stamina = o_stamina + int(o_card_passive)
-                t_stamina = t_stamina - int(o_card_passive)
-            elif o_card_passive_type == 'FLOG':
-                o_attack = o_attack + int((o_card_passive/100) *t_attack)
-                t_attack = t_attack - int((o_card_passive/100) *t_attack)
-            elif o_card_passive_type == 'WITHER':
-                o_defense = o_defense + int((o_card_passive/100) *t_defense)
-                t_defense = t_defense - int((o_card_passive/100) *t_defense)
-            elif o_card_passive_type == 'RAGE':
-                o_attack = o_attack + int(((o_card_passive/100) * o_defense))
-                o_defense = o_defense - int(((o_card_passive/100) *o_attack))
-            elif o_card_passive_type == 'BRACE':            
-                o_defense = o_defense + int(((o_card_passive/100) *o_attack))
-                o_attack = o_attack - int(((o_card_passive/100) * o_defense))
-            elif o_card_passive_type == 'BZRK':            
-                o_attack = o_attack + int(((o_card_passive/100) *o_health))
-                o_health = o_health - int((o_attack))
-            elif o_card_passive_type == 'CRYSTAL':            
-                o_defense = o_defense + int(((o_card_passive/100) *o_health))
-                o_health = o_health - int((o_defense))
-            elif o_card_passive_type == 'GROWTH':            
-                o_attack = o_attack + int(((o_card_passive/100) * o_attack))
-                o_defense = o_defense + int(((o_card_passive/100) * o_defense))
-                o_max_health = o_max_health - int(((o_card_passive/100) * o_max_health))
-                o_health = o_health - int(((o_card_passive/100) * o_max_health))
-            elif o_card_passive_type == 'STANCE':
-                tempattack = o_attack + o_card_passive
-                o_attack = o_defense  + o_card_passive          
-                o_defense = tempattack
-            elif o_card_passive_type == 'CONFUSE':
-                tempattack = t_attack - o_card_passive
-                t_attack = t_defense  - o_card_passive          
-                t_defense = tempattack
-            elif o_card_passive_type == 'BLINK':
-                o_stamina = o_stamina - o_card_passive         
-                t_stamina = t_stamina + o_card_passive - 10
-            elif o_card_passive_type == 'SLOW':
-                tempstam = t_stamina + o_card_passive 
-                o_stamina = o_stamina - (2 * o_card_passive)      
-                t_stamina = o_stamina
-                o_stamina = tempstam  
-            elif o_card_passive_type == 'HASTE':
-                tempstam = t_stamina - o_card_passive    
-                o_stamina = o_stamina + (2 * o_card_passive)      
-                t_stamina = o_stamina 
-                o_stamina = tempstam  
-            elif o_card_passive_type == 'SOULCHAIN':
-                o_stamina = o_card_passive
-                t_stamina = o_card_passive
-            elif o_card_passive_type == 'FEAR':
-                o_health = o_health - int((o_card_passive/100) * o_health)
-                t_attack = t_attack - int((o_card_passive/100) * t_attack)
-                t_defense = t_defense - int((o_card_passive/100) * t_defense)
-            elif o_card_passive_type == 'GAMBLE':
-                o_health = o_card_passive
-                t_health = o_card_passive * 2           
-
-            # Title Passive
-            o_title_passive_type = list(o_title_passive.keys())[0]
-            o_title_passive_value = list(o_title_passive.values())[0]
-
-            if o_title_passive_bool:
-                if o_title_passive_type == 'ATK':
-                    o_attack = o_attack + int(o_title_passive_value)
-                elif o_title_passive_type == 'DEF':
-                    o_defense = o_defense + int(o_title_passive_value)
-                elif o_title_passive_type == 'STAM':
-                    o_stamina = o_stamina + int(o_title_passive_value)
-                elif o_title_passive_type == 'HLT':
-                    o_max_health = o_max_health + int(o_title_passive_value)
-                    o_health = o_health + int(o_title_passive_value)
-                elif o_title_passive_type == 'LIFE':
-                    _max_health = o_max_health + int((o_title_passive_value/100) * t_health)
-                elif o_title_passive_type == 'DRAIN':
-                    t_stamina = t_stamina - int(o_title_passive_value)
-                    o_stamina = o_stamina + int(o_title_passive_value)
-                elif o_title_passive_type == 'FLOG':
-                    o_attack = o_attack + int((o_title_passive_value/100) *t_attack)
-                    t_attack = t_attack - int((o_title_passive_value/100) *t_attack)
-                elif o_title_passive_type == 'WITHER':
-                    o_defense = o_defense + int((o_title_passive_value/100) *t_defense)
-                    t_defense = t_defense - int((o_title_passive_value/100) *t_defense)
-                elif o_title_passive_type == 'RAGE':
-                    o_attack = o_attack + int(((o_title_passive_value/100) * o_defense))
-                    o_defense = o_defense - int(((o_title_passive_value/100) *o_attack))
-                elif o_title_passive_type == 'BRACE':            
-                    o_defense = o_defense + int(((o_title_passive_value/100) *o_attack))
-                    o_attack = o_attack - int(((o_title_passive_value/100) * o_defense))
-                elif o_title_passive_type == 'BZRK':            
-                    o_attack = o_attack + int(((o_title_passive_value/100) *o_health))
-                    o_health = o_health - int((o_attack))
-                elif o_title_passive_type == 'CRYSTAL':            
-                    o_defense = o_defense + int(((o_title_passive_value/100) * o_health))
-                    o_health = o_health - int((o_defense))
-                elif o_title_passive_type == 'GROWTH':            
-                    o_attack = o_attack + int((o_title_passive_value/100) * o_attack)
-                    o_defense = o_defense + int((o_title_passive_value/100) * o_defense)
-                    o_max_health = o_max_health - int((o_title_passive_value/100) * o_max_health) 
-                elif o_title_passive_type == 'STANCE':
-                    tempattack = o_attack
-                    o_attack = o_defense            
-                    o_defense = tempattack
-                elif o_title_passive_type == 'CONFUSE':
-                    tempattack = t_attack
-                    t_attack = t_defense            
-                    t_defense = tempattack
-                elif o_title_passive_type == 'BLINK':
-                    o_stamina = o_stamina - o_title_passive_value         
-                    t_stamina = t_stamina + o_title_passive_value
-                elif o_title_passive_type == 'SLOW':
-                    tempstam = t_stamina + o_title_passive_value 
-                    o_stamina = o_stamina - o_title_passive_value      
-                    t_stamina = o_stamina
-                    o_stamina = tempstam  
-                elif o_title_passive_type == 'HASTE':
-                    tempstam = t_stamina - o_title_passive_value    
-                    o_stamina = o_stamina + o_title_passive_value      
-                    t_stamina = o_stamina 
-                    o_stamina = tempstam  
-                elif o_title_passive_type == 'SOULCHAIN':
-                    o_stamina = o_title_passive_value
-                    t_stamina = o_title_passive_value
-                elif o_title_passive_type == 'FEAR':
-                    o_health = o_health - int((o_title_passive_value/100) * o_health)
-                    t_attack = t_attack - int((o_title_passive_value/100) * t_attack)
-                    t_defense = t_defense - int((o_title_passive_value/100) * t_defense)
-                elif o_title_passive_type == 'GAMBLE':
-                    t_health = o_title_passive_value * 2
-                    o_health = o_title_passive_value
-
-            # Arm Passive Player 1
-            oarm_passive_type = list(oarm_passive.keys())[0]
-            oarm_passive_value = list(oarm_passive.values())[0]
-
-            if oarm_passive_type == 'ATK':
-                o_attack = o_attack + int(oarm_passive_value)
-            elif oarm_passive_type == 'DEF':
-                o_defense = o_defense + int(oarm_passive_value)
-            elif oarm_passive_type == 'STAM':
-                o_stamina = o_stamina + int(oarm_passive_value)
-            elif oarm_passive_type == 'HLT':
-                o_max_health = o_max_health + int(oarm_passive_value)
-                o_health = o_health + int(oarm_passive_value)
-            elif oarm_passive_type == 'LIFE':
-                o_max_health = o_max_health + int((oarm_passive_value/100) * t_health)
-            elif oarm_passive_type == 'DRAIN':
-                t_stamina = t_stamina - int(oarm_passive_value)
-                o_stamina = o_stamina + int(oarm_passive_value)
-            elif oarm_passive_type == 'FLOG':
-                o_attack = o_attack + int((oarm_passive_value/100) *t_attack)
-                t_attack = t_attack - int((oarm_passive_value/100) *t_attack)
-            elif oarm_passive_type == 'WITHER':
-                o_defense = o_defense + int((oarm_passive_value/100) *t_defense)
-                t_defense = t_defense - int((oarm_passive_value/100) *t_defense)
-            elif oarm_passive_type == 'RAGE':
-                o_attack = o_attack + int(((oarm_passive_value/100) * o_defense))
-                o_defense = o_defense- int(((oarm_passive_value/100) *o_attack))
-            elif oarm_passive_type == 'BRACE':            
-                o_defense = o_defense + int(((oarm_passive_value/100) *o_attack))
-                o_attack = o_attack - int(((oarm_passive_value/100) * o_defense))
-            elif oarm_passive_type == 'BZRK':            
-                o_attack = o_attack + int(((oarm_passive_value/100) *o_health))
-                o_health = o_health - int((o_attack))
-            elif oarm_passive_type == 'CRYSTAL':            
-                o_defense = o_defense + int(((oarm_passive_value/100) * o_health))
-                o_health = o_health - int((o_defense))
-            elif oarm_passive_type == 'GROWTH':            
-                o_attack = o_attack + int((oarm_passive_value/100) * o_attack)
-                o_defense = o_defense + int((oarm_passive_value/100) * o_defense)
-                o_max_health = o_max_health - int((oarm_passive_value/100) * o_max_health)
-            elif oarm_passive_type == 'STANCE':
-                tempattack = o_attack + oarm_passive_value
-                o_attack = o_defense  + oarm_passive_value         
-                o_defense = tempattack
-            elif oarm_passive_type == 'CONFUSE':
-                tempattack = o_attack - oarm_passive_value
-                t_attack = t_defense  - oarm_passive_value           
-                t_defense = tempattack
-            elif oarm_passive_type == 'BLINK':
-                o_stamina = o_stamina - oarm_passive_value         
-                t_stamina = t_stamina + oarm_passive_value
-            elif oarm_passive_type == 'SLOW':
-                tempstam = t_stamina + oarm_passive_value 
-                o_stamina = o_stamina - oarm_passive_value      
-                t_stamina = o_stamina
-                o_stamina = tempstam  
-            elif oarm_passive_type == 'HASTE':
-                tempstam = t_stamina - oarm_passive_value    
-                o_stamina = o_stamina + oarm_passive_value      
-                t_stamina = o_stamina 
-                o_stamina = tempstam  
-            elif oarm_passive_type == 'SOULCHAIN':
-                o_stamina = oarm_passive_value
-                t_stamina = oarm_passive_value
-            elif oarm_passive_type == 'FEAR':
-                o_health = o_health - int((oarm_passive_value/100) * o_health)
-                t_attack = t_attack - int((oarm_passive_value/100) * t_attack)
-                t_defense = t_defense - int((oarm_passive_value/100) * t_defense)
-            elif oarm_passive_type == 'GAMBLE':
-                t_health = oarm_passive_value * 2
-                o_health = oarm_passive_value
-
-            # Arm Passive Player 2
-            tarm_passive_type = list(tarm_passive.keys())[0]
-            tarm_passive_value = list(tarm_passive.values())[0]
-
-            if tarm_passive_type == 'ATK':
-                t_attack = t_attack + int(tarm_passive_value)
-            elif tarm_passive_type == 'DEF':
-                t_defense = t_defense + int(tarm_passive_value)
-            elif tarm_passive_type == 'STAM':
-                t_stamina = t_stamina + int(tarm_passive_value)
-            elif tarm_passive_type == 'HLT':
-                t_max_health = t_max_health + int(tarm_passive_value)
-                t_health = t_health + int(tarm_passive_value)
-            elif tarm_passive_type == 'LIFE':
-                t_max_health = t_max_health + int((tarm_passive_value/100) * o_health)
-            elif tarm_passive_type == 'DRAIN':
-                o_stamina = o_stamina - int(tarm_passive_value)
-                t_stamina = t_stamina + int(tarm_passive_value)
-            elif tarm_passive_type == 'FLOG':
-                t_attack = t_attack + int((tarm_passive_value/100) * o_attack)
-                o_attack = o_attack - int((tarm_passive_value/100) * o_attack)
-            elif tarm_passive_type == 'WITHER':
-                t_defense = t_defense + int((tarm_passive_value/100) *o_defense)
-                o_defense = o_defense - int((tarm_passive_value/100) *o_defense)
-            elif tarm_passive_type == 'RAGE':
-                t_attack = t_attack + int((tarm_passive_value/100) * t_defense)
-                t_defense = t_defense - int((tarm_passive_value/100) *t_attack)
-            elif tarm_passive_type == 'BRACE':            
-                t_defense = t_defense + int((tarm_passive_value/100) *t_attack)
-                t_attack = t_attack - int((tarm_passive_value/100) * t_defense)
-            elif tarm_passive_type == 'BZRK':            
-                t_attack = t_attack + int((tarm_passive_value/100)* t_health)
-                t_health = t_health - int((t_attack))
-            elif tarm_passive_type == 'CRYSTAL':            
-                t_defense = t_defense + int((tarm_passive_value/100) *t_health)
-                t_health = t_health - int(t_defense)
-            elif tarm_passive_type == 'GROWTH':            
-                t_attack = t_attack + int((tarm_passive_value/100) * t_attack)
-                t_defense = t_defense + int((tarm_passive_value/100) * t_defense)
-                t_max_health = t_max_health - int(((tarm_passive_value/100) * t_max_health))
-            elif tarm_passive_type == 'STANCE':
-                tempattack = t_attack + tarm_passive_value
-                t_attack = t_defense  + tarm_passive_value         
-                t_defense = tempattack
-            elif tarm_passive_type == 'CONFUSE':
-                tempattack = o_attack - tarm_passive_value
-                o_attack = o_defense  - tarm_passive_value           
-                o_defense = tempattack
-            elif tarm_passive_type == 'BLINK':
-                t_stamina = t_stamina - tarm_passive_value         
-                o_stamina = o_stamina + tarm_passive_value
-            elif tarm_passive_type == 'SLOW':
-                tempstam = o_stamina + tarm_passive_value 
-                t_stamina = t_stamina - tarm_passive_value      
-                o_stamina = t_stamina
-                t_stamina = tempstam  
-            elif tarm_passive_type == 'HASTE':
-                tempstam = o_stamina - tarm_passive_value    
-                t_stamina = t_stamina + tarm_passive_value      
-                o_stamina = t_stamina 
-                t_stamina = tempstam  
-            elif tarm_passive_type == 'SOULCHAIN':
-                t_stamina = tarm_passive_value
-                o_stamina = tarm_passive_value
-            elif tarm_passive_type == 'FEAR':
-                t_health = t_health - int((tarm_passive_value/100) * t_health)
-                o_attack = o_attack - int((tarm_passive_value/100) * o_attack)
-                o_defense = o_defense - int((tarm_passive_value/100) * o_defense)
-            elif tarm_passive_type == 'GAMBLE':
-                t_health = tarm_passive_value * 2
-                o_health = tarm_passive_value
-
-            
-
-
-            # Player 2 Passive Config
-            if (t_universe == t_title_universe) or (t_title_universe == "Unbound"):
-                t_title_passive_bool = True
-            
-            # Player 1 Card Passive
-            t_card_passive_type = list(t_passive.values())[1]
-            t_card_passive = list(t_passive.values())[0]
-
-            if t_card_passive_type == 'ATK':
-                t_attack = t_attack + int(t_card_passive)
-            elif t_card_passive_type == 'DEF':
-                t_defense = t_defense + int(t_card_passive)
-            elif t_card_passive_type == 'STAM':
-                t_stamina = t_stamina + int(t_card_passive)
-            elif t_card_passive_type == 'HLT':
-                t_max_health = t_max_health + int(t_card_passive)
-                t_health = t_health + int(t_card_passive)
-            elif t_card_passive_type == 'LIFE':
-                t_max_health = t_max_health + int((t_card_passive/100) * o_health)
-            elif t_card_passive_type == 'DRAIN':
-                o_stamina = o_stamina - int(t_card_passive)
-                t_stamina = t_stamina + int(t_card_passive)
-            elif t_card_passive_type == 'FLOG':
-                t_attack = t_attack + int((t_card_passive/100) * o_attack)
-                o_attack = o_attack - int((t_card_passive/100) * o_attack)
-            elif t_card_passive_type == 'WITHER':
-                t_defense = t_defense + int((t_card_passive/100) *o_defense)
-                o_defense = o_defense - int((t_card_passive/100) *o_defense)
-            elif t_card_passive_type == 'RAGE':
-                t_attack = t_attack + int((t_card_passive/100) * t_defense)
-                t_defense = t_defense - int((t_card_passive/100) *t_attack)
-            elif t_card_passive_type == 'BRACE':            
-                t_defense = t_defense + int((t_card_passive/100) *t_attack)
-                t_attack = t_attack - int((t_card_passive/100) * t_defense)
-            elif t_card_passive_type == 'BZRK':            
-                t_attack = t_attack + int(((t_card_passive/100)* t_health))
-                t_health = t_health - int((t_attack))
-            elif t_card_passive_type == 'CRYSTAL':            
-                t_defense = t_defense + int((t_card_passive/100) *t_health)
-                t_health = t_health - int(t_defense)
-            elif t_card_passive_type == 'GROWTH':            
-                t_attack =  t_attack + int((t_card_passive/100) * t_attack)
-                t_defense = t_defense + int((t_card_passive/100) * t_defense)
-                t_max_health = t_max_health - int(((t_card_passive/100) * t_max_health))
-                t_health = t_health - int(((t_card_passive/100) * t_health ))
-            elif t_card_passive_type == 'STANCE':
-                tempattack = t_attack + t_card_passive
-                t_attack = t_defense + t_card_passive            
-                t_defense = tempattack
-            elif t_card_passive_type == 'CONFUSE':
-                tempattack = o_attack - t_card_passive
-                o_attack = o_defense  - t_card_passive          
-                o_defense = tempattack
-            elif t_card_passive_type == 'BLINK':
-                t_stamina = t_stamina - t_card_passive         
-                o_stamina = o_stamina + t_card_passive - 10
-            elif t_card_passive_type == 'SLOW':
-                tempstam = o_stamina + t_card_passive 
-                t_stamina = t_stamina - (2 * t_card_passive)     
-                o_stamina = t_stamina
-                t_stamina = tempstam  
-            elif t_card_passive_type == 'HASTE':
-                tempstam = o_stamina - t_card_passive    
-                t_stamina = t_stamina + (2 * t_card_passive)      
-                o_stamina = t_stamina 
-                t_stamina = tempstam  
-            elif t_card_passive_type == 'SOULCHAIN':
-                t_stamina = t_card_passive
-                o_stamina = t_card_passive
-            elif t_card_passive_type == 'FEAR':
-                t_health = t_health - int((t_card_passive/100) * t_health)
-                o_attack = o_attack - int((t_card_passive/100) * o_attack)
-                o_defense = o_defense - int((t_card_passive/100) * o_defense)
-            elif t_card_passive_type == 'GAMBLE':
-                t_health = t_card_passive * 2
-                o_health = t_card_passive
-
-            # Title Passive
-            t_title_passive_type = list(t_title_passive.keys())[0]
-            t_title_passive_value = list(t_title_passive.values())[0]
-
-            if t_title_passive_bool:
-                if t_title_passive_type == 'ATK':
-                    t_attack = t_attack + int(t_title_passive_value)
-                elif t_title_passive_type == 'DEF':
-                    t_defense = t_defense + int(t_title_passive_value)
-                elif t_title_passive_type == 'STAM':
-                    t_stamina = t_stamina + int(t_title_passive_value)
-                elif t_title_passive_type == 'HLT':
-                    t_max_health = t_max_health + int(t_title_passive_value)
-                    t_health = t_health + int(t_title_passive_value)
-                elif t_title_passive_type == 'LIFE':
-                    t_max_health = t_max_health + int((t_title_passive_value/100) * o_health)
-                elif t_title_passive_type == 'DRAIN':
-                    o_stamina = o_stamina - int(t_title_passive_value)
-                    t_stamina = t_stamina + int(t_title_passive_value)
-                elif t_title_passive_type == 'FLOG':
-                    t_attack = t_attack + int((t_title_passive_value/100) * o_attack)
-                    o_attack = o_attack - int((t_title_passive_value/100) * o_attack)
-                elif t_title_passive_type == 'WITHER':
-                    t_defense = t_defense + int((t_title_passive_value/100) *o_defense)
-                    o_defense = o_defense - int((t_title_passive_value/100) *o_defense)
-                elif t_title_passive_type == 'RAGE':
-                    t_attack = t_attack + int(((t_title_passive_value/100) * t_defense))
-                    t_defense = t_defense - int(((t_title_passive_value/100) *t_attack))
-                elif t_title_passive_type == 'BRACE':            
-                    t_defense = t_defense + int(((t_title_passive_value/100) *t_attack))
-                    t_attack = t_attack - int(((t_title_passive_value/100) * t_defense))
-                elif t_title_passive_type == 'BZRK':            
-                    t_attack = t_attack + int(((t_title_passive_value/100)* t_health))
-                    t_health = t_health - int((t_attack))
-                elif t_title_passive_type == 'CRYSTAL':            
-                    t_defense = t_defense + int(((t_title_passive_value/100) *t_health))
-                    t_health = t_health - int(t_defense)
-                elif t_title_passive_type == 'GROWTH':            
-                    tt_attack = t_attack + int(((t_title_passive_value/100) * t_attack))
-                    t_defense = t_defense + int(((t_title_passive_value/100) * t_defense))
-                    t_max_health = t_max_health - int(((t_title_passive_value/100) * t_max_health))
-                elif t_title_passive_type == 'STANCE':
-                    tempattack = t_attack + t_title_passive_value
-                    t_attack = t_defense  + t_title_passive_value          
-                    t_defense = tempattack
-                elif t_title_passive_type == 'CONFUSE':
-                    tempattack = o_attack - t_title_passive_value
-                    o_attack = o_defense  - t_title_passive_value           
-                    o_defense = tempattack
-                elif t_title_passive_type == 'BLINK':
-                    t_stamina = t_stamina - t_title_passive_value         
-                    o_stamina = o_stamina + t_title_passive_value
-                elif t_title_passive_type == 'SLOW':
-                    tempstam = o_stamina + t_title_passive_value 
-                    t_stamina = t_stamina - t_title_passive_value      
-                    o_stamina = t_stamina
-                    t_stamina = tempstam  
-                elif t_title_passive_type == 'HASTE':
-                    tempstam = o_stamina - t_title_passive_value    
-                    t_stamina = t_stamina + t_title_passive_value      
-                    o_stamina = t_stamina 
-                    t_stamina = tempstam  
-                elif t_title_passive_type == 'SOULCHAIN':
-                    t_stamina = t_title_passive_value
-                    o_stamina = t_title_passive_value
-                elif t_title_passive_type == 'FEAR':
-                    t_health = t_health - int((t_title_passive_value/100) * t_health)
-                    o_attack = o_attack - int((t_title_passive_value/100) * o_attack)
-                    o_defense = o_defense - int((t_title_passive_value/100) * o_defense)
-                elif t_title_passive_type == 'GAMBLE':
-                    t_health = t_title_passive_value * 2
-                    o_health = t_title_passive_value
-
-
-            # Player 2 Moves
-            t_1 = t_moveset[0]
-            t_2 = t_moveset[1]
-            t_3 = t_moveset[2]
-            t_enhancer = t_moveset[3]
-            t_enhancer_used=False
-            t_pet_used=False
-
-            # Player 1 Focus & Resolve
-            t_focus = 90
-            t_used_focus=False
-            t_resolve = 60
-            t_used_resolve=False
-            t_chainsaw=False
-            t_def_chainsaw=False
-            t_atk_chainsaw=False
-            if t_universe == "Chainsawman":
-                t_chainsaw=True
-            
             # Turn iterator
             turn = 0
             # Enhance Turn Iterators
@@ -26335,24 +24574,13 @@ class CrownUnlimited(commands.Cog):
             et=0
 
             botActive = True
-                
 
-            # Vulnerability Check
-            if o_type == 0 and t_type == 2:
-                o_vul=True
-            if t_type == 0 and o_type == 2:
-                t_vul=True
             lineup = f"{currentopponent + 1}/{total_legends}"
             options = [1,2,3,4,5,0]
 
             # Count Turns
             turn_total = 0
             
-            #Rebirth Scaling
-            o_attack = o_attack + (o_user['REBIRTH'] * 10)
-            o_defense = o_defense + (o_user['REBIRTH'] * 10)
-
-
             # START TURNS
             while (o_health > 0) and (t_health > 0):
                 #Player 1 Turn Start
@@ -26609,10 +24837,10 @@ class CrownUnlimited(commands.Cog):
                         
                                 if private_channel.guild:
                                     await private_channel.send(f"{ctx.author.mention} has fled the battle...")
-                                    response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                                    
                                     await discord.TextChannel.delete(private_channel, reason=None)
                                 else:
-                                    response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                                    
                                     await private_channel.send(f"You fled the battle...")
                                 return
                             if button_ctx.custom_id == "1":
@@ -27029,7 +25257,7 @@ class CrownUnlimited(commands.Cog):
                                     await button_ctx.send(embed=embedVar)
                                     turn=0
                         except asyncio.TimeoutError:
-                            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                            
                             await private_channel.send(f"{ctx.author.mention} {m.STORY_ENDED}")
                             if private_channel.guild:
                                 await discord.TextChannel.delete(private_channel, reason=None)
@@ -27541,9 +25769,8 @@ class CrownUnlimited(commands.Cog):
                                     elif tpet_type == 'DESTRUCTION':
                                         o_max_health = round(o_max_health - dmg['DMG'])
                                     t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-
                                     embedVar = discord.Embed(title=f"{t_card.upper()} Summoned {tpet_name}", colour=0xe91e63)
-                                    embedVar.add_field(name=f"{tpet_name} used {tpetmove_text}!", value =f"Enhanced {tpet_type}")
+                                    embedVar.add_field(name=f"{tpet_name} used {tpetmove_text}!", value = f"Enhanced {tpet_type}")
                                     embedVar.set_thumbnail(url=tpet_image)
                                     await private_channel.send(embed=embedVar)
                                     turn=1
@@ -27718,7 +25945,7 @@ class CrownUnlimited(commands.Cog):
 
                     if str(reaction.emoji) == '👎':
                         continued = False 
-                        db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                        
                         if private_channel.guild:
                             await discord.TextChannel.delete(private_channel, reason=None)
                         return
@@ -27727,107 +25954,96 @@ class CrownUnlimited(commands.Cog):
                     continued = True
                 except asyncio.TimeoutError:
                     continued = False
-                    response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                    
                     if private_channel.guild:
                         await discord.TextChannel.delete(private_channel, reason=None)
 
             elif t_health <=0 or t_max_health <= 0:
-                
-                uid = o_DID
-                ouser = await self.bot.fetch_user(uid)
-                wintime = time.asctime()
-                h_playtime = int(wintime[11:13])
-                m_playtime = int(wintime[14:16])
-                s_playtime = int(wintime[17:19])
-                gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
-                if o_user['RIFT'] == 1:
-                    response = db.updateUserNoFilter({'DISNAME':str(o_user['DISNAME'])}, {'$set': {'RIFT' : 0}})
-                drop_response = await dungeondrops(ctx.author, selected_universe, currentopponent)
-                teambank = await blessteam(15, oteam)
-                fambank = await blessfamily(15,ofam)
-                questlogger = await quest(ouser, t_card, "Dungeon")
-                destinylogger = await destiny(ouser, t_card, "Dungeon")
-                petlogger = await petlevel(opet_name, ouser)
-                cardlogger = await cardlevel(o_card, ouser, o_universe, selected_universe, "Dungeon")
-                match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']), str(oarm['ARM']), str(selected_universe), "Dungeon", o['EXCLUSIVE'])
-                if destinylogger:
-                    await ctx.author.send(destinylogger)
-                if questlogger:
-                    await ctx.author.send(questlogger)
-                if currentopponent != (total_legends):
-                    if private_channel.guild:
+                try:
+                    uid = o_DID
+                    ouser = await self.bot.fetch_user(uid)
+                    wintime = time.asctime()
+                    h_playtime = int(wintime[11:13])
+                    m_playtime = int(wintime[14:16])
+                    s_playtime = int(wintime[17:19])
+                    gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
+                    if o_user['RIFT'] == 1:
+                        response = db.updateUserNoFilter({'DISNAME':str(o_user['DISNAME'])}, {'$set': {'RIFT' : 0}})
+                    drop_response = await dungeondrops(ctx.author, selected_universe, currentopponent)
+                    teambank = await blessteam(15, oteam)
+                    fambank = await blessfamily(15,ofam)
+                    questlogger = await quest(ouser, t_card, "Dungeon")
+                    destinylogger = await destiny(ouser, t_card, "Dungeon")
+                    petlogger = await petlevel(opet_name, ouser)
+                    cardlogger = await cardlevel(o_card, ouser, o_universe, selected_universe, "Dungeon")
+                    match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']), str(oarm['ARM']), str(selected_universe), "Dungeon", o['EXCLUSIVE'])
+                    if destinylogger:
+                        await ctx.author.send(destinylogger)
+                    if questlogger:
+                        await ctx.author.send(questlogger)
+
+                    if currentopponent != (total_legends):
                         embedVar = discord.Embed(title=f"VICTORY\n**{o_card} says**\n{o_win_description}", description=f"The game lasted {turn_total} rounds.\n\n{drop_response}", colour=0xe91e63)
                         embedVar.set_author(name=f"{t_card} lost!")
                         await private_channel.send(embed=embedVar)
-
-                        emojis = ['👍', '👎']
-                        accept = await private_channel.send(f"{ctx.author.mention} would you like to continue?")
-                        for emoji in emojis:
-                            await accept.add_reaction(emoji)
-
-                        def check(reaction, user):
-                            return user == user1 and ((str(reaction.emoji) == '👍') or (str(reaction.emoji) == '👎'))
-                        try:
-                            reaction, user = await self.bot.wait_for('reaction_add', timeout=45.0, check=check)
-
-                            if str(reaction.emoji) == '👎':
-                                continued = False 
-                                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
-                                if private_channel.guild:
-                                    await discord.TextChannel.delete(private_channel, reason=None)
-                                return
-
-                            currentopponent = currentopponent + 1
-                            continued = True
-                        except asyncio.TimeoutError:
-                            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
-                            await private_channel.send(f"{ctx.author.mention} {m.STORY_ENDED}")
-                            if private_channel.guild:
-                                await discord.TextChannel.delete(private_channel, reason=None)
-                            return
-                    else:
- 
-                        embedVar = discord.Embed(title=f"VICTORY", description=f"{t_card} has been defeated!\n\n{drop_response}", colour=0xe91e63)
-                        embedVar.set_author(name=f"The match lasted {turn_total} rounds.")
-                        embedVar.set_footer(text=f"{o_card} says:\n{o_win_description}")
-                        await ctx.author.send(embed=embedVar)
-
+                        
                         currentopponent = currentopponent + 1
                         continued = True
 
-                if currentopponent == (total_legends):
-                    embedVar = discord.Embed(title=f"UNIVERSE CONQUERED", description=f"Universe {selected_universe} has been conquered\n\n{drop_response}", colour=0xe91e63)
-                    embedVar.set_author(name=f"New Universes have been unlocked to explore!")
-                    if crestsearch:
-                        await movecrest(selected_universe, oguild['GNAME'])
-                        embedVar.add_field(name=f"{selected_universe} CREST CLAIMED!", value=f"{oguild['GNAME']} earned the {selected_universe} **Crest**")
-                    embedVar.add_field(name="Additional Reward", value=f"You earned additional rewards in your vault! Take a look.")
-                    embedVar.set_footer(text="The .shop has been updated with new CARDS, TITLES and ARMS!")
-                    upload_query={'DISNAME': str(ctx.author)}
-                    dungeon_new_upload_query={'$addToSet': {'DUNGEONS': selected_universe}}
-                    r=db.updateUserNoFilter(upload_query, dungeon_new_upload_query)
-                    if selected_universe in completed_dungeons:
-                        await bless(100, ctx.author)
-                        await ctx.author.send(embed=embedVar)
-                        await ctx.author.send(f"You were awarded :coin: 50 for completing the {selected_universe} Dungeon!")
-                        response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
-                    else:
-                        await bless(15000, ctx.author)
-                        await ctx.author.send(embed=embedVar)
-                        response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
-                        await ctx.author.send(f"You were awarded :coin: 15000 for completing the {selected_universe} Dungeon! ")
-                    continued=False
-                    if private_channel.guild:
-                        response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
-                        await discord.TextChannel.delete(private_channel, reason=None)
+                    if currentopponent == (total_legends):
+                        embedVar = discord.Embed(title=f"UNIVERSE CONQUERED", description=f"Universe {selected_universe} has been conquered\n\n{drop_response}", colour=0xe91e63)
+                        embedVar.set_author(name=f"New Universes have been unlocked to explore!")
+                        if crestsearch:
+                            await movecrest(selected_universe, oguild['GNAME'])
+                            embedVar.add_field(name=f"{selected_universe} CREST CLAIMED!", value=f"{oguild['GNAME']} earned the {selected_universe} **Crest**")
+                        embedVar.add_field(name="Additional Reward", value=f"You earned additional rewards in your vault! Take a look.")
+                        embedVar.set_footer(text="The .shop has been updated with new CARDS, TITLES and ARMS!")
+                        upload_query={'DISNAME': str(ctx.author)}
+                        dungeon_new_upload_query={'$addToSet': {'DUNGEONS': selected_universe}}
+                        r=db.updateUserNoFilter(upload_query, dungeon_new_upload_query)
+                        if selected_universe in completed_dungeons:
+                            await bless(100, ctx.author)
+                            await ctx.author.send(embed=embedVar)
+                            await ctx.author.send(f"You were awarded :coin: 50 for completing the {selected_universe} Dungeon!")
+                            
+                        else:
+                            await bless(15000, ctx.author)
+                            await ctx.author.send(embed=embedVar)
+                            
+                            await ctx.author.send(f"You were awarded :coin: 15000 for completing the {selected_universe} Dungeon! ")
+                        continued=False
+                        if private_channel.guild:
+                            
+                            await discord.TextChannel.delete(private_channel, reason=None)
+                except Exception as ex:
+                    trace = []
+                    tb = ex.__traceback__
+                    while tb is not None:
+                        trace.append({
+                            "filename": tb.tb_frame.f_code.co_filename,
+                            "name": tb.tb_frame.f_code.co_name,
+                            "lineno": tb.tb_lineno
+                        })
+                        tb = tb.tb_next
+                    print(str({
+                        'type': type(ex).__name__,
+                        'message': str(ex),
+                        'trace': trace
+                    }))
 
     @cog_ext.cog_slash(description="Enter the Abyss", guild_ids=main.guild_ids)
     async def abyss(self, ctx: SlashContext):
         # await ctx.send("The Abyss has opened. Floors to travel deep into the Abyss are starting to form. Check back later for entry.")
         # return
         private_channel = ctx
+        mode = "Abyss"
         if isinstance(private_channel.channel, discord.channel.DMChannel):
             await private_channel.send(m.SERVER_FUNCTION_ONLY)
+            return
+
+        channel_exists_response = existing_channel_check(self, ctx)
+        if channel_exists_response:
+            await private_channel.send(m.ALREADY_IN_TALES)
             return
 
         try:
@@ -28951,10 +27167,10 @@ class CrownUnlimited(commands.Cog):
                         
                                 if private_channel.guild:
                                     await private_channel.send(f"{ctx.author.mention} has fled the battle...")
-                                    response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                                    
                                     await discord.TextChannel.delete(private_channel, reason=None)
                                 else:
-                                    response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                                    
                                     await private_channel.send(f"You fled the battle...")
                                 return
                             if button_ctx.custom_id == "1":
@@ -29371,7 +27587,7 @@ class CrownUnlimited(commands.Cog):
                                     await button_ctx.send(embed=embedVar)
                                     turn=0
                         except asyncio.TimeoutError:
-                            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                            
                             await private_channel.send(f"{ctx.author.mention} {m.STORY_ENDED}")
                             if private_channel.guild:
                                 await discord.TextChannel.delete(private_channel, reason=None)
@@ -30073,7 +28289,7 @@ class CrownUnlimited(commands.Cog):
 
                     if str(reaction.emoji) == '👎':
                         continued = False 
-                        db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                        
                         if private_channel.guild:
                             await discord.TextChannel.delete(private_channel, reason=None)
                         return
@@ -30082,7 +28298,7 @@ class CrownUnlimited(commands.Cog):
                     continued = True
                 except asyncio.TimeoutError:
                     continued = False
-                    response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                    
                     if private_channel.guild:
                         await discord.TextChannel.delete(private_channel, reason=None)
 
@@ -30097,45 +28313,12 @@ class CrownUnlimited(commands.Cog):
                 gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
 
                 if currentopponent != (total_legends):
-                    if private_channel.guild:
-                        embedVar = discord.Embed(title=f"VICTORY\n**{o_card} says**\n{o_win_description}", description=f"The game lasted {turn_total} rounds.", colour=0xe91e63)
-                        embedVar.set_author(name=f"{t_card} lost!")
-                        await private_channel.send(embed=embedVar)
+                    embedVar = discord.Embed(title=f"VICTORY\n**{o_card} says**\n{o_win_description}", description=f"The game lasted {turn_total} rounds.", colour=0xe91e63)
+                    embedVar.set_author(name=f"{t_card} lost!")
+                    await private_channel.send(embed=embedVar)
 
-                        emojis = ['👍', '👎']
-                        accept = await private_channel.send(f"{ctx.author.mention} would you like to continue?")
-                        for emoji in emojis:
-                            await accept.add_reaction(emoji)
-
-                        def check(reaction, user):
-                            return user == user1 and ((str(reaction.emoji) == '👍') or (str(reaction.emoji) == '👎'))
-                        try:
-                            reaction, user = await self.bot.wait_for('reaction_add', timeout=45.0, check=check)
-
-                            if str(reaction.emoji) == '👎':
-                                continued = False 
-                                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
-                                if private_channel.guild:
-                                    await discord.TextChannel.delete(private_channel, reason=None)
-                                return
-
-                            currentopponent = currentopponent + 1
-                            continued = True
-                        except asyncio.TimeoutError:
-                            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
-                            await private_channel.send(f"{ctx.author.mention} {m.STORY_ENDED}")
-                            if private_channel.guild:
-                                await discord.TextChannel.delete(private_channel, reason=None)
-                            return
-                    else:
- 
-                        embedVar = discord.Embed(title=f"VICTORY", description=f"{t_card} has been defeated!", colour=0xe91e63)
-                        embedVar.set_author(name=f"The match lasted {turn_total} rounds.")
-                        embedVar.set_footer(text=f"{o_card} says:\n{o_win_description}")
-                        await ctx.author.send(embed=embedVar)
-
-                        currentopponent = currentopponent + 1
-                        continued = True
+                    currentopponent = currentopponent + 1
+                    continued = True
 
                 if currentopponent == (total_legends):
                     await bless(1000, ctx.author)
@@ -30145,15 +28328,22 @@ class CrownUnlimited(commands.Cog):
                     continued=False
                     
                     if private_channel.guild:
-                        response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                        
                         await discord.TextChannel.delete(private_channel, reason=None)
 
     @cog_ext.cog_slash(description="Tales! Defeat Tales to unlock Dungeons", guild_ids=main.guild_ids)
     async def tales(self, ctx: SlashContext):
         private_channel = ctx
+        mode = "Tales"
         if isinstance(private_channel.channel, discord.channel.DMChannel):
             await private_channel.send(m.SERVER_FUNCTION_ONLY)
             return
+
+        channel_exists_response = existing_channel_check(self, ctx)
+        if channel_exists_response:
+            await private_channel.send(m.ALREADY_IN_TALES)
+            return
+
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
         oteam = sowner['TEAM']
         ofam = sowner['FAMILY']
@@ -30170,13 +28360,6 @@ class CrownUnlimited(commands.Cog):
                     crestlist = oguild['CREST']
                     crestsearch=True
         
-        
-        if sowner['AVAILABLE']:
-            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': False}})
-        else:
-            await private_channel.send(m.ALREADY_IN_TALES)
-            return
-
         completed_crown_tales = sowner['CROWN_TALES']
         all_universes = db.queryAllUniverse()
         available_universes = []
@@ -30216,7 +28399,6 @@ class CrownUnlimited(commands.Cog):
 
             if msg.content == "Quit":
                 await private_channel.send("Quit Tales selection. ")
-                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                 return
 
             #Universe Cost
@@ -30231,7 +28413,6 @@ class CrownUnlimited(commands.Cog):
                     entrance_fee = entrance_fee * universe_tier
                     if balance <= entrance_fee:
                             await private_channel.send(f"Tier {universe_tier} Tales require an :coin: {'{:,}'.format(entrance_fee)} entrance fee!", delete_after=5)
-                            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
                             return
                     else:
                         await curse(entrance_fee, str(ctx.author))
@@ -30251,7 +28432,6 @@ class CrownUnlimited(commands.Cog):
                 await ctx.send(f"{ctx.author.mention} private channel has been opened for you. Good luck!")
 
         except:
-            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
             embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", colour=0xe91e63)
             await private_channel.send(embed=embedVar)
             return
@@ -30263,25 +28443,13 @@ class CrownUnlimited(commands.Cog):
 
 
         if not universe['CROWN_TALES']:
-            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+            
             await ctx.author.send(f"{selected_universe} is not ready to be explored! Check back later!")
             if private_channel.guild:
                 await discord.TextChannel.delete(private_channel, reason=None)
             return
 
         boss = db.queryBoss({'NAME': str(universe['UNIVERSE_BOSS'])})
-        
-        
-
-        opponent_scaling = 0
-        player_scaling = 0
-
-        if universe['PREREQUISITE']:
-            opponent_scaling = 8
-            player_scaling = 5
-        else:
-            opponent_scaling = 2
-            player_scaling = 1
 
         legends = [x for x in universe['CROWN_TALES']]
         total_legends = len(legends)
@@ -30297,688 +28465,92 @@ class CrownUnlimited(commands.Cog):
             t = db.queryCard({'NAME': legends[currentopponent]})
             ttitle = db.queryTitle({'TITLE': universe['UTITLE']})
 
-            #################################################################### PLAYER DATA
-            # Player 1 Data
-            o_user = sowner
-            oarm = db.queryArm({'ARM': o_user['ARM']})
-            oarm_universe=oarm['UNIVERSE']
-            oarm_passive = oarm['ABILITIES'][0]
-            oarm_name=oarm['ARM']
-
-            vault = db.queryVault({'OWNER': str(ctx.author) , 'PETS.NAME': o_user['PET']})
-            opet = {}
-            for pet in vault['PETS']:
-                if o_user['PET'] == pet['NAME']:
-                    opet = pet
-
-            opet_passive_type = opet['TYPE']
-            opet_name = opet['NAME']
-            opet_image = opet['PATH']
-            opet_exp = opet['EXP']
-            opet_lvl = opet['LVL']
-            opet_bond = opet['BOND']
+            stats = await build_player_stats(self, ctx, sowner, o, otitle, t, ttitle, mode, universe, currentopponent, None, None, None, None)  
             
+            o_card = stats['o_card']
+            o_card_path = stats['o_card_path']
+            oarm = stats['oarm']
+            o_user = stats['o_user']
+            o_universe = stats['o_universe']
+            o_attack = stats['o_attack']
+            o_defense = stats['o_defense']
+            o_stamina = stats['o_stamina']
+            o_max_stamina = stats['o_max_stamina']
+            o_health = stats['o_health']
+            o_max_health = stats['o_max_health']
+            o_DID = stats['o_DID']
+            o_chainsaw = stats['o_chainsaw']
+            o_atk_chainsaw = stats['o_atk_chainsaw']
+            o_def_chainsaw = stats['o_def_chainsaw']
+            omove1_text = stats['omove1_text']
+            omove2_text = stats['omove2_text']
+            omove3_text = stats['omove3_text']
+            omove_enhanced_text = stats['omove_enhanced_text']
+            o_enhancer_used = stats['o_enhancer_used']
+            o_1 = stats['o_1']
+            o_2 = stats['o_2']
+            o_3 = stats['o_3']
+            o_gif = stats['o_gif']
+            o_enhancer = stats['o_enhancer']
+            o_vul = stats['o_vul']
+            o_accuracy = stats['o_accuracy']
+            o_speed = stats['o_speed']
+            o_special_move_description = stats['o_special_move_description']
+            o_greeting_description = stats['o_greeting_description']
+            o_focus_description = stats['o_focus_description']
+            o_resolve_description = stats['o_resolve_description']
+            o_special_move_description = stats['o_special_move_description']
+            o_win_description = stats['o_win_description']
+            o_lose_description = stats['o_lose_description']
+            ocard_lvl_ap_buff = stats['ocard_lvl_ap_buff']
+            opet_name = stats['opet_name']
+            opet_move = stats['opet_move']
+            opetmove_text = stats['opetmove_text']
+            opet_image = stats['opet_image']
+            o_pet_used = stats['o_pet_used']
+            user1 = stats['user1']
+            o_focus = stats['o_focus']
+            o_used_focus = stats['o_used_focus']
+            o_resolve = stats['o_resolve']
+            o_used_resolve = stats['o_used_resolve']
+            o_block_used = stats['o_block_used']
+            o_defend_used = stats['o_defend_used']
+            o_final_stand = stats['o_final_stand']
 
-            o_DID = o_user['DID']
-            o_card = o['NAME']
+            t_card = stats['t_card']
+            t_universe = stats['t_universe']
+            t_attack = stats['t_attack']
+            t_defense = stats['t_defense']
+            t_health = stats['t_health']
+            t_max_health = stats['t_max_health']
+            t_chainsaw = stats['t_chainsaw']
+            t_atk_chainsaw = stats['t_atk_chainsaw']
+            t_def_chainsaw = stats['t_def_chainsaw']
+            t_stamina = stats['t_stamina']
+            t_max_stamina = stats['t_max_stamina']
+            t_1 = stats['t_1']
+            t_2 = stats['t_2']
+            t_3 = stats['t_3']
+            t_enhancer = stats['t_enhancer']
+            t_enhancer_used = stats['t_enhancer_used']
+            t_vul = stats['t_vul']
+            t_accuracy = stats['t_accuracy']
+            t_speed = stats['t_speed']
+            t_special_move_description = stats['t_special_move_description']
+            t_gif = stats['t_gif']
+            t_greeting_description = stats['t_greeting_description']
+            t_focus_description = stats['t_focus_description']
+            t_resolve_description = stats['t_resolve_description']
+            t_special_move_description = stats['t_special_move_description']
+            t_win_description = stats['t_win_description']
+            t_lose_description = stats['t_lose_description']
+            t_focus = stats['t_focus']
+            t_used_focus = stats['t_used_focus']
+            t_resolve = stats['t_resolve']
+            t_used_resolve = stats['t_used_resolve']
+            t_final_stand = stats['t_final_stand']
+            tcard_lvl_ap_buff = stats['tcard_lvl_ap_buff']
 
-            ocard_lvl = 0
-            ocard_tier = 0
-            ocard_exp = 0
-            ocard_lvl_attack_buff = 0
-            ocard_lvl_defense_buff = 0
-            ocard_lvl_ap_buff = 0
-            ocard_lvl_hlt_buff = 0
-
-
-            for x in vault['CARD_LEVELS']:
-                if x['CARD'] == o_card:
-                    ocard_lvl = x['LVL']
-                    ocard_tier = x['TIER']
-                    ocard_exp = x['EXP']
-                    ocard_lvl_ap_buff = x['AP']
-                    ocard_lvl_attack_buff = x['ATK']
-                    ocard_lvl_defense_buff = x['DEF']
-                    ocard_lvl_hlt_buff = x['HLT']
-
-            o_gif = o['GIF']
-            o_destiny = o['HAS_COLLECTION']
-            o_card_path=o['PATH']
-            o_rcard_path=o['RPATH']
-            o_health = o['HLT'] + ocard_lvl_hlt_buff
-            o_max_health = o['HLT'] + ocard_lvl_hlt_buff
-            o_stamina = o['STAM']
-            o_max_stamina = o['STAM']
-            o_moveset = o['MOVESET']
-            o_attack = o['ATK'] + ocard_lvl_attack_buff
-            o_defense = o['DEF'] + ocard_lvl_defense_buff
-            o_type = o['TYPE']
-            o_accuracy = o['ACC']
-            o_passive = o['PASS'][0]
-            o_speed = o['SPD']
-            o_universe = o['UNIVERSE']
-            o_title_universe = otitle['UNIVERSE']
-            o_title_passive = otitle['ABILITIES'][0]
-            o_vul = False
-            user1 = await self.bot.fetch_user(o_DID)
-            o_title_passive_bool = False
-            o_descriptions = []
-            if o['DESCRIPTIONS']:
-                o_descriptions = o['DESCRIPTIONS']
-                o_greeting_description = o_descriptions[0]
-                o_focus_description =  o_descriptions[1]
-                o_resolve_description = o_descriptions[2]
-                o_special_move_description = o_descriptions[3]
-                o_win_description = o_descriptions[4]
-                o_lose_description = o_descriptions[5]
-            else:
-                o_greeting_description = "Are you ready to battle!"
-                o_focus_description =  "I still have more in the tank!"
-                o_resolve_description = "Power up!"
-                o_special_move_description = "Take this!"
-                o_win_description = "Too easy. Come back when you're truly prepared."
-                o_lose_description = "I can't believe I lost..."
-
-
-            # Player 2 Data
-            t_user = boss
-            tarm = db.queryArm({'ARM': universe['UARM']})
-            tarm_universe = tarm['UNIVERSE']
-            t_destiny = t['HAS_COLLECTION']
-            tarm_passive = tarm['ABILITIES'][0]
-            tarm_name=tarm['ARM'] 
-            t_card = t['NAME']
-            t_gif = t['GIF']
-            t_card_path=t['PATH']
-            t_rcard_path=t['RPATH']
-            tcard_lvl_ap_buff = 0
-            t_health = t['HLT'] + (5 * currentopponent)
-            t_stamina = t['STAM']
-            t_max_stamina= t['STAM']
-            t_moveset = t['MOVESET']
-            t_attack = t['ATK']+ (2 * currentopponent) 
-            t_defense = t['DEF'] + (2 * currentopponent) + opponent_scaling
-            t_type = t['TYPE']
-            t_accuracy = t['ACC']
-            t_passive = t['PASS'][0]
-            t_speed = t['SPD']
-            t_universe = t['UNIVERSE']
-            t_title_universe = ttitle['UNIVERSE']
-            t_title_passive = ttitle['ABILITIES'][0]
-            t_vul = False
-            #user2 = await self.bot.fetch_user(t_DID)
-            t_title_passive_bool = False
-            if t['DESCRIPTIONS']:
-                t_descriptions = t['DESCRIPTIONS']
-                t_greeting_description = t_descriptions[0]
-                t_focus_description =  t_descriptions[1]
-                t_resolve_description = t_descriptions[2]
-                t_special_move_description = t_descriptions[3]
-                t_win_description = t_descriptions[4]
-                t_lose_description = t_descriptions[5]
-            else:
-                t_greeting_description = "Are you ready to battle!"
-                t_focus_description =  "I still have more in the tank!"
-                t_resolve_description = "Power up!"
-                t_special_move_description = "Take this!"
-                t_win_description = "Too easy. Come back when you're truly prepared."
-                t_lose_description = "I can't believe I lost..."
-
-            if o['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= o['HLT']: # Demon Slayer Universal Trait
-                o_max_health = t['HLT']
-                o_health = t['HLT']
-            else:                    
-                o_max_health = o['HLT'] + ocard_lvl_hlt_buff
-
-            if t['UNIVERSE'] == "Demon Slayer" and o_max_health >= t['HLT']: #Demon Slayer Universal Trait
-                t_max_health = o_max_health + (3 * currentopponent)
-                t_health = o_max_health + (3 * currentopponent)
-            else:                    
-                t_max_health = t['HLT'] + (3 * currentopponent)
-
-            if o_card == "Ash Ketchum" and t_universe == "Johto Region":
-                o_health = round(o_health + 100)
-                o_attack = round(o_attack + 50)
-                o_defense = round(o_defense + 50)
-            elif o_card == "Ash Ketchum" and t_universe == "Hoenn Region":
-                o_health = round(o_health + 150)
-                o_attack = round(o_attack + 75)
-                o_defense = round(o_defense + 75)
-            elif o_card == "Ash Ketchum" and t_universe == "Sinnoh Region":
-                o_health = round(o_health + 200)
-                o_attack = round(o_attack + 100)
-                o_defense = round(o_defense + 100)
-
-            #DBZ traits
-            o_final_stand=False
-            t_final_stand=False
-            if o['UNIVERSE'] == "Dragon Ball Z":
-                o_final_stand=True
-            if t['UNIVERSE'] == "Dragon Ball Z":
-                t_final_stand=True
-            ################################################################################
-
-            if (oarm_universe == o_universe) and (o_title_universe == o_universe):
-                o_attack = o_attack + 20
-                o_defense = o_defense + 20
-                o_max_health = o_max_health + 100
-                o_health = o_health + 100
-                if o_destiny:
-                    o_attack = o_attack + 5
-                    o_defense = o_defense + 5
-                    o_max_health = o_max_health + 50
-                    o_health = o_health + 50
-            
-            if (tarm_universe == t_universe) and (t_title_universe == t_universe):
-                t_attack = t_attack + 20
-                t_defense = t_defense + 20
-                t_max_health = t_max_health + 100
-                t_health = t_health + 100
-                if t_destiny:
-                    t_attack = t_attack + 5
-                    t_defense = t_defense + 5
-                    t_max_health = t_max_health + 50
-                    t_health = t_health + 50
-
-            # Player 1 Passive Config
-            if (o_universe == o_title_universe) or (o_title_universe == "Unbound"):
-                o_title_passive_bool = True
-            
-            # Player 1 Focus & Resolve
-            o_focus = 90
-            o_used_focus=False
-            o_resolve = 60
-            o_used_resolve=False
-
-            # Player 1 Moves
-            o_1 = o_moveset[0]
-            o_2 = o_moveset[1]
-            o_3 = o_moveset[2]
-            o_enhancer = o_moveset[3] 
-            o_enhancer_used=False
-            o_pet_used=False
-            o_defend_used=False
-            o_block_used=False
-            o_chainsaw=False
-            o_def_chainsaw=False
-            o_atk_chainsaw=False
-            if o_universe == "Chainsawman":
-                o_chainsaw=True
-
-            omove1_text = list(o_1.keys())[0]
-            omove2_text = list(o_2.keys())[0]
-            omove3_text = list(o_3.keys())[0]
-            omove_enhanced_text = list(o_enhancer.keys())[0]
-
-            opetmove_text= list(opet.keys())[3] # Name of the ability
-            opetmove_ap = (opet_bond * opet_lvl) + list(opet.values())[3] # Ability Power
-
-            opet_move = {str(opetmove_text): int(opetmove_ap), 'STAM': 15, 'TYPE': str(opet_passive_type)}
-
-            # Player 1 Card Passive
-            o_card_passive_type = list(o_passive.values())[1]
-            o_card_passive = list(o_passive.values())[0]
-
-            if o_card_passive_type == 'ATK':
-                o_attack = o_attack + int(o_card_passive)
-            elif o_card_passive_type == 'DEF':
-                o_defense = o_defense + int(o_card_passive)
-            elif o_card_passive_type == 'STAM':
-                o_stamina = o_stamina + int(o_card_passive)
-            elif o_card_passive_type == 'HLT':
-                o_max_health = o_max_health + int(o_card_passive)
-                o_health = o_health + int(o_card_passive)
-            elif o_card_passive_type == 'LIFE':
-                o_max_health = o_max_health + int((o_card_passive/100) * t_health)
-            elif o_card_passive_type == 'DRAIN':
-                o_stamina = o_stamina + int(o_card_passive)
-                t_stamina = t_stamina - int(o_card_passive)
-            elif o_card_passive_type == 'FLOG':
-                o_attack = o_attack + int((o_card_passive/100) *t_attack)
-                t_attack = t_attack - int((o_card_passive/100) *t_attack)
-            elif o_card_passive_type == 'WITHER':
-                o_defense = o_defense + int((o_card_passive/100) *t_defense)
-                t_defense = t_defense - int((o_card_passive/100) *t_defense)
-            elif o_card_passive_type == 'RAGE':
-                o_attack = o_attack + int(((o_card_passive/100) * o_defense))
-                o_defense = o_defense - int(((o_card_passive/100) *o_attack))
-            elif o_card_passive_type == 'BRACE':            
-                o_defense = o_defense + int(((o_card_passive/100) *o_attack))
-                o_attack = o_attack - int(((o_card_passive/100) * o_defense))
-            elif o_card_passive_type == 'BZRK':            
-                o_attack = o_attack + int(((o_card_passive/100) *o_health))
-                o_health = o_health - int((o_attack))
-            elif o_card_passive_type == 'CRYSTAL':            
-                o_defense = o_defense + int(((o_card_passive/100) * o_health))
-                o_health = o_health - int((o_defense))
-            elif o_card_passive_type == 'GROWTH':            
-                o_attack = o_attack + int(((o_card_passive/100) * o_attack))
-                o_defense = o_defense + int(((o_card_passive/100) * o_defense))
-                o_max_health = o_max_health - int((o_card_passive/100) * o_max_health)
-                o_health = o_health - int(((o_card_passive/100) * o_max_health))
-            elif o_card_passive_type == 'STANCE':
-                tempattack = o_attack + o_card_passive
-                o_attack = o_defense  + o_card_passive          
-                o_defense = tempattack
-            elif o_card_passive_type == 'CONFUSE':
-                tempattack = t_attack - o_card_passive
-                t_attack = t_defense  - o_card_passive          
-                t_defense = tempattack
-            elif o_card_passive_type == 'BLINK':
-                o_stamina = o_stamina - o_card_passive         
-                t_stamina = t_stamina + o_card_passive - 10
-            elif o_card_passive_type == 'SLOW':
-                tempstam = t_stamina + o_card_passive 
-                o_stamina = o_stamina - (2 * o_card_passive)      
-                t_stamina = o_stamina
-                o_stamina = tempstam  
-            elif o_card_passive_type == 'HASTE':
-                tempstam = t_stamina - o_card_passive    
-                o_stamina = o_stamina + (2 * o_card_passive)      
-                t_stamina = o_stamina 
-                o_stamina = tempstam  
-            elif o_card_passive_type == 'SOULCHAIN':
-                o_stamina = o_card_passive
-                t_stamina = o_card_passive
-            elif o_card_passive_type == 'FEAR':
-                o_health = o_health - int((o_card_passive/100) * o_health)
-                t_attack = t_attack - int((o_card_passive/100) * t_attack)
-                t_defense = t_defense - int((o_card_passive/100) * t_defense)
-            elif o_card_passive_type == 'GAMBLE':
-                o_health = o_card_passive
-                t_health = o_card_passive   
-                c_health = o_card_passive              
-
-            # Title Passive
-            o_title_passive_type = list(o_title_passive.keys())[0]
-            o_title_passive_value = list(o_title_passive.values())[0]
-
-            if o_title_passive_bool:
-                if o_title_passive_type == 'ATK':
-                    o_attack = o_attack + int(o_title_passive_value)
-                elif o_title_passive_type == 'DEF':
-                    o_defense = o_defense + int(o_title_passive_value)
-                elif o_title_passive_type == 'STAM':
-                    o_stamina = o_stamina + int(o_title_passive_value)
-                elif o_title_passive_type == 'HLT':
-                    o_max_health = o_max_health + int(o_title_passive_value)
-                    o_health = o_health + int(o_title_passive_value)
-                elif o_title_passive_type == 'LIFE':
-                    o_max_health = o_max_health + int((o_title_passive_value/100) * t_health)
-                elif o_title_passive_type == 'DRAIN':
-                    t_stamina = t_stamina - int(o_title_passive_value)
-                    o_stamina = o_stamina + int(o_title_passive_value)
-                elif o_title_passive_type == 'FLOG':
-                    o_attack = o_attack + int((o_title_passive_value/100) *t_attack)
-                    t_attack = t_attack - int((o_title_passive_value/100) *t_attack)
-                elif o_title_passive_type == 'WITHER':
-                    o_defense = o_defense + int((o_title_passive_value/100) *t_defense)
-                    t_defense = t_defense - int((o_title_passive_value/100) *t_defense)
-                elif o_title_passive_type == 'RAGE':
-                    o_attack = o_attack + int(((o_title_passive_value/100) * o_defense))
-                    o_defense = o_defense - int(((o_title_passive_value/100) *o_attack))
-                elif o_title_passive_type == 'BRACE':            
-                    o_defense = o_defense + int(((o_title_passive_value/100) *o_attack))
-                    o_attack = o_attack - int(((o_title_passive_value/100) * o_defense))
-                elif o_title_passive_type == 'BZRK':            
-                    o_attack = o_attack + int(((o_title_passive_value/100) *o_health))
-                    o_health = o_health - int((o_attack))
-                elif o_title_passive_type == 'CRYSTAL':            
-                    o_defense = o_defense + int(((o_title_passive_value/100) * o_health))
-                    o_health = o_health - int((o_defense))
-                elif o_title_passive_type == 'GROWTH':            
-                    o_attack = o_attack + int((o_title_passive_value/100) * o_attack)
-                    o_defense = o_defense + int((o_title_passive_value/100) * o_defense)
-                    o_max_health = o_max_health - int((o_title_passive_value/100) * o_max_health) 
-                elif o_title_passive_type == 'STANCE':
-                    tempattack = o_attack
-                    o_attack = o_defense            
-                    o_defense = tempattack
-                elif o_title_passive_type == 'CONFUSE':
-                    tempattack = t_attack
-                    t_attack = t_defense            
-                    t_defense = tempattack
-                elif o_title_passive_type == 'BLINK':
-                    o_stamina = o_stamina - o_title_passive_value         
-                    t_stamina = t_stamina + o_title_passive_value
-                elif o_title_passive_type == 'SLOW':
-                    tempstam = t_stamina + o_title_passive_value 
-                    o_stamina = o_stamina - o_title_passive_value      
-                    t_stamina = o_stamina
-                    o_stamina = tempstam  
-                elif o_title_passive_type == 'HASTE':
-                    tempstam = t_stamina - o_title_passive_value    
-                    o_stamina = o_stamina + o_title_passive_value      
-                    t_stamina = o_stamina 
-                    o_stamina = tempstam  
-                elif o_title_passive_type == 'SOULCHAIN':
-                    o_stamina = o_title_passive_value
-                    t_stamina = o_title_passive_value
-                elif o_title_passive_type == 'FEAR':
-                    o_health = o_health - int((o_title_passive_value/100) * o_health)
-                    t_attack = t_attack - int((o_title_passive_value/100) * t_attack)
-                    t_defense = t_defense - int((o_title_passive_value/100) * t_defense)
-                elif o_title_passive_type == 'GAMBLE':
-                    t_health = o_title_passive_value
-                    o_health = o_title_passive_value
-
-            # Arm Passive Player 1
-            oarm_passive_type = list(oarm_passive.keys())[0]
-            oarm_passive_value = list(oarm_passive.values())[0]
-
-            if oarm_passive_type == 'ATK':
-                o_attack = o_attack + int(oarm_passive_value)
-            elif oarm_passive_type == 'DEF':
-                o_defense = o_defense + int(oarm_passive_value)
-            elif oarm_passive_type == 'STAM':
-                o_stamina = o_stamina + int(oarm_passive_value)
-            elif oarm_passive_type == 'HLT':
-                o_max_health = o_max_health + int(oarm_passive_value)
-                o_health = o_health + int(oarm_passive_value)
-            elif oarm_passive_type == 'LIFE':
-                o_max_health = o_max_health + int((oarm_passive_value/100) * t_health)
-            elif oarm_passive_type == 'DRAIN':
-                t_stamina = t_stamina - int(oarm_passive_value)
-                o_stamina = o_stamina + int(oarm_passive_value)
-            elif oarm_passive_type == 'FLOG':
-                o_attack = o_attack + int((oarm_passive_value/100) *t_attack)
-                t_attack = t_attack - int((oarm_passive_value/100) *t_attack)
-            elif oarm_passive_type == 'WITHER':
-                o_defense = o_defense + int((oarm_passive_value/100) *t_defense)
-                t_defense = t_defense - int((oarm_passive_value/100) *t_defense)
-            elif oarm_passive_type == 'RAGE':
-                o_attack = o_attack + int(((oarm_passive_value/100) * o_defense))
-                o_defense = o_defense- int(((oarm_passive_value/100) *o_attack))
-            elif oarm_passive_type == 'BRACE':            
-                o_defense = o_defense + int(((oarm_passive_value/100) *o_attack))
-                o_attack = o_attack - int(((oarm_passive_value/100) * o_defense))
-            elif oarm_passive_type == 'BZRK':            
-                o_attack = o_attack + int(((oarm_passive_value/100) *o_health))
-                o_health = o_health - int((o_attack))
-            elif oarm_passive_type == 'CRYSTAL':            
-                o_defense = o_defense + int(((oarm_passive_value/100) * o_health))
-                o_health = o_health - int((o_defense))
-            elif oarm_passive_type == 'GROWTH':            
-                o_attack = o_attack + int((oarm_passive_value/100) * o_attack)
-                o_defense = o_defense + int((oarm_passive_value/100) * o_defense)
-                o_max_health = o_max_health - int((oarm_passive_value/100) * o_max_health)
-            elif oarm_passive_type == 'STANCE':
-                tempattack = o_attack + oarm_passive_value
-                o_attack = o_defense  + oarm_passive_value         
-                o_defense = tempattack
-            elif oarm_passive_type == 'CONFUSE':
-                tempattack = o_attack - oarm_passive_value
-                t_attack = t_defense  - oarm_passive_value           
-                t_defense = tempattack
-            elif oarm_passive_type == 'BLINK':
-                o_stamina = o_stamina - oarm_passive_value         
-                t_stamina = t_stamina + oarm_passive_value
-            elif oarm_passive_type == 'SLOW':
-                tempstam = t_stamina + oarm_passive_value 
-                o_stamina = o_stamina - oarm_passive_value      
-                t_stamina = o_stamina
-                o_stamina = tempstam  
-            elif oarm_passive_type == 'HASTE':
-                tempstam = t_stamina - oarm_passive_value    
-                o_stamina = o_stamina + oarm_passive_value      
-                t_stamina = o_stamina 
-                o_stamina = tempstam  
-            elif oarm_passive_type == 'SOULCHAIN':
-                o_stamina = oarm_passive_value
-                t_stamina = oarm_passive_value
-            elif oarm_passive_type == 'FEAR':
-                o_health = o_health - int((oarm_passive_value/100) * o_health)
-                t_attack = t_attack - int((oarm_passive_value/100) * t_attack)
-                t_defense = t_defense - int((oarm_passive_value/100) * t_defense)
-            elif oarm_passive_type == 'GAMBLE':
-                t_health = oarm_passive_value
-                o_health = oarm_passive_value
-
-            # Arm Passive Player 2
-            tarm_passive_type = list(tarm_passive.keys())[0]
-            tarm_passive_value = list(tarm_passive.values())[0]
-
-            if tarm_passive_type == 'ATK':
-                t_attack = t_attack + int(tarm_passive_value)
-            elif tarm_passive_type == 'DEF':
-                t_defense = t_defense + int(tarm_passive_value)
-            elif tarm_passive_type == 'STAM':
-                t_stamina = t_stamina + int(tarm_passive_value)
-            elif tarm_passive_type == 'HLT':
-                t_max_health = t_max_health + int(tarm_passive_value)
-                t_health = t_health + int(tarm_passive_value)
-            elif tarm_passive_type == 'LIFE':
-                t_max_health = t_max_health + int((tarm_passive_value/100) * o_health)
-            elif tarm_passive_type == 'DRAIN':
-                o_stamina = o_stamina - int(tarm_passive_value)
-                t_stamina = t_stamina + int(tarm_passive_value)
-            elif tarm_passive_type == 'FLOG':
-                t_attack = t_attack + int((tarm_passive_value/100) * o_attack)
-                o_attack = o_attack - int((tarm_passive_value/100) * o_attack)
-            elif tarm_passive_type == 'WITHER':
-                t_defense = t_defense + int((tarm_passive_value/100) *o_defense)
-                o_defense = o_defense - int((tarm_passive_value/100) *o_defense)
-            elif tarm_passive_type == 'RAGE':
-                t_attack = t_attack + int((tarm_passive_value/100) * t_defense)
-                t_defense = t_defense - int((tarm_passive_value/100) *t_attack)
-            elif tarm_passive_type == 'BRACE':            
-                t_defense = t_defense + int((tarm_passive_value/100) *t_attack)
-                t_attack = t_attack - int((tarm_passive_value/100) * t_defense)
-            elif tarm_passive_type == 'BZRK':            
-                t_attack = t_attack + int((tarm_passive_value/100)* t_health)
-                t_health = t_health - int((t_attack))
-            elif tarm_passive_type == 'CRYSTAL':            
-                t_defense = t_defense + int((tarm_passive_value/100) *t_health)
-                t_health = t_health - int(t_defense)
-            elif tarm_passive_type == 'GROWTH':            
-                t_attack = t_attack + int((tarm_passive_value/100) * t_attack)
-                t_defense = t_defense + int((tarm_passive_value/100) * t_defense)
-                t_max_health = t_max_health - int(((tarm_passive_value/100) * t_max_health))
-            elif tarm_passive_type == 'STANCE':
-                tempattack = t_attack + tarm_passive_value
-                t_attack = t_defense  + tarm_passive_value         
-                t_defense = tempattack
-            elif tarm_passive_type == 'CONFUSE':
-                tempattack = o_attack - tarm_passive_value
-                o_attack = o_defense  - tarm_passive_value           
-                o_defense = tempattack
-            elif tarm_passive_type == 'BLINK':
-                t_stamina = t_stamina - tarm_passive_value         
-                o_stamina = o_stamina + tarm_passive_value
-            elif tarm_passive_type == 'SLOW':
-                tempstam = o_stamina + tarm_passive_value 
-                t_stamina = t_stamina - tarm_passive_value      
-                o_stamina = t_stamina
-                t_stamina = tempstam  
-            elif tarm_passive_type == 'HASTE':
-                tempstam = o_stamina - tarm_passive_value    
-                t_stamina = t_stamina + tarm_passive_value      
-                o_stamina = t_stamina 
-                t_stamina = tempstam  
-            elif tarm_passive_type == 'SOULCHAIN':
-                t_stamina = tarm_passive_value
-                o_stamina = tarm_passive_value
-            elif tarm_passive_type == 'FEAR':
-                t_health = t_health - int((tarm_passive_value/100) * t_health)
-                o_attack = o_attack - int((tarm_passive_value/100) * o_attack)
-                o_defense = o_defense - int((tarm_passive_value/100) * o_defense)
-            elif tarm_passive_type == 'GAMBLE':
-                t_health = tarm_passive_value
-                o_health = tarm_passive_value
-
-
-            # Player 2 Passive Config
-            if (t_universe == t_title_universe) or (t_title_universe == "Unbound"):
-                t_title_passive_bool = True
-
-            # Player 1 Card Passive
-            t_card_passive_type = list(t_passive.values())[1]
-            t_card_passive = list(t_passive.values())[0]
-
-            if t_card_passive_type == 'ATK':
-                t_attack = t_attack + int(t_card_passive)
-            elif t_card_passive_type == 'DEF':
-                t_defense = t_defense + int(t_card_passive)
-            elif t_card_passive_type == 'STAM':
-                t_stamina = t_stamina + int(t_card_passive)
-            elif t_card_passive_type == 'HLT':
-                t_max_health = t_max_health + int(t_card_passive)
-                t_health = t_health + int(t_card_passive)
-            elif t_card_passive_type == 'LIFE':
-                t_max_health = t_max_health + int((t_card_passive/100) * o_health)
-            elif t_card_passive_type == 'DRAIN':
-                o_stamina = o_stamina - int(t_card_passive)
-                t_stamina = t_stamina + int(t_card_passive)
-            elif t_card_passive_type == 'FLOG':
-                t_attack = t_attack + int((t_card_passive/100) * o_attack)
-                o_attack = o_attack - int((t_card_passive/100) * o_attack)
-            elif t_card_passive_type == 'WITHER':
-                t_defense = t_defense + int((t_card_passive/100) *o_defense)
-                o_defense = o_defense - int((t_card_passive/100) *o_defense)
-            elif t_card_passive_type == 'RAGE':
-                t_attack = t_attack + int((t_card_passive/100) * t_defense)
-                t_defense = t_defense - int((t_card_passive/100) *t_attack)
-            elif t_card_passive_type == 'BRACE':            
-                t_defense = t_defense + int((t_card_passive/100) *t_attack)
-                t_attack = t_attack - int((t_card_passive/100) * t_defense)
-            elif t_card_passive_type == 'BZRK':            
-                t_attack = t_attack + int(((t_card_passive/100)* t_health))
-                t_health = t_health - int((t_attack))
-            elif t_card_passive_type == 'CRYSTAL':            
-                t_defense = t_defense + int((t_card_passive/100) *t_health)
-                t_health = t_health - int(t_defense)
-            elif t_card_passive_type == 'GROWTH':            
-                t_attack =  t_attack + int((t_card_passive/100) * t_attack)
-                t_defense = t_defense + int((t_card_passive/100) * t_defense)
-                t_max_health = t_max_health - int(((t_card_passive/100) * t_max_health))
-                t_health = t_health - int(((t_card_passive/100) * t_health))
-            elif t_card_passive_type == 'STANCE':
-                tempattack = t_attack + t_card_passive
-                t_attack = t_defense + t_card_passive            
-                t_defense = tempattack
-            elif t_card_passive_type == 'CONFUSE':
-                tempattack = o_attack - t_card_passive
-                o_attack = o_defense  - t_card_passive          
-                o_defense = tempattack
-            elif t_card_passive_type == 'BLINK':
-                t_stamina = t_stamina - t_card_passive         
-                o_stamina = o_stamina + t_card_passive - 10
-            elif t_card_passive_type == 'SLOW':
-                tempstam = o_stamina + t_card_passive 
-                t_stamina = t_stamina - (2 * t_card_passive)     
-                o_stamina = t_stamina
-                t_stamina = tempstam  
-            elif t_card_passive_type == 'HASTE':
-                tempstam = o_stamina - t_card_passive    
-                t_stamina = t_stamina + (2 * t_card_passive)      
-                o_stamina = t_stamina 
-                t_stamina = tempstam  
-            elif t_card_passive_type == 'SOULCHAIN':
-                t_stamina = t_card_passive
-                o_stamina = t_card_passive
-            elif t_card_passive_type == 'FEAR':
-                t_health = t_health - int((t_card_passive/100) * t_health)
-                o_attack = o_attack - int((t_card_passive/100) * o_attack)
-                o_defense = o_defense - int((t_card_passive/100) * o_defense)
-            elif t_card_passive_type == 'GAMBLE':
-                t_health = t_card_passive 
-                o_health = t_card_passive
-
-            # Title Passive
-            t_title_passive_type = list(t_title_passive.keys())[0]
-            t_title_passive_value = list(t_title_passive.values())[0]
-
-            if t_title_passive_bool:
-                if t_title_passive_type == 'ATK':
-                    t_attack = t_attack + int(t_title_passive_value)
-                elif t_title_passive_type == 'DEF':
-                    t_defense = t_defense + int(t_title_passive_value)
-                elif t_title_passive_type == 'STAM':
-                    t_stamina = t_stamina + int(t_title_passive_value)
-                elif t_title_passive_type == 'HLT':
-                    t_max_health = t_max_health + int(t_title_passive_value)
-                    t_health = t_health + int(t_title_passive_value)
-                elif t_title_passive_type == 'LIFE':
-                    t_max_health = t_max_health + int((t_title_passive_value/100) * o_health)
-                elif t_title_passive_type == 'DRAIN':
-                    o_stamina = o_stamina - int(t_title_passive_value)
-                    t_stamina = t_stamina + int(t_title_passive_value)
-                elif t_title_passive_type == 'FLOG':
-                    t_attack = t_attack + int((t_title_passive_value/100) * o_attack)
-                    o_attack = o_attack - int((t_title_passive_value/100) * o_attack)
-                elif t_title_passive_type == 'WITHER':
-                    t_defense = t_defense + int((t_title_passive_value/100) *o_defense)
-                    o_defense = o_defense - int((t_title_passive_value/100) *o_defense)
-                elif t_title_passive_type == 'RAGE':
-                    t_attack = t_attack + int(((t_title_passive_value/100) * t_defense))
-                    t_defense = t_defense - int(((t_title_passive_value/100) *t_attack))
-                elif t_title_passive_type == 'BRACE':            
-                    t_defense = t_defense + int(((t_title_passive_value/100) *t_attack))
-                    t_attack = t_attack - int(((t_title_passive_value/100) * t_defense))
-                elif t_title_passive_type == 'BZRK':            
-                    t_attack = t_attack + int(((t_title_passive_value/100)* t_health))
-                    t_health = t_health - int((t_attack))
-                elif t_title_passive_type == 'CRYSTAL':            
-                    t_defense = t_defense + int(((t_title_passive_value/100) *t_health))
-                    t_health = t_health - int(t_defense)
-                elif t_title_passive_type == 'GROWTH':            
-                    tt_attack = t_attack + int(((t_title_passive_value/100) * t_attack))
-                    t_defense = t_defense + int(((t_title_passive_value/100) * t_defense))
-                    t_max_health = t_max_health - int(((t_title_passive_value/100) * t_max_health))
-                elif t_title_passive_type == 'STANCE':
-                    tempattack = t_attack + t_title_passive_value
-                    t_attack = t_defense  + t_title_passive_value          
-                    t_defense = tempattack
-                elif t_title_passive_type == 'CONFUSE':
-                    tempattack = o_attack - t_title_passive_value
-                    o_attack = o_defense  - t_title_passive_value           
-                    o_defense = tempattack
-                elif t_title_passive_type == 'BLINK':
-                    t_stamina = t_stamina - t_title_passive_value         
-                    o_stamina = o_stamina + t_title_passive_value
-                elif t_title_passive_type == 'SLOW':
-                    tempstam = o_stamina + t_title_passive_value 
-                    t_stamina = t_stamina - t_title_passive_value      
-                    o_stamina = t_stamina
-                    t_stamina = tempstam  
-                elif t_title_passive_type == 'HASTE':
-                    tempstam = o_stamina - t_title_passive_value    
-                    t_stamina = t_stamina + t_title_passive_value      
-                    o_stamina = t_stamina 
-                    t_stamina = tempstam  
-                elif t_title_passive_type == 'SOULCHAIN':
-                    t_stamina = t_title_passive_value
-                    o_stamina = t_title_passive_value
-                elif t_title_passive_type == 'FEAR':
-                    t_health = t_health - int((t_title_passive_value/100) * t_health)
-                    o_attack = o_attack - int((t_title_passive_value/100) * o_attack)
-                    o_defense = o_defense - int((t_title_passive_value/100) * o_defense)
-                elif t_title_passive_type == 'GAMBLE':
-                    t_health = t_title_passive_value
-                    o_health = t_title_passive_value
-
-
-            # Player 2 Moves
-            t_1 = t_moveset[0]
-            t_2 = t_moveset[1]
-            t_3 = t_moveset[2]
-            t_enhancer = t_moveset[3]
-            t_enhancer_used=False
-            t_pet_used=False
-
-            # Player 1 Focus & Resolve
-            t_focus = 90
-            t_used_focus=False
-            t_resolve = 60
-            t_used_resolve=False
-            t_chainsaw=False
-            t_def_chainsaw=False
-            t_atk_chainsaw=False
-            if t_universe == "Chainsawman":
-                t_chainsaw=True
-                
-                
-            
             # Turn iterator
             turn = 0
             # Enhance Turn Iterators
@@ -30986,24 +28558,17 @@ class CrownUnlimited(commands.Cog):
             et=0
 
             botActive = True
-                
 
             # Vulnerability Check
-            if o_type == 0 and t_type == 2:
-                o_vul=True
-            if t_type == 0 and o_type == 2:
-                t_vul=True
+          
+            o_vul=False
+            t_vul=False
             lineup = f"{currentopponent + 1}/{total_legends}"
             options = [1,2,3,4,5,0]
 
             # Count Turns
             turn_total = 0
-            
-            #Rebirth Scaling
-            o_attack = o_attack + (o_user['REBIRTH'] * 10)
-            o_defense = o_defense + (o_user['REBIRTH'] * 10)
-
-            # START TURNS
+            # Game Start
             while (o_health > 0) and (t_health > 0):
                 # if t_universe == 'Death Note' and turn_total == 3:
                 #     embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death", description=f"**{t_card} says**\n'Delete'", colour=0xe91e63)
@@ -31031,12 +28596,9 @@ class CrownUnlimited(commands.Cog):
                         o_health = o_max_health
 
                     # Tutorial Instructions
-                    if turn_total == 0 and botActive:
-                        await private_channel.send(f"{ctx.author.mention}")                    
+                    if turn_total == 0:
                         embedVar = discord.Embed(title=f"**{o_card}** VS **{t_card}** has begun! {lineup}\n{t_universe} Tales Battle", description=f"`{o_card} Says:`\n{o_greeting_description}", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
-
-                    
 
                     if o_health <= (o_max_health * .25):
                         embed_color_o=0xe74c3c
@@ -31129,7 +28691,7 @@ class CrownUnlimited(commands.Cog):
                             o_used_resolve = True 
                             o_pet_used=False
 
-                           
+                        
                         elif o_universe == "League Of Legends":
                             embedVar = discord.Embed(title=f"Turret Shot hits {t_card} for 25 DMG!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
@@ -31139,7 +28701,7 @@ class CrownUnlimited(commands.Cog):
                             embedVar = discord.Embed(title=f"Ruler's Authority... {t_card} loses {15 + turn_total} DEF!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_defense = round(t_defense - (15 + turn_total))
-                           
+                        
                         elif o_universe == "Attack On Titan":
                             embedVar = discord.Embed(title=f"Rally! {o_card} Increased Max Health!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
@@ -31161,12 +28723,12 @@ class CrownUnlimited(commands.Cog):
                             embedVar = discord.Embed(title=f"Hero Reinforcements! {t_card} Increased Max Health!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_max_health = round(t_max_health + 50)
-                           
+                        
                         elif t_universe == "7ds":
                             embedVar = discord.Embed(title=f"Increase Power Level! {t_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_stamina = 110
-                           
+                        
                         elif t_universe == "Souls":
                             embedVar = discord.Embed(title=f"Combo Recognition! {t_card} Increased ATK by {15 + turn_total}!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
@@ -31259,6 +28821,7 @@ class CrownUnlimited(commands.Cog):
                         await private_channel.send(embed=embedVar, file=player_1_card, components=[battle_action_row, util_action_row] )
                         # await private_channel.send(f"Choose your move! **|** _Turn_ {turn_total} :dagger:**{o_attack}**/:shield:**{o_defense}**", components=[battle_action_row, util_action_row], file=player_1_card)
                         # Make sure user is responding with move
+
                         def check(button_ctx):
                             return button_ctx.author == user1 and button_ctx.custom_id in options
 
@@ -31271,10 +28834,10 @@ class CrownUnlimited(commands.Cog):
                         
                                 if private_channel.guild:
                                     await private_channel.send(f"{ctx.author.mention} has fled the battle...")
-                                    response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                                    
                                     await discord.TextChannel.delete(private_channel, reason=None)
                                 else:
-                                    response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                                    
                                     await private_channel.send(f"You fled the battle...")
                                 return
                             if button_ctx.custom_id == "1":
@@ -31705,7 +29268,7 @@ class CrownUnlimited(commands.Cog):
                                 'message': str(ex),
                                 'trace': trace
                             }))
-                            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                            
                             await discord.TextChannel.delete(private_channel, reason=None)
                             return
                 #PLayer 2 Turn Start
@@ -32238,7 +29801,7 @@ class CrownUnlimited(commands.Cog):
                 end_message="Use the /end command to end the tutorial lobby"
             else:
                 end_message="Try Again"
-            # End the match
+            # End Game
             if o_health <= 0 or o_max_health <= 0:
                 # await private_channel.send(f":zap: {user2.mention} you win the match!")
                 wintime = time.asctime()
@@ -32272,7 +29835,7 @@ class CrownUnlimited(commands.Cog):
 
                     if str(reaction.emoji) == '👎':
                         continued = False 
-                        db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                        
                         if private_channel.guild:
                             await discord.TextChannel.delete(private_channel, reason=None)
                         return
@@ -32281,98 +29844,78 @@ class CrownUnlimited(commands.Cog):
                     continued = True
                 except asyncio.TimeoutError:
                     continued = False
-                    response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                    
                     if private_channel.guild:
                         await discord.TextChannel.delete(private_channel, reason=None)
 
             elif t_health <=0 or t_max_health <= 0:
-                
-                uid = o_DID
-                ouser = await self.bot.fetch_user(uid)
-                wintime = time.asctime()
-                h_playtime = int(wintime[11:13])
-                m_playtime = int(wintime[14:16])
-                s_playtime = int(wintime[17:19])
-                gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
-                teambank = await blessteam(10, oteam)
-                fambank = await blessfamily(10, ofam)
-                if o_user['RIFT'] == 1:
-                    response = db.updateUserNoFilter({'DISNAME':str(o_user['DISNAME'])}, {'$set': {'RIFT' : 0}})
-                drop_response = await drops(ctx.author, selected_universe, currentopponent)
-                questlogger = await quest(ouser, t_card, "Tales")
-                destinylogger = await destiny(ouser, t_card, "Tales")
-                petlogger = await petlevel(opet_name, ouser)
-                cardlogger = await cardlevel(o_card, ouser, o_universe, selected_universe, "Tales")
-                match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']), str(oarm['ARM']), str(selected_universe), "Tales", o['EXCLUSIVE'])
-                if destinylogger:
-                    await ctx.author.send(destinylogger)
-                if questlogger:
-                    await ctx.author.send(questlogger)
-                if currentopponent != (total_legends):
-                
-                    if private_channel.guild:
-
+                try:
+                    uid = o_DID
+                    ouser = await self.bot.fetch_user(uid)
+                    wintime = time.asctime()
+                    h_playtime = int(wintime[11:13])
+                    m_playtime = int(wintime[14:16])
+                    s_playtime = int(wintime[17:19])
+                    gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
+                    teambank = await blessteam(10, oteam)
+                    fambank = await blessfamily(10, ofam)
+                    if o_user['RIFT'] == 1:
+                        response = db.updateUserNoFilter({'DISNAME':str(o_user['DISNAME'])}, {'$set': {'RIFT' : 0}})
+                    drop_response = await drops(ctx.author, selected_universe, currentopponent)
+                    questlogger = await quest(ouser, t_card, "Tales")
+                    destinylogger = await destiny(ouser, t_card, "Tales")
+                    petlogger = await petlevel(opet_name, ouser)
+                    cardlogger = await cardlevel(o_card, ouser, o_universe, selected_universe, "Tales")
+                    match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']), str(oarm['ARM']), str(selected_universe), "Tales", o['EXCLUSIVE'])
+                    if destinylogger:
+                        await ctx.author.send(destinylogger)
+                    if questlogger:
+                        await ctx.author.send(questlogger)
+                        
+                    if currentopponent != (total_legends):                
                         embedVar = discord.Embed(title=f"VICTORY\n**{o_card} says**\n{o_win_description}", description=f"The game lasted {turn_total} rounds.\n\n{drop_response}", colour=0xe91e63)
                         embedVar.set_author(name=f"{t_card} lost!")
                         await private_channel.send(embed=embedVar)
 
-                        emojis = ['👍', '👎']
-                        accept = await private_channel.send(f"{ctx.author.mention} would you like to continue?")
-                        for emoji in emojis:
-                            await accept.add_reaction(emoji)
-
-                        def check(reaction, user):
-                            return user == user1 and ((str(reaction.emoji) == '👍') or (str(reaction.emoji) == '👎'))
-                        try:
-                            reaction, user = await self.bot.wait_for('reaction_add', timeout=45.0, check=check)
-                          
-                            if str(reaction.emoji) == '👎':
-                                continued = False 
-                                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
-                                if private_channel.guild:
-                                    await discord.TextChannel.delete(private_channel, reason=None)
-                                return
-
-
-                            currentopponent = currentopponent + 1
-                            continued = True
-                        except asyncio.TimeoutError:
-                            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
-                            await private_channel.send(f"{ctx.author.mention} {m.STORY_ENDED}")
-                            if private_channel.guild:
-                                await discord.TextChannel.delete(private_channel, reason=None)
-                            return
-                    else:
-
-                        embedVar = discord.Embed(title=f"VICTORY", description=f"{t_card} has been defeated!\n\n{drop_response}", colour=0xe91e63)
-                        embedVar.set_author(name=f"The match lasted {turn_total} rounds.")
-                        embedVar.set_footer(text=f"{o_card} says:\n{o_win_description}")
-                        await ctx.author.send(embed=embedVar)
-
                         currentopponent = currentopponent + 1
                         continued = True
 
-                if currentopponent == (total_legends):
-                    embedVar = discord.Embed(title=f"UNIVERSE CONQUERED", description=f"Universe {selected_universe} has been conquered\n\n{drop_response}", colour=0xe91e63)
-                    embedVar.set_author(name=f"New Universes have been unlocked to explore!")
-                    embedVar.add_field(name="Additional Reward", value=f"You earned additional rewards in your vault! Take a look.")
-                    embedVar.set_footer(text="The .shop has been updated with new CARDS, TITLES and ARMS!")
-                    upload_query={'DISNAME': str(ctx.author)}
-                    new_upload_query={'$addToSet': {'CROWN_TALES': selected_universe}}
-                    r=db.updateUserNoFilter(upload_query, new_upload_query)
-                    if selected_universe in completed_crown_tales:
-                        await bless(400, ctx.author)
-                        await ctx.author.send(embed=embedVar)
-                        response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
-                        await ctx.author.send(f"You were awarded :coin: 400 for completing the {selected_universe} Tale again!")
-                    else:
-                        await bless(5000, ctx.author)
-                        await ctx.author.send(embed=embedVar)
-                        response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
-                        await ctx.author.send(f"You were awarded :coin: 5000 for completing the {selected_universe} Tale! ")
-                    continued=False
-                    if private_channel.guild:
-                        await discord.TextChannel.delete(private_channel, reason=None)
+                    if currentopponent == (total_legends):
+                        embedVar = discord.Embed(title=f"UNIVERSE CONQUERED", description=f"Universe {selected_universe} has been conquered\n\n{drop_response}", colour=0xe91e63)
+                        embedVar.set_author(name=f"New Universes have been unlocked to explore!")
+                        embedVar.add_field(name="Additional Reward", value=f"You earned additional rewards in your vault! Take a look.")
+                        embedVar.set_footer(text="The .shop has been updated with new CARDS, TITLES and ARMS!")
+                        upload_query={'DISNAME': str(ctx.author)}
+                        new_upload_query={'$addToSet': {'CROWN_TALES': selected_universe}}
+                        r=db.updateUserNoFilter(upload_query, new_upload_query)
+                        if selected_universe in completed_crown_tales:
+                            await bless(400, ctx.author)
+                            await ctx.author.send(embed=embedVar)
+                            
+                            await ctx.author.send(f"You were awarded :coin: 400 for completing the {selected_universe} Tale again!")
+                        else:
+                            await bless(5000, ctx.author)
+                            await ctx.author.send(embed=embedVar)
+                            
+                            await ctx.author.send(f"You were awarded :coin: 5000 for completing the {selected_universe} Tale! ")
+                        continued=False
+                        if private_channel.guild:
+                            await discord.TextChannel.delete(private_channel, reason=None)
+                except Exception as ex:
+                    trace = []
+                    tb = ex.__traceback__
+                    while tb is not None:
+                        trace.append({
+                            "filename": tb.tb_frame.f_code.co_filename,
+                            "name": tb.tb_frame.f_code.co_name,
+                            "lineno": tb.tb_lineno
+                        })
+                        tb = tb.tb_next
+                    print(str({
+                        'type': type(ex).__name__,
+                        'message': str(ex),
+                        'trace': trace
+                    }))
 
     @cog_ext.cog_slash(description="Boss! Defeat Dungeon to unlock Boss", guild_ids=main.guild_ids)
     async def boss(self, ctx: SlashContext):
@@ -32380,6 +29923,12 @@ class CrownUnlimited(commands.Cog):
         if isinstance(private_channel.channel, discord.channel.DMChannel):
             await private_channel.send(m.SERVER_FUNCTION_ONLY)
             return
+
+        channel_exists_response = existing_channel_check(self, ctx)
+        if channel_exists_response:
+            await private_channel.send(m.ALREADY_IN_TALES)
+            return
+            
         sowner = db.queryUser({'DISNAME': str(ctx.author)})
         oteam = sowner['TEAM']
         ofam = sowner['FAMILY']
@@ -32416,7 +29965,7 @@ class CrownUnlimited(commands.Cog):
                     available_universes.append(uni)
         if not available_universes:
             await private_channel.send("No available Bosses for you at this time!")
-            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+            
             return
 
         embedVar = discord.Embed(title=f":japanese_ogre: Select A Boss Arena", description="\n".join(available_universes), colour=0xe91e63) 
@@ -32439,7 +29988,7 @@ class CrownUnlimited(commands.Cog):
 
             if msg.content == "Quit":
                 await private_channel.send("Quit Boss selection. ")
-                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                
                 return
 
             #Universe Cost
@@ -32454,7 +30003,7 @@ class CrownUnlimited(commands.Cog):
                     entrance_fee = entrance_fee * universe_tier
                     if balance <= entrance_fee:
                             await private_channel.send(f"Tier {universe_tier} Bosses require an :coin: {'{:,}'.format(entrance_fee)} entrance fee!", delete_after=5)
-                            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                            
                             return
                     else:
                         await curse(entrance_fee, str(ctx.author))
@@ -32475,14 +30024,14 @@ class CrownUnlimited(commands.Cog):
                 await private_channel.send(f'{ctx.author.mention} Good luck!')
             
         except:
-            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+            
             embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", colour=0xe91e63)
             await private_channel.send(embed=embedVar)
             return
 
         universe = db.queryUniverse({'TITLE': str(selected_universe)})
         if not universe['CROWN_TALES']:
-            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+            
             await ctx.author.send(f"{selected_universe} Boss Arena not available! Check back later!")
             if private_channel.guild:
                 await discord.TextChannel.delete(private_channel, reason=None)
@@ -33495,7 +31044,7 @@ class CrownUnlimited(commands.Cog):
                         # calculate data based on selected move
                         if button_ctx.custom_id == "q" or button_ctx.custom_id =="Q":
                             o_health=0
-                            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+                            
                     
                             if private_channel.guild:
                                 await private_channel.send(f"{ctx.author.mention} has fled the battle...")
@@ -34594,7 +32143,7 @@ class CrownUnlimited(commands.Cog):
             m_playtime = int(wintime[14:16])
             s_playtime = int(wintime[17:19])
             gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
-            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+            
             embedVar = discord.Embed(title=f":zap: **{t_card}** Wins...", description=f"Match concluded in {turn_total} turns!\n{t_wins}", colour=0x1abc9c)
             embedVar.set_author(name=f"{o_card} says:\n{o_lose_description}", icon_url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236432/PCG%20LOGOS%20AND%20RESOURCES/PCGBot_1.png")
             if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
@@ -34630,7 +32179,7 @@ class CrownUnlimited(commands.Cog):
             await bless(50, str(ctx.author))
             teambank = await blessteam(10, oteam)
             fambank = await blessfamily(10,ofam)
-            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+            
             embedVar = discord.Embed(title=f":zap: **{o_card}**defeated the {t_universe} Boss {t_card}!", description=f"Match concluded in {turn_total} turns!\n\n{drop_response} + :coin: 50!\n{t_concede}", colour=0xe91e63)
             if crestsearch:
                 await movecrest(selected_universe, oguild['GNAME'])
@@ -49993,7 +47542,6 @@ class CrownUnlimited(commands.Cog):
                 embedVar.set_footer(text="The .shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
                 await ctx.send(embed=embedVar)
 
-
     @cog_ext.cog_slash(description="View all Cards of a Universe you unlocked", guild_ids=main.guild_ids)
     async def cardlist(self, ctx: SlashContext, universe: str):
         universe_data = db.queryUniverse({'TITLE': {"$regex": str(universe), "$options": "i"}})
@@ -50485,7 +48033,7 @@ class CrownUnlimited(commands.Cog):
             if str(ctx.author) == str(o):
                 validator = True
         if private_channel.guild and validator:
-            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': True}})
+            
             await discord.TextChannel.delete(private_channel.channel, reason=None)
 
 async def score(owner, user: User):
@@ -50809,13 +48357,13 @@ def starting_position(o,t):
         return False
 
 def damage_cal(universe, card, ability, attack, defense, op_defense, vul, accuracy, stamina, enhancer, health, op_health, op_stamina, maxhealth, op_attack, special_description, turn, ap_buff): 
-    if op_defense == 0:
+    if op_defense <= 0:
         op_defense = 25
-    if attack == 0:
+    if attack <= 0:
         attack = 25
-    if defense == 0:
+    if defense <= 0:
         defense = 25
-    if op_attack == 0:
+    if op_attack <= 0:
         op_attack = 25
 
     move = list(ability.keys())[0]
@@ -51379,6 +48927,1392 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
 
 def setup(bot):
     bot.add_cog(CrownUnlimited(bot))
+
+async def build_player_stats(self, ctx, sowner: str, o: dict, otitle: dict, t: dict, ttitle: dict, mode: str, universe: str, currentopponent: int, abyss_scaling: None, companion: None, c: None, ctitle: None):
+    co_op_modes = ['CTales', 'DTales', 'CDungeon', 'DDungeon']
+    solo_modes = ['ATales','Tales', 'Dungeon', 'Boss']
+    opponent_pet_modes = ['Dungeon', 'DDungeon', 'CDungeon']
+    opponent_scaling = 0
+    player_scaling = 0
+    opponent_health_scaling = 0
+    
+    try:   
+        if universe['PREREQUISITE']:
+            opponent_scaling = 8
+            opponent_health_scaling = 125
+            player_scaling = 2
+        else:
+            opponent_scaling = 4
+            opponent_health_scaling = 50
+            player_scaling = 1
+
+        if mode == "Dungeon":
+            opponent_scaling = opponent_scaling + 10
+            opponent_health_scaling = 250
+        
+        if mode == "CDungeon":
+            opponent_scaling = opponent_scaling + 15
+            opponent_health_scaling = 350
+        
+        if mode == "DDungeon":
+            opponent_scaling = opponent_scaling + 12
+
+        if mode == "Abyss":
+            opponent_scaling = abyss_scaling
+    
+
+        # Player 1 Data
+        o_user = sowner
+        oarm = db.queryArm({'ARM': o_user['ARM']})
+        oarm_universe=oarm['UNIVERSE']
+        oarm_passive = oarm['ABILITIES'][0]
+        oarm_name=oarm['ARM']
+
+        vault = db.queryVault({'OWNER': str(ctx.author) , 'PETS.NAME': o_user['PET']})
+        opet = {}
+        for pet in vault['PETS']:
+            if o_user['PET'] == pet['NAME']:
+                opet = pet
+
+        opet_passive_type = opet['TYPE']
+        opet_name = opet['NAME']
+        opet_image = opet['PATH']
+        opet_exp = opet['EXP']
+        opet_lvl = opet['LVL']
+        opet_bond = opet['BOND']
+        
+
+        o_DID = o_user['DID']
+        o_card = o['NAME']
+
+        ocard_lvl = 0
+        ocard_tier = 0
+        ocard_exp = 0
+        ocard_lvl_attack_buff = 0
+        ocard_lvl_defense_buff = 0
+        ocard_lvl_ap_buff = 0
+        ocard_lvl_hlt_buff = 0
+
+
+        for x in vault['CARD_LEVELS']:
+            if x['CARD'] == o_card:
+                ocard_lvl = x['LVL']
+                ocard_tier = x['TIER']
+                ocard_exp = x['EXP']
+                ocard_lvl_ap_buff = x['AP']
+                ocard_lvl_attack_buff = x['ATK']
+                ocard_lvl_defense_buff = x['DEF']
+                ocard_lvl_hlt_buff = x['HLT']
+
+        o_gif = o['GIF']
+        o_destiny = o['HAS_COLLECTION']
+        o_card_path=o['PATH']
+        o_rcard_path=o['RPATH']
+        
+        o_health = o['HLT'] + ocard_lvl_hlt_buff
+        o_max_health = o['HLT'] + ocard_lvl_hlt_buff
+        o_stamina = o['STAM']
+        o_max_stamina = o['STAM']
+        o_moveset = o['MOVESET']
+        o_attack = o['ATK'] + ocard_lvl_attack_buff
+        o_defense = o['DEF'] + ocard_lvl_defense_buff
+        o_type = o['TYPE']
+        o_accuracy = o['ACC']
+        o_passive = o['PASS'][0]
+        o_speed = o['SPD']
+        o_universe = o['UNIVERSE']
+        o_title_universe = otitle['UNIVERSE']
+        o_title_passive = otitle['ABILITIES'][0]
+        o_vul = False
+        user1 = await self.bot.fetch_user(o_DID)
+        o_title_passive_bool = False
+        o_descriptions = []
+        if o['DESCRIPTIONS']:
+            o_descriptions = o['DESCRIPTIONS']
+            o_greeting_description = o_descriptions[0]
+            o_focus_description =  o_descriptions[1]
+            o_resolve_description = o_descriptions[2]
+            o_special_move_description = o_descriptions[3]
+            o_win_description = o_descriptions[4]
+            o_lose_description = o_descriptions[5]
+        else:
+            o_greeting_description = "Are you ready to battle!"
+            o_focus_description =  "I still have more in the tank!"
+            o_resolve_description = "Power up!"
+            o_special_move_description = "Take this!"
+            o_win_description = "Too easy. Come back when you're truly prepared."
+            o_lose_description = "I can't believe I lost..."
+
+
+        if companion:
+            ### Companion Data
+            c_user = companion
+            carm = db.queryArm({'ARM': c_user['ARM']})
+            carm_universe=carm['UNIVERSE']
+            carm_passive = carm['ABILITIES'][0]
+            carm_name=carm['ARM']
+
+            cvault = db.queryVault({'OWNER': c_user['DISNAME'] , 'PETS.NAME': c_user['PET']})
+            cpet = {}
+            for pet in cvault['PETS']:
+                if c_user['PET'] == pet['NAME']:
+                    cpet = pet
+
+            cpet_passive_type = cpet['TYPE']
+            cpet_name = cpet['NAME']
+            cpet_image = cpet['PATH']
+            cpet_exp = cpet['EXP']
+            cpet_lvl = cpet['LVL']
+            cpet_bond = cpet['BOND']
+            
+
+            c_DID = c_user['DID']
+            c_card = c['NAME']
+
+            ccard_lvl = 0
+            ccard_tier = 0
+            ccard_exp = 0
+            ccard_lvl_attack_buff = 0
+            ccard_lvl_defense_buff = 0
+            ccard_lvl_ap_buff = 0
+            ccard_lvl_hlt_buff = 0
+
+
+            for x in vault['CARD_LEVELS']:
+                if x['CARD'] == c_card:
+                    ccard_lvl = x['LVL']
+                    ccard_tier = x['TIER']
+                    ccard_exp = x['EXP']
+                    ccard_lvl_ap_buff = x['AP']
+                    ccard_lvl_attack_buff = x['ATK']
+                    ccard_lvl_defense_buff = x['DEF']
+                    ccard_lvl_hlt_buff = x['HLT']
+
+            c_gif = c['GIF']
+            c_destiny = c['HAS_COLLECTION']            
+            c_card_path=c['PATH']
+            c_rcard_path= c['RPATH']
+            c_health = c['HLT'] + ccard_lvl_hlt_buff
+            c_max_health = c['HLT'] + ccard_lvl_hlt_buff
+
+            c_stamina = c['STAM']
+            c_max_stamina = c['STAM']
+            c_moveset = c['MOVESET']
+            c_attack = c['ATK'] + ccard_lvl_attack_buff
+            c_defense = c['DEF'] + ccard_lvl_defense_buff
+            c_type = c['TYPE']
+            c_accuracy = c['ACC']
+            c_passive = c['PASS'][0]
+            c_speed = c['SPD']
+            c_universe = c['UNIVERSE']
+            c_title_universe = ctitle['UNIVERSE']
+            c_title_passive = ctitle['ABILITIES'][0]
+            c_vul = False
+            user2 = await self.bot.fetch_user(c_DID)
+            c_title_passive_bool = False
+            c_descriptions = []
+            if c['DESCRIPTIONS']:
+                c_descriptions = c['DESCRIPTIONS']
+                c_greeting_description = c_descriptions[0]
+                c_focus_description =  c_descriptions[1]
+                c_resolve_description = c_descriptions[2]
+                c_special_move_description = c_descriptions[3]
+                c_win_description = c_descriptions[4]
+                c_lose_description = c_descriptions[5]
+            else:
+                c_greeting_description = "Are you ready to battle!"
+                c_focus_description =  "I still have more in the tank!"
+                c_resolve_description = "Power up!"
+                c_special_move_description = "Take this!"
+                c_win_description = "Too easy. Come back when you're truly prepared."
+                c_lose_description = "I can't believe I lost..."
+
+
+        # Player 2 Data
+        # t_user = boss
+        tarm = db.queryArm({'ARM': universe['DARM']})
+        tarm_universe = tarm['UNIVERSE']
+        t_destiny = t['HAS_COLLECTION']
+        if mode in opponent_pet_modes:
+            tpet = db.queryPet({'PET': universe['DPET']})
+            tpet_passive = tpet['ABILITIES'][0]
+            tpet_name = tpet['PET']
+            tpet_image = tpet['PATH']
+            tpet_lvl = 10
+            tpet_bond = 3
+        tarm_passive = tarm['ABILITIES'][0]
+        tarm_name=tarm['ARM']
+        tcard_lvl_ap_buff = 0
+        t_card = t['NAME']
+        t_gif = t['GIF']
+        t_card_path=t['PATH']
+        t_rcard_path=t['RPATH']
+        t_health = t['HLT'] + (30 * currentopponent) + opponent_health_scaling 
+        t_stamina = t['STAM']
+        t_max_stamina= t['STAM']
+        t_moveset = t['MOVESET']
+        t_attack = t['ATK'] + (3 * currentopponent) + opponent_scaling
+        t_defense = t['DEF'] + (6 * currentopponent) + opponent_scaling
+        t_type = t['TYPE']
+        t_accuracy = t['ACC']
+        t_passive = t['PASS'][0]
+        t_speed = t['SPD']
+        t_universe = t['UNIVERSE']
+        t_title_universe = ttitle['UNIVERSE']
+        t_title_passive = ttitle['ABILITIES'][0]
+        t_vul = False
+        #user2 = await self.bot.fetch_user(t_DID)
+        t_title_passive_bool = False
+        if t['DESCRIPTIONS']:
+            t_descriptions = t['DESCRIPTIONS']
+            t_greeting_description = t_descriptions[0]
+            t_focus_description =  t_descriptions[1]
+            t_resolve_description = t_descriptions[2]
+            t_special_move_description = t_descriptions[3]
+            t_win_description = t_descriptions[4]
+            t_lose_description = t_descriptions[5]
+        else:
+            t_greeting_description = "Are you ready to battle!"
+            t_focus_description =  "I still have more in the tank!"
+            t_resolve_description = "Power up!"
+            t_special_move_description = "Take this!"
+            t_win_description = "Too easy. Come back when you're truly prepared."
+            t_lose_description = "I can't believe I lost..."
+
+        if o['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= o['HLT']: # Demon Slayer Universal Trait
+            o_max_health = t['HLT']  - (10 * currentopponent)
+            o_health = t['HLT'] - (10 * currentopponent)
+        else:                    
+            o_max_health = o['HLT'] - (10 * currentopponent) + ocard_lvl_hlt_buff
+
+        if t['UNIVERSE'] == "Demon Slayer" and o_max_health >= t['HLT']: #Demon Slayer Universal Trait
+            t_max_health = o_max_health + (20 * currentopponent) + 200
+            t_health = o_max_health + (20 * currentopponent) + 200
+        else:                    
+            t_max_health = t['HLT'] + (20 * currentopponent) + 200
+
+        if companion:
+            if c['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= c['HLT']: # Demon Slayer Universal Trait
+                c_max_health = t['HLT'] - (10 * currentopponent)
+                c_health = t['HLT'] - (10 * currentopponent)
+            else:                    
+                c_max_health = c['HLT'] - (10 * currentopponent) + ccard_lvl_hlt_buff
+
+        #DBZ traits
+        o_final_stand=False
+        t_final_stand=False
+        if o['UNIVERSE'] == "Dragon Ball Z":
+            o_final_stand=True
+        
+        if t['UNIVERSE'] == "Dragon Ball Z":
+            t_final_stand=True
+            
+        if (oarm_universe == o_universe) and (o_title_universe == o_universe):
+            o_attack = o_attack + 20
+            o_defense = o_defense + 20
+            o_max_health = o_max_health + 100
+            o_health = o_health + 100
+            if o_destiny:
+                o_attack = o_attack + 5
+                o_defense = o_defense + 5
+                o_max_health = o_max_health + 50
+                o_health = o_health + 50
+        
+        if (tarm_universe == t_universe) and (t_title_universe == t_universe):
+            t_attack = t_attack + 20
+            t_defense = t_defense + 20
+            t_max_health = t_max_health + 100
+            t_health = t_health + 100
+            if t_destiny:
+                t_attack = t_attack + 5
+                t_defense = t_defense + 5
+                t_max_health = t_max_health + 50
+                t_health = t_health + 50
+
+        if companion:
+            c_final_stand=False
+            if c['UNIVERSE'] == "Dragon Ball Z":
+                c_final_stand=True
+
+            if (carm_universe == c_universe) and (c_title_universe == c_universe):
+                c_attack = c_attack + 20
+                c_defense = c_defense + 20
+                c_max_health = c_max_health + 100
+                c_health = c_health + 100
+                if c_destiny:
+                    c_attack = c_attack + 5
+                    c_defense = c_defense + 5
+                    c_max_health = c_max_health +  50
+                    c_health = c_health + 50
+
+            if oteam == cteam:
+                o_defense = o_defense + 10
+                c_defense = c_defense + 10
+            if ofam == cfam:
+                o_health = o_health + 50
+                c_health = c_health + 50
+                o_max_health = o_max_health + 50
+                c_max_health = c_max_health + 50
+            
+            # Companion Passive Config
+            if (c_universe == c_title_universe) or (c_title_universe == "Unbound"):
+                c_title_passive_bool = True
+            
+            # Player 1 Focus & Resolve
+            c_focus = 90
+            c_used_focus=False
+            c_resolve = 60
+            c_used_resolve=False
+
+            # Companion Moves
+            c_1 = c_moveset[0]
+            c_2 = c_moveset[1]
+            c_3 = c_moveset[2]
+            c_enhancer = c_moveset[3]
+            c_enhancer_used=False
+            c_pet_used=False
+            c_block_used=False
+            c_chainsaw=False
+            c_def_chainsaw=False
+            c_atk_chainsaw=False
+            if c_universe == "Chainsawman":
+                c_chainsaw=True
+
+        
+            cmove1_text = list(c_1.keys())[0]
+            cmove2_text = list(c_2.keys())[0]
+            cmove3_text = list(c_3.keys())[0]
+            cmove_enhanced_text = list(c_enhancer.keys())[0]
+
+            cpetmove_text= list(cpet.keys())[3] # Name of the ability
+            cpetmove_ap= (cpet_bond * cpet_lvl) + list(cpet.values())[3] # Ability Power
+
+            cpet_move = {str(cpetmove_text): int(cpetmove_ap), 'STAM': 15, 'TYPE': str(cpet_passive_type)}
+
+            # Player 1 Card Passive
+            c_card_passive_type = list(c_passive.values())[1]
+            c_card_passive = list(c_passive.values())[0]
+
+            if c_card_passive_type == 'ATK':
+                c_attack = c_attack + int(c_card_passive)
+            elif c_card_passive_type == 'DEF':
+                c_defense = o_defense + int(c_card_passive)
+            elif c_card_passive_type == 'STAM':
+                c_stamina = o_stamina + int(c_card_passive)
+            elif c_card_passive_type == 'HLT':
+                c_max_health = c_max_health + int(c_card_passive)
+                c_health = c_health + int(c_card_passive)
+            elif c_card_passive_type == 'LIFE':
+                c_max_health = c_max_health + int((c_card_passive/100) * t_health)
+            elif c_card_passive_type == 'DRAIN':
+                t_stamina = t_stamina - int(c_card_passive)
+                c_stamina = c_stamina + int(c_card_passive)
+            elif c_card_passive_type == 'FLOG':
+                c_attack = c_attack + int((c_card_passive/100) *t_attack)
+                t_attack = t_attack - int((c_card_passive/100) *t_attack)
+            elif c_card_passive_type == 'WITHER':
+                c_defense = c_defense + int((c_card_passive/100) *t_defense)
+                t_defense = t_defense - int((c_card_passive/100) *t_defense)
+            elif c_card_passive_type == 'RAGE':
+                c_attack = c_attack + int(((c_card_passive/100) * c_defense))
+                c_defense = c_defense - int(((c_card_passive/100) * c_attack))
+            elif c_card_passive_type == 'BRACE':            
+                c_defense = c_defense + int(((c_card_passive/100) * c_attack))
+                c_attack = c_attack - int(((c_card_passive/100) * c_defense))
+            elif c_card_passive_type == 'BZRK':            
+                c_attack = c_attack + int(((c_card_passive/100) * c_health))
+                c_health = c_health - int((c_attack))
+            elif c_card_passive_type == 'CRYSTAL':            
+                c_defense = c_defense + int(((c_card_passive/100) *c_health))
+                c_health = c_health - int((c_defense))
+            elif c_card_passive_type == 'GROWTH':            
+                c_attack = c_attack + int(((c_card_passive/100) * c_attack))
+                c_defense = c_defense + int(((c_card_passive/100) * c_defense))
+                c_max_health = c_max_health - int(((c_card_passive/100) * c_max_health))
+                c_health = c_health - int(((c_card_passive/100) * c_max_health))
+            elif c_card_passive_type == 'STANCE':
+                tempattack = c_attack + c_card_passive
+                c_attack = c_defense  + c_card_passive          
+                c_defense = tempattack
+            elif c_card_passive_type == 'CONFUSE':
+                tempattack = t_attack - c_card_passive
+                t_attack = t_defense  - c_card_passive          
+                t_defense = tempattack
+            elif c_card_passive_type == 'BLINK':
+                c_stamina = c_stamina - c_card_passive         
+                t_stamina = t_stamina + c_card_passive - 10
+            elif c_card_passive_type == 'SLOW':
+                tempstam = t_stamina + o_card_passive 
+                c_stamina = c_stamina - (2 * c_card_passive)      
+                t_stamina = c_stamina
+                o_stamina = tempstam  
+            elif c_card_passive_type == 'HASTE':
+                tempstam = t_stamina - c_card_passive    
+                c_stamina = c_stamina + (2 * c_card_passive)      
+                t_stamina = c_stamina 
+                c_stamina = tempstam  
+            elif c_card_passive_type == 'SOULCHAIN':
+                c_stamina = c_card_passive
+                t_stamina = c_card_passive
+            elif c_card_passive_type == 'FEAR':
+                c_health = c_health - int((c_card_passive/100) * c_health)
+                t_attack = t_attack - int((c_card_passive/100) * t_attack)
+                t_defense = t_defense - int((c_card_passive/100) * t_defense)
+            elif c_card_passive_type == 'GAMBLE':
+                c_health = c_card_passive
+                t_health = c_card_passive * 2
+                o_health = c_card_passive            
+
+            # Title Passive
+            c_title_passive_type = list(c_title_passive.keys())[0]
+            c_title_passive_value = list(c_title_passive.values())[0]
+
+            if c_title_passive_bool:
+                if c_title_passive_type == 'ATK':
+                    c_attack = c_attack + int(c_title_passive_value)
+                elif c_title_passive_type == 'DEF':
+                    c_defense = c_defense + int(c_title_passive_value)
+                elif c_title_passive_type == 'STAM':
+                    c_stamina = c_stamina + int(c_title_passive_value)
+                elif c_title_passive_type == 'HLT':
+                    c_max_health = c_max_health + int(c_title_passive_value)
+                    c_health = c_health + int(c_title_passive_value)
+                elif c_title_passive_type == 'LIFE':
+                    c_max_health = c_max_health + int(c_title_passive_value)
+                elif c_title_passive_type == 'DRAIN':
+                    t_stamina = t_stamina - int(c_title_passive_value)
+                    c_stamina = c_stamina + int(c_title_passive_value)
+                elif c_title_passive_type == 'FLOG':
+                    c_attack = c_attack + int((c_title_passive_value/100) *t_attack)
+                    t_attack = t_attack - int((c_title_passive_value/100) *t_attack)
+                elif c_title_passive_type == 'WITHER':
+                    c_defense = c_defense + int((c_title_passive_value/100) *t_defense)
+                    t_defense = t_defense - int((c_title_passive_value/100) *t_defense)
+                elif c_title_passive_type == 'RAGE':
+                    c_attack = c_attack + int(((c_title_passive_value/100) * c_defense))
+                    c_defense = c_defense - int(((c_title_passive_value/100) * c_attack))
+                elif c_title_passive_type == 'BRACE':            
+                    c_defense = c_defense + int(((c_title_passive_value/100) * c_attack))
+                    c_attack = c_attack - int(((c_title_passive_value/100) * c_defense))
+                elif c_title_passive_type == 'BZRK':            
+                    c_attack = c_attack + int(((c_title_passive_value/100) * c_health))
+                    c_health = c_health - int((c_attack))
+                elif c_title_passive_type == 'CRYSTAL':            
+                    c_defense = c_defense + int(((c_title_passive_value/100) *c_health))
+                    c_health = c_health - int((c_defense))
+                elif c_title_passive_type == 'GROWTH':            
+                    c_attack = c_attack + int(((c_title_passive_value/100) * c_attack))
+                    c_defense = c_defense + int(((c_title_passive_value/100) * c_defense))
+                    c_max_health = c_max_health - int(((c_title_passive_value/100) * c_max_health))
+                elif c_title_passive_type == 'STANCE':
+                    tempattack = c_attack
+                    c_attack = c_defense            
+                    c_defense = tempattack
+                elif c_title_passive_type == 'CONFUSE':
+                    tempattack = t_attack
+                    t_attack = t_defense            
+                    t_defense = tempattack
+                elif c_title_passive_type == 'BLINK':
+                    c_stamina = c_stamina - c_title_passive_value         
+                    t_stamina = t_stamina + c_title_passive_value
+                elif c_title_passive_type == 'SLOW':
+                    tempstam = t_stamina + c_title_passive_value 
+                    c_stamina = c_stamina - c_title_passive_value      
+                    t_stamina = c_stamina
+                    c_stamina = tempstam  
+                elif c_title_passive_type == 'HASTE':
+                    tempstam = t_stamina - c_title_passive_value    
+                    c_stamina = c_stamina + c_title_passive_value      
+                    t_stamina = c_stamina 
+                    c_stamina = tempstam  
+                elif c_title_passive_type == 'SOULCHAIN':
+                    c_stamina = c_title_passive_value
+                    t_stamina = c_title_passive_value
+                elif c_title_passive_type == 'FEAR':
+                    c_health = c_health - int((c_title_passive_value/100) * c_health)
+                    t_attack = t_attack - int((c_title_passive_value/100) * t_attack)
+                    t_defense = t_defense - int((c_title_passive_value/100) * t_defense)
+                elif c_title_passive_type == 'GAMBLE':
+                    t_health = c_title_passive_value * 2
+                    c_health = c_title_passive_value
+                    o_health = c_title_passive_value
+
+            # Arm Passive Player 1
+            carm_passive_type = list(carm_passive.keys())[0]
+            carm_passive_value = list(carm_passive.values())[0]
+
+            if carm_passive_type == 'ATK':
+                c_attack = c_attack + int(carm_passive_value)
+            elif carm_passive_type == 'DEF':
+                c_defense = c_defense + int(carm_passive_value)
+            elif carm_passive_type == 'STAM':
+                c_stamina = c_stamina + int(carm_passive_value)
+            elif carm_passive_type == 'HLT':
+                c_max_health = c_max_health + int(carm_passive_value)
+                c_health = c_health + int(carm_passive_value)
+            elif carm_passive_type == 'LIFE':
+                c_max_health = c_max_health + int((carm_passive_value/100) * t_health)
+            elif carm_passive_type == 'DRAIN':
+                t_stamina = t_stamina - int(carm_passive_value)
+                c_stamina = c_stamina + int(carm_passive_value)
+            elif carm_passive_type == 'FLOG':
+                c_attack = c_attack + int((carm_passive_value/100) *t_attack)
+                t_attack = t_attack - int((carm_passive_value/100) *t_attack)
+            elif carm_passive_type == 'WITHER':
+                c_defense = c_defense + int((carm_passive_value/100) *t_defense)
+                t_defense = t_defense - int((carm_passive_value/100) *t_defense)
+            elif carm_passive_type == 'RAGE':
+                c_attack = c_attack + int(((carm_passive_value/100) * c_defense))
+                c_defense = c_defense - int(((carm_passive_value/100) * c_attack))
+            elif carm_passive_type == 'BRACE':            
+                c_defense = c_defense + int(((carm_passive_value/100) * c_attack))
+                c_attack = c_attack - int(((carm_passive_value/100) * c_defense))
+            elif carm_passive_type == 'BZRK':            
+                c_attack = c_attack + int(((carm_passive_value/100) * c_health))
+                c_health = c_health - int((c_attack))
+            elif carm_passive_type == 'CRYSTAL':            
+                c_defense = c_defense + int(((carm_passive_value/100) *c_health))
+                c_health = c_health - int((c_defense))
+            elif carm_passive_type == 'GROWTH':            
+                c_attack = c_attack + int(((carm_passive_value/100) * c_attack))
+                c_defense = c_defense + int(((carm_passive_value/100) * c_defense))
+                c_max_health = c_max_health - int(((carm_passive_value/100) * c_max_health))
+            elif carm_passive_type == 'STANCE':
+                tempattack = c_attack + carm_passive_value
+                c_attack = c_defense  + carm_passive_value         
+                c_defense = tempattack
+            elif carm_passive_type == 'CONFUSE':
+                tempattack = c_attack - carm_passive_value
+                t_attack = t_defense  - carm_passive_value           
+                t_defense = tempattack
+            elif carm_passive_type == 'BLINK':
+                c_stamina = c_stamina - carm_passive_value         
+                t_stamina = t_stamina + carm_passive_value
+            elif carm_passive_type == 'SLOW':
+                tempstam = t_stamina + carm_passive_value 
+                c_stamina = c_stamina - carm_passive_value      
+                t_stamina = c_stamina
+                c_stamina = tempstam  
+            elif carm_passive_type == 'HASTE':
+                tempstam = t_stamina - carm_passive_value    
+                c_stamina = c_stamina + carm_passive_value      
+                t_stamina = c_stamina 
+                c_stamina = tempstam  
+            elif carm_passive_type == 'SOULCHAIN':
+                c_stamina = carm_passive_value
+                t_stamina = carm_passive_value
+            elif carm_passive_type == 'FEAR':
+                c_health = c_health - int((carm_passive_value/100) * c_health)
+                t_attack = t_attack - int((carm_passive_value/100) * t_attack)
+                t_defense = t_defense - int((carm_passive_value/100) * t_defense)
+            elif carm_passive_type == 'GAMBLE':
+                t_health = carm_passive_value * 2
+                c_health = carm_passive_value
+                o_health = carm_passive_value
+
+        ################################################################################
+
+        # Player 1 Passive Config
+        if (o_universe == o_title_universe) or (o_title_universe == "Unbound"):
+            o_title_passive_bool = True
+        
+        # Player 1 Focus & Resolve
+        o_focus = 90
+        o_used_focus=False
+        o_resolve = 60
+        o_used_resolve=False
+
+        # Player 1 Moves
+        o_1 = o_moveset[0]
+        o_2 = o_moveset[1]
+        o_3 = o_moveset[2]
+        o_enhancer = o_moveset[3]
+        o_enhancer_used=False
+        o_pet_used=False
+        o_block_used=False
+        o_defend_used=False
+        o_chainsaw=False
+        o_def_chainsaw=False
+        o_atk_chainsaw=False
+        if o_universe == "Chainsawman":
+            o_chainsaw=True
+
+        omove1_text = list(o_1.keys())[0]
+        omove2_text = list(o_2.keys())[0]
+        omove3_text = list(o_3.keys())[0]
+        omove_enhanced_text = list(o_enhancer.keys())[0]
+
+        opetmove_text= list(opet.keys())[3] # Name of the ability
+        opetmove_ap= (opet_bond * opet_lvl) + list(opet.values())[3] # Ability Power
+
+        opet_move = {str(opetmove_text): int(opetmove_ap), 'STAM': 15, 'TYPE': str(opet_passive_type)}
+
+        # Player 1 Card Passive
+        o_card_passive_type = list(o_passive.values())[1]
+        o_card_passive = list(o_passive.values())[0]
+
+        if o_card_passive_type == 'ATK':
+            o_attack = o_attack + int(o_card_passive)
+        elif o_card_passive_type == 'DEF':
+            o_defense = o_defense + int(o_card_passive)
+        elif o_card_passive_type == 'STAM':
+            o_stamina = o_stamina + int(o_card_passive)
+        elif o_card_passive_type == 'HLT':
+            o_max_health = o_max_health + int(o_card_passive)
+            o_health = o_health + int(o_card_passive)
+        elif o_card_passive_type == 'LIFE':
+            o_max_health = o_max_health + int((o_card_passive/100) * t_health)
+        elif o_card_passive_type == 'DRAIN':
+            o_stamina = o_stamina + int(o_card_passive)
+            t_stamina = t_stamina - int(o_card_passive)
+        elif o_card_passive_type == 'FLOG':
+            o_attack = o_attack + int((o_card_passive/100) *t_attack)
+            t_attack = t_attack - int((o_card_passive/100) *t_attack)
+        elif o_card_passive_type == 'WITHER':
+            o_defense = o_defense + int((o_card_passive/100) *t_defense)
+            t_defense = t_defense - int((o_card_passive/100) *t_defense)
+        elif o_card_passive_type == 'RAGE':
+            o_attack = o_attack + int(((o_card_passive/100) * o_defense))
+            o_defense = o_defense - int(((o_card_passive/100) *o_attack))
+        elif o_card_passive_type == 'BRACE':            
+            o_defense = o_defense + int(((o_card_passive/100) *o_attack))
+            o_attack = o_attack - int(((o_card_passive/100) * o_defense))
+        elif o_card_passive_type == 'BZRK':            
+            o_attack = o_attack + int(((o_card_passive/100) *o_health))
+            o_health = o_health - int((o_attack))
+        elif o_card_passive_type == 'CRYSTAL':            
+            o_defense = o_defense + int(((o_card_passive/100) *o_health))
+            o_health = o_health - int((o_defense))
+        elif o_card_passive_type == 'GROWTH':            
+            o_attack = o_attack + int(((o_card_passive/100) * o_attack))
+            o_defense = o_defense + int(((o_card_passive/100) * o_defense))
+            o_max_health = o_max_health - int(((o_card_passive/100) * o_max_health))
+            o_health = o_health - int(((o_card_passive/100) * o_max_health))
+        elif o_card_passive_type == 'STANCE':
+            tempattack = o_attack + o_card_passive
+            o_attack = o_defense  + o_card_passive          
+            o_defense = tempattack
+        elif o_card_passive_type == 'CONFUSE':
+            tempattack = t_attack - o_card_passive
+            t_attack = t_defense  - o_card_passive          
+            t_defense = tempattack
+        elif o_card_passive_type == 'BLINK':
+            o_stamina = o_stamina - o_card_passive         
+            t_stamina = t_stamina + o_card_passive - 10
+        elif o_card_passive_type == 'SLOW':
+            tempstam = t_stamina + o_card_passive 
+            o_stamina = o_stamina - (2 * o_card_passive)      
+            t_stamina = o_stamina
+            o_stamina = tempstam  
+        elif o_card_passive_type == 'HASTE':
+            tempstam = t_stamina - o_card_passive    
+            o_stamina = o_stamina + (2 * o_card_passive)      
+            t_stamina = o_stamina 
+            o_stamina = tempstam  
+        elif o_card_passive_type == 'SOULCHAIN':
+            o_stamina = o_card_passive
+            t_stamina = o_card_passive
+        elif o_card_passive_type == 'FEAR':
+            o_health = o_health - int((o_card_passive/100) * o_health)
+            t_attack = t_attack - int((o_card_passive/100) * t_attack)
+            t_defense = t_defense - int((o_card_passive/100) * t_defense)
+        elif o_card_passive_type == 'GAMBLE':
+            o_health = o_card_passive
+            t_health = o_card_passive * 2
+            if companion:
+                c_health = o_card_passive              
+
+        # Title Passive
+        o_title_passive_type = list(o_title_passive.keys())[0]
+        o_title_passive_value = list(o_title_passive.values())[0]
+
+        if o_title_passive_bool:
+            if o_title_passive_type == 'ATK':
+                o_attack = o_attack + int(o_title_passive_value)
+            elif o_title_passive_type == 'DEF':
+                o_defense = o_defense + int(o_title_passive_value)
+            elif o_title_passive_type == 'STAM':
+                o_stamina = o_stamina + int(o_title_passive_value)
+            elif o_title_passive_type == 'HLT':
+                o_max_health = o_max_health + int(o_title_passive_value)
+                o_health = o_health + int(o_title_passive_value)
+            elif o_title_passive_type == 'LIFE':
+                _max_health = o_max_health + int((o_title_passive_value/100) * t_health)
+            elif o_title_passive_type == 'DRAIN':
+                t_stamina = t_stamina - int(o_title_passive_value)
+                o_stamina = o_stamina + int(o_title_passive_value)
+            elif o_title_passive_type == 'FLOG':
+                o_attack = o_attack + int((o_title_passive_value/100) *t_attack)
+                t_attack = t_attack - int((o_title_passive_value/100) *t_attack)
+            elif o_title_passive_type == 'WITHER':
+                o_defense = o_defense + int((o_title_passive_value/100) *t_defense)
+                t_defense = t_defense - int((o_title_passive_value/100) *t_defense)
+            elif o_title_passive_type == 'RAGE':
+                o_attack = o_attack + int(((o_title_passive_value/100) * o_defense))
+                o_defense = o_defense - int(((o_title_passive_value/100) *o_attack))
+            elif o_title_passive_type == 'BRACE':            
+                o_defense = o_defense + int(((o_title_passive_value/100) *o_attack))
+                o_attack = o_attack - int(((o_title_passive_value/100) * o_defense))
+            elif o_title_passive_type == 'BZRK':            
+                o_attack = o_attack + int(((o_title_passive_value/100) *o_health))
+                o_health = o_health - int((o_attack))
+            elif o_title_passive_type == 'CRYSTAL':            
+                o_defense = o_defense + int(((o_title_passive_value/100) * o_health))
+                o_health = o_health - int((o_defense))
+            elif o_title_passive_type == 'GROWTH':            
+                o_attack = o_attack + int((o_title_passive_value/100) * o_attack)
+                o_defense = o_defense + int((o_title_passive_value/100) * o_defense)
+                o_max_health = o_max_health - int((o_title_passive_value/100) * o_max_health) 
+            elif o_title_passive_type == 'STANCE':
+                tempattack = o_attack
+                o_attack = o_defense            
+                o_defense = tempattack
+            elif o_title_passive_type == 'CONFUSE':
+                tempattack = t_attack
+                t_attack = t_defense            
+                t_defense = tempattack
+            elif o_title_passive_type == 'BLINK':
+                o_stamina = o_stamina - o_title_passive_value         
+                t_stamina = t_stamina + o_title_passive_value
+            elif o_title_passive_type == 'SLOW':
+                tempstam = t_stamina + o_title_passive_value 
+                o_stamina = o_stamina - o_title_passive_value      
+                t_stamina = o_stamina
+                o_stamina = tempstam  
+            elif o_title_passive_type == 'HASTE':
+                tempstam = t_stamina - o_title_passive_value    
+                o_stamina = o_stamina + o_title_passive_value      
+                t_stamina = o_stamina 
+                o_stamina = tempstam  
+            elif o_title_passive_type == 'SOULCHAIN':
+                o_stamina = o_title_passive_value
+                t_stamina = o_title_passive_value
+            elif o_title_passive_type == 'FEAR':
+                o_health = o_health - int((o_title_passive_value/100) * o_health)
+                t_attack = t_attack - int((o_title_passive_value/100) * t_attack)
+                t_defense = t_defense - int((o_title_passive_value/100) * t_defense)
+            elif o_title_passive_type == 'GAMBLE':
+                t_health = o_title_passive_value * 2
+                o_health = o_title_passive_value
+                if companion:
+                    c_health = o_title_passive_value
+
+        # Arm Passive Player 1
+        oarm_passive_type = list(oarm_passive.keys())[0]
+        oarm_passive_value = list(oarm_passive.values())[0]
+
+        if oarm_passive_type == 'ATK':
+            o_attack = o_attack + int(oarm_passive_value)
+        elif oarm_passive_type == 'DEF':
+            o_defense = o_defense + int(oarm_passive_value)
+        elif oarm_passive_type == 'STAM':
+            o_stamina = o_stamina + int(oarm_passive_value)
+        elif oarm_passive_type == 'HLT':
+            o_max_health = o_max_health + int(oarm_passive_value)
+            o_health = o_health + int(oarm_passive_value)
+        elif oarm_passive_type == 'LIFE':
+            o_max_health = o_max_health + int((oarm_passive_value/100) * t_health)
+        elif oarm_passive_type == 'DRAIN':
+            t_stamina = t_stamina - int(oarm_passive_value)
+            o_stamina = o_stamina + int(oarm_passive_value)
+        elif oarm_passive_type == 'FLOG':
+            o_attack = o_attack + int((oarm_passive_value/100) *t_attack)
+            t_attack = t_attack - int((oarm_passive_value/100) *t_attack)
+        elif oarm_passive_type == 'WITHER':
+            o_defense = o_defense + int((oarm_passive_value/100) *t_defense)
+            t_defense = t_defense - int((oarm_passive_value/100) *t_defense)
+        elif oarm_passive_type == 'RAGE':
+            o_attack = o_attack + int(((oarm_passive_value/100) * o_defense))
+            o_defense = o_defense- int(((oarm_passive_value/100) *o_attack))
+        elif oarm_passive_type == 'BRACE':            
+            o_defense = o_defense + int(((oarm_passive_value/100) *o_attack))
+            o_attack = o_attack - int(((oarm_passive_value/100) * o_defense))
+        elif oarm_passive_type == 'BZRK':            
+            o_attack = o_attack + int(((oarm_passive_value/100) *o_health))
+            o_health = o_health - int((o_attack))
+        elif oarm_passive_type == 'CRYSTAL':            
+            o_defense = o_defense + int(((oarm_passive_value/100) * o_health))
+            o_health = o_health - int((o_defense))
+        elif oarm_passive_type == 'GROWTH':            
+            o_attack = o_attack + int((oarm_passive_value/100) * o_attack)
+            o_defense = o_defense + int((oarm_passive_value/100) * o_defense)
+            o_max_health = o_max_health - int((oarm_passive_value/100) * o_max_health)
+        elif oarm_passive_type == 'STANCE':
+            tempattack = o_attack + oarm_passive_value
+            o_attack = o_defense  + oarm_passive_value         
+            o_defense = tempattack
+        elif oarm_passive_type == 'CONFUSE':
+            tempattack = o_attack - oarm_passive_value
+            t_attack = t_defense  - oarm_passive_value           
+            t_defense = tempattack
+        elif oarm_passive_type == 'BLINK':
+            o_stamina = o_stamina - oarm_passive_value         
+            t_stamina = t_stamina + oarm_passive_value
+        elif oarm_passive_type == 'SLOW':
+            tempstam = t_stamina + oarm_passive_value 
+            o_stamina = o_stamina - oarm_passive_value      
+            t_stamina = o_stamina
+            o_stamina = tempstam  
+        elif oarm_passive_type == 'HASTE':
+            tempstam = t_stamina - oarm_passive_value    
+            o_stamina = o_stamina + oarm_passive_value      
+            t_stamina = o_stamina 
+            o_stamina = tempstam  
+        elif oarm_passive_type == 'SOULCHAIN':
+            o_stamina = oarm_passive_value
+            t_stamina = oarm_passive_value
+        elif oarm_passive_type == 'FEAR':
+            o_health = o_health - int((oarm_passive_value/100) * o_health)
+            t_attack = t_attack - int((oarm_passive_value/100) * t_attack)
+            t_defense = t_defense - int((oarm_passive_value/100) * t_defense)
+        elif oarm_passive_type == 'GAMBLE':
+            t_health = oarm_passive_value * 2
+            o_health = oarm_passive_value
+            if companion:
+                c_health = oarm_passive_value
+
+
+        ################################################################################
+
+        if mode in opponent_pet_modes:
+            tpetmove_text = list(tpet_passive.keys())[0]
+            tpetmove_ap = (tpet_bond * tpet_lvl) + list(opet.values())[3] # Ability Power
+            tpetmove_type = list(tpet_passive.values())[1]
+            tpet_move = {str(tpetmove_text):int(tpetmove_ap), 'STAM': 15, 'TYPE':tpetmove_type}
+
+        # Arm Passive Player 2
+        tarm_passive_type = list(tarm_passive.keys())[0]
+        tarm_passive_value = list(tarm_passive.values())[0]
+
+        if tarm_passive_type == 'ATK':
+            t_attack = t_attack + int(tarm_passive_value)
+        elif tarm_passive_type == 'DEF':
+            t_defense = t_defense + int(tarm_passive_value)
+        elif tarm_passive_type == 'STAM':
+            t_stamina = t_stamina + int(tarm_passive_value)
+        elif tarm_passive_type == 'HLT':
+            t_max_health = t_max_health + int(tarm_passive_value)
+            t_health = t_health + int(tarm_passive_value)
+        elif tarm_passive_type == 'LIFE':
+            t_max_health = t_max_health + int((tarm_passive_value/100) * o_health)
+        elif tarm_passive_type == 'DRAIN':
+            if companion:
+                c_stamina = c_stamina - int(tarm_passive_value)
+            o_stamina = o_stamina - int(tarm_passive_value)
+            t_stamina = t_stamina + int(tarm_passive_value)
+        elif tarm_passive_type == 'FLOG':
+            t_attack = t_attack + int((tarm_passive_value/100) * o_attack)
+            o_attack = o_attack - int((tarm_passive_value/100) * o_attack)
+            if companion:
+                c_attack = c_attack - int((tarm_passive_value/100) * c_attack)
+        elif tarm_passive_type == 'WITHER':
+            t_defense = t_defense + int((tarm_passive_value/100) *o_defense)
+            o_defense = o_defense - int((tarm_passive_value/100) *o_defense)
+            if companion:
+                c_defense = c_defense - int((tarm_passive_value/100) *c_defense)
+        elif tarm_passive_type == 'RAGE':
+            t_attack = t_attack + int((tarm_passive_value/100) * t_defense)
+            t_defense = t_defense - int((tarm_passive_value/100) *t_attack)
+        elif tarm_passive_type == 'BRACE':            
+            t_defense = t_defense + int((tarm_passive_value/100) *t_attack)
+            t_attack = t_attack - int((tarm_passive_value/100) * t_defense)
+        elif tarm_passive_type == 'BZRK':            
+            t_attack = t_attack + int((.25*tarm_passive_value))
+            t_health = t_health - int((tarm_passive_value))
+        elif tarm_passive_type == 'CRYSTAL':            
+            t_defense = t_defense + int((.25*tarm_passive_value))
+            t_health = t_health - int((tarm_passive_value))
+        elif tarm_passive_type == 'GROWTH':            
+            t_attack = t_attack + int((tarm_passive_value/100) * t_attack)
+            t_defense = t_defense + int((tarm_passive_value/100) * t_defense)
+            t_max_health = t_max_health - int(((tarm_passive_value/100) * t_max_health))
+        elif tarm_passive_type == 'STANCE':
+            tempattack = t_attack + tarm_passive_value
+            t_attack = t_defense  + tarm_passive_value         
+            t_defense = tempattack
+        elif tarm_passive_type == 'CONFUSE':
+            tempattack = o_attack - tarm_passive_value
+            o_attack = o_defense  - tarm_passive_value           
+            o_defense = tempattack
+            if companion:
+                c_defense = tempattack
+        elif tarm_passive_type == 'BLINK':
+            t_stamina = t_stamina - tarm_passive_value         
+            o_stamina = o_stamina + tarm_passive_value
+            if companion:
+                c_stamina = c_stamina + tarm_passive_value
+        elif tarm_passive_type == 'SLOW':
+            tempstam = o_stamina + tarm_passive_value 
+            t_stamina = t_stamina - tarm_passive_value      
+            o_stamina = t_stamina
+            if companion:
+                c_stamina = t_stamina
+            t_stamina = tempstam  
+        elif tarm_passive_type == 'HASTE':
+            tempstam = o_stamina - tarm_passive_value    
+            t_stamina = t_stamina + tarm_passive_value      
+            o_stamina = t_stamina
+            if companion:
+                c_stamina = t_stamina 
+            t_stamina = tempstam  
+        elif tarm_passive_type == 'SOULCHAIN':
+            t_stamina = tarm_passive_value
+            o_stamina = tarm_passive_value
+            if companion:
+                c_stamina = tarm_passive_value
+        elif tarm_passive_type == 'FEAR':
+            t_health = t_health - int((tarm_passive_value/100) * t_health)
+            o_attack = o_attack - int((tarm_passive_value/100) * o_attack)
+            o_defense = o_defense - int((tarm_passive_value/100) * o_defense)
+            if companion:
+                c_attack = c_attack - int((tarm_passive_value/100) * c_attack)
+                c_defense = c_defense - int((tarm_passive_value/100) * c_defense)
+        elif tarm_passive_type == 'GAMBLE':
+            t_health = tarm_passive_value * 2
+            o_health = tarm_passive_value
+            if companion:
+                c_health = tarm_passive_value
+
+
+        # Player 2 Passive Config
+        if (t_universe == t_title_universe) or (t_title_universe == "Unbound"):
+            t_title_passive_bool = True
+        
+        # Player 1 Card Passive
+        t_card_passive_type = list(t_passive.values())[1]
+        t_card_passive = list(t_passive.values())[0]
+
+        if t_card_passive_type == 'ATK':
+            t_attack = t_attack + int(t_card_passive)
+        elif t_card_passive_type == 'DEF':
+            t_defense = t_defense + int(t_card_passive)
+        elif t_card_passive_type == 'STAM':
+            t_stamina = t_stamina + int(t_card_passive)
+        elif t_card_passive_type == 'HLT':
+            t_max_health = t_max_health + int(t_card_passive)
+            t_health = t_health + int(t_card_passive)
+        elif t_card_passive_type == 'LIFE':
+            t_max_health = t_max_health + int((t_card_passive/100) * o_health)
+        elif t_card_passive_type == 'DRAIN':
+            if companion:
+                c_stamina = c_stamina - int(t_card_passive)
+            o_stamina = o_stamina - int(t_card_passive)
+            t_stamina = t_stamina + int(t_card_passive)
+        elif t_card_passive_type == 'FLOG':
+            t_attack = t_attack + int((t_card_passive/100) * o_attack)
+            o_attack = o_attack - int((t_card_passive/100) * o_attack)
+            if companion:
+                c_attack = c_attack - int((t_card_passive/100) * c_attack)
+        elif t_card_passive_type == 'WITHER':
+            t_defense = t_defense + int((t_card_passive/100) *o_defense)
+            o_defense = o_defense - int((t_card_passive/100) *o_defense)
+            if companion:
+                c_defense = c_defense - int((t_card_passive/100) *c_defense)
+        elif t_card_passive_type == 'RAGE':
+            t_attack = t_attack + int((t_card_passive/100) * t_defense)
+            t_defense = t_defense - int((t_card_passive/100) *t_attack)
+        elif t_card_passive_type == 'BRACE':            
+            t_defense = t_defense + int((t_card_passive/100) *t_attack)
+            t_attack = t_attack - int((t_card_passive/100) * t_defense)
+        elif t_card_passive_type == 'BZRK':            
+            t_attack = t_attack + int(((t_card_passive/100)* t_health))
+            t_health = t_health - int((t_attack))
+        elif t_card_passive_type == 'CRYSTAL':            
+            t_defense = t_defense + int((t_card_passive/100) *t_health)
+            t_health = t_health - int(t_defense)
+        elif t_card_passive_type == 'GROWTH':            
+            t_attack =  t_attack + int((t_card_passive/100) * t_attack)
+            t_defense = t_defense + int((t_card_passive/100) * t_defense)
+            t_max_health = t_max_health - int(((t_card_passive/100) * t_max_health))
+            t_health = t_health - int(((t_card_passive/100) * t_health ))
+        elif t_card_passive_type == 'STANCE':
+            tempattack = t_attack + t_card_passive
+            t_attack = t_defense + t_card_passive            
+            t_defense = tempattack
+        elif t_card_passive_type == 'CONFUSE':
+            tempattack = o_attack - t_card_passive
+            o_attack = o_defense  - t_card_passive          
+            o_defense = tempattack
+        elif t_card_passive_type == 'BLINK':
+            t_stamina = t_stamina - t_card_passive         
+            o_stamina = o_stamina + t_card_passive - 10
+        elif t_card_passive_type == 'SLOW':
+            tempstam = o_stamina + t_card_passive 
+            t_stamina = t_stamina - (2 * t_card_passive)     
+            o_stamina = t_stamina
+            t_stamina = tempstam  
+        elif t_card_passive_type == 'HASTE':
+            tempstam = o_stamina - t_card_passive    
+            t_stamina = t_stamina + (2 * t_card_passive)      
+            o_stamina = t_stamina 
+            t_stamina = tempstam  
+        elif t_card_passive_type == 'SOULCHAIN':
+            t_stamina = t_card_passive
+            o_stamina = t_card_passive
+            if companion:
+                c_stamina = t_card_passive
+        elif t_card_passive_type == 'FEAR':
+            t_health = t_health - int((t_card_passive/100) * t_health)
+            o_attack = o_attack - int((t_card_passive/100) * o_attack)
+            o_defense = o_defense - int((t_card_passive/100) * o_defense)
+            if companion:
+                c_attack = o_attack - int((t_card_passive/100 * o_attack))
+                c_defense = o_defense - int((t_card_passive/100 * o_defense))
+        elif t_card_passive_type == 'GAMBLE':
+            t_health = t_card_passive * 2
+            o_health = t_card_passive
+            if companion:
+                c_health = t_card_passive
+
+        # Title Passive
+        t_title_passive_type = list(t_title_passive.keys())[0]
+        t_title_passive_value = list(t_title_passive.values())[0]
+
+        if t_title_passive_bool:
+            if t_title_passive_type == 'ATK':
+                t_attack = t_attack + int(t_title_passive_value)
+            elif t_title_passive_type == 'DEF':
+                t_defense = t_defense + int(t_title_passive_value)
+            elif t_title_passive_type == 'STAM':
+                t_stamina = t_stamina + int(t_title_passive_value)
+            elif t_title_passive_type == 'HLT':
+                t_max_health = t_max_health + int(t_title_passive_value)
+                t_health = t_health + int(t_title_passive_value)
+            elif t_title_passive_type == 'LIFE':
+                t_max_health = t_max_health + int((t_title_passive_value/100) * o_health)
+            elif t_title_passive_type == 'DRAIN':
+                if companion:
+                    c_stamina = c_stamina - int(t_title_passive_value)
+                o_stamina = o_stamina - int(t_title_passive_value)
+                t_stamina = t_stamina + int(t_title_passive_value)
+            elif t_title_passive_type == 'FLOG':
+                t_attack = t_attack + int((t_title_passive_value/100) * o_attack)
+                o_attack = o_attack - int((t_title_passive_value/100) * o_attack)
+                if companion:
+                    c_attack = c_attack - int((t_title_passive_value/100) * c_attack)
+            elif t_title_passive_type == 'WITHER':
+                t_defense = t_defense + int((t_title_passive_value/100) *o_defense)
+                o_defense = o_defense - int((t_title_passive_value/100) *o_defense)
+                if companion:
+                    c_defense = c_defense - int((t_title_passive_value/100) *c_defense)
+            elif t_title_passive_type == 'RAGE':
+                t_attack = t_attack + int(((t_title_passive_value/100) * t_defense))
+                t_defense = t_defense - int(((t_title_passive_value/100) *t_attack))
+            elif t_title_passive_type == 'BRACE':            
+                t_defense = t_defense + int(((t_title_passive_value/100) *t_attack))
+                t_attack = t_attack - int(((t_title_passive_value/100) * t_defense))
+            elif t_title_passive_type == 'BZRK':            
+                t_attack = t_attack + int(((t_title_passive_value/100)* t_health))
+                t_health = t_health - int((t_attack))
+            elif t_title_passive_type == 'CRYSTAL':            
+                t_defense = t_defense + int(((t_title_passive_value/100) *t_health))
+                t_health = t_health - int(t_defense)
+            elif t_title_passive_type == 'GROWTH':            
+                t_attack = t_attack + int(((t_title_passive_value/100) * t_attack))
+                t_defense = t_defense + int(((t_title_passive_value/100) * t_defense))
+                t_max_health = t_max_health - int(((t_title_passive_value/100) * t_max_health))
+            elif t_title_passive_type == 'STANCE':
+                tempattack = t_attack + t_title_passive_value
+                t_attack = t_defense  + t_title_passive_value          
+                t_defense = tempattack
+            elif t_title_passive_type == 'CONFUSE':
+                tempattack = o_attack - t_title_passive_value
+                o_attack = o_defense  - t_title_passive_value           
+                o_defense = tempattack
+                if companion:
+                    c_attack = c_defense  - t_title_passive_value           
+                    c_defense = tempattack
+            elif t_title_passive_type == 'BLINK':
+                t_stamina = t_stamina - t_title_passive_value         
+                o_stamina = o_stamina + t_title_passive_value
+                if companion:
+                    c_stamina = c_stamina + t_title_passive_value
+            elif t_title_passive_type == 'SLOW':
+                tempstam = o_stamina + t_title_passive_value 
+                t_stamina = t_stamina - t_title_passive_value      
+                o_stamina = t_stamina
+                if companion:
+                    c_stamina = t_stamina
+                t_stamina = tempstam  
+            elif t_title_passive_type == 'HASTE':
+                tempstam = o_stamina - t_title_passive_value    
+                t_stamina = t_stamina + t_title_passive_value      
+                o_stamina = t_stamina
+                if companion:
+                    c_stamina = t_stamina
+                t_stamina = tempstam  
+            elif t_title_passive_type == 'SOULCHAIN':
+                t_stamina = t_title_passive_value
+                o_stamina = t_title_passive_value
+                if companion:
+                    c_stamina = t_title_passive_value
+            elif t_title_passive_type == 'FEAR':
+                t_health = t_health - int((t_title_passive_value/100) * t_health)
+                o_attack = o_attack - int((t_title_passive_value/100) * o_attack)
+                o_defense = o_defense - int((t_title_passive_value/100) * o_defense)
+                if companion:
+                    c_attack = o_attack - int((t_title_passive_value/100) * o_attack)
+                    c_defense = o_defense - int((t_title_passive_value/100) * o_defense)
+            elif t_title_passive_type == 'GAMBLE':
+                t_health = t_title_passive_value * 2
+                o_health = t_title_passive_value
+                if companion:
+                    c_health = t_title_passive_value
+
+
+        # Player 2 Moves
+        t_1 = t_moveset[0]
+        t_2 = t_moveset[1]
+        t_3 = t_moveset[2]
+        t_enhancer = t_moveset[3]
+        t_enhancer_used=False
+        t_pet_used=False
+
+        # Player 1 Focus & Resolve
+        t_focus = 90
+        t_used_focus=False
+        t_resolve = 60
+        t_used_resolve=False
+        t_chainsaw=False
+        t_def_chainsaw=False
+        t_atk_chainsaw=False
+        if t_universe == "Chainsawman":
+            t_chainsaw=True
+        
+        #Rebirth Scaling
+        o_attack = o_attack + (o_user['REBIRTH'] * 10)
+        o_defense = o_defense + (o_user['REBIRTH'] * 10)
+        
+        if companion:
+            c_attack = c_attack + (c_user['REBIRTH'] * 10)
+            c_defense = c_defense + (c_user['REBIRTH'] * 10)
+
+        STATS = {
+            'o_card': o_card,
+            'o_card_path': o_card_path,
+            'oarm': oarm,
+            'o_user': o_user,
+            'o_universe': o_universe,
+            'o_attack': o_attack,
+            'o_defense': o_defense,
+            'o_stamina': o_stamina,
+            'o_max_stamina': o_max_stamina,
+            'o_health': o_health,
+            'o_max_health': o_max_health,
+            'o_DID': o_DID,
+            'o_chainsaw': o_chainsaw,
+            'o_atk_chainsaw': o_atk_chainsaw,
+            'o_def_chainsaw': o_def_chainsaw,
+            'omove1_text': omove1_text,
+            'omove2_text': omove2_text,
+            'omove3_text': omove3_text,
+            'omove_enhanced_text': omove_enhanced_text,
+            'o_1': o_1,
+            'o_2': o_2,
+            'o_3': o_3,
+            'o_gif': o_gif,
+            'o_enhancer': o_enhancer,
+            'o_vul': o_vul,
+            'o_accuracy': o_accuracy,
+            'o_speed': o_speed,
+            'o_special_move_description': o_special_move_description,
+            'o_greeting_description': o_greeting_description,
+            'o_focus_description': o_focus_description,
+            'o_resolve_description': o_resolve_description,
+            'o_special_move_description': o_special_move_description,
+            'o_win_description': o_win_description,
+            'o_lose_description': o_lose_description,
+            'ocard_lvl_ap_buff': ocard_lvl_ap_buff,
+            'opet_name': opet_name,
+            'opet_move': opet_move,
+            'opetmove_text': opetmove_text,
+            'opet_image': opet_image,
+            'o_pet_used': o_pet_used,
+            'user1': user1,
+            'o_focus': o_focus,
+            'o_used_focus': o_used_focus,
+            'o_resolve': o_resolve,
+            'o_used_resolve': o_used_resolve,
+            'o_block_used': o_block_used,
+            'o_defend_used': o_defend_used,
+            'o_enhancer_used': o_enhancer_used,
+            'o_final_stand': o_final_stand,
+            't_card': t_card,
+            't_universe': t_universe,
+            't_attack': t_attack,
+            't_defense': t_defense,
+            't_health': t_health,
+            't_max_health': t_max_health,
+            't_chainsaw': t_chainsaw,
+            't_atk_chainsaw': t_atk_chainsaw,
+            't_def_chainsaw': t_def_chainsaw,
+            't_stamina': t_stamina,
+            't_max_stamina': t_max_stamina,
+            't_1': t_1,
+            't_2': t_2,
+            't_3': t_3,
+            't_enhancer': t_enhancer,
+            't_enhancer_used': t_enhancer_used,
+            't_vul': t_vul,
+            't_accuracy': t_accuracy,
+            't_speed': t_speed,
+            't_special_move_description': t_special_move_description,
+            't_gif': t_gif,
+            't_greeting_description': t_greeting_description,
+            't_focus_description': t_focus_description,
+            't_resolve_description': t_resolve_description,
+            't_special_move_description': t_special_move_description,
+            't_win_description': t_win_description,
+            't_lose_description': t_lose_description,
+            't_focus': t_focus,
+            't_used_focus': t_used_focus,
+            't_resolve': t_resolve,
+            't_used_resolve': t_used_resolve,
+            't_final_stand': t_final_stand,
+            'tcard_lvl_ap_buff': tcard_lvl_ap_buff
+        }
+
+        if mode in opponent_pet_modes:
+            STATS = {
+                'o_card': o_card,
+                'o_card_path': o_card_path,
+                'oarm': oarm,
+                'o_user': o_user,
+                'o_universe': o_universe,
+                'o_attack': o_attack,
+                'o_defense': o_defense,
+                'o_stamina': o_stamina,
+                'o_max_stamina': o_max_stamina,
+                'o_health': o_health,
+                'o_max_health': o_max_health,
+                'o_DID': o_DID,
+                'o_chainsaw': o_chainsaw,
+                'o_atk_chainsaw': o_atk_chainsaw,
+                'o_def_chainsaw': o_def_chainsaw,
+                'omove1_text': omove1_text,
+                'omove2_text': omove2_text,
+                'omove3_text': omove3_text,
+                'omove_enhanced_text': omove_enhanced_text,
+                'o_1': o_1,
+                'o_2': o_2,
+                'o_3': o_3,
+                'o_gif': o_gif,
+                'o_enhancer': o_enhancer,
+                'o_vul': o_vul,
+                'o_accuracy': o_accuracy,
+                'o_speed': o_speed,
+                'o_special_move_description': o_special_move_description,
+                'o_greeting_description': o_greeting_description,
+                'o_focus_description': o_focus_description,
+                'o_resolve_description': o_resolve_description,
+                'o_special_move_description': o_special_move_description,
+                'o_win_description': o_win_description,
+                'o_lose_description': o_lose_description,
+                'ocard_lvl_ap_buff': ocard_lvl_ap_buff,
+                'opet_name': opet_name,
+                'opet_move': opet_move,
+                'opetmove_text': opetmove_text,
+                'opet_image': opet_image,
+                'o_pet_used': o_pet_used,
+                'user1': user1,
+                'o_focus': o_focus,
+                'o_used_focus': o_used_focus,
+                'o_resolve': o_resolve,
+                'o_used_resolve': o_used_resolve,
+                'o_block_used': o_block_used,
+                'o_defend_used': o_defend_used,
+                'o_enhancer_used': o_enhancer_used,
+                'o_final_stand': o_final_stand,
+                't_card': t_card,
+                't_universe': t_universe,
+                't_attack': t_attack,
+                't_defense': t_defense,
+                't_health': t_health,
+                't_max_health': t_max_health,
+                't_chainsaw': t_chainsaw,
+                't_atk_chainsaw': t_atk_chainsaw,
+                't_def_chainsaw': t_def_chainsaw,
+                't_stamina': t_stamina,
+                't_max_stamina': t_max_stamina,
+                't_1': t_1,
+                't_2': t_2,
+                't_3': t_3,
+                't_enhancer': t_enhancer,
+                't_enhancer_used': t_enhancer_used,
+                't_vul': t_vul,
+                't_accuracy': t_accuracy,
+                't_speed': t_speed,
+                't_special_move_description': t_special_move_description,
+                't_gif': t_gif,
+                't_greeting_description': t_greeting_description,
+                't_focus_description': t_focus_description,
+                't_resolve_description': t_resolve_description,
+                't_special_move_description': t_special_move_description,
+                't_win_description': t_win_description,
+                't_lose_description': t_lose_description,
+                't_focus': t_focus,
+                't_used_focus': t_used_focus,
+                't_resolve': t_resolve,
+                't_used_resolve': t_used_resolve,
+                't_final_stand': t_final_stand,
+                'tcard_lvl_ap_buff': tcard_lvl_ap_buff,
+                'tpet_name': tpet_name,
+                'tpet_move': tpet_move,
+                'tpetmove_text': tpetmove_text,
+                'tpet_image': tpet_image,
+                't_pet_used': t_pet_used,
+            }
+
+        return STATS
+    except Exception as ex:
+        trace = []
+        tb = ex.__traceback__
+        while tb is not None:
+            trace.append({
+                "filename": tb.tb_frame.f_code.co_filename,
+                "name": tb.tb_frame.f_code.co_name,
+                "lineno": tb.tb_lineno
+            })
+            tb = tb.tb_next
+        print(str({
+            'type': type(ex).__name__,
+            'message': str(ex),
+            'trace': trace
+        }))
+
+def existing_channel_check(self, ctx):
+    try:
+        text_channel_list = []
+        channel_exists = False
+        name_check = str(ctx.author).split("#", 1)[0]
+
+        for guild in self.bot.guilds:
+            for channel in guild.text_channels:
+                text_channel_list.append(channel.name)
+        for text_channel in text_channel_list:
+            if text_channel.startswith(name_check):
+                channel_exists = True
+        
+        if channel_exists:
+            return True
+        else:
+            return False
+    except Exception as ex:
+        trace = []
+        tb = ex.__traceback__
+        while tb is not None:
+            trace.append({
+                "filename": tb.tb_frame.f_code.co_filename,
+                "name": tb.tb_frame.f_code.co_name,
+                "lineno": tb.tb_lineno
+            })
+            tb = tb.tb_next
+        print(str({
+            'type': type(ex).__name__,
+            'message': str(ex),
+            'trace': trace
+        }))
+        return
 
 def getTime(hgame, mgame, sgame, hnow, mnow, snow):
     hoursPassed = hnow - hgame
