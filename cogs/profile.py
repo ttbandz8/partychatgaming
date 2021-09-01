@@ -207,26 +207,26 @@ class Profile(commands.Cog):
                 hlt_buff = ""
                 message = ""
                 if (oarm_universe == o_show) and (o_title_universe == o_show):
-                    atk_buff = f" / {o_attack + 20}"
-                    def_buff = f" / {o_defense + 20}"
-                    hlt_buff = f" / {o_max_health + 100}"
+                    o_attack = o_attack + 20
+                    o_defense = o_defense + 20
+                    o_max_health = o_max_health + 100
                     message = "_Universe Buff Applied_"
                     if o_destiny:
-                        atk_buff = f" / {o_attack + 25}"
-                        def_buff = f" / {o_defense + 25}"
-                        hlt_buff = f" / {o_max_health + 150}"
+                        o_attack = o_attack + 25
+                        o_defense = o_defense + 25
+                        o_max_health = o_max_health + 150
                         message = "_Destiny Buff Applied_"
 
                 embedVar = discord.Embed(title=f":trident: {card_lvl} | {title_name} {o_card} & {active_pet['NAME']}:".format(self), description=textwrap.dedent(f"""\
                 {message}
-                :heart: | **Health** - {o_max_health} {hlt_buff}
-                :cyclone: | **Stamina** - {o_max_stamina}
-                :dagger: | **Attack** - {o_attack} {atk_buff}
-                :shield: | **Shield** - {o_defense} {def_buff}
+                :heart: | **Health** {o_max_health}
+                :cyclone: | **Stamina** {o_max_stamina}
+                :dagger: | **Attack** {o_attack}
+                :shield: | **Shield** {o_defense}
                 
-                :reminder_ribbon: | **Title** - {title_name} ~ {title_passive_type} | {title_passive_value}
-                :mechanical_arm: | **Arm** - {arm_name} ~ {arm_passive_type} | {arm_passive_value}
-                :bird: | **Pet** - {active_pet['NAME']} ~ {active_pet['TYPE']} | {pet_ability_power} 
+                :reminder_ribbon: | **Title** {title_name} ~ {title_passive_type} | {title_passive_value}
+                :mechanical_arm: | **Arm** {arm_name} ~ {arm_passive_type} | {arm_passive_value}
+                :bird: | **Pet** {active_pet['NAME']} ~ {active_pet['TYPE']} | {pet_ability_power} 
                 **Bond** _{bond}_ {bond_message} / **Level** _{lvl}_ {lvl_message}
             
                 _**Moveset**_
@@ -296,9 +296,9 @@ class Profile(commands.Cog):
                         if card == cl['CARD']:
                             lvl = f":trident: **{cl['LVL']}**"
                     cards.append(textwrap.dedent(f"""
-                    **{resp['NAME']}** | {lvl}
-                    **HLT:** {resp['HLT']} **ATK:** {resp['ATK']} **DEF:** {resp['DEF']}
-                    **Universe:** {resp['UNIVERSE']}"""))
+                    :flower_playing_cards: **{resp['NAME']}** | {lvl}
+                    :heart: {resp['HLT']} :dagger: {resp['ATK']} :shield: {resp['DEF']}
+                    :earth_americas:  {resp['UNIVERSE']}"""))
 
                 # Adding to array until divisible by 10
                 while len(cards) % 10 != 0:

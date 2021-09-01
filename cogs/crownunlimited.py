@@ -26074,12 +26074,12 @@ class CrownUnlimited(commands.Cog):
             abyss_buttons = [
                 manage_components.create_button(
                     style=ButtonStyle.blue,
-                    label="Yes",
+                    label="Begin",
                     custom_id="Yes"
                 ),
                 manage_components.create_button(
                     style=ButtonStyle.red,
-                    label="No",
+                    label="Quit",
                     custom_id="No"
                 )
             ]

@@ -19,6 +19,8 @@ import destiny as d
 from discord import User
 from discord import Member
 from discord_slash import SlashCommand
+from discord_slash.utils import manage_components
+from discord_slash.model import ButtonStyle
 import os
 import logging
 import requests
@@ -1030,84 +1032,95 @@ async def sell(ctx, player: User, item: str):
             return
 
          if commence:
-            accept = await ctx.send(f"{ctx.author.mention} do you accept {user2.mention}'s offer?")
-            emojis = ['👍', '👎']
-            for emoji in emojis:
-               await accept.add_reaction(emoji)
-
-            def check(reaction, user):
-               return user == ctx.author and ((str(reaction.emoji) == '👍') or (str(reaction.emoji) == '👎'))
+            sell_buttons = [
+               manage_components.create_button(
+                  style=ButtonStyle.blue,
+                  label="💸",
+                  custom_id="Yes"
+               ),
+               manage_components.create_button(
+                  style=ButtonStyle.red,
+                  label="❌",
+                  custom_id="No"
+               )
+            ]
+            sell_buttons_action_row = manage_components.create_actionrow(*sell_buttons)
+            await ctx.send(f"{ctx.author.mention} do you accept {user2.mention}'s offer?", components=[sell_buttons_action_row])
+        
+            def check(button_ctx):
+               return button_ctx.author == ctx.author
 
             try:
-               reaction, user = await bot.wait_for('reaction_add', timeout=20.0, check=check)
+               button_ctx: ComponentContext = await manage_components.wait_for_component(bot, components=[sell_buttons_action_row], check=check)               
                
-               if str(reaction.emoji) == '👎':
-                  await ctx.send("Sell ended.")
+               if button_ctx.custom_id == "No":
+                  await button_ctx.send("Sell ended.")
                   return
 
-               if p1_trade_item in p1_arms:
-                  db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'ARMS': str(p1_trade_item)}})
-                  await bless(p2_trade_item, ctx.author)
-                  await ctx.send(f"{p2_trade_item} has been added to {ctx.author.mention}'s balance.")
-               elif p1_trade_item in p1_titles:
-                  db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'TITLES': str(p1_trade_item)}})
-                  await bless(p2_trade_item, ctx.author)
-                  await ctx.send(f"{p2_trade_item} has been added to {ctx.author.mention}'s balance.")
-               elif p1_trade_item in p1_cards:
-               
-                  db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'CARDS': str(p1_trade_item)}})
-                  await bless(p2_trade_item, ctx.author)
-                  await ctx.send(f"{p2_trade_item} has been added to {ctx.author.mention}'s balance.")
-               elif p1_trade_item in p1_pet_names:
-                  db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'PETS': {'NAME': str(p1_trade_item)}}})
-                  await bless(p2_trade_item, ctx.author)
-                  await ctx.send(f"{p2_trade_item} has been added to {ctx.author.mention}'s balance.")
+               if button_ctx.custom_id == "Yes":
+                  if p1_trade_item in p1_arms:
+                     db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'ARMS': str(p1_trade_item)}})
+                     await bless(p2_trade_item, ctx.author)
+                     await button_ctx.send(f"{p2_trade_item} has been added to {ctx.author.mention}'s balance.")
+                  elif p1_trade_item in p1_titles:
+                     db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'TITLES': str(p1_trade_item)}})
+                     await bless(p2_trade_item, ctx.author)
+                     await button_ctx.send(f"{p2_trade_item} has been added to {ctx.author.mention}'s balance.")
+                  elif p1_trade_item in p1_cards:
+                  
+                     db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'CARDS': str(p1_trade_item)}})
+                     await bless(p2_trade_item, ctx.author)
+                     await button_ctx.send(f"{p2_trade_item} has been added to {ctx.author.mention}'s balance.")
+                  elif p1_trade_item in p1_pet_names:
+                     db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'PETS': {'NAME': str(p1_trade_item)}}})
+                     await bless(p2_trade_item, ctx.author)
+                     await button_ctx.send(f"{p2_trade_item} has been added to {ctx.author.mention}'s balance.")
 
 
-               if p1_trade_item in p1_arms:
-                  await curse(p2_trade_item, user2)
-                  response = db.updateVaultNoFilter({'OWNER': str(user2)},{'$addToSet':{'ARMS': str(p1_trade_item)}})
-                  await ctx.send(f"{p1_trade_item} has been added to {user2.mention}'s vault: ARMS")
-               elif p1_trade_item in p1_titles:
-                  await curse(p2_trade_item, user2)
-                  response = db.updateVaultNoFilter({'OWNER': str(user2)},{'$addToSet':{'TITLES': str(p1_trade_item)}})
-                  await ctx.send(f"{p1_trade_item} has been added to {user2.mention}'s vault: TITLES")
-               elif p1_trade_item in p1_cards:
-                  await curse(p2_trade_item, user2)
-                  # CARD_LEVEL Configuration 
-                  card_1 = db.queryCard({'NAME': str(p1_trade_item)})
-                  card_1_uni = db.queryUniverse({'TITLE': card_1['UNIVERSE']})
-                  card_1_tier = card_1_uni['TIER']
-                  cupdate_query = {'$addToSet': {'CARD_LEVELS': {'CARD': str(p1_trade_item), 'LVL': 0, 'TIER': int(card_1_tier), 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
-                  card_1_level_exist = False
-                  for card in p2_card_levels:
-                     if card['CARD'] == str(p1_trade_item):
-                        card_1_level_exist = True
-                  if card_1_level_exist == False:
-                     cvault_query = {'OWNER' : str(user2)}
-                     response = db.updateVaultNoFilter(cvault_query, cupdate_query)
+                  if p1_trade_item in p1_arms:
+                     await curse(p2_trade_item, user2)
+                     response = db.updateVaultNoFilter({'OWNER': str(user2)},{'$addToSet':{'ARMS': str(p1_trade_item)}})
+                     await button_ctx.send(f"{p1_trade_item} has been added to {user2.mention}'s vault: ARMS")
+                  elif p1_trade_item in p1_titles:
+                     await curse(p2_trade_item, user2)
+                     response = db.updateVaultNoFilter({'OWNER': str(user2)},{'$addToSet':{'TITLES': str(p1_trade_item)}})
+                     await button_ctx.send(f"{p1_trade_item} has been added to {user2.mention}'s vault: TITLES")
+                  elif p1_trade_item in p1_cards:
+                     await curse(p2_trade_item, user2)
+                     # CARD_LEVEL Configuration 
+                     card_1 = db.queryCard({'NAME': str(p1_trade_item)})
+                     card_1_uni = db.queryUniverse({'TITLE': card_1['UNIVERSE']})
+                     card_1_tier = card_1_uni['TIER']
+                     cupdate_query = {'$addToSet': {'CARD_LEVELS': {'CARD': str(p1_trade_item), 'LVL': 0, 'TIER': int(card_1_tier), 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
+                     card_1_level_exist = False
+                     for card in p2_card_levels:
+                        if card['CARD'] == str(p1_trade_item):
+                           card_1_level_exist = True
+                     if card_1_level_exist == False:
+                        cvault_query = {'OWNER' : str(user2)}
+                        response = db.updateVaultNoFilter(cvault_query, cupdate_query)
 
-                  response = db.updateVaultNoFilter({'OWNER': str(user2)},{'$addToSet':{'CARDS': str(p1_trade_item)}})
+                     response = db.updateVaultNoFilter({'OWNER': str(user2)},{'$addToSet':{'CARDS': str(p1_trade_item)}})
 
-                  for destiny in d.destiny:
-                     if p1_trade_item in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
-                        db.updateVaultNoFilter({'OWNER': str(user2)},{'$addToSet':{'DESTINY': destiny}})
-                        await ctx.send(f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.")
+                     for destiny in d.destiny:
+                        if p1_trade_item in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
+                           db.updateVaultNoFilter({'OWNER': str(user2)},{'$addToSet':{'DESTINY': destiny}})
+                           await button_ctx.send(f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.")
 
-                  await ctx.send(f"{p1_trade_item} has been added to {user2.mention}'s vault: CARDS")
-               elif p1_trade_item in p1_pet_names:
-                  await curse(p2_trade_item, user2)
-                  selected_pet = db.queryPet({"PET": p1_trade_item})
-                  pet_ability_name = list(selected_pet['ABILITIES'][0].keys())[0]
-                  pet_ability_power = list(selected_pet['ABILITIES'][0].values())[0]
-                  pet_ability_type = list(selected_pet['ABILITIES'][0].values())[1]
+                     await button_ctx.send(f"{p1_trade_item} has been added to {user2.mention}'s vault: CARDS")
+                  elif p1_trade_item in p1_pet_names:
+                     await curse(p2_trade_item, user2)
+                     selected_pet = db.queryPet({"PET": p1_trade_item})
+                     pet_ability_name = list(selected_pet['ABILITIES'][0].keys())[0]
+                     pet_ability_power = list(selected_pet['ABILITIES'][0].values())[0]
+                     pet_ability_type = list(selected_pet['ABILITIES'][0].values())[1]
 
-                  response = db.updateVaultNoFilter({'OWNER': str(user2)},{'$addToSet':{'PETS': p1_active_pet}})
-                  #response = db.updateVaultNoFilter({'OWNER': str(user2)},{'$addToSet':{'PETS': str(p1_trade_item)}})
-                  await ctx.send(f"{p1_trade_item} has been added to {user2.mention}'s vault: PETS")
+                     response = db.updateVaultNoFilter({'OWNER': str(user2)},{'$addToSet':{'PETS': p1_active_pet}})
+                     #response = db.updateVaultNoFilter({'OWNER': str(user2)},{'$addToSet':{'PETS': str(p1_trade_item)}})
+                     await button_ctx.send(f"{p1_trade_item} has been added to {user2.mention}'s vault: PETS")
 
             except:
-               await ctx.send("Trade ended. ")
+               await ctx.send("Sell ended unexpectedly.")
 
 @slash.slash(name="Gift", description="Give money to friend", guild_ids=guild_ids)
 @commands.check(validate_user)
@@ -1430,41 +1443,57 @@ async def resell(ctx, item: str):
       else:
          if p1_trade_item in p1_cards:
             card = db.queryCard({'NAME':{"$regex": str(p1_trade_item), "$options": "i"}})
-            sell_price = card['PRICE'] * .07
+            sell_price = card['PRICE'] * .15
          elif p1_trade_item in p1_titles:
             title = db.queryTitle({'TITLE': {"$regex": str(p1_trade_item), "$options": "i"}})
-            sell_price = title['PRICE'] * .07
+            sell_price = title['PRICE'] * .15
          elif p1_trade_item in p1_arms:
             arm = db.queryArm({'ARM': {"$regex": str(p1_trade_item), "$options": "i"}})
-            sell_price = arm['PRICE'] * .07
+            sell_price = arm['PRICE'] * .15
 
          if (p1_trade_item == user['CARD']) or (p1_trade_item == user['TITLE']) or (p1_trade_item == user['ARM']):
             await ctx.send("You cannot resell an equipped item.")
             return
 
-         accept = await ctx.send(f"{ctx.author.mention} are you willing to resell {p1_trade_item} for :coin: {round(sell_price)}?")
-         emojis = ['👍', '👎']
-         for emoji in emojis:
-            await accept.add_reaction(emoji)
+         sell_buttons = [
+               manage_components.create_button(
+                  style=ButtonStyle.blue,
+                  label="💸",
+                  custom_id="Yes"
+               ),
+               manage_components.create_button(
+                  style=ButtonStyle.red,
+                  label="❌",
+                  custom_id="No"
+               )
+            ]
+         sell_buttons_action_row = manage_components.create_actionrow(*sell_buttons)
 
-         def check(reaction, user):
-            return user == ctx.author and str(reaction.emoji) == '👍'
+         await ctx.send(f"{ctx.author.mention} are you willing to resell {p1_trade_item} for :coin: {round(sell_price)}?", components=[sell_buttons_action_row])
+
+         
+         def check(button_ctx):
+            return button_ctx.author == ctx.author
 
          try:
-            reaction, user = await bot.wait_for('reaction_add', timeout=20.0, check=check)
+            button_ctx: ComponentContext = await manage_components.wait_for_component(bot, components=[sell_buttons_action_row], check=check)
 
-            if p1_trade_item in p1_arms:
-               db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'ARMS': str(p1_trade_item)}})
-               await bless(sell_price, ctx.author)
-               await ctx.send(f"{p1_trade_item} has been resold for :coin: {round(sell_price)}.")
-            elif p1_trade_item in p1_titles:
-               db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'TITLES': str(p1_trade_item)}})
-               await bless(sell_price, ctx.author)
-               await ctx.send(f"{p1_trade_item} has been resold for :coin: {round(sell_price)}.")
-            elif p1_trade_item in p1_cards:
-               db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'CARDS': str(p1_trade_item)}})
-               await bless(sell_price, ctx.author)
-               await ctx.send(f"{p1_trade_item} has been resold for :coin: {round(sell_price)}.")
+            if button_ctx.custom_id == "No":
+                  await button_ctx.send("Sell ended.")
+                  return
+            if button_ctx.custom_id == "Yes":
+               if p1_trade_item in p1_arms:
+                  db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'ARMS': str(p1_trade_item)}})
+                  await bless(sell_price, ctx.author)
+                  await button_ctx.send(f"{p1_trade_item} has been resold for :coin: {round(sell_price)}.")
+               elif p1_trade_item in p1_titles:
+                  db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'TITLES': str(p1_trade_item)}})
+                  await bless(sell_price, ctx.author)
+                  await button_ctx.send(f"{p1_trade_item} has been resold for :coin: {round(sell_price)}.")
+               elif p1_trade_item in p1_cards:
+                  db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'CARDS': str(p1_trade_item)}})
+                  await bless(sell_price, ctx.author)
+                  await button_ctx.send(f"{p1_trade_item} has been resold for :coin: {round(sell_price)}.")
 
          except:
             await ctx.send("Resell ended. ")
