@@ -643,8 +643,9 @@ class Profile(commands.Cog):
                 for d in destiny:
                     if not d['COMPLETED']:
                         destiny_messages.append(textwrap.dedent(f"""\
-                        **{d["NAME"]}**
+                        :sparkles: **{d["NAME"]}**
                         Defeat **{d['DEFEAT']}** with **{" ".join(d['USE_CARDS'])}** | **Current Progress:** {d['WINS']}/{d['REQUIRED']}
+                        Win :flower_playing_cards: **{d['EARN']}**
                         """))
 
                 if not destiny_messages:

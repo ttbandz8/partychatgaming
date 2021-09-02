@@ -15,6 +15,9 @@ import requests
 from collections import ChainMap
 import DiscordUtils
 from discord_slash import cog_ext, SlashContext
+from discord_slash import SlashCommand
+from discord_slash.utils import manage_components
+from discord_slash.model import ButtonStyle
 
 emojis = ['👍', '👎']
 
@@ -35,24 +38,38 @@ class Teams(commands.Cog):
         if team_name == "":
             return
         team_query = {'OWNER': str(ctx.author), 'TNAME': team_name, 'MEMBERS': [str(ctx.author)], 'GAMES': ["Crown Unlimited"]}
-        accept = await ctx.send(f"Do you want to create the team {team_name}?".format(self), delete_after=10)
-        for emoji in emojis:
-            await accept.add_reaction(emoji)
 
-        def check(reaction, user):
-            return (user == ctx.author and (str(reaction.emoji) == '👍')) or (user == ctx.author and (str(reaction.emoji) == '👎'))
+        team_buttons = [
+            manage_components.create_button(
+                style=ButtonStyle.blue,
+                label="✔️",
+                custom_id="Yes"
+            ),
+            manage_components.create_button(
+                style=ButtonStyle.red,
+                label="❌",
+                custom_id="No"
+            )
+        ]
+        team_buttons_action_row = manage_components.create_actionrow(*team_buttons)
+        await ctx.send(f"Do you want to create the team {team_name}?".format(self), components=[team_buttons_action_row])
+
+
+        def check(button_ctx):
+            return button_ctx.author == ctx.author
 
         try:
-            reaction, user = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
+            button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[team_buttons_action_row], check=check)
 
-            if str(reaction.emoji) == '👎':
-                await ctx.send("Team not created.")
+            if button_ctx.custom_id == "No":
+                await button_ctx.send("Team not created.")
                 return
-
-            response = db.createTeam(data.newTeam(team_query), str(ctx.author))
-            await ctx.send(response)
+            
+            if button_ctx.custom_id == "Yes":
+                response = db.createTeam(data.newTeam(team_query), str(ctx.author))
+                await button_ctx.send(response)
         except:
-            print("Team not created. ")
+            print("Team creation ended unexpectedly. ")
 
     @cog_ext.cog_slash(description="Recruit team member", guild_ids=main.guild_ids)
     async def recruit(self, ctx, player: User):
@@ -69,19 +86,38 @@ class Teams(commands.Cog):
                 # If user is part of a team you cannot add them to your team
                 if member_profile['TEAM'] == 'PCG':
                     await main.DM(ctx, player, f"{ctx.author.mention}" + f" has invited you to join {team_profile['TNAME']} !" + f" React in server to join {team_profile['TNAME']}" )
-                    accept = await ctx.send(f"{player.mention}" +f" do you want to join team {team_profile['TNAME']}?".format(self), delete_after=10)
-                    for emoji in emojis:
-                        await accept.add_reaction(emoji)
 
-                    def check(reaction, user):
-                        return user == player and str(reaction.emoji) == '👍'
+                    team_buttons = [
+                        manage_components.create_button(
+                            style=ButtonStyle.blue,
+                            label="✔️",
+                            custom_id="Yes"
+                        ),
+                        manage_components.create_button(
+                            style=ButtonStyle.red,
+                            label="❌",
+                            custom_id="No"
+                        )
+                    ]
+                    team_buttons_action_row = manage_components.create_actionrow(*team_buttons)
+                    await ctx.send(f"{player.mention}" +f" do you want to join team {team_profile['TNAME']}?".format(self), components=[team_buttons_action_row])
+
+                    def check(button_ctx):
+                        return button_ctx.author == player
 
                     try:
-                        confirmed = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
-                        team_query = {'TNAME': team_profile['TNAME']}
-                        new_value_query = {'$push': {'MEMBERS': str(player)}}
-                        response = db.addTeamMember(team_query, new_value_query, str(ctx.author), str(player))
-                        await ctx.send(response)
+                        button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[team_buttons_action_row], check=check)
+                        
+                        if button_ctx.custom_id == "No":
+                            await button_ctx.send("Team not created.")
+                            return
+
+                        if button_ctx.custom_id == "Yes":
+                            confirmed = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
+                            team_query = {'TNAME': team_profile['TNAME']}
+                            new_value_query = {'$push': {'MEMBERS': str(player)}}
+                            response = db.addTeamMember(team_query, new_value_query, str(ctx.author), str(player))
+                            await button_ctx.send(response)
                     except:
                         await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=3)
                 else:
@@ -190,32 +226,47 @@ class Teams(commands.Cog):
             if guildname != 'PCG':
                 guildteam=True
             if team['OWNER'] == str(ctx.author):
-                accept = await ctx.send(f"Do you want to delete the {team['GAMES'][0]} team {team_name}?".format(self), delete_after=10)
-                for emoji in emojis:
-                    await accept.add_reaction(emoji)
 
-                def check(reaction, user):
-                    return (user == ctx.author and (str(reaction.emoji) == '👍')) or (user == ctx.author and (str(reaction.emoji) == '👎'))
+                team_buttons = [
+                    manage_components.create_button(
+                        style=ButtonStyle.blue,
+                        label="✔️",
+                        custom_id="Yes"
+                    ),
+                    manage_components.create_button(
+                        style=ButtonStyle.red,
+                        label="❌",
+                        custom_id="No"
+                    )
+                ]
+                team_buttons_action_row = manage_components.create_actionrow(*team_buttons)
+
+                await ctx.send(f"Do you want to delete the {team['GAMES'][0]} team {team_name}?".format(self), components=[team_buttons_action_row])
+
+                def check(button_ctx):
+                    return button_ctx.author == ctx.author
 
                 try:
-                    reaction, user = await self.bot.wait_for('reaction_add', timeout=8.0, check=check)
-                    if str(reaction.emoji) == '👎':
-                        await ctx.send("Team not deleted.")
-                        return
-                    response = db.deleteTeam(team, str(ctx.author))
+                    button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[team_buttons_action_row], check=check)
 
-                    user_query = {'DISNAME': str(ctx.author)}
-                    new_value = {'$set': {'TEAM': 'PCG'}}
-                    db.updateUserNoFilter(user_query, new_value)
-                    await ctx.send(response)
-                    if guildteam:
-                        guild_query = {'GNAME' : str(guildname)}
-                        guild_info = db.queryGuildAlt(guild_query)
-                        new_query = {'FOUNDER' : str(guild_info['FOUNDER'])}
-                        if guild_info:
-                            pull_team = {'$pull' : {'SWORDS' : str(team_name)}}
-                            response2 = db.deleteGuildSword(new_query, pull_team, str(guild_info['FOUNDER']), str(team_name))
-                            await ctx.send(response2)
+                    if button_ctx.custom_id == "No":
+                        await button_ctx.send("Team not created.")
+                        return
+
+                    if button_ctx.custom_id == "Yes":
+                        response = db.deleteTeam(team, str(ctx.author))
+                        user_query = {'DISNAME': str(ctx.author)}
+                        new_value = {'$set': {'TEAM': 'PCG'}}
+                        db.updateUserNoFilter(user_query, new_value)
+                        await button_ctx.send(response)
+                        if guildteam:
+                            guild_query = {'GNAME' : str(guildname)}
+                            guild_info = db.queryGuildAlt(guild_query)
+                            new_query = {'FOUNDER' : str(guild_info['FOUNDER'])}
+                            if guild_info:
+                                pull_team = {'$pull' : {'SWORDS' : str(team_name)}}
+                                response2 = db.deleteGuildSword(new_query, pull_team, str(guild_info['FOUNDER']), str(team_name))
+                                await button_ctx.send(response2)
                 except Exception as e:
                     print(e)
             else:
