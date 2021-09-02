@@ -16,6 +16,9 @@ from PIL import Image, ImageFont, ImageDraw
 import requests
 from .crownunlimited import showcard
 from discord_slash import cog_ext, SlashContext
+from discord_slash import SlashCommand
+from discord_slash.utils import manage_components
+from discord_slash.model import ButtonStyle
 
 class Cards(commands.Cog):
     def __init__(self, bot):
@@ -132,23 +135,51 @@ class Cards(commands.Cog):
                                 db.updateVaultNoFilter(vault_query,{'$addToSet':{'DESTINY': destiny}})
                                 await ctx.send(f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.")
 
-                        accept = await ctx.send(f"{ctx.author.mention} would you like to equip this Card?")
-                        emojis = ['👍', '👎']
-                        for emoji in emojis:
-                            await accept.add_reaction(emoji)
+                        card_buttons = [
+                            manage_components.create_button(
+                                style=ButtonStyle.blue,
+                                label="✔️",
+                                custom_id="Yes"
+                            ),
+                            manage_components.create_button(
+                                style=ButtonStyle.red,
+                                label="❌",
+                                custom_id="No"
+                            )
+                        ]
+                        card_buttons_action_row = manage_components.create_actionrow(*card_buttons)
+                        await ctx.send(f"{ctx.author.mention} would you like to equip this Card?", components=[card_buttons_action_row])
 
-                        def check(reaction, user):
-                            return (user == ctx.author and (str(reaction.emoji) == '👍')) or (user == ctx.author and (str(reaction.emoji) == '👎'))
+                        def check(button_ctx):
+                            return button_ctx.author == ctx.author
+
                         try:
-                            user_query = {'DISNAME': str(ctx.author)}
-                            reaction, user = await self.bot.wait_for('reaction_add', timeout=25.0, check=check)
-                            if str(reaction.emoji) == '👎':
-                                await ctx.send("Maybe next time...")
+                            button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[card_buttons_action_row], check=check)
+
+                            if button_ctx.custom_id == "No":
+                                await button_ctx.send("Did not equip card.")
                                 return
-                            response = db.updateUserNoFilter(user_query, {'$set': {'CARD': str(card_name)}})
-                            await ctx.send(response)
-                        except:
-                            return
+
+                            if button_ctx.custom_id == "Yes":
+                                user_query = {'DISNAME': str(ctx.author)}
+                                response = db.updateUserNoFilter(user_query, {'$set': {'CARD': str(card_name)}})
+                                await button_ctx.send(response)
+                        except Exception as ex:
+                            trace = []
+                            tb = ex.__traceback__
+                            while tb is not None:
+                                trace.append({
+                                    "filename": tb.tb_frame.f_code.co_filename,
+                                    "name": tb.tb_frame.f_code.co_name,
+                                    "lineno": tb.tb_lineno
+                                })
+                                tb = tb.tb_next
+                            print(str({
+                                'type': type(ex).__name__,
+                                'message': str(ex),
+                                'trace': trace
+                            }))
+
             elif checkout == True:
                 await ctx.send(m.CARD_DOESNT_EXIST)
             else:

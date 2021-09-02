@@ -12,6 +12,9 @@ from discord import Member
 from PIL import Image, ImageFont, ImageDraw
 import requests
 from discord_slash import cog_ext, SlashContext
+from discord_slash import SlashCommand
+from discord_slash.utils import manage_components
+from discord_slash.model import ButtonStyle
 
 class Titles(commands.Cog):
     def __init__(self, bot):
@@ -98,22 +101,35 @@ class Titles(commands.Cog):
                     await ctx.send(m.PURCHASE_COMPLETE_1 + f"`{newstock}` `{mintedTitle}` TITLES left in the Shop!")
 
 
+                    title_buttons = [
+                            manage_components.create_button(
+                                style=ButtonStyle.blue,
+                                label="✔️",
+                                custom_id="Yes"
+                            ),
+                            manage_components.create_button(
+                                style=ButtonStyle.red,
+                                label="❌",
+                                custom_id="No"
+                            )
+                        ]
+                    title_buttons_action_row = manage_components.create_actionrow(*title_buttons)
+                    await ctx.send(f"{ctx.author.mention} would you like to equip this Title?", components=[title_buttons_action_row])
 
-                    accept = await ctx.send(f"{ctx.author.mention} would you like to equip this Title?")
-                    emojis = ['👍', '👎']
-                    for emoji in emojis:
-                        await accept.add_reaction(emoji)
+                    def check(button_ctx):
+                        return button_ctx.author == ctx.author
 
-                    def check(reaction, user):
-                        return (user == ctx.author and (str(reaction.emoji) == '👍')) or (user == ctx.author and (str(reaction.emoji) == '👎'))
                     try:
-                        user_query = {'DISNAME': str(ctx.author)}
-                        reaction, user = await self.bot.wait_for('reaction_add', timeout=25.0, check=check)
-                        if str(reaction.emoji) == '👎':
-                            await ctx.send("Maybe another time...")
+                        button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[title_buttons_action_row], check=check)
+                        
+                        if button_ctx.custom_id == "No":
+                            await button_ctx.send("Did not equip title.")
                             return
-                        response = db.updateUserNoFilter(user_query, {'$set': {'TITLE': str(title_name)}})
-                        await ctx.send(response)
+                        
+                        if button_ctx.custom_id == "Yes":
+                            user_query = {'DISNAME': str(ctx.author)}
+                            response = db.updateUserNoFilter(user_query, {'$set': {'TITLE': str(title_name)}})
+                            await button_ctx.send(response)
                     except:
                         return
 

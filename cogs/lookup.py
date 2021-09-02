@@ -171,7 +171,23 @@ class Lookup(commands.Cog):
         query = {'DISNAME': str(player)}
         d = db.queryUser(query)
         m = db.queryManyMatchesPerPlayer({'PLAYER': str(player)})
+        v = db.queryVault({'OWNER': str(player)})
         if d:
+            balance = v['BALANCE']
+            if balance >= 150000:
+                bal_icon = ":money_with_wings:"
+            elif balance >=100000:
+                bal_icon = ":moneybag:"
+            elif balance >= 50000:
+                bal_icon = ":dollar:"
+
+            bal_message = f"{bal_icon}{'{:,}'.format(balance)}"
+
+            all_cards = len(v['CARDS'])
+            all_titles = len(v['TITLES'])
+            all_arms = len(v['ARMS'])
+            all_pets = len(v['PETS'])
+
             name = d['DISNAME'].split("#",1)[0]
             games = d['GAMES']
             abyss_level = d['LEVEL']
@@ -261,6 +277,8 @@ class Lookup(commands.Cog):
             matches_to_string = dict(ChainMap(*matches))
             ign_to_string = dict(ChainMap(*ign))
 
+
+
             embed1 = discord.Embed(title= f"{icon} | " + f"{name}".format(self), description=textwrap.dedent(f"""\
             :new_moon: | **Abyss Rank**: {abyss_level}
             :flower_playing_cards: | **Card:** {card}
@@ -269,16 +287,22 @@ class Lookup(commands.Cog):
             :bird: | **Pet: **{pet}
 
             :military_medal: | {most_played_card_message}
-            
             **Tales Played: **{len(tales_matches)}
             **Dungeons Played: **{len(dungeon_matches)}
             **Bosses Played: **{len(boss_matches)}
             **Pvp Played: **{len(pvp_matches)}
             **W/L:** {wins}**/**{losses}
             
+            **Balance** {bal_message}
+            :flower_playing_cards: **Owned** {all_cards}
+            :reminder_ribbon: **Owned** {all_titles}
+            :mechanical_arm: **Owned** {all_arms}
+            :bird: **Owned** {all_pets}
+            
             :flags: | **Guild: **{guild}
             :military_helmet: | **Team: **{team} 
             :family_mwgb: | **Family: **{family}
+
             
             """), colour=000000)
             embed1.set_thumbnail(url=avatar)

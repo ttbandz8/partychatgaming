@@ -47565,11 +47565,11 @@ class CrownUnlimited(commands.Cog):
             else:
                 available = "🟠"
             if card['EXCLUSIVE'] and not card['HAS_COLLECTION']:
-                dungeon_card_details.append(f"{available} **{card['NAME']}**: :coin:{'{:,}'.format(card['PRICE'])}\n**HLT:** {card['HLT']} **ATK:** {card['ATK']}  **DEF:** {card['DEF']}\n")
+                dungeon_card_details.append(f"{available} **{card['NAME']}**: :coin:{'{:,}'.format(card['PRICE'])}\n:heart: {card['HLT']} :dagger: {card['ATK']}  :shield: {card['DEF']}\n")
             elif not card['HAS_COLLECTION']:
-                tales_card_details.append(f"{available} **{card['NAME']}**: :coin:{'{:,}'.format(card['PRICE'])}\n**HLT:** {card['HLT']} **ATK:** {card['ATK']}  **DEF:** {card['DEF']}\n")
+                tales_card_details.append(f"{available} **{card['NAME']}**: :coin:{'{:,}'.format(card['PRICE'])}\n:heart: {card['HLT']} :dagger: {card['ATK']}  :shield: {card['DEF']}\n")
             elif card['HAS_COLLECTION']:
-                destiny_card_details.append(f"{available} **{card['NAME']}**: :coin:{'{:,}'.format(card['PRICE'])}\n**HLT:** {card['HLT']} **ATK:** {card['ATK']}  **DEF:** {card['DEF']}\n")
+                destiny_card_details.append(f"{available} **{card['NAME']}**: :coin:{'{:,}'.format(card['PRICE'])}\n:heart: {card['HLT']} :dagger: {card['ATK']}  :shield: {card['DEF']}\n")
 
         all_cards = []
         if tales_card_details:
@@ -47644,9 +47644,9 @@ class CrownUnlimited(commands.Cog):
             else:
                 available = ":red_circle:"
             if title['EXCLUSIVE']:
-                dungeon_titles_details.append(f"{available} **{title['TITLE']}**\n**{title_passive_type}:** {title_passive_value}\n")
+                dungeon_titles_details.append(f"{available} :reminder_ribbon: **{title['TITLE']}**\n**{title_passive_type}:** {title_passive_value}\n")
             else:
-                tales_titles_details.append(f"{available} **{title['TITLE']}**: :coin:{'{:,}'.format(title['PRICE'])}\n**{title_passive_type}:** {title_passive_value}\n")
+                tales_titles_details.append(f"{available} :reminder_ribbon: **{title['TITLE']}**: :coin:{'{:,}'.format(title['PRICE'])}\n**{title_passive_type}:** {title_passive_value}\n")
 
         all_titles = []
         if tales_titles_details:
@@ -47716,9 +47716,9 @@ class CrownUnlimited(commands.Cog):
             else:
                 available = ":red_circle:"
             if arm['EXCLUSIVE']:
-                dungeon_arms_details.append(f"{available} **{arm['ARM']}**\n**{arm_passive_type}:** {arm_passive_value}\n")
+                dungeon_arms_details.append(f"{available} :mechanical_arm: **{arm['ARM']}**\n**{arm_passive_type}:** {arm_passive_value}\n")
             else:
-                tales_arms_details.append(f"{available} **{arm['ARM']}**: :coin:{'{:,}'.format(arm['PRICE'])}\n**{arm_passive_type}:** {arm_passive_value}\n")
+                tales_arms_details.append(f"{available} :mechanical_arm: **{arm['ARM']}**: :coin:{'{:,}'.format(arm['PRICE'])}\n**{arm_passive_type}:** {arm_passive_value}\n")
 
         all_arms = []
         if tales_arms_details:
@@ -47777,7 +47777,7 @@ class CrownUnlimited(commands.Cog):
         
         destiny_details = []
         for de in destinies:
-            destiny_details.append(f"**{de['NAME']}**\nDefeat {de['DEFEAT']} with {' '.join(de['USE_CARDS'])} {str(de['REQUIRED'])} times: Unlock **{de['EARN']}**\n")
+            destiny_details.append(f":sparkles: **{de['NAME']}**\nDefeat {de['DEFEAT']} with {' '.join(de['USE_CARDS'])} {str(de['REQUIRED'])} times: Unlock **{de['EARN']}**\n")
         
         total_destinies = len(destiny_details)
 
@@ -47837,9 +47837,9 @@ class CrownUnlimited(commands.Cog):
             else:
                 available = ":red_circle:"
             if pet['EXCLUSIVE']:
-                dungeon_pets_details.append(f"{available} **{pet['PET']}**\n**{pet_ability}:** {pet_ability_power}\n**Type:** {pet_ability_type}\n")
+                dungeon_pets_details.append(f"{available} :bird: **{pet['PET']}**\n**{pet_ability}:** {pet_ability_power}\n**Type:** {pet_ability_type}\n")
             else:
-                tales_pets_details.append(f"{available} **{pet['PET']}**\n**{pet_ability}:** {pet_ability_power}\n**Type:** {pet_ability_type}\n")
+                tales_pets_details.append(f"{available} :bird: **{pet['PET']}**\n**{pet_ability}:** {pet_ability_power}\n**Type:** {pet_ability_type}\n")
 
         all_pets = []
         if tales_pets_details:
