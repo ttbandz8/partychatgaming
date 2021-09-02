@@ -294,10 +294,10 @@ class Lookup(commands.Cog):
             **W/L:** {wins}**/**{losses}
             
             **Balance** {bal_message}
-            :flower_playing_cards: **Owned** {all_cards}
-            :reminder_ribbon: **Owned** {all_titles}
-            :mechanical_arm: **Owned** {all_arms}
-            :bird: **Owned** {all_pets}
+            :flower_playing_cards: **Cards** {all_cards}
+            :reminder_ribbon: **Titles** {all_titles}
+            :mechanical_arm: **Arms** {all_arms}
+            :bird: **Pets** {all_pets}
             
             :flags: | **Guild: **{guild}
             :military_helmet: | **Team: **{team} 
