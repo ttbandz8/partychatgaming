@@ -32536,7 +32536,7 @@ class CrownUnlimited(commands.Cog):
                     o_defense = o_defense - int((t_card_passive/100) *o_defense)
                 elif t_card_passive_type == 'RAGE':
                     t_attack = t_attack + int((t_card_passive/100) * t_defense)
-                    t_defense = t_defense - int((t_card_passive/100) *t_attack)
+                    t_defense = t_defense - int((t_card_passive/100) * t_attack)
                 elif t_card_passive_type == 'BRACE':            
                     t_defense = t_defense + int((t_card_passive/100) *t_attack)
                     t_attack = t_attack - int((t_card_passive/100) * t_defense)
@@ -48435,19 +48435,19 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, vul, accura
             flog = round((ap/100) * op_attack )
         elif enh == 'WITHER':
             enh_type="WITHER"
-            wither = round((ap/100) * op_attack )
+            wither = round((ap/100) * op_defense )
         elif enh == 'RAGE':
             enh_type="RAGE"
             rage = round((ap/100) * op_attack )
         elif enh == 'BRACE':
             enh_type="BRACE"
-            brace = round((ap/100) * op_attack )
+            brace = round((ap/100) * op_defense )
         elif enh == 'BZRK':
             enh_type="BZRK"
             bzrk = round((ap/100) * op_attack )
         elif enh == 'CRYSTAL':
             enh_type="CRYSTAL"
-            crystal = round((ap/100) * op_attack )
+            crystal = round((ap/100) * op_defense )
         elif enh == 'GROWTH':
             enh_type="GROWTH"
             growth = (ap/100)
