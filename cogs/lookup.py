@@ -177,9 +177,9 @@ class Lookup(commands.Cog):
                 balance = v['BALANCE']
                 if balance >= 150000:
                     bal_icon = ":money_with_wings:"
-                elif balance >=100000:
+                elif balance >= 100000:
                     bal_icon = ":moneybag:"
-                elif balance >= 50000:
+                elif balance >= 50000 or balance <= 49999:
                     bal_icon = ":dollar:"
 
                 bal_message = f"{bal_icon}{'{:,}'.format(balance)}"
