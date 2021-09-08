@@ -322,7 +322,7 @@ class CrownUnlimited(commands.Cog):
 
                         # Tutorial Instructions
                         if turn_total == 0 and botActive:
-                            embedVar = discord.Embed(title=f"**{o_card}** VS **{t_card}** has begun! {lineup}\n{t_universe} Auto-Tales Battle", description=f"The Battle is underway...", colour=0xe91e63)
+                            embedVar = discord.Embed(title=f"**{o_card}** VS **{t_card}** has begun! {lineup}\nAuto Battler is turned on and the battle is underway.", description=f"The Auto Battler will notify you once you've won or lost.", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
 
                         if o_health <= (o_max_health * .25):
@@ -1470,7 +1470,7 @@ class CrownUnlimited(commands.Cog):
                     embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                 else: 
                     embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
-                await ctx.author.send(embed=embedVar)
+                await private_channel.send(embed=embedVar)
 
                 await private_channel.send(f"{ctx.author.mention} would you like to play again?", components=[play_again_buttons_action_row])
 
@@ -25536,6 +25536,7 @@ class CrownUnlimited(commands.Cog):
                 tpet_passive = tpet['ABILITIES'][0]
                 tpet_name = tpet['PET']
                 tpet_image = tpet['PATH']
+                t_destiny = t['HAS_COLLECTION']
                 tpet_bond = 3
                 tpet_lvl = 6
                 tarm_passive = tarm['ABILITIES'][0]
