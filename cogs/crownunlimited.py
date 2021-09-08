@@ -1484,6 +1484,7 @@ class CrownUnlimited(commands.Cog):
                         await discord.TextChannel.delete(private_channel, reason=None)
                         return
                     if button_ctx.custom_id == "Yes":
+                        await button_ctx.send("Good luck!")
                         currentopponent = 0
                         continued = True
                 except asyncio.TimeoutError:
@@ -47821,7 +47822,7 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, vul, accura
                 enhanced = ap
             else:
                 n = ap / turn
-                rand = round(random.randint(2, 100))
+                rand = round(random.randint(2, 50))
                 if n <= 0:
                     n = 30
                 if turn % 10 == 0:
@@ -47841,7 +47842,7 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, vul, accura
                 n = ap / turn
                 if n <= 0:
                     n = 30
-                rand = round(random.randint(2, 100))
+                rand = round(random.randint(2, 50))
                 if turn % 10 == 0:
                     n = ap * .20
                 if turn == rand:
