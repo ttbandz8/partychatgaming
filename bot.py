@@ -1502,7 +1502,7 @@ async def curseguild(amount, guild):
 #    else:
 #       print(m.ADMIN_ONLY_COMMAND)
 
-@slash.slash(name="Ups", description="function to update stuff", guild_ids=guild_ids)
+@slash.slash(name="Update", description="function to update stuff", guild_ids=guild_ids)
 async def update(ctx):
    # Parameters
    dont_update_enhancer = ["WAVE", "CREATION", "DESTRUCTION", "BLAST", "STAM", "BLINK", "SLOW", "HASTE", "CONFUSE", "STANCE", "GAMBLE", "SOULCHAIN"]
@@ -1900,52 +1900,52 @@ async def update(ctx):
         }))
         pass
 
-@slash.slash(name="Menu", description="Menu Options for things to do", guild_ids=guild_ids)
-@commands.check(validate_user)
-async def menu(ctx):
-   try:
-      response = db.queryAllMenu()
-      profile, story, pvp, objectives = "", "", "", ""
-      for menu in response:
-         if menu['NAME'] == "Profile":
-            profile = menu['PATH']
-         if menu['NAME'] == "Story":
-            story = menu['PATH']
-         if menu['NAME'] == "PVP":
-            pvp = menu['PATH']
-         if menu['NAME'] == "Objectives":
-            objectives = menu['PATH']
+# @slash.slash(name="Menu", description="Menu Options for things to do", guild_ids=guild_ids)
+# @commands.check(validate_user)
+# async def menu(ctx):
+#    try:
+#       response = db.queryAllMenu()
+#       profile, story, pvp, objectives = "", "", "", ""
+#       for menu in response:
+#          if menu['NAME'] == "Profile":
+#             profile = menu['PATH']
+#          if menu['NAME'] == "Story":
+#             story = menu['PATH']
+#          if menu['NAME'] == "PVP":
+#             pvp = menu['PATH']
+#          if menu['NAME'] == "Objectives":
+#             objectives = menu['PATH']
 
-      embedVar1 = discord.Embed(title= f"Story Mode", description="Journey through Universes to defeat powerful foes to unlock vast new worlds, tough boss fights, and new possibilities!", colour=0x7289da)
-      embedVar1.set_image(url=story)
-      embedVar1.set_footer(text=f"use /crown for additional assistance")
+#       embedVar1 = discord.Embed(title= f"Story Mode", description="Journey through Universes to defeat powerful foes to unlock vast new worlds, tough boss fights, and new possibilities!", colour=0x7289da)
+#       embedVar1.set_image(url=story)
+#       embedVar1.set_footer(text=f"use /crown for additional assistance")
 
-      embedVar2 = discord.Embed(title= f"Profile Menu", description="View and Edit your Cards, Titles, Arms, and Pets to craft new builds and strategies.", colour=0x7289da)
-      embedVar2.set_image(url=profile)
-      # embedVar2.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
-      embedVar2.set_footer(text=f"use /crown for additional assistance")
+#       embedVar2 = discord.Embed(title= f"Profile Menu", description="View and Edit your Cards, Titles, Arms, and Pets to craft new builds and strategies.", colour=0x7289da)
+#       embedVar2.set_image(url=profile)
+#       # embedVar2.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
+#       embedVar2.set_footer(text=f"use /crown for additional assistance")
       
-      embedVar3 = discord.Embed(title= f"PVP Mode", description="Face off against friend or foe!", colour=0x7289da)
-      embedVar3.set_image(url=pvp)
-      # embedVar3.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
-      embedVar3.set_footer(text=f"use /crown for additional assistance")
+#       embedVar3 = discord.Embed(title= f"PVP Mode", description="Face off against friend or foe!", colour=0x7289da)
+#       embedVar3.set_image(url=pvp)
+#       # embedVar3.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
+#       embedVar3.set_footer(text=f"use /crown for additional assistance")
 
-      embedVar4 = discord.Embed(title= f"Crown Unlimited Menu", description="5 Primary Objectives of Crown Unlimited. Click arrow below to go to the next page!", colour=0x7289da)
-      embedVar4.set_image(url=objectives)
-      # embedVar4.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
-      embedVar4.set_footer(text=f"use /crown for additional assistance")
+#       embedVar4 = discord.Embed(title= f"Crown Unlimited Menu", description="5 Primary Objectives of Crown Unlimited. Click arrow below to go to the next page!", colour=0x7289da)
+#       embedVar4.set_image(url=objectives)
+#       # embedVar4.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
+#       embedVar4.set_footer(text=f"use /crown for additional assistance")
 
-      paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
-      paginator.add_reaction('⏮️', "first")
-      paginator.add_reaction('⏪', "back")
-      paginator.add_reaction('🔐', "lock")
-      paginator.add_reaction('⏩', "next")
-      paginator.add_reaction('⏭️', "last")
-      embeds = [embedVar4, embedVar1,embedVar3, embedVar2]
-      await paginator.run(embeds)
+#       paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+#       paginator.add_reaction('⏮️', "first")
+#       paginator.add_reaction('⏪', "back")
+#       paginator.add_reaction('🔐', "lock")
+#       paginator.add_reaction('⏩', "next")
+#       paginator.add_reaction('⏭️', "last")
+#       embeds = [embedVar4, embedVar1,embedVar3, embedVar2]
+#       await paginator.run(embeds)
          
-   except Exception as e:
-      await ctx.send(f"Error has occurred: {e}")
+#    except Exception as e:
+#       await ctx.send(f"Error has occurred: {e}")
 
 
 if config('ENV') == "production":
