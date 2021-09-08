@@ -123,81 +123,50 @@ async def enhancers(ctx):
    avatar="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png"
 
 
-   embedVar1 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
+   embedVar1 = discord.Embed(title= f":microbe: Enhancer Type: Boosts",colour=0x7289da)
    embedVar1.set_thumbnail(url=avatar)
-   embedVar1.add_field(name="`INCREASES`", value="`ATK` - Increase `ATK`\n\n`DEF` - Increase `DEF`\n\n`HLT` - Increase `HLT`\n\n`STAM` - Increase `STAM`\n\n")
+   embedVar1.add_field(name="`BOOSTS`", value="**ATK**\n**Title, Arm, Card Passive Effect:** Increase Attack by Flat AP value.\n**Card Active Enhancer Effect:** Increase Attack By AP %.\n\n**DEF**\n**Title, Arm, Card Passive Effect:** Increase Defense by Flat AP value.\n**Card Active Enhancer Effect:** Increase Defense By AP %.\n\n**HLT**\n**Title, Arm, Card Passive Effect:** Increase Health by Flat AP value.\n**Card Active Enhancer Effect:** Increase Health By Flat AP + 16% of Current Health.\n\n**STAM** - Increase Stamina by Flat AP\n\n")
    embedVar1.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
 
-   embedVar2 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
+   embedVar2 = discord.Embed(title= f":microbe: Enhancer Type: Steals",colour=0x7289da)
    embedVar2.set_thumbnail(url=avatar)
-   embedVar2.add_field(name="`STEALS`", value="`FLOG`- `ATK` Steal\n\n`WITHER`- `DEF` Steal\n\n`LIFE` - `LIFE` Steal\n\n`DRAIN` - `STAM` Steal\n\n")
+   embedVar2.add_field(name="`STEALS`", value="**FLOG**- Steal Opponent Attack and Add it to Your Attack by AP %\n\n**WITHER**- Steal Opponent Defense and Add it to Your Defense by AP %\n\n**LIFE**\n**Title, Arm, Card Passive Effect:** Steal Opponent Health and Add it to your Max Health by AP %\n**Card Active Enhancer Effect:** Steal Opponent Health and Add it to your Current Health by Flat AP + 9% of Opponent Current Health. \n\n**DRAIN** - Steal Opponent Stamina and Add it to your Stamina by Flat AP\n\n")
    embedVar2.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
 
-   embedVar3 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
+   embedVar3 = discord.Embed(title= f":microbe: Enhancer Type: Sacrifice",colour=0x7289da)
    embedVar3.set_thumbnail(url=avatar)
-   embedVar3.add_field(name="`SACRIFICE`", value="`RAGE` - Decrease `DEF`, Increase `ATK`\n\n`BRACE` - Decrease `ATK`, Increase `DEF`\n\n`BZRK` - Decrease `HLT`,  Increase `ATK`\n\n`CRYSTAL`- Decrease `HLT`, Increase `DEF`\n\n")
+   embedVar3.add_field(name="`SACRIFICE`", value="**RAGE** - Decrease Your Defense by AP %, Increase Your Attack by Amount of Decreased Defense\n\n**BRACE** - Decrease Your Attack by AP %, Increase Your Defense By Amount of Decreased Attack\n\n**BZRK** - Decrease Your Current Health by AP %,  Increase Your Attack by Amount of Decreased Health\n\n**CRYSTAL** - Decrease Your Health by AP %, Increase Your Defense by Amount of Decreased Health\n\n")
    embedVar3.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
 
-   embedVar4 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
+   embedVar4 = discord.Embed(title= f":microbe: Enhancer Type: Conversion",colour=0x7289da)
    embedVar4.set_thumbnail(url=avatar)
-   embedVar4.add_field(name="`TRADE`", value="`STANCE` - Swap `ATK` and `DEF`\n\n`CONFUSE` - Swap `OPP ATK` and  `OPP DEF`\n\n")
+   embedVar4.add_field(name="`CONVERSION`", value="**STANCE** - Swap Your Attack and Defense, Increase Your Attack By Flat AP\n\n**CONFUSE** - Swap Opponenet Attack and Defense, Decrease Opponent Defense by Flat AP\n\n")
    embedVar4.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
 
-   embedVar5 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
+   embedVar5 = discord.Embed(title= f":microbe: Enhancer Type: Time Manipulation",colour=0x7289da)
    embedVar5.set_thumbnail(url=avatar)
-   embedVar5.add_field(name="`TIME`", value="`BLINK`  - Decrease  `STAM`, Increase `OPP STAM`\n\n`SLOW` - Decrease `STAM`, Swap `OPP STAM`\n\n`HASTE` - Increase `STAM`, Swap `OPP STAM`\n\n")
+   embedVar5.add_field(name="`TIME MANIPULATION`", value="**BLINK**  - Decrease Your Stamina by Flat AP, Increase Opponent Stamina by Flat AP\n\n**SLOW** - Decrease Your Stamina by Flat AP, Swap You and Your Opponent's Stamina\n\n**HASTE** - Increase Your Stamina, Swap You and Your Opponent's Stamina\n\n")
    embedVar5.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
 
-   embedVar6 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
+   embedVar6 = discord.Embed(title= f":microbe: Enhancer Type: Control",colour=0x7289da)
    embedVar6.set_thumbnail(url=avatar)
-   embedVar6.add_field(name="`CONTROL`", value="`SOULCHAIN` - Both `PLAYERS` `STAM` = `AP`\n\n`GAMBLE` - Both `PLAYERS` `HEALTH` = `AP`\n\n")
+   embedVar6.add_field(name="`CONTROL`", value="**SOULCHAIN** - You and Your Opponent's Stamina Equal Flat AP\n\n**GAMBLE** - You and Your Opponent's Health Equal Flat AP\n\n")
    embedVar6.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
    
-   embedVar7 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
+   embedVar7 = discord.Embed(title= f":microbe: Enhancer Type: Fortitude",colour=0x7289da)
    embedVar7.set_thumbnail(url=avatar)
-   embedVar7.add_field(name="`FORTITUDE`", value="`GROWTH`- Decrease `MAXHLT`, Increase `ATK` & `DEF`\n\n`FEAR` - Decrease `MAXHLT`, Decrease `OPP ATK` & `OPP DEF`\n\n")
+   embedVar7.add_field(name="`FORTITUDE`", value="**GROWTH**- Decrease Your Max Health by AP %, Increase Your Attack and Defense by AP %\n\n**FEAR** - Decrease Your Max Health by AP %, Decrease Opponent Attack and Defense by AP %\n\n")
    embedVar7.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
 
-   embedVar8 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
+   embedVar8 = discord.Embed(title= f":microbe: Enhancer Type: Damage",colour=0x7289da)
    embedVar8.set_thumbnail(url=avatar)
-   embedVar8.add_field(name="`DAMAGE`", value="`WAVE` - Decreasing `Turn Count` Based `AP DMG` \n\n`BLAST` - Increasing `Turn Count` Based `AP DMG`\n\n")
+   embedVar8.add_field(name="`DAMAGE`", value="**WAVE** - Deal Flat AP Damage to Opponent. AP Decreases each turn. If used on turn that is divisible by 10 you will deal 30% of Flat AP Damage. You have chance to Crit for Double Flat AP Damage. \n\n**BLAST** - Deal Flat AP Damage to Opponent. AP Increases each turn.\n\n")
    embedVar8.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
 
-   embedVar9 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
+   embedVar9 = discord.Embed(title= f":microbe: Enhancer Type: Divinity",colour=0x7289da)
    embedVar9.set_thumbnail(url=avatar)
-   embedVar9.add_field(name="`DIVINITY`", value="`CREATION` - Increase `MAXHEALTH` Decreasing by `Turn Count`\n\n`DESTRUCTION` - Decrease `OPP MAXHEALTH` Increasing By `Turn Count`\n\n")
+   embedVar9.add_field(name="`DIVINITY`", value="**CREATION** - Increase Max Health by Flat AP. AP Decreases each turn. If used on turn that is divisible by 10 you will heal Health & Max Health for 20% of Flat AP. You have chance to Crit Heal Health and Max Health for Double Flat AP. \n\n**DESTRUCTION** - Decrease Opponent Max Health by Flat AP. AP Increases each turn.\n\n")
    embedVar9.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
-
-   embedVar10 = discord.Embed(title= f":trident:ENHANCE DETAILS:", description=textwrap.dedent(f"""
-   **AP:** **Ability Power**                                                                                           
-   **ATK:** AP Percentage Based Attack Increased
-   **DEF:** AP Percentage Based Attack Increased
-   **STAM:** Increased Stamina based on AP Value
-   **HLT:** Increased Health based on AP Value
-   **LIFE:** Lifesteals based on AP Value + 9% of Opponent Health
-   **DRAIN:** Steals Opponent Stamina based on AP Value
-   **FLOG:** Steals Attack based on 30% of AP Percentage
-   **WITHER:** Steals Defense based on 30% of AP Percentage
-   **RAGE:** Gain ATK but Lose DEF based on 30% of AP Percentage Of Your DEF
-   **BRACE:** GAIN DEF but Lose ATK based on 30% AP Percentage Of Your ATK
-   **BZRK:** Gain ATK but lose Health based on AP Percentage
-   **CRYSTAL:** Gain DEF Bbut lose Health based on AP Percentage
-   **STANCE:** Increase DEF by AP, Then Swaps ATK and DEF
-   **CONFUSE:** Decreasee Opponent DEF by AP, Then Swaps Opponent ATK and DEF
-   **BLINK:** Decreases Your Stamina by AP Value and gives opponent Stamina by AP Value
-   **SLOW:** Increases Your Stamina by AP, Decreases your Opponent Stamina by AP, Then swaps you and your opponents Stamina
-   **HASTE:** Decreases your Stamina by AP, Increases your Opponent stamina by AP, Then swap you and your opponent Stamina 
-   **SOUL:** CHAIN - Make you and your opponent Stamina equal AP
-   **GAMBLE:** Make you and your opponent health equal AP 
-   **GROWTH:** Lower Max Health, Increase Defense and Attack based on AP Percentage
-   **FEAR:** Lower your Health by AP Percentage, Lower your opponent ATK and DEF by AP Percentage
-   **WAVE:** Deals AP / Turn Count Damage to Opponent that decreases as the Turn Count increases (Crits on 10's and 15's)
-   **BLAST:** Deals AP * Turn Count Damage to Opponent that increases as the Turn Count increases
-   **CREATION:** Increases AP / Turn Count Max Health & Health that decreases as the Turn Count increases (Crits on 10's and 15's)
-   **DESTRUCTION:** Decreases AP * Turn Count Max Health that increases as the Turn Count increases
-   """) ,colour=0x7289da)
-   embedVar10.set_thumbnail(url=avatar)
-   embedVar10.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
 
    paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
    paginator.add_reaction('⏮️', "first")
@@ -205,7 +174,7 @@ async def enhancers(ctx):
    paginator.add_reaction('🔐', "lock")
    paginator.add_reaction('⏩', "next")
    paginator.add_reaction('⏭️', "last")
-   embeds = [embedVar1, embedVar2, embedVar3, embedVar4, embedVar5, embedVar6, embedVar7, embedVar8, embedVar9, embedVar10]
+   embeds = [embedVar1, embedVar2, embedVar3, embedVar4, embedVar5, embedVar6, embedVar7, embedVar8, embedVar9]
    await paginator.run(embeds)
 
 @slash.slash(name="Crown", description="Crown Unlimited Tutorial", guild_ids=guild_ids)
