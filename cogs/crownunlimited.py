@@ -323,7 +323,6 @@ class CrownUnlimited(commands.Cog):
                         # Tutorial Instructions
                         if turn_total == 0 and botActive:
                             embedVar = discord.Embed(title=f"**{o_card}** VS **{t_card}** has begun! {lineup}\nAuto Battler is turned on and the battle is underway.", description=f"The Auto Battler will notify you once you've won or lost.", colour=0xe91e63)
-                            await private_channel.send(embed=embedVar)
 
                         if o_health <= (o_max_health * .25):
                             embed_color_o=0xe74c3c
