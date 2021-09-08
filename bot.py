@@ -1502,450 +1502,450 @@ async def curseguild(amount, guild):
 #    else:
 #       print(m.ADMIN_ONLY_COMMAND)
 
-@slash.slash(name="Update", description="function to update stuff", guild_ids=guild_ids)
-async def update(ctx):
-   # Parameters
-   dont_update_enhancer = ["WAVE", "CREATION", "DESTRUCTION", "BLAST", "STAM", "BLINK", "SLOW", "HASTE", "CONFUSE", "STANCE", "GAMBLE", "SOULCHAIN"]
-   dont_update_passive = ["WAVE", "CREATION", "DESTRUCTION", "BLAST", "STAM", "BLINK", "SLOW", "HASTE", "CONFUSE", "STANCE", "GAMBLE", "SOULCHAIN", "ATK", "DEF", "HLT", "LIFE"]
-   universes = [
-      "League Of Legends",
-      "Attack On Titan",
-      "Naruto",
-      "Bleach",
-      "My Hero Academia",
-      "Dragon Ball Z",
-      "Demon Slayer",
-      "7ds",
-      "One Punch Man",
-      "God Of War",
-      "Unbound",
-      "Black Clover",
-      "Solo Leveling",
-      "Kanto Region",
-      "Digimon",
-      "Hoenn Region",
-      "Chainsawman",
-      "Crown Rift Madness",
-      "Crown Rift Slayers",
-      "Souls",
-      "Crown Rift Awakening",
-      "Death Note",
-      "Fate",
-      "Johto Region",
-      "Kalos Region",
-      "Sinnoh Region"
-   ]
+# @slash.slash(name="Update", description="function to update stuff", guild_ids=guild_ids)
+# async def update(ctx):
+#    # Parameters
+#    dont_update_enhancer = ["WAVE", "CREATION", "DESTRUCTION", "BLAST", "STAM", "BLINK", "SLOW", "HASTE", "CONFUSE", "STANCE", "GAMBLE", "SOULCHAIN"]
+#    dont_update_passive = ["WAVE", "CREATION", "DESTRUCTION", "BLAST", "STAM", "BLINK", "SLOW", "HASTE", "CONFUSE", "STANCE", "GAMBLE", "SOULCHAIN", "ATK", "DEF", "HLT", "LIFE"]
+#    universes = [
+#       "League Of Legends",
+#       "Attack On Titan",
+#       "Naruto",
+#       "Bleach",
+#       "My Hero Academia",
+#       "Dragon Ball Z",
+#       "Demon Slayer",
+#       "7ds",
+#       "One Punch Man",
+#       "God Of War",
+#       "Unbound",
+#       "Black Clover",
+#       "Solo Leveling",
+#       "Kanto Region",
+#       "Digimon",
+#       "Hoenn Region",
+#       "Chainsawman",
+#       "Crown Rift Madness",
+#       "Crown Rift Slayers",
+#       "Souls",
+#       "Crown Rift Awakening",
+#       "Death Note",
+#       "Fate",
+#       "Johto Region",
+#       "Kalos Region",
+#       "Sinnoh Region"
+#    ]
 
-   # Card Update
-   try:
-      # Update Cards 1st
-      card_dump = db.queryAllCards()
-      card_list = []
-      for c in card_dump:
-         if c["UNIVERSE"] in universes:
-            card_list.append(c)
-
-      for card in card_list:
-         cardname = card["NAME"]
-         # Card Moveset
-         moveset = card["MOVESET"]
-         enhancer = moveset[3]
-         enhancer_name = list(enhancer.keys())[0]
-         enhancer_ap = list(enhancer.values())[0]
-         enhancer_type = list(enhancer.values())[2]
-
-         passive = card["PASS"][0]
-         passive_name = list(passive.keys())[0]
-         passive_ap = list(passive.values())[0]
-         passive_type = list(passive.values())[1]
-         new_passive_ap_value = 0
-         new_enhancer_ap_value = 0
-
-         # Card Universe
-         card_universe = db.queryUniverse({"TITLE": card["UNIVERSE"]})
-         card_tier = card_universe["TIER"]
-         if card_tier == 0:
-            card_tier = 9
-
-         # Card Enhancer and Passive update
-         if enhancer_type not in dont_update_enhancer:
-            if enhancer_ap >= 40 and enhancer_ap > 39:
-               if card_tier == 1:
-                  new_enhancer_ap_value = 15
-               if card_tier == 2:
-                  new_enhancer_ap_value = 20
-               if card_tier == 3:
-                  new_enhancer_ap_value = 25
-               if card_tier == 4:
-                  new_enhancer_ap_value = 35
-               if card_tier == 5:
-                  new_enhancer_ap_value = 40
-               if card_tier == 9:
-                  new_enhancer_ap_value = 23
-            elif enhancer_ap >= 30 and enhancer_ap < 39:
-               if card_tier == 1:
-                  new_enhancer_ap_value = 10
-               if card_tier == 2:
-                  new_enhancer_ap_value = 15
-               if card_tier == 3:
-                  new_enhancer_ap_value = 20
-               if card_tier == 4:
-                  new_enhancer_ap_value = 30
-               if card_tier == 5:
-                  new_enhancer_ap_value = 35
-               if card_tier == 9:
-                  new_enhancer_ap_value = 18
-            elif enhancer_ap >= 20 and enhancer_ap < 30:
-               if card_tier == 1:
-                  new_enhancer_ap_value = 5
-               if card_tier == 2:
-                  new_enhancer_ap_value = 10
-               if card_tier == 3:
-                  new_enhancer_ap_value = 15
-               if card_tier == 4:
-                  new_enhancer_ap_value = 20
-               if card_tier == 5:
-                  new_enhancer_ap_value = 25
-               if card_tier == 9:
-                  new_enhancer_ap_value = 13
-            elif enhancer_ap >= 0 and enhancer_ap < 20:
-               if card_tier == 1:
-                  new_enhancer_ap_value = 3
-               if card_tier == 2:
-                  new_enhancer_ap_value = 8
-               if card_tier == 3:
-                  new_enhancer_ap_value = 10
-               if card_tier == 4:
-                  new_enhancer_ap_value = 15
-               if card_tier == 5:
-                  new_enhancer_ap_value = 20
-               if card_tier == 9:
-                  new_enhancer_ap_value = 9
-            
-            query = {"NAME": cardname}
-            update_query = {'$set': {'MOVESET.$[type].' + enhancer_name: new_enhancer_ap_value}}
-            filter_query = [{'type.' + enhancer_name: enhancer_ap}]
-            resp = db.updateCardWithFilter(query, update_query, filter_query)
-         if passive_type not in dont_update_passive:  
-            if passive_ap >= 40 and passive_ap > 39:
-               if card_tier == 1:
-                  new_passive_ap_value = 15
-               if card_tier == 2:
-                  new_passive_ap_value = 20
-               if card_tier == 3:
-                  new_passive_ap_value = 25
-               if card_tier == 4:
-                  new_passive_ap_value = 35
-               if card_tier == 5:
-                  new_passive_ap_value = 40
-               if card_tier == 9:
-                  new_passive_ap_value = 23
-            elif passive_ap >= 30 and passive_ap < 39:
-               if card_tier == 1:
-                  new_passive_ap_value = 10
-               if card_tier == 2:
-                  new_passive_ap_value = 15
-               if card_tier == 3:
-                  new_passive_ap_value = 20
-               if card_tier == 4:
-                  new_passive_ap_value = 30
-               if card_tier == 5:
-                  new_passive_ap_value = 35
-               if card_tier == 9:
-                  new_passive_ap_value = 18
-            elif passive_ap >= 20 and passive_ap < 30:
-               if card_tier == 1:
-                  new_passive_ap_value = 5
-               if card_tier == 2:
-                  new_passive_ap_value = 10
-               if card_tier == 3:
-                  new_passive_ap_value = 15
-               if card_tier == 4:
-                  new_passive_ap_value = 20
-               if card_tier == 5:
-                  new_passive_ap_value = 25
-               if card_tier == 9:
-                  new_passive_ap_value = 13
-            elif passive_ap >= 0 and passive_ap < 20:
-               if card_tier == 1:
-                  new_passive_ap_value = 3
-               if card_tier == 2:
-                  new_passive_ap_value = 8
-               if card_tier == 3:
-                  new_passive_ap_value = 10
-               if card_tier == 4:
-                  new_passive_ap_value = 15
-               if card_tier == 5:
-                  new_passive_ap_value = 20
-               if card_tier == 9:
-                  new_passive_ap_value = 9
-            
-            query = {"NAME": cardname}
-            update_query = {'$set': {'PASSIVE.$[type].' + passive_name: new_passive_ap_value}}
-            filter_query = [{'type.' + passive_name: passive_ap}]
-            resp = db.updateCardWithFilter(query, update_query, filter_query)
-
-      print("Update Cards complete.")
-   except Exception as ex:
-        trace = []
-        tb = ex.__traceback__
-        while tb is not None:
-            trace.append({
-                "filename": tb.tb_frame.f_code.co_filename,
-                "name": tb.tb_frame.f_code.co_name,
-                "lineno": tb.tb_lineno
-            })
-            tb = tb.tb_next
-        print(str({
-            'type': type(ex).__name__,
-            'message': str(ex),
-            'trace': trace
-        }))
-        pass
-   
-   # Arm Update
-   try:
-      # Update Arms 1st
-      arm_dump = db.queryAllArms()
-      arm_list = []
-      for c in arm_dump:
-         if c["UNIVERSE"] in universes:
-            arm_list.append(c)
-      for arm in arm_list:
-         armname = arm["ARM"]
-
-         passive = arm["ABILITIES"][0]
-         passive_type = list(passive.keys())[0]
-         passive_ap = list(passive.values())[0]
-         new_passive_ap_value = 0
-
-         # Card Universe
-         card_universe = db.queryUniverse({"TITLE": arm["UNIVERSE"]})
-         card_tier = card_universe["TIER"]
-         if card_tier == 0:
-            card_tier = 9
-
-         if passive_type not in dont_update_passive:  
-            if passive_ap >= 40 and passive_ap > 39:
-               if card_tier == 1:
-                  new_passive_ap_value = 10
-               if card_tier == 2:
-                  new_passive_ap_value = 15
-               if card_tier == 3:
-                  new_passive_ap_value = 18
-               if card_tier == 4:
-                  new_passive_ap_value = 20
-               if card_tier == 5:
-                  new_passive_ap_value = 25
-               if card_tier == 9:
-                  new_passive_ap_value = 19
-            elif passive_ap >= 30 and passive_ap < 39:
-               if card_tier == 1:
-                  new_passive_ap_value = 8
-               if card_tier == 2:
-                  new_passive_ap_value = 13
-               if card_tier == 3:
-                  new_passive_ap_value = 18
-               if card_tier == 4:
-                  new_passive_ap_value = 27
-               if card_tier == 5:
-                  new_passive_ap_value = 30
-               if card_tier == 9:
-                  new_passive_ap_value = 17
-            elif passive_ap >= 20 and passive_ap < 30:
-               if card_tier == 1:
-                  new_passive_ap_value = 6
-               if card_tier == 2:
-                  new_passive_ap_value = 10
-               if card_tier == 3:
-                  new_passive_ap_value = 15
-               if card_tier == 4:
-                  new_passive_ap_value = 24
-               if card_tier == 5:
-                  new_passive_ap_value = 25
-               if card_tier == 9:
-                  new_passive_ap_value = 12
-            elif passive_ap >= 0 and passive_ap < 20:
-               if card_tier == 1:
-                  new_passive_ap_value = 3
-               if card_tier == 2:
-                  new_passive_ap_value = 8
-               if card_tier == 3:
-                  new_passive_ap_value = 10
-               if card_tier == 4:
-                  new_passive_ap_value = 18
-               if card_tier == 5:
-                  new_passive_ap_value = 20
-               if card_tier == 9:
-                  new_passive_ap_value = 9
-            
-            query = {"ARM": armname}
-            update_query = {'$set': {'ABILITIES.$[type].' + passive_type: new_passive_ap_value}}
-            filter_query = [{'type.' + passive_type: passive_ap}]
-            resp = db.updateArmWithFilter(query, update_query, filter_query)
-      print("Update Arm complete.")
-   except Exception as ex:
-        trace = []
-        tb = ex.__traceback__
-        while tb is not None:
-            trace.append({
-                "filename": tb.tb_frame.f_code.co_filename,
-                "name": tb.tb_frame.f_code.co_name,
-                "lineno": tb.tb_lineno
-            })
-            tb = tb.tb_next
-        print(str({
-            'type': type(ex).__name__,
-            'message': str(ex),
-            'trace': trace
-        }))
-        pass
-   
-   # Title Update
-   try:
-      # Update Cards 1st
-      title_dump = db.queryAllTitles()
-      title_list = []
-      for c in title_dump:
-         if c["UNIVERSE"] in universes:
-            title_list.append(c)
-
-      for title in title_list:
-         titlename = title["TITLE"]
-
-         passive = title["ABILITIES"][0]
-         passive_type = list(passive.keys())[0]
-         passive_ap = list(passive.values())[0]
-         new_passive_ap_value = 0
-
-         # Card Universe
-         card_universe = db.queryUniverse({"TITLE": title["UNIVERSE"]})
-         card_tier = card_universe["TIER"]
-         if card_tier == 0:
-            card_tier = 9
-
-         if passive_type not in dont_update_passive:  
-            if passive_ap >= 40 and passive_ap > 39:
-               if card_tier == 1:
-                  new_passive_ap_value = 10
-               if card_tier == 2:
-                  new_passive_ap_value = 18
-               if card_tier == 3:
-                  new_passive_ap_value = 20
-               if card_tier == 4:
-                  new_passive_ap_value = 25
-               if card_tier == 5:
-                  new_passive_ap_value = 35
-               if card_tier == 9:
-                  new_passive_ap_value = 22
-            elif passive_ap >= 30 and passive_ap < 39:
-               if card_tier == 1:
-                  new_passive_ap_value = 8
-               if card_tier == 2:
-                  new_passive_ap_value = 15
-               if card_tier == 3:
-                  new_passive_ap_value = 18
-               if card_tier == 4:
-                  new_passive_ap_value = 28
-               if card_tier == 5:
-                  new_passive_ap_value = 32
-               if card_tier == 9:
-                  new_passive_ap_value = 19
-            elif passive_ap >= 20 and passive_ap < 30:
-               if card_tier == 1:
-                  new_passive_ap_value = 5
-               if card_tier == 2:
-                  new_passive_ap_value = 12
-               if card_tier == 3:
-                  new_passive_ap_value = 16
-               if card_tier == 4:
-                  new_passive_ap_value = 26
-               if card_tier == 5:
-                  new_passive_ap_value = 28
-               if card_tier == 9:
-                  new_passive_ap_value = 11
-            elif passive_ap >= 0 and passive_ap < 20:
-               if card_tier == 1:
-                  new_passive_ap_value = 3
-               if card_tier == 2:
-                  new_passive_ap_value = 8
-               if card_tier == 3:
-                  new_passive_ap_value = 10
-               if card_tier == 4:
-                  new_passive_ap_value = 14
-               if card_tier == 5:
-                  new_passive_ap_value = 20
-               if card_tier == 9:
-                  new_passive_ap_value = 9
-            
-            query = {"TITLE": titlename}
-            update_query = {'$set': {'ABILITIES.$[type].' + passive_type: new_passive_ap_value}}
-            filter_query = [{'type.' + passive_type: passive_ap}]
-            resp = db.updateTitleWithFilter(query, update_query, filter_query)
-      print("Update Title complete.")
-   except Exception as ex:
-        trace = []
-        tb = ex.__traceback__
-        while tb is not None:
-            trace.append({
-                "filename": tb.tb_frame.f_code.co_filename,
-                "name": tb.tb_frame.f_code.co_name,
-                "lineno": tb.tb_lineno
-            })
-            tb = tb.tb_next
-        print(str({
-            'type': type(ex).__name__,
-            'message': str(ex),
-            'trace': trace
-        }))
-        pass
-
-# @slash.slash(name="Menu", description="Menu Options for things to do", guild_ids=guild_ids)
-# @commands.check(validate_user)
-# async def menu(ctx):
+#    # Card Update
 #    try:
-#       response = db.queryAllMenu()
-#       profile, story, pvp, objectives = "", "", "", ""
-#       for menu in response:
-#          if menu['NAME'] == "Profile":
-#             profile = menu['PATH']
-#          if menu['NAME'] == "Story":
-#             story = menu['PATH']
-#          if menu['NAME'] == "PVP":
-#             pvp = menu['PATH']
-#          if menu['NAME'] == "Objectives":
-#             objectives = menu['PATH']
+#       # Update Cards 1st
+#       card_dump = db.queryAllCards()
+#       card_list = []
+#       for c in card_dump:
+#          if c["UNIVERSE"] in universes:
+#             card_list.append(c)
 
-#       embedVar1 = discord.Embed(title= f"Story Mode", description="Journey through Universes to defeat powerful foes to unlock vast new worlds, tough boss fights, and new possibilities!", colour=0x7289da)
-#       embedVar1.set_image(url=story)
-#       embedVar1.set_footer(text=f"use /crown for additional assistance")
+#       for card in card_list:
+#          cardname = card["NAME"]
+#          # Card Moveset
+#          moveset = card["MOVESET"]
+#          enhancer = moveset[3]
+#          enhancer_name = list(enhancer.keys())[0]
+#          enhancer_ap = list(enhancer.values())[0]
+#          enhancer_type = list(enhancer.values())[2]
 
-#       embedVar2 = discord.Embed(title= f"Profile Menu", description="View and Edit your Cards, Titles, Arms, and Pets to craft new builds and strategies.", colour=0x7289da)
-#       embedVar2.set_image(url=profile)
-#       # embedVar2.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
-#       embedVar2.set_footer(text=f"use /crown for additional assistance")
+#          passive = card["PASS"][0]
+#          passive_name = list(passive.keys())[0]
+#          passive_ap = list(passive.values())[0]
+#          passive_type = list(passive.values())[1]
+#          new_passive_ap_value = 0
+#          new_enhancer_ap_value = 0
+
+#          # Card Universe
+#          card_universe = db.queryUniverse({"TITLE": card["UNIVERSE"]})
+#          card_tier = card_universe["TIER"]
+#          if card_tier == 0:
+#             card_tier = 9
+
+#          # Card Enhancer and Passive update
+#          if enhancer_type not in dont_update_enhancer:
+#             if enhancer_ap >= 40 and enhancer_ap > 39:
+#                if card_tier == 1:
+#                   new_enhancer_ap_value = 15
+#                if card_tier == 2:
+#                   new_enhancer_ap_value = 20
+#                if card_tier == 3:
+#                   new_enhancer_ap_value = 25
+#                if card_tier == 4:
+#                   new_enhancer_ap_value = 35
+#                if card_tier == 5:
+#                   new_enhancer_ap_value = 40
+#                if card_tier == 9:
+#                   new_enhancer_ap_value = 23
+#             elif enhancer_ap >= 30 and enhancer_ap < 39:
+#                if card_tier == 1:
+#                   new_enhancer_ap_value = 10
+#                if card_tier == 2:
+#                   new_enhancer_ap_value = 15
+#                if card_tier == 3:
+#                   new_enhancer_ap_value = 20
+#                if card_tier == 4:
+#                   new_enhancer_ap_value = 30
+#                if card_tier == 5:
+#                   new_enhancer_ap_value = 35
+#                if card_tier == 9:
+#                   new_enhancer_ap_value = 18
+#             elif enhancer_ap >= 20 and enhancer_ap < 30:
+#                if card_tier == 1:
+#                   new_enhancer_ap_value = 5
+#                if card_tier == 2:
+#                   new_enhancer_ap_value = 10
+#                if card_tier == 3:
+#                   new_enhancer_ap_value = 15
+#                if card_tier == 4:
+#                   new_enhancer_ap_value = 20
+#                if card_tier == 5:
+#                   new_enhancer_ap_value = 25
+#                if card_tier == 9:
+#                   new_enhancer_ap_value = 13
+#             elif enhancer_ap >= 0 and enhancer_ap < 20:
+#                if card_tier == 1:
+#                   new_enhancer_ap_value = 3
+#                if card_tier == 2:
+#                   new_enhancer_ap_value = 8
+#                if card_tier == 3:
+#                   new_enhancer_ap_value = 10
+#                if card_tier == 4:
+#                   new_enhancer_ap_value = 15
+#                if card_tier == 5:
+#                   new_enhancer_ap_value = 20
+#                if card_tier == 9:
+#                   new_enhancer_ap_value = 9
+            
+#             query = {"NAME": cardname}
+#             update_query = {'$set': {'MOVESET.$[type].' + enhancer_name: new_enhancer_ap_value}}
+#             filter_query = [{'type.' + enhancer_name: enhancer_ap}]
+#             resp = db.updateCardWithFilter(query, update_query, filter_query)
+#          if passive_type not in dont_update_passive:  
+#             if passive_ap >= 40 and passive_ap > 39:
+#                if card_tier == 1:
+#                   new_passive_ap_value = 15
+#                if card_tier == 2:
+#                   new_passive_ap_value = 20
+#                if card_tier == 3:
+#                   new_passive_ap_value = 25
+#                if card_tier == 4:
+#                   new_passive_ap_value = 35
+#                if card_tier == 5:
+#                   new_passive_ap_value = 40
+#                if card_tier == 9:
+#                   new_passive_ap_value = 23
+#             elif passive_ap >= 30 and passive_ap < 39:
+#                if card_tier == 1:
+#                   new_passive_ap_value = 10
+#                if card_tier == 2:
+#                   new_passive_ap_value = 15
+#                if card_tier == 3:
+#                   new_passive_ap_value = 20
+#                if card_tier == 4:
+#                   new_passive_ap_value = 30
+#                if card_tier == 5:
+#                   new_passive_ap_value = 35
+#                if card_tier == 9:
+#                   new_passive_ap_value = 18
+#             elif passive_ap >= 20 and passive_ap < 30:
+#                if card_tier == 1:
+#                   new_passive_ap_value = 5
+#                if card_tier == 2:
+#                   new_passive_ap_value = 10
+#                if card_tier == 3:
+#                   new_passive_ap_value = 15
+#                if card_tier == 4:
+#                   new_passive_ap_value = 20
+#                if card_tier == 5:
+#                   new_passive_ap_value = 25
+#                if card_tier == 9:
+#                   new_passive_ap_value = 13
+#             elif passive_ap >= 0 and passive_ap < 20:
+#                if card_tier == 1:
+#                   new_passive_ap_value = 3
+#                if card_tier == 2:
+#                   new_passive_ap_value = 8
+#                if card_tier == 3:
+#                   new_passive_ap_value = 10
+#                if card_tier == 4:
+#                   new_passive_ap_value = 15
+#                if card_tier == 5:
+#                   new_passive_ap_value = 20
+#                if card_tier == 9:
+#                   new_passive_ap_value = 9
+            
+#             query = {"NAME": cardname}
+#             update_query = {'$set': {'PASSIVE.$[type].' + passive_name: new_passive_ap_value}}
+#             filter_query = [{'type.' + passive_name: passive_ap}]
+#             resp = db.updateCardWithFilter(query, update_query, filter_query)
+
+#       print("Update Cards complete.")
+#    except Exception as ex:
+#         trace = []
+#         tb = ex.__traceback__
+#         while tb is not None:
+#             trace.append({
+#                 "filename": tb.tb_frame.f_code.co_filename,
+#                 "name": tb.tb_frame.f_code.co_name,
+#                 "lineno": tb.tb_lineno
+#             })
+#             tb = tb.tb_next
+#         print(str({
+#             'type': type(ex).__name__,
+#             'message': str(ex),
+#             'trace': trace
+#         }))
+#         pass
+   
+#    # Arm Update
+#    try:
+#       # Update Arms 1st
+#       arm_dump = db.queryAllArms()
+#       arm_list = []
+#       for c in arm_dump:
+#          if c["UNIVERSE"] in universes:
+#             arm_list.append(c)
+#       for arm in arm_list:
+#          armname = arm["ARM"]
+
+#          passive = arm["ABILITIES"][0]
+#          passive_type = list(passive.keys())[0]
+#          passive_ap = list(passive.values())[0]
+#          new_passive_ap_value = 0
+
+#          # Card Universe
+#          card_universe = db.queryUniverse({"TITLE": arm["UNIVERSE"]})
+#          card_tier = card_universe["TIER"]
+#          if card_tier == 0:
+#             card_tier = 9
+
+#          if passive_type not in dont_update_passive:  
+#             if passive_ap >= 40 and passive_ap > 39:
+#                if card_tier == 1:
+#                   new_passive_ap_value = 10
+#                if card_tier == 2:
+#                   new_passive_ap_value = 15
+#                if card_tier == 3:
+#                   new_passive_ap_value = 18
+#                if card_tier == 4:
+#                   new_passive_ap_value = 20
+#                if card_tier == 5:
+#                   new_passive_ap_value = 25
+#                if card_tier == 9:
+#                   new_passive_ap_value = 19
+#             elif passive_ap >= 30 and passive_ap < 39:
+#                if card_tier == 1:
+#                   new_passive_ap_value = 8
+#                if card_tier == 2:
+#                   new_passive_ap_value = 13
+#                if card_tier == 3:
+#                   new_passive_ap_value = 18
+#                if card_tier == 4:
+#                   new_passive_ap_value = 27
+#                if card_tier == 5:
+#                   new_passive_ap_value = 30
+#                if card_tier == 9:
+#                   new_passive_ap_value = 17
+#             elif passive_ap >= 20 and passive_ap < 30:
+#                if card_tier == 1:
+#                   new_passive_ap_value = 6
+#                if card_tier == 2:
+#                   new_passive_ap_value = 10
+#                if card_tier == 3:
+#                   new_passive_ap_value = 15
+#                if card_tier == 4:
+#                   new_passive_ap_value = 24
+#                if card_tier == 5:
+#                   new_passive_ap_value = 25
+#                if card_tier == 9:
+#                   new_passive_ap_value = 12
+#             elif passive_ap >= 0 and passive_ap < 20:
+#                if card_tier == 1:
+#                   new_passive_ap_value = 3
+#                if card_tier == 2:
+#                   new_passive_ap_value = 8
+#                if card_tier == 3:
+#                   new_passive_ap_value = 10
+#                if card_tier == 4:
+#                   new_passive_ap_value = 18
+#                if card_tier == 5:
+#                   new_passive_ap_value = 20
+#                if card_tier == 9:
+#                   new_passive_ap_value = 9
+            
+#             query = {"ARM": armname}
+#             update_query = {'$set': {'ABILITIES.$[type].' + passive_type: new_passive_ap_value}}
+#             filter_query = [{'type.' + passive_type: passive_ap}]
+#             resp = db.updateArmWithFilter(query, update_query, filter_query)
+#       print("Update Arm complete.")
+#    except Exception as ex:
+#         trace = []
+#         tb = ex.__traceback__
+#         while tb is not None:
+#             trace.append({
+#                 "filename": tb.tb_frame.f_code.co_filename,
+#                 "name": tb.tb_frame.f_code.co_name,
+#                 "lineno": tb.tb_lineno
+#             })
+#             tb = tb.tb_next
+#         print(str({
+#             'type': type(ex).__name__,
+#             'message': str(ex),
+#             'trace': trace
+#         }))
+#         pass
+   
+#    # Title Update
+#    try:
+#       # Update Cards 1st
+#       title_dump = db.queryAllTitles()
+#       title_list = []
+#       for c in title_dump:
+#          if c["UNIVERSE"] in universes:
+#             title_list.append(c)
+
+#       for title in title_list:
+#          titlename = title["TITLE"]
+
+#          passive = title["ABILITIES"][0]
+#          passive_type = list(passive.keys())[0]
+#          passive_ap = list(passive.values())[0]
+#          new_passive_ap_value = 0
+
+#          # Card Universe
+#          card_universe = db.queryUniverse({"TITLE": title["UNIVERSE"]})
+#          card_tier = card_universe["TIER"]
+#          if card_tier == 0:
+#             card_tier = 9
+
+#          if passive_type not in dont_update_passive:  
+#             if passive_ap >= 40 and passive_ap > 39:
+#                if card_tier == 1:
+#                   new_passive_ap_value = 10
+#                if card_tier == 2:
+#                   new_passive_ap_value = 18
+#                if card_tier == 3:
+#                   new_passive_ap_value = 20
+#                if card_tier == 4:
+#                   new_passive_ap_value = 25
+#                if card_tier == 5:
+#                   new_passive_ap_value = 35
+#                if card_tier == 9:
+#                   new_passive_ap_value = 22
+#             elif passive_ap >= 30 and passive_ap < 39:
+#                if card_tier == 1:
+#                   new_passive_ap_value = 8
+#                if card_tier == 2:
+#                   new_passive_ap_value = 15
+#                if card_tier == 3:
+#                   new_passive_ap_value = 18
+#                if card_tier == 4:
+#                   new_passive_ap_value = 28
+#                if card_tier == 5:
+#                   new_passive_ap_value = 32
+#                if card_tier == 9:
+#                   new_passive_ap_value = 19
+#             elif passive_ap >= 20 and passive_ap < 30:
+#                if card_tier == 1:
+#                   new_passive_ap_value = 5
+#                if card_tier == 2:
+#                   new_passive_ap_value = 12
+#                if card_tier == 3:
+#                   new_passive_ap_value = 16
+#                if card_tier == 4:
+#                   new_passive_ap_value = 26
+#                if card_tier == 5:
+#                   new_passive_ap_value = 28
+#                if card_tier == 9:
+#                   new_passive_ap_value = 11
+#             elif passive_ap >= 0 and passive_ap < 20:
+#                if card_tier == 1:
+#                   new_passive_ap_value = 3
+#                if card_tier == 2:
+#                   new_passive_ap_value = 8
+#                if card_tier == 3:
+#                   new_passive_ap_value = 10
+#                if card_tier == 4:
+#                   new_passive_ap_value = 14
+#                if card_tier == 5:
+#                   new_passive_ap_value = 20
+#                if card_tier == 9:
+#                   new_passive_ap_value = 9
+            
+#             query = {"TITLE": titlename}
+#             update_query = {'$set': {'ABILITIES.$[type].' + passive_type: new_passive_ap_value}}
+#             filter_query = [{'type.' + passive_type: passive_ap}]
+#             resp = db.updateTitleWithFilter(query, update_query, filter_query)
+#       print("Update Title complete.")
+#    except Exception as ex:
+#         trace = []
+#         tb = ex.__traceback__
+#         while tb is not None:
+#             trace.append({
+#                 "filename": tb.tb_frame.f_code.co_filename,
+#                 "name": tb.tb_frame.f_code.co_name,
+#                 "lineno": tb.tb_lineno
+#             })
+#             tb = tb.tb_next
+#         print(str({
+#             'type': type(ex).__name__,
+#             'message': str(ex),
+#             'trace': trace
+#         }))
+#         pass
+
+@slash.slash(name="Menu", description="Menu Options for things to do", guild_ids=guild_ids)
+@commands.check(validate_user)
+async def menu(ctx):
+   try:
+      response = db.queryAllMenu()
+      profile, story, pvp, objectives = "", "", "", ""
+      for menu in response:
+         if menu['NAME'] == "Profile":
+            profile = menu['PATH']
+         if menu['NAME'] == "Story":
+            story = menu['PATH']
+         if menu['NAME'] == "PVP":
+            pvp = menu['PATH']
+         if menu['NAME'] == "Objectives":
+            objectives = menu['PATH']
+
+      embedVar1 = discord.Embed(title= f"Story Mode", description="Journey through Universes to defeat powerful foes to unlock vast new worlds, tough boss fights, and new possibilities!", colour=0x7289da)
+      embedVar1.set_image(url=story)
+      embedVar1.set_footer(text=f"use /crown for additional assistance")
+
+      embedVar2 = discord.Embed(title= f"Profile Menu", description="View and Edit your Cards, Titles, Arms, and Pets to craft new builds and strategies.", colour=0x7289da)
+      embedVar2.set_image(url=profile)
+      # embedVar2.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
+      embedVar2.set_footer(text=f"use /crown for additional assistance")
       
-#       embedVar3 = discord.Embed(title= f"PVP Mode", description="Face off against friend or foe!", colour=0x7289da)
-#       embedVar3.set_image(url=pvp)
-#       # embedVar3.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
-#       embedVar3.set_footer(text=f"use /crown for additional assistance")
+      embedVar3 = discord.Embed(title= f"PVP Mode", description="Face off against friend or foe!", colour=0x7289da)
+      embedVar3.set_image(url=pvp)
+      # embedVar3.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
+      embedVar3.set_footer(text=f"use /crown for additional assistance")
 
-#       embedVar4 = discord.Embed(title= f"Crown Unlimited Menu", description="5 Primary Objectives of Crown Unlimited. Click arrow below to go to the next page!", colour=0x7289da)
-#       embedVar4.set_image(url=objectives)
-#       # embedVar4.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
-#       embedVar4.set_footer(text=f"use /crown for additional assistance")
+      embedVar4 = discord.Embed(title= f"Crown Unlimited Menu", description="5 Primary Objectives of Crown Unlimited. Click arrow below to go to the next page!", colour=0x7289da)
+      embedVar4.set_image(url=objectives)
+      # embedVar4.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
+      embedVar4.set_footer(text=f"use /crown for additional assistance")
 
-#       paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
-#       paginator.add_reaction('⏮️', "first")
-#       paginator.add_reaction('⏪', "back")
-#       paginator.add_reaction('🔐', "lock")
-#       paginator.add_reaction('⏩', "next")
-#       paginator.add_reaction('⏭️', "last")
-#       embeds = [embedVar4, embedVar1,embedVar3, embedVar2]
-#       await paginator.run(embeds)
+      paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+      paginator.add_reaction('⏮️', "first")
+      paginator.add_reaction('⏪', "back")
+      paginator.add_reaction('🔐', "lock")
+      paginator.add_reaction('⏩', "next")
+      paginator.add_reaction('⏭️', "last")
+      embeds = [embedVar4, embedVar1,embedVar3, embedVar2]
+      await paginator.run(embeds)
          
-#    except Exception as e:
-#       await ctx.send(f"Error has occurred: {e}")
+   except Exception as e:
+      await ctx.send(f"Error has occurred: {e}")
 
 
 if config('ENV') == "production":
