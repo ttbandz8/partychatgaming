@@ -729,6 +729,13 @@ def queryCard(query):
     data = cards_col.find_one(query)
     return data
 
+def updateCardWithFilter(query, new_value, arrayFilters):
+    try:
+        update = cards_col.update_one(query, new_value, array_filters=arrayFilters)
+        return True
+    except:
+        return False
+
 def updateCard(query, new_value):
     try:
         cardexists = card_exists({'NAME': query['NAME']})
@@ -788,6 +795,13 @@ def updateTitle(query, new_value):
             return True
         else:
             return False
+    except:
+        return False
+
+def updateTitleWithFilter(query, new_value, arrayFilters):
+    try:
+        update = titles_col.update_one(query, new_value, array_filters=arrayFilters)
+        return True
     except:
         return False
 
@@ -875,6 +889,13 @@ def updateArm(query, new_value):
             return True
         else:
             return False
+    except:
+        return False
+
+def updateArmWithFilter(query, new_value, arrayFilters):
+    try:
+        update = arm_col.update_one(query, new_value, array_filters=arrayFilters)
+        return True
     except:
         return False
 
@@ -1171,8 +1192,11 @@ def queryAllUniverse():
     return data
 
 def queryUniverse(query):
-    data = universe_col.find_one(query)
-    return data
+    try:
+        data = universe_col.find_one(query)
+        return data
+    except:
+        return False
 
 
 ''' BOSS '''

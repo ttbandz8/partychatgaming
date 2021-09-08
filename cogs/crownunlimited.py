@@ -47578,7 +47578,7 @@ async def cardlevel(card: str, player: str, card_universe: str, mode_universe: s
     atk_def_buff = 0
     ap_buff = 0
     
-    if lvl < 150:
+    if lvl < 200:
         # Experience Code
         if exp < (lvl_req - 1):
             query = {'OWNER': str(player)}

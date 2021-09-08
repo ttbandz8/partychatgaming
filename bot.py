@@ -1418,85 +1418,85 @@ async def curseguild(amount, guild):
 
 #    await ctx.send(embed=embedVar)
 
-@slash.slash(name="Resell", description="Sell items back to the shop", guild_ids=guild_ids)
-@commands.check(validate_user)
-async def resell(ctx, item: str):
-   user = db.queryUser({'DISNAME': str(ctx.author)})
-   p1_trade_item = item
-   p1_vault = db.queryVault({'OWNER' : str(ctx.author)})
-   p1_cards = p1_vault['CARDS']
-   p1_titles = p1_vault['TITLES']
-   p1_arms = p1_vault['ARMS']
-   p1_balance = p1_vault['BALANCE']
+# @slash.slash(name="Resell", description="Sell items back to the shop", guild_ids=guild_ids)
+# @commands.check(validate_user)
+# async def resell(ctx, item: str):
+#    user = db.queryUser({'DISNAME': str(ctx.author)})
+#    p1_trade_item = item
+#    p1_vault = db.queryVault({'OWNER' : str(ctx.author)})
+#    p1_cards = p1_vault['CARDS']
+#    p1_titles = p1_vault['TITLES']
+#    p1_arms = p1_vault['ARMS']
+#    p1_balance = p1_vault['BALANCE']
 
-   if p1_trade_item in p1_cards and len(p1_cards) == 1:
-      await ctx.send("You cannot sell your only card.")
-   elif p1_trade_item in p1_arms and len(p1_arms) == 1:
-      await ctx.send("You cannot sell your only arm.")
-   elif p1_trade_item in p1_titles and len(p1_titles) == 1:
-      await ctx.send("You cannot sell your only title.")
-   else:
+#    if p1_trade_item in p1_cards and len(p1_cards) == 1:
+#       await ctx.send("You cannot sell your only card.")
+#    elif p1_trade_item in p1_arms and len(p1_arms) == 1:
+#       await ctx.send("You cannot sell your only arm.")
+#    elif p1_trade_item in p1_titles and len(p1_titles) == 1:
+#       await ctx.send("You cannot sell your only title.")
+#    else:
 
-      if p1_trade_item not in p1_cards and p1_trade_item not in p1_titles and p1_trade_item not in p1_arms:
-         await ctx.send("You do not own this item.")
-         return
-      else:
-         if p1_trade_item in p1_cards:
-            card = db.queryCard({'NAME':{"$regex": str(p1_trade_item), "$options": "i"}})
-            sell_price = card['PRICE'] * .15
-         elif p1_trade_item in p1_titles:
-            title = db.queryTitle({'TITLE': {"$regex": str(p1_trade_item), "$options": "i"}})
-            sell_price = title['PRICE'] * .15
-         elif p1_trade_item in p1_arms:
-            arm = db.queryArm({'ARM': {"$regex": str(p1_trade_item), "$options": "i"}})
-            sell_price = arm['PRICE'] * .15
+#       if p1_trade_item not in p1_cards and p1_trade_item not in p1_titles and p1_trade_item not in p1_arms:
+#          await ctx.send("You do not own this item.")
+#          return
+#       else:
+#          if p1_trade_item in p1_cards:
+#             card = db.queryCard({'NAME':{"$regex": str(p1_trade_item), "$options": "i"}})
+#             sell_price = card['PRICE'] * .15
+#          elif p1_trade_item in p1_titles:
+#             title = db.queryTitle({'TITLE': {"$regex": str(p1_trade_item), "$options": "i"}})
+#             sell_price = title['PRICE'] * .15
+#          elif p1_trade_item in p1_arms:
+#             arm = db.queryArm({'ARM': {"$regex": str(p1_trade_item), "$options": "i"}})
+#             sell_price = arm['PRICE'] * .15
 
-         if (p1_trade_item == user['CARD']) or (p1_trade_item == user['TITLE']) or (p1_trade_item == user['ARM']):
-            await ctx.send("You cannot resell an equipped item.")
-            return
+#          if (p1_trade_item == user['CARD']) or (p1_trade_item == user['TITLE']) or (p1_trade_item == user['ARM']):
+#             await ctx.send("You cannot resell an equipped item.")
+#             return
 
-         sell_buttons = [
-               manage_components.create_button(
-                  style=ButtonStyle.blue,
-                  label="💸",
-                  custom_id="Yes"
-               ),
-               manage_components.create_button(
-                  style=ButtonStyle.red,
-                  label="❌",
-                  custom_id="No"
-               )
-            ]
-         sell_buttons_action_row = manage_components.create_actionrow(*sell_buttons)
+#          sell_buttons = [
+#                manage_components.create_button(
+#                   style=ButtonStyle.blue,
+#                   label="💸",
+#                   custom_id="Yes"
+#                ),
+#                manage_components.create_button(
+#                   style=ButtonStyle.red,
+#                   label="❌",
+#                   custom_id="No"
+#                )
+#             ]
+#          sell_buttons_action_row = manage_components.create_actionrow(*sell_buttons)
 
-         await ctx.send(f"{ctx.author.mention} are you willing to resell {p1_trade_item} for :coin: {round(sell_price)}?", components=[sell_buttons_action_row])
+#          await ctx.send(f"{ctx.author.mention} are you willing to resell {p1_trade_item} for :coin: {round(sell_price)}?", components=[sell_buttons_action_row])
 
          
-         def check(button_ctx):
-            return button_ctx.author == ctx.author
+#          def check(button_ctx):
+#             return button_ctx.author == ctx.author
 
-         try:
-            button_ctx: ComponentContext = await manage_components.wait_for_component(bot, components=[sell_buttons_action_row], check=check)
+#          try:
+#             button_ctx: ComponentContext = await manage_components.wait_for_component(bot, components=[sell_buttons_action_row], check=check)
 
-            if button_ctx.custom_id == "No":
-                  await button_ctx.send("Sell ended.")
-                  return
-            if button_ctx.custom_id == "Yes":
-               if p1_trade_item in p1_arms:
-                  db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'ARMS': str(p1_trade_item)}})
-                  await bless(sell_price, ctx.author)
-                  await button_ctx.send(f"{p1_trade_item} has been resold for :coin: {round(sell_price)}.")
-               elif p1_trade_item in p1_titles:
-                  db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'TITLES': str(p1_trade_item)}})
-                  await bless(sell_price, ctx.author)
-                  await button_ctx.send(f"{p1_trade_item} has been resold for :coin: {round(sell_price)}.")
-               elif p1_trade_item in p1_cards:
-                  db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'CARDS': str(p1_trade_item)}})
-                  await bless(sell_price, ctx.author)
-                  await button_ctx.send(f"{p1_trade_item} has been resold for :coin: {round(sell_price)}.")
+#             if button_ctx.custom_id == "No":
+#                   await button_ctx.send("Sell ended.")
+#                   return
+#             if button_ctx.custom_id == "Yes":
+#                if p1_trade_item in p1_arms:
+#                   db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'ARMS': str(p1_trade_item)}})
+#                   await bless(sell_price, ctx.author)
+#                   await button_ctx.send(f"{p1_trade_item} has been resold for :coin: {round(sell_price)}.")
+#                elif p1_trade_item in p1_titles:
+#                   db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'TITLES': str(p1_trade_item)}})
+#                   await bless(sell_price, ctx.author)
+#                   await button_ctx.send(f"{p1_trade_item} has been resold for :coin: {round(sell_price)}.")
+#                elif p1_trade_item in p1_cards:
+#                   db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'CARDS': str(p1_trade_item)}})
+#                   await bless(sell_price, ctx.author)
+#                   await button_ctx.send(f"{p1_trade_item} has been resold for :coin: {round(sell_price)}.")
 
-         except:
-            await ctx.send("Resell ended. ")
+#          except:
+#             await ctx.send("Resell ended. ")
 
 # @bot.command()
 # @commands.check(validate_user)
@@ -1532,6 +1532,404 @@ async def resell(ctx, item: str):
 #          response = db.updateManyTeams({'$set': {new_field: field_type}})
 #    else:
 #       print(m.ADMIN_ONLY_COMMAND)
+
+@slash.slash(name="Ups", description="function to update stuff", guild_ids=guild_ids)
+async def update(ctx):
+   # Parameters
+   dont_update_enhancer = ["WAVE", "CREATION", "DESTRUCTION", "BLAST", "STAM", "BLINK", "SLOW", "HASTE", "CONFUSE", "STANCE", "GAMBLE", "SOULCHAIN"]
+   dont_update_passive = ["WAVE", "CREATION", "DESTRUCTION", "BLAST", "STAM", "BLINK", "SLOW", "HASTE", "CONFUSE", "STANCE", "GAMBLE", "SOULCHAIN", "ATK", "DEF", "HLT", "LIFE"]
+   universes = [
+      "League Of Legends",
+      "Attack On Titan",
+      "Naruto",
+      "Bleach",
+      "My Hero Academia",
+      "Dragon Ball Z",
+      "Demon Slayer",
+      "7ds",
+      "One Punch Man",
+      "God Of War",
+      "Unbound",
+      "Black Clover",
+      "Solo Leveling",
+      "Kanto Region",
+      "Digimon",
+      "Hoenn Region",
+      "Chainsawman",
+      "Crown Rift Madness",
+      "Crown Rift Slayers",
+      "Souls",
+      "Crown Rift Awakening",
+      "Death Note",
+      "Fate",
+      "Johto Region",
+      "Kalos Region",
+      "Sinnoh Region"
+   ]
+
+   # Card Update
+   try:
+      # Update Cards 1st
+      card_dump = db.queryAllCards()
+      card_list = []
+      for c in card_dump:
+         if c["UNIVERSE"] in universes:
+            card_list.append(c)
+
+      for card in card_list:
+         cardname = card["NAME"]
+         # Card Moveset
+         moveset = card["MOVESET"]
+         enhancer = moveset[3]
+         enhancer_name = list(enhancer.keys())[0]
+         enhancer_ap = list(enhancer.values())[0]
+         enhancer_type = list(enhancer.values())[2]
+
+         passive = card["PASS"][0]
+         passive_name = list(passive.keys())[0]
+         passive_ap = list(passive.values())[0]
+         passive_type = list(passive.values())[1]
+         new_passive_ap_value = 0
+         new_enhancer_ap_value = 0
+
+         # Card Universe
+         card_universe = db.queryUniverse({"TITLE": card["UNIVERSE"]})
+         card_tier = card_universe["TIER"]
+         if card_tier == 0:
+            card_tier = 9
+
+         # Card Enhancer and Passive update
+         if enhancer_type not in dont_update_enhancer:
+            if enhancer_ap >= 40 and enhancer_ap > 39:
+               if card_tier == 1:
+                  new_enhancer_ap_value = 15
+               if card_tier == 2:
+                  new_enhancer_ap_value = 20
+               if card_tier == 3:
+                  new_enhancer_ap_value = 25
+               if card_tier == 4:
+                  new_enhancer_ap_value = 35
+               if card_tier == 5:
+                  new_enhancer_ap_value = 40
+               if card_tier == 9:
+                  new_enhancer_ap_value = 23
+            elif enhancer_ap >= 30 and enhancer_ap < 39:
+               if card_tier == 1:
+                  new_enhancer_ap_value = 10
+               if card_tier == 2:
+                  new_enhancer_ap_value = 15
+               if card_tier == 3:
+                  new_enhancer_ap_value = 20
+               if card_tier == 4:
+                  new_enhancer_ap_value = 30
+               if card_tier == 5:
+                  new_enhancer_ap_value = 35
+               if card_tier == 9:
+                  new_enhancer_ap_value = 18
+            elif enhancer_ap >= 20 and enhancer_ap < 30:
+               if card_tier == 1:
+                  new_enhancer_ap_value = 5
+               if card_tier == 2:
+                  new_enhancer_ap_value = 10
+               if card_tier == 3:
+                  new_enhancer_ap_value = 15
+               if card_tier == 4:
+                  new_enhancer_ap_value = 20
+               if card_tier == 5:
+                  new_enhancer_ap_value = 25
+               if card_tier == 9:
+                  new_enhancer_ap_value = 13
+            elif enhancer_ap >= 0 and enhancer_ap < 20:
+               if card_tier == 1:
+                  new_enhancer_ap_value = 3
+               if card_tier == 2:
+                  new_enhancer_ap_value = 8
+               if card_tier == 3:
+                  new_enhancer_ap_value = 10
+               if card_tier == 4:
+                  new_enhancer_ap_value = 15
+               if card_tier == 5:
+                  new_enhancer_ap_value = 20
+               if card_tier == 9:
+                  new_enhancer_ap_value = 9
+            
+            query = {"NAME": cardname}
+            update_query = {'$set': {'MOVESET.$[type].' + enhancer_name: new_enhancer_ap_value}}
+            filter_query = [{'type.' + enhancer_name: enhancer_ap}]
+            resp = db.updateCardWithFilter(query, update_query, filter_query)
+         if passive_type not in dont_update_passive:  
+            if passive_ap >= 40 and passive_ap > 39:
+               if card_tier == 1:
+                  new_passive_ap_value = 15
+               if card_tier == 2:
+                  new_passive_ap_value = 20
+               if card_tier == 3:
+                  new_passive_ap_value = 25
+               if card_tier == 4:
+                  new_passive_ap_value = 35
+               if card_tier == 5:
+                  new_passive_ap_value = 40
+               if card_tier == 9:
+                  new_passive_ap_value = 23
+            elif passive_ap >= 30 and passive_ap < 39:
+               if card_tier == 1:
+                  new_passive_ap_value = 10
+               if card_tier == 2:
+                  new_passive_ap_value = 15
+               if card_tier == 3:
+                  new_passive_ap_value = 20
+               if card_tier == 4:
+                  new_passive_ap_value = 30
+               if card_tier == 5:
+                  new_passive_ap_value = 35
+               if card_tier == 9:
+                  new_passive_ap_value = 18
+            elif passive_ap >= 20 and passive_ap < 30:
+               if card_tier == 1:
+                  new_passive_ap_value = 5
+               if card_tier == 2:
+                  new_passive_ap_value = 10
+               if card_tier == 3:
+                  new_passive_ap_value = 15
+               if card_tier == 4:
+                  new_passive_ap_value = 20
+               if card_tier == 5:
+                  new_passive_ap_value = 25
+               if card_tier == 9:
+                  new_passive_ap_value = 13
+            elif passive_ap >= 0 and passive_ap < 20:
+               if card_tier == 1:
+                  new_passive_ap_value = 3
+               if card_tier == 2:
+                  new_passive_ap_value = 8
+               if card_tier == 3:
+                  new_passive_ap_value = 10
+               if card_tier == 4:
+                  new_passive_ap_value = 15
+               if card_tier == 5:
+                  new_passive_ap_value = 20
+               if card_tier == 9:
+                  new_passive_ap_value = 9
+            
+            query = {"NAME": cardname}
+            update_query = {'$set': {'PASSIVE.$[type].' + passive_name: new_passive_ap_value}}
+            filter_query = [{'type.' + passive_name: passive_ap}]
+            resp = db.updateCardWithFilter(query, update_query, filter_query)
+
+      print("Update Cards complete.")
+   except Exception as ex:
+        trace = []
+        tb = ex.__traceback__
+        while tb is not None:
+            trace.append({
+                "filename": tb.tb_frame.f_code.co_filename,
+                "name": tb.tb_frame.f_code.co_name,
+                "lineno": tb.tb_lineno
+            })
+            tb = tb.tb_next
+        print(str({
+            'type': type(ex).__name__,
+            'message': str(ex),
+            'trace': trace
+        }))
+        pass
+   
+   # Arm Update
+   try:
+      # Update Arms 1st
+      arm_dump = db.queryAllArms()
+      arm_list = []
+      for c in arm_dump:
+         if c["UNIVERSE"] in universes:
+            arm_list.append(c)
+      for arm in arm_list:
+         armname = arm["ARM"]
+
+         passive = arm["ABILITIES"][0]
+         passive_type = list(passive.keys())[0]
+         passive_ap = list(passive.values())[0]
+         new_passive_ap_value = 0
+
+         # Card Universe
+         card_universe = db.queryUniverse({"TITLE": arm["UNIVERSE"]})
+         card_tier = card_universe["TIER"]
+         if card_tier == 0:
+            card_tier = 9
+
+         if passive_type not in dont_update_passive:  
+            if passive_ap >= 40 and passive_ap > 39:
+               if card_tier == 1:
+                  new_passive_ap_value = 10
+               if card_tier == 2:
+                  new_passive_ap_value = 15
+               if card_tier == 3:
+                  new_passive_ap_value = 18
+               if card_tier == 4:
+                  new_passive_ap_value = 20
+               if card_tier == 5:
+                  new_passive_ap_value = 25
+               if card_tier == 9:
+                  new_passive_ap_value = 19
+            elif passive_ap >= 30 and passive_ap < 39:
+               if card_tier == 1:
+                  new_passive_ap_value = 8
+               if card_tier == 2:
+                  new_passive_ap_value = 13
+               if card_tier == 3:
+                  new_passive_ap_value = 18
+               if card_tier == 4:
+                  new_passive_ap_value = 27
+               if card_tier == 5:
+                  new_passive_ap_value = 30
+               if card_tier == 9:
+                  new_passive_ap_value = 17
+            elif passive_ap >= 20 and passive_ap < 30:
+               if card_tier == 1:
+                  new_passive_ap_value = 6
+               if card_tier == 2:
+                  new_passive_ap_value = 10
+               if card_tier == 3:
+                  new_passive_ap_value = 15
+               if card_tier == 4:
+                  new_passive_ap_value = 24
+               if card_tier == 5:
+                  new_passive_ap_value = 25
+               if card_tier == 9:
+                  new_passive_ap_value = 12
+            elif passive_ap >= 0 and passive_ap < 20:
+               if card_tier == 1:
+                  new_passive_ap_value = 3
+               if card_tier == 2:
+                  new_passive_ap_value = 8
+               if card_tier == 3:
+                  new_passive_ap_value = 10
+               if card_tier == 4:
+                  new_passive_ap_value = 18
+               if card_tier == 5:
+                  new_passive_ap_value = 20
+               if card_tier == 9:
+                  new_passive_ap_value = 9
+            
+            query = {"ARM": armname}
+            update_query = {'$set': {'ABILITIES.$[type].' + passive_type: new_passive_ap_value}}
+            filter_query = [{'type.' + passive_type: passive_ap}]
+            resp = db.updateArmWithFilter(query, update_query, filter_query)
+      print("Update Arm complete.")
+   except Exception as ex:
+        trace = []
+        tb = ex.__traceback__
+        while tb is not None:
+            trace.append({
+                "filename": tb.tb_frame.f_code.co_filename,
+                "name": tb.tb_frame.f_code.co_name,
+                "lineno": tb.tb_lineno
+            })
+            tb = tb.tb_next
+        print(str({
+            'type': type(ex).__name__,
+            'message': str(ex),
+            'trace': trace
+        }))
+        pass
+   
+   # Title Update
+   try:
+      # Update Cards 1st
+      title_dump = db.queryAllTitles()
+      title_list = []
+      for c in title_dump:
+         if c["UNIVERSE"] in universes:
+            title_list.append(c)
+
+      for title in title_list:
+         titlename = title["TITLE"]
+
+         passive = title["ABILITIES"][0]
+         passive_type = list(passive.keys())[0]
+         passive_ap = list(passive.values())[0]
+         new_passive_ap_value = 0
+
+         # Card Universe
+         card_universe = db.queryUniverse({"TITLE": title["UNIVERSE"]})
+         card_tier = card_universe["TIER"]
+         if card_tier == 0:
+            card_tier = 9
+
+         if passive_type not in dont_update_passive:  
+            if passive_ap >= 40 and passive_ap > 39:
+               if card_tier == 1:
+                  new_passive_ap_value = 10
+               if card_tier == 2:
+                  new_passive_ap_value = 18
+               if card_tier == 3:
+                  new_passive_ap_value = 20
+               if card_tier == 4:
+                  new_passive_ap_value = 25
+               if card_tier == 5:
+                  new_passive_ap_value = 35
+               if card_tier == 9:
+                  new_passive_ap_value = 22
+            elif passive_ap >= 30 and passive_ap < 39:
+               if card_tier == 1:
+                  new_passive_ap_value = 8
+               if card_tier == 2:
+                  new_passive_ap_value = 15
+               if card_tier == 3:
+                  new_passive_ap_value = 18
+               if card_tier == 4:
+                  new_passive_ap_value = 28
+               if card_tier == 5:
+                  new_passive_ap_value = 32
+               if card_tier == 9:
+                  new_passive_ap_value = 19
+            elif passive_ap >= 20 and passive_ap < 30:
+               if card_tier == 1:
+                  new_passive_ap_value = 5
+               if card_tier == 2:
+                  new_passive_ap_value = 12
+               if card_tier == 3:
+                  new_passive_ap_value = 16
+               if card_tier == 4:
+                  new_passive_ap_value = 26
+               if card_tier == 5:
+                  new_passive_ap_value = 28
+               if card_tier == 9:
+                  new_passive_ap_value = 11
+            elif passive_ap >= 0 and passive_ap < 20:
+               if card_tier == 1:
+                  new_passive_ap_value = 3
+               if card_tier == 2:
+                  new_passive_ap_value = 8
+               if card_tier == 3:
+                  new_passive_ap_value = 10
+               if card_tier == 4:
+                  new_passive_ap_value = 14
+               if card_tier == 5:
+                  new_passive_ap_value = 20
+               if card_tier == 9:
+                  new_passive_ap_value = 9
+            
+            query = {"TITLE": titlename}
+            update_query = {'$set': {'ABILITIES.$[type].' + passive_type: new_passive_ap_value}}
+            filter_query = [{'type.' + passive_type: passive_ap}]
+            resp = db.updateTitleWithFilter(query, update_query, filter_query)
+      print("Update Title complete.")
+   except Exception as ex:
+        trace = []
+        tb = ex.__traceback__
+        while tb is not None:
+            trace.append({
+                "filename": tb.tb_frame.f_code.co_filename,
+                "name": tb.tb_frame.f_code.co_name,
+                "lineno": tb.tb_lineno
+            })
+            tb = tb.tb_next
+        print(str({
+            'type': type(ex).__name__,
+            'message': str(ex),
+            'trace': trace
+        }))
+        pass
 
 @slash.slash(name="Menu", description="Menu Options for things to do", guild_ids=guild_ids)
 @commands.check(validate_user)
