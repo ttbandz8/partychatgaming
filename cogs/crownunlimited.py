@@ -1453,23 +1453,23 @@ class CrownUnlimited(commands.Cog):
                 play_again_buttons = [
                             manage_components.create_button(
                                 style=ButtonStyle.blue,
-                                label="✔️",
+                                label="Yes",
                                 custom_id="Yes"
                             ),
                             manage_components.create_button(
                                 style=ButtonStyle.red,
-                                label="❌",
+                                label="No",
                                 custom_id="No"
                             )
                         ]
                 play_again_buttons_action_row = manage_components.create_actionrow(*play_again_buttons)
 
                 if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
-                    embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[2]} Seconds.")
+                    embedVar.set_footer(text=f"Battle Time: {gameClock[2]} Seconds.")
                 elif int(gameClock[0]) == 0:
-                    embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                    embedVar.set_footer(text=f"Battle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                 else: 
-                    embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                    embedVar.set_footer(text=f"Battle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                 await private_channel.send(embed=embedVar)
 
                 await private_channel.send(f"{ctx.author.mention} would you like to play again?", components=[play_again_buttons_action_row])
@@ -1478,7 +1478,7 @@ class CrownUnlimited(commands.Cog):
                     return button_ctx.author == ctx.author
 
                 try:
-                    button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[play_again_buttons_action_row], check=check)
+                    button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[play_again_buttons_action_row], timeout=45, check=check)
 
                     if button_ctx.custom_id == "No":                        
                         await discord.TextChannel.delete(private_channel, reason=None)
@@ -1513,9 +1513,9 @@ class CrownUnlimited(commands.Cog):
                 cardlogger = await cardlevel(o_card, ouser, o_universe, selected_universe, "Tales")
                 match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']), str(oarm['ARM']), str(selected_universe), "Tales", o['EXCLUSIVE'])
                 if destinylogger:
-                    await ctx.author.send(destinylogger)
+                    await private_channel.send(destinylogger)
                 if questlogger:
-                    await ctx.author.send(questlogger)
+                    await private_channel.send(questlogger)
                 if currentopponent != (total_legends):
                     embedVar = discord.Embed(title=f"VICTORY\n**{o_card} says**\n{o_win_description}", description=f"The game lasted {turn_total} rounds.\n\n{drop_response}", colour=0xe91e63)
                     embedVar.set_author(name=f"{t_card} lost!")
@@ -3066,7 +3066,7 @@ class CrownUnlimited(commands.Cog):
                             return button_ctx.author == user1 and button_ctx.custom_id in options
 
                         try:
-                            button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[battle_action_row, util_action_row, coop_util_action_row], check=check)
+                            button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[battle_action_row, util_action_row, coop_util_action_row], timeout=45, check=check)
 
                             # calculate data based on selected move
                             if button_ctx.custom_id == "q" or button_ctx.custom_id == "Q":
@@ -5902,12 +5902,12 @@ class CrownUnlimited(commands.Cog):
                 embedVar = discord.Embed(title=f":zap: **{t_card}** wins the match!", description=f"The game lasted {turn_total} rounds.\n**{t_card} says**\n`{t_win_description}`", colour=0x1abc9c)
                 embedVar.set_author(name=f"{o_card} & {c_card} lost!")
                 if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
-                    embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[2]} Seconds.")
+                    embedVar.set_footer(text=f"Battle Time: {gameClock[2]} Seconds.")
                 elif int(gameClock[0]) == 0:
-                    embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                    embedVar.set_footer(text=f"Battle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                 else: 
-                    embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
-                await ctx.author.send(embed=embedVar)
+                    embedVar.set_footer(text=f"Battle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                await private_channel.send(embed=embedVar)
 
                 emojis = ['👍', '👎']
                 accept = await private_channel.send(f"{ctx.author.mention} will you play again?")
@@ -5957,9 +5957,9 @@ class CrownUnlimited(commands.Cog):
                 petlogger = await petlevel(opet_name, ouser)
                 cardlogger = await cardlevel(o_card, ouser, o_universe, selected_universe, "Dungeon")
                 if questlogger:
-                    await ctx.author.send(questlogger)
+                    await private_channel.send(questlogger)
                 if destinylogger:
-                    await ctx.author.send(destinylogger)
+                    await private_channel.send(destinylogger)
 
                 if currentopponent != total_legends:                    
                     embedVar = discord.Embed(title=f"VICTORY\n**{o_card} says**\n{o_win_description}", description=f"The game lasted {turn_total} rounds.\n\n{drop_response}", colour=0xe91e63)
@@ -7519,7 +7519,7 @@ class CrownUnlimited(commands.Cog):
                             return button_ctx.author == user1 and button_ctx.custom_id in options
 
                         try:
-                            button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[battle_action_row, util_action_row, coop_util_action_row], check=check)
+                            button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[battle_action_row, util_action_row, coop_util_action_row], timeout=45, check=check)
 
                             # calculate data based on selected move
                             if button_ctx.custom_id == "q" or button_ctx.custom_id == "Q":
@@ -10799,12 +10799,12 @@ class CrownUnlimited(commands.Cog):
                 embedVar = discord.Embed(title=f":zap: **{t_card}** wins the match!", description=f"The game lasted {turn_total} rounds.\n**{t_card} says**\n`{t_win_description}`", colour=0x1abc9c)
                 embedVar.set_author(name=f"{o_card} & {c_card} lost!")
                 if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
-                    embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[2]} Seconds.")
+                    embedVar.set_footer(text=f"Battle Time: {gameClock[2]} Seconds.")
                 elif int(gameClock[0]) == 0:
-                    embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                    embedVar.set_footer(text=f"Battle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                 else: 
-                    embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
-                await ctx.author.send(embed=embedVar)
+                    embedVar.set_footer(text=f"Battle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                await private_channel.send(embed=embedVar)
                 
                 emojis = ['👍', '👎']
                 accept = await private_channel.send(f"{ctx.author.mention} will you play again?")
@@ -10851,9 +10851,9 @@ class CrownUnlimited(commands.Cog):
                 petlogger = await petlevel(opet_name, ouser)
                 cardlogger = await cardlevel(o_card, ouser, o_universe, selected_universe, "Dungeon")
                 if questlogger:
-                    await ctx.author.send(questlogger)
+                    await private_channel.send(questlogger)
                 if destinylogger:
-                    await ctx.author.send(destinylogger)
+                    await private_channel.send(destinylogger)
 
                 if currentopponent != (total_legends):
                     embedVar = discord.Embed(title=f"VICTORY\n**{o_card} says**\n{o_win_description}", description=f"The game lasted {turn_total} rounds.\n\n{drop_response}", colour=0xe91e63)
@@ -12412,7 +12412,7 @@ class CrownUnlimited(commands.Cog):
                             return button_ctx.author == user1 and button_ctx.custom_id in options
 
                         try:
-                            button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[battle_action_row, util_action_row, coop_util_action_row], check=check)
+                            button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[battle_action_row, util_action_row, coop_util_action_row], timeout=45, check=check)
 
                             # calculate data based on selected move
                             if button_ctx.custom_id == "q" or button_ctx.custom_id == "Q":
@@ -13873,7 +13873,7 @@ class CrownUnlimited(commands.Cog):
                             return button_ctx.author == user and button_ctx.custom_id in options
 
                         try:
-                            button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[battle_action_row, util_action_row, coop_util_action_row], check=check)
+                            button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[battle_action_row, util_action_row, coop_util_action_row], timeout=45, check=check)
 
                             # calculate data based on selected move
                             if button_ctx.custom_id == "q" or button_ctx.custom_id == "Q" :
@@ -15102,12 +15102,12 @@ class CrownUnlimited(commands.Cog):
                 embedVar = discord.Embed(title=f":zap: **{t_card}** wins the match!", description=f"The game lasted {turn_total} rounds.\n**{t_card} says**\n`{t_win_description}`", colour=0x1abc9c)
                 embedVar.set_author(name=f"{o_card} & {c_card} lost!")
                 if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
-                    embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[2]} Seconds.")
+                    embedVar.set_footer(text=f"Battle Time: {gameClock[2]} Seconds.")
                 elif int(gameClock[0]) == 0:
-                    embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                    embedVar.set_footer(text=f"Battle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                 else: 
-                    embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
-                await ctx.author.send(embed=embedVar)
+                    embedVar.set_footer(text=f"Battle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                await private_channel.send(embed=embedVar)
 
                 emojis = ['👍', '👎']
                 accept = await private_channel.send(f"{user.mention} will you play again with {ctx.author.mention}?")
@@ -15163,7 +15163,7 @@ class CrownUnlimited(commands.Cog):
                 cardlogger = await cardlevel(o_card, ouser, o_universe, selected_universe, "Tales")
                 ccardlogger = await cardlevel(c_card, user, c_universe, selected_universe, "Tales")
                 if questlogger:
-                    await ctx.author.send(questlogger)
+                    await private_channel.send(questlogger)
                 if cquestlogger:
                     await user.send(cquestlogger)
                 if currentopponent != total_legends:
@@ -15198,7 +15198,7 @@ class CrownUnlimited(commands.Cog):
                         embedVar = discord.Embed(title=f"VICTORY", description=f"{t_card} has been defeated!\n\n{drop_response}", colour=0xe91e63)
                         embedVar.set_author(name=f"The match lasted {turn_total} rounds.")
                         embedVar.set_footer(text=f"{o_card} says:\n{o_win_description}")
-                        await ctx.author.send(embed=embedVar)
+                        await private_channel.send(embed=embedVar)
 
                         currentopponent = currentopponent + 1
                         continued = True
@@ -15656,7 +15656,7 @@ class CrownUnlimited(commands.Cog):
                             return button_ctx.author == user1 and button_ctx.custom_id in options
 
                         try:
-                            button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[battle_action_row, util_action_row, coop_util_action_row], check=check)
+                            button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[battle_action_row, util_action_row, coop_util_action_row], timeout=45, check=check)
 
                             # calculate data based on selected move
                             if button_ctx.custom_id == "q" or button_ctx.custom_id == "Q":
@@ -17316,7 +17316,7 @@ class CrownUnlimited(commands.Cog):
                             return button_ctx.author == user and button_ctx.custom_id in options
 
                         try:
-                            button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[battle_action_row, util_action_row, coop_util_action_row], check=check)
+                            button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[battle_action_row, util_action_row, coop_util_action_row], timeout=45, check=check)
 
                             # calculate data based on selected move
                             if button_ctx.custom_id == "q" or button_ctx.custom_id == "Q" :
@@ -18744,12 +18744,12 @@ class CrownUnlimited(commands.Cog):
                 embedVar = discord.Embed(title=f":zap: **{t_card}** wins the match!", description=f"The game lasted {turn_total} rounds.\n**{t_card} says**\n`{t_win_description}`", colour=0x1abc9c)
                 embedVar.set_author(name=f"{o_card} & {c_card} lost!")
                 if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
-                    embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[2]} Seconds.")
+                    embedVar.set_footer(text=f"Battle Time: {gameClock[2]} Seconds.")
                 elif int(gameClock[0]) == 0:
-                    embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                    embedVar.set_footer(text=f"Battle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                 else: 
-                    embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
-                await ctx.author.send(embed=embedVar)
+                    embedVar.set_footer(text=f"Battle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                await private_channel.send(embed=embedVar)
                 
                 emojis = ['👍', '👎']
                 accept = await private_channel.send(f"{user.mention} will you play again with {ctx.author.mention}?")
@@ -18802,7 +18802,7 @@ class CrownUnlimited(commands.Cog):
                 petlogger = await petlevel(opet_name, ouser)
                 cpetlogger = await petlevel(cpet_name, user)
                 if questlogger:
-                    await ctx.author.send(questlogger)
+                    await private_channel.send(questlogger)
                 if cquestlogger:
                     await user.send(cquestlogger)
                 if currentopponent != (total_legends):
@@ -18836,7 +18836,7 @@ class CrownUnlimited(commands.Cog):
                         embedVar = discord.Embed(title=f"VICTORY", description=f"{t_card} has been defeated!\n\n{drop_response}\n{cdrop_response}", colour=0xe91e63)
                         embedVar.set_author(name=f"The match lasted {turn_total} rounds.")
                         embedVar.set_footer(text=f"{o_card} says:\n{o_win_description}")
-                        await ctx.author.send(embed=embedVar)
+                        await private_channel.send(embed=embedVar)
 
                         currentopponent = currentopponent + 1
                         continued = True
@@ -20390,7 +20390,7 @@ class CrownUnlimited(commands.Cog):
                         return button_ctx.author == user1 and button_ctx.custom_id in options
 
                     try:
-                        button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[battle_action_row, util_action_row, coop_util_action_row], check=check)
+                        button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[battle_action_row, util_action_row, coop_util_action_row], timeout=45, check=check)
 
                         # calculate data based on selected move
                         if button_ctx.custom_id == "q" or button_ctx.custom_id == "Q":
@@ -22069,7 +22069,7 @@ class CrownUnlimited(commands.Cog):
                         return button_ctx.author == user and button_ctx.custom_id in options
 
                     try:
-                        button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[battle_action_row, util_action_row, coop_util_action_row], check=check)
+                        button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[battle_action_row, util_action_row, coop_util_action_row], timeout=45, check=check)
 
                         # calculate data based on selected move
                         if button_ctx.custom_id == "q" or button_ctx.custom_id == "Q" :
@@ -23510,18 +23510,18 @@ class CrownUnlimited(commands.Cog):
             embedVar = discord.Embed(title=f":zap: **{t_card}** Wins...", description=f"Match concluded in {turn_total} turns!\n{t_wins}", colour=0x1abc9c)
             embedVar.set_author(name=f"{o_card} says:\n{o_lose_description}", icon_url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236432/PCG%20LOGOS%20AND%20RESOURCES/PCGBot_1.png")
             if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
-                embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[2]} Seconds.")
+                embedVar.set_footer(text=f"Battle Time: {gameClock[2]} Seconds.")
             elif int(gameClock[0]) == 0:
-                embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                embedVar.set_footer(text=f"Battle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
             else: 
-                embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
-            await ctx.author.send(embed=embedVar)
+                embedVar.set_footer(text=f"Battle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+            await private_channel.send(embed=embedVar)
             if botActive:                    
                 embedVar = discord.Embed(title=f"PLAY AGAIN", description=f"{t_card} was too powerful level up your character and try again...", colour=0xe74c3c)
                 embedVar.set_author(name=f"You Lost...")
                 embedVar.add_field(name="Tips!", value="Equiping stronger `TITLES` and `ARMS` will make you character tougher in a fight!")
                 embedVar.set_footer(text="The .shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
-                await ctx.author.send(embed=embedVar)
+                await private_channel.send(embed=embedVar)
 
             if private_channel.guild:
                 await discord.TextChannel.delete(private_channel, reason=None)
@@ -23555,11 +23555,11 @@ class CrownUnlimited(commands.Cog):
                 await movecrest(selected_universe, oguild['GNAME'])
             embedVar.set_author(name=f"{t_card} lost", icon_url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236432/PCG%20LOGOS%20AND%20RESOURCES/PCGBot_1.png")
             if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
-                embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[2]} Seconds.")
+                embedVar.set_footer(text=f"Battle Time: {gameClock[2]} Seconds.")
             elif int(gameClock[0]) == 0:
-                embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                embedVar.set_footer(text=f"Battle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
             else: 
-                embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                embedVar.set_footer(text=f"Battle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
             await ctx.author.send(embed=embedVar)
 
             if botActive:                    
@@ -24075,7 +24075,7 @@ class CrownUnlimited(commands.Cog):
                             return button_ctx.author == user1 and button_ctx.custom_id in options
 
                         try:
-                            button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[battle_action_row, util_action_row], check=check)
+                            button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[battle_action_row, util_action_row], timeout=45, check=check)
 
                             # calculate data based on selected move
                             if button_ctx.custom_id == "q" or button_ctx.custom_id =="Q" :
@@ -25171,33 +25171,46 @@ class CrownUnlimited(commands.Cog):
 
                 embedVar = discord.Embed(title=f":zap: **{t_card}** wins the match!", description=f"The game lasted {turn_total} rounds.\n**{t_card} says**\n`{t_win_description}`", colour=0x1abc9c)
                 embedVar.set_author(name=f"{o_card} lost!")
+                
+                play_again_buttons = [
+                            manage_components.create_button(
+                                style=ButtonStyle.blue,
+                                label="Yes",
+                                custom_id="Yes"
+                            ),
+                            manage_components.create_button(
+                                style=ButtonStyle.red,
+                                label="No",
+                                custom_id="No"
+                            )
+                        ]
+                play_again_buttons_action_row = manage_components.create_actionrow(*play_again_buttons)
+
                 if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
-                    embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[2]} Seconds.")
+                    embedVar.set_footer(text=f"Battle Time: {gameClock[2]} Seconds.")
                 elif int(gameClock[0]) == 0:
-                    embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                    embedVar.set_footer(text=f"Battle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                 else: 
-                    embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
-                await ctx.author.send(embed=embedVar)
+                    embedVar.set_footer(text=f"Battle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                await private_channel.send(embed=embedVar)
                 
                 emojis = ['👍', '👎']
-                accept = await private_channel.send(f"{ctx.author.mention} would you like to play again?")
+                accept = await private_channel.send(f"{ctx.author.mention} would you like to play again?", components=[play_again_buttons_action_row])
                 for emoji in emojis:
                     await accept.add_reaction(emoji)
 
-                def check(reaction, user):
-                    return user == user1 and (str(reaction.emoji) == '👍') or (str(reaction.emoji) == '👎')
+                def check(button_ctx):
+                    return button_ctx.author == ctx.author
                 try:
-                    reaction, user = await self.bot.wait_for('reaction_add', timeout=45.0, check=check)
+                    button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[play_again_buttons_action_row], timeout=45, check=check)
 
-                    if str(reaction.emoji) == '👎':
-                        continued = False 
-                        
-                        if private_channel.guild:
-                            await discord.TextChannel.delete(private_channel, reason=None)
+                    if button_ctx.custom_id == "No":                        
+                        await discord.TextChannel.delete(private_channel, reason=None)
                         return
-
-                    currentopponent = 0
-                    continued = True
+                    if button_ctx.custom_id == "Yes":
+                        currentopponent = 0
+                        continued = True
+                        await button_ctx.send("Good luck!")
                 except asyncio.TimeoutError:
                     continued = False
                     
@@ -25224,9 +25237,9 @@ class CrownUnlimited(commands.Cog):
                     cardlogger = await cardlevel(o_card, ouser, o_universe, selected_universe, "Dungeon")
                     match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']), str(oarm['ARM']), str(selected_universe), "Dungeon", o['EXCLUSIVE'])
                     if destinylogger:
-                        await ctx.author.send(destinylogger)
+                        await private_channel.send(destinylogger)
                     if questlogger:
-                        await ctx.author.send(questlogger)
+                        await private_channel.send(questlogger)
 
                     if currentopponent != (total_legends):
                         embedVar = discord.Embed(title=f"VICTORY\n**{o_card} says**\n{o_win_description}", description=f"The game lasted {turn_total} rounds.\n\n{drop_response}", colour=0xe91e63)
@@ -25237,8 +25250,7 @@ class CrownUnlimited(commands.Cog):
                         continued = True
 
                     if currentopponent == (total_legends):
-                        embedVar = discord.Embed(title=f"UNIVERSE CONQUERED", description=f"Universe {selected_universe} has been conquered\n\n{drop_response}", colour=0xe91e63)
-                        embedVar.set_author(name=f"New Universes have been unlocked to explore!")
+                        embedVar = discord.Embed(title=f"DUNGEON CONQUERED", description=f"Universe {selected_universe} has been conquered\n\n{drop_response}", colour=0xe91e63)
                         if crestsearch:
                             await movecrest(selected_universe, oguild['GNAME'])
                             embedVar.add_field(name=f"{selected_universe} CREST CLAIMED!", value=f"{oguild['GNAME']} earned the {selected_universe} **Crest**")
@@ -25356,7 +25368,7 @@ class CrownUnlimited(commands.Cog):
                 return button_ctx.author == ctx.author
             
             try:
-                button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[abyss_buttons_action_row, abyss_buttons], check=check)
+                button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[abyss_buttons_action_row, abyss_buttons], timeout=45, check=check)
                 
                 if button_ctx.custom_id == "Yes":
                     if sowner['CARD'] in banned_cards:
@@ -26406,7 +26418,7 @@ class CrownUnlimited(commands.Cog):
                             return button_ctx.author == user1 and button_ctx.custom_id in options
 
                         try:
-                            button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[battle_action_row, util_action_row], check=check)
+                            button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[battle_action_row, util_action_row], timeout=45, check=check)
 
                             # calculate data based on selected move
                             if button_ctx.custom_id == "q" or button_ctx.custom_id =="Q" :
@@ -27517,12 +27529,12 @@ class CrownUnlimited(commands.Cog):
                 embedVar = discord.Embed(title=f":zap: **{t_card}** wins the match!", description=f"The game lasted {turn_total} rounds.\n**{t_card} says**\n`{t_win_description}`", colour=0x1abc9c)
                 embedVar.set_author(name=f"{o_card} lost!")
                 if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
-                    embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[2]} Seconds.")
+                    embedVar.set_footer(text=f"Battle Time: {gameClock[2]} Seconds.")
                 elif int(gameClock[0]) == 0:
-                    embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                    embedVar.set_footer(text=f"Battle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                 else: 
-                    embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
-                await ctx.author.send(embed=embedVar)
+                    embedVar.set_footer(text=f"Battle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                await private_channel.send(embed=embedVar)
                 
                 emojis = ['👍', '👎']
                 accept = await private_channel.send(f"{ctx.author.mention} would you like to play again?")
@@ -28073,7 +28085,7 @@ class CrownUnlimited(commands.Cog):
                             return button_ctx.author == user1 and button_ctx.custom_id in options
 
                         try:
-                            button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[battle_action_row, util_action_row], check=check)
+                            button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[battle_action_row, util_action_row], timeout=45, check=check)
 
                             # calculate data based on selected move
                             if button_ctx.custom_id == "q" or button_ctx.custom_id =="Q":
@@ -29065,31 +29077,31 @@ class CrownUnlimited(commands.Cog):
                 play_again_buttons = [
                             manage_components.create_button(
                                 style=ButtonStyle.blue,
-                                label="✔️",
+                                label="Yes",
                                 custom_id="Yes"
                             ),
                             manage_components.create_button(
                                 style=ButtonStyle.red,
-                                label="❌",
+                                label="No",
                                 custom_id="No"
                             )
                         ]
                 play_again_buttons_action_row = manage_components.create_actionrow(*play_again_buttons)
 
                 if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
-                    embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[2]} Seconds.")
+                    embedVar.set_footer(text=f"Battle Time: {gameClock[2]} Seconds.")
                 elif int(gameClock[0]) == 0:
-                    embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                    embedVar.set_footer(text=f"Battle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                 else: 
-                    embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
-                await ctx.author.send(embed=embedVar)
+                    embedVar.set_footer(text=f"Battle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                await private_channel.send(embed=embedVar)
      
                 accept = await private_channel.send(f"{ctx.author.mention} would you like to play again?", components=[play_again_buttons_action_row])
 
                 def check(button_ctx):
                     return button_ctx.author == ctx.author
                 try:
-                    button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[play_again_buttons_action_row], check=check)
+                    button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[play_again_buttons_action_row], timeout=45, check=check)
 
                     if button_ctx.custom_id == "No":                        
                         await discord.TextChannel.delete(private_channel, reason=None)
@@ -29097,6 +29109,7 @@ class CrownUnlimited(commands.Cog):
                     if button_ctx.custom_id == "Yes":
                         currentopponent = 0
                         continued = True
+                        await button_ctx.send("Good luck!")
                 except asyncio.TimeoutError:
                     continued = False
                     
@@ -29123,9 +29136,9 @@ class CrownUnlimited(commands.Cog):
                     cardlogger = await cardlevel(o_card, ouser, o_universe, selected_universe, "Tales")
                     match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']), str(oarm['ARM']), str(selected_universe), "Tales", o['EXCLUSIVE'])
                     if destinylogger:
-                        await ctx.author.send(destinylogger)
+                        await private_channel.send(destinylogger)
                     if questlogger:
-                        await ctx.author.send(questlogger)
+                        await private_channel.send(questlogger)
                         
                     if currentopponent != (total_legends):                
                         embedVar = discord.Embed(title=f"VICTORY\n**{o_card} says**\n{o_win_description}", description=f"The game lasted {turn_total} rounds.\n\n{drop_response}", colour=0xe91e63)
@@ -30294,7 +30307,7 @@ class CrownUnlimited(commands.Cog):
                         return button_ctx.author == user1 and button_ctx.custom_id in options
 
                     try:
-                        button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[battle_action_row, util_action_row], check=check)
+                        button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[battle_action_row, util_action_row], timeout=45, check=check)
 
                         # calculate data based on selected move
                         if button_ctx.custom_id == "q" or button_ctx.custom_id =="Q":
@@ -31402,18 +31415,18 @@ class CrownUnlimited(commands.Cog):
             embedVar = discord.Embed(title=f":zap: **{t_card}** Wins...", description=f"Match concluded in {turn_total} turns!\n{t_wins}", colour=0x1abc9c)
             embedVar.set_author(name=f"{o_card} says:\n{o_lose_description}", icon_url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236432/PCG%20LOGOS%20AND%20RESOURCES/PCGBot_1.png")
             if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
-                embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[2]} Seconds.")
+                embedVar.set_footer(text=f"Battle Time: {gameClock[2]} Seconds.")
             elif int(gameClock[0]) == 0:
-                embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                embedVar.set_footer(text=f"Battle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
             else: 
-                embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
-            await ctx.author.send(embed=embedVar)
+                embedVar.set_footer(text=f"Battle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+            await private_channel.send(embed=embedVar)
             if botActive:                    
                 embedVar = discord.Embed(title=f"PLAY AGAIN", description=f"{t_card} was too powerful level up your character and try again...", colour=0xe74c3c)
                 embedVar.set_author(name=f"You Lost...")
                 embedVar.add_field(name="Tips!", value="Equiping stronger `TITLES` and `ARMS` will make you character tougher in a fight!")
                 embedVar.set_footer(text="The .shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
-                await ctx.author.send(embed=embedVar)
+                await private_channel.send(embed=embedVar)
 
             if private_channel.guild:
                 await discord.TextChannel.delete(private_channel, reason=None)
@@ -31440,11 +31453,11 @@ class CrownUnlimited(commands.Cog):
                 await movecrest(selected_universe, oguild['GNAME'])
             embedVar.set_author(name=f"{t_card} lost", icon_url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236432/PCG%20LOGOS%20AND%20RESOURCES/PCGBot_1.png")
             if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
-                embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[2]} Seconds.")
+                embedVar.set_footer(text=f"Battle Time: {gameClock[2]} Seconds.")
             elif int(gameClock[0]) == 0:
-                embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                embedVar.set_footer(text=f"Battle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
             else: 
-                embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                embedVar.set_footer(text=f"Battle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
             await ctx.author.send(embed=embedVar)
 
             if botActive:                    
@@ -32553,7 +32566,7 @@ class CrownUnlimited(commands.Cog):
                                 return button_ctx.author == user1 and button_ctx.custom_id in options
 
                             try:
-                                button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[battle_action_row, util_action_row], check=check)
+                                button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[battle_action_row, util_action_row], timeout=45, check=check)
 
                                 # calculate data based on selected move
                                 if button_ctx.custom_id == "q" or button_ctx.custom_id =="Q":
@@ -33235,7 +33248,7 @@ class CrownUnlimited(commands.Cog):
                                     return button_ctx.author == user2 and button_ctx.custom_id in options
 
                                 try:
-                                    button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[battle_action_row, util_action_row], check=check)
+                                    button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[battle_action_row, util_action_row], timeout=45, check=check)
 
                                     # calculate data based on selected move
                                     if button_ctx.custom_id == "q" or button_ctx.custom_id =="Q":
@@ -34181,11 +34194,11 @@ class CrownUnlimited(commands.Cog):
                     embedVar = discord.Embed(title=f":zap: **{t_card}** wins the match! Use /start to Play again or /end to end the session", description=f"Match concluded in {turn_total} turns\n**{t_card} says**\n`{t_win_description}`", colour=0x1abc9c)
                     embedVar.set_author(name=f"{o_card} says:\n{o_lose_description}")
                     if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
-                        embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[2]} Seconds.")
+                        embedVar.set_footer(text=f"Battle Time: {gameClock[2]} Seconds.")
                     elif int(gameClock[0]) == 0:
-                        embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                        embedVar.set_footer(text=f"Battle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                     else: 
-                        embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                        embedVar.set_footer(text=f"Battle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                     embedVar.add_field(name="Focus Count", value=f"**{o_card}**: {o_focus_count}\n**{t_card}**: {t_focus_count}")
                     if o_focus_count >= t_focus_count:
                         embedVar.add_field(name="Most Focused", value=f"**{o_card}**")
@@ -34227,11 +34240,11 @@ class CrownUnlimited(commands.Cog):
                     embedVar = discord.Embed(title=f":zap: VICTORY\n**{o_card} says**\n{o_win_description}\n\n Use /start to Play again or /end to end the session", description=f"The match lasted {turn_total} turns", colour=0xe91e63)
                     embedVar.set_author(name=f"{t_card} says\n{t_lose_description}")
                     if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
-                        embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[2]} Seconds.")
+                        embedVar.set_footer(text=f"Battle Time: {gameClock[2]} Seconds.")
                     elif int(gameClock[0]) == 0:
-                        embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                        embedVar.set_footer(text=f"Battle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                     else: 
-                        embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                        embedVar.set_footer(text=f"Battle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                     embedVar.add_field(name="Focus Count", value=f"**{o_card}**: {o_focus_count}\n**{t_card}**: {t_focus_count}")
                     if o_focus_count >= t_focus_count:
                         embedVar.add_field(name="Most Focused", value=f"**{o_card}**")
@@ -35332,7 +35345,7 @@ class CrownUnlimited(commands.Cog):
                                 return button_ctx.author == user1 and button_ctx.custom_id in options
 
                             try:
-                                button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[battle_action_row, util_action_row], check=check)
+                                button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[battle_action_row, util_action_row], timeout=45, check=check)
 
                                 # calculate data based on selected move
                                 if button_ctx.custom_id == "q" or button_ctx.custom_id =="Q":
@@ -35978,7 +35991,7 @@ class CrownUnlimited(commands.Cog):
                                     return button_ctx.author == user2 and button_ctx.custom_id in options
 
                                 try:
-                                    button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[battle_action_row, util_action_row], check=check)
+                                    button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[battle_action_row, util_action_row], timeout=45, check=check)
 
                                     # calculate data based on selected move
                                     if button_ctx.custom_id == "q" or button_ctx.custom_id =="Q":
@@ -36922,11 +36935,11 @@ class CrownUnlimited(commands.Cog):
                     embedVar = discord.Embed(title=f":zap: **{t_card}** wins the match! Use /start to Play again or /end to end the session", description=f"Match concluded in {turn_total} turns\n**{t_card} says**\n`{t_win_description}`", colour=0x1abc9c)
                     embedVar.set_author(name=f"{o_card} says:\n{o_lose_description}")
                     if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
-                        embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[2]} Seconds.")
+                        embedVar.set_footer(text=f"Battle Time: {gameClock[2]} Seconds.")
                     elif int(gameClock[0]) == 0:
-                        embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                        embedVar.set_footer(text=f"Battle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                     else: 
-                        embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                        embedVar.set_footer(text=f"Battle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                     embedVar.add_field(name="Focus Count", value=f"**{o_card}**: {o_focus_count}\n**{t_card}**: {t_focus_count}")
                     if o_focus_count >= t_focus_count:
                         embedVar.add_field(name="Most Focused", value=f"**{o_card}**")
@@ -36968,11 +36981,11 @@ class CrownUnlimited(commands.Cog):
                     embedVar = discord.Embed(title=f":zap: VICTORY\n**{o_card} says**\n{o_win_description}\n\n Use /start to Play again or /end to end the session", description=f"The match lasted {turn_total} turns", colour=0xe91e63)
                     embedVar.set_author(name=f"{t_card} says\n{t_lose_description}")
                     if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
-                        embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[2]} Seconds.")
+                        embedVar.set_footer(text=f"Battle Time: {gameClock[2]} Seconds.")
                     elif int(gameClock[0]) == 0:
-                        embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                        embedVar.set_footer(text=f"Battle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                     else: 
-                        embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                        embedVar.set_footer(text=f"Battle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                     embedVar.add_field(name="Focus Count", value=f"**{o_card}**: {o_focus_count}\n**{t_card}**: {t_focus_count}")
                     if o_focus_count >= t_focus_count:
                         embedVar.add_field(name="Most Focused", value=f"**{o_card}**")
@@ -38067,7 +38080,7 @@ class CrownUnlimited(commands.Cog):
                                 return button_ctx.author == user1 and button_ctx.custom_id in options
 
                             try:
-                                button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[battle_action_row, util_action_row], check=check)
+                                button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[battle_action_row, util_action_row], timeout=45, check=check)
 
                                 # calculate data based on selected move
                                 if button_ctx.custom_id == "q" or button_ctx.custom_id =="Q":
@@ -38613,7 +38626,7 @@ class CrownUnlimited(commands.Cog):
                                     return button_ctx.author == user2 and button_ctx.custom_id in options
 
                                 try:
-                                    button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[battle_action_row, util_action_row], check=check)
+                                    button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[battle_action_row, util_action_row], timeout=45, check=check)
 
                                     # calculate data based on selected move
                                     if button_ctx.custom_id == "q" or button_ctx.custom_id =="Q":
@@ -39458,11 +39471,11 @@ class CrownUnlimited(commands.Cog):
                     embedVar = discord.Embed(title=f":zap: **{t_card}** wins the match! Use /start to Play again or /end to end the session", description=f"Match concluded in {turn_total} turns\n**{t_card} says**\n`{t_win_description}`", colour=0x1abc9c)
                     embedVar.set_author(name=f"{o_card} says:\n{o_lose_description}")
                     if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
-                        embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[2]} Seconds.")
+                        embedVar.set_footer(text=f"Battle Time: {gameClock[2]} Seconds.")
                     elif int(gameClock[0]) == 0:
-                        embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                        embedVar.set_footer(text=f"Battle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                     else: 
-                        embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                        embedVar.set_footer(text=f"Battle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                     embedVar.add_field(name="Focus Count", value=f"**{o_card}**: {o_focus_count}\n**{t_card}**: {t_focus_count}")
                     if o_focus_count >= t_focus_count:
                         embedVar.add_field(name="Most Focused", value=f"**{o_card}**")
@@ -39504,11 +39517,11 @@ class CrownUnlimited(commands.Cog):
                     embedVar = discord.Embed(title=f":zap: VICTORY\n**{o_card} says**\n{o_win_description}\n\n Use /start to Play again or /end to end the session", description=f"The match lasted {turn_total} turns", colour=0xe91e63)
                     embedVar.set_author(name=f"{t_card} says\n{t_lose_description}")
                     if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
-                        embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[2]} Seconds.")
+                        embedVar.set_footer(text=f"Battle Time: {gameClock[2]} Seconds.")
                     elif int(gameClock[0]) == 0:
-                        embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                        embedVar.set_footer(text=f"Battle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                     else: 
-                        embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                        embedVar.set_footer(text=f"Battle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                     embedVar.add_field(name="Focus Count", value=f"**{o_card}**: {o_focus_count}\n**{t_card}**: {t_focus_count}")
                     if o_focus_count >= t_focus_count:
                         embedVar.add_field(name="Most Focused", value=f"**{o_card}**")
@@ -40603,7 +40616,7 @@ class CrownUnlimited(commands.Cog):
                                 return button_ctx.author == user1 and button_ctx.custom_id in options
 
                             try:
-                                button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[battle_action_row, util_action_row], check=check)
+                                button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[battle_action_row, util_action_row], timeout=45, check=check)
 
                                 # calculate data based on selected move
                                 if button_ctx.custom_id == "q" or button_ctx.custom_id =="Q":
@@ -41149,7 +41162,7 @@ class CrownUnlimited(commands.Cog):
                                     return button_ctx.author == user2 and button_ctx.custom_id in options
 
                                 try:
-                                    button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[battle_action_row, util_action_row], check=check)
+                                    button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[battle_action_row, util_action_row], timeout=45, check=check)
 
                                     # calculate data based on selected move
                                     if button_ctx.custom_id == "q" or button_ctx.custom_id =="Q":
@@ -41994,11 +42007,11 @@ class CrownUnlimited(commands.Cog):
                     embedVar = discord.Embed(title=f":zap: **{t_card}** wins the match! Use /start to Play again or /end to end the session", description=f"Match concluded in {turn_total} turns\n**{t_card} says**\n`{t_win_description}`", colour=0x1abc9c)
                     embedVar.set_author(name=f"{o_card} says:\n{o_lose_description}")
                     if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
-                        embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[2]} Seconds.")
+                        embedVar.set_footer(text=f"Battle Time: {gameClock[2]} Seconds.")
                     elif int(gameClock[0]) == 0:
-                        embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                        embedVar.set_footer(text=f"Battle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                     else: 
-                        embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                        embedVar.set_footer(text=f"Battle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                     embedVar.add_field(name="Focus Count", value=f"**{o_card}**: {o_focus_count}\n**{t_card}**: {t_focus_count}")
                     if o_focus_count >= t_focus_count:
                         embedVar.add_field(name="Most Focused", value=f"**{o_card}**")
@@ -42040,11 +42053,11 @@ class CrownUnlimited(commands.Cog):
                     embedVar = discord.Embed(title=f":zap: VICTORY\n**{o_card} says**\n{o_win_description}\n\n Use /start to Play again or /end to end the session", description=f"The match lasted {turn_total} turns", colour=0xe91e63)
                     embedVar.set_author(name=f"{t_card} says\n{t_lose_description}")
                     if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
-                        embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[2]} Seconds.")
+                        embedVar.set_footer(text=f"Battle Time: {gameClock[2]} Seconds.")
                     elif int(gameClock[0]) == 0:
-                        embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                        embedVar.set_footer(text=f"Battle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                     else: 
-                        embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                        embedVar.set_footer(text=f"Battle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                     embedVar.add_field(name="Focus Count", value=f"**{o_card}**: {o_focus_count}\n**{t_card}**: {t_focus_count}")
                     if o_focus_count >= t_focus_count:
                         embedVar.add_field(name="Most Focused", value=f"**{o_card}**")
@@ -43164,7 +43177,7 @@ class CrownUnlimited(commands.Cog):
                                 return button_ctx.author == user1 and button_ctx.custom_id in options
 
                             try:
-                                button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[battle_action_row, util_action_row], check=check)
+                                button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[battle_action_row, util_action_row], timeout=45, check=check)
 
                                 # calculate data based on selected move
                                 if button_ctx.custom_id == "q" or button_ctx.custom_id =="Q":
@@ -43828,7 +43841,7 @@ class CrownUnlimited(commands.Cog):
                                     return button_ctx.author == user2 and button_ctx.custom_id in options
 
                                 try:
-                                    button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[battle_action_row, util_action_row], check=check)
+                                    button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[battle_action_row, util_action_row], timeout=45, check=check)
 
                                     # calculate data based on selected move
                                     if button_ctx.custom_id == "q" or button_ctx.custom_id =="Q":
@@ -44634,11 +44647,11 @@ class CrownUnlimited(commands.Cog):
                     embedVar = discord.Embed(title=f":zap: **{t_card}** wins the match! Use /start to Play again or /end to end the session", description=f"Match concluded in {turn_total} turns\n**{t_card} says**\n`{t_win_description}`", colour=0x1abc9c)
                     embedVar.set_author(name=f"{o_card} says:\n{o_lose_description}")
                     if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
-                        embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[2]} Seconds.")
+                        embedVar.set_footer(text=f"Battle Time: {gameClock[2]} Seconds.")
                     elif int(gameClock[0]) == 0:
-                        embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                        embedVar.set_footer(text=f"Battle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                     else: 
-                        embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                        embedVar.set_footer(text=f"Battle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                     embedVar.add_field(name="Focus Count", value=f"**{o_card}**: {o_focus_count}\n**{t_card}**: {t_focus_count}")
                     if o_focus_count >= t_focus_count:
                         embedVar.add_field(name="Most Focused", value=f"**{o_card}**")
@@ -44669,11 +44682,11 @@ class CrownUnlimited(commands.Cog):
                     embedVar = discord.Embed(title=f":zap: VICTORY\n**{o_card} says**\n{o_win_description}\n\n Use /start to Play again or /end to end the session", description=f"The match lasted {turn_total} turns", colour=0xe91e63)
                     embedVar.set_author(name=f"{t_card} says\n{t_lose_description}")
                     if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
-                        embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[2]} Seconds.")
+                        embedVar.set_footer(text=f"Battle Time: {gameClock[2]} Seconds.")
                     elif int(gameClock[0]) == 0:
-                        embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                        embedVar.set_footer(text=f"Battle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                     else: 
-                        embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                        embedVar.set_footer(text=f"Battle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                     embedVar.add_field(name="Focus Count", value=f"**{o_card}**: {o_focus_count}\n**{t_card}**: {t_focus_count}")
                     if o_focus_count >= t_focus_count:
                         embedVar.add_field(name="Most Focused", value=f"**{o_card}**")
@@ -45814,7 +45827,7 @@ class CrownUnlimited(commands.Cog):
                             return button_ctx.author == user1 and button_ctx.custom_id in options
 
                         try:
-                            button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[battle_action_row, util_action_row], check=check)
+                            button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[battle_action_row, util_action_row], timeout=45, check=check)
 
                             # calculate data based on selected move
                             if button_ctx.custom_id == "q" or button_ctx.custom_id =="Q":
@@ -46719,11 +46732,11 @@ class CrownUnlimited(commands.Cog):
             embedVar = discord.Embed(title=f":shield: **{t_card}** defended the {guild_info['GNAME']}", description=f"Match concluded in {turn_total} turns\n**{t_card} says**\n`{t_win_description}`", colour=0x1abc9c)
             embedVar.set_author(name=f"{o_card} says:\n{o_lose_description}")
             if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
-                embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[2]} Seconds.")
+                embedVar.set_footer(text=f"Battle Time: {gameClock[2]} Seconds.")
             elif int(gameClock[0]) == 0:
-                embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                embedVar.set_footer(text=f"Battle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
             else: 
-                embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                embedVar.set_footer(text=f"Battle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
             embedVar.add_field(name="Focus Count", value=f"**{o_card}**: {o_focus_count}\n**{t_card}**: {t_focus_count}")
             if o_focus_count >= t_focus_count:
                 embedVar.add_field(name="Most Focused", value=f"**{o_card}**")
@@ -46779,11 +46792,11 @@ class CrownUnlimited(commands.Cog):
             embedVar = discord.Embed(title=f"{endmessage}\n**{o_card} says**\n{o_win_description}\n\n You have defeated the {guild_info['GNAME']} SHIELD!", description=f"The match lasted {turn_total} turns", colour=0xe91e63)
             embedVar.set_author(name=f"{t_card} says\n{t_lose_description}")
             if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
-                embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[2]} Seconds.")
+                embedVar.set_footer(text=f"Battle Time: {gameClock[2]} Seconds.")
             elif int(gameClock[0]) == 0:
-                embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                embedVar.set_footer(text=f"Battle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
             else: 
-                embedVar.set_footer(text=f"Play again?\nBattle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                embedVar.set_footer(text=f"Battle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
             embedVar.add_field(name="Focus Count", value=f"**{o_card}**: {o_focus_count}\n**{t_card}**: {t_focus_count}")
             if o_focus_count >= t_focus_count:
                 embedVar.add_field(name="Most Focused", value=f"**{o_card}**")
