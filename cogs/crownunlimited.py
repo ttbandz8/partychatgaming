@@ -47884,16 +47884,16 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, vul, accura
             if fortitude <= ap:
                 fortitude = health * (2/5) #216
 
-            attackpower = round(((int(atk) / 25) * int(ap)) / op_defense) #5.09
-            modifier = random.randint(5,11)
+            attackpower = round(((int(atk) / 28) * int(ap)) / op_defense) #5.09
+            modifier = random.randint(6,11)
             dmg = round(((fortitude * attackpower)/100) * modifier)
 
             #dmg = ((attackpower * (100 * (100 / defensepower))) * .001) + int(ap)
             
             #dmg = (int(ap)*(100/(100+int(op_defense)))) + int(atk)
 
-            low = dmg - (dmg * .15)
-            high = dmg + (dmg * .30)
+            low = dmg - (dmg * .08)
+            high = dmg + (dmg * .15)
 
             true_dmg = (random.randint(int(low), int(high))) + 25
             message = ""
