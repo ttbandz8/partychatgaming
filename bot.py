@@ -1004,12 +1004,12 @@ async def sell(ctx, player: User, item: str):
             sell_buttons = [
                manage_components.create_button(
                   style=ButtonStyle.blue,
-                  label="💸",
+                  label="Yes",
                   custom_id="Yes"
                ),
                manage_components.create_button(
                   style=ButtonStyle.red,
-                  label="❌",
+                  label="No",
                   custom_id="No"
                )
             ]
