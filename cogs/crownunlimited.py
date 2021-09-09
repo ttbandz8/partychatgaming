@@ -48394,7 +48394,7 @@ async def build_player_stats(self, ctx, sowner: str, o: dict, otitle: dict, t: d
 
         # Player 2 Data
         # t_user = boss
-        tarm = db.queryArm({'ARM': universe['DARM']})
+        tarm = db.queryArm({'ARM': universe['UARM']})
         tarm_universe = tarm['UNIVERSE']
         t_destiny = t['HAS_COLLECTION']
         if mode in opponent_pet_modes:
