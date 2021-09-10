@@ -35,7 +35,7 @@ import typing
 class CrownUnlimited(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self._cd = commands.CooldownMapping.from_cooldown(1, 30, commands.BucketType.member) # Change accordingly
+        self._cd = commands.CooldownMapping.from_cooldown(1, 480, commands.BucketType.member) # Change accordingly. Currently every 8 minutes (480 seconds == 8 minutes)
 
     @commands.Cog.listener()
     async def on_ready(self):
