@@ -76,12 +76,13 @@ class CrownUnlimited(commands.Cog):
             for uni in all_universes:
                 if uni['PREREQUISITE'] in player['CROWN_TALES'] and uni['HAS_CROWN_TALES'] == True and uni['TIER'] != 9:
                     if uni['TITLE'] in completed_crown_tales:
-                        available_universes.append(uni['TITLE'])
+                        available_universes.append(uni)
                     else:
-                        available_universes.append(uni['TITLE'])
+                        available_universes.append(uni)
             u = len(available_universes) - 1
             rand_universe = random.randint(1, u)
-            universe = available_universes[rand_universe]
+            universe = available_universes[rand_universe]['TITLE']
+
 
             # Select Card at Random
             all_available_drop_cards = db.queryDropCards(universe)
@@ -100,6 +101,8 @@ class CrownUnlimited(commands.Cog):
             else:
                 selected_mode = "Tales"
                 approach_message = ":japanese_ogre: A Calm "
+
+            universe_tier = available_universes[rand_universe]['TIER']
             
             random_battle_buttons = [
                 manage_components.create_button(
@@ -115,28 +118,53 @@ class CrownUnlimited(commands.Cog):
             ]
             random_battle_buttons_action_row = manage_components.create_actionrow(*random_battle_buttons)
 
+            # Lose / Bounty
+            random_flee_loss = 0
+            bounty = 0
+            if universe_tier == 1:
+                random_flee_loss = random.randint(1, 100)
+                bounty = random.randint(50, 250)
+            if universe_tier == 2:
+                random_flee_loss = random.randint(1, 150)
+                bounty = random.randint(50, 500)
+            if universe_tier == 3:
+                random_flee_loss = random.randint(25, 350)
+                bounty = random.randint(150, 1500)
+            if universe_tier == 4:
+                random_flee_loss = random.randint(500, 3000)
+                bounty = random.randint(500, 4000)
+            if universe_tier == 5:
+                random_flee_loss = random.randint(5000, 10000)
+                bounty = random.randint(5000, 25000)
+
+            if selected_mode == "Dungeon":
+                random_flee_loss = random_flee_loss * 3
+                bounty = bounty * 3
+
             # Send Message
-            embedVar = discord.Embed(title=f"Enemy Approaches!", description=textwrap.dedent(f"""\
-            :flower_playing_cards: **{approach_message} {cards[rand_card]['NAME']}** approaches!
-            
-            Will you battle or flee?
-            """), colour=0xe91e63)
+            embedVar = discord.Embed(title=f"**{approach_message} {cards[rand_card]['NAME']}** Approaches!", description=textwrap.dedent(f"""\
+            **Bounty** :coin: **{bounty}**
+            {message.author.mention}, Will you battle or flee?
+            """), colour=0xf1c40f)
+            embedVar.set_author(name="Enemy Approaches!")
             embedVar.set_thumbnail(url=f"{cards[rand_card]['PATH']}")
-            await message.channel.send(embed=embedVar, components=[random_battle_buttons_action_row])
+            embedVar.set_footer(text="Use /explore to toggle Explore Mode.", icon_url="https://cdn.discordapp.com/emojis/784402243519905792.gif?v=1")
+            await message.channel.send(embed=embedVar, components=[random_battle_buttons_action_row], delete_after=25)
 
             def check(button_ctx):
                 return button_ctx.author == message.author
 
             try:
-                button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[random_battle_buttons_action_row], timeout=45, check=check)
+                button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[random_battle_buttons_action_row], check=check)
                 
-                if button_ctx.custom_id == "No":                        
-                    await button_ctx.send("You fled!")
+                if button_ctx.custom_id == "No":
+                    await curse(random_flee_loss, message.author)
+                    await button_ctx.send(f"You fled, dropping :coin: {random_flee_loss} in the escape!", delete_after=15)
                     return
                 
                 if button_ctx.custom_id == "Yes":
                     await button_ctx.send(f"{message.author.mention} private channel has been opened for you. Good luck!")
-                    await enemy_approached(self, message, message.channel, player, selected_mode, universe, cards[rand_card]['NAME'])
+                    await enemy_approached(self, message, message.channel, player, selected_mode, universe, cards[rand_card]['NAME'], bounty)
             except Exception as ex:
                 trace = []
                 tb = ex.__traceback__
@@ -41868,7 +41896,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             'trace': trace
         }))
 
-async def enemy_approached(self, message, channel, player, selected_mode, universe, opponent):
+async def enemy_approached(self, message, channel, player, selected_mode, universe, opponent, bounty):
         private_channel = channel
         mode = selected_mode
         enemy_title = ""
@@ -43387,7 +43415,8 @@ async def enemy_approached(self, message, channel, player, selected_mode, univer
                         await message.author.send(destinylogger)
                     if questlogger:
                         await message.author.send(questlogger)
-                    embedVar = discord.Embed(title=f"VICTORY\n**{o_card} says**\n{o_win_description}", description=f"The game lasted {turn_total} rounds.\n\n{drop_response}", colour=0xe91e63)
+                    await bless(bounty, message.author)
+                    embedVar = discord.Embed(title=f"VICTORY\n:coin: {bounty} Bounty Received!\n**{o_card} says**\n{o_win_description}", description=f"The game lasted {turn_total} rounds.\n\n{drop_response}", colour=0xe91e63)
                     embedVar.set_author(name=f"{t_card} lost!")
                     await message.author.send(embed=embedVar)                  
                     await discord.TextChannel.delete(private_channel, reason=None)
