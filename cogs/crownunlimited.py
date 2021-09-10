@@ -40539,6 +40539,8 @@ def setup(bot):
 
 async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict, otitle: dict, t: dict, ttitle: dict, mode: str, universe: str, currentopponent: int, abyss_scaling: None, companion: None, c: None, ctitle: None):
     co_op_modes = ['CTales', 'DTales', 'CDungeon', 'DDungeon']
+    U_modes = ['ATales','Tales', 'CTales', 'DTales']
+    D_modes = ['CDungeon','DDungeon', 'Dungeon']
     solo_modes = ['ATales','Tales', 'Dungeon', 'Boss']
     opponent_pet_modes = ['Dungeon', 'DDungeon', 'CDungeon']
     opponent_scaling = 0
@@ -40546,11 +40548,11 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
     opponent_health_scaling = 0
     enemy_title = ""
     enemy_arm = ""
-    if mode == "Tales":
+    if mode in U_modes:
             enemy_title = "UTITLE"
             enemy_arm = "UARM"
         
-    if mode == "Dungeon":
+    if mode in D_modes:
         enemy_title = "DTITLE"
         enemy_arm = "DARM"
     
