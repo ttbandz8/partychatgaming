@@ -67,6 +67,8 @@ class CrownUnlimited(commands.Cog):
             
             # Pull Character Information
             player = db.queryUser({'DISNAME': str(message.author)})
+            if not player:
+                return
             if player['EXPLORE'] is False:
                 return
 
