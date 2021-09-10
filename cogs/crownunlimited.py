@@ -35,7 +35,7 @@ import typing
 class CrownUnlimited(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self._cd = commands.CooldownMapping.from_cooldown(1, 280, commands.BucketType.member) # Change accordingly. Currently every 8 minutes (480 seconds == 8 minutes)
+        self._cd = commands.CooldownMapping.from_cooldown(1, 400, commands.BucketType.member) # Change accordingly. Currently every 8 minutes (480 seconds == 8 minutes)
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -40243,12 +40243,12 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, vul, accura
             true_dmg = (random.randint(int(low), int(high))) + 25
             message = ""
 
-            miss_hit = 1 # Miss
+            miss_hit = 4 # Miss
             low_hit = 7 # Lower Damage
             med_hit = 11 # Medium Damage
             standard_hit = 19 # Standard Damage
             high_hit = 20 # Crit Hit
-            hit_roll = random.randint(0,20)
+            hit_roll = random.randint(4,20)
 
 
             if hit_roll <= miss_hit:
@@ -41946,7 +41946,7 @@ async def enemy_approached(self, message, channel, player, selected_mode, univer
             
             t = db.queryCard({'NAME': opponent})
             ttitle = db.queryTitle({'TITLE': universe[enemy_title]})
-            currentopponent = 5
+            currentopponent = 1
             randomized_battle = True
             stats = await build_player_stats(self, randomized_battle, message, sowner, o, otitle, t, ttitle, mode, universe, currentopponent, None, None, None, None)  
             
