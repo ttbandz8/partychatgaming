@@ -151,7 +151,7 @@ class CrownUnlimited(commands.Cog):
             embedVar.set_author(name="Enemy Approaches!")
             embedVar.set_thumbnail(url=f"{cards[rand_card]['PATH']}")
             embedVar.set_footer(text="Use /explore to toggle Explore Mode.", icon_url="https://cdn.discordapp.com/emojis/784402243519905792.gif?v=1")
-            await message.channel.send(embed=embedVar, components=[random_battle_buttons_action_row], delete_after=25)
+            await message.channel.send(embed=embedVar, components=[random_battle_buttons_action_row])
 
             def check(button_ctx):
                 return button_ctx.author == message.author
