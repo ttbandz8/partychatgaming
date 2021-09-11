@@ -123,81 +123,50 @@ async def enhancers(ctx):
    avatar="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png"
 
 
-   embedVar1 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
+   embedVar1 = discord.Embed(title= f":microbe: Enhancer Type: Boosts",colour=0x7289da)
    embedVar1.set_thumbnail(url=avatar)
-   embedVar1.add_field(name="`INCREASES`", value="`ATK` - Increase `ATK`\n\n`DEF` - Increase `DEF`\n\n`HLT` - Increase `HLT`\n\n`STAM` - Increase `STAM`\n\n")
+   embedVar1.add_field(name="`BOOSTS`", value="**ATK**\n**Title, Arm, Card Passive Effect:** Increase Attack by Flat AP value.\n**Card Active Enhancer Effect:** Increase Attack By AP %.\n\n**DEF**\n**Title, Arm, Card Passive Effect:** Increase Defense by Flat AP value.\n**Card Active Enhancer Effect:** Increase Defense By AP %.\n\n**HLT**\n**Title, Arm, Card Passive Effect:** Increase Health by Flat AP value.\n**Card Active Enhancer Effect:** Increase Health By Flat AP + 16% of Current Health.\n\n**STAM** - Increase Stamina by Flat AP\n\n")
    embedVar1.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
 
-   embedVar2 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
+   embedVar2 = discord.Embed(title= f":microbe: Enhancer Type: Steals",colour=0x7289da)
    embedVar2.set_thumbnail(url=avatar)
-   embedVar2.add_field(name="`STEALS`", value="`FLOG`- `ATK` Steal\n\n`WITHER`- `DEF` Steal\n\n`LIFE` - `LIFE` Steal\n\n`DRAIN` - `STAM` Steal\n\n")
+   embedVar2.add_field(name="`STEALS`", value="**FLOG**- Steal Opponent Attack and Add it to Your Attack by AP %\n\n**WITHER**- Steal Opponent Defense and Add it to Your Defense by AP %\n\n**LIFE**\n**Title, Arm, Card Passive Effect:** Steal Opponent Health and Add it to your Max Health by AP %\n**Card Active Enhancer Effect:** Steal Opponent Health and Add it to your Current Health by Flat AP + 9% of Opponent Current Health. \n\n**DRAIN** - Steal Opponent Stamina and Add it to your Stamina by Flat AP\n\n")
    embedVar2.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
 
-   embedVar3 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
+   embedVar3 = discord.Embed(title= f":microbe: Enhancer Type: Sacrifice",colour=0x7289da)
    embedVar3.set_thumbnail(url=avatar)
-   embedVar3.add_field(name="`SACRIFICE`", value="`RAGE` - Decrease `DEF`, Increase `ATK`\n\n`BRACE` - Decrease `ATK`, Increase `DEF`\n\n`BZRK` - Decrease `HLT`,  Increase `ATK`\n\n`CRYSTAL`- Decrease `HLT`, Increase `DEF`\n\n")
+   embedVar3.add_field(name="`SACRIFICE`", value="**RAGE** - Decrease Your Defense by AP %, Increase Your Attack by Amount of Decreased Defense\n\n**BRACE** - Decrease Your Attack by AP %, Increase Your Defense By Amount of Decreased Attack\n\n**BZRK** - Decrease Your Current Health by AP %,  Increase Your Attack by Amount of Decreased Health\n\n**CRYSTAL** - Decrease Your Health by AP %, Increase Your Defense by Amount of Decreased Health\n\n")
    embedVar3.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
 
-   embedVar4 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
+   embedVar4 = discord.Embed(title= f":microbe: Enhancer Type: Conversion",colour=0x7289da)
    embedVar4.set_thumbnail(url=avatar)
-   embedVar4.add_field(name="`TRADE`", value="`STANCE` - Swap `ATK` and `DEF`\n\n`CONFUSE` - Swap `OPP ATK` and  `OPP DEF`\n\n")
+   embedVar4.add_field(name="`CONVERSION`", value="**STANCE** - Swap Your Attack and Defense, Increase Your Attack By Flat AP\n\n**CONFUSE** - Swap Opponenet Attack and Defense, Decrease Opponent Defense by Flat AP\n\n")
    embedVar4.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
 
-   embedVar5 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
+   embedVar5 = discord.Embed(title= f":microbe: Enhancer Type: Time Manipulation",colour=0x7289da)
    embedVar5.set_thumbnail(url=avatar)
-   embedVar5.add_field(name="`TIME`", value="`BLINK`  - Decrease  `STAM`, Increase `OPP STAM`\n\n`SLOW` - Decrease `STAM`, Swap `OPP STAM`\n\n`HASTE` - Increase `STAM`, Swap `OPP STAM`\n\n")
+   embedVar5.add_field(name="`TIME MANIPULATION`", value="**BLINK**  - Decrease Your Stamina by Flat AP, Increase Opponent Stamina by Flat AP\n\n**SLOW** - Decrease Your Stamina by Flat AP, Swap You and Your Opponent's Stamina\n\n**HASTE** - Increase Your Stamina, Swap You and Your Opponent's Stamina\n\n")
    embedVar5.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
 
-   embedVar6 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
+   embedVar6 = discord.Embed(title= f":microbe: Enhancer Type: Control",colour=0x7289da)
    embedVar6.set_thumbnail(url=avatar)
-   embedVar6.add_field(name="`CONTROL`", value="`SOULCHAIN` - Both `PLAYERS` `STAM` = `AP`\n\n`GAMBLE` - Both `PLAYERS` `HEALTH` = `AP`\n\n")
+   embedVar6.add_field(name="`CONTROL`", value="**SOULCHAIN** - You and Your Opponent's Stamina Equal Flat AP\n\n**GAMBLE** - You and Your Opponent's Health Equal Flat AP\n\n")
    embedVar6.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
    
-   embedVar7 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
+   embedVar7 = discord.Embed(title= f":microbe: Enhancer Type: Fortitude",colour=0x7289da)
    embedVar7.set_thumbnail(url=avatar)
-   embedVar7.add_field(name="`FORTITUDE`", value="`GROWTH`- Decrease `MAXHLT`, Increase `ATK` & `DEF`\n\n`FEAR` - Decrease `MAXHLT`, Decrease `OPP ATK` & `OPP DEF`\n\n")
+   embedVar7.add_field(name="`FORTITUDE`", value="**GROWTH**- Decrease Your Max Health by AP %, Increase Your Attack and Defense by AP %\n\n**FEAR** - Decrease Your Max Health by AP %, Decrease Opponent Attack and Defense by AP %\n\n")
    embedVar7.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
 
-   embedVar8 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
+   embedVar8 = discord.Embed(title= f":microbe: Enhancer Type: Damage",colour=0x7289da)
    embedVar8.set_thumbnail(url=avatar)
-   embedVar8.add_field(name="`DAMAGE`", value="`WAVE` - Decreasing `Turn Count` Based `AP DMG` \n\n`BLAST` - Increasing `Turn Count` Based `AP DMG`\n\n")
+   embedVar8.add_field(name="`DAMAGE`", value="**WAVE** - Deal Flat AP Damage to Opponent. AP Decreases each turn. If used on turn that is divisible by 10 you will deal 30% of Flat AP Damage. You have chance to Crit for Double Flat AP Damage. \n\n**BLAST** - Deal Flat AP Damage to Opponent. AP Increases each turn.\n\n")
    embedVar8.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
 
-   embedVar9 = discord.Embed(title= f":trident:ENHANCE Sets:",colour=0x7289da)
+   embedVar9 = discord.Embed(title= f":microbe: Enhancer Type: Divinity",colour=0x7289da)
    embedVar9.set_thumbnail(url=avatar)
-   embedVar9.add_field(name="`DIVINITY`", value="`CREATION` - Increase `MAXHEALTH` Decreasing by `Turn Count`\n\n`DESTRUCTION` - Decrease `OPP MAXHEALTH` Increasing By `Turn Count`\n\n")
+   embedVar9.add_field(name="`DIVINITY`", value="**CREATION** - Increase Max Health by Flat AP. AP Decreases each turn. If used on turn that is divisible by 10 you will heal Health & Max Health for 20% of Flat AP. You have chance to Crit Heal Health and Max Health for Double Flat AP. \n\n**DESTRUCTION** - Decrease Opponent Max Health by Flat AP. AP Increases each turn.\n\n")
    embedVar9.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
-
-   embedVar10 = discord.Embed(title= f":trident:ENHANCE DETAILS:", description=textwrap.dedent(f"""
-   **AP:** **Ability Power**                                                                                           
-   **ATK:** AP Percentage Based Attack Increased
-   **DEF:** AP Percentage Based Attack Increased
-   **STAM:** Increased Stamina based on AP Value
-   **HLT:** Increased Health based on AP Value
-   **LIFE:** Lifesteals based on AP Value + 9% of Opponent Health
-   **DRAIN:** Steals Opponent Stamina based on AP Value
-   **FLOG:** Steals Attack based on 30% of AP Percentage
-   **WITHER:** Steals Defense based on 30% of AP Percentage
-   **RAGE:** Gain ATK but Lose DEF based on 30% of AP Percentage Of Your DEF
-   **BRACE:** GAIN DEF but Lose ATK based on 30% AP Percentage Of Your ATK
-   **BZRK:** Gain ATK but lose Health based on AP Percentage
-   **CRYSTAL:** Gain DEF Bbut lose Health based on AP Percentage
-   **STANCE:** Increase DEF by AP, Then Swaps ATK and DEF
-   **CONFUSE:** Decreasee Opponent DEF by AP, Then Swaps Opponent ATK and DEF
-   **BLINK:** Decreases Your Stamina by AP Value and gives opponent Stamina by AP Value
-   **SLOW:** Increases Your Stamina by AP, Decreases your Opponent Stamina by AP, Then swaps you and your opponents Stamina
-   **HASTE:** Decreases your Stamina by AP, Increases your Opponent stamina by AP, Then swap you and your opponent Stamina 
-   **SOUL:** CHAIN - Make you and your opponent Stamina equal AP
-   **GAMBLE:** Make you and your opponent health equal AP 
-   **GROWTH:** Lower Max Health, Increase Defense and Attack based on AP Percentage
-   **FEAR:** Lower your Health by AP Percentage, Lower your opponent ATK and DEF by AP Percentage
-   **WAVE:** Deals AP / Turn Count Damage to Opponent that decreases as the Turn Count increases (Crits on 10's and 15's)
-   **BLAST:** Deals AP * Turn Count Damage to Opponent that increases as the Turn Count increases
-   **CREATION:** Increases AP / Turn Count Max Health & Health that decreases as the Turn Count increases (Crits on 10's and 15's)
-   **DESTRUCTION:** Decreases AP * Turn Count Max Health that increases as the Turn Count increases
-   """) ,colour=0x7289da)
-   embedVar10.set_thumbnail(url=avatar)
-   embedVar10.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
 
    paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
    paginator.add_reaction('⏮️', "first")
@@ -205,7 +174,7 @@ async def enhancers(ctx):
    paginator.add_reaction('🔐', "lock")
    paginator.add_reaction('⏩', "next")
    paginator.add_reaction('⏭️', "last")
-   embeds = [embedVar1, embedVar2, embedVar3, embedVar4, embedVar5, embedVar6, embedVar7, embedVar8, embedVar9, embedVar10]
+   embeds = [embedVar1, embedVar2, embedVar3, embedVar4, embedVar5, embedVar6, embedVar7, embedVar8, embedVar9]
    await paginator.run(embeds)
 
 @slash.slash(name="Crown", description="Crown Unlimited Tutorial", guild_ids=guild_ids)
@@ -666,7 +635,7 @@ async def fix(ctx, player: User):
 @bot.event
 async def on_slash_command_error(ctx, ex):
    if isinstance(ex, commands.CommandOnCooldown): # Checks Cooldown
-      msg = 'You have already claimed your daily. Try again in {:.2f}s'.format(ex.retry_after)
+      msg = 'You have already used this command... Try again in {:.2f}s'.format(ex.retry_after)
       await ctx.author.send(msg)
 
 @slash.slash(name="Daily", description="Receive your daily reward and quests", guild_ids=guild_ids)
@@ -1035,12 +1004,12 @@ async def sell(ctx, player: User, item: str):
             sell_buttons = [
                manage_components.create_button(
                   style=ButtonStyle.blue,
-                  label="💸",
+                  label="Yes",
                   custom_id="Yes"
                ),
                manage_components.create_button(
                   style=ButtonStyle.red,
-                  label="❌",
+                  label="No",
                   custom_id="No"
                )
             ]
@@ -1418,120 +1387,518 @@ async def curseguild(amount, guild):
 
 #    await ctx.send(embed=embedVar)
 
-@slash.slash(name="Resell", description="Sell items back to the shop", guild_ids=guild_ids)
-@commands.check(validate_user)
-async def resell(ctx, item: str):
-   user = db.queryUser({'DISNAME': str(ctx.author)})
-   p1_trade_item = item
-   p1_vault = db.queryVault({'OWNER' : str(ctx.author)})
-   p1_cards = p1_vault['CARDS']
-   p1_titles = p1_vault['TITLES']
-   p1_arms = p1_vault['ARMS']
-   p1_balance = p1_vault['BALANCE']
+# @slash.slash(name="Resell", description="Sell items back to the shop", guild_ids=guild_ids)
+# @commands.check(validate_user)
+# async def resell(ctx, item: str):
+#    user = db.queryUser({'DISNAME': str(ctx.author)})
+#    p1_trade_item = item
+#    p1_vault = db.queryVault({'OWNER' : str(ctx.author)})
+#    p1_cards = p1_vault['CARDS']
+#    p1_titles = p1_vault['TITLES']
+#    p1_arms = p1_vault['ARMS']
+#    p1_balance = p1_vault['BALANCE']
 
-   if p1_trade_item in p1_cards and len(p1_cards) == 1:
-      await ctx.send("You cannot sell your only card.")
-   elif p1_trade_item in p1_arms and len(p1_arms) == 1:
-      await ctx.send("You cannot sell your only arm.")
-   elif p1_trade_item in p1_titles and len(p1_titles) == 1:
-      await ctx.send("You cannot sell your only title.")
-   else:
+#    if p1_trade_item in p1_cards and len(p1_cards) == 1:
+#       await ctx.send("You cannot sell your only card.")
+#    elif p1_trade_item in p1_arms and len(p1_arms) == 1:
+#       await ctx.send("You cannot sell your only arm.")
+#    elif p1_trade_item in p1_titles and len(p1_titles) == 1:
+#       await ctx.send("You cannot sell your only title.")
+#    else:
 
-      if p1_trade_item not in p1_cards and p1_trade_item not in p1_titles and p1_trade_item not in p1_arms:
-         await ctx.send("You do not own this item.")
-         return
-      else:
-         if p1_trade_item in p1_cards:
-            card = db.queryCard({'NAME':{"$regex": str(p1_trade_item), "$options": "i"}})
-            sell_price = card['PRICE'] * .15
-         elif p1_trade_item in p1_titles:
-            title = db.queryTitle({'TITLE': {"$regex": str(p1_trade_item), "$options": "i"}})
-            sell_price = title['PRICE'] * .15
-         elif p1_trade_item in p1_arms:
-            arm = db.queryArm({'ARM': {"$regex": str(p1_trade_item), "$options": "i"}})
-            sell_price = arm['PRICE'] * .15
+#       if p1_trade_item not in p1_cards and p1_trade_item not in p1_titles and p1_trade_item not in p1_arms:
+#          await ctx.send("You do not own this item.")
+#          return
+#       else:
+#          if p1_trade_item in p1_cards:
+#             card = db.queryCard({'NAME':{"$regex": str(p1_trade_item), "$options": "i"}})
+#             sell_price = card['PRICE'] * .15
+#          elif p1_trade_item in p1_titles:
+#             title = db.queryTitle({'TITLE': {"$regex": str(p1_trade_item), "$options": "i"}})
+#             sell_price = title['PRICE'] * .15
+#          elif p1_trade_item in p1_arms:
+#             arm = db.queryArm({'ARM': {"$regex": str(p1_trade_item), "$options": "i"}})
+#             sell_price = arm['PRICE'] * .15
 
-         if (p1_trade_item == user['CARD']) or (p1_trade_item == user['TITLE']) or (p1_trade_item == user['ARM']):
-            await ctx.send("You cannot resell an equipped item.")
-            return
+#          if (p1_trade_item == user['CARD']) or (p1_trade_item == user['TITLE']) or (p1_trade_item == user['ARM']):
+#             await ctx.send("You cannot resell an equipped item.")
+#             return
 
-         sell_buttons = [
-               manage_components.create_button(
-                  style=ButtonStyle.blue,
-                  label="💸",
-                  custom_id="Yes"
-               ),
-               manage_components.create_button(
-                  style=ButtonStyle.red,
-                  label="❌",
-                  custom_id="No"
-               )
-            ]
-         sell_buttons_action_row = manage_components.create_actionrow(*sell_buttons)
+#          sell_buttons = [
+#                manage_components.create_button(
+#                   style=ButtonStyle.blue,
+#                   label="💸",
+#                   custom_id="Yes"
+#                ),
+#                manage_components.create_button(
+#                   style=ButtonStyle.red,
+#                   label="❌",
+#                   custom_id="No"
+#                )
+#             ]
+#          sell_buttons_action_row = manage_components.create_actionrow(*sell_buttons)
 
-         await ctx.send(f"{ctx.author.mention} are you willing to resell {p1_trade_item} for :coin: {round(sell_price)}?", components=[sell_buttons_action_row])
+#          await ctx.send(f"{ctx.author.mention} are you willing to resell {p1_trade_item} for :coin: {round(sell_price)}?", components=[sell_buttons_action_row])
 
          
-         def check(button_ctx):
-            return button_ctx.author == ctx.author
+#          def check(button_ctx):
+#             return button_ctx.author == ctx.author
 
-         try:
-            button_ctx: ComponentContext = await manage_components.wait_for_component(bot, components=[sell_buttons_action_row], check=check)
+#          try:
+#             button_ctx: ComponentContext = await manage_components.wait_for_component(bot, components=[sell_buttons_action_row], check=check)
 
-            if button_ctx.custom_id == "No":
-                  await button_ctx.send("Sell ended.")
-                  return
-            if button_ctx.custom_id == "Yes":
-               if p1_trade_item in p1_arms:
-                  db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'ARMS': str(p1_trade_item)}})
-                  await bless(sell_price, ctx.author)
-                  await button_ctx.send(f"{p1_trade_item} has been resold for :coin: {round(sell_price)}.")
-               elif p1_trade_item in p1_titles:
-                  db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'TITLES': str(p1_trade_item)}})
-                  await bless(sell_price, ctx.author)
-                  await button_ctx.send(f"{p1_trade_item} has been resold for :coin: {round(sell_price)}.")
-               elif p1_trade_item in p1_cards:
-                  db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'CARDS': str(p1_trade_item)}})
-                  await bless(sell_price, ctx.author)
-                  await button_ctx.send(f"{p1_trade_item} has been resold for :coin: {round(sell_price)}.")
+#             if button_ctx.custom_id == "No":
+#                   await button_ctx.send("Sell ended.")
+#                   return
+#             if button_ctx.custom_id == "Yes":
+#                if p1_trade_item in p1_arms:
+#                   db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'ARMS': str(p1_trade_item)}})
+#                   await bless(sell_price, ctx.author)
+#                   await button_ctx.send(f"{p1_trade_item} has been resold for :coin: {round(sell_price)}.")
+#                elif p1_trade_item in p1_titles:
+#                   db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'TITLES': str(p1_trade_item)}})
+#                   await bless(sell_price, ctx.author)
+#                   await button_ctx.send(f"{p1_trade_item} has been resold for :coin: {round(sell_price)}.")
+#                elif p1_trade_item in p1_cards:
+#                   db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'CARDS': str(p1_trade_item)}})
+#                   await bless(sell_price, ctx.author)
+#                   await button_ctx.send(f"{p1_trade_item} has been resold for :coin: {round(sell_price)}.")
 
-         except:
-            await ctx.send("Resell ended. ")
+#          except:
+#             await ctx.send("Resell ended. ")
 
-# @bot.command()
-# @commands.check(validate_user)
-# async def addfield(ctx, collection, new_field, field_type):
-#    if ctx.author.guild_permissions.administrator == True:
+@bot.command()
+@commands.check(validate_user)
+async def addfield(ctx, collection, new_field, field_type):
+   if ctx.author.guild_permissions.administrator == True:
 
-#       if field_type == 'string':
-#          field_type = "PCG"
-#       elif field_type == 'int':
-#          field_type = 0
-#       elif field_type == 'list':
-#          field_type = []
-#       elif field_type == 'bool':
-#          field_type = False
+      if field_type == 'string':
+         field_type = ""
+      elif field_type == 'int':
+         field_type = 0
+      elif field_type == 'list':
+         field_type = []
+      elif field_type == 'bool':
+         field_type = False
       
-#       if collection == 'cards':
-#          response = db.updateManyCards({'$set': {new_field: field_type}})
-#       elif collection == 'titles':
-#          response = db.updateManyTitles({'$set': {new_field: field_type}})
-#       elif collection == 'vaults':
-#          response = db.updateManyVaults({'$set': {new_field: field_type}})
-#       elif collection == 'users':
-#          response = db.updateManyUsers({'$set': {new_field: field_type}})
-#       elif collection == 'universe':
-#          response = db.updateManyUniverses({'$set': {new_field: field_type}})
-#       elif collection == 'boss':
-#          response = db.updateManyBosses({'$set': {new_field: field_type}})
-#       elif collection == 'arms':
-#          response = db.updateManyArms({'$set': {new_field: field_type}})
-#       elif collection == 'pets':
-#          response = db.updateManyPets({'$set': {new_field: field_type}})
-#       elif collection == 'teams':
-#          response = db.updateManyTeams({'$set': {new_field: field_type}})
-#    else:
-#       print(m.ADMIN_ONLY_COMMAND)
+      if collection == 'cards':
+         response = db.updateManyCards({'$set': {new_field: field_type}})
+      elif collection == 'titles':
+         response = db.updateManyTitles({'$set': {new_field: field_type}})
+      elif collection == 'vaults':
+         response = db.updateManyVaults({'$set': {new_field: field_type}})
+      elif collection == 'users':
+         response = db.updateManyUsers({'$set': {new_field: field_type}})
+      elif collection == 'universe':
+         response = db.updateManyUniverses({'$set': {new_field: field_type}})
+      elif collection == 'boss':
+         response = db.updateManyBosses({'$set': {new_field: field_type}})
+      elif collection == 'arms':
+         response = db.updateManyArms({'$set': {new_field: field_type}})
+      elif collection == 'pets':
+         response = db.updateManyPets({'$set': {new_field: field_type}})
+      elif collection == 'teams':
+         response = db.updateManyTeams({'$set': {new_field: field_type}})
+   else:
+      print(m.ADMIN_ONLY_COMMAND)
+
+# @slash.slash(name="Update", description="function to update stuff", guild_ids=guild_ids)
+# async def update(ctx):
+#    # Parameters
+#    dont_update_enhancer = ["WAVE", "CREATION", "DESTRUCTION", "BLAST", "STAM", "BLINK", "SLOW", "HASTE", "CONFUSE", "STANCE", "GAMBLE", "SOULCHAIN"]
+#    dont_update_passive = ["WAVE", "CREATION", "DESTRUCTION", "BLAST", "STAM", "BLINK", "SLOW", "HASTE", "CONFUSE", "STANCE", "GAMBLE", "SOULCHAIN", "ATK", "DEF", "HLT", "LIFE"]
+#    universes = [
+#       "League Of Legends",
+#       "Attack On Titan",
+#       "Naruto",
+#       "Bleach",
+#       "My Hero Academia",
+#       "Dragon Ball Z",
+#       "Demon Slayer",
+#       "7ds",
+#       "One Punch Man",
+#       "God Of War",
+#       "Unbound",
+#       "Black Clover",
+#       "Solo Leveling",
+#       "Kanto Region",
+#       "Digimon",
+#       "Hoenn Region",
+#       "Chainsawman",
+#       "Crown Rift Madness",
+#       "Crown Rift Slayers",
+#       "Souls",
+#       "Crown Rift Awakening",
+#       "Death Note",
+#       "Fate",
+#       "Johto Region",
+#       "Kalos Region",
+#       "Sinnoh Region"
+#    ]
+
+#    # Card Update
+#    try:
+#       # Update Cards 1st
+#       card_dump = db.queryAllCards()
+#       card_list = []
+#       for c in card_dump:
+#          if c["UNIVERSE"] in universes:
+#             card_list.append(c)
+
+#       for card in card_list:
+#          cardname = card["NAME"]
+#          # Card Moveset
+#          moveset = card["MOVESET"]
+#          enhancer = moveset[3]
+#          enhancer_name = list(enhancer.keys())[0]
+#          enhancer_ap = list(enhancer.values())[0]
+#          enhancer_type = list(enhancer.values())[2]
+
+#          passive = card["PASS"][0]
+#          passive_name = list(passive.keys())[0]
+#          passive_ap = list(passive.values())[0]
+#          passive_type = list(passive.values())[1]
+#          new_passive_ap_value = 0
+#          new_enhancer_ap_value = 0
+
+#          # Card Universe
+#          card_universe = db.queryUniverse({"TITLE": card["UNIVERSE"]})
+#          card_tier = card_universe["TIER"]
+#          if card_tier == 0:
+#             card_tier = 9
+
+#          # Card Enhancer and Passive update
+#          if enhancer_type not in dont_update_enhancer:
+#             if enhancer_ap >= 40 and enhancer_ap > 39:
+#                if card_tier == 1:
+#                   new_enhancer_ap_value = 15
+#                if card_tier == 2:
+#                   new_enhancer_ap_value = 20
+#                if card_tier == 3:
+#                   new_enhancer_ap_value = 25
+#                if card_tier == 4:
+#                   new_enhancer_ap_value = 35
+#                if card_tier == 5:
+#                   new_enhancer_ap_value = 40
+#                if card_tier == 9:
+#                   new_enhancer_ap_value = 23
+#             elif enhancer_ap >= 30 and enhancer_ap < 39:
+#                if card_tier == 1:
+#                   new_enhancer_ap_value = 10
+#                if card_tier == 2:
+#                   new_enhancer_ap_value = 15
+#                if card_tier == 3:
+#                   new_enhancer_ap_value = 20
+#                if card_tier == 4:
+#                   new_enhancer_ap_value = 30
+#                if card_tier == 5:
+#                   new_enhancer_ap_value = 35
+#                if card_tier == 9:
+#                   new_enhancer_ap_value = 18
+#             elif enhancer_ap >= 20 and enhancer_ap < 30:
+#                if card_tier == 1:
+#                   new_enhancer_ap_value = 5
+#                if card_tier == 2:
+#                   new_enhancer_ap_value = 10
+#                if card_tier == 3:
+#                   new_enhancer_ap_value = 15
+#                if card_tier == 4:
+#                   new_enhancer_ap_value = 20
+#                if card_tier == 5:
+#                   new_enhancer_ap_value = 25
+#                if card_tier == 9:
+#                   new_enhancer_ap_value = 13
+#             elif enhancer_ap >= 0 and enhancer_ap < 20:
+#                if card_tier == 1:
+#                   new_enhancer_ap_value = 3
+#                if card_tier == 2:
+#                   new_enhancer_ap_value = 8
+#                if card_tier == 3:
+#                   new_enhancer_ap_value = 10
+#                if card_tier == 4:
+#                   new_enhancer_ap_value = 15
+#                if card_tier == 5:
+#                   new_enhancer_ap_value = 20
+#                if card_tier == 9:
+#                   new_enhancer_ap_value = 9
+            
+#             query = {"NAME": cardname}
+#             update_query = {'$set': {'MOVESET.$[type].' + enhancer_name: new_enhancer_ap_value}}
+#             filter_query = [{'type.' + enhancer_name: enhancer_ap}]
+#             resp = db.updateCardWithFilter(query, update_query, filter_query)
+#          if passive_type not in dont_update_passive:  
+#             if passive_ap >= 40 and passive_ap > 39:
+#                if card_tier == 1:
+#                   new_passive_ap_value = 15
+#                if card_tier == 2:
+#                   new_passive_ap_value = 20
+#                if card_tier == 3:
+#                   new_passive_ap_value = 25
+#                if card_tier == 4:
+#                   new_passive_ap_value = 35
+#                if card_tier == 5:
+#                   new_passive_ap_value = 40
+#                if card_tier == 9:
+#                   new_passive_ap_value = 23
+#             elif passive_ap >= 30 and passive_ap < 39:
+#                if card_tier == 1:
+#                   new_passive_ap_value = 10
+#                if card_tier == 2:
+#                   new_passive_ap_value = 15
+#                if card_tier == 3:
+#                   new_passive_ap_value = 20
+#                if card_tier == 4:
+#                   new_passive_ap_value = 30
+#                if card_tier == 5:
+#                   new_passive_ap_value = 35
+#                if card_tier == 9:
+#                   new_passive_ap_value = 18
+#             elif passive_ap >= 20 and passive_ap < 30:
+#                if card_tier == 1:
+#                   new_passive_ap_value = 5
+#                if card_tier == 2:
+#                   new_passive_ap_value = 10
+#                if card_tier == 3:
+#                   new_passive_ap_value = 15
+#                if card_tier == 4:
+#                   new_passive_ap_value = 20
+#                if card_tier == 5:
+#                   new_passive_ap_value = 25
+#                if card_tier == 9:
+#                   new_passive_ap_value = 13
+#             elif passive_ap >= 0 and passive_ap < 20:
+#                if card_tier == 1:
+#                   new_passive_ap_value = 3
+#                if card_tier == 2:
+#                   new_passive_ap_value = 8
+#                if card_tier == 3:
+#                   new_passive_ap_value = 10
+#                if card_tier == 4:
+#                   new_passive_ap_value = 15
+#                if card_tier == 5:
+#                   new_passive_ap_value = 20
+#                if card_tier == 9:
+#                   new_passive_ap_value = 9
+            
+#             query = {"NAME": cardname}
+#             update_query = {'$set': {'PASSIVE.$[type].' + passive_name: new_passive_ap_value}}
+#             filter_query = [{'type.' + passive_name: passive_ap}]
+#             resp = db.updateCardWithFilter(query, update_query, filter_query)
+
+#       print("Update Cards complete.")
+#    except Exception as ex:
+#         trace = []
+#         tb = ex.__traceback__
+#         while tb is not None:
+#             trace.append({
+#                 "filename": tb.tb_frame.f_code.co_filename,
+#                 "name": tb.tb_frame.f_code.co_name,
+#                 "lineno": tb.tb_lineno
+#             })
+#             tb = tb.tb_next
+#         print(str({
+#             'type': type(ex).__name__,
+#             'message': str(ex),
+#             'trace': trace
+#         }))
+#         pass
+   
+#    # Arm Update
+#    try:
+#       # Update Arms 1st
+#       arm_dump = db.queryAllArms()
+#       arm_list = []
+#       for c in arm_dump:
+#          if c["UNIVERSE"] in universes:
+#             arm_list.append(c)
+#       for arm in arm_list:
+#          armname = arm["ARM"]
+
+#          passive = arm["ABILITIES"][0]
+#          passive_type = list(passive.keys())[0]
+#          passive_ap = list(passive.values())[0]
+#          new_passive_ap_value = 0
+
+#          # Card Universe
+#          card_universe = db.queryUniverse({"TITLE": arm["UNIVERSE"]})
+#          card_tier = card_universe["TIER"]
+#          if card_tier == 0:
+#             card_tier = 9
+
+#          if passive_type not in dont_update_passive:  
+#             if passive_ap >= 40 and passive_ap > 39:
+#                if card_tier == 1:
+#                   new_passive_ap_value = 10
+#                if card_tier == 2:
+#                   new_passive_ap_value = 15
+#                if card_tier == 3:
+#                   new_passive_ap_value = 18
+#                if card_tier == 4:
+#                   new_passive_ap_value = 20
+#                if card_tier == 5:
+#                   new_passive_ap_value = 25
+#                if card_tier == 9:
+#                   new_passive_ap_value = 19
+#             elif passive_ap >= 30 and passive_ap < 39:
+#                if card_tier == 1:
+#                   new_passive_ap_value = 8
+#                if card_tier == 2:
+#                   new_passive_ap_value = 13
+#                if card_tier == 3:
+#                   new_passive_ap_value = 18
+#                if card_tier == 4:
+#                   new_passive_ap_value = 27
+#                if card_tier == 5:
+#                   new_passive_ap_value = 30
+#                if card_tier == 9:
+#                   new_passive_ap_value = 17
+#             elif passive_ap >= 20 and passive_ap < 30:
+#                if card_tier == 1:
+#                   new_passive_ap_value = 6
+#                if card_tier == 2:
+#                   new_passive_ap_value = 10
+#                if card_tier == 3:
+#                   new_passive_ap_value = 15
+#                if card_tier == 4:
+#                   new_passive_ap_value = 24
+#                if card_tier == 5:
+#                   new_passive_ap_value = 25
+#                if card_tier == 9:
+#                   new_passive_ap_value = 12
+#             elif passive_ap >= 0 and passive_ap < 20:
+#                if card_tier == 1:
+#                   new_passive_ap_value = 3
+#                if card_tier == 2:
+#                   new_passive_ap_value = 8
+#                if card_tier == 3:
+#                   new_passive_ap_value = 10
+#                if card_tier == 4:
+#                   new_passive_ap_value = 18
+#                if card_tier == 5:
+#                   new_passive_ap_value = 20
+#                if card_tier == 9:
+#                   new_passive_ap_value = 9
+            
+#             query = {"ARM": armname}
+#             update_query = {'$set': {'ABILITIES.$[type].' + passive_type: new_passive_ap_value}}
+#             filter_query = [{'type.' + passive_type: passive_ap}]
+#             resp = db.updateArmWithFilter(query, update_query, filter_query)
+#       print("Update Arm complete.")
+#    except Exception as ex:
+#         trace = []
+#         tb = ex.__traceback__
+#         while tb is not None:
+#             trace.append({
+#                 "filename": tb.tb_frame.f_code.co_filename,
+#                 "name": tb.tb_frame.f_code.co_name,
+#                 "lineno": tb.tb_lineno
+#             })
+#             tb = tb.tb_next
+#         print(str({
+#             'type': type(ex).__name__,
+#             'message': str(ex),
+#             'trace': trace
+#         }))
+#         pass
+   
+#    # Title Update
+#    try:
+#       # Update Cards 1st
+#       title_dump = db.queryAllTitles()
+#       title_list = []
+#       for c in title_dump:
+#          if c["UNIVERSE"] in universes:
+#             title_list.append(c)
+
+#       for title in title_list:
+#          titlename = title["TITLE"]
+
+#          passive = title["ABILITIES"][0]
+#          passive_type = list(passive.keys())[0]
+#          passive_ap = list(passive.values())[0]
+#          new_passive_ap_value = 0
+
+#          # Card Universe
+#          card_universe = db.queryUniverse({"TITLE": title["UNIVERSE"]})
+#          card_tier = card_universe["TIER"]
+#          if card_tier == 0:
+#             card_tier = 9
+
+#          if passive_type not in dont_update_passive:  
+#             if passive_ap >= 40 and passive_ap > 39:
+#                if card_tier == 1:
+#                   new_passive_ap_value = 10
+#                if card_tier == 2:
+#                   new_passive_ap_value = 18
+#                if card_tier == 3:
+#                   new_passive_ap_value = 20
+#                if card_tier == 4:
+#                   new_passive_ap_value = 25
+#                if card_tier == 5:
+#                   new_passive_ap_value = 35
+#                if card_tier == 9:
+#                   new_passive_ap_value = 22
+#             elif passive_ap >= 30 and passive_ap < 39:
+#                if card_tier == 1:
+#                   new_passive_ap_value = 8
+#                if card_tier == 2:
+#                   new_passive_ap_value = 15
+#                if card_tier == 3:
+#                   new_passive_ap_value = 18
+#                if card_tier == 4:
+#                   new_passive_ap_value = 28
+#                if card_tier == 5:
+#                   new_passive_ap_value = 32
+#                if card_tier == 9:
+#                   new_passive_ap_value = 19
+#             elif passive_ap >= 20 and passive_ap < 30:
+#                if card_tier == 1:
+#                   new_passive_ap_value = 5
+#                if card_tier == 2:
+#                   new_passive_ap_value = 12
+#                if card_tier == 3:
+#                   new_passive_ap_value = 16
+#                if card_tier == 4:
+#                   new_passive_ap_value = 26
+#                if card_tier == 5:
+#                   new_passive_ap_value = 28
+#                if card_tier == 9:
+#                   new_passive_ap_value = 11
+#             elif passive_ap >= 0 and passive_ap < 20:
+#                if card_tier == 1:
+#                   new_passive_ap_value = 3
+#                if card_tier == 2:
+#                   new_passive_ap_value = 8
+#                if card_tier == 3:
+#                   new_passive_ap_value = 10
+#                if card_tier == 4:
+#                   new_passive_ap_value = 14
+#                if card_tier == 5:
+#                   new_passive_ap_value = 20
+#                if card_tier == 9:
+#                   new_passive_ap_value = 9
+            
+#             query = {"TITLE": titlename}
+#             update_query = {'$set': {'ABILITIES.$[type].' + passive_type: new_passive_ap_value}}
+#             filter_query = [{'type.' + passive_type: passive_ap}]
+#             resp = db.updateTitleWithFilter(query, update_query, filter_query)
+#       print("Update Title complete.")
+#    except Exception as ex:
+#         trace = []
+#         tb = ex.__traceback__
+#         while tb is not None:
+#             trace.append({
+#                 "filename": tb.tb_frame.f_code.co_filename,
+#                 "name": tb.tb_frame.f_code.co_name,
+#                 "lineno": tb.tb_lineno
+#             })
+#             tb = tb.tb_next
+#         print(str({
+#             'type': type(ex).__name__,
+#             'message': str(ex),
+#             'trace': trace
+#         }))
+#         pass
 
 @slash.slash(name="Menu", description="Menu Options for things to do", guild_ids=guild_ids)
 @commands.check(validate_user)

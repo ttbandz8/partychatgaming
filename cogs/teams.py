@@ -103,7 +103,7 @@ class Teams(commands.Cog):
                     await ctx.send(f"{player.mention}" +f" do you want to join team {team_profile['TNAME']}?".format(self), components=[team_buttons_action_row])
 
                     def check(button_ctx):
-                        return button_ctx.author == player
+                        return str(button_ctx.author) == str(player)
 
                     try:
                         button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[team_buttons_action_row], check=check)
@@ -113,7 +113,6 @@ class Teams(commands.Cog):
                             return
 
                         if button_ctx.custom_id == "Yes":
-                            confirmed = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
                             team_query = {'TNAME': team_profile['TNAME']}
                             new_value_query = {'$push': {'MEMBERS': str(player)}}
                             response = db.addTeamMember(team_query, new_value_query, str(ctx.author), str(player))
@@ -140,19 +139,38 @@ class Teams(commands.Cog):
                 # If user is part of a team you cannot add them to your team
                 if member_profile['TEAM'] != 'PCG':
                     await main.DM(ctx, owner, f"{ctx.author.mention}" + f" Applied to join {team_profile['TNAME']} !" + f" You may accept or deny in server." )
-                    accept = await ctx.send(f"{ctx.author.mention}" + " applies to join "+f"{owner.mention}" +f" do you accept...?".format(self), delete_after=10)
-                    for emoji in emojis:
-                        await accept.add_reaction(emoji)
+                    
+                    team_buttons = [
+                        manage_components.create_button(
+                            style=ButtonStyle.blue,
+                            label="✔️",
+                            custom_id="Yes"
+                        ),
+                        manage_components.create_button(
+                            style=ButtonStyle.red,
+                            label="❌",
+                            custom_id="No"
+                        )
+                    ]
+                    team_buttons_action_row = manage_components.create_actionrow(*team_buttons)
+                    
+                    await ctx.send(f"{ctx.author.mention}" + " applies to join "+f"{owner.mention}" +f" do you accept...?".format(self), components=[team_buttons_action_row])
 
-                    def check(reaction, user):
-                        return user == owner and str(reaction.emoji) == '👍'
+                    def check(button_ctx):
+                        return str(button_ctx.author) == str(owner)
 
                     try:
-                        confirmed = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
-                        team_query = {'TNAME': team_profile['TNAME']}
-                        new_value_query = {'$push': {'MEMBERS': str(ctx.author)}}
-                        response = db.addTeamMember(team_query, new_value_query, str(owner), str(ctx.author))
-                        await ctx.send(response)
+                        button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[team_buttons_action_row], check=check)
+                        
+                        if button_ctx.custom_id == "No":
+                            await button_ctx.send("Team not created.")
+                            return
+
+                        if button_ctx.custom_id == "Yes":
+                            team_query = {'TNAME': team_profile['TNAME']}
+                            new_value_query = {'$push': {'MEMBERS': str(ctx.author)}}
+                            response = db.addTeamMember(team_query, new_value_query, str(owner), str(ctx.author))
+                            await button_ctx.send(response)
                     except:
                         await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=3)
                 else:
@@ -166,23 +184,37 @@ class Teams(commands.Cog):
         team_profile = db.queryTeam({'TNAME': owner_profile['TEAM']})
         if team_profile:
             if owner_profile['DISNAME'] == team_profile['OWNER']:
+                    
+                    team_buttons = [
+                        manage_components.create_button(
+                            style=ButtonStyle.blue,
+                            label="✔️",
+                            custom_id="Yes"
+                        ),
+                        manage_components.create_button(
+                            style=ButtonStyle.red,
+                            label="❌",
+                            custom_id="No"
+                        )
+                    ]
+                    team_buttons_action_row = manage_components.create_actionrow(*team_buttons)
+                    await ctx.send(f"Do you want to remove {member.mention} from the {team_profile['TNAME']}?".format(self), components=[team_buttons_action_row])
 
-                    accept = await ctx.send(f"Do you want to remove {member.mention} from the {team_profile['TNAME']}?".format(self), delete_after=8)
-                    for emoji in emojis:
-                        await accept.add_reaction(emoji)
-
-                    def check(reaction, user):
-                        return (user == ctx.author and (str(reaction.emoji) == '👍')) or (user == ctx.author and (str(reaction.emoji) == '👎'))
+                    def check(button_ctx):
+                        return button_ctx.author == ctx.author
 
                     try:
-                        reaction, user = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
-                        if str(reaction.emoji) == '👎':
-                            await ctx.send("Member not deleted. ")
+                        button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[team_buttons_action_row], check=check)
+                        
+                        if button_ctx.custom_id == "No":
+                            await button_ctx.send("Team not created.")
                             return
-                        team_query = {'TNAME': team_profile['TNAME']}
-                        new_value_query = {'$pull': {'MEMBERS': str(member)}}
-                        response = db.deleteTeamMember(team_query, new_value_query, str(member))
-                        await ctx.send(response)
+
+                        if button_ctx.custom_id == "Yes":    
+                            team_query = {'TNAME': team_profile['TNAME']}
+                            new_value_query = {'$pull': {'MEMBERS': str(member)}}
+                            response = db.deleteTeamMember(team_query, new_value_query, str(member))
+                            await button_ctx.send(response)
                     except:
                         print("Team not created. ")
             else:
@@ -196,19 +228,36 @@ class Teams(commands.Cog):
         team_profile = db.queryTeam({'TNAME': member_profile['TEAM']})
         if team_profile:
 
-                    accept = await ctx.send(f"Do you want to leave team {member_profile['TEAM']}?".format(self), delete_after=8)
-                    for emoji in emojis:
-                        await accept.add_reaction(emoji)
+                    team_buttons = [
+                        manage_components.create_button(
+                            style=ButtonStyle.blue,
+                            label="✔️",
+                            custom_id="Yes"
+                        ),
+                        manage_components.create_button(
+                            style=ButtonStyle.red,
+                            label="❌",
+                            custom_id="No"
+                        )
+                    ]
+                    team_buttons_action_row = manage_components.create_actionrow(*team_buttons)
+                    await ctx.send(f"Do you want to leave team {member_profile['TEAM']}?".format(self), delete_after=8)
 
-                    def check(reaction, user):
-                        return user == ctx.author and str(reaction.emoji) == '👍'
+                    def check(button_ctx):
+                        return button_ctx.author == ctx.author
 
                     try:
-                        confirmed = await self.bot.wait_for('reaction_add', timeout=5.0, check=check)
-                        team_query = {'TNAME': member_profile['TEAM']}
-                        new_value_query = {'$pull': {'MEMBERS': str(ctx.author)}}
-                        response = db.deleteTeamMember(team_query, new_value_query, str(ctx.author))
-                        await ctx.send(response)
+                        button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[team_buttons_action_row], check=check)
+
+                        if button_ctx.custom_id == "No":
+                            await button_ctx.send("Team not created.")
+                            return
+                        
+                        if button_ctx.custom_id == "Yes":
+                            team_query = {'TNAME': member_profile['TEAM']}
+                            new_value_query = {'$pull': {'MEMBERS': str(ctx.author)}}
+                            response = db.deleteTeamMember(team_query, new_value_query, str(ctx.author))
+                            await ctx.send(response)
                     except:
                         print("Team not created. ")
 

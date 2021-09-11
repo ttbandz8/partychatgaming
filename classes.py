@@ -34,6 +34,7 @@ class USER():
     REBIRTH: int = field(default_factory=lambda: 0)
     PATRON: bool = field(default_factory=lambda: False)
     LEVEL: int = field(default_factory=lambda: 0)
+    EXPLORE: bool = field(default_factory=lambda: False)
     
 @dataclass(frozen=True, order=True)
 class GUILD():

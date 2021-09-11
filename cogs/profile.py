@@ -380,9 +380,9 @@ class Profile(commands.Cog):
                     title_passive_type = list(title_passive.keys())[0]
                     title_passive_value = list(title_passive.values())[0]
                     titles.append(textwrap.dedent(f"""
-                    **{resp['TITLE']}**
-                    **{title_passive_type}:** {title_passive_value}
-                    **Universe:** {resp['UNIVERSE']}"""))
+                    :reminder_ribbon: **{resp['TITLE']}**
+                    :microbe: **{title_passive_type}:** {title_passive_value}
+                    :earth_africa: **Universe:** {resp['UNIVERSE']}"""))
 
                 # Adding to array until divisible by 10
                 while len(titles) % 10 != 0:
@@ -465,9 +465,9 @@ class Profile(commands.Cog):
                     arm_passive_type = list(arm_passive.keys())[0]
                     arm_passive_value = list(arm_passive.values())[0]
                     arms.append(textwrap.dedent(f"""
-                    **{resp['ARM']}**
-                    **{arm_passive_type}:** {arm_passive_value}
-                    **Universe:** {resp['UNIVERSE']}"""))
+                    :mechanical_arm: **{resp['ARM']}**
+                    :microbe: **{arm_passive_type}:** {arm_passive_value}
+                    :earth_africa: **Universe:** {resp['UNIVERSE']}"""))
 
                 # Adding to array until divisible by 10
                 while len(arms) % 10 != 0:
@@ -559,9 +559,9 @@ class Profile(commands.Cog):
                     pet_ability_power = list(pet.values())[3]
                     power = (pet['BOND'] * pet['LVL']) + pet_ability_power
                     pets.append(textwrap.dedent(f"""
-                    **{pet['NAME']}** | _B_ **{pet['BOND']}** {bond_message} / _L_ **{pet['LVL']} {lvl_message}**
-                    **{pet_ability}:** {power}
-                    **Type:** {pet['TYPE']}"""))
+                    :bird: **{pet['NAME']}** | _B_ **{pet['BOND']}** {bond_message} / _L_ **{pet['LVL']} {lvl_message}**
+                    :small_blue_diamond: **{pet_ability}:** {power}
+                    :microbe: **Type:** {pet['TYPE']}"""))
 
                 # Adding to array until divisible by 10
                 while len(pets) % 10 != 0:

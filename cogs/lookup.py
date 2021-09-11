@@ -168,181 +168,199 @@ class Lookup(commands.Cog):
 
     @cog_ext.cog_slash(description="Lookup player stats", guild_ids=main.guild_ids)
     async def lookup(self, ctx, player: User):
-        query = {'DISNAME': str(player)}
-        d = db.queryUser(query)
-        m = db.queryManyMatchesPerPlayer({'PLAYER': str(player)})
-        v = db.queryVault({'OWNER': str(player)})
-        if d:
-            balance = v['BALANCE']
-            if balance >= 150000:
-                bal_icon = ":money_with_wings:"
-            elif balance >=100000:
-                bal_icon = ":moneybag:"
-            elif balance >= 50000:
-                bal_icon = ":dollar:"
+        try:
+            query = {'DISNAME': str(player)}
+            d = db.queryUser(query)
+            m = db.queryManyMatchesPerPlayer({'PLAYER': str(player)})
+            v = db.queryVault({'OWNER': str(player)})
+            if d:
+                balance = v['BALANCE']
+                if balance >= 150000:
+                    bal_icon = ":money_with_wings:"
+                elif balance >= 100000:
+                    bal_icon = ":moneybag:"
+                elif balance >= 50000 or balance <= 49999:
+                    bal_icon = ":dollar:"
 
-            bal_message = f"{bal_icon}{'{:,}'.format(balance)}"
+                bal_message = f"{bal_icon}{'{:,}'.format(balance)}"
 
-            all_cards = len(v['CARDS'])
-            all_titles = len(v['TITLES'])
-            all_arms = len(v['ARMS'])
-            all_pets = len(v['PETS'])
+                all_cards = len(v['CARDS'])
+                all_titles = len(v['TITLES'])
+                all_arms = len(v['ARMS'])
+                all_pets = len(v['PETS'])
 
-            name = d['DISNAME'].split("#",1)[0]
-            games = d['GAMES']
-            abyss_level = d['LEVEL']
-            card = d['CARD']
-            ign = d['IGN']
-            team = d['TEAM']
-            guild = d['GUILD']
-            if team != "PCG":
-                team_info = db.queryTeam({'TNAME' : str(team)})
-                guild = team_info['GUILD']
-            family = d['FAMILY']
-            titles = d['TITLE']
-            arm = d['ARM']
-            avatar = d['AVATAR']
-            matches = d['MATCHES']
-            tournament_wins = d['TOURNAMENT_WINS']
-            crown_tales = d['CROWN_TALES']
-            dungeons = d['DUNGEONS']
-            bosses = d['BOSS_WINS']
-            pet = d['PET']
-            rebirth = d['REBIRTH']
-            icon = ':triangular_flag_on_post:'
-            if rebirth == 0:
+                name = d['DISNAME'].split("#",1)[0]
+                games = d['GAMES']
+                abyss_level = d['LEVEL']
+                card = d['CARD']
+                ign = d['IGN']
+                team = d['TEAM']
+                guild = d['GUILD']
+                if team != "PCG":
+                    team_info = db.queryTeam({'TNAME' : str(team)})
+                    guild = team_info['GUILD']
+                family = d['FAMILY']
+                titles = d['TITLE']
+                arm = d['ARM']
+                avatar = d['AVATAR']
+                matches = d['MATCHES']
+                tournament_wins = d['TOURNAMENT_WINS']
+                crown_tales = d['CROWN_TALES']
+                dungeons = d['DUNGEONS']
+                bosses = d['BOSS_WINS']
+                pet = d['PET']
+                rebirth = d['REBIRTH']
                 icon = ':triangular_flag_on_post:'
-            elif rebirth == 1:
-                icon = ':heart_on_fire:'
-            elif rebirth == 2:
-                icon = ':heart_on_fire::heart_on_fire:'
-            elif rebirth == 3:
-                icon = ':heart_on_fire::heart_on_fire::heart_on_fire:'
-            elif rebirth == 4:
-                icon = ':heart_on_fire::heart_on_fire::heart_on_fire::heart_on_fire:'
-            elif rebirth == 5:
-                icon = ':heart_on_fire::heart_on_fire::heart_on_fire::heart_on_fire::heart_on_fire:'
+                if rebirth == 0:
+                    icon = ':triangular_flag_on_post:'
+                elif rebirth == 1:
+                    icon = ':heart_on_fire:'
+                elif rebirth == 2:
+                    icon = ':heart_on_fire::heart_on_fire:'
+                elif rebirth == 3:
+                    icon = ':heart_on_fire::heart_on_fire::heart_on_fire:'
+                elif rebirth == 4:
+                    icon = ':heart_on_fire::heart_on_fire::heart_on_fire::heart_on_fire:'
+                elif rebirth == 5:
+                    icon = ':heart_on_fire::heart_on_fire::heart_on_fire::heart_on_fire::heart_on_fire:'
 
-            pvp_matches = []
-            boss_matches = []
-            dungeon_matches = []
-            tales_matches = []
-            most_played_card = []
-            most_played_card_message = "_No Data For Analysis_"
-            match_history_message = ""
+                pvp_matches = []
+                boss_matches = []
+                dungeon_matches = []
+                tales_matches = []
+                most_played_card = []
+                most_played_card_message = "_No Data For Analysis_"
+                match_history_message = ""
 
-            wlmatches = list(d['MATCHES'][0].values())[0]
-            wins = wlmatches[0]
-            losses = wlmatches[1]
-            if m:
-                for match in m:
-                    most_played_card.append(match['CARD'])
-                    if match['UNIVERSE_TYPE'] == "Tales":
-                        tales_matches.append(match)
-                    elif match['UNIVERSE_TYPE'] == "Dungeon":
-                        dungeon_matches.append(match)
-                    elif match['UNIVERSE_TYPE'] == "Boss":
-                        boss_matches.append(match)
-                    elif match['UNIVERSE_TYPE'] == "PVP":
-                        pvp_matches.append(match)
+                wlmatches = list(d['MATCHES'][0].values())[0]
+                wins = wlmatches[0]
+                losses = wlmatches[1]
+                if m:
+                    for match in m:
+                        most_played_card.append(match['CARD'])
+                        if match['UNIVERSE_TYPE'] == "Tales":
+                            tales_matches.append(match)
+                        elif match['UNIVERSE_TYPE'] == "Dungeon":
+                            dungeon_matches.append(match)
+                        elif match['UNIVERSE_TYPE'] == "Boss":
+                            boss_matches.append(match)
+                        elif match['UNIVERSE_TYPE'] == "PVP":
+                            pvp_matches.append(match)
 
-                card_main = most_frequent(most_played_card)
+                    card_main = most_frequent(most_played_card)
 
-                if not most_played_card:
-                    most_played_card_message = "_No Data For Analysis_"
-                else:
-                    most_played_card_message = f"**Most Played Card: **{card_main}"
-                    match_history_message = f"""
-                    **Tales Played: **{len(tales_matches)}
-                    **Dungeons Played: **{len(dungeon_matches)}
-                    **Bosses Played: **{len(boss_matches)}
-                    **Pvp Played: **{len(pvp_matches)}
-                    """
-
-            crown_list = []
-            for crown in crown_tales:
-                if crown != "":
-                    crown_list.append(crown)
-            
-            dungeon_list = []
-            for dungeon in dungeons:
-                if dungeon != "":
-                    dungeon_list.append(dungeon)
-
-            boss_list =[]
-            for boss in bosses:
-                if boss != "":
-                    boss_list.append(boss)
-
-            matches_to_string = dict(ChainMap(*matches))
-            ign_to_string = dict(ChainMap(*ign))
-
-
-
-            embed1 = discord.Embed(title= f"{icon} | " + f"{name}".format(self), description=textwrap.dedent(f"""\
-            :new_moon: | **Abyss Rank**: {abyss_level}
-            :flower_playing_cards: | **Card:** {card}
-            :reminder_ribbon:** | Title: **{titles}
-            :mechanical_arm: | **Arm: **{arm}
-            :bird: | **Pet: **{pet}
-
-            :military_medal: | {most_played_card_message}
-            **Tales Played: **{len(tales_matches)}
-            **Dungeons Played: **{len(dungeon_matches)}
-            **Bosses Played: **{len(boss_matches)}
-            **Pvp Played: **{len(pvp_matches)}
-            **W/L:** {wins}**/**{losses}
-            
-            **Balance** {bal_message}
-            :flower_playing_cards: **Owned** {all_cards}
-            :reminder_ribbon: **Owned** {all_titles}
-            :mechanical_arm: **Owned** {all_arms}
-            :bird: **Owned** {all_pets}
-            
-            :flags: | **Guild: **{guild}
-            :military_helmet: | **Team: **{team} 
-            :family_mwgb: | **Family: **{family}
-
-            
-            """), colour=000000)
-            embed1.set_thumbnail(url=avatar)
-            # embed1.add_field(name="Team" + " :military_helmet:", value=team)
-            # embed1.add_field(name="Family" + " :family_mwgb:", value=family)
-            # embed1.add_field(name="Card" + " ::flower_playing_cards: :", value=' '.join(str(x) for x in titles))
-            # embed1.add_field(name="Title" + " :crown:", value=' '.join(str(x) for x in titles))
-            # embed1.add_field(name="Arm" + " :mechanical_arm: ", value=f"{arm}")
-            # embed1.add_field(name="Pet" + " :dog:  ", value=f"{pet}")
-            # embed1.add_field(name="Tournament Wins" + " :fireworks:", value=tournament_wins)
-
-            if crown_list:
-                embed4 = discord.Embed(title= f"{icon} | " + f"{name}".format(self), description=":bank: | Party Chat Gaming Database™️", colour=000000)
-                embed4.set_thumbnail(url=avatar)
-                embed4.add_field(name="Completed Tales" + " :medal:", value="\n".join(crown_list))
-                if dungeon_list:
-                    embed4.add_field(name="Completed Dungeons" + " :fire: ", value="\n".join(dungeon_list))
-                    if boss_list:
-                        embed4.add_field(name="Boss Souls" + ":japanese_ogre:",value="\n".join(boss_list))
+                    if not most_played_card:
+                        most_played_card_message = "_No Data For Analysis_"
                     else:
-                        embed4.add_field(name="Boss Souls" + " :japanese_ogre: ", value="No Boss Souls Collected, yet!")
-                else:
-                    embed4.add_field(name="Completed Dungeons" + " :fire: ", value="No Dungeons Completed, yet!")
-            else:
-                embed4 = discord.Embed(title= f"{icon} " + f"{name}".format(self), description=":bank: Party Chat Gaming Database™️", colour=000000)
-                embed4.set_thumbnail(url=avatar)
-                embed4.add_field(name="Completed Tales" + " :medal:", value="No completed Tales, yet!")
-                embed4.add_field(name="Completed Dungeons" + " :fire: ", value="No Dungeons Completed, yet!")
-                embed4.add_field(name="Boss Souls" + " :japanese_ogre: ", value="No Boss Souls Collected, yet!")
+                        most_played_card_message = f"**Most Played Card: **{card_main}"
+                        match_history_message = f"""
+                        **Tales Played: **{len(tales_matches)}
+                        **Dungeons Played: **{len(dungeon_matches)}
+                        **Bosses Played: **{len(boss_matches)}
+                        **Pvp Played: **{len(pvp_matches)}
+                        """
 
-            paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
-            paginator.add_reaction('⏮️', "first")
-            paginator.add_reaction('⏪', "back")
-            paginator.add_reaction('🔐', "lock")
-            paginator.add_reaction('⏩', "next")
-            paginator.add_reaction('⏭️', "last")
-            embeds = [embed1, embed4 ]
-            await paginator.run(embeds)
-        else:
-            await ctx.send(m.USER_NOT_REGISTERED)
+                crown_list = []
+                for crown in crown_tales:
+                    if crown != "":
+                        crown_list.append(crown)
+                
+                dungeon_list = []
+                for dungeon in dungeons:
+                    if dungeon != "":
+                        dungeon_list.append(dungeon)
+
+                boss_list =[]
+                for boss in bosses:
+                    if boss != "":
+                        boss_list.append(boss)
+
+                matches_to_string = dict(ChainMap(*matches))
+                ign_to_string = dict(ChainMap(*ign))
+
+
+
+                embed1 = discord.Embed(title= f"{icon} | " + f"{name}".format(self), description=textwrap.dedent(f"""\
+                :new_moon: | **Abyss Rank**: {abyss_level}
+                :flower_playing_cards: | **Card:** {card}
+                :reminder_ribbon:** | Title: **{titles}
+                :mechanical_arm: | **Arm: **{arm}
+                :bird: | **Pet: **{pet}
+
+                :military_medal: | {most_played_card_message}
+                **Tales Played: **{len(tales_matches)}
+                **Dungeons Played: **{len(dungeon_matches)}
+                **Bosses Played: **{len(boss_matches)}
+                **Pvp Played: **{len(pvp_matches)}
+                **W/L:** {wins}**/**{losses}
+                
+                **Balance** {bal_message}
+                :flower_playing_cards: **Cards** {all_cards}
+                :reminder_ribbon: **Titles** {all_titles}
+                :mechanical_arm: **Arms** {all_arms}
+                :bird: **Pets** {all_pets}
+                
+                :flags: | **Guild: **{guild}
+                :military_helmet: | **Team: **{team} 
+                :family_mwgb: | **Family: **{family}
+
+                
+                """), colour=000000)
+                embed1.set_thumbnail(url=avatar)
+                # embed1.add_field(name="Team" + " :military_helmet:", value=team)
+                # embed1.add_field(name="Family" + " :family_mwgb:", value=family)
+                # embed1.add_field(name="Card" + " ::flower_playing_cards: :", value=' '.join(str(x) for x in titles))
+                # embed1.add_field(name="Title" + " :crown:", value=' '.join(str(x) for x in titles))
+                # embed1.add_field(name="Arm" + " :mechanical_arm: ", value=f"{arm}")
+                # embed1.add_field(name="Pet" + " :dog:  ", value=f"{pet}")
+                # embed1.add_field(name="Tournament Wins" + " :fireworks:", value=tournament_wins)
+
+                if crown_list:
+                    embed4 = discord.Embed(title= f"{icon} | " + f"{name}".format(self), description=":bank: | Party Chat Gaming Database™️", colour=000000)
+                    embed4.set_thumbnail(url=avatar)
+                    embed4.add_field(name="Completed Tales" + " :medal:", value="\n".join(crown_list))
+                    if dungeon_list:
+                        embed4.add_field(name="Completed Dungeons" + " :fire: ", value="\n".join(dungeon_list))
+                        if boss_list:
+                            embed4.add_field(name="Boss Souls" + ":japanese_ogre:",value="\n".join(boss_list))
+                        else:
+                            embed4.add_field(name="Boss Souls" + " :japanese_ogre: ", value="No Boss Souls Collected, yet!")
+                    else:
+                        embed4.add_field(name="Completed Dungeons" + " :fire: ", value="No Dungeons Completed, yet!")
+                else:
+                    embed4 = discord.Embed(title= f"{icon} " + f"{name}".format(self), description=":bank: Party Chat Gaming Database™️", colour=000000)
+                    embed4.set_thumbnail(url=avatar)
+                    embed4.add_field(name="Completed Tales" + " :medal:", value="No completed Tales, yet!")
+                    embed4.add_field(name="Completed Dungeons" + " :fire: ", value="No Dungeons Completed, yet!")
+                    embed4.add_field(name="Boss Souls" + " :japanese_ogre: ", value="No Boss Souls Collected, yet!")
+
+                paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+                paginator.add_reaction('⏮️', "first")
+                paginator.add_reaction('⏪', "back")
+                paginator.add_reaction('🔐', "lock")
+                paginator.add_reaction('⏩', "next")
+                paginator.add_reaction('⏭️', "last")
+                embeds = [embed1, embed4 ]
+                await paginator.run(embeds)
+            else:
+                await ctx.send(m.USER_NOT_REGISTERED)
+        except Exception as ex:
+            trace = []
+            tb = ex.__traceback__
+            while tb is not None:
+                trace.append({
+                    "filename": tb.tb_frame.f_code.co_filename,
+                    "name": tb.tb_frame.f_code.co_name,
+                    "lineno": tb.tb_lineno
+                })
+                tb = tb.tb_next
+            print(str({
+                'type': type(ex).__name__,
+                'message': str(ex),
+                'trace': trace
+            }))
+            await ctx.send("There's an issue with your lookup command. Check with support.")
+            return
 
     @cog_ext.cog_slash(description="Lookup team stats", guild_ids=main.guild_ids)
     async def team(self, ctx, team: str):
