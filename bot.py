@@ -84,9 +84,9 @@ async def help(ctx):
 
    paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
    paginator.add_reaction('⏮️', "first")
-   paginator.add_reaction('⏪', "back")
-   paginator.add_reaction('🔐', "lock")
-   paginator.add_reaction('⏩', "next")
+   paginator.add_reaction('⬅️', "back")
+   paginator.add_reaction('🔒', "lock")
+   paginator.add_reaction('➡️', "next")
    paginator.add_reaction('⏭️', "last")
    embeds = [embedVar2,embedVar3, embedVar1]
    await paginator.run(embeds)
@@ -170,9 +170,9 @@ async def enhancers(ctx):
 
    paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
    paginator.add_reaction('⏮️', "first")
-   paginator.add_reaction('⏪', "back")
-   paginator.add_reaction('🔐', "lock")
-   paginator.add_reaction('⏩', "next")
+   paginator.add_reaction('⬅️', "back")
+   paginator.add_reaction('🔒', "lock")
+   paginator.add_reaction('➡️', "next")
    paginator.add_reaction('⏭️', "last")
    embeds = [embedVar1, embedVar2, embedVar3, embedVar4, embedVar5, embedVar6, embedVar7, embedVar8, embedVar9]
    await paginator.run(embeds)
@@ -368,9 +368,9 @@ async def crown(ctx):
 
    paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
    paginator.add_reaction('⏮️', "first")
-   paginator.add_reaction('⏪', "back")
-   paginator.add_reaction('🔐', "lock")
-   paginator.add_reaction('⏩', "next")
+   paginator.add_reaction('⬅️', "back")
+   paginator.add_reaction('🔒', "lock")
+   paginator.add_reaction('➡️', "next")
    paginator.add_reaction('⏭️', "last")
    embeds = [embedVar1, embedVar2, embedVar3, embedVar4, embedVar5, embedVar6, embedVar7, embedVar8,embedVar9, embedVar10]
    await paginator.run(embeds)
@@ -1937,11 +1937,11 @@ async def menu(ctx):
 
       paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
       paginator.add_reaction('⏮️', "first")
-      paginator.add_reaction('⏪', "back")
-      paginator.add_reaction('🔐', "lock")
-      paginator.add_reaction('⏩', "next")
+      paginator.add_reaction('⬅️', "back")
+      paginator.add_reaction('🔒', "lock")
+      paginator.add_reaction('➡️', "next")
       paginator.add_reaction('⏭️', "last")
-      embeds = [embedVar4, embedVar1,embedVar3, embedVar2]
+      embeds = [embedVar4, embedVar2,embedVar1, embedVar3]
       await paginator.run(embeds)
          
    except Exception as e:
