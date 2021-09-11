@@ -16,6 +16,8 @@ import requests
 from collections import ChainMap
 import DiscordUtils
 from discord_slash import cog_ext, SlashContext
+from discord_slash.utils import manage_components
+from discord_slash.model import ButtonStyle
 
 emojis = ['👍', '👎']
 
@@ -290,27 +292,40 @@ class Lobbies(commands.Cog):
             title = user['TITLE']
             arm = user['ARM']
             if name in user['GAMES']:
-                await main.DM(ctx, user1, f"{ctx.author.mention}" + f" has challenged you to {name}")
-                accept = await ctx.send(f"{user1.mention} are you ready to battle {ctx.author.mention}? !!!:fire:")
-                for emoji in emojis:
-                    await accept.add_reaction(emoji)
+                battle_buttons = [
+                    manage_components.create_button(
+                        style=ButtonStyle.blue,
+                        label="Yes",
+                        custom_id="Yes"
+                    ),
+                    manage_components.create_button(
+                        style=ButtonStyle.red,
+                        label="No",
+                        custom_id="No"
+                    )
+                ]
+                battle_buttons_action_row = manage_components.create_actionrow(*battle_buttons)
+                await ctx.send(f"{user1.mention} challenged you to a battle. Will you accept {ctx.author.mention}?", components=[battle_buttons_action_row])
 
-                def check(reaction, user):
-                    return user == user1 and str(reaction.emoji) == '👍'
+                def check(button_ctx):
+                    return button_ctx.author == user1
                 try:
-                    reaction, user = await self.bot.wait_for('reaction_add', timeout=15.0, check=check)
+                    button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[battle_buttons_action_row], timeout=45, check=check)
+
+                    if button_ctx.custom_id == "No":
+                        await button_ctx.send("Battle Declined. ")
+                        return
+
+                    if button_ctx.custom_id == "Yes":
+                        join_query = {"TEAM": [str(user1)], "SCORE": 0, "CARD": card1, "TITLE": title1, "ARM": arm, "POSITION": 1}
+
+                        session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 1, "TEAMS": [{"TEAM": [str(ctx.author)], "SCORE": 0, "CARD": card, "TITLE": title, "ARM": arm, "POSITION": 0}], "AVAILABLE": True}
 
 
-                    join_query = {"TEAM": [str(user1)], "SCORE": 0, "CARD": card1, "TITLE": title1, "ARM": arm, "POSITION": 1}
-
-                    session_query = {"OWNER": str(ctx.author), "GAME": game["GAME"], "TYPE": 1, "TEAMS": [{"TEAM": [str(ctx.author)], "SCORE": 0, "CARD": card, "TITLE": title, "ARM": arm, "POSITION": 0}], "AVAILABLE": True}
-
-
-                    session = db.createSession(data.newSession(session_query))
-                    resp = db.joinSession(session_query, join_query)
-                    await ctx.send(resp)
-                    message = await ctx.send(f"{ctx.author.mention} use /start to start Ranked Match or Use /menu to view other PVP Modes!!!:fire:")
-
+                        session = db.createSession(data.newSession(session_query))
+                        resp = db.joinSession(session_query, join_query)
+                        await ctx.send(resp)
+                        message = await ctx.send(f"{ctx.author.mention} use /start to start match. Use /wager put some money on the match.")
                 except:
                     await ctx.send(m.ALREADY_IN_SESSION)  
 
