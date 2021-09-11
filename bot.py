@@ -244,6 +244,9 @@ async def crown(ctx):
    embedVar4 = discord.Embed(title= f":crown: Titles, Arms, and Pets", description=textwrap.dedent(f"""\
    **Titles** & **Arms** 
    Modify you or the Opponents **Stats** prior to battle by applying **Enhancers** at the start of the match.
+   
+   **Title Exlusivity**
+   Titles are only effective on cards from the same Universe or Unbound!
    Buy **Titles** and **Arms** with :coin: or Earn them via **Drops**
 
    **Universe Buff** :Match Your Titles and Arms to your Card **Universe**.

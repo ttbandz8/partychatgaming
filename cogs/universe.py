@@ -55,20 +55,25 @@ class Universe(commands.Cog):
                 darm = universe['DARM']
                 dpet = universe['DPET']
                 boss = universe['UNIVERSE_BOSS']
+                tier = universe['TIER']
                 bossmessage = f"*Use /viewboss {boss}*"
                 if boss == "":
                     bossmessage = f"No {universe_title} Boss available yet!"
                 prerec = universe['PREREQUISITE']
                 
-                prerecmessage = f"Compelete the {prerec} Tale to unlock this Universes!"
+                prerecmessage = f"Compelete the {prerec} Tale to unlock this Universe!"
                 if prerec == "":
-                    prerec = "Starter Universe"
-                    prerecmessage = "Compelete this Starter Tale to unlock additional Universes!"
+                    if tier == 9:
+                        prerec = "Crown Rift"
+                        prerecmessage = "Complete Battles To Open Crown Rifts!"
+                    else:
+                        prerec = "Starter Universe"
+                        prerecmessage = "Complete this Starter Tale to unlock additional Universes!"
                 owner = universe['GUILD']
                 ownermessage = f"{universe_title} is owned by the {owner} Guild!"
                 if owner == "PCG":
                     owner = "Crest Unclaimed"
-                    ownermessage = "*Complete the /dungeon To Claim this Universe for your Guild!*"
+                    ownermessage = "*Complete the /dungeon and Claim this Universe for your Guild!*"
                    
                 
                 mytrait = {}

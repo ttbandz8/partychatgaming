@@ -117,6 +117,7 @@ class Profile(commands.Cog):
                 o_collection = card['COLLECTION']
                 o_destiny = card['HAS_COLLECTION']
                 o_rebirth = d['REBIRTH']
+                
         
                 rebirthBonus = o_rebirth * 10
                 traits = ut.traits
@@ -217,6 +218,22 @@ class Profile(commands.Cog):
                         o_max_health = o_max_health + 150
                         message = "_Destiny Buff Applied_"
 
+                #Title errors 
+                titled =False
+                titleicon=":warning:"
+                titlemessage = f"{titleicon} | **{o_title_universe} Title**: {title_name} ~ Ineffectve. "
+                warningmessage = f"Use {o_show} or Unbound Titles on this card"
+                if o_title_universe == "Unbound":
+                    titled =True
+                    titleicon = ":reminder_ribbon:"
+                    titlemessage = f":reminder_ribbon: | **Title** {title_name} ~ {title_passive_type} | {title_passive_value}"
+                    warningmessage= f""
+                elif o_title_universe == o_show:
+                    titled =True
+                    titleicon = ":reminder_ribbon:"
+                    titlemessage = f":reminder_ribbon: | **Title** {title_name} ~ {title_passive_type} | {title_passive_value}"
+                    warningmessage= f""
+
                 embedVar = discord.Embed(title=f":trident: {card_lvl} | {title_name} {o_card} & {active_pet['NAME']}:".format(self), description=textwrap.dedent(f"""\
                 {message}
                 :heart: | **Health** {o_max_health}
@@ -224,7 +241,7 @@ class Profile(commands.Cog):
                 :dagger: | **Attack** {o_attack}
                 :shield: | **Shield** {o_defense}
                 
-                :reminder_ribbon: | **Title** {title_name} ~ {title_passive_type} | {title_passive_value}
+                {titlemessage}
                 :mechanical_arm: | **Arm** {arm_name} ~ {arm_passive_type} | {arm_passive_value}
                 :bird: | **Pet** {active_pet['NAME']} ~ {active_pet['TYPE']} | {pet_ability_power} 
                 **Bond** _{bond}_ {bond_message} / **Level** _{lvl}_ {lvl_message}
@@ -237,6 +254,7 @@ class Profile(commands.Cog):
                 
                 :drop_of_blood: | _Passive:_ **{passive_name}:** {passive_type} by {passive_num}
                 :infinity: | {traitmessage}
+                *{warningmessage}*
                 """)
                 
                 , colour=000000)
@@ -1110,9 +1128,9 @@ class Profile(commands.Cog):
         
         embedVar1 = discord.Embed(title=f"{shopName}", description=textwrap.dedent(f"""
         **Balance:** {icon}{vault['BALANCE']}
-        **.cards universe:** View Universe Card List
-        **.viewcard card name:** View Cards
-        **.buycard card name:** Buy Card
+        **/cards universe:** View Universe Card List
+        **/viewcard card name:** View Cards
+        **/buycard card name:** Buy Card
         """), colour=0x2ecc71, value='Page 1')
         # embedVar1.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236723/PCG%20LOGOS%20AND%20RESOURCES/Party_Chat_Shop.png")
         embedVar1.add_field(name=":shopping_bags: Cards", value="\n".join(card_text_list))
@@ -1120,9 +1138,9 @@ class Profile(commands.Cog):
 
         embedVar2 = discord.Embed(title=f"{shopName}", description=textwrap.dedent(f"""
         **Balance:** :coin:{vault['BALANCE']}
-        **.titles universe:** View Universe Title List
-        **.viewtitle title name:** View Title Stats
-        **.buytitle title name:** Buy Title
+        **/titles universe:** View Universe Title List
+        **/viewtitle title name:** View Title Stats
+        **/buytitle title name:** Buy Title
         """), colour=0x3498db, value='Page 2')
         # embedVar2.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236723/PCG%20LOGOS%20AND%20RESOURCES/Party_Chat_Shop.png")
         embedVar2.add_field(name=":shopping_bags: Titles", value="\n".join(title_text_list))
@@ -1130,9 +1148,9 @@ class Profile(commands.Cog):
 
         embedVar3 = discord.Embed(title=f"{shopName}", description=textwrap.dedent(f"""
         **Balance:** :coin:{vault['BALANCE']}
-        **.arms universe:** View Universe Arm List
-        **.viewarm arm name:** View Arm Stats
-        **.buyarm arm name** Buy Arm
+        **/arms universe:** View Universe Arm List
+        **/viewarm arm name:** View Arm Stats
+        **/buyarm arm name** Buy Arm
         """), colour=0xf1c40f, value='Page 3')
         # embedVar3.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236723/PCG%20LOGOS%20AND%20RESOURCES/Party_Chat_Shop.png")
         embedVar3.add_field(name=":shopping_bags: Arm", value="\n".join(arm_text_list))
