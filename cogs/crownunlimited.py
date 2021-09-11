@@ -35,7 +35,7 @@ import typing
 class CrownUnlimited(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self._cd = commands.CooldownMapping.from_cooldown(1, 480, commands.BucketType.member) # Change accordingly. Currently every 8 minutes (480 seconds == 8 minutes)
+        self._cd = commands.CooldownMapping.from_cooldown(1, 400, commands.BucketType.member) # Change accordingly. Currently every 8 minutes (480 seconds == 8 minutes)
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -67,6 +67,8 @@ class CrownUnlimited(commands.Cog):
             
             # Pull Character Information
             player = db.queryUser({'DISNAME': str(message.author)})
+            if not player:
+                return
             if player['EXPLORE'] is False:
                 return
 
@@ -149,7 +151,7 @@ class CrownUnlimited(commands.Cog):
             embedVar.set_author(name="Enemy Approaches!")
             embedVar.set_thumbnail(url=f"{cards[rand_card]['PATH']}")
             embedVar.set_footer(text="Use /explore to toggle Explore Mode.", icon_url="https://cdn.discordapp.com/emojis/784402243519905792.gif?v=1")
-            await message.channel.send(embed=embedVar, components=[random_battle_buttons_action_row], delete_after=25)
+            await message.channel.send(embed=embedVar, components=[random_battle_buttons_action_row])
 
             def check(button_ctx):
                 return button_ctx.author == message.author
@@ -39498,62 +39500,84 @@ class CrownUnlimited(commands.Cog):
 
     @cog_ext.cog_slash(description="View all available Universes", guild_ids=main.guild_ids)
     async def universes(self, ctx: SlashContext):
-        universe_data = db.queryAllUniverse()
-        user = db.queryUser({'DISNAME': str(ctx.author)})
+        try:
+            universe_data = db.queryAllUniverse()
+            user = db.queryUser({'DISNAME': str(ctx.author)})
 
-        available_universes = []
-        unavailable_universes = []
-        for uni in universe_data:
-            available = ""
-            if len(uni['CROWN_TALES']) > 2:
-                available = f"🟢 |{Crest_dict[uni]}"
-                available_universes.append(f"{available} {uni['TITLE']}")
-            else:
-                available = f"🟠 |{Crest_dict[uni]}"
-                unavailable_universes.append(f"{available} {uni['TITLE']}")
+            available_universes = []
+            unavailable_universes = []
+            for uni in universe_data:
+                available = ""
+                if len(uni['CROWN_TALES']) > 2:
+                    available = f"{Crest_dict[uni['TITLE']]}"
+                    tier = ""
+                    prerequisite = ""
+                    if uni['TIER'] == 9:
+                        tier = ":crystal_ball:"
+                    else:
+                        tier = str(uni['TIER'])
 
-        all_universes = []
-        if available_universes:
-            for a in available_universes:
-                all_universes.append(a)
-        
-        # if unavailable_universes:
-        #     for u in unavailable_universes:
-        #         all_universes.append(u)
-        total_universes = len(all_universes)
+                    if uni['PREREQUISITE'] == "":
+                        prerequisite = "*Starter Universe*"
+                    else:
+                        prerequisite = f":lock: *{uni['PREREQUISITE']}*"
+                    if uni['TIER'] == 9:
+                        prerequisite = ":crystal_ball: *Crown Rift*"
+                    available_universes.append(f"{available} **{uni['TITLE']}**\n:earth_africa: Tier {tier}\n{prerequisite}\n")
 
-        # Adding to array until divisible by 10
-        while len(all_universes) % 10 != 0:
-            all_universes.append("")
+            all_universes = []
+            if available_universes:
+                for a in available_universes:
+                    all_universes.append(a)
+            total_universes = len(all_universes)
 
-        # Check if divisible by 10, then start to split evenly
-        if len(all_universes) % 10 == 0:
-            first_digit = int(str(len(all_universes))[:1])
-            universes_broken_up = np.array_split(all_universes, first_digit)
-        
-        # If it's not an array greater than 10, show paginationless embed
-        if len(all_universes) < 10:
-            embedVar = discord.Embed(title= f"Universe List", description="\n".join(all_universes), colour=0x7289da)
-            embedVar.set_footer(text=f"{total_universes} Total Universes")
-            await ctx.send(embed=embedVar)
+            # Adding to array until divisible by 10
+            while len(all_universes) % 10 != 0:
+                all_universes.append("")
 
-        embed_list = []
-        icon = ":crown:"
-        if user['RIFT'] == 1:
-            icon=":crystal_ball:"
-        for i in range(0, len(universes_broken_up)):
-            globals()['embedVar%s' % i] = discord.Embed(title= f"{icon} Universe List", description="\n".join(universes_broken_up[i]), colour=0x7289da)
-            globals()['embedVar%s' % i].set_footer(text=f"{total_universes} Total Universes\n/cards Universe Name - View Card List\n/titles Universe Name - View Titles List\n/arms Universe Name - View Arms List\n/pets Universe Name - View Pet List\n/destinies Universe Name - View Destiny List")
-            embed_list.append(globals()['embedVar%s' % i])
+            # Check if divisible by 10, then start to split evenly
+            if len(all_universes) % 10 == 0:
+                first_digit = int(str(len(all_universes))[:1])
+                universes_broken_up = np.array_split(all_universes, first_digit)
+            
+            # If it's not an array greater than 10, show paginationless embed
+            if len(all_universes) < 10:
+                embedVar = discord.Embed(title= f"Universe List", description="\n".join(all_universes), colour=0x7289da)
+                embedVar.set_footer(text=f"{total_universes} Total Universes")
+                await ctx.send(embed=embedVar)
 
-        paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
-        paginator.add_reaction('⏮️', "first")
-        paginator.add_reaction('⏪', "back")
-        paginator.add_reaction('🔐', "lock")
-        paginator.add_reaction('⏩', "next")
-        paginator.add_reaction('⏭️', "last")
-        embeds = embed_list
-        await paginator.run(embeds)
+            embed_list = []
+            icon = ":crown:"
+            if user['RIFT'] == 1:
+                icon=":crystal_ball:"
+            for i in range(0, len(universes_broken_up)):
+                globals()['embedVar%s' % i] = discord.Embed(title= f"{icon} Universe List", description="\n".join(universes_broken_up[i]), colour=0x7289da)
+                globals()['embedVar%s' % i].set_footer(text=f"{total_universes} Total Universes\nFull list of Universes and their Crests")
+                embed_list.append(globals()['embedVar%s' % i])
+
+            paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+            paginator.add_reaction('⏮️', "first")
+            paginator.add_reaction('⏪', "back")
+            paginator.add_reaction('🔐', "lock")
+            paginator.add_reaction('⏩', "next")
+            paginator.add_reaction('⏭️', "last")
+            embeds = embed_list
+            await paginator.run(embeds)
+        except Exception as ex:
+            trace = []
+            tb = ex.__traceback__
+            while tb is not None:
+                trace.append({
+                    "filename": tb.tb_frame.f_code.co_filename,
+                    "name": tb.tb_frame.f_code.co_name,
+                    "lineno": tb.tb_lineno
+                })
+                tb = tb.tb_next
+            print(str({
+                'type': type(ex).__name__,
+                'message': str(ex),
+                'trace': trace
+            }))
 
     @cog_ext.cog_slash(description="View all Homes for purchase", guild_ids=main.guild_ids)
     async def houses(self, ctx: SlashContext):
@@ -40241,12 +40265,12 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, vul, accura
             true_dmg = (random.randint(int(low), int(high))) + 25
             message = ""
 
-            miss_hit = 1 # Miss
+            miss_hit = 4 # Miss
             low_hit = 7 # Lower Damage
             med_hit = 11 # Medium Damage
             standard_hit = 19 # Standard Damage
             high_hit = 20 # Crit Hit
-            hit_roll = random.randint(0,20)
+            hit_roll = random.randint(4,20)
 
 
             if hit_roll <= miss_hit:
@@ -40537,6 +40561,8 @@ def setup(bot):
 
 async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict, otitle: dict, t: dict, ttitle: dict, mode: str, universe: str, currentopponent: int, abyss_scaling: None, companion: None, c: None, ctitle: None):
     co_op_modes = ['CTales', 'DTales', 'CDungeon', 'DDungeon']
+    U_modes = ['ATales','Tales', 'CTales', 'DTales']
+    D_modes = ['CDungeon','DDungeon', 'Dungeon']
     solo_modes = ['ATales','Tales', 'Dungeon', 'Boss']
     opponent_pet_modes = ['Dungeon', 'DDungeon', 'CDungeon']
     opponent_scaling = 0
@@ -40544,11 +40570,11 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
     opponent_health_scaling = 0
     enemy_title = ""
     enemy_arm = ""
-    if mode == "Tales":
+    if mode in U_modes:
             enemy_title = "UTITLE"
             enemy_arm = "UARM"
         
-    if mode == "Dungeon":
+    if mode in D_modes:
         enemy_title = "DTITLE"
         enemy_arm = "DARM"
     
@@ -40763,12 +40789,12 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         t_gif = t['GIF']
         t_card_path=t['PATH']
         t_rcard_path=t['RPATH']
-        t_health = t['HLT'] + (30 * currentopponent) + opponent_health_scaling 
+        t_health = t['HLT'] + (10 * currentopponent) + opponent_health_scaling 
         t_stamina = t['STAM']
         t_max_stamina= t['STAM']
         t_moveset = t['MOVESET']
         t_attack = t['ATK'] + (3 * currentopponent) + opponent_scaling
-        t_defense = t['DEF'] + (6 * currentopponent) + opponent_scaling
+        t_defense = t['DEF'] + (3 * currentopponent) + opponent_scaling
         t_type = t['TYPE']
         t_accuracy = t['ACC']
         t_passive = t['PASS'][0]
@@ -41942,7 +41968,7 @@ async def enemy_approached(self, message, channel, player, selected_mode, univer
             
             t = db.queryCard({'NAME': opponent})
             ttitle = db.queryTitle({'TITLE': universe[enemy_title]})
-            currentopponent = 5
+            currentopponent = 2
             randomized_battle = True
             stats = await build_player_stats(self, randomized_battle, message, sowner, o, otitle, t, ttitle, mode, universe, currentopponent, None, None, None, None)  
             
