@@ -222,7 +222,7 @@ class Profile(commands.Cog):
                 titled =False
                 titleicon=":warning:"
                 titlemessage = f"{titleicon} | **{title_name}** ~ **INEFFECTIVE**"
-                warningmessage = f"Use {o_show} or Unbound Titles on this card"
+                warningmessage = f"*Use {o_show} or Unbound Titles on this card*"
                 if o_title_universe == "Unbound":
                     titled =True
                     titleicon = ":reminder_ribbon:"
@@ -254,7 +254,7 @@ class Profile(commands.Cog):
                 
                 :drop_of_blood: | _Passive:_ **{passive_name}:** {passive_type} by {passive_num}
                 :infinity: | {traitmessage}
-                *{warningmessage}*
+                {warningmessage}
                 """)
                 
                 , colour=000000)
