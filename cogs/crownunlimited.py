@@ -154,7 +154,7 @@ class CrownUnlimited(commands.Cog):
             {message.author.mention}
             **{battle_message}**
             """), colour=0xf1c40f)
-            embedVar.set_author(name="Enemy Approaches!")
+            embedVar.set_author(name="Enemy Approaches!", icon_url="https://cdn.discordapp.com/emojis/788000259996516373.gif?v=1")
             embedVar.set_thumbnail(url=f"{cards[rand_card]['PATH']}")
             embedVar.set_footer(text="Use /explore to turn off these interactions.", icon_url="https://cdn.discordapp.com/emojis/784402243519905792.gif?v=1")
             await message.channel.send(embed=embedVar, components=[random_battle_buttons_action_row])
