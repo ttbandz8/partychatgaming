@@ -40046,7 +40046,6 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, vul, accura
 
     enh_type=""
     if enhancer:
-        ap = ap - ap_buff
         if enh == 'ATK':
             enh_type="ATK"
             atk = ap
@@ -40056,6 +40055,7 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, vul, accura
         elif enh == 'STAM':
             enh_type="STAM"
             stam = ap
+            ap = ap - ap_buff
         elif enh == 'HLT':
             enh_type='HLT'
             hlt = round(ap + (.16 * health))
@@ -40064,7 +40064,7 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, vul, accura
             lifesteal = round(ap + (.09 * op_health))
         elif enh == 'DRAIN':
             enh_type='DRAIN'
-            drain = ap 
+            drain = ap
         elif enh == 'FLOG':
             enh_type="FLOG"
             flog = round((ap/100) * op_attack )
@@ -40095,33 +40095,42 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, vul, accura
         elif enh == 'BLINK':
             enh_type="BLINK"
             blink = ap
+            ap = ap - ap_buff
         elif enh == 'SLOW':
             enh_type="SLOW"
             slow = ap
+            ap = ap - ap_buff
         elif enh == 'HASTE':
             enh_type="HASTE"
             haste = ap
+            ap = ap - ap_buff
         elif enh == 'FEAR':
             enh_type="FEAR"
             fear = ap
         elif enh == 'SOULCHAIN':
             enh_type="SOULCHAIN"
             soulchain = ap
+            ap = ap - ap_buff
         elif enh == 'GAMBLE':
             enh_type="GAMBLE"
             gamble = ap
+            ap = ap - ap_buff
         elif enh == 'WAVE':
             enh_type="WAVE"
             wave = ap
+            ap = ap - ap_buff
         elif enh == 'CREATION':
             enh_type="CREATION"
             creation = ap
+            ap = ap - ap_buff
         elif enh == 'BLAST':
             enh_type="BLAST"
             blast = ap
+            ap = ap - ap_buff
         elif enh == 'DESTRUCTION':
             enh_type="DESTRUCTION"
             destruction = ap
+            ap = ap - ap_buff
 
     #handle different staments for lifesteal and drain
     if enhancer:
