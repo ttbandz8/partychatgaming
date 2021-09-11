@@ -76,7 +76,7 @@ class CrownUnlimited(commands.Cog):
             all_universes = db.queryAllUniverse()
             available_universes = []
             for uni in all_universes:
-                if uni['PREREQUISITE'] in player['CROWN_TALES'] and uni['HAS_CROWN_TALES'] == True and uni['TIER'] != 9:
+                if uni['PREREQUISITE'] in player['CROWN_TALES'] and uni['HAS_CROWN_TALES']:
                     if uni['TITLE'] in completed_crown_tales:
                         available_universes.append(uni)
                     else:
@@ -87,7 +87,7 @@ class CrownUnlimited(commands.Cog):
 
 
             # Select Card at Random
-            all_available_drop_cards = db.queryDropCards(universe)
+            all_available_drop_cards = db.querySpecificDropCards(universe)
             cards = []
             for card in all_available_drop_cards:
                 cards.append(card)
@@ -96,7 +96,7 @@ class CrownUnlimited(commands.Cog):
             rand_card = random.randint(0, c)
             selected_mode = ""
             approach_message = ""
-            mode_selector_randomizer = random.randint(0, 40)
+            mode_selector_randomizer = random.randint(0, 100)
             if mode_selector_randomizer <= 10:
                 selected_mode = "Dungeon"
                 approach_message = ":space_invader: A Tempered "
@@ -132,21 +132,27 @@ class CrownUnlimited(commands.Cog):
             if universe_tier == 3:
                 random_flee_loss = random.randint(25, 350)
                 bounty = random.randint(150, 1500)
+            if universe_tier == 9:
+                random_flee_loss = random.randint(1, 500)
+                bounty = random.randint(1, 6000)
             if universe_tier == 4:
                 random_flee_loss = random.randint(500, 3000)
                 bounty = random.randint(500, 4000)
             if universe_tier == 5:
                 random_flee_loss = random.randint(5000, 10000)
                 bounty = random.randint(5000, 25000)
-
+            battle_message = "If you defeat the card you will earn it, and it's bounty!"
             if selected_mode == "Dungeon":
                 random_flee_loss = random_flee_loss * 3
                 bounty = bounty * 3
+                battle_message = "If you defeat the card you will earn it, and 3x it's bounty!!"
 
             # Send Message
             embedVar = discord.Embed(title=f"**{approach_message} {cards[rand_card]['NAME']}** Approaches!", description=textwrap.dedent(f"""\
             **Bounty** :coin: **{bounty}**
-            {message.author.mention}, Will you battle or flee?
+
+            {message.author.mention}
+            **{battle_message}**
             """), colour=0xf1c40f)
             embedVar.set_author(name="Enemy Approaches!")
             embedVar.set_thumbnail(url=f"{cards[rand_card]['PATH']}")
@@ -1615,6 +1621,7 @@ class CrownUnlimited(commands.Cog):
 
                 embedVar = discord.Embed(title=f":zap: **{t_card}** wins the match!", description=f"The game lasted {turn_total} rounds.\n**{t_card} says**\n`{t_win_description}`", colour=0x1abc9c)
                 embedVar.set_author(name=f"{o_card} lost!")
+                await ctx.author.send(embed=embedVar)
 
                 play_again_buttons = [
                             manage_components.create_button(
@@ -29590,7 +29597,7 @@ class CrownUnlimited(commands.Cog):
         t_gif = t['GIF']
         t_card_path=t['PATH']
         t_rcard_path=t['RPATH']
-        tcard_lvl_ap_buff = 30
+        tcard_lvl_ap_buff = 100
         t_health = t['HLT'] * 2
         t_stamina = t['STAM']
         t_max_stamina= t['STAM']
@@ -31658,7 +31665,7 @@ class CrownUnlimited(commands.Cog):
             )
         ]
         battle_buttons_action_row = manage_components.create_actionrow(*battle_buttons)
-        await ctx.send(f"Ready to fight?", components=[battle_buttons_action_row])
+        await ctx.send(f"{player.mention}, Ready to fight?", components=[battle_buttons_action_row])
 
         def check(button_ctx):
             return button_ctx.author == player
@@ -39236,13 +39243,13 @@ class CrownUnlimited(commands.Cog):
         # If it's not an array greater than 10, show paginationless embed
         if len(all_cards) < 10:
             embedVar = discord.Embed(title= f"{universe} Card List", description="\n".join(all_cards), colour=0x7289da)
-            embedVar.set_footer(text=f"{total_cards} Total Cards\n🟣 Dungeon Drop\n🟢 Tale Drop\n🔵 Destiny Line")
+            embedVar.set_footer(text=f"{total_cards} Total Cards\n🟣 Dungeon Drop\n🟢 Tale Drop\n🔵 Destiny Line\n🟠 Unavailable")
             await ctx.send(embed=embedVar)
 
         embed_list = []
         for i in range(0, len(cards_broken_up)):
             globals()['embedVar%s' % i] = discord.Embed(title= f":flower_playing_cards: {universe_data['TITLE']} Card List", description="\n".join(cards_broken_up[i]), colour=0x7289da)
-            globals()['embedVar%s' % i].set_footer(text=f"{total_cards} Total Cards\n🟣 Dungeon Drop\n🟢 Tale Drop\n🔵 Destiny Line\n/viewcard 'Card Name' - View Card Details\n/destinies 'Universe Name' -View Destiny Lines")
+            globals()['embedVar%s' % i].set_footer(text=f"{total_cards} Total Cards\n🟣 Dungeon Drop\n🟢 Tale Drop\n🔵 Destiny Line\n🟠 Unavailable\n/viewcard 'Card Name' - View Card Details\n/destinies 'Universe Name' -View Destiny Lines")
             embed_list.append(globals()['embedVar%s' % i])
 
         paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
@@ -39308,14 +39315,14 @@ class CrownUnlimited(commands.Cog):
         if len(all_titles) < 10:
             embedVar = discord.Embed(title= f"{universe} Title List", description="\n".join(all_titles), colour=0x7289da)
             # embedVar.set_thumbnail(url={universe_data['PATH']})
-            embedVar.set_footer(text=f"{total_titles} Total Titles\n🟣 Dungeon Drop\n🟢 Tale Drop")
+            embedVar.set_footer(text=f"{total_titles} Total Titles\n🟣 Dungeon Drop\n🟢 Tale Drop\n🔴 Boss Drop")
             await ctx.send(embed=embedVar)
 
         embed_list = []
         for i in range(0, len(titles_broken_up)):
             globals()['embedVar%s' % i] = discord.Embed(title= f":reminder_ribbon: {universe_data['TITLE']} Title List", description="\n".join(titles_broken_up[i]), colour=0x7289da)
             # globals()['embedVar%s' % i].set_thumbnail(url={universe_data['PATH']})
-            globals()['embedVar%s' % i].set_footer(text=f"{total_titles} Total Titles\n🟣 Dungeon Drop\n🟢 Tale Drop\n/viewtitle 'Title Name' - View Title Details")
+            globals()['embedVar%s' % i].set_footer(text=f"{total_titles} Total Titles\n🟣 Dungeon Drop\n🟢 Tale Drop\n🔴 Boss Drop\n/viewtitle 'Title Name' - View Title Details")
             embed_list.append(globals()['embedVar%s' % i])
 
         paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
@@ -39378,13 +39385,13 @@ class CrownUnlimited(commands.Cog):
         # If it's not an array greater than 10, show paginationless embed
         if len(all_arms) < 10:
             embedVar = discord.Embed(title= f"{universe} Arms List", description="\n".join(all_arms), colour=0x7289da)
-            embedVar.set_footer(text=f"{total_arms} Total Arms\n🟣 Dungeon Drop\n🟢 Tale Drop")
+            embedVar.set_footer(text=f"{total_arms} Total Arms\n🟣 Dungeon Drop\n🟢 Tale Drop\n🔴 Boss Drop")
             await ctx.send(embed=embedVar)
 
         embed_list = []
         for i in range(0, len(arms_broken_up)):
             globals()['embedVar%s' % i] = discord.Embed(title= f":mechanical_arm: {universe_data['TITLE']} Arms List", description="\n".join(arms_broken_up[i]), colour=0x7289da)
-            globals()['embedVar%s' % i].set_footer(text=f"{total_arms} Total Arms\n🟣 Dungeon Drop\n🟢 Tale Drop\n/viewarm 'Arm Name' - View Arm Details")
+            globals()['embedVar%s' % i].set_footer(text=f"{total_arms} Total Arms\n🟣 Dungeon Drop\n🟢 Tale Drop\n🔴 Boss Drop\n/viewarm 'Arm Name' - View Arm Details")
             embed_list.append(globals()['embedVar%s' % i])
 
         paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
@@ -39501,13 +39508,13 @@ class CrownUnlimited(commands.Cog):
         # If it's not an array greater than 10, show paginationless embed
         if len(all_pets) < 10:
             embedVar = discord.Embed(title= f"{universe} Pet List", description="\n".join(all_pets), colour=0x7289da)
-            embedVar.set_footer(text=f"{total_pets} Total Pets\n🟣 Dungeon Drop\n🟢 Tale Drop")
+            embedVar.set_footer(text=f"{total_pets} Total Pets\n🟣 Dungeon Drop\n🟢 Tale Drop\n🔴 Boss Drop")
             await ctx.send(embed=embedVar)
 
         embed_list = []
         for i in range(0, len(pets_broken_up)):
             globals()['embedVar%s' % i] = discord.Embed(title= f":dog: {universe_data['TITLE']} Pet List", description="\n".join(pets_broken_up[i]), colour=0x7289da)
-            globals()['embedVar%s' % i].set_footer(text=f"{total_pets} Total Pets\n🟣 Dungeon Drop\n🟢 Tale Drop\n/viewpet 'Pet Name' - View Pet Details")
+            globals()['embedVar%s' % i].set_footer(text=f"{total_pets} Total Pets\n🟣 Dungeon Drop\n🟢 Tale Drop\n🔴 Boss Drop\n/viewpet 'Pet Name' - View Pet Details")
             embed_list.append(globals()['embedVar%s' % i])
 
         paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
@@ -43454,11 +43461,7 @@ async def enemy_approached(self, message, channel, player, selected_mode, univer
                     m_playtime = int(wintime[14:16])
                     s_playtime = int(wintime[17:19])
                     gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
-
-                    if mode == "Dungeon":
-                        drop_response = await dungeondrops(str(message.author), universe['TITLE'], currentopponent)
-                    if mode == "Tales":
-                        drop_response = await drops(str(message.author), universe['TITLE'], currentopponent)
+                    drop_response = await specific_drops(str(message.author), t_card)
                     questlogger = await quest(ouser, t_card, selected_mode)
                     destinylogger = await destiny(ouser, t_card, selected_mode)
                     petlogger = await petlevel(opet_name, ouser)
@@ -43784,6 +43787,61 @@ async def drops(player, universe, matchcount):
 
                 await bless(50, player)
                 return f"You earned _Card:_ **{cards[rand_card]}** + :coin: 50!\n{message}"
+    except Exception as ex:
+        trace = []
+        tb = ex.__traceback__
+        while tb is not None:
+            trace.append({
+                "filename": tb.tb_frame.f_code.co_filename,
+                "name": tb.tb_frame.f_code.co_name,
+                "lineno": tb.tb_lineno
+            })
+            tb = tb.tb_next
+        print(str({
+            'type': type(ex).__name__,
+            'message': str(ex),
+            'trace': trace
+        }))
+        await ctx.send("There's an issue with the Drops. Please use /ff to close this channel and start anew. Alert support.")
+        return
+
+async def specific_drops(player, card):
+    vault_query = {'OWNER' : str(player)}
+    vault = db.queryVault(vault_query)
+    user_query = {'DISNAME' : str(player)}
+    user = db.queryUser(user_query)
+    rebirth = user['REBIRTH']
+    owned_destinies = []
+    for destiny in vault['DESTINY']:
+        owned_destinies.append(destiny['NAME'])
+
+    try:
+        # Check if already owned
+        card_owned = False
+        for c in vault['CARD_LEVELS']:
+            if c['CARD'] == str(card):
+                card_owned = True
+        
+        if card_owned:
+            await cardlevel(card, player, universe, universe, "Tales")
+            message = ""
+            await bless(150, player)
+            return f"You earned EXP for _Card:_ **{card}** + :coin: 150 in addition to the card bounty!!"
+        else:
+            card_data = db.queryCard({'NAME': str(card)})
+            uni = db.queryUniverse({'TITLE': card_data['UNIVERSE']})
+            tier = uni['TIER']
+            update_query = {'$addToSet': {'CARD_LEVELS': {'CARD': str(card), 'LVL': 0, 'TIER': int(tier), 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
+            response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(card)}})
+            r = db.updateVaultNoFilter(vault_query, update_query)
+            message = ""
+            for destiny in d.destiny:
+                if card in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
+                    db.updateVaultNoFilter(vault_query,{'$addToSet':{'DESTINY': destiny}})
+                    message = f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault."
+
+            await bless(50, player)
+            return f"You earned _Card:_ **{card}**!\n{message}"
     except Exception as ex:
         trace = []
         tb = ex.__traceback__
