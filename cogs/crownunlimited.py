@@ -2074,25 +2074,6 @@ class CrownUnlimited(commands.Cog):
                 t_win_description = "Too easy. Come back when you're truly prepared."
                 t_lose_description = "I can't believe I lost..."
 
-
-            if o['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= o['HLT']: # Demon Slayer Universal Trait
-                o_max_health = t['HLT']
-                o_health = t['HLT']
-            else:                    
-                o_max_health = o['HLT'] + ocard_lvl_hlt_buff
-
-            if t['UNIVERSE'] == "Demon Slayer" and o_max_health >= t['HLT']: #Demon Slayer Universal Trait
-                t_max_health = o_max_health + (13 * currentopponent) + 10 + opponent_scaling
-                t_health = o_max_health + (13 * currentopponent) + 10 + opponent_scaling
-            else:                    
-                t_max_health = t['HLT'] + (13 * currentopponent) + 10 + opponent_scaling
-
-            if c['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= c['HLT']: # Demon Slayer Universal Trait
-                c_max_health = t['HLT']
-                c_health = t['HLT']
-            else:                    
-                c_max_health = c['HLT']
-
             #DBZ traits
             o_final_stand=False
             c_final_stand=False
@@ -2946,6 +2927,17 @@ class CrownUnlimited(commands.Cog):
 
             botActive = True
                 
+            if o['UNIVERSE'] == "Demon Slayer" and t_max_health >= o['HLT']: # Demon Slayer Universal Trait
+                o_max_health = t_max_health
+                o_health = t_max_health
+
+            if t['UNIVERSE'] == "Demon Slayer" and o_max_health >= t['HLT']: #Demon Slayer Universal Trait
+                t_max_health = o_max_health + 100
+                t_health = o_max_health + 100
+
+            if c['UNIVERSE'] == "Demon Slayer" and t_max_health >= c['HLT']: # Demon Slayer Universal Trait
+                c_max_health = t_max_health
+                c_health = t_max_health
 
             # Vulnerability Check
             if o_type == 0 and t_type == 2:
@@ -6519,23 +6511,6 @@ class CrownUnlimited(commands.Cog):
                 t_win_description = "Too easy. Come back when you're truly prepared."
                 t_lose_description = "I can't believe I lost..."
 
-            if o['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= o['HLT']: # Demon Slayer Universal Trait
-                o_max_health = t['HLT']  - (10 * currentopponent)
-                o_health = t['HLT'] - (10 * currentopponent)
-            else:                    
-                o_max_health = o['HLT'] - (10 * currentopponent) + ocard_lvl_hlt_buff
-
-            if t['UNIVERSE'] == "Demon Slayer" and o_max_health >= t['HLT']: #Demon Slayer Universal Trait
-                t_max_health = o_max_health + (20 * currentopponent) + 200
-                t_health = o_max_health + (20 * currentopponent) + 200
-            else:                    
-                t_max_health = t['HLT'] + (20 * currentopponent) + 200
-
-            if c['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= c['HLT']: # Demon Slayer Universal Trait
-                c_max_health = t['HLT'] - (10 * currentopponent)
-                c_health = t['HLT'] - (10 * currentopponent)
-            else:                    
-                c_max_health = c['HLT'] - (10 * currentopponent)
             #DBZ traits
             o_final_stand=False
             c_final_stand=False
@@ -7372,6 +7347,18 @@ class CrownUnlimited(commands.Cog):
             t_enhancer = t_moveset[3]
             t_enhancer_used=False
             t_pet_used=False
+
+            if o['UNIVERSE'] == "Demon Slayer" and t_max_health >= o['HLT']: # Demon Slayer Universal Trait
+                o_max_health = t_max_health
+                o_health = t_max_health
+
+            if t['UNIVERSE'] == "Demon Slayer" and o_max_health >= t['HLT']: #Demon Slayer Universal Trait
+                t_max_health = o_max_health + 250
+                t_health = o_max_health + 250
+
+            if c['UNIVERSE'] == "Demon Slayer" and t_max_health >= c['HLT']: # Demon Slayer Universal Trait
+                c_max_health = t_max_health
+                c_health = t_max_health
 
             # Player 1 Focus & Resolve
             t_focus = 90
@@ -11428,24 +11415,6 @@ class CrownUnlimited(commands.Cog):
                 t_lose_description = "I can't believe I lost..."
 
 
-            if o['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= o['HLT']: # Demon Slayer Universal Trait
-                o_max_health = t['HLT']
-                o_health = t['HLT']
-            else:                    
-                o_max_health = o['HLT'] + ocard_lvl_hlt_buff
-
-            if t['UNIVERSE'] == "Demon Slayer" and o_max_health >= t['HLT']: #Demon Slayer Universal Trait
-                t_max_health = o_max_health + (13 * currentopponent) + 10 + opponent_scaling
-                t_health = o_max_health + (13 * currentopponent) + 10 + opponent_scaling
-            else:                    
-                t_max_health = t['HLT'] + (13 * currentopponent) + 10 + opponent_scaling
-
-            if c['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= c['HLT']: # Demon Slayer Universal Trait
-                c_max_health = t['HLT']
-                c_health = t['HLT']
-            else:                    
-                c_max_health = c['HLT'] + ccard_lvl_hlt_buff
-
             #DBZ traits
             o_final_stand=False
             c_final_stand=False
@@ -12270,6 +12239,18 @@ class CrownUnlimited(commands.Cog):
                     o_health = t_title_passive_value
                     c_health = t_title_passive_value
 
+
+            if o['UNIVERSE'] == "Demon Slayer" and t_max_health >= o['HLT']: # Demon Slayer Universal Trait
+                o_max_health = t_max_health
+                o_health = t_max_health
+
+            if t['UNIVERSE'] == "Demon Slayer" and o_max_health >= t['HLT']: #Demon Slayer Universal Trait
+                t_max_health = o_max_health
+                t_health = o_max_health
+
+            if c['UNIVERSE'] == "Demon Slayer" and t_max_health >= c['HLT']: # Demon Slayer Universal Trait
+                c_max_health = t_max_health
+                c_health = t_max_health
 
             # Player 2 Moves
             t_1 = t_moveset[0]
@@ -15395,6 +15376,9 @@ class CrownUnlimited(commands.Cog):
                     
     @cog_ext.cog_slash(description="Co-op Dungeon with Friends", guild_ids=main.guild_ids)
     async def cdungeon(self, ctx: SlashContext, user: User):
+        await ctx.send("This Command has been turned off at this time. Thank you!")
+        return
+        
         private_channel = ctx
         mode = "CDungeon"
         if isinstance(private_channel.channel, discord.channel.DMChannel):
@@ -19393,24 +19377,6 @@ class CrownUnlimited(commands.Cog):
             t_lose_description = "I can't believe I lost..."
 
 
-        if o['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= o['HLT']: # Demon Slayer Universal Trait
-            o_max_health = t['HLT']
-            o_health = t['HLT']
-        else:                    
-            o_max_health = o['HLT'] + ocard_lvl_hlt_buff
-
-        if t['UNIVERSE'] == "Demon Slayer" and o_max_health >= t['HLT']: #Demon Slayer Universal Trait
-            t_max_health = o_max_health * 3
-            t_health = o_max_health * 3
-        else:                    
-            t_max_health = t['HLT'] * 3
-
-        if c['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= c['HLT']: # Demon Slayer Universal Trait
-            c_max_health = t['HLT']
-            c_health = t['HLT']
-        else:                    
-            c_max_health = c['HLT'] + ccard_lvl_hlt_buff
-
         #DBZ traits
         o_final_stand=False
         c_final_stand=False
@@ -20266,7 +20232,19 @@ class CrownUnlimited(commands.Cog):
         et=0
 
         botActive = True
-            
+        if o['UNIVERSE'] == "Demon Slayer" and t_max_health >= o['HLT']: # Demon Slayer Universal Trait
+            o_max_health = t_max_health
+            o_health = t_max_health
+
+        if c['UNIVERSE'] == "Demon Slayer" and t_max_health >= c['HLT']: # Demon Slayer Universal Trait
+                c_max_health = t_max_health
+                c_health = t_max_health
+
+        if t['UNIVERSE'] == "Demon Slayer" and o_max_health >= t['HLT']: #Demon Slayer Universal Trait
+            t_max_health = o_max_health * 3
+            t_health = o_max_health * 3
+        else:                    
+            t_max_health = t['HLT'] * 3     
 
         # Vulnerability Check
         if o_type == 0 and t_type == 2:
@@ -29621,18 +29599,6 @@ class CrownUnlimited(commands.Cog):
             t_lose_description = "I can't believe I lost..."
 
 
-        if o['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= o['HLT']: # Demon Slayer Universal Trait
-            o_max_health = t['HLT']
-            o_health = t['HLT']
-        else:                    
-            o_max_health = o['HLT'] + ocard_lvl_hlt_buff
-
-        if t['UNIVERSE'] == "Demon Slayer" and o_max_health >= t['HLT']: #Demon Slayer Universal Trait
-            t_max_health = o_max_health * 2
-            t_health = o_max_health * 2
-        else:                    
-            t_max_health = t['HLT'] * 2
-
         #DBZ traits
         o_final_stand=False
         t_final_stand=False
@@ -30183,7 +30149,15 @@ class CrownUnlimited(commands.Cog):
         if t_universe == "Chainsawman":
             t_chainsaw=True
 
-        
+        if o['UNIVERSE'] == "Demon Slayer" and t_max_health >= o['HLT']: # Demon Slayer Universal Trait
+            o_max_health = t_max_health
+            o_health = t_max_health
+
+        if t['UNIVERSE'] == "Demon Slayer" and o_max_health >= t['HLT']: #Demon Slayer Universal Trait
+            t_max_health = o_max_health * 2
+            t_health = o_max_health * 2
+        else:                    
+            t_max_health = t['HLT'] * 2
         # Turn iterator
         turn = 0
         # Enhance Turn Iterators
@@ -31834,20 +31808,6 @@ class CrownUnlimited(commands.Cog):
                     t_special_move_description = "Take this!"
                     t_win_description = "Too easy. Come back when you're truly prepared."
                     t_lose_description = "I can't believe I lost..."
-
-
-                if t['UNIVERSE'] == "Demon Slayer" and o_max_health >= t['HLT']: #Demon Slayer Universal Trait
-                    t_max_health = o_max_health
-                    t_health = o_max_health
-                else:                    
-                    t_max_health = t['HLT'] + tcard_lvl_hlt_buff
-
-                if o['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= o['HLT']: # Demon Slayer Universal Trait
-                    o_max_health = t['HLT']
-                    o_health = t['HLT']
-                else:                    
-                    o_max_health = o['HLT'] + ocard_lvl_hlt_buff
-
  
                 #DBZ traits
                 o_final_stand=False
@@ -32398,7 +32358,13 @@ class CrownUnlimited(commands.Cog):
                 tmove2_text = list(t_2.keys())[0]
                 tmove3_text = list(t_3.keys())[0]
                 tmove_enhanced_text = list(t_enhancer.keys())[0]
+                if o['UNIVERSE'] == "Demon Slayer" and t_max_health >= o['HLT']: # Demon Slayer Universal Trait
+                    o_max_health = t_max_health
+                    o_health = t_max_health
 
+                if t['UNIVERSE'] == "Demon Slayer" and o_max_health >= t['HLT']: #Demon Slayer Universal Trait
+                    t_max_health = o_max_health
+                    t_health = o_max_health
                 
                 # Turn iterator
                 turn = 0
@@ -34618,20 +34584,6 @@ class CrownUnlimited(commands.Cog):
                     t_win_description = "Too easy. Come back when you're truly prepared."
                     t_lose_description = "I can't believe I lost..."
 
-
-                if t['UNIVERSE'] == "Demon Slayer" and o_max_health >= t['HLT']: #Demon Slayer Universal Trait
-                    t_max_health = o_max_health
-                    t_health = o_max_health
-                else:                    
-                    t_max_health = t['HLT'] + tcard_lvl_hlt_buff
-
-                if o['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= o['HLT']: # Demon Slayer Universal Trait
-                    o_max_health = t['HLT']
-                    o_health = t['HLT']
-                else:                    
-                    o_max_health = o['HLT'] + ocard_lvl_hlt_buff
-
-
                 #DBZ traits
                 o_final_stand=False
                 t_final_stand=False
@@ -35209,6 +35161,14 @@ class CrownUnlimited(commands.Cog):
                 # Enhance Turn Iterators
                 eo=0
                 et=0
+
+                if o['UNIVERSE'] == "Demon Slayer" and t_max_health >= o['HLT']: # Demon Slayer Universal Trait
+                    o_max_health = t_max_health
+                    o_health = t_max_health
+
+                if t['UNIVERSE'] == "Demon Slayer" and o_max_health >= t['HLT']: #Demon Slayer Universal Trait
+                    t_max_health = o_max_health
+                    t_health = o_max_health
 
                 botActive = False
                 tutorialbot = '837538366509154407'
@@ -40588,14 +40548,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         enemy_arm = "DARM"
     
     try:   
-        if universe['PREREQUISITE']:
+        if universe['PREREQUISITE'] != "":
             opponent_scaling = 8
-            opponent_health_scaling = 125
+            opponent_health_scaling = 100
             player_scaling = 2
-        else:
-            opponent_scaling = 4
-            opponent_health_scaling = 50
-            player_scaling = 1
 
         if mode == "Dungeon":
             opponent_scaling = opponent_scaling + 10
@@ -40799,6 +40755,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         t_card_path=t['PATH']
         t_rcard_path=t['RPATH']
         t_health = t['HLT'] + (10 * currentopponent) + opponent_health_scaling 
+        t_max_health = t_health
         t_stamina = t['STAM']
         t_max_stamina= t['STAM']
         t_moveset = t['MOVESET']
@@ -40829,19 +40786,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             t_special_move_description = "Take this!"
             t_win_description = "Too easy. Come back when you're truly prepared."
             t_lose_description = "I can't believe I lost..."
-
-        if o['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= o['HLT']: # Demon Slayer Universal Trait
-            o_max_health = t['HLT']  - (10 * currentopponent)
-            o_health = t['HLT'] - (10 * currentopponent)
-        else:                    
-            o_max_health = o['HLT'] - (10 * currentopponent) + ocard_lvl_hlt_buff
-
-        if t['UNIVERSE'] == "Demon Slayer" and o_max_health >= t['HLT']: #Demon Slayer Universal Trait
-            t_max_health = o_max_health + (20 * currentopponent) + 200
-            t_health = o_max_health + (20 * currentopponent) + 200
-        else:                    
-            t_max_health = t['HLT'] + (20 * currentopponent) + 200
-
+                
         if companion:
             if c['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= c['HLT']: # Demon Slayer Universal Trait
                 c_max_health = t['HLT'] - (10 * currentopponent)
@@ -41710,6 +41655,18 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 if companion:
                     c_health = t_title_passive_value
 
+        if o['UNIVERSE'] == "Demon Slayer" and t_max_health >= o['HLT']: # Demon Slayer Universal Trait
+            o_max_health = t_max_health
+            o_health = t_max_health
+
+        if t['UNIVERSE'] == "Demon Slayer" and o_max_health >= t['HLT']: #Demon Slayer Universal Trait
+            t_max_health = o_max_health
+            t_health = o_max_health
+
+        if companion:
+            if c['UNIVERSE'] == "Demon Slayer" and t_max_health >= c['HLT']: # Demon Slayer Universal Trait
+                c_max_health = t_max_health
+                c_health = t_max_health
 
         # Player 2 Moves
         t_1 = t_moveset[0]
@@ -41977,7 +41934,7 @@ async def enemy_approached(self, message, channel, player, selected_mode, univer
             
             t = db.queryCard({'NAME': opponent})
             ttitle = db.queryTitle({'TITLE': universe[enemy_title]})
-            currentopponent = 2
+            currentopponent = 1
             randomized_battle = True
             stats = await build_player_stats(self, randomized_battle, message, sowner, o, otitle, t, ttitle, mode, universe, currentopponent, None, None, None, None)  
             
