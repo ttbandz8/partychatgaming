@@ -113,7 +113,62 @@ class Boss(commands.Cog):
             await ctx.send(f"Error when viewing boss. Alert support. Thank you!")
             return
 
+    @cog_ext.cog_slash(description="Exchange Boss Souls for Cards", guild_ids=main.guild_ids)
+    async def exchange(self, ctx, boss : str, card : str):
+        try:
+            userinfo = db.queryUser({"DISNAME" : str(ctx.author)})
+            bossname = boss
+            cardname = card
+            boss_info = db.queryBoss({'NAME': {"$regex": str(bossname), "$options": "i"}})
+            mintedBoss = ""
+            if userinfo:
+                soul_list = userinfo['BOSS_WINS']
+                for souls in soul_list:
+                    if bossname == souls:
+                        mintedBoss = bossname
+                    else:
+                        await ctx.send("You do not own this Boss Soul", delete_after=3)
+                        return
+                if boss_info:
+                    card_info = db.queryCard({'NAME': {"$regex": str(cardname), "$options": "i"}})
+                    if card_info:
+                        uboss_name = boss_info['NAME']
+                        uboss_show = boss_info['UNIVERSE']
+                        card_show = card_info['UNIVERSE']
+                        if uboss_show == card_show:
+                            db.updateUserNoFilter({'DISNAME': str(ctx.author)},{'$pull':{'BOSS_WINS': str(bossname)}})
+                            response = db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$addToSet':{'CARDS': str(cardname)}})
+                            await ctx.send(f"SOUL EXCHANGE: {cardname} has been added to {ctx.author.mention}'s vault: CARDS")
+                            
+                        else:
+                            await ctx.send("Card must match Boss Universe", delete_after=3)
+                        
+                    else:
+                        await ctx.send("Card Doesn't Exist", delete_after=3)
+                else:
+                    await ctx.send("Boss Doesn't Exist", delete_after=3)
 
+                
+                
+                
+                
+        except Exception as ex:
+            trace = []
+            tb = ex.__traceback__
+            while tb is not None:
+                trace.append({
+                    "filename": tb.tb_frame.f_code.co_filename,
+                    "name": tb.tb_frame.f_code.co_name,
+                    "lineno": tb.tb_lineno
+                })
+                tb = tb.tb_next
+            print(str({
+                'type': type(ex).__name__,
+                'message': str(ex),
+                'trace': trace
+            }))
+            await ctx.send(f"Error when exchanging boss soul. Alert support. Thank you!")
+            return
 
 
 
