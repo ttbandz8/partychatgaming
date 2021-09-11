@@ -150,7 +150,7 @@ class CrownUnlimited(commands.Cog):
             """), colour=0xf1c40f)
             embedVar.set_author(name="Enemy Approaches!")
             embedVar.set_thumbnail(url=f"{cards[rand_card]['PATH']}")
-            embedVar.set_footer(text="Use /explore to turn off/on these interactions.", icon_url="https://cdn.discordapp.com/emojis/784402243519905792.gif?v=1")
+            embedVar.set_footer(text="Use /explore to turn off these interactions.", icon_url="https://cdn.discordapp.com/emojis/784402243519905792.gif?v=1")
             await message.channel.send(embed=embedVar, components=[random_battle_buttons_action_row])
 
             def check(button_ctx):
@@ -34331,10 +34331,6 @@ class CrownUnlimited(commands.Cog):
                                     else:
                                         await ctx.send(m.NOT_ENOUGH_STAMINA)
                                         turn = 1
-                if botActive:
-                    end_message="Use the /end command to end the tutorial lobby"
-                else:
-                    end_message = "Try Again!"
                 # End the match
                 if o_health <= 0 or o_max_health <= 0:
                     # await ctx.send(f":zap: {user2.mention} you win the match!")
@@ -34349,9 +34345,9 @@ class CrownUnlimited(commands.Cog):
                     match = await savematch(str(tuser), str(t_card), str(t_card_path), str(ttitle['TITLE']), str(tarm['ARM']), "N/A", "PVP", o['EXCLUSIVE'])
                     ouid = sowner['DID']
                     sownerctx = await self.bot.fetch_user(ouid)
-                    response = await score(sownerctx, tuser)
-                    await curse(3, str(ctx.author))
-                    await bless(8, tuser)
+                    # response = await score(sownerctx, tuser)
+                    await curse(30, str(ctx.author))
+                    await bless(80, tuser)
                     if tguild:                        
                         await bless(15, str(tuser))
                         await blessteam(25, tteam)
@@ -34363,7 +34359,7 @@ class CrownUnlimited(commands.Cog):
                             await teamloss(oteam)
                             await curseguild(30, oguild)
                         
-                    embedVar = discord.Embed(title=f":zap: **{t_card}** wins the match! Use /start to Play again or /end to end the session", description=f"Match concluded in {turn_total} turns\n**{t_card} says**\n`{t_win_description}`", colour=0x1abc9c)
+                    embedVar = discord.Embed(title=f":zap: VICTORY\n**{t_card}** ", description=f"Match concluded in {turn_total} turns\n**{t_card} says**\n`{t_win_description}`", colour=0x1abc9c)
                     embedVar.set_author(name=f"{o_card} says:\n{o_lose_description}")
                     if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
                         embedVar.set_footer(text=f"Battle Time: {gameClock[2]} Seconds.")
@@ -34377,12 +34373,6 @@ class CrownUnlimited(commands.Cog):
                     else:
                         embedVar.add_field(name="Most Focused", value=f"**{t_card}**")
                     await ctx.send(embed=embedVar)
-                    if botActive:                    
-                        embedVar = discord.Embed(title=f"PLAY AGAIN", description=f"Don't Worry! Losing is apart of the game. Use the /end command to **END** the tutorial lobby OR use /start to **PLAY AGAIN**", colour=0xe74c3c)
-                        embedVar.set_author(name=f"You Lost...")
-                        embedVar.add_field(name="Tips!", value="Equiping stronger `TITLES` and `ARMS` will make you character tougher in a fight!")
-                        embedVar.set_footer(text="The .shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
-                        await ctx.send(embed=embedVar)
 
                 elif t_health <=0 or t_max_health <= 0:
                     uid = o_DID
@@ -34395,7 +34385,7 @@ class CrownUnlimited(commands.Cog):
                     gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
                     ouid = sowner['DID']
                     sownerctx = await self.bot.fetch_user(ouid)
-                    response = await score(sownerctx, ouser)
+                    # response = await score(sownerctx, ouser)
                     await bless(8, str(ctx.author))
                     await curse(3, str(tuser))
                     if oguild:                        
@@ -34409,7 +34399,7 @@ class CrownUnlimited(commands.Cog):
                             await teamloss(tteam)
                             await curseguild(30, tguild)
                     match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']), str(oarm['ARM']), "N/A", "PVP", o['EXCLUSIVE'])
-                    embedVar = discord.Embed(title=f":zap: VICTORY\n**{o_card} says**\n{o_win_description}\n\n Use /start to Play again or /end to end the session", description=f"The match lasted {turn_total} turns", colour=0xe91e63)
+                    embedVar = discord.Embed(title=f":zap: VICTORY\n**{o_card} says**\n{o_win_description}", description=f"The match lasted {turn_total} turns", colour=0xe91e63)
                     embedVar.set_author(name=f"{t_card} says\n{t_lose_description}")
                     if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
                         embedVar.set_footer(text=f"Battle Time: {gameClock[2]} Seconds.")
@@ -34423,12 +34413,6 @@ class CrownUnlimited(commands.Cog):
                     else:
                         embedVar.add_field(name="Most Focused", value=f"**{t_card}**")
                     await ctx.send(embed=embedVar)
-                    if botActive:                    
-                        embedVar = discord.Embed(title=f"TUTORIAL COMPLETE", description=f"Victories earn **ITEMS** ! Use the /end command to **END** the tutorial lobby\n**OR** use /start to **PLAY AGAIN**", colour=0xe91e63)
-                        embedVar.set_author(name=f"Congratulations You Beat Senpai!")
-                        embedVar.add_field(name="Tips!", value="Equiping stronger **TITLES** and **ARMS** will make you character tougher in a fight!")
-                        embedVar.set_footer(text="The .shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
-                        await ctx.send(embed=embedVar)
         except Exception as ex:
             trace = []
             tb = ex.__traceback__
@@ -34447,6 +34431,8 @@ class CrownUnlimited(commands.Cog):
 
     @cog_ext.cog_slash(description="Start Battle for Money", guild_ids=main.guild_ids)
     async def wager(self, ctx: SlashContext, wager: int):
+        await ctx.send("This Command has been turned off at this time. Thank you!")
+        return
         await ctx.defer()
         private_channel = ctx
         starttime = time.asctime()

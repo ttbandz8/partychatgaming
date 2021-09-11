@@ -15,9 +15,6 @@ BOT_COMMANDS = textwrap.dedent(f"""\
 **/deleteaccount @player**IWANTTODELETEMYACCOUNT: Delete your account
 **/lookup @player**: Profile lookup
 
-**GAME COMMANDS**
-**/vs @player**: Matchup lookup
-
 **TEAM COMMANDS**
 **/team team name**: Team lookup
 **/createteam game team name**: Create team 
@@ -58,10 +55,6 @@ BOT_COMMANDS = textwrap.dedent(f"""\
 **/viewhouse**: View House Information
 **/buyhouse**: Buy and move into a new family house
 
-
-**LOBBY COMMANDS**
-**/check @player**: Check if player is in a lobby
-**/end**: End lobby and save score
 """)
 
 CROWN_UNLIMITED_COMMANDS = textwrap.dedent(f"""\
@@ -85,10 +78,6 @@ CROWN_UNLIMITED_COMMANDS = textwrap.dedent(f"""\
 **/senpaibattle**: Tutorial Bot
 **/legendbattle**:  Advanced Tutorial Bot
 **/battle @player**: Challenge another Player
-**/start** Start a battle in your current session
-**/arena:** Starts round against current opponent and No Pets Allowed/
-**/brawl:** Starts round against current opponent with equal health, attack, and defense/
-**/arenabrawl:** Starts round against current opponent with equal health, attack, and defense and No Pets are allowed/
 **/wager amount**: Wager amount to battle in current session
 **/raid guild**: Start Guild Raid Battle
 
@@ -103,7 +92,6 @@ CROWN_UNLIMITED_COMMANDS = textwrap.dedent(f"""\
 **/cboss @companion**: Opens Crown Universe CO-OP Boss Menu
 **/dtales 1-3**: Opens Crown Tales Duo Story Mode Menu
 **/ddungeon 1-3**: Opens Crown Tales Duo Dungeon Menu
-**/dboss 1-3**: Opens Crown Universe Duo Boss Menu
 **PATREON ONLY**
 **/atales**:Auto-Battle Tales
 """)
