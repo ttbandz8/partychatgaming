@@ -11012,6 +11012,9 @@ class CrownUnlimited(commands.Cog):
 
                 if currentopponent != (total_legends):
                     embedVar = discord.Embed(title=f"VICTORY\n**{o_card} says**\n{o_win_description}", description=f"The game lasted {turn_total} rounds.\n\n{drop_response}", colour=0xe91e63)
+                    if crestsearch:
+                        await blessguild(1000, oguild['GNAME'])
+                        embedVar.add_field(name=f"{selected_universe} CREST SEARCH!", value=f"{oguild['GNAME']} earned 1,000 :coin:")
                     embedVar.set_author(name=f"{t_card} lost!")
                     await private_channel.send(embed=embedVar)
 
@@ -11022,6 +11025,7 @@ class CrownUnlimited(commands.Cog):
                     embedVar = discord.Embed(title=f"DUNGEON CONQUERED", description=f"Universe {selected_universe} has been conquered\n\n{drop_response}", colour=0xe91e63)
                     embedVar.set_author(name=f"New Universes have been unlocked to explore!")
                     if crestsearch:
+                        await blessguild(25000, oguild['GNAME'])
                         await movecrest(selected_universe, oguild['GNAME'])
                         embedVar.add_field(name=f"{selected_universe} CREST CLAIMED!", value=f"{oguild['GNAME']} earned the {selected_universe} **Crest**")
                     embedVar.add_field(name="Additional Reward", value=f"You earned additional rewards in your vault! Take a look.")
@@ -18964,6 +18968,9 @@ class CrownUnlimited(commands.Cog):
                     if private_channel.guild:
 
                         embedVar = discord.Embed(title=f"VICTORY\n**{o_card} says**\n{o_win_description}", description=f"The game lasted {turn_total} rounds.\n\n{drop_response}\n{cdrop_response}", colour=0xe91e63)
+                        if crestsearch:
+                            await blessguild(1000, oguild['GNAME'])
+                            embedVar.add_field(name=f"{selected_universe} CREST SEARCH!", value=f"{oguild['GNAME']} earned 1,000 :coin:")
                         embedVar.set_author(name=f"{t_card} lost!")
                         await private_channel.send(embed=embedVar)
 
@@ -18999,7 +19006,9 @@ class CrownUnlimited(commands.Cog):
                     embedVar = discord.Embed(title=f"DUNGEON CONQUERED", description=f"Universe {selected_universe} has been conquered\n\n{drop_response}\n{cdrop_response}", colour=0xe91e63)
                     embedVar.set_author(name=f"New Universes have been unlocked to explore!")
                     if crestsearch:
+                        await blessguild(30000, oguild['GNAME'])
                         await movecrest(selected_universe, oguild['GNAME'])
+                        embedVar.add_field(name=f"{selected_universe} CREST CLAIMED!", value=f"{oguild['GNAME']} earned the {selected_universe} **Crest**")
                     embedVar.add_field(name="Additional Reward", value=f"You earned additional rewards in your vault! Take a look.")
                     embedVar.set_footer(text="The .shop has been updated with new CARDS, TITLES and ARMS!")
                     upload_query={'DISNAME': str(ctx.author)}
@@ -23701,7 +23710,9 @@ class CrownUnlimited(commands.Cog):
             response = db.updateUserNoFilter({'DISNAME': str(user)}, {'$set': {'AVAILABLE': True}})
             embedVar = discord.Embed(title=f":zap: **{o_card}** and **{c_card}**defeated the {t_universe} Boss {t_card}!", description=f"Match concluded in {turn_total} turns!\n\n{drop_response} + :coin: 50!\n\n{c_user['NAME']} got :coin:50!\n{t_concede}", colour=0xe91e63)
             if crestsearch:
+                await blessguild(25000, oguild['GNAME'])
                 await movecrest(selected_universe, oguild['GNAME'])
+                embedVar.add_field(name=f"{selected_universe} CREST CLAIMED!", value=f"{oguild['GNAME']} earned the {selected_universe} **Crest**")
             embedVar.set_author(name=f"{t_card} lost", icon_url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236432/PCG%20LOGOS%20AND%20RESOURCES/PCGBot_1.png")
             if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
                 embedVar.set_footer(text=f"Battle Time: {gameClock[2]} Seconds.")
@@ -25393,6 +25404,9 @@ class CrownUnlimited(commands.Cog):
 
                     if currentopponent != (total_legends):
                         embedVar = discord.Embed(title=f"VICTORY\n**{o_card} says**\n{o_win_description}", description=f"The game lasted {turn_total} rounds.\n\n{drop_response}", colour=0xe91e63)
+                        if crestsearch:
+                            await blessguild(1000, oguild['GNAME'])
+                            embedVar.add_field(name=f"{selected_universe} CREST SEARCH!", value=f"{oguild['GNAME']} earned 1,000 :coin:")
                         embedVar.set_author(name=f"{t_card} lost!")
                         await private_channel.send(embed=embedVar)
                         
@@ -25402,6 +25416,7 @@ class CrownUnlimited(commands.Cog):
                     if currentopponent == (total_legends):
                         embedVar = discord.Embed(title=f"DUNGEON CONQUERED", description=f"Universe {selected_universe} has been conquered\n\n{drop_response}", colour=0xe91e63)
                         if crestsearch:
+                            await blessguild(25000, oguild['GNAME'])
                             await movecrest(selected_universe, oguild['GNAME'])
                             embedVar.add_field(name=f"{selected_universe} CREST CLAIMED!", value=f"{oguild['GNAME']} earned the {selected_universe} **Crest**")
                         embedVar.add_field(name="Additional Reward", value=f"You earned additional rewards in your vault! Take a look.")
@@ -31592,7 +31607,9 @@ class CrownUnlimited(commands.Cog):
             
             embedVar = discord.Embed(title=f":zap: **{o_card}**defeated the {t_universe} Boss {t_card}!", description=f"Match concluded in {turn_total} turns!\n\n{drop_response} + :coin: 50!\n{t_concede}", colour=0xe91e63)
             if crestsearch:
+                await blessguild(25000, oguild['GNAME'])
                 await movecrest(selected_universe, oguild['GNAME'])
+                embedVar.add_field(name=f"{selected_universe} CREST CLAIMED!", value=f"{oguild['GNAME']} earned the {selected_universe} **Crest**")
             embedVar.set_author(name=f"{t_card} lost", icon_url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236432/PCG%20LOGOS%20AND%20RESOURCES/PCGBot_1.png")
             if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
                 embedVar.set_footer(text=f"Battle Time: {gameClock[2]} Seconds.")

@@ -117,6 +117,7 @@ class Profile(commands.Cog):
                 o_collection = card['COLLECTION']
                 o_destiny = card['HAS_COLLECTION']
                 o_rebirth = d['REBIRTH']
+                
         
                 rebirthBonus = o_rebirth * 10
                 traits = ut.traits
@@ -217,6 +218,22 @@ class Profile(commands.Cog):
                         o_max_health = o_max_health + 150
                         message = "_Destiny Buff Applied_"
 
+                #Title errors 
+                titled =False
+                titleicon=":warning:"
+                titlemessage = f"{titleicon} | **{o_title_universe} Title**: {title_name} ~ Ineffectve. "
+                warningmessage = f"Use {o_show} or Unbound Titles on this card"
+                if o_title_universe == "Unbound":
+                    titled =True
+                    titleicon = ":reminder_ribbon:"
+                    titlemessage = f":reminder_ribbon: | **Title** {title_name} ~ {title_passive_type} | {title_passive_value}"
+                    warningmessage= f""
+                elif o_title_universe == o_show:
+                    titled =True
+                    titleicon = ":reminder_ribbon:"
+                    titlemessage = f":reminder_ribbon: | **Title** {title_name} ~ {title_passive_type} | {title_passive_value}"
+                    warningmessage= f""
+
                 embedVar = discord.Embed(title=f":trident: {card_lvl} | {title_name} {o_card} & {active_pet['NAME']}:".format(self), description=textwrap.dedent(f"""\
                 {message}
                 :heart: | **Health** {o_max_health}
@@ -224,7 +241,7 @@ class Profile(commands.Cog):
                 :dagger: | **Attack** {o_attack}
                 :shield: | **Shield** {o_defense}
                 
-                :reminder_ribbon: | **Title** {title_name} ~ {title_passive_type} | {title_passive_value}
+                {titlemessage}
                 :mechanical_arm: | **Arm** {arm_name} ~ {arm_passive_type} | {arm_passive_value}
                 :bird: | **Pet** {active_pet['NAME']} ~ {active_pet['TYPE']} | {pet_ability_power} 
                 **Bond** _{bond}_ {bond_message} / **Level** _{lvl}_ {lvl_message}
@@ -237,6 +254,7 @@ class Profile(commands.Cog):
                 
                 :drop_of_blood: | _Passive:_ **{passive_name}:** {passive_type} by {passive_num}
                 :infinity: | {traitmessage}
+                *{warningmessage}*
                 """)
                 
                 , colour=000000)
