@@ -1110,9 +1110,9 @@ class Profile(commands.Cog):
         
         embedVar1 = discord.Embed(title=f"{shopName}", description=textwrap.dedent(f"""
         **Balance:** {icon}{vault['BALANCE']}
-        **.cards universe:** View Universe Card List
-        **.viewcard card name:** View Cards
-        **.buycard card name:** Buy Card
+        **/cards universe:** View Universe Card List
+        **/viewcard card name:** View Cards
+        **/buycard card name:** Buy Card
         """), colour=0x2ecc71, value='Page 1')
         # embedVar1.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236723/PCG%20LOGOS%20AND%20RESOURCES/Party_Chat_Shop.png")
         embedVar1.add_field(name=":shopping_bags: Cards", value="\n".join(card_text_list))
@@ -1120,9 +1120,9 @@ class Profile(commands.Cog):
 
         embedVar2 = discord.Embed(title=f"{shopName}", description=textwrap.dedent(f"""
         **Balance:** :coin:{vault['BALANCE']}
-        **.titles universe:** View Universe Title List
-        **.viewtitle title name:** View Title Stats
-        **.buytitle title name:** Buy Title
+        **/titles universe:** View Universe Title List
+        **/viewtitle title name:** View Title Stats
+        **/buytitle title name:** Buy Title
         """), colour=0x3498db, value='Page 2')
         # embedVar2.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236723/PCG%20LOGOS%20AND%20RESOURCES/Party_Chat_Shop.png")
         embedVar2.add_field(name=":shopping_bags: Titles", value="\n".join(title_text_list))
@@ -1130,9 +1130,9 @@ class Profile(commands.Cog):
 
         embedVar3 = discord.Embed(title=f"{shopName}", description=textwrap.dedent(f"""
         **Balance:** :coin:{vault['BALANCE']}
-        **.arms universe:** View Universe Arm List
-        **.viewarm arm name:** View Arm Stats
-        **.buyarm arm name** Buy Arm
+        **/arms universe:** View Universe Arm List
+        **/viewarm arm name:** View Arm Stats
+        **/buyarm arm name** Buy Arm
         """), colour=0xf1c40f, value='Page 3')
         # embedVar3.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236723/PCG%20LOGOS%20AND%20RESOURCES/Party_Chat_Shop.png")
         embedVar3.add_field(name=":shopping_bags: Arm", value="\n".join(arm_text_list))
