@@ -122,6 +122,8 @@ class Boss(commands.Cog):
             boss_info = db.queryBoss({'NAME': {"$regex": str(bossname), "$options": "i"}})
             mintedBoss = ""
             if userinfo:
+                vault_info = db.queryVault({"OWNER" : str(ctx.author)})
+                p1_card_levels = vault_info['CARD_LEVELS']
                 soul_list = userinfo['BOSS_WINS']
                 for souls in soul_list:
                     if bossname == souls:
@@ -137,8 +139,19 @@ class Boss(commands.Cog):
                         card_show = card_info['UNIVERSE']
                         if uboss_show == card_show:
                             db.updateUserNoFilter({'DISNAME': str(ctx.author)},{'$pull':{'BOSS_WINS': str(bossname)}})
-                            response = db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$addToSet':{'CARDS': str(cardname)}})
-                            await ctx.send(f"SOUL EXCHANGE: {cardname} has been added to {ctx.author.mention}'s vault: CARDS")
+                            card_2 = db.queryCard({'NAME': str(cardname)})
+                            card_2_uni = db.queryUniverse({'TITLE': card_2['UNIVERSE']})
+                            card_2_tier = card_2_uni['TIER']
+                            update_query = {'$addToSet': {'CARD_LEVELS': {'CARD': str(cardname), 'LVL': 0, 'TIER': int(card_2_tier), 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
+                            card_2_level_exist = False
+                            for card in p1_card_levels:
+                                if card['CARD'] == str(cardname):
+                                    card_2_level_exist = True
+                            if card_2_level_exist == False:
+                                vault_query = {'OWNER' : str(ctx.author)}
+                                response = db.updateVaultNoFilter(vault_query, update_query)
+                                response = db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$addToSet':{'CARDS': str(cardname)}})
+                                await ctx.send(f"SOUL EXCHANGE: {cardname} has been added to {ctx.author.mention}'s vault: CARDS")
                             
                         else:
                             await ctx.send("Card must match Boss Universe", delete_after=3)
