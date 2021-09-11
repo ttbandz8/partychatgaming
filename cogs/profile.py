@@ -221,17 +221,17 @@ class Profile(commands.Cog):
                 #Title errors 
                 titled =False
                 titleicon=":warning:"
-                titlemessage = f"{titleicon} | **{o_title_universe} Title**: {title_name} ~ Ineffectve. "
+                titlemessage = f"{titleicon} | **{title_name}** ~ **INEFFECTIVE**"
                 warningmessage = f"Use {o_show} or Unbound Titles on this card"
                 if o_title_universe == "Unbound":
                     titled =True
                     titleicon = ":reminder_ribbon:"
-                    titlemessage = f":reminder_ribbon: | **Title** {title_name} ~ {title_passive_type} | {title_passive_value}"
+                    titlemessage = f":reminder_ribbon: | **{title_name}** ~ {title_passive_type} | {title_passive_value}"
                     warningmessage= f""
                 elif o_title_universe == o_show:
                     titled =True
                     titleicon = ":reminder_ribbon:"
-                    titlemessage = f":reminder_ribbon: | **Title** {title_name} ~ {title_passive_type} | {title_passive_value}"
+                    titlemessage = f":reminder_ribbon: | **{title_name}** ~ {title_passive_type} | {title_passive_value}"
                     warningmessage= f""
 
                 embedVar = discord.Embed(title=f":trident: {card_lvl} | {title_name} {o_card} & {active_pet['NAME']}:".format(self), description=textwrap.dedent(f"""\
@@ -242,8 +242,8 @@ class Profile(commands.Cog):
                 :shield: | **Shield** {o_defense}
                 
                 {titlemessage}
-                :mechanical_arm: | **Arm** {arm_name} ~ {arm_passive_type} | {arm_passive_value}
-                :bird: | **Pet** {active_pet['NAME']} ~ {active_pet['TYPE']} | {pet_ability_power} 
+                :mechanical_arm: | **{arm_name}** ~ {arm_passive_type} | {arm_passive_value}
+                :bird: | **{active_pet['NAME']}** ~ {active_pet['TYPE']} | {pet_ability_power} 
                 **Bond** _{bond}_ {bond_message} / **Level** _{lvl}_ {lvl_message}
             
                 _**Moveset**_
