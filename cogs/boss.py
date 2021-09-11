@@ -8,6 +8,7 @@ import messages as m
 import numpy as np
 import help_commands as h
 import unique_traits as ut
+import destiny as d
 # Converters
 from discord import User
 from discord import Member
@@ -116,6 +117,8 @@ class Boss(commands.Cog):
     @cog_ext.cog_slash(description="Exchange Boss Souls for Cards", guild_ids=main.guild_ids)
     async def exchange(self, ctx, boss : str, card : str):
         try:
+            vault_query = {'OWNER' : str(ctx.author)}
+            vault = db.queryVault(vault_query)
             userinfo = db.queryUser({"DISNAME" : str(ctx.author)})
             bossname = boss
             cardname = card
@@ -136,6 +139,24 @@ class Boss(commands.Cog):
                         uboss_show = boss_info['UNIVERSE']
                         card_show = card_info['UNIVERSE']
                         if uboss_show == card_show:
+                            card_owned = False
+                            for c in vault['CARD_LEVELS']:
+                                if c['CARD'] == str(card_info['NAME']):
+                                    card_owned = True
+                            if not card_owned:
+                                uni = db.queryUniverse({'TITLE': card_info['UNIVERSE']})
+                                tier = uni['TIER']
+                                update_query = {'$addToSet': {'CARD_LEVELS': {'CARD': str(card_info['NAME']), 'LVL': 0, 'TIER': int(tier), 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
+                                response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(card_info['NAME'])}})
+                                r = db.updateVaultNoFilter(vault_query, update_query)
+                            owned_destinies = []
+                            for destiny in vault['DESTINY']:
+                                owned_destinies.append(destiny['NAME'])
+                            for destiny in d.destiny:
+                                if card_info['NAME'] in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
+                                    db.updateVaultNoFilter(vault_query,{'$addToSet':{'DESTINY': destiny}})
+                                    await ctx.send(f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.")
+
                             db.updateUserNoFilter({'DISNAME': str(ctx.author)},{'$pull':{'BOSS_WINS': str(bossname)}})
                             response = db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$addToSet':{'CARDS': str(cardname)}})
                             await ctx.send(f"SOUL EXCHANGE: {cardname} has been added to {ctx.author.mention}'s vault: CARDS")
