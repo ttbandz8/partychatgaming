@@ -43461,7 +43461,7 @@ async def enemy_approached(self, message, channel, player, selected_mode, univer
                     m_playtime = int(wintime[14:16])
                     s_playtime = int(wintime[17:19])
                     gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
-                    drop_response = await specific_drops(str(message.author), t_card)
+                    drop_response = await specific_drops(str(message.author), t_card, t_universe)
                     questlogger = await quest(ouser, t_card, selected_mode)
                     destinylogger = await destiny(ouser, t_card, selected_mode)
                     petlogger = await petlevel(opet_name, ouser)
@@ -43805,7 +43805,7 @@ async def drops(player, universe, matchcount):
         await ctx.send("There's an issue with the Drops. Please use /ff to close this channel and start anew. Alert support.")
         return
 
-async def specific_drops(player, card):
+async def specific_drops(player, card, universe):
     vault_query = {'OWNER' : str(player)}
     vault = db.queryVault(vault_query)
     user_query = {'DISNAME' : str(player)}
