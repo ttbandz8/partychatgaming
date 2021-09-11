@@ -97,7 +97,7 @@ class CrownUnlimited(commands.Cog):
             selected_mode = ""
             approach_message = ""
             mode_selector_randomizer = random.randint(0, 100)
-            if mode_selector_randomizer <= 10:
+            if mode_selector_randomizer <= 10 or cards[rand_card]['EXCLUSIVE']:
                 selected_mode = "Dungeon"
                 approach_message = ":space_invader: A Tempered "
             else:
