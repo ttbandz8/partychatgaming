@@ -42003,6 +42003,8 @@ async def enemy_approached(self, message, channel, player, selected_mode, univer
             t = db.queryCard({'NAME': opponent})
             ttitle = db.queryTitle({'TITLE': universe[enemy_title]})
             currentopponent = 1
+            if mode == "Dungeon":
+                currentopponent = 10
             randomized_battle = True
             stats = await build_player_stats(self, randomized_battle, message, sowner, o, otitle, t, ttitle, mode, universe, currentopponent, None, None, None, None)  
             
