@@ -114,7 +114,7 @@ class CrownUnlimited(commands.Cog):
                 ),
                 manage_components.create_button(
                     style=ButtonStyle.red,
-                    label="Flee",
+                    label="Take Chances",
                     custom_id="No"
                 )
             ]
@@ -122,30 +122,44 @@ class CrownUnlimited(commands.Cog):
 
             # Lose / Bounty
             random_flee_loss = 0
+            take_chances_response = ""
             bounty = 0
+            
             if universe_tier == 1:
-                random_flee_loss = random.randint(1, 100)
+                random_flee_loss = random.randint(1, 500)
                 bounty = random.randint(50, 250)
             if universe_tier == 2:
-                random_flee_loss = random.randint(1, 150)
+                random_flee_loss = random.randint(1, 1000)
                 bounty = random.randint(50, 500)
             if universe_tier == 3:
-                random_flee_loss = random.randint(25, 350)
+                random_flee_loss = random.randint(1, 2000)
                 bounty = random.randint(150, 1500)
             if universe_tier == 9:
-                random_flee_loss = random.randint(1, 500)
+                random_flee_loss = random.randint(1, 3000)
                 bounty = random.randint(1, 6000)
             if universe_tier == 4:
-                random_flee_loss = random.randint(500, 3000)
+                random_flee_loss = random.randint(1, 5000)
                 bounty = random.randint(500, 4000)
             if universe_tier == 5:
-                random_flee_loss = random.randint(5000, 10000)
+                random_flee_loss = random.randint(1, 100000)
                 bounty = random.randint(5000, 25000)
             battle_message = "If you defeat the card you will earn it, and it's bounty!"
             if selected_mode == "Dungeon":
-                random_flee_loss = random_flee_loss * 3
                 bounty = bounty * 3
                 battle_message = "If you defeat the card you will earn it, and 3x it's bounty!!"
+                random_flee_loss = 20
+
+            if random_flee_loss <= 10 and selected_mode == "Tales":
+                drop_response = await specific_drops(str(message.author), cards[rand_card]['NAME'], universe)
+                embedVar = discord.Embed(title=f"**{drop_response}**", colour=0xf1c40f)
+                embedVar.set_footer(text="LESS GOOOOO", icon_url="https://cdn.discordapp.com/emojis/877233426770583563.gif?v=1")
+                embedVar.set_author(name="Good job!", icon_url="https://cdn.discordapp.com/emojis/875101593152917585.gif?v=1")
+                take_chances_response = embedVar
+            else:
+                take_chances_message_rand = random.randint(0, len(take_chances_messages))
+                embedVar = discord.Embed(title=f"**{take_chances_messages[take_chances_message_rand]}**", colour=0xf1c40f)
+                embedVar.set_footer(text="You down bad", icon_url="https://cdn.discordapp.com/emojis/872980334487171092.gif?v=1")
+                take_chances_response = embedVar
 
             # Send Message
             embedVar = discord.Embed(title=f"**{approach_message} {cards[rand_card]['NAME']}** Approaches!", description=textwrap.dedent(f"""\
@@ -167,7 +181,7 @@ class CrownUnlimited(commands.Cog):
                 
                 if button_ctx.custom_id == "No":
                     await curse(random_flee_loss, message.author)
-                    await button_ctx.send(f"You fled, dropping :coin: {random_flee_loss} in the escape!", delete_after=15)
+                    await button_ctx.send(embed=take_chances_response, delete_after=45)
                     return
                 
                 if button_ctx.custom_id == "Yes":
@@ -19039,6 +19053,7 @@ class CrownUnlimited(commands.Cog):
                         await discord.TextChannel.delete(private_channel, reason=None)
 
     @cog_ext.cog_slash(description="Co-op Bosses with Friends", guild_ids=main.guild_ids)
+    @commands.cooldown(1, 1800, commands.BucketType.user)
     async def cboss(self, ctx: SlashContext, user: User):
         await ctx.defer()
         companion = db.queryUser({'DISNAME': str(user)})
@@ -29353,6 +29368,7 @@ class CrownUnlimited(commands.Cog):
                     }))
 
     @cog_ext.cog_slash(description="Boss! Defeat Dungeon to unlock Boss", guild_ids=main.guild_ids)
+    @commands.cooldown(1, 1800, commands.BucketType.user)
     async def boss(self, ctx: SlashContext):
         await ctx.defer()
         private_channel = ctx
@@ -29382,13 +29398,7 @@ class CrownUnlimited(commands.Cog):
                     crestsearch=True
         oteam = sowner['TEAM']
         ofam = sowner['FAMILY']
-
-        if sowner['AVAILABLE']:
-            response = db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'AVAILABLE': False}})
-        else:
-            await private_channel.send(m.ALREADY_IN_TALES)
-            return
-        
+ 
         completed_crown_tales = sowner['CROWN_TALES']
         completed_dungeons = sowner['DUNGEONS']
         all_universes = db.queryAllUniverse()
@@ -44154,3 +44164,4 @@ Crest_dict = {'Unbound': ':ideograph_advantage:',
               'Crown Rift Awakening': ':u7a7a:',
               'Crown Rift Slayers': ':sa:',
               'Crown Rift Madness': ':loop:'}
+take_chances_messages = ['You lost immediately.', 'You got smoked!', 'You fainted before the fight even started.', 'That... was just sad. You got dropped with ease.', 'Too bad, so sad. You took the L.', 'Annnd another L. You lost.', 'Annnnnnnnnnnd another L! You lost.', 'How many Ls you gonna take today?', 'That was worse than the last time. You got dropped.']
