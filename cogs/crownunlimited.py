@@ -177,7 +177,7 @@ class CrownUnlimited(commands.Cog):
                 return button_ctx.author == message.author
 
             try:
-                button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[random_battle_buttons_action_row], check=check)
+                button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[random_battle_buttons_action_row], timeout=60 check=check)
                 
                 if button_ctx.custom_id == "No":
                     await curse(random_flee_loss, message.author)
