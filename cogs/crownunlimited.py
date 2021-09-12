@@ -100,9 +100,11 @@ class CrownUnlimited(commands.Cog):
             if mode_selector_randomizer <= 10 or cards[rand_card]['EXCLUSIVE']:
                 selected_mode = "Dungeon"
                 approach_message = ":space_invader: A Tempered "
+                icon="https://cdn.discordapp.com/emojis/744887136125190204.gif?v=1"
             else:
                 selected_mode = "Tales"
                 approach_message = ":japanese_ogre: A Calm "
+                icon="https://cdn.discordapp.com/emojis/788000259996516373.gif?v=1"
 
             universe_tier = available_universes[rand_universe]['TIER']
             
@@ -149,6 +151,7 @@ class CrownUnlimited(commands.Cog):
                 battle_message = "If you defeat the card you will earn it, and 3x it's bounty!!"
                 random_flee_loss = 20
 
+            # Take Chances Button Interaction
             if random_flee_loss <= 10 and selected_mode == "Tales":
                 drop_response = await specific_drops(str(message.author), cards[rand_card]['NAME'], universe)
                 embedVar = discord.Embed(title=f"**{drop_response}**", colour=0xf1c40f)
@@ -168,7 +171,7 @@ class CrownUnlimited(commands.Cog):
             {message.author.mention}
             **{battle_message}**
             """), colour=0xf1c40f)
-            embedVar.set_author(name="Enemy Approaches!", icon_url="https://cdn.discordapp.com/emojis/788000259996516373.gif?v=1")
+            embedVar.set_author(name="Enemy Approaches!", icon_url=f"{icon}")
             embedVar.set_thumbnail(url=f"{cards[rand_card]['PATH']}")
             embedVar.set_footer(text="Use /explore to turn off these interactions.", icon_url="https://cdn.discordapp.com/emojis/784402243519905792.gif?v=1")
             await message.channel.send(embed=embedVar, components=[random_battle_buttons_action_row])
@@ -177,7 +180,7 @@ class CrownUnlimited(commands.Cog):
                 return button_ctx.author == message.author
 
             try:
-                button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[random_battle_buttons_action_row], timeout=60 check=check)
+                button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[random_battle_buttons_action_row], timeout=60, check=check)
                 
                 if button_ctx.custom_id == "No":
                     await curse(random_flee_loss, message.author)
