@@ -129,10 +129,10 @@ class Boss(commands.Cog):
                 for souls in soul_list:
                     if bossname == souls:
                         mintedBoss = bossname
-                    else:
-                        await ctx.send("You do not own this Boss Soul", delete_after=3)
-                        return
-                if boss_info:
+                if mintedBoss =="":
+                    await ctx.send("You do not own this Boss Soul", delete_after=3)
+                    return
+                elif boss_info:
                     card_info = db.queryCard({'NAME': {"$regex": str(cardname), "$options": "i"}})
                     if card_info:
                         uboss_name = boss_info['NAME']
@@ -167,12 +167,7 @@ class Boss(commands.Cog):
                     else:
                         await ctx.send("Card Doesn't Exist", delete_after=3)
                 else:
-                    await ctx.send("Boss Doesn't Exist", delete_after=3)
-
-                
-                
-                
-                
+                    await ctx.send("Boss Doesn't Exist", delete_after=3)               
         except Exception as ex:
             trace = []
             tb = ex.__traceback__
