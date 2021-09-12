@@ -185,7 +185,7 @@ class CrownUnlimited(commands.Cog):
                     return
                 
                 if button_ctx.custom_id == "Yes":
-                    await button_ctx.send(f"{message.author.mention} private channel has been opened for you. Good luck!")
+                    await button_ctx.send(f"{message.author.mention} private channel has been opened for you. Good luck!", delete_after=10)
                     await enemy_approached(self, message, message.channel, player, selected_mode, universe, cards[rand_card]['NAME'], bounty)
             except Exception as ex:
                 trace = []
