@@ -159,8 +159,7 @@ class CrownUnlimited(commands.Cog):
                 embedVar.set_author(name="Good job!", icon_url="https://cdn.discordapp.com/emojis/875101593152917585.gif?v=1")
                 take_chances_response = embedVar
             else:
-                take_chances_message_rand = random.randint(0, len(take_chances_messages))
-                embedVar = discord.Embed(title=f"**{take_chances_messages[take_chances_message_rand]}**", colour=0xf1c40f)
+                embedVar = discord.Embed(title=f"**You lost immediately.**", colour=0xf1c40f)
                 embedVar.set_footer(text="You down bad", icon_url="https://cdn.discordapp.com/emojis/872980334487171092.gif?v=1")
                 take_chances_response = embedVar
 
