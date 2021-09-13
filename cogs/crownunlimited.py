@@ -237,7 +237,7 @@ class CrownUnlimited(commands.Cog):
 
     @cog_ext.cog_slash(description="Auto Tales Battler", guild_ids=main.guild_ids)
     async def atales(self, ctx: SlashContext):
-        await ctx.defer()
+        # await ctx.defer()
         # await ctx.send("atales Command has been turned off at this time. Please use Tales instead. Thank you!")
         # return
         
@@ -1737,7 +1737,7 @@ class CrownUnlimited(commands.Cog):
 
     @cog_ext.cog_slash(description="Duo Tales with AI", guild_ids=main.guild_ids)
     async def dtales(self, ctx: SlashContext, deck : int):
-        await ctx.defer()
+        # await ctx.defer()
         private_channel = ctx
         mode = "DTales"
         if isinstance(private_channel.channel, discord.channel.DMChannel):
@@ -6179,7 +6179,7 @@ class CrownUnlimited(commands.Cog):
                     
     @cog_ext.cog_slash(description="Duo Dungeons with AI", guild_ids=main.guild_ids)
     async def ddungeon(self, ctx: SlashContext, deck : int):
-        await ctx.defer()
+        # await ctx.defer()
         private_channel = ctx
         mode = "DDungeon"
         if isinstance(private_channel.channel, discord.channel.DMChannel):
@@ -11075,7 +11075,7 @@ class CrownUnlimited(commands.Cog):
 
     @cog_ext.cog_slash(description="Co-op Tales with Friends", guild_ids=main.guild_ids)
     async def ctales(self, ctx: SlashContext, user: User):
-        await ctx.defer()
+        # await ctx.defer()
         private_channel = ctx
         mode = "CTales"
         if isinstance(private_channel.channel, discord.channel.DMChannel):
@@ -15408,7 +15408,7 @@ class CrownUnlimited(commands.Cog):
                     
     @cog_ext.cog_slash(description="Co-op Dungeon with Friends", guild_ids=main.guild_ids)
     async def cdungeon(self, ctx: SlashContext, user: User):
-        await ctx.defer()
+        # await ctx.defer()
         await ctx.send("This Command has been turned off at this time. Thank you!")
         return
         
@@ -19058,7 +19058,7 @@ class CrownUnlimited(commands.Cog):
     @cog_ext.cog_slash(description="Co-op Bosses with Friends", guild_ids=main.guild_ids)
     @commands.cooldown(1, 1800, commands.BucketType.user)
     async def cboss(self, ctx: SlashContext, user: User):
-        await ctx.defer()
+        # await ctx.defer()
         companion = db.queryUser({'DISNAME': str(user)})
         private_channel = ctx
         mode = "CBoss"
@@ -23767,7 +23767,7 @@ class CrownUnlimited(commands.Cog):
 
     @cog_ext.cog_slash(description="Dungeon! Available for Tales you beat", guild_ids=main.guild_ids)
     async def dungeon(self, ctx: SlashContext):
-        await ctx.defer()
+        # await ctx.defer()
         private_channel = ctx
         mode = "Dungeon"
         if isinstance(private_channel.channel, discord.channel.DMChannel):
@@ -25481,7 +25481,7 @@ class CrownUnlimited(commands.Cog):
 
     @cog_ext.cog_slash(description="Enter the Abyss", guild_ids=main.guild_ids)
     async def abyss(self, ctx: SlashContext):
-        await ctx.defer()
+        # await ctx.defer()
         # await ctx.send("The Abyss has opened. Floors to travel deep into the Abyss are starting to form. Check back later for entry.")
         # return
         private_channel = ctx
@@ -27783,7 +27783,7 @@ class CrownUnlimited(commands.Cog):
 
     @cog_ext.cog_slash(description="Tales! Defeat Tales to unlock Dungeons", guild_ids=main.guild_ids)
     async def tales(self, ctx: SlashContext):
-        await ctx.defer()
+        # await ctx.defer()
         private_channel = ctx
         mode = "Tales"
         if isinstance(private_channel.channel, discord.channel.DMChannel):
@@ -29373,7 +29373,7 @@ class CrownUnlimited(commands.Cog):
     @cog_ext.cog_slash(description="Boss! Defeat Dungeon to unlock Boss", guild_ids=main.guild_ids)
     @commands.cooldown(1, 1800, commands.BucketType.user)
     async def boss(self, ctx: SlashContext):
-        await ctx.defer()
+        # await ctx.defer()
         private_channel = ctx
         if isinstance(private_channel.channel, discord.channel.DMChannel):
             await private_channel.send(m.SERVER_FUNCTION_ONLY)
@@ -34453,7 +34453,7 @@ class CrownUnlimited(commands.Cog):
     async def wager(self, ctx: SlashContext, wager: int):
         await ctx.send("This Command has been turned off at this time. Thank you!")
         return
-        await ctx.defer()
+        # await ctx.defer()
         private_channel = ctx
         starttime = time.asctime()
         h_gametime = starttime[11:13]
