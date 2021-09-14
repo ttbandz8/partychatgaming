@@ -1926,6 +1926,7 @@ class CrownUnlimited(commands.Cog):
                         embedVar = discord.Embed(title=f"Mana Zone! {o_card} Increased Stamina!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         o_stamina = 160
+                    
                     elif o_universe == "Death Note":
                         if turn_total >= 24:
                             embedVar = discord.Embed(title=f"{t_card.upper()}'s' Scheduled Death", description=f"**{o_card} says**\n'Delete'", colour=0xe91e63)
@@ -22163,6 +22164,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             t_enhancer_used=False
                         elif int(aiMove) == 5:
                             if not t_used_resolve and t_used_focus:
+                                if botActive and mode in B_modes:
+                                    embedVar = discord.Embed(title=f"{t_card} Resolved!", description=f"{t_rmessage}", colour=0xe91e63)
+                                    embedVar.set_footer(text=f"{o_card} this will not be easy...")
+                                    await private_channel.send(embed=embedVar)
                                 if t_universe == "My Hero Academia": #My hero TRait
                                         #fortitude or luck is based on health  
                                         fortitude = 0.0
@@ -24060,6 +24065,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 t_enhancer_used=False
                             elif int(aiMove) == 5:
                                 if not t_used_resolve and t_used_focus:
+                                    if botActive and mode in B_modes:
+                                        embedVar = discord.Embed(title=f"{t_card} Resolved!", description=f"{t_rmessage}", colour=0xe91e63)
+                                        embedVar.set_footer(text=f"{o_card} this will not be easy...")
+                                        await private_channel.send(embed=embedVar)
                                     if t_universe == "My Hero Academia": #My hero TRait
                                             #fortitude or luck is based on health  
                                             fortitude = 0.0
@@ -24668,6 +24677,21 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
             # End the match
             if (((o_health <= 0 or c_health <= 0) and mode in co_op_modes) or (o_max_health <= 0 or c_max_health <= 0) and mode in co_op_modes) or ((o_health <= 0 or o_max_health <= 0) and mode not in co_op_modes):
+                # Play Again Buttons
+                play_again_buttons = [
+                    manage_components.create_button(
+                        style=ButtonStyle.blue,
+                        label="Yes",
+                        custom_id="Yes"
+                    ),
+                    manage_components.create_button(
+                        style=ButtonStyle.red,
+                        label="No",
+                        custom_id="No"
+                    )
+                ]
+                play_again_buttons_action_row = manage_components.create_actionrow(*play_again_buttons)
+
                 # await private_channel.send(f":zap: {user2.mention} you win the match!")
                 wintime = time.asctime()
                 h_playtime = int(wintime[11:13])
@@ -24676,6 +24700,24 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
                 if o_user['RIFT'] == 1:
                     response = db.updateUserNoFilter({'DISNAME':str(o_user['DISNAME'])}, {'$set': {'RIFT' : 0}})
+                
+                # BOSS LOSS
+                if mode in B_modes:
+                    embedVar = discord.Embed(title=f":zap: **{t_card}** Wins...", description=f"Match concluded in {turn_total} turns!\n{t_wins}", colour=0x1abc9c)
+                    embedVar.set_author(name=f"{o_card} says:\n{o_lose_description}", icon_url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236432/PCG%20LOGOS%20AND%20RESOURCES/PCGBot_1.png")
+                    if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
+                        embedVar.set_footer(text=f"Battle Time: {gameClock[2]} Seconds.")
+                    elif int(gameClock[0]) == 0:
+                        embedVar.set_footer(text=f"Battle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                    else: 
+                        embedVar.set_footer(text=f"Battle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+
+                    embedVar = discord.Embed(title=f"PLAY AGAIN", description=f"{t_card} was too powerful level up your character and try again...", colour=0xe74c3c)
+                    embedVar.set_author(name=f"You Lost...")
+                    embedVar.add_field(name="Tips!", value="Equiping stronger `TITLES` and `ARMS` will make you character tougher in a fight!")
+                    embedVar.set_footer(text="The .shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
+                    await private_channel.send(embed=embedVar)
+
 
                 embedVar = discord.Embed(title=f":zap: **{t_card}** wins the match!", description=f"The game lasted {turn_total} rounds.\n**{t_card} says**\n`{t_win_description}`", colour=0x1abc9c)
                 embedVar.set_author(name=f"{o_card} & {c_card} lost!")
@@ -24686,26 +24728,22 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 else: 
                     embedVar.set_footer(text=f"Battle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                 await private_channel.send(embed=embedVar)
-                
-                emojis = ['👍', '👎']
-                accept = await private_channel.send(f"{ctx.author.mention} will you play again?")
-                for emoji in emojis:
-                    await accept.add_reaction(emoji)
 
-                def check(reaction, user):
-                    return user == user and (str(reaction.emoji) == '👍') or (str(reaction.emoji) == '👎')
+                if mode not in co_op_modes and mode != "Abyss"
+                    await private_channel.send(f"{ctx.author.mention} will you play again?", components=[play_again_buttons])
+
+                def check(button_ctx):
+                    return button_ctx.author == ctx.author
                 try:
-                    reaction, user = await self.bot.wait_for('reaction_add', timeout=45.0, check=check)
+                    button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[play_again_buttons_action_row], timeout=120, check=check)
 
-                    if str(reaction.emoji) == '👎':
-                        continued = False 
-                        
-                        if private_channel.guild:
-                            await discord.TextChannel.delete(private_channel, reason=None)
+                    if button_ctx.custom_id == "No":
+                        await discord.TextChannel.delete(private_channel, reason=None)
                         return
-                        
-                    currentopponent = 0
-                    continued = True
+                    
+                    if button_ctx.custom_id == "Yes":
+                        currentopponent = 0
+                        continued = True
                 except asyncio.TimeoutError:
                     continued = False
                     
