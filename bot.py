@@ -1046,7 +1046,7 @@ async def sell(ctx, player: User, item: str):
                   elif p1_trade_item in p1_pet_names:
                      db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'PETS': {'NAME': str(p1_trade_item)}}})
                      await bless(p2_trade_item, ctx.author)
-                     await button_ctx.send(f"{p2_trade_item} has been added to {ctx.author.mention}'s balance.")
+                     await button_ctx.send(f"{p2_trade_item }has been added to {ctx.author.mention}'s balance.")
 
 
                   if p1_trade_item in p1_arms:

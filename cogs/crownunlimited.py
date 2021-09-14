@@ -4725,7 +4725,7 @@ class CrownUnlimited(commands.Cog):
                     embedVar = discord.Embed(title=f"UNIVERSE CONQUERED", description=f"Universe {selected_universe} has been conquered\n\n{drop_response}", colour=0xe91e63)
                     embedVar.set_author(name=f"New Universes have been unlocked to explore!")
                     embedVar.add_field(name="Additional Reward", value=f"You earned additional rewards in your vault! Take a look.")
-                    embedVar.set_footer(text="The .shop has been updated with new CARDS, TITLES and ARMS!")
+                    embedVar.set_footer(text="The /shop has been updated with new CARDS, TITLES and ARMS!")
                     upload_query={'DISNAME': str(ctx.author)}
                     new_upload_query={'$addToSet': {'CROWN_TALES': selected_universe}}
                     r=db.updateUserNoFilter(upload_query, new_upload_query)
@@ -8374,7 +8374,7 @@ class CrownUnlimited(commands.Cog):
                         await movecrest(selected_universe, oguild['GNAME'])
                         embedVar.add_field(name=f"{selected_universe} CREST CLAIMED!", value=f"{oguild['GNAME']} earned the {selected_universe} **Crest**")
                     embedVar.add_field(name="Additional Reward", value=f"You earned additional rewards in your vault! Take a look.")
-                    embedVar.set_footer(text="The .shop has been updated with new CARDS, TITLES and ARMS!")
+                    embedVar.set_footer(text="The /shop has been updated with new CARDS, TITLES and ARMS!")
                     upload_query={'DISNAME': str(ctx.author)}
                     new_upload_query={'$addToSet': {'CROWN_TALES': selected_universe}}
                     r=db.updateUserNoFilter(upload_query, new_upload_query)
@@ -13043,7 +13043,7 @@ class CrownUnlimited(commands.Cog):
                 embedVar = discord.Embed(title=f"PLAY AGAIN", description=f"{t_card} was too powerful level up your character and try again...", colour=0xe74c3c)
                 embedVar.set_author(name=f"You Lost...")
                 embedVar.add_field(name="Tips!", value="Equiping stronger `TITLES` and `ARMS` will make you character tougher in a fight!")
-                embedVar.set_footer(text="The .shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
+                embedVar.set_footer(text="The /shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
                 await private_channel.send(embed=embedVar)
 
             if private_channel.guild:
@@ -17737,7 +17737,7 @@ class CrownUnlimited(commands.Cog):
                 embedVar = discord.Embed(title=f"PLAY AGAIN", description=f"{t_card} was too powerful level up your character and try again...", colour=0xe74c3c)
                 embedVar.set_author(name=f"You Lost...")
                 embedVar.add_field(name="Tips!", value="Equiping stronger `TITLES` and `ARMS` will make you character tougher in a fight!")
-                embedVar.set_footer(text="The .shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
+                embedVar.set_footer(text="The /shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
                 await private_channel.send(embed=embedVar)
 
             if private_channel.guild:
@@ -18930,7 +18930,7 @@ class CrownUnlimited(commands.Cog):
                                     if botActive:                    
                                         embedVar = discord.Embed(title=f"Enhancers!", description=f"Enhancers cost 20 Stamina to Boost your Character or Debuff Your Opponent!", colour=0xe91e63)
                                         embedVar.add_field(name=f"Your Enhancer: {omove_enhanced_text} is a {list(o_enhancer.values())[2]}", value="Pay Attention to your enhancer messages to know what effect is being used!")
-                                        embedVar.set_footer(text=f"Use .enhance to view a full list of enhancers! Look for the {list(o_enhancer.values())[2]} Enhancer")
+                                        embedVar.set_footer(text=f"Use /enhancers to view a full list of enhancers! Look for the {list(o_enhancer.values())[2]} Enhancer")
                                         await button_ctx.send(embed=embedVar)
                                     o_enhancer_used=True
                                     dmg = damage_cal(o_universe, o_card, o_enhancer, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total, ocard_lvl_ap_buff)
@@ -25328,7 +25328,7 @@ class CrownUnlimited(commands.Cog):
                 embedVar = discord.Embed(title=f"TUTORIAL COMPLETE", description=f"Victories earn **ITEMS** ! Use the /end command to **END** the tutorial lobby\nOR use /start to **PLAY AGAIN**", colour=0xe91e63)
                 embedVar.set_author(name=f"Congratulations You Beat Senpai!")
                 embedVar.add_field(name="Tips!", value="Equiping stronger `TITLES` and `ARMS` will make you character tougher in a fight!")
-                embedVar.set_footer(text="The .shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
+                embedVar.set_footer(text="The /shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
                 await ctx.send(embed=embedVar)
 
     @cog_ext.cog_slash(description="View all Cards of a Universe you unlocked", guild_ids=main.guild_ids)
@@ -34272,7 +34272,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         await movecrest(selected_universe, oguild['GNAME'])
                         embedVar.add_field(name=f"{selected_universe} CREST CLAIMED!", value=f"{oguild['GNAME']} earned the {selected_universe} **Crest**")
                     embedVar.add_field(name="Additional Reward", value=f"You earned additional rewards in your vault! Take a look.")
-                    embedVar.set_footer(text="The .shop has been updated with new CARDS, TITLES and ARMS!")
+                    embedVar.set_footer(text="The /shop has been updated with new CARDS, TITLES and ARMS!")
                     upload_query={'DISNAME': str(ctx.author)}
                     new_upload_query={'$addToSet': {'CROWN_TALES': selected_universe}}
                     r=db.updateUserNoFilter(upload_query, new_upload_query)
