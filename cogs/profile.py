@@ -1127,7 +1127,7 @@ class Profile(commands.Cog):
                 arm_text_list.append(f"**{arm['ARM']}**: :coin:{arm['PRICE']} " + f"_{arm['UNIVERSE']}_")
         
         embedVar1 = discord.Embed(title=f"{shopName}", description=textwrap.dedent(f"""
-        **Balance:** {icon}{vault['BALANCE']}
+        **Balance:** {icon}{'{:,}'.format(vault['BALANCE'])}
         **/cards universe:** View Universe Card List
         **/viewcard card name:** View Cards
         **/buycard card name:** Buy Card
@@ -1137,7 +1137,7 @@ class Profile(commands.Cog):
         embedVar1.set_footer(text="Stock updated every day")
 
         embedVar2 = discord.Embed(title=f"{shopName}", description=textwrap.dedent(f"""
-        **Balance:** :coin:{vault['BALANCE']}
+        **Balance:** :coin:{'{:,}'.format(vault['BALANCE'])}
         **/titles universe:** View Universe Title List
         **/viewtitle title name:** View Title Stats
         **/buytitle title name:** Buy Title
@@ -1147,7 +1147,7 @@ class Profile(commands.Cog):
         embedVar2.set_footer(text="Stock updated every day")
 
         embedVar3 = discord.Embed(title=f"{shopName}", description=textwrap.dedent(f"""
-        **Balance:** :coin:{vault['BALANCE']}
+        **Balance:** :coin:{'{:,}'.format(vault['BALANCE'])}
         **/arms universe:** View Universe Arm List
         **/viewarm arm name:** View Arm Stats
         **/buyarm arm name** Buy Arm
