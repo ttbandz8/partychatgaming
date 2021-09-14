@@ -24718,7 +24718,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                     embedVar.set_footer(text="The .shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
                     await private_channel.send(embed=embedVar)
 
-
                 embedVar = discord.Embed(title=f":zap: **{t_card}** wins the match!", description=f"The game lasted {turn_total} rounds.\n**{t_card} says**\n`{t_win_description}`", colour=0x1abc9c)
                 embedVar.set_author(name=f"{o_card} & {c_card} lost!")
                 if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
@@ -24731,9 +24730,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                 if mode not in co_op_modes and mode != "Abyss"
                     await private_channel.send(f"{ctx.author.mention} will you play again?", components=[play_again_buttons])
+                    play_again_selector = ctx.author
+                elif mode in co_op_modes and mode not in ai_co_op_modes:
+                    await private_channel.send(f"{user2.mention} will you play again with {ctx.author.mention}?", components=[play_again_buttons])
+                    play_again_selector = user2
+
 
                 def check(button_ctx):
-                    return button_ctx.author == ctx.author
+                    return button_ctx.author == play_again_selector
                 try:
                     button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[play_again_buttons_action_row], timeout=120, check=check)
 
@@ -24750,7 +24754,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                     if private_channel.guild:
                         await discord.TextChannel.delete(private_channel, reason=None)
 
-            elif t_health <=0 or t_max_health <= 0:         
+            elif t_health <=0 or t_max_health <= 0:
+                tale_or_dungeon_only = ""
+                if mode in U_modes:
+                    tale_or_dungeon_only = "Tales"
+                if mode in D_modes:
+                    tale_or_dungeon_only = "Dungeon"     
                 uid = o_DID
                 ouser = await self.bot.fetch_user(uid)
                 wintime = time.asctime()
@@ -24761,13 +24770,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 teambank = await blessteam(15, oteam)
                 if o_user['RIFT'] == 1:
                     response = db.updateUserNoFilter({'DISNAME':str(o_user['DISNAME'])}, {'$set': {'RIFT' : 0}})
+                
                 drop_response = await dungeondrops(ctx.author, selected_universe, currentopponent)
                 ofambank = await blessfamily(15,ofam)
                 match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']), str(oarm['ARM']), str(selected_universe), "Dungeon", o['EXCLUSIVE'])
-                questlogger = await quest(ouser, t_card, "Dungeon")
-                destinylogger = await destiny(ouser, t_card, "Dungeon")
+                questlogger = await quest(ouser, t_card, tale_or_dungeon_only)
+                destinylogger = await destiny(ouser, t_card, tale_or_dungeon_only)
                 petlogger = await petlevel(opet_name, ouser)
-                cardlogger = await cardlevel(o_card, ouser, o_universe, selected_universe, "Dungeon")
+                cardlogger = await cardlevel(o_card, ouser, o_universe, selected_universe, tale_or_dungeon_only)
                 if questlogger:
                     await private_channel.send(questlogger)
                 if destinylogger:
