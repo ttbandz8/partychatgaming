@@ -2742,7 +2742,6 @@ class CrownUnlimited(commands.Cog):
                         turn = 2
                     else:
                         turn = 1
-                #Play Bot
                 else:
                     # UNIVERSE CARD
                     player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus, t_attack, t_defense, turn_total)
@@ -16690,6 +16689,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
     opponent_health_scaling = 0
     enemy_title = ""
     enemy_arm = ""
+    t_user = ""
     if mode in B_modes:
         bossname = boss['CARD']
         boss = db.queryBoss({'NAME': str(bossname)})
@@ -16890,9 +16890,6 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 c_win_description = "Too easy. Come back when you're truly prepared."
                 c_lose_description = "I can't believe I lost..."
 
-
-        # Player 2 Data
-        # t_user = boss
         if mode in B_modes:
             tarm = db.queryArm({'ARM': enemy_arm})
         else:
@@ -16948,6 +16945,26 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             t_special_move_description = "Take this!"
             t_win_description = "Too easy. Come back when you're truly prepared."
             t_lose_description = "I can't believe I lost..."
+        
+        
+        # World Building
+        t_arena = t_user['DESCRIPTION'][0]
+        t_arenades = t_user['DESCRIPTION'][1]
+        t_entrance = t_user['DESCRIPTION'][2]
+        t_description = t_user['DESCRIPTION'][3]
+        t_welcome = t_user['DESCRIPTION'][4]
+        t_feeling = t_user['DESCRIPTION'][5]
+        t_powerup = t_user['DESCRIPTION'][6]
+        t_aura = t_user['DESCRIPTION'][7]
+        t_assault = t_user['DESCRIPTION'][8]
+        t_world = t_user['DESCRIPTION'][9]
+        t_punish = t_user['DESCRIPTION'][10]
+        t_rmessage = t_user['DESCRIPTION'][11]
+        t_rebuke = t_user['DESCRIPTION'][12]
+        t_concede = t_user['DESCRIPTION'][13]
+        t_wins = t_user['DESCRIPTION'][14]
+
+
              
         if companion:
             if c['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= c['HLT']: # Demon Slayer Universal Trait
@@ -17944,10 +17961,271 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             'tpet_move': tpet_move,
             'tpetmove_text': tpetmove_text,
             'tpet_image': tpet_image,
-            't_pet_used': t_pet_used,
+            't_pet_used': t_pet_used
         }
-              
-        if mode in co_op_modes:
+
+        if mode == "Boss":
+            STATS = {
+                'o_card': o_card,
+                'o_card_path': o_card_path,
+                'oarm': oarm,
+                'o_user': o_user,
+                'o_universe': o_universe,
+                'o_attack': o_attack,
+                'o_defense': o_defense,
+                'o_stamina': o_stamina,
+                'o_max_stamina': o_max_stamina,
+                'o_health': o_health,
+                'o_max_health': o_max_health,
+                'o_DID': o_DID,
+                'o_chainsaw': o_chainsaw,
+                'o_atk_chainsaw': o_atk_chainsaw,
+                'o_def_chainsaw': o_def_chainsaw,
+                'omove1_text': omove1_text,
+                'omove2_text': omove2_text,
+                'omove3_text': omove3_text,
+                'omove_enhanced_text': omove_enhanced_text,
+                'o_1': o_1,
+                'o_2': o_2,
+                'o_3': o_3,
+                'o_gif': o_gif,
+                'o_enhancer': o_enhancer,
+                'o_vul': o_vul,
+                'o_accuracy': o_accuracy,
+                'o_speed': o_speed,
+                'o_special_move_description': o_special_move_description,
+                'o_greeting_description': o_greeting_description,
+                'o_focus_description': o_focus_description,
+                'o_resolve_description': o_resolve_description,
+                'o_special_move_description': o_special_move_description,
+                'o_win_description': o_win_description,
+                'o_lose_description': o_lose_description,
+                'ocard_lvl_ap_buff': ocard_lvl_ap_buff,
+                'opet_name': opet_name,
+                'opet_move': opet_move,
+                'opetmove_text': opetmove_text,
+                'opet_image': opet_image,
+                'o_pet_used': o_pet_used,
+                'user1': user1,
+                'o_focus': o_focus,
+                'o_used_focus': o_used_focus,
+                'o_resolve': o_resolve,
+                'o_used_resolve': o_used_resolve,
+                'o_block_used': o_block_used,
+                'o_defend_used': o_defend_used,
+                'o_enhancer_used': o_enhancer_used,
+                'o_final_stand': o_final_stand,
+                't_card': t_card,
+                't_universe': t_universe,
+                't_attack': t_attack,
+                't_defense': t_defense,
+                't_health': t_health,
+                't_max_health': t_max_health,
+                't_chainsaw': t_chainsaw,
+                't_atk_chainsaw': t_atk_chainsaw,
+                't_def_chainsaw': t_def_chainsaw,
+                't_stamina': t_stamina,
+                't_max_stamina': t_max_stamina,
+                't_1': t_1,
+                't_2': t_2,
+                't_3': t_3,
+                't_enhancer': t_enhancer,
+                't_enhancer_used': t_enhancer_used,
+                't_vul': t_vul,
+                't_accuracy': t_accuracy,
+                't_speed': t_speed,
+                't_special_move_description': t_special_move_description,
+                't_gif': t_gif,
+                't_greeting_description': t_greeting_description,
+                't_focus_description': t_focus_description,
+                't_resolve_description': t_resolve_description,
+                't_special_move_description': t_special_move_description,
+                't_win_description': t_win_description,
+                't_lose_description': t_lose_description,
+                't_focus': t_focus,
+                't_used_focus': t_used_focus,
+                't_resolve': t_resolve,
+                't_used_resolve': t_used_resolve,
+                't_final_stand': t_final_stand,
+                'tcard_lvl_ap_buff': tcard_lvl_ap_buff,
+                'tpet_name': tpet_name,
+                'tpet_move': tpet_move,
+                'tpetmove_text': tpetmove_text,
+                'tpet_image': tpet_image,
+                't_pet_used': t_pet_used,
+                't_arena': t_arena,
+                't_arenades': t_arenades,
+                't_entrance': t_entrance,
+                't_description': t_description,
+                't_welcome': t_welcome,
+                't_feeling': t_feeling,
+                't_powerup': t_powerup,
+                't_aura': t_aura,
+                't_assault': t_assault,
+                't_world': t_world,
+                't_punish': t_punish,
+                't_rmessage': t_rmessage,
+                't_rebuke': t_rebuke,
+                't_concede': t_concede,
+                't_wins': t_wins
+            }
+
+        if mode == "CBoss":
+            STATS = {
+                'o_card': o_card,
+                'o_card_path': o_card_path,
+                'oarm': oarm,
+                'o_user': o_user,
+                'o_universe': o_universe,
+                'o_attack': o_attack,
+                'o_defense': o_defense,
+                'o_stamina': o_stamina,
+                'o_max_stamina': o_max_stamina,
+                'o_health': o_health,
+                'o_max_health': o_max_health,
+                'o_DID': o_DID,
+                'o_chainsaw': o_chainsaw,
+                'o_atk_chainsaw': o_atk_chainsaw,
+                'o_def_chainsaw': o_def_chainsaw,
+                'omove1_text': omove1_text,
+                'omove2_text': omove2_text,
+                'omove3_text': omove3_text,
+                'omove_enhanced_text': omove_enhanced_text,
+                'o_1': o_1,
+                'o_2': o_2,
+                'o_3': o_3,
+                'o_gif': o_gif,
+                'o_enhancer': o_enhancer,
+                'o_vul': o_vul,
+                'o_accuracy': o_accuracy,
+                'o_speed': o_speed,
+                'o_special_move_description': o_special_move_description,
+                'o_greeting_description': o_greeting_description,
+                'o_focus_description': o_focus_description,
+                'o_resolve_description': o_resolve_description,
+                'o_special_move_description': o_special_move_description,
+                'o_win_description': o_win_description,
+                'o_lose_description': o_lose_description,
+                'ocard_lvl_ap_buff': ocard_lvl_ap_buff,
+                'opet_name': opet_name,
+                'opet_move': opet_move,
+                'opetmove_text': opetmove_text,
+                'opet_image': opet_image,
+                'o_pet_used': o_pet_used,
+                'user1': user1,
+                'o_focus': o_focus,
+                'o_used_focus': o_used_focus,
+                'o_resolve': o_resolve,
+                'o_used_resolve': o_used_resolve,
+                'o_block_used': o_block_used,
+                'o_defend_used': o_defend_used,
+                'o_enhancer_used': o_enhancer_used,
+                'o_final_stand': o_final_stand,
+                't_card': t_card,
+                't_universe': t_universe,
+                't_attack': t_attack,
+                't_defense': t_defense,
+                't_health': t_health,
+                't_max_health': t_max_health,
+                't_chainsaw': t_chainsaw,
+                't_atk_chainsaw': t_atk_chainsaw,
+                't_def_chainsaw': t_def_chainsaw,
+                't_stamina': t_stamina,
+                't_max_stamina': t_max_stamina,
+                't_1': t_1,
+                't_2': t_2,
+                't_3': t_3,
+                't_enhancer': t_enhancer,
+                't_enhancer_used': t_enhancer_used,
+                't_vul': t_vul,
+                't_accuracy': t_accuracy,
+                't_speed': t_speed,
+                't_special_move_description': t_special_move_description,
+                't_gif': t_gif,
+                't_greeting_description': t_greeting_description,
+                't_focus_description': t_focus_description,
+                't_resolve_description': t_resolve_description,
+                't_special_move_description': t_special_move_description,
+                't_win_description': t_win_description,
+                't_lose_description': t_lose_description,
+                't_focus': t_focus,
+                't_used_focus': t_used_focus,
+                't_resolve': t_resolve,
+                't_used_resolve': t_used_resolve,
+                't_final_stand': t_final_stand,
+                'tcard_lvl_ap_buff': tcard_lvl_ap_buff,
+                'tpet_name': tpet_name,
+                'tpet_move': tpet_move,
+                'tpetmove_text': tpetmove_text,
+                'tpet_image': tpet_image,
+                't_pet_used': t_pet_used,
+                't_arena': t_arena,
+                't_arenades': t_arenades,
+                't_entrance': t_entrance,
+                't_description': t_description,
+                't_welcome': t_welcome,
+                't_feeling': t_feeling,
+                't_powerup': t_powerup,
+                't_aura': t_aura,
+                't_assault': t_assault,
+                't_world': t_world,
+                't_punish': t_punish,
+                't_rmessage': t_rmessage,
+                't_rebuke': t_rebuke,
+                't_concede': t_concede,
+                't_wins': t_wins,
+                'c_card': c_card,
+                'c_card_path': c_card_path,
+                'carm': carm,
+                'c_user': c_user,
+                'c_universe': c_universe,
+                'c_attack': c_attack,
+                'c_defense': c_defense,
+                'c_stamina': c_stamina,
+                'c_max_stamina': c_max_stamina,
+                'c_health': c_health,
+                'c_max_health': c_max_health,
+                'c_DID': c_DID,
+                'c_chainsaw': c_chainsaw,
+                'c_atk_chainsaw': c_atk_chainsaw,
+                'c_def_chainsaw': c_def_chainsaw,
+                'cmove1_text': cmove1_text,
+                'cmove2_text': cmove2_text,
+                'cmove3_text': cmove3_text,
+                'cmove_enhanced_text': cmove_enhanced_text,
+                'c_1': c_1,
+                'c_2': c_2,
+                'c_3': c_3,
+                'c_gif': c_gif,
+                'c_enhancer': c_enhancer,
+                'c_vul': c_vul,
+                'c_accuracy': c_accuracy,
+                'c_speed': c_speed,
+                'c_special_move_description': c_special_move_description,
+                'c_greeting_description': c_greeting_description,
+                'c_focus_description': c_focus_description,
+                'c_resolve_description': c_resolve_description,
+                'c_special_move_description': c_special_move_description,
+                'c_win_description': c_win_description,
+                'c_lose_description': c_lose_description,
+                'ccard_lvl_ap_buff': ccard_lvl_ap_buff,
+                'cpet_name': cpet_name,
+                'cpet_move': cpet_move,
+                'cpetmove_text': cpetmove_text,
+                'cpet_image': cpet_image,
+                'c_pet_used': c_pet_used,
+                'user2': user2,
+                'c_focus': c_focus,
+                'c_used_focus': c_used_focus,
+                'c_resolve': c_resolve,
+                'c_used_resolve': c_used_resolve,
+                'c_block_used': c_block_used,
+                'c_defend_used': c_defend_used,
+                'c_enhancer_used': c_enhancer_used,
+                'c_final_stand': c_final_stand,
+            }
+        
+        if mode in co_op_modes and mode != "CBoss":
             STATS = {
             'o_card': o_card,
             'o_card_path': o_card_path,
@@ -18085,7 +18363,8 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             'c_defend_used': c_defend_used,
             'c_enhancer_used': c_enhancer_used,
             'c_final_stand': c_final_stand,
-        }
+        }  
+
         return STATS
     except Exception as ex:
         trace = []
@@ -20085,6 +20364,23 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             tpet_image = stats['tpet_image']
             t_pet_used = stats['t_pet_used']
             tpetmove_text = stats['tpetmove_text']
+            if mode in B_modes:
+                t_arena = stats['t_arena']
+                t_arenades = stats['t_arenades']
+                t_entrance = stats['t_entrance']
+                t_description = stats['t_description']
+                t_welcome = stats['t_welcome']
+                t_feeling = stats['t_feeling']
+                t_powerup = stats['t_powerup']
+                t_aura = stats['t_aura']
+                t_assault = stats['t_assault']
+                t_world = stats['t_world']
+                t_punish = stats['t_punish']
+                t_rmessage = stats['t_rmessage']
+                t_rebuke = stats['t_rebuke']
+                t_concede = stats['t_concede']
+                t_wins = stats['t_wins']
+                t_special_move_description = boss_special_move_default_msg
             
             if mode not in co_op_modes:
                 c_health = 0
@@ -20169,6 +20465,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death", description=f"**{o_card} says**\nYou will die in 24 turns...", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
 
+                    if mode in B_modes:                    
+                        embedVar = discord.Embed(title=f"**{t_card}** Boss of `{t_universe}`", description=f"*{t_description}*", colour=0xe91e63)
+                        embedVar.add_field(name=f"{t_arena}", value=f"{t_arenades}")
+                        embedVar.add_field(name=f"Entering the {t_arena}",value= f"{t_entrance}", inline=False)
+                        embedVar.set_footer(text=f"{t_card} waits for you to strike....")
                     if mode in co_op_modes:
                         if c_universe == "Death Note" and turn_total == 0:
                             embedVar = discord.Embed(title=f"{c_card.upper()} Scheduled Death", description=f"**{c_card} says**\nYou will die in 24 turns...", colour=0xe91e63)
@@ -20186,7 +20487,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                     # Tutorial Instructions
                     if turn_total == 0:
                         if mode in B_modes:
-                            embedVar = discord.Embed(title=f"**{o_card}** VS **{t_card}** has begun!\n{t_universe} {mode} Battle", description=f"`{o_card} Says:`\n{o_greeting_description}", colour=0xe91e63)
+                            embedVar = discord.Embed(title=f"**{t_card}** Boss of `{t_universe}`", description=f"*{t_description}*", colour=0xe91e63)
+                            embedVar.add_field(name=f"{t_arena}", value=f"{t_arenades}")
+                            embedVar.add_field(name=f"Entering the {t_arena}",value= f"{t_entrance}", inline=False)
+                            embedVar.set_footer(text=f"{t_card} waits for you to strike....")
                         elif mode in co_op_modes and mode not in B_modes:
                             embedVar = discord.Embed(title=f"**{o_card}** & **{c_card}** VS **{t_card}** has begun! {lineup}\n{t_universe} {mode} Battle", description=f"`{o_card} Says:`\n{o_greeting_description}", colour=0xe91e63)
                         elif mode == "ATales":
@@ -21566,6 +21870,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 #Opponent Turn Start
                 elif turn == 1:
                     await asyncio.sleep(1)
+                    if turn_total == 1 and botActive and mode in B_modes:                    
+                        embedVar = discord.Embed(title=f"**{t_card}** Says : ", description=f"{t_welcome}", colour=0xe91e63)
+                        embedVar.add_field(name=f"**{o_card}** Braces: ",value=f"{t_feeling}")
+                        embedVar.set_footer(text=f"{t_card} begins his assault")
+                        await private_channel.send(embed=embedVar)
                     if t_attack <= 25:
                         t_attack = 25
                     if t_defense <= 30:
@@ -21601,6 +21910,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                     #Focus
                     if t_stamina < 10:
+                        if mode in B_modes:
+                            embedVar = discord.Embed(title=f"**{t_card}** Enters Focus State", description=f"{t_powerup}", colour=0xe91e63)
+                            embedVar.add_field(name=f"A great aura starts to envelop **{t_card}** ",value= f"{t_aura}")
+                            embedVar.set_footer(text=f"{t_card} Says: 'Now, are you ready for a real fight?'")
+                            await private_channel.send(embed=embedVar)
                         # o_pet_used = True
                         fortitude = 0.0
                         low = t_health - (t_health*.90)
@@ -21713,6 +22027,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 turn = 1 
                     else:
                         # UNIVERSE CARD
+                        # Turn Selector is for determining if in co-op or not, swapping turns after using moves
                         turn_selector = 0
                         if mode in co_op_modes:
                             turn_selector = 2
@@ -23500,6 +23815,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                         #Focus
                         if t_stamina < 10:
+                            if mode in B_modes:
+                                embedVar = discord.Embed(title=f"**{t_card}** Enters Focus State", description=f"{t_powerup}", colour=0xe91e63)
+                                embedVar.add_field(name=f"A great aura starts to envelop **{t_card}** ",value= f"{t_aura}")
+                                embedVar.set_footer(text=f"{t_card} Says: 'Now, are you ready for a real fight?'")
                             # o_pet_used = True
                             fortitude = 0.0
                             low = t_health - (t_health*.90)
@@ -24394,7 +24713,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         await discord.TextChannel.delete(private_channel, reason=None)
 
             elif t_health <=0 or t_max_health <= 0:         
-                print("You win")
                 uid = o_DID
                 ouser = await self.bot.fetch_user(uid)
                 wintime = time.asctime()
