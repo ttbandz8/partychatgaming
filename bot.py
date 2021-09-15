@@ -421,7 +421,11 @@ async def rebirth(ctx):
    user_is_validated = db.queryUser(query)
    if user_is_validated:
       rLevel = user_is_validated['REBIRTH']
+      gabes_purse = user_is_validated['TOURNAMENT_WINS']
       if rLevel < 5:
+         pursemessage = "You will lose all of your equipped and vaulted items."
+         if gabes_purse == 1:
+            pursemessage = ":purse: | Gabe's Purse Activated! All Items Will Be Retained!"
          rebirthCost = round(150000 * (1 + (rLevel)))
          embedVar1 = discord.Embed(title= f":heart_on_fire:{user_is_validated['NAME']}'s Rebirth",colour=0x7289da)
          embedVar1.set_thumbnail(url=user_is_validated['AVATAR'])
@@ -435,7 +439,7 @@ async def rebirth(ctx):
          Increased Item Drop Rates + 50%
          Keep All Card Levels
          
-         You will lose all of your equipped and vaulted items.
+         {pursemessage}
          
          *Rebirth is permanent and cannot be undone*
          """))
@@ -453,6 +457,15 @@ async def rebirth(ctx):
             if vault:
                if vault['BALANCE'] >= rebirthCost:           
                   if rLevel == 0:
+                     if gabes_purse == 1:
+                        db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'CROWN_TALES': ['']}}) 
+                        db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'DUNGEONS': ['']}}) 
+                        db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'BOSS_WINS': ['']}}) 
+                        db.updateUserNoFilter(query, {'$inc': {'REBIRTH': 1 }}) 
+                        db.updateVaultNoFilter({"OWNER" : user_is_validated['DISNAME']}, {'$set': {'BALANCE' : 1500}})
+                        await ctx.send(f"You are now Rebirth Level: {user_is_validated['REBIRTH'] + 1}")  
+                        db.updateUserNoFilter(query, {'$set': {'TOURNAMENT_WINS': 0 }}) 
+                        return    
                      card_level_list = vault['CARD_LEVELS']
                      owned_cards = []
                      for card in card_level_list:
@@ -484,6 +497,15 @@ async def rebirth(ctx):
                         db.updateUserNoFilter(query, {'$inc': {'REBIRTH': 1 }}) 
                         await ctx.send(f"You are now Rebirth Level: {user_is_validated['REBIRTH'] + 1}")           
                   elif rLevel == 1:
+                     if gabes_purse == 1:
+                        db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'CROWN_TALES': ['']}}) 
+                        db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'DUNGEONS': ['']}}) 
+                        db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'BOSS_WINS': ['']}}) 
+                        db.updateUserNoFilter(query, {'$inc': {'REBIRTH': 1 }}) 
+                        db.updateVaultNoFilter({"OWNER" : user_is_validated['DISNAME']}, {'$set': {'BALANCE' : 1500}})
+                        await ctx.send(f"You are now Rebirth Level: {user_is_validated['REBIRTH'] + 1}")  
+                        db.updateUserNoFilter(query, {'$set': {'TOURNAMENT_WINS': 0 }}) 
+                        return 
                      card_level_list = vault['CARD_LEVELS']
                      owned_cards = []
                      for card in card_level_list:
@@ -515,6 +537,15 @@ async def rebirth(ctx):
                         nRebirth = db.updateUserNoFilter(query, {'$inc': {'REBIRTH': 1 }}) 
                         await ctx.send(f"You are now Rebirth Level: {user_is_validated['REBIRTH'] + 1}")   
                   elif rLevel == 2:
+                     if gabes_purse == 1:
+                        db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'CROWN_TALES': ['']}}) 
+                        db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'DUNGEONS': ['']}}) 
+                        db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'BOSS_WINS': ['']}}) 
+                        db.updateUserNoFilter(query, {'$inc': {'REBIRTH': 1 }}) 
+                        db.updateVaultNoFilter({"OWNER" : user_is_validated['DISNAME']}, {'$set': {'BALANCE' : 1500}})
+                        await ctx.send(f"You are now Rebirth Level: {user_is_validated['REBIRTH'] + 1}")  
+                        db.updateUserNoFilter(query, {'$set': {'TOURNAMENT_WINS': 0 }}) 
+                        return 
                      card_level_list = vault['CARD_LEVELS']
                      owned_cards = []
                      for card in card_level_list:
@@ -546,6 +577,15 @@ async def rebirth(ctx):
                         nRebirth = db.updateUserNoFilter(query, {'$inc': {'REBIRTH': 1 }}) 
                         await ctx.send(f"You are now Rebirth Level: {user_is_validated['REBIRTH'] + 1}")      
                   elif rLevel == 3:
+                     if gabes_purse == 1:
+                        db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'CROWN_TALES': ['']}}) 
+                        db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'DUNGEONS': ['']}}) 
+                        db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'BOSS_WINS': ['']}}) 
+                        db.updateUserNoFilter(query, {'$inc': {'REBIRTH': 1 }}) 
+                        db.updateVaultNoFilter({"OWNER" : user_is_validated['DISNAME']}, {'$set': {'BALANCE' : 1500}})
+                        await ctx.send(f"You are now Rebirth Level: {user_is_validated['REBIRTH'] + 1}")  
+                        db.updateUserNoFilter(query, {'$set': {'TOURNAMENT_WINS': 0 }}) 
+                        return  
                      card_level_list = vault['CARD_LEVELS']
                      owned_cards = []
                      for card in card_level_list:
@@ -577,6 +617,15 @@ async def rebirth(ctx):
                         nRebirth = db.updateUserNoFilter(query, {'$inc': {'REBIRTH': 1 }}) 
                         await ctx.send(f"You are now Rebirth Level: {user_is_validated['REBIRTH'] + 1}")     
                   elif rLevel == 4:
+                     if gabes_purse == 1:
+                        db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'CROWN_TALES': ['']}}) 
+                        db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'DUNGEONS': ['']}}) 
+                        db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'BOSS_WINS': ['']}}) 
+                        db.updateUserNoFilter(query, {'$inc': {'REBIRTH': 1 }}) 
+                        db.updateVaultNoFilter({"OWNER" : user_is_validated['DISNAME']}, {'$set': {'BALANCE' : 1500}})
+                        await ctx.send(f"You are now Rebirth Level: {user_is_validated['REBIRTH'] + 1}")  
+                        db.updateUserNoFilter(query, {'$set': {'TOURNAMENT_WINS': 0 }}) 
+                        return 
                      card_level_list = vault['CARD_LEVELS']
                      owned_cards = []
                      for card in card_level_list:
