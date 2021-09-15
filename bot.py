@@ -1262,6 +1262,146 @@ async def cursefamily(amount, family):
          print("cant find family")
 
 
+@slash.slash(description="Purchase Boosts", guild_ids=guild_ids)
+@commands.check(validate_user)
+async def trinketshop(ctx):
+   user_query = {'DISNAME': str(ctx.author)}
+   user = db.queryUser(user_query)
+   vault = db.altQueryVault({'OWNER' : str(ctx.author)})
+   current_card = user['CARD']
+   has_gabes_purse = user['TOURNAMENT_WINS']
+   balance = vault['BALANCE']
+
+   sell_buttons = [
+         manage_components.create_button(
+            style=ButtonStyle.green,
+            label="🔋 1️⃣",
+            custom_id="1"
+         ),
+         manage_components.create_button(
+            style=ButtonStyle.blue,
+            label="🔋 2️⃣",
+            custom_id="2"
+         ),
+         manage_components.create_button(
+            style=ButtonStyle.red,
+            label="🔋 3️⃣",
+            custom_id="3"
+         ),
+         manage_components.create_button(
+            style=ButtonStyle.grey,
+            label="Gabe's Purse 👛",
+            custom_id="4"
+         ),
+         manage_components.create_button(
+            style=ButtonStyle.grey,
+            label="Cancel",
+            custom_id="cancel"
+         )
+      ]
+   sell_buttons_action_row = manage_components.create_actionrow(*sell_buttons)
+   embedVar = discord.Embed(title=f"**Trinket Shop**", description=textwrap.dedent(f"""\
+   Purchase Experience Boosts
+   *Experience Boost Applied to Current Equipped Card*
+
+   🔋 1️⃣ **1,500EXP** for :coin: **80,000**
+   
+   🔋 2️⃣ **4,500EXP** for :moneybag: **150,000**
+
+   🔋 3️⃣ **15,000EXP** for :money_with_wings: **650,000**
+
+   Purchase Gabe's Purse to Keep All Items When Rebirthing
+
+   **Gabe's Purse** 👛 for :money_with_wings: **1,000,000**
+
+   What would you like to buy?
+   """), colour=0xf1c40f)
+   embedVar.set_footer(text="Boosts are used immediately upon purchase. Click cancel to exit purchase.", icon_url="https://cdn.discordapp.com/emojis/784402243519905792.gif?v=1")
+   await ctx.send(embed=embedVar, components=[sell_buttons_action_row])
+
+   def check(button_ctx):
+      return button_ctx.author == ctx.author
+
+   try:
+      button_ctx: ComponentContext = await manage_components.wait_for_component(bot, components=[sell_buttons_action_row], timeout=120,check=check)
+      levels_gained = 0
+      price = 0
+      exp_boost_buttons = ["1", "2", "3"]
+      if button_ctx.custom_id == "1":
+         levels_gained = 10
+         price = 80000
+      if button_ctx.custom_id == "2":
+         levels_gained = 30
+         price = 150000
+      if button_ctx.custom_id == "3":
+         levels_gained = 100
+         price=650000
+      
+      if button_ctx.custom_id in exp_boost_buttons:
+         if price > balance:
+            await button_ctx.send("You're too broke to buy. Get your money up.")
+            return
+
+         card_info = {}
+         for level in vault['CARD_LEVELS']:
+            if level['CARD'] == current_card:
+               card_info = level
+      
+         lvl = card_info['LVL']
+         max_lvl = 200
+         if lvl == max_lvl:
+            await button_ctx.send(f"**{current_card}** is already max level.")
+            return
+
+         if (levels_gained + lvl) > max_lvl:
+            levels_gained = levels_gained - (levels_gained + lvl)
+
+         atk_def_buff = round(levels_gained / 2)
+         ap_buff = round(levels_gained / 3)
+         hlt_buff = (round(levels_gained / 20) * 25)
+         
+         query = {'OWNER': str(ctx.author)}
+         update_query = {'$set': {'CARD_LEVELS.$[type].' + "EXP": 0}, '$inc': {'CARD_LEVELS.$[type].' + "LVL": levels_gained, 'CARD_LEVELS.$[type].' + "ATK": atk_def_buff, 'CARD_LEVELS.$[type].' + "DEF": atk_def_buff, 'CARD_LEVELS.$[type].' + "AP": ap_buff, 'CARD_LEVELS.$[type].' + "HLT": hlt_buff}}
+         filter_query = [{'type.'+ "CARD": str(current_card)}]
+         response = db.updateVault(query, update_query, filter_query)
+         await curse(price, str(ctx.author))
+         await button_ctx.send(f"**{str(current_card)}** gained {levels_gained} levels!")
+
+         if button_ctx.custom_id == "cancel":
+            await button_ctx.send("Sell ended.")
+            return
+      
+      if button_ctx.custom_id == "4":
+         if price > balance:
+            await button_ctx.send("You're too broke to buy. Get your money up.")
+            return
+         if has_gabes_purse:
+            await button_ctx.send("You already own Gabes Purse. You cannot purchase more than one.")
+            return
+         else:
+            db.updateUserNoFilter(user_query, {'$set': {'TOURNAMENT_WINS': 1}})
+            await curse(1000000, str(ctx.author))
+            await button_ctx.send("Gabe's Purse has been purchased!")
+            return
+      
+   except Exception as ex:
+      trace = []
+      tb = ex.__traceback__
+      while tb is not None:
+         trace.append({
+            "filename": tb.tb_frame.f_code.co_filename,
+            "name": tb.tb_frame.f_code.co_name,
+            "lineno": tb.tb_lineno
+         })
+         tb = tb.tb_next
+      print(str({
+         'type': type(ex).__name__,
+         'message': str(ex),
+         'trace': trace
+      }))
+      await ctx.send("Trinket Shop closed unexpectedly. Seek support.")
+
+
 @slash.slash(name="Bounty", description="Set Guild Bounty", guild_ids=guild_ids)
 @commands.check(validate_user)
 async def bounty(ctx, amount):
@@ -1389,85 +1529,85 @@ async def curseguild(amount, guild):
 
 #    await ctx.send(embed=embedVar)
 
-# @slash.slash(name="Resell", description="Sell items back to the shop", guild_ids=guild_ids)
-# @commands.check(validate_user)
-# async def resell(ctx, item: str):
-#    user = db.queryUser({'DISNAME': str(ctx.author)})
-#    p1_trade_item = item
-#    p1_vault = db.queryVault({'OWNER' : str(ctx.author)})
-#    p1_cards = p1_vault['CARDS']
-#    p1_titles = p1_vault['TITLES']
-#    p1_arms = p1_vault['ARMS']
-#    p1_balance = p1_vault['BALANCE']
+@slash.slash(name="Resell", description="Sell items back to the shop", guild_ids=guild_ids)
+@commands.check(validate_user)
+async def resell(ctx, item: str):
+   user = db.queryUser({'DISNAME': str(ctx.author)})
+   p1_trade_item = item
+   p1_vault = db.queryVault({'OWNER' : str(ctx.author)})
+   p1_cards = p1_vault['CARDS']
+   p1_titles = p1_vault['TITLES']
+   p1_arms = p1_vault['ARMS']
+   p1_balance = p1_vault['BALANCE']
 
-#    if p1_trade_item in p1_cards and len(p1_cards) == 1:
-#       await ctx.send("You cannot sell your only card.")
-#    elif p1_trade_item in p1_arms and len(p1_arms) == 1:
-#       await ctx.send("You cannot sell your only arm.")
-#    elif p1_trade_item in p1_titles and len(p1_titles) == 1:
-#       await ctx.send("You cannot sell your only title.")
-#    else:
+   if p1_trade_item in p1_cards and len(p1_cards) == 1:
+      await ctx.send("You cannot sell your only card.")
+   elif p1_trade_item in p1_arms and len(p1_arms) == 1:
+      await ctx.send("You cannot sell your only arm.")
+   elif p1_trade_item in p1_titles and len(p1_titles) == 1:
+      await ctx.send("You cannot sell your only title.")
+   else:
 
-#       if p1_trade_item not in p1_cards and p1_trade_item not in p1_titles and p1_trade_item not in p1_arms:
-#          await ctx.send("You do not own this item.")
-#          return
-#       else:
-#          if p1_trade_item in p1_cards:
-#             card = db.queryCard({'NAME':{"$regex": str(p1_trade_item), "$options": "i"}})
-#             sell_price = card['PRICE'] * .15
-#          elif p1_trade_item in p1_titles:
-#             title = db.queryTitle({'TITLE': {"$regex": str(p1_trade_item), "$options": "i"}})
-#             sell_price = title['PRICE'] * .15
-#          elif p1_trade_item in p1_arms:
-#             arm = db.queryArm({'ARM': {"$regex": str(p1_trade_item), "$options": "i"}})
-#             sell_price = arm['PRICE'] * .15
+      if p1_trade_item not in p1_cards and p1_trade_item not in p1_titles and p1_trade_item not in p1_arms:
+         await ctx.send("You do not own this item.")
+         return
+      else:
+         if p1_trade_item in p1_cards:
+            card = db.queryCard({'NAME':{"$regex": str(p1_trade_item), "$options": "i"}})
+            sell_price = card['PRICE'] * .15
+         elif p1_trade_item in p1_titles:
+            title = db.queryTitle({'TITLE': {"$regex": str(p1_trade_item), "$options": "i"}})
+            sell_price = title['PRICE'] * .15
+         elif p1_trade_item in p1_arms:
+            arm = db.queryArm({'ARM': {"$regex": str(p1_trade_item), "$options": "i"}})
+            sell_price = arm['PRICE'] * .15
 
-#          if (p1_trade_item == user['CARD']) or (p1_trade_item == user['TITLE']) or (p1_trade_item == user['ARM']):
-#             await ctx.send("You cannot resell an equipped item.")
-#             return
+         if (p1_trade_item == user['CARD']) or (p1_trade_item == user['TITLE']) or (p1_trade_item == user['ARM']):
+            await ctx.send("You cannot resell an equipped item.")
+            return
 
-#          sell_buttons = [
-#                manage_components.create_button(
-#                   style=ButtonStyle.blue,
-#                   label="💸",
-#                   custom_id="Yes"
-#                ),
-#                manage_components.create_button(
-#                   style=ButtonStyle.red,
-#                   label="❌",
-#                   custom_id="No"
-#                )
-#             ]
-#          sell_buttons_action_row = manage_components.create_actionrow(*sell_buttons)
+         sell_buttons = [
+               manage_components.create_button(
+                  style=ButtonStyle.blue,
+                  label="💸",
+                  custom_id="Yes"
+               ),
+               manage_components.create_button(
+                  style=ButtonStyle.red,
+                  label="❌",
+                  custom_id="No"
+               )
+            ]
+         sell_buttons_action_row = manage_components.create_actionrow(*sell_buttons)
 
-#          await ctx.send(f"{ctx.author.mention} are you willing to resell {p1_trade_item} for :coin: {round(sell_price)}?", components=[sell_buttons_action_row])
+         await ctx.send(f"{ctx.author.mention} are you willing to resell {p1_trade_item} for :coin: {round(sell_price)}?", components=[sell_buttons_action_row])
 
          
-#          def check(button_ctx):
-#             return button_ctx.author == ctx.author
+         def check(button_ctx):
+            return button_ctx.author == ctx.author
 
-#          try:
-#             button_ctx: ComponentContext = await manage_components.wait_for_component(bot, components=[sell_buttons_action_row], check=check)
+         try:
+            button_ctx: ComponentContext = await manage_components.wait_for_component(bot, components=[sell_buttons_action_row], check=check)
 
-#             if button_ctx.custom_id == "No":
-#                   await button_ctx.send("Sell ended.")
-#                   return
-#             if button_ctx.custom_id == "Yes":
-#                if p1_trade_item in p1_arms:
-#                   db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'ARMS': str(p1_trade_item)}})
-#                   await bless(sell_price, ctx.author)
-#                   await button_ctx.send(f"{p1_trade_item} has been resold for :coin: {round(sell_price)}.")
-#                elif p1_trade_item in p1_titles:
-#                   db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'TITLES': str(p1_trade_item)}})
-#                   await bless(sell_price, ctx.author)
-#                   await button_ctx.send(f"{p1_trade_item} has been resold for :coin: {round(sell_price)}.")
-#                elif p1_trade_item in p1_cards:
-#                   db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'CARDS': str(p1_trade_item)}})
-#                   await bless(sell_price, ctx.author)
-#                   await button_ctx.send(f"{p1_trade_item} has been resold for :coin: {round(sell_price)}.")
+            if button_ctx.custom_id == "No":
+                  await button_ctx.send("Sell ended.")
+                  return
+            if button_ctx.custom_id == "Yes":
+               if p1_trade_item in p1_arms:
+                  db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'ARMS': str(p1_trade_item)}})
+                  await bless(sell_price, ctx.author)
+                  await button_ctx.send(f"{p1_trade_item} has been resold for :coin: {round(sell_price)}.")
+               elif p1_trade_item in p1_titles:
+                  db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'TITLES': str(p1_trade_item)}})
+                  await bless(sell_price, ctx.author)
+                  await button_ctx.send(f"{p1_trade_item} has been resold for :coin: {round(sell_price)}.")
+               elif p1_trade_item in p1_cards:
+                  db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'CARDS': str(p1_trade_item)}})
+                  await bless(sell_price, ctx.author)
+                  await button_ctx.send(f"{p1_trade_item} has been resold for :coin: {round(sell_price)}.")
 
-#          except:
-#             await ctx.send("Resell ended. ")
+         except:
+            await ctx.send("Resell ended. ")
 
 @bot.command()
 @commands.check(validate_user)
@@ -1503,7 +1643,6 @@ async def addfield(ctx, collection, new_field, field_type):
          response = db.updateManyTeams({'$set': {new_field: field_type}})
    else:
       print(m.ADMIN_ONLY_COMMAND)
-
 
 @bot.command()
 @commands.check(validate_user)

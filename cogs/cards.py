@@ -14,6 +14,7 @@ from discord import User
 from discord import Member
 from PIL import Image, ImageFont, ImageDraw
 import requests
+import random
 from .crownunlimited import showcard
 from discord_slash import cog_ext, SlashContext
 from discord_slash import SlashCommand
@@ -123,12 +124,13 @@ class Cards(commands.Cog):
                         update_query = {"$set": {"STOCK": newstock}} 
                         response = db.updateCard(cardInventory, update_query)
                         response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(card_name)}})
-                        await ctx.send(m.PURCHASE_COMPLETE_1 + f"`{newstock}` `{mintedCard}` CARDS left in the Shop!")
                         
                         # Add Card Level config
-                        if card_name not in owned_card_levels_list: 
-                            update_query = {'$addToSet': {'CARD_LEVELS': {'CARD': str(card_name), 'LVL': 0, 'TIER': int(tier), 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}            
+                        if card_name not in owned_card_levels_list:
+                            update_query = {'$addToSet': {'CARD_LEVELS': {'CARD': str(card_name), 'LVL': 0, 'TIER': int(tier), 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}        
                             r = db.updateVaultNoFilter(vault_query, update_query)
+                        
+                        await ctx.send(f"You Purchased **{mintedCard}**\n**{newstock}** {mintedCard} cards left in the Shop!")
                         # Add Destiny
                         for destiny in d.destiny:
                             if card_name in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:

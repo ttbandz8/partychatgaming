@@ -168,12 +168,12 @@ class CrownUnlimited(commands.Cog):
             bounty_message = f"{bounty_icon} {'{:,}'.format(bounty)}"
             battle_message = "If you defeat the card you will earn it, and it's bounty!"
             if selected_mode == "Dungeon":
-                bounty = bounty * 3
-                battle_message = "If you defeat the card you will earn it, and 3x it's bounty!!"
-                random_flee_loss = 20
+                bounty = bounty * 2
+                battle_message = "If you defeat the card you will earn it, and 2x it's bounty!!"
+                random_flee_loss = 100
 
             # Take Chances Button Interaction
-            if random_flee_loss <= 20 and selected_mode == "Tales":
+            if random_flee_loss <= 35 and selected_mode == "Tales":
                 drop_response = await specific_drops(str(message.author), cards[rand_card]['NAME'], universetitle)
                 embedVar = discord.Embed(title=f"**{drop_response}**", colour=0xf1c40f)
                 embedVar.set_footer(text="LESS GOOOOO", icon_url="https://cdn.discordapp.com/emojis/877233426770583563.gif?v=1")
@@ -19689,6 +19689,7 @@ async def drops(player, universe, matchcount):
                 await bless(150, player)
                 return f"You earned EXP for _Card:_ **{cards[rand_card]}** + :coin: 150!\n{message}"
             else:
+                
                 card_data = db.queryCard({'NAME': str(cards[rand_card])})
                 uni = db.queryUniverse({'TITLE': card_data['UNIVERSE']})
                 tier = uni['TIER']
