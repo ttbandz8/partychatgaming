@@ -345,9 +345,9 @@ class Profile(commands.Cog):
 
                 paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
                 paginator.add_reaction('⏮️', "first")
-                paginator.add_reaction('⏪', "back")
+                paginator.add_reaction('⬅️', "back")
                 paginator.add_reaction('🔐', "lock")
-                paginator.add_reaction('⏩', "next")
+                paginator.add_reaction('➡️', "next")
                 paginator.add_reaction('⏭️', "last")
                 embeds = embed_list
                 await paginator.run(embeds)
@@ -429,9 +429,9 @@ class Profile(commands.Cog):
 
                 paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
                 paginator.add_reaction('⏮️', "first")
-                paginator.add_reaction('⏪', "back")
+                paginator.add_reaction('⬅️', "back")
                 paginator.add_reaction('🔐', "lock")
-                paginator.add_reaction('⏩', "next")
+                paginator.add_reaction('➡️', "next")
                 paginator.add_reaction('⏭️', "last")
                 embeds = embed_list
                 await paginator.run(embeds)
@@ -514,9 +514,9 @@ class Profile(commands.Cog):
 
                 paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
                 paginator.add_reaction('⏮️', "first")
-                paginator.add_reaction('⏪', "back")
+                paginator.add_reaction('⬅️', "back")
                 paginator.add_reaction('🔐', "lock")
-                paginator.add_reaction('⏩', "next")
+                paginator.add_reaction('➡️', "next")
                 paginator.add_reaction('⏭️', "last")
                 embeds = embed_list
                 await paginator.run(embeds)
@@ -609,9 +609,9 @@ class Profile(commands.Cog):
 
                 paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
                 paginator.add_reaction('⏮️', "first")
-                paginator.add_reaction('⏪', "back")
+                paginator.add_reaction('⬅️', "back")
                 paginator.add_reaction('🔐', "lock")
-                paginator.add_reaction('⏩', "next")
+                paginator.add_reaction('➡️', "next")
                 paginator.add_reaction('⏭️', "last")
                 embeds = embed_list
                 await paginator.run(embeds)
@@ -697,9 +697,9 @@ class Profile(commands.Cog):
 
                 paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
                 paginator.add_reaction('⏮️', "first")
-                paginator.add_reaction('⏪', "back")
+                paginator.add_reaction('⬅️', "back")
                 paginator.add_reaction('🔐', "lock")
-                paginator.add_reaction('⏩', "next")
+                paginator.add_reaction('➡️', "next")
                 paginator.add_reaction('⏭️', "last")
                 embeds = embed_list
                 await paginator.run(embeds)
@@ -1158,9 +1158,9 @@ class Profile(commands.Cog):
 
         paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
         paginator.add_reaction('⏮️', "first")
-        paginator.add_reaction('⏪', "back")
+        paginator.add_reaction('⬅️', "back")
         paginator.add_reaction('🔐', "lock")
-        paginator.add_reaction('⏩', "next")
+        paginator.add_reaction('➡️', "next")
         paginator.add_reaction('⏭️', "last")
         embeds = [embedVar1,embedVar2,embedVar3]
         await paginator.run(embeds)

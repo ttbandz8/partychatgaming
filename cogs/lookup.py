@@ -202,9 +202,9 @@ class Lookup(commands.Cog):
 
                 paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
                 paginator.add_reaction('⏮️', "first")
-                paginator.add_reaction('⏪', "back")
+                paginator.add_reaction('⬅️', "back")
                 paginator.add_reaction('🔐', "lock")
-                paginator.add_reaction('⏩', "next")
+                paginator.add_reaction('➡️', "next")
                 paginator.add_reaction('⏭️', "last")
                 embeds = [embed1, embed4 ]
                 await paginator.run(embeds)
@@ -286,9 +286,9 @@ class Lookup(commands.Cog):
             embed3.add_field(name=":video_game: | Games ", value="\n".join(games), inline=False)
             paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
             paginator.add_reaction('⏮️', "first")
-            paginator.add_reaction('⏪', "back")
+            paginator.add_reaction('⬅️', "back")
             paginator.add_reaction('🔐', "lock")
-            paginator.add_reaction('⏩', "next")
+            paginator.add_reaction('➡️', "next")
             paginator.add_reaction('⏭️', "last")
             embeds = [embed1, embed2, embed3]
             await paginator.run(embeds)
@@ -413,9 +413,9 @@ class Lookup(commands.Cog):
             
             paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
             paginator.add_reaction('⏮️', "first")
-            paginator.add_reaction('⏪', "back")
+            paginator.add_reaction('⬅️', "back")
             paginator.add_reaction('🔐', "lock")
-            paginator.add_reaction('⏩', "next")
+            paginator.add_reaction('➡️', "next")
             paginator.add_reaction('⏭️', "last")
             embeds = [embed1,embed2, embed3]
             await paginator.run(embeds)
