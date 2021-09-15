@@ -225,7 +225,6 @@ class CrownUnlimited(commands.Cog):
                     'message': str(ex),
                     'trace': trace
                 }))
-
     
     @cog_ext.cog_slash(description="Toggle Explore Mode On/Off", guild_ids=main.guild_ids)
     @commands.cooldown(1, 15, commands.BucketType.user)

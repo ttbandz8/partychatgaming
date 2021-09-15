@@ -722,7 +722,7 @@ def queryDropCards(args):
     return data 
 
 def querySpecificDropCards(args):
-    data = cards_col.find({'UNIVERSE': args, 'AVAILABLE': True, 'HAS_COLLECTION': False})
+    data = cards_col.find({'UNIVERSE': args, 'AVAILABLE': True, 'HAS_COLLECTION': False, 'VUL': False})
     return data 
 
 def queryExclusiveDropCards(args):
