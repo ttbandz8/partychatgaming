@@ -2886,5 +2886,95 @@ destiny = [
         "EARN": "Tien", 
         "COMPLETED": False,
         "UNIVERSE": "Dragon Ball Z"
-    }
+    },
+    {
+        "NAME": "The Prodigal Son",
+        "WINS": 0,
+        "REQUIRED": 100,
+        "DEFEAT": "Light Yagami",
+        "USE_CARDS": ["Ryuk"],
+        "EARN": "Light Yagami", 
+        "COMPLETED": False,
+        "UNIVERSE": "Death Note"
+    },
+    {
+        "NAME": "Pop Star Shinigami",
+        "WINS": 0,
+        "REQUIRED": 50,
+        "DEFEAT": "Misa",
+        "USE_CARDS": ["Soichiro Yagami"],
+        "EARN": "Misa", 
+        "COMPLETED": False,
+        "UNIVERSE": "Death Note"
+    },
+    {
+        "NAME": "The Chocolate Prodigy",
+        "WINS": 0,
+        "REQUIRED": 50,
+        "DEFEAT": "Mello",
+        "USE_CARDS": ["Misa"],
+        "EARN": "Mello", 
+        "COMPLETED": False,
+        "UNIVERSE": "Death Note"
+    },
+    {
+        "NAME": "The Puppet Prodigy",
+        "WINS": 0,
+        "REQUIRED": 50,
+        "DEFEAT": "Near",
+        "USE_CARDS": ["Mello"],
+        "EARN": "Near", 
+        "COMPLETED": False,
+        "UNIVERSE": "Death Note"
+    },
+    {
+        "NAME": "The Puppet Prodigy",
+        "WINS": 0,
+        "REQUIRED": 50,
+        "DEFEAT": "Near",
+        "USE_CARDS": ["Mello"],
+        "EARN": "Near", 
+        "COMPLETED": False,
+        "UNIVERSE": "Death Note"
+    },
+    {
+        "NAME": "The Prodigy Son",
+        "WINS": 0,
+        "REQUIRED": 100,
+        "DEFEAT": "L",
+        "USE_CARDS": ["Mello"],
+        "EARN": "L", 
+        "COMPLETED": False,
+        "UNIVERSE": "Death Note"
+    },
+    {
+        "NAME": "The Prodigy Son",
+        "WINS": 0,
+        "REQUIRED": 100,
+        "DEFEAT": "L",
+        "USE_CARDS": ["Near"],
+        "EARN": "L", 
+        "COMPLETED": False,
+        "UNIVERSE": "Death Note"
+    },
+    {
+        "NAME": "My Son's Shinigami",
+        "WINS": 0,
+        "REQUIRED": 100,
+        "DEFEAT": "Ryuk",
+        "USE_CARDS": ["Soichiro Yagami"],
+        "EARN": "Ryuk", 
+        "COMPLETED": False,
+        "UNIVERSE": "Death Note"
+    },
+    {
+        "NAME": "A New Shinigami",
+        "WINS": 0,
+        "REQUIRED": 100,
+        "DEFEAT": "Minoru Tanaka",
+        "USE_CARDS": ["Light Yagami"],
+        "EARN": "Minoru Tanaka", 
+        "COMPLETED": False,
+        "UNIVERSE": "Death Note"
+    },
 ]

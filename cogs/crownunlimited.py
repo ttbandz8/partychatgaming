@@ -14383,6 +14383,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         embed_color_o = 0x2ecc71
 
                     if o_stamina < 10:
+                        if mode in B_modes:                                       
+                            embedVar = discord.Embed(title=f"{t_punish}")
+                            embedVar.add_field(name=f"{t_arena}",value= f"{t_world}", inline=False)
+                            embedVar.set_footer(text=f"{t_assault}")
+                            await private_channel.send(embed=embedVar)
                         #fortitude or luck is based on health  
                         fortitude = 0.0
                         low = o_health - (o_health*.90)
@@ -14445,7 +14450,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             o_pet_used=False
                          
                         elif o_universe == "League Of Legends":
-                            embedVar = discord.Embed(title=f"Turret Shot hits {t_card}for 25 DMG!", colour=0xe91e63)
+                            embedVar = discord.Embed(title=f"Turret Shot hits {t_card} for 25 DMG!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_health = round(t_health - 30)
                             
@@ -15133,6 +15138,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             o_pet_used=False
                                             embedVar = discord.Embed(title=f"{o_card.upper()} PLUS ULTRAAA", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
                                             embedVar.add_field(name=f"Transformation: Plus Ultra", value="You do not lose a turn after you Resolve.")
+                                            if mode in B_modes:
+                                                embedVar.add_field(name=f"{t_card}'s Rebuke", value=f"{t_rebuke}", inline =False)
+                                                embedVar.set_footer(text=f"{o_card} this is your chance!")
                                             await button_ctx.send(embed=embedVar)
 
                                             turn_total= turn_total + 1
@@ -15158,6 +15166,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             o_pet_used=False
                                             embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
                                             embedVar.add_field(name=f"Transformation: Bankai", value="Gain double Attack on Resolve.")
+                                            if mode in B_modes:
+                                                embedVar.add_field(name=f"{t_card}'s Rebuke", value=f"{t_rebuke}", inline =False)
+                                                embedVar.set_footer(text=f"{o_card} this is your chance!")
                                             await button_ctx.send(embed=embedVar)
                                             turn_total= turn_total + 1
                                             turn=1
@@ -15180,6 +15191,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             o_pet_used=False
                                             embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
                                             embedVar.add_field(name=f"Transformation: Ascension", value="On Resolve Refill Health.")
+                                            if mode in B_modes:
+                                                embedVar.add_field(name=f"{t_card}'s Rebuke", value=f"{t_rebuke}", inline =False)
+                                                embedVar.set_footer(text=f"{o_card} this is your chance!")
                                             await button_ctx.send(embed=embedVar)
                                             turn_total= turn_total + 1
                                             turn=1
@@ -15201,6 +15215,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             
                                             embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
                                             embedVar.add_field(name=f"Transformation: Command Seal", value="On Resolve, Strike with Ultimate, then Focus.")
+                                            if mode in B_modes:
+                                                embedVar.add_field(name=f"{t_card}'s Rebuke", value=f"{t_rebuke}", inline =False)
+                                                embedVar.set_footer(text=f"{o_card} this is your chance!")
                                             await button_ctx.send(embed=embedVar)
                                             dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total, ocard_lvl_ap_buff)
                                             t_health = t_health - dmg['DMG']
@@ -15230,6 +15247,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             o_pet_used=False
                                             embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
                                             embedVar.add_field(name=f"Transformation: Plus Ultra", value="You do not lose a turn after you Resolve.")
+                                            if mode in B_modes:
+                                                embedVar.add_field(name=f"{t_card}'s Rebuke", value=f"{t_rebuke}", inline =False)
+                                                embedVar.set_footer(text=f"{o_card} this is your chance!")
                                             await button_ctx.send(embed=embedVar)
                                             turn_total= turn_total + 1
                                             turn=1
@@ -15252,6 +15272,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             o_pet_used=False
                                             embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
                                             embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
+                                            if mode in B_modes:
+                                                embedVar.add_field(name=f"{t_card}'s Rebuke", value=f"{t_rebuke}", inline =False)
+                                                embedVar.set_footer(text=f"{o_card} this is your chance!")
                                             await button_ctx.send(embed=embedVar)
                                             turn_total= turn_total + 1
                                             turn=1
@@ -15772,6 +15795,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             embedVar.add_field(name=f"A great aura starts to envelop **{t_card}** ",value= f"{t_aura}")
                             embedVar.set_footer(text=f"{t_card} Says: 'Now, are you ready for a real fight?'")
                             await private_channel.send(embed=embedVar)
+                        else:
+                            embedVar = discord.Embed(title=f"{t_card.upper()} FOCUSED", description=f"**{t_card} says**\n{t_focus_description}", colour=0xe91e63)
+                            embedVar.add_field(name=f"{t_card} focused and {healmessage}", value="All stats & stamina increased")
+                            await private_channel.send(embed=embedVar)
                         # o_pet_used = True
                         fortitude = 0.0
                         low = t_health - (t_health*.90)
@@ -15805,10 +15832,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         t_attack = t_attack + t_attackcalc
                         t_defense =  t_defense + t_defensecalc
                         t_used_focus=True
-                        
-                        embedVar = discord.Embed(title=f"{t_card.upper()} FOCUSED", description=f"**{t_card} says**\n{t_focus_description}", colour=0xe91e63)
-                        embedVar.add_field(name=f"{t_card} focused and {healmessage}", value="All stats & stamina increased")
-                        await private_channel.send(embed=embedVar)
 
                         if not t_used_resolve and t_used_focus and t_universe == "Digimon":  #Digimon Universal Trait
                             #fortitude or luck is based on health  
@@ -15830,6 +15853,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"**{t_card} says**\n{t_resolve_description}", colour=0xe91e63)
                             embedVar.add_field(name=f"Transformation: Digivolve", value="On Focus you Resolve.")
                             await private_channel.send(embed=embedVar)
+                            if mode in B_modes:
+                                embedVar = discord.Embed(title=f"{t_card} Resolved!", description=f"{t_rmessage}", colour=0xe91e63)
+                                embedVar.set_footer(text=f"{o_card} this will not be easy...")
+                                await private_channel.send(embed=embedVar)
                             
                         elif t_universe == "League Of Legends":
                             embedVar = discord.Embed(title=f"Turret Shot hits {o_card} for 25 DMG!", colour=0xe91e63)
@@ -16041,7 +16068,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             t_enhancer_used=False
                         elif int(aiMove) == 5:
                             if not t_used_resolve and t_used_focus:
-                                if botActive and mode in B_modes:
+                                if mode in B_modes:
                                     embedVar = discord.Embed(title=f"{t_card} Resolved!", description=f"{t_rmessage}", colour=0xe91e63)
                                     embedVar.set_footer(text=f"{o_card} this will not be easy...")
                                     await private_channel.send(embed=embedVar)
@@ -16404,7 +16431,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 await private_channel.send(f"{tpet_name} needs a turn to rest...")
 
                         if int(aiMove) !=5 and int(aiMove) !=6:
-                            print(aiMove)
                             # If you have enough stamina for move, use it
                             #if c used block
                             if mode in co_op_modes:
@@ -18307,6 +18333,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 embedVar = discord.Embed(title=f"**{t_card}** Enters Focus State", description=f"{t_powerup}", colour=0xe91e63)
                                 embedVar.add_field(name=f"A great aura starts to envelop **{t_card}** ",value= f"{t_aura}")
                                 embedVar.set_footer(text=f"{t_card} Says: 'Now, are you ready for a real fight?'")
+                            else:
+                                embedVar = discord.Embed(title=f"{t_card.upper()} FOCUSED", description=f"**{t_card} says**\n{t_focus_description}", colour=0xe91e63)
+                                embedVar.add_field(name=f"{t_card} focused and {healmessage}", value="All stats & stamina increased")
+                                await private_channel.send(embed=embedVar)
                             # o_pet_used = True
                             fortitude = 0.0
                             low = t_health - (t_health*.90)
@@ -18341,10 +18371,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             t_defense =  t_defense + t_defensecalc
                             t_used_focus=True
                             
-                            embedVar = discord.Embed(title=f"{t_card.upper()} FOCUSED", description=f"**{t_card} says**\n{t_focus_description}", colour=0xe91e63)
-                            embedVar.add_field(name=f"{t_card} focused and {healmessage}", value="All stats & stamina increased")
-                            await private_channel.send(embed=embedVar)
-
                             if not t_used_resolve and t_used_focus and t_universe == "Digimon":  #Digimon Universal Trait
                                 #fortitude or luck is based on health  
                                 fortitude = 0.0
@@ -19306,7 +19332,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 
                     embedVar = discord.Embed(title=f"BOSS DEFEATED", description=f"Boss Victories are added to your player profile! Defeat {t_card} again to earn exotic loot!", colour=0xe91e63)
                     embedVar.set_author(name=f"Congratulations You Defeated {t_card}!")
-                    embedVar.add_field(name="Tips!", value=f"Run .lookup to view your Boss Souls")
+                    embedVar.add_field(name="Tips!", value=f"Run /lookup to view your Boss Souls")
                     embedVar.set_footer(text="Bosses have a chance to drop :coin:, ARMS, TITLES, and even BOSS CARDS:eyes:")
                     await ctx.author.send(embed=embedVar)
                     
