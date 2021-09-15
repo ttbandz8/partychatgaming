@@ -1386,15 +1386,55 @@ async def sponsor(ctx, team: str, amount):
    await ctx.send(f"{guild_name} sponsored {team_name} :coin:{amount}!!!")
    return
 
+@slash.slash(name="Fund", description="Fund Guild From Team Bank", guild_ids=guild_ids)
+@commands.check(validate_user)
+async def fund(ctx, amount):
+   try:
+      user = db.queryUser({'DISNAME': str(ctx.author)})
+      team = db.queryTeam({'TNAME': user['TEAM']})
+      team_guild = team['GUILD']
+      if team_guild =="PCG":
+         await ctx.send("Your team must join a Guild First!")
+         return
+      if user['TEAM'] == 'PCG' or user['DISNAME'] != team['OWNER']:
+         await ctx.send("You must be owner of team to fund the Guild. ")
+         return
+
+      balance = team['BANK']
+      if balance <= int(amount):
+         await ctx.send("You do not have that amount to fund.") 
+      else:
+         await curseteam(int(amount), team['TNAME'])
+         await blessguild_Alt(int(amount), str(team_guild))
+         await ctx.send(f" {team_guild} has been funded :coin:{'{:,}'.format(amount)}.")
+         return
+   except Exception as ex:
+            trace = []
+            tb = ex.__traceback__
+            while tb is not None:
+                trace.append({
+                    "filename": tb.tb_frame.f_code.co_filename,
+                    "name": tb.tb_frame.f_code.co_name,
+                    "lineno": tb.tb_lineno
+                })
+                tb = tb.tb_next
+            print(str({
+                'type': type(ex).__name__,
+                'message': str(ex),
+                'trace': trace
+            }))
+            await ctx.send(f"Error when funding guild. Alert support. Thank you!")
+            return
+
 async def blessguild(amount, guild):
    blessAmount = amount
    posBlessAmount = 0 + abs(int(blessAmount))
    query = {'GNAME': str(guild)}
    guild_data = db.queryGuildAlt(query)
    if guild_data:
-      house = guild_data['HALL']
-      house_data = db.queryHouse({'HOUSE': house})
-      multiplier = house_data['MULT']
+      hall = guild_data['HALL']
+      hall_data = db.queryHall({'HALL': hall})
+      multiplier = hall_data['MULT']
       posBlessAmount = posBlessAmount * multiplier
       update_query = {"$inc": {'BANK': int(posBlessAmount)}}
       db.updateGuildAlt(query, update_query)
@@ -1407,9 +1447,9 @@ async def blessguild_Alt(amount, guild):
    query = {'GNAME': str(guild)}
    guild_data = db.queryGuildAlt(query)
    if guild_data:
-      house = guild_data['HALL']
-      house_data = db.queryHouse({'HOUSE': house})
-      multiplier = house_data['MULT']
+      hall = guild_data['HALL']
+      hall_data = db.queryHall({'HALL': hall})
+      multiplier = hall_data['MULT']
       update_query = {"$inc": {'BANK': posBlessAmount}}
       db.updateGuildAlt(query, update_query)
    else:

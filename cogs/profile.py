@@ -8,6 +8,9 @@ import messages as m
 import numpy as np
 import help_commands as h
 import unique_traits as ut
+from discord_slash import SlashCommand
+from discord_slash.utils import manage_components
+from discord_slash.model import ButtonStyle
 # Converters
 from discord import User
 from discord import Member
@@ -853,32 +856,52 @@ class Profile(commands.Cog):
             preset3_arm = list(deck[2].values())[2]
             preset3_pet = list(deck[2].values())[3]    
    
-            listed_options = [f"**Preset 1**: {preset1_title} {preset1_card} and {preset1_pet}\n**Card**: {preset1_card}\n**Title**: {preset1_title}\n**Arm**: {preset1_arm}\n**Pet**: {preset1_pet}\n\n", 
-            f"**Preset 2**: {preset2_title} {preset2_card} and {preset2_pet}\n**Card**: {preset2_card}\n**Title**: {preset2_title}\n**Arm**: {preset2_arm}\n**Pet**: {preset2_pet}\n\n", 
-            f"**Preset 3**: {preset3_title} {preset3_card} and {preset3_pet}\n**Card**: {preset3_card}\n**Title**: {preset3_title}\n**Arm**: {preset3_arm}\n**Pet**: {preset3_pet}\n\n"]
+            listed_options = [f"1️⃣ | {preset1_title} {preset1_card} and {preset1_pet}\n**Card**: {preset1_card}\n**Title**: {preset1_title}\n**Arm**: {preset1_arm}\n**Pet**: {preset1_pet}\n\n", 
+            f"2️⃣ | {preset2_title} {preset2_card} and {preset2_pet}\n**Card**: {preset2_card}\n**Title**: {preset2_title}\n**Arm**: {preset2_arm}\n**Pet**: {preset2_pet}\n\n", 
+            f"3️⃣ | {preset3_title} {preset3_card} and {preset3_pet}\n**Card**: {preset3_card}\n**Title**: {preset3_title}\n**Arm**: {preset3_arm}\n**Pet**: {preset3_pet}\n\n"]
         
             embedVar = discord.Embed(title="What Preset would you like?", description=textwrap.dedent(f"""
             {"".join(listed_options)}
             """))
-            embedVar.set_author(name="Press 0 to close Menu.\nPress 1, 2 or 3 to load a preset.")
             embedVar.set_thumbnail(url=avatar)
             # embedVar.add_field(name=f"Preset 1:{preset1_title} {preset1_card} and {preset1_pet}", value=f"Card: {preset1_card}\nTitle: {preset1_title}\nArm: {preset1_arm}\nPet: {preset1_pet}", inline=False)
             # embedVar.add_field(name=f"Preset 2:{preset2_title} {preset2_card} and {preset2_pet}", value=f"Card: {preset2_card}\nTitle: {preset2_title}\nArm: {preset2_arm}\nPet: {preset2_pet}", inline=False)
             # embedVar.add_field(name=f"Preset 3:{preset3_title} {preset3_card} and {preset3_pet}", value=f"Card: {preset3_card}\nTitle: {preset3_title}\nArm: {preset3_arm}\nPet: {preset3_pet}", inline=False)
-            embedVar.set_footer(text="Type Preset # to update current build!")
-            await ctx.send(embed=embedVar)
-
-            options =["0","1","2","3","4"]
-
-            def check(msg):
-                return msg.author == ctx.author and msg.content in options
+            util_buttons = [
+                manage_components.create_button(
+                    style=ButtonStyle.red,
+                    label="1️⃣",
+                    custom_id = "1"
+                ),
+                manage_components.create_button(
+                    style=ButtonStyle.blue,
+                    label="2️⃣",
+                    custom_id = "2"
+                ),
+                manage_components.create_button(
+                    style=ButtonStyle.green,
+                    label="3️⃣",
+                    custom_id = "3"
+                ),
+                manage_components.create_button(
+                    style=ButtonStyle.grey,
+                    label="Quit",
+                    custom_id = "0"
+                ),
+            ]
+            util_action_row = manage_components.create_actionrow(*util_buttons)
+            components = [util_action_row]
+            await ctx.send(embed=embedVar,components=[util_action_row])
+            
+            def check(button_ctx):
+                return button_ctx.author == ctx.author
             try:
-                msg = await self.bot.wait_for("message",timeout=20, check=check)
+                button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[util_action_row], timeout=120,check=check)
 
-                if msg.content == "0":
-                    await ctx.send(f"{ctx.author.mention}, No change has been made")
+                if  button_ctx.custom_id == "0":
+                    await button_ctx.send(f"{ctx.author.mention}, No change has been made")
                     return
-                elif msg.content == "1":
+                elif  button_ctx.custom_id == "1":
                     for card in ownedcards :                     
                         if preset1_card in ownedcards:
                             for title in ownedtitles:
@@ -888,21 +911,21 @@ class Profile(commands.Cog):
                                             for pet in ownedpets:
                                                 if preset1_pet in ownedpets:
                                                     response = db.updateUserNoFilter(query, {'$set': {'CARD': str(preset1_card), 'TITLE': str(preset1_title),'ARM': str(preset1_arm), 'PET': str(preset1_pet)}})
-                                                    await ctx.send(response)
+                                                    await button_ctx.send(response)
                                                     return
                                                 else:
-                                                    await ctx.send(f"{ctx.author.mention}, You No Longer Own {preset1_pet}")
+                                                    await button_ctx.send(f"{ctx.author.mention}, You No Longer Own {preset1_pet}")
                                                     return
                                         else:
-                                            await ctx.send(f"{ctx.author.mention}, You No Longer Own {preset1_arm}")
+                                            await button_ctx.send(f"{ctx.author.mention}, You No Longer Own {preset1_arm}")
                                             return
                                 else:
-                                    await ctx.send(f"{ctx.author.mention}, You No Longer Own {preset1_title}")
+                                    await button_ctx.send(f"{ctx.author.mention}, You No Longer Own {preset1_title}")
                                     return
                         else:
-                            await ctx.send(f"{ctx.author.mention}, You No Longer Own {preset1_card}")
+                            await button_ctx.send(f"{ctx.author.mention}, You No Longer Own {preset1_card}")
                             return
-                elif msg.content == "2":
+                elif  button_ctx.custom_id == "2":
                     for card in ownedcards :                     
                         if preset2_card in ownedcards:
                             for title in ownedtitles:
@@ -912,21 +935,21 @@ class Profile(commands.Cog):
                                             for pet in ownedpets:
                                                 if preset2_pet in ownedpets:
                                                     response = db.updateUserNoFilter(query, {'$set': {'CARD': str(preset2_card), 'TITLE': str(preset2_title),'ARM': str(preset2_arm), 'PET': str(preset2_pet)}})
-                                                    await ctx.send(response)
+                                                    await button_ctx.send(response)
                                                     return
                                                 else:
-                                                    await ctx.send(f"{ctx.author.mention}, You No Longer Own {preset2_pet}")
+                                                    await button_ctx.send(f"{ctx.author.mention}, You No Longer Own {preset2_pet}")
                                                     return
                                         else:
-                                            await ctx.send(f"{ctx.author.mention}, You No Longer Own {preset2_arm}")
+                                            await button_ctx.send(f"{ctx.author.mention}, You No Longer Own {preset2_arm}")
                                             return
                                 else:
-                                    await ctx.send(f"{ctx.author.mention}, You No Longer Own {preset2_title}")
+                                    await button_ctx.send(f"{ctx.author.mention}, You No Longer Own {preset2_title}")
                                     return
                         else:
-                            await ctx.send(f"{ctx.author.mention}, You No Longer Own {preset2_card}")
+                            await button_ctx.send(f"{ctx.author.mention}, You No Longer Own {preset2_card}")
                             return
-                elif msg.content == "3":
+                elif  button_ctx.custom_id == "3":
                     for card in ownedcards :                     
                         if preset3_card in ownedcards:
                             for title in ownedtitles:
@@ -936,25 +959,36 @@ class Profile(commands.Cog):
                                             for pet in ownedpets:
                                                 if preset3_pet in ownedpets:
                                                     response = db.updateUserNoFilter(query, {'$set': {'CARD': str(preset3_card), 'TITLE': str(preset3_title),'ARM': str(preset3_arm), 'PET': str(preset3_pet)}})
-                                                    await ctx.send(response)
+                                                    await button_ctx.send(response)
                                                     return
                                                 else:
-                                                    await ctx.send(f"{ctx.author.mention}, You No Longer Own {preset3_pet}")
+                                                    await button_ctx.send(f"{ctx.author.mention}, You No Longer Own {preset3_pet}")
                                                     return
                                         else:
-                                            await ctx.send(f"{ctx.author.mention}, You No Longer Own {preset3_arm}")
+                                            await button_ctx.send(f"{ctx.author.mention}, You No Longer Own {preset3_arm}")
                                             return
                                 else:
-                                    await ctx.send(f"{ctx.author.mention}, You No Longer Own {preset3_title}")
+                                    await button_ctx.send(f"{ctx.author.mention}, You No Longer Own {preset3_title}")
                                     return
                         else:
-                            await ctx.send(f"{ctx.author.mention}, You No Longer Own {preset3_card}")
-                            return
-                else:
-                    print("Bad selection")    
-            except:
-                await ctx.send(f"{ctx.author.mention}, No change has been made")
-                return
+                            await button_ctx.send(f"{ctx.author.mention}, You No Longer Own {preset3_card}")
+                            return  
+            except Exception as ex:
+                trace = []
+                tb = ex.__traceback__
+                while tb is not None:
+                    trace.append({
+                        "filename": tb.tb_frame.f_code.co_filename,
+                        "name": tb.tb_frame.f_code.co_name,
+                        "lineno": tb.tb_lineno
+                    })
+                    tb = tb.tb_next
+                print(str({
+                    'type': type(ex).__name__,
+                    'message': str(ex),
+                    'trace': trace
+                }))
+                await ctx.send("Preset Issue Seek support.")
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
@@ -993,49 +1027,78 @@ class Profile(commands.Cog):
             preset3_arm = list(deck[2].values())[2]
             preset3_pet = list(deck[2].values())[3]    
    
-            listed_options = [f"**Current Build**: {current_title} {current_card} & {current_pet}\n**Card**: {current_card}\n**Title**: {current_title}\n**Arm**: {current_arm}\n**Pet**: {current_pet}\n\n",
-            f"**Preset 1**: {preset1_title} {preset1_card} & {preset1_pet}\n**Card**: {preset1_card}\n**Title**: {preset1_title}\n**Arm**: {preset1_arm}\n**Pet**: {preset1_pet}\n\n", 
-            f"**Preset 2**: {preset2_title} {preset2_card} & {preset2_pet}\n**Card**: {preset2_card}\n**Title**: {preset2_title}\n**Arm**: {preset2_arm}\n**Pet**: {preset2_pet}\n\n", 
-            f"**Preset 3**: {preset3_title} {preset3_card} & {preset3_pet}\n**Card**: {preset3_card}\n**Title**: {preset3_title}\n**Arm**: {preset3_arm}\n**Pet**: {preset3_pet}\n\n"]
+            listed_options = [f"📝 | {current_title} {current_card} & {current_pet}\n**Card**: {current_card}\n**Title**: {current_title}\n**Arm**: {current_arm}\n**Pet**: {current_pet}\n\n",
+            f"1️⃣ | {preset1_title} {preset1_card} & {preset1_pet}\n**Card**: {preset1_card}\n**Title**: {preset1_title}\n**Arm**: {preset1_arm}\n**Pet**: {preset1_pet}\n\n", 
+            f"2️⃣ | {preset2_title} {preset2_card} & {preset2_pet}\n**Card**: {preset2_card}\n**Title**: {preset2_title}\n**Arm**: {preset2_arm}\n**Pet**: {preset2_pet}\n\n", 
+            f"3️⃣ | {preset3_title} {preset3_card} & {preset3_pet}\n**Card**: {preset3_card}\n**Title**: {preset3_title}\n**Arm**: {preset3_arm}\n**Pet**: {preset3_pet}\n\n"]
         
             embedVar = discord.Embed(title=f"Save Current Build", description=textwrap.dedent(f"""
             {"".join(listed_options)}
             """))
-            embedVar.set_author(name="Press 0 to close Menu.\nPress 1, 2 or 3 to overwrite preset.")
-            # embedVar.add_field(name=f"Current Build:`{current_title} {current_card}` and `{current_pet}`", value=f"", inline=False)
-            # embedVar.add_field(name=f"Preset 1:{preset1_title} {preset1_card} and {preset1_pet}", value=f"Card: {preset1_card}\nTitle: {preset1_title}\nArm: {preset1_arm}\nPet: {preset1_pet}", inline=False)
-            # embedVar.add_field(name=f"Preset 2:{preset2_title} {preset2_card} and {preset2_pet}", value=f"Card: {preset2_card}\nTitle: {preset2_title}\nArm: {preset2_arm}\nPet: {preset2_pet}", inline=False)
-            # embedVar.add_field(name=f"Preset 3:{preset3_title} {preset3_card} and {preset3_pet}", value=f"Card: {preset3_card}\nTitle: {preset3_title}\nArm: {preset3_arm}\nPet: {preset3_pet}", inline=False)
-            embedVar.set_footer(text="Type Preset # to update current build!")
-            await ctx.send(embed=embedVar)
+            util_buttons = [
+                manage_components.create_button(
+                    style=ButtonStyle.red,
+                    label="📝 1️⃣",
+                    custom_id = "1"
+                ),
+                manage_components.create_button(
+                    style=ButtonStyle.blue,
+                    label="📝 2️⃣",
+                    custom_id = "2"
+                ),
+                manage_components.create_button(
+                    style=ButtonStyle.green,
+                    label="📝 3️⃣",
+                    custom_id = "3"
+                ),
+                manage_components.create_button(
+                    style=ButtonStyle.grey,
+                    label="Quit",
+                    custom_id = "0"
+                ),
+            ]
+            util_action_row = manage_components.create_actionrow(*util_buttons)
+            components = [util_action_row]
+            await ctx.send(embed=embedVar,components=[util_action_row])
 
-            options =["0","1","2","3"]
+            
+            def check(button_ctx):
+                return button_ctx.author == ctx.author
 
-            def check(msg):
-                return msg.author == ctx.author and msg.content in options or msg.content == "0"
             try:
-                msg = await self.bot.wait_for("message",timeout=20, check=check)
+                button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[util_action_row], timeout=120,check=check)
 
-                if msg.content == "0":
-                    await ctx.send(f"{ctx.author.mention}, No change has been made")
+                if button_ctx.custom_id == "0":
+                    await button_ctx.send(f"{ctx.author.mention}, No change has been made")
                     return
-                elif msg.content == "1":
+                elif button_ctx.custom_id == "1":
                     response = db.updateVaultNoFilter(vault_query, {'$set': {'DECK.0.CARD' :str(current_card), 'DECK.0.TITLE': str(current_title),'DECK.0.ARM': str(current_arm), 'DECK.0.PET': str(current_pet)}})
-                    await ctx.send(response)
+                    await button_ctx.send(response)
                     return
-                elif msg.content == "2":
+                elif button_ctx.custom_id == "2":
                     response = db.updateVaultNoFilter(vault_query, {'$set': {'DECK.1.CARD' :str(current_card), 'DECK.1.TITLE': str(current_title),'DECK.1.ARM': str(current_arm), 'DECK.1.PET': str(current_pet)}})
-                    await ctx.send(response)
+                    await button_ctx.send(response)
                     return
-                elif msg.content == "3":
+                elif button_ctx.custom_id == "3":
                     response = db.updateVaultNoFilter(vault_query, {'$set': {'DECK.2.CARD' :str(current_card), 'DECK.2.TITLE': str(current_title),'DECK.2.ARM': str(current_arm), 'DECK.2.PET': str(current_pet)}})
-                    await ctx.send(response)
+                    await button_ctx.send(response)
                     return
-                else:
-                    print("Bad selection")    
-            except:
-                await ctx.send(f"{ctx.author.mention}, No change has been made")
-                return
+            except Exception as ex:
+                trace = []
+                tb = ex.__traceback__
+                while tb is not None:
+                    trace.append({
+                        "filename": tb.tb_frame.f_code.co_filename,
+                        "name": tb.tb_frame.f_code.co_name,
+                        "lineno": tb.tb_lineno
+                    })
+                    tb = tb.tb_next
+                print(str({
+                    'type': type(ex).__name__,
+                    'message': str(ex),
+                    'trace': trace
+                }))
+                await ctx.send("Preset Issue Seek support.")
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
