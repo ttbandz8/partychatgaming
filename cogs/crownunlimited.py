@@ -5759,86 +5759,118 @@ class CrownUnlimited(commands.Cog):
                                         turn = 1
                 # End the match
                 if o_health <= 0 or o_max_health <= 0:
-                    # await ctx.send(f":zap: {user2.mention} you win the match!")
-                    uid = t_DID
-                    tuser = await self.bot.fetch_user(uid)
-                    ouser = await self.bot.fetch_user(uid)
-                    wintime = time.asctime()
-                    h_playtime = int(wintime[11:13])
-                    m_playtime = int(wintime[14:16])
-                    s_playtime = int(wintime[17:19])
-                    gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
-                    match = await savematch(str(tuser), str(t_card), str(t_card_path), str(ttitle['TITLE']), str(tarm['ARM']), "N/A", "PVP", o['EXCLUSIVE'])
-                    ouid = sowner['DID']
-                    sownerctx = await self.bot.fetch_user(ouid)
-                    # response = await score(sownerctx, tuser)
-                    await curse(30, str(ctx.author))
-                    await bless(80, tuser)
-                    if tguild:                        
-                        await bless(15, str(tuser))
-                        await blessteam(25, tteam)
-                        await teamwin(tteam)
-                        await blessguild(60, tguild)
-                        if oguild:
-                            await curse(7, str(tuser))
-                            await curseteam(15, oteam)
-                            await teamloss(oteam)
-                            await curseguild(30, oguild)
-                        
-                    embedVar = discord.Embed(title=f":zap: VICTORY\n**{t_card}** ", description=f"Match concluded in {turn_total} turns\n**{t_card} says**\n`{t_win_description}`", colour=0x1abc9c)
-                    embedVar.set_author(name=f"{o_card} says:\n{o_lose_description}")
-                    if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
-                        embedVar.set_footer(text=f"Battle Time: {gameClock[2]} Seconds.")
-                    elif int(gameClock[0]) == 0:
-                        embedVar.set_footer(text=f"Battle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
-                    else: 
-                        embedVar.set_footer(text=f"Battle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
-                    embedVar.add_field(name="Focus Count", value=f"**{o_card}**: {o_focus_count}\n**{t_card}**: {t_focus_count}")
-                    if o_focus_count >= t_focus_count:
-                        embedVar.add_field(name="Most Focused", value=f"**{o_card}**")
-                    else:
-                        embedVar.add_field(name="Most Focused", value=f"**{t_card}**")
-                    await ctx.send(embed=embedVar)
+                    try:
+                        # await ctx.send(f":zap: {user2.mention} you win the match!")
+                        uid = t_DID
+                        tuser = await self.bot.fetch_user(uid)
+                        ouser = await self.bot.fetch_user(uid)
+                        wintime = time.asctime()
+                        h_playtime = int(wintime[11:13])
+                        m_playtime = int(wintime[14:16])
+                        s_playtime = int(wintime[17:19])
+                        gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
+                        match = await savematch(str(tuser), str(t_card), str(t_card_path), str(ttitle['TITLE']), str(tarm['ARM']), "N/A", "PVP", o['EXCLUSIVE'])
+                        ouid = sowner['DID']
+                        sownerctx = await self.bot.fetch_user(ouid)
+                        # response = await score(sownerctx, tuser)
+                        await curse(30, str(ctx.author))
+                        await bless(80, tuser)
+                        if tguild:                        
+                            await bless(15, str(tuser))
+                            await blessteam(25, tteam)
+                            await teamwin(tteam)
+                            await blessguild(60, tguild)
+                            if oguild:
+                                await curse(7, str(tuser))
+                                await curseteam(15, oteam)
+                                await teamloss(oteam)
+                                await curseguild(30, oguild)
+                            
+                        embedVar = discord.Embed(title=f":zap: VICTORY\n**{t_card}** ", description=f"Match concluded in {turn_total} turns\n**{t_card} says**\n`{t_win_description}`", colour=0x1abc9c)
+                        embedVar.set_author(name=f"{o_card} says:\n{o_lose_description}")
+                        if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
+                            embedVar.set_footer(text=f"Battle Time: {gameClock[2]} Seconds.")
+                        elif int(gameClock[0]) == 0:
+                            embedVar.set_footer(text=f"Battle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                        else: 
+                            embedVar.set_footer(text=f"Battle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                        embedVar.add_field(name="Focus Count", value=f"**{o_card}**: {o_focus_count}\n**{t_card}**: {t_focus_count}")
+                        if o_focus_count >= t_focus_count:
+                            embedVar.add_field(name="Most Focused", value=f"**{o_card}**")
+                        else:
+                            embedVar.add_field(name="Most Focused", value=f"**{t_card}**")
+                        await ctx.send(embed=embedVar)
+                    except Exception as ex:
+                        trace = []
+                        tb = ex.__traceback__
+                        while tb is not None:
+                            trace.append({
+                                "filename": tb.tb_frame.f_code.co_filename,
+                                "name": tb.tb_frame.f_code.co_name,
+                                "lineno": tb.tb_lineno
+                            })
+                            tb = tb.tb_next
+                        print(str({
+                            'type': type(ex).__name__,
+                            'message': str(ex),
+                            'trace': trace
+                        }))
 
                 elif t_health <=0 or t_max_health <= 0:
-                    uid = o_DID
-                    ouser = await self.bot.fetch_user(uid)
-                    tuser = await self.bot.fetch_user(uid)
-                    wintime = time.asctime()
-                    h_playtime = int(wintime[11:13])
-                    m_playtime = int(wintime[14:16])
-                    s_playtime = int(wintime[17:19])
-                    gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
-                    ouid = sowner['DID']
-                    sownerctx = await self.bot.fetch_user(ouid)
-                    # response = await score(sownerctx, ouser)
-                    await bless(8, str(ctx.author))
-                    await curse(3, str(tuser))
-                    if oguild:                        
-                        await bless(15, str(ctx.author))
-                        await blessteam(25, oteam)
-                        await teamwin(oteam)
-                        await blessguild(60, oguild)
-                        if tguild:
-                            await curse(7, str(tuser))
-                            await curseteam(15, tteam)
-                            await teamloss(tteam)
-                            await curseguild(30, tguild)
-                    match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']), str(oarm['ARM']), "N/A", "PVP", o['EXCLUSIVE'])
-                    embedVar = discord.Embed(title=f":zap: VICTORY\n**{o_card} says**\n{o_win_description}", description=f"The match lasted {turn_total} turns", colour=0xe91e63)
-                    embedVar.set_author(name=f"{t_card} says\n{t_lose_description}")
-                    if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
-                        embedVar.set_footer(text=f"Battle Time: {gameClock[2]} Seconds.")
-                    elif int(gameClock[0]) == 0:
-                        embedVar.set_footer(text=f"Battle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
-                    else: 
-                        embedVar.set_footer(text=f"Battle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
-                    embedVar.add_field(name="Focus Count", value=f"**{o_card}**: {o_focus_count}\n**{t_card}**: {t_focus_count}")
-                    if o_focus_count >= t_focus_count:
-                        embedVar.add_field(name="Most Focused", value=f"**{o_card}**")
-                    else:
-                        embedVar.add_field(name="Most Focused", value=f"**{t_card}**")
-                    await ctx.send(embed=embedVar)
+                    try:
+                        uid = o_DID
+                        ouser = await self.bot.fetch_user(uid)
+                        tuser = await self.bot.fetch_user(uid)
+                        wintime = time.asctime()
+                        h_playtime = int(wintime[11:13])
+                        m_playtime = int(wintime[14:16])
+                        s_playtime = int(wintime[17:19])
+                        gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
+                        ouid = sowner['DID']
+                        sownerctx = await self.bot.fetch_user(ouid)
+                        # response = await score(sownerctx, ouser)
+                        await bless(8, str(ctx.author))
+                        await curse(3, str(tuser))
+                        if oguild:                        
+                            await bless(15, str(ctx.author))
+                            await blessteam(25, oteam)
+                            await teamwin(oteam)
+                            await blessguild(60, oguild)
+                            if tguild:
+                                await curse(7, str(tuser))
+                                await curseteam(15, tteam)
+                                await teamloss(tteam)
+                                await curseguild(30, tguild)
+                        match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']), str(oarm['ARM']), "N/A", "PVP", o['EXCLUSIVE'])
+                        embedVar = discord.Embed(title=f":zap: VICTORY\n**{o_card} says**\n{o_win_description}", description=f"The match lasted {turn_total} turns", colour=0xe91e63)
+                        embedVar.set_author(name=f"{t_card} says\n{t_lose_description}")
+                        if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
+                            embedVar.set_footer(text=f"Battle Time: {gameClock[2]} Seconds.")
+                        elif int(gameClock[0]) == 0:
+                            embedVar.set_footer(text=f"Battle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                        else: 
+                            embedVar.set_footer(text=f"Battle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
+                        embedVar.add_field(name="Focus Count", value=f"**{o_card}**: {o_focus_count}\n**{t_card}**: {t_focus_count}")
+                        if o_focus_count >= t_focus_count:
+                            embedVar.add_field(name="Most Focused", value=f"**{o_card}**")
+                        else:
+                            embedVar.add_field(name="Most Focused", value=f"**{t_card}**")
+                        await ctx.send(embed=embedVar)
+                    except Exception as ex:
+                        trace = []
+                        tb = ex.__traceback__
+                        while tb is not None:
+                            trace.append({
+                                "filename": tb.tb_frame.f_code.co_filename,
+                                "name": tb.tb_frame.f_code.co_name,
+                                "lineno": tb.tb_lineno
+                            })
+                            tb = tb.tb_next
+                        print(str({
+                            'type': type(ex).__name__,
+                            'message': str(ex),
+                            'trace': trace
+                        }))
         except Exception as ex:
             trace = []
             tb = ex.__traceback__
