@@ -596,7 +596,6 @@ class CrownUnlimited(commands.Cog):
                 else:
                     oguild = "PCG"
                 
-            print(oguild)
             await battle_commands(self, ctx, mode, universe, selected_universe, None, oguild, crestlist, crestsearch, private_channel, sowner, oteam, ofam, None, None, None, None, None)
         except Exception as ex:
             trace = []
