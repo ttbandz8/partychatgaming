@@ -530,7 +530,7 @@ class CrownUnlimited(commands.Cog):
 
             if mode in B_MODES:
                 bossname = universe_selection['BOSS_NAME']
-                oguild = "PCG"
+                oguild = universe_selection['OGUILD']
             else:
                 if mode in D_modes:
                     completed_universes = universe_selection['COMPLETED_DUNGEONS']
@@ -585,7 +585,7 @@ class CrownUnlimited(commands.Cog):
 
             if mode in B_MODES:
                 bossname = universe_selection['BOSS_NAME']
-                oguild = "PCG"
+                oguild = universe_selection['OGUILD']
             else:
                 if mode in D_modes:
                     completed_universes = universe_selection['COMPLETED_DUNGEONS']
@@ -596,7 +596,7 @@ class CrownUnlimited(commands.Cog):
                 else:
                     oguild = "PCG"
                 
-            
+            print(oguild)
             await battle_commands(self, ctx, mode, universe, selected_universe, None, oguild, crestlist, crestsearch, private_channel, sowner, oteam, ofam, None, None, None, None, None)
         except Exception as ex:
             trace = []
@@ -11475,6 +11475,9 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
 
 
 async def battle_commands(self, ctx, mode, universe, selected_universe, completed_universes, oguild, crestlist, crestsearch, private_channel, sowner, oteam, ofam, cowner, cteam, cfam, deckNumber, user):
+    print(oguild)
+    print(oteam)
+    print(ofam)
     randomized_battle = False
     co_op_modes = ['CTales', 'DTales', 'CDungeon', 'DDungeon', 'CBoss']
     ai_co_op_modes = ['DTales', 'DDungeon']
@@ -17080,19 +17083,35 @@ async def blessfamily(amount, family):
 
 
 async def blessguild(amount, guild):
-   blessAmount = amount
-   posBlessAmount = 0 + abs(int(blessAmount))
-   query = {'GNAME': str(guild)}
-   guild_data = db.queryGuildAlt(query)
-   if guild_data:
-      hall = guild_data['HALL']
-      hall_data = db.queryHall({'HALL': hall})
-      multiplier = hall_data['MULT']
-      posBlessAmount = posBlessAmount * multiplier
-      update_query = {"$inc": {'BANK': int(posBlessAmount)}}
-      db.updateGuildAlt(query, update_query)
-   else:
-      print("Cannot find guild")
+    try:
+        blessAmount = amount
+        posBlessAmount = 0 + abs(int(blessAmount))
+        query = {'GNAME': str(guild)}
+        guild_data = db.queryGuildAlt(query)
+        if guild_data:
+            hall = guild_data['HALL']
+            hall_data = db.queryHall({'HALL': hall})
+            multiplier = hall_data['MULT']
+            posBlessAmount = posBlessAmount * multiplier
+            update_query = {"$inc": {'BANK': int(posBlessAmount)}}
+            db.updateGuildAlt(query, update_query)
+        else:
+            print("Cannot find guild")
+    except Exception as ex:
+        trace = []
+        tb = ex.__traceback__
+        while tb is not None:
+            trace.append({
+                "filename": tb.tb_frame.f_code.co_filename,
+                "name": tb.tb_frame.f_code.co_name,
+                "lineno": tb.tb_lineno
+            })
+            tb = tb.tb_next
+        print(str({
+            'type': type(ex).__name__,
+            'message': str(ex),
+            'trace': trace
+        }))
 
 
 async def curse(amount, user):
