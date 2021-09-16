@@ -16786,7 +16786,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         cfambank = await blessfamily(50,cfam)
                         cteambank = await blessteam(50,cteam)
                         cpetlogger = await petlevel(cpet_name, user2)
-                        ccardlogger = await cardlevel(c_card, user2, c_universe, selected_universe, tale_or_dungeon_only)
+                        ccardlogger = await cardlevel(c_card, user2, c_universe, selected_universe, "Dungeon")
                         await bless(50, str(user2))
                         embedVar = discord.Embed(title=f":zap: **{o_card}** and **{c_card}**defeated the {t_universe} Boss {t_card}!", description=f"Match concluded in {turn_total} turns!\n\n{drop_response} + :coin: 50!\n\n{c_user['NAME']} got :coin:50!\n{t_concede}", colour=0xe91e63)
                     else:
@@ -16796,7 +16796,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                     ofambank = await blessfamily(50,ofam)
                     oteambank = await blessteam(50,oteam)
                     petlogger = await petlevel(opet_name, ouser)
-                    cardlogger = await cardlevel(o_card, ouser, o_universe, selected_universe, tale_or_dungeon_only)
+                    cardlogger = await cardlevel(o_card, ouser, o_universe, selected_universe, "Dungeon")
                                         
                     if crestsearch:
                         await blessguild(25000, oguild['GNAME'])

@@ -724,7 +724,7 @@ async def on_slash_command_error(ctx, ex):
 @slash.slash(name="Daily", description="Receive your daily reward and quests", guild_ids=guild_ids)
 @commands.cooldown(1, 60*60*24, commands.BucketType.user)
 async def daily(ctx):
-   dailyamount = 750
+   dailyamount = 1000
    await bless(dailyamount, ctx.author)
 
    user_data = db.queryUser({'DISNAME': str(ctx.author)})
