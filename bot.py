@@ -1577,7 +1577,7 @@ async def fund(ctx, amount):
       else:
          await curseteam(int(amount), team['TNAME'])
          await blessguild_Alt(int(amount), str(team_guild))
-         await ctx.send(f" {team_guild} has been funded :coin:{'{:,}'.format(amount)}.")
+         await ctx.send(f"{team_guild} has been funded :coin: {amount}.")
          return
    except Exception as ex:
             trace = []
