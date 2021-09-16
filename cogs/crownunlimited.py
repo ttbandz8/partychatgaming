@@ -301,7 +301,7 @@ class CrownUnlimited(commands.Cog):
                 'message': str(ex),
                 'trace': trace
             })) 
-            embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", colour=0xe91e63)
+            embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", delete_after=30, colour=0xe91e63)
             await ctx.send(embed=embedVar)
             return
 
@@ -357,7 +357,7 @@ class CrownUnlimited(commands.Cog):
                 'message': str(ex),
                 'trace': trace
             })) 
-            embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", colour=0xe91e63)
+            embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", delete_after=30, colour=0xe91e63)
             await ctx.send(embed=embedVar)
             return
                    
@@ -413,7 +413,7 @@ class CrownUnlimited(commands.Cog):
                 'message': str(ex),
                 'trace': trace
             })) 
-            embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", colour=0xe91e63)
+            embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", delete_after=30, colour=0xe91e63)
             await ctx.send(embed=embedVar)
             return
     
@@ -467,7 +467,7 @@ class CrownUnlimited(commands.Cog):
                 'message': str(ex),
                 'trace': trace
             })) 
-            embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", colour=0xe91e63)
+            embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", delete_after=30, colour=0xe91e63)
             await ctx.send(embed=embedVar)
             return
                   
@@ -522,7 +522,7 @@ class CrownUnlimited(commands.Cog):
                 'message': str(ex),
                 'trace': trace
             })) 
-            embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", colour=0xe91e63)
+            embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", delete_after=30, colour=0xe91e63)
             await ctx.send(embed=embedVar)
             return
     
@@ -581,9 +581,10 @@ class CrownUnlimited(commands.Cog):
                 'message': str(ex),
                 'trace': trace
             })) 
-            embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", colour=0xe91e63)
+            embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", delete_after=30, colour=0xe91e63)
             await ctx.send(embed=embedVar)
             return
+
 
     @cog_ext.cog_slash(description="Boss! Defeat Dungeon to unlock Boss", guild_ids=main.guild_ids)
     async def boss(self, ctx: SlashContext):
@@ -637,7 +638,7 @@ class CrownUnlimited(commands.Cog):
                 'message': str(ex),
                 'trace': trace
             })) 
-            embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", colour=0xe91e63)
+            embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", delete_after=30, colour=0xe91e63)
             await ctx.send(embed=embedVar)
             return
 
@@ -687,7 +688,7 @@ class CrownUnlimited(commands.Cog):
                 'message': str(ex),
                 'trace': trace
             })) 
-            embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", colour=0xe91e63)
+            embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", delete_after=30, colour=0xe91e63)
             await ctx.send(embed=embedVar)
             return
     
@@ -3040,7 +3041,7 @@ class CrownUnlimited(commands.Cog):
                 'message': str(ex),
                 'trace': trace
             })) 
-            embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", colour=0xe91e63)
+            embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", delete_after=30, colour=0xe91e63)
             await ctx.send(embed=embedVar)
             return
     
@@ -13798,20 +13799,81 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
         completed_crown_tales = sowner['CROWN_TALES']
         all_universes = db.queryAllUniverse()
         available_universes = []
+        universe_menu = []
         selected_universe = ""
         if sowner['RIFT'] == 1:
             for uni in all_universes:
                 if uni['PREREQUISITE'] in sowner['CROWN_TALES'] and uni['HAS_CROWN_TALES'] == True or uni['TIER'] == 9:
                     if uni['TITLE'] in completed_crown_tales:
                         available_universes.append(uni['TITLE'])
+                        tier_icon = ""
+                        if uni['TIER'] == 1:
+                            tier_icon = "1️⃣"
+                        elif uni['TIER'] == 2:
+                            tier_icon = "2️⃣"
+                        elif uni['TIER'] == 3:
+                            tier_icon = "3️⃣"
+                        elif uni['TIER'] == 4:
+                            tier_icon = "4️⃣"
+                        elif uni['TIER'] == 5:
+                            tier_icon = "5️⃣"
+                        elif uni['TIER'] == 9:
+                            tier_icon = ":crystal_ball:"
+
+                        universe_menu.append(f"{Crest_dict[uni['TITLE']]} {tier_icon} | **{uni['TITLE']}**\n:crossed_swords: **{len(uni['CROWN_TALES'])}**\n")
                     else:
+                        tier_icon = ""
+                        if uni['TIER'] == 1:
+                            tier_icon = "1️⃣"
+                        elif uni['TIER'] == 2:
+                            tier_icon = "2️⃣"
+                        elif uni['TIER'] == 3:
+                            tier_icon = "3️⃣"
+                        elif uni['TIER'] == 4:
+                            tier_icon = "4️⃣"
+                        elif uni['TIER'] == 5:
+                            tier_icon = "5️⃣"
+                        elif uni['TIER'] == 9:
+                            tier_icon = ":crystal_ball:"
+
+                        universe_menu.append(f"{Crest_dict[uni['TITLE']]} {tier_icon} | **{uni['TITLE']}**\n:crossed_swords: **{len(uni['CROWN_TALES'])}**\n")
                         available_universes.append(uni['TITLE'])
         else:
             for uni in all_universes:
                 if uni['PREREQUISITE'] in sowner['CROWN_TALES'] and uni['HAS_CROWN_TALES'] == True and uni['TIER'] != 9:
                     if uni['TITLE'] in completed_crown_tales:
                         available_universes.append(uni['TITLE'])
+                        tier_icon = ""
+                        if uni['TIER'] == 1:
+                            tier_icon = "1️⃣"
+                        elif uni['TIER'] == 2:
+                            tier_icon = "2️⃣"
+                        elif uni['TIER'] == 3:
+                            tier_icon = "3️⃣"
+                        elif uni['TIER'] == 4:
+                            tier_icon = "4️⃣"
+                        elif uni['TIER'] == 5:
+                            tier_icon = "5️⃣"
+                        elif uni['TIER'] == 9:
+                            tier_icon = ":crystal_ball:"
+
+                        universe_menu.append(f"{Crest_dict[uni['TITLE']]} {tier_icon} | **{uni['TITLE']}**\n:crossed_swords: **{len(uni['CROWN_TALES'])}**\n")
                     else:
+                        tier_icon = ""
+                        if uni['TIER'] == 1:
+                            tier_icon = "1️⃣"
+                        elif uni['TIER'] == 2:
+                            tier_icon = "2️⃣"
+                        elif uni['TIER'] == 3:
+                            tier_icon = "3️⃣"
+                        elif uni['TIER'] == 4:
+                            tier_icon = "4️⃣"
+                        elif uni['TIER'] == 5:
+                            tier_icon = "5️⃣"
+                        elif uni['TIER'] == 9:
+                            tier_icon = ":crystal_ball:"
+
+                        universe_menu.append(f"{Crest_dict[uni['TITLE']]} {tier_icon} | **{uni['TITLE']}**\n:crossed_swords: **{len(uni['CROWN_TALES'])}**\n")
                         available_universes.append(uni['TITLE'])
         
         icon = ":robot:"
@@ -13819,7 +13881,8 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             icon = ":crystal_ball:"
         
         
-        embedVar = discord.Embed(title=f"{icon} Select {mode} Universe", description="\n".join(available_universes), colour=0xe91e63)
+        embedVar = discord.Embed(title=f"{icon} Select {mode} Universe", description="\n".join(universe_menu), colour=0xe91e63)
+        embedVar.set_author(name="Type the universe you want to explore", icon_url="https://cdn.discordapp.com/emojis/866090350015545384.gif?v=1")
         embedVar.set_footer(text="Type Quit to exit Tales selection")
         await ctx.send(embed=embedVar, delete_after=30)
         accept = await ctx.send(f"{ctx.author.mention} which Universe would you like to explore!", delete_after=30)
@@ -13891,7 +13954,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                 'message': str(ex),
                 'trace': trace
             })) 
-            embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", colour=0xe91e63)
+            embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", delete_after=30, colour=0xe91e63)
             await ctx.send(embed=embedVar)
             return
 
@@ -13900,15 +13963,32 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
         completed_crown_tales = sowner['CROWN_TALES']
         all_universes = db.queryAllUniverse()
         available_universes = []
+        universe_menu = []
         selected_universe = ""
         for uni in completed_crown_tales:
             if uni != "":
+                tier_icon = ""
+                if uni['TIER'] == 1:
+                    tier_icon = "1️⃣"
+                elif uni['TIER'] == 2:
+                    tier_icon = "2️⃣"
+                elif uni['TIER'] == 3:
+                    tier_icon = "3️⃣"
+                elif uni['TIER'] == 4:
+                    tier_icon = "4️⃣"
+                elif uni['TIER'] == 5:
+                    tier_icon = "5️⃣"
+                elif uni['TIER'] == 9:
+                    tier_icon = ":crystal_ball:"
+
+                universe_menu.append(f"{Crest_dict[uni['TITLE']]} {tier_icon} | **{uni['TITLE']}**\n:crossed_swords: **{len(uni['CROWN_TALES'])}**\n")
                 available_universes.append(uni)
         
         if not available_universes:
             await ctx.send("No available Dungeons for you at this time!")
             return
-        embedVar = discord.Embed(title=f":fire: Select A Dungeon", description="\n".join(available_universes), colour=0xe91e63)
+        embedVar = discord.Embed(title=f":fire: Select A Dungeon", description="\n".join(universe_menu), colour=0xe91e63)
+        embedVar.set_author(name="Type the universe you want to explore", icon_url="https://cdn.discordapp.com/emojis/866090350015545384.gif?v=1")
         embedVar.set_footer(text="Type Quit to exit Dungeon selection")
         await ctx.send(embed=embedVar, delete_after=30)
         accept = await ctx.send(f"{ctx.author.mention} which Dungeon would you like to explore!", delete_after=30)
@@ -13942,7 +14022,6 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                     entrance_fee = entrance_fee * universe_tier
                     if balance <= entrance_fee:
                             await ctx.send(f"Tier {universe_tier} Dungeons require an :coin: {'{:,}'.format(entrance_fee)} entrance fee!", delete_after=5)
-                            
                             return
                     else:
                         await curse(entrance_fee, str(ctx.author))
@@ -13969,7 +14048,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                 'message': str(ex),
                 'trace': trace
             })) 
-            embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", colour=0xe91e63)
+            embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", delete_after=30, colour=0xe91e63)
             await ctx.send(embed=embedVar)
             return
 
@@ -14038,7 +14117,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             await ctx.send(f"{ctx.author.mention} private channel has been opened for you.")
             return {'SELECTED_UNIVERSE': selected_universe, 'PRIVATE_CHANNEL': private_channel, 'UNIVERSE_DATA': universe, 'CREST_LIST': crestlist, 'CREST_SEARCH': crestsearch, 'COMPLETED_DUNGEONS': completed_dungeons, 'OGUILD': oguild, 'BOSS_NAME': bossname}
         except:
-            embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", colour=0xe91e63)
+            embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", delete_after=30, colour=0xe91e63)
             await private_channel.send(embed=embedVar)
             return
 
