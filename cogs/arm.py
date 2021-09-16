@@ -32,6 +32,9 @@ class Arm(commands.Cog):
         arm_name = arm
         vault_query = {'OWNER' : str(ctx.author)}
         vault = db.altQueryVault(vault_query)
+        if len(vault['ARMS']) >= 150:
+            await ctx.send("You're maxed out on Arms!")
+            return
         shop = db.queryShopArms()
         arms = []
         rift_universes = ['Crown Rift Slayers', 'Crown Rift Awakening', 'Crown Rift Madness']

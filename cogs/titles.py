@@ -34,6 +34,10 @@ class Titles(commands.Cog):
         title_name = title
         vault_query = {'OWNER' : str(ctx.author)}
         vault = db.altQueryVault(vault_query)
+        if len(vault['TITLES']) >= 150:
+            await ctx.send("You're maxed out on Titles!")
+            return
+
         shop = db.queryShopTitles()
         titles = []
         rift_universes = ['Crown Rift Slayers', 'Crown Rift Awakening', 'Crown Rift Madness']
@@ -137,6 +141,7 @@ class Titles(commands.Cog):
             await ctx.send(m.TITLE_DOESNT_EXIST)
         else:
             await ctx.send(m.TITLE_OUT_OF_STOCK)
+
 
     @cog_ext.cog_slash(description="Equip a Title", guild_ids=main.guild_ids)
     async def equiptitle(self, ctx, title: str):

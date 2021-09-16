@@ -41,6 +41,10 @@ class Cards(commands.Cog):
             vault_query = {'OWNER' : str(ctx.author)}
             vault = db.altQueryVault(vault_query)
             owned_card_levels_list = []
+            if len(vault['CARDS']) >= 150:
+                await ctx.send("You're maxed out on Cards!")
+                return
+                
             for c in vault['CARD_LEVELS']:
                 owned_card_levels_list.append(c['CARD'])
 
