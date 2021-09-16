@@ -14223,8 +14223,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             o_health = t_health
                                         elif enh_type == 'FEAR':
                                             t_health = round(t_health - ((dmg['DMG']/100) * t_health))
-                                            o_attack = round(c_attack - ((dmg['DMG']/100) * o_attack))
-                                            o_defense = round(c_defense - ((dmg['DMG']/100) * o_defense))
+                                            o_attack = round(o_attack - ((dmg['DMG']/100) * o_attack))
+                                            o_defense = round(o_defense - ((dmg['DMG']/100) * o_defense))
                                         elif enh_type == 'WAVE':
                                             o_health = round(o_health - dmg['DMG'])
                                         elif enh_type == 'BLAST':
@@ -16670,6 +16670,15 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
             # End the match
             if (((o_health <= 0 or c_health <= 0) and mode in co_op_modes) or (o_max_health <= 0 or c_max_health <= 0) and mode in co_op_modes) or ((o_health <= 0 or o_max_health <= 0) and mode not in co_op_modes):
+                # await private_channel.send(f":zap: {user2.mention} you win the match!")
+                wintime = time.asctime()
+                h_playtime = int(wintime[11:13])
+                m_playtime = int(wintime[14:16])
+                s_playtime = int(wintime[17:19])
+                gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
+                if o_user['RIFT'] == 1:
+                    response = db.updateUserNoFilter({'DISNAME':str(o_user['DISNAME'])}, {'$set': {'RIFT' : 0}})
+                
                 if randomized_battle:
                     embedVar = discord.Embed(title=f":zap: **{t_card}** wins the match!", description=f"The game lasted {turn_total} rounds.\n**{t_card} says**\n`{t_win_description}`", colour=0x1abc9c)
                     embedVar.set_author(name=f"{o_card}")
@@ -16681,16 +16690,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         embedVar.set_footer(text=f"Battle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                     await ctx.author.send(embed=embedVar)
                     await discord.TextChannel.delete(private_channel, reason=None)
-
-                # await private_channel.send(f":zap: {user2.mention} you win the match!")
-                wintime = time.asctime()
-                h_playtime = int(wintime[11:13])
-                m_playtime = int(wintime[14:16])
-                s_playtime = int(wintime[17:19])
-                gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
-                if o_user['RIFT'] == 1:
-                    response = db.updateUserNoFilter({'DISNAME':str(o_user['DISNAME'])}, {'$set': {'RIFT' : 0}})
-                
                 # BOSS LOSS
                 if mode in B_modes:
                     embedVar = discord.Embed(title=f":zap: **{t_card}** Wins...", description=f"Match concluded in {turn_total} turns!\n{t_wins}", colour=0x1abc9c)
@@ -16840,9 +16839,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                     if o_user['RIFT'] == 1:
                         response = db.updateUserNoFilter({'DISNAME':str(o_user['DISNAME'])}, {'$set': {'RIFT' : 0}})
 
-                    drop_response = await dungeondrops(ctx.author, selected_universe, currentopponent)
+                    if mode in D_modes:
+                        drop_response = await dungeondrops(ctx.author, selected_universe, currentopponent)
+                    elif mode in U_modes:
+                        drop_response = await drops(ctx.author, selected_universe, currentopponent)
                     ofambank = await blessfamily(15,ofam)
-                    match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']), str(oarm['ARM']), str(selected_universe), "Dungeon", o['EXCLUSIVE'])
+                    match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']), str(oarm['ARM']), str(selected_universe), tale_or_dungeon_only, o['EXCLUSIVE'])
                     questlogger = await quest(ouser, t_card, tale_or_dungeon_only)
                     destinylogger = await destiny(ouser, t_card, tale_or_dungeon_only)
                     petlogger = await petlevel(opet_name, ouser)

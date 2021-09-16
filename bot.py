@@ -1345,8 +1345,6 @@ async def cursefamily(amount, family):
 @slash.slash(description="Purchase Boosts", guild_ids=guild_ids)
 @commands.check(validate_user)
 async def trinketshop(ctx):
-   await ctx.send("The Trinket Shop is currently down.")
-   return
    user_query = {'DISNAME': str(ctx.author)}
    user = db.queryUser(user_query)
    vault = db.altQueryVault({'OWNER' : str(ctx.author)})
@@ -1436,7 +1434,8 @@ async def trinketshop(ctx):
             return
 
          if (levels_gained + lvl) > max_lvl:
-            levels_gained = levels_gained - (levels_gained + lvl)
+            levels_gained =  max_lvl - lvl
+            print(levels_gained)
 
          atk_def_buff = round(levels_gained / 2)
          ap_buff = round(levels_gained / 3)
