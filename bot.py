@@ -1453,6 +1453,7 @@ async def trinketshop(ctx):
             return
       
       if button_ctx.custom_id == "4":
+         price = 1000000
          if price > balance:
             await button_ctx.send("You're too broke to buy. Get your money up.")
             return
