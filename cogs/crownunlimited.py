@@ -35,7 +35,7 @@ import typing
 class CrownUnlimited(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self._cd = commands.CooldownMapping.from_cooldown(1, 580, commands.BucketType.member) # Change accordingly. Currently every 8 minutes (480 seconds == 8 minutes)
+        self._cd = commands.CooldownMapping.from_cooldown(1, 600, commands.BucketType.member) # Change accordingly. Currently every 8 minutes (480 seconds == 8 minutes)
     
     co_op_modes = ['CTales', 'DTales', 'CDungeon', 'DDungeon']
     ai_co_op_modes = ['DTales', 'DDungeon']
@@ -301,8 +301,6 @@ class CrownUnlimited(commands.Cog):
                 'message': str(ex),
                 'trace': trace
             })) 
-            embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", delete_after=30, colour=0xe91e63)
-            await ctx.send(embed=embedVar)
             return
 
     
@@ -357,8 +355,6 @@ class CrownUnlimited(commands.Cog):
                 'message': str(ex),
                 'trace': trace
             })) 
-            embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", delete_after=30, colour=0xe91e63)
-            await ctx.send(embed=embedVar)
             return
                    
     
@@ -413,8 +409,6 @@ class CrownUnlimited(commands.Cog):
                 'message': str(ex),
                 'trace': trace
             })) 
-            embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", delete_after=30, colour=0xe91e63)
-            await ctx.send(embed=embedVar)
             return
     
     
@@ -467,8 +461,6 @@ class CrownUnlimited(commands.Cog):
                 'message': str(ex),
                 'trace': trace
             })) 
-            embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", delete_after=30, colour=0xe91e63)
-            await ctx.send(embed=embedVar)
             return
                   
     
@@ -522,8 +514,6 @@ class CrownUnlimited(commands.Cog):
                 'message': str(ex),
                 'trace': trace
             })) 
-            embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", delete_after=30, colour=0xe91e63)
-            await ctx.send(embed=embedVar)
             return
     
     
@@ -581,8 +571,6 @@ class CrownUnlimited(commands.Cog):
                 'message': str(ex),
                 'trace': trace
             })) 
-            embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", delete_after=30, colour=0xe91e63)
-            await ctx.send(embed=embedVar)
             return
 
 
@@ -638,8 +626,6 @@ class CrownUnlimited(commands.Cog):
                 'message': str(ex),
                 'trace': trace
             })) 
-            embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", delete_after=30, colour=0xe91e63)
-            await ctx.send(embed=embedVar)
             return
 
     
@@ -688,16 +674,14 @@ class CrownUnlimited(commands.Cog):
                 'message': str(ex),
                 'trace': trace
             })) 
-            embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", delete_after=30, colour=0xe91e63)
-            await ctx.send(embed=embedVar)
             return
     
     
     @cog_ext.cog_slash(description="Enter the Abyss", guild_ids=main.guild_ids)
     async def abyss(self, ctx: SlashContext):
-        # await ctx.defer()
-        # await ctx.send("The Abyss has opened. Floors to travel deep into the Abyss are starting to form. Check back later for entry.")
-        # return
+        await ctx.defer()
+        await ctx.send("Floors to travel deep into the Abyss are starting to form. Check back later for entry.")
+        return
         private_channel = ctx
         mode = "Abyss"
         if isinstance(private_channel.channel, discord.channel.DMChannel):
@@ -2995,7 +2979,7 @@ class CrownUnlimited(commands.Cog):
                         
                         await discord.TextChannel.delete(private_channel, reason=None)
 
-    
+
     @cog_ext.cog_slash(description="Conquer Tales to Unlock New Universes!", guild_ids=main.guild_ids)
     async def tales(self, ctx: SlashContext):
         U_modes = ['ATales','Tales', 'CTales', 'DTales']
@@ -3041,8 +3025,6 @@ class CrownUnlimited(commands.Cog):
                 'message': str(ex),
                 'trace': trace
             })) 
-            embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", delete_after=30, colour=0xe91e63)
-            await ctx.send(embed=embedVar)
             return
     
     
@@ -4086,23 +4068,23 @@ class CrownUnlimited(commands.Cog):
 
                             battle_buttons = [
                                 manage_components.create_button(
-                                    style=ButtonStyle.red,
-                                    label=f"💥 {omove1_text} | 10🌀",
+                                    style=ButtonStyle.green,
+                                    label=f"💥 10",
                                     custom_id =  "1"
                                 ),
                                 manage_components.create_button(
-                                    style=ButtonStyle.red,
-                                    label=f"☄️ {omove2_text} | 30🌀",
+                                    style=ButtonStyle.green,
+                                    label=f"☄️ 30",
                                     custom_id =  "2"
                                 ),
                                 manage_components.create_button(
-                                    style=ButtonStyle.red,
-                                    label=f"🏵️ {omove3_text} | 80🌀",
+                                    style=ButtonStyle.green,
+                                    label=f"🏵️ 80",
                                     custom_id = "3"
                                 ),
                                 manage_components.create_button(
                                     style=ButtonStyle.blue,
-                                    label=f"🦠 {omove_enhanced_text} | 20🌀",
+                                    label=f"🦠 20",
                                     custom_id = "4"
                                 )
                             ]
@@ -4142,7 +4124,24 @@ class CrownUnlimited(commands.Cog):
                             battle_action_row = manage_components.create_actionrow(*battle_buttons)
                             util_action_row = manage_components.create_actionrow(*util_buttons)
 
-                            await private_channel.send(content=f"Choose your move! **|** _Turn_ {turn_total} :dagger:**{o_attack}**/:shield:**{o_defense}**", components=[battle_action_row, util_action_row], file=player_1_card)
+                            h_a_s_response = health_and_stamina_bars(o_health, o_stamina, o_max_health, o_max_stamina, o_used_resolve)
+                            embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}", description=textwrap.dedent(f"""\
+                            **Health**
+                            {h_a_s_response['HEALTH']}
+                            **Stamina**
+                            {h_a_s_response['STAMINA']}
+                            💥 | **{omove1_text}**
+                            ☄️ | **{omove2_text}**
+                            🏵️ | **{omove3_text}**
+                            🦠 | **{omove_enhanced_text}**
+                            **Attack** :dagger:**{o_attack}**
+                            **Defense** :shield:**{o_defense}**
+
+                            *Stamina costs located on buttons*
+                            """), color=0xe74c3c)
+                            embedVar.set_thumbnail(url=opet_image)
+                            embedVar.set_footer(text=f"{t_card}: ❤️{t_health} 🌀{t_stamina} 🗡️{t_attack}/🛡️{t_defense}", icon_url="https://cdn.discordapp.com/emojis/789290881654980659.gif?v=1")
+                            await private_channel.send(embed=embedVar, components=[battle_action_row, util_action_row], file=player_1_card)
                             # Make sure user is responding with move
                             def check(button_ctx):
                                 return button_ctx.author == user1 and button_ctx.custom_id in options
@@ -4768,26 +4767,26 @@ class CrownUnlimited(commands.Cog):
 
                                 battle_buttons = [
                                     manage_components.create_button(
-                                        style=ButtonStyle.red,
-                                        label=f"💥 {tmove1_text} | 10🌀",
+                                        style=ButtonStyle.green,
+                                        label=f"💥 10",
                                         custom_id =  "1"
                                     ),
                                     manage_components.create_button(
-                                        style=ButtonStyle.red,
-                                        label=f"☄️ {tmove2_text} | 30🌀",
+                                        style=ButtonStyle.green,
+                                        label=f"☄️ 30",
                                         custom_id =  "2"
                                     ),
                                     manage_components.create_button(
-                                        style=ButtonStyle.red,
-                                        label=f"🏵️ {tmove3_text} | 80🌀",
+                                        style=ButtonStyle.green,
+                                        label=f"🏵️ 80",
                                         custom_id = "3"
                                     ),
                                     manage_components.create_button(
                                         style=ButtonStyle.blue,
-                                        label=f"🦠 {tmove_enhanced_text} | 20🌀",
+                                        label=f"🦠 20",
                                         custom_id = "4"
                                     )
-                                ]
+                                 ]
 
                                 util_buttons = [
                                     manage_components.create_button(
@@ -4824,7 +4823,24 @@ class CrownUnlimited(commands.Cog):
                                 battle_action_row = manage_components.create_actionrow(*battle_buttons)
                                 util_action_row = manage_components.create_actionrow(*util_buttons)
 
-                                await private_channel.send(f"Choose your move! **|** _Turn_ {turn_total} :dagger:**{t_attack}**/:shield:**{t_defense}**", components=[battle_action_row, util_action_row], file=player_2_card)
+                                h_a_s_response = health_and_stamina_bars(t_health, t_stamina, t_max_health, t_max_stamina, t_used_resolve)
+                                embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}", description=textwrap.dedent(f"""\
+                                **Health**
+                                {h_a_s_response['HEALTH']}
+                                **Stamina**
+                                {h_a_s_response['STAMINA']}
+                                💥 | **{tmove1_text}**
+                                ☄️ | **{tmove2_text}**
+                                🏵️ | **{tmove3_text}**
+                                🦠 | **{tmove_enhanced_text}**
+                                **Attack** :dagger:**{t_attack}**
+                                **Defense** :shield:**{t_defense}**
+
+                                *Stamina costs located on buttons*
+                                """), color=0xe74c3c)
+                                embedVar.set_thumbnail(url=tpet_image)
+                                embedVar.set_footer(text=f"{o_card}: ❤️{o_health} 🌀{o_stamina} 🗡️{o_attack}/🛡️{o_defense}", icon_url="https://cdn.discordapp.com/emojis/789290881654980659.gif?v=1")
+                                await private_channel.send(embed=embedVar, components=[battle_action_row, util_action_row], file=player_2_card)
                                 # Make sure user is responding with move
                                 def check(button_ctx):
                                     return button_ctx.author == user2 and button_ctx.custom_id in options
@@ -13820,7 +13836,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                         elif uni['TIER'] == 9:
                             tier_icon = ":crystal_ball:"
 
-                        universe_menu.append(f"{Crest_dict[uni['TITLE']]} {tier_icon} | **{uni['TITLE']}**\n:crossed_swords: **{len(uni['CROWN_TALES'])}**\n")
+                        universe_menu.append(f"{Crest_dict[uni['TITLE']]} | **{uni['TITLE']}**\n:crossed_swords: **{len(uni['CROWN_TALES'])}**\n")
                     else:
                         tier_icon = ""
                         if uni['TIER'] == 1:
@@ -13836,7 +13852,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                         elif uni['TIER'] == 9:
                             tier_icon = ":crystal_ball:"
 
-                        universe_menu.append(f"{Crest_dict[uni['TITLE']]} {tier_icon} | **{uni['TITLE']}**\n:crossed_swords: **{len(uni['CROWN_TALES'])}**\n")
+                        universe_menu.append(f"{Crest_dict[uni['TITLE']]} | **{uni['TITLE']}**\n:crossed_swords: **{len(uni['CROWN_TALES'])}**\n")
                         available_universes.append(uni['TITLE'])
         else:
             for uni in all_universes:
@@ -13857,7 +13873,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                         elif uni['TIER'] == 9:
                             tier_icon = ":crystal_ball:"
 
-                        universe_menu.append(f"{Crest_dict[uni['TITLE']]} {tier_icon} | **{uni['TITLE']}**\n:crossed_swords: **{len(uni['CROWN_TALES'])}**\n")
+                        universe_menu.append(f"{Crest_dict[uni['TITLE']]} | **{uni['TITLE']}**\n:crossed_swords: **{len(uni['CROWN_TALES'])}**\n")
                     else:
                         tier_icon = ""
                         if uni['TIER'] == 1:
@@ -13873,7 +13889,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                         elif uni['TIER'] == 9:
                             tier_icon = ":crystal_ball:"
 
-                        universe_menu.append(f"{Crest_dict[uni['TITLE']]} {tier_icon} | **{uni['TITLE']}**\n:crossed_swords: **{len(uni['CROWN_TALES'])}**\n")
+                        universe_menu.append(f"{Crest_dict[uni['TITLE']]} | **{uni['TITLE']}**\n:crossed_swords: **{len(uni['CROWN_TALES'])}**\n")
                         available_universes.append(uni['TITLE'])
         
         icon = ":robot:"
@@ -13954,8 +13970,6 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                 'message': str(ex),
                 'trace': trace
             })) 
-            embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", delete_after=30, colour=0xe91e63)
-            await ctx.send(embed=embedVar)
             return
 
     if mode in D_modes:
@@ -13981,7 +13995,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                 elif uni['TIER'] == 9:
                     tier_icon = ":crystal_ball:"
 
-                universe_menu.append(f"{Crest_dict[uni['TITLE']]} {tier_icon} | **{uni['TITLE']}**\n:crossed_swords: **{len(uni['CROWN_TALES'])}**\n")
+                universe_menu.append(f"{Crest_dict[uni['TITLE']]} | **{uni['TITLE']}**\n:crossed_swords: **{len(uni['CROWN_TALES'])}**\n")
                 available_universes.append(uni)
         
         if not available_universes:
@@ -14048,8 +14062,6 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                 'message': str(ex),
                 'trace': trace
             })) 
-            embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", delete_after=30, colour=0xe91e63)
-            await ctx.send(embed=embedVar)
             return
 
     if mode in B_modes:
@@ -15078,23 +15090,23 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                             battle_buttons = [
                                 manage_components.create_button(
-                                    style=ButtonStyle.red,
-                                    label=f"💥 {omove1_text} | 10🌀",
+                                    style=ButtonStyle.green,
+                                    label=f"💥 10",
                                     custom_id =  "1"
                                 ),
                                 manage_components.create_button(
-                                    style=ButtonStyle.red,
-                                    label=f"☄️ {omove2_text} | 30🌀",
+                                    style=ButtonStyle.green,
+                                    label=f"☄️ 30",
                                     custom_id =  "2"
                                 ),
                                 manage_components.create_button(
-                                    style=ButtonStyle.red,
-                                    label=f"🏵️ {omove3_text} | 80🌀",
+                                    style=ButtonStyle.green,
+                                    label=f"🏵️ 80",
                                     custom_id = "3"
                                 ),
                                 manage_components.create_button(
                                     style=ButtonStyle.blue,
-                                    label=f"🦠 {omove_enhanced_text} | 20🌀",
+                                    label=f"🦠 20",
                                     custom_id = "4"
                                 )
                             ]
@@ -15159,7 +15171,25 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 components = [battle_action_row, util_action_row, coop_util_action_row]
                             else:
                                 components = [battle_action_row, util_action_row]
-                            await private_channel.send(f"Choose your move! **|** _Turn_ {turn_total} :dagger:**{o_attack}**/:shield:**{o_defense}**", components=components, file=player_1_card)
+
+                            h_a_s_response = health_and_stamina_bars(o_health, o_stamina, o_max_health, o_max_stamina, o_used_resolve)
+                            embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}", description=textwrap.dedent(f"""\
+                            **Health**
+                            {h_a_s_response['HEALTH']}
+                            **Stamina**
+                            {h_a_s_response['STAMINA']}
+                            💥 | **{omove1_text}**
+                            ☄️ | **{omove2_text}**
+                            🏵️ | **{omove3_text}**
+                            🦠 | **{omove_enhanced_text}**
+                            **Attack** :dagger:**{o_attack}**
+                            **Defense** :shield:**{o_defense}**
+
+                            *Stamina costs located on buttons*
+                            """), color=0xe74c3c)
+                            embedVar.set_thumbnail(url=opet_image)
+                            embedVar.set_footer(text=f"{t_card}: ❤️{t_health} 🌀{t_stamina} 🗡️{t_attack}/🛡️{t_defense}", icon_url="https://cdn.discordapp.com/emojis/789290881654980659.gif?v=1")
+                            await private_channel.send(embed=embedVar, components=components, file=player_1_card)
                             # Make sure user is responding with move
                             def check(button_ctx):
                                 return button_ctx.author == user1 and button_ctx.custom_id in options
@@ -15554,7 +15584,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             embedVar.add_field(name=f"{o_card} used {omove_enhanced_text}!", value =f"Enhanced {comp_enh}")
                                             await button_ctx.send(embed=embedVar)
                                             turn_total= turn_total + 1
-                                            turn=1
+                                            turn = 1
                                         else:
                                             await button_ctx.send(m.NOT_ENOUGH_STAMINA)
                                             turn=0
@@ -15874,10 +15904,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             embedVar.add_field(name=f"A great aura starts to envelop **{t_card}** ",value= f"{t_aura}")
                             embedVar.set_footer(text=f"{t_card} Says: 'Now, are you ready for a real fight?'")
                             await private_channel.send(embed=embedVar)
-                        else:
-                            embedVar = discord.Embed(title=f"{t_card.upper()} FOCUSED", description=f"**{t_card} says**\n{t_focus_description}", colour=0xe91e63)
-                            embedVar.add_field(name=f"{t_card} focused and {healmessage}", value="All stats & stamina increased")
-                            await private_channel.send(embed=embedVar)
+                        
                         # o_pet_used = True
                         fortitude = 0.0
                         low = t_health - (t_health*.90)
@@ -15911,7 +15938,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         t_attack = t_attack + t_attackcalc
                         t_defense =  t_defense + t_defensecalc
                         t_used_focus=True
-
+                        embedVar = discord.Embed(title=f"{t_card.upper()} FOCUSED", description=f"**{t_card} says**\n{t_focus_description}", colour=0xe91e63)
+                        embedVar.add_field(name=f"{t_card} focused and {healmessage}", value="All stats & stamina increased")
+                        await private_channel.send(embed=embedVar)
                         if not t_used_resolve and t_used_focus and t_universe == "Digimon":  #Digimon Universal Trait
                             #fortitude or luck is based on health  
                             fortitude = 0.0
@@ -16005,11 +16034,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             aiMove = 6 
                         elif o_stamina <= 10:
                             if t_enhancer in Gamble_Enhancer_Check:
+                                print("I got gamble")
                                 if t_stamina >= 20:
                                     aiMove = 4
                                 else:
                                     aiMove = 1
                             else:
+                                print("I don't got gamble")
                                 aiMove = 1
                         elif t_health <= (.50 * t_max_health) and t_used_resolve == False and t_used_focus:
                             aiMove = 5
@@ -17775,23 +17806,23 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                 battle_buttons = [
                                     manage_components.create_button(
-                                        style=ButtonStyle.red,
-                                        label=f"💥 {cmove1_text} | 10🌀",
-                                        custom_id =  "1"
+                                    style=ButtonStyle.green,
+                                    label=f"💥 10",
+                                    custom_id =  "1"
                                     ),
                                     manage_components.create_button(
-                                        style=ButtonStyle.red,
-                                        label=f"☄️ {cmove2_text} | 30🌀",
+                                        style=ButtonStyle.green,
+                                        label=f"☄️ 30",
                                         custom_id =  "2"
                                     ),
                                     manage_components.create_button(
-                                        style=ButtonStyle.red,
-                                        label=f"🏵️ {cmove3_text} | 80🌀",
+                                        style=ButtonStyle.green,
+                                        label=f"🏵️ 80",
                                         custom_id = "3"
                                     ),
                                     manage_components.create_button(
                                         style=ButtonStyle.blue,
-                                        label=f"🦠 {cmove_enhanced_text} | 20🌀",
+                                        label=f"🦠 20",
                                         custom_id = "4"
                                     )
                                 ]
@@ -17840,7 +17871,28 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 util_action_row = manage_components.create_actionrow(*util_buttons)
                                 coop_util_action_row = manage_components.create_actionrow(*coop_util_buttons)
 
-                                await private_channel.send(f"Choose your move! **|** _Turn_ {turn_total} :dagger:**{c_attack}**/:shield:**{c_defense}**", components=[battle_action_row, util_action_row, coop_util_action_row], file=companion)
+                                h_a_s_response = health_and_stamina_bars(c_health, c_stamina, c_max_health, c_max_stamina, c_used_resolve)
+                                embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}", description=textwrap.dedent(f"""\
+                                **Health** **{o_health}**
+                                {h_a_s_response['HEALTH']}
+                                **Stamina** **{o_stamina}**
+                                {h_a_s_response['STAMINA']}
+                                **Attack**
+                                :dagger:**{c_attack}**
+                                **Defense**
+                                :shield:**{c_defense}**
+                            
+
+                                💥 | **{cmove1_text}**
+                                ☄️ | **{cmove2_text}**
+                                🏵️ | **{cmove3_text}**
+                                🦠 | **{cmove_enhanced_text}**
+                                *Stamina costs located on buttons*
+                                """), color=0xe74c3c)
+                                embedVar.set_thumbnail(url=opet_image)
+                                embedVar.set_footer(text=f"{t_card}: ❤️{t_health} 🌀{t_stamina} 🗡️{t_attack}/🛡️{t_defense}", icon_url="https://cdn.discordapp.com/emojis/789290881654980659.gif?v=1")
+                                await private_channel.send(embed=embedVar, components=[battle_action_row, util_action_row, coop_util_action_row], file=companion)
+                                
                                 # Make sure user is responding with move
                                 def check(button_ctx):
                                     return button_ctx.author == user and button_ctx.custom_id in options
@@ -19520,6 +19572,55 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             'trace': trace
         }))
         return
+
+
+def health_and_stamina_bars(health, stamina, max_health, max_stamina, resolved):
+    health_response = ""
+    stamina_response = ""
+    
+    if health >= max_health:
+        health_response = f"❤️❤️❤️❤️❤️"
+    if health >= (max_health * .80) and health < max_health:
+        health_response = f"❤️❤️❤️❤️🖤"
+    if health >= (max_health * .60) and health < (max_health * .80):
+        health_response = f"❤️❤️❤️🖤🖤"
+    if health >= (max_health * .40) and health < (max_health * .60):
+        health_response = f"❤️❤️🖤🖤🖤"
+    if health >= (max_health * .20) and health < (max_health * .40):
+        health_response = f"❤️🖤🖤🖤🖤"
+    if health >= 0 and health <= (max_health * .20):
+        health_response = f"🖤🖤🖤🖤🖤"
+    if resolved:
+        if stamina >= max_stamina:
+            stamina_response = f"⚡⚡⚡⚡⚡"
+        if stamina >= (max_stamina * .80) and stamina < max_stamina:
+            stamina_response = f"⚡⚡⚡⚡💫"
+        if stamina >= (max_stamina * .60) and stamina < (max_stamina * .80):
+            stamina_response = f"⚡⚡⚡💫💫"
+        if stamina >= (max_stamina * .40) and stamina < (max_stamina * .60):
+            stamina_response = f"⚡⚡💫💫💫"
+        if stamina >= (max_stamina * .20) and stamina < (max_stamina * .40):
+            stamina_response = f"⚡💫💫💫💫"
+        if stamina >= 0 and stamina <= (max_stamina * .20):
+            stamina_response = f"💫💫💫💫💫"
+    else:
+        if stamina >= max_stamina:
+            stamina_response = f"🌀🌀🌀🌀🌀"
+        if stamina >= (max_stamina * .80) and stamina < max_stamina:
+            stamina_response = f"🌀🌀🌀🌀🌪️"
+        if stamina >= (max_stamina * .60) and stamina < (max_stamina * .80):
+            stamina_response = f"🌀🌀🌀🌪️🌪️"
+        if stamina >= (max_stamina * .40) and stamina < (max_stamina * .60):
+            stamina_response = f"🌀🌀🌪️🌪️🌪️"
+        if stamina >= (max_stamina * .20) and stamina < (max_stamina * .40):
+            stamina_response = f"🌀🌪️🌪️🌪️🌪️"
+        if stamina >= 0 and stamina <= (max_stamina * .20):
+            stamina_response = f"🌪️🌪️🌪️🌪️🌪️"
+
+    
+
+    
+    return {"HEALTH": health_response, "STAMINA": stamina_response}
 
 
 def existing_channel_check(self, ctx):
