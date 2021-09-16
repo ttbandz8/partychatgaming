@@ -1345,6 +1345,8 @@ async def cursefamily(amount, family):
 @slash.slash(description="Purchase Boosts", guild_ids=guild_ids)
 @commands.check(validate_user)
 async def trinketshop(ctx):
+   await ctx.send("The Trinket Shop is currently down.")
+   return
    user_query = {'DISNAME': str(ctx.author)}
    user = db.queryUser(user_query)
    vault = db.altQueryVault({'OWNER' : str(ctx.author)})
