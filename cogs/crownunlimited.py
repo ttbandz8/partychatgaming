@@ -4128,7 +4128,7 @@ class CrownUnlimited(commands.Cog):
                             ☄️ | **{omove2_text}** *{ap2}*
                             🏵️ | **{omove3_text}** *{ap3}*
                             🦠 | **{omove_enhanced_text}** *{enh1}{enhancer_suffix_mapping[enh_name]}*
-                            ↘️ {enhancer_mapping[enh_name]}*
+                            ↘️ {enhancer_mapping[enh_name]}
 
                             {pet_msg_on_resolve}
                             *Stamina costs located on buttons*
@@ -4834,7 +4834,7 @@ class CrownUnlimited(commands.Cog):
                                 ☄️ | **{tmove2_text}** *{tap2}*
                                 🏵️ | **{tmove3_text}** *{tap3}*
                                 🦠 | **{tmove_enhanced_text}** *{tenh1}{enhancer_suffix_mapping[tenh_name]}*
-                                ↘️ {enhancer_mapping[tenh_name]}*
+                                ↘️ {enhancer_mapping[tenh_name]}
 
                                 {tpet_msg_on_resolve}
                                 *Stamina costs located on buttons*
@@ -11275,7 +11275,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
 
             channel_exists_response = existing_channel_check(self, ctx)
             if channel_exists_response:
-                await private_channel.send(m.ALREADY_IN_TALES)
+                await ctx.send(m.ALREADY_IN_TALES)
                 return
 
             #Universe Cost
@@ -11287,12 +11287,12 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             universe_tier = universe['TIER']
             entrance_fee = 250
             if selected_universe in crestlist:
-                await private_channel.send(f"{Crest_dict[selected_universe]} | :flags: {guildname} {selected_universe} Crest Activated! No entrance fee!")
+                await ctx.send(f"{Crest_dict[selected_universe]} | :flags: {guildname} {selected_universe} Crest Activated! No entrance fee!")
             else:
                 if universe_tier >= 3:
                     entrance_fee = entrance_fee * universe_tier
                     if balance <= entrance_fee:
-                            await private_channel.send(f"Tier {universe_tier} Tales require an :coin: {'{:,}'.format(entrance_fee)} entrance fee!", delete_after=5)
+                            await ctx.send(f"Tier {universe_tier} Tales require an :coin: {'{:,}'.format(entrance_fee)} entrance fee!", delete_after=5)
                             
                             return
                     else:
@@ -11301,7 +11301,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                             crest_guild = db.queryGuildAlt({'GNAME' : universe['GUILD']})
                             if crest_guild:
                                 await blessguild(entrance_fee, universe['GUILD'])
-                                await private_channel.send(f"{Crest_dict[selected_universe]} | {crest_guild['GNAME']} Universe Toll Paid!")
+                                await ctx.send(f"{Crest_dict[selected_universe]} | {crest_guild['GNAME']} Universe Toll Paid!")
             
             private_channel = await guild.create_text_channel(f'{str(ctx.author)}-{mode}-run', overwrites=overwrites)
             await private_channel.send(f"{ctx.author.mention} private channel has been opened for you. Good luck!")
@@ -12464,7 +12464,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 ),
                             ]
 
-                            if mode in co_op_modes:
+                            if mode in ai_co_op_modes:
                                 coop_util_buttons = [
                                     manage_components.create_button(
                                         style=ButtonStyle.blue,
@@ -12481,6 +12481,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         label="Request Block",
                                         custom_id = "9"
                                     ),
+                                ]
+                            elif mode in co_op_modes and mode not in ai_co_op_modes:
+                                coop_util_buttons = [
+                                    manage_components.create_button(
+                                        style=ButtonStyle.blue,
+                                        label="Assist Companion 20",
+                                        custom_id = "7"
+                                    )
                                 ]
 
                             if o_used_focus and o_used_resolve and not o_pet_used:
@@ -12529,7 +12537,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             ☄️ | **{omove2_text}** *{ap2}*
                             🏵️ | **{omove3_text}** *{ap3}*
                             🦠 | **{omove_enhanced_text}** *{enh1}{enhancer_suffix_mapping[enh_name]}*
-                            ↘️ {enhancer_mapping[enh_name]}*
+                            ↘️ {enhancer_mapping[enh_name]}
 
                             {pet_msg_on_resolve}
                             *Stamina costs located on buttons*
@@ -12546,9 +12554,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                 # calculate data based on selected move
                                 if button_ctx.custom_id == "q" or button_ctx.custom_id == "Q":
-                                    o_health=0                
+                                    o_health=0
+                                    await button_ctx.send(f"You fled the battle...")      
                                     await discord.TextChannel.delete(private_channel, reason=None)
-                                    await button_ctx.send(f"You fled the battle...")
                                     return
                                 if button_ctx.custom_id == "1":
                                     o_pet_used =False
@@ -15229,7 +15237,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 ☄️ | **{cmove2_text}** *{cap2}*
                                 🏵️ | **{cmove3_text}** *{cap3}*
                                 🦠 | **{cmove_enhanced_text}** *{cenh1}{enhancer_suffix_mapping[cenh_name]}*
-                                ↘️ {enhancer_mapping[cenh_name]}*
+                                ↘️ {enhancer_mapping[cenh_name]}
 
                                 {pet_msg_on_resolve}
                                 *Stamina costs located on buttons*
@@ -16846,9 +16854,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                     if currentopponent != (total_legends):
                         embedVar = discord.Embed(title=f"VICTORY\n**{o_card} says**\n{o_win_description}", description=f"The game lasted {turn_total} rounds.\n\n{drop_response}", colour=0xe91e63)
-                        if crestsearch:
-                            await blessguild(1000, oguild['GNAME'])
-                            embedVar.add_field(name=f"{selected_universe} CREST SEARCH!", value=f"{oguild['GNAME']} earned 1,000 :coin:")
+                        if mode in D_modes:
+                            if crestsearch:
+                                await blessguild(1000, oguild['GNAME'])
+                                embedVar.add_field(name=f"{selected_universe} CREST SEARCH!", value=f"{oguild['GNAME']} earned 1,000 :coin:")
                         embedVar.set_author(name=f"{t_card} lost!")
                         await private_channel.send(embed=embedVar)
 
