@@ -4114,7 +4114,7 @@ class CrownUnlimited(commands.Cog):
                             ap1 = list(o_1.values())[0] + ocard_lvl_ap_buff
                             ap2 = list(o_2.values())[0] + ocard_lvl_ap_buff
                             ap3 = list(o_3.values())[0] + ocard_lvl_ap_buff
-                            enh1 = list(o_enhancer.values())[0] + ocard_lvl_ap_buff
+                            enh1 = list(o_enhancer.values())[0]
                             enh_name = list(o_enhancer.values())[2]
                             pet_enh_name = list(opet_move.values())[2]
                             pet_msg_on_resolve = ""
@@ -4123,12 +4123,12 @@ class CrownUnlimited(commands.Cog):
                                 pet_msg_on_resolve =f"🐦 | *{enhancer_mapping[pet_enh_name]}*"
 
                             h_a_s_response = health_and_stamina_bars(o_health, o_stamina, o_max_health, o_max_stamina, o_used_resolve)
-                            embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}\n**Attack** | **{o_attack}** :dagger:\n**Defense** | **{o_defense}** :shield:\n**Health** | **{o_health}** {h_a_s_response['HEALTH']}\n**Stamina** | **{o_stamina}** {h_a_s_response['STAMINA']}", description=textwrap.dedent(f"""\
+                            embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}\n**Attack**    | **{round(o_attack)}** :dagger:\n**Defense** | **{round(o_defense)}** :shield:\n**Health**    | **{round(o_health)}** {h_a_s_response['HEALTH']}\n**Stamina** | **{o_stamina}** {h_a_s_response['STAMINA']}", description=textwrap.dedent(f"""\
                             💥 | **{omove1_text}** *{ap1}*
                             ☄️ | **{omove2_text}** *{ap2}*
                             🏵️ | **{omove3_text}** *{ap3}*
                             🦠 | **{omove_enhanced_text}** *{enh1}{enhancer_suffix_mapping[enh_name]}*
-                            *{omove_enhanced_text}: {enhancer_mapping[enh_name]}*
+                            ↘️ {enhancer_mapping[enh_name]}*
 
                             {pet_msg_on_resolve}
                             *Stamina costs located on buttons*
@@ -4820,21 +4820,21 @@ class CrownUnlimited(commands.Cog):
                                 tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff
                                 tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff
                                 tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff
-                                tenh1 = list(t_enhancer.values())[0] + tcard_lvl_ap_buff
-                                tenh_name = list(o_enhancer.values())[2]
-                                tpet_enh_name = list(opet_move.values())[2]
+                                tenh1 = list(t_enhancer.values())[0]
+                                tenh_name = list(t_enhancer.values())[2]
+                                tpet_enh_name = list(tpet_move.values())[2]
                                 tpet_msg_on_resolve = ""
 
                                 if t_used_resolve:
                                     tpet_msg_on_resolve =f"🐦 | *{enhancer_mapping[tpet_enh_name]}*"
 
-                                h_a_s_response = health_and_stamina_bars(o_health, o_stamina, o_max_health, o_max_stamina, o_used_resolve)
-                                embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}\n**Attack** | **{t_attack}** :dagger:\n**Defense** | **{t_defense}** :shield:\n**Health** | **{t_health}** {h_a_s_response['HEALTH']}\n**Stamina** | **{t_stamina}** {h_a_s_response['STAMINA']}", description=textwrap.dedent(f"""\
-                                💥 | **{tmove1_text}** *{tp1}*
-                                ☄️ | **{tmove2_text}** *{tp2}*
-                                🏵️ | **{tmove3_text}** *{tp3}*
+                                h_a_s_response = health_and_stamina_bars(t_health, t_stamina, t_max_health, t_max_stamina, t_used_resolve)
+                                embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}\n**Attack**    | **{t_attack}** :dagger:\n**Defense** | **{t_defense}** :shield:\n**Health**    | **{t_health}** {h_a_s_response['HEALTH']}\n**Stamina** | **{t_stamina}** {h_a_s_response['STAMINA']}", description=textwrap.dedent(f"""\
+                                💥 | **{tmove1_text}** *{tap1}*
+                                ☄️ | **{tmove2_text}** *{tap2}*
+                                🏵️ | **{tmove3_text}** *{tap3}*
                                 🦠 | **{tmove_enhanced_text}** *{tenh1}{enhancer_suffix_mapping[tenh_name]}*
-                                *{tmove_enhanced_text}: {enhancer_mapping[tenh_name]}*
+                                ↘️ {enhancer_mapping[tenh_name]}*
 
                                 {tpet_msg_on_resolve}
                                 *Stamina costs located on buttons*
@@ -8872,6 +8872,7 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, vul, accura
 
     enh_type=""
     if enhancer:
+        ap = ap - ap_buff
         if enh == 'ATK':
             enh_type="ATK"
             atk = round((ap/100) * attack)
@@ -8881,7 +8882,6 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, vul, accura
         elif enh == 'STAM':
             enh_type="STAM"
             stam = ap
-            ap = ap - ap_buff
         elif enh == 'HLT':
             enh_type='HLT'
             hlt = round(ap + (.16 * health))
@@ -8921,42 +8921,34 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, vul, accura
         elif enh == 'BLINK':
             enh_type="BLINK"
             blink = ap
-            ap = ap - ap_buff
+
         elif enh == 'SLOW':
             enh_type="SLOW"
             slow = ap
-            ap = ap - ap_buff
         elif enh == 'HASTE':
             enh_type="HASTE"
             haste = ap
-            ap = ap - ap_buff
         elif enh == 'FEAR':
             enh_type="FEAR"
             fear = ap
         elif enh == 'SOULCHAIN':
             enh_type="SOULCHAIN"
             soulchain = ap
-            ap = ap - ap_buff
         elif enh == 'GAMBLE':
             enh_type="GAMBLE"
             gamble = ap
-            ap = ap - ap_buff
         elif enh == 'WAVE':
             enh_type="WAVE"
             wave = ap
-            ap = ap - ap_buff
         elif enh == 'CREATION':
             enh_type="CREATION"
             creation = ap
-            ap = ap - ap_buff
         elif enh == 'BLAST':
             enh_type="BLAST"
             blast = ap
-            ap = ap - ap_buff
         elif enh == 'DESTRUCTION':
             enh_type="DESTRUCTION"
             destruction = ap
-            ap = ap - ap_buff
 
     #handle different staments for lifesteal and drain
     if enhancer:
@@ -9266,20 +9258,20 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
         #     pet_img = temp_pet_img.thumbnail(maxsize, Image.ANTIALIAS)
         #     im.paste(pet_img, (300,300))
 
-            # Max Health
-            hlt_base = round_rectangle((int(max_health), 30), 0)
-            im.paste(hlt_base, (80, 160), hlt_base)
-            # Health Meter
-            hlt = health_bar((health, 30), 0)
-            im.paste(hlt, (80, 160), hlt)
+            # # Max Health
+            # hlt_base = round_rectangle((int(max_health), 30), 0)
+            # im.paste(hlt_base, (80, 160), hlt_base)
+            # # Health Meter
+            # hlt = health_bar((health, 30), 0)
+            # im.paste(hlt, (80, 160), hlt)
 
 
-            # Max Stamina
-            stam_base = round_rectangle((int(max_stamina), 30), 0)
-            im.paste(stam_base, (80, 195), stam_base)
-            # Stamina Meter
-            stam = stamina_bar((stamina, 30), 0)
-            im.paste(stam, (80, 195), stam)
+            # # Max Stamina
+            # stam_base = round_rectangle((int(max_stamina), 30), 0)
+            # im.paste(stam_base, (80, 195), stam_base)
+            # # Stamina Meter
+            # stam = stamina_bar((stamina, 30), 0)
+            # im.paste(stam, (80, 195), stam)
             #########################################################################
 
             draw = ImageDraw.Draw(im)
@@ -9292,12 +9284,12 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
             stats = ImageFont.truetype("Freedom-10eM.ttf", 30)
 
 
-            # Health & Stamina
-            header = ImageFont.truetype("KomikaTitle-Paint.ttf", 60)
-            health_text = f'{health}/{max_health}'
-            stamina_text = f'{stamina}/{max_stamina}'
-            draw.text((185,155), health_text, (255, 255, 255), font=h, align="left")
-            draw.text((82,197), stamina_text, (255, 255, 255), font=s, align="left")
+            # # Health & Stamina
+            # header = ImageFont.truetype("KomikaTitle-Paint.ttf", 60)
+            # health_text = f'{health}/{max_health}'
+            # stamina_text = f'{stamina}/{max_stamina}'
+            # draw.text((185,155), health_text, (255, 255, 255), font=h, align="left")
+            # draw.text((82,197), stamina_text, (255, 255, 255), font=s, align="left")
 
             # Character Name
             if not resolved:
@@ -12523,7 +12515,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             ap1 = list(o_1.values())[0] + ocard_lvl_ap_buff
                             ap2 = list(o_2.values())[0] + ocard_lvl_ap_buff
                             ap3 = list(o_3.values())[0] + ocard_lvl_ap_buff
-                            enh1 = list(o_enhancer.values())[0] + ocard_lvl_ap_buff
+                            enh1 = list(o_enhancer.values())[0]
                             enh_name = list(o_enhancer.values())[2]
                             pet_enh_name = list(opet_move.values())[2]
                             pet_msg_on_resolve = ""
@@ -12532,12 +12524,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 pet_msg_on_resolve =f"🐦 | *{enhancer_mapping[pet_enh_name]}*"
 
                             h_a_s_response = health_and_stamina_bars(o_health, o_stamina, o_max_health, o_max_stamina, o_used_resolve)
-                            embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}\n**Attack** | **{o_attack}** :dagger:\n**Defense** | **{o_defense}** :shield:\n**Health** | **{o_health}** {h_a_s_response['HEALTH']}\n**Stamina** | **{o_stamina}** {h_a_s_response['STAMINA']}", description=textwrap.dedent(f"""\
+                            embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}\n**Attack**    | **{round(o_attack)}** :dagger:\n**Defense** | **{round(o_defense)}** :shield:\n**Health**    | **{round(o_health)}** {h_a_s_response['HEALTH']}\n**Stamina** | **{o_stamina}** {h_a_s_response['STAMINA']}", description=textwrap.dedent(f"""\
                             💥 | **{omove1_text}** *{ap1}*
                             ☄️ | **{omove2_text}** *{ap2}*
                             🏵️ | **{omove3_text}** *{ap3}*
                             🦠 | **{omove_enhanced_text}** *{enh1}{enhancer_suffix_mapping[enh_name]}*
-                            *{omove_enhanced_text}: {enhancer_mapping[enh_name]}*
+                            ↘️ {enhancer_mapping[enh_name]}*
 
                             {pet_msg_on_resolve}
                             *Stamina costs located on buttons*
@@ -12554,15 +12546,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                 # calculate data based on selected move
                                 if button_ctx.custom_id == "q" or button_ctx.custom_id == "Q":
-                                    o_health=0
-                            
-                                    if private_channel.guild:
-                                        await button_ctx.send(f"{ctx.author.mention} has fled the battle...")
-                                        
-                                        await discord.TextChannel.delete(private_channel, reason=None)
-                                    else:
-                                        
-                                        await button_ctx.send(f"You fled the battle...")
+                                    o_health=0                
+                                    await discord.TextChannel.delete(private_channel, reason=None)
+                                    await button_ctx.send(f"You fled the battle...")
                                     return
                                 if button_ctx.custom_id == "1":
                                     o_pet_used =False
@@ -15229,21 +15215,21 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 cap1 = list(c_1.values())[0] + ccard_lvl_ap_buff
                                 cap2 = list(c_2.values())[0] + ccard_lvl_ap_buff
                                 cap3 = list(c_3.values())[0] + ccard_lvl_ap_buff
-                                cenh1 = list(c_enhancer.values())[0] + ccard_lvl_ap_buff
-                                cenh_name = list(o_enhancer.values())[2]
-                                cpet_enh_name = list(opet_move.values())[2]
+                                cenh1 = list(c_enhancer.values())[0]
+                                cenh_name = list(c_enhancer.values())[2]
+                                cpet_enh_name = list(cpet_move.values())[2]
                                 cpet_msg_on_resolve = ""
 
-                                if o_used_resolve:
+                                if c_used_resolve:
                                     pet_msg_on_resolve =f"🐦 | *{enhancer_mapping[pet_enh_name]}*"
 
                                 h_a_s_response = health_and_stamina_bars(c_health, c_stamina, c_max_health, c_max_stamina, c_used_resolve)
-                                embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}\n**Attack** | **{o_attack}** :dagger:\n**Defense** | **{o_defense}** :shield:\n**Health** | **{o_health}** {h_a_s_response['HEALTH']}\n**Stamina** | **{o_stamina}** {h_a_s_response['STAMINA']}", description=textwrap.dedent(f"""\
+                                embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}\n**Attack**    | **{c_attack}** :dagger:\n**Defense** | **{c_defense}** :shield:\n**Health**    | **{c_health}** {h_a_s_response['HEALTH']}\n**Stamina** | **{c_stamina}** {h_a_s_response['STAMINA']}", description=textwrap.dedent(f"""\
                                 💥 | **{cmove1_text}** *{cap1}*
                                 ☄️ | **{cmove2_text}** *{cap2}*
                                 🏵️ | **{cmove3_text}** *{cap3}*
                                 🦠 | **{cmove_enhanced_text}** *{cenh1}{enhancer_suffix_mapping[cenh_name]}*
-                                *{cmove_enhanced_text}: {enhancer_mapping[cenh_name]}*
+                                ↘️ {enhancer_mapping[cenh_name]}*
 
                                 {pet_msg_on_resolve}
                                 *Stamina costs located on buttons*
@@ -16688,21 +16674,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                     await ctx.author.send(embed=embedVar)
                     await discord.TextChannel.delete(private_channel, reason=None)
 
-                # Play Again Buttons
-                play_again_buttons = [
-                    manage_components.create_button(
-                        style=ButtonStyle.blue,
-                        label="Yes",
-                        custom_id="Yes"
-                    ),
-                    manage_components.create_button(
-                        style=ButtonStyle.red,
-                        label="No",
-                        custom_id="No"
-                    )
-                ]
-                play_again_buttons_action_row = manage_components.create_actionrow(*play_again_buttons)
-
                 # await private_channel.send(f":zap: {user2.mention} you win the match!")
                 wintime = time.asctime()
                 h_playtime = int(wintime[11:13])
@@ -16730,20 +16701,33 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                     await ctx.author.send(embed=embedVar)
                     await discord.TextChannel.delete(private_channel, reason=None)
 
-                embedVar = discord.Embed(title=f":zap: **{t_card}** wins the match!", description=f"The game lasted {turn_total} rounds.\n**{t_card} says**\n`{t_win_description}`", colour=0x1abc9c)
+                
+                # Play Again Buttons
+                play_again_buttons = [
+                        manage_components.create_button(
+                            style=ButtonStyle.blue,
+                            label="Yes",
+                            custom_id = "Yes"
+                        ),
+                        manage_components.create_button(
+                            style=ButtonStyle.red,
+                            label="No",
+                            custom_id = "No"
+                        )
+                    ]
+                play_again_buttons_action_row = manage_components.create_actionrow(*play_again_buttons)
+                embedVar = discord.Embed(title=f":zap: **{t_card}** wins the match!\n\nWill you play again?", description=f"The game lasted {turn_total} rounds.\n**{t_card} says**\n`{t_win_description}`", colour=0x1abc9c)
                 if int(gameClock[0]) == 0 and int(gameClock[1]) == 0:
                     embedVar.set_footer(text=f"Battle Time: {gameClock[2]} Seconds.")
                 elif int(gameClock[0]) == 0:
                     embedVar.set_footer(text=f"Battle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                 else: 
                     embedVar.set_footer(text=f"Battle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
-                await private_channel.send(embed=embedVar)
+                await private_channel.send(embed=embedVar, components=[play_again_buttons_action_row])
 
                 if mode not in co_op_modes and mode != "Abyss":
-                    await private_channel.send(f"{ctx.author.mention} will you play again?", components=[play_again_buttons])
                     play_again_selector = ctx.author
                 elif mode in co_op_modes and mode not in ai_co_op_modes:
-                    await private_channel.send(f"{user2.mention} will you play again with {ctx.author.mention}?", components=[play_again_buttons])
                     play_again_selector = user2
 
 
@@ -16966,15 +16950,15 @@ def health_and_stamina_bars(health, stamina, max_health, max_stamina, resolved):
         if stamina >= max_stamina:
             stamina_response = f"🌀🌀🌀🌀🌀"
         if stamina >= (max_stamina * .80) and stamina < max_stamina:
-            stamina_response = f"🌀🌀🌀🌀🌪️"
+            stamina_response = f"🌀🌀🌀🌀⚫"
         if stamina >= (max_stamina * .60) and stamina < (max_stamina * .80):
-            stamina_response = f"🌀🌀🌀🌪️🌪️"
+            stamina_response = f"🌀🌀🌀⚫⚫"
         if stamina >= (max_stamina * .40) and stamina < (max_stamina * .60):
-            stamina_response = f"🌀🌀🌪️🌪️🌪️"
+            stamina_response = f"🌀🌀⚫⚫⚫"
         if stamina >= (max_stamina * .10) and stamina < (max_stamina * .40):
-            stamina_response = f"🌀🌪️🌪️🌪️🌪️"
+            stamina_response = f"🌀⚫⚫⚫⚫"
         if stamina >= 0 and stamina <= (max_stamina * .10):
-            stamina_response = f"🌪️🌪️🌪️🌪️🌪️"
+            stamina_response = f"⚫⚫⚫⚫⚫"
 
     
 
@@ -17683,17 +17667,17 @@ enhancer_mapping = {'ATK': 'Increase Attack %',
 'DEF': 'Increase Defense %',
 'STAM': 'Increase Stamina',
 'HLT': 'Heal yourself or companion',
-'LIFE': 'Lifesteal: Steal Health from Opponent',
+'LIFE': 'Steal Health from Opponent',
 'DRAIN': 'Drain Stamina from Opponent',
-'FLOG': 'Flog: Steal Attack from Opponent',
-'WITHER': 'Wither: Steal Defense from Opponent',
-'RAGE': 'Rage: Lose Defense, Increase Attack',
-'BRACE': 'Brace: Lose Attack, Increase Defense',
-'BZRK': 'Berserk: Lose Health, Increase Attack',
-'CRYSTAL': 'Crystal: Lose Health, Increase Defense',
-'GROWTH': 'Growth: Lose Health, Increase Attack & Defense',
-'STANCE': 'Stance: Swap your Attack & Defense, Increase Attack',
-'CONFUSE': 'Confuse: Swap Opponent Attack & Defense, Decrease Opponent Defense',
+'FLOG': 'Steal Attack from Opponent',
+'WITHER': 'Steal Defense from Opponent',
+'RAGE': 'Lose Defense, Increase Attack',
+'BRACE': 'Lose Attack, Increase Defense',
+'BZRK': 'Lose Health, Increase Attack',
+'CRYSTAL': 'Lose Health, Increase Defense',
+'GROWTH': 'Lose Health, Increase Attack & Defense',
+'STANCE': 'Swap your Attack & Defense, Increase Attack',
+'CONFUSE': 'Swap Opponent Attack & Defense, Decrease Opponent Defense',
 'BLINK': 'Decrease your  Stamina, Swap Stamina with Opponent',
 'SLOW': 'Decrease Opponent Stamina, Swap Stamina with Opponent',
 'HASTE': ' Increase your Stamina, Swap Stamina with Opponent',
@@ -17707,10 +17691,10 @@ enhancer_mapping = {'ATK': 'Increase Attack %',
 }
 enhancer_suffix_mapping = {'ATK': '%',
 'DEF': '%',
-'STAM': 'Flat',
+'STAM': ' Flat',
 'HLT': '%',
 'LIFE': '%',
-'DRAIN': 'Flat',
+'DRAIN': ' Flat',
 'FLOG': '%',
 'WITHER': '%',
 'RAGE': '%',
@@ -17718,18 +17702,18 @@ enhancer_suffix_mapping = {'ATK': '%',
 'BZRK': '%',
 'CRYSTAL': '%',
 'GROWTH': '%',
-'STANCE': 'Flat',
-'CONFUSE': 'Flat',
-'BLINK': 'Flat',
-'SLOW': 'Flat',
-'HASTE': 'Flat',
+'STANCE': ' Flat',
+'CONFUSE': ' Flat',
+'BLINK': ' Flat',
+'SLOW': ' Flat',
+'HASTE': ' Flat',
 'FEAR': '%',
-'SOULCHAIN': 'Flat',
-'GAMBLE': 'Flat',
-'WAVE': 'Flat',
-'CREATION': 'Flat',
-'BLAST': 'Flat',
-'DESTRUCTION': 'Flat'
+'SOULCHAIN': ' Flat',
+'GAMBLE': ' Flat',
+'WAVE': ' Flat',
+'CREATION': ' Flat',
+'BLAST': ' Flat',
+'DESTRUCTION': ' Flat'
 }
 Healer_Enhancer_Check = ['HLT', 'LIFE']
 # DPS_Enhancer_Check = ['FLOG', 'WITHER', 'LIFE', ]
