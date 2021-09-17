@@ -291,8 +291,8 @@ class Profile(commands.Cog):
         d = db.queryUser(query)
         vault = db.queryVault({'OWNER': d['DISNAME']})
         
-        if d:
-            try:
+        try:
+            if d:
                 name = d['DISNAME'].split("#",1)[0]
                 avatar = d['AVATAR']
                 card_levels = vault['CARD_LEVELS']
