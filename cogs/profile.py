@@ -287,12 +287,12 @@ class Profile(commands.Cog):
 
     @cog_ext.cog_slash(description="Check all your cards", guild_ids=main.guild_ids)
     async def cards(self, ctx):
+        await ctx.defer()
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
         vault = db.queryVault({'OWNER': d['DISNAME']})
-        
-        try:
-            if d:
+        try: 
+            if vault:
                 name = d['DISNAME'].split("#",1)[0]
                 avatar = d['AVATAR']
                 card_levels = vault['CARD_LEVELS']
@@ -308,66 +308,51 @@ class Profile(commands.Cog):
                 elif balance >= 50000:
                     icon = ":dollar:"
                 
-                    name = d['DISNAME'].split("#",1)[0]
-                    avatar = d['AVATAR']
-                    card_levels = vault['CARD_LEVELS']
-                    balance = vault['BALANCE']
-                    cards_list = vault['CARDS']
-                    total_cards = len(cards_list)
-                    cards=[]
-                    icon = ":coin:"
-                    if balance >= 150000:
-                        icon = ":money_with_wings:"
-                    elif balance >=100000:
-                        icon = ":moneybag:"
-                    elif balance >= 50000:
-                        icon = ":dollar:"
-                    
+                
+                for card in cards_list:
+                    resp = db.queryCard({"NAME": str(card)})
+                    lvl = ""
+                    for cl in card_levels:
+                        if card == cl['CARD']:
+                            lvl = f":trident: **{cl['LVL']}**"
+                    cards.append(textwrap.dedent(f"""
+                    :flower_playing_cards: **{resp['NAME']}** | {lvl}
+                    :heart: {resp['HLT']} :dagger: {resp['ATK']} :shield: {resp['DEF']}
+                    :earth_americas:  {resp['UNIVERSE']}"""))
 
-                    for card in cards_list:
-                        resp = db.queryCard({"NAME": str(card)})
-                        lvl = ""
-                        for cl in card_levels:
-                            if card == cl['CARD']:
-                                lvl = f":trident: **{cl['LVL']}**"
-                        cards.append(textwrap.dedent(f"""
-                        :flower_playing_cards: **{resp['NAME']}** | {lvl}
-                        :heart: {resp['HLT']} :dagger: {resp['ATK']} :shield: {resp['DEF']}
-                        :earth_americas:  {resp['UNIVERSE']}"""))
+                # Adding to array until divisible by 10
+                while len(cards) % 10 != 0:
+                    cards.append("")
+                # Check if divisible by 10, then start to split evenly
+                if len(cards) % 10 == 0:
+                    first_digit = int(str(len(cards))[:1])
+                    if len(cards) >= 89:
+                        if first_digit == 1:
+                            first_digit = 10
+                    cards_broken_up = np.array_split(cards, first_digit)
+                
+                # If it's not an array greater than 10, show paginationless embed
+                if len(cards) < 10:
+                    embedVar = discord.Embed(title= f"Cards\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(cards), colour=0x7289da)
+                    embedVar.set_thumbnail(url=avatar)
+                    embedVar.set_footer(text=f"/equipcard card name: Equip Card\n/viewcard card name: View Cards Details")
+                    await ctx.send(embed=embedVar)
 
-                    # Adding to array until divisible by 10
-                    while len(cards) % 10 != 0:
-                        cards.append("")
-                    # Check if divisible by 10, then start to split evenly
-                    if len(cards) % 10 == 0:
-                        first_digit = int(str(len(cards))[:1])
-                        if len(cards) >= 89:
-                            if first_digit == 1:
-                                first_digit = 10
-                        cards_broken_up = np.array_split(cards, first_digit)
-                    
-                    # If it's not an array greater than 10, show paginationless embed
-                    if len(cards) < 10:
-                        embedVar = discord.Embed(title= f"Cards\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(cards), colour=0x7289da)
-                        embedVar.set_thumbnail(url=avatar)
-                        embedVar.set_footer(text=f"/equipcard card name: Equip Card\n/viewcard card name: View Cards Details")
-                        await ctx.send(embed=embedVar)
+                embed_list = []
+                for i in range(0, len(cards_broken_up)):
+                    globals()['embedVar%s' % i] = discord.Embed(title= f":flower_playing_cards: Cards\n**Balance**: {icon}{'{:,}'.format(balance)}", description="\n".join(cards_broken_up[i]), colour=0x7289da)
+                    globals()['embedVar%s' % i].set_thumbnail(url=avatar)
+                    globals()['embedVar%s' % i].set_footer(text=f"{total_cards} Total Cards\n/equipcard card name: Equip Card\n/viewcard card name: View Cards Details")
+                    embed_list.append(globals()['embedVar%s' % i])
 
-                    embed_list = []
-                    for i in range(0, len(cards_broken_up)):
-                        globals()['embedVar%s' % i] = discord.Embed(title= f":flower_playing_cards: Cards\n**Balance**: {icon}{'{:,}'.format(balance)}", description="\n".join(cards_broken_up[i]), colour=0x7289da)
-                        globals()['embedVar%s' % i].set_thumbnail(url=avatar)
-                        globals()['embedVar%s' % i].set_footer(text=f"{total_cards} Total Cards\n/equipcard card name: Equip Card\n/viewcard card name: View Cards Details")
-                        embed_list.append(globals()['embedVar%s' % i])
-
-                    paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
-                    paginator.add_reaction('⏮️', "first")
-                    paginator.add_reaction('⬅️', "back")
-                    paginator.add_reaction('🔐', "lock")
-                    paginator.add_reaction('➡️', "next")
-                    paginator.add_reaction('⏭️', "last")
-                    embeds = embed_list
-                    await paginator.run(embeds)
+                paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+                paginator.add_reaction('⏮️', "first")
+                paginator.add_reaction('⬅️', "back")
+                paginator.add_reaction('🔐', "lock")
+                paginator.add_reaction('➡️', "next")
+                paginator.add_reaction('⏭️', "last")
+                embeds = embed_list
+                await paginator.run(embeds)
             else:
                 newVault = db.createVault({'OWNER': d['DISNAME']})
         except Exception as ex:
@@ -390,6 +375,7 @@ class Profile(commands.Cog):
 
     @cog_ext.cog_slash(description="Check all your titles", guild_ids=main.guild_ids)
     async def titles(self, ctx):
+        await ctx.defer()
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
         vault = db.queryVault({'OWNER': d['DISNAME']})
@@ -474,6 +460,7 @@ class Profile(commands.Cog):
 
     @cog_ext.cog_slash(description="Check all your arms", guild_ids=main.guild_ids)
     async def arms(self, ctx):
+        await ctx.defer()
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
         vault = db.queryVault({'OWNER': d['DISNAME']})
@@ -559,6 +546,7 @@ class Profile(commands.Cog):
 
     @cog_ext.cog_slash(description="Check all your pets", guild_ids=main.guild_ids)
     async def pets(self, ctx):
+        await ctx.defer()
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
         vault = db.queryVault({'OWNER': d['DISNAME']})
@@ -654,6 +642,7 @@ class Profile(commands.Cog):
 
     @cog_ext.cog_slash(description="Check all your destiny lines", guild_ids=main.guild_ids)
     async def destinies(self, ctx):
+        await ctx.defer()
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
         vault = db.queryVault({'OWNER': d['DISNAME']})
@@ -742,6 +731,7 @@ class Profile(commands.Cog):
 
     @cog_ext.cog_slash(description="Check all your quests", guild_ids=main.guild_ids)
     async def quests(self, ctx):
+        await ctx.defer()
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
         vault = db.queryVault({'OWNER': d['DISNAME']})
