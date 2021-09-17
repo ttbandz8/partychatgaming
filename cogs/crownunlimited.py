@@ -141,23 +141,23 @@ class CrownUnlimited(commands.Cog):
             bounty = 0
             
             if universe_tier == 1:
-                random_flee_loss = random.randint(1, 500)
-                bounty = random.randint(50, 250)
+                random_flee_loss = random.randint(1, 100)
+                bounty = random.randint(1, 500)
             if universe_tier == 2:
-                random_flee_loss = random.randint(1, 1000)
-                bounty = random.randint(50, 500)
+                random_flee_loss = random.randint(1, 150)
+                bounty = random.randint(1, 1500)
             if universe_tier == 3:
-                random_flee_loss = random.randint(1, 2000)
-                bounty = random.randint(150, 1500)
+                random_flee_loss = random.randint(1, 250)
+                bounty = random.randint(1, 4000)
             if universe_tier == 9:
-                random_flee_loss = random.randint(1, 3000)
-                bounty = random.randint(1, 6000)
+                random_flee_loss = random.randint(1, 350)
+                bounty = random.randint(1, 9000)
             if universe_tier == 4:
-                random_flee_loss = random.randint(1, 5000)
-                bounty = random.randint(500, 4000)
+                random_flee_loss = random.randint(1, 650)
+                bounty = random.randint(1, 15000)
             if universe_tier == 5:
-                random_flee_loss = random.randint(1, 100000)
-                bounty = random.randint(5000, 25000)
+                random_flee_loss = random.randint(1, 750)
+                bounty = random.randint(1, 35000)
             
             if bounty >= 150000:
                 bounty_icon = ":money_with_wings:"
@@ -178,6 +178,16 @@ class CrownUnlimited(commands.Cog):
                 drop_response = await specific_drops(str(message.author), cards[rand_card]['NAME'], universetitle)
                 embedVar = discord.Embed(title=f"**{drop_response}**", colour=0xf1c40f)
                 embedVar.set_footer(text="LESS GOOOOO", icon_url="https://cdn.discordapp.com/emojis/877233426770583563.gif?v=1")
+                take_chances_response = embedVar
+            
+            elif random_flee_loss <= 100:
+                if selected_mode == "Tales":
+                    found_amount = round(bounty / 2)
+                else:
+                    found_amount = round(bounty / 3)
+                await bless(found_amount, str(message.author))
+                embedVar = discord.Embed(title=f"You fled but found {bounty_icon} {found_amount}!", colour=0xf1c40f)
+                embedVar.set_footer(text="Money Earned!", icon_url="https://cdn.discordapp.com/emojis/877233426770583563.gif?v=1")
                 embedVar.set_author(name="Good job!", icon_url="https://cdn.discordapp.com/emojis/875101593152917585.gif?v=1")
                 take_chances_response = embedVar
             else:
@@ -8695,6 +8705,17 @@ async def destiny(player, opponent, mode):
                     completion = destiny['REQUIRED'] - (destiny['WINS'] + 3)
                     
                     if completion <= 0:
+                        try:
+                            if destiny['EARN'] not in owned_card_levels_list: 
+                                # Add the CARD_LEVELS for Destiny Card 
+                                card_data = db.queryCard({'NAME': str(destiny['EARN'])})
+                                uni = db.queryUniverse({'TITLE': card_data['UNIVERSE']})
+                                tier = uni['TIER']
+                                update_query = {'$addToSet': {'CARD_LEVELS': {'CARD': str(destiny['EARN']), 'LVL': 0, 'TIER': int(tier), 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
+                                db.updateVaultNoFilter(vault_query, update_query)
+                                #
+                        except Exception as ex:
+                            print(f"Error in Completing Destiny: {ex}")
                         response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(destiny['EARN'])}})
                         message = f"**{destiny['NAME']}** completed! **{destiny['EARN']}** has been added to your vault!"
                         query = {'OWNER': str(player)}
@@ -9468,8 +9489,6 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         boss = db.queryBoss({'NAME': str(bossname)})
         enemy_arm = boss['ARM']
         t_user = boss
-        opponent_scaling = 125 * universe_tier
-        opponent_health_scaling = 3000 + (universe_tier * 1500)
     if mode in U_modes:
         enemy_title = "UTITLE"
         enemy_arm = "UARM"   
@@ -9562,6 +9581,14 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             o_win_description = "Too easy. Come back when you're truly prepared."
             o_lose_description = "I can't believe I lost..."
 
+        if mode in B_modes:
+            o_universe_data = db.queryUniverse({"TITLE": o_universe})
+            o_universe_tier = o_universe_data['TIER']
+            if o_universe_tier == 9:
+                o_universe_tier = crown_rift_universe_mappings[o_universe]
+
+            opponent_scaling = 50 * universe_tier + (o_universe_tier * 150)
+            opponent_health_scaling = ((universe_tier * 1250) + (o_universe_tier * 1200))
 
         if companion:
             ### Companion Data
@@ -9658,6 +9685,15 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 c_special_move_description = "Take this!"
                 c_win_description = "Too easy. Come back when you're truly prepared."
                 c_lose_description = "I can't believe I lost..."
+            
+            if mode in B_modes:
+                c_universe_data = db.queryUniverse({"TITLE": c_universe})
+                c_universe_tier = c_universe_data['TIER']
+                if c_universe_tier == 9:
+                    c_universe_tier = crown_rift_universe_mappings[c_universe]
+                if c_universe_tier > o_universe_tier:
+                    opponent_scaling = 50 * universe_tier + (c_universe_tier * 150)
+                    opponent_health_scaling = 1500 + ((universe_tier * 1250) + (c_universe_tier * 1200))
 
         if mode in B_modes:
             tarm = db.queryArm({'ARM': enemy_arm})
@@ -16963,9 +16999,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 await ctx.author.send(embed=embedVar)
                                 await ctx.author.send(f"You were awarded :coin: 5000 for completing the {selected_universe} Tale! ")
                             continued=False
-                            await discord.TextChannel.delete(private_channel, reason=None)
-
-                    
+                            await discord.TextChannel.delete(private_channel, reason=None)                  
     except Exception as ex:
         trace = []
         tb = ex.__traceback__
@@ -17799,6 +17833,7 @@ enhancer_suffix_mapping = {'ATK': '%',
 'BLAST': ' Flat',
 'DESTRUCTION': ' Flat'
 }
+crown_rift_universe_mappings = {'Crown Rift Awakening': 3, 'Crown Rift Slayers': 2, 'Crown Rift Madness': 5}
 Healer_Enhancer_Check = ['HLT', 'LIFE']
 # DPS_Enhancer_Check = ['FLOG', 'WITHER', 'LIFE', ]
 Gamble_Enhancer_Check = ['GAMBLE']

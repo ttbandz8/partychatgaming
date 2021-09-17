@@ -292,7 +292,7 @@ class Profile(commands.Cog):
         d = db.queryUser(query)
         vault = db.queryVault({'OWNER': d['DISNAME']})
         
-        if vault:
+        if d:
             try:
                 name = d['DISNAME'].split("#",1)[0]
                 avatar = d['AVATAR']
