@@ -4122,7 +4122,7 @@ class CrownUnlimited(commands.Cog):
                                 pet_msg_on_resolve =f"🐦 | *{enhancer_mapping[pet_enh_name]}*"
 
                             h_a_s_response = health_and_stamina_bars(o_health, o_stamina, o_max_health, o_max_stamina, o_used_resolve)
-                            embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}\n**Attack**    | **{round(o_attack)}** :dagger:\n**Defense** | **{round(o_defense)}** :shield:\n**Health**    | **{round(o_health)}** {h_a_s_response['HEALTH']}\n**Stamina** | **{o_stamina}** {h_a_s_response['STAMINA']}", description=textwrap.dedent(f"""\
+                            embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}\n**Attack**    | **{round(o_attack)}** :dagger:\n**Defense** | **{round(o_defense)}** :shield:\n**Health**    | **{round(o_health)}/{round(o_max_health)}** {h_a_s_response['HEALTH']}\n**Stamina** | **{o_stamina}/{o_max_stamina}** {h_a_s_response['STAMINA']}", description=textwrap.dedent(f"""\
                             💥 | **{omove1_text}** *{ap1}*
                             ☄️ | **{omove2_text}** *{ap2}*
                             🏵️ | **{omove3_text}** *{ap3}*
@@ -4828,7 +4828,7 @@ class CrownUnlimited(commands.Cog):
                                     tpet_msg_on_resolve =f"🐦 | *{enhancer_mapping[tpet_enh_name]}*"
 
                                 h_a_s_response = health_and_stamina_bars(t_health, t_stamina, t_max_health, t_max_stamina, t_used_resolve)
-                                embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}\n**Attack**    | **{t_attack}** :dagger:\n**Defense** | **{t_defense}** :shield:\n**Health**    | **{t_health}** {h_a_s_response['HEALTH']}\n**Stamina** | **{t_stamina}** {h_a_s_response['STAMINA']}", description=textwrap.dedent(f"""\
+                                embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}\n**Attack**    | **{t_attack}** :dagger:\n**Defense** | **{t_defense}** :shield:\n**Health**    | **{t_health}/{t_max_health}** {h_a_s_response['HEALTH']}\n**Stamina** | **{t_stamina}/{t_max_stamina}** {h_a_s_response['STAMINA']}", description=textwrap.dedent(f"""\
                                 💥 | **{tmove1_text}** *{tap1}*
                                 ☄️ | **{tmove2_text}** *{tap2}*
                                 🏵️ | **{tmove3_text}** *{tap3}*
@@ -11506,9 +11506,6 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
 
 
 async def battle_commands(self, ctx, mode, universe, selected_universe, completed_universes, oguild, crestlist, crestsearch, private_channel, sowner, oteam, ofam, cowner, cteam, cfam, deckNumber, user):
-    print(oguild)
-    print(oteam)
-    print(ofam)
     randomized_battle = False
     co_op_modes = ['CTales', 'DTales', 'CDungeon', 'DDungeon', 'CBoss']
     ai_co_op_modes = ['DTales', 'DDungeon']
@@ -12566,7 +12563,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 pet_msg_on_resolve =f"🐦 | *{enhancer_mapping[pet_enh_name]}*"
 
                             h_a_s_response = health_and_stamina_bars(o_health, o_stamina, o_max_health, o_max_stamina, o_used_resolve)
-                            embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}\n**Attack**    | **{round(o_attack)}** :dagger:\n**Defense** | **{round(o_defense)}** :shield:\n**Health**    | **{round(o_health)}** {h_a_s_response['HEALTH']}\n**Stamina** | **{o_stamina}** {h_a_s_response['STAMINA']}", description=textwrap.dedent(f"""\
+                            embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}\n**Attack**    | **{round(o_attack)}** :dagger:\n**Defense** | **{round(o_defense)}** :shield:\n**Health**    | **{round(o_health)}/{round(o_max_health)}** {h_a_s_response['HEALTH']}\n**Stamina** | **{o_stamina}/{o_max_stamina}** {h_a_s_response['STAMINA']}", description=textwrap.dedent(f"""\
                             💥 | **{omove1_text}** *{ap1}*
                             ☄️ | **{omove2_text}** *{ap2}*
                             🏵️ | **{omove3_text}** *{ap3}*
@@ -15266,7 +15263,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     pet_msg_on_resolve =f"🐦 | *{enhancer_mapping[pet_enh_name]}*"
 
                                 h_a_s_response = health_and_stamina_bars(c_health, c_stamina, c_max_health, c_max_stamina, c_used_resolve)
-                                embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}\n**Attack**    | **{c_attack}** :dagger:\n**Defense** | **{c_defense}** :shield:\n**Health**    | **{c_health}** {h_a_s_response['HEALTH']}\n**Stamina** | **{c_stamina}** {h_a_s_response['STAMINA']}", description=textwrap.dedent(f"""\
+                                embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}\n**Attack**    | **{c_attack}** :dagger:\n**Defense** | **{c_defense}** :shield:\n**Health**    | **{c_health}/{c_max_health}** {h_a_s_response['HEALTH']}\n**Stamina** | **{c_stamina}/{c_max_stamina}** {h_a_s_response['STAMINA']}", description=textwrap.dedent(f"""\
                                 💥 | **{cmove1_text}** *{cap1}*
                                 ☄️ | **{cmove2_text}** *{cap2}*
                                 🏵️ | **{cmove3_text}** *{cap3}*
