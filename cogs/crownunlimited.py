@@ -174,7 +174,7 @@ class CrownUnlimited(commands.Cog):
                 random_flee_loss = 100
 
             # Take Chances Button Interaction
-            if random_flee_loss <= 50 and selected_mode == "Tales":
+            if random_flee_loss <= 10 and selected_mode == "Tales":
                 drop_response = await specific_drops(str(message.author), cards[rand_card]['NAME'], universetitle)
                 embedVar = discord.Embed(title=f"**{drop_response}**", colour=0xf1c40f)
                 embedVar.set_footer(text="LESS GOOOOO", icon_url="https://cdn.discordapp.com/emojis/877233426770583563.gif?v=1")
