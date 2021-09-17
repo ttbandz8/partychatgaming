@@ -12545,9 +12545,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             util_action_row = manage_components.create_actionrow(*util_buttons)
                             if mode in co_op_modes:
                                 coop_util_action_row = manage_components.create_actionrow(*coop_util_buttons)
-
+                            
+                            companion_stats = ""
                             if mode in co_op_modes:
                                 components = [battle_action_row, util_action_row, coop_util_action_row]
+                                companion_stats = f"\n{c_card}: ❤️{c_health} 🌀{c_stamina} 🗡️{c_attack}/🛡️{c_defense}"
                             else:
                                 components = [battle_action_row, util_action_row]
 
@@ -12574,7 +12576,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             *Stamina costs located on buttons*
                             """), color=0xe74c3c)
                             embedVar.set_thumbnail(url=opet_image)
-                            embedVar.set_footer(text=f"{t_card}: ❤️{t_health} 🌀{t_stamina} 🗡️{t_attack}/🛡️{t_defense}", icon_url="https://cdn.discordapp.com/emojis/789290881654980659.gif?v=1")
+                            embedVar.set_footer(text=f"{t_card}: ❤️{t_health} 🌀{t_stamina} 🗡️{t_attack}/🛡️{t_defense}{companion_stats}", icon_url="https://cdn.discordapp.com/emojis/789290881654980659.gif?v=1")
                             await private_channel.send(embed=embedVar, components=components, file=player_1_card)
                             # Make sure user is responding with move
                             def check(button_ctx):
