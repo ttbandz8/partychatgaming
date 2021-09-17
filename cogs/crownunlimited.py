@@ -174,7 +174,7 @@ class CrownUnlimited(commands.Cog):
                 random_flee_loss = 100
 
             # Take Chances Button Interaction
-            if random_flee_loss <= 35 and selected_mode == "Tales":
+            if random_flee_loss <= 50 and selected_mode == "Tales":
                 drop_response = await specific_drops(str(message.author), cards[rand_card]['NAME'], universetitle)
                 embedVar = discord.Embed(title=f"**{drop_response}**", colour=0xf1c40f)
                 embedVar.set_footer(text="LESS GOOOOO", icon_url="https://cdn.discordapp.com/emojis/877233426770583563.gif?v=1")
@@ -195,7 +195,7 @@ class CrownUnlimited(commands.Cog):
             embedVar.set_author(name="Enemy Approaches!", icon_url=f"{icon}")
             embedVar.set_thumbnail(url=f"{cards[rand_card]['PATH']}")
             embedVar.set_footer(text="Use /explore to turn off these interactions.", icon_url="https://cdn.discordapp.com/emojis/784402243519905792.gif?v=1")
-            await message.channel.send(embed=embedVar, components=[random_battle_buttons_action_row])
+            await message.channel.send(embed=embedVar, components=[random_battle_buttons_action_row], delete_after=60)
 
             def check(button_ctx):
                 return button_ctx.author == message.author
@@ -6958,27 +6958,27 @@ class CrownUnlimited(commands.Cog):
 
 
                         battle_buttons = [
-                            manage_components.create_button(
-                                style=ButtonStyle.red,
-                                label=f"💥 {omove1_text} | 10🌀",
-                                custom_id =  "1"
-                            ),
-                            manage_components.create_button(
-                                style=ButtonStyle.red,
-                                label=f"☄️ {omove2_text} | 30🌀",
-                                custom_id =  "2"
-                            ),
-                            manage_components.create_button(
-                                style=ButtonStyle.red,
-                                label=f"🏵️ {omove3_text} | 80🌀",
-                                custom_id = "3"
-                            ),
-                            manage_components.create_button(
-                                style=ButtonStyle.blue,
-                                label=f"🦠 {omove_enhanced_text} | 20🌀",
-                                custom_id = "4"
-                            )
-                        ]
+                                manage_components.create_button(
+                                    style=ButtonStyle.green,
+                                    label=f"💥 10",
+                                    custom_id =  "1"
+                                ),
+                                manage_components.create_button(
+                                    style=ButtonStyle.green,
+                                    label=f"☄️ 30",
+                                    custom_id =  "2"
+                                ),
+                                manage_components.create_button(
+                                    style=ButtonStyle.green,
+                                    label=f"🏵️ 80",
+                                    custom_id = "3"
+                                ),
+                                manage_components.create_button(
+                                    style=ButtonStyle.blue,
+                                    label=f"🦠 20",
+                                    custom_id = "4"
+                                )
+                            ]
 
                         util_buttons = [
                             manage_components.create_button(
@@ -7006,7 +7006,31 @@ class CrownUnlimited(commands.Cog):
                         battle_action_row = manage_components.create_actionrow(*battle_buttons)
                         util_action_row = manage_components.create_actionrow(*util_buttons)
 
-                        await private_channel.send(f"Choose your move! **|** _Turn_ {turn_total} :dagger:**{o_attack}**/:shield:**{o_defense}**", components=[battle_action_row, util_action_row], file=player_1_card)
+                        ap1 = list(o_1.values())[0] + ocard_lvl_ap_buff
+                        ap2 = list(o_2.values())[0] + ocard_lvl_ap_buff
+                        ap3 = list(o_3.values())[0] + ocard_lvl_ap_buff
+                        enh1 = list(o_enhancer.values())[0]
+                        enh_name = list(o_enhancer.values())[2]
+                        pet_enh_name = list(opet_move.values())[2]
+                        pet_msg_on_resolve = ""
+
+                        if o_used_resolve:
+                            pet_msg_on_resolve =f"🐦 | *{enhancer_mapping[pet_enh_name]}*"
+
+                        h_a_s_response = health_and_stamina_bars(o_health, o_stamina, o_max_health, o_max_stamina, o_used_resolve)
+                        embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}\n**Attack**    | **{round(o_attack)}** :dagger:\n**Defense** | **{round(o_defense)}** :shield:\n**Health**    | **{round(o_health)}/{round(o_max_health)}** {h_a_s_response['HEALTH']}\n**Stamina** | **{o_stamina}/{o_max_stamina}** {h_a_s_response['STAMINA']}", description=textwrap.dedent(f"""\
+                        💥 | **{omove1_text}** *{ap1}*
+                        ☄️ | **{omove2_text}** *{ap2}*
+                        🏵️ | **{omove3_text}** *{ap3}*
+                        🦠 | **{omove_enhanced_text}** *{enh1}{enhancer_suffix_mapping[enh_name]}*
+                        ↘️ {enhancer_mapping[enh_name]}
+
+                        {pet_msg_on_resolve}
+                        *Stamina costs located on buttons*
+                        """), color=0xe74c3c)
+                        embedVar.set_thumbnail(url=opet_image)
+                        embedVar.set_footer(text=f"{t_card}: ❤️{t_health} 🌀{t_stamina} 🗡️{t_attack}/🛡️{t_defense}", icon_url="https://cdn.discordapp.com/emojis/789290881654980659.gif?v=1")
+                        await private_channel.send(embed=embedVar, components=components, file=player_1_card)
                         # Make sure user is responding with move
                         def check(button_ctx):
                             return button_ctx.author == user1 and button_ctx.custom_id in options
@@ -9437,27 +9461,25 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
     enemy_title = ""
     enemy_arm = ""
     t_user = ""
+    if mode == "Abyss":
+        opponent_scaling = abyss_scaling
     if mode in B_modes:
         bossname = boss['CARD']
         boss = db.queryBoss({'NAME': str(bossname)})
         enemy_arm = boss['ARM']
         t_user = boss
+        opponent_scaling = 125 * universe_tier
+        opponent_health_scaling = 3000 + (universe_tier * 1500)
     if mode in U_modes:
         enemy_title = "UTITLE"
         enemy_arm = "UARM"   
     if mode in D_modes:
         enemy_title = "DTITLE"
         enemy_arm = "DARM"
+        opponent_scaling = opponent_scaling + 50
+        opponent_health_scaling = 450
     
     try:   
-        if mode in D_modes:
-            opponent_scaling = opponent_scaling + 50
-            opponent_health_scaling = 300
-
-        if mode == "Abyss":
-            opponent_scaling = abyss_scaling
-    
-
         # Player 1 Data
         o_user = sowner
         oarm = db.queryArm({'ARM': o_user['ARM']})
@@ -9665,7 +9687,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         t_stamina = t['STAM']
         t_max_stamina= t['STAM']
         t_moveset = t['MOVESET']
-        t_attack = t['ATK'] + (3 * currentopponent) + opponent_scaling
+        t_attack = t['ATK'] + (4 * currentopponent) + opponent_scaling
         t_defense = t['DEF'] + (3 * currentopponent) + opponent_scaling
         t_type = t['TYPE']
         t_accuracy = t['ACC']
@@ -13320,9 +13342,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         t_attack = t_attack + t_attackcalc
                         t_defense =  t_defense + t_defensecalc
                         t_used_focus=True
-                        embedVar = discord.Embed(title=f"{t_card.upper()} FOCUSED", description=f"**{t_card} says**\n{t_focus_description}", colour=0xe91e63)
-                        embedVar.add_field(name=f"{t_card} focused and {healmessage}", value="All stats & stamina increased")
-                        await private_channel.send(embed=embedVar)
+                        if mode != "ATales":
+                            embedVar = discord.Embed(title=f"{t_card.upper()} FOCUSED", description=f"**{t_card} says**\n{t_focus_description}", colour=0xe91e63)
+                            embedVar.add_field(name=f"{t_card} focused and {healmessage}", value="All stats & stamina increased")
+                            await private_channel.send(embed=embedVar)
                         if not t_used_resolve and t_used_focus and t_universe == "Digimon":  #Digimon Universal Trait
                             #fortitude or luck is based on health  
                             fortitude = 0.0
@@ -17574,6 +17597,7 @@ async def bossdrops(player, universe):
     all_available_drop_pets = db.queryExclusiveDropPets(universe)
     boss = db.queryBoss({'UNIVERSE': universe})
     vault_query = {'OWNER' : str(player)}
+    vault = db.queryVault(vault_query)
     user_query = {'DISNAME' : str(player)}
     user = db.queryUser(user_query)
     rebirth = user['REBIRTH']
