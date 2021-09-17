@@ -9769,12 +9769,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             t_concede = t_user['DESCRIPTION'][13]
             t_wins = t_user['DESCRIPTION'][14]
        
-        if companion:
-            if c['UNIVERSE'] == "Demon Slayer" and t['HLT'] >= c['HLT']: # Demon Slayer Universal Trait
-                c_max_health = t['HLT'] - (10 * currentopponent)
-                c_health = t['HLT'] - (10 * currentopponent)
-            else:                    
-                c_max_health = c['HLT'] - (10 * currentopponent) + ccard_lvl_hlt_buff
+        
 
         #DBZ traits
         o_final_stand=False
@@ -10358,100 +10353,6 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         tpetmove_type = list(tpet_passive.values())[1]
         tpet_move = {str(tpetmove_text):int(tpetmove_ap), 'STAM': 15, 'TYPE':tpetmove_type}
 
-        # Arm Passive Player 2
-        tarm_passive_type = list(tarm_passive.keys())[0]
-        tarm_passive_value = list(tarm_passive.values())[0]
-
-        if tarm_passive_type == 'ATK':
-            t_attack = t_attack + int(tarm_passive_value)
-        elif tarm_passive_type == 'DEF':
-            t_defense = t_defense + int(tarm_passive_value)
-        elif tarm_passive_type == 'STAM':
-            t_stamina = t_stamina + int(tarm_passive_value)
-        elif tarm_passive_type == 'HLT':
-            t_max_health = t_max_health + int(tarm_passive_value)
-            t_health = t_health + int(tarm_passive_value)
-        elif tarm_passive_type == 'LIFE':
-            t_max_health = t_max_health + int((tarm_passive_value/100) * o_health)
-        elif tarm_passive_type == 'DRAIN':
-            if companion:
-                c_stamina = c_stamina - int(tarm_passive_value)
-            o_stamina = o_stamina - int(tarm_passive_value)
-            t_stamina = t_stamina + int(tarm_passive_value)
-        elif tarm_passive_type == 'FLOG':
-            t_attack = t_attack + int((tarm_passive_value/100) * o_attack)
-            o_attack = o_attack - int((tarm_passive_value/100) * o_attack)
-            if companion:
-                c_attack = c_attack - int((tarm_passive_value/100) * c_attack)
-        elif tarm_passive_type == 'WITHER':
-            t_defense = t_defense + int((tarm_passive_value/100) *o_defense)
-            o_defense = o_defense - int((tarm_passive_value/100) *o_defense)
-            if companion:
-                c_defense = c_defense - int((tarm_passive_value/100) *c_defense)
-        elif tarm_passive_type == 'RAGE':
-            t_attack = t_attack + int((tarm_passive_value/100) * t_defense)
-            t_defense = t_defense - int((tarm_passive_value/100) *t_attack)
-        elif tarm_passive_type == 'BRACE':            
-            t_defense = t_defense + int((tarm_passive_value/100) *t_attack)
-            t_attack = t_attack - int((tarm_passive_value/100) * t_defense)
-        elif tarm_passive_type == 'BZRK':            
-            t_attack = t_attack + int((.25*tarm_passive_value))
-            t_health = t_health - int((tarm_passive_value))
-        elif tarm_passive_type == 'CRYSTAL':            
-            t_defense = t_defense + int((.25*tarm_passive_value))
-            t_health = t_health - int((tarm_passive_value))
-        elif tarm_passive_type == 'GROWTH':            
-            t_attack = t_attack + int((tarm_passive_value/100) * t_attack)
-            t_defense = t_defense + int((tarm_passive_value/100) * t_defense)
-            t_max_health = t_max_health - int(((tarm_passive_value/100) * t_max_health))
-        elif tarm_passive_type == 'STANCE':
-            tempattack = t_attack + tarm_passive_value
-            t_attack = t_defense  + tarm_passive_value         
-            t_defense = tempattack
-        elif tarm_passive_type == 'CONFUSE':
-            tempattack = o_attack - tarm_passive_value
-            o_attack = o_defense  - tarm_passive_value           
-            o_defense = tempattack
-            if companion:
-                c_defense = tempattack
-        elif tarm_passive_type == 'BLINK':
-            t_stamina = t_stamina - tarm_passive_value         
-            o_stamina = o_stamina + tarm_passive_value
-            if companion:
-                c_stamina = c_stamina + tarm_passive_value
-        elif tarm_passive_type == 'SLOW':
-            tempstam = o_stamina + tarm_passive_value 
-            t_stamina = t_stamina - tarm_passive_value      
-            o_stamina = t_stamina
-            if companion:
-                c_stamina = t_stamina
-            t_stamina = tempstam  
-        elif tarm_passive_type == 'HASTE':
-            tempstam = o_stamina - tarm_passive_value    
-            t_stamina = t_stamina + tarm_passive_value      
-            o_stamina = t_stamina
-            if companion:
-                c_stamina = t_stamina 
-            t_stamina = tempstam  
-        elif tarm_passive_type == 'SOULCHAIN':
-            t_stamina = tarm_passive_value
-            o_stamina = tarm_passive_value
-            if companion:
-                c_stamina = tarm_passive_value
-        elif tarm_passive_type == 'FEAR':
-            t_health = t_health - int((tarm_passive_value/100) * t_health)
-            o_attack = o_attack - int((tarm_passive_value/100) * o_attack)
-            o_defense = o_defense - int((tarm_passive_value/100) * o_defense)
-            if companion:
-                c_attack = c_attack - int((tarm_passive_value/100) * c_attack)
-                c_defense = c_defense - int((tarm_passive_value/100) * c_defense)
-        elif tarm_passive_type == 'GAMBLE':
-            t_health = tarm_passive_value * 2
-            o_health = tarm_passive_value
-            if companion:
-                c_health = tarm_passive_value
-
-
         # Player 2 Passive Config
         if (t_universe == t_title_universe) or (t_title_universe == "Unbound"):
             t_title_passive_bool = True
@@ -10636,6 +10537,100 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 o_health = t_title_passive_value
                 if companion:
                     c_health = t_title_passive_value
+
+        # Arm Passive Player 2
+        tarm_passive_type = list(tarm_passive.keys())[0]
+        tarm_passive_value = list(tarm_passive.values())[0]
+
+        if tarm_passive_type == 'ATK':
+            t_attack = t_attack + int(tarm_passive_value)
+        elif tarm_passive_type == 'DEF':
+            t_defense = t_defense + int(tarm_passive_value)
+        elif tarm_passive_type == 'STAM':
+            t_stamina = t_stamina + int(tarm_passive_value)
+        elif tarm_passive_type == 'HLT':
+            t_max_health = t_max_health + int(tarm_passive_value)
+            t_health = t_health + int(tarm_passive_value)
+        elif tarm_passive_type == 'LIFE':
+            t_max_health = t_max_health + int((tarm_passive_value/100) * o_health)
+        elif tarm_passive_type == 'DRAIN':
+            if companion:
+                c_stamina = c_stamina - int(tarm_passive_value)
+            o_stamina = o_stamina - int(tarm_passive_value)
+            t_stamina = t_stamina + int(tarm_passive_value)
+        elif tarm_passive_type == 'FLOG':
+            t_attack = t_attack + int((tarm_passive_value/100) * o_attack)
+            o_attack = o_attack - int((tarm_passive_value/100) * o_attack)
+            if companion:
+                c_attack = c_attack - int((tarm_passive_value/100) * c_attack)
+        elif tarm_passive_type == 'WITHER':
+            t_defense = t_defense + int((tarm_passive_value/100) *o_defense)
+            o_defense = o_defense - int((tarm_passive_value/100) *o_defense)
+            if companion:
+                c_defense = c_defense - int((tarm_passive_value/100) *c_defense)
+        elif tarm_passive_type == 'RAGE':
+            t_attack = t_attack + int((tarm_passive_value/100) * t_defense)
+            t_defense = t_defense - int((tarm_passive_value/100) *t_attack)
+        elif tarm_passive_type == 'BRACE':            
+            t_defense = t_defense + int((tarm_passive_value/100) *t_attack)
+            t_attack = t_attack - int((tarm_passive_value/100) * t_defense)
+        elif tarm_passive_type == 'BZRK':            
+            t_attack = t_attack + int((.25*tarm_passive_value))
+            t_health = t_health - int((tarm_passive_value))
+        elif tarm_passive_type == 'CRYSTAL':            
+            t_defense = t_defense + int((.25*tarm_passive_value))
+            t_health = t_health - int((tarm_passive_value))
+        elif tarm_passive_type == 'GROWTH':            
+            t_attack = t_attack + int((tarm_passive_value/100) * t_attack)
+            t_defense = t_defense + int((tarm_passive_value/100) * t_defense)
+            t_max_health = t_max_health - int(((tarm_passive_value/100) * t_max_health))
+        elif tarm_passive_type == 'STANCE':
+            tempattack = t_attack + tarm_passive_value
+            t_attack = t_defense  + tarm_passive_value         
+            t_defense = tempattack
+        elif tarm_passive_type == 'CONFUSE':
+            tempattack = o_attack - tarm_passive_value
+            o_attack = o_defense  - tarm_passive_value           
+            o_defense = tempattack
+            if companion:
+                c_defense = tempattack
+        elif tarm_passive_type == 'BLINK':
+            t_stamina = t_stamina - tarm_passive_value         
+            o_stamina = o_stamina + tarm_passive_value
+            if companion:
+                c_stamina = c_stamina + tarm_passive_value
+        elif tarm_passive_type == 'SLOW':
+            tempstam = o_stamina + tarm_passive_value 
+            t_stamina = t_stamina - tarm_passive_value      
+            o_stamina = t_stamina
+            if companion:
+                c_stamina = t_stamina
+            t_stamina = tempstam  
+        elif tarm_passive_type == 'HASTE':
+            tempstam = o_stamina - tarm_passive_value    
+            t_stamina = t_stamina + tarm_passive_value      
+            o_stamina = t_stamina
+            if companion:
+                c_stamina = t_stamina 
+            t_stamina = tempstam  
+        elif tarm_passive_type == 'SOULCHAIN':
+            t_stamina = tarm_passive_value
+            o_stamina = tarm_passive_value
+            if companion:
+                c_stamina = tarm_passive_value
+        elif tarm_passive_type == 'FEAR':
+            t_health = t_health - int((tarm_passive_value/100) * t_health)
+            o_attack = o_attack - int((tarm_passive_value/100) * o_attack)
+            o_defense = o_defense - int((tarm_passive_value/100) * o_defense)
+            if companion:
+                c_attack = c_attack - int((tarm_passive_value/100) * c_attack)
+                c_defense = c_defense - int((tarm_passive_value/100) * c_defense)
+        elif tarm_passive_type == 'GAMBLE':
+            t_health = tarm_passive_value * 2
+            o_health = tarm_passive_value
+            if companion:
+                c_health = tarm_passive_value
+
 
         if o['UNIVERSE'] == "Demon Slayer" and t_max_health >= o['HLT']: # Demon Slayer Universal Trait
             o_max_health = t_max_health
