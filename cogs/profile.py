@@ -312,11 +312,25 @@ class Profile(commands.Cog):
                 for card in cards_list:
                     resp = db.queryCard({"NAME": str(card)})
                     lvl = ""
+                    card_available = resp['AVAILABLE']
+                    card_exclusive = resp['EXCLUSIVE']
+                    card_collection = resp['HAS_COLLECTION']
+                    icon = ":flower_playing_cards:"
+                    if card_available and card_exclusive:
+                        icon = ":fire:"
+                    elif card_available == False and card_exclusive ==False:
+                        if card_collection:
+                            icon =":sparkles:"
+                        else:
+                            icon = ":japanese_ogre:"
                     for cl in card_levels:
                         if card == cl['CARD']:
-                            lvl = f":trident: **{cl['LVL']}**"
+                            licon = ":trident:"
+                            if cl['LVL'] == 200:
+                                licon =":fleur_de_lis:"
+                            lvl = f"{licon} **{cl['LVL']}**"
                     cards.append(textwrap.dedent(f"""
-                    :flower_playing_cards: **{resp['NAME']}** | {lvl}
+                    {icon} **{resp['NAME']}** | {lvl}
                     :heart: {resp['HLT']} :dagger: {resp['ATK']} :shield: {resp['DEF']}
                     :earth_americas:  {resp['UNIVERSE']}"""))
 
@@ -400,8 +414,15 @@ class Profile(commands.Cog):
                     title_passive = resp['ABILITIES'][0]
                     title_passive_type = list(title_passive.keys())[0]
                     title_passive_value = list(title_passive.values())[0]
+                    title_available = resp['AVAILABLE']
+                    title_exclusive = resp['EXCLUSIVE']
+                    icon = ":reminder_ribbon:"
+                    if title_available and title_exclusive:
+                        icon = ":fire:"
+                    elif title_available == False and title_exclusive ==False:
+                        icon = ":japanese_ogre:"
                     titles.append(textwrap.dedent(f"""
-                    :reminder_ribbon: **{resp['TITLE']}**
+                    {icon} **{resp['TITLE']}**
                     :microbe: **{title_passive_type}:** {title_passive_value}
                     :earth_africa: **Universe:** {resp['UNIVERSE']}"""))
 
@@ -486,8 +507,15 @@ class Profile(commands.Cog):
                     arm_passive = resp['ABILITIES'][0]
                     arm_passive_type = list(arm_passive.keys())[0]
                     arm_passive_value = list(arm_passive.values())[0]
+                    arm_available = resp['AVAILABLE']
+                    arm_exclusive = resp['EXCLUSIVE']
+                    icon = ":mechanical_arm:"
+                    if arm_available and arm_exclusive:
+                        icon = ":fire:"
+                    elif arm_available == False and arm_exclusive ==False:
+                        icon = ":japanese_ogre:"
                     arms.append(textwrap.dedent(f"""
-                    :mechanical_arm: **{resp['ARM']}**
+                    {icon} **{resp['ARM']}**
                     :microbe: **{arm_passive_type}:** {arm_passive_value}
                     :earth_africa: **Universe:** {resp['UNIVERSE']}"""))
 
@@ -581,8 +609,17 @@ class Profile(commands.Cog):
                     pet_ability = list(pet.keys())[3]
                     pet_ability_power = list(pet.values())[3]
                     power = (pet['BOND'] * pet['LVL']) + pet_ability_power
+                    pet_info = db.queryPet({'PET' : pet['NAME']})
+                    if pet_info:
+                        pet_available = pet_info['AVAILABLE']
+                        pet_exclusive = pet_info['EXCLUSIVE']
+                    icon = ":bird:"
+                    if pet_available and pet_exclusive:
+                        icon = ":fire:"
+                    elif pet_available == False and pet_exclusive ==False:
+                        icon = ":japanese_ogre:"
                     pets.append(textwrap.dedent(f"""
-                    :bird: **{pet['NAME']}** | _B_ **{pet['BOND']}** {bond_message} / _L_ **{pet['LVL']} {lvl_message}**
+                    {icon} **{pet['NAME']}** | _B_ **{pet['BOND']}** {bond_message} / _L_ **{pet['LVL']} {lvl_message}**
                     :small_blue_diamond: **{pet_ability}:** {power}
                     :microbe: **Type:** {pet['TYPE']}"""))
 
@@ -753,7 +790,7 @@ class Profile(commands.Cog):
                     else:
                         completed = "🔴"
                     quest_messages.append(textwrap.dedent(f"""\
-                    Defeat **{quest['OPPONENT']}** {quest['GOAL']} times in {quest['TYPE']} for :coin:{quest['REWARD']}! : {completed}
+                    Defeat **{quest['OPPONENT']}** {quest['GOAL']} times in {quest['TYPE']} for :coin:{'{:,}'.format(quest['REWARD'])}! : {completed}
                     **Current Progress:** {quest['WINS']}/{quest['GOAL']}
                     
                     """))
