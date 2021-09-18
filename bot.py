@@ -1676,13 +1676,13 @@ async def resell(ctx, item: str):
       else:
          if p1_trade_item in p1_cards:
             card = db.queryCard({'NAME':{"$regex": str(p1_trade_item), "$options": "i"}})
-            sell_price = card['PRICE'] * .15
+            sell_price = card['PRICE'] * .45
          elif p1_trade_item in p1_titles:
             title = db.queryTitle({'TITLE': {"$regex": str(p1_trade_item), "$options": "i"}})
-            sell_price = title['PRICE'] * .15
+            sell_price = title['PRICE'] * .45
          elif p1_trade_item in p1_arms:
             arm = db.queryArm({'ARM': {"$regex": str(p1_trade_item), "$options": "i"}})
-            sell_price = arm['PRICE'] * .15
+            sell_price = arm['PRICE'] * .45
 
          if (p1_trade_item == user['CARD']) or (p1_trade_item == user['TITLE']) or (p1_trade_item == user['ARM']):
             await ctx.send("You cannot resell an equipped item.")
