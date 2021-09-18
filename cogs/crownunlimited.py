@@ -16776,8 +16776,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         embedVar.set_footer(text=f"Battle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                     else: 
                         embedVar.set_footer(text=f"Battle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
-                    await ctx.author.send(embed=embedVar)
+                    
+                    await ctx.send(embed=embedVar)
                     await discord.TextChannel.delete(private_channel, reason=None)
+                    return
                 # BOSS LOSS
                 if mode in B_modes:
                     embedVar = discord.Embed(title=f":zap: **{t_card}** Wins...", description=f"Match concluded in {turn_total} turns!\n{t_wins}", colour=0x1abc9c)
