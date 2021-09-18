@@ -17194,7 +17194,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             })
             tb = tb.tb_next
         print(str({
-            'PLAYER': str(ctx.author)
+            'PLAYER': str(ctx.author),
             'type': type(ex).__name__,
             'message': str(ex),
             'trace': trace
