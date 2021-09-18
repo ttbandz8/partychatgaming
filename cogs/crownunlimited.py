@@ -1921,14 +1921,12 @@ class CrownUnlimited(commands.Cog):
                                         o_attack = round(o_attack + o_resolve_attack)
                                         o_defense = round(o_defense - o_resolve_defense)
                                         
-                                        embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
-                                        embedVar.add_field(name=f"Transformation: Command Seal", value="On Resolve, Strike with Ultimate, then Focus.")
-                                        await button_ctx.send(embed=embedVar)
                                         dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total, ocard_lvl_ap_buff)
                                         t_health = t_health - dmg['DMG']
-                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
+                                        embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE\n\n{dmg['MESSAGE']}", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Transformation: Command Seal", value="On Resolve, Strike with Ultimate, then Focus.")
                                         await button_ctx.send(embed=embedVar)
-                                        o_stamina = 0
+                                        # o_stamina = 0
                                         o_used_resolve = True 
                                         o_pet_used=False
                                         turn_total= turn_total + 1
@@ -2594,15 +2592,13 @@ class CrownUnlimited(commands.Cog):
                                         t_defense = round(t_defense - t_resolve_defense)
                                         t_used_resolve=True
                                         
-                                        embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"**{t_card} says**\n{t_resolve_description}", colour=0xe91e63)
-                                        embedVar.add_field(name=f"Transformation: Command Seal", value="On Resolve, Strike with Ultimate, then Focus.")
-                                        await private_channel.send(embed=embedVar)
                                         dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total, tcard_lvl_ap_buff)
                                         t_pet_used =False
                                         o_health = o_health - int(dmg['DMG'])
-                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                        embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE\n\n{dmg['MESSAGE']}", description=f"**{t_card} says**\n{t_resolve_description}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Transformation: Command Seal", value="On Resolve, Strike with Ultimate, then Focus.")
                                         await private_channel.send(embed=embedVar)
-                                        t_stamina = 0
+                                        # t_stamina = 0
                                         turn_total= turn_total + 1
                                         turn=0
                                     elif t_universe == "Kanto Region" or t_universe == "Johto Region" or t_universe == "Hoenn Region" or t_universe == "Sinnoh Region" or t_universe == "Kalos Region" or t_universe == "Unova Region" or t_universe == "Alola Region" or t_universe == "Galar Region": #Pokemon Resolves
@@ -4286,14 +4282,12 @@ class CrownUnlimited(commands.Cog):
                                             o_attack = round(o_attack + o_resolve_attack)
                                             o_defense = round(o_defense - o_resolve_defense)
                                             
-                                            embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
-                                            embedVar.add_field(name=f"Transformation: Command Seal", value="On Resolve, Strike with Ultimate, then Focus.")
-                                            await button_ctx.send(embed=embedVar)
                                             dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total, ocard_lvl_ap_buff)
                                             t_health = t_health - dmg['DMG']
-                                            embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
+                                            embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE\n\n{dmg['MESSAGE']}", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
+                                            embedVar.add_field(name=f"Transformation: Command Seal", value="On Resolve, Strike with Ultimate, then Focus.")
                                             await button_ctx.send(embed=embedVar)
-                                            o_stamina = 0
+                                            # o_stamina = 0
                                             o_used_resolve = True 
                                             o_pet_used=False
                                             turn_total= turn_total + 1
@@ -4972,15 +4966,13 @@ class CrownUnlimited(commands.Cog):
                                                 t_used_resolve=True
                                                 
                                                 
-                                                embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"**{t_card} says**\n{t_resolve_description}", colour=0xe91e63)
-                                                embedVar.add_field(name=f"Transformation: Command Seal", value="On Resolve, Strike with Ultimate, then Focus.")
-                                                await button_ctx.send(embed=embedVar)
                                                 dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total, tcard_lvl_ap_buff)
                                                 t_pet_used =False
                                                 o_health = o_health - int(dmg['DMG'])
-                                                embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                                embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE\n\n{dmg['MESSAGE']}", description=f"**{t_card} says**\n{t_resolve_description}", colour=0xe91e63)
+                                                embedVar.add_field(name=f"Transformation: Command Seal", value="On Resolve, Strike with Ultimate, then Focus.")
                                                 await button_ctx.send(embed=embedVar)
-                                                t_stamina = 0
+                                                # t_stamina = 0
                                                 turn_total= turn_total + 1
                                                 turn=0
                                             elif t_universe == "Kanto Region" or t_universe == "Johto Region" or t_universe == "Hoenn Region" or t_universe == "Sinnoh Region" or t_universe == "Kalos Region" or t_universe == "Unova Region" or t_universe == "Alola Region" or t_universe == "Galar Region": #Pokemon Resolves
@@ -5479,15 +5471,13 @@ class CrownUnlimited(commands.Cog):
                                             t_defense = round(t_defense - t_resolve_defense)
                                             t_used_resolve=True
                                             
-                                            embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"**{t_card} says**\n{t_resolve_description}", colour=0xe91e63)
-                                            embedVar.add_field(name=f"Transformation: Command Seal", value="On Resolve, Strike with Ultimate, then Focus.")
-                                            await ctx.send(embed=embedVar)
                                             dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total, tcard_lvl_ap_buff)
                                             t_pet_used =False
                                             o_health = o_health - int(dmg['DMG'])
-                                            embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                            embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE\n\n{dmg['MESSAGE']}", description=f"**{t_card} says**\n{t_resolve_description}", colour=0xe91e63)
+                                            embedVar.add_field(name=f"Transformation: Command Seal", value="On Resolve, Strike with Ultimate, then Focus.")
                                             await ctx.send(embed=embedVar)
-                                            t_stamina = 0
+                                            # t_stamina = 0
                                             turn_total= turn_total + 1
                                             turn=0
                                         elif t_universe == "Kanto Region" or t_universe == "Johto Region" or t_universe == "Hoenn Region" or t_universe == "Sinnoh Region" or t_universe == "Kalos Region" or t_universe == "Unova Region" or t_universe == "Alola Region" or t_universe == "Galar Region": #Pokemon Resolves
@@ -7157,14 +7147,12 @@ class CrownUnlimited(commands.Cog):
                                         o_attack = round(o_attack + o_resolve_attack)
                                         o_defense = round(o_defense - o_resolve_defense)
                                         
-                                        embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
-                                        embedVar.add_field(name=f"Transformation: Command Seal", value="On Resolve, Strike with Ultimate, then Focus.")
-                                        await button_ctx.send(embed=embedVar)
                                         dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total, ocard_lvl_ap_buff)
                                         t_health = t_health - dmg['DMG']
-                                        embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
+                                        embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE\n\n{dmg['MESSAGE']}", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
+                                        embedVar.add_field(name=f"Transformation: Command Seal", value="On Resolve, Strike with Ultimate, then Focus.")
                                         await button_ctx.send(embed=embedVar)
-                                        o_stamina = 0
+                                        # o_stamina = 0
                                         o_used_resolve = True 
                                         o_pet_used=False
                                         turn_total= turn_total + 1
@@ -7725,15 +7713,13 @@ class CrownUnlimited(commands.Cog):
                                 t_defense = round(t_defense - t_resolve_defense)
                                 t_used_resolve=True
                                 
-                                embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"**{t_card} says**\n{t_resolve_description}", colour=0xe91e63)
-                                embedVar.add_field(name=f"Transformation: Command Seal", value="On Resolve, Strike with Ultimate, then Focus.")
-                                await private_channel.send(embed=embedVar)
                                 dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total, tcard_lvl_ap_buff)
                                 t_pet_used =False
                                 o_health = o_health - int(dmg['DMG'])
-                                embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
+                                embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE\n\n{dmg['MESSAGE']}", description=f"**{t_card} says**\n{t_resolve_description}", colour=0xe91e63)
+                                embedVar.add_field(name=f"Transformation: Command Seal", value="On Resolve, Strike with Ultimate, then Focus.")
                                 await private_channel.send(embed=embedVar)
-                                t_stamina = 0
+                                # t_stamina = 0
                                 turn_total= turn_total + 1
                                 turn=0
                             elif t_universe == "Kanto Region" or t_universe == "Johto Region" or t_universe == "Hoenn Region" or t_universe == "Sinnoh Region" or t_universe == "Kalos Region" or t_universe == "Unova Region" or t_universe == "Alola Region" or t_universe == "Galar Region": #Pokemon Resolves
@@ -12218,7 +12204,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         
                                         dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total, ocard_lvl_ap_buff)
                                         t_health = t_health - dmg['DMG']
-                                        o_stamina = 0
+                                        # o_stamina = 0
                                         o_used_resolve = True 
                                         o_pet_used=False
                                         turn_total= turn_total + 1
@@ -12763,12 +12749,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             if mode in B_modes:
                                                 embedVar.add_field(name=f"{t_card}'s Rebuke", value=f"{t_rebuke}", inline =False)
                                                 embedVar.set_footer(text=f"{o_card} this is your chance!")
-                                            await button_ctx.send(embed=embedVar)
                                             dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total, ocard_lvl_ap_buff)
                                             t_health = t_health - dmg['DMG']
-                                            embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
+                                            embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE\n\n{dmg['MESSAGE']}", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
+                                            embedVar.add_field(name=f"Transformation: Command Seal", value="On Resolve, Strike with Ultimate, then Focus.")
                                             await button_ctx.send(embed=embedVar)
-                                            o_stamina = 0
+                                            # o_stamina = 0
                                             o_used_resolve = True 
                                             o_pet_used=False
                                             turn_total= turn_total + 1
@@ -13720,7 +13706,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     if mode != "ATales":
                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                         await private_channel.send(embed=embedVar)
-                                    t_stamina = 0
+                                    # t_stamina = 0
                                     turn_total= turn_total + 1
                                     turn=turn_selector
                                 elif t_universe == "Kanto Region" or t_universe == "Johto Region" or t_universe == "Hoenn Region" or t_universe == "Sinnoh Region" or t_universe == "Kalos Region" or t_universe == "Unova Region" or t_universe == "Alola Region" or t_universe == "Galar Region": #Pokemon Resolves
@@ -14830,14 +14816,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             c_attack = round(c_attack + c_resolve_attack)
                                             c_defense = round(c_defense - c_resolve_defense)
                                             
-                                            embedVar = discord.Embed(title=f"{c_card.upper()} STRENGTHENED RESOLVE", description=f"**{c_card} says**\n{c_resolve_description}", colour=0xe91e63)
-                                            embedVar.add_field(name=f"Transformation: Command Seal", value="On Resolve, Strike with Ultimate, then Focus.")
-                                            await private_channel.send(embed=embedVar)
                                             dmg = damage_cal(c_universe, c_card, c_3, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina,c_max_health, t_attack, c_special_move_description, turn_total, ccard_lvl_ap_buff)
                                             t_health = t_health - dmg['DMG']
-                                            embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
+                                            embedVar = discord.Embed(title=f"{c_card.upper()} STRENGTHENED RESOLVE\n\n{dmg['MESSAGE']}", description=f"**{c_card} says**\n{c_resolve_description}", colour=0xe91e63)
+                                            embedVar.add_field(name=f"Transformation: Command Seal", value="On Resolve, Strike with Ultimate, then Focus.")
                                             await private_channel.send(embed=embedVar)
-                                            c_stamina = 0
+                                            # c_stamina = 0
                                             c_used_resolve = True 
                                             c_pet_used=False
                                             turn_total= turn_total + 1
@@ -15455,14 +15439,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 c_attack = round(c_attack + c_resolve_attack)
                                                 c_defense = round(c_defense - c_resolve_defense)
                                                 
-                                                embedVar = discord.Embed(title=f"{c_card.upper()} STRENGTHENED RESOLVE", description=f"**{c_card} says**\n{c_resolve_description}", colour=0xe91e63)
-                                                embedVar.add_field(name=f"Transformation: Command Seal", value="On Resolve, Strike with Ultimate, then Focus.")
-                                                await button_ctx.send(embed=embedVar)
                                                 dmg = damage_cal(c_universe, c_card, c_3, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina,c_max_health, t_attack, c_special_move_description, turn_total, ccard_lvl_ap_buff)
                                                 t_health = t_health - dmg['DMG']
-                                                embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
+                                                embedVar = discord.Embed(title=f"{c_card.upper()} STRENGTHENED RESOLVE\n\n{dmg['MESSAGE']}", description=f"**{c_card} says**\n{c_resolve_description}", colour=0xe91e63)
+                                                embedVar.add_field(name=f"Transformation: Command Seal", value="On Resolve, Strike with Ultimate, then Focus.")
                                                 await button_ctx.send(embed=embedVar)
-                                                c_stamina = 0
+                                                # c_stamina = 0
                                                 c_used_resolve = True 
                                                 c_pet_used=False
                                                 turn_total= turn_total + 1
@@ -16251,7 +16233,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         t_pet_used =False                                    
                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                         await private_channel.send(embed=embedVar)
-                                        t_stamina = 0
+                                        # t_stamina = 0
                                         turn_total= turn_total + 1
                                         turn=0
                                     elif t_universe == "Kanto Region" or t_universe == "Johto Region" or t_universe == "Hoenn Region" or t_universe == "Sinnoh Region" or t_universe == "Kalos Region" or t_universe == "Unova Region" or t_universe == "Alola Region" or t_universe == "Galar Region": #Pokemon Resolves
