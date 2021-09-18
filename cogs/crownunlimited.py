@@ -69,7 +69,7 @@ class CrownUnlimited(commands.Cog):
         ratelimit = self.get_ratelimit(message)
         if ratelimit is None:
             if isinstance(message.channel, discord.channel.DMChannel):
-                await private_channel.send(m.SERVER_FUNCTION_ONLY)
+                await message.channel.send(m.SERVER_FUNCTION_ONLY)
                 return
 
             # Check if currently in a match
@@ -222,20 +222,22 @@ class CrownUnlimited(commands.Cog):
                     await button_ctx.send(f"{message.author.mention} private channel has been opened for you. Good luck!", delete_after=10)
                     await enemy_approached(self, message, message.channel, player, selected_mode, universe, cards[rand_card]['NAME'], bounty)
             except Exception as ex:
-                trace = []
-                tb = ex.__traceback__
-                while tb is not None:
-                    trace.append({
-                        "filename": tb.tb_frame.f_code.co_filename,
-                        "name": tb.tb_frame.f_code.co_name,
-                        "lineno": tb.tb_lineno
-                    })
-                    tb = tb.tb_next
-                print(str({
-                    'type': type(ex).__name__,
-                    'message': str(ex),
-                    'trace': trace
-                }))
+                # trace = []
+                # tb = ex.__traceback__
+                # while tb is not None:
+                #     trace.append({
+                #         "filename": tb.tb_frame.f_code.co_filename,
+                #         "name": tb.tb_frame.f_code.co_name,
+                #         "lineno": tb.tb_lineno
+                #     })
+                #     tb = tb.tb_next
+                # print(str({
+                #     'type': type(ex).__name__,
+                #     'message': str(ex),
+                #     'trace': trace
+                # }))
+                print("Explore Exception. Likely nothing, but yea.")
+                # await message.channel.send("Something ain't right, my guy.Check with support.")
     
     @cog_ext.cog_slash(description="Toggle Explore Mode On/Off", guild_ids=main.guild_ids)
     @commands.cooldown(1, 15, commands.BucketType.user)
@@ -11671,7 +11673,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             return {'SELECTED_UNIVERSE': selected_universe, 'PRIVATE_CHANNEL': private_channel, 'UNIVERSE_DATA': universe, 'CREST_LIST': crestlist, 'CREST_SEARCH': crestsearch, 'COMPLETED_DUNGEONS': completed_dungeons, 'OGUILD': oguild, 'BOSS_NAME': bossname}
         except:
             embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", delete_after=30, colour=0xe91e63)
-            await private_channel.send(embed=embedVar)
+            await ctx.send(embed=embedVar)
             return
 
 
@@ -17192,6 +17194,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             })
             tb = tb.tb_next
         print(str({
+            'PLAYER': str(ctx.author),
             'type': type(ex).__name__,
             'message': str(ex),
             'trace': trace
@@ -17258,7 +17261,7 @@ def existing_channel_check(self, ctx):
             for channel in guild.text_channels:
                 text_channel_list.append(channel.name)
         for text_channel in text_channel_list:
-            if text_channel.startswith(name_check):
+            if text_channel.startswith(name_check.lower()):
                 channel_exists = True
         
         if channel_exists:
