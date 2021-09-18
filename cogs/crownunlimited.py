@@ -7659,7 +7659,7 @@ class CrownUnlimited(commands.Cog):
                     await private_channel.send(file=player_2_card)
                     aiMove = 0
                     
-                    if o_stamina == 0:
+                    if o_stamina < 0:
                         aiMove = 1
                     elif t_health <= (.50 * t_max_health) and t_used_resolve == False and t_used_focus:
                         aiMove = 5
@@ -14192,7 +14192,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     c_health = round(dmg['DMG'])
                                                 else:
                                                     t_health = round(dmg['DMG'])
-                                                    c_health = round(dmg['DMG'])
+                                                    _health = round(dmg['DMG'])
                                             elif enh_type == 'FEAR':
                                                 t_health = round(t_health - ((dmg['DMG']/100) * t_health))
                                                 c_attack = round(c_attack - ((dmg['DMG']/100) * c_attack))
