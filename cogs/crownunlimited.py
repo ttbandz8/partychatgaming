@@ -35,7 +35,7 @@ import typing
 class CrownUnlimited(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self._cd = commands.CooldownMapping.from_cooldown(1, 600, commands.BucketType.member) # Change accordingly. Currently every 8 minutes (480 seconds == 8 minutes)
+        self._cd = commands.CooldownMapping.from_cooldown(1, 490, commands.BucketType.member) # Change accordingly. Currently every 8 minutes (480 seconds == 8 minutes)
     
     co_op_modes = ['CTales', 'DTales', 'CDungeon', 'DDungeon']
     ai_co_op_modes = ['DTales', 'DDungeon']
