@@ -16795,7 +16795,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                     embedVar.set_author(name=f"You Lost...")
                     embedVar.add_field(name="Tips!", value="Equiping stronger `TITLES` and `ARMS` will make you character tougher in a fight!")
                     embedVar.set_footer(text="The .shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
-                    await ctx.author.send(embed=embedVar)
+                    await ctx.send(embed=embedVar)
                     await discord.TextChannel.delete(private_channel, reason=None)
 
                 
@@ -16899,13 +16899,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         embedVar.set_footer(text=f"Battle Time: {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
                     else: 
                         embedVar.set_footer(text=f"Battle Time: {gameClock[0]} Hours {gameClock[1]} Minutes and {gameClock[2]} Seconds.")
-                    await ctx.author.send(embed=embedVar)
+                    await ctx.send(embed=embedVar)
                 
                     embedVar = discord.Embed(title=f"BOSS DEFEATED", description=f"Boss Victories are added to your player profile! Defeat {t_card} again to earn exotic loot!", colour=0xe91e63)
                     embedVar.set_author(name=f"Congratulations You Defeated {t_card}!")
                     embedVar.add_field(name="Tips!", value=f"Run /lookup to view your Boss Souls")
                     embedVar.set_footer(text="Bosses have a chance to drop :coin:, ARMS, TITLES, and even BOSS CARDS:eyes:")
-                    await ctx.author.send(embed=embedVar)
+                    await ctx.send(embed=embedVar)
                     
                     if t_card not in sowner['BOSS_WINS']:
                         await bless(40000, str(ctx.author))
@@ -16972,12 +16972,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             if selected_universe in completed_universes:
                                 await bless(800, ctx.author)
                                 #await bless(125, user2)
-                                await ctx.author.send(embed=embedVar)
-                                await ctx.author.send(f"You were awarded :coin: 800 for completing the {selected_universe} Dungeon again!")
+                                await ctx.send(embed=embedVar)
+                                await ctx.send(f"You were awarded :coin: 800 for completing the {selected_universe} Dungeon again!")
                             else:
                                 await bless(15000, ctx.author)
-                                await ctx.author.send(embed=embedVar)
-                                await ctx.author.send(f"You were awarded :coin: 15000 for completing the {selected_universe} Dungeon! ")
+                                await ctx.send(embed=embedVar)
+                                await ctx.send(f"You were awarded :coin: 15000 for completing the {selected_universe} Dungeon! ")
                             continued=False
                             await discord.TextChannel.delete(private_channel, reason=None)
                         elif mode in U_modes:
@@ -16990,12 +16990,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             r=db.updateUserNoFilter(upload_query, new_upload_query)
                             if selected_universe in completed_universes:
                                 await bless(400, ctx.author)
-                                await ctx.author.send(embed=embedVar)
-                                await ctx.author.send(f"You were awarded :coin: 400 for completing the {selected_universe} Tale again!")
+                                await ctx.send(embed=embedVar)
+                                await ctx.send(f"You were awarded :coin: 400 for completing the {selected_universe} Tale again!")
                             else:
                                 await bless(5000, ctx.author)
-                                await ctx.author.send(embed=embedVar)
-                                await ctx.author.send(f"You were awarded :coin: 5000 for completing the {selected_universe} Tale! ")
+                                await ctx.send(embed=embedVar)
+                                await ctx.send(f"You were awarded :coin: 5000 for completing the {selected_universe} Tale! ")
                             continued=False
                             await discord.TextChannel.delete(private_channel, reason=None)                  
     except Exception as ex:
