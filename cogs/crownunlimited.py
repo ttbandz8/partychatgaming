@@ -17059,7 +17059,7 @@ def existing_channel_check(self, ctx):
             for channel in guild.text_channels:
                 text_channel_list.append(channel.name)
         for text_channel in text_channel_list:
-            if text_channel.startswith(name_check):
+            if text_channel.startswith(name_check.lower()):
                 channel_exists = True
         
         if channel_exists:
