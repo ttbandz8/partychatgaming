@@ -332,7 +332,7 @@ class Cards(commands.Cog):
             :comet: **{move2}:** {move2ap}
             :rosette: **{move3}:** {move3ap}
             :microbe: **{move4}:** {move4enh} by {move4ap}
-            *Use /enhance to learn about the {move4enh} Enhancement!*
+            *Use /enhancers to learn about the {move4enh} Enhancement!*
 
             :drop_of_blood: _Passive:_ **{passive_name}:** {passive_type} by {passive_num}
             :infinity: {traitmessage}

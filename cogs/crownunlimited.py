@@ -11428,7 +11428,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                         elif uni['TIER'] == 9:
                             tier_icon = ":crystal_ball:"
 
-                        universe_menu.append(f"{Crest_dict[uni['TITLE']]} | **{uni['TITLE']}**\n:crossed_swords: **{len(uni['CROWN_TALES'])}**\n")
+                        universe_menu.append(f"{Crest_dict[uni['TITLE']]} | **{uni['TITLE']}** : :crossed_swords: **{len(uni['CROWN_TALES'])}**\n")
                     else:
                         tier_icon = ""
                         if uni['TIER'] == 1:
@@ -11444,10 +11444,10 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                         elif uni['TIER'] == 9:
                             tier_icon = ":crystal_ball:"
 
-                        universe_menu.append(f"{Crest_dict[uni['TITLE']]} | **{uni['TITLE']}**\n:crossed_swords: **{len(uni['CROWN_TALES'])}**\n")
+                        universe_menu.append(f"{Crest_dict[uni['TITLE']]} | **{uni['TITLE']}** : :crossed_swords: **{len(uni['CROWN_TALES'])}**\n")
                         available_universes.append(uni['TITLE'])
         
-        icon = ":robot:"
+        icon = ":crown:"
         if sowner['RIFT'] == 1:
             icon = ":crystal_ball:"
         

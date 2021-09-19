@@ -1373,6 +1373,13 @@ async def trinketshop(ctx):
    current_card = user['CARD']
    has_gabes_purse = user['TOURNAMENT_WINS']
    balance = vault['BALANCE']
+   icon = ":coin:"
+   if balance >= 1000000:
+      icon = ":money_with_wings:"
+   elif balance >=650000:
+      icon = ":moneybag:"
+   elif balance >= 150000:
+      icon = ":dollar:"
 
    sell_buttons = [
          manage_components.create_button(
@@ -1402,15 +1409,15 @@ async def trinketshop(ctx):
          )
       ]
    sell_buttons_action_row = manage_components.create_actionrow(*sell_buttons)
-   embedVar = discord.Embed(title=f"**Trinket Shop**", description=textwrap.dedent(f"""\
+   embedVar = discord.Embed(title=f":tickets: | **Trinket Shop** - {icon}{'{:,}'.format(balance)} ", description=textwrap.dedent(f"""\
    Purchase Experience Boosts
    *Experience Boost Applied to Current Equipped Card*
 
    🔋 1️⃣ **1,500EXP** for :coin: **80,000**
    
-   🔋 2️⃣ **4,500EXP** for :moneybag: **150,000**
+   🔋 2️⃣ **4,500EXP** for :dollar: **150,000**
 
-   🔋 3️⃣ **15,000EXP** for :money_with_wings: **650,000**
+   🔋 3️⃣ **15,000EXP** for :moneybag: **650,000**
 
    Purchase Gabe's Purse to Keep All Items When Rebirthing
 

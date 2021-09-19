@@ -799,6 +799,7 @@ class Profile(commands.Cog):
                     **Balance**: :coin:{'{:,}'.format(balance)}
                     \n{"".join(quest_messages)}
                     """), colour=0x7289da)
+                embedVar.set_footer(text="Use /tales or /dungeons to complete daily quest!", icon_url="https://cdn.discordapp.com/emojis/784402243519905792.gif?v=1")
                 await ctx.send(embed=embedVar)
             except Exception as ex:
                 trace = []
