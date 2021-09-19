@@ -744,7 +744,11 @@ async def daily(ctx):
    q2 = random.randint(0, oppponent_len)
    q3 = random.randint(0, oppponent_len)
 
-   quests = [{'OPPONENT': opponents[q1], 'TYPE': 'Tales', 'GOAL': 3, 'WINS': 0, 'REWARD': 5000 },{'OPPONENT': opponents[q2], 'TYPE': 'Tales', 'GOAL': 5, 'WINS': 0, 'REWARD': 9000 }, {'OPPONENT': opponents[q3], 'TYPE': 'Dungeon', 'GOAL': 3, 'WINS': 0, 'REWARD': 15000 }]
+   q1_earn = round(random.int(1000, 15000))
+   q2_earn = round(random.int(3000, 35000))
+   q3_earn = round(random.int(5000, 60000))
+
+   quests = [{'OPPONENT': opponents[q1], 'TYPE': 'Tales', 'GOAL': 3, 'WINS': 0, 'REWARD': q1_earn },{'OPPONENT': opponents[q2], 'TYPE': 'Tales', 'GOAL': 5, 'WINS': 0, 'REWARD': q2_earn }, {'OPPONENT': opponents[q3], 'TYPE': 'Dungeon', 'GOAL': 5, 'WINS': 0, 'REWARD': q3_earn }]
    db.updateVaultNoFilter({'OWNER': str(ctx.author)}, {'$set': {'QUESTS': quests}})
 
    await ctx.send(f"Daily bonus :coin:{dailyamount} has been applied for {ctx.author.mention}!\nYour new quests are available!\n**use /quests to open the Quest Board**!")
@@ -1417,6 +1421,10 @@ async def trinketshop(ctx):
          levels_gained = 100
          price=650000
       
+      if button_ctx.custom_id == "cancel":
+         await button_ctx.send("Cancelled purchase.")
+         return
+         
       if button_ctx.custom_id in exp_boost_buttons:
          if price > balance:
             await button_ctx.send("You're too broke to buy. Get your money up.")
