@@ -749,7 +749,7 @@ async def daily(ctx):
       q2_earn = round(random.randint(3000, 25000))
       q3_earn = round(random.randint(3000, 150000))
 
-      quests = [{'OPPONENT': opponents[q1], 'TYPE': 'Tales', 'GOAL': 5, 'WINS': 0, 'REWARD': q1_earn },{'OPPONENT': opponents[q2], 'TYPE': 'Tales', 'GOAL': 5, 'WINS': 0, 'REWARD': q2_earn }, {'OPPONENT': opponents[q3], 'TYPE': 'Dungeon', 'GOAL': 10, 'WINS': 0, 'REWARD': q3_earn }]
+      quests = [{'OPPONENT': opponents[q1], 'TYPE': 'Tales', 'GOAL': 3, 'WINS': 0, 'REWARD': q1_earn },{'OPPONENT': opponents[q2], 'TYPE': 'Tales', 'GOAL': 5, 'WINS': 0, 'REWARD': q2_earn }, {'OPPONENT': opponents[q3], 'TYPE': 'Dungeon', 'GOAL': 10, 'WINS': 0, 'REWARD': q3_earn }]
       db.updateVaultNoFilter({'OWNER': str(ctx.author)}, {'$set': {'QUESTS': quests}})
 
       await ctx.send(f"Daily bonus :coin:{dailyamount} has been applied for {ctx.author.mention}!\nYour new quests are available!\n**use /quests to open the Quest Board**!")
@@ -1417,7 +1417,7 @@ async def trinketshop(ctx):
    
    🔋 2️⃣ **4,500EXP** for :dollar: **150,000**
 
-   🔋 3️⃣ **15,000EXP** for :moneybag: **650,000**
+   🔋 3️⃣ **15,000EXP** for :moneybag: **425,000**
 
    Purchase Gabe's Purse to Keep All Items When Rebirthing
 
@@ -1444,7 +1444,7 @@ async def trinketshop(ctx):
          price = 150000
       if button_ctx.custom_id == "3":
          levels_gained = 100
-         price=650000
+         price=425000
       
       if button_ctx.custom_id == "cancel":
          await button_ctx.send("Cancelled purchase.")
