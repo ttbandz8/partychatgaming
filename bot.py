@@ -724,30 +724,52 @@ async def on_slash_command_error(ctx, ex):
 @slash.slash(name="Daily", description="Receive your daily reward and quests", guild_ids=guild_ids)
 @commands.cooldown(1, 60*60*24, commands.BucketType.user)
 async def daily(ctx):
-   dailyamount = 1000
-   await bless(dailyamount, ctx.author)
+   try:
+      dailyamount = 1000
+      await bless(dailyamount, ctx.author)
 
-   user_data = db.queryUser({'DISNAME': str(ctx.author)})
-   user_completed_tales = user_data['CROWN_TALES']
-   universes = db.queryAllUniverse()
-   
-   user_available_opponents = []
+      user_data = db.queryUser({'DISNAME': str(ctx.author)})
+      user_completed_tales = user_data['CROWN_TALES']
+      universes = db.queryAllUniverse()
+      
+      user_available_opponents = []
 
-   for x in universes:
-      for y in user_completed_tales:
-          if y == x['PREREQUISITE']:
-            user_available_opponents.append(x['CROWN_TALES'])
+      for x in universes:
+         for y in user_completed_tales:
+            if y == x['PREREQUISITE']:
+               user_available_opponents.append(x['CROWN_TALES'])
 
-   opponents = [x for x in user_available_opponents for x in x]
-   oppponent_len = len(opponents)
-   q1 = random.randint(0, oppponent_len)
-   q2 = random.randint(0, oppponent_len)
-   q3 = random.randint(0, oppponent_len)
+      opponents = [x for x in user_available_opponents for x in x]
+      oppponent_len = len(opponents)
+      q1 = random.randint(0, oppponent_len)
+      q2 = random.randint(0, oppponent_len)
+      q3 = random.randint(0, oppponent_len)
 
-   quests = [{'OPPONENT': opponents[q1], 'TYPE': 'Tales', 'GOAL': 3, 'WINS': 0, 'REWARD': 5000 },{'OPPONENT': opponents[q2], 'TYPE': 'Tales', 'GOAL': 5, 'WINS': 0, 'REWARD': 9000 }, {'OPPONENT': opponents[q3], 'TYPE': 'Dungeon', 'GOAL': 3, 'WINS': 0, 'REWARD': 15000 }]
-   db.updateVaultNoFilter({'OWNER': str(ctx.author)}, {'$set': {'QUESTS': quests}})
+      q1_earn = round(random.randint(1000, 25000))
+      q2_earn = round(random.randint(3000, 25000))
+      q3_earn = round(random.randint(3000, 150000))
 
-   await ctx.send(f"Daily bonus :coin:{dailyamount} has been applied for {ctx.author.mention}!\nYour new quests are available!\n**use /quests to open the Quest Board**!")
+      quests = [{'OPPONENT': opponents[q1], 'TYPE': 'Tales', 'GOAL': 5, 'WINS': 0, 'REWARD': q1_earn },{'OPPONENT': opponents[q2], 'TYPE': 'Tales', 'GOAL': 5, 'WINS': 0, 'REWARD': q2_earn }, {'OPPONENT': opponents[q3], 'TYPE': 'Dungeon', 'GOAL': 10, 'WINS': 0, 'REWARD': q3_earn }]
+      db.updateVaultNoFilter({'OWNER': str(ctx.author)}, {'$set': {'QUESTS': quests}})
+
+      await ctx.send(f"Daily bonus :coin:{dailyamount} has been applied for {ctx.author.mention}!\nYour new quests are available!\n**use /quests to open the Quest Board**!")
+   except Exception as ex:
+      trace = []
+      tb = ex.__traceback__
+      while tb is not None:
+         trace.append({
+               "filename": tb.tb_frame.f_code.co_filename,
+               "name": tb.tb_frame.f_code.co_name,
+               "lineno": tb.tb_lineno
+         })
+         tb = tb.tb_next
+      print(str({
+         'PLAYER': str(ctx.author),
+         'type': type(ex).__name__,
+         'message': str(ex),
+         'trace': trace
+      }))
+      return
 
 @bot.command()
 @commands.check(validate_user)
@@ -1417,6 +1439,10 @@ async def trinketshop(ctx):
          levels_gained = 100
          price=650000
       
+      if button_ctx.custom_id == "cancel":
+         await button_ctx.send("Cancelled purchase.")
+         return
+         
       if button_ctx.custom_id in exp_boost_buttons:
          if price > balance:
             await button_ctx.send("You're too broke to buy. Get your money up.")
