@@ -8709,12 +8709,13 @@ async def quest(player, opponent, mode):
             if quest_data == {}:
                 return
             completion = quest_data['GOAL'] - (quest_data['WINS'] + 1)
+            reward = int(quest_data['REWARD'])
         
             if str(mode) == "Dungeon" and quest_data['TYPE'] == "Dungeon" and completion >= 0:
                 message = "Dungeon Quest progressed!"
                 if completion == 0:
-                    await bless(1500, player)
-                    message = "Dungeon Quest Completed! :coin:1500 has been added to your balance."
+                    await bless(reward, player)
+                    message = f"Dungeon Quest Completed! :coin:{reward} has been added to your balance."
 
                 query = {'OWNER': str(player)}
                 update_query = {'$inc': {'QUESTS.$[type].' + "WINS": 1}}
@@ -8726,11 +8727,11 @@ async def quest(player, opponent, mode):
                 message = "Tales Quest progressed!"
                 if completion == 0:
                     if quest_data['GOAL'] == 5:
-                        await bless(1000, player)
-                        message = "Tales Quest Completed! :coin:1000 has been added to your balance."
+                        await bless(reward, player)
+                        message = f"Tales Quest Completed! :coin:{reward} has been added to your balance."
                     elif quest_data['GOAL'] == 3:
-                        await bless(500, player)
-                        message = "Tales Quest Completed! :coin:500 has been added to your balance."
+                        await bless(reward, player)
+                        message = f"Tales Quest Completed! :coin:{reward} has been added to your balance."
 
                 query = {'OWNER': str(player)}
                 update_query = {'$inc': {'QUESTS.$[type].' + "WINS": 1}}
