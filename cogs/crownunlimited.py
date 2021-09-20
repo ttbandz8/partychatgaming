@@ -17163,18 +17163,18 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                     match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']), str(oarm['ARM']), "N/A", "Boss", o['EXCLUSIVE'])
                     if mode == "CBoss":
                         cmatch = await savematch(str(user2), str(c_card), str(c_card_path), str(ctitle['TITLE']), str(carm['ARM']), "N/A", "Boss", c['EXCLUSIVE'])
-                        cfambank = await blessfamily(50,cfam)
-                        cteambank = await blessteam(50,cteam)
+                        cfambank = await blessfamily(15000,cfam)
+                        cteambank = await blessteam(15000,cteam)
                         cpetlogger = await petlevel(cpet_name, user2)
                         ccardlogger = await cardlevel(c_card, user2, c_universe, selected_universe, "Dungeon")
                         await bless(50, str(user2))
-                        embedVar = discord.Embed(title=f":zap: **{o_card}** and **{c_card}**defeated the {t_universe} Boss {t_card}!", description=f"Match concluded in {turn_total} turns!\n\n{drop_response} + :coin: 50!\n\n{c_user['NAME']} got :coin:50!\n{t_concede}", colour=0xe91e63)
+                        embedVar = discord.Embed(title=f":zap: **{o_card}** and **{c_card}**defeated the {t_universe} Boss {t_card}!", description=f"Match concluded in {turn_total} turns!\n\n{drop_response} + :coin: 15,000!\n\n{c_user['NAME']} got :coin: 10,000!\n{t_concede}", colour=0xe91e63)
                     else:
-                        embedVar = discord.Embed(title=f":zap: **{o_card}** defeated the {t_universe} Boss {t_card}!", description=f"Match concluded in {turn_total} turns!\n\n{drop_response} + :coin: 50!", colour=0xe91e63)
+                        embedVar = discord.Embed(title=f":zap: **{o_card}** defeated the {t_universe} Boss {t_card}!", description=f"Match concluded in {turn_total} turns!\n\n{drop_response} + :coin: 25,000!", colour=0xe91e63)
                     
-                    await bless(50, str(ctx.author)) 
-                    ofambank = await blessfamily(50,ofam)
-                    oteambank = await blessteam(50,oteam)
+                    await bless(25000, str(ctx.author)) 
+                    ofambank = await blessfamily(15000,ofam)
+                    oteambank = await blessteam(15000,oteam)
                     petlogger = await petlevel(opet_name, ouser)
                     cardlogger = await cardlevel(o_card, ouser, o_universe, selected_universe, "Dungeon")
                                         
@@ -17215,7 +17215,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                     m_playtime = int(wintime[14:16])
                     s_playtime = int(wintime[17:19])
                     gameClock = getTime(int(h_gametime),int(m_gametime),int(s_gametime),h_playtime,m_playtime,s_playtime)
-                    teambank = await blessteam(15, oteam)
+                    if mode in D_modes:
+                        teambank = await blessteam(100, oteam)
+                    else:
+                        teambank = await blessteam(50, oteam)
                     if o_user['RIFT'] == 1:
                         response = db.updateUserNoFilter({'DISNAME':str(o_user['DISNAME'])}, {'$set': {'RIFT' : 0}})
 
@@ -17223,7 +17226,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         drop_response = await dungeondrops(ctx.author, selected_universe, currentopponent)
                     elif mode in U_modes:
                         drop_response = await drops(ctx.author, selected_universe, currentopponent)
-                    ofambank = await blessfamily(15,ofam)
+                    if mode in D_modes:
+                        ofambank = await blessfamily(100,ofam)
+                    else:
+                        ofambank = await blessfamily(50,ofam)
                     match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']), str(oarm['ARM']), str(selected_universe), tale_or_dungeon_only, o['EXCLUSIVE'])
                     questlogger = await quest(ouser, t_card, tale_or_dungeon_only)
                     destinylogger = await destiny(ouser, t_card, tale_or_dungeon_only)
@@ -17260,14 +17266,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             new_upload_query={'$addToSet': {'DUNGEONS': selected_universe}}
                             r=db.updateUserNoFilter(upload_query, new_upload_query)
                             if selected_universe in completed_universes:
-                                await bless(800, ctx.author)
+                                await bless(5000, ctx.author)
                                 #await bless(125, user2)
                                 await ctx.send(embed=embedVar)
-                                await ctx.send(f"You were awarded :coin: 800 for completing the {selected_universe} Dungeon again!")
+                                await ctx.send(f"You were awarded :coin: 5,000 for completing the {selected_universe} Dungeon again!")
                             else:
                                 await bless(15000, ctx.author)
                                 await ctx.send(embed=embedVar)
-                                await ctx.send(f"You were awarded :coin: 15000 for completing the {selected_universe} Dungeon! ")
+                                await ctx.send(f"You were awarded :coin: 15,000 for completing the {selected_universe} Dungeon! ")
                             continued=False
                             await discord.TextChannel.delete(private_channel, reason=None)
                         elif mode in U_modes:
@@ -17279,13 +17285,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             new_upload_query={'$addToSet': {'CROWN_TALES': selected_universe}}
                             r=db.updateUserNoFilter(upload_query, new_upload_query)
                             if selected_universe in completed_universes:
-                                await bless(400, ctx.author)
+                                await bless(1000, ctx.author)
                                 await ctx.send(embed=embedVar)
-                                await ctx.send(f"You were awarded :coin: 400 for completing the {selected_universe} Tale again!")
+                                await ctx.send(f"You were awarded :coin: 1,000 for completing the {selected_universe} Tale again!")
                             else:
                                 await bless(5000, ctx.author)
                                 await ctx.send(embed=embedVar)
-                                await ctx.send(f"You were awarded :coin: 5000 for completing the {selected_universe} Tale! ")
+                                await ctx.send(f"You were awarded :coin: 5,000 for completing the {selected_universe} Tale! ")
                             continued=False
                             await discord.TextChannel.delete(private_channel, reason=None)                  
     except Exception as ex:
