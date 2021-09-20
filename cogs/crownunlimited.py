@@ -13709,7 +13709,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             aiMove = 2
                         elif t_stamina >= 30 and (t_health >= o_health):
                             if t_enhancer['TYPE'] in Gamble_Enhancer_Check:
-                                aiMove = 3
+                                aiMove = 1
                             elif t_enhancer['TYPE'] in Support_Enhancer_Check or t_enhancer['TYPE'] in Stamina_Enhancer_Check:
                                 aiMove = 2
                             else:
@@ -13720,7 +13720,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             aiMove = 1
                         elif t_stamina >= 20:
                             if t_enhancer['TYPE'] in Gamble_Enhancer_Check:
-                                aiMove = 3
+                                aiMove = 1
                             elif t_enhancer['TYPE'] in Support_Enhancer_Check or t_enhancer['TYPE'] in Stamina_Enhancer_Check:
                                 aiMove = 1
                             else:
