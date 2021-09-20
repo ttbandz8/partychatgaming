@@ -303,38 +303,38 @@ class CrownUnlimited(commands.Cog):
         except Exception as ex:
             return
 
-    @cog_ext.cog_slash(description="Auto Dungeon Battler", guild_ids=main.guild_ids)
-    async def adungon(self, ctx: SlashContext):
-        U_modes = ['ATales','Tales', 'CTales', 'DTales']
-        D_modes = ['CDungeon','DDungeon', 'Dungeon', 'ADungeon']
-        B_MODES = ['Boss', 'CBoss']
-        try:
-            # await ctx.defer()
-            mode = "ADungeon"
+    # @cog_ext.cog_slash(description="Auto Dungeon Battler", guild_ids=main.guild_ids)
+    # async def adungeon(self, ctx: SlashContext):
+    #     U_modes = ['ATales','Tales', 'CTales', 'DTales']
+    #     D_modes = ['CDungeon','DDungeon', 'Dungeon', 'ADungeon']
+    #     B_MODES = ['Boss', 'CBoss']
+    #     try:
+    #         # await ctx.defer()
+    #         mode = "ADungeon"
 
-            sowner = db.queryUser({'DISNAME': str(ctx.author)})
-            oteam = sowner['TEAM']
-            ofam = sowner['FAMILY']
+    #         sowner = db.queryUser({'DISNAME': str(ctx.author)})
+    #         oteam = sowner['TEAM']
+    #         ofam = sowner['FAMILY']
             
-            universe_selection = await select_universe(self, ctx, sowner, oteam, ofam, mode, None)
-            selected_universe = universe_selection['SELECTED_UNIVERSE']
-            private_channel = universe_selection['PRIVATE_CHANNEL']
-            universe = universe_selection['UNIVERSE_DATA']
-            crestlist = universe_selection['CREST_LIST']
-            crestsearch = universe_selection['CREST_SEARCH']
+    #         universe_selection = await select_universe(self, ctx, sowner, oteam, ofam, mode, None)
+    #         selected_universe = universe_selection['SELECTED_UNIVERSE']
+    #         private_channel = universe_selection['PRIVATE_CHANNEL']
+    #         universe = universe_selection['UNIVERSE_DATA']
+    #         crestlist = universe_selection['CREST_LIST']
+    #         crestsearch = universe_selection['CREST_SEARCH']
 
-            if mode in D_modes:
-                completed_universes = universe_selection['COMPLETED_DUNGEONS']
-            else:
-                completed_universes = universe_selection['COMPLETED_TALES']
-            if crestsearch:
-                oguild = universe_selection['OGUILD']
-            else:
-                oguild = "PCG"
+    #         if mode in D_modes:
+    #             completed_universes = universe_selection['COMPLETED_DUNGEONS']
+    #         else:
+    #             completed_universes = universe_selection['COMPLETED_TALES']
+    #         if crestsearch:
+    #             oguild = universe_selection['OGUILD']
+    #         else:
+    #             oguild = "PCG"
             
-            await battle_commands(self, ctx, mode, universe, selected_universe, completed_universes, oguild, crestlist, crestsearch, private_channel, sowner, oteam, ofam, None, None, None, None, None)
-        except Exception as ex:
-            return
+    #         await battle_commands(self, ctx, mode, universe, selected_universe, completed_universes, oguild, crestlist, crestsearch, private_channel, sowner, oteam, ofam, None, None, None, None, None)
+    #     except Exception as ex:
+    #         return
 
     @cog_ext.cog_slash(description="Duo Tales with AI", guild_ids=main.guild_ids)
     async def dtales(self, ctx: SlashContext, deck: int):
