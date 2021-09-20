@@ -2977,4 +2977,14 @@ destiny = [
         "COMPLETED": False,
         "UNIVERSE": "Death Note"
     },
+    {
+        "NAME": "Forged Servant",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Sasaki Kojirou",
+        "USE_CARDS": ["Medea"],
+        "EARN": "Sasaki Kojirou", 
+        "COMPLETED": False,
+        "UNIVERSE": "Death Note"
+    }
 ]
