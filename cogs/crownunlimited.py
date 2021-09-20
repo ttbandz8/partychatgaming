@@ -10302,7 +10302,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 o_max_health = o_max_health + int(o_title_passive_value)
                 o_health = o_health + int(o_title_passive_value)
             elif o_title_passive_type == 'LIFE':
-                _max_health = o_max_health + int((o_title_passive_value/100) * t_health)
+                o_max_health = o_max_health + int((o_title_passive_value/100) * t_health)
             elif o_title_passive_type == 'DRAIN':
                 t_stamina = t_stamina - int(o_title_passive_value)
                 o_stamina = o_stamina + int(o_title_passive_value)
