@@ -1686,83 +1686,136 @@ async def curseguild(amount, guild):
 
 @slash.slash(name="Resell", description="Sell items back to the shop", guild_ids=guild_ids)
 @commands.check(validate_user)
-async def resell(ctx, item: str):
-   user = db.queryUser({'DISNAME': str(ctx.author)})
-   p1_trade_item = item
-   p1_vault = db.queryVault({'OWNER' : str(ctx.author)})
-   p1_cards = p1_vault['CARDS']
-   p1_titles = p1_vault['TITLES']
-   p1_arms = p1_vault['ARMS']
-   p1_balance = p1_vault['BALANCE']
+async def resell(ctx, where: str, selections: list):
+   await ctx.defer()
+   card_indications = ["cards", "card", "c", "ccards", "cardsss", "car", "cc"]
+   title_indications = ["titles", "t", "title", "titt", "titl", "titls"]
+   arm_indications = ["arms", "arm", "a", "ar", "am", "arsm"]
 
-   if p1_trade_item in p1_cards and len(p1_cards) == 1:
-      await ctx.send("You cannot sell your only card.")
-   elif p1_trade_item in p1_arms and len(p1_arms) == 1:
-      await ctx.send("You cannot sell your only arm.")
-   elif p1_trade_item in p1_titles and len(p1_titles) == 1:
-      await ctx.send("You cannot sell your only title.")
-   else:
+   try:
+      list_to_sell = []
+      sell_price = 0
+      
+      sell_buttons = [
+         manage_components.create_button(
+            style=ButtonStyle.green,
+            label="Yes",
+            custom_id="yes"
+         ),
+         manage_components.create_button(
+            style=ButtonStyle.blue,
+            label="No",
+            custom_id="no"
+         )
+      ]
+      sell_buttons_action_row = manage_components.create_actionrow(*sell_buttons)
 
-      if p1_trade_item not in p1_cards and p1_trade_item not in p1_titles and p1_trade_item not in p1_arms:
-         await ctx.send("You do not own this item.")
-         return
-      else:
-         if p1_trade_item in p1_cards:
-            card = db.queryCard({'NAME':{"$regex": str(p1_trade_item), "$options": "i"}})
-            sell_price = card['PRICE'] * .45
-         elif p1_trade_item in p1_titles:
-            title = db.queryTitle({'TITLE': {"$regex": str(p1_trade_item), "$options": "i"}})
-            sell_price = title['PRICE'] * .45
-         elif p1_trade_item in p1_arms:
-            arm = db.queryArm({'ARM': {"$regex": str(p1_trade_item), "$options": "i"}})
-            sell_price = arm['PRICE'] * .45
+      user = db.queryUser({'DISNAME': str(ctx.author)})
+      vault = db.queryVault({'OWNER' : str(ctx.author)})
+      
+      if where.lower() in card_indications:
+         p1_cards = vault['CARDS']
+         selections_as_list = selections.split()
+         for selected in selections_as_list:
+            card = p1_cards[int(selected)]
+            if card not in list_to_sell and card != user["CARD"]:
+               card_data = db.queryCard({'NAME':{"$regex": str(card), "$options": "i"}})
+               sell_price = sell_price + (card_data['PRICE'] * .45)
+               list_to_sell.append(f"{str(card)}")
 
-         if (p1_trade_item == user['CARD']) or (p1_trade_item == user['TITLE']) or (p1_trade_item == user['ARM']):
-            await ctx.send("You cannot resell an equipped item.")
-            return
+         list_to_sell_as_text = "\n".join(list_to_sell)
 
-         sell_buttons = [
-               manage_components.create_button(
-                  style=ButtonStyle.blue,
-                  label="💸",
-                  custom_id="Yes"
-               ),
-               manage_components.create_button(
-                  style=ButtonStyle.red,
-                  label="❌",
-                  custom_id="No"
-               )
-            ]
-         sell_buttons_action_row = manage_components.create_actionrow(*sell_buttons)
+      if where.lower() in title_indications:
+         p1_titles = vault['TITLES']
+         selections_as_list = selections.split()
+         for selected in selections_as_list:
+            title = p1_titles[int(selected)]
+            if title not in list_to_sell and title != user["TITLE"]:
+               title_data = db.queryTitle({'TITLE':{"$regex": str(title), "$options": "i"}})
+               sell_price = sell_price + (title_data['PRICE'] * .45)
+               list_to_sell.append(f"{str(title)}")
+         list_to_sell_as_text = "\n".join(list_to_sell)
 
-         await ctx.send(f"{ctx.author.mention} are you willing to resell {p1_trade_item} for :coin: {round(sell_price)}?", components=[sell_buttons_action_row])
+      if where.lower() in arm_indications:
+         p1_arms = vault['ARMS']
+         selections_as_list = selections.split()
+         for selected in selections_as_list:
+            arm = p1_arms[int(selected)]
+            if arm not in list_to_sell and arm != user["ARM"]:
+               arm_data = db.queryArm({'ARM':{"$regex": str(arm), "$options": "i"}})
+               sell_price = sell_price + (arm_data['PRICE'] * .45)
+               list_to_sell.append(f"{str(arm)}")
+         list_to_sell_as_text = "\n".join(list_to_sell)
 
+      await ctx.send(f"Are you sure you want to sell\n **{list_to_sell_as_text}**\n for :coin:{round(sell_price)}?", components=[sell_buttons_action_row])
+      
+      def check(button_ctx):
+         return button_ctx.author == ctx.author
+      # p1_titles = vault['TITLES']
+      # p1_arms = vault['ARMS']
+      # p1_balance = vault['BALANCE']
+
+      try:
+         button_ctx: ComponentContext = await manage_components.wait_for_component(bot, components=[sell_buttons_action_row], timeout=120,check=check)
          
-         def check(button_ctx):
-            return button_ctx.author == ctx.author
+         if button_ctx.custom_id == "no":
+            await button_ctx.send("Sell cancelled. ")
+            return
+         if button_ctx.custom_id == "yes":
+            await button_ctx.send("Items have been sold! A DM will be sent to you as additional confirmation. Thank you!")
+            if where.lower() in card_indications:
+               for card in list_to_sell:
+                  db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'CARDS': str(card)}})
+               
+            if where.lower() in title_indications:
+               for title in list_to_sell:
+                  db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'TITLES': str(title)}})
 
-         try:
-            button_ctx: ComponentContext = await manage_components.wait_for_component(bot, components=[sell_buttons_action_row], check=check)
+            if where.lower() in arm_indications:
+               for arm in list_to_sell:
+                  db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'ARMS': str(arm)}})
 
-            if button_ctx.custom_id == "No":
-                  await button_ctx.send("Sell ended.")
-                  return
-            if button_ctx.custom_id == "Yes":
-               if p1_trade_item in p1_arms:
-                  db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'ARMS': str(p1_trade_item)}})
-                  await bless(sell_price, ctx.author)
-                  await button_ctx.send(f"{p1_trade_item} has been resold for :coin: {round(sell_price)}.")
-               elif p1_trade_item in p1_titles:
-                  db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'TITLES': str(p1_trade_item)}})
-                  await bless(sell_price, ctx.author)
-                  await button_ctx.send(f"{p1_trade_item} has been resold for :coin: {round(sell_price)}.")
-               elif p1_trade_item in p1_cards:
-                  db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'CARDS': str(p1_trade_item)}})
-                  await bless(sell_price, ctx.author)
-                  await button_ctx.send(f"{p1_trade_item} has been resold for :coin: {round(sell_price)}.")
+            await bless(sell_price, ctx.author)
+            await ctx.author.send(f"**SOLD**\n **{list_to_sell_as_text}**\n for :coin:{round(sell_price)}!")
+            return
+      except Exception as ex:
+         trace = []
+         tb = ex.__traceback__
+         while tb is not None:
+               trace.append({
+                  "filename": tb.tb_frame.f_code.co_filename,
+                  "name": tb.tb_frame.f_code.co_name,
+                  "lineno": tb.tb_lineno
+               })
+               tb = tb.tb_next
+         print(str({
+               'PLAYER': str(ctx.author),
+               'type': type(ex).__name__,
+               'message': str(ex),
+               'trace': trace
+         }))
+         await ctx.send("There's an issue with selling one or all of your items.")
+         return
+         
+   except Exception as ex:
+      trace = []
+      tb = ex.__traceback__
+      while tb is not None:
+            trace.append({
+               "filename": tb.tb_frame.f_code.co_filename,
+               "name": tb.tb_frame.f_code.co_name,
+               "lineno": tb.tb_lineno
+            })
+            tb = tb.tb_next
+      print(str({
+            'PLAYER': str(ctx.author),
+            'type': type(ex).__name__,
+            'message': str(ex),
+            'trace': trace
+      }))
+      await ctx.send("There's an issue with selling one or all of your items.")
+      return
 
-         except:
-            await ctx.send("Resell ended. ")
 
 @bot.command()
 @commands.check(validate_user)
