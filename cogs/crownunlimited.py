@@ -1694,6 +1694,7 @@ class CrownUnlimited(commands.Cog):
                             embedVar = discord.Embed(title=f"Mana Zone! {o_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             o_stamina = 160
+                            ocard_lvl_ap_buff = ocard_lvl_ap_buff + 8
                         elif o_universe == "Death Note":
                             if turn_total >= 24:
                                 embedVar = discord.Embed(title=f"{t_card.upper()}'s' Scheduled Death", description=f"**{o_card} says**\n'Delete'", colour=0xe91e63)
@@ -2353,6 +2354,7 @@ class CrownUnlimited(commands.Cog):
                                 embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
                                 await private_channel.send(embed=embedVar)
                                 t_stamina = 160
+                                tcard_lvl_ap_buff = tcard_lvl_ap_buff + 8
                                 
                             elif t_universe == "Death Note":
                                 if turn_total >= 24:
@@ -4013,6 +4015,7 @@ class CrownUnlimited(commands.Cog):
                                 embedVar = discord.Embed(title=f"Mana Zone! {o_card} Increased Stamina!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
                                 o_stamina = 160
+                                ocard_lvl_ap_buff = ocard_lvl_ap_buff + 8
                                 
                             elif o_universe == "Death Note":
                                 if turn_total >= 24:
@@ -4719,6 +4722,7 @@ class CrownUnlimited(commands.Cog):
                                 embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
                                 t_stamina = 160
+                                tcard_lvl_ap_buff = tcard_lvl_ap_buff + 8
                             elif t_universe == "Death Note":
                                 if turn_total >= 24:
                                     embedVar = discord.Embed(title=f"{o_card.upper()}'s' Scheduled Death", description=f"**{t_card} says**\n'Delete'", colour=0xe91e63)
@@ -6916,7 +6920,7 @@ class CrownUnlimited(commands.Cog):
                         embedVar = discord.Embed(title=f"Mana Zone! {o_card} Increased Stamina!", colour=0xe91e63)
                         await ctx.send(embed=embedVar)
                         o_stamina = 160
-                        
+                        ocard_lvl_ap_buff = ocard_lvl_ap_buff + 8
                     elif o_universe == "Death Note":
                         if turn_total >= 24:
                             embedVar = discord.Embed(title=f"{t_card.upper()}'s' Scheduled Death", description=f"**{o_card} says**\n'Delete'", colour=0xe91e63)
@@ -7621,7 +7625,7 @@ class CrownUnlimited(commands.Cog):
                         embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         t_stamina = 160
-                        
+                        tcard_lvl_ap_buff = tcard_lvl_ap_buff + 8
                     elif t_universe == "Death Note":
                         if turn_total >= 24:
                             embedVar = discord.Embed(title=f"{o_card.upper()}'s' Scheduled Death", description=f"**{t_card} says**\n'Delete'", colour=0xe91e63)
@@ -12103,7 +12107,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             embedVar = discord.Embed(title=f"Mana Zone! {o_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             o_stamina = 160
-                        
+                            ocard_lvl_ap_buff = ocard_lvl_ap_buff + 8
                         elif o_universe == "Death Note":
                             if turn_total >= 24:
                                 embedVar = discord.Embed(title=f"{t_card.upper()}'s' Scheduled Death", description=f"**{o_card} says**\n'Delete'", colour=0xe91e63)
@@ -13555,7 +13559,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_stamina = 160
-                            
+                            tcard_lvl_ap_buff = tcard_lvl_ap_buff + 8
                         elif t_universe == "Death Note":
                             if turn_total >= 24:
                                 embedVar = discord.Embed(title=f"{o_card.upper()}'s' Scheduled Death", description=f"**{t_card} says**\n'Delete'", colour=0xe91e63)
@@ -14767,7 +14771,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 embedVar = discord.Embed(title=f"Mana Zone! {c_card} Increased Stamina!", colour=0xe91e63)
                                 await private_channel.send(embed=embedVar)
                                 c_stamina = 160
-                            
+                                ccard_lvl_ap_buff = ccard_lvl_ap_buff + 8
                             elif c_universe == "Death Note":
                                 if turn_total >= 24:
                                     embedVar = discord.Embed(title=f"{t_card.upper()}'s' Scheduled Death", description=f"**{c_card} says**\n'Delete'", colour=0xe91e63)
@@ -16260,7 +16264,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina!", colour=0xe91e63)
                                 await private_channel.send(embed=embedVar)
                                 t_stamina = 160
-                            
+                                tcard_lvl_ap_buff = tcard_lvl_ap_buff + 8
                             
                             elif t_universe == "Death Note":
                                 if turn_total >= 24:

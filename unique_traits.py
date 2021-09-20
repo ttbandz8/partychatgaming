@@ -33,15 +33,15 @@ traits = [{
 },{
     'NAME': 'Black Clover',
     'EFFECT': 'Mana Zone',
-    'TRAIT': 'Gain 160 Mana on Focus'
+    'TRAIT': 'Gain 160 Mana on Focus. AP is increased by 8 on Focus.'
 },{
     'NAME': 'Fate',
     'EFFECT': 'Command Seal',
-    'TRAIT': 'On Resolve, Strike with Ultimate, then Focus.'
+    'TRAIT': 'On Resolve, Strike with Ultimate with no mana cost.'
 },{
     'NAME': 'Demon Slayer',
     'EFFECT': 'Total Concentration Constant',
-    'TRAIT': 'At match start, if your oppponent has greater health, Your health = Opponent Max Health.'
+    'TRAIT': 'At match start, if your oppponent has greater health, Your health = Opponent Health.'
 },{
     'NAME': 'God Of War',
     'EFFECT': 'Ascension',
