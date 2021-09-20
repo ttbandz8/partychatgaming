@@ -271,6 +271,8 @@ class CrownUnlimited(commands.Cog):
     
     @cog_ext.cog_slash(description="Auto Tales Battler", guild_ids=main.guild_ids)
     async def atales(self, ctx: SlashContext):
+        await ctx.send("/atales is currently down. Please check back later!")
+        return
         U_modes = ['ATales','Tales', 'CTales', 'DTales']
         D_modes = ['CDungeon','DDungeon', 'Dungeon']
         B_MODES = ['Boss', 'CBoss']

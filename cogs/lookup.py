@@ -35,6 +35,7 @@ class Lookup(commands.Cog):
 
     @cog_ext.cog_slash(description="Lookup player stats", guild_ids=main.guild_ids)
     async def lookup(self, ctx, player: User):
+        await ctx.defer()
         try:
             query = {'DISNAME': str(player)}
             d = db.queryUser(query)

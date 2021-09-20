@@ -310,6 +310,7 @@ class Profile(commands.Cog):
                 
                 
                 for card in cards_list:
+                    index = cards_list.index(card)
                     resp = db.queryCard({"NAME": str(card)})
                     lvl = ""
                     card_available = resp['AVAILABLE']
@@ -330,7 +331,7 @@ class Profile(commands.Cog):
                                 licon =":fleur_de_lis:"
                             lvl = f"{licon} **{cl['LVL']}**"
                     cards.append(textwrap.dedent(f"""
-                    {icon} **{resp['NAME']}** | {lvl}
+                    {icon} [{index}] **{resp['NAME']}** | {lvl}
                     :heart: {resp['HLT']} :dagger: {resp['ATK']} :shield: {resp['DEF']}
                     :earth_americas:  {resp['UNIVERSE']}"""))
 

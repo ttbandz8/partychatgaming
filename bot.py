@@ -1686,83 +1686,150 @@ async def curseguild(amount, guild):
 
 @slash.slash(name="Resell", description="Sell items back to the shop", guild_ids=guild_ids)
 @commands.check(validate_user)
-async def resell(ctx, item: str):
-   user = db.queryUser({'DISNAME': str(ctx.author)})
-   p1_trade_item = item
-   p1_vault = db.queryVault({'OWNER' : str(ctx.author)})
-   p1_cards = p1_vault['CARDS']
-   p1_titles = p1_vault['TITLES']
-   p1_arms = p1_vault['ARMS']
-   p1_balance = p1_vault['BALANCE']
+async def resell(ctx, where: str, selections: list):
+   await ctx.send("Resell is under construction. Multi-Item resell is on the way!")
+   return
+   card_indications = ["cards", "card", "c", "ccards", "cardsss", "car", "cc"]
+   title_indications = ["titles", "t", "title", "titt", "titl", "titls"]
+   arm_indications = ["arms", "arm", "a", "ar", "am", "arsm"]
 
-   if p1_trade_item in p1_cards and len(p1_cards) == 1:
-      await ctx.send("You cannot sell your only card.")
-   elif p1_trade_item in p1_arms and len(p1_arms) == 1:
-      await ctx.send("You cannot sell your only arm.")
-   elif p1_trade_item in p1_titles and len(p1_titles) == 1:
-      await ctx.send("You cannot sell your only title.")
-   else:
+   try:
+      user = db.queryUser({'DISNAME': str(ctx.author)})
+      vault = db.queryVault({'OWNER' : str(ctx.author)})
+      
+      if where.lower() in card_indications:
+         p1_cards = vault['CARDS']
+         selections_as_list = selections.split()
+         list_to_sell = []
+         sell_price = 0
+         for selected in selections_as_list:
+            card = p1_cards[int(selected)]
+            card_data = db.queryCard({'NAME':{"$regex": str(card), "$options": "i"}})
+            sell_price = sell_price + (card_data['PRICE'] * .45)
+            list_to_sell.append(f"**{str(card)}**")
 
-      if p1_trade_item not in p1_cards and p1_trade_item not in p1_titles and p1_trade_item not in p1_arms:
-         await ctx.send("You do not own this item.")
+         list_to_sell_as_text = "\n".join(list_to_sell)
+
+         await ctx.send(f"Are you sure you want to sell\n {list_to_sell_as_text}\n for :coin:{round(sell_price)}?")
          return
-      else:
-         if p1_trade_item in p1_cards:
-            card = db.queryCard({'NAME':{"$regex": str(p1_trade_item), "$options": "i"}})
-            sell_price = card['PRICE'] * .45
-         elif p1_trade_item in p1_titles:
-            title = db.queryTitle({'TITLE': {"$regex": str(p1_trade_item), "$options": "i"}})
-            sell_price = title['PRICE'] * .45
-         elif p1_trade_item in p1_arms:
-            arm = db.queryArm({'ARM': {"$regex": str(p1_trade_item), "$options": "i"}})
-            sell_price = arm['PRICE'] * .45
 
-         if (p1_trade_item == user['CARD']) or (p1_trade_item == user['TITLE']) or (p1_trade_item == user['ARM']):
-            await ctx.send("You cannot resell an equipped item.")
-            return
-
-         sell_buttons = [
-               manage_components.create_button(
-                  style=ButtonStyle.blue,
-                  label="💸",
-                  custom_id="Yes"
-               ),
-               manage_components.create_button(
-                  style=ButtonStyle.red,
-                  label="❌",
-                  custom_id="No"
-               )
-            ]
-         sell_buttons_action_row = manage_components.create_actionrow(*sell_buttons)
-
-         await ctx.send(f"{ctx.author.mention} are you willing to resell {p1_trade_item} for :coin: {round(sell_price)}?", components=[sell_buttons_action_row])
+      # p1_titles = vault['TITLES']
+      # p1_arms = vault['ARMS']
+      # p1_balance = vault['BALANCE']
 
          
-         def check(button_ctx):
-            return button_ctx.author == ctx.author
+   except Exception as ex:
+      trace = []
+      tb = ex.__traceback__
+      while tb is not None:
+            trace.append({
+               "filename": tb.tb_frame.f_code.co_filename,
+               "name": tb.tb_frame.f_code.co_name,
+               "lineno": tb.tb_lineno
+            })
+            tb = tb.tb_next
+      print(str({
+            'type': type(ex).__name__,
+            'message': str(ex),
+            'trace': trace
+      }))
+      await ctx.send("There's an issue with loading your cards. Check with support.")
+      return
 
-         try:
-            button_ctx: ComponentContext = await manage_components.wait_for_component(bot, components=[sell_buttons_action_row], check=check)
+   # cards = []
+   # for card in p1_cards:
+   #    index = p1_cards.index(card)
+   #    resp = db.queryCard({"NAME": str(card)})
+   #    lvl = ""
+   #    card_available = resp['AVAILABLE']
+   #    card_exclusive = resp['EXCLUSIVE']
+   #    card_collection = resp['HAS_COLLECTION']
+   #    icon = ":flower_playing_cards:"
+   #    if card_available and card_exclusive:
+   #       icon = ":fire:"
+   #    elif card_available == False and card_exclusive ==False:
+   #       if card_collection:
+   #             icon =":sparkles:"
+   #       else:
+   #             icon = ":japanese_ogre:"
+   #    for cl in card_levels:
+   #       if card == cl['CARD']:
+   #             licon = ":trident:"
+   #             if cl['LVL'] == 200:
+   #                licon =":fleur_de_lis:"
+   #             lvl = f"{licon} **{cl['LVL']}**"
+   #    cards.append(textwrap.dedent(f"""
+   #    [{index}] **{resp['NAME']}** | {lvl}
+   #    :heart: {resp['HLT']} :dagger: {resp['ATK']} :shield: {resp['DEF']}
+   #    :earth_americas:  {resp['UNIVERSE']}"""))
+   # if p1_trade_item in p1_cards and len(p1_cards) == 1:
+   #    await ctx.send("You cannot sell your only card.")
+   # elif p1_trade_item in p1_arms and len(p1_arms) == 1:
+   #    await ctx.send("You cannot sell your only arm.")
+   # elif p1_trade_item in p1_titles and len(p1_titles) == 1:
+   #    await ctx.send("You cannot sell your only title.")
+   # else:
 
-            if button_ctx.custom_id == "No":
-                  await button_ctx.send("Sell ended.")
-                  return
-            if button_ctx.custom_id == "Yes":
-               if p1_trade_item in p1_arms:
-                  db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'ARMS': str(p1_trade_item)}})
-                  await bless(sell_price, ctx.author)
-                  await button_ctx.send(f"{p1_trade_item} has been resold for :coin: {round(sell_price)}.")
-               elif p1_trade_item in p1_titles:
-                  db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'TITLES': str(p1_trade_item)}})
-                  await bless(sell_price, ctx.author)
-                  await button_ctx.send(f"{p1_trade_item} has been resold for :coin: {round(sell_price)}.")
-               elif p1_trade_item in p1_cards:
-                  db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'CARDS': str(p1_trade_item)}})
-                  await bless(sell_price, ctx.author)
-                  await button_ctx.send(f"{p1_trade_item} has been resold for :coin: {round(sell_price)}.")
+   #    if p1_trade_item not in p1_cards and p1_trade_item not in p1_titles and p1_trade_item not in p1_arms:
+   #       await ctx.send("You do not own this item.")
+   #       return
+   #    else:
+   #       if p1_trade_item in p1_cards:
+   #          card = db.queryCard({'NAME':{"$regex": str(p1_trade_item), "$options": "i"}})
+   #          sell_price = card['PRICE'] * .45
+   #       elif p1_trade_item in p1_titles:
+   #          title = db.queryTitle({'TITLE': {"$regex": str(p1_trade_item), "$options": "i"}})
+   #          sell_price = title['PRICE'] * .45
+   #       elif p1_trade_item in p1_arms:
+   #          arm = db.queryArm({'ARM': {"$regex": str(p1_trade_item), "$options": "i"}})
+   #          sell_price = arm['PRICE'] * .45
 
-         except:
-            await ctx.send("Resell ended. ")
+   #       if (p1_trade_item == user['CARD']) or (p1_trade_item == user['TITLE']) or (p1_trade_item == user['ARM']):
+   #          await ctx.send("You cannot resell an equipped item.")
+   #          return
+
+   #       sell_buttons = [
+   #             manage_components.create_button(
+   #                style=ButtonStyle.blue,
+   #                label="💸",
+   #                custom_id="Yes"
+   #             ),
+   #             manage_components.create_button(
+   #                style=ButtonStyle.red,
+   #                label="❌",
+   #                custom_id="No"
+   #             )
+   #          ]
+   #       sell_buttons_action_row = manage_components.create_actionrow(*sell_buttons)
+
+   #       await ctx.send(f"{ctx.author.mention} are you willing to resell {p1_trade_item} for :coin: {round(sell_price)}?", components=[sell_buttons_action_row])
+
+         
+   #       def check(button_ctx):
+   #          return button_ctx.author == ctx.author
+
+   #       try:
+   #          button_ctx: ComponentContext = await manage_components.wait_for_component(bot, components=[sell_buttons_action_row], check=check)
+
+   #          if button_ctx.custom_id == "No":
+   #                await button_ctx.send("Sell ended.")
+   #                return
+   #          if button_ctx.custom_id == "Yes":
+   #             if p1_trade_item in p1_arms:
+   #                db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'ARMS': str(p1_trade_item)}})
+   #                await bless(sell_price, ctx.author)
+   #                await button_ctx.send(f"{p1_trade_item} has been resold for :coin: {round(sell_price)}.")
+   #             elif p1_trade_item in p1_titles:
+   #                db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'TITLES': str(p1_trade_item)}})
+   #                await bless(sell_price, ctx.author)
+   #                await button_ctx.send(f"{p1_trade_item} has been resold for :coin: {round(sell_price)}.")
+   #             elif p1_trade_item in p1_cards:
+   #                db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'CARDS': str(p1_trade_item)}})
+   #                await bless(sell_price, ctx.author)
+   #                await button_ctx.send(f"{p1_trade_item} has been resold for :coin: {round(sell_price)}.")
+
+   #       except:
+   #          await ctx.send("Resell ended. ")
 
 @bot.command()
 @commands.check(validate_user)
