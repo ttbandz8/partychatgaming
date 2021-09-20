@@ -411,6 +411,7 @@ class Profile(commands.Cog):
                     icon = ":dollar:"
 
                 for title in titles_list:
+                    index = titles_list.index(title)
                     resp = db.queryTitle({"TITLE": str(title)})
                     title_passive = resp['ABILITIES'][0]
                     title_passive_type = list(title_passive.keys())[0]
@@ -423,7 +424,7 @@ class Profile(commands.Cog):
                     elif title_available == False and title_exclusive ==False:
                         icon = ":japanese_ogre:"
                     titles.append(textwrap.dedent(f"""
-                    {icon} **{resp['TITLE']}**
+                    {icon} [{index}] **{resp['TITLE']}**
                     :microbe: **{title_passive_type}:** {title_passive_value}
                     :earth_africa: **Universe:** {resp['UNIVERSE']}"""))
 
@@ -504,6 +505,7 @@ class Profile(commands.Cog):
                     icon = ":dollar:"
 
                 for arm in arms_list:
+                    index = arms_list.index(arm)
                     resp = db.queryArm({"ARM": str(arm)})
                     arm_passive = resp['ABILITIES'][0]
                     arm_passive_type = list(arm_passive.keys())[0]
@@ -516,7 +518,7 @@ class Profile(commands.Cog):
                     elif arm_available == False and arm_exclusive ==False:
                         icon = ":japanese_ogre:"
                     arms.append(textwrap.dedent(f"""
-                    {icon} **{resp['ARM']}**
+                    {icon} [{index}] **{resp['ARM']}**
                     :microbe: **{arm_passive_type}:** {arm_passive_value}
                     :earth_africa: **Universe:** {resp['UNIVERSE']}"""))
 
