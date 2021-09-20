@@ -196,7 +196,7 @@ class CrownUnlimited(commands.Cog):
                 take_chances_response = embedVar
 
             # Send Message
-            embedVar = discord.Embed(title=f"**{approach_message} {cards[rand_card]['NAME']}** Approaches!", description=textwrap.dedent(f"""\
+            embedVar = discord.Embed(title=f"**{approach_message}{cards[rand_card]['NAME']}** Approaches!", description=textwrap.dedent(f"""\
             **Bounty** **{bounty_message}**
 
             {message.author.mention}
