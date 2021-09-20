@@ -40,7 +40,7 @@ class CrownUnlimited(commands.Cog):
     co_op_modes = ['CTales', 'DTales', 'CDungeon', 'DDungeon']
     ai_co_op_modes = ['DTales', 'DDungeon']
     U_modes = ['ATales','Tales', 'CTales', 'DTales']
-    D_modes = ['CDungeon','DDungeon', 'Dungeon']
+    D_modes = ['CDungeon','DDungeon', 'Dungeon', 'ADungeon']
     solo_modes = ['ATales','Tales', 'Dungeon', 'Boss']
     opponent_pet_modes = ['Dungeon', 'DDungeon', 'CDungeon']
     max_items = 150
@@ -272,11 +272,45 @@ class CrownUnlimited(commands.Cog):
     @cog_ext.cog_slash(description="Auto Tales Battler", guild_ids=main.guild_ids)
     async def atales(self, ctx: SlashContext):
         U_modes = ['ATales','Tales', 'CTales', 'DTales']
-        D_modes = ['CDungeon','DDungeon', 'Dungeon']
+        D_modes = ['CDungeon','DDungeon', 'Dungeon', 'ADungeon']
         B_MODES = ['Boss', 'CBoss']
         try:
             # await ctx.defer()
             mode = "ATales"
+
+            sowner = db.queryUser({'DISNAME': str(ctx.author)})
+            oteam = sowner['TEAM']
+            ofam = sowner['FAMILY']
+            print(ofam)
+            
+            universe_selection = await select_universe(self, ctx, sowner, oteam, ofam, mode, None)
+            selected_universe = universe_selection['SELECTED_UNIVERSE']
+            private_channel = universe_selection['PRIVATE_CHANNEL']
+            universe = universe_selection['UNIVERSE_DATA']
+            crestlist = universe_selection['CREST_LIST']
+            crestsearch = universe_selection['CREST_SEARCH']
+
+            if mode in D_modes:
+                completed_universes = universe_selection['COMPLETED_DUNGEONS']
+            else:
+                completed_universes = universe_selection['COMPLETED_TALES']
+            if crestsearch:
+                oguild = universe_selection['OGUILD']
+            else:
+                oguild = "PCG"
+            
+            await battle_commands(self, ctx, mode, universe, selected_universe, completed_universes, oguild, crestlist, crestsearch, private_channel, sowner, oteam, ofam, None, None, None, None, None)
+        except Exception as ex:
+            return
+
+    @cog_ext.cog_slash(description="Auto Dungeon Battler", guild_ids=main.guild_ids)
+    async def adungon(self, ctx: SlashContext):
+        U_modes = ['ATales','Tales', 'CTales', 'DTales']
+        D_modes = ['CDungeon','DDungeon', 'Dungeon', 'ADungeon']
+        B_MODES = ['Boss', 'CBoss']
+        try:
+            # await ctx.defer()
+            mode = "ADungeon"
 
             sowner = db.queryUser({'DISNAME': str(ctx.author)})
             oteam = sowner['TEAM']
@@ -298,15 +332,14 @@ class CrownUnlimited(commands.Cog):
             else:
                 oguild = "PCG"
             
-            await battle_commands(self, ctx, mode, universe, selected_universe, completed_universes, oguild, crestlist, crestsearch, private_channel, sowner, oteam, None, None, None, None, None, None)
+            await battle_commands(self, ctx, mode, universe, selected_universe, completed_universes, oguild, crestlist, crestsearch, private_channel, sowner, oteam, ofam, None, None, None, None, None)
         except Exception as ex:
             return
 
-    
     @cog_ext.cog_slash(description="Duo Tales with AI", guild_ids=main.guild_ids)
     async def dtales(self, ctx: SlashContext, deck: int):
         U_modes = ['ATales','Tales', 'CTales', 'DTales']
-        D_modes = ['CDungeon','DDungeon', 'Dungeon']
+        D_modes = ['CDungeon','DDungeon', 'Dungeon', 'ADungeon']
         B_MODES = ['Boss', 'CBoss']
         try:
             # await ctx.defer()
@@ -360,7 +393,7 @@ class CrownUnlimited(commands.Cog):
     @cog_ext.cog_slash(description="Duo Dungeons with AI", guild_ids=main.guild_ids)
     async def ddungeon(self, ctx: SlashContext, deck : int):
         U_modes = ['ATales','Tales', 'CTales', 'DTales']
-        D_modes = ['CDungeon','DDungeon', 'Dungeon']
+        D_modes = ['CDungeon','DDungeon', 'Dungeon', 'ADungeon']
         B_MODES = ['Boss', 'CBoss']
         try:
             # await ctx.defer()
@@ -414,11 +447,11 @@ class CrownUnlimited(commands.Cog):
     @cog_ext.cog_slash(description="Co-op Tales with Friends", guild_ids=main.guild_ids)
     async def ctales(self, ctx: SlashContext, user: User):
         U_modes = ['ATales','Tales', 'CTales', 'DTales']
-        D_modes = ['CDungeon','DDungeon', 'Dungeon']
+        D_modes = ['CDungeon','DDungeon', 'Dungeon', 'ADungeon']
         B_MODES = ['Boss', 'CBoss']        
         try:
             U_modes = ['ATales','Tales', 'CTales', 'DTales']
-            D_modes = ['CDungeon','DDungeon', 'Dungeon']
+            D_modes = ['CDungeon','DDungeon', 'Dungeon', 'ADungeon']
             B_MODES = ['Boss', 'CBoss']
             mode = "CTales"
             sowner = db.queryUser({'DISNAME': str(ctx.author)})
@@ -466,12 +499,12 @@ class CrownUnlimited(commands.Cog):
     @cog_ext.cog_slash(description="Co-op Dungeon with Friends", guild_ids=main.guild_ids)
     async def cdungeon(self, ctx: SlashContext, user: User):
         U_modes = ['ATales','Tales', 'CTales', 'DTales']
-        D_modes = ['CDungeon','DDungeon', 'Dungeon']
+        D_modes = ['CDungeon','DDungeon', 'Dungeon', 'ADungeon']
         B_MODES = ['Boss', 'CBoss']
     
         try:
             U_modes = ['ATales','Tales', 'CTales', 'DTales']
-            D_modes = ['CDungeon','DDungeon', 'Dungeon']
+            D_modes = ['CDungeon','DDungeon', 'Dungeon', 'ADungeon']
             B_MODES = ['Boss', 'CBoss']
             mode = "CDungeon"
             sowner = db.queryUser({'DISNAME': str(ctx.author)})
@@ -519,7 +552,7 @@ class CrownUnlimited(commands.Cog):
     @cog_ext.cog_slash(description="Co-op Bosses with Friends", guild_ids=main.guild_ids)
     async def cboss(self, ctx: SlashContext, user: User):
         U_modes = ['ATales','Tales', 'CTales', 'DTales']
-        D_modes = ['CDungeon','DDungeon', 'Dungeon']
+        D_modes = ['CDungeon','DDungeon', 'Dungeon', 'ADungeon']
         B_MODES = ['Boss', 'CBoss'] 
         try:
             # await ctx.defer()
@@ -576,7 +609,7 @@ class CrownUnlimited(commands.Cog):
     @cog_ext.cog_slash(description="Boss! Defeat Dungeon to unlock Boss", guild_ids=main.guild_ids)
     async def boss(self, ctx: SlashContext):
         U_modes = ['ATales','Tales', 'CTales', 'DTales']
-        D_modes = ['CDungeon','DDungeon', 'Dungeon']
+        D_modes = ['CDungeon','DDungeon', 'Dungeon', 'ADungeon']
         B_MODES = ['Boss', 'CBoss']
         try:
             # await ctx.defer()
@@ -630,7 +663,7 @@ class CrownUnlimited(commands.Cog):
     @cog_ext.cog_slash(description="Dungeon! Available for Tales you beat", guild_ids=main.guild_ids)
     async def dungeon(self, ctx: SlashContext):
         U_modes = ['ATales','Tales', 'CTales', 'DTales']
-        D_modes = ['CDungeon','DDungeon', 'Dungeon']
+        D_modes = ['CDungeon','DDungeon', 'Dungeon', 'ADungeon']
         B_MODES = ['Boss', 'CBoss']
         try:
             # await ctx.defer()
@@ -656,7 +689,7 @@ class CrownUnlimited(commands.Cog):
             else:
                 oguild = "PCG"
             
-            await battle_commands(self, ctx, mode, universe, selected_universe, completed_universes, oguild, crestlist, crestsearch, private_channel, sowner, oteam, None, None, None, None, None, None)
+            await battle_commands(self, ctx, mode, universe, selected_universe, completed_universes, oguild, crestlist, crestsearch, private_channel, sowner, oteam, ofam, None, None, None, None, None)
         except Exception as ex:
             trace = []
             tb = ex.__traceback__
@@ -2979,7 +3012,7 @@ class CrownUnlimited(commands.Cog):
     @cog_ext.cog_slash(description="Conquer Tales to Unlock New Universes!", guild_ids=main.guild_ids)
     async def tales(self, ctx: SlashContext):
         U_modes = ['ATales','Tales', 'CTales', 'DTales']
-        D_modes = ['CDungeon','DDungeon', 'Dungeon']
+        D_modes = ['CDungeon','DDungeon', 'Dungeon', 'ADungeon']
         B_MODES = ['Boss', 'CBoss']
         try:
             # await ctx.defer()
@@ -3005,7 +3038,7 @@ class CrownUnlimited(commands.Cog):
             else:
                 oguild = "PCG"
             
-            await battle_commands(self, ctx, mode, universe, selected_universe, completed_universes, oguild, crestlist, crestsearch, private_channel, sowner, oteam, None, None, None, None, None, None)
+            await battle_commands(self, ctx, mode, universe, selected_universe, completed_universes, oguild, crestlist, crestsearch, private_channel, sowner, oteam, ofam, None, None, None, None, None)
         except Exception as ex:
             trace = []
             tb = ex.__traceback__
@@ -9595,7 +9628,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
     co_op_modes = ['CTales', 'DTales', 'CDungeon', 'DDungeon']
     ai_co_op_modes = ['DTales', 'DDungeon']
     U_modes = ['ATales','Tales', 'CTales', 'DTales']
-    D_modes = ['CDungeon','DDungeon', 'Dungeon']
+    D_modes = ['CDungeon','DDungeon', 'Dungeon', 'ADungeon']
     B_modes = ['Boss', 'CBoss']
     solo_modes = ['ATales','Tales', 'Dungeon', 'Boss']
     opponent_pet_modes = ['Dungeon', 'DDungeon', 'CDungeon']
@@ -11330,7 +11363,8 @@ async def enemy_approached(self, message, channel, player, selected_mode, univer
 
 async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode: str, user: None):
     U_modes = ['ATales','Tales', 'CTales', 'DTales']
-    D_modes = ['CDungeon','DDungeon', 'Dungeon']
+    AUTO_BATTLE_modes = ['ATales', 'ADungeon']
+    D_modes = ['CDungeon','DDungeon', 'Dungeon', 'ADungeon']
     B_modes = ['Boss', 'CBoss']
     C_MODES = ['CTales', 'CDungeon', 'CBoss']
     if isinstance(ctx.channel, discord.channel.DMChannel):
@@ -11364,7 +11398,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             if oguild:
                 crestlist = oguild['CREST']
                 crestsearch=True
-    if sowner['PATRON'] != True and mode == "ATales":
+    if sowner['PATRON'] != True and mode in AUTO_BATTLE_modes:
         embedVar = discord.Embed(title=f"Auto-Battles Locked", description=f"To Unlock Auto-Battles Join Patreon!", colour=0xe91e63)
         embedVar.add_field(name=f"Check out the #patreon channel!\nThank you for supporting the development of future games!", value="-Party Chat Dev Team")
         await ctx.send(embed=embedVar)
@@ -11686,8 +11720,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
     randomized_battle = False
     co_op_modes = ['CTales', 'DTales', 'CDungeon', 'DDungeon', 'CBoss']
     ai_co_op_modes = ['DTales', 'DDungeon']
+    AUTO_BATTLE_modes = ['ATales', 'ADungeon']
     U_modes = ['ATales','Tales', 'CTales', 'DTales']
-    D_modes = ['CDungeon','DDungeon', 'Dungeon']
+    D_modes = ['CDungeon','DDungeon', 'Dungeon', 'ADungeon']
     B_modes = ['Boss', 'CBoss']
     solo_modes = ['ATales','Tales', 'Dungeon', 'Boss']
     opponent_pet_modes = ['Dungeon', 'DDungeon', 'CDungeon']
@@ -11986,7 +12021,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             embedVar.set_footer(text=f"{t_card} waits for you to strike....")
                         elif mode in co_op_modes and mode not in B_modes:
                             embedVar = discord.Embed(title=f"**{o_card}** & **{c_card}** VS **{t_card}** has begun! {lineup}\n{t_universe} {mode} Battle", description=f"`{o_card} Says:`\n{o_greeting_description}", colour=0xe91e63)
-                        elif mode == "ATales":
+                        elif mode in AUTO_BATTLE_modes:
                             embedVar = discord.Embed(title=f"**{o_card}** VS **{t_card}** has begun! {lineup}\n{t_universe} {mode} Battle\nThe Result of this Automated Battle will be reported soon.", colour=0xe91e63)
                         elif randomized_battle:
                             embedVar = discord.Embed(title=f"**{o_card}** VS **{t_card}** has begun!\n{t_universe} {mode} Battle", description=f"`{o_card} Says:`\n{o_greeting_description}", colour=0xe91e63)
@@ -12142,7 +12177,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         else:
                             turn = 0 
                     else:
-                        if mode == "ATales":
+                        if mode in AUTO_BATTLE_modes:
                             aiMove = 0
                             if t_stamina <10 :
                                 aiMove = 1
@@ -13511,7 +13546,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         t_attack = t_attack + t_attackcalc
                         t_defense =  t_defense + t_defensecalc
                         t_used_focus=True
-                        if mode != "ATales":
+                        if mode not in AUTO_BATTLE_modes:
                             embedVar = discord.Embed(title=f"{t_card.upper()} FOCUSED", description=f"**{t_card} says**\n{t_focus_description}", colour=0xe91e63)
                             embedVar.add_field(name=f"{t_card} focused and {healmessage}", value="All stats & stamina increased")
                             await private_channel.send(embed=embedVar)
@@ -13607,7 +13642,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             turn_selector = 2
                         else:
                             turn_selector = 0
-                        if mode != "ATales":
+                        if mode not in AUTO_BATTLE_modes:
                             player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus, t_attack, t_defense, turn_total)
                             await private_channel.send(file=player_2_card)
                         aiMove = 0
@@ -13755,7 +13790,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total, tcard_lvl_ap_buff)
                             else:
                                 dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total, tcard_lvl_ap_buff)
-                            if mode != "ATales":
+                            if mode not in AUTO_BATTLE_modes:
                                 if t_gif != "N/A":
                                     await private_channel.send(f"{t_gif}")
                         elif int(aiMove) == 4:
@@ -13789,7 +13824,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         t_defense = round(t_defense - t_resolve_defense)
                                         t_used_resolve=True
                                         t_pet_used =False
-                                        if mode != "ATales":
+                                        if mode not in AUTO_BATTLE_modes:
                                             embedVar = discord.Embed(title=f"{t_card.upper()} PLUS ULTRAAA", description=f"**{t_card} says**\n{t_resolve_description}", colour=0xe91e63)
                                             embedVar.add_field(name=f"Transformation: Plus Ultra", value="You do not lose a turn after you Resolve.")
                                             await private_channel.send(embed=embedVar)
@@ -13814,7 +13849,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         t_defense = 120
                                     t_used_resolve=True
                                     t_pet_used =False
-                                    if mode != "ATales":
+                                    if mode not in AUTO_BATTLE_modes:
                                         embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"**{t_card} says**\n{t_resolve_description}", colour=0xe91e63)
                                         embedVar.add_field(name=f"Transformation: Bankai", value="Gain double Attack on Resolve.")
                                         await private_channel.send(embed=embedVar)
@@ -13837,7 +13872,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     t_defense = round(t_defense - t_resolve_defense)
                                     t_used_resolve=True
                                     t_pet_used =False
-                                    if mode != "ATales":
+                                    if mode not in AUTO_BATTLE_modes:
                                         embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"**{t_card} says**\n{t_resolve_description}", colour=0xe91e63)
                                         embedVar.add_field(name=f"Transformation: Ascension", value="On Resolve Refill Health.")
                                         await private_channel.send(embed=embedVar)
@@ -13859,7 +13894,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     t_attack = round(t_attack + t_resolve_attack)
                                     t_defense = round(t_defense - t_resolve_defense)
                                     t_used_resolve=True
-                                    if mode != "ATales":
+                                    if mode not in AUTO_BATTLE_modes:
                                         embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"**{t_card} says**\n{t_resolve_description}", colour=0xe91e63)
                                         embedVar.add_field(name=f"Transformation: Command Seal", value="On Resolve, Strike with Ultimate, then Focus.")
                                         await private_channel.send(embed=embedVar)
@@ -13870,7 +13905,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     t_pet_used =False
                                     c_health = c_health - int(dmg['DMG'])
                                     
-                                    if mode != "ATales":
+                                    if mode not in AUTO_BATTLE_modes:
                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                         await private_channel.send(embed=embedVar)
                                     # t_stamina = 0
@@ -13894,7 +13929,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     t_used_resolve=True
                                     t_pet_used =False
                                     
-                                    if mode != "ATales":
+                                    if mode not in AUTO_BATTLE_modes:
                                         embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"**{t_card} says**\n{t_resolve_description}", colour=0xe91e63)
                                         embedVar.add_field(name=f"Transformation: Evolution", value="When you Resolve you do not lose Defense.")
                                         await private_channel.send(embed=embedVar)
@@ -13918,14 +13953,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     t_used_resolve=True
                                     t_pet_used =False
 
-                                    if mode != "ATales":
+                                    if mode not in AUTO_BATTLE_modes:
                                         embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"**{t_card} says**\n{t_resolve_description}", colour=0xe91e63)
                                         embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
                                         await private_channel.send(embed=embedVar)
                                     turn_total= turn_total + 1
                                     turn=turn_selector
                             else:
-                                if mode != "ATales":
+                                if mode not in AUTO_BATTLE_modes:
                                     await private_channel.send(m.CANNOT_USE_RESOLVE)
                                 turn=1
                         elif int(aiMove) == 6:
@@ -14019,14 +14054,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             elif tpet_type == 'DESTRUCTION':
                                                 c_max_health = round(c_max_health - dmg['DMG'])
                                             t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-                                            if mode != "ATales":
+                                            if mode not in AUTO_BATTLE_modes:
                                                 embedVar = discord.Embed(title=f"{t_card.upper()} Summoned {tpet_name}", colour=0xe91e63)
                                                 embedVar.add_field(name=f"{tpet_name} used {tpetmove_text}!", value =f"Enhanced {tpet_type}")
                                                 embedVar.set_thumbnail(url=tpet_image)
                                                 await private_channel.send(embed=embedVar)
                                             turn=turn_selector
                                         else:
-                                            if mode != "ATales":
+                                            if mode not in AUTO_BATTLE_modes:
                                                 await private_channel.send(f"{tpet_name} needs a turn to rest...")
                                             turn=1
                                     else:
@@ -14117,7 +14152,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 o_max_health = round(o_max_health - dmg['DMG'])
                                             t_stamina = t_stamina - int(dmg['STAMINA_USED'])
 
-                                            if mode != "ATales":
+                                            if mode not in AUTO_BATTLE_modes:
                                                 embedVar = discord.Embed(title=f"{t_card.upper()} Summoned {tpet_name}", colour=0xe91e63)
                                                 embedVar.add_field(name=f"{tpet_name} used {tpetmove_text}!", value =f"Enhanced {tpet_type}")
                                                 embedVar.set_thumbnail(url=tpet_image)
@@ -14215,7 +14250,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             o_max_health = round(o_max_health - dmg['DMG'])
                                         t_stamina = t_stamina - int(dmg['STAMINA_USED'])
 
-                                        if mode != "ATales":
+                                        if mode not in AUTO_BATTLE_modes:
                                             embedVar = discord.Embed(title=f"{t_card.upper()} Summoned {tpet_name}", colour=0xe91e63)
                                             embedVar.add_field(name=f"{tpet_name} used {tpetmove_text}!", value =f"Enhanced {tpet_type}")
                                             embedVar.set_thumbnail(url=tpet_image)
@@ -14320,14 +14355,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 c_max_health = round(c_max_health - dmg['DMG'])
                                             t_stamina = t_stamina - int(dmg['STAMINA_USED'])
 
-                                            if mode != "ATales":
+                                            if mode not in AUTO_BATTLE_modes:
                                                 embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                                 await private_channel.send(embed=embedVar)
                                             turn_total= turn_total + 1
                                             turn = turn_selector
                                         elif dmg['DMG'] == 0:
                                             t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-                                            if mode != "ATales":
+                                            if mode not in AUTO_BATTLE_modes:
                                                 embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                                 await private_channel.send(embed=embedVar)
                                             turn_total= turn_total + 1
@@ -14335,7 +14370,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         else:
                                             if c_universe == "Naruto" and c_stamina == 0:
                                                 c_health = c_health
-                                                if mode != "ATales":
+                                                if mode not in AUTO_BATTLE_modes:
                                                     embedVar = discord.Embed(title=f"{c_card.upper()}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
                                                     await private_channel.send(embed=embedVar)
                                             else:
@@ -14455,14 +14490,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             elif enh_type == 'DESTRUCTION':
                                                 o_max_health = round(o_max_health - dmg['DMG'])
                                             t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-                                            if mode != "ATales":
+                                            if mode not in AUTO_BATTLE_modes:
                                                 embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                                 await private_channel.send(embed=embedVar)
                                             turn_total= turn_total + 1
                                             turn = turn_selector
                                         elif dmg['DMG'] == 0:
                                             t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-                                            if mode != "ATales":
+                                            if mode not in AUTO_BATTLE_modes:
                                                 embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                                 await private_channel.send(embed=embedVar)
                                             turn_total= turn_total + 1
@@ -14470,17 +14505,17 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         else:
                                             if o_universe == "Naruto" and o_stamina == 0:
                                                 o_health = o_health 
-                                                if mode != "ATales":
+                                                if mode not in AUTO_BATTLE_modes:
                                                     embedVar = discord.Embed(title=f"{o_card.upper()}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
                                                     await private_channel.send(embed=embedVar)
                                             else:
                                                 o_health = o_health - int(dmg['DMG'])
-                                                if mode != "ATales":
+                                                if mode not in AUTO_BATTLE_modes:
                                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                                     await private_channel.send(embed=embedVar)
                                             if o_health <= 0:
                                                 if o_final_stand==True:
-                                                    if mode != "ATales":
+                                                    if mode not in AUTO_BATTLE_modes:
                                                         embedVar = discord.Embed(title=f"{o_card.upper()}'s LAST STAND", description=f"{o_card} FINDS RESOLVE", colour=0xe91e63)
                                                         embedVar.add_field(name=f"{o_card} resolved and continues to fight", value="All stats & stamina increased")
                                                         await private_channel.send(embed=embedVar)
@@ -14503,7 +14538,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 turn_total= turn_total + 1
                                                 turn=turn_selector
                                     else:
-                                        if mode != "ATales":
+                                        if mode not in AUTO_BATTLE_modes:
                                             await private_channel.send(m.NOT_ENOUGH_STAMINA)
                                         turn = 1
                             else:
@@ -14594,14 +14629,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         elif enh_type == 'DESTRUCTION':
                                             o_max_health = round(o_max_health - dmg['DMG'])
                                         t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-                                        if mode != "ATales":
+                                        if mode not in AUTO_BATTLE_modes:
                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                             await private_channel.send(embed=embedVar)
                                         turn_total= turn_total + 1
                                         turn = turn_selector
                                     elif dmg['DMG'] == 0:
                                         t_stamina = t_stamina - int(dmg['STAMINA_USED'])
-                                        if mode != "ATales":
+                                        if mode not in AUTO_BATTLE_modes:
                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                             await private_channel.send(embed=embedVar)
                                         turn_total= turn_total + 1
@@ -14609,17 +14644,17 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     else:
                                         if o_universe == "Naruto" and o_stamina == 0:
                                             o_health = o_health 
-                                            if mode != "ATales":
+                                            if mode not in AUTO_BATTLE_modes:
                                                 embedVar = discord.Embed(title=f"{o_card.upper()}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
                                                 await private_channel.send(embed=embedVar)
                                         else:
                                             o_health = o_health - int(dmg['DMG'])
-                                            if mode != "ATales":
+                                            if mode not in AUTO_BATTLE_modes:
                                                 embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
                                                 await private_channel.send(embed=embedVar)
                                         if o_health <= 0:
                                             if o_final_stand==True:
-                                                if mode != "ATales":
+                                                if mode not in AUTO_BATTLE_modes:
                                                     embedVar = discord.Embed(title=f"{o_card.upper()}'s LAST STAND", description=f"{o_card} FINDS RESOLVE", colour=0xe91e63)
                                                     embedVar.add_field(name=f"{o_card} resolved and continues to fight", value="All stats & stamina increased")
                                                     await private_channel.send(embed=embedVar)
@@ -14642,7 +14677,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             turn_total= turn_total + 1
                                             turn=turn_selector
                                 else:
-                                    if mode != "ATales":
+                                    if mode in AUTO_BATTLE_modes:
                                         await private_channel.send(m.NOT_ENOUGH_STAMINA)
                                     turn = 1
 
@@ -17234,7 +17269,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                     if mode in D_modes:
                         ofambank = await blessfamily(100,ofam)
                     else:
-                        ofambank = await blessfamily(50,ofam)
+                        print(ofam)
+                        ofambank = await blessfamily(50, ofam)
                     match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']), str(oarm['ARM']), str(selected_universe), tale_or_dungeon_only, o['EXCLUSIVE'])
                     questlogger = await quest(ouser, t_card, tale_or_dungeon_only)
                     destinylogger = await destiny(ouser, t_card, tale_or_dungeon_only)

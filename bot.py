@@ -1720,7 +1720,7 @@ async def resell(ctx, where: str, selections: list):
             card = p1_cards[int(selected)]
             if card not in list_to_sell and card != user["CARD"]:
                card_data = db.queryCard({'NAME':{"$regex": str(card), "$options": "i"}})
-               sell_price = sell_price + (card_data['PRICE'] * .45)
+               sell_price = sell_price + (card_data['PRICE'] * .30)
                list_to_sell.append(f"{str(card)}")
 
          list_to_sell_as_text = "\n".join(list_to_sell)
@@ -1732,7 +1732,7 @@ async def resell(ctx, where: str, selections: list):
             title = p1_titles[int(selected)]
             if title not in list_to_sell and title != user["TITLE"]:
                title_data = db.queryTitle({'TITLE':{"$regex": str(title), "$options": "i"}})
-               sell_price = sell_price + (title_data['PRICE'] * .45)
+               sell_price = sell_price + (title_data['PRICE'] * .30)
                list_to_sell.append(f"{str(title)}")
          list_to_sell_as_text = "\n".join(list_to_sell)
 
@@ -1743,7 +1743,7 @@ async def resell(ctx, where: str, selections: list):
             arm = p1_arms[int(selected)]
             if arm not in list_to_sell and arm != user["ARM"]:
                arm_data = db.queryArm({'ARM':{"$regex": str(arm), "$options": "i"}})
-               sell_price = sell_price + (arm_data['PRICE'] * .45)
+               sell_price = sell_price + (arm_data['PRICE'] * .30)
                list_to_sell.append(f"{str(arm)}")
          list_to_sell_as_text = "\n".join(list_to_sell)
 
