@@ -223,6 +223,9 @@ class Profile(commands.Cog):
                 #Title errors 
                 titled =False
                 titleicon=":warning:"
+                licon = ":trident:"
+                if card_lvl == 200:
+                    licon =":fleur_de_lis:"
                 titlemessage = f"{titleicon} | **{title_name}** ~ **INEFFECTIVE**"
                 warningmessage = f"*Use {o_show} or Unbound Titles on this card*"
                 if o_title_universe == "Unbound":
@@ -236,7 +239,7 @@ class Profile(commands.Cog):
                     titlemessage = f":reminder_ribbon: | **{title_name}** ~ {title_passive_type} | {title_passive_value}"
                     warningmessage= f""
 
-                embedVar = discord.Embed(title=f":trident: {card_lvl} | {title_name} {o_card} & {active_pet['NAME']}:".format(self), description=textwrap.dedent(f"""\
+                embedVar = discord.Embed(title=f"{licon} {card_lvl} | {title_name} {o_card} & {active_pet['NAME']}:".format(self), description=textwrap.dedent(f"""\
                 {message}
                 :heart: | **Health** {o_max_health}
                 :cyclone: | **Stamina** {o_max_stamina}
@@ -348,7 +351,7 @@ class Profile(commands.Cog):
                 
                 # If it's not an array greater than 10, show paginationless embed
                 if len(cards) < 10:
-                    embedVar = discord.Embed(title= f"Cards\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(cards), colour=0x7289da)
+                    embedVar = discord.Embed(title= f":flower_playing_cards: Cards\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(cards), colour=0x7289da)
                     embedVar.set_thumbnail(url=avatar)
                     embedVar.set_footer(text=f"/equipcard card name: Equip Card\n/viewcard card name: View Cards Details")
                     await ctx.send(embed=embedVar)

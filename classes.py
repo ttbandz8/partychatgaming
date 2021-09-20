@@ -277,10 +277,10 @@ class VAULT():
     OWNER: str
     BALANCE: int = field(default_factory=lambda: 1500)
     CARDS: list[str] = field(default_factory=lambda: ['Ochaco Uraraka','Eevee','Garen'])
-    TITLES: list[str] = field(default_factory=lambda: ['Starter'])
-    ARMS: list[str] = field(default_factory=lambda: ['Stock'])
+    TITLES: list[str] = field(default_factory=lambda: ['Starter','Iron 4','UA 1st Year','Pokemon Trainer'])
+    ARMS: list[str] = field(default_factory=lambda: ['Stock', 'Poke Ball', 'Hyper-Density Seals', 'Dorans Shield'])
     PETS: list[str] = field(default_factory=lambda: [{'NAME': 'Chick', 'LVL': 1, 'EXP': 0, 'Heal': 3, 'TYPE': 'HLT', 'BOND': 0, 'BONDEXP': 0, 'PATH': "https://res.cloudinary.com/dkcmq8o15/image/upload/v1622307902/Pets/chick.jpg"}])
-    DECK: list[str] = field(default_factory=lambda: [{'CARD': 'Eevee', 'TITLE': 'Starter', 'ARM': 'Stock', 'PET': 'Chick'}, {'CARD': 'Ochaco Uraraka', 'TITLE': 'Starter', 'ARM': 'Stock', 'PET': 'Chick'}, {'CARD': 'Garen', 'TITLE': 'Starter', 'ARM': 'Stock', 'PET': 'Chick'}])
+    DECK: list[str] = field(default_factory=lambda: [{'CARD': 'Eevee', 'TITLE': 'Pokemon Trainer', 'ARM': 'Poke Ball', 'PET': 'Chick'}, {'CARD': 'Ochaco Uraraka', 'TITLE': 'UA 1st Year', 'ARM': 'Hyper-Density Seals', 'PET': 'Chick'}, {'CARD': 'Garen', 'TITLE': 'Iron 4', 'ARM': 'Dorans Shield', 'PET': 'Chick'}])
     CARD_LEVELS: list[str] = field(default_factory=lambda: [{'CARD': 'Eevee', 'LVL': 0, 'TIER': 1, 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}, {'CARD': 'Ochaco Uraraka', 'LVL': 0, 'TIER': 1, 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}, {'CARD': 'Garen', 'LVL': 0, 'TIER': 1, 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}])
     QUESTS: list[str] = field(default_factory=lambda: [])
     DESTINY: list[str] = field(default_factory=lambda: [])
