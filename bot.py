@@ -395,8 +395,6 @@ async def r(ctx):
       Start Tutorial!
       **/crown**
 
-      Start Battle Tutorial!
-      **/senpaibattle**
       
       **CHANGING YOUR DISCORD ACCOUNT INFO WILL BREAK YOUR ACCOUNT IN THE GAME. YOU HAVE BEEN WARNED.**
       

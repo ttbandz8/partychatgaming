@@ -2985,6 +2985,6 @@ destiny = [
         "USE_CARDS": ["Medea"],
         "EARN": "Sasaki Kojirou", 
         "COMPLETED": False,
-        "UNIVERSE": "Death Note"
+        "UNIVERSE": "Fate"
     }
 ]
