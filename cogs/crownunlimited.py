@@ -2229,7 +2229,7 @@ class CrownUnlimited(commands.Cog):
                                         turn_total= turn_total + 1
                                         turn=1
                                     else:
-                                        if t_universe == "Naruto" and t_stamina == 0:
+                                        if t_universe == "Naruto" and t_stamina < 10:
                                             t_health = t_health 
                                             embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{o_card} strikes a log", colour=0xe91e63)
                                             await button_ctx.send(embed=embedVar)
@@ -2882,7 +2882,7 @@ class CrownUnlimited(commands.Cog):
                                         turn_total= turn_total + 1
                                         turn=0
                                     else:
-                                        if o_universe == "Naruto" and o_stamina == 0:
+                                        if o_universe == "Naruto" and o_stamina < 10:
                                             o_health = o_health 
                                             embedVar = discord.Embed(title=f"{o_card.upper()}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
                                             await private_channel.send(embed=embedVar)
@@ -4600,7 +4600,7 @@ class CrownUnlimited(commands.Cog):
                                             turn_total= turn_total + 1
                                             turn=1
                                         else:
-                                            if t_universe == "Naruto" and t_stamina == 0:
+                                            if t_universe == "Naruto" and t_stamina < 10:
                                                 t_health = t_health 
                                                 embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{o_card} strikes a log", colour=0xe91e63)
                                                 await button_ctx.send(embed=embedVar)
@@ -5277,7 +5277,7 @@ class CrownUnlimited(commands.Cog):
                                                 turn_total= turn_total + 1
                                                 turn=0
                                             else:
-                                                if o_universe == "Naruto" and o_stamina == 0:
+                                                if o_universe == "Naruto" and o_stamina < 10:
                                                     o_health = o_health 
                                                     embedVar = discord.Embed(title=f"{o_card.upper()}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
                                                     await button_ctx.send(embed=embedVar)
@@ -5761,7 +5761,7 @@ class CrownUnlimited(commands.Cog):
                                             turn_total= turn_total + 1
                                             turn=0
                                         else:
-                                            if o_universe == "Naruto" and o_stamina == 0:
+                                            if o_universe == "Naruto" and o_stamina < 10:
                                                 o_health = o_health 
                                                 embedVar = discord.Embed(title=f"{o_card.upper()}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
                                                 await ctx.send(embed=embedVar)
@@ -7504,7 +7504,7 @@ class CrownUnlimited(commands.Cog):
                                     turn_total= turn_total + 1
                                     turn=1
                                 else:
-                                    if t_universe == "Naruto" and t_stamina == 0:
+                                    if t_universe == "Naruto" and t_stamina < 10:
                                         t_health = t_health 
                                         embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{o_card} strikes a log", colour=0xe91e63)
                                         await button_ctx.send(embed=embedVar)
@@ -8031,7 +8031,7 @@ class CrownUnlimited(commands.Cog):
                                 turn_total= turn_total + 1
                                 turn=0
                             else:
-                                if o_universe == "Naruto" and o_stamina == 0:
+                                if o_universe == "Naruto" and o_stamina < 10:
                                     o_health = o_health 
                                     embedVar = discord.Embed(title=f"{o_card.upper()}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
                                     await private_channel.send(embed=embedVar)
@@ -10247,9 +10247,18 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                     t_attack = t_attack - int((carm_passive_value/100) * t_attack)
                     t_defense = t_defense - int((carm_passive_value/100) * t_defense)
             elif carm_passive_type == 'GAMBLE':
-                t_health = carm_passive_value * 2
-                c_health = carm_passive_value
-                o_health = carm_passive_value
+                if mode in B_modes:
+                    c_health = carm_passive_value
+                    o_health = carm_passive_value
+                    t_health = carm_passive_value * 3
+                elif mode in D_modes:
+                    c_health = carm_passive_value
+                    o_health = carm_passive_value
+                    t_health = carm_passive_value * 2
+                else:
+                    c_health = carm_passive_value
+                    o_health = carm_passive_value
+                    t_health = carm_passive_value 
 
         ################################################################################
 
@@ -12773,7 +12782,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         turn_total= turn_total + 1
                                         turn=1
                                     else:
-                                        if t_universe == "Naruto" and t_stamina == 0:
+                                        if t_universe == "Naruto" and t_stamina < 10:
                                             t_health = t_health 
                                         else:
                                             t_health = t_health - dmg['DMG']
@@ -13576,7 +13585,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             turn_total= turn_total + 1
                                             turn=1
                                         else:
-                                            if t_universe == "Naruto" and t_stamina == 0:
+                                            if t_universe == "Naruto" and t_stamina < 10:
                                                 t_health = t_health 
                                                 embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{o_card} strikes a log", colour=0xe91e63)
                                                 await button_ctx.send(embed=embedVar)
@@ -14564,7 +14573,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             turn_total= turn_total + 1
                                             turn=turn_selector
                                         else:
-                                            if c_universe == "Naruto" and c_stamina == 0:
+                                            if c_universe == "Naruto" and c_stamina < 10:
                                                 c_health = c_health
                                                 if mode not in AUTO_BATTLE_modes:
                                                     embedVar = discord.Embed(title=f"{c_card.upper()}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
@@ -14699,7 +14708,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             turn_total= turn_total + 1
                                             turn=turn_selector
                                         else:
-                                            if o_universe == "Naruto" and o_stamina == 0:
+                                            if o_universe == "Naruto" and o_stamina < 10:
                                                 o_health = o_health 
                                                 if mode not in AUTO_BATTLE_modes:
                                                     embedVar = discord.Embed(title=f"{o_card.upper()}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
@@ -14838,7 +14847,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         turn_total= turn_total + 1
                                         turn=turn_selector
                                     else:
-                                        if o_universe == "Naruto" and o_stamina == 0:
+                                        if o_universe == "Naruto" and o_stamina < 10:
                                             o_health = o_health 
                                             if mode not in AUTO_BATTLE_modes:
                                                 embedVar = discord.Embed(title=f"{o_card.upper()}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
@@ -15711,7 +15720,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             turn_total= turn_total + 1
                                             turn=3
                                         else:
-                                            if t_universe == "Naruto" and t_stamina == 0:
+                                            if t_universe == "Naruto" and t_stamina < 10:
                                                 t_health = t_health 
                                                 embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{c_card} strikes a log", colour=0xe91e63)
                                                 await private_channel.send(embed=embedVar)
@@ -16354,7 +16363,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 turn_total= turn_total + 1
                                                 turn=3
                                             else:
-                                                if t_universe == "Naruto" and t_stamina == 0:
+                                                if t_universe == "Naruto" and t_stamina < 10:
                                                     t_health = t_health 
                                                     embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{c_card} strikes a log", colour=0xe91e63)
                                                     await button_ctx.send(embed=embedVar)
@@ -17142,7 +17151,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             turn_total= turn_total + 1
                                             turn=0
                                         else:
-                                            if o_universe == "Naruto" and o_stamina == 0:
+                                            if o_universe == "Naruto" and o_stamina < 10:
                                                 o_health = o_health 
                                                 embedVar = discord.Embed(title=f"{o_card.upper()}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
                                                 await private_channel.send(embed=embedVar)
@@ -17275,7 +17284,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             turn_total= turn_total + 1
                                             turn=0
                                         else:
-                                            if c_universe == "Naruto" and c_stamina == 0:
+                                            if c_universe == "Naruto" and c_stamina < 10:
                                                 c_health = c_health 
                                                 embedVar = discord.Embed(title=f"{c_card.upper()}: Substitution Jutsu", description=f"{t_card} strikes a log", colour=0xe91e63)
                                                 await private_channel.send(embed=embedVar)
