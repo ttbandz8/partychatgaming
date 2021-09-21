@@ -16189,10 +16189,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 embedVar = discord.Embed(title=f"**{t_card}** Enters Focus State", description=f"{t_powerup}", colour=0xe91e63)
                                 embedVar.add_field(name=f"A great aura starts to envelop **{t_card}** ",value= f"{t_aura}")
                                 embedVar.set_footer(text=f"{t_card} Says: 'Now, are you ready for a real fight?'")
-                            else:
-                                embedVar = discord.Embed(title=f"{t_card.upper()} FOCUSED", description=f"**{t_card} says**\n{t_focus_description}", colour=0xe91e63)
-                                embedVar.add_field(name=f"{t_card} focused and {healmessage}", value="All stats & stamina increased")
-                                await private_channel.send(embed=embedVar)
                             # o_pet_used = True
                             fortitude = 0.0
                             low = t_health - (t_health*.90)
@@ -16310,7 +16306,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             
                             if t_used_resolve and not t_pet_used:
                                 aiMove = 6 
-                            elif c_stamina == 0:
+                            elif c_stamina < 10:
                                 aiMove = 1
                             elif t_stamina >= 160 and (t_health >= c_health):
                                 aiMove = 3
