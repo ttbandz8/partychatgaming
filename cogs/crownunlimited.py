@@ -10065,9 +10065,18 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                     t_attack = t_attack - int((c_card_passive/100) * t_attack)
                     t_defense = t_defense - int((c_card_passive/100) * t_defense)
             elif c_card_passive_type == 'GAMBLE':
-                c_health = c_card_passive
-                t_health = c_card_passive * 2
-                o_health = c_card_passive            
+                if mode in B_modes:
+                    c_health = o_card_passive
+                    o_health = c_card_passive
+                    t_health = o_card_passive * 3
+                elif mode in D_modes:
+                    c_health = o_card_passive
+                    o_health = c_card_passive
+                    t_health = o_card_passive * 2
+                else:
+                    c_health = o_card_passive
+                    o_health = c_card_passive
+                    t_health = o_card_passive             
 
             # Title Passive
             c_title_passive_type = list(c_title_passive.keys())[0]
@@ -10147,9 +10156,18 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                         t_attack = t_attack - int((c_title_passive_value/100) * t_attack)
                         t_defense = t_defense - int((c_title_passive_value/100) * t_defense)
                 elif c_title_passive_type == 'GAMBLE':
-                    t_health = c_title_passive_value * 2
-                    c_health = c_title_passive_value
-                    o_health = c_title_passive_value
+                    if mode in B_modes:
+                        c_health = o_card_passive
+                        o_health = c_card_passive
+                        t_health = o_card_passive * 3
+                    elif mode in D_modes:
+                        c_health = o_card_passive
+                        o_health = c_card_passive
+                        t_health = o_card_passive * 2
+                    else:
+                        c_health = o_card_passive
+                        o_health = c_card_passive
+                        t_health = o_card_passive 
 
             # Arm Passive Player 1
             carm_passive_type = list(carm_passive.keys())[0]
@@ -10347,8 +10365,15 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 t_attack = t_attack - int((o_card_passive/100) * t_attack)
                 t_defense = t_defense - int((o_card_passive/100) * t_defense)
         elif o_card_passive_type == 'GAMBLE':
-            o_health = o_card_passive
-            t_health = o_card_passive * 2
+            if mode in B_modes:
+                o_health = o_card_passive
+                t_health = o_card_passive * 3
+            elif mode in D_modes:
+                o_health = o_card_passive
+                t_health = o_card_passive * 2
+            else:
+                o_health = o_card_passive
+                t_health = o_card_passive 
             if companion:
                 c_health = o_card_passive              
 
@@ -10430,8 +10455,15 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                     t_attack = t_attack - int((o_title_passive_value/100) * t_attack)
                     t_defense = t_defense - int((o_title_passive_value/100) * t_defense)
             elif o_title_passive_type == 'GAMBLE':
-                t_health = o_title_passive_value * 2
-                o_health = o_title_passive_value
+                if mode in B_modes:
+                    o_health = o_title_passive_value
+                    t_health = o_title_passive_value * 3
+                elif mode in D_modes:
+                    o_health = o_title_passive_value
+                    t_health = o_title_passive_value * 2
+                else:
+                    o_health = o_title_passive_value
+                    t_health = o_title_passive_value 
                 if companion:
                     c_health = o_title_passive_value
 
@@ -10512,8 +10544,15 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 t_attack = t_attack - int((oarm_passive_value/100) * t_attack)
                 t_defense = t_defense - int((oarm_passive_value/100) * t_defense)
         elif oarm_passive_type == 'GAMBLE':
-            t_health = oarm_passive_value * 2
-            o_health = oarm_passive_value
+            if mode in B_modes:
+                o_health = oarm_passive_value
+                t_health = oarm_passive_value * 3
+            elif mode in D_modes:
+                o_health = oarm_passive_value
+                t_health = oarm_passive_value * 2
+            else:
+                o_health = oarm_passive_value
+                t_health = oarm_passive_value 
             if companion:
                 c_health = oarm_passive_value
 
@@ -10621,8 +10660,15 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                     c_attack = o_attack - int((t_card_passive/100 * o_attack))
                     c_defense = o_defense - int((t_card_passive/100 * o_defense))
         elif t_card_passive_type == 'GAMBLE':
-            t_health = t_card_passive * 2
-            o_health = t_card_passive
+            if mode in B_modes:
+                o_health = t_card_passive
+                t_health = t_card_passive * 3
+            elif mode in D_modes:
+                o_health = t_card_passive
+                t_health = t_card_passive * 2
+            else:
+                o_health = t_card_passive
+                t_health = t_card_passive 
             if companion:
                 c_health = t_card_passive
 
@@ -10724,8 +10770,15 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                         c_attack = o_attack - int((t_title_passive_value/100) * o_attack)
                         c_defense = o_defense - int((t_title_passive_value/100) * o_defense)
             elif t_title_passive_type == 'GAMBLE':
-                t_health = t_title_passive_value * 2
-                o_health = t_title_passive_value
+                if mode in B_modes:
+                    o_health = t_title_passive_value
+                    t_health = t_title_passive_value * 3
+                elif mode in D_modes:
+                    o_health = t_title_passive_value
+                    t_health = t_title_passive_value * 2
+                else:
+                    o_health = t_title_passive_value
+                    t_health = t_title_passive_value 
                 if companion:
                     c_health = t_title_passive_value
 
@@ -10828,8 +10881,15 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                     c_attack = c_attack - int((tarm_passive_value/100) * c_attack)
                     c_defense = c_defense - int((tarm_passive_value/100) * c_defense)
         elif tarm_passive_type == 'GAMBLE':
-            t_health = tarm_passive_value * 2
-            o_health = tarm_passive_value
+            if mode in B_modes:
+                o_health = tarm_passive_value
+                t_health = tarm_passive_value * 3
+            elif mode in D_modes:
+                o_health = tarm_passive_value
+                t_health = tarm_passive_value * 2
+            else:
+                o_health = tarm_passive_value
+                t_health = tarm_passive_value 
             if companion:
                 c_health = tarm_passive_value
 
