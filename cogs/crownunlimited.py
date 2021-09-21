@@ -12223,7 +12223,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             elif o_stamina >= 40 and (o_health >= t_health):
                                 aiMove = 1
                             elif o_stamina >= 40:
-                                aiMove = 2
+                                if o_enhancer['TYPE'] in Control_Enhancer_Check:
+                                    aiMove = 0
+                                else:
+                                    aiMove = 2
                             elif o_stamina >= 30 and (o_health >= t_health):
                                 if o_enhancer['TYPE'] in Control_Enhancer_Check:
                                     aiMove = 2
@@ -12235,13 +12238,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 aiMove = 1
                             elif o_stamina >= 20:
                                 if o_enhancer['TYPE'] in Control_Enhancer_Check:
-                                    aiMove = 1
+                                    aiMove = 0
                                 else:
                                     aiMove = 4
                             elif o_stamina >= 10:
                                 aiMove = 1
                             else:
-                                aiMove = 0
+                                aiMove = 1
                             
 
                             # Make sure user is responding with move
