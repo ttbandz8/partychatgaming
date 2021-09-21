@@ -9855,6 +9855,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             tarm = db.queryArm({'ARM': enemy_arm})
         else:
             tarm = db.queryArm({'ARM': universe[enemy_arm]})
+
         tarm_universe = tarm['UNIVERSE']
         t_destiny = t['HAS_COLLECTION']
         tpet = db.queryPet({'PET': universe['DPET']})
@@ -13232,16 +13233,16 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 petdmg = damage_cal(o_universe, o_card, o_1, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total, ocard_lvl_ap_buff)
                                                 t_health = t_health - petdmg['DMG']
 
-                                                embedVar = discord.Embed(title=f"**PERSONA!**\n{opet_name} was summoned from {o_card}'s soul!", colour=0xe91e63)
+                                                embedVar = discord.Embed(title=f"**PERSONA!**\n{opet_name} was summoned from {o_card}'s soul dealing **{petdmg['DMG']}** damage!!", colour=0xe91e63)
                                                 embedVar.add_field(name=f"{opet_name} used {opetmove_text}!", value =f"Enhanced {opet_type}")
-                                                embedVar.add_field(name=f"{opet_name} used a follow up attack dealing {petdmg} damage!", value =f"Enhanced {opet_type}")
+                                                
                                                 embedVar.set_thumbnail(url=opet_image)
                                                 await button_ctx.send(embed=embedVar)
-
-                                            embedVar = discord.Embed(title=f"{o_card.upper()} Summoned {opet_name}", colour=0xe91e63)
-                                            embedVar.add_field(name=f"{opet_name} used {opetmove_text}!", value =f"Enhanced {opet_type}")
-                                            embedVar.set_thumbnail(url=opet_image)
-                                            await button_ctx.send(embed=embedVar)
+                                            else:
+                                                embedVar = discord.Embed(title=f"{o_card.upper()} Summoned {opet_name}", colour=0xe91e63)
+                                                embedVar.add_field(name=f"{opet_name} used {opetmove_text}!", value =f"Enhanced {opet_type}")
+                                                embedVar.set_thumbnail(url=opet_image)
+                                                await button_ctx.send(embed=embedVar)
                                             turn=0
                                         else:
                                             await button_ctx.send(f"{opet_name} needs a turn to rest...")
@@ -14214,9 +14215,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                     c_health = c_health - petdmg['DMG']
 
-                                                    embedVar = discord.Embed(title=f"**PERSONA!**\n{tpet_name} was summoned from {t_card}'s soul!", colour=0xe91e63)
+                                                    embedVar = discord.Embed(title=f"**PERSONA!**\n{tpet_name} was summoned from {t_card}'s soul dealing **{petdmg['DMG']}** damage!!", colour=0xe91e63)
                                                     embedVar.add_field(name=f"{tpet_name} used {tpetmove_text}!", value =f"Enhanced {tpet_type}")
-                                                    embedVar.add_field(name=f"{tpet_name} used a follow up attack dealing {petdmg} damage!", value =f"Enhanced {tpet_type}")
+                                                    embedVar.add_field(name=f"{tpet_name} used a follow up attack dealing **{petdmg['DMG']}** damage!", value =f"Enhanced {tpet_type}")
                                                     embedVar.set_thumbnail(url=tpet_image)
                                                     await button_ctx.send(embed=embedVar)
                                                 else:
@@ -14327,9 +14328,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                     t_health = t_health - petdmg['DMG']
 
-                                                    embedVar = discord.Embed(title=f"**PERSONA!**\n{tpet_name} was summoned from {t_card}'s soul!", colour=0xe91e63)
+                                                    embedVar = discord.Embed(title=f"**PERSONA!**\n{tpet_name} was summoned from {t_card}'s soul dealing **{petdmg['DMG']}** damage!!", colour=0xe91e63)
                                                     embedVar.add_field(name=f"{tpet_name} used {tpetmove_text}!", value =f"Enhanced {tpet_type}")
-                                                    embedVar.add_field(name=f"{tpet_name} used a follow up attack dealing {petdmg} damage!", value =f"Enhanced {tpet_type}")
+                                                    
                                                     embedVar.set_thumbnail(url=tpet_image)
                                                     await button_ctx.send(embed=embedVar)
                                                 else:
@@ -14436,13 +14437,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                         if mode not in AUTO_BATTLE_modes:
                                             if t_universe == "Persona":
-                                                petdmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total, tcard_lvl_ap_buff)
+                                                petdmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total, tcard_lvl_ap_buff)
 
                                                 t_health = t_health - petdmg['DMG']
 
-                                                embedVar = discord.Embed(title=f"**PERSONA!**\n{tpet_name} was summoned from {t_card}'s soul!", colour=0xe91e63)
+                                                embedVar = discord.Embed(title=f"**PERSONA!**\n{tpet_name} was summoned from {t_card}'s soul dealing **{petdmg['DMG']}** damage!!", colour=0xe91e63)
                                                 embedVar.add_field(name=f"{tpet_name} used {tpetmove_text}!", value =f"Enhanced {tpet_type}")
-                                                embedVar.add_field(name=f"{tpet_name} used a follow up attack dealing {petdmg} damage!", value =f"Enhanced {tpet_type}")
+                                                
                                                 embedVar.set_thumbnail(url=tpet_image)
                                                 await button_ctx.send(embed=embedVar)
                                             else:
@@ -15484,9 +15485,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                 t_health = t_health - petdmg['DMG']
 
-                                                embedVar = discord.Embed(title=f"**PERSONA!**\n{cpet_name} was summoned from {c_card}'s soul!", colour=0xe91e63)
+                                                embedVar = discord.Embed(title=f"**PERSONA!**\n{cpet_name} was summoned from {c_card}'s soul dealing **{petdmg['DMG']}** damage!!", colour=0xe91e63)
                                                 embedVar.add_field(name=f"{cpet_name} used {cpetmove_text}!", value =f"Enhanced {cpet_type}")
-                                                embedVar.add_field(name=f"{cpet_name} used a follow up attack dealing {petdmg} damage!", value =f"Enhanced {cpet_type}")
+                                                
                                                 embedVar.set_thumbnail(url=cpet_image)
                                                 await button_ctx.send(embed=embedVar)
                                             else:
@@ -16124,9 +16125,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                     t_health = t_health - petdmg['DMG']
 
-                                                    embedVar = discord.Embed(title=f"**PERSONA!**\n{cpet_name} was summoned from {c_card}'s soul!", colour=0xe91e63)
+                                                    embedVar = discord.Embed(title=f"**PERSONA!**\n{cpet_name} was summoned from {c_card}'s soul dealing **{petdmg['DMG']}** damage!!", colour=0xe91e63)
                                                     embedVar.add_field(name=f"{cpet_name} used {cpetmove_text}!", value =f"Enhanced {cpet_type}")
-                                                    embedVar.add_field(name=f"{cpet_name} used a follow up attack dealing {petdmg} damage!", value =f"Enhanced {cpet_type}")
+                                                    
                                                     embedVar.set_thumbnail(url=cpet_image)
                                                     await button_ctx.send(embed=embedVar)
                                                 else:
@@ -16926,9 +16927,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                                 t_health = t_health - petdmg['DMG']
 
-                                                embedVar = discord.Embed(title=f"**PERSONA!**\n{tpet_name} was summoned from {t_card}'s soul!", colour=0xe91e63)
+                                                embedVar = discord.Embed(title=f"**PERSONA!**\n{tpet_name} was summoned from {t_card}'s soul dealing **{petdmg['DMG']}** damage!!", colour=0xe91e63)
                                                 embedVar.add_field(name=f"{tpet_name} used {tpetmove_text}!", value =f"Enhanced {tpet_type}")
-                                                embedVar.add_field(name=f"{tpet_name} used a follow up attack dealing {petdmg} damage!", value =f"Enhanced {tpet_type}")
+                                                
                                                 embedVar.set_thumbnail(url=tpet_image)
                                                 await button_ctx.send(embed=embedVar)
                                             else:
@@ -18425,5 +18426,6 @@ Crest_dict = {'Unbound': ':ideograph_advantage:',
               'Death Note': ':white_flower:',
               'Crown Rift Awakening': ':u7a7a:',
               'Crown Rift Slayers': ':sa:',
-              'Crown Rift Madness': ':loop:'}
+              'Crown Rift Madness': ':m:',
+              'Persona': ':o:'}
 take_chances_messages = ['You lost immediately.', 'You got smoked!', 'You fainted before the fight even started.', 'That... was just sad. You got dropped with ease.', 'Too bad, so sad. You took the L.', 'Annnd another L. You lost.', 'Annnnnnnnnnnd another L! You lost.', 'How many Ls you gonna take today?', 'That was worse than the last time. You got dropped.']

@@ -158,4 +158,5 @@ Crest_dict = {'Unbound': ':ideograph_advantage:',
               'Death Note': ':white_flower:',
               'Crown Rift Awakening': ':u7a7a:',
               'Crown Rift Slayers': ':sa:',
-              'Crown Rift Madness': ':loop:'}
+              'Crown Rift Madness': ':m:',
+              'Persona': ':o:'}

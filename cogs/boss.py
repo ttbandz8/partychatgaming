@@ -76,7 +76,7 @@ class Boss(commands.Cog):
                 if mytrait:
                     traitmessage = f"**{mytrait['EFFECT']}**: {mytrait['TRAIT']}"
                 
-                embedVar = discord.Embed(title=f":japanese_ogre: | {uboss_name}\n:earth_africa: | {uboss_show} Boss", description=textwrap.dedent(f"""
+                embedVar = discord.Embed(title=f":japanese_ogre: | {uboss_name}\n:earth_africa: | {uboss_show} Boss\n", description=textwrap.dedent(f"""
                 **{message}**\n
      
                 :flower_playing_cards: | **Card** - {uboss_name}\n                                                                           

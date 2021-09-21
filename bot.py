@@ -1243,7 +1243,7 @@ async def invest(ctx, amount):
       else:
          await blessfamily_Alt(int(amount), user['FAMILY'])
          await curse(int(amount), ctx.author)
-         await ctx.send(f":coin:{amount} invested into {user['NAME']}'s Family'.")
+         await ctx.send(f":coin:{amount} invested into **{user['NAME']}'s Family**.")
          return
    else:
       await ctx.send(f"Family does not exist")
