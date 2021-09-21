@@ -2928,16 +2928,6 @@ destiny = [
         "UNIVERSE": "Death Note"
     },
     {
-        "NAME": "The Puppet Prodigy",
-        "WINS": 0,
-        "REQUIRED": 50,
-        "DEFEAT": "Near",
-        "USE_CARDS": ["Mello"],
-        "EARN": "Near", 
-        "COMPLETED": False,
-        "UNIVERSE": "Death Note"
-    },
-    {
         "NAME": "The Prodigy Son",
         "WINS": 0,
         "REQUIRED": 100,
@@ -2985,6 +2975,6 @@ destiny = [
         "USE_CARDS": ["Medea"],
         "EARN": "Sasaki Kojirou", 
         "COMPLETED": False,
-        "UNIVERSE": "Death Note"
+        "UNIVERSE": "Fate"
     }
 ]
