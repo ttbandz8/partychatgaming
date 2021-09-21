@@ -2976,5 +2976,66 @@ destiny = [
         "EARN": "Sasaki Kojirou", 
         "COMPLETED": False,
         "UNIVERSE": "Fate"
+    },
+
+    {
+        "NAME": "Protect The Boy",
+        "WINS": 0,
+        "REQUIRED": 35,
+        "DEFEAT": "Minato Arisato",
+        "USE_CARDS": ["Aigis"],
+        "EARN": "Minato Arisato", 
+        "COMPLETED": False,
+        "UNIVERSE": "Persona"
+    },
+    {
+        "NAME": "Fate vs Destiny",
+        "WINS": 0,
+        "REQUIRED": 100,
+        "DEFEAT": "Nyx",
+        "USE_CARDS": ["Minato Arisato"],
+        "EARN": "Nyx", 
+        "COMPLETED": False,
+        "UNIVERSE": "Persona"
+    },
+    {
+        "NAME": "Lovers Arcana",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Ren Amamiya",
+        "USE_CARDS": ["Ann Takamaki"],
+        "EARN": "Ren Amamiya", 
+        "COMPLETED": False,
+        "UNIVERSE": "Persona"
+    },
+    {
+        "NAME": "Friends Long Ago and Always",
+        "WINS": 0,
+        "REQUIRED": 20,
+        "DEFEAT": "Ann Takamaki",
+        "USE_CARDS": ["Ryuji Sakamoto"],
+        "EARN": "Ann Takamaki", 
+        "COMPLETED": False,
+        "UNIVERSE": "Persona"
+    },
+    {
+        "NAME": "Stupid Ryuji",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Ryuji Sakamoto",
+        "USE_CARDS": ["Morgana"],
+        "EARN": "Ryuji Sakamoto", 
+        "COMPLETED": False,
+        "UNIVERSE": "Persona"
+    },
+    {
+        "NAME": "We will Always Be",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Yu Narukami",
+        "USE_CARDS": ["Yukiko Amagi"],
+        "EARN": "Yu Narukami", 
+        "COMPLETED": False,
+        "UNIVERSE": "Persona"
     }
 ]

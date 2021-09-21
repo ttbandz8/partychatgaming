@@ -10001,7 +10001,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 c_max_health = c_max_health + int(c_card_passive)
                 c_health = c_health + int(c_card_passive)
             elif c_card_passive_type == 'LIFE':
-                c_max_health = c_max_health + int((c_card_passive/100) * t_health)
+                if mode in B_modes:
+                    c_max_health = c_max_health + int((c_card_passive/200) * t_health)
+                else:
+                    c_max_health = c_max_health + int((c_card_passive/100) * t_health)
             elif c_card_passive_type == 'DRAIN':
                 t_stamina = t_stamina - int(c_card_passive)
                 c_stamina = c_stamina + int(c_card_passive)
@@ -10053,9 +10056,14 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 c_stamina = c_card_passive
                 t_stamina = c_card_passive
             elif c_card_passive_type == 'FEAR':
-                c_health = c_health - int((c_card_passive/100) * c_health)
-                t_attack = t_attack - int((c_card_passive/100) * t_attack)
-                t_defense = t_defense - int((c_card_passive/100) * t_defense)
+                if c_universe == "Chainsawman":
+                    c_health = c_health - int((c_card_passive/190) * c_health)
+                    t_attack = t_attack - int((c_card_passive/100) * t_attack)
+                    t_defense = t_defense - int((c_card_passive/100) * t_defense)
+                else:
+                    c_health = c_health - int((c_card_passive/100) * c_health)
+                    t_attack = t_attack - int((c_card_passive/100) * t_attack)
+                    t_defense = t_defense - int((c_card_passive/100) * t_defense)
             elif c_card_passive_type == 'GAMBLE':
                 c_health = c_card_passive
                 t_health = c_card_passive * 2
@@ -10076,7 +10084,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                     c_max_health = c_max_health + int(c_title_passive_value)
                     c_health = c_health + int(c_title_passive_value)
                 elif c_title_passive_type == 'LIFE':
-                    c_max_health = c_max_health + int(c_title_passive_value)
+                    if mode in B_modes:
+                        c_max_health = c_max_health + int((c_title_passive_value/200) * t_health)
+                    else:
+                        c_max_health = c_max_health + int((c_title_passive_value/100) * t_health)
                 elif c_title_passive_type == 'DRAIN':
                     t_stamina = t_stamina - int(c_title_passive_value)
                     c_stamina = c_stamina + int(c_title_passive_value)
@@ -10127,9 +10138,14 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                     c_stamina = c_title_passive_value
                     t_stamina = c_title_passive_value
                 elif c_title_passive_type == 'FEAR':
-                    c_health = c_health - int((c_title_passive_value/100) * c_health)
-                    t_attack = t_attack - int((c_title_passive_value/100) * t_attack)
-                    t_defense = t_defense - int((c_title_passive_value/100) * t_defense)
+                    if c_universe == "Chainsawman":
+                        c_health = c_health - int((c_title_passive_value/190) * c_health)
+                        t_attack = t_attack - int((c_title_passive_value/100) * t_attack)
+                        t_defense = t_defense - int((c_title_passive_value/100) * t_defense)
+                    else:
+                        c_health = c_health - int((c_title_passive_value/100) * c_health)
+                        t_attack = t_attack - int((c_title_passive_value/100) * t_attack)
+                        t_defense = t_defense - int((c_title_passive_value/100) * t_defense)
                 elif c_title_passive_type == 'GAMBLE':
                     t_health = c_title_passive_value * 2
                     c_health = c_title_passive_value
@@ -10149,7 +10165,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 c_max_health = c_max_health + int(carm_passive_value)
                 c_health = c_health + int(carm_passive_value)
             elif carm_passive_type == 'LIFE':
-                c_max_health = c_max_health + int((carm_passive_value/100) * t_health)
+                if mode in B_modes:
+                    c_max_health = c_max_health + int((carm_passive_value/200) * t_health)
+                else:
+                    c_max_health = c_max_health + int((carm_passive_value/100) * t_health)
             elif carm_passive_type == 'DRAIN':
                 t_stamina = t_stamina - int(carm_passive_value)
                 c_stamina = c_stamina + int(carm_passive_value)
@@ -10200,9 +10219,14 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 c_stamina = carm_passive_value
                 t_stamina = carm_passive_value
             elif carm_passive_type == 'FEAR':
-                c_health = c_health - int((carm_passive_value/100) * c_health)
-                t_attack = t_attack - int((carm_passive_value/100) * t_attack)
-                t_defense = t_defense - int((carm_passive_value/100) * t_defense)
+                if c_universe == "Chainsawman":
+                    c_health = c_health - int((carm_passive_value/190) * c_health)
+                    t_attack = t_attack - int((carm_passive_value/100) * t_attack)
+                    t_defense = t_defense - int((carm_passive_value/100) * t_defense)
+                else:
+                    c_health = c_health - int((carm_passive_value/100) * c_health)
+                    t_attack = t_attack - int((carm_passive_value/100) * t_attack)
+                    t_defense = t_defense - int((carm_passive_value/100) * t_defense)
             elif carm_passive_type == 'GAMBLE':
                 t_health = carm_passive_value * 2
                 c_health = carm_passive_value
@@ -10259,7 +10283,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             o_max_health = o_max_health + int(o_card_passive)
             o_health = o_health + int(o_card_passive)
         elif o_card_passive_type == 'LIFE':
-            o_max_health = o_max_health + int((o_card_passive/100) * t_health)
+            if mode in B_modes:
+                o_max_health = o_max_health + int((o_card_passive/200) * t_health)
+            else:
+                o_max_health = o_max_health + int((o_card_passive/100) * t_health)
         elif o_card_passive_type == 'DRAIN':
             o_stamina = o_stamina + int(o_card_passive)
             t_stamina = t_stamina - int(o_card_passive)
@@ -10311,9 +10338,14 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             o_stamina = o_card_passive
             t_stamina = o_card_passive
         elif o_card_passive_type == 'FEAR':
-            o_health = o_health - int((o_card_passive/100) * o_health)
-            t_attack = t_attack - int((o_card_passive/100) * t_attack)
-            t_defense = t_defense - int((o_card_passive/100) * t_defense)
+            if o_universe == "Chainsawman":
+                o_health = o_health - int((o_card_passive/190) * o_health)
+                t_attack = t_attack - int((o_card_passive/100) * t_attack)
+                t_defense = t_defense - int((o_card_passive/100) * t_defense)
+            else:
+                o_health = o_health - int((o_card_passive/100) * o_health)
+                t_attack = t_attack - int((o_card_passive/100) * t_attack)
+                t_defense = t_defense - int((o_card_passive/100) * t_defense)
         elif o_card_passive_type == 'GAMBLE':
             o_health = o_card_passive
             t_health = o_card_passive * 2
@@ -10335,7 +10367,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 o_max_health = o_max_health + int(o_title_passive_value)
                 o_health = o_health + int(o_title_passive_value)
             elif o_title_passive_type == 'LIFE':
-                o_max_health = o_max_health + int((o_title_passive_value/100) * t_health)
+                if mode in B_modes:
+                    o_max_health = o_max_health + int((o_title_passive_value/200) * t_health) 
+                else:
+                    o_max_health = o_max_health + int((o_title_passive_value/100) * t_health)
             elif o_title_passive_type == 'DRAIN':
                 t_stamina = t_stamina - int(o_title_passive_value)
                 o_stamina = o_stamina + int(o_title_passive_value)
@@ -10386,9 +10421,14 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 o_stamina = o_title_passive_value
                 t_stamina = o_title_passive_value
             elif o_title_passive_type == 'FEAR':
-                o_health = o_health - int((o_title_passive_value/100) * o_health)
-                t_attack = t_attack - int((o_title_passive_value/100) * t_attack)
-                t_defense = t_defense - int((o_title_passive_value/100) * t_defense)
+                if o_universe == "Chainsawman":
+                    o_health = o_health - int((o_title_passive_value/190) * o_health)
+                    t_attack = t_attack - int((o_title_passive_value/100) * t_attack)
+                    t_defense = t_defense - int((o_title_passive_value/100) * t_defense)
+                else:
+                    o_health = o_health - int((o_title_passive_value/100) * o_health)
+                    t_attack = t_attack - int((o_title_passive_value/100) * t_attack)
+                    t_defense = t_defense - int((o_title_passive_value/100) * t_defense)
             elif o_title_passive_type == 'GAMBLE':
                 t_health = o_title_passive_value * 2
                 o_health = o_title_passive_value
@@ -10409,7 +10449,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             o_max_health = o_max_health + int(oarm_passive_value)
             o_health = o_health + int(oarm_passive_value)
         elif oarm_passive_type == 'LIFE':
-            o_max_health = o_max_health + int((oarm_passive_value/100) * t_health)
+            if mode in B_modes:
+                o_max_health = o_max_health + int((oarm_passive_value/200) * t_health)
+            else:
+                o_max_health = o_max_health + int((oarm_passive_value/100) * t_health)
         elif oarm_passive_type == 'DRAIN':
             t_stamina = t_stamina - int(oarm_passive_value)
             o_stamina = o_stamina + int(oarm_passive_value)
@@ -10460,9 +10503,14 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             o_stamina = oarm_passive_value
             t_stamina = oarm_passive_value
         elif oarm_passive_type == 'FEAR':
-            o_health = o_health - int((oarm_passive_value/100) * o_health)
-            t_attack = t_attack - int((oarm_passive_value/100) * t_attack)
-            t_defense = t_defense - int((oarm_passive_value/100) * t_defense)
+            if o_universe == "Chainsawman":
+                o_health = o_health - int((oarm_passive_value/190) * o_health)
+                t_attack = t_attack - int((oarm_passive_value/100) * t_attack)
+                t_defense = t_defense - int((oarm_passive_value/100) * t_defense)
+            else:
+                o_health = o_health - int((oarm_passive_value/100) * o_health)
+                t_attack = t_attack - int((oarm_passive_value/100) * t_attack)
+                t_defense = t_defense - int((oarm_passive_value/100) * t_defense)
         elif oarm_passive_type == 'GAMBLE':
             t_health = oarm_passive_value * 2
             o_health = oarm_passive_value
@@ -10495,7 +10543,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             t_max_health = t_max_health + int(t_card_passive)
             t_health = t_health + int(t_card_passive)
         elif t_card_passive_type == 'LIFE':
-            t_max_health = t_max_health + int((t_card_passive/100) * o_health)
+            if mode in B_modes:
+                t_max_health = t_max_health + int((t_card_passive/200) * o_health)
+            else:
+                t_max_health = t_max_health + int((t_card_passive/100) * o_health)
         elif t_card_passive_type == 'DRAIN':
             if companion:
                 c_stamina = c_stamina - int(t_card_passive)
@@ -10555,12 +10606,20 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             if companion:
                 c_stamina = t_card_passive
         elif t_card_passive_type == 'FEAR':
-            t_health = t_health - int((t_card_passive/100) * t_health)
-            o_attack = o_attack - int((t_card_passive/100) * o_attack)
-            o_defense = o_defense - int((t_card_passive/100) * o_defense)
-            if companion:
-                c_attack = o_attack - int((t_card_passive/100 * o_attack))
-                c_defense = o_defense - int((t_card_passive/100 * o_defense))
+            if t_universe == "Chainsawman":
+                t_health = t_health - int((t_card_passive/190) * t_health)
+                o_attack = o_attack - int((t_card_passive/100) * o_attack)
+                o_defense = o_defense - int((t_card_passive/100) * o_defense)
+                if companion:
+                    c_attack = o_attack - int((t_card_passive/100 * o_attack))
+                    c_defense = o_defense - int((t_card_passive/100 * o_defense))
+            else:
+                t_health = t_health - int((t_card_passive/100) * t_health)
+                o_attack = o_attack - int((t_card_passive/100) * o_attack)
+                o_defense = o_defense - int((t_card_passive/100) * o_defense)
+                if companion:
+                    c_attack = o_attack - int((t_card_passive/100 * o_attack))
+                    c_defense = o_defense - int((t_card_passive/100 * o_defense))
         elif t_card_passive_type == 'GAMBLE':
             t_health = t_card_passive * 2
             o_health = t_card_passive
@@ -10650,12 +10709,20 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 if companion:
                     c_stamina = t_title_passive_value
             elif t_title_passive_type == 'FEAR':
-                t_health = t_health - int((t_title_passive_value/100) * t_health)
-                o_attack = o_attack - int((t_title_passive_value/100) * o_attack)
-                o_defense = o_defense - int((t_title_passive_value/100) * o_defense)
-                if companion:
-                    c_attack = o_attack - int((t_title_passive_value/100) * o_attack)
-                    c_defense = o_defense - int((t_title_passive_value/100) * o_defense)
+                if t_universe == "Chainsawman":
+                    t_health = t_health - int((t_title_passive_value/190) * t_health)
+                    o_attack = o_attack - int((t_title_passive_value/100) * o_attack)
+                    o_defense = o_defense - int((t_title_passive_value/100) * o_defense)
+                    if companion:
+                        c_attack = o_attack - int((t_title_passive_value/100) * o_attack)
+                        c_defense = o_defense - int((t_title_passive_value/100) * o_defense)
+                else:
+                    t_health = t_health - int((t_title_passive_value/100) * t_health)
+                    o_attack = o_attack - int((t_title_passive_value/100) * o_attack)
+                    o_defense = o_defense - int((t_title_passive_value/100) * o_defense)
+                    if companion:
+                        c_attack = o_attack - int((t_title_passive_value/100) * o_attack)
+                        c_defense = o_defense - int((t_title_passive_value/100) * o_defense)
             elif t_title_passive_type == 'GAMBLE':
                 t_health = t_title_passive_value * 2
                 o_health = t_title_passive_value
@@ -10676,7 +10743,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             t_max_health = t_max_health + int(tarm_passive_value)
             t_health = t_health + int(tarm_passive_value)
         elif tarm_passive_type == 'LIFE':
-            t_max_health = t_max_health + int((tarm_passive_value/100) * o_health)
+            if mode in B_modes:
+                t_max_health = t_max_health + int((tarm_passive_value/200) * o_health)
+            else:
+                t_max_health = t_max_health + int((tarm_passive_value/100) * o_health)
         elif tarm_passive_type == 'DRAIN':
             if companion:
                 c_stamina = c_stamina - int(tarm_passive_value)
@@ -10743,12 +10813,20 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             if companion:
                 c_stamina = tarm_passive_value
         elif tarm_passive_type == 'FEAR':
-            t_health = t_health - int((tarm_passive_value/100) * t_health)
-            o_attack = o_attack - int((tarm_passive_value/100) * o_attack)
-            o_defense = o_defense - int((tarm_passive_value/100) * o_defense)
-            if companion:
-                c_attack = c_attack - int((tarm_passive_value/100) * c_attack)
-                c_defense = c_defense - int((tarm_passive_value/100) * c_defense)
+            if t_universe == "Chainsawman":
+                t_health = t_health - int((tarm_passive_value/190) * t_health)
+                o_attack = o_attack - int((tarm_passive_value/100) * o_attack)
+                o_defense = o_defense - int((tarm_passive_value/100) * o_defense)
+                if companion:
+                    c_attack = c_attack - int((tarm_passive_value/100) * c_attack)
+                    c_defense = c_defense - int((tarm_passive_value/100) * c_defense)
+            else:
+                t_health = t_health - int((tarm_passive_value/100) * t_health)
+                o_attack = o_attack - int((tarm_passive_value/100) * o_attack)
+                o_defense = o_defense - int((tarm_passive_value/100) * o_defense)
+                if companion:
+                    c_attack = c_attack - int((tarm_passive_value/100) * c_attack)
+                    c_defense = c_defense - int((tarm_passive_value/100) * c_defense)
         elif tarm_passive_type == 'GAMBLE':
             t_health = tarm_passive_value * 2
             o_health = tarm_passive_value
@@ -12426,7 +12504,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     turn=0
                             elif aiMove == 6:
                                     #Resolve Check and Calculation
-                                if o_used_resolve and o_used_focus and not o_pet_used:                                  
+                                if o_used_resolve and o_used_focus and not o_pet_used:
                                     o_enhancer_used=True
                                     dmg = damage_cal(o_universe, o_card, opet_move, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total, ocard_lvl_ap_buff)
                                     o_enhancer_used=False
@@ -12514,6 +12592,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             t_max_health = round(t_max_health - dmg['DMG'])
 
                                         o_stamina = o_stamina - int(dmg['STAMINA_USED'])
+                                    
+                                        if o_universe == "Persona":
+                                            petdmg = damage_cal(o_universe, o_card, o_1, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total, ocard_lvl_ap_buff)
+                                            t_health = t_health - petdmg['DMG']
 
                                         turn=0
                                     else:
@@ -13086,6 +13168,15 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 t_max_health = round(t_max_health - dmg['DMG'])
 
                                             o_stamina = o_stamina - int(dmg['STAMINA_USED'])
+                                            if o_universe == "Persona":
+                                                petdmg = damage_cal(o_universe, o_card, o_1, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total, ocard_lvl_ap_buff)
+                                                t_health = t_health - petdmg['DMG']
+
+                                                embedVar = discord.Embed(title=f"**PERSONA!**\n{opet_name} was summoned from {o_card}'s soul!", colour=0xe91e63)
+                                                embedVar.add_field(name=f"{opet_name} used {opetmove_text}!", value =f"Enhanced {opet_type}")
+                                                embedVar.add_field(name=f"{opet_name} used a follow up attack dealing {petdmg} damage!", value =f"Enhanced {opet_type}")
+                                                embedVar.set_thumbnail(url=opet_image)
+                                                await button_ctx.send(embed=embedVar)
 
                                             embedVar = discord.Embed(title=f"{o_card.upper()} Summoned {opet_name}", colour=0xe91e63)
                                             embedVar.add_field(name=f"{opet_name} used {opetmove_text}!", value =f"Enhanced {opet_type}")
@@ -14058,10 +14149,25 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 c_max_health = round(c_max_health - dmg['DMG'])
                                             t_stamina = t_stamina - int(dmg['STAMINA_USED'])
                                             if mode not in AUTO_BATTLE_modes:
-                                                embedVar = discord.Embed(title=f"{t_card.upper()} Summoned {tpet_name}", colour=0xe91e63)
-                                                embedVar.add_field(name=f"{tpet_name} used {tpetmove_text}!", value =f"Enhanced {tpet_type}")
-                                                embedVar.set_thumbnail(url=tpet_image)
-                                                await private_channel.send(embed=embedVar)
+                                                if t_universe == "Persona":
+                                                    petdmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total, tcard_lvl_ap_buff)
+
+                                                    c_health = c_health - petdmg['DMG']
+
+                                                    embedVar = discord.Embed(title=f"**PERSONA!**\n{tpet_name} was summoned from {t_card}'s soul!", colour=0xe91e63)
+                                                    embedVar.add_field(name=f"{tpet_name} used {tpetmove_text}!", value =f"Enhanced {tpet_type}")
+                                                    embedVar.add_field(name=f"{tpet_name} used a follow up attack dealing {petdmg} damage!", value =f"Enhanced {tpet_type}")
+                                                    embedVar.set_thumbnail(url=tpet_image)
+                                                    await button_ctx.send(embed=embedVar)
+                                                else:
+                                                    embedVar = discord.Embed(title=f"{t_card.upper()} Summoned {tpet_name}", colour=0xe91e63)
+                                                    embedVar.add_field(name=f"{tpet_name} used {tpetmove_text}!", value =f"Enhanced {tpet_type}")
+                                                    embedVar.set_thumbnail(url=tpet_image)
+                                                    await private_channel.send(embed=embedVar)
+
+                                            if t_universe == "Persona":
+                                                petdmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total, tcard_lvl_ap_buff)
+
                                             turn=turn_selector
                                         else:
                                             if mode not in AUTO_BATTLE_modes:
@@ -14156,10 +14262,25 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             t_stamina = t_stamina - int(dmg['STAMINA_USED'])
 
                                             if mode not in AUTO_BATTLE_modes:
-                                                embedVar = discord.Embed(title=f"{t_card.upper()} Summoned {tpet_name}", colour=0xe91e63)
-                                                embedVar.add_field(name=f"{tpet_name} used {tpetmove_text}!", value =f"Enhanced {tpet_type}")
-                                                embedVar.set_thumbnail(url=tpet_image)
-                                                await private_channel.send(embed=embedVar)
+                                                if t_universe == "Persona":
+                                                    petdmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total, tcard_lvl_ap_buff)
+
+                                                    t_health = t_health - petdmg['DMG']
+
+                                                    embedVar = discord.Embed(title=f"**PERSONA!**\n{tpet_name} was summoned from {t_card}'s soul!", colour=0xe91e63)
+                                                    embedVar.add_field(name=f"{tpet_name} used {tpetmove_text}!", value =f"Enhanced {tpet_type}")
+                                                    embedVar.add_field(name=f"{tpet_name} used a follow up attack dealing {petdmg} damage!", value =f"Enhanced {tpet_type}")
+                                                    embedVar.set_thumbnail(url=tpet_image)
+                                                    await button_ctx.send(embed=embedVar)
+                                                else:
+                                                    embedVar = discord.Embed(title=f"{t_card.upper()} Summoned {tpet_name}", colour=0xe91e63)
+                                                    embedVar.add_field(name=f"{tpet_name} used {tpetmove_text}!", value =f"Enhanced {tpet_type}")
+                                                    embedVar.set_thumbnail(url=tpet_image)
+                                                    await private_channel.send(embed=embedVar)
+                                            
+                                            if t_universe == "Persona":
+                                                petdmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total, tcard_lvl_ap_buff)
+
                                             turn=1
                                         else:
                                             await private_channel.send(f"{tpet_name} needs a turn to rest...")
@@ -14254,10 +14375,21 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         t_stamina = t_stamina - int(dmg['STAMINA_USED'])
 
                                         if mode not in AUTO_BATTLE_modes:
-                                            embedVar = discord.Embed(title=f"{t_card.upper()} Summoned {tpet_name}", colour=0xe91e63)
-                                            embedVar.add_field(name=f"{tpet_name} used {tpetmove_text}!", value =f"Enhanced {tpet_type}")
-                                            embedVar.set_thumbnail(url=tpet_image)
-                                            await private_channel.send(embed=embedVar)
+                                            if t_universe == "Persona":
+                                                petdmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total, tcard_lvl_ap_buff)
+
+                                                t_health = t_health - petdmg['DMG']
+
+                                                embedVar = discord.Embed(title=f"**PERSONA!**\n{tpet_name} was summoned from {t_card}'s soul!", colour=0xe91e63)
+                                                embedVar.add_field(name=f"{tpet_name} used {tpetmove_text}!", value =f"Enhanced {tpet_type}")
+                                                embedVar.add_field(name=f"{tpet_name} used a follow up attack dealing {petdmg} damage!", value =f"Enhanced {tpet_type}")
+                                                embedVar.set_thumbnail(url=tpet_image)
+                                                await button_ctx.send(embed=embedVar)
+                                            else:
+                                                embedVar = discord.Embed(title=f"{t_card.upper()} Summoned {tpet_name}", colour=0xe91e63)
+                                                embedVar.add_field(name=f"{tpet_name} used {tpetmove_text}!", value =f"Enhanced {tpet_type}")
+                                                embedVar.set_thumbnail(url=tpet_image)
+                                                await private_channel.send(embed=embedVar)
                                         turn=1
                                     else:
                                         await private_channel.send(f"{tpet_name} needs a turn to rest...")
@@ -15287,11 +15419,21 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 t_max_health = round(t_max_health - dmg['DMG'])
 
                                             c_stamina = c_stamina - int(dmg['STAMINA_USED'])
+                                            if c_universe == "Persona":
+                                                petdmg = damage_cal(c_universe, c_card, c_1, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina, c_max_health, t_attack, c_special_move_description, turn_total, ccard_lvl_ap_buff)
 
-                                            embedVar = discord.Embed(title=f"{c_card.upper()} Summoned {cpet_name}", colour=0xe91e63)
-                                            embedVar.add_field(name=f"{cpet_name} used {cpetmove_text}!", value =f"Enhanced {cpet_type}")
-                                            embedVar.set_thumbnail(url=cpet_image)
-                                            await private_channel.send(embed=embedVar)
+                                                t_health = t_health - petdmg['DMG']
+
+                                                embedVar = discord.Embed(title=f"**PERSONA!**\n{cpet_name} was summoned from {c_card}'s soul!", colour=0xe91e63)
+                                                embedVar.add_field(name=f"{cpet_name} used {cpetmove_text}!", value =f"Enhanced {cpet_type}")
+                                                embedVar.add_field(name=f"{cpet_name} used a follow up attack dealing {petdmg} damage!", value =f"Enhanced {cpet_type}")
+                                                embedVar.set_thumbnail(url=cpet_image)
+                                                await button_ctx.send(embed=embedVar)
+                                            else:
+                                                embedVar = discord.Embed(title=f"{c_card.upper()} Summoned {cpet_name}", colour=0xe91e63)
+                                                embedVar.add_field(name=f"{cpet_name} used {cpetmove_text}!", value =f"Enhanced {cpet_type}")
+                                                embedVar.set_thumbnail(url=cpet_image)
+                                                await private_channel.send(embed=embedVar)
                                             turn=2
                                         else:
                                             await private_channel.send(f"{cpet_name} needs a turn to rest...")
@@ -15917,11 +16059,21 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_max_health = round(t_max_health - dmg['DMG'])
 
                                                 c_stamina = c_stamina - int(dmg['STAMINA_USED'])
+                                                if c_universe == "Persona":
+                                                    petdmg = damage_cal(c_universe, c_card, c_1, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina, c_max_health, t_attack, c_special_move_description, turn_total, ccard_lvl_ap_buff)
 
-                                                embedVar = discord.Embed(title=f"{c_card.upper()} Summoned {cpet_name}", colour=0xe91e63)
-                                                embedVar.add_field(name=f"{cpet_name} used {cpetmove_text}!", value =f"Enhanced {cpet_type}")
-                                                embedVar.set_thumbnail(url=cpet_image)
-                                                await button_ctx.send(embed=embedVar)
+                                                    t_health = t_health - petdmg['DMG']
+
+                                                    embedVar = discord.Embed(title=f"**PERSONA!**\n{cpet_name} was summoned from {c_card}'s soul!", colour=0xe91e63)
+                                                    embedVar.add_field(name=f"{cpet_name} used {cpetmove_text}!", value =f"Enhanced {cpet_type}")
+                                                    embedVar.add_field(name=f"{cpet_name} used a follow up attack dealing {petdmg} damage!", value =f"Enhanced {cpet_type}")
+                                                    embedVar.set_thumbnail(url=cpet_image)
+                                                    await button_ctx.send(embed=embedVar)
+                                                else:
+                                                    embedVar = discord.Embed(title=f"{c_card.upper()} Summoned {cpet_name}", colour=0xe91e63)
+                                                    embedVar.add_field(name=f"{cpet_name} used {cpetmove_text}!", value =f"Enhanced {cpet_type}")
+                                                    embedVar.set_thumbnail(url=cpet_image)
+                                                    await private_channel.send(embed=embedVar)
                                                 turn=2
                                             else:
                                                 await button_ctx.send(f"{cpet_name} needs a turn to rest...")
@@ -16709,10 +16861,21 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 o_max_health = round(o_max_health - dmg['DMG'])
                                             t_stamina = t_stamina - int(dmg['STAMINA_USED'])
 
-                                            embedVar = discord.Embed(title=f"{t_card.upper()} Summoned {tpet_name}", colour=0xe91e63)
-                                            embedVar.add_field(name=f"{tpet_name} used {tpetmove_text}!", value =f"Enhanced {tpet_type}")
-                                            embedVar.set_thumbnail(url=tpet_image)
-                                            await private_channel.send(embed=embedVar)
+                                            if t_universe == "Persona":
+                                                petdmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total, tcard_lvl_ap_buff)
+
+                                                t_health = t_health - petdmg['DMG']
+
+                                                embedVar = discord.Embed(title=f"**PERSONA!**\n{tpet_name} was summoned from {t_card}'s soul!", colour=0xe91e63)
+                                                embedVar.add_field(name=f"{tpet_name} used {tpetmove_text}!", value =f"Enhanced {tpet_type}")
+                                                embedVar.add_field(name=f"{tpet_name} used a follow up attack dealing {petdmg} damage!", value =f"Enhanced {tpet_type}")
+                                                embedVar.set_thumbnail(url=tpet_image)
+                                                await button_ctx.send(embed=embedVar)
+                                            else:
+                                                embedVar = discord.Embed(title=f"{t_card.upper()} Summoned {tpet_name}", colour=0xe91e63)
+                                                embedVar.add_field(name=f"{tpet_name} used {tpetmove_text}!", value =f"Enhanced {tpet_type}")
+                                                embedVar.set_thumbnail(url=tpet_image)
+                                                await private_channel.send(embed=embedVar)
                                             turn=1
                                         else:
                                             await private_channel.send(f"{tpet_name} needs a turn to rest...")

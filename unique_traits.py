@@ -21,7 +21,7 @@ traits = [{
 },{
     'NAME': 'Chainsawman',
     'EFFECT': 'Devilization',
-    'TRAIT': 'When health reaches _50%_ gain double ATK and double DEF.'
+    'TRAIT': 'When health reaches _50%_ gain double ATK and double DEF. Strong Fear Infliction.'
 },{
     'NAME': 'Bleach',
     'EFFECT': 'Bankai',
@@ -82,4 +82,8 @@ traits = [{
     'NAME': 'Crown Rift Madness',
     'EFFECT': 'Madness',
     'TRAIT': 'Do not lose turn on Focus, but also do not heal'
+},{
+    'NAME': 'Persona',
+    'EFFECT': 'Summoner',
+    'TRAIT': 'Pet deals damage equal to your :boom: attack, in addition to their status effect.'
 }]
