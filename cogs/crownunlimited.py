@@ -196,7 +196,7 @@ class CrownUnlimited(commands.Cog):
                 take_chances_response = embedVar
 
             # Send Message
-            embedVar = discord.Embed(title=f"**{approach_message} {cards[rand_card]['NAME']}** Approaches!", description=textwrap.dedent(f"""\
+            embedVar = discord.Embed(title=f"**{approach_message}{cards[rand_card]['NAME']}** Approaches!", description=textwrap.dedent(f"""\
             **Bounty** **{bounty_message}**
 
             {message.author.mention}
@@ -12258,7 +12258,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             elif o_stamina >= 40 and (o_health >= t_health):
                                 aiMove = 1
                             elif o_stamina >= 40:
-                                aiMove = 2
+                                if o_enhancer['TYPE'] in Control_Enhancer_Check:
+                                    aiMove = 0
+                                else:
+                                    aiMove = 2
                             elif o_stamina >= 30 and (o_health >= t_health):
                                 if o_enhancer['TYPE'] in Control_Enhancer_Check:
                                     aiMove = 2
@@ -12270,13 +12273,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 aiMove = 1
                             elif o_stamina >= 20:
                                 if o_enhancer['TYPE'] in Control_Enhancer_Check:
-                                    aiMove = 1
+                                    aiMove = 0
                                 else:
                                     aiMove = 4
                             elif o_stamina >= 10:
                                 aiMove = 1
                             else:
-                                aiMove = 0
+                                aiMove = 1
                             
 
                             # Make sure user is responding with move
@@ -13748,7 +13751,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             aiMove = 2
                         elif t_stamina >= 30 and (t_health >= o_health):
                             if t_enhancer['TYPE'] in Gamble_Enhancer_Check:
-                                aiMove = 3
+                                aiMove = 1
                             elif t_enhancer['TYPE'] in Support_Enhancer_Check or t_enhancer['TYPE'] in Stamina_Enhancer_Check:
                                 aiMove = 2
                             else:
@@ -13759,7 +13762,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             aiMove = 1
                         elif t_stamina >= 20:
                             if t_enhancer['TYPE'] in Gamble_Enhancer_Check:
-                                aiMove = 3
+                                aiMove = 1
                             elif t_enhancer['TYPE'] in Support_Enhancer_Check or t_enhancer['TYPE'] in Stamina_Enhancer_Check:
                                 aiMove = 1
                             else:
@@ -16221,10 +16224,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 embedVar = discord.Embed(title=f"**{t_card}** Enters Focus State", description=f"{t_powerup}", colour=0xe91e63)
                                 embedVar.add_field(name=f"A great aura starts to envelop **{t_card}** ",value= f"{t_aura}")
                                 embedVar.set_footer(text=f"{t_card} Says: 'Now, are you ready for a real fight?'")
-                            else:
-                                embedVar = discord.Embed(title=f"{t_card.upper()} FOCUSED", description=f"**{t_card} says**\n{t_focus_description}", colour=0xe91e63)
-                                embedVar.add_field(name=f"{t_card} focused and {healmessage}", value="All stats & stamina increased")
-                                await private_channel.send(embed=embedVar)
                             # o_pet_used = True
                             fortitude = 0.0
                             low = t_health - (t_health*.90)
@@ -16342,7 +16341,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             
                             if t_used_resolve and not t_pet_used:
                                 aiMove = 6 
-                            elif c_stamina == 0:
+                            elif c_stamina < 10:
                                 aiMove = 1
                             elif t_stamina >= 160 and (t_health >= c_health):
                                 aiMove = 3
