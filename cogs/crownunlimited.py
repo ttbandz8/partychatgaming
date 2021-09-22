@@ -9354,7 +9354,7 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, vul, accura
                     message=f"`{card}` used `{move}`! :boom:   IT MORTALLY WOUNDS FOR **{true_dmg}**!! :boom: "
                 else:
                     true_dmg = round(true_dmg * 2)
-                    message=f"`{card}` used `{move}`! :boom:   IT CRITICALLY HITS FOR {true_dmg}!! :boom: "
+                    message=f"`{card}` used `{move}`! :boom:   IT CRITICALLY HITS FOR **{true_dmg}**!! :boom: "
                 
                 
 
