@@ -1910,8 +1910,8 @@ class CrownUnlimited(commands.Cog):
                                         o_health = o_health + o_resolve_health
                                         o_attack = round((o_attack + (2 * o_resolve_attack))* 2)
                                         o_defense = round(o_defense - o_resolve_defense)
-                                        if o_defense >= 120:
-                                            o_defense = 120
+                                        # if o_defense >= 120:
+                                            # o_defense = 120
                                         o_used_resolve = True 
                                         o_pet_used=False
                                         embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
@@ -2579,8 +2579,8 @@ class CrownUnlimited(commands.Cog):
                                         t_health = t_health + t_resolve_health
                                         t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                         t_defense = round(t_defense - t_resolve_defense)
-                                        if t_defense >= 120:
-                                            t_defense = 120
+                                        # if t_defense >= 120:
+                                            # t_defense = 120
                                         t_used_resolve=True
                                         t_pet_used =False
 
@@ -4273,8 +4273,8 @@ class CrownUnlimited(commands.Cog):
                                             o_health = o_health + o_resolve_health
                                             o_attack = round((o_attack + (2 * o_resolve_attack))* 2)
                                             o_defense = round(o_defense - o_resolve_defense)
-                                            if o_defense >= 120:
-                                                o_defense = 120
+                                            # if o_defense >= 120:
+                                                # o_defense = 120
                                             o_used_resolve = True 
                                             o_pet_used=False
                                             embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
@@ -4954,8 +4954,8 @@ class CrownUnlimited(commands.Cog):
                                                 t_health = t_health + t_resolve_health
                                                 t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                                 t_defense = round(t_defense - t_resolve_defense)
-                                                if t_defense >= 120:
-                                                    t_defense = 120
+                                                # if t_defense >= 120:
+                                                    # t_defense = 120
                                                 t_used_resolve=True
                                                 t_pet_used =False
 
@@ -5462,8 +5462,8 @@ class CrownUnlimited(commands.Cog):
                                             t_health = t_health + t_resolve_health
                                             t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                             t_defense = round(t_defense - t_resolve_defense)
-                                            if t_defense >= 120:
-                                                t_defense = 120
+                                            # if t_defense >= 120:
+                                                # t_defense = 120
                                             t_used_resolve=True
 
                                             embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"**{t_card} says**\n{t_resolve_description}", colour=0xe91e63)
@@ -7177,8 +7177,8 @@ class CrownUnlimited(commands.Cog):
                                     o_health = o_health + o_resolve_health
                                     o_attack = round((o_attack + (2 * o_resolve_attack))* 2)
                                     o_defense = round(o_defense - o_resolve_defense)
-                                    if o_defense >= 120:
-                                        o_defense = 120
+                                    # if o_defense >= 120:
+                                        # o_defense = 120
                                     o_used_resolve = True 
                                     o_pet_used=False
                                     embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
@@ -7834,8 +7834,8 @@ class CrownUnlimited(commands.Cog):
                                 t_health = t_health + t_resolve_health
                                 t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                 t_defense = round(t_defense - t_resolve_defense)
-                                if t_defense >= 120:
-                                    t_defense = 120
+                                # if t_defense >= 120:
+                                    # t_defense = 120
                                 t_used_resolve=True
 
                                 embedVar = discord.Embed(title=f"{t_card.upper()} STRENGTHENED RESOLVE", description=f"**{t_card} says**\n{t_resolve_description}", colour=0xe91e63)
@@ -9335,23 +9335,23 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, vul, accura
             if hit_roll <= miss_hit:
                 if universe == 'Crown Rift Slayers':
                     true_dmg = round(true_dmg * .85)
-                    message=f'`{move}` used Twice! The first strike misses but second connects for {true_dmg}! :bangbang:'
+                    message=f'`{move}` used Twice! The first strike misses but second connects for **{true_dmg}**! :bangbang:'
                 else:
                     true_dmg=0
                     message=f'`{move}` used! It misses!'
             elif hit_roll <=low_hit and hit_roll > miss_hit:
                 true_dmg = round(true_dmg * .70)
-                message=f'`{move}` used! It chips for {true_dmg}! :anger:'
+                message=f'`{move}` used! It chips for **{true_dmg}**! :anger:'
             elif hit_roll <=med_hit and hit_roll > low_hit:
                 true_dmg = round(true_dmg * .85)
-                message=f'`{move}` used! It connects for {true_dmg}! :bangbang:'
+                message=f'`{move}` used! It connects for **{true_dmg}**! :bangbang:'
             elif hit_roll <=standard_hit and hit_roll > med_hit:
                 true_dmg = round(true_dmg)
-                message=f'`{move}` used! It hits for {true_dmg}! :anger_right:'
+                message=f'`{move}` used! It hits for **{true_dmg}**! :anger_right:'
             elif hit_roll == 20:
                 if universe == 'Crown Rift Awakening':
                     true_dmg = round(true_dmg * 2.5)
-                    message=f"`{card}` used `{move}`! :boom:   IT MORTALLY WOUNDS FOR {true_dmg}!! :boom: "
+                    message=f"`{card}` used `{move}`! :boom:   IT MORTALLY WOUNDS FOR **{true_dmg}**!! :boom: "
                 else:
                     true_dmg = round(true_dmg * 2)
                     message=f"`{card}` used `{move}`! :boom:   IT CRITICALLY HITS FOR {true_dmg}!! :boom: "
@@ -12484,8 +12484,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         o_health = o_health + o_resolve_health
                                         o_attack = round((o_attack + (2 * o_resolve_attack))* 2)
                                         o_defense = round(o_defense - o_resolve_defense)
-                                        if o_defense >= 120:
-                                            o_defense = 120
+                                        # # if o_defense >= 120:
+                                            # o_defense = 120
                                         o_used_resolve = True 
                                         o_pet_used=False
                                         turn_total= turn_total + 1
@@ -13025,8 +13025,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             o_health = o_health + o_resolve_health
                                             o_attack = round((o_attack + (2 * o_resolve_attack))* 2)
                                             o_defense = round(o_defense - o_resolve_defense)
-                                            if o_defense >= 120:
-                                                o_defense = 120
+                                            # if o_defense >= 120:
+                                                # # o_defense = 120
                                             o_used_resolve = True 
                                             o_pet_used=False
                                             embedVar = discord.Embed(title=f"{o_card.upper()} STRENGTHENED RESOLVE", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
@@ -14009,8 +14009,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     t_health = t_health + t_resolve_health
                                     t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                     t_defense = round(t_defense - t_resolve_defense)
-                                    if t_defense >= 120:
-                                        t_defense = 120
+                                    # if t_defense >= 120:
+                                        # t_defense = 120
                                     t_used_resolve=True
                                     t_pet_used =False
                                     if mode not in AUTO_BATTLE_modes:
@@ -15294,8 +15294,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             c_health = c_health + c_resolve_health
                                             c_attack = round((c_attack + (2 * c_resolve_attack))* 2)
                                             c_defense = round(c_defense - c_resolve_defense)
-                                            if c_defense >= 120:
-                                                c_defense = 120
+                                            # if c_defense >= 120:
+                                                # c_defense = 120
                                             c_used_resolve = True 
                                             c_pet_used=False
                                             embedVar = discord.Embed(title=f"{c_card.upper()} STRENGTHENED RESOLVE", description=f"**{c_card} says**\n{c_resolve_description}", colour=0xe91e63)
@@ -15934,8 +15934,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 c_health = c_health + c_resolve_health
                                                 c_attack = round((c_attack + (2 * c_resolve_attack))* 2)
                                                 c_defense = round(c_defense - c_resolve_defense)
-                                                if c_defense >= 120:
-                                                    c_defense = 120
+                                                # if c_defense >= 120:
+                                                    # c_defense = 120
                                                 c_used_resolve = True 
                                                 c_pet_used=False
                                                 embedVar = discord.Embed(title=f"{c_card.upper()} STRENGTHENED RESOLVE", description=f"**{c_card} says**\n{c_resolve_description}", colour=0xe91e63)
@@ -16725,8 +16725,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         t_health = t_health + t_resolve_health
                                         t_attack = round((t_attack + (2 * t_resolve_attack)) * 2)
                                         t_defense = round(t_defense - t_resolve_defense)
-                                        if t_defense >= 120:
-                                            t_defense = 120
+                                        # if t_defense >= 120:
+                                            # t_defense = 120
                                         t_used_resolve=True
                                         t_pet_used =False
 
