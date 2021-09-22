@@ -714,7 +714,7 @@ def queryShopCards():
     return data 
 
 def altQueryShopCards(args):
-    data = cards_col.find({'EXCLUSIVE': False, 'AVAILABLE': True})
+    data = cards_col.find({'EXCLUSIVE': False, 'AVAILABLE': True, 'HAS_COLLECTION': False})
     return data 
 
 def queryDropCards(args):
@@ -726,7 +726,7 @@ def querySpecificDropCards(args):
     return data 
 
 def queryExclusiveDropCards(args):
-    data = cards_col.find({'UNIVERSE': args, 'EXCLUSIVE': True, 'AVAILABLE': True})
+    data = cards_col.find({'UNIVERSE': args, 'EXCLUSIVE': True, 'AVAILABLE': True, 'HAS_COLLECTION': False})
     return data 
 
 def queryCard(query):

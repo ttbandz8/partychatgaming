@@ -3037,5 +3037,105 @@ destiny = [
         "EARN": "Yu Narukami", 
         "COMPLETED": False,
         "UNIVERSE": "Persona"
+    },
+    {
+        "NAME": "Ahjin",
+        "WINS": 0,
+        "REQUIRED": 30,
+        "DEFEAT": "Jin Woo",
+        "USE_CARDS": ["Yoo Jinho"],
+        "EARN": "Jin Woo", 
+        "COMPLETED": False,
+        "UNIVERSE": "Solo Leveling"
+    },
+    {
+        "NAME": "The Grand Marshal",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Bellion",
+        "USE_CARDS": ["Jin Woo"],
+        "EARN": "Bellion", 
+        "COMPLETED": False,
+        "UNIVERSE": "Solo Leveling"
+    },
+    {
+        "NAME": "The Fallen Chairman",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Go Gunhee",
+        "USE_CARDS": ["Jin Woo"],
+        "EARN": "Go Gunhee", 
+        "COMPLETED": False,
+        "UNIVERSE": "Solo Leveling"
+    },
+    {
+        "NAME": "Blood Commander",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Idris Shadow",
+        "USE_CARDS": ["Jin Woo"],
+        "EARN": "Idris Shadow", 
+        "COMPLETED": False,
+        "UNIVERSE": "Solo Leveling"
+    },
+    {
+        "NAME": "The Ant King",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Beru Shadow",
+        "USE_CARDS": ["Jin Woo"],
+        "EARN": "Beru Shadow", 
+        "COMPLETED": False,
+        "UNIVERSE": "Solo Leveling"
+    },
+    {
+        "NAME": "The Father of the Monarch",
+        "WINS": 0,
+        "REQUIRED": 28,
+        "DEFEAT": "Sung Hwan",
+        "USE_CARDS": ["Jin Woo"],
+        "EARN": "Sung Hwan", 
+        "COMPLETED": False,
+        "UNIVERSE": "Solo Leveling"
+    },
+    {
+        "NAME": "The Monarch That Escaped",
+        "WINS": 0,
+        "REQUIRED": 18,
+        "DEFEAT": "Frost Monarch",
+        "USE_CARDS": ["Go Gunhee"],
+        "EARN": "Frost Monarch", 
+        "COMPLETED": False,
+        "UNIVERSE": "Solo Leveling"
+    },
+    {
+        "NAME": "Letter From The Grave",
+        "WINS": 0,
+        "REQUIRED": 35,
+        "DEFEAT": "Ashborn",
+        "USE_CARDS": ["Sung Hwan"],
+        "EARN": "Ashborn", 
+        "COMPLETED": False,
+        "UNIVERSE": "Solo Leveling"
+    },
+    {
+        "NAME": "Find The Proper Suitor",
+        "WINS": 0,
+        "REQUIRED": 35,
+        "DEFEAT": "Architect",
+        "USE_CARDS": ["Ashborn"],
+        "EARN": "Architect", 
+        "COMPLETED": False,
+        "UNIVERSE": "Solo Leveling"
+    },
+    {
+        "NAME": "Bow Or Die",
+        "WINS": 0,
+        "REQUIRED": 50,
+        "DEFEAT": "Statue Of God",
+        "USE_CARDS": ["Architect"],
+        "EARN": "Statue Of God", 
+        "COMPLETED": False,
+        "UNIVERSE": "Solo Leveling"
     }
 ]
