@@ -9185,33 +9185,33 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, vul, accura
     #handle different staments for lifesteal and drain
     if enhancer:
         if enh_type == 'ATK' or enh_type == 'DEF' or enh_type == 'HLT' or enh_type == 'STAM':
-            message = f'`{card}` used `{move}`! enhanced `{enh_type}`!'
+            message = f'**{card}** used **{move}** :microbe:! enhanced **{enh_type}**!'
         elif  enh_type == 'LIFE':
-            message = f'`{card}` used `{move}`! absorbing `{enh_type}`!'
+            message = f'**{card}** used **{move}** :microbe:! absorbing **{enh_type}**!'
         elif  enh_type == 'DRAIN':
-            message = f'`{card}` used `{move}`! Inflicts {enh_type}... absorbing STAM!'
+            message = f'**{card}** used **{move}** :microbe:! Inflicts {enh_type}... absorbing STAM!'
         elif  enh_type == 'FLOG':
-            message = f'`{card}` used `{move}`! Inflicts {enh_type}... absorbing ATK!'
+            message = f'**{card}** used **{move}** :microbe:! Inflicts {enh_type}... absorbing ATK!'
         elif  enh_type == 'WITHER':
-            message = f'`{card}` used `{move}`! Inflicts {enh_type}... absorbing DEF!'
+            message = f'**{card}** used **{move}** :microbe:! Inflicts {enh_type}... absorbing DEF!'
         elif enh_type == 'RAGE':
-            message = f'`{card}` used `{move}`! sacrificing defense to `{enh_type}`!'
+            message = f'**{card}** used **{move}** :microbe:! sacrificing defense to **{enh_type}**!'
         elif enh_type == 'BRACE': 
-            message = f'`{card}` used `{move}`! sacrificing attack to `{enh_type}`!'
+            message = f'**{card}** used **{move}** :microbe:! sacrificing attack to **{enh_type}**!'
         elif enh_type == 'BZRK' or enh_type == 'CRYSTAL': 
-            message = f'`{card}` used `{move}`! sacrificing health to `{enh_type}`!'
+            message = f'**{card}** used **{move}** :microbe:! sacrificing health to **{enh_type}**!'
         elif enh_type == 'WAVE' or enh_type == 'BLAST': 
-            message = f'`{card}` used `{move}`! dealing `{enh_type}` Damage!'
+            message = f'**{card}** used **{move}** :microbe:! dealing **{enh_type}** Damage!'
         elif enh_type == 'CREATION': 
-            message = f'`{card}` used `{move}`! healing and increasing Max Health!'
+            message = f'**{card}** used **{move}** :microbe:! healing and increasing Max Health!'
         elif enh_type == 'DESTRUCTION': 
-            message = f'`{card}` used `{move}`! draining health and Max Health!'
+            message = f'**{card}** used **{move}** :microbe:! draining health and Max Health!'
         elif enh_type == 'GROWTH': 
-            message = f'`{card}` used `{move}`! sacrificing MAX health for `{enh_type}`!'
+            message = f'**{card}** used **{move}** :microbe:! sacrificing MAX health for **{enh_type}**!'
         elif enh_type == 'STANCE': 
-            message = f'`{card}` used `{move}`! Changing their `{enh_type}`!'
+            message = f'**{card}** used **{move}** :microbe:! Changing their **{enh_type}**!'
         else: 
-            message = f'`{card}` used `{move}`! inflicts {enh_type}'
+            message = f'**{card}** used **{move}** :microbe:! inflicts {enh_type}'
             
         enhanced=0
         if enh_type == "ATK":
@@ -9293,7 +9293,7 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, vul, accura
             else:
                 enhanced = round((ap * turn) * .60)
             if enhanced > op_health:
-                message = f'**{card}** used **{move}**! Opponent has been reduced.'
+                message = f'**{card}** used **{move}** :microbe:! Opponent has been reduced.'
                 enhanced = op_health - 1
 
         
@@ -9335,26 +9335,26 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, vul, accura
             if hit_roll <= miss_hit:
                 if universe == 'Crown Rift Slayers':
                     true_dmg = round(true_dmg * .85)
-                    message=f'`{move}` used Twice! The first strike misses but second connects for **{true_dmg}**! :bangbang:'
+                    message=f'**{move}** used Twice! The first strike misses but second connects for **{true_dmg}**! :bangbang:'
                 else:
                     true_dmg=0
-                    message=f'`{move}` used! It misses!'
+                    message=f'**{move}** misses! :dash:'
             elif hit_roll <=low_hit and hit_roll > miss_hit:
                 true_dmg = round(true_dmg * .70)
-                message=f'`{move}` used! It chips for **{true_dmg}**! :anger:'
+                message=f'**{move}** used! It chips for **{true_dmg}**! :anger:'
             elif hit_roll <=med_hit and hit_roll > low_hit:
                 true_dmg = round(true_dmg * .85)
-                message=f'`{move}` used! It connects for **{true_dmg}**! :bangbang:'
+                message=f'**{move}** used! It connects for **{true_dmg}**! :bangbang:'
             elif hit_roll <=standard_hit and hit_roll > med_hit:
                 true_dmg = round(true_dmg)
-                message=f'`{move}` used! It hits for **{true_dmg}**! :anger_right:'
+                message=f'**{move}** used! It hits for **{true_dmg}**! :anger_right:'
             elif hit_roll == 20:
                 if universe == 'Crown Rift Awakening':
                     true_dmg = round(true_dmg * 2.5)
-                    message=f"`{card}` used `{move}`! :boom:   IT MORTALLY WOUNDS FOR **{true_dmg}**!! :boom: "
+                    message=f"**{move}** used! :boom: IT MORTALLY WOUNDS FOR **{true_dmg}**!! :boom: "
                 else:
                     true_dmg = round(true_dmg * 2)
-                    message=f"`{card}` used `{move}`! :boom:   IT CRITICALLY HITS FOR **{true_dmg}**!! :boom: "
+                    message=f"**{move}** used! :boom: IT CRITICALLY HITS FOR **{true_dmg}**!! :boom: "
                 
                 
 
