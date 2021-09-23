@@ -1,15 +1,15 @@
 traits = [{
     'NAME': 'My Hero Academia',
     'EFFECT': 'Plus Ultra!',
-    'TRAIT': 'You do not lose a turn after you Resolve.'
+    'TRAIT': 'You do not lose a turn after you Resolve. AP of all abilities is greatly increased upon Resolve.'
 },{
     'NAME': 'League Of Legends',
     'EFFECT': 'Turret Shot',
-    'TRAIT': 'When you Focus you send a 25hit to Opponent.'
+    'TRAIT': 'When you Focus you deal 30 damage to Opponent. Upon Resolve, you deal 30 Times You + Opponent Focus count damage.'
 },{
     'NAME': 'Pokemon',
     'EFFECT': 'Evolution',
-    'TRAIT': 'When you Resolve you do not lose Defense.'
+    'TRAIT': 'When you Resolve your Defense doubles.'
 },{
     'NAME': 'Digimon',
     'EFFECT': 'Digivolve',
@@ -29,11 +29,11 @@ traits = [{
 },{
     'NAME': 'Attack On Titan',
     'EFFECT': 'Rally',
-    'TRAIT': 'Gain 50 Max Health on Focus.'
+    'TRAIT': 'Gain 100 Max Health on Focus. Gain 100 Times Your Focus Count worth of Health upon Resolve.'
 },{
     'NAME': 'Black Clover',
     'EFFECT': 'Mana Zone',
-    'TRAIT': 'Gain 160 Stamina on Focus. AP is increased by 8 on Focus.'
+    'TRAIT': 'Gain 100 Stamina on Focus. AP is increased by 10 on Focus.'
 },{
     'NAME': 'Fate',
     'EFFECT': 'Command Seal',
@@ -57,11 +57,11 @@ traits = [{
 },{
     'NAME': 'Solo Leveling',
     'EFFECT': 'Rulers Authority',
-    'TRAIT': 'When you focus, opponent loses (15 + turn count) defense'
+    'TRAIT': 'When you focus, opponent loses (30 + turn count) defense'
 },{
     'NAME': 'Souls',
     'EFFECT': 'Combo Recognition',
-    'TRAIT': 'When your opponent focus, gain (15 + turn count) attack'
+    'TRAIT': 'When your opponent focus, gain (30 + turn count) attack'
 },{
     'NAME': 'Death Note',
     'EFFECT': 'Scheduled Death',
