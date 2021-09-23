@@ -9538,7 +9538,7 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, vul, accura
                 abilitypower = 25
             
             dmg = abilitypower 
-            if dmg > ap: #If DMG > ap -> Dmg = ap * 1.5
+            if dmg > (ap * 1.5): #If DMG > ap -> Dmg = ap * 1.5
                 dmg = ap * 1.5
             elif dmg < (ap/2): # If you dmg is less than you base AP you do / of AP Damage
                 dmg = ap/2
@@ -9560,8 +9560,8 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, vul, accura
             #dmg = ((attackpower * (100 * (100 / defensepower))) * .001) + int(ap)
             
 
-            low = dmg - (dmg * .25)
-            high = dmg + (dmg * .25)
+            low = dmg - (dmg * .10)
+            high = dmg + (dmg * .10)
 
             true_dmg = (random.randint(int(low), int(high))) + 25
             message = ""
