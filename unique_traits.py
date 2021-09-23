@@ -53,7 +53,7 @@ traits = [{
 },{
     'NAME': 'One Punch Man',
     'EFFECT': 'Hero Reinforcement',
-    'TRAIT': 'When Opponent Focuses, your Max Health increases by 50.'
+    'TRAIT': 'When Opponent Focuses, you gain 100 Health.'
 },{
     'NAME': 'Solo Leveling',
     'EFFECT': 'Rulers Authority',

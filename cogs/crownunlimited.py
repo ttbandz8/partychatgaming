@@ -1737,9 +1737,9 @@ class CrownUnlimited(commands.Cog):
                                 t_health = 0
                            
                         if t_universe == "One Punch Man":
-                            embedVar = discord.Embed(title=f"Hero Reinforcements! {t_card} Increased Max Health!", colour=0xe91e63)
+                            embedVar = discord.Embed(title=f"Hero Reinforcements! {t_card} Increased Health!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            t_max_health = round(t_max_health + 50)
+                            t_health = round(t_health + 100)
                            
                         elif t_universe == "7ds":
                             embedVar = discord.Embed(title=f"Increase Power Level! {t_card} Increased Stamina!", colour=0xe91e63)
@@ -2430,9 +2430,9 @@ class CrownUnlimited(commands.Cog):
                                     o_health = 0
                             
                             if o_universe == "One Punch Man":
-                                embedVar = discord.Embed(title=f"Hero Reinforcements! {o_card} Increased Max Health!", colour=0xe91e63)
+                                embedVar = discord.Embed(title=f"Hero Reinforcements! {o_card} Increased Health!", colour=0xe91e63)
                                 await private_channel.send(embed=embedVar)
-                                o_max_health = round(o_max_health + 50)
+                                o_health = round(o_health + 100)
                                 
                             elif o_universe == "7ds":
                                 embedVar = discord.Embed(title=f"Increase Power Level! {o_card} Increased Stamina!", colour=0xe91e63)
@@ -4123,9 +4123,9 @@ class CrownUnlimited(commands.Cog):
                                     t_health = 0
                                 
                             if t_universe == "One Punch Man":
-                                embedVar = discord.Embed(title=f"Hero Reinforcements! {t_card} Increased Max Health!", colour=0xe91e63)
+                                embedVar = discord.Embed(title=f"Hero Reinforcements! {t_card} Increased Health!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
-                                t_max_health = round(t_max_health + 50)
+                                t_health = round(t_health + 100)
                                 
                             elif t_universe == "7ds":
                                 embedVar = discord.Embed(title=f"Increase Power Level! {t_card} Increased Stamina!", colour=0xe91e63)
@@ -4860,9 +4860,9 @@ class CrownUnlimited(commands.Cog):
                                     await private_channel.send(embed=embedVar)
                                     o_health = 0
                             if o_universe == "One Punch Man":
-                                embedVar = discord.Embed(title=f"Hero Reinforcements! {o_card} Increased Max Health!", colour=0xe91e63)
+                                embedVar = discord.Embed(title=f"Hero Reinforcements! {o_card} Increased Health!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
-                                o_max_health = round(o_max_health + 50)
+                                o_health = round(o_health + 100)
                             elif o_universe == "7ds":
                                 embedVar = discord.Embed(title=f"Increase Power Level! {o_card} Increased Stamina!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
@@ -7123,9 +7123,9 @@ class CrownUnlimited(commands.Cog):
                             t_health = 0
                         
                     if t_universe == "One Punch Man":
-                        embedVar = discord.Embed(title=f"Hero Reinforcements! {t_card} Increased Max Health!", colour=0xe91e63)
+                        embedVar = discord.Embed(title=f"Hero Reinforcements! {t_card} Increased Health!", colour=0xe91e63)
                         await ctx.send(embed=embedVar)
-                        t_max_health = round(t_max_health + 50)
+                        t_health = round(t_health + 100)
                         
                     elif t_universe == "7ds":
                         embedVar = discord.Embed(title=f"Increase Power Level! {t_card} Increased Stamina!", colour=0xe91e63)
@@ -7859,9 +7859,9 @@ class CrownUnlimited(commands.Cog):
                             o_health = 0
                         
                     if o_universe == "One Punch Man":
-                        embedVar = discord.Embed(title=f"Hero Reinforcements! {o_card} Increased Max Health!", colour=0xe91e63)
+                        embedVar = discord.Embed(title=f"Hero Reinforcements! {o_card} Increased Health!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
-                        o_max_health = round(o_max_health + 50)
+                        o_health = round(o_health + 100)
                         
                     elif o_universe == "7ds":
                         embedVar = discord.Embed(title=f"Increase Power Level! {o_card} Increased Stamina!", colour=0xe91e63)
@@ -12545,9 +12545,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 t_health = 0
                             
                         if t_universe == "One Punch Man":
-                            embedVar = discord.Embed(title=f"Hero Reinforcements! {t_card} Increased Max Health!", colour=0xe91e63)
+                            embedVar = discord.Embed(title=f"Hero Reinforcements! {t_card} Increased Health!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            t_max_health = round(t_max_health + 50)
+                            t_health = round(t_health + 100)
                             
                         elif t_universe == "7ds":
                             embedVar = discord.Embed(title=f"Increase Power Level! {t_card} Increased Stamina!", colour=0xe91e63)
@@ -14077,9 +14077,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 o_health = 0
                             
                         if o_universe == "One Punch Man":
-                            embedVar = discord.Embed(title=f"Hero Reinforcements! {o_card} Increased Max Health!", colour=0xe91e63)
+                            embedVar = discord.Embed(title=f"Hero Reinforcements! {o_card} Increased Health!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            o_max_health = round(o_max_health + 50)
+                            o_health = round(o_health + 100)
                             
                         elif o_universe == "7ds":
                             embedVar = discord.Embed(title=f"Increase Power Level! {o_card} Increased Stamina!", colour=0xe91e63)
@@ -15370,9 +15370,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     t_health = 0
                                 
                             if t_universe == "One Punch Man":
-                                embedVar = discord.Embed(title=f"Hero Reinforcements! {t_card} Increased Max Health!", colour=0xe91e63)
+                                embedVar = discord.Embed(title=f"Hero Reinforcements! {t_card} Increased Health!", colour=0xe91e63)
                                 await private_channel.send(embed=embedVar)
-                                t_max_health = round(t_max_health + 50)
+                                t_health = round(t_health + 100)
                                 
                             elif t_universe == "7ds":
                                 embedVar = discord.Embed(title=f"Increase Power Level! {t_card} Increased Stamina!", colour=0xe91e63)
@@ -16944,9 +16944,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     o_health = 0
                                 
                             if c_universe == "One Punch Man":
-                                embedVar = discord.Embed(title=f"Hero Reinforcements! {c_card} Increased Max Health!", colour=0xe91e63)
+                                embedVar = discord.Embed(title=f"Hero Reinforcements! {c_card} Increased Health!", colour=0xe91e63)
                                 await private_channel.send(embed=embedVar)
-                                c_max_health = round(c_max_health + 50)
+                                c_health = round(c_health + 100)
                                 
                             elif c_universe == "7ds":
                                 embedVar = discord.Embed(title=f"Increase Power Level! {c_card} Increased Stamina!", colour=0xe91e63)
