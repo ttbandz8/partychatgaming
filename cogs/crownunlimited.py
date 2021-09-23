@@ -9527,21 +9527,41 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, vul, accura
 
         #dmg = ((int(ap) + int(atk)) / (op_defense + 2) * (.20 * int(ap)))
         try:
-        
-            fortitude = ((maxhealth - health) * (2/5))
-            if fortitude <= ap:
-                fortitude = health * (2/5) #216
-
-            attackpower = round(((int(atk) / 28) * int(ap)) / op_defense) #5.09
-            modifier = random.randint(6,11)
-            dmg = round(((fortitude * attackpower)/100) * modifier)
+            defensepower = op_defense - atk
+            if defensepower <=0:
+                defensepower = 1
+            
+            attackpower = atk + ap
+            
+            abilitypower = round(attackpower / defensepower)
+            if abilitypower <= 0:
+                abilitypower = 25
+            
+            dmg = abilitypower 
+            if dmg > ap: #If DMG > ap -> Dmg = ap * 1.5
+                dmg = ap * 1.5
+            elif dmg < (ap/2): # If you dmg is less than you base AP you do / of AP Damage
+                dmg = ap/2
+                
+            # print(f'{turn} : {card}')
+            # print("DEF:" , defensepower, "Closer to 1 is stronger op def")
+            # print("ATK:" ,attackpower, "Higher is better")
+            # print("AP:" , abilitypower)
+            # print("DMG:", dmg)
+                
+            # fortitude = round((maxhealth - health))
+            # print("FORT:" , fortitude)
+            # print("**********")
+            #attackpower = round((int(atk) * int(ap)) / op_defense) #5.09
+            # print(attackpower)
+            # modifier = random.randint(6,11)
+            # dmg = round((fortitude * attackpower))
 
             #dmg = ((attackpower * (100 * (100 / defensepower))) * .001) + int(ap)
             
-            #dmg = (int(ap)*(100/(100+int(op_defense)))) + int(atk)
 
-            low = dmg - (dmg * .08)
-            high = dmg + (dmg * .15)
+            low = dmg - (dmg * .25)
+            high = dmg + (dmg * .25)
 
             true_dmg = (random.randint(int(low), int(high))) + 25
             message = ""
@@ -9556,8 +9576,8 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, vul, accura
 
             if hit_roll <= miss_hit:
                 if universe == 'Crown Rift Slayers':
-                    true_dmg = round(true_dmg * .85)
-                    message=f'**{move}** used Twice! The first strike misses but second connects for **{true_dmg}**! :bangbang:'
+                    true_dmg = round(true_dmg)
+                    message=f'**{move}** used Twice! The first strike misses but second hits for **{true_dmg}**! :bangbang:'
                 else:
                     true_dmg=0
                     message=f'**{move}** misses! :dash:'

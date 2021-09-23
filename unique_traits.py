@@ -73,7 +73,7 @@ traits = [{
 },{
     'NAME': 'Crown Rift Slayers',
     'EFFECT': 'Follow Up Attack',
-    'TRAIT': 'If you miss, you connect'
+    'TRAIT': 'If you miss, Hit!'
 },{
     'NAME': 'Crown Rift Awakening',
     'EFFECT': 'Blood Awakening',
