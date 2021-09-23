@@ -9893,8 +9893,8 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
     if mode in D_modes:
         enemy_title = "DTITLE"
         enemy_arm = "DARM"
-        opponent_scaling = opponent_scaling + 50
-        opponent_health_scaling = 450
+        opponent_scaling = opponent_scaling + 100
+        opponent_health_scaling = 1000
     
     try:   
         # Player 1 Data
@@ -10117,13 +10117,13 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         t_gif = t['GIF']
         t_card_path=t['PATH']
         t_rcard_path=t['RPATH']
-        t_health = t['HLT'] + (10 * currentopponent) + opponent_health_scaling 
+        t_health = t['HLT'] + (100 * currentopponent) + opponent_health_scaling 
         t_max_health = t_health
         t_stamina = t['STAM']
         t_max_stamina= t['STAM']
         t_moveset = t['MOVESET']
-        t_attack = t['ATK'] + (4 * currentopponent) + opponent_scaling
-        t_defense = t['DEF'] + (3 * currentopponent) + opponent_scaling
+        t_attack = t['ATK'] + (5 * currentopponent) + opponent_scaling
+        t_defense = t['DEF'] + (5 * currentopponent) + opponent_scaling
         t_type = t['TYPE']
         t_accuracy = t['ACC']
         t_passive = t['PASS'][0]
