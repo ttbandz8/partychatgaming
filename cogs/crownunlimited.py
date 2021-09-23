@@ -1743,7 +1743,7 @@ class CrownUnlimited(commands.Cog):
                         elif t_universe == "7ds":
                             embedVar = discord.Embed(title=f"Increase Power Level! {t_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            t_stamina = 110
+                            t_stamina = t_stamina + 80
                            
                         elif t_universe == "Souls":
                             embedVar = discord.Embed(title=f"Combo Recognition! {t_card} Increased Attack by {15 + turn_total}!", colour=0xe91e63)
@@ -2404,7 +2404,7 @@ class CrownUnlimited(commands.Cog):
                             elif o_universe == "7ds":
                                 embedVar = discord.Embed(title=f"Increase Power Level! {o_card} Increased Stamina!", colour=0xe91e63)
                                 await private_channel.send(embed=embedVar)
-                                o_stamina = 110
+                                o_stamina = o_stamina + 60
                             
                             elif o_universe == "Souls":
                                 embedVar = discord.Embed(title=f"Combo Recognition! {o_card} Increased ATK by {15 + turn_total}!", colour=0xe91e63)
@@ -4065,7 +4065,7 @@ class CrownUnlimited(commands.Cog):
                             elif t_universe == "7ds":
                                 embedVar = discord.Embed(title=f"Increase Power Level! {t_card} Increased Stamina!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
-                                t_stamina = 110
+                                t_stamina = t_stamina + 80
                                 
                             elif t_universe == "Souls":
                                 embedVar = discord.Embed(title=f"Combo Recognition! {t_card} Increased Attack by {15 + turn_total}!", colour=0xe91e63)
@@ -4769,7 +4769,7 @@ class CrownUnlimited(commands.Cog):
                             elif o_universe == "7ds":
                                 embedVar = discord.Embed(title=f"Increase Power Level! {o_card} Increased Stamina!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
-                                o_stamina = 110
+                                o_stamina = o_stamina + 60
                             elif o_universe == "Souls":
                                 embedVar = discord.Embed(title=f"Combo Recognition! {o_card} Increased ATK by {15 + turn_total}!", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
@@ -6969,7 +6969,7 @@ class CrownUnlimited(commands.Cog):
                     elif t_universe == "7ds":
                         embedVar = discord.Embed(title=f"Increase Power Level! {t_card} Increased Stamina!", colour=0xe91e63)
                         await ctx.send(embed=embedVar)
-                        t_stamina = 110
+                        t_stamina = t_stamina + 80
                         
                     elif t_universe == "Souls":
                         embedVar = discord.Embed(title=f"Combo Recognition! {t_card} Increased Attack by {15 + turn_total}!", colour=0xe91e63)
@@ -7674,7 +7674,7 @@ class CrownUnlimited(commands.Cog):
                     elif o_universe == "7ds":
                         embedVar = discord.Embed(title=f"Increase Power Level! {o_card} Increased Stamina!", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
-                        o_stamina = 110
+                        o_stamina = o_stamina + 60
                     
                     elif o_universe == "Souls":
                         embedVar = discord.Embed(title=f"Combo Recognition! {o_card} Increased ATK by {15 + turn_total}!", colour=0xe91e63)
@@ -8062,7 +8062,6 @@ class CrownUnlimited(commands.Cog):
                                     t_stamina = t_stamina - int(dmg['STAMINA_USED'])                                               
                                     turn_total= turn_total + 1
                                     turn=0
-
                         else:
                             await private_channel.send(m.NOT_ENOUGH_STAMINA)
                             turn = 1       
@@ -12306,7 +12305,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         elif t_universe == "7ds":
                             embedVar = discord.Embed(title=f"Increase Power Level! {t_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            t_stamina = 110
+                            t_stamina = t_stamina + 80
                             
                         elif t_universe == "Souls":
                             embedVar = discord.Embed(title=f"Combo Recognition! {t_card} Increased Attack by {15 + turn_total}!", colour=0xe91e63)
@@ -13774,7 +13773,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         elif o_universe == "7ds":
                             embedVar = discord.Embed(title=f"Increase Power Level! {o_card} Increased Stamina!", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            o_stamina = 110
+                            o_stamina = o_stamina + 60
                             
                         elif o_universe == "Souls":
                             embedVar = discord.Embed(title=f"Combo Recognition! {o_card} Increased ATK by {15 + turn_total}!", colour=0xe91e63)
@@ -15027,7 +15026,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             elif t_universe == "7ds":
                                 embedVar = discord.Embed(title=f"Increase Power Level! {t_card} Increased Stamina!", colour=0xe91e63)
                                 await private_channel.send(embed=embedVar)
-                                t_stamina = 110
+                                t_stamina = t_stamina + 80
                             
                             elif t_universe == "Souls":
                                 embedVar = discord.Embed(title=f"Combo Recognition! {t_card} Increased Attack by {15 + turn_total}!", colour=0xe91e63)
@@ -16537,7 +16536,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             elif c_universe == "7ds":
                                 embedVar = discord.Embed(title=f"Increase Power Level! {c_card} Increased Stamina!", colour=0xe91e63)
                                 await private_channel.send(embed=embedVar)
-                                c_stamina = 110
+                                c_stamina = c_stamina + 60
                                 
                             elif c_universe == "Souls":
                                 embedVar = discord.Embed(title=f"Combo Recognition! {c_card} Increased ATK by {15 + turn_total}!", colour=0xe91e63)
