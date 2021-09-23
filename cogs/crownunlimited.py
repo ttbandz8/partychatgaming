@@ -2086,10 +2086,10 @@ class CrownUnlimited(commands.Cog):
                                             o_attack = round(o_attack - dmg['DMG'])
                                         elif opet_type == 'BZRK':
                                             o_health = round(o_health - dmg['DMG'])
-                                            o_attack = round(o_attack + (.75 * dmg['DMG']))
+                                            o_attack = round(o_attack +  dmg['DMG'])
                                         elif opet_type == 'CRYSTAL':
                                             o_health = round(o_health - dmg['DMG'])
-                                            o_defense = round(o_defense +(.75 * dmg['DMG']))
+                                            o_defense = round(o_defense + dmg['DMG'])
                                         elif opet_type == 'GROWTH':
                                             o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
                                             o_defense = round(o_defense + (o_defense* dmg['DMG']))
@@ -2198,10 +2198,10 @@ class CrownUnlimited(commands.Cog):
                                             o_attack = round(o_attack - dmg['DMG'])
                                         elif enh_type == 'BZRK':
                                             o_health = round(o_health - dmg['DMG'])
-                                            o_attack = round(o_attack + (.75 * dmg['DMG']))
+                                            o_attack = round(o_attack +  dmg['DMG'])
                                         elif enh_type == 'CRYSTAL':
                                             o_health = round(o_health - dmg['DMG'])
-                                            o_defense = round(o_defense + (.75 * dmg['DMG']))
+                                            o_defense = round(o_defense +  dmg['DMG'])
                                         elif enh_type == 'GROWTH':
                                             o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
                                             o_defense = round(o_defense + (o_defense* dmg['DMG']))
@@ -2791,10 +2791,10 @@ class CrownUnlimited(commands.Cog):
                                             t_attack = round(t_attack - dmg['DMG'])
                                         elif tpet_type == 'BZRK':
                                             t_health = round(t_health - dmg['DMG'])
-                                            t_attack = round(t_attack + (.75 * dmg['DMG']))
+                                            t_attack = round(t_attack +  dmg['DMG'])
                                         elif tpet_type == 'CRYSTAL':
                                             t_health = round(t_health - dmg['DMG'])
-                                            t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                            t_defense = round(t_defense +  dmg['DMG'])
                                         elif tpet_type == 'GROWTH':
                                             t_max_health = round(t_max_health - (t_max_health *dmg['DMG']))
                                             t_defense = round(t_defense + (t_defense * dmg['DMG']))
@@ -2890,7 +2890,7 @@ class CrownUnlimited(commands.Cog):
                                             t_attack = round(t_attack + (.75 *  dmg['DMG']))
                                         elif enh_type == 'CRYSTAL':
                                             t_health = round(t_health - dmg['DMG'])
-                                            t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                            t_defense = round(t_defense +  dmg['DMG'])
                                         elif enh_type == 'GROWTH':
                                             t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
                                             t_defense = round(t_defense + (t_defense * dmg['DMG']))
@@ -4519,10 +4519,10 @@ class CrownUnlimited(commands.Cog):
                                                 o_attack = round(o_attack - dmg['DMG'])
                                             elif opet_type == 'BZRK':
                                                 o_health = round(o_health - dmg['DMG'])
-                                                o_attack = round(o_attack + (.75 * dmg['DMG']))
+                                                o_attack = round(o_attack +  dmg['DMG'])
                                             elif opet_type == 'CRYSTAL':
                                                 o_health = round(o_health - dmg['DMG'])
-                                                o_defense = round(o_defense +(.75 * dmg['DMG']))
+                                                o_defense = round(o_defense + dmg['DMG'])
                                             elif opet_type == 'GROWTH':
                                                 o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
                                                 o_defense = round(o_defense + (o_defense* dmg['DMG']))
@@ -4634,10 +4634,10 @@ class CrownUnlimited(commands.Cog):
                                                 o_attack = round(o_attack - dmg['DMG'])
                                             elif enh_type == 'BZRK':
                                                 o_health = round(o_health - dmg['DMG'])
-                                                o_attack = round(o_attack + (.75 * dmg['DMG']))
+                                                o_attack = round(o_attack +  dmg['DMG'])
                                             elif enh_type == 'CRYSTAL':
                                                 o_health = round(o_health - dmg['DMG'])
-                                                o_defense = round(o_defense +(.75 * dmg['DMG']))
+                                                o_defense = round(o_defense + dmg['DMG'])
                                             elif enh_type == 'GROWTH':
                                                 o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
                                                 o_defense = round(o_defense + (o_defense* dmg['DMG']))
@@ -5233,10 +5233,10 @@ class CrownUnlimited(commands.Cog):
                                                     t_attack = round(t_attack - dmg['DMG'])
                                                 elif tpet_type == 'BZRK':
                                                     t_health = round(t_health - dmg['DMG'])
-                                                    t_attack = round(t_attack + (.75 * dmg['DMG']))
+                                                    t_attack = round(t_attack +  dmg['DMG'])
                                                 elif tpet_type == 'CRYSTAL':
                                                     t_health = round(t_health - dmg['DMG'])
-                                                    t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                                    t_defense = round(t_defense +  dmg['DMG'])
                                                 elif tpet_type == 'GROWTH':
                                                     t_max_health = round(t_max_health - (t_max_health *dmg['DMG']))
                                                     t_defense = round(t_defense + (t_defense * dmg['DMG']))
@@ -5346,10 +5346,10 @@ class CrownUnlimited(commands.Cog):
                                                     t_attack = round(t_attack - dmg['DMG'])
                                                 elif enh_type == 'BZRK':
                                                     t_health = round(t_health - dmg['DMG'])
-                                                    t_attack = round(t_attack + (.75 * dmg['DMG']))
+                                                    t_attack = round(t_attack +  dmg['DMG'])
                                                 elif enh_type == 'CRYSTAL':
                                                     t_health = round(t_health - dmg['DMG'])
-                                                    t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                                    t_defense = round(t_defense +  dmg['DMG'])
                                                 elif enh_type == 'GROWTH':
                                                     t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
                                                     t_defense = round(t_defense + (t_defense * dmg['DMG']))
@@ -5765,10 +5765,10 @@ class CrownUnlimited(commands.Cog):
                                                 t_attack = round(t_attack - dmg['DMG'])
                                             elif tpet_type == 'BZRK':
                                                 t_health = round(t_health - dmg['DMG'])
-                                                t_attack = round(t_attack + (.75 * dmg['DMG']))
+                                                t_attack = round(t_attack +  dmg['DMG'])
                                             elif tpet_type == 'CRYSTAL':
                                                 t_health = round(t_health - dmg['DMG'])
-                                                t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                                t_defense = round(t_defense +  dmg['DMG'])
                                             elif tpet_type == 'GROWTH':
                                                 t_max_health = round(t_max_health - (t_max_health *dmg['DMG']))
                                                 t_defense = round(t_defense + (t_defense * dmg['DMG']))
@@ -5864,7 +5864,7 @@ class CrownUnlimited(commands.Cog):
                                                 t_attack = round(t_attack + (.75 *  dmg['DMG']))
                                             elif enh_type == 'CRYSTAL':
                                                 t_health = round(t_health - dmg['DMG'])
-                                                t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                                t_defense = round(t_defense +  dmg['DMG'])
                                             elif enh_type == 'GROWTH':
                                                 t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
                                                 t_defense = round(t_defense + (t_defense * dmg['DMG']))
@@ -7517,10 +7517,10 @@ class CrownUnlimited(commands.Cog):
                         #                 o_attack = round(o_attack - dmg['DMG'])
                         #             elif opet_type == 'BZRK':
                         #                 o_health = round(o_health - dmg['DMG'])
-                        #                 o_attack = round(o_attack + (.75 * dmg['DMG']))
+                        #                 o_attack = round(o_attack +  dmg['DMG'])
                         #             elif opet_type == 'CRYSTAL':
                         #                 o_health = round(o_health - dmg['DMG'])
-                        #                 o_defense = round(o_defense +(.75 * dmg['DMG']))
+                        #                 o_defense = round(o_defense + dmg['DMG'])
                         #             elif opet_type == 'GROWTH':
                         #                 o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
                         #                 o_defense = round(o_defense + (o_defense* dmg['DMG']))
@@ -7632,10 +7632,10 @@ class CrownUnlimited(commands.Cog):
                                         o_attack = round(o_attack - dmg['DMG'])
                                     elif enh_type == 'BZRK':
                                         o_health = round(o_health - dmg['DMG'])
-                                        o_attack = round(o_attack + (.75 * dmg['DMG']))
+                                        o_attack = round(o_attack +  dmg['DMG'])
                                     elif enh_type == 'CRYSTAL':
                                         o_health = round(o_health - dmg['DMG'])
-                                        o_defense = round(o_defense +(.75 * dmg['DMG']))
+                                        o_defense = round(o_defense + dmg['DMG'])
                                     elif enh_type == 'GROWTH':
                                         o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
                                         o_defense = round(o_defense + (o_defense* dmg['DMG']))
@@ -8194,10 +8194,10 @@ class CrownUnlimited(commands.Cog):
                                     t_attack = round(t_attack - dmg['DMG'])
                                 elif enh_type == 'BZRK':
                                     t_health = round(t_health - dmg['DMG'])
-                                    t_attack = round(t_attack +(.75 * dmg['DMG']))
+                                    t_attack = round(t_attack + dmg['DMG'])
                                 elif enh_type == 'CRYSTAL':
                                     t_health = round(t_health - dmg['DMG'])
-                                    t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                    t_defense = round(t_defense +  dmg['DMG'])
                                 elif enh_type == 'GROWTH':
                                     t_max_health = round(t_max_health - dmg['DMG'])
                                     t_defense = round(t_defense + (.3 * dmg['DMG']))
@@ -12884,10 +12884,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             o_attack = round(o_attack - dmg['DMG'])
                                         elif opet_type == 'BZRK':
                                             o_health = round(o_health - dmg['DMG'])
-                                            o_attack = round(o_attack + (.75 * dmg['DMG']))
+                                            o_attack = round(o_attack +  dmg['DMG'])
                                         elif opet_type == 'CRYSTAL':
                                             o_health = round(o_health - dmg['DMG'])
-                                            o_defense = round(o_defense + (.75 * dmg['DMG']))
+                                            o_defense = round(o_defense +  dmg['DMG'])
                                         elif opet_type == 'GROWTH':
                                             o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
                                             o_defense = round(o_defense + (o_defense* dmg['DMG']))
@@ -12990,10 +12990,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             o_attack = round(o_attack - dmg['DMG'])
                                         elif enh_type == 'BZRK':
                                             o_health = round(o_health - dmg['DMG'])
-                                            o_attack = round(o_attack + (.75 * dmg['DMG']))
+                                            o_attack = round(o_attack +  dmg['DMG'])
                                         elif enh_type == 'CRYSTAL':
                                             o_health = round(o_health - dmg['DMG'])
-                                            o_defense = round(o_defense +(.75 * dmg['DMG']))
+                                            o_defense = round(o_defense + dmg['DMG'])
                                         elif enh_type == 'GROWTH':
                                             o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
                                             o_defense = round(o_defense + (o_defense* dmg['DMG']))
@@ -13495,10 +13495,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 o_attack = round(o_attack - dmg['DMG'])
                                             elif opet_type == 'BZRK':
                                                 o_health = round(o_health - dmg['DMG'])
-                                                o_attack = round(o_attack + (.75 * dmg['DMG']))
+                                                o_attack = round(o_attack +  dmg['DMG'])
                                             elif opet_type == 'CRYSTAL':
                                                 o_health = round(o_health - dmg['DMG'])
-                                                o_defense = round(o_defense + (.75 * dmg['DMG']))
+                                                o_defense = round(o_defense +  dmg['DMG'])
                                             elif opet_type == 'GROWTH':
                                                 o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
                                                 o_defense = round(o_defense + (o_defense* dmg['DMG']))
@@ -13603,10 +13603,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 c_attack = round(c_attack - dmg['DMG'])
                                             elif comp_enh == 'BZRK':
                                                 c_health = round(c_health - dmg['DMG'])
-                                                c_attack = round(c_attack + (.75 * dmg['DMG']))
+                                                c_attack = round(c_attack +  dmg['DMG'])
                                             elif comp_enh == 'CRYSTAL':
                                                 c_health = round(c_health - dmg['DMG'])
-                                                c_defense = round(c_defense +(.75 * dmg['DMG']))
+                                                c_defense = round(c_defense + dmg['DMG'])
                                             elif comp_enh == 'GROWTH':
                                                 c_max_health = round(c_max_health - (c_max_health * dmg['DMG']))
                                                 c_defense = round(c_defense + (c_defense * dmg['DMG']))
@@ -13697,10 +13697,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 o_attack = round(o_attack - dmg['DMG'])
                                             elif cenh_type == 'BZRK':
                                                 o_health = round(o_health - dmg['DMG'])
-                                                o_attack = round(o_attack + (.75 * dmg['DMG']))
+                                                o_attack = round(o_attack +  dmg['DMG'])
                                             elif cenh_type == 'CRYSTAL':
                                                 o_health = round(o_health - dmg['DMG'])
-                                                o_defense = round(o_defense +(.75 * dmg['DMG']))
+                                                o_defense = round(o_defense + dmg['DMG'])
                                             elif cenh_type == 'GROWTH':
                                                 o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
                                                 o_defense = round(o_defense + (o_defense * dmg['DMG']))
@@ -13824,10 +13824,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 o_attack = round(o_attack - dmg['DMG'])
                                             elif enh_type == 'BZRK':
                                                 o_health = round(o_health - dmg['DMG'])
-                                                o_attack = round(o_attack + (.75 * dmg['DMG']))
+                                                o_attack = round(o_attack +  dmg['DMG'])
                                             elif enh_type == 'CRYSTAL':
                                                 o_health = round(o_health - dmg['DMG'])
-                                                o_defense = round(o_defense +(.75 * dmg['DMG']))
+                                                o_defense = round(o_defense + dmg['DMG'])
                                             elif enh_type == 'GROWTH':
                                                 o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
                                                 o_defense = round(o_defense + (o_defense* dmg['DMG']))
@@ -14516,10 +14516,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 t_attack = round(t_attack - dmg['DMG'])
                                             elif tpet_type == 'BZRK':
                                                 t_health = round(t_health - dmg['DMG'])
-                                                t_attack = round(t_attack + (.75 * dmg['DMG']))
+                                                t_attack = round(t_attack +  dmg['DMG'])
                                             elif tpet_type == 'CRYSTAL':
                                                 t_health = round(t_health - dmg['DMG'])
-                                                t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                                t_defense = round(t_defense +  dmg['DMG'])
                                             elif tpet_type == 'GROWTH':
                                                 t_max_health = round(t_max_health - (t_max_health *dmg['DMG']))
                                                 t_defense = round(t_defense + (t_defense * dmg['DMG']))
@@ -14628,10 +14628,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 t_attack = round(t_attack - dmg['DMG'])
                                             elif tpet_type == 'BZRK':
                                                 t_health = round(t_health - dmg['DMG'])
-                                                t_attack = round(t_attack + (.75 * dmg['DMG']))
+                                                t_attack = round(t_attack +  dmg['DMG'])
                                             elif tpet_type == 'CRYSTAL':
                                                 t_health = round(t_health - dmg['DMG'])
-                                                t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                                t_defense = round(t_defense +  dmg['DMG'])
                                             elif tpet_type == 'GROWTH':
                                                 t_max_health = round(t_max_health - (t_max_health *dmg['DMG']))
                                                 t_defense = round(t_defense + (t_defense * dmg['DMG']))
@@ -14741,10 +14741,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             t_attack = round(t_attack - dmg['DMG'])
                                         elif tpet_type == 'BZRK':
                                             t_health = round(t_health - dmg['DMG'])
-                                            t_attack = round(t_attack + (.75 * dmg['DMG']))
+                                            t_attack = round(t_attack +  dmg['DMG'])
                                         elif tpet_type == 'CRYSTAL':
                                             t_health = round(t_health - dmg['DMG'])
-                                            t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                            t_defense = round(t_defense +  dmg['DMG'])
                                         elif tpet_type == 'GROWTH':
                                             t_max_health = round(t_max_health - (t_max_health *dmg['DMG']))
                                             t_defense = round(t_defense + (t_defense * dmg['DMG']))
@@ -14855,7 +14855,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 t_attack = round(t_attack +(.75 *  dmg['DMG']))
                                             elif enh_type == 'CRYSTAL':
                                                 t_health = round(t_health - dmg['DMG'])
-                                                t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                                t_defense = round(t_defense +  dmg['DMG'])
                                             elif enh_type == 'GROWTH':
                                                 t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
                                                 t_defense = round(t_defense + (t_defense * dmg['DMG']))
@@ -14991,7 +14991,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 t_attack = round(t_attack +(.75 *  dmg['DMG']))
                                             elif enh_type == 'CRYSTAL':
                                                 t_health = round(t_health - dmg['DMG'])
-                                                t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                                t_defense = round(t_defense +  dmg['DMG'])
                                             elif enh_type == 'GROWTH':
                                                 t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
                                                 t_defense = round(t_defense + (t_defense * dmg['DMG']))
@@ -15130,7 +15130,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             t_attack = round(t_attack +(.75 *  dmg['DMG']))
                                         elif enh_type == 'CRYSTAL':
                                             t_health = round(t_health - dmg['DMG'])
-                                            t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                            t_defense = round(t_defense +  dmg['DMG'])
                                         elif enh_type == 'GROWTH':
                                             t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
                                             t_defense = round(t_defense + (t_defense * dmg['DMG']))
@@ -15819,10 +15819,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 c_attack = round(c_attack - dmg['DMG'])
                                             elif cpet_type == 'BZRK':
                                                 c_health = round(c_health - dmg['DMG'])
-                                                c_attack = round(c_attack + (.75 * dmg['DMG']))
+                                                c_attack = round(c_attack +  dmg['DMG'])
                                             elif cpet_type == 'CRYSTAL':
                                                 c_health = round(c_health - dmg['DMG'])
-                                                c_defense = round(c_defense +(.75 * dmg['DMG']))
+                                                c_defense = round(c_defense + dmg['DMG'])
                                             elif cpet_type == 'GROWTH':
                                                 c_max_health = round(c_max_health - (c_max_health * dmg['DMG']))
                                                 c_defense = round(c_defense + (c_defense * dmg['DMG']))
@@ -15927,10 +15927,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             o_attack = round(o_attack - dmg['DMG'])
                                         elif cenh_type == 'BZRK':
                                             o_health = round(o_health - dmg['DMG'])
-                                            o_attack = round(o_attack + (.75 * dmg['DMG']))
+                                            o_attack = round(o_attack +  dmg['DMG'])
                                         elif cenh_type == 'CRYSTAL':
                                             o_health = round(o_health - dmg['DMG'])
-                                            o_defense = round(o_defense +(.75 * dmg['DMG']))
+                                            o_defense = round(o_defense + dmg['DMG'])
                                         elif cenh_type == 'GROWTH':
                                             o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
                                             o_defense = round(o_defense + (o_defense * dmg['DMG']))
@@ -16032,10 +16032,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 c_attack = round(c_attack - dmg['DMG'])
                                             elif enh_type == 'BZRK':
                                                 c_health = round(c_health - dmg['DMG'])
-                                                c_attack = round(c_attack + (.75 * dmg['DMG']))
+                                                c_attack = round(c_attack +  dmg['DMG'])
                                             elif enh_type == 'CRYSTAL':
                                                 c_health = round(c_health - dmg['DMG'])
-                                                c_defense = round(c_defense +(.75 * dmg['DMG']))
+                                                c_defense = round(c_defense + dmg['DMG'])
                                             elif enh_type == 'GROWTH':
                                                 c_max_health = round(c_max_health - (c_max_health * dmg['DMG']))
                                                 c_defense = round(c_defense + (c_defense * dmg['DMG']))
@@ -16490,10 +16490,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     c_attack = round(c_attack - dmg['DMG'])
                                                 elif cpet_type == 'BZRK':
                                                     c_health = round(c_health - dmg['DMG'])
-                                                    c_attack = round(c_attack + (.75 * dmg['DMG']))
+                                                    c_attack = round(c_attack +  dmg['DMG'])
                                                 elif cpet_type == 'CRYSTAL':
                                                     c_health = round(c_health - dmg['DMG'])
-                                                    c_defense = round(c_defense +(.75 * dmg['DMG']))
+                                                    c_defense = round(c_defense + dmg['DMG'])
                                                 elif cpet_type == 'GROWTH':
                                                     c_max_health = round(c_max_health - (c_max_health * dmg['DMG']))
                                                     c_defense = round(c_defense + (c_defense * dmg['DMG']))
@@ -16598,10 +16598,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 o_attack = round(o_attack - dmg['DMG'])
                                             elif cenh_type == 'BZRK':
                                                 o_health = round(o_health - dmg['DMG'])
-                                                o_attack = round(o_attack + (.75 * dmg['DMG']))
+                                                o_attack = round(o_attack +  dmg['DMG'])
                                             elif cenh_type == 'CRYSTAL':
                                                 o_health = round(o_health - dmg['DMG'])
-                                                o_defense = round(o_defense +(.75 * dmg['DMG']))
+                                                o_defense = round(o_defense + dmg['DMG'])
                                             elif cenh_type == 'GROWTH':
                                                 o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
                                                 o_defense = round(o_defense + (o_defense * dmg['DMG']))
@@ -16706,10 +16706,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     c_attack = round(c_attack - dmg['DMG'])
                                                 elif enh_type == 'BZRK':
                                                     c_health = round(c_health - dmg['DMG'])
-                                                    c_attack = round(c_attack + (.75 * dmg['DMG']))
+                                                    c_attack = round(c_attack +  dmg['DMG'])
                                                 elif enh_type == 'CRYSTAL':
                                                     c_health = round(c_health - dmg['DMG'])
-                                                    c_defense = round(c_defense +(.75 * dmg['DMG']))
+                                                    c_defense = round(c_defense + dmg['DMG'])
                                                 elif enh_type == 'GROWTH':
                                                     c_max_health = round(c_max_health - (c_max_health * dmg['DMG']))
                                                     c_defense = round(c_defense + (c_defense * dmg['DMG']))
@@ -17329,10 +17329,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 t_attack = round(t_attack - dmg['DMG'])
                                             elif tpet_type == 'BZRK':
                                                 t_health = round(t_health - dmg['DMG'])
-                                                t_attack = round(t_attack + (.75 * dmg['DMG']))
+                                                t_attack = round(t_attack +  dmg['DMG'])
                                             elif tpet_type == 'CRYSTAL':
                                                 t_health = round(t_health - dmg['DMG'])
-                                                t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                                t_defense = round(t_defense +  dmg['DMG'])
                                             elif tpet_type == 'GROWTH':
                                                 t_max_health = round(t_max_health - (t_max_health *dmg['DMG']))
                                                 t_defense = round(t_defense + (t_defense * dmg['DMG']))
@@ -17436,10 +17436,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 t_attack = round(t_attack - dmg['DMG'])
                                             elif tpet_type == 'BZRK':
                                                 t_health = round(t_health - dmg['DMG'])
-                                                t_attack = round(t_attack + (.75 * dmg['DMG']))
+                                                t_attack = round(t_attack +  dmg['DMG'])
                                             elif tpet_type == 'CRYSTAL':
                                                 t_health = round(t_health - dmg['DMG'])
-                                                t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                                t_defense = round(t_defense +  dmg['DMG'])
                                             elif tpet_type == 'GROWTH':
                                                 t_max_health = round(t_max_health - (t_max_health *dmg['DMG']))
                                                 t_defense = round(t_defense + (t_defense * dmg['DMG']))
@@ -17537,7 +17537,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 t_attack = round(t_attack +(.75 *  dmg['DMG']))
                                             elif enh_type == 'CRYSTAL':
                                                 t_health = round(t_health - dmg['DMG'])
-                                                t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                                t_defense = round(t_defense +  dmg['DMG'])
                                             elif enh_type == 'GROWTH':
                                                 t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
                                                 t_defense = round(t_defense + (t_defense * dmg['DMG']))
@@ -17670,7 +17670,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 t_attack = round(t_attack +(.75 *  dmg['DMG']))
                                             elif enh_type == 'CRYSTAL':
                                                 t_health = round(t_health - dmg['DMG'])
-                                                t_defense = round(t_defense + (.75 * dmg['DMG']))
+                                                t_defense = round(t_defense +  dmg['DMG'])
                                             elif enh_type == 'GROWTH':
                                                 t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
                                                 t_defense = round(t_defense + (t_defense * dmg['DMG']))
