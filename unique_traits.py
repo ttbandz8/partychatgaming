@@ -33,7 +33,7 @@ traits = [{
 },{
     'NAME': 'Black Clover',
     'EFFECT': 'Mana Zone',
-    'TRAIT': 'Gain 160 Mana on Focus. AP is increased by 8 on Focus.'
+    'TRAIT': 'Gain 160 Stamina on Focus. AP is increased by 8 on Focus.'
 },{
     'NAME': 'Fate',
     'EFFECT': 'Command Seal',
@@ -49,7 +49,7 @@ traits = [{
 },{
     'NAME': '7ds',
     'EFFECT': 'Increase Power',
-    'TRAIT': 'Gain 110 Mana on Opponent Focus.'
+    'TRAIT': 'Gain 60 Stamina on Opponent Focus.'
 },{
     'NAME': 'One Punch Man',
     'EFFECT': 'Hero Reinforcement',
