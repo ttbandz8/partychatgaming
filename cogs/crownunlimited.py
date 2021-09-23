@@ -1917,7 +1917,7 @@ class CrownUnlimited(commands.Cog):
                                         health_boost = 100 * o_focus_count
                                         o_health = o_health + health_boost
                                         embedVar = discord.Embed(title=f"{o_card.upper()} Titan Mode", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
-                                        embedVar.add_field(name=f"Transformation Complete", value=f"Health increased by {health_boost}!")
+                                        embedVar.add_field(name=f"Transformation Complete", value=f"Health increased by **{health_boost}**!")
                                         await button_ctx.send(embed=embedVar)
 
                                         turn_total= turn_total + 1
@@ -2618,7 +2618,7 @@ class CrownUnlimited(commands.Cog):
                                         health_boost = 100 * t_focus_count
                                         t_health = t_health + health_boost
                                         embedVar = discord.Embed(title=f"{t_card.upper()} Titan Mode", description=f"**{t_card} says**\n{t_resolve_description}", colour=0xe91e63)
-                                        embedVar.add_field(name=f"Transformation Complete", value=f"Health increased by {health_boost}!")
+                                        embedVar.add_field(name=f"Transformation Complete", value=f"Health increased by **{health_boost}**!")
                                         await button_ctx.send(embed=embedVar)
 
                                         turn_total= turn_total + 1
@@ -4344,7 +4344,7 @@ class CrownUnlimited(commands.Cog):
                                             health_boost = 100 * o_focus_count
                                             o_health = o_health + health_boost
                                             embedVar = discord.Embed(title=f"{o_card.upper()} Titan Mode", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
-                                            embedVar.add_field(name=f"Transformation Complete", value=f"Health increased by {health_boost}!")
+                                            embedVar.add_field(name=f"Transformation Complete", value=f"Health increased by **{health_boost}**!")
                                             await button_ctx.send(embed=embedVar)
 
                                             turn_total= turn_total + 1
@@ -5057,7 +5057,7 @@ class CrownUnlimited(commands.Cog):
                                                 health_boost = 100 * t_focus_count
                                                 t_health = t_health + health_boost
                                                 embedVar = discord.Embed(title=f"{t_card.upper()} Titan Mode", description=f"**{t_card} says**\n{t_resolve_description}", colour=0xe91e63)
-                                                embedVar.add_field(name=f"Transformation Complete", value=f"Health increased by {health_boost}!")
+                                                embedVar.add_field(name=f"Transformation Complete", value=f"Health increased by **{health_boost}**!")
                                                 await button_ctx.send(embed=embedVar)
 
                                                 turn_total= turn_total + 1
@@ -5597,7 +5597,7 @@ class CrownUnlimited(commands.Cog):
                                             health_boost = 100 * t_focus_count
                                             t_health = t_health + health_boost
                                             embedVar = discord.Embed(title=f"{t_card.upper()} Titan Mode", description=f"**{t_card} says**\n{t_resolve_description}", colour=0xe91e63)
-                                            embedVar.add_field(name=f"Transformation Complete", value=f"Health increased by {health_boost}!")
+                                            embedVar.add_field(name=f"Transformation Complete", value=f"Health increased by **{health_boost}**!")
                                             await button_ctx.send(embed=embedVar)
 
                                             turn_total= turn_total + 1
@@ -7344,7 +7344,7 @@ class CrownUnlimited(commands.Cog):
                                     health_boost = 100 * o_focus_count
                                     o_health = o_health + health_boost
                                     embedVar = discord.Embed(title=f"{o_card.upper()} Titan Mode", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
-                                    embedVar.add_field(name=f"Transformation Complete", value=f"Health increased by {health_boost}!")
+                                    embedVar.add_field(name=f"Transformation Complete", value=f"Health increased by **{health_boost}**!")
 
                                     turn_total= turn_total + 1
                                     turn=1
@@ -8032,7 +8032,7 @@ class CrownUnlimited(commands.Cog):
                                 health_boost = 100 * t_focus_count
                                 t_health = t_health + health_boost
                                 embedVar = discord.Embed(title=f"{t_card.upper()} Titan Mode", description=f"**{t_card} says**\n{t_resolve_description}", colour=0xe91e63)
-                                embedVar.add_field(name=f"Transformation Complete", value=f"Health increased by {health_boost}!")
+                                embedVar.add_field(name=f"Transformation Complete", value=f"Health increased by **{health_boost}**!")
 
                                 turn_total= turn_total + 1
                                 turn=0
@@ -9407,33 +9407,33 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, vul, accura
     #handle different staments for lifesteal and drain
     if enhancer:
         if enh_type == 'ATK' or enh_type == 'DEF' or enh_type == 'HLT' or enh_type == 'STAM':
-            message = f'**{card}** used **{move}** :microbe:! enhanced **{enh_type}**!'
+            message = f'**{card}** used **{move}** :microbe: enhanced **{enh_type}**!'
         elif  enh_type == 'LIFE':
-            message = f'**{card}** used **{move}** :microbe:! absorbing **{enh_type}**!'
+            message = f'**{card}** used **{move}** :microbe: absorbing **{enh_type}**!'
         elif  enh_type == 'DRAIN':
-            message = f'**{card}** used **{move}** :microbe:! Inflicts {enh_type}... absorbing STAM!'
+            message = f'**{card}** used **{move}** :microbe: Inflicts {enh_type}... absorbing STAM!'
         elif  enh_type == 'FLOG':
-            message = f'**{card}** used **{move}** :microbe:! Inflicts {enh_type}... absorbing ATK!'
+            message = f'**{card}** used **{move}** :microbe: Inflicts {enh_type}... absorbing ATK!'
         elif  enh_type == 'WITHER':
-            message = f'**{card}** used **{move}** :microbe:! Inflicts {enh_type}... absorbing DEF!'
+            message = f'**{card}** used **{move}** :microbe: Inflicts {enh_type}... absorbing DEF!'
         elif enh_type == 'RAGE':
-            message = f'**{card}** used **{move}** :microbe:! sacrificing defense to **{enh_type}**!'
+            message = f'**{card}** used **{move}** :microbe: sacrificing defense to **{enh_type}**!'
         elif enh_type == 'BRACE': 
-            message = f'**{card}** used **{move}** :microbe:! sacrificing attack to **{enh_type}**!'
+            message = f'**{card}** used **{move}** :microbe: sacrificing attack to **{enh_type}**!'
         elif enh_type == 'BZRK' or enh_type == 'CRYSTAL': 
-            message = f'**{card}** used **{move}** :microbe:! sacrificing health to **{enh_type}**!'
+            message = f'**{card}** used **{move}** :microbe: sacrificing health to **{enh_type}**!'
         elif enh_type == 'WAVE' or enh_type == 'BLAST': 
-            message = f'**{card}** used **{move}** :microbe:! dealing **{enh_type}** Damage!'
+            message = f'**{card}** used **{move}** :microbe: dealing **{enh_type}** Damage!'
         elif enh_type == 'CREATION': 
-            message = f'**{card}** used **{move}** :microbe:! healing and increasing Max Health!'
+            message = f'**{card}** used **{move}** :microbe: healing and increasing Max Health!'
         elif enh_type == 'DESTRUCTION': 
-            message = f'**{card}** used **{move}** :microbe:! draining health and Max Health!'
+            message = f'**{card}** used **{move}** :microbe: draining health and Max Health!'
         elif enh_type == 'GROWTH': 
-            message = f'**{card}** used **{move}** :microbe:! sacrificing MAX health for **{enh_type}**!'
+            message = f'**{card}** used **{move}** :microbe: sacrificing MAX health for **{enh_type}**!'
         elif enh_type == 'STANCE': 
-            message = f'**{card}** used **{move}** :microbe:! Changing their **{enh_type}**!'
+            message = f'**{card}** used **{move}** :microbe: Changing their **{enh_type}**!'
         else: 
-            message = f'**{card}** used **{move}** :microbe:! inflicts {enh_type}'
+            message = f'**{card}** used **{move}** :microbe: inflicts {enh_type}'
             
         enhanced=0
         if enh_type == "ATK":
@@ -9515,7 +9515,7 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, vul, accura
             else:
                 enhanced = round((ap * turn) * .60)
             if enhanced > op_health:
-                message = f'**{card}** used **{move}** :microbe:! Opponent has been reduced.'
+                message = f'**{card}** used **{move}** :microbe: Opponent has been reduced.'
                 enhanced = op_health - 1
 
         
@@ -9572,7 +9572,7 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, vul, accura
                 message=f'**{move}** used! It hits for **{true_dmg}**! :anger_right:'
             elif hit_roll == 20:
                 if universe == 'Crown Rift Awakening':
-                    true_dmg = round(true_dmg * 2.5)
+                    true_dmg = round(true_dmg * 4)
                     message=f"**{move}** used! :boom: IT MORTALLY WOUNDS FOR **{true_dmg}**!! :boom: "
                 else:
                     true_dmg = round(true_dmg * 2)
@@ -13285,7 +13285,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             health_boost = 100 * o_focus_count
                                             o_health = o_health + health_boost
                                             embedVar = discord.Embed(title=f"{o_card.upper()} Titan Mode", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
-                                            embedVar.add_field(name=f"Transformation Complete", value=f"Health increased by {health_boost}!")
+                                            embedVar.add_field(name=f"Transformation Complete", value=f"Health increased by **{health_boost}**!")
                                             if mode in B_modes:
                                                 embedVar.add_field(name=f"{t_card}'s Rebuke", value=f"{t_rebuke}", inline =False)
                                                 embedVar.set_footer(text=f"{o_card} this is your chance!")
@@ -14306,7 +14306,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     t_health = t_health + health_boost
                                     if mode not in AUTO_BATTLE_modes:
                                         embedVar = discord.Embed(title=f"{t_card.upper()} Titan Mode", description=f"**{t_card} says**\n{t_resolve_description}", colour=0xe91e63)
-                                        embedVar.add_field(name=f"Transformation Complete", value=f"Health increased by {health_boost}!")
+                                        embedVar.add_field(name=f"Transformation Complete", value=f"Health increased by **{health_boost}**!")
                                         await button_ctx.send(embed=embedVar)
 
                                     turn_total= turn_total + 1
@@ -15630,7 +15630,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             health_boost = 100 * c_focus_count
                                             c_health = c_health + health_boost
                                             embedVar = discord.Embed(title=f"{c_card.upper()} Titan Mode", description=f"**{c_card} says**\n{c_resolve_description}", colour=0xe91e63)
-                                            embedVar.add_field(name=f"Transformation Complete", value=f"Health increased by {health_boost}!")
+                                            embedVar.add_field(name=f"Transformation Complete", value=f"Health increased by **{health_boost}**!")
                                             await button_ctx.send(embed=embedVar)
 
                                             turn_total= turn_total + 1
@@ -16302,7 +16302,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 health_boost = 100 * c_focus_count
                                                 c_health = c_health + health_boost
                                                 embedVar = discord.Embed(title=f"{c_card.upper()} Titan Mode", description=f"**{c_card} says**\n{c_resolve_description}", colour=0xe91e63)
-                                                embedVar.add_field(name=f"Transformation Complete", value=f"Health increased by {health_boost}!")
+                                                embedVar.add_field(name=f"Transformation Complete", value=f"Health increased by **{health_boost}**!")
                                                 await button_ctx.send(embed=embedVar)
 
                                                 turn_total= turn_total + 1
@@ -17125,7 +17125,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         t_health = t_health + health_boost
 
                                         embedVar = discord.Embed(title=f"{t_card.upper()} Titan Mode", description=f"**{t_card} says**\n{t_resolve_description}", colour=0xe91e63)
-                                        embedVar.add_field(name=f"Transformation Complete", value=f"Health increased by {health_boost}!")
+                                        embedVar.add_field(name=f"Transformation Complete", value=f"Health increased by **{health_boost}**!")
                                         await private_channel.send(embed=embedVar)
                                         turn_total= turn_total + 1
                                         turn=0

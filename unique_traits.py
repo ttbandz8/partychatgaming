@@ -5,7 +5,7 @@ traits = [{
 },{
     'NAME': 'League Of Legends',
     'EFFECT': 'Turret Shot',
-    'TRAIT': 'When you Focus you deal 30 damage to Opponent. Upon Resolve, you deal 30 Times You + Opponent Focus count damage.'
+    'TRAIT': 'When you Focus you deal 30 damage to Opponent. Upon Resolve, you deal 30 x (Your Focus Count + Opponent Focus Count) damage.'
 },{
     'NAME': 'Pokemon',
     'EFFECT': 'Evolution',
@@ -29,7 +29,7 @@ traits = [{
 },{
     'NAME': 'Attack On Titan',
     'EFFECT': 'Rally',
-    'TRAIT': 'Gain 100 Max Health on Focus. Gain 100 Times Your Focus Count worth of Health upon Resolve.'
+    'TRAIT': 'Gain 100 Max Health on Focus. Gain (100 x Your Focus Count) worth of Health upon Resolve.'
 },{
     'NAME': 'Black Clover',
     'EFFECT': 'Mana Zone',
@@ -77,7 +77,7 @@ traits = [{
 },{
     'NAME': 'Crown Rift Awakening',
     'EFFECT': 'Blood Awakening',
-    'TRAIT': 'Your crits do 2.5x Damage'
+    'TRAIT': 'Your Critical Hits do 4x Damage'
 },{
     'NAME': 'Crown Rift Madness',
     'EFFECT': 'Madness',
