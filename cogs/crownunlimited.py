@@ -9893,8 +9893,8 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
     if mode in D_modes:
         enemy_title = "DTITLE"
         enemy_arm = "DARM"
-        opponent_scaling = opponent_scaling + 100
-        opponent_health_scaling = 1000
+        opponent_scaling = opponent_scaling + 50
+        opponent_health_scaling = 450
     
     try:   
         # Player 1 Data
