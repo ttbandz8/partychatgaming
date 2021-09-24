@@ -9915,12 +9915,16 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         t_user = boss
     if mode in U_modes:
         enemy_title = "UTITLE"
-        enemy_arm = "UARM"   
+        enemy_arm = "UARM"
+        if randomized_battle:
+            currentopponent = 6
     if mode in D_modes:
         enemy_title = "DTITLE"
         enemy_arm = "DARM"
         opponent_scaling = opponent_scaling + 50
         opponent_health_scaling = 450
+        if randomized_battle:
+            currentopponent = 10
     
     try:   
         # Player 1 Data
@@ -10141,7 +10145,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             tpet_bond = 1
         tarm_passive = tarm['ABILITIES'][0]
         tarm_name=tarm['ARM']
-        tcard_lvl_ap_buff = 0
+        tcard_lvl_ap_buff = 0 + (10 * currentopponent)
         t_card = t['NAME']
         t_gif = t['GIF']
         t_card_path=t['PATH']
