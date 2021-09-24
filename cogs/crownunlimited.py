@@ -281,7 +281,6 @@ class CrownUnlimited(commands.Cog):
             sowner = db.queryUser({'DISNAME': str(ctx.author)})
             oteam = sowner['TEAM']
             ofam = sowner['FAMILY']
-            print(ofam)
             
             universe_selection = await select_universe(self, ctx, sowner, oteam, ofam, mode, None)
             selected_universe = universe_selection['SELECTED_UNIVERSE']
@@ -17961,7 +17960,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                     if mode in D_modes:
                         ofambank = await blessfamily(100,ofam)
                     else:
-                        print(ofam)
                         ofambank = await blessfamily(50, ofam)
                     match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']), str(oarm['ARM']), str(selected_universe), tale_or_dungeon_only, o['EXCLUSIVE'])
                     questlogger = await quest(ouser, t_card, tale_or_dungeon_only)

@@ -3137,5 +3137,136 @@ destiny = [
         "EARN": "Statue Of God", 
         "COMPLETED": False,
         "UNIVERSE": "Solo Leveling"
+    },
+    {
+        "NAME": "You Bet On Me",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Yami Sukehiro",
+        "USE_CARDS": ["Asta"],
+        "EARN": "Yami Sukehiro",
+        "COMPLETED": False,
+        "UNIVERSE": "Black Clover"
+    },
+    {
+        "NAME": "Haze The New Recruit",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Magna",
+        "USE_CARDS": ["Asta"],
+        "EARN": "Magna",
+        "COMPLETED": False,
+        "UNIVERSE": "Black Clover"
+    },
+    {
+        "NAME": "You Inspired Me To Grow Stronger",
+        "WINS": 0,
+        "REQUIRED": 20,
+        "DEFEAT": "Fuegoleon",
+        "USE_CARDS": ["Asta"],
+        "EARN": "Fuegoleon",
+        "COMPLETED": False,
+        "UNIVERSE": "Black Clover"
+    },
+    {
+        "NAME": "You Are The Weak One",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Mars",
+        "USE_CARDS": ["Asta"],
+        "EARN": "Mars",
+        "COMPLETED": False,
+        "UNIVERSE": "Black Clover"
+    },
+    {
+        "NAME": "I Never Forgot You",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Fana",
+        "USE_CARDS": ["Mars"],
+        "EARN": "Fana",
+        "COMPLETED": False,
+        "UNIVERSE": "Black Clover"
+    },
+    {
+        "NAME": "Until One Of Us Dies",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Dante Zogratis",
+        "USE_CARDS": ["Magna"],
+        "EARN": "Dante Zogratis",
+        "COMPLETED": False,
+        "UNIVERSE": "Black Clover"
+    },
+    {
+        "NAME": "Captain Of The Golden Dawn",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "William Vangeance",
+        "USE_CARDS": ["Yuno"],
+        "EARN": "William Vangeance",
+        "COMPLETED": False,
+        "UNIVERSE": "Black Clover"
+    },
+    {
+        "NAME": "The Son You Never Had",
+        "WINS": 0,
+        "REQUIRED": 20,
+        "DEFEAT": "Licht",
+        "USE_CARDS": ["Yuno"],
+        "EARN": "Licht",
+        "COMPLETED": False,
+        "UNIVERSE": "Black Clover"
+    },
+    {
+        "NAME": "The One True King",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Zenon Zogratis",
+        "USE_CARDS": ["Yuno"],
+        "EARN": "Zenon Zogratis",
+        "COMPLETED": False,
+        "UNIVERSE": "Black Clover"
+    },
+    {
+        "NAME": "Reveng Of The Elves",
+        "WINS": 0,
+        "REQUIRED": 20,
+        "DEFEAT": "Zagred",
+        "USE_CARDS": ["Licht"],
+        "EARN": "Zagred",
+        "COMPLETED": False,
+        "UNIVERSE": "Black Clover"
+    },
+    {
+        "NAME": "My Sister And My Rival",
+        "WINS": 0,
+        "REQUIRED": 15,
+        "DEFEAT": "Mereoleona",
+        "USE_CARDS": ["Fuegoleon"],
+        "EARN": "Mereoleona",
+        "COMPLETED": False,
+        "UNIVERSE": "Black Clover"
+    },
+    {
+        "NAME": "The Forgiven Brother",
+        "WINS": 0,
+        "REQUIRED": 20,
+        "DEFEAT": "Nozel Silva",
+        "USE_CARDS": ["Noelle Silva"],
+        "EARN": "Nozel Silva",
+        "COMPLETED": False,
+        "UNIVERSE": "Black Clover"
+    },
+    {
+        "NAME": "Witch Mother",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Witch Queen",
+        "USE_CARDS": ["Vanessa Enoteca"],
+        "EARN": "Witch Queen",
+        "COMPLETED": False,
+        "UNIVERSE": "Black Clover"
     }
+
 ]
