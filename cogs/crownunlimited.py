@@ -9890,6 +9890,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         bossname = boss['CARD']
         boss = db.queryBoss({'NAME': str(bossname)})
         enemy_arm = boss['ARM']
+        enemy_pet = boss['PET']
         t_user = boss
     if mode in U_modes:
         enemy_title = "UTITLE"
@@ -10104,7 +10105,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
 
         tarm_universe = tarm['UNIVERSE']
         t_destiny = t['HAS_COLLECTION']
-        tpet = db.queryPet({'PET': universe['DPET']})
+        if mode in B_modes:
+            tpet= db.queryPet({'PET': enemy_pet})
+        else:
+            tpet = db.queryPet({'PET': universe['DPET']})
         tpet_passive = tpet['ABILITIES'][0]
         tpet_name = tpet['PET']
         tpet_image = tpet['PATH']
@@ -13986,11 +13990,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                     #Focus
                     if t_stamina < 10:
                         t_focus_count = t_focus_count + 1
-                        if mode in B_modes:
-                            embedVar = discord.Embed(title=f"**{t_card}** Enters Focus State", description=f"{t_powerup}", colour=0xe91e63)
-                            embedVar.add_field(name=f"A great aura starts to envelop **{t_card}** ",value= f"{t_aura}")
-                            embedVar.set_footer(text=f"{t_card} Says: 'Now, are you ready for a real fight?'")
-                            await private_channel.send(embed=embedVar)
+                        
                         
                         # o_pet_used = True
                         fortitude = 0.0
@@ -14026,9 +14026,15 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         t_defense =  t_defense + t_defensecalc
                         t_used_focus=True
                         if mode not in AUTO_BATTLE_modes:
-                            embedVar = discord.Embed(title=f"{t_card.upper()} FOCUSED", description=f"**{t_card} says**\n{t_focus_description}", colour=0xe91e63)
-                            embedVar.add_field(name=f"{t_card} focused and {healmessage}", value="All stats & stamina increased")
-                            await private_channel.send(embed=embedVar)
+                            if mode in B_modes:
+                                embedVar = discord.Embed(title=f"**{t_card}** Enters Focus State", description=f"{t_powerup}", colour=0xe91e63)
+                                embedVar.add_field(name=f"A great aura starts to envelop **{t_card}** ",value= f"{t_aura}")
+                                embedVar.set_footer(text=f"{t_card} Says: 'Now, are you ready for a real fight?'")
+                                await private_channel.send(embed=embedVar)
+                            else:
+                                embedVar = discord.Embed(title=f"{t_card.upper()} FOCUSED", description=f"**{t_card} says**\n{t_focus_description}", colour=0xe91e63)
+                                embedVar.add_field(name=f"{t_card} focused and {healmessage}", value="All stats & stamina increased")
+                                await private_channel.send(embed=embedVar)
                         if not t_used_resolve and t_used_focus and t_universe == "Digimon":  #Digimon Universal Trait
                             #fortitude or luck is based on health  
                             fortitude = 0.0
