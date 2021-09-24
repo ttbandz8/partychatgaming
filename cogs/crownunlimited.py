@@ -18412,6 +18412,7 @@ async def drops(player, universe, matchcount):
             
             if card_owned:
                 await cardlevel(cards[rand_card], player, universe, universe, "Tales")
+                response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(cards[rand_card])}})
                 message = ""
                 await bless(150, player)
                 return f"You earned EXP for _Card:_ **{cards[rand_card]}** + :coin: 150!\n{message}"
@@ -18613,6 +18614,7 @@ async def dungeondrops(player, universe, matchcount):
             
             if card_owned:
                 await cardlevel(cards[rand_card], player, universe, universe, "Dungeon")
+                response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(cards[rand_card])}})
                 message = ""
                 await bless(200, player)
                 return f"You earned {exp_gain} EXP for _Card:_ **{cards[rand_card]}** + :coin: 200!\n{message}"
