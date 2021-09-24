@@ -14696,7 +14696,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 if t_universe == "Persona":
                                                     petdmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total, tcard_lvl_ap_buff)
 
-                                                    t_health = t_health - petdmg['DMG']
+                                                    o_health = o_health - petdmg['DMG']
 
                                                     embedVar = discord.Embed(title=f"**PERSONA!**\n{tpet_name} was summoned from {t_card}'s soul dealing **{petdmg['DMG']}** damage!!", colour=0xe91e63)
                                                     embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!", value =f"Enhanced **{tpet_type}**")
@@ -14711,7 +14711,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             
                                             if t_universe == "Persona":
                                                 petdmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total, tcard_lvl_ap_buff)
-
+                                                o_health = o_health - petdmg['DMG']
                                             turn=1
                                         else:
                                             await private_channel.send(f"{tpet_name} needs a turn to rest...")
@@ -14809,7 +14809,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             if t_universe == "Persona":
                                                 petdmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total, tcard_lvl_ap_buff)
 
-                                                t_health = t_health - petdmg['DMG']
+                                                o_health = o_health - petdmg['DMG']
 
                                                 embedVar = discord.Embed(title=f"**PERSONA!**\n{tpet_name} was summoned from {t_card}'s soul dealing **{petdmg['DMG']}** damage!!", colour=0xe91e63)
                                                 embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!", value =f"Enhanced **{tpet_type}**")
@@ -17398,7 +17398,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             if t_universe == "Persona":
                                                 petdmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total, tcard_lvl_ap_buff)
 
-                                                t_health = t_health - petdmg['DMG']
+                                                o_health = o_health - petdmg['DMG']
 
                                                 embedVar = discord.Embed(title=f"**PERSONA!**\n{tpet_name} was summoned from {t_card}'s soul dealing **{petdmg['DMG']}** damage!!", colour=0xe91e63)
                                                 embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!", value =f"Enhanced **{tpet_type}**")
