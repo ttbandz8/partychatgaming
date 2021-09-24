@@ -10117,7 +10117,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         t_gif = t['GIF']
         t_card_path=t['PATH']
         t_rcard_path=t['RPATH']
-        t_health = t['HLT'] + (100 * currentopponent) + opponent_health_scaling 
+        t_health = t['HLT'] + (10 * currentopponent) + opponent_health_scaling 
         t_max_health = t_health
         t_stamina = t['STAM']
         t_max_stamina= t['STAM']
