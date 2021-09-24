@@ -10128,8 +10128,8 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         t_stamina = t['STAM']
         t_max_stamina= t['STAM']
         t_moveset = t['MOVESET']
-        t_attack = t['ATK'] + (4 * currentopponent) + opponent_scaling
-        t_defense = t['DEF'] + (3 * currentopponent) + opponent_scaling
+        t_attack = t['ATK'] + (5 * currentopponent) + opponent_scaling
+        t_defense = t['DEF'] + (5 * currentopponent) + opponent_scaling
         t_type = t['TYPE']
         t_accuracy = t['ACC']
         t_passive = t['PASS'][0]
