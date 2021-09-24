@@ -4582,12 +4582,12 @@ class CrownUnlimited(commands.Cog):
                                                 embedVar.add_field(name=f"{opet_name} used **{opetmove_text}**!", value =f"Enhanced **{opet_type}**")
                                                 
                                                 embedVar.set_thumbnail(url=opet_image)
-                                                await button_ctx.send(embed=embedVar)
                                             else:
                                                 embedVar = discord.Embed(title=f"{o_card.upper()} Summoned :bird: {opet_name}", colour=0xe91e63)
                                                 embedVar.add_field(name=f"{opet_name} used **{opetmove_text}**!", value =f"Enhanced **{opet_type}**")
                                                 embedVar.set_thumbnail(url=opet_image)
-                                                await button_ctx.send(embed=embedVar)
+                                            
+                                            await button_ctx.send(embed=embedVar)
                                             turn=0
                                         else:
                                             await button_ctx.send(f"{opet_name} needs a turn to rest...")
@@ -5306,13 +5306,12 @@ class CrownUnlimited(commands.Cog):
                                                     embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!", value =f"Enhanced **{tpet_type}**")
                                                     
                                                     embedVar.set_thumbnail(url=tpet_image)
-                                                    await button_ctx.send(embed=embedVar)
                                                 else:
                                                     embedVar = discord.Embed(title=f"{t_card.upper()} Summoned :bird: {tpet_name}", colour=0xe91e63)
                                                     embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!", value =f"Enhanced **{tpet_type}**")
                                                     embedVar.set_thumbnail(url=tpet_image)
-                                                    await button_ctx.send(embed=embedVar)
-                                                    
+                                                
+                                                await button_ctx.send(embed=embedVar)    
                                                 turn=1
                                             else:
                                                 await button_ctx.send(f"{tpet_name} needs a turn to rest...")
