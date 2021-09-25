@@ -18592,7 +18592,7 @@ async def dungeondrops(player, universe, matchcount):
 
     try:
         if drop_rate <= gold_drop:
-            bless_amount = 60 + (5 * matchcount) * (1+ rebirth)
+            bless_amount = (60 + (5 * matchcount)) * (1+ rebirth)
             await bless(bless_amount, player)
             return f"You earned :coin: **{bless_amount}**!"
         elif drop_rate <= rift_rate and drop_rate > gold_drop:
