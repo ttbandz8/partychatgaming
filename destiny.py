@@ -124,8 +124,88 @@ destiny = [
         "WINS": 0,
         "REQUIRED": 10,
         "DEFEAT": "Yhorm The Giant",
-        "USE_CARDS": ["Hollow Garrison"],
+        "USE_CARDS": ["Onion Knight"],
         "EARN": "Yhorm The Giant",
+        "COMPLETED": False,
+        "UNIVERSE": "Souls"
+    },
+    {
+        "NAME": "Power Of The Dark",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Lord Gwyn",
+        "USE_CARDS": ["Rekindled"],
+        "EARN": "Ringed Knight",
+        "COMPLETED": False,
+        "UNIVERSE": "Souls"
+    },
+    {
+        "NAME": "Painted World Slave",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Sister Friede",
+        "USE_CARDS": ["Ringed Knight"],
+        "EARN": "Slave Knight Gael",
+        "COMPLETED": False,
+        "UNIVERSE": "Souls"
+    },
+    {
+        "NAME": "End Of The Painted World",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Sister Friede",
+        "USE_CARDS": ["Slave Knight Gael"],
+        "EARN": "Sister Friede",
+        "COMPLETED": False,
+        "UNIVERSE": "Souls"
+    },
+    {
+        "NAME": "Forever: Father, Daughter and Ash",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Friede And Father:",
+        "USE_CARDS": ["Sister Friede"],
+        "EARN": "Friede And Father:",
+        "COMPLETED": False,
+        "UNIVERSE": "Souls"
+    },
+    {
+        "NAME": "Gwyn's Undead Knight",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Gravelord Nito",
+        "USE_CARDS": ["Lord Gwyn"],
+        "EARN": "Gravelord Nito",
+        "COMPLETED": False,
+        "UNIVERSE": "Souls"
+    },
+    {
+        "NAME": "Gwyn's Scaleless Knight",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Seath, The Scaleless",
+        "USE_CARDS": ["Lord Gwyn"],
+        "EARN": "Seath, The Scaleless",
+        "COMPLETED": False,
+        "UNIVERSE": "Souls"
+    },
+    {
+        "NAME": "Gwyn's Wicken Knight",
+        "WINS": 0,
+        "REQUIRED": 25,
+        "DEFEAT": "Witch Of Izalith",
+        "USE_CARDS": ["Lord Gwyn"],
+        "EARN": "Witch Of Izalith",
+        "COMPLETED": False,
+        "UNIVERSE": "Souls"
+    },
+    {
+        "NAME": "Stolen Onion",
+        "WINS": 0,
+        "REQUIRED": 10,
+        "DEFEAT": "Onion Knight",
+        "USE_CARDS": ["0nion Knight"],
+        "EARN": "Onion Knight",
         "COMPLETED": False,
         "UNIVERSE": "Souls"
     },
