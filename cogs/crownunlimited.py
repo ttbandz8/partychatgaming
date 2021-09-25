@@ -13449,7 +13449,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             o_used_resolve = True 
                                             o_pet_used=False
                                             embedVar = discord.Embed(title=f"{o_card} STRENGTHENED RESOLVE :zap:", description=f"**{o_card} says**\n{o_resolve_description}", colour=0xe91e63)
-                                            embedVar.add_field(name=f"Transformation: Plus Ultra", value="You do not lose a turn after you Resolve.")
+                                            embedVar.add_field(name=f"Transformation: Evolution", value="When you Resolve your Defense doubles")
                                             if mode in B_modes:
                                                 embedVar.add_field(name=f"{t_card}'s Rebuke", value=f"{t_rebuke}", inline =False)
                                                 embedVar.set_footer(text=f"{o_card} this is your chance!")
@@ -14471,7 +14471,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     
                                     if mode not in AUTO_BATTLE_modes:
                                         embedVar = discord.Embed(title=f"{t_card} STRENGTHENED RESOLVE :zap:", description=f"**{t_card} says**\n{t_resolve_description}", colour=0xe91e63)
-                                        embedVar.add_field(name=f"Transformation: Evolution", value="When you Resolve you do not lose Defense.")
+                                        embedVar.add_field(name=f"Transformation: Evolution", value="When you Resolve your Defense doubles")
                                         await private_channel.send(embed=embedVar)
                                     turn_total= turn_total + 1
                                     turn=turn_selector
@@ -16455,7 +16455,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 c_used_resolve = True 
                                                 c_pet_used=False
                                                 embedVar = discord.Embed(title=f"{c_card} STRENGTHENED RESOLVE :zap:", description=f"**{c_card} says**\n{c_resolve_description}", colour=0xe91e63)
-                                                embedVar.add_field(name=f"Transformation: Evolution", value="When you Resolve you do not lose Defense.")
+                                                embedVar.add_field(name=f"Transformation: Evolution", value="When you Resolve your Defense doubles")
                                                 await button_ctx.send(embed=embedVar)
                                                 turn_total= turn_total + 1
                                                 turn=3
@@ -17289,7 +17289,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         t_pet_used =False
 
                                         embedVar = discord.Embed(title=f"{t_card} STRENGTHENED RESOLVE :zap:", description=f"**{t_card} says**\n{t_resolve_description}", colour=0xe91e63)
-                                        embedVar.add_field(name=f"Transformation: Evolution", value="When you Resolve you do not lose Defense.")
+                                        embedVar.add_field(name=f"Transformation: Evolution", value="When you Resolve your Defense doubles")
                                         await private_channel.send(embed=embedVar)
                                         turn_total= turn_total + 1
                                         turn=0
