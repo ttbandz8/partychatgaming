@@ -3157,6 +3157,7 @@ class CrownUnlimited(commands.Cog):
                 return
 
             if button_ctx.custom_id == "Yes":
+                await button_ctx.send("Battle starting...")
                 # Get Session Owner Disname for scoring
                 sowner = db.queryUser({'DISNAME': str(ctx.author)})
                 opponent = db.queryUser({'DISNAME': str(player)})
@@ -5298,8 +5299,7 @@ class CrownUnlimited(commands.Cog):
                                                 t_stamina = t_stamina - int(dmg['STAMINA_USED'])
 
                                                 if t_universe == "Persona":
-                                                    petdmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total, tcard_lvl_ap_buff)
-
+                                                    petdmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total, tcard_lvl_ap_buff)
                                                     o_health = o_health - petdmg['DMG']
 
                                                     embedVar = discord.Embed(title=f"**PERSONA!**\n{tpet_name} was summoned from {t_card}'s soul dealing **{petdmg['DMG']}** damage!!", colour=0xe91e63)
