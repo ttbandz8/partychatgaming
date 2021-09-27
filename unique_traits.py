@@ -33,7 +33,7 @@ traits = [{
 },{
     'NAME': 'Black Clover',
     'EFFECT': 'Mana Zone',
-    'TRAIT': 'Gain 100 Stamina on Focus. AP is increased by 10 on Focus.'
+    'TRAIT': 'Gain 100 Stamina on Focus. AP is increased by 50 on Focus.'
 },{
     'NAME': 'Fate',
     'EFFECT': 'Command Seal',
