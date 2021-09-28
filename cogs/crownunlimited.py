@@ -1727,7 +1727,7 @@ class CrownUnlimited(commands.Cog):
                             embedVar = discord.Embed(title=f"Mana Zone! {o_card} Increased Stamina 🌀", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             o_stamina = 100
-                            ocard_lvl_ap_buff = ocard_lvl_ap_buff + 50
+                            ocard_lvl_ap_buff = ocard_lvl_ap_buff + 30
                         elif o_universe == "Death Note":
                             if turn_total >= 24:
                                 embedVar = discord.Embed(title=f"{t_card.upper()}'s' Scheduled Death 📓", description=f"**{o_card} says**\n**Delete**", colour=0xe91e63)
@@ -2420,7 +2420,7 @@ class CrownUnlimited(commands.Cog):
                                 embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina 🌀", colour=0xe91e63)
                                 await private_channel.send(embed=embedVar)
                                 t_stamina = 100
-                                tcard_lvl_ap_buff = tcard_lvl_ap_buff + 50
+                                tcard_lvl_ap_buff = tcard_lvl_ap_buff + 30
                                 
                             elif t_universe == "Death Note":
                                 if turn_total >= 24:
@@ -4115,7 +4115,7 @@ class CrownUnlimited(commands.Cog):
                                 embedVar = discord.Embed(title=f"Mana Zone! {o_card} Increased Stamina 🌀", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
                                 o_stamina = 100
-                                ocard_lvl_ap_buff = ocard_lvl_ap_buff + 50
+                                ocard_lvl_ap_buff = ocard_lvl_ap_buff + 30
                                 
                             elif o_universe == "Death Note":
                                 if turn_total >= 24:
@@ -4864,7 +4864,7 @@ class CrownUnlimited(commands.Cog):
                                 embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina 🌀", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
                                 t_stamina = 100
-                                tcard_lvl_ap_buff = tcard_lvl_ap_buff + 50
+                                tcard_lvl_ap_buff = tcard_lvl_ap_buff + 30
                             elif t_universe == "Death Note":
                                 if turn_total >= 24:
                                     embedVar = discord.Embed(title=f"{o_card.upper()}'s' Scheduled Death 📓", description=f"**{t_card} says**\n**Delete**", colour=0xe91e63)
@@ -7137,7 +7137,7 @@ class CrownUnlimited(commands.Cog):
                         embedVar = discord.Embed(title=f"Mana Zone! {o_card} Increased Stamina 🌀", colour=0xe91e63)
                         await ctx.send(embed=embedVar)
                         o_stamina = 100
-                        ocard_lvl_ap_buff = ocard_lvl_ap_buff + 50
+                        ocard_lvl_ap_buff = ocard_lvl_ap_buff + 30
                     elif o_universe == "Death Note":
                         if turn_total >= 24:
                             embedVar = discord.Embed(title=f"{t_card.upper()}'s' Scheduled Death 📓", description=f"**{o_card} says**\n**Delete**", colour=0xe91e63)
@@ -7874,7 +7874,7 @@ class CrownUnlimited(commands.Cog):
                         embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina 🌀", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         t_stamina = 100
-                        tcard_lvl_ap_buff = tcard_lvl_ap_buff + 50
+                        tcard_lvl_ap_buff = tcard_lvl_ap_buff + 30
                     elif t_universe == "Death Note":
                         if turn_total >= 24:
                             embedVar = discord.Embed(title=f"{o_card.upper()}'s' Scheduled Death 📓", description=f"**{t_card} says**\n**Delete**", colour=0xe91e63)
@@ -8804,8 +8804,8 @@ class CrownUnlimited(commands.Cog):
                     else:
                         prerequisite = f":lock: *{uni['PREREQUISITE']}*"
                     if uni['TIER'] == 9:
-                        prerequisite = ":crystal_ball: *Crown Rift*"
-                    available_universes.append(f"{available} **{uni['TITLE']}**\n:earth_africa: Tier {tier}\n{prerequisite}\n")
+                        prerequisite = "*Crown Rift*"
+                    available_universes.append(f"{available} **{uni['TITLE']}**\n:earth_africa: Tier {tier} | {prerequisite}\n")
 
             all_universes = []
             if available_universes:
@@ -8824,8 +8824,8 @@ class CrownUnlimited(commands.Cog):
             
             # If it's not an array greater than 10, show paginationless embed
             if len(all_universes) < 10:
-                embedVar = discord.Embed(title= f"Universe List", description="\n".join(all_universes), colour=0x7289da)
-                embedVar.set_footer(text=f"{total_universes} Total Universes")
+                embedVar = discord.Embed(title= f"Universe List | :lock: *Prerequisite*", description="\n".join(all_universes), colour=0x7289da)
+                embedVar.set_footer(text=f"{total_universes} Total Universes\n/viewuniverse *Universe Name*- Universe Details")
                 await ctx.send(embed=embedVar)
 
             embed_list = []
@@ -8833,8 +8833,8 @@ class CrownUnlimited(commands.Cog):
             if user['RIFT'] == 1:
                 icon=":crystal_ball:"
             for i in range(0, len(universes_broken_up)):
-                globals()['embedVar%s' % i] = discord.Embed(title= f"{icon} Universe List", description="\n".join(universes_broken_up[i]), colour=0x7289da)
-                globals()['embedVar%s' % i].set_footer(text=f"{total_universes} Total Universes\nFull list of Universes and their Crests")
+                globals()['embedVar%s' % i] = discord.Embed(title= f"{icon} Universe List | :lock: *Prerequisite*", description="\n".join(universes_broken_up[i]), colour=0x7289da)
+                globals()['embedVar%s' % i].set_footer(text=f"{total_universes} Total Universes\nFull list of Universes and their Crests\n/viewuniverse Universe - Universe Details")
                 embed_list.append(globals()['embedVar%s' % i])
 
             paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
@@ -11853,7 +11853,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                         elif uni['TIER'] == 9:
                             tier_icon = ":crystal_ball:"
 
-                        universe_menu.append(f"{Crest_dict[uni['TITLE']]} | **{uni['TITLE']}**\n:crossed_swords: **{len(uni['CROWN_TALES'])}**\n")
+                        universe_menu.append(f"{Crest_dict[uni['TITLE']]} | **{uni['TITLE']}**~ :crossed_swords: **{len(uni['CROWN_TALES'])}**\n")
                     else:
                         tier_icon = ""
                         if uni['TIER'] == 1:
@@ -11869,7 +11869,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                         elif uni['TIER'] == 9:
                             tier_icon = ":crystal_ball:"
 
-                        universe_menu.append(f"{Crest_dict[uni['TITLE']]} | **{uni['TITLE']}**\n:crossed_swords: **{len(uni['CROWN_TALES'])}**\n")
+                        universe_menu.append(f"{Crest_dict[uni['TITLE']]} | **{uni['TITLE']}** : :crossed_swords: **{len(uni['CROWN_TALES'])}**")
                         available_universes.append(uni['TITLE'])
         else:
             for uni in all_universes:
@@ -11890,7 +11890,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                         elif uni['TIER'] == 9:
                             tier_icon = ":crystal_ball:"
 
-                        universe_menu.append(f"{Crest_dict[uni['TITLE']]} | **{uni['TITLE']}** : :crossed_swords: **{len(uni['CROWN_TALES'])}**\n")
+                        universe_menu.append(f"{Crest_dict[uni['TITLE']]} | **{uni['TITLE']}** : :crossed_swords: **{len(uni['CROWN_TALES'])}**")
                     else:
                         tier_icon = ""
                         if uni['TIER'] == 1:
@@ -11906,7 +11906,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                         elif uni['TIER'] == 9:
                             tier_icon = ":crystal_ball:"
 
-                        universe_menu.append(f"{Crest_dict[uni['TITLE']]} | **{uni['TITLE']}** : :crossed_swords: **{len(uni['CROWN_TALES'])}**\n")
+                        universe_menu.append(f"{Crest_dict[uni['TITLE']]} | **{uni['TITLE']}** : :crossed_swords: **{len(uni['CROWN_TALES'])}**")
                         available_universes.append(uni['TITLE'])
         
         icon = ":crown:"
@@ -11914,7 +11914,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             icon = ":crystal_ball:"
         
         
-        embedVar = discord.Embed(title=f"{icon} Select {mode} Universe", description="\n".join(universe_menu), colour=0xe91e63)
+        embedVar = discord.Embed(title=f"{icon} Select {mode} Universe | :crossed_swords: *Battles*", description="\n".join(universe_menu), colour=0xe91e63)
         embedVar.set_author(name="Type the universe you want to explore", icon_url="https://cdn.discordapp.com/emojis/866090350015545384.gif?v=1")
         embedVar.set_footer(text="Type Quit to exit Tales selection")
         await ctx.send(embed=embedVar, delete_after=30)
@@ -12075,16 +12075,18 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
         all_universes = db.queryAllUniverse()
         available_universes = []
         selected_universe = ""
+        universe_menu = []
         for uni in completed_dungeons:
             if uni != "":
                 searchUni = db.queryUniverse({'TITLE': str(uni)})
                 if searchUni['UNIVERSE_BOSS'] != "":
+                    universe_menu.append(f"{Crest_dict[uni]} | **{uni}**\n")
                     available_universes.append(uni)
         if not available_universes:
             await ctx.send("No available Bosses for you at this time!")
             return
         
-        embedVar = discord.Embed(title=f":japanese_ogre: Select A Boss Arena", description="\n".join(available_universes), colour=0xe91e63) 
+        embedVar = discord.Embed(title=f":japanese_ogre: Select A Boss Arena", description="\n".join(universe_menu), colour=0xe91e63) 
         embedVar.set_footer(text="Type Quit to exit Tales selection")
         await ctx.send(embed=embedVar)
         accept = await ctx.send(f"{ctx.author.mention} which Universe would you like to explore!")
@@ -12569,7 +12571,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             embedVar = discord.Embed(title=f"Mana Zone! {o_card} Increased Stamina 🌀", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             o_stamina = 100
-                            ocard_lvl_ap_buff = ocard_lvl_ap_buff + 50
+                            ocard_lvl_ap_buff = ocard_lvl_ap_buff + 30
                         elif o_universe == "Death Note":
                             if turn_total >= 24:
                                 if t_universe == "Death Note":
@@ -14110,7 +14112,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina 🌀", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             t_stamina = 100
-                            tcard_lvl_ap_buff = tcard_lvl_ap_buff + 50
+                            tcard_lvl_ap_buff = tcard_lvl_ap_buff + 30
                         elif t_universe == "Death Note":
                             if turn_total >= 24:
                                 embedVar = discord.Embed(title=f"{o_card.upper()}'s' Scheduled Death 📓", description=f"**{t_card} says**\n**Delete**", colour=0xe91e63)
@@ -15404,7 +15406,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 embedVar = discord.Embed(title=f"Mana Zone! {c_card} Increased Stamina 🌀", colour=0xe91e63)
                                 await private_channel.send(embed=embedVar)
                                 c_stamina = 100
-                                ccard_lvl_ap_buff = ccard_lvl_ap_buff + 50
+                                ccard_lvl_ap_buff = ccard_lvl_ap_buff + 30
                             elif c_universe == "Death Note":
                                 if turn_total >= 24:
                                     embedVar = discord.Embed(title=f"{t_card.upper()}'s' Scheduled Death 📓", description=f"**{c_card} says**\n**Delete**", colour=0xe91e63)
@@ -16978,7 +16980,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 embedVar = discord.Embed(title=f"Mana Zone! {t_card} Increased Stamina 🌀", colour=0xe91e63)
                                 await private_channel.send(embed=embedVar)
                                 t_stamina = 100
-                                tcard_lvl_ap_buff = tcard_lvl_ap_buff + 50
+                                tcard_lvl_ap_buff = tcard_lvl_ap_buff + 30
                             
                             elif t_universe == "Death Note":
                                 if turn_total >= 24:
@@ -18860,7 +18862,7 @@ enhancer_mapping = {'ATK': 'Increase Attack %',
 'GROWTH': 'Lose Health, Increase Attack & Defense',
 'STANCE': 'Swap your Attack & Defense, Increase Attack',
 'CONFUSE': 'Swap Opponent Attack & Defense, Decrease Opponent Defense',
-'BLINK': 'Decrease your  Stamina, Swap Stamina with Opponent',
+'BLINK': 'Decrease your  Stamina, Increase Target Stamina',
 'SLOW': 'Decrease Opponent Stamina, Swap Stamina with Opponent',
 'HASTE': ' Increase your Stamina, Swap Stamina with Opponent',
 'FEAR': 'Decrease your Health, Decrease Opponent Attack and Defense',

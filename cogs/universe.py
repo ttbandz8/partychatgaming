@@ -56,7 +56,7 @@ class Universe(commands.Cog):
                 dpet = universe['DPET']
                 boss = universe['UNIVERSE_BOSS']
                 tier = universe['TIER']
-                bossmessage = f"*Use /viewboss {boss}*"
+                bossmessage = f"*/viewboss {boss}*"
                 if boss == "":
                     bossmessage = f"No {universe_title} Boss available yet!"
                 prerec = universe['PREREQUISITE']
@@ -89,25 +89,29 @@ class Universe(commands.Cog):
                     
 
                 embedVar = discord.Embed(title=f":earth_africa: | {universe_title} :crossed_swords: {fights}", description=textwrap.dedent(f"""
-                {crest} | **{ownermessage}**\n
+                {crest} | **{ownermessage}**
                 
-                :crown: | **Tales Build**\n                                                                               
+                🗒️ | **Details**
+                
+                :crown: | **Tale Build** */tales*
                 :reminder_ribbon: | **Title** - {ttitle}
-                :mechanical_arm: | **Arm** - {tarm}\n
-
-                :fire: | **Dungeon Build**\n
+                :mechanical_arm: | **Arm** - {tarm}
+                
+                :fire: | **Dungeon Build** */dungeon*
                 :reminder_ribbon: | **Title** - {dtitle}
                 :mechanical_arm: | **Arm** - {darm}
-                :bird: | **Pet** {dpet}\n
                 
-                :japanese_ogre: | **Universe Boss**
+                :bird: | **Universe Pet ** - {dpet}
+                */petlist {universe_title}*
+                
+                :japanese_ogre: | **Universe Boss** */boss*
                 :flower_playing_cards: | **Card** - {boss}
                 {bossmessage}\n
-
                 :infinity: | **Universe Trait** - {traitmessage}
                 :lock: | **Prerequisites:** {prerecmessage}
                 """), colour=000000)
                 embedVar.set_image(url=universe_image)
+                embedVar.set_footer(text=f"{universe_title} Details")
 
                 await ctx.send(embed=embedVar)
 

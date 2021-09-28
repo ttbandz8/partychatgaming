@@ -1239,7 +1239,7 @@ class Profile(commands.Cog):
         
         embedVar1 = discord.Embed(title=f"{shopName}", description=textwrap.dedent(f"""
         **Balance:** {icon}{'{:,}'.format(vault['BALANCE'])}
-        **/cards universe:** View Universe Card List
+        **/cardlist universe:** View Universe Card List
         **/viewcard card name:** View Cards
         **/buycard card name:** Buy Card
         """), colour=0x2ecc71, value='Page 1')
@@ -1249,7 +1249,7 @@ class Profile(commands.Cog):
 
         embedVar2 = discord.Embed(title=f"{shopName}", description=textwrap.dedent(f"""
         **Balance:** :coin:{'{:,}'.format(vault['BALANCE'])}
-        **/titles universe:** View Universe Title List
+        **/titlelist universe:** View Universe Title List
         **/viewtitle title name:** View Title Stats
         **/buytitle title name:** Buy Title
         """), colour=0x3498db, value='Page 2')
@@ -1259,7 +1259,7 @@ class Profile(commands.Cog):
 
         embedVar3 = discord.Embed(title=f"{shopName}", description=textwrap.dedent(f"""
         **Balance:** :coin:{'{:,}'.format(vault['BALANCE'])}
-        **/arms universe:** View Universe Arm List
+        **/armlist universe:** View Universe Arm List
         **/viewarm arm name:** View Arm Stats
         **/buyarm arm name** Buy Arm
         """), colour=0xf1c40f, value='Page 3')

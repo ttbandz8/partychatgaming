@@ -222,6 +222,7 @@ class Cards(commands.Cog):
             o_card_path=card['PATH']
             o_price=card['PRICE']
             o_exclusive = card['EXCLUSIVE']
+            o_available = card['AVAILABLE']
             o_max_health = card['HLT']
             o_health = card['HLT']
             o_stamina = card['STAM']
@@ -257,6 +258,9 @@ class Cards(commands.Cog):
                     price_message = "_Priceless_"
                     card_icon= f":fire:"
                     dungeon = True
+            elif o_exclusive ==False and o_available == False and o_has_collection == False:
+                price_message = "_Priceless_"
+                card_icon= f":japanese_ogre:"
             else:
                 price_message = f":coin: {'{:,}'.format(o_price)}"
                 card_icon= f":flower_playing_cards:"
@@ -314,6 +318,9 @@ class Cards(commands.Cog):
                 else:
                     message = f"{o_card} is a Dungeon card. "
                     tip=f"Find this card in the {o_show} /dungeon"
+            elif o_has_collection == False and o_available == False and o_exclusive == False:
+                message = f"{o_card} is a Boss card. "
+                tip=f"Defeat the {o_show} /boss to earn this card"
             elif o_attack > o_defense:
                 message = f"{o_card} is an offensive card. "
                 tip="Equipping defensive /titles and /arms would help boost survivability"
