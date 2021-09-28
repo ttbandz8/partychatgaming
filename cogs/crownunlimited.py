@@ -1598,10 +1598,10 @@ class CrownUnlimited(commands.Cog):
                         o_block_used=False
                         o_defense = int(o_defense/2)
                     if o_universe == "Death Note" and turn_total == 0:
-                        embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death", description=f"**{o_card} says**\nYou will die in 24 turns...", colour=0xe91e63)
+                        embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death 📓", description=f"**{o_card} says**\nYou will die in 24 turns...", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                     if t_universe == 'Death Note' and turn_total == 0:
-                        embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death", description=f"**{t_card} says**\nYou will die in 24 turns...", colour=0xe91e63)
+                        embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death 📓", description=f"**{t_card} says**\nYou will die in 24 turns...", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                     if o_attack <= 25:
                         o_attack = 25
@@ -1730,7 +1730,7 @@ class CrownUnlimited(commands.Cog):
                             ocard_lvl_ap_buff = ocard_lvl_ap_buff + 50
                         elif o_universe == "Death Note":
                             if turn_total >= 24:
-                                embedVar = discord.Embed(title=f"{t_card.upper()}'s' Scheduled Death", description=f"**{o_card} says**\n**Delete**", colour=0xe91e63)
+                                embedVar = discord.Embed(title=f"{t_card.upper()}'s' Scheduled Death 📓", description=f"**{o_card} says**\n**Delete**", colour=0xe91e63)
                                 embedVar.add_field(name=f"{t_card} had a heart attack and died", value=f"Death....")
                                 await private_channel.send(embed=embedVar)
                                 t_health = 0
@@ -2153,7 +2153,7 @@ class CrownUnlimited(commands.Cog):
                                 if o_stamina >=20:
                                     o_stamina = o_stamina - 20
                                     o_block_used=True
-                                    o_defense = o_defense * 3
+                                    o_defense = o_defense * 2
                                     embedVar = discord.Embed(title=f"{o_card} **Defended** 🛡️", colour=0xe91e63)
                                     
                                     await button_ctx.send(embed=embedVar)
@@ -2424,13 +2424,13 @@ class CrownUnlimited(commands.Cog):
                                 
                             elif t_universe == "Death Note":
                                 if turn_total >= 24:
-                                    embedVar = discord.Embed(title=f"{o_card.upper()}'s' Scheduled Death", description=f"**{t_card} says**\n**Delete**", colour=0xe91e63)
+                                    embedVar = discord.Embed(title=f"{o_card.upper()}'s' Scheduled Death 📓 ", description=f"**{t_card} says**\n**Delete**", colour=0xe91e63)
                                     embedVar.add_field(name=f"{o_card} had a heart attack and died", value=f"Death....")
                                     await private_channel.send(embed=embedVar)
                                     o_health = 0
                             
                             if o_universe == "One Punch Man":
-                                embedVar = discord.Embed(title=f"Hero Reinforcements! {o_card} Increased Health! & Max Health ❤️", colour=0xe91e63)
+                                embedVar = discord.Embed(title=f"Hero Reinforcements! {o_card} Increased Health!  ❤️", colour=0xe91e63)
                                 await private_channel.send(embed=embedVar)
                                 o_health = round(o_health + 100)
                                 o_max_health = round(o_max_health + 100)
@@ -2441,7 +2441,7 @@ class CrownUnlimited(commands.Cog):
                                 o_stamina = o_stamina + 60
                             
                             elif o_universe == "Souls":
-                                embedVar = discord.Embed(title=f"Combo Recognition! {o_card} Increased ATK by **{30 + turn_total}** 🔺 ", colour=0xe91e63)
+                                embedVar = discord.Embed(title=f"Combo Recognition! {o_card} Increased Attack by **{30 + turn_total}** 🔺 ", colour=0xe91e63)
                                 await private_channel.send(embed=embedVar)
                                 o_attack = round(o_attack + (30 + turn_total))
                                 
@@ -3959,10 +3959,10 @@ class CrownUnlimited(commands.Cog):
                             o_block_used=False
                             o_defense = o_defense/ 2
                         if o_universe == "Death Note" and turn_total == 0:
-                            embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death", description=f"**{o_card} says**\nYou will die in 24 turns...", colour=0xe91e63)
+                            embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death 📓", description=f"**{o_card} says**\nYou will die in 24 turns...", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                         if t_universe == 'Death Note' and turn_total == 0:
-                            embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death", description=f"**{t_card} says**\nYou will die in 24 turns...", colour=0xe91e63)
+                            embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death 📓", description=f"**{t_card} says**\nYou will die in 24 turns...", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                         if o_attack <= 25:
                             o_attack = 25
@@ -4119,7 +4119,7 @@ class CrownUnlimited(commands.Cog):
                                 
                             elif o_universe == "Death Note":
                                 if turn_total >= 24:
-                                    embedVar = discord.Embed(title=f"{t_card.upper()}'s' Scheduled Death", description=f"**{o_card} says**\n**Delete**", colour=0xe91e63)
+                                    embedVar = discord.Embed(title=f"{t_card.upper()}'s' Scheduled Death 📓", description=f"**{o_card} says**\n**Delete**", colour=0xe91e63)
                                     embedVar.add_field(name=f"{t_card} had a heart attack and died", value=f"Death....")
                                     await private_channel.send(embed=embedVar)
                                     t_health = 0
@@ -4604,7 +4604,7 @@ class CrownUnlimited(commands.Cog):
                                             await button_ctx.send(embed=embedVar)
                                         o_stamina = o_stamina - 20
                                         o_block_used=True
-                                        o_defense = o_defense * 3
+                                        o_defense = o_defense * 2
                                         embedVar = discord.Embed(title=f"{o_card} **Defended** 🛡️", colour=0xe91e63)
                                         await button_ctx.send(embed=embedVar)
                                         turn_total= turn_total + 1
@@ -4867,12 +4867,12 @@ class CrownUnlimited(commands.Cog):
                                 tcard_lvl_ap_buff = tcard_lvl_ap_buff + 50
                             elif t_universe == "Death Note":
                                 if turn_total >= 24:
-                                    embedVar = discord.Embed(title=f"{o_card.upper()}'s' Scheduled Death", description=f"**{t_card} says**\n**Delete**", colour=0xe91e63)
+                                    embedVar = discord.Embed(title=f"{o_card.upper()}'s' Scheduled Death 📓", description=f"**{t_card} says**\n**Delete**", colour=0xe91e63)
                                     embedVar.add_field(name=f"{o_card} had a heart attack and died", value=f"Death....")
                                     await private_channel.send(embed=embedVar)
                                     o_health = 0
                             if o_universe == "One Punch Man":
-                                embedVar = discord.Embed(title=f"Hero Reinforcements! {o_card} Increased Health! & Max Health ❤️", colour=0xe91e63)
+                                embedVar = discord.Embed(title=f"Hero Reinforcements! {o_card} Increased Health!  ❤️", colour=0xe91e63)
                                 await private_channel.send(embed=embedVar)
                                 o_health = round(o_health + 100)
                                 o_max_health = round(o_max_health + 100)
@@ -4881,7 +4881,7 @@ class CrownUnlimited(commands.Cog):
                                 await ctx.send(embed=embedVar)
                                 o_stamina = o_stamina + 60
                             elif o_universe == "Souls":
-                                embedVar = discord.Embed(title=f"Combo Recognition! {o_card} Increased ATK by **{30 + turn_total}** 🔺 ", colour=0xe91e63)
+                                embedVar = discord.Embed(title=f"Combo Recognition! {o_card} Increased Attack by **{30 + turn_total}** 🔺 ", colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
                                 o_attack = round(o_attack + (30 + turn_total))
                             else:
@@ -5323,7 +5323,7 @@ class CrownUnlimited(commands.Cog):
                                             
                                             t_stamina = t_stamina - 20
                                             t_block_used=True
-                                            t_defense = t_defense * 3
+                                            t_defense = t_defense * 2
                                             embedVar = discord.Embed(title=f"{t_card} **Defended** 🛡️", colour=0xe91e63)
                                             
                                             await button_ctx.send(embed=embedVar)
@@ -6981,10 +6981,10 @@ class CrownUnlimited(commands.Cog):
                     o_block_used=False
                     o_defense = o_defense/ 2
                 if o_universe == "Death Note" and turn_total == 0:
-                    embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death", description=f"**{o_card} says**\nYou will die in 24 turns...", colour=0xe91e63)
+                    embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death 📓", description=f"**{o_card} says**\nYou will die in 24 turns...", colour=0xe91e63)
                     await private_channel.send(embed=embedVar)
                 if t_universe == 'Death Note' and turn_total == 0:
-                    embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death", description=f"**{t_card} says**\nYou will die in 24 turns...", colour=0xe91e63)
+                    embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death 📓", description=f"**{t_card} says**\nYou will die in 24 turns...", colour=0xe91e63)
                     await private_channel.send(embed=embedVar)
                 if o_attack <= 25:
                     o_attack = 25
@@ -7140,7 +7140,7 @@ class CrownUnlimited(commands.Cog):
                         ocard_lvl_ap_buff = ocard_lvl_ap_buff + 50
                     elif o_universe == "Death Note":
                         if turn_total >= 24:
-                            embedVar = discord.Embed(title=f"{t_card.upper()}'s' Scheduled Death", description=f"**{o_card} says**\n**Delete**", colour=0xe91e63)
+                            embedVar = discord.Embed(title=f"{t_card.upper()}'s' Scheduled Death 📓", description=f"**{o_card} says**\n**Delete**", colour=0xe91e63)
                             embedVar.add_field(name=f"{t_card} had a heart attack and died", value=f"Death....")
                             await private_channel.send(embed=embedVar)
                             t_health = 0
@@ -7613,7 +7613,7 @@ class CrownUnlimited(commands.Cog):
                                     await button_ctx.send(embed=embedVar)
                                 o_stamina = o_stamina - 20
                                 o_block_used=True
-                                o_defense = o_defense * 3
+                                o_defense = o_defense * 2
                                 embedVar = discord.Embed(title=f"{o_card} **Defended** 🛡️", colour=0xe91e63)
                                 
                                 await button_ctx.send(embed=embedVar)
@@ -7877,13 +7877,13 @@ class CrownUnlimited(commands.Cog):
                         tcard_lvl_ap_buff = tcard_lvl_ap_buff + 50
                     elif t_universe == "Death Note":
                         if turn_total >= 24:
-                            embedVar = discord.Embed(title=f"{o_card.upper()}'s' Scheduled Death", description=f"**{t_card} says**\n**Delete**", colour=0xe91e63)
+                            embedVar = discord.Embed(title=f"{o_card.upper()}'s' Scheduled Death 📓", description=f"**{t_card} says**\n**Delete**", colour=0xe91e63)
                             embedVar.add_field(name=f"{o_card} had a heart attack and died", value=f"Death....")
                             await private_channel.send(embed=embedVar)
                             o_health = 0
                         
                     if o_universe == "One Punch Man":
-                        embedVar = discord.Embed(title=f"Hero Reinforcements! {o_card} Increased Health! & Max Health ❤️", colour=0xe91e63)
+                        embedVar = discord.Embed(title=f"Hero Reinforcements! {o_card} Increased Health!  ❤️", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         o_health = round(o_health + 100)
                         o_max_health = round(o_max_health + 100)
@@ -7894,7 +7894,7 @@ class CrownUnlimited(commands.Cog):
                         o_stamina = o_stamina + 60
                     
                     elif o_universe == "Souls":
-                        embedVar = discord.Embed(title=f"Combo Recognition! {o_card} Increased ATK by **{30 + turn_total}** 🔺 ", colour=0xe91e63)
+                        embedVar = discord.Embed(title=f"Combo Recognition! {o_card} Increased Attack by **{30 + turn_total}** 🔺 ", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                         o_attack = round(o_attack + (30 + turn_total))
                         
@@ -12416,7 +12416,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         o_defense = int(o_defense/2)
                         o_defend_used=False
                     if o_universe == "Death Note" and turn_total == 0:
-                        embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death", description=f"**{o_card} says**\nYou will die in 24 turns...", colour=0xe91e63)
+                        embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death 📓", description=f"**{o_card} says**\nYou will die in 24 turns...", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
 
                     if mode in B_modes:                    
@@ -12426,10 +12426,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         embedVar.set_footer(text=f"{t_card} waits for you to strike....")
                     if mode in co_op_modes:
                         if c_universe == "Death Note" and turn_total == 0:
-                            embedVar = discord.Embed(title=f"{c_card.upper()} Scheduled Death", description=f"**{c_card} says**\nYou will die in 24 turns...", colour=0xe91e63)
+                            embedVar = discord.Embed(title=f"{c_card.upper()} Scheduled Death 📓", description=f"**{c_card} says**\nYou will die in 24 turns...", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                     if t_universe == 'Death Note' and turn_total == 0:
-                        embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death", description=f"**{t_card} says**\nYou will die in 24 turns...", colour=0xe91e63)
+                        embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death 📓", description=f"**{t_card} says**\nYou will die in 24 turns...", colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                     if o_attack <= 25:
                         o_attack = 25
@@ -12573,12 +12573,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         elif o_universe == "Death Note":
                             if turn_total >= 24:
                                 if t_universe == "Death Note":
-                                    embedVar = discord.Embed(title=f"{o_card.upper()}'s' Scheduled Death", description=f"**{t_card} says**\n**Delete**", colour=0xe91e63)
+                                    embedVar = discord.Embed(title=f"{o_card.upper()}'s' Scheduled Death 📓", description=f"**{t_card} says**\n**Delete**", colour=0xe91e63)
                                     embedVar.add_field(name=f"{o_card} had a heart attack and died", value=f"You cannot cheat a Shinigami in the Shinagami Realm....")
                                     await private_channel.send(embed=embedVar)
                                     o_health = 0
                                 else:
-                                    embedVar = discord.Embed(title=f"{t_card.upper()}'s' Scheduled Death", description=f"**{o_card} says**\n**Delete**", colour=0xe91e63)
+                                    embedVar = discord.Embed(title=f"{t_card.upper()}'s' Scheduled Death 📓", description=f"**{o_card} says**\n**Delete**", colour=0xe91e63)
                                     embedVar.add_field(name=f"{t_card} had a heart attack and died", value=f"Death....")
                                     await private_channel.send(embed=embedVar)
                                     t_health = 0
@@ -12990,7 +12990,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 if o_stamina >=20:
                                     o_stamina = o_stamina - 20
                                     o_block_used=True
-                                    o_defense = o_defense * 3
+                                    o_defense = o_defense * 2
                                     turn_total= turn_total + 1
                                     turn=1
                                 else:
@@ -13800,7 +13800,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         if c_stamina >=20:
                                             c_stamina = c_stamina - 20
                                             c_block_used=True
-                                            c_defense = c_defense * 3
+                                            c_defense = c_defense * 2
                                             embedVar = discord.Embed(title=f"{c_card} **Defended** 🛡️ {o_card.upper()}", colour=0xe91e63)
                                             
                                             await button_ctx.send(embed=embedVar)
@@ -13819,7 +13819,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             block_message = f"{o_card} **Defended** 🛡️"
                                             o_block_used=True
                                         o_stamina = o_stamina - 20
-                                        o_defense = o_defense * 3
+                                        o_defense = o_defense * 2
                                         embedVar = discord.Embed(title=f"{block_message}", colour=0xe91e63)
                                         
                                         await button_ctx.send(embed=embedVar)
@@ -14113,13 +14113,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             tcard_lvl_ap_buff = tcard_lvl_ap_buff + 50
                         elif t_universe == "Death Note":
                             if turn_total >= 24:
-                                embedVar = discord.Embed(title=f"{o_card.upper()}'s' Scheduled Death", description=f"**{t_card} says**\n**Delete**", colour=0xe91e63)
+                                embedVar = discord.Embed(title=f"{o_card.upper()}'s' Scheduled Death 📓", description=f"**{t_card} says**\n**Delete**", colour=0xe91e63)
                                 embedVar.add_field(name=f"{o_card} had a heart attack and died", value=f"Death....")
                                 await private_channel.send(embed=embedVar)
                                 o_health = 0
                             
                         if o_universe == "One Punch Man":
-                            embedVar = discord.Embed(title=f"Hero Reinforcements! {o_card} Increased Health! & Max Health ❤️", colour=0xe91e63)
+                            embedVar = discord.Embed(title=f"Hero Reinforcements! {o_card} Increased Health!  ❤️", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             o_health = round(o_health + 100)
                             o_max_health = round(o_max_health + 100)
@@ -14130,7 +14130,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             o_stamina = o_stamina + 60
                             
                         elif o_universe == "Souls":
-                            embedVar = discord.Embed(title=f"Combo Recognition! {o_card} Increased ATK by **{30 + turn_total}** 🔺 ", colour=0xe91e63)
+                            embedVar = discord.Embed(title=f"Combo Recognition! {o_card} Increased Attack by **{30 + turn_total}** 🔺 ", colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                             o_attack = round(o_attack + (30 + turn_total))
                             
@@ -15407,7 +15407,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 ccard_lvl_ap_buff = ccard_lvl_ap_buff + 50
                             elif c_universe == "Death Note":
                                 if turn_total >= 24:
-                                    embedVar = discord.Embed(title=f"{t_card.upper()}'s' Scheduled Death", description=f"**{c_card} says**\n**Delete**", colour=0xe91e63)
+                                    embedVar = discord.Embed(title=f"{t_card.upper()}'s' Scheduled Death 📓", description=f"**{c_card} says**\n**Delete**", colour=0xe91e63)
                                     embedVar.add_field(name=f"{t_card} had a heart attack and died", value=f"Death....")
                                     await private_channel.send(embed=embedVar)
                                     t_health = 0
@@ -16033,7 +16033,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     if c_stamina >=20:
                                         c_block_used=True
                                         c_stamina = c_stamina - 20
-                                        c_defense = c_defense * 3
+                                        c_defense = c_defense * 2
                                         embedVar = discord.Embed(title=f"{c_card} **Defended** 🛡️ {o_card.upper()}", colour=0xe91e63)
                                         
                                         await button_ctx.send(embed=embedVar)
@@ -16705,7 +16705,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         if c_stamina >=20:
                                             c_block_used=True
                                             c_stamina = c_stamina - 20
-                                            c_defense = c_defense * 3
+                                            c_defense = c_defense * 2
                                             embedVar = discord.Embed(title=f"{c_card} **Defended** 🛡️ {o_card.upper()}", colour=0xe91e63)
                                             
                                             await button_ctx.send(embed=embedVar)
@@ -16982,7 +16982,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             
                             elif t_universe == "Death Note":
                                 if turn_total >= 24:
-                                    embedVar = discord.Embed(title=f"{o_card.upper()}'s' Scheduled Death", description=f"**{t_card} says**\n**Delete**", colour=0xe91e63)
+                                    embedVar = discord.Embed(title=f"{o_card.upper()}'s' Scheduled Death 📓", description=f"**{t_card} says**\n**Delete**", colour=0xe91e63)
                                     embedVar.add_field(name=f"{o_card} had a heart attack and died", value=f"Death....")
                                     await private_channel.send(embed=embedVar)
                                     o_health = 0
@@ -16999,7 +16999,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 c_stamina = c_stamina + 60
                                 
                             elif c_universe == "Souls":
-                                embedVar = discord.Embed(title=f"Combo Recognition! {c_card} Increased ATK by **{30 + turn_total}** 🔺 ", colour=0xe91e63)
+                                embedVar = discord.Embed(title=f"Combo Recognition! {c_card} Increased Attack by **{30 + turn_total}** 🔺 ", colour=0xe91e63)
                                 await private_channel.send(embed=embedVar)
                                 c_attack = round(c_attack + (30 + turn_total))
                                 
