@@ -12615,8 +12615,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                     else:
                         if mode in AUTO_BATTLE_modes:
                             aiMove = 0
-                            if turn == 0 and o_enhancer['TYPE'] in Turn_Enhancer_Check = ['WAVE', 'CREATION'] and o_stamina >=20
-                                aiMove = 4
+                            if turn == 0 and o_enhancer['TYPE'] in Turn_Enhancer_Check:
+                                if o_stamina >=20:
+                                    aiMove = 4
+                                else:
+                                    aiMove = 1
                             elif t_stamina <10 :
                                 aiMove = 1
                             elif o_health <= (.50 * o_max_health) and o_used_resolve == False and o_used_focus:
