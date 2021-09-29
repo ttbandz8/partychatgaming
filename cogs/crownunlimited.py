@@ -11853,7 +11853,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                         elif uni['TIER'] == 9:
                             tier_icon = ":crystal_ball:"
 
-                        universe_menu.append(f"{Crest_dict[uni['TITLE']]} | **{uni['TITLE']}**~ :crossed_swords: **{len(uni['CROWN_TALES'])}**\n")
+                        universe_menu.append(f"{Crest_dict[uni['TITLE']]} | **{uni['TITLE']}** : :crossed_swords: **{len(uni['CROWN_TALES'])}**\n")
                     else:
                         tier_icon = ""
                         if uni['TIER'] == 1:
@@ -12615,7 +12615,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                     else:
                         if mode in AUTO_BATTLE_modes:
                             aiMove = 0
-                            if t_stamina <10 :
+                            if turn == 0 and o_enhancer['TYPE'] in Turn_Enhancer_Check = ['WAVE', 'CREATION'] and o_stamina >=20
+                                aiMove = 4
+                            elif t_stamina <10 :
                                 aiMove = 1
                             elif o_health <= (.50 * o_max_health) and o_used_resolve == False and o_used_focus:
                                 aiMove = 5
