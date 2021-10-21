@@ -387,22 +387,14 @@ async def r(ctx):
    if response:
 
       embedVar = discord.Embed(title=f"**Welcome to Crown Unlimited**!", description=textwrap.dedent(f"""
-      Embark on a journey through Universes filled with characters from your favorite anime and video games!
-      First, run **/daily** to get your daily rewards!
-
-      Type **/menu** for quick overview on what to do next! Checkout the tutorials below if you need additional assistance!
-
-      Start Tutorial!
+      If you'd like to read the manual, run the command below!
       **/crown**
 
-      
-      **CHANGING YOUR DISCORD ACCOUNT INFO WILL BREAK YOUR ACCOUNT IN THE GAME. YOU HAVE BEEN WARNED.**
-      
-      _We do not own the rights to the images used in this game. This is an open beta of an experimental bot for the purposes of growing our coding talents and skill. We do not and will not make money from this project._
+      You have enough money to buy some new cards and accessories if you do not like your starters. Have fun!
       """), colour=0xe91e63)
-      embedVar.set_footer(text=".crown to inquire all potential commands and capabilites of the bot")
+      embedVar.set_footer(text="Changing your Discord Account Name or Numbers will break your Crown Unlimited Account.")
       await ctx.author.send(embed=embedVar)
-      await ctx.send(f"Welcome to Crown Unlimited, {ctx.author.mention}! Use **/daily** to collect your daily reward! Use **/menu** to see what you can do.")
+      await ctx.send(f"Welcome to Crown Unlimited, {ctx.author.mention}! Use **/daily** to collect your daily reward!\nType **/menu** for quick overview of the game! Additional info has been DM'd to you!")
 
       vault = db.queryVault({'OWNER': disname})
       if vault:
