@@ -9756,9 +9756,9 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
             h = ImageFont.truetype("Roboto-Bold.ttf", 35)
             m = ImageFont.truetype("Roboto-Bold.ttf", 25)
             r = ImageFont.truetype("Freedom-10eM.ttf", 40)
-            rhs = ImageFont.truetype("Monster of South Italic St.ttf", 38)
+            rhs = ImageFont.truetype("Monster of South Italic St.ttf", 50)
             stats = ImageFont.truetype("Freedom-10eM.ttf", 30)
-            card_details_font_size = ImageFont.truetype("Roboto-Bold.ttf", 30)
+            card_details_font_size = ImageFont.truetype("gang_wolfik.ttf", 60)
 
 
             h_a_s_response = health_and_stamina_bars(health, stamina, max_health, max_stamina, resolved)
@@ -9768,8 +9768,8 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
             stamina_bar =f"{stamina}/{max_stamina} {h_a_s_response['STAMINA']}"
             if stamina == max_stamina:
                 stamina_bar =f"{max_stamina} {h_a_s_response['STAMINA']}"
-            attack_stat = f"🗡️ {attack}"
-            defense_stat = f"🛡️ {defense}"
+            attack_stat = f"🗡️{attack}"
+            defense_stat = f"🛡️{defense}"
             moveset = d['MOVESET']
             move1 = moveset[0]
             move1_text = f"💥 {list(move1.keys())[0]}"
@@ -9803,15 +9803,15 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
             
             with Pilmoji(im) as pilmoji:
                 pilmoji.text((70, 160), health_bar.strip(), (255, 255, 255), font=rhs, stroke_width=2, stroke_fill=(0,0,0))
-                pilmoji.text((70, 195), stamina_bar.strip(), (255, 255, 255), font=rhs, stroke_width=2, stroke_fill=(0,0,0))
-                pilmoji.text((70, 240), attack_stat.strip(), (255, 255, 255), font=rhs, stroke_width=2, stroke_fill=(0,0,0))
-                pilmoji.text((200, 240), defense_stat.strip(), (255, 255, 255), font=rhs, stroke_width=2, stroke_fill=(0,0,0))
+                pilmoji.text((70, 210), stamina_bar.strip(), (255, 255, 255), font=rhs, stroke_width=2, stroke_fill=(0,0,0))
+                pilmoji.text((70, 260), attack_stat.strip(), (255, 255, 255), font=rhs, stroke_width=2, stroke_fill=(0,0,0))
+                pilmoji.text((220, 260), defense_stat.strip(), (255, 255, 255), font=rhs, stroke_width=2, stroke_fill=(0,0,0))
 
                 pilmoji.text((85,20), title_stat.strip(), (255, 255, 255), font=h, stroke_width=2, stroke_fill=(0,0,0), align="left")
-                # pilmoji.text((70, 290), move1_text.strip(), (255, 255, 255), font=card_details_font_size, stroke_width=2, stroke_fill=(0,0,0))
-                # pilmoji.text((70, 340), move2_text.strip(), (255, 255, 255), font=card_details_font_size, stroke_width=2, stroke_fill=(0,0,0))
-                # pilmoji.text((70, 390), move3_text.strip(), (255, 255, 255), font=card_details_font_size, stroke_width=2, stroke_fill=(0,0,0))
-                # pilmoji.text((70, 440), move_enhanced_text.strip(), (255, 255, 255), font=card_details_font_size, stroke_width=2, stroke_fill=(0,0,0))
+                # pilmoji.text((70, 350), move1_text.strip(), (255, 255, 255), font=card_details_font_size, stroke_width=2, stroke_fill=(0,0,0))
+                # pilmoji.text((70, 400), move2_text.strip(), (255, 255, 255), font=card_details_font_size, stroke_width=2, stroke_fill=(0,0,0))
+                # pilmoji.text((70, 450), move3_text.strip(), (255, 255, 255), font=card_details_font_size, stroke_width=2, stroke_fill=(0,0,0))
+                # pilmoji.text((70, 500), move_enhanced_text.strip(), (255, 255, 255), font=card_details_font_size, stroke_width=2, stroke_fill=(0,0,0))
                 
                 # pilmoji.text((1005, 50), level_stat.strip(), lvl_color, font=header, stroke_width=5, stroke_fill=(0,0,0))
                
