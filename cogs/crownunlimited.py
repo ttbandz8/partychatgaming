@@ -30,6 +30,7 @@ from discord_slash import cog_ext, SlashContext
 from discord_slash.utils import manage_components
 from discord_slash.model import ButtonStyle
 import typing
+from pilmoji import Pilmoji
 
 
 class CrownUnlimited(commands.Cog):
@@ -4233,8 +4234,7 @@ class CrownUnlimited(commands.Cog):
                             if o_used_resolve:
                                 pet_msg_on_resolve =f"🐦 | *{enhancer_mapping[pet_enh_name]}*"
 
-                            h_a_s_response = health_and_stamina_bars(o_health, o_stamina, o_max_health, o_max_stamina, o_used_resolve)
-                            embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}\n**Attack**    | **{round(o_attack)}** :dagger:\n**Defense** | **{round(o_defense)}** 🛡️\n**Health**    | **{round(o_health)}/{round(o_max_health)}** {h_a_s_response['HEALTH']}\n**Stamina** | **{o_stamina}/{o_max_stamina}** {h_a_s_response['STAMINA']}", description=textwrap.dedent(f"""\
+                            embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}", description=textwrap.dedent(f"""\
                             💥 | **{omove1_text}** *{ap1}*
                             ☄️ | **{omove2_text}** *{ap2}*
                             🏵️ | **{omove3_text}** *{ap3}*
@@ -4980,8 +4980,7 @@ class CrownUnlimited(commands.Cog):
                                 if t_used_resolve:
                                     tpet_msg_on_resolve =f"🐦 | *{enhancer_mapping[tpet_enh_name]}*"
 
-                                h_a_s_response = health_and_stamina_bars(t_health, t_stamina, t_max_health, t_max_stamina, t_used_resolve)
-                                embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}\n**Attack**    | **{t_attack}** :dagger:\n**Defense** | **{t_defense}** 🛡️\n**Health**    | **{t_health}/{t_max_health}** {h_a_s_response['HEALTH']}\n**Stamina** | **{t_stamina}/{t_max_stamina}** {h_a_s_response['STAMINA']}", description=textwrap.dedent(f"""\
+                                embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}", description=textwrap.dedent(f"""\
                                 💥 | **{tmove1_text}** *{tap1}*
                                 ☄️ | **{tmove2_text}** *{tap2}*
                                 🏵️ | **{tmove3_text}** *{tap3}*
@@ -7255,7 +7254,7 @@ class CrownUnlimited(commands.Cog):
                         pet_msg_on_resolve =f"🐦 | *{enhancer_mapping[pet_enh_name]}*"
 
                     h_a_s_response = health_and_stamina_bars(o_health, o_stamina, o_max_health, o_max_stamina, o_used_resolve)
-                    embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}\n**Attack**    | **{round(o_attack)}** :dagger:\n**Defense** | **{round(o_defense)}** 🛡️\n**Health**    | **{round(o_health)}/{round(o_max_health)}** {h_a_s_response['HEALTH']}\n**Stamina** | **{o_stamina}/{o_max_stamina}** {h_a_s_response['STAMINA']}", description=textwrap.dedent(f"""\
+                    embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}", description=textwrap.dedent(f"""\
                     💥 | **{omove1_text}** *{ap1}*
                     ☄️ | **{omove2_text}** *{ap2}*
                     🏵️ | **{omove3_text}** *{ap3}*
@@ -9750,29 +9749,6 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
             else:
                 im = Image.open(requests.get(d['PATH'], stream=True).raw)
 
-        # Add Pet Image
-        # if pet:
-        #     maxsize = (1000, 1000)
-        #     temp_pet_img = Image.open(requests.get(pet, stream=True).raw)
-        #     pet_img = temp_pet_img.thumbnail(maxsize, Image.ANTIALIAS)
-        #     im.paste(pet_img, (300,300))
-
-            # # Max Health
-            # hlt_base = round_rectangle((int(max_health), 30), 0)
-            # im.paste(hlt_base, (80, 160), hlt_base)
-            # # Health Meter
-            # hlt = health_bar((health, 30), 0)
-            # im.paste(hlt, (80, 160), hlt)
-
-
-            # # Max Stamina
-            # stam_base = round_rectangle((int(max_stamina), 30), 0)
-            # im.paste(stam_base, (80, 195), stam_base)
-            # # Stamina Meter
-            # stam = stamina_bar((stamina, 30), 0)
-            # im.paste(stam, (80, 195), stam)
-            #########################################################################
-
             draw = ImageDraw.Draw(im)
             header = ImageFont.truetype("KomikaTitle-Paint.ttf", 55)
             tournament_wins_font = ImageFont.truetype("RobotoCondensed-Bold.ttf", 35)
@@ -9780,33 +9756,65 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
             h = ImageFont.truetype("Roboto-Bold.ttf", 35)
             m = ImageFont.truetype("Roboto-Bold.ttf", 25)
             r = ImageFont.truetype("Freedom-10eM.ttf", 40)
+            rhs = ImageFont.truetype("Monster of South Italic St.ttf", 38)
             stats = ImageFont.truetype("Freedom-10eM.ttf", 30)
+            card_details_font_size = ImageFont.truetype("Roboto-Bold.ttf", 30)
 
 
-            # # Health & Stamina
-            # header = ImageFont.truetype("KomikaTitle-Paint.ttf", 60)
-            # health_text = f'{health}/{max_health}'
-            # stamina_text = f'{stamina}/{max_stamina}'
-            # draw.text((185,155), health_text, (255, 255, 255), font=h, align="left")
-            # draw.text((82,197), stamina_text, (255, 255, 255), font=s, align="left")
+            h_a_s_response = health_and_stamina_bars(health, stamina, max_health, max_stamina, resolved)
+            health_bar = f"{health}/{max_health} {h_a_s_response['HEALTH']}"
+            if health == max_health:
+                health_bar = f"{max_health} {h_a_s_response['HEALTH']}"
+            stamina_bar =f"{stamina}/{max_stamina} {h_a_s_response['STAMINA']}"
+            if stamina == max_stamina:
+                stamina_bar =f"{max_stamina} {h_a_s_response['STAMINA']}"
+            attack_stat = f"🗡️ {attack}"
+            defense_stat = f"🛡️ {defense}"
+            moveset = d['MOVESET']
+            move1 = moveset[0]
+            move1_text = f"💥 {list(move1.keys())[0]}"
+            move2 = moveset[1]
+            move2_text = f"☄️ {list(move2.keys())[0]}"
+            move3 = moveset[2]
+            move3_text = f"🏵️ {list(move3.keys())[0]}"
+            move_enhanced = moveset[3]
+            move_enhanced_text = f"🦠 {list(move_enhanced.keys())[0]}"
+            # level_stat = f"🔱{lvl}"
+            # lvl_color = (255, 255, 255)
+            # if lvl == 200:
+            #     lvl_color = (230,230,250)
+            # elif lvl >= 150 and lvl < 200:
+            #     lvl_color = (128,0,0)
+            # elif lvl >= 75 and lvl < 149:
+            #     lvl_color = (57,255,20)
+            # elif lvl >= 25 and lvl < 74:
+            #     lvl_color = (137, 207, 240)
+            title_stat = f"🎗️{title['TITLE']}"
 
             # Character Name
             if not resolved:
                 if d["HAS_COLLECTION"]:
-                    draw.text((82,50), d['NAME'], (255,215,0), font=header, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
+                    draw.text((82,50), f"{d['NAME']}", (255,215,0), font=header, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
                 else:
                     draw.text((82,50), d['NAME'], (255, 255, 255), font=header, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
 
             # Title Name
-            draw.text((85,20), title['TITLE'], (255, 255, 255), font=h, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
+            # draw.text((85,20), title['TITLE'], (255, 255, 255), font=h, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
+            
+            with Pilmoji(im) as pilmoji:
+                pilmoji.text((70, 160), health_bar.strip(), (255, 255, 255), font=rhs, stroke_width=2, stroke_fill=(0,0,0))
+                pilmoji.text((70, 195), stamina_bar.strip(), (255, 255, 255), font=rhs, stroke_width=2, stroke_fill=(0,0,0))
+                pilmoji.text((70, 240), attack_stat.strip(), (255, 255, 255), font=rhs, stroke_width=2, stroke_fill=(0,0,0))
+                pilmoji.text((200, 240), defense_stat.strip(), (255, 255, 255), font=rhs, stroke_width=2, stroke_fill=(0,0,0))
 
-            # # Turn Total
-            # draw.text((85,350),f"Turn {turn_total}", (255, 255, 255), font=stats, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
-
-            # # Stats
-            # draw.text((85,250),f"ATK {attack}", (255, 255, 255), font=stats, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
-            # draw.text((85,300),f"DEF {defense}", (255, 255, 255), font=stats, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
-
+                pilmoji.text((85,20), title_stat.strip(), (255, 255, 255), font=h, stroke_width=2, stroke_fill=(0,0,0), align="left")
+                # pilmoji.text((70, 290), move1_text.strip(), (255, 255, 255), font=card_details_font_size, stroke_width=2, stroke_fill=(0,0,0))
+                # pilmoji.text((70, 340), move2_text.strip(), (255, 255, 255), font=card_details_font_size, stroke_width=2, stroke_fill=(0,0,0))
+                # pilmoji.text((70, 390), move3_text.strip(), (255, 255, 255), font=card_details_font_size, stroke_width=2, stroke_fill=(0,0,0))
+                # pilmoji.text((70, 440), move_enhanced_text.strip(), (255, 255, 255), font=card_details_font_size, stroke_width=2, stroke_fill=(0,0,0))
+                
+                # pilmoji.text((1005, 50), level_stat.strip(), lvl_color, font=header, stroke_width=5, stroke_fill=(0,0,0))
+               
             if focused:
                             # side    # vert
                 draw.line(((0, 0), (0, 800)), fill=(30,144,255), width=15)
@@ -9835,27 +9843,6 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
                 draw.line(((1195, 0), (0, 0)), fill=(255,215,0), width=15)
                 draw.line(((0, 600), (1195, 600)), fill=(255,215,0), width=15)
                 draw.text((280,130), "RESOLVED", (255,215,0), font=r, stroke_width=2, stroke_fill=(0,0,0), align="left")
-
-
-            # moveset = d['MOVESET']
-            # # Player Moves
-            # move1 = moveset[0]
-            # move1_text = list(move1.keys())[0]
-
-            # move2 = moveset[1]
-            # move2_text = list(move2.keys())[0]
-
-            # move3 = moveset[2]
-            # move3_text = list(move3.keys())[0]
-
-            # move_enhanced = moveset[3]
-            # move_enhanced_text = list(move_enhanced.keys())[0]
-
-            # draw.text((82,240), f"1 | 🌀 10 | {move1_text}",  (255, 255, 255), font=m, stroke_width=2, stroke_fill=(0,0,0), align="left")
-            # draw.text((82,270), f"2 | 🌀 30 | {move2_text}",  (255, 255, 255), font=m, stroke_width=2, stroke_fill=(0,0,0), align="left")
-            # draw.text((82,300), f"3 | 🌀 80 | {move3_text}",  (255, 255, 255), font=m, stroke_width=2, stroke_fill=(0,0,0), align="left")
-            # draw.text((82,330), f"4 | 🌀 20 | {move_enhanced_text}",  (255, 255, 255), stroke_width=2, stroke_fill=(0,0,0), font=m, align="left")
-            # draw.text((82,550), f"0 | 🌀 20 | Block",  (255, 255, 255), font=m, align="left")
             
 
             # data = io.BytesIO
@@ -13259,8 +13246,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             if o_used_resolve:
                                 pet_msg_on_resolve =f"🐦 | *{enhancer_mapping[pet_enh_name]}*"
 
-                            h_a_s_response = health_and_stamina_bars(o_health, o_stamina, o_max_health, o_max_stamina, o_used_resolve)
-                            embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}\n**Attack**    | **{round(o_attack)}** :dagger:\n**Defense** | **{round(o_defense)}** 🛡️\n**Health**    | **{round(o_health)}/{round(o_max_health)}** {h_a_s_response['HEALTH']}\n**Stamina** | **{o_stamina}/{o_max_stamina}** {h_a_s_response['STAMINA']}", description=textwrap.dedent(f"""\
+                            embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}", description=textwrap.dedent(f"""\
                             💥 | **{omove1_text}** *{ap1}*
                             ☄️ | **{omove2_text}** *{ap2}*
                             🏵️ | **{omove3_text}** *{ap3}*
@@ -16278,8 +16264,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 if c_used_resolve:
                                     pet_msg_on_resolve =f"🐦 | *{enhancer_mapping[pet_enh_name]}*"
 
-                                h_a_s_response = health_and_stamina_bars(c_health, c_stamina, c_max_health, c_max_stamina, c_used_resolve)
-                                embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}\n**Attack**    | **{c_attack}** :dagger:\n**Defense** | **{c_defense}** 🛡️\n**Health**    | **{c_health}/{c_max_health}** {h_a_s_response['HEALTH']}\n**Stamina** | **{c_stamina}/{c_max_stamina}** {h_a_s_response['STAMINA']}", description=textwrap.dedent(f"""\
+                                embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}", description=textwrap.dedent(f"""\
                                 💥 | **{cmove1_text}** *{cap1}*
                                 ☄️ | **{cmove2_text}** *{cap2}*
                                 🏵️ | **{cmove3_text}** *{cap3}*

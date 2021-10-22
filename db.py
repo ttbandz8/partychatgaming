@@ -1,4 +1,5 @@
-import pymongo 
+from pymongo import MongoClient
+import certifi
 import messages as m
 from decouple import config
 
@@ -9,12 +10,13 @@ else:
     # TEST
     use_database = "PCGTEST"
 
-TOKEN = config('MONGOTOKEN_TEST')
-mongo = pymongo.MongoClient(TOKEN)
-
-print(use_database)
+# TOKEN = config('MONGOTOKEN_TEST')
+MONGO = config('MONGO_LOGIN')
+mongo = MongoClient(MONGO, tlsCAFile=certifi.where())
+# mongo = pymongo.MongoClient(TOKEN)
 
 db = mongo[use_database]
+
 users_col = db["USERS"]
 teams_col = db["TEAMS"]
 family_col = db["FAMILY"]
@@ -677,14 +679,6 @@ def card_exists(data):
     else:
         return False
 
-# def deleteAllCards(user_query):
-#     exists = user_exists({'DISNAME': user_query['DISNAME']})
-#     if exists:
-#         cards_col.delete_many({'UNIVERSE': 'Dragon Ball Z'})
-#         return 'All Cards Deleted'
-#     else:
-#         return 'Unable to Delete All Cards'
-
 '''New Card'''
 def createCard(card):
     try:
@@ -1265,14 +1259,27 @@ def queryBoss(query):
 '''Query User'''
 def queryUser(user):
     try:
-        exists = user_exists({'DISNAME': user['DISNAME']})
-        if exists:
-            data = users_col.find_one(user)
+        data = users_col.find_one(user)
+        if data:
             return data
         else:
             return False
            
-    except:
+    except Exception as ex:
+        trace = []
+        tb = ex.__traceback__
+        while tb is not None:
+            trace.append({
+                "filename": tb.tb_frame.f_code.co_filename,
+                "name": tb.tb_frame.f_code.co_name,
+                "lineno": tb.tb_lineno
+            })
+            tb = tb.tb_next
+        print(str({
+            'type': type(ex).__name__,
+            'message': str(ex),
+            'trace': trace
+        }))
         return False
 
 def queryAllUsers():
@@ -1282,7 +1289,6 @@ def queryAllUsers():
 def createUsers(users):
     exists = user_exists({'DISNAME': users['DISNAME']})
     if exists:
-        print("Does exist")
         return False
     else:
         data = users_col.insert_one(users)

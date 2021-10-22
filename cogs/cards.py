@@ -15,7 +15,7 @@ from discord import Member
 from PIL import Image, ImageFont, ImageDraw
 import requests
 import random
-from .crownunlimited import showcard
+from .crownunlimited import showcard, enhancer_mapping, enhancer_suffix_mapping
 from discord_slash import cog_ext, SlashContext
 from discord_slash import SlashCommand
 from discord_slash.utils import manage_components
@@ -267,7 +267,6 @@ class Cards(commands.Cog):
             att = 0
             defe = 0
             turn = 0
-            card_file = showcard(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, title, focused, att, defe, turn)
             mytrait = {}
             traitmessage = ''
             for trait in traits:
@@ -327,28 +326,24 @@ class Cards(commands.Cog):
             elif o_defense > o_attack:
                 message = f"{o_card} is a defensive card. "
                 tip="Equipping offensive /titles and /arms would help boost killability"              
-
-            embedVar = discord.Embed(title=f"{card_icon}  {o_card}\n{price_message}".format(self), description=textwrap.dedent(f"""
-            :heart: **Health** - {o_max_health}
-            :cyclone: **Stamina** - {o_max_stamina}
-            :dagger: **Attack** - {o_attack}
-            :shield: **Shield** - {o_defense}
-
-            _**Moveset**_
+            
+            card_file = showcard(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, title, focused, o_attack, o_defense, turn)
+            embedVar = discord.Embed(title=f"{card_icon} {price_message}".format(self), description=textwrap.dedent(f"""
+            _**Moveset Details**_
             :boom: **{move1}:** {move1ap}
             :comet: **{move2}:** {move2ap}
             :rosette: **{move3}:** {move3ap}
-            :microbe: **{move4}:** {move4enh} by {move4ap}
-            *Use /enhancers to learn about the {move4enh} Enhancement!*
+            :microbe: **{move4}:** *{move4enh} {move4ap}{enhancer_suffix_mapping[move4enh]}*
+            ↘️ {enhancer_mapping[move4enh]}
 
             :drop_of_blood: _Passive:_ **{passive_name}:** {passive_type} by {passive_num}
             :infinity: {traitmessage}
             """), colour=000000)
             if o_show != "Unbound":
                 embedVar.set_thumbnail(url=show_img)
-            embedVar.set_image(url=o_card_path)
             embedVar.set_footer(text=f"{tip}")
-            await ctx.send(embed=embedVar)
+            await ctx.send(embed=embedVar, file=card_file)
+            # await ctx.send(file=card_file)
 
         else:
             await ctx.send(m.CARD_DOESNT_EXIST, delete_after=3)

@@ -1,31 +1,25 @@
 from dataclasses import field
-from discord import player, team
 from discord.ext.commands.errors import CommandOnCooldown
 from discord.flags import Intents
 from pymongo.collation import CollationMaxVariable
 import db
 import time
 import classes as data
-import test_data as td
 import messages as m
 import discord
 import DiscordUtils
 from discord.ext import commands
-from PIL import Image, ImageFont, ImageDraw
 import numpy as np
 import help_commands as h
 import destiny as d
 # Converters
 from discord import User
-from discord import Member
 from discord_slash import SlashCommand
 from discord_slash.utils import manage_components
 from discord_slash.model import ButtonStyle
 import os
 import logging
-import requests
 from decouple import config
-from collections import ChainMap
 import textwrap
 import random
 import unique_traits as ut
@@ -59,7 +53,26 @@ else:
    bot = commands.Bot(command_prefix=",", intents=intents)
    guild_ids = [839352855000776735]
 
+
 slash = SlashCommand(bot, sync_commands=True)
+
+async def load(ctx, extension):
+   # Goes into cogs folder and looks for extension
+   bot.load_extension(f'cogs.{extension}')
+
+async def unload(ctx, extension):
+   # Goes into cogs folder and looks for extension
+   bot.unload_extension(f'cogs.{extension}')
+
+for filename in os.listdir('./cogs'):
+   if filename.endswith('.py'):
+      # :-3 removes .py from filename
+      bot.load_extension(f'cogs.{filename[:-3]}')
+
+
+@bot.command()
+async def ping(ctx):
+   await ctx.send("Hello World")
 
 bot.remove_command("help")
 
@@ -100,19 +113,6 @@ async def validate_user(ctx):
    else:
       msg = await ctx.send(m.USER_NOT_REGISTERED, delete_after=5)
       return False
-
-async def load(ctx, extension):
-   # Goes into cogs folder and looks for extension
-   bot.load_extension(f'cogs.{extension}')
-
-async def unload(ctx, extension):
-   # Goes into cogs folder and looks for extension
-   bot.unload_extension(f'cogs.{extension}')
-
-for filename in os.listdir('./cogs'):
-   if filename.endswith('.py'):
-      # :-3 removes .py from filename
-      bot.load_extension(f'cogs.{filename[:-3]}')
 
 @bot.event
 async def on_ready():
@@ -686,24 +686,6 @@ async def rebirth(ctx):
       else:
          await ctx.send(f"You are at full Rebirth\n:angel:Level: {user_is_validated['REBIRTH']} ", delete_after=5)
 
-# @bot.command()
-# @commands.check(validate_user)
-# async def purge(ctx, amount: int):
-#    if ctx.author.guild_permissions.administrator == True:
-#       await ctx.channel.purge(limit=amount)
-#       await ctx.send(f"{amount} messages have been purged.")
-#    else:
-#       print(m.ADMIN_ONLY_COMMAND)
-
-@bot.command()
-@commands.check(validate_user)
-async def fix(ctx, player: User):
-   user = player
-   if ctx.author.guild_permissions.administrator == True:
-      response = db.updateUserNoFilter({'DISNAME': str(user)}, {'$set': {'AVAILABLE': True}})
-      await ctx.send(f"{user.mention} is fixed. ")
-   else:
-      print(m.ADMIN_ONLY_COMMAND)
 
 @bot.event
 async def on_slash_command_error(ctx, ex):
@@ -780,42 +762,6 @@ async def updatestock(ctx, stock: int):
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandOnCooldown):
         await ctx.send(f'Your Daily Reward is on cooldown! You can use it in {round(error.retry_after/3600)} hours!')
-
-
-# @slash.slash(name="Vs", description="How many times you defeated opponent", guild_ids=guild_ids)
-# @commands.check(validate_user)
-# async def vs(ctx, player: User):
-#    user = player
-#    args1 = "crown"
-#    aliases = [x for x in db.query_all_games() for x in x['ALIASES']]
-#    game = {}
-#    if args1 in aliases:
-#       game_query = {'ALIASES': args1}
-#       game = db.queryGame(game_query)
-
-#       win_query = {'GAME': game['GAME'], 'WINNER.TEAM': [str(ctx.author)], 'LOSER.TEAM': [str(user)]}
-#       win_count = 0
-#       win_sessions = db.querySessionForUser(win_query)
-#       for x in win_sessions:
-#          win_count +=1
-
-#       loss_query = {'GAME': game['GAME'], 'WINNER.TEAM': [str(user)], 'LOSER.TEAM': [str(ctx.author)]}
-#       loss_count = 0
-#       loss_sessions = db.querySessionForUser(loss_query)
-#       for x in loss_sessions:
-#          loss_count +=1
-
-#       total_games = win_count + loss_count
-#       if win_count > 0:
-#          message = f"{str(ctx.author.mention)} has defeated {str(user.mention)} {win_count} out of {total_games} matches in {game['GAME']}!"
-#       else:
-#          message = f"{str(ctx.author.mention)} has never defeated {str(user.mention)} in {game['GAME']}!"
-
-#       if total_games == 0:
-#          message = "You two have not played each other. "
-#       await ctx.send(message)
-#    else:
-#       await ctx.send(m.GAME_NOT_DETECTED, delete_after=5)
 
 async def DM(ctx, user : User, m,  message=None):
     message = message or "This Message is sent via DM"
@@ -1661,18 +1607,6 @@ async def curseguild(amount, guild):
          db.updateGuildAlt(query, update_query)
       else:
          print("cant find guild")
-
-# @slash.slash(name="Traits", description="See full list of Universe Traits", guild_ids=guild_ids)
-# @commands.check(validate_user)
-# async def traits(ctx):
-#    traits = ut.traits
-#    traitmessages = []
-#    for trait in traits:
-#       traitmessages.append(f"_{trait['NAME']}_\n**{trait['EFFECT']}**: {trait['TRAIT']}\n")
-
-#    embedVar = discord.Embed(title=":infinity: | Universe Traits", description="\n".join(traitmessages))
-
-#    await ctx.send(embed=embedVar)
 
 @slash.slash(name="Resell", description="Sell items back to the shop", guild_ids=guild_ids)
 @commands.check(validate_user)

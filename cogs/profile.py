@@ -17,7 +17,7 @@ from PIL import Image, ImageFont, ImageDraw
 import requests
 from collections import ChainMap
 import DiscordUtils
-from .crownunlimited import showcard
+from .crownunlimited import showcard, enhancer_mapping, enhancer_suffix_mapping
 import random
 import textwrap
 from discord_slash import cog_ext, SlashContext
@@ -195,11 +195,9 @@ class Profile(commands.Cog):
 
                 resolved = False
                 focused = False
-                cardtitle = {'TITLE': 'CARD PREVIEW'}
                 att = 0
                 defe = 0
                 turn = 0
-                card_file = showcard(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, cardtitle, focused, att, defe, turn)
 
                 passive_name = list(o_passive.keys())[0]
                 passive_num = list(o_passive.values())[0]
@@ -231,43 +229,40 @@ class Profile(commands.Cog):
                 if o_title_universe == "Unbound":
                     titled =True
                     titleicon = ":reminder_ribbon:"
-                    titlemessage = f":reminder_ribbon: | **{title_name}** ~ {title_passive_type} | {title_passive_value}"
+                    titlemessage = f":reminder_ribbon: | **{title_name}** {title_passive_type} *{title_passive_value}{enhancer_suffix_mapping[title_passive_type]}*"
                     warningmessage= f""
                 elif o_title_universe == o_show:
                     titled =True
                     titleicon = ":reminder_ribbon:"
-                    titlemessage = f":reminder_ribbon: | **{title_name}** ~ {title_passive_type} | {title_passive_value}"
+                    titlemessage = f":reminder_ribbon: | **{title_name}** *{title_passive_type} {title_passive_value}{enhancer_suffix_mapping[title_passive_type]}*"
                     warningmessage= f""
+                cardtitle = {'TITLE': title_name}
+                card_file = showcard(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, cardtitle, focused, o_attack, o_defense, turn)
 
-                embedVar = discord.Embed(title=f"{licon} {card_lvl} | {title_name} {o_card} & {active_pet['NAME']}:".format(self), description=textwrap.dedent(f"""\
-                {message}
-                :heart: | **Health** {o_max_health}
-                :cyclone: | **Stamina** {o_max_stamina}
-                :dagger: | **Attack** {o_attack}
-                :shield: | **Shield** {o_defense}
-                
+                embedVar = discord.Embed(title=f"{licon} {card_lvl} {message}".format(self), description=textwrap.dedent(f"""\
                 {titlemessage}
-                :mechanical_arm: | **{arm_name}** ~ {arm_passive_type} | {arm_passive_value}
-                :bird: | **{active_pet['NAME']}** ~ {active_pet['TYPE']} | {pet_ability_power} 
+                :mechanical_arm: | **{arm_name}** *{arm_passive_type} {arm_passive_value}{enhancer_suffix_mapping[arm_passive_type]}*
+                :bird: | **{active_pet['NAME']}** *{active_pet['TYPE']} {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]}*
                 **Bond** _{bond}_ {bond_message} / **Level** _{lvl}_ {lvl_message}
             
-                _**Moveset**_
+                _**Moveset Details**_
                 :boom: | **{move1}:** {move1ap}
                 :comet: | **{move2}:** {move2ap}
                 :rosette: | **{move3}:** {move3ap}
-                :microbe: | **{move4}:** {move4enh} by {move4ap}
+                :microbe: | **{move4}:** *{move4enh} {move4ap}{enhancer_suffix_mapping[move4enh]}*
+                ↘️ {enhancer_mapping[move4enh]}
                 
-                :drop_of_blood: | _Passive:_ **{passive_name}:** {passive_type} by {passive_num}
+                :drop_of_blood: | _Passive:_ **{passive_name}:** *{passive_type} {passive_num}{enhancer_suffix_mapping[passive_type]}*
                 :infinity: | {traitmessage}
                 {warningmessage}
                 """)
                 
                 , colour=000000)
                 embedVar.set_thumbnail(url=active_pet['PATH'])
-                embedVar.set_image(url=o_card_path)
-                embedVar.set_footer(text=f"EXP Until Next Level: {150 - card_exp}\nRebirth Buff: +{rebirthBonus}", icon_url="https://cdn.discordapp.com/emojis/841486485826961448.gif?v=1")
+                if card_lvl != 200:
+                    embedVar.set_footer(text=f"EXP Until Next Level: {150 - card_exp}\nRebirth Buff: +{rebirthBonus}", icon_url="https://cdn.discordapp.com/emojis/841486485826961448.gif?v=1")
 
-                await ctx.send(embed=embedVar)
+                await ctx.send(embed=embedVar, file=card_file)
             except Exception as ex:
                 trace = []
                 tb = ex.__traceback__
@@ -829,40 +824,47 @@ class Profile(commands.Cog):
 
     @cog_ext.cog_slash(description="Check your balance", guild_ids=main.guild_ids)
     async def bal(self, ctx):
-        query = {'DISNAME': str(ctx.author)}
-        d = db.queryUser(query)
-        vault = db.queryVault({'OWNER': d['DISNAME']})
-        icon = ":coin:"
-        if vault:
-            name = d['DISNAME'].split("#",1)[0]
-            avatar = d['AVATAR']
-            balance = vault['BALANCE']
-            if balance >= 150000:
-                icon = ":money_with_wings:"
-            elif balance >=100000:
-                icon = ":moneybag:"
-            elif balance >= 50000:
-                icon = ":dollar:"
-            if d['TEAM'] != 'PCG':
-                t = db.queryTeam({'TNAME' : d['TEAM']})
-                tbal = t['BANK']
-                if d['FAMILY'] != 'PCG':
-                    f = db.queryFamily({'HEAD': d['FAMILY']})
-                    fbal = f['BANK']
-                    
-                
-
-            embedVar = discord.Embed(title= f"{icon}{'{:,}'.format(balance)}", colour=0x7289da)
-            # if t:
-            #     embedVar = discord.Embed(title= f":triangular_flag_on_post:{icon}{'{:,}'.format(balance)}", colour=0x7289da)
-            #     embedVar.add_field(name=f":military_helmet:: {t['TNAME']}", value=f":coin:{'{:,}'.format(t['BANK'])}")
-            #     if f:
-            #         embedVar.add_field(name=f":family_mwgb: {f['HEAD']}", value=f":coin:{'{:,}'.format(f['BANK'])}")
-
-            await ctx.send(embed=embedVar)
-        else:
-            newVault = db.createVault({'OWNER': d['DISNAME']})
-
+        try:
+            query = {'DISNAME': str(ctx.author)}
+            d = db.queryUser(query)
+            vault = db.queryVault({'OWNER': d['DISNAME']})
+            icon = ":coin:"
+            if vault:
+                name = d['DISNAME'].split("#",1)[0]
+                avatar = d['AVATAR']
+                balance = vault['BALANCE']
+                if balance >= 150000:
+                    icon = ":money_with_wings:"
+                elif balance >=100000:
+                    icon = ":moneybag:"
+                elif balance >= 50000:
+                    icon = ":dollar:"
+                if d['TEAM'] != 'PCG':
+                    t = db.queryTeam({'TNAME' : d['TEAM']})
+                    tbal = t['BANK']
+                    if d['FAMILY'] != 'PCG':
+                        f = db.queryFamily({'HEAD': d['FAMILY']})
+                        fbal = f['BANK']
+                embedVar = discord.Embed(title= f"{icon}{'{:,}'.format(balance)}", colour=0x7289da)
+                await ctx.send(embed=embedVar)
+            else:
+                newVault = db.createVault({'OWNER': d['DISNAME']})
+        except:
+            trace = []
+            tb = ex.__traceback__
+            while tb is not None:
+                trace.append({
+                    "filename": tb.tb_frame.f_code.co_filename,
+                    "name": tb.tb_frame.f_code.co_name,
+                    "lineno": tb.tb_lineno
+                })
+                tb = tb.tb_next
+            print(str({
+                'type': type(ex).__name__,
+                'message': str(ex),
+                'trace': trace
+            }))
+            
     @cog_ext.cog_slash(description="Check your build presets", guild_ids=main.guild_ids)
     async def preset(self, ctx):
         query = {'DISNAME': str(ctx.author)}
