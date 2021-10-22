@@ -70,10 +70,6 @@ for filename in os.listdir('./cogs'):
       bot.load_extension(f'cogs.{filename[:-3]}')
 
 
-@bot.command()
-async def ping(ctx):
-   await ctx.send("Hello World")
-
 bot.remove_command("help")
 
 @bot.group(invoke_without_command=True)
