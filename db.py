@@ -13,6 +13,7 @@ else:
 # TOKEN = config('MONGOTOKEN_TEST')
 MONGO = config('MONGO_LOGIN')
 mongo = MongoClient(MONGO, tlsCAFile=certifi.where())
+
 # mongo = pymongo.MongoClient(TOKEN)
 
 db = mongo[use_database]
