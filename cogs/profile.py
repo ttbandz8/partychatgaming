@@ -210,11 +210,13 @@ class Profile(commands.Cog):
                 if (oarm_universe == o_show) and (o_title_universe == o_show):
                     o_attack = o_attack + 20
                     o_defense = o_defense + 20
+                    o_health = o_health + 100
                     o_max_health = o_max_health + 100
                     message = "_Universe Buff Applied_"
                     if o_destiny:
                         o_attack = o_attack + 25
                         o_defense = o_defense + 25
+                        o_health = o_health + 150
                         o_max_health = o_max_health + 150
                         message = "_Destiny Buff Applied_"
 

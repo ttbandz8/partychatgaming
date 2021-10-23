@@ -72,7 +72,7 @@ for filename in os.listdir('./cogs'):
 
 bot.remove_command("help")
 
-@bot.group(invoke_without_command=True)
+@slash.slash(name="Help", description="List of Commands", guild_ids=guild_ids)
 async def help(ctx):
    avatar="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png"
 
@@ -91,13 +91,19 @@ async def help(ctx):
    embedVar3.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
    embedVar3.set_footer(text=f".senpai - Text Bot Tutorial")
 
+   embedVar4 = discord.Embed(title= f"Common Symbols", description=h.LEGEND, colour=0x7289da)
+   embedVar4.set_thumbnail(url=avatar)
+   embedVar4.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
+   embedVar4.set_footer(text=f".senpai - Text Bot Tutorial")
+
+
    paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
    paginator.add_reaction('⏮️', "first")
    paginator.add_reaction('⬅️', "back")
    paginator.add_reaction('🔒', "lock")
    paginator.add_reaction('➡️', "next")
    paginator.add_reaction('⏭️', "last")
-   embeds = [embedVar2,embedVar3, embedVar1]
+   embeds = [embedVar4, embedVar2,embedVar3, embedVar1]
    await paginator.run(embeds)
 
 async def validate_user(ctx):
@@ -386,7 +392,31 @@ async def r(ctx):
       If you'd like to read the manual, run the command below!
       **/crown**
 
-      You have enough money to buy some new cards and accessories if you do not like your starters. Have fun!
+      **Some Important Symbols**
+      **Basics**
+      :trident: - Level
+      :heart:  - Health
+      :cyclone: - Stamina
+      🗡️ - Attack
+      🛡️ - Defense
+
+      **Accessories**
+      :reminder_ribbon: - Title for Card
+      :mechanical_arm: - Arm for Card
+      :bird: - Pet
+
+      **Moveset**
+      :boom: - Basic Attack *costs 10 :cyclone:*
+      :comet: - Special Attack *costs 30 :cyclone:*
+      :rosette: - Ultimate Attack *costs 80 :cyclone:*
+      :microbe: - Enhancer Ability *costs 20 :cyclone:*
+      ↘️ - Explains Enhancer Ability
+
+      **Passives**
+      :drop_of_blood: - Card Passive
+      :infinity: - Universe Trait for Card
+
+      **Have fun!**
       """), colour=0xe91e63)
       embedVar.set_footer(text="Changing your Discord Account Name or Numbers will break your Crown Unlimited Account.")
       await ctx.author.send(embed=embedVar)

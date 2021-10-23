@@ -9,6 +9,31 @@ import textwrap
 # CROWN_UNLIMITED_PLAYER_COMMANDS="`/vault` - Open `VAULT` *Use :fast_forward:*\n\n`/equipcard` `CARD Name` - Equip new `CARD`\n\n`/equiptitle` - Equip new `TITLE`\n\n`/equiparm` - Equip new `ARM`\n\n`/viewpet` - View `PET` Stats\n\n`/equippet` - Equip new `PET`\n\n`/trade` @`PLAYER` `ITEM` - trade `CARDS`, `TITLES`, `ARMS` or `PETS`\n\n`/sell` @`PLAYER` `ITEM` - sell `CARDS`, `TITLES`, `ARMS` or `PETS`\n\n`/build` - view current Build\n\n`/savedeck` - save current Build\n\n`/viewdeck` - view/load Saved Builds\n\n`/shop` - Open Pop Up `SHOP` *Use :fast_forward:*\n\n"
 CROWN_UNLIMITED_GAMES="`/crownhelp` - Crown Unlimited Help Book\n\n`/senpaibattle` - Tutorial Bot\n\n`/legendbattle` -  Advanced Tutorial Bot\n\n`/battle` @`PLAYER` - Challenge another Player\n\n`/start` - To start a battle in your current session\n\n`/wager` `AMOUNT` - Wager amount to battle in current session\n\n`/solo` - Play Crown Unlimited In DMS\n\n`/tales` - Opens Crown Tales Story Mode Menu\n\n`/dungeon` - Opens Crown Tales Dungeon Menu\n\n`/boss` `UNIVERSE` - Opens Crown Universe Boss Fight\n\n`/ctales` @`COMPANION` - Opens Crown Tales CO-OP Story Mode Menu\n\n`/cdungeon` @`COMPANION`- Opens Crown Tales CO-OP Dungeon Menu\n\n`/cboss` @`COMPANION` `UNIVERSE` - Opens Crown Universe CO-OP Boss Fight\n\n`/enhance` - Opens Enhancement Help Menu\n\n"
 
+LEGEND = textwrap.dedent(f"""\
+**Basics**
+:trident: - Level
+:heart:  - Health
+:cyclone: - Stamina
+🗡️ - Attack
+🛡️ - Defense
+
+**Accessories**
+:reminder_ribbon: - Title for Card
+:mechanical_arm: - Arm for Card
+:bird: - Pet
+
+**Moveset**
+:boom: - Basic Attack *costs 10 :cyclone:*
+:comet: - Special Attack *costs 30 :cyclone:*
+:rosette: - Ultimate Attack *costs 80 :cyclone:*
+:microbe: - Enhancer Ability *costs 20 :cyclone:*
+↘️ - Explains Enhancer Ability
+
+**Passives**
+:drop_of_blood: - Card Passive
+:infinity: - Universe Trait for Card
+""")
+
 BOT_COMMANDS = textwrap.dedent(f"""\
 **ACCOUNT COMMANDS**
 **/r**: Account Registration
@@ -85,15 +110,8 @@ CROWN_UNLIMITED_COMMANDS = textwrap.dedent(f"""\
 **/ff**: Leave current tale, dungeon, or boss fight
 **/universes**: Show List Of Crown Universes
 **/tales**: Opens Crown Tales Story Mode Menu
-**/dungeon**: Opens Crown Tales Dungeon Menu
-**/boss**: Opens Crown Universe Boss Menu
-**/ctales @companion**: Opens Crown Tales CO-OP Story Mode Menu
-**/cdungeon @companion**: Opens Crown Tales CO-OP Dungeon Menu
-**/cboss @companion**: Opens Crown Universe CO-OP Boss Menu
-**/dtales 1-3**: Opens Crown Tales Duo Story Mode Menu
-**/ddungeon 1-3**: Opens Crown Tales Duo Dungeon Menu
-**PATREON ONLY**
-**/atales**:Auto-Battle Tales
+**/cooptales**: Opens Crown Tales CO-OP Story Mode Menu
+**/aitales**: Opens Crown Tales Duo Story Mode Menu
 """)
 CTAP_COMMANDS = textwrap.dedent(f"""\
 **CARD COMMANDS**

@@ -29,6 +29,7 @@ from discord import Embed
 from discord_slash import cog_ext, SlashContext
 from discord_slash.utils import manage_components
 from discord_slash.model import ButtonStyle
+from discord_slash.utils.manage_commands import create_option, create_choice
 import typing
 from pilmoji import Pilmoji
 
@@ -269,81 +270,54 @@ class CrownUnlimited(commands.Cog):
                 'trace': trace
             }))
 
-    
-    @cog_ext.cog_slash(description="Auto Tales Battler", guild_ids=main.guild_ids)
-    async def atales(self, ctx: SlashContext):
+
+    @cog_ext.cog_slash(description="Duo Tales with AI", 
+    options=[
+        create_option(
+            name="deck",
+            description="AI Preset",
+            option_type=3,
+            required=True,
+            choices=[
+                create_choice(
+                    name="Preset 1",
+                    value="1"
+                ),
+                create_choice(
+                    name="Preset 2",
+                    value="2"
+                ),
+                create_choice(
+                    name="Preset 3",
+                    value="3"
+                )
+            ]
+        ),
+        create_option(
+            name="mode",
+            description="Difficulty Level",
+            option_type=3,
+            required=True,
+            choices=[
+                create_choice(
+                    name="AI Normal Co-op",
+                    value="DTales"
+                ),
+                create_choice(
+                    name="AI Hard Co-op",
+                    value="DDungeon"
+                )
+            ]
+        )
+    ]
+    ,guild_ids=main.guild_ids)
+    async def aitales(self, ctx: SlashContext, deck: int, mode: str):
         U_modes = ['ATales','Tales', 'CTales', 'DTales']
         D_modes = ['CDungeon','DDungeon', 'Dungeon', 'ADungeon']
         B_MODES = ['Boss', 'CBoss']
         try:
             # await ctx.defer()
-            mode = "ATales"
-
-            sowner = db.queryUser({'DISNAME': str(ctx.author)})
-            oteam = sowner['TEAM']
-            ofam = sowner['FAMILY']
-            
-            universe_selection = await select_universe(self, ctx, sowner, oteam, ofam, mode, None)
-            selected_universe = universe_selection['SELECTED_UNIVERSE']
-            private_channel = universe_selection['PRIVATE_CHANNEL']
-            universe = universe_selection['UNIVERSE_DATA']
-            crestlist = universe_selection['CREST_LIST']
-            crestsearch = universe_selection['CREST_SEARCH']
-
-            if mode in D_modes:
-                completed_universes = universe_selection['COMPLETED_DUNGEONS']
-            else:
-                completed_universes = universe_selection['COMPLETED_TALES']
-            if crestsearch:
-                oguild = universe_selection['OGUILD']
-            else:
-                oguild = "PCG"
-            
-            await battle_commands(self, ctx, mode, universe, selected_universe, completed_universes, oguild, crestlist, crestsearch, private_channel, sowner, oteam, ofam, None, None, None, None, None)
-        except Exception as ex:
-            return
-
-    # @cog_ext.cog_slash(description="Auto Dungeon Battler", guild_ids=main.guild_ids)
-    # async def adungeon(self, ctx: SlashContext):
-    #     U_modes = ['ATales','Tales', 'CTales', 'DTales']
-    #     D_modes = ['CDungeon','DDungeon', 'Dungeon', 'ADungeon']
-    #     B_MODES = ['Boss', 'CBoss']
-    #     try:
-    #         # await ctx.defer()
-    #         mode = "ADungeon"
-
-    #         sowner = db.queryUser({'DISNAME': str(ctx.author)})
-    #         oteam = sowner['TEAM']
-    #         ofam = sowner['FAMILY']
-            
-    #         universe_selection = await select_universe(self, ctx, sowner, oteam, ofam, mode, None)
-    #         selected_universe = universe_selection['SELECTED_UNIVERSE']
-    #         private_channel = universe_selection['PRIVATE_CHANNEL']
-    #         universe = universe_selection['UNIVERSE_DATA']
-    #         crestlist = universe_selection['CREST_LIST']
-    #         crestsearch = universe_selection['CREST_SEARCH']
-
-    #         if mode in D_modes:
-    #             completed_universes = universe_selection['COMPLETED_DUNGEONS']
-    #         else:
-    #             completed_universes = universe_selection['COMPLETED_TALES']
-    #         if crestsearch:
-    #             oguild = universe_selection['OGUILD']
-    #         else:
-    #             oguild = "PCG"
-            
-    #         await battle_commands(self, ctx, mode, universe, selected_universe, completed_universes, oguild, crestlist, crestsearch, private_channel, sowner, oteam, ofam, None, None, None, None, None)
-    #     except Exception as ex:
-    #         return
-
-    @cog_ext.cog_slash(description="Duo Tales with AI", guild_ids=main.guild_ids)
-    async def dtales(self, ctx: SlashContext, deck: int):
-        U_modes = ['ATales','Tales', 'CTales', 'DTales']
-        D_modes = ['CDungeon','DDungeon', 'Dungeon', 'ADungeon']
-        B_MODES = ['Boss', 'CBoss']
-        try:
-            # await ctx.defer()
-            mode = "DTales"
+            deck = int(deck)
             if deck != 1 and deck != 2 and deck != 3:
                 await ctx.send("Not a valid Deck Option")
                 return
@@ -390,62 +364,37 @@ class CrownUnlimited(commands.Cog):
             return
                    
     
-    @cog_ext.cog_slash(description="Duo Dungeons with AI", guild_ids=main.guild_ids)
-    async def ddungeon(self, ctx: SlashContext, deck : int):
-        U_modes = ['ATales','Tales', 'CTales', 'DTales']
-        D_modes = ['CDungeon','DDungeon', 'Dungeon', 'ADungeon']
-        B_MODES = ['Boss', 'CBoss']
-        try:
-            # await ctx.defer()
-            mode = "DDungeon"
-            if deck != 1 and deck != 2 and deck != 3:
-                await ctx.send("Not a valid Deck Option")
-                return
-            deckNumber = deck - 1
-            sowner = db.queryUser({'DISNAME': str(ctx.author)})
-            oteam = sowner['TEAM']
-            ofam = sowner['FAMILY']
-            cowner = sowner
-            cteam = oteam
-            cfam = ofam
-            
-            universe_selection = await select_universe(self, ctx, sowner, oteam, ofam, mode, None)
-            selected_universe = universe_selection['SELECTED_UNIVERSE']
-            private_channel = universe_selection['PRIVATE_CHANNEL']
-            universe = universe_selection['UNIVERSE_DATA']
-            crestlist = universe_selection['CREST_LIST']
-            crestsearch = universe_selection['CREST_SEARCH']
-
-            if mode in D_modes:
-                completed_universes = universe_selection['COMPLETED_DUNGEONS']
-            else:
-                completed_universes = universe_selection['COMPLETED_TALES']
-            if crestsearch:
-                oguild = universe_selection['OGUILD']
-            else:
-                oguild = "PCG"
-            
-            await battle_commands(self, ctx, mode, universe, selected_universe, completed_universes, oguild, crestlist, crestsearch, private_channel, sowner, oteam, ofam, cowner, cteam, cfam, deckNumber, None)
-        except Exception as ex:
-            trace = []
-            tb = ex.__traceback__
-            while tb is not None:
-                trace.append({
-                    "filename": tb.tb_frame.f_code.co_filename,
-                    "name": tb.tb_frame.f_code.co_name,
-                    "lineno": tb.tb_lineno
-                })
-                tb = tb.tb_next
-            print(str({
-                'type': type(ex).__name__,
-                'message': str(ex),
-                'trace': trace
-            })) 
-            return
-    
-    
-    @cog_ext.cog_slash(description="Co-op Tales with Friends", guild_ids=main.guild_ids)
-    async def ctales(self, ctx: SlashContext, user: User):
+    @cog_ext.cog_slash(description="Co-op Tales with Friends", 
+    options=[
+        create_option(
+            name="user",
+            description="Difficulty Level",
+            option_type=6,
+            required=True
+        ),
+        create_option(
+            name="mode",
+            description="Difficulty Level",
+            option_type=3,
+            required=True,
+            choices=[
+                create_choice(
+                    name="Normal Co-op",
+                    value="CTales"
+                ),
+                create_choice(
+                    name="Hard Co-op",
+                    value="CDungeon"
+                ),
+                create_choice(
+                    name="Boss Co-op",
+                    value="CBoss"
+                ),
+            ]
+        )
+    ]
+    ,guild_ids=main.guild_ids)
+    async def cooptales(self, ctx: SlashContext, user: User, mode: str):
         U_modes = ['ATales','Tales', 'CTales', 'DTales']
         D_modes = ['CDungeon','DDungeon', 'Dungeon', 'ADungeon']
         B_MODES = ['Boss', 'CBoss']        
@@ -453,7 +402,8 @@ class CrownUnlimited(commands.Cog):
             U_modes = ['ATales','Tales', 'CTales', 'DTales']
             D_modes = ['CDungeon','DDungeon', 'Dungeon', 'ADungeon']
             B_MODES = ['Boss', 'CBoss']
-            mode = "CTales"
+
+
             sowner = db.queryUser({'DISNAME': str(ctx.author)})
             companion = db.queryUser({'DISNAME': str(user)})
             oteam = sowner['TEAM']
@@ -462,20 +412,26 @@ class CrownUnlimited(commands.Cog):
             cfam = companion['FAMILY']
 
             universe_selection = await select_universe(self, ctx, sowner, oteam, ofam, mode, user)
+            if not universe_selection:
+                return
             selected_universe = universe_selection['SELECTED_UNIVERSE']
             private_channel = universe_selection['PRIVATE_CHANNEL']
             universe = universe_selection['UNIVERSE_DATA']
             crestlist = universe_selection['CREST_LIST']
             crestsearch = universe_selection['CREST_SEARCH']
             
-            if mode in D_modes:
-                completed_universes = universe_selection['COMPLETED_DUNGEONS']
-            else:
-                completed_universes = universe_selection['COMPLETED_TALES']
-            if crestsearch:
+            if mode in B_MODES:
+                bossname = universe_selection['BOSS_NAME']
                 oguild = universe_selection['OGUILD']
             else:
-                oguild = "PCG"
+                if mode in D_modes:
+                    completed_universes = universe_selection['COMPLETED_DUNGEONS']
+                else:
+                    completed_universes = universe_selection['COMPLETED_TALES']
+                if crestsearch:
+                    oguild = universe_selection['OGUILD']
+                else:
+                    oguild = "PCG"
             
             await battle_commands(self, ctx, mode, universe, selected_universe, completed_universes, oguild, crestlist, crestsearch, private_channel, sowner, oteam, ofam, companion, cteam, cfam, None, user)
         except Exception as ex:
@@ -494,79 +450,48 @@ class CrownUnlimited(commands.Cog):
                 'trace': trace
             })) 
             return
-                  
-    
-    @cog_ext.cog_slash(description="Co-op Dungeon with Friends", guild_ids=main.guild_ids)
-    async def cdungeon(self, ctx: SlashContext, user: User):
+
+
+    @cog_ext.cog_slash(description="Conquer Tales to Unlock New Universes!", 
+    options=[
+        create_option(
+            name="mode",
+            description="Difficulty Level",
+            option_type=3,
+            required=True,
+            choices=[
+                create_choice(
+                    name="Auto Battler",
+                    value="ATales"
+                ),
+                create_choice(
+                    name="Normal Difficulty",
+                    value="Tales"
+                ),
+                create_choice(
+                    name="Hard Difficulty",
+                    value="Dungeon"
+                ),
+                create_choice(
+                    name="Boss Battle",
+                    value="Boss"
+                ),
+            ]
+        )
+    ]
+    ,guild_ids=main.guild_ids)
+    async def tales(self, ctx: SlashContext, mode: str):
         U_modes = ['ATales','Tales', 'CTales', 'DTales']
         D_modes = ['CDungeon','DDungeon', 'Dungeon', 'ADungeon']
         B_MODES = ['Boss', 'CBoss']
-    
-        try:
-            U_modes = ['ATales','Tales', 'CTales', 'DTales']
-            D_modes = ['CDungeon','DDungeon', 'Dungeon', 'ADungeon']
-            B_MODES = ['Boss', 'CBoss']
-            mode = "CDungeon"
-            sowner = db.queryUser({'DISNAME': str(ctx.author)})
-            companion = db.queryUser({'DISNAME': str(user)})
-            oteam = sowner['TEAM']
-            cteam = companion['TEAM']
-            ofam = sowner['FAMILY']
-            cfam = companion['FAMILY']
-
-            universe_selection = await select_universe(self, ctx, sowner, oteam, ofam, mode, user)
-            selected_universe = universe_selection['SELECTED_UNIVERSE']
-            private_channel = universe_selection['PRIVATE_CHANNEL']
-            universe = universe_selection['UNIVERSE_DATA']
-            crestlist = universe_selection['CREST_LIST']
-            crestsearch = universe_selection['CREST_SEARCH']
-            
-            if mode in D_modes:
-                completed_universes = universe_selection['COMPLETED_DUNGEONS']
-            else:
-                completed_universes = universe_selection['COMPLETED_TALES']
-            if crestsearch:
-                oguild = universe_selection['OGUILD']
-            else:
-                oguild = "PCG"
-            
-            await battle_commands(self, ctx, mode, universe, selected_universe, completed_universes, oguild, crestlist, crestsearch, private_channel, sowner, oteam, ofam, companion, cteam, cfam, None, user)
-        except Exception as ex:
-            trace = []
-            tb = ex.__traceback__
-            while tb is not None:
-                trace.append({
-                    "filename": tb.tb_frame.f_code.co_filename,
-                    "name": tb.tb_frame.f_code.co_name,
-                    "lineno": tb.tb_lineno
-                })
-                tb = tb.tb_next
-            print(str({
-                'type': type(ex).__name__,
-                'message': str(ex),
-                'trace': trace
-            })) 
-            return
-    
-    
-    @cog_ext.cog_slash(description="Co-op Bosses with Friends", guild_ids=main.guild_ids)
-    async def cboss(self, ctx: SlashContext, user: User):
-        U_modes = ['ATales','Tales', 'CTales', 'DTales']
-        D_modes = ['CDungeon','DDungeon', 'Dungeon', 'ADungeon']
-        B_MODES = ['Boss', 'CBoss'] 
         try:
             # await ctx.defer()
-            mode = "CBoss"
-            companion = db.queryUser({'DISNAME': str(user)})
+
             sowner = db.queryUser({'DISNAME': str(ctx.author)})
             oteam = sowner['TEAM']
             ofam = sowner['FAMILY']
-            cteam = companion['TEAM']
-            cfam = companion['FAMILY']
-
-            universe_selection = await select_universe(self, ctx, sowner, oteam, ofam, mode, user)
-            if not universe_selection:
-                return
+            
+            universe_selection = await select_universe(self, ctx, sowner, oteam, ofam, mode, None)
             selected_universe = universe_selection['SELECTED_UNIVERSE']
             private_channel = universe_selection['PRIVATE_CHANNEL']
             universe = universe_selection['UNIVERSE_DATA']
@@ -585,111 +510,11 @@ class CrownUnlimited(commands.Cog):
                     oguild = universe_selection['OGUILD']
                 else:
                     oguild = "PCG"
-                
             
-            await battle_commands(self, ctx, mode, universe, selected_universe, None, oguild, crestlist, crestsearch, private_channel, sowner, oteam, ofam, companion, cteam, cfam, None, user)
-        except Exception as ex:
-            trace = []
-            tb = ex.__traceback__
-            while tb is not None:
-                trace.append({
-                    "filename": tb.tb_frame.f_code.co_filename,
-                    "name": tb.tb_frame.f_code.co_name,
-                    "lineno": tb.tb_lineno
-                })
-                tb = tb.tb_next
-            print(str({
-                'type': type(ex).__name__,
-                'message': str(ex),
-                'trace': trace
-            })) 
-            return
-
-
-    @cog_ext.cog_slash(description="Boss! Defeat Dungeon to unlock Boss", guild_ids=main.guild_ids)
-    async def boss(self, ctx: SlashContext):
-        U_modes = ['ATales','Tales', 'CTales', 'DTales']
-        D_modes = ['CDungeon','DDungeon', 'Dungeon', 'ADungeon']
-        B_MODES = ['Boss', 'CBoss']
-        try:
-            # await ctx.defer()
-            mode = "Boss"
-
-            sowner = db.queryUser({'DISNAME': str(ctx.author)})
-            oteam = sowner['TEAM']
-            ofam = sowner['FAMILY']
-            
-            universe_selection = await select_universe(self, ctx, sowner, oteam, ofam, mode, None)
-            if not universe_selection:
-                return
-            selected_universe = universe_selection['SELECTED_UNIVERSE']
-            private_channel = universe_selection['PRIVATE_CHANNEL']
-            universe = universe_selection['UNIVERSE_DATA']
-            crestlist = universe_selection['CREST_LIST']
-            crestsearch = universe_selection['CREST_SEARCH']
-
             if mode in B_MODES:
-                bossname = universe_selection['BOSS_NAME']
-                oguild = universe_selection['OGUILD']
+                await battle_commands(self, ctx, mode, universe, selected_universe, None, oguild, crestlist, crestsearch, private_channel, sowner, oteam, ofam, None, None, None, None, None)
             else:
-                if mode in D_modes:
-                    completed_universes = universe_selection['COMPLETED_DUNGEONS']
-                else:
-                    completed_universes = universe_selection['COMPLETED_TALES']
-                if crestsearch:
-                    oguild = universe_selection['OGUILD']
-                else:
-                    oguild = "PCG"
-                
-            await battle_commands(self, ctx, mode, universe, selected_universe, None, oguild, crestlist, crestsearch, private_channel, sowner, oteam, ofam, None, None, None, None, None)
-        except Exception as ex:
-            trace = []
-            tb = ex.__traceback__
-            while tb is not None:
-                trace.append({
-                    "filename": tb.tb_frame.f_code.co_filename,
-                    "name": tb.tb_frame.f_code.co_name,
-                    "lineno": tb.tb_lineno
-                })
-                tb = tb.tb_next
-            print(str({
-                'type': type(ex).__name__,
-                'message': str(ex),
-                'trace': trace
-            })) 
-            return
-
-    
-    @cog_ext.cog_slash(description="Dungeon! Available for Tales you beat", guild_ids=main.guild_ids)
-    async def dungeon(self, ctx: SlashContext):
-        U_modes = ['ATales','Tales', 'CTales', 'DTales']
-        D_modes = ['CDungeon','DDungeon', 'Dungeon', 'ADungeon']
-        B_MODES = ['Boss', 'CBoss']
-        try:
-            # await ctx.defer()
-            mode = "Dungeon"
-
-            sowner = db.queryUser({'DISNAME': str(ctx.author)})
-            oteam = sowner['TEAM']
-            ofam = sowner['FAMILY']
-            
-            universe_selection = await select_universe(self, ctx, sowner, oteam, ofam, mode, None)
-            selected_universe = universe_selection['SELECTED_UNIVERSE']
-            private_channel = universe_selection['PRIVATE_CHANNEL']
-            universe = universe_selection['UNIVERSE_DATA']
-            crestlist = universe_selection['CREST_LIST']
-            crestsearch = universe_selection['CREST_SEARCH']
-
-            if mode in D_modes:
-                completed_universes = universe_selection['COMPLETED_DUNGEONS']
-            else:
-                completed_universes = universe_selection['COMPLETED_TALES']
-            if crestsearch:
-                oguild = universe_selection['OGUILD']
-            else:
-                oguild = "PCG"
-            
-            await battle_commands(self, ctx, mode, universe, selected_universe, completed_universes, oguild, crestlist, crestsearch, private_channel, sowner, oteam, ofam, None, None, None, None, None)
+                await battle_commands(self, ctx, mode, universe, selected_universe, completed_universes, oguild, crestlist, crestsearch, private_channel, sowner, oteam, ofam, None, None, None, None, None)
         except Exception as ex:
             trace = []
             tb = ex.__traceback__
@@ -707,7 +532,7 @@ class CrownUnlimited(commands.Cog):
             })) 
             return
     
-    
+
     @cog_ext.cog_slash(description="Enter the Abyss", guild_ids=main.guild_ids)
     async def abyss(self, ctx: SlashContext):
         await ctx.defer()
@@ -3076,54 +2901,6 @@ class CrownUnlimited(commands.Cog):
                         await discord.TextChannel.delete(private_channel, reason=None)
 
 
-    @cog_ext.cog_slash(description="Conquer Tales to Unlock New Universes!", guild_ids=main.guild_ids)
-    async def tales(self, ctx: SlashContext):
-        U_modes = ['ATales','Tales', 'CTales', 'DTales']
-        D_modes = ['CDungeon','DDungeon', 'Dungeon', 'ADungeon']
-        B_MODES = ['Boss', 'CBoss']
-        try:
-            # await ctx.defer()
-            mode = "Tales"
-
-            sowner = db.queryUser({'DISNAME': str(ctx.author)})
-            oteam = sowner['TEAM']
-            ofam = sowner['FAMILY']
-            
-            universe_selection = await select_universe(self, ctx, sowner, oteam, ofam, mode, None)
-            selected_universe = universe_selection['SELECTED_UNIVERSE']
-            private_channel = universe_selection['PRIVATE_CHANNEL']
-            universe = universe_selection['UNIVERSE_DATA']
-            crestlist = universe_selection['CREST_LIST']
-            crestsearch = universe_selection['CREST_SEARCH']
-
-            if mode in D_modes:
-                completed_universes = universe_selection['COMPLETED_DUNGEONS']
-            else:
-                completed_universes = universe_selection['COMPLETED_TALES']
-            if crestsearch:
-                oguild = universe_selection['OGUILD']
-            else:
-                oguild = "PCG"
-            
-            await battle_commands(self, ctx, mode, universe, selected_universe, completed_universes, oguild, crestlist, crestsearch, private_channel, sowner, oteam, ofam, None, None, None, None, None)
-        except Exception as ex:
-            trace = []
-            tb = ex.__traceback__
-            while tb is not None:
-                trace.append({
-                    "filename": tb.tb_frame.f_code.co_filename,
-                    "name": tb.tb_frame.f_code.co_name,
-                    "lineno": tb.tb_lineno
-                })
-                tb = tb.tb_next
-            print(str({
-                'type': type(ex).__name__,
-                'message': str(ex),
-                'trace': trace
-            })) 
-            return
-    
-    
     @cog_ext.cog_slash( description="PVP Battle", guild_ids=main.guild_ids)
     async def battle(self, ctx: SlashContext, player: User):
         await ctx.defer()
@@ -15688,7 +15465,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             c_health = c_health + health_boost
                                             embedVar = discord.Embed(title=f"{c_card.upper()} Titan Mode", description=f"**{c_card} says**\n{c_resolve_description}", colour=0xe91e63)
                                             embedVar.add_field(name=f"Transformation Complete", value=f"Health increased by **{health_boost}**!")
-                                            await button_ctx.send(embed=embedVar)
+                                            await private_channel.send(embed=embedVar)
 
                                             turn_total= turn_total + 1
                                             turn=3
@@ -15714,7 +15491,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             c_pet_used=False
                                             embedVar = discord.Embed(title=f"{c_card} STRENGTHENED RESOLVE :zap:", description=f"**{c_card} says**\n{c_resolve_description}", colour=0xe91e63)
                                             embedVar.add_field(name=f"Transformation: Bankai", value="Gain double Attack on Resolve.")
-                                            await button_ctx.send(embed=embedVar)
+                                            await private_channel.send(embed=embedVar)
                                             turn_total= turn_total + 1
                                             turn=3
                                         elif c_universe == "God Of War": #God Of War Trait
@@ -15736,7 +15513,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             c_pet_used=False
                                             embedVar = discord.Embed(title=f"{c_card} STRENGTHENED RESOLVE :zap:", description=f"**{c_card} says**\n{c_resolve_description}", colour=0xe91e63)
                                             embedVar.add_field(name=f"Transformation: Ascension", value="On Resolve Refill Health.")
-                                            await button_ctx.send(embed=embedVar)
+                                            await private_channel.send(embed=embedVar)
                                             turn_total= turn_total + 1
                                             turn=3
                                         elif c_universe == "Fate": #Fate Trait
@@ -15759,7 +15536,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             t_health = t_health - dmg['DMG']
                                             embedVar = discord.Embed(title=f"{c_card} STRENGTHENED RESOLVE :zap:\n\n{dmg['MESSAGE']}", description=f"**{c_card} says**\n{c_resolve_description}", colour=0xe91e63)
                                             embedVar.add_field(name=f"Transformation: Command Seal", value="On Resolve, Strike with Ultimate, then Focus.")
-                                            await button_ctx.send(embed=embedVar)
+                                            await private_channel.send(embed=embedVar)
                                             # c_stamina = 0
                                             c_used_resolve = True 
                                             c_pet_used=False
@@ -15784,7 +15561,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             c_pet_used=False
                                             embedVar = discord.Embed(title=f"{c_card} STRENGTHENED RESOLVE :zap:", description=f"**{c_card} says**\n{c_resolve_description}", colour=0xe91e63)
                                             embedVar.add_field(name=f"Transformation: Evolution", value="When you Resolve you do not lose Defense.")
-                                            await button_ctx.send(embed=embedVar)
+                                            await private_channel.send(embed=embedVar)
                                             turn_total= turn_total + 1
                                             turn=3
                                         else: # Standard Resolve
@@ -15811,13 +15588,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             else:
                                                 embedVar = discord.Embed(title=f"{c_card} STRENGTHENED RESOLVE :zap:", description=f"**{c_card} says**\n{c_resolve_description}", colour=0xe91e63)
                                                 embedVar.add_field(name=f"Transformation", value="All stats & stamina greatly increased")
-                                            await button_ctx.send(embed=embedVar)
+                                            await private_channel.send(embed=embedVar)
                                             turn_total= turn_total + 1
                                             turn=3
                                     else:
                                         emessage = m.CANNOT_USE_RESOLVE
                                         embedVar = discord.Embed(title=emessage, colour=0xe91e63)
-                                        await button_ctx.send(embed=embedVar)
+                                        await private_channel.send(embed=embedVar)
                                 elif aiMove == 6:
                                         #Resolve Check and Calculation
                                     if c_used_resolve and c_used_focus and not c_pet_used:                                  
@@ -15917,18 +15694,18 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 embedVar.add_field(name=f"{cpet_name} used **{cpetmove_text}**!", value =f"Enhanced **{cpet_type}**")
                                                 
                                                 embedVar.set_thumbnail(url=cpet_image)
-                                                await button_ctx.send(embed=embedVar)
+                                                await private_channel.send(embed=embedVar)
                                             else:
                                                 embedVar = discord.Embed(title=f"{c_card.upper()} Summoned :bird: {cpet_name}", colour=0xe91e63)
                                                 embedVar.add_field(name=f"{cpet_name} used **{cpetmove_text}**!", value =f"Enhanced **{cpet_type}**")
                                                 embedVar.set_thumbnail(url=cpet_image)
-                                                await button_ctx.send(embed=embedVar)
+                                                await private_channel.send(embed=embedVar)
                                             turn=2
                                         else:
-                                            await button_ctx.send(f"{cpet_name} needs a turn to rest...")
+                                            await private_channel.send(f"{cpet_name} needs a turn to rest...")
                                             turn=2
                                     else:
-                                        await button_ctx.send(f"{cpet_name} needs a turn to rest...")   
+                                        await private_channel.send(f"{cpet_name} needs a turn to rest...")   
                                 elif aiMove == 7:                                
                                     c_enhancer_used=True
                                     dmg = damage_cal(c_universe, c_card, c_enhancer, c_attack, c_defense, o_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, o_health, o_stamina, c_max_health, o_attack, c_special_move_description, turn_total, ccard_lvl_ap_buff)
@@ -16017,10 +15794,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                         embedVar = discord.Embed(title=f"{c_card.upper()} ASSISTED {o_card.upper()}", colour=0xe91e63)
                                         embedVar.add_field(name=f"{c_card} used {cmove_enhanced_text}!", value =f"Enhanced {cenh_type}")
-                                        await button_ctx.send(embed=embedVar)
+                                        await private_channel.send(embed=embedVar)
                                         turn=3
                                     else:
-                                        await button_ctx.send(m.NOT_ENOUGH_STAMINA)
+                                        await private_channel.send(m.NOT_ENOUGH_STAMINA)
                                         turn=2
                                 elif aiMove == 8:
                                     if c_stamina >=20:
@@ -16029,10 +15806,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         c_defense = c_defense * 2
                                         embedVar = discord.Embed(title=f"{c_card} **Defended** 🛡️ {o_card.upper()}", colour=0xe91e63)
                                         
-                                        await button_ctx.send(embed=embedVar)
+                                        await private_channel.send(embed=embedVar)
                                         turn=3
                                     else:
-                                        await button_ctx.send(f"{c_card} is too tired to block...")
+                                        await private_channel.send(f"{c_card} is too tired to block...")
                                         turn=2
 
                                 if aiMove != 5 and aiMove != 6 and aiMove != 7 and aiMove != 8:
@@ -16262,7 +16039,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 cpet_msg_on_resolve = ""
 
                                 if c_used_resolve:
-                                    pet_msg_on_resolve =f"🐦 | *{enhancer_mapping[pet_enh_name]}*"
+                                    cpet_msg_on_resolve =f"🐦 | *{enhancer_mapping[pet_enh_name]}*"
 
                                 embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}", description=textwrap.dedent(f"""\
                                 💥 | **{cmove1_text}** *{cap1}*
@@ -16271,7 +16048,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 🦠 | **{cmove_enhanced_text}** *{cenh1}{enhancer_suffix_mapping[cenh_name]}*
                                 ↘️ {enhancer_mapping[cenh_name]}
 
-                                {pet_msg_on_resolve}
+                                {cpet_msg_on_resolve}
                                 *Stamina costs located on buttons*
                                 """), color=0xe74c3c)
                                 embedVar.set_thumbnail(url=cpet_image)
