@@ -79,22 +79,22 @@ async def help(ctx):
    embedVar1 = discord.Embed(title= f"Bot Commands", description=h.BOT_COMMANDS, colour=0x7289da)
    embedVar1.set_thumbnail(url=avatar)
    embedVar1.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
-   embedVar1.set_footer(text=f".senpai - Text Bot Tutorial")
+   embedVar1.set_footer(text=f"/crown - Crown Unlimited Manual")
 
    embedVar2 = discord.Embed(title= f"Crown Unlimited Commands", description=h.CROWN_UNLIMITED_COMMANDS, colour=0x7289da)
    embedVar2.set_thumbnail(url=avatar)
    embedVar2.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
-   embedVar2.set_footer(text=f".senpai - Text Bot Tutorial")
+   embedVar2.set_footer(text=f"/crown - Crown Unlimited Manual")
    
    embedVar3 = discord.Embed(title= f"CTAP Commands", description=h.CTAP_COMMANDS, colour=0x7289da)
    embedVar3.set_thumbnail(url=avatar)
    embedVar3.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
-   embedVar3.set_footer(text=f".senpai - Text Bot Tutorial")
+   embedVar3.set_footer(text=f"/crown - Crown Unlimited Manual")
 
    embedVar4 = discord.Embed(title= f"Common Symbols", description=h.LEGEND, colour=0x7289da)
    embedVar4.set_thumbnail(url=avatar)
    embedVar4.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
-   embedVar4.set_footer(text=f".senpai - Text Bot Tutorial")
+   embedVar4.set_footer(text=f"/crown - Crown Unlimited Manual")
 
 
    paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
