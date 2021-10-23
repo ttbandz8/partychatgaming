@@ -17302,16 +17302,25 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 c_max_health = round(c_max_health - dmg['DMG'])
                                             t_stamina = t_stamina - int(dmg['STAMINA_USED'])
 
-                                            embedVar = discord.Embed(title=f"{t_card.upper()} Summoned :bird: {tpet_name}", colour=0xe91e63)
-                                            embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!", value =f"Enhanced **{tpet_type}**")
-                                            embedVar.set_thumbnail(url=tpet_image)
-                                            await private_channel.send(embed=embedVar)
-                                            turn=3
+                                            if t_universe == "Persona":
+                                                petdmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total, tcard_lvl_ap_buff)
+
+                                                o_health = o_health - petdmg['DMG']
+
+                                                embedVar = discord.Embed(title=f"**PERSONA!**\n{tpet_name} was summoned from {t_card}'s soul dealing **{petdmg['DMG']}** damage!!", colour=0xe91e63)
+                                                embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!", value =f"Enhanced **{tpet_type}**")
+                                                
+                                                embedVar.set_thumbnail(url=tpet_image)
+                                                await button_ctx.send(embed=embedVar)
+                                            else:
+                                                embedVar = discord.Embed(title=f"{t_card.upper()} Summoned :bird: {tpet_name}", colour=0xe91e63)
+                                                embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!", value =f"Enhanced **{tpet_type}**")
+                                                embedVar.set_thumbnail(url=tpet_image)
+                                                await private_channel.send(embed=embedVar)
+                                            turn=1
                                         else:
                                             await private_channel.send(f"{tpet_name} needs a turn to rest...")
                                             turn=1
-                                else:
-                                    await private_channel.send(f"{tpet_name} needs a turn to rest...")
 
                             if int(aiMove) !=5 and int(aiMove) !=6:
                                 # If you have enough stamina for move, use it
