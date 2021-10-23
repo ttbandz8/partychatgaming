@@ -61,7 +61,7 @@ BOT_COMMANDS = textwrap.dedent(f"""\
 **/exile @player**: Kick Team from Guild (Guild Owners Only)
 **/renounce**: Leave Guild (Team Owner Only)
 **/sponsor team name amount**: Send Team Guild coin (Guild Owners Onlu)
-**/donate amount team name**: Donate coin to Team Bank
+**/fund amount**: Donate coin to Guild Bank
 **/bounty amount**: Set Guild Bounty (Guild Owners Only)
 **/viewhall**: View Hall Information
 **/buyhall**: Buy and move into a new Guild Hall
