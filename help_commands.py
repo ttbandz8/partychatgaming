@@ -84,7 +84,7 @@ BOT_COMMANDS = textwrap.dedent(f"""\
 
 CROWN_UNLIMITED_COMMANDS = textwrap.dedent(f"""\
 **CROWN UNLIMITED PROFILE COMMANDS**
-**/menu**: View Balance
+**/menu**: View In Game Menu
 
 **/crown**: Crown Unlimited Help Book
 **/build**: View your current build
@@ -99,12 +99,16 @@ CROWN_UNLIMITED_COMMANDS = textwrap.dedent(f"""\
 **/quest**: Open your list of Quests
 **/rebirth**: Rebirth Account with permanent increases
 
+
 **CROWN UNLIMITED PVP COMMANDS**
-**/senpaibattle**: Tutorial Bot
-**/legendbattle**:  Advanced Tutorial Bot
 **/battle @player**: Challenge another Player
 **/wager amount**: Wager amount to battle in current session
 **/raid guild**: Start Guild Raid Battle
+
+**CROWN UNLIMITED PVP TUTORIAL BOTS**
+**/battle @Senpai**: Tutorial Bot
+**/battle @Legend**: Advanced Tutorial Bot
+*Must be in Support Server For Tutorial*
 
 **CROWN UNLIMITED STORY MODE COMMANDS**
 **/ff**: Leave current tale, dungeon, or boss fight

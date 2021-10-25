@@ -300,18 +300,18 @@ class CrownUnlimited(commands.Cog):
             required=True,
             choices=[
                 create_choice(
-                    name="AI Normal Co-op",
+                    name="Duo Tales (Normal)",
                     value="DTales"
                 ),
                 create_choice(
-                    name="AI Hard Co-op",
+                    name="Duo Dungeon (Hard)",
                     value="DDungeon"
                 )
             ]
         )
     ]
     ,guild_ids=main.guild_ids)
-    async def aitales(self, ctx: SlashContext, deck: int, mode: str):
+    async def duo(self, ctx: SlashContext, deck: int, mode: str):
         U_modes = ['ATales','Tales', 'CTales', 'DTales']
         D_modes = ['CDungeon','DDungeon', 'Dungeon', 'ADungeon']
         B_MODES = ['Boss', 'CBoss']
@@ -379,22 +379,22 @@ class CrownUnlimited(commands.Cog):
             required=True,
             choices=[
                 create_choice(
-                    name="Normal Co-op",
+                    name="Co-Op Tales (Normal)",
                     value="CTales"
                 ),
                 create_choice(
-                    name="Hard Co-op",
+                    name="Co-Op Dungeon (Hard)",
                     value="CDungeon"
                 ),
                 create_choice(
-                    name="Boss Co-op",
+                    name="Co-Op Boss (Extreme)",
                     value="CBoss"
                 ),
             ]
         )
     ]
     ,guild_ids=main.guild_ids)
-    async def cooptales(self, ctx: SlashContext, user: User, mode: str):
+    async def coop(self, ctx: SlashContext, user: User, mode: str):
         U_modes = ['ATales','Tales', 'CTales', 'DTales']
         D_modes = ['CDungeon','DDungeon', 'Dungeon', 'ADungeon']
         B_MODES = ['Boss', 'CBoss']        
@@ -465,15 +465,15 @@ class CrownUnlimited(commands.Cog):
                     value="ATales"
                 ),
                 create_choice(
-                    name="Normal Difficulty",
+                    name="Tales (Normal)",
                     value="Tales"
                 ),
                 create_choice(
-                    name="Hard Difficulty",
+                    name="Dungeon (Hard)",
                     value="Dungeon"
                 ),
                 create_choice(
-                    name="Boss Battle",
+                    name="Boss Battle (Extreme)",
                     value="Boss"
                 ),
             ]
@@ -1590,8 +1590,17 @@ class CrownUnlimited(commands.Cog):
                             turn = 0 
                     else:
 
-                         # UNIVERSE CARD
-                        player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus, o_attack, o_defense, turn_total)
+                        #Ap Levels
+                        ap1 = list(o_1.values())[0] + ocard_lvl_ap_buff
+                        ap2 = list(o_2.values())[0] + ocard_lvl_ap_buff
+                        ap3 = list(o_3.values())[0] + ocard_lvl_ap_buff
+                        enh1 = list(o_enhancer.values())[0]
+                        enh_name = list(o_enhancer.values())[2]
+                        pet_enh_name = list(opet_move.values())[2]
+                        pet_msg_on_resolve = ""
+                        
+                        # UNIVERSE CARD
+                        player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus, o_attack, o_defense, turn_total, ap1, ap2, ap3, enh1, enh_name, ocard_lvl)
                         # await private_channel.send(file=player_1_card)
                         
                         if o_used_focus and o_used_resolve:
@@ -2283,8 +2292,15 @@ class CrownUnlimited(commands.Cog):
                             else:
                                 turn = 1
                         else:
+                            tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff
+                            tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff
+                            tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff
+                            tenh1 = list(t_enhancer.values())[0]
+                            tenh_name = list(t_enhancer.values())[2]
+                            tpet_enh_name = list(tpet_move.values())[2]
+                            tpet_msg_on_resolve = ""
                             # UNIVERSE CARD
-                            player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus, t_attack, t_defense, turn_total)
+                            player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus, t_attack, t_defense, turn_total, tap1, tap2, tap3, tenh1, tenh_name, tcard_lvl)
                             await private_channel.send(file=player_2_card)
                             aiMove = 0
                             
@@ -2909,6 +2925,15 @@ class CrownUnlimited(commands.Cog):
         h_gametime = starttime[11:13]
         m_gametime = starttime[14:16]
         s_gametime = starttime[17:19]
+        
+        #Tutorial Code
+        tutorialbot = '837538366509154407'
+        legendbot = '845672426113466395'
+        opponent = db.queryUser({'DISNAME': str(player)})
+        oppDID = opponent['DID']
+        tutorial=False
+        if oppDID == tutorialbot or oppDID == legendbot:
+            tutorial=True
 
         battle_buttons = [
             manage_components.create_button(
@@ -2923,10 +2948,16 @@ class CrownUnlimited(commands.Cog):
             )
         ]
         battle_buttons_action_row = manage_components.create_actionrow(*battle_buttons)
-        await ctx.send(f"{player.mention}, Ready to fight?", components=[battle_buttons_action_row])
+        if tutorial:
+            await ctx.send(f"{ctx.author.mention}, Ready for Tutorial?", components=[battle_buttons_action_row])
+        else:
+            await ctx.send(f"{player.mention}, Ready to fight?", components=[battle_buttons_action_row])
 
         def check(button_ctx):
-            return button_ctx.author == player
+            if tutorial:
+                return button_ctx.author == ctx.author
+            else:
+                return button_ctx.author == player
         try:
             button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[battle_buttons_action_row], timeout=45, check=check)
             
@@ -3756,6 +3787,7 @@ class CrownUnlimited(commands.Cog):
                                 embedVar.add_field(name="**How do I play?**", value="The point of the game is to win **Battles**!\n**To do this**, you need to select moves outmanuevering your opponent to **secure the win**!")
                                 embedVar.set_footer(text="Select a move to get started. DON'T WORRY! When your STAMINA depletes to 0 your character will Focus to REPLENISH!")
                                 await private_channel.send(embed=embedVar)
+                                await asyncio.sleep(5)
                             else:
                                 # await ctx.send(f"{user1.mention}{user2.mention}")
                                 embedVar = discord.Embed(title=f"**{o_card}** & {opet_name} VS **{t_card}** & {tpet_name} Ranked Battle has begun!", description=f"{o_card} Says:\n{o_greeting_description}", colour=0xe91e63)
@@ -3797,6 +3829,7 @@ class CrownUnlimited(commands.Cog):
                                 embedVar.add_field(name="**Strategy**", value="Pay attention to your oppononets **STAMINA** bar. If they are entering **Focus State**, you will have the ability to **strike twice!**")
                                 embedVar.set_footer(text="After you entered focus state once, a transformation is possible by strengthening your RESOLVE! **Press 5**")
                                 await ctx.send(embed=embedVar)
+                                await asyncio.sleep(5)
                             #Universal Trait
                             #fortitude or luck is based on health  
                             fortitude = 0.0
@@ -3834,7 +3867,6 @@ class CrownUnlimited(commands.Cog):
                             o_used_focus = True
 
                             
-                            await ctx.send(embed=embedVar)
                             if botActive:
                                 if messagenumber != 2:
                                     if messagenumber == 1:
@@ -3929,9 +3961,17 @@ class CrownUnlimited(commands.Cog):
                             else:
                                 turn = 0 
                         else:
-
+                            #Ap Levels
+                            ap1 = list(o_1.values())[0] + ocard_lvl_ap_buff
+                            ap2 = list(o_2.values())[0] + ocard_lvl_ap_buff
+                            ap3 = list(o_3.values())[0] + ocard_lvl_ap_buff
+                            enh1 = list(o_enhancer.values())[0]
+                            enh_name = list(o_enhancer.values())[2]
+                            pet_enh_name = list(opet_move.values())[2]
+                            pet_msg_on_resolve = ""
+                            
                             # UNIVERSE CARD
-                            player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus, o_attack, o_defense, turn_total)
+                            player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus, o_attack, o_defense, turn_total, ap1, ap2, ap3, enh1, enh_name, ocard_lvl)
                             # await private_channel.send(file=player_1_card)
                             
                             if o_used_focus and o_used_resolve:
@@ -4000,24 +4040,18 @@ class CrownUnlimited(commands.Cog):
                             battle_action_row = manage_components.create_actionrow(*battle_buttons)
                             util_action_row = manage_components.create_actionrow(*util_buttons)
 
-                            ap1 = list(o_1.values())[0] + ocard_lvl_ap_buff
-                            ap2 = list(o_2.values())[0] + ocard_lvl_ap_buff
-                            ap3 = list(o_3.values())[0] + ocard_lvl_ap_buff
-                            enh1 = list(o_enhancer.values())[0]
-                            enh_name = list(o_enhancer.values())[2]
-                            pet_enh_name = list(opet_move.values())[2]
-                            pet_msg_on_resolve = ""
+                            # ap1 = list(o_1.values())[0] + ocard_lvl_ap_buff
+                            # ap2 = list(o_2.values())[0] + ocard_lvl_ap_buff
+                            # ap3 = list(o_3.values())[0] + ocard_lvl_ap_buff
+                            # enh1 = list(o_enhancer.values())[0]
+                            # enh_name = list(o_enhancer.values())[2]
+                            # pet_enh_name = list(opet_move.values())[2]
+                            # pet_msg_on_resolve = ""
 
                             if o_used_resolve:
                                 pet_msg_on_resolve =f"🐦 | *{enhancer_mapping[pet_enh_name]}*"
 
                             embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}", description=textwrap.dedent(f"""\
-                            💥 | **{omove1_text}** *{ap1}*
-                            ☄️ | **{omove2_text}** *{ap2}*
-                            🏵️ | **{omove3_text}** *{ap3}*
-                            🦠 | **{omove_enhanced_text}** *{enh1}{enhancer_suffix_mapping[enh_name]}*
-                            ↘️ {enhancer_mapping[enh_name]}
-
                             {pet_msg_on_resolve}
                             *Stamina costs located on buttons*
                             """), color=0xe74c3c)
@@ -4042,6 +4076,7 @@ class CrownUnlimited(commands.Cog):
                                         embedVar.add_field(name=f"Combos!", value="Chain your Basic Attack with Summons And Enhancers To Maximize Damage!")
                                         embedVar.set_footer(text=f"Basic Attacks are great when you are low on stamina, but don't be afraid to enter focus state and REPLENISH!")
                                         await button_ctx.send(embed=embedVar)
+                                        
                                     dmg = damage_cal(o_universe, o_card, o_1, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total, ocard_lvl_ap_buff)
                                     o_pet_used=False
                                 elif button_ctx.custom_id == "2":
@@ -4050,6 +4085,7 @@ class CrownUnlimited(commands.Cog):
                                         embedVar.add_field(name=f"Strategy!", value="Special Attacks are the balance between STAMINA cost and Damage output when trying to build Combos!")
                                         embedVar.set_footer(text=f"Special Attacks are great when you need to control the focus game! Use Them to Maximize your focus and build stronger combos!")
                                         await button_ctx.send(embed=embedVar)
+                                        
                                     dmg = damage_cal(o_universe, o_card, o_2, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total, ocard_lvl_ap_buff)
                                     o_pet_used=False
                                 elif button_ctx.custom_id == "3":
@@ -4058,6 +4094,7 @@ class CrownUnlimited(commands.Cog):
                                         embedVar.add_field(name=f"Ultimate GIF", value="Using your ultimate move also comes with a bonus GIF to deliver that final blow!")
                                         embedVar.set_footer(text=f"Ultimate moves will consume most of your stamina! Use Them Wisely!")
                                         await button_ctx.send(embed=embedVar)
+                                        
                                     dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total, ocard_lvl_ap_buff)
                                     o_pet_used=False
                                     if o_gif != "N/A":
@@ -4065,9 +4102,10 @@ class CrownUnlimited(commands.Cog):
                                 elif button_ctx.custom_id == "4":
                                     if botActive:                    
                                         embedVar = discord.Embed(title=f"Enhancers!", description=f"Enhancers cost 20 Stamina to Boost your Character or Debuff Your Opponent!", colour=0xe91e63)
-                                        embedVar.add_field(name=f"Your Enhancer: {omove_enhanced_text} is a {list(o_enhancer.values())[2]}", value="Pay Attention to your enhancer messages to know what effect is being used!")
-                                        embedVar.set_footer(text=f"Use .enhance to view a full list of enhancers! Look for the {list(o_enhancer.values())[2]} Enhancer")
+                                        embedVar.add_field(name=f"Your Enhancer: {omove_enhanced_text} is a {list(o_enhancer.values())[2]}", value=f"Pay Attention to your enhancer messages to know what effect is being used!\n\n**{list(o_enhancer.values())[2]} : {enhancer_mapping[list(o_enhancer.values())[2]]}**")
+                                        embedVar.set_footer(text=f"Use /enhancers to view a full list of enhancers! Look for the {list(o_enhancer.values())[2]} Enhancer")
                                         await button_ctx.send(embed=embedVar)
+                                        
                                     o_enhancer_used=True
                                     dmg = damage_cal(o_universe, o_card, o_enhancer, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total, ocard_lvl_ap_buff)
                                     o_pet_used=False
@@ -4080,6 +4118,7 @@ class CrownUnlimited(commands.Cog):
                                             embedVar.add_field(name=f"Trade Offs!", value="Resolved Charactes sacrifice **DEFENSE** to **HEAL**, gain **ATK** and the ability to **SUMMON PETS**!")
                                             embedVar.set_footer(text=f"You can only enter Resolve once per match! Use the Heal Wisely!!!")
                                             await button_ctx.send(embed=embedVar)
+                                            await asyncio.sleep(5)
                                         if o_universe == "My Hero Academia": #My Hero Trait
                                             #fortitude or luck is based on health  
                                             fortitude = 0.0
@@ -4263,7 +4302,8 @@ class CrownUnlimited(commands.Cog):
                                             embedVar = discord.Embed(title=f"Pet Summons!", description=f"You've summoned {opet_name}", colour=0xe91e63)
                                             embedVar.add_field(name=f"Pet Enhancers!", value="Pet Enhancers cost 15 Stamina but do not count as the Summoners turn!")
                                             embedVar.set_footer(text=f"Pets will Level Up and build Bond as you win battles! Train up your pets to perform better in the field!")
-                                            await button_ctx.send(embed=embedVar)                                      
+                                            await button_ctx.send(embed=embedVar)
+                                            await asyncio.sleep(5)                                
                                         o_enhancer_used=True
                                         dmg = damage_cal(o_universe, o_card, opet_move, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total, ocard_lvl_ap_buff)
                                         o_enhancer_used=False
@@ -4476,6 +4516,7 @@ class CrownUnlimited(commands.Cog):
 
                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
                                             await button_ctx.send(embed=embedVar)
+                                            await asyncio.sleep(5)
                                             turn_total= turn_total + 1
                                             turn=1
                                         elif dmg['DMG'] == 0:
@@ -4483,6 +4524,7 @@ class CrownUnlimited(commands.Cog):
 
                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
                                             await button_ctx.send(embed=embedVar)
+                                            await asyncio.sleep(5)
                                             turn_total= turn_total + 1
                                             turn=1
                                         else:
@@ -4490,10 +4532,12 @@ class CrownUnlimited(commands.Cog):
                                                 t_health = t_health 
                                                 embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{o_card} strikes a log", colour=0xe91e63)
                                                 await button_ctx.send(embed=embedVar)
+                                                await asyncio.sleep(5)
                                             else:
                                                 t_health = t_health - dmg['DMG']
                                                 embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
                                                 await button_ctx.send(embed=embedVar)
+                                                await asyncio.sleep(5)
                                             if t_health <= 0:
                                                 if t_final_stand==True:
                                                     embedVar = discord.Embed(title=f"{t_card.upper()}'s LAST STAND", description=f"{t_card} FINDS RESOLVE", colour=0xe91e63)
@@ -4676,8 +4720,15 @@ class CrownUnlimited(commands.Cog):
                             #Check If Playing Bot
                             if botActive != True:
                                 #PlayUser
+                                tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff
+                                tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff
+                                tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff
+                                tenh1 = list(t_enhancer.values())[0]
+                                tenh_name = list(t_enhancer.values())[2]
+                                tpet_enh_name = list(tpet_move.values())[2]
+                                tpet_msg_on_resolve = ""
                                 # UNIVERSE CARD
-                                player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus, t_attack, t_defense, turn_total)
+                                player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus, t_attack, t_defense, turn_total, tap1, tap2, tap3, tenh1, tenh_name, tcard_lvl)
                                 # await private_channel.send(file=player_2_card)
                                 
                                 if t_used_focus and t_used_resolve:
@@ -4758,12 +4809,6 @@ class CrownUnlimited(commands.Cog):
                                     tpet_msg_on_resolve =f"🐦 | *{enhancer_mapping[tpet_enh_name]}*"
 
                                 embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}", description=textwrap.dedent(f"""\
-                                💥 | **{tmove1_text}** *{tap1}*
-                                ☄️ | **{tmove2_text}** *{tap2}*
-                                🏵️ | **{tmove3_text}** *{tap3}*
-                                🦠 | **{tmove_enhanced_text}** *{tenh1}{enhancer_suffix_mapping[tenh_name]}*
-                                ↘️ {enhancer_mapping[tenh_name]}
-
                                 {tpet_msg_on_resolve}
                                 *Stamina costs located on buttons*
                                 """), color=0xe74c3c)
@@ -5247,8 +5292,16 @@ class CrownUnlimited(commands.Cog):
                                     return
                             #Play Bot
                             else:
+                                #PlayUser
+                                tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff
+                                tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff
+                                tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff
+                                tenh1 = list(t_enhancer.values())[0]
+                                tenh_name = list(t_enhancer.values())[2]
+                                tpet_enh_name = list(tpet_move.values())[2]
+                                tpet_msg_on_resolve = ""
                                 # UNIVERSE CARD
-                                player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus, t_attack, t_defense, turn_total)
+                                player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus, t_attack, t_defense, turn_total, tap1, tap2, tap3, tenh1, tenh_name, tcard_lvl)
                                 await ctx.send(file=player_2_card)
 
                                 aiMove = 0
@@ -6949,8 +7002,17 @@ class CrownUnlimited(commands.Cog):
                         turn = 0 
                 else:
 
+                    #Ap Levels
+                    ap1 = list(o_1.values())[0] + ocard_lvl_ap_buff
+                    ap2 = list(o_2.values())[0] + ocard_lvl_ap_buff
+                    ap3 = list(o_3.values())[0] + ocard_lvl_ap_buff
+                    enh1 = list(o_enhancer.values())[0]
+                    enh_name = list(o_enhancer.values())[2]
+                    pet_enh_name = list(opet_move.values())[2]
+                    pet_msg_on_resolve = ""
+                    
                     # UNIVERSE CARD
-                    player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus, o_attack, o_defense, turn_total)
+                    player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus, o_attack, o_defense, turn_total, ap1, ap2, ap3, enh1, enh_name, ocard_lvl)
                     # await private_channel.send(file=player_1_card)
                     
                     if o_used_focus and o_used_resolve:
@@ -7019,25 +7081,19 @@ class CrownUnlimited(commands.Cog):
                     battle_action_row = manage_components.create_actionrow(*battle_buttons)
                     util_action_row = manage_components.create_actionrow(*util_buttons)
 
-                    ap1 = list(o_1.values())[0] + ocard_lvl_ap_buff
-                    ap2 = list(o_2.values())[0] + ocard_lvl_ap_buff
-                    ap3 = list(o_3.values())[0] + ocard_lvl_ap_buff
-                    enh1 = list(o_enhancer.values())[0]
-                    enh_name = list(o_enhancer.values())[2]
-                    pet_enh_name = list(opet_move.values())[2]
-                    pet_msg_on_resolve = ""
+                    # ap1 = list(o_1.values())[0] + ocard_lvl_ap_buff
+                    # ap2 = list(o_2.values())[0] + ocard_lvl_ap_buff
+                    # ap3 = list(o_3.values())[0] + ocard_lvl_ap_buff
+                    # enh1 = list(o_enhancer.values())[0]
+                    # enh_name = list(o_enhancer.values())[2]
+                    # pet_enh_name = list(opet_move.values())[2]
+                    # pet_msg_on_resolve = ""
 
                     if o_used_resolve:
                         pet_msg_on_resolve =f"🐦 | *{enhancer_mapping[pet_enh_name]}*"
 
                     h_a_s_response = health_and_stamina_bars(o_health, o_stamina, o_max_health, o_max_stamina, o_used_resolve)
                     embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}", description=textwrap.dedent(f"""\
-                    💥 | **{omove1_text}** *{ap1}*
-                    ☄️ | **{omove2_text}** *{ap2}*
-                    🏵️ | **{omove3_text}** *{ap3}*
-                    🦠 | **{omove_enhanced_text}** *{enh1}{enhancer_suffix_mapping[enh_name]}*
-                    ↘️ {enhancer_mapping[enh_name]}
-
                     {pet_msg_on_resolve}
                     *Stamina costs located on buttons*
                     """), color=0xe74c3c)
@@ -7086,7 +7142,7 @@ class CrownUnlimited(commands.Cog):
                             if botActive:                    
                                 embedVar = discord.Embed(title=f"Enhancers!", description=f"Enhancers cost 20 Stamina to Boost your Character or Debuff Your Opponent!", colour=0xe91e63)
                                 embedVar.add_field(name=f"Your Enhancer: {omove_enhanced_text} is a {list(o_enhancer.values())[2]}", value="Pay Attention to your enhancer messages to know what effect is being used!")
-                                embedVar.set_footer(text=f"Use .enhance to view a full list of enhancers! Look for the {list(o_enhancer.values())[2]} Enhancer")
+                                embedVar.set_footer(text=f"Use /enhancers to view a full list of enhancers! Look for the {list(o_enhancer.values())[2]} Enhancer")
                                 await button_ctx.send(embed=embedVar)
                             o_enhancer_used=True
                             dmg = damage_cal(o_universe, o_card, o_enhancer, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total, ocard_lvl_ap_buff)
@@ -7686,8 +7742,16 @@ class CrownUnlimited(commands.Cog):
                     else:
                         turn = 1
                 else:
+                    #PlayUser
+                    tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff
+                    tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff
+                    tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff
+                    tenh1 = list(t_enhancer.values())[0]
+                    tenh_name = list(t_enhancer.values())[2]
+                    tpet_enh_name = list(tpet_move.values())[2]
+                    tpet_msg_on_resolve = ""
                     # UNIVERSE CARD
-                    player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus, t_attack, t_defense, turn_total)
+                    player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus, t_attack, t_defense, turn_total, tap1, tap2, tap3, tenh1, tenh_name, tcard_lvl)
                     await private_channel.send(file=player_2_card)
                     aiMove = 0
                     
@@ -9207,35 +9271,6 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, vul, accura
 
     #handle different staments for lifesteal and drain
     if enhancer:
-        if enh_type == 'ATK' or enh_type == 'DEF' or enh_type == 'HLT' or enh_type == 'STAM':
-            message = f'**{card}** used **{move}** :microbe: enhanced **{enh_type}**!'
-        elif  enh_type == 'LIFE':
-            message = f'**{card}** used **{move}** :microbe: absorbing **{enh_type}**!'
-        elif  enh_type == 'DRAIN':
-            message = f'**{card}** used **{move}** :microbe: Inflicts {enh_type}... absorbing STAM!'
-        elif  enh_type == 'FLOG':
-            message = f'**{card}** used **{move}** :microbe: Inflicts {enh_type}... absorbing ATK!'
-        elif  enh_type == 'WITHER':
-            message = f'**{card}** used **{move}** :microbe: Inflicts {enh_type}... absorbing DEF!'
-        elif enh_type == 'RAGE':
-            message = f'**{card}** used **{move}** :microbe: sacrificing defense to **{enh_type}**!'
-        elif enh_type == 'BRACE': 
-            message = f'**{card}** used **{move}** :microbe: sacrificing attack to **{enh_type}**!'
-        elif enh_type == 'BZRK' or enh_type == 'CRYSTAL': 
-            message = f'**{card}** used **{move}** :microbe: sacrificing health to **{enh_type}**!'
-        elif enh_type == 'WAVE' or enh_type == 'BLAST': 
-            message = f'**{card}** used **{move}** :microbe: dealing **{enh_type}** Damage!'
-        elif enh_type == 'CREATION': 
-            message = f'**{card}** used **{move}** :microbe: healing and increasing Max Health!'
-        elif enh_type == 'DESTRUCTION': 
-            message = f'**{card}** used **{move}** :microbe: draining health and Max Health!'
-        elif enh_type == 'GROWTH': 
-            message = f'**{card}** used **{move}** :microbe: sacrificing MAX health for **{enh_type}**!'
-        elif enh_type == 'STANCE': 
-            message = f'**{card}** used **{move}** :microbe: Changing their **{enh_type}**!'
-        else: 
-            message = f'**{card}** used **{move}** :microbe: inflicts {enh_type}'
-            
         enhanced=0
         if enh_type == "ATK":
             enhanced=atk
@@ -9283,41 +9318,76 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, vul, accura
             if turn == 0:
                 enhanced = ap
             else:
-                n = ap / turn
                 rand = round(random.randint(2, 50))
-                if n <= 0:
-                    n = 30
+                n = ap 
                 if turn % 10 == 0:
                     n = ap * .50
-                if turn == rand:
+                elif n <= 0:
+                    n = 30
+                elif turn == rand:
                     n = ap * 2
+                else:
+                    n = ap / turn
                 enhanced = n
         elif enh_type == 'BLAST':
             if turn == 0:
                 enhanced = ap
             else:
-                enhanced = round((ap * turn) * .60)
+                enhanced = round(ap * turn)
         elif enh_type == 'CREATION':
             if turn == 0:
                 enhanced = ap
             else:
-                n = ap / turn
-                if n <= 0:
-                    n = 30
                 rand = round(random.randint(2, 50))
+                n = ap
                 if turn % 10 == 0:
                     n = ap * .50
-                if turn == rand:
+                elif n <= 0:
+                    n = 30
+                elif turn == rand:
                     n = ap * 2
+                else:
+                    n = ap / turn
                 enhanced = n
         elif enh_type == 'DESTRUCTION':
             if turn == 0:
                 enhanced = ap
             else:
-                enhanced = round((ap * turn) * .60)
+                enhanced = round(ap * turn)
             if enhanced > op_health:
                 message = f'**{card}** used **{move}** :microbe: Opponent has been reduced.'
                 enhanced = op_health - 1
+                
+        if enh_type == 'ATK' or enh_type == 'DEF' or enh_type == 'HLT' or enh_type == 'STAM':
+            message = f'**{card}** used **{move}** :microbe: enhanced **{enh_type}**!'
+        elif  enh_type == 'LIFE':
+            message = f'**{card}** used **{move}** :microbe: absorbing **{enh_type}**!'
+        elif  enh_type == 'DRAIN':
+            message = f'**{card}** used **{move}** :microbe: Inflicts {enh_type}... absorbing STAM!'
+        elif  enh_type == 'FLOG':
+            message = f'**{card}** used **{move}** :microbe: Inflicts {enh_type}... absorbing ATK!'
+        elif  enh_type == 'WITHER':
+            message = f'**{card}** used **{move}** :microbe: Inflicts {enh_type}... absorbing DEF!'
+        elif enh_type == 'RAGE':
+            message = f'**{card}** used **{move}** :microbe: sacrificing defense to **{enh_type}**!'
+        elif enh_type == 'BRACE': 
+            message = f'**{card}** used **{move}** :microbe: sacrificing attack to **{enh_type}**!'
+        elif enh_type == 'BZRK' or enh_type == 'CRYSTAL': 
+            message = f'**{card}** used **{move}** :microbe: sacrificing health to **{enh_type}**!'
+        elif enh_type == 'WAVE' or enh_type == 'BLAST': 
+            message = f'**{card}** used **{move}** :microbe: dealing **{round(enhanced)} {enh_type}** Damage!'
+        elif enh_type == 'CREATION': 
+            message = f'**{card}** used **{move}** :microbe: healing **{round(enhanced)}** and increasing Max Health!'
+        elif enh_type == 'DESTRUCTION': 
+            message = f'**{card}** used **{move}** :microbe: draining **{round(enhanced)}** health and Max Health!'
+        elif enh_type == 'GROWTH': 
+            message = f'**{card}** used **{move}** :microbe: sacrificing MAX health for **{enh_type}**!'
+        elif enh_type == 'STANCE': 
+            message = f'**{card}** used **{move}** :microbe: Changing their **{enh_type}**!'
+        else: 
+            message = f'**{card}** used **{move}** :microbe: inflicts {enh_type}'
+            
+        
 
         
         response = {"DMG": enhanced, "MESSAGE": message, "STAMINA_USED": move_stamina, "CAN_USE_MOVE": can_use_move_flag, "ENHANCED_TYPE": enh_type, "ENHANCE": True}
@@ -9514,7 +9584,7 @@ def round_rectangle(size, radius, alpha=55):
     return image
 
 
-def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focused, attack, defense, turn_total):
+def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focused, attack, defense, turn_total, ap1, ap2, ap3, enh1, enhname, lvl):
     try:
         if health <= 0:
             im = Image.open(requests.get(d['PATH'], stream=True).raw)
@@ -9527,15 +9597,15 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
                 im = Image.open(requests.get(d['PATH'], stream=True).raw)
 
             draw = ImageDraw.Draw(im)
-            header = ImageFont.truetype("KomikaTitle-Paint.ttf", 55)
+            header = ImageFont.truetype("KomikaTitle.ttf", 70)
             tournament_wins_font = ImageFont.truetype("RobotoCondensed-Bold.ttf", 35)
             s = ImageFont.truetype("Roboto-Bold.ttf", 22)
             h = ImageFont.truetype("Roboto-Bold.ttf", 35)
             m = ImageFont.truetype("Roboto-Bold.ttf", 25)
             r = ImageFont.truetype("Freedom-10eM.ttf", 40)
-            rhs = ImageFont.truetype("Monster of South Italic St.ttf", 50)
+            rhs = ImageFont.truetype("destructobeambb_bold.ttf", 35)
             stats = ImageFont.truetype("Freedom-10eM.ttf", 30)
-            card_details_font_size = ImageFont.truetype("gang_wolfik.ttf", 60)
+            card_details_font_size = ImageFont.truetype("destructobeambb_bold.ttf", 35)
 
 
             h_a_s_response = health_and_stamina_bars(health, stamina, max_health, max_stamina, resolved)
@@ -9545,35 +9615,63 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
             stamina_bar =f"{stamina}/{max_stamina} {h_a_s_response['STAMINA']}"
             if stamina == max_stamina:
                 stamina_bar =f"{max_stamina} {h_a_s_response['STAMINA']}"
-            attack_stat = f"🗡️{attack}"
-            defense_stat = f"🛡️{defense}"
+            attack_stat = f"🗡️{round(attack)}"
+            defense_stat = f"🛡️{round(defense)}"
             moveset = d['MOVESET']
             move1 = moveset[0]
-            move1_text = f"💥 {list(move1.keys())[0]}"
+            move1_ap = ap1
+            move1_text = f"💥 {list(move1.keys())[0]}: {move1_ap}"
+            
             move2 = moveset[1]
-            move2_text = f"☄️ {list(move2.keys())[0]}"
+            move2_ap = ap2
+            move2_text = f"☄️ {list(move2.keys())[0]}: {move2_ap}"
+            
             move3 = moveset[2]
-            move3_text = f"🏵️ {list(move3.keys())[0]}"
+            move3_ap = ap3
+            move3_text = f"🏵️ {list(move3.keys())[0]}: {move3_ap}"
+            
             move_enhanced = moveset[3]
-            move_enhanced_text = f"🦠 {list(move_enhanced.keys())[0]}"
-            # level_stat = f"🔱{lvl}"
-            # lvl_color = (255, 255, 255)
-            # if lvl == 200:
-            #     lvl_color = (230,230,250)
-            # elif lvl >= 150 and lvl < 200:
-            #     lvl_color = (128,0,0)
-            # elif lvl >= 75 and lvl < 149:
-            #     lvl_color = (57,255,20)
-            # elif lvl >= 25 and lvl < 74:
-            #     lvl_color = (137, 207, 240)
+            move_enhanced_ap = enh1
+            move_enhanced_name = enhname
+            turn_crit=False
+            if enhname in Turn_Enhancer_Check:
+                if turn_total ==0:
+                    move_enhanced_ap = round(enh1)
+                elif turn_total % 10 == 0:
+                    move_enhanced_ap = round(enh1 * .50)
+                    turn_crit ==True
+                elif turn_total >= 1:
+                    move_enhanced_ap = round(enh1 / turn_total)
+                else:
+                    move_enhanced_ap = enh1
+            elif enhname in Damage_Enhancer_Check:
+                if turn_total > 0:
+                    move_enhanced_ap = round(enh1 * turn_total)
+                else:
+                    move_enhanced_ap = enh1
+            if not turn_crit:
+                move_enhanced_text = f"🦠 {list(move_enhanced.keys())[0]}: {move_enhanced_name} {move_enhanced_ap}{enhancer_suffix_mapping[enhname]}\n  ↘️ {enhancer_mapping[enhname]}"
+            else:
+                move_enhanced_text = f"🎇 {list(move_enhanced.keys())[0]}: {move_enhanced_name} {move_enhanced_ap}{enhancer_suffix_mapping[enhname]}\n  ↘️ {enhancer_mapping[enhname]}"
+            
+            level_stat = f"🔱{lvl}"
+            lvl_color = (255, 255, 255)
+            if lvl == 200:
+                lvl_color = (230,230,250)
+            elif lvl >= 150 and lvl < 200:
+                lvl_color = (128,0,0)
+            elif lvl >= 75 and lvl < 149:
+                lvl_color = (57,255,20)
+            elif lvl >= 25 and lvl < 74:
+                lvl_color = (137, 207, 240)
             title_stat = f"🎗️{title['TITLE']}"
 
             # Character Name
             if not resolved:
                 if d["HAS_COLLECTION"]:
-                    draw.text((82,50), f"{d['NAME']}", (255,215,0), font=header, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
+                    draw.text((82,60), f"{d['NAME']}", (255,215,0), font=header, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
                 else:
-                    draw.text((82,50), d['NAME'], (255, 255, 255), font=header, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
+                    draw.text((82,60), d['NAME'], (255, 255, 255), font=header, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
 
             # Title Name
             # draw.text((85,20), title['TITLE'], (255, 255, 255), font=h, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
@@ -9585,12 +9683,12 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
                 pilmoji.text((220, 260), defense_stat.strip(), (255, 255, 255), font=rhs, stroke_width=2, stroke_fill=(0,0,0))
 
                 pilmoji.text((85,20), title_stat.strip(), (255, 255, 255), font=h, stroke_width=2, stroke_fill=(0,0,0), align="left")
-                # pilmoji.text((70, 350), move1_text.strip(), (255, 255, 255), font=card_details_font_size, stroke_width=2, stroke_fill=(0,0,0))
-                # pilmoji.text((70, 400), move2_text.strip(), (255, 255, 255), font=card_details_font_size, stroke_width=2, stroke_fill=(0,0,0))
-                # pilmoji.text((70, 450), move3_text.strip(), (255, 255, 255), font=card_details_font_size, stroke_width=2, stroke_fill=(0,0,0))
-                # pilmoji.text((70, 500), move_enhanced_text.strip(), (255, 255, 255), font=card_details_font_size, stroke_width=2, stroke_fill=(0,0,0))
+                pilmoji.text((70, 330), move1_text.strip(), (255, 255, 255), font=card_details_font_size, stroke_width=2, stroke_fill=(0,0,0))
+                pilmoji.text((70, 380), move2_text.strip(), (255, 255, 255), font=card_details_font_size, stroke_width=2, stroke_fill=(0,0,0))
+                pilmoji.text((70, 430), move3_text.strip(), (255, 255, 255), font=card_details_font_size, stroke_width=2, stroke_fill=(0,0,0))
+                pilmoji.text((70, 480), move_enhanced_text.strip(), (255, 255, 255), font=card_details_font_size, stroke_width=2, stroke_fill=(0,0,0))
                 
-                # pilmoji.text((1005, 50), level_stat.strip(), lvl_color, font=header, stroke_width=5, stroke_fill=(0,0,0))
+                pilmoji.text((1005, 40), level_stat.strip(), lvl_color, font=card_details_font_size, stroke_width=3, stroke_fill=(0,0,0))
                
             if focused:
                             # side    # vert
@@ -9909,6 +10007,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             tpet_bond = 1
         tarm_passive = tarm['ABILITIES'][0]
         tarm_name=tarm['ARM']
+        tcard_lvl = 0
         tcard_lvl_ap_buff = 0 + (10 * currentopponent)
         t_card = t['NAME']
         t_gif = t['GIF']
@@ -11018,6 +11117,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
 
         STATS = {
             'o_card': o_card,
+            'o_cardlevel': ocard_lvl,
             'o_card_path': o_card_path,
             'oarm': oarm,
             'o_user': o_user,
@@ -11067,6 +11167,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             'o_enhancer_used': o_enhancer_used,
             'o_final_stand': o_final_stand,
             't_card': t_card,
+            't_cardlevel': tcard_lvl,
             't_universe': t_universe,
             't_attack': t_attack,
             't_defense': t_defense,
@@ -11109,6 +11210,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         if mode == "Boss":
             STATS = {
                 'o_card': o_card,
+                'o_cardlevel': ocard_lvl,
                 'o_card_path': o_card_path,
                 'oarm': oarm,
                 'o_user': o_user,
@@ -11158,6 +11260,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 'o_enhancer_used': o_enhancer_used,
                 'o_final_stand': o_final_stand,
                 't_card': t_card,
+                't_cardlevel': tcard_lvl,
                 't_universe': t_universe,
                 't_attack': t_attack,
                 't_defense': t_defense,
@@ -11215,6 +11318,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         if mode == "CBoss":
             STATS = {
                 'o_card': o_card,
+                'o_cardlevel': ocard_lvl,
                 'o_card_path': o_card_path,
                 'oarm': oarm,
                 'o_user': o_user,
@@ -11264,6 +11368,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 'o_enhancer_used': o_enhancer_used,
                 'o_final_stand': o_final_stand,
                 't_card': t_card,
+                't_cardlevel': tcard_lvl,
                 't_universe': t_universe,
                 't_attack': t_attack,
                 't_defense': t_defense,
@@ -11317,6 +11422,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 't_concede': t_concede,
                 't_wins': t_wins,
                 'c_card': c_card,
+                'c_cardlevel': ccard_lvl,
                 'c_card_path': c_card_path,
                 'carm': carm,
                 'c_user': c_user,
@@ -11370,6 +11476,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         if mode in co_op_modes and mode != "CBoss":
             STATS = {
             'o_card': o_card,
+            'o_cardlevel': ocard_lvl,
             'o_card_path': o_card_path,
             'oarm': oarm,
             'o_user': o_user,
@@ -11419,6 +11526,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             'o_enhancer_used': o_enhancer_used,
             'o_final_stand': o_final_stand,
             't_card': t_card,
+            't_cardlevel': tcard_lvl,
             't_universe': t_universe,
             't_attack': t_attack,
             't_defense': t_defense,
@@ -11457,6 +11565,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             'tpet_image': tpet_image,
             't_pet_used': t_pet_used,
             'c_card': c_card,
+            'c_cardlevel': ccard_lvl,
             'c_card_path': c_card_path,
             'carm': carm,
             'c_user': c_user,
@@ -11992,6 +12101,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 stats = await build_player_stats(self, randomized_battle, ctx, sowner, o, otitle, t, ttitle, mode, universe, currentopponent, oteam, ofam, abyss_scaling, None, None, None, None, None, None, None)
 
             o_card = stats['o_card']
+            ocard_lvl = stats['o_cardlevel']
             o_card_path = stats['o_card_path']
             oarm = stats['oarm']
             o_user = stats['o_user']
@@ -12043,6 +12153,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             o_vul=True
 
             t_card = stats['t_card']
+            tcard_lvl = stats['t_cardlevel']
             t_universe = stats['t_universe']
             t_attack = stats['t_attack']
             t_defense = stats['t_defense']
@@ -12107,6 +12218,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
             if mode in co_op_modes:
                 c_card = stats['c_card']
+                ccard_lvl = stats['c_cardlevel']
                 c_card_path = stats['c_card_path']
                 carm = stats['carm']
                 c_user = stats['c_user']
@@ -12894,8 +13006,17 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 else:
                                     turn=0
                         else:
+                            #Ap Levels
+                            ap1 = list(o_1.values())[0] + ocard_lvl_ap_buff
+                            ap2 = list(o_2.values())[0] + ocard_lvl_ap_buff
+                            ap3 = list(o_3.values())[0] + ocard_lvl_ap_buff
+                            enh1 = list(o_enhancer.values())[0]
+                            enh_name = list(o_enhancer.values())[2]
+                            pet_enh_name = list(opet_move.values())[2]
+                            pet_msg_on_resolve = ""
+                            
                             # UNIVERSE CARD
-                            player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus, o_attack, o_defense, turn_total)
+                            player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve, otitle, o_used_focus, o_attack, o_defense, turn_total, ap1, ap2, ap3, enh1, enh_name, ocard_lvl)
                             # await private_channel.send(file=player_1_card)
                             
                             main_options = ["1","2","3","4"]
@@ -12944,7 +13065,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             util_buttons = [
                                 manage_components.create_button(
                                     style=ButtonStyle.grey,
-                                    label="Block 20",
+                                    label="Defend Companion 20",
                                     custom_id = "0"
                                 ),
                                 manage_components.create_button(
@@ -13012,24 +13133,18 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             else:
                                 components = [battle_action_row, util_action_row]
 
-                            ap1 = list(o_1.values())[0] + ocard_lvl_ap_buff
-                            ap2 = list(o_2.values())[0] + ocard_lvl_ap_buff
-                            ap3 = list(o_3.values())[0] + ocard_lvl_ap_buff
-                            enh1 = list(o_enhancer.values())[0]
-                            enh_name = list(o_enhancer.values())[2]
-                            pet_enh_name = list(opet_move.values())[2]
-                            pet_msg_on_resolve = ""
+                            # ap1 = list(o_1.values())[0] + ocard_lvl_ap_buff
+                            # ap2 = list(o_2.values())[0] + ocard_lvl_ap_buff
+                            # ap3 = list(o_3.values())[0] + ocard_lvl_ap_buff
+                            # enh1 = list(o_enhancer.values())[0]
+                            # enh_name = list(o_enhancer.values())[2]
+                            # pet_enh_name = list(opet_move.values())[2]
+                            # pet_msg_on_resolve = ""
 
                             if o_used_resolve:
                                 pet_msg_on_resolve =f"🐦 | *{enhancer_mapping[pet_enh_name]}*"
 
                             embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}", description=textwrap.dedent(f"""\
-                            💥 | **{omove1_text}** *{ap1}*
-                            ☄️ | **{omove2_text}** *{ap2}*
-                            🏵️ | **{omove3_text}** *{ap3}*
-                            🦠 | **{omove_enhanced_text}** *{enh1}{enhancer_suffix_mapping[enh_name]}*
-                            ↘️ {enhancer_mapping[enh_name]}
-
                             {pet_msg_on_resolve}
                             *Stamina costs located on buttons*
                             """), color=0xe74c3c)
@@ -13930,7 +14045,16 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         else:
                             turn_selector = 0
                         if mode not in AUTO_BATTLE_modes:
-                            player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus, t_attack, t_defense, turn_total)
+                            #PlayUser
+                            tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff
+                            tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff
+                            tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff
+                            tenh1 = list(t_enhancer.values())[0]
+                            tenh_name = list(t_enhancer.values())[2]
+                            tpet_enh_name = list(tpet_move.values())[2]
+                            tpet_msg_on_resolve = ""
+                            # UNIVERSE CARD
+                            player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus, t_attack, t_defense, turn_total, tap1, tap2, tap3, tenh1, tenh_name, tcard_lvl)
                             await private_channel.send(file=player_2_card)
                         aiMove = 0
                         
@@ -15212,7 +15336,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         else:
                             if mode in ai_co_op_modes:
                                 # UNIVERSE CARD
-                                companion_card = showcard(c, c_max_health, c_health, c_max_stamina, c_stamina, c_used_resolve, ctitle, c_used_focus, c_attack, c_defense, turn_total)
+                                cap1 = list(c_1.values())[0] + ccard_lvl_ap_buff
+                                cap2 = list(c_2.values())[0] + ccard_lvl_ap_buff
+                                cap3 = list(c_3.values())[0] + ccard_lvl_ap_buff
+                                cenh1 = list(c_enhancer.values())[0]
+                                cenh_name = list(c_enhancer.values())[2]
+                                cpet_enh_name = list(cpet_move.values())[2]
+                                cpet_msg_on_resolve = ""
+                                companion_card = showcard(c, c_max_health, c_health, c_max_stamina, c_stamina, c_used_resolve, ctitle, c_used_focus, c_attack, c_defense, turn_total, cap1, cap2, cap3, cenh1, cenh_name, ccard_lvl)
                                 await private_channel.send(file=companion_card)
                                 aiMove = 0
                                 
@@ -15952,7 +16083,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         await private_channel.send(embed=embedVar)
                                         turn=2
                             else:
-                                companion = showcard(c, c_max_health, c_health, c_max_stamina, c_stamina, c_used_resolve, ctitle, c_used_focus, c_attack, c_defense, turn_total)
+                                cap1 = list(c_1.values())[0] + ccard_lvl_ap_buff
+                                cap2 = list(c_2.values())[0] + ccard_lvl_ap_buff
+                                cap3 = list(c_3.values())[0] + ccard_lvl_ap_buff
+                                cenh1 = list(c_enhancer.values())[0]
+                                cenh_name = list(c_enhancer.values())[2]
+                                cpet_enh_name = list(cpet_move.values())[2]
+                                cpet_msg_on_resolve = ""
+                                companion = showcard(c, c_max_health, c_health, c_max_stamina, c_stamina, c_used_resolve, ctitle, c_used_focus, c_attack, c_defense, turn_total, cap1, cap2, cap3, cenh1, cenh_name, ccard_lvl)
                                 # await private_channel.send(file=companion)
                                 
                                 if c_used_focus and c_used_resolve:
@@ -15989,7 +16127,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 util_buttons = [
                                     manage_components.create_button(
                                         style=ButtonStyle.grey,
-                                        label="Block 20",
+                                        label="Defend Companion 20",
                                         custom_id = "0"
                                     ),
                                     manage_components.create_button(
@@ -16042,12 +16180,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     cpet_msg_on_resolve =f"🐦 | *{enhancer_mapping[pet_enh_name]}*"
 
                                 embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}", description=textwrap.dedent(f"""\
-                                💥 | **{cmove1_text}** *{cap1}*
-                                ☄️ | **{cmove2_text}** *{cap2}*
-                                🏵️ | **{cmove3_text}** *{cap3}*
-                                🦠 | **{cmove_enhanced_text}** *{cenh1}{enhancer_suffix_mapping[cenh_name]}*
-                                ↘️ {enhancer_mapping[cenh_name]}
-
                                 {cpet_msg_on_resolve}
                                 *Stamina costs located on buttons*
                                 """), color=0xe74c3c)
@@ -16784,8 +16916,16 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             else:
                                 turn = 3
                         else:
+                            #PlayUser
+                            tap1 = list(t_1.values())[0] + tcard_lvl_ap_buff
+                            tap2 = list(t_2.values())[0] + tcard_lvl_ap_buff
+                            tap3 = list(t_3.values())[0] + tcard_lvl_ap_buff
+                            tenh1 = list(t_enhancer.values())[0]
+                            tenh_name = list(t_enhancer.values())[2]
+                            tpet_enh_name = list(tpet_move.values())[2]
+                            tpet_msg_on_resolve = ""
                             # UNIVERSE CARD
-                            player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus, t_attack, t_defense, turn_total)
+                            player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve, ttitle, t_used_focus, t_attack, t_defense, turn_total, tap1, tap2, tap3, tenh1, tenh_name, tcard_lvl)
                             await private_channel.send(file=player_2_card)
                             aiMove = 0
                             

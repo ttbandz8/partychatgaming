@@ -239,20 +239,13 @@ class Profile(commands.Cog):
                     titlemessage = f":reminder_ribbon: | **{title_name}** *{title_passive_type} {title_passive_value}{enhancer_suffix_mapping[title_passive_type]}*"
                     warningmessage= f""
                 cardtitle = {'TITLE': title_name}
-                card_file = showcard(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, cardtitle, focused, o_attack, o_defense, turn)
+                card_file = showcard(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, cardtitle, focused, o_attack, o_defense, turn, move1ap, move2ap, move3ap, move4ap, move4enh, card_lvl)
 
                 embedVar = discord.Embed(title=f"{licon} {card_lvl} {message}".format(self), description=textwrap.dedent(f"""\
                 {titlemessage}
                 :mechanical_arm: | **{arm_name}** *{arm_passive_type} {arm_passive_value}{enhancer_suffix_mapping[arm_passive_type]}*
                 :bird: | **{active_pet['NAME']}** *{active_pet['TYPE']} {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]}*
                 **Bond** _{bond}_ {bond_message} / **Level** _{lvl}_ {lvl_message}
-            
-                _**Moveset Details**_
-                :boom: | **{move1}:** {move1ap}
-                :comet: | **{move2}:** {move2ap}
-                :rosette: | **{move3}:** {move3ap}
-                :microbe: | **{move4}:** *{move4enh} {move4ap}{enhancer_suffix_mapping[move4enh]}*
-                ↘️ {enhancer_mapping[move4enh]}
                 
                 :drop_of_blood: | _Passive:_ **{passive_name}:** *{passive_type} {passive_num}{enhancer_suffix_mapping[passive_type]}*
                 :infinity: | {traitmessage}

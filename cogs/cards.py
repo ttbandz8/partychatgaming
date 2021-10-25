@@ -327,15 +327,8 @@ class Cards(commands.Cog):
                 message = f"{o_card} is a defensive card. "
                 tip="Equipping offensive /titles and /arms would help boost killability"              
             
-            card_file = showcard(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, title, focused, o_attack, o_defense, turn)
+            card_file = showcard(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, title, focused, o_attack, o_defense, turn, move1ap, move2ap, move3ap, move4ap, move4enh, 0)
             embedVar = discord.Embed(title=f"{card_icon} {price_message}".format(self), description=textwrap.dedent(f"""
-            _**Moveset Details**_
-            :boom: **{move1}:** {move1ap}
-            :comet: **{move2}:** {move2ap}
-            :rosette: **{move3}:** {move3ap}
-            :microbe: **{move4}:** *{move4enh} {move4ap}{enhancer_suffix_mapping[move4enh]}*
-            ↘️ {enhancer_mapping[move4enh]}
-
             :drop_of_blood: _Passive:_ **{passive_name}:** {passive_type} by {passive_num}
             :infinity: {traitmessage}
             """), colour=000000)
