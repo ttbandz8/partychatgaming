@@ -433,7 +433,7 @@ class CrownUnlimited(commands.Cog):
                 else:
                     oguild = "PCG"
             
-            await battle_commands(self, ctx, mode, universe, selected_universe, None, oguild, crestlist, crestsearch, private_channel, sowner, oteam, ofam, companion, cteam, cfam, None, user)
+            await battle_commands(self, ctx, mode, universe, selected_universe, completed_universes, oguild, crestlist, crestsearch, private_channel, sowner, oteam, ofam, companion, cteam, cfam, None, user)
         except Exception as ex:
             trace = []
             tb = ex.__traceback__
@@ -6332,7 +6332,35 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, vul, accura
 
     #handle different staments for lifesteal and drain
     if enhancer:
-        
+        if enh_type == 'ATK' or enh_type == 'DEF' or enh_type == 'HLT' or enh_type == 'STAM':
+            message = f'**{card}** used **{move}** :microbe: enhanced **{enh_type}**!'
+        elif  enh_type == 'LIFE':
+            message = f'**{card}** used **{move}** :microbe: absorbing **{enh_type}**!'
+        elif  enh_type == 'DRAIN':
+            message = f'**{card}** used **{move}** :microbe: Inflicts {enh_type}... absorbing STAM!'
+        elif  enh_type == 'FLOG':
+            message = f'**{card}** used **{move}** :microbe: Inflicts {enh_type}... absorbing ATK!'
+        elif  enh_type == 'WITHER':
+            message = f'**{card}** used **{move}** :microbe: Inflicts {enh_type}... absorbing DEF!'
+        elif enh_type == 'RAGE':
+            message = f'**{card}** used **{move}** :microbe: sacrificing defense to **{enh_type}**!'
+        elif enh_type == 'BRACE': 
+            message = f'**{card}** used **{move}** :microbe: sacrificing attack to **{enh_type}**!'
+        elif enh_type == 'BZRK' or enh_type == 'CRYSTAL': 
+            message = f'**{card}** used **{move}** :microbe: sacrificing health to **{enh_type}**!'
+        elif enh_type == 'WAVE' or enh_type == 'BLAST': 
+            message = f'**{card}** used **{move}** :microbe: dealing **{enh_type}** Damage!'
+        elif enh_type == 'CREATION': 
+            message = f'**{card}** used **{move}** :microbe: healing and increasing Max Health!'
+        elif enh_type == 'DESTRUCTION': 
+            message = f'**{card}** used **{move}** :microbe: draining health and Max Health!'
+        elif enh_type == 'GROWTH': 
+            message = f'**{card}** used **{move}** :microbe: sacrificing MAX health for **{enh_type}**!'
+        elif enh_type == 'STANCE': 
+            message = f'**{card}** used **{move}** :microbe: Changing their **{enh_type}**!'
+        else: 
+            message = f'**{card}** used **{move}** :microbe: inflicts {enh_type}'
+            
         enhanced=0
         if enh_type == "ATK":
             enhanced=atk
@@ -6380,76 +6408,41 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, vul, accura
             if turn == 0:
                 enhanced = ap
             else:
+                n = ap / turn
                 rand = round(random.randint(2, 50))
-                n = ap 
+                if n <= 0:
+                    n = 30
                 if turn % 10 == 0:
                     n = ap * .50
-                elif n <= 0:
-                    n = 30  
-                elif turn == rand:
+                if turn == rand:
                     n = ap * 2
-                else:
-                    n = ap/turn
                 enhanced = n
         elif enh_type == 'BLAST':
             if turn == 0:
                 enhanced = ap
             else:
-                enhanced = round(ap * turn)
+                enhanced = round((ap * turn) * .60)
         elif enh_type == 'CREATION':
             if turn == 0:
                 enhanced = ap
             else:
+                n = ap / turn
+                if n <= 0:
+                    n = 30
                 rand = round(random.randint(2, 50))
-                n = ap 
                 if turn % 10 == 0:
                     n = ap * .50
-                elif n <= 0:
-                    n = 30  
-                elif turn == rand:
+                if turn == rand:
                     n = ap * 2
-                else:
-                    n = ap/turn
                 enhanced = n
         elif enh_type == 'DESTRUCTION':
             if turn == 0:
                 enhanced = ap
             else:
-                enhanced = round(ap * turn)
+                enhanced = round((ap * turn) * .60)
             if enhanced > op_health:
                 message = f'**{card}** used **{move}** :microbe: Opponent has been reduced.'
                 enhanced = op_health - 1
-                
-        if enh_type == 'ATK' or enh_type == 'DEF' or enh_type == 'HLT' or enh_type == 'STAM':
-            message = f'**{card}** used **{move}** :microbe: enhanced **{enh_type}**!'
-        elif  enh_type == 'LIFE':
-            message = f'**{card}** used **{move}** :microbe: absorbing **{enh_type}**!'
-        elif  enh_type == 'DRAIN':
-            message = f'**{card}** used **{move}** :microbe: Inflicts {enh_type}... absorbing STAM!'
-        elif  enh_type == 'FLOG':
-            message = f'**{card}** used **{move}** :microbe: Inflicts {enh_type}... absorbing ATK!'
-        elif  enh_type == 'WITHER':
-            message = f'**{card}** used **{move}** :microbe: Inflicts {enh_type}... absorbing DEF!'
-        elif enh_type == 'RAGE':
-            message = f'**{card}** used **{move}** :microbe: sacrificing defense to **{enh_type}**!'
-        elif enh_type == 'BRACE': 
-            message = f'**{card}** used **{move}** :microbe: sacrificing attack to **{enh_type}**!'
-        elif enh_type == 'BZRK' or enh_type == 'CRYSTAL': 
-            message = f'**{card}** used **{move}** :microbe: sacrificing health to **{enh_type}**!'
-        elif enh_type == 'WAVE' or enh_type == 'BLAST': 
-            message = f'**{card}** used **{move}** :microbe: dealing **{round(enhanced)} {enh_type}** Damage!'
-        elif enh_type == 'CREATION': 
-            message = f'**{card}** used **{move}** :microbe: healing and increasing **{round(enhanced)}**Max Health!'
-        elif enh_type == 'DESTRUCTION': 
-            message = f'**{card}** used **{move}** :microbe: draining **{round(enhanced)}**health and Max Health!'
-        elif enh_type == 'GROWTH': 
-            message = f'**{card}** used **{move}** :microbe: sacrificing MAX health for **{enh_type}**!'
-        elif enh_type == 'STANCE': 
-            message = f'**{card}** used **{move}** :microbe: Changing their **{enh_type}**!'
-        else: 
-            message = f'**{card}** used **{move}** :microbe: inflicts {enh_type}'
-            
-        
 
         
         response = {"DMG": enhanced, "MESSAGE": message, "STAMINA_USED": move_stamina, "CAN_USE_MOVE": can_use_move_flag, "ENHANCED_TYPE": enh_type, "ENHANCE": True}
@@ -6667,8 +6660,7 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
             r = ImageFont.truetype("Freedom-10eM.ttf", 40)
             rhs = ImageFont.truetype("destructobeambb_bold.ttf", 35)
             stats = ImageFont.truetype("Freedom-10eM.ttf", 30)
-            card_details_font_size = ImageFont.truetype("destructobeambb_bold.ttf", 30)
-            card_levels = ImageFont.truetype("destructobeambb_bold.ttf", 40)
+            card_details_font_size = ImageFont.truetype("destructobeambb_bold.ttf", 35)
 
 
             h_a_s_response = health_and_stamina_bars(health, stamina, max_health, max_stamina, resolved)
@@ -6718,50 +6710,23 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
                 move_enhanced_text = f"🎇 {list(move_enhanced.keys())[0]}: {move_enhanced_name} {move_enhanced_ap}{enhancer_suffix_mapping[enhname]}\n  ↘️ {enhancer_mapping[enhname]}"
             
             level_stat = f"🔱{lvl}"
-            lvl_color = (255, 255, 255) #white
-            focus_color = (30,144,255) #focusblue
-            stroke_color = (0,0,0)
+            lvl_color = (255, 255, 255)
             if lvl == 200:
-                lvl_color = (255, 215, 0)
-                focus_color = (138,43,226)# blue violet
-            elif lvl >= 180:
-                lvl_color = (255, 0, 255)#fuchsia
-                focus_color = (0,0,139)#darkblue
-            elif lvl >= 160:
-                lvl_color = (0, 0, 0)#black
-                focus_color = (255,253,208)#cream
-                stroke_color = (255,255,255)
-                if lvl >= 170:
-                    focus_color = (0,0,139)#darkblue
-            elif lvl >= 140:
-                lvl_color = (192, 192, 192)#silver
-                focus_color = (255,253,208)#cream
-            elif lvl == 120:
-                lvl_color = (220, 20, 60)#crimsonred
-                focus_color = (255,253,208)#cream
-            elif lvl >= 100:
-                lvl_color = (255, 20, 147)#deeppink
-                focus_color = (192,192,192)#silver
-            elif lvl >= 80:
-                lvl_color = (0, 191, 255)#deepskyblue
-                focus_color = (30,144,255)
-            elif lvl >= 60:
-                lvl_color = (255, 69, 0)#orangered
-                focus_color = (30,144,255)
-            elif lvl >= 40:
-                lvl_color = (0, 255, 0)#green
-                focus_color = (30,144,255)
-            elif lvl >= 20:
-                lvl_color = (165, 42, 42)#brown
-                focus_color = (30,144,255)
+                lvl_color = (230,230,250)
+            elif lvl >= 150 and lvl < 200:
+                lvl_color = (128,0,0)
+            elif lvl >= 75 and lvl < 149:
+                lvl_color = (57,255,20)
+            elif lvl >= 25 and lvl < 74:
+                lvl_color = (137, 207, 240)
             title_stat = f"🎗️{title['TITLE']}"
 
             # Character Name
             if not resolved:
                 if d["HAS_COLLECTION"]:
-                    draw.text((82,40), f"{d['NAME']}", (255,215,0), font=header, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
+                    draw.text((82,60), f"{d['NAME']}", (255,215,0), font=header, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
                 else:
-                    draw.text((82,40), d['NAME'], (255, 255, 255), font=header, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
+                    draw.text((82,60), d['NAME'], (255, 255, 255), font=header, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
 
             # Title Name
             # draw.text((85,20), title['TITLE'], (255, 255, 255), font=h, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
@@ -6778,36 +6743,36 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
                 pilmoji.text((70, 430), move3_text.strip(), (255, 255, 255), font=card_details_font_size, stroke_width=2, stroke_fill=(0,0,0))
                 pilmoji.text((70, 480), move_enhanced_text.strip(), (255, 255, 255), font=card_details_font_size, stroke_width=2, stroke_fill=(0,0,0))
                 
-                pilmoji.text((1005, 40), level_stat.strip(), lvl_color, font=card_levels, stroke_width=3, stroke_fill=stroke_color)
+                pilmoji.text((1005, 40), level_stat.strip(), lvl_color, font=card_details_font_size, stroke_width=3, stroke_fill=(0,0,0))
                
             if focused:
                             # side    # vert
-                draw.line(((0, 0), (0, 800)), fill=focus_color, width=15)
-                draw.line(((1195, 0), (1195, 800)), fill=focus_color, width=10)
-                draw.line(((1195, 0), (0, 0)), fill=focus_color, width=15)
-                draw.line(((0, 600), (1195, 600)), fill=focus_color, width=15)
-                draw.text((82,120), "FOCUSED", focus_color, font=r, stroke_width=2, stroke_fill=stroke_color, align="left")
+                draw.line(((0, 0), (0, 800)), fill=(30,144,255), width=15)
+                draw.line(((1195, 0), (1195, 800)), fill=(30,144,255), width=10)
+                draw.line(((1195, 0), (0, 0)), fill=(30,144,255), width=15)
+                draw.line(((0, 600), (1195, 600)), fill=(30,144,255), width=15)
+                draw.text((82,130), "FOCUSED", (30,144,255), font=r, stroke_width=2, stroke_fill=(0,0,0), align="left")
 
             if resolved:
                 if d['RNAME'] != "N/A" and d['RNAME'] != "":
                     if d["HAS_COLLECTION"]:
-                        draw.text((82,40), d['RNAME'], (255,215,0), font=header, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
+                        draw.text((82,50), d['RNAME'], (255,215,0), font=header, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
                     else:
                         if d["HAS_COLLECTION"]:
-                            draw.text((82,40), d['RNAME'], (255,215,0), font=header, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
+                            draw.text((82,50), d['RNAME'], (255,215,0), font=header, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
                         else:
-                            draw.text((82,40), d['NAME'], (255, 255, 255), font=header, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
+                            draw.text((82,50), d['NAME'], (255, 255, 255), font=header, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
                 else:
                     if d["HAS_COLLECTION"]:
-                        draw.text((82,40), d['NAME'], (255,215,0), font=header, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
+                        draw.text((82,50), d['NAME'], (255,215,0), font=header, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
                     else:
-                        draw.text((82,40), d['NAME'], (255, 255, 255), font=header, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
+                        draw.text((82,50), d['NAME'], (255, 255, 255), font=header, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
                             # side    # vert
-                draw.line(((0, 0), (0, 800)), fill=lvl_color, width=15)
-                draw.line(((1195, 0), (1195, 800)), fill=lvl_color, width=10)
-                draw.line(((1195, 0), (0, 0)), fill=lvl_color, width=15)
-                draw.line(((0, 600), (1195, 600)), fill=lvl_color, width=15)
-                draw.text((280,120), "RESOLVED", lvl_color, font=r, stroke_width=2, stroke_fill=stroke_color, align="left")
+                draw.line(((0, 0), (0, 800)), fill=(255,215,0), width=15)
+                draw.line(((1195, 0), (1195, 800)), fill=(255,215,0), width=10)
+                draw.line(((1195, 0), (0, 0)), fill=(255,215,0), width=15)
+                draw.line(((0, 600), (1195, 600)), fill=(255,215,0), width=15)
+                draw.text((280,130), "RESOLVED", (255,215,0), font=r, stroke_width=2, stroke_fill=(0,0,0), align="left")
             
 
             # data = io.BytesIO
@@ -6970,8 +6935,8 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             if o_universe_tier == 9:
                 o_universe_tier = crown_rift_universe_mappings[o_universe]
 
-            opponent_scaling = 50 * universe_tier + (o_universe_tier * 75)
-            opponent_health_scaling = ((universe_tier * 500) + (o_universe_tier * 500))
+            opponent_scaling = 50 * universe_tier + (o_universe_tier * 150)
+            opponent_health_scaling = ((universe_tier * 1250) + (o_universe_tier * 1200))
 
         if companion:
             ### Companion Data
@@ -7020,7 +6985,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             ccard_lvl_hlt_buff = 0
 
 
-            for x in cvault['CARD_LEVELS']:
+            for x in vault['CARD_LEVELS']:
                 if x['CARD'] == c_card:
                     ccard_lvl = x['LVL']
                     ccard_tier = x['TIER']
@@ -7075,8 +7040,8 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 if c_universe_tier == 9:
                     c_universe_tier = crown_rift_universe_mappings[c_universe]
                 if c_universe_tier > o_universe_tier:
-                    opponent_scaling = 50 * universe_tier + (c_universe_tier * 75)
-                    opponent_health_scaling = 1500 + ((universe_tier * 500) + (c_universe_tier * 500))
+                    opponent_scaling = 50 * universe_tier + (c_universe_tier * 150)
+                    opponent_health_scaling = 1500 + ((universe_tier * 1250) + (c_universe_tier * 1200))
         
         if mode in pvp_modes:
             # Player 2 Data
@@ -7186,7 +7151,6 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             tarm_name=tarm['ARM']
             tcard_lvl_ap_buff = 0 + (10 * currentopponent)
             t_card = t['NAME']
-            tcard_lvl = 0
             t_gif = t['GIF']
             t_card_path=t['PATH']
             t_rcard_path=t['RPATH']
@@ -8309,7 +8273,6 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
 
         STATS = {
             'o_card': o_card,
-            'ocard_lvl': ocard_lvl,
             'o_card_path': o_card_path,
             'oarm': oarm,
             'o_user': o_user,
@@ -8359,7 +8322,6 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             'o_enhancer_used': o_enhancer_used,
             'o_final_stand': o_final_stand,
             't_card': t_card,
-            'tcard_lvl': tcard_lvl,
             't_universe': t_universe,
             't_attack': t_attack,
             't_defense': t_defense,
@@ -8402,7 +8364,6 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         if mode in pvp_modes:
             STATS = {
                 'o_card': o_card,
-                'ocard_lvl': ocard_lvl,
                 'o_card_path': o_card_path,
                 'oarm': oarm,
                 'o_user': o_user,
@@ -8452,7 +8413,6 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 'o_enhancer_used': o_enhancer_used,
                 'o_final_stand': o_final_stand,
                 't_card': t_card,
-                'tcard_lvl': tcard_lvl,
                 't_universe': t_universe,
                 't_attack': t_attack,
                 't_defense': t_defense,
@@ -8506,7 +8466,6 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         if mode == "Boss":
             STATS = {
                 'o_card': o_card,
-                'ocard_lvl': ocard_lvl,
                 'o_card_path': o_card_path,
                 'oarm': oarm,
                 'o_user': o_user,
@@ -8556,7 +8515,6 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 'o_enhancer_used': o_enhancer_used,
                 'o_final_stand': o_final_stand,
                 't_card': t_card,
-                'tcard_lvl': tcard_lvl,
                 't_universe': t_universe,
                 't_attack': t_attack,
                 't_defense': t_defense,
@@ -8614,7 +8572,6 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         if mode == "CBoss":
             STATS = {
                 'o_card': o_card,
-                'ocard_lvl': ocard_lvl,
                 'o_card_path': o_card_path,
                 'oarm': oarm,
                 'o_user': o_user,
@@ -8664,7 +8621,6 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 'o_enhancer_used': o_enhancer_used,
                 'o_final_stand': o_final_stand,
                 't_card': t_card,
-                'tcard_lvl': tcard_lvl,
                 't_universe': t_universe,
                 't_attack': t_attack,
                 't_defense': t_defense,
@@ -8718,7 +8674,6 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 't_concede': t_concede,
                 't_wins': t_wins,
                 'c_card': c_card,
-                'ccard_lvl': ccard_lvl,
                 'c_card_path': c_card_path,
                 'carm': carm,
                 'c_user': c_user,
@@ -8772,7 +8727,6 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         if mode in co_op_modes and mode != "CBoss":
             STATS = {
             'o_card': o_card,
-            'ocard_lvl': ocard_lvl,
             'o_card_path': o_card_path,
             'oarm': oarm,
             'o_user': o_user,
@@ -8822,7 +8776,6 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             'o_enhancer_used': o_enhancer_used,
             'o_final_stand': o_final_stand,
             't_card': t_card,
-            'tcard_lvl': tcard_lvl,
             't_universe': t_universe,
             't_attack': t_attack,
             't_defense': t_defense,
@@ -8861,7 +8814,6 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             'tpet_image': tpet_image,
             't_pet_used': t_pet_used,
             'c_card': c_card,
-            'ccard_lvl': ccard_lvl,
             'c_card_path': c_card_path,
             'carm': carm,
             'c_user': c_user,
@@ -9408,7 +9360,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 stats = await build_player_stats(self, randomized_battle, ctx, sowner, o, otitle, t, ttitle, mode, universe, currentopponent, oteam, ofam, abyss_scaling, None, None, None, None, None, None, None, None, None, None)
 
             o_card = stats['o_card']
-            ocard_lvl = stats['ocard_lvl']
             o_card_path = stats['o_card_path']
             oarm = stats['oarm']
             o_user = stats['o_user']
@@ -9461,7 +9412,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
             if mode in PVP_MODES:
                 t_card = stats['t_card']
-                tcard_lvl = stats['tcard_lvl']
                 t_card_path = stats['t_card_path']
                 tarm = stats['tarm']
                 t_user = stats['t_user']
@@ -9513,16 +9463,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 t_vul=True
             else:
                 t_card = stats['t_card']
-                tcard_lvl_ap_buff = stats['tcard_lvl_ap_buff']
-                if mode in D_modes:
-                    tcard_lvl = 150
-                    tcard_lvl_ap_buff = 50
-                elif mode in U_modes:
-                    tcard_lvl = 30
-                    tcard_lvl_ap_buff = 10
-                elif mode in B_modes:
-                    tcard_lvl = 200
-                    tcard_lvl_ap_buff = 66
                 t_universe = stats['t_universe']
                 t_attack = stats['t_attack']
                 t_defense = stats['t_defense']
@@ -9554,6 +9494,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 t_resolve = stats['t_resolve']
                 t_used_resolve = stats['t_used_resolve']
                 t_final_stand = stats['t_final_stand']
+                tcard_lvl_ap_buff = stats['tcard_lvl_ap_buff']
                 t_vul=True
                 tpet_move = stats['tpet_move']
                 tpet_name = stats['tpet_name']
@@ -9587,7 +9528,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
             if mode in co_op_modes:
                 c_card = stats['c_card']
-                ccard_lvl = stats['ccard_lvl']
                 c_card_path = stats['c_card_path']
                 carm = stats['carm']
                 c_user = stats['c_user']
@@ -9785,6 +9725,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             o_used_focus = True
 
                             
+                            await ctx.send(embed=embedVar)
                             if botActive:
                                 if messagenumber != 2:
                                     if messagenumber == 1:
@@ -10009,7 +9950,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 elif button_ctx.custom_id == "4":
                                     if botActive:                    
                                         embedVar = discord.Embed(title=f"Enhancers!", description=f"Enhancers cost 20 Stamina to Boost your Character or Debuff Your Opponent!", colour=0xe91e63)
-                                        embedVar.add_field(name=f"Your Enhancer: {omove_enhanced_text} is a {list(o_enhancer.values())[2]}", value=f"Pay Attention to your enhancer messages to know what effect is being used!\n\n**{list(o_enhancer.values())[2]} : {enhancer_mapping[list(o_enhancer.values())[2]]}**")
+                                        embedVar.add_field(name=f"Your Enhancer: {omove_enhanced_text} is a {list(o_enhancer.values())[2]}", value="Pay Attention to your enhancer messages to know what effect is being used!")
                                         embedVar.set_footer(text=f"Use /enhancers to view a full list of enhancers! Look for the {list(o_enhancer.values())[2]} Enhancer")
                                         await button_ctx.send(embed=embedVar)
                                     o_enhancer_used=True
@@ -10553,9 +10494,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             t_attack = t_attack + t_attackcalc
                             t_defense =  t_defense + t_defensecalc
                             t_used_focus=True
-                            # embedVar = discord.Embed(title=f"{t_card.upper()} FOCUSED", description=f"**{t_card} says**\n{t_focus_description}", colour=0xe91e63)
-                            # embedVar.add_field(name=f"{t_card} focused and {healmessage}", value="All stats & stamina increased")
-                            # await ctx.send(embed=embedVar)
+                            embedVar = discord.Embed(title=f"{t_card.upper()} FOCUSED", description=f"**{t_card} says**\n{t_focus_description}", colour=0xe91e63)
+                            embedVar.add_field(name=f"{t_card} focused and {healmessage}", value="All stats & stamina increased")
+                            await ctx.send(embed=embedVar)
                             if not t_used_resolve and t_used_focus and t_universe == "Digimon":  #Digimon Universal Trait
                                 #fortitude or luck is based on health  
                                 fortitude = 0.0
@@ -10573,7 +10514,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 t_defense = round(t_defense - t_resolve_defense)
                                 t_used_resolve=True
 
-                                embedVar = discord.Embed(title=f"{t_card} DIGIVOLUTION :zap:", description=f"**{t_card} says**\n{t_resolve_description}", colour=0xe91e63)
+                                embedVar = discord.Embed(title=f"{t_card} STRENGTHENED RESOLVE :zap:", description=f"**{t_card} says**\n{t_resolve_description}", colour=0xe91e63)
                                 embedVar.add_field(name=f"Transformation: Digivolve", value="On Focus you Resolve.")
                                 await ctx.send(embed=embedVar)
                             elif t_universe == "League Of Legends":
@@ -10707,7 +10648,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 
 
                                 if t_used_resolve:
-                                    tpet_msg_on_resolve =f"🐦 *{enhancer_mapping[tpet_enh_name]}*"
+                                    tpet_msg_on_resolve =f"🐦 | *{enhancer_mapping[tpet_enh_name]}*"
 
                                 embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}", description=textwrap.dedent(f"""\
                                 {tpet_msg_on_resolve}
@@ -10772,7 +10713,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 await button_ctx.send(embed=embedVar)
                                                 turn_total= turn_total + 1
                                                 turn=1
-                                            elif t_universe == "Attack On Titan":
+                                            if t_universe == "Attack On Titan":
                                                 #fortitude or luck is based on health  
                                                 fortitude = 0.0
                                                 low = t_health - (t_health * .75)
@@ -12566,6 +12507,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     pet_msg_on_resolve =f"🐦 | *{enhancer_mapping[pet_enh_name]}*"
 
                                 embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}", description=textwrap.dedent(f"""\
+                                💥 | **{omove1_text}** *{ap1}*
+                                ☄️ | **{omove2_text}** *{ap2}*
+                                🏵️ | **{omove3_text}** *{ap3}*
+                                🦠 | **{omove_enhanced_text}** *{enh1}{enhancer_suffix_mapping[enh_name]}*
+                                ↘️ {enhancer_mapping[enh_name]}
 
                                 {pet_msg_on_resolve}
                                 *Stamina costs located on buttons*
@@ -15604,6 +15550,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         cpet_msg_on_resolve =f"🐦 | *{enhancer_mapping[pet_enh_name]}*"
 
                                     embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}", description=textwrap.dedent(f"""\
+                                    💥 | **{cmove1_text}** *{cap1}*
+                                    ☄️ | **{cmove2_text}** *{cap2}*
+                                    🏵️ | **{cmove3_text}** *{cap3}*
+                                    🦠 | **{cmove_enhanced_text}** *{cenh1}{enhancer_suffix_mapping[cenh_name]}*
+                                    ↘️ {enhancer_mapping[cenh_name]}
 
                                     {cpet_msg_on_resolve}
                                     *Stamina costs located on buttons*
@@ -15851,7 +15802,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_attack = round (t_attack - dmg['DMG'])
                                                     elif cpet_type == 'WITHER':
                                                         c_defense = round(c_defense + dmg['DMG'])
-                                                        t_defense = round (t_defense - dmg['DMG'])
+                                                        t_defense = round (t_attack - dmg['DMG'])
                                                     elif cpet_type == 'RAGE':
                                                         c_defense = round(c_defense - dmg['DMG'])
                                                         c_attack = round(c_attack + dmg['DMG'])
