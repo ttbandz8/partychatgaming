@@ -189,7 +189,7 @@ class CrownUnlimited(commands.Cog):
                     found_amount = round(bounty / 3)
                 await bless(found_amount, str(message.author))
                 embedVar = discord.Embed(title=f"You fled but found {bounty_icon} {found_amount}!", colour=0xf1c40f)
-                embedVar.set_footer(text="Money Earned!", icon_url="https://cdn.discordapp.com/emojis/877233426770583563.gif?v=1")
+                embedVar.set_footer(text="Money Earned!", icon_url="https://cdn.discordapp.com/emojis/866116525613514752.gif?size=96")
                 take_chances_response = embedVar
             else:
                 embedVar = discord.Embed(title=f"You fled", colour=0xf1c40f)
@@ -202,8 +202,8 @@ class CrownUnlimited(commands.Cog):
             {message.author.mention}, **{battle_message}**
             """), colour=0xf1c40f)
             embedVar.set_author(name="Enemy Approaches!", icon_url=f"{icon}")
-            embedVar.set_thumbnail(url=f"{cards[rand_card]['PATH']}")
-            embedVar.set_footer(text="Use /explore to turn off these interactions.", icon_url="https://cdn.discordapp.com/emojis/784402243519905792.gif?v=1")
+            embedVar.set_image(url=f"{cards[rand_card]['PATH']}")
+            embedVar.set_footer(text="Use /explore to turn off these interactions.")
             await message.channel.send(embed=embedVar, components=[random_battle_buttons_action_row], delete_after=60)
 
             def check(button_ctx):
