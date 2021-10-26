@@ -169,17 +169,17 @@ class CrownUnlimited(commands.Cog):
                 bounty_icon = ":dollar:"
 
             bounty_message = f"{bounty_icon} {'{:,}'.format(bounty)}"
-            battle_message = "If you defeat the card you will earn it, and it's bounty!"
+            battle_message = "Defeat the card to earn it, and it's bounty!"
             if selected_mode == "Dungeon":
                 bounty = bounty * 2
-                battle_message = "If you defeat the card you will earn it, and 2x it's bounty!!"
+                battle_message = "Defeat the card to earn it, and 2x it's bounty!!"
                 random_flee_loss = 100
 
             # Take Chances Button Interaction
             if random_flee_loss <= 10 and selected_mode == "Tales":
                 drop_response = await specific_drops(str(message.author), cards[rand_card]['NAME'], universetitle)
                 embedVar = discord.Embed(title=f"**{drop_response}**", colour=0xf1c40f)
-                embedVar.set_footer(text="LESS GOOOOO", icon_url="https://cdn.discordapp.com/emojis/877233426770583563.gif?v=1")
+                embedVar.set_footer(text="Successful Capture!", icon_url="https://cdn.discordapp.com/emojis/877233426770583563.gif?v=1")
                 take_chances_response = embedVar
             
             elif random_flee_loss <= 100:
@@ -190,19 +190,16 @@ class CrownUnlimited(commands.Cog):
                 await bless(found_amount, str(message.author))
                 embedVar = discord.Embed(title=f"You fled but found {bounty_icon} {found_amount}!", colour=0xf1c40f)
                 embedVar.set_footer(text="Money Earned!", icon_url="https://cdn.discordapp.com/emojis/877233426770583563.gif?v=1")
-                embedVar.set_author(name="Good job!", icon_url="https://cdn.discordapp.com/emojis/875101593152917585.gif?v=1")
                 take_chances_response = embedVar
             else:
-                embedVar = discord.Embed(title=f"**You lost immediately.**", colour=0xf1c40f)
-                embedVar.set_footer(text="You down bad", icon_url="https://cdn.discordapp.com/emojis/872980334487171092.gif?v=1")
+                embedVar = discord.Embed(title=f"You fled", colour=0xf1c40f)
+                # embedVar.set_footer(text="", icon_url="https://cdn.discordapp.com/emojis/872980334487171092.gif?v=1")
                 take_chances_response = embedVar
 
             # Send Message
             embedVar = discord.Embed(title=f"**{approach_message}{cards[rand_card]['NAME']}** Approaches!", description=textwrap.dedent(f"""\
             **Bounty** **{bounty_message}**
-
-            {message.author.mention}
-            **{battle_message}**
+            {message.author.mention}, **{battle_message}**
             """), colour=0xf1c40f)
             embedVar.set_author(name="Enemy Approaches!", icon_url=f"{icon}")
             embedVar.set_thumbnail(url=f"{cards[rand_card]['PATH']}")
