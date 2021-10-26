@@ -6380,7 +6380,7 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, vul, accura
                 rand = round(random.randint(2, 50))
                 n = ap 
                 if turn % 10 == 0:
-                    n = ap * .50
+                    n = ap * .75
                 elif n <= 0:
                     n = 30  
                 elif turn == rand:
@@ -6400,7 +6400,7 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, vul, accura
                 rand = round(random.randint(2, 50))
                 n = ap 
                 if turn % 10 == 0:
-                    n = ap * .50
+                    n = ap * .75
                 elif n <= 0:
                     n = 30  
                 elif turn == rand:
@@ -6417,32 +6417,48 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, vul, accura
                 message = f'**{card}** used **{move}** :microbe: Opponent has been reduced.'
                 enhanced = op_health - 1
                 
-        if enh_type == 'ATK' or enh_type == 'DEF' or enh_type == 'HLT' or enh_type == 'STAM':
-            message = f'**{card}** used **{move}** :microbe: enhanced **{enh_type}**!'
+        if enh_type == 'ATK':
+            message = f'**{card}** used **{move}** :microbe: Increasing **Attack** by **{enhanced}**'
+        elif enh_type == 'DEF':
+            message = f'**{card}** used **{move}** :microbe: Increasing **Defense** by **{enhanced}**'
+        elif enh_type == 'STAM':
+            message = f'**{card}** used **{move}** :microbe: Increasing Stamina by **{enhanced}**'
         elif  enh_type == 'LIFE':
-            message = f'**{card}** used **{move}** :microbe: absorbing **{enh_type}**!'
+            message = f'**{card}** used **{move}** :microbe: Stealing **{enhanced} Health**'
         elif  enh_type == 'DRAIN':
-            message = f'**{card}** used **{move}** :microbe: Inflicts {enh_type}... absorbing STAM!'
+            message = f'**{card}** used **{move}** :microbe: Draining **{enhanced} Stamina**'
         elif  enh_type == 'FLOG':
-            message = f'**{card}** used **{move}** :microbe: Inflicts {enh_type}... absorbing ATK!'
+            message = f'**{card}** used **{move}** :microbe: Stealing **{enhanced} Attack**'
         elif  enh_type == 'WITHER':
-            message = f'**{card}** used **{move}** :microbe: Inflicts {enh_type}... absorbing DEF!'
+            message = f'**{card}** used **{move}** :microbe: Stealing **{enhanced} Defense**'
         elif enh_type == 'RAGE':
-            message = f'**{card}** used **{move}** :microbe: sacrificing defense to **{enh_type}**!'
+            message = f'**{card}** used **{move}** :microbe: Sacrificing **{enhanced} Defense**, Increasing **Attack** by **{enhanced}**'
         elif enh_type == 'BRACE': 
-            message = f'**{card}** used **{move}** :microbe: sacrificing attack to **{enh_type}**!'
-        elif enh_type == 'BZRK' or enh_type == 'CRYSTAL': 
-            message = f'**{card}** used **{move}** :microbe: sacrificing health to **{enh_type}**!'
-        elif enh_type == 'WAVE' or enh_type == 'BLAST': 
-            message = f'**{card}** used **{move}** :microbe: dealing **{round(enhanced)} {enh_type}** Damage!'
+            message = f'**{card}** used **{move}** :microbe: Sacrificing **{enhanced} Attack**, Increasing **Defense** by **{enhanced}**'
+        elif enh_type == 'BZRK': 
+            message = f'**{card}** used **{move}** :microbe: Sacrificing **{enhanced} Health**, Increasing **Attack** by **{enhanced}**'
+        elif enh_type == 'CRYSTAL':
+            message = f'**{card}** used **{move}** :microbe: Sacrifices **{enhanced} Health**, Increasing **Defense** by **{enhanced}**'
+        elif enh_type == 'WAVE' or enh_type == 'BLAST':
+            message = f'**{card}** used **{move}** :microbe: Dealing **{round(enhanced)} {enh_type}** Damage!'
         elif enh_type == 'CREATION': 
-            message = f'**{card}** used **{move}** :microbe: healing and increasing **{round(enhanced)}**Max Health!'
+            message = f'**{card}** used **{move}** :microbe: Healing and Increasing **Max Health** by**{round(enhanced)}**'
         elif enh_type == 'DESTRUCTION': 
-            message = f'**{card}** used **{move}** :microbe: draining **{round(enhanced)}**health and Max Health!'
+            message = f'**{card}** used **{move}** :microbe: Destroying **{round(enhanced)} Max Health**'
         elif enh_type == 'GROWTH': 
-            message = f'**{card}** used **{move}** :microbe: sacrificing MAX health for **{enh_type}**!'
+            message = f'**{card}** used **{move}** :microbe: Sacrificing **Max Health** to Increase **Attack** and **Defense**'
         elif enh_type == 'STANCE': 
-            message = f'**{card}** used **{move}** :microbe: Changing their **{enh_type}**!'
+            message = f'**{card}** used **{move}** :microbe: Swapping **Attack** and **Defense**, Increasing **Attack** by **{enhanced}**'
+        elif enh_type == 'CONFUSE':
+            message = f'**{card}** used **{move}** :microbe: Swapping **Attack** and **Defense**, Decreasing **Defense** by **{enhanced}**'
+        elif enh_type == 'HLT':
+            message = f'**{card}** used **{move}** :microbe: Healing for  **{enh_type}**!'
+        elif enh_type == 'FEAR': 
+            message = f'**{card}** used **{move}** :microbe: Sacrificing **Max Health** to Decrease **Attack** and **Defense**'
+        elif enh_type == 'SOULCHAIN':
+            message = f'**{card}** used **{move}** :microbe: Synchronizing **Stamina** to **{enhanced}**'
+        elif enh_type == 'GAMBLE':
+            message = f'**{card}** used **{move}** :microbe: Synchronizing **Health** to **{enhanced}**'
         else: 
             message = f'**{card}** used **{move}** :microbe: inflicts {enh_type}'
             
@@ -6654,8 +6670,61 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
                 im = Image.open(requests.get(d['RPATH'], stream=True).raw)
             else:
                 im = Image.open(requests.get(d['PATH'], stream=True).raw)
+            
+            level_stat = f"🔱{lvl}"
+            lvl_color = (255, 255, 255) #white
+            focus_color = (30,144,255) #focusblue
+            stroke_color = (0,0,0)
+            if lvl == 200:
+                lvl_color = (255, 215, 0)
+                focus_color = (138,43,226)# blue violet
+            elif lvl >= 180:
+                lvl_color = (255, 0, 255)#fuchsia
+                focus_color = (0,0,139)#darkblue
+            elif lvl >= 160:
+                lvl_color = (0, 0, 0)#black
+                focus_color = (255,253,208)#cream
+                stroke_color = (255,255,255)
+                if lvl >= 170:
+                    focus_color = (0,0,139)#darkblue
+            elif lvl >= 140:
+                lvl_color = (192, 192, 192)#silver
+                focus_color = (255,253,208)#cream
+            elif lvl == 120:
+                lvl_color = (220, 20, 60)#crimsonred
+                focus_color = (255,253,208)#cream
+            elif lvl >= 100:
+                lvl_color = (255, 20, 147)#deeppink
+                focus_color = (192,192,192)#silver
+            elif lvl >= 80:
+                lvl_color = (0, 191, 255)#deepskyblue
+                focus_color = (30,144,255)
+            elif lvl >= 60:
+                lvl_color = (255, 69, 0)#orangered
+                focus_color = (30,144,255)
+            elif lvl >= 40:
+                lvl_color = (0, 255, 0)#green
+                focus_color = (30,144,255)
+            elif lvl >= 20:
+                lvl_color = (165, 42, 42)#brown
+                focus_color = (30,144,255)
 
-            draw = ImageDraw.Draw(im)
+            draw = ImageDraw.Draw(im, "RGBA")
+            lc = list(lvl_color)
+            lc.append(60)
+            lc_border = list(lvl_color)
+            lc_border.append(130)
+
+
+            # Moveset Box
+            draw.rounded_rectangle(((55, 310), (1300, 600)), fill=(0, 0, 0, 80), radius=10)
+            # draw.rounded_rectangle(((55, 310), (1160, 630)), outline=(0, 0, 0, 127), width=3, radius=10)
+
+            # Level Box
+            draw.rounded_rectangle(((995, 35), (1300, 90)), fill=tuple(lc), radius=10)
+            # draw.rounded_rectangle(((995, 35), (1300, 90)), outline=tuple(lc_border), width=4, radius=10)
+
+
             header = ImageFont.truetype("KomikaTitle.ttf", 70)
             tournament_wins_font = ImageFont.truetype("RobotoCondensed-Bold.ttf", 35)
             s = ImageFont.truetype("Roboto-Bold.ttf", 22)
@@ -6664,7 +6733,7 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
             r = ImageFont.truetype("Freedom-10eM.ttf", 40)
             rhs = ImageFont.truetype("destructobeambb_bold.ttf", 35)
             stats = ImageFont.truetype("Freedom-10eM.ttf", 30)
-            card_details_font_size = ImageFont.truetype("destructobeambb_bold.ttf", 30)
+            card_details_font_size = ImageFont.truetype("destructobeambb_bold.ttf", 25)
             card_levels = ImageFont.truetype("destructobeambb_bold.ttf", 40)
 
 
@@ -6714,43 +6783,6 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
             else:
                 move_enhanced_text = f"🎇 {list(move_enhanced.keys())[0]}: {move_enhanced_name} {move_enhanced_ap}{enhancer_suffix_mapping[enhname]}\n  ↘️ {enhancer_mapping[enhname]}"
             
-            level_stat = f"🔱{lvl}"
-            lvl_color = (255, 255, 255) #white
-            focus_color = (30,144,255) #focusblue
-            stroke_color = (0,0,0)
-            if lvl == 200:
-                lvl_color = (255, 215, 0)
-                focus_color = (138,43,226)# blue violet
-            elif lvl >= 180:
-                lvl_color = (255, 0, 255)#fuchsia
-                focus_color = (0,0,139)#darkblue
-            elif lvl >= 160:
-                lvl_color = (0, 0, 0)#black
-                focus_color = (255,253,208)#cream
-                stroke_color = (255,255,255)
-                if lvl >= 170:
-                    focus_color = (0,0,139)#darkblue
-            elif lvl >= 140:
-                lvl_color = (192, 192, 192)#silver
-                focus_color = (255,253,208)#cream
-            elif lvl == 120:
-                lvl_color = (220, 20, 60)#crimsonred
-                focus_color = (255,253,208)#cream
-            elif lvl >= 100:
-                lvl_color = (255, 20, 147)#deeppink
-                focus_color = (192,192,192)#silver
-            elif lvl >= 80:
-                lvl_color = (0, 191, 255)#deepskyblue
-                focus_color = (30,144,255)
-            elif lvl >= 60:
-                lvl_color = (255, 69, 0)#orangered
-                focus_color = (30,144,255)
-            elif lvl >= 40:
-                lvl_color = (0, 255, 0)#green
-                focus_color = (30,144,255)
-            elif lvl >= 20:
-                lvl_color = (165, 42, 42)#brown
-                focus_color = (30,144,255)
             title_stat = f"🎗️{title['TITLE']}"
 
             # Character Name
@@ -6769,7 +6801,7 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
                 pilmoji.text((70, 260), attack_stat.strip(), (255, 255, 255), font=rhs, stroke_width=2, stroke_fill=(0,0,0))
                 pilmoji.text((220, 260), defense_stat.strip(), (255, 255, 255), font=rhs, stroke_width=2, stroke_fill=(0,0,0))
 
-                pilmoji.text((85,20), title_stat.strip(), (255, 255, 255), font=h, stroke_width=2, stroke_fill=(0,0,0), align="left")
+                pilmoji.text((70,20), title_stat.strip(), (255, 255, 255), font=h, stroke_width=2, stroke_fill=(0,0,0), align="left")
                 pilmoji.text((70, 330), move1_text.strip(), (255, 255, 255), font=card_details_font_size, stroke_width=2, stroke_fill=(0,0,0))
                 pilmoji.text((70, 380), move2_text.strip(), (255, 255, 255), font=card_details_font_size, stroke_width=2, stroke_fill=(0,0,0))
                 pilmoji.text((70, 430), move3_text.strip(), (255, 255, 255), font=card_details_font_size, stroke_width=2, stroke_fill=(0,0,0))
