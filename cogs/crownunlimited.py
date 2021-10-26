@@ -6709,7 +6709,7 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
                 lvl_color = (165, 42, 42)#brown
                 focus_color = (30,144,255)
 
-            draw = ImageDraw.Draw(im, "RGBA")
+            draw = ImageDraw.Draw(im)
             lc = list(lvl_color)
             lc.append(60)
             lc_border = list(lvl_color)
