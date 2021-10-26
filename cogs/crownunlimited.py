@@ -6452,7 +6452,7 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, vul, accura
         elif enh_type == 'CONFUSE':
             message = f'**{card}** used **{move}** :microbe: Swapping **Attack** and **Defense**, Decreasing **Defense** by **{enhanced}**'
         elif enh_type == 'HLT':
-            message = f'**{card}** used **{move}** :microbe: Healing for  **{enh_type}**!'
+            message = f'**{card}** used **{move}** :microbe: Healing for  **{enhanced}**!'
         elif enh_type == 'FEAR': 
             message = f'**{card}** used **{move}** :microbe: Sacrificing **Max Health** to Decrease **Attack** and **Defense**'
         elif enh_type == 'SOULCHAIN':
