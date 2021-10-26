@@ -201,7 +201,7 @@ class CrownUnlimited(commands.Cog):
             **Bounty** **{bounty_message}**
             {message.author.mention}, **{battle_message}**
             """), colour=0xf1c40f)
-            embedVar.set_author(name="Enemy Approaches!", icon_url=f"{icon}")
+            # embedVar.set_author(name="Enemy Approaches!", icon_url=f"{icon}")
             embedVar.set_image(url=f"{cards[rand_card]['PATH']}")
             embedVar.set_footer(text="Use /explore to turn off these interactions.")
             await message.channel.send(embed=embedVar, components=[random_battle_buttons_action_row], delete_after=60)
