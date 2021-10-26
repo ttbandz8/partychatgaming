@@ -6717,11 +6717,11 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
 
 
             # Moveset Box
-            draw.rounded_rectangle(((55, 310), (1300, 600)), fill=(0, 0, 0, 80), radius=10)
+            # draw.rounded_rectangle(((55, 310), (1300, 600)), fill=(0, 0, 0, 80), radius=10)
             # draw.rounded_rectangle(((55, 310), (1160, 630)), outline=(0, 0, 0, 127), width=3, radius=10)
 
             # Level Box
-            draw.rounded_rectangle(((995, 35), (1300, 90)), fill=tuple(lc), radius=10)
+            # draw.rounded_rectangle(((995, 35), (1300, 90)), fill=tuple(lc), radius=10)
             # draw.rounded_rectangle(((995, 35), (1300, 90)), outline=tuple(lc_border), width=4, radius=10)
 
 
