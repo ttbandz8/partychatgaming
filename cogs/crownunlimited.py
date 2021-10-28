@@ -1522,7 +1522,7 @@ class CrownUnlimited(commands.Cog):
                             o_resolve_health = round(fortitude + (.5*o_resolve))
                             o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
                             o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
-git
+
                             o_stamina = o_stamina + o_resolve
                             o_health = o_health + o_resolve_health
                             o_attack = round(o_attack + o_resolve_attack)
@@ -16092,7 +16092,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                         if button_ctx.custom_id != "5" and button_ctx.custom_id != "6" and button_ctx.custom_id != "7" and button_ctx.custom_id != "0" and button_ctx.custom_id in options:
                                             # If you have enough stamina for move, use it
-                                            c_pet_used =False
+                                            
                                             if dmg['CAN_USE_MOVE']:
                                                 c_pet_used =False
                                                 if dmg['ENHANCE']:
