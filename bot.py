@@ -390,8 +390,11 @@ async def r(ctx):
 
       embedVar = discord.Embed(title=f"**Welcome to Crown Unlimited**!", description=textwrap.dedent(f"""
       If you'd like to read the manual, run the command below!
-      **/crown**
-
+      **/crown** - Game Manual
+      **/battle @Senpai** - Tutorial Battle
+      **/help** - Help Menu
+      
+      */battle @legend - Advanced Tutorial Battle*
       **Some Important Symbols**
       **Basics**
       :trident: - Level

@@ -1525,7 +1525,7 @@ class CrownUnlimited(commands.Cog):
                             o_resolve_health = round(fortitude + (.5*o_resolve))
                             o_resolve_attack = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
                             o_resolve_defense = round((.30 * o_defense) * (o_resolve / (.50 * o_defense)))
-
+git
                             o_stamina = o_stamina + o_resolve
                             o_health = o_health + o_resolve_health
                             o_attack = round(o_attack + o_resolve_attack)
@@ -1690,19 +1690,19 @@ class CrownUnlimited(commands.Cog):
                                     await private_channel.send(f"You fled the battle...")
                                 return
                             if button_ctx.custom_id == "1":
-                                o_pet_used =False
+                                
                                 dmg = damage_cal(o_universe, o_card, o_1, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total, ocard_lvl_ap_buff)
                             elif button_ctx.custom_id == "2":
-                                o_pet_used =False
+                                
                                 dmg = damage_cal(o_universe, o_card, o_2, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total, ocard_lvl_ap_buff)
                             elif button_ctx.custom_id == "3":
-                                o_pet_used =False
+                                
                                 dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total, ocard_lvl_ap_buff)
                                 if o_gif != "N/A":
                                     await private_channel.send(f"{o_gif}")
                             elif button_ctx.custom_id == "4":
                                 o_enhancer_used=True
-                                o_pet_used =False
+                                
                                 dmg = damage_cal(o_universe, o_card, o_enhancer, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total, ocard_lvl_ap_buff)
                                 o_enhancer_used=False
                             elif button_ctx.custom_id == "5":
@@ -2001,7 +2001,9 @@ class CrownUnlimited(commands.Cog):
 
                             if button_ctx.custom_id != "5" and button_ctx.custom_id != "6" and button_ctx.custom_id != "0" and button_ctx.custom_id in options:
                                 # If you have enough stamina for move, use it
+                                
                                 if dmg['CAN_USE_MOVE']:
+                                    o_pet_used =False
                                     if dmg['ENHANCE']:
                                         enh_type= dmg['ENHANCED_TYPE']
                                     
@@ -2397,21 +2399,21 @@ class CrownUnlimited(commands.Cog):
                             
 
                             if int(aiMove) == 0:
-                                t_pet_used =False
+                                
                                 t_health=0
                             if int(aiMove) == 1:
-                                t_pet_used =False
+                                
                                 dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total, tcard_lvl_ap_buff)
                             elif int(aiMove) == 2:
-                                t_pet_used =False
+                                
                                 dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total, tcard_lvl_ap_buff)
                             elif int(aiMove) == 3:
-                                t_pet_used =False
+                                
                                 dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total, tcard_lvl_ap_buff)
                                 if t_gif != "N/A":
                                     await private_channel.send(f"{t_gif}")
                             elif int(aiMove) == 4:
-                                t_pet_used =False
+                                
                                 t_enhancer_used=True
                                 dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total, tcard_lvl_ap_buff)
                                 t_enhancer_used=False
@@ -2698,8 +2700,10 @@ class CrownUnlimited(commands.Cog):
                                     await private_channel.send(f"{tpet_name} needs a turn to rest...") 
 
                             if int(aiMove) !=5 and int(aiMove) !=6:
+                                
                                 # If you have enough stamina for move, use it
                                 if dmg['CAN_USE_MOVE']:
+                                    t_pet_used =False
                                     if dmg['ENHANCE']:
                                         enh_type= dmg['ENHANCED_TYPE']
                                         if enh_type == 'ATK':
@@ -4188,7 +4192,7 @@ class CrownUnlimited(commands.Cog):
                                 embedVar.set_footer(text=f"Basic Attacks are great when you are low on stamina, but don't be afraid to enter focus state and REPLENISH!")
                                 await button_ctx.send(embed=embedVar)
                             dmg = damage_cal(o_universe, o_card, o_1, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total, ocard_lvl_ap_buff)
-                            o_pet_used=False
+                            
                         elif button_ctx.custom_id == "2":
                             if botActive:                    
                                 embedVar = discord.Embed(title=f"Special Attack!", description=f"Great Shot! Your Special Attack cost 30 Stamina to deal great Damage!", colour=0xe91e63)
@@ -4196,7 +4200,7 @@ class CrownUnlimited(commands.Cog):
                                 embedVar.set_footer(text=f"Special Attacks are great when you need to control the focus game! Use Them to Maximize your focus and build stronger combos!")
                                 await button_ctx.send(embed=embedVar)
                             dmg = damage_cal(o_universe, o_card, o_2, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total, ocard_lvl_ap_buff)
-                            o_pet_used=False
+                            
                         elif button_ctx.custom_id == "3":
                             if botActive:                    
                                 embedVar = discord.Embed(title=f"Ultimate Move!", description=f"Ultimate Moves cost 80 Stamina to deal incredible Damage!", colour=0xe91e63)
@@ -4204,7 +4208,7 @@ class CrownUnlimited(commands.Cog):
                                 embedVar.set_footer(text=f"Ultimate moves will consume most of your stamina! Use Them Wisely!")
                                 await button_ctx.send(embed=embedVar)
                             dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total, ocard_lvl_ap_buff)
-                            o_pet_used=False
+                            
                             if o_gif != "N/A":
                                 await private_channel.send(f"{o_gif}")
                         elif button_ctx.custom_id == "4":
@@ -4215,7 +4219,7 @@ class CrownUnlimited(commands.Cog):
                                 await button_ctx.send(embed=embedVar)
                             o_enhancer_used=True
                             dmg = damage_cal(o_universe, o_card, o_enhancer, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total, ocard_lvl_ap_buff)
-                            o_pet_used=False
+                            
                             o_enhancer_used=False
                         elif button_ctx.custom_id == "5":
                             #Resolve Check and Calculation
@@ -4527,6 +4531,7 @@ class CrownUnlimited(commands.Cog):
                         if button_ctx.custom_id != "5" and button_ctx.custom_id != "6" and button_ctx.custom_id != "0" and button_ctx.custom_id in options:
                             # If you have enough stamina for move, use it
                             if dmg['CAN_USE_MOVE']:
+                                o_pet_used =False
                                 if dmg['ENHANCE']:
                                     enh_type= dmg['ENHANCED_TYPE']                                        
                                     if enh_type == 'ATK':
@@ -9987,7 +9992,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         embedVar.set_footer(text=f"Basic Attacks are great when you are low on stamina, but don't be afraid to enter focus state and REPLENISH!")
                                         await button_ctx.send(embed=embedVar)
                                     dmg = damage_cal(o_universe, o_card, o_1, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total, ocard_lvl_ap_buff)
-                                    o_pet_used=False
+                                    
                                 elif button_ctx.custom_id == "2":
                                     if botActive:                    
                                         embedVar = discord.Embed(title=f"Special Attack!", description=f"Great Shot! Your Special Attack cost 30 Stamina to deal great Damage!", colour=0xe91e63)
@@ -9995,7 +10000,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         embedVar.set_footer(text=f"Special Attacks are great when you need to control the focus game! Use Them to Maximize your focus and build stronger combos!")
                                         await button_ctx.send(embed=embedVar)
                                     dmg = damage_cal(o_universe, o_card, o_2, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total, ocard_lvl_ap_buff)
-                                    o_pet_used=False
+                                    
                                 elif button_ctx.custom_id == "3":
                                     if botActive:                    
                                         embedVar = discord.Embed(title=f"Ultimate Move!", description=f"Ultimate Moves cost 80 Stamina to deal incredible Damage!", colour=0xe91e63)
@@ -10003,7 +10008,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         embedVar.set_footer(text=f"Ultimate moves will consume most of your stamina! Use Them Wisely!")
                                         await button_ctx.send(embed=embedVar)
                                     dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total, ocard_lvl_ap_buff)
-                                    o_pet_used=False
+                                    
                                     if o_gif != "N/A":
                                         await private_channel.send(f"{o_gif}")
                                 elif button_ctx.custom_id == "4":
@@ -10014,7 +10019,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         await button_ctx.send(embed=embedVar)
                                     o_enhancer_used=True
                                     dmg = damage_cal(o_universe, o_card, o_enhancer, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total, ocard_lvl_ap_buff)
-                                    o_pet_used=False
+                                    
                                     o_enhancer_used=False
                                 elif button_ctx.custom_id == "5":
                                     #Resolve Check and Calculation
@@ -10340,6 +10345,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 if button_ctx.custom_id != "5" and button_ctx.custom_id != "6" and button_ctx.custom_id != "0" and button_ctx.custom_id in options:
                                     # If you have enough stamina for move, use it
                                     if dmg['CAN_USE_MOVE']:
+                                        o_pet_used =False
                                         if dmg['ENHANCE']:
                                             enh_type= dmg['ENHANCED_TYPE']                                        
                                             if enh_type == 'ATK':
@@ -10731,19 +10737,19 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         await button_ctx.send(f"{tuser.mention} has fled the battle...")
                                         return
                                     if button_ctx.custom_id == "1":
-                                        t_pet_used =False
+                                        
                                         dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total, tcard_lvl_ap_buff)
                                     elif button_ctx.custom_id == "2":
-                                        t_pet_used =False
+                                        
                                         dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total, tcard_lvl_ap_buff)
                                     elif button_ctx.custom_id == "3":
-                                        t_pet_used =False
+                                        
                                         dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total, tcard_lvl_ap_buff)
                                         if t_gif != "N/A":
                                             await private_channel.send(f"{t_gif}")
                                     elif button_ctx.custom_id == "4":
                                         t_enhancer_used=True
-                                        t_pet_used =False
+                                        
                                         dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina,t_max_health, o_attack, t_special_move_description, turn_total, tcard_lvl_ap_buff)
                                         t_enhancer_used=False
                                     elif button_ctx.custom_id == "5":
@@ -11058,8 +11064,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
 
                                     if button_ctx.custom_id != "5" and button_ctx.custom_id != "6" and button_ctx.custom_id != "0" and button_ctx.custom_id in options:
+                                        
                                         # If you have enough stamina for move, use it
                                         if dmg['CAN_USE_MOVE']:
+                                            t_pet_used =False
                                             if dmg['ENHANCE']:
                                                 
                                                 enh_type= dmg['ENHANCED_TYPE']
@@ -11584,6 +11592,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 if int(aiMove) !=5 and int(aiMove) !=6:
                                     # If you have enough stamina for move, use it
                                     if dmg['CAN_USE_MOVE']:
+                                        t_pet_used =False
                                         if dmg['ENHANCE']:
                                             enh_type= dmg['ENHANCED_TYPE']
                                             if enh_type == 'ATK':
@@ -12030,17 +12039,17 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 # Make sure user is responding with move
 
                                 if aiMove == 1:
-                                    o_pet_used =False
+                                    
                                     dmg = damage_cal(o_universe, o_card, o_1, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total, ocard_lvl_ap_buff)
                                 elif aiMove == 2:
-                                    o_pet_used =False
+                                    
                                     dmg = damage_cal(o_universe, o_card, o_2, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total, ocard_lvl_ap_buff)
                                 elif aiMove == 3:
-                                    o_pet_used =False
+                                    
                                     dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total, ocard_lvl_ap_buff)
                                 elif aiMove == 4:
                                     o_enhancer_used=True
-                                    o_pet_used =False
+                                    
                                     dmg = damage_cal(o_universe, o_card, o_enhancer, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total, ocard_lvl_ap_buff)
                                     o_enhancer_used=False
                                 elif aiMove == 5:
@@ -12310,6 +12319,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 if aiMove != 5 and aiMove != 6 and aiMove != 0:
                                     # If you have enough stamina for move, use it
                                     if dmg['CAN_USE_MOVE']:
+                                        o_pet_used =False
                                         if dmg['ENHANCE']:
                                             enh_type= dmg['ENHANCED_TYPE']
                                         
@@ -12587,19 +12597,19 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         await discord.TextChannel.delete(private_channel, reason=None)
                                         return
                                     if button_ctx.custom_id == "1":
-                                        o_pet_used =False
+                                        
                                         dmg = damage_cal(o_universe, o_card, o_1, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total, ocard_lvl_ap_buff)
                                     elif button_ctx.custom_id == "2":
-                                        o_pet_used =False
+                                        
                                         dmg = damage_cal(o_universe, o_card, o_2, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total, ocard_lvl_ap_buff)
                                     elif button_ctx.custom_id == "3":
-                                        o_pet_used =False
+                                        
                                         dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total, ocard_lvl_ap_buff)
                                         if o_gif != "N/A":
                                             await private_channel.send(f"{o_gif}")
                                     elif button_ctx.custom_id == "4":
                                         o_enhancer_used=True
-                                        o_pet_used =False
+                                        
                                         dmg = damage_cal(o_universe, o_card, o_enhancer, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina, o_max_health, t_attack, o_special_move_description, turn_total, ocard_lvl_ap_buff)
                                         o_enhancer_used=False
                                     elif button_ctx.custom_id == "5":
@@ -13140,6 +13150,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     if button_ctx.custom_id in main_options:
                                         # If you have enough stamina for move, use it
                                         if dmg['CAN_USE_MOVE']:
+                                            o_pet_used =False
                                             if dmg['ENHANCE']:
                                                 enh_type= dmg['ENHANCED_TYPE']
                                             
@@ -13605,19 +13616,19 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             if int(aiMove) == 0:
                                 t_health=0
                             if int(aiMove) == 1:
-                                t_pet_used =False
+                                
                                 if c_block_used==True:
                                     dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total, tcard_lvl_ap_buff)
                                 else:
                                     dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total, tcard_lvl_ap_buff)
                             elif int(aiMove) == 2:
-                                t_pet_used =False
+                                
                                 if c_block_used==True:
                                     dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total, tcard_lvl_ap_buff)
                                 else:
                                     dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total, tcard_lvl_ap_buff)
                             elif int(aiMove) == 3:
-                                t_pet_used =False
+                                
                                 if c_block_used==True:
                                     dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total, tcard_lvl_ap_buff)
                                 else:
@@ -13626,7 +13637,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     if t_gif != "N/A":
                                         await private_channel.send(f"{t_gif}")
                             elif int(aiMove) == 4:
-                                t_pet_used =False
+                                
                                 t_enhancer_used=True
                                 if c_block_used==True:
                                     dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total, tcard_lvl_ap_buff)
@@ -14177,11 +14188,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     await private_channel.send(f"{tpet_name} needs a turn to rest...")
 
                             if int(aiMove) !=5 and int(aiMove) !=6:
+                                
                                 # If you have enough stamina for move, use it
                                 #if c used block
                                 if mode in co_op_modes:
                                     if c_block_used==True:
                                         if dmg['CAN_USE_MOVE']:
+                                            t_pet_used =False
                                             if dmg['ENHANCE']:
                                                 enh_type= dmg['ENHANCED_TYPE']
                                                 if enh_type == 'ATK':
@@ -14318,6 +14331,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             turn = 1
                                     else:
                                         if dmg['CAN_USE_MOVE']:
+                                            t_pet_used =False
                                             if dmg['ENHANCE']:
                                                 enh_type= dmg['ENHANCED_TYPE']
                                                 if enh_type == 'ATK':
@@ -14457,6 +14471,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             turn = 1
                                 else:
                                     if dmg['CAN_USE_MOVE']:
+                                        t_pet_used =False
                                         if dmg['ENHANCE']:
                                             enh_type= dmg['ENHANCED_TYPE']
                                             if enh_type == 'ATK':
@@ -14956,19 +14971,19 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             await private_channel.send(f"You fled the battle...")
                                         return
                                     if aiMove == 1:
-                                        c_pet_used =False
+                                        
                                         dmg = damage_cal(c_universe, c_card, c_1, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina, c_max_health, t_attack, c_special_move_description, turn_total, ccard_lvl_ap_buff)
                                     elif aiMove == 2:
-                                        c_pet_used =False
+                                        
                                         dmg = damage_cal(c_universe, c_card, c_2, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina, c_max_health, t_attack, c_special_move_description, turn_total, ccard_lvl_ap_buff)
                                     elif aiMove == 3:
-                                        c_pet_used =False
+                                        
                                         dmg = damage_cal(c_universe, c_card, c_3, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina, c_max_health, t_attack, c_special_move_description, turn_total, ccard_lvl_ap_buff)
                                         if c_gif != "N/A":
                                             await private_channel.send(f"{c_gif}")
                                     elif aiMove == 4:
                                         c_enhancer_used=True
-                                        c_pet_used =False
+                                        
                                         dmg = damage_cal(c_universe, c_card, c_enhancer, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina, c_max_health, t_attack, c_special_move_description, turn_total, ccard_lvl_ap_buff)
                                         c_enhancer_used=False
                                     elif aiMove == 5:
@@ -15368,7 +15383,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                     if aiMove != 5 and aiMove != 6 and aiMove != 7 and aiMove != 8:
                                         # If you have enough stamina for move, use it
+                                        
                                         if dmg['CAN_USE_MOVE']:
+                                            c_pet_used =False
                                             if dmg['ENHANCE']:
                                                 enh_type= dmg['ENHANCED_TYPE']
                                             
@@ -15630,19 +15647,19 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 await private_channel.send(f"You fled the battle...")
                                             return
                                         if button_ctx.custom_id == "1":
-                                            c_pet_used =False
+                                            
                                             dmg = damage_cal(c_universe, c_card, c_1, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina, c_max_health, t_attack, c_special_move_description, turn_total, ccard_lvl_ap_buff)
                                         elif button_ctx.custom_id == "2":
-                                            c_pet_used =False
+                                            
                                             dmg = damage_cal(c_universe, c_card, c_2, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina, c_max_health, t_attack, c_special_move_description, turn_total, ccard_lvl_ap_buff)
                                         elif button_ctx.custom_id == "3":
-                                            c_pet_used =False
+                                            
                                             dmg = damage_cal(c_universe, c_card, c_3, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina, c_max_health, t_attack, c_special_move_description, turn_total, ccard_lvl_ap_buff)
                                             if c_gif != "N/A":
                                                 await private_channel.send(f"{c_gif}")
                                         elif button_ctx.custom_id == "4":
                                             c_enhancer_used=True
-                                            c_pet_used =False
+                                            
                                             dmg = damage_cal(c_universe, c_card, c_enhancer, c_attack, c_defense, t_defense, c_vul, c_accuracy, c_stamina, c_enhancer_used, c_health, t_health, t_stamina, c_max_health, t_attack, c_special_move_description, turn_total, ccard_lvl_ap_buff)
                                             c_enhancer_used=False
                                         elif button_ctx.custom_id == "5":
@@ -16044,7 +16061,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                         if button_ctx.custom_id != "5" and button_ctx.custom_id != "6" and button_ctx.custom_id != "7" and button_ctx.custom_id != "0" and button_ctx.custom_id in options:
                                             # If you have enough stamina for move, use it
+                                            c_pet_used =False
                                             if dmg['CAN_USE_MOVE']:
+                                                c_pet_used =False
                                                 if dmg['ENHANCE']:
                                                     enh_type= dmg['ENHANCED_TYPE']
                                                 
@@ -16447,19 +16466,19 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 if int(aiMove) == 0:
                                     t_health=0
                                 if int(aiMove) == 1:
-                                    t_pet_used =False
+                                    
                                     if o_defend_used==True:
                                         dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total, tcard_lvl_ap_buff)
                                     else:
                                         dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total, tcard_lvl_ap_buff)
                                 elif int(aiMove) == 2:
-                                    t_pet_used =False
+                                    
                                     if o_defend_used==True:
                                         dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total, tcard_lvl_ap_buff)
                                     else:
                                         dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, c_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, c_health, c_stamina, t_max_health, c_attack, t_special_move_description, turn_total, tcard_lvl_ap_buff)
                                 elif int(aiMove) == 3:
-                                    t_pet_used =False
+                                    
                                     if o_defend_used==True:
                                         dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total, tcard_lvl_ap_buff)
                                     else: 
@@ -16467,7 +16486,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     if t_gif != "N/A":
                                         await private_channel.send(f"{t_gif}")
                                 elif int(aiMove) == 4:
-                                    t_pet_used =False
+                                    
                                     t_enhancer_used=True
                                     if o_defend_used==True:
                                         dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul, t_accuracy, t_stamina, t_enhancer_used, t_health,o_health, o_stamina, t_max_health, o_attack, t_special_move_description, turn_total, tcard_lvl_ap_buff)
@@ -16890,8 +16909,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 if int(aiMove) !=5 and int(aiMove) !=6:
                                     # If you have enough stamina for move, use it
                                     #check if o is blocking
+                                    
                                     if o_defend_used==True:
                                         if dmg['CAN_USE_MOVE']:
+                                            t_pet_used =False
                                             if dmg['ENHANCE']:
                                                 enh_type= dmg['ENHANCED_TYPE']
                                                 if enh_type == 'ATK':
@@ -17025,6 +17046,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             turn = 3
                                     else:                                 
                                         if dmg['CAN_USE_MOVE']:
+                                            t_pet_used =False
                                             if dmg['ENHANCE']:
                                                 enh_type= dmg['ENHANCED_TYPE']
                                                 if enh_type == 'ATK':
