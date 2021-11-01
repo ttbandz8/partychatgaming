@@ -11791,6 +11791,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 embedVar.add_field(name=f"{t_arena}", value=f"{t_arenades}")
                                 embedVar.add_field(name=f"Entering the {t_arena}",value= f"{t_entrance}", inline=False)
                                 embedVar.set_footer(text=f"{t_card} waits for you to strike....")
+                                await asyncio.sleep(5)
                             elif mode in co_op_modes and mode not in B_modes:
                                 embedVar = discord.Embed(title=f"**{o_card}** & **{c_card}** VS **{t_card}** has begun! {lineup}\n{t_universe} {mode} Battle", description=f"`{o_card} Says:`\n{o_greeting_description}", colour=0xe91e63)
                             elif mode in AUTO_BATTLE_modes:
@@ -11835,6 +11836,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 embedVar.add_field(name=f"{t_arena}",value= f"{t_world}", inline=False)
                                 embedVar.set_footer(text=f"{t_assault}")
                                 await private_channel.send(embed=embedVar)
+                                await asyncio.sleep(5)
                             #fortitude or luck is based on health  
                             fortitude = 0.0
                             low = o_health - (o_health*.90)
@@ -11959,7 +11961,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         else:
                             if mode in AUTO_BATTLE_modes:
                                 aiMove = 0
-                                if turn == 0 and o_enhancer['TYPE'] in Turn_Enhancer_Check:
+                                if turn_total == 0 and o_enhancer['TYPE'] in Turn_Enhancer_Check:
                                     if o_stamina >=20:
                                         aiMove = 4
                                     else:
@@ -13334,6 +13336,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             embedVar.add_field(name=f"**{o_card}** Braces: ",value=f"{t_feeling}")
                             embedVar.set_footer(text=f"{t_card} begins his assault")
                             await private_channel.send(embed=embedVar)
+                            await asyncio.sleep(5)
                         if t_attack <= 25:
                             t_attack = 25
                         if t_defense <= 30:
