@@ -112,7 +112,6 @@ class Profile(commands.Cog):
                 o_attack = card['ATK'] + card_lvl_attack_buff
                 o_defense = card['DEF'] + card_lvl_defense_buff
                 o_type = card['TYPE']
-                o_accuracy = card['ACC']
                 o_passive = card['PASS'][0]
                 o_speed = card['SPD']
                 o_show = card['UNIVERSE']
