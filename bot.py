@@ -72,6 +72,7 @@ for filename in os.listdir('./cogs'):
 
 bot.remove_command("help")
 
+
 @slash.slash(name="Help", description="List of Commands", guild_ids=guild_ids)
 async def help(ctx):
    avatar="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png"
@@ -105,6 +106,7 @@ async def help(ctx):
    paginator.add_reaction('⏭️', "last")
    embeds = [embedVar4, embedVar2,embedVar3, embedVar1]
    await paginator.run(embeds)
+
 
 async def validate_user(ctx):
    query = {'DISNAME': str(ctx.author)}
@@ -434,6 +436,7 @@ async def r(ctx):
    else:
       await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=3) 
 
+
 @slash.slash(name="Rebirth", description="Rebirth for permanent buffs", guild_ids=guild_ids)
 async def rebirth(ctx):
    query = {'DISNAME': str(ctx.author)}
@@ -722,6 +725,7 @@ async def on_slash_command_error(ctx, ex):
       msg = 'You have already used this command... Try again in {:.2f}s'.format(ex.retry_after)
       await ctx.author.send(msg)
 
+
 @slash.slash(name="Daily", description="Receive your daily reward and quests", guild_ids=guild_ids)
 @commands.cooldown(1, 60*60*24, commands.BucketType.user)
 async def daily(ctx):
@@ -787,14 +791,17 @@ async def updatestock(ctx, stock: int):
    else:
       print(m.ADMIN_ONLY_COMMAND)
 
+
 @bot.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandOnCooldown):
         await ctx.send(f'Your Daily Reward is on cooldown! You can use it in {round(error.retry_after/3600)} hours!')
 
+
 async def DM(ctx, user : User, m,  message=None):
     message = message or "This Message is sent via DM"
     await user.send(m)
+
 
 async def bless(amount, user):
    blessAmount = amount
@@ -806,6 +813,7 @@ async def bless(amount, user):
       update_query = {"$inc": {'BALANCE': posBlessAmount}}
       db.updateVaultNoFilter(vault, update_query)
 
+
 async def curse(amount, user):
       curseAmount = amount
       negCurseAmount = 0 - abs(int(curseAmount))
@@ -815,6 +823,7 @@ async def curse(amount, user):
          vault = db.queryVault({'OWNER' : vaultOwner['DISNAME']})
          update_query = {"$inc": {'BALANCE': int(negCurseAmount)}}
          db.updateVaultNoFilter(vault, update_query)
+
 
 @slash.slash(name="Trade", description="Trade Cards, Titles, Arms, and Pets for other items", guild_ids=guild_ids)
 @commands.check(validate_user)
@@ -996,6 +1005,7 @@ async def trade(ctx, player: User, item: str):
          except:
             await ctx.send("Trade ended. ")
 
+
 @slash.slash(name="Sell", description="Sell Cards, Titles, Arms, and Pets for coin", guild_ids=guild_ids)
 @commands.check(validate_user)
 async def sell(ctx, player: User, item: str):
@@ -1161,6 +1171,7 @@ async def sell(ctx, player: User, item: str):
             except:
                await ctx.send("Sell ended unexpectedly.")
 
+
 @slash.slash(name="Gift", description="Give money to friend", guild_ids=guild_ids)
 @commands.check(validate_user)
 async def gift(ctx, player: User, amount: int):
@@ -1178,6 +1189,7 @@ async def gift(ctx, player: User, amount: int):
       await ctx.send(f":coin:{amount} has been gifted to {user2.mention}.")
       return
    
+
 @slash.slash(name="Donate", description="Donate money to Team", guild_ids=guild_ids)
 @commands.check(validate_user)
 async def donate(ctx, amount, team: str):
@@ -1197,6 +1209,7 @@ async def donate(ctx, amount, team: str):
    else:
       await ctx.send(f"Team: {dteam} does not exist")
       
+
 @slash.slash(name="Invest", description="Invest money in your Family", guild_ids=guild_ids)
 @commands.check(validate_user)
 async def invest(ctx, amount):
@@ -1214,6 +1227,7 @@ async def invest(ctx, amount):
          return
    else:
       await ctx.send(f"Family does not exist")
+
 
 @slash.slash(name="Pay", description="Pay a Team Member", guild_ids=guild_ids)
 @commands.check(validate_user)
@@ -1240,6 +1254,7 @@ async def pay(ctx, player: User, amount):
       await ctx.send(f":coin:{amount} has been paid to {user2.mention}.")
       return
 
+
 async def blessteam(amount, team):
    blessAmount = amount
    posBlessAmount = 0 + abs(int(blessAmount))
@@ -1250,6 +1265,7 @@ async def blessteam(amount, team):
       db.updateTeam(query, update_query)
    else:
       print("Cannot find Team")
+
 
 async def curseteam(amount, team):
       curseAmount = amount
@@ -1288,6 +1304,7 @@ async def allowance(ctx, player: User, amount):
       await ctx.send(f":coin:{amount} has been gifted to {user2.mention}.")
       return
 
+
 async def blessfamily(amount, family):
    blessAmount = amount
    posBlessAmount = 0 + abs(int(blessAmount))
@@ -1302,7 +1319,8 @@ async def blessfamily(amount, family):
       db.updateFamily(query, update_query)
    else:
       print("Cannot find family")
-      
+
+
 async def blessfamily_Alt(amount, family):
    blessAmount = amount
    posBlessAmount = 0 + abs(int(blessAmount))
@@ -1316,6 +1334,7 @@ async def blessfamily_Alt(amount, family):
       db.updateFamily(query, update_query)
    else:
       print("Cannot find family")
+
 
 async def cursefamily(amount, family):
       curseAmount = amount
