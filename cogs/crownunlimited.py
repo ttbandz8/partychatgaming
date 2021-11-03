@@ -9017,77 +9017,21 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
         selected_universe = ""
         if sowner['RIFT'] == 1:
             for uni in all_universes:
-                if uni['PREREQUISITE'] in sowner['CROWN_TALES'] and uni['HAS_CROWN_TALES'] == True or uni['TIER'] == 9:
+                if uni['HAS_CROWN_TALES'] == True or uni['TIER'] == 9:
                     if uni['TITLE'] in completed_crown_tales:
                         available_universes.append(uni['TITLE'])
-                        tier_icon = ""
-                        if uni['TIER'] == 1:
-                            tier_icon = "1️⃣"
-                        elif uni['TIER'] == 2:
-                            tier_icon = "2️⃣"
-                        elif uni['TIER'] == 3:
-                            tier_icon = "3️⃣"
-                        elif uni['TIER'] == 4:
-                            tier_icon = "4️⃣"
-                        elif uni['TIER'] == 5:
-                            tier_icon = "5️⃣"
-                        elif uni['TIER'] == 9:
-                            tier_icon = ":crystal_ball:"
-
-                        universe_menu.append(f"{Crest_dict[uni['TITLE']]} | **{uni['TITLE']}** : :crossed_swords: **{len(uni['CROWN_TALES'])}**\n")
+                        universe_menu.append(f"{Crest_dict[uni['TITLE']]} | **{uni['TITLE']}** : :crossed_swords: **{len(uni['CROWN_TALES'])}**\n :white_check_mark: ")
                     else:
-                        tier_icon = ""
-                        if uni['TIER'] == 1:
-                            tier_icon = "1️⃣"
-                        elif uni['TIER'] == 2:
-                            tier_icon = "2️⃣"
-                        elif uni['TIER'] == 3:
-                            tier_icon = "3️⃣"
-                        elif uni['TIER'] == 4:
-                            tier_icon = "4️⃣"
-                        elif uni['TIER'] == 5:
-                            tier_icon = "5️⃣"
-                        elif uni['TIER'] == 9:
-                            tier_icon = ":crystal_ball:"
-
-                        universe_menu.append(f"{Crest_dict[uni['TITLE']]} | **{uni['TITLE']}** : :crossed_swords: **{len(uni['CROWN_TALES'])}**")
+                        universe_menu.append(f"{Crest_dict[uni['TITLE']]} | **{uni['TITLE']}** : :crossed_swords: **{len(uni['CROWN_TALES'])}**\n")
                         available_universes.append(uni['TITLE'])
         else:
             for uni in all_universes:
-                if uni['PREREQUISITE'] in sowner['CROWN_TALES'] and uni['HAS_CROWN_TALES'] == True and uni['TIER'] != 9:
+                if uni['HAS_CROWN_TALES'] == True and uni['TIER'] != 9:
                     if uni['TITLE'] in completed_crown_tales:
                         available_universes.append(uni['TITLE'])
-                        tier_icon = ""
-                        if uni['TIER'] == 1:
-                            tier_icon = "1️⃣"
-                        elif uni['TIER'] == 2:
-                            tier_icon = "2️⃣"
-                        elif uni['TIER'] == 3:
-                            tier_icon = "3️⃣"
-                        elif uni['TIER'] == 4:
-                            tier_icon = "4️⃣"
-                        elif uni['TIER'] == 5:
-                            tier_icon = "5️⃣"
-                        elif uni['TIER'] == 9:
-                            tier_icon = ":crystal_ball:"
-
-                        universe_menu.append(f"{Crest_dict[uni['TITLE']]} | **{uni['TITLE']}** : :crossed_swords: **{len(uni['CROWN_TALES'])}**")
+                        universe_menu.append(f"{Crest_dict[uni['TITLE']]} | **{uni['TITLE']}** : :crossed_swords: **{len(uni['CROWN_TALES'])}** :white_check_mark: \n")
                     else:
-                        tier_icon = ""
-                        if uni['TIER'] == 1:
-                            tier_icon = "1️⃣"
-                        elif uni['TIER'] == 2:
-                            tier_icon = "2️⃣"
-                        elif uni['TIER'] == 3:
-                            tier_icon = "3️⃣"
-                        elif uni['TIER'] == 4:
-                            tier_icon = "4️⃣"
-                        elif uni['TIER'] == 5:
-                            tier_icon = "5️⃣"
-                        elif uni['TIER'] == 9:
-                            tier_icon = ":crystal_ball:"
-
-                        universe_menu.append(f"{Crest_dict[uni['TITLE']]} | **{uni['TITLE']}** : :crossed_swords: **{len(uni['CROWN_TALES'])}**")
+                        universe_menu.append(f"{Crest_dict[uni['TITLE']]} | **{uni['TITLE']}** : :crossed_swords: **{len(uni['CROWN_TALES'])}**\n")
                         available_universes.append(uni['TITLE'])
         
         icon = ":crown:"
@@ -9130,25 +9074,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             if not universe['CROWN_TALES']:
                 await ctx.send(f"{selected_universe} is not ready to be explored! Check back later!")
                 return
-            universe_tier = universe['TIER']
-            entrance_fee = 250
-            if selected_universe in crestlist:
-                await ctx.send(f"{Crest_dict[selected_universe]} | :flags: {guildname} {selected_universe} Crest Activated! No entrance fee!")
-            else:
-                if universe_tier >= 3:
-                    entrance_fee = entrance_fee * universe_tier
-                    if balance <= entrance_fee:
-                            await ctx.send(f"Tier {universe_tier} Tales require an :coin: {'{:,}'.format(entrance_fee)} entrance fee!", delete_after=5)
-                            
-                            return
-                    else:
-                        await curse(entrance_fee, str(ctx.author))
-                        if universe['GUILD'] != 'PCG':
-                            crest_guild = db.queryGuildAlt({'GNAME' : universe['GUILD']})
-                            if crest_guild:
-                                await blessguild(entrance_fee, universe['GUILD'])
-                                await ctx.send(f"{Crest_dict[selected_universe]} | {crest_guild['GNAME']} Universe Toll Paid!")
-            
+
             private_channel = await guild.create_text_channel(f'{str(ctx.author)}-{mode}-run', overwrites=overwrites)
             await private_channel.send(f"{ctx.author.mention} private channel has been opened for you. Good luck!")
             
@@ -9178,9 +9104,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
         universe_menu = []
         selected_universe = ""
         for uni in completed_crown_tales:
-            
             if uni != "":
-
                 universe_menu.append(f"{Crest_dict[uni]} | **{uni}**\n")
                 available_universes.append(uni)
 
@@ -9213,23 +9137,6 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             #Universe Cost
             selected_universe = _selected
             universe = db.queryUniverse({'TITLE': str(selected_universe)})
-            universe_tier = universe['TIER']
-            entrance_fee = 500
-            if selected_universe in crestlist:
-                await ctx.send(f"{Crest_dict[selected_universe]} | :flags: {guildname} {selected_universe} Crest Activated! No entrance fee!")
-            else:
-                if universe_tier >= 3:
-                    entrance_fee = entrance_fee * universe_tier
-                    if balance <= entrance_fee:
-                            await ctx.send(f"Tier {universe_tier} Dungeons require an :coin: {'{:,}'.format(entrance_fee)} entrance fee!", delete_after=5)
-                            return
-                    else:
-                        await curse(entrance_fee, str(ctx.author))
-                        if universe['GUILD'] != 'PCG':
-                            crest_guild = db.queryGuildAlt({'GNAME' : universe['GUILD']})
-                            if crest_guild:
-                                await blessguild(entrance_fee, universe['GUILD'])
-                                await ctx.send(f"{Crest_dict[selected_universe]} | {crest_guild['GNAME']} Universe Toll Paid!")
             private_channel = await guild.create_text_channel(f'{str(ctx.author)}-{mode}-run', overwrites=overwrites)
             await ctx.send(f"{ctx.author.mention} private channel has been opened for you. Good luck!")
             return {'SELECTED_UNIVERSE': selected_universe, 'PRIVATE_CHANNEL': private_channel, 'UNIVERSE_DATA': universe, 'CREST_LIST': crestlist, 'CREST_SEARCH': crestsearch, 'COMPLETED_DUNGEONS': completed_dungeons, 'OGUILD': oguild}
@@ -9293,26 +9200,6 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             #Universe Cost
             selected_universe = _selected
             universe = db.queryUniverse({'TITLE': str(selected_universe)})
-            universe_tier = universe['TIER']
-            bossname = universe['UNIVERSE_BOSS']
-            entrance_fee = 10000
-            if selected_universe in crestlist:
-                await ctx.send(f"{Crest_dict[selected_universe]} | :flags: {guildname} {selected_universe} Crest Activated! No entrance fee!")
-            else:
-                if universe_tier >= 3:
-                    entrance_fee = entrance_fee * universe_tier
-                    if balance <= entrance_fee:
-                            await ctx.send(f"Tier {universe_tier} Bosses require an :coin: {'{:,}'.format(entrance_fee)} entrance fee!", delete_after=5)
-                            
-                            return
-                    else:
-                        await curse(entrance_fee, str(ctx.author))
-                        if universe['GUILD'] != 'PCG':
-                            crest_guild = db.queryGuildAlt({'GNAME' : universe['GUILD']})
-                            if crest_guild:
-                                await blessguild(entrance_fee, universe['GUILD'])
-                                await ctx.send(f"{Crest_dict[selected_universe]} | {crest_guild['GNAME']} Universe Toll Paid!")
-            
             private_channel = await guild.create_text_channel(f'{str(ctx.author)}-{mode}-fight', overwrites=overwrites)
             await ctx.send(f"{ctx.author.mention} private channel has been opened for you.")
             return {'SELECTED_UNIVERSE': selected_universe, 'PRIVATE_CHANNEL': private_channel, 'UNIVERSE_DATA': universe, 'CREST_LIST': crestlist, 'CREST_SEARCH': crestsearch, 'COMPLETED_DUNGEONS': completed_dungeons, 'OGUILD': oguild, 'BOSS_NAME': bossname}

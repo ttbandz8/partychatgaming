@@ -231,7 +231,6 @@ class Cards(commands.Cog):
             o_attack = card['ATK']
             o_defense = card['DEF']
             o_type = card['TYPE']
-            o_accuracy = card['ACC']
             o_passive = card['PASS'][0]
             o_speed = card['SPD']
             o_show = card['UNIVERSE']
