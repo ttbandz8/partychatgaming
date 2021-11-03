@@ -90,11 +90,9 @@ class CrownUnlimited(commands.Cog):
             all_universes = db.queryAllUniverse()
             available_universes = []
             for uni in all_universes:
-                if uni['PREREQUISITE'] in player['CROWN_TALES'] and uni['HAS_CROWN_TALES']:
-                    if uni['TITLE'] in completed_crown_tales:
-                        available_universes.append(uni)
-                    else:
-                        available_universes.append(uni)
+                if uni['HAS_CROWN_TALES']:
+                    available_universes.append(uni)
+
             u = len(available_universes) - 1
             rand_universe = random.randint(1, u)
             universetitle = available_universes[rand_universe]['TITLE']
@@ -121,7 +119,6 @@ class CrownUnlimited(commands.Cog):
                 approach_message = ":japanese_ogre: A Calm "
                 icon="https://cdn.discordapp.com/emojis/788000259996516373.gif?v=1"
 
-            universe_tier = available_universes[rand_universe]['TIER']
             
             random_battle_buttons = [
                 manage_components.create_button(
@@ -138,28 +135,9 @@ class CrownUnlimited(commands.Cog):
             random_battle_buttons_action_row = manage_components.create_actionrow(*random_battle_buttons)
 
             # Lose / Bounty
-            random_flee_loss = 0
-            take_chances_response = ""
-            bounty = 0
-            
-            if universe_tier == 1:
-                random_flee_loss = random.randint(1, 100)
-                bounty = random.randint(1, 500)
-            if universe_tier == 2:
-                random_flee_loss = random.randint(1, 150)
-                bounty = random.randint(1, 1500)
-            if universe_tier == 3:
-                random_flee_loss = random.randint(1, 250)
-                bounty = random.randint(1, 4000)
-            if universe_tier == 9:
-                random_flee_loss = random.randint(1, 350)
-                bounty = random.randint(1, 9000)
-            if universe_tier == 4:
-                random_flee_loss = random.randint(1, 650)
-                bounty = random.randint(1, 15000)
-            if universe_tier == 5:
-                random_flee_loss = random.randint(1, 750)
-                bounty = random.randint(1, 35000)
+            take_chances_response = ""          
+            random_flee_loss = random.randint(1, 30)
+            bounty = random.randint(1, 15000)
             
             if bounty >= 150000:
                 bounty_icon = ":money_with_wings:"
@@ -627,9 +605,6 @@ class CrownUnlimited(commands.Cog):
                         return
                     if checks['UNIVERSE'] in banned_universes:
                         await private_channel.send(f":x: **{checks['UNIVERSE']}** cards are banned on floor {floor}. Use another card.")
-                        return
-                    if uni_tier in banned_universe_tiers:
-                        await private_channel.send(f":x: **Tier {uni_tier}** cards are banned on floor {floor}. Use another card.")
                         return
                         
                     guild = ctx.guild
@@ -6881,8 +6856,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
     pvp_modes = ['PVP']
     opponent_pet_modes = ['Dungeon', 'DDungeon', 'CDungeon']
     if mode not in pvp_modes:
-        universe_tier = universe['TIER']
-        opponent_scaling = universe_tier * 5
+        opponent_scaling = 15
         opponent_health_scaling = 0
         enemy_title = ""
         enemy_arm = ""
@@ -6994,15 +6968,6 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             o_win_description = "Too easy. Come back when you're truly prepared."
             o_lose_description = "I can't believe I lost..."
 
-        if mode in B_modes:
-            o_universe_data = db.queryUniverse({"TITLE": o_universe})
-            o_universe_tier = o_universe_data['TIER']
-            if o_universe_tier == 9:
-                o_universe_tier = crown_rift_universe_mappings[o_universe]
-
-            opponent_scaling = 50 * universe_tier + (o_universe_tier * 75)
-            opponent_health_scaling = ((universe_tier * 500) + (o_universe_tier * 500))
-
         if companion:
             ### Companion Data
             c_user = companion
@@ -7098,15 +7063,6 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 c_special_move_description = "Take this!"
                 c_win_description = "Too easy. Come back when you're truly prepared."
                 c_lose_description = "I can't believe I lost..."
-            
-            if mode in B_modes:
-                c_universe_data = db.queryUniverse({"TITLE": c_universe})
-                c_universe_tier = c_universe_data['TIER']
-                if c_universe_tier == 9:
-                    c_universe_tier = crown_rift_universe_mappings[c_universe]
-                if c_universe_tier > o_universe_tier:
-                    opponent_scaling = 50 * universe_tier + (c_universe_tier * 75)
-                    opponent_health_scaling = 1500 + ((universe_tier * 500) + (c_universe_tier * 500))
         
         if mode in pvp_modes:
             # Player 2 Data
