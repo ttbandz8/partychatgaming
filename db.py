@@ -38,6 +38,7 @@ house_col =db["HOUSE"]
 hall_col =db["HALL"]
 menu_col = db['MENU']
 abyss_col = db['ABYSS']
+acceptable = [1, 2, 3, 4]
 
 
 '''Check if Collection Exists'''
@@ -713,15 +714,15 @@ def altQueryShopCards(args):
     return data 
 
 def queryDropCards(args):
-    data = cards_col.find({'UNIVERSE': args, 'EXCLUSIVE': False, 'AVAILABLE': True, 'HAS_COLLECTION': False})
+    data = cards_col.find({'UNIVERSE': args, 'EXCLUSIVE': False, 'AVAILABLE': True, 'HAS_COLLECTION': False, 'IS_SKIN': False,'TIER': {'$in': acceptable}})
     return data 
 
 def querySpecificDropCards(args):
-    data = cards_col.find({'UNIVERSE': args, 'AVAILABLE': True, 'HAS_COLLECTION': False, 'VUL': False})
+    data = cards_col.find({'UNIVERSE': args, 'AVAILABLE': True, 'HAS_COLLECTION': False, 'VUL': False, 'IS_SKIN': False, 'TIER': {'$in': acceptable}})
     return data 
 
 def queryExclusiveDropCards(args):
-    data = cards_col.find({'UNIVERSE': args, 'EXCLUSIVE': True, 'AVAILABLE': True, 'HAS_COLLECTION': False})
+    data = cards_col.find({'UNIVERSE': args, 'EXCLUSIVE': True, 'AVAILABLE': True, 'HAS_COLLECTION': False, 'IS_SKIN': False, 'TIER': {'$in': acceptable}})
     return data 
 
 def queryCard(query):

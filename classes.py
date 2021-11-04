@@ -144,6 +144,7 @@ class TOURNAMENTS():
 class CARDS():
     PATH: str
     NAME: str
+    FPATH: str = field(default_factory=lambda: "N/A")
     PRICE: int = field(default_factory=lambda: 0)
     TOURNAMENT_REQUIREMENTS: int = field(default_factory=lambda: 0)
     TIMESTAMP: str = now
@@ -156,9 +157,9 @@ class CARDS():
     ATK: int = field(default_factory=lambda: 25)
     DEF: int = field(default_factory=lambda: 25)
     TYPE: int = field(default_factory=lambda: 0)
-    ACC: float = field(default_factory=lambda: .50)
+    TIER: float = field(default_factory=lambda: 1)
     PASS: list[str] = field(default_factory=lambda: [{'NAME': 0, 'TYPE': 'TYPE'}])
-    SPD: float = field(default_factory=lambda: .50)
+    SPD: float = field(default_factory=lambda: 1)
     VUL: bool = field(default_factory=lambda: False)
     UNIVERSE: str = field(default_factory=lambda: "Unbound")
     COLLECTION: str = field(default_factory=lambda: "N/A")
@@ -169,6 +170,9 @@ class CARDS():
     BASEDEF: int = field(default_factory=lambda: 25)
     DESCRIPTIONS: list[str] = field(default_factory=lambda: [])
     EXCLUSIVE: bool = field(default_factory=lambda: False)
+    IS_SKIN: bool = field(default_factory=lambda: False)
+    SKIN_FOR: str = field(default_factory=lambda: "N/A")
+
 
 @dataclass(frozen=True, order=True) 
 class TITLES():
