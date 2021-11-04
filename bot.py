@@ -1795,16 +1795,16 @@ async def addfield(ctx, collection, new_field, field_type):
    if ctx.author.guild_permissions.administrator == True:
 
       if field_type == 'string':
-         field_type = ""
+         field_type = "N/A"
       elif field_type == 'int':
          field_type = 1
       elif field_type == 'list':
          field_type = []
       elif field_type == 'bool':
-         field_type = True
+         field_type = False
       
       if collection == 'cards':
-         response = db.updateManyCards({'$set': {new_field: field_type}, '$unset': {'ACC': 1}})
+         response = db.updateManyCards({'$set': {new_field: field_type}})
       elif collection == 'titles':
          response = db.updateManyTitles({'$set': {new_field: field_type}})
       elif collection == 'vaults':

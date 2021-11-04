@@ -714,15 +714,15 @@ def altQueryShopCards(args):
     return data 
 
 def queryDropCards(args):
-    data = cards_col.find({'UNIVERSE': args, 'EXCLUSIVE': False, 'AVAILABLE': True, 'HAS_COLLECTION': False, 'TIER': {'$in': acceptable}})
+    data = cards_col.find({'UNIVERSE': args, 'EXCLUSIVE': False, 'AVAILABLE': True, 'HAS_COLLECTION': False, 'IS_SKIN': False,'TIER': {'$in': acceptable}})
     return data 
 
 def querySpecificDropCards(args):
-    data = cards_col.find({'UNIVERSE': args, 'AVAILABLE': True, 'HAS_COLLECTION': False, 'VUL': False, 'TIER': {'$in': acceptable}})
+    data = cards_col.find({'UNIVERSE': args, 'AVAILABLE': True, 'HAS_COLLECTION': False, 'VUL': False, 'IS_SKIN': False, 'TIER': {'$in': acceptable}})
     return data 
 
 def queryExclusiveDropCards(args):
-    data = cards_col.find({'UNIVERSE': args, 'EXCLUSIVE': True, 'AVAILABLE': True, 'HAS_COLLECTION': False, 'TIER': {'$in': acceptable}})
+    data = cards_col.find({'UNIVERSE': args, 'EXCLUSIVE': True, 'AVAILABLE': True, 'HAS_COLLECTION': False, 'IS_SKIN': False, 'TIER': {'$in': acceptable}})
     return data 
 
 def queryCard(query):

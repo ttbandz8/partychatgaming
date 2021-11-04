@@ -144,6 +144,7 @@ class TOURNAMENTS():
 class CARDS():
     PATH: str
     NAME: str
+    FPATH: str = field(default_factory=lambda: "N/A")
     PRICE: int = field(default_factory=lambda: 0)
     TOURNAMENT_REQUIREMENTS: int = field(default_factory=lambda: 0)
     TIMESTAMP: str = now
@@ -169,34 +170,9 @@ class CARDS():
     BASEDEF: int = field(default_factory=lambda: 25)
     DESCRIPTIONS: list[str] = field(default_factory=lambda: [])
     EXCLUSIVE: bool = field(default_factory=lambda: False)
+    IS_SKIN: bool = field(default_factory=lambda: False)
+    SKIN_FOR: str = field(default_factory=lambda: "N/A")
 
-@dataclass(frozen=True, order=True) 
-class SKINS():
-    PATH: str
-    NAME: str
-    PRICE: int = field(default_factory=lambda: 0)
-    TOURNAMENT_REQUIREMENTS: int = field(default_factory=lambda: 0)
-    TIMESTAMP: str = now
-    MOVESET: list[str] = field(default_factory=lambda: [{'MOVE1': 20, "STAM": 10}, {'MOVE2': 50, "STAM": 30}, {'ULTIMATE': 100, "STAM": 80}, {'ENHANCER': 0, "STAM": 20, "TYPE": "TYPE"}])
-    RPATH: str = field(default_factory=lambda: "N/A")
-    RNAME: str = field(default_factory=lambda: "N/A")
-    GIF: str = field(default_factory=lambda: "N/A")
-    HLT: int = field(default_factory=lambda: 500)
-    STAM: int = field(default_factory=lambda: 100) 
-    ATK: int = field(default_factory=lambda: 25)
-    DEF: int = field(default_factory=lambda: 25)
-    TYPE: int = field(default_factory=lambda: 0)
-    TIER: float = field(default_factory=lambda: 1)
-    PASS: list[str] = field(default_factory=lambda: [{'NAME': 0, 'TYPE': 'TYPE'}])
-    SPD: float = field(default_factory=lambda: 1)
-    VUL: bool = field(default_factory=lambda: False)
-    UNIVERSE: str = field(default_factory=lambda: "Unbound")
-    COLLECTION: str = field(default_factory=lambda: "N/A")
-    HAS_COLLECTION: bool = field(default_factory=lambda: False)
-    STOCK: int = field(default_factory=lambda: 5)
-    AVAILABLE: bool = field(default_factory=lambda: False)
-    DESCRIPTIONS: list[str] = field(default_factory=lambda: [])
-    EXCLUSIVE: bool = field(default_factory=lambda: False)
 
 @dataclass(frozen=True, order=True) 
 class TITLES():
