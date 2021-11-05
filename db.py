@@ -713,6 +713,11 @@ def altQueryShopCards(args):
     data = cards_col.find({'EXCLUSIVE': False, 'AVAILABLE': True, 'HAS_COLLECTION': False})
     return data 
 
+def querySkins(args):
+    data = cards_col.find({'SKIN_FOR': args, 'HAS_COLLECTION': False, 'AVAILABLE': True, 'IS_SKIN': True})
+    return data 
+
+
 def queryDropCards(args):
     data = cards_col.find({'UNIVERSE': args, 'EXCLUSIVE': False, 'AVAILABLE': True, 'HAS_COLLECTION': False, 'IS_SKIN': False,'TIER': {'$in': acceptable}})
     return data 

@@ -59,137 +59,164 @@ class Cards(commands.Cog):
             tier = 0
 
             check_card = db.queryCard({'NAME' : {"$regex": f"^{str(card)}$", "$options": "i"}})
+            price = check_card['PRICE']
             card_name = check_card['NAME']
+
             if check_card:
                 if check_card['UNIVERSE'] == 'Unbound':
                     await ctx.send("You cannot purchase this card.")
                     return
-                all_universes = db.queryAllUniverse()
+
                 user = db.queryUser({'DISNAME': str(ctx.author)})
-                available_universes = []
                 
                 if user['RIFT'] == 1:
                     riftShopOpen = True
-                if riftShopOpen:    
-                    for uni in all_universes:
-                        if uni['PREREQUISITE'] in user['CROWN_TALES']:
-                            if uni['TIER'] != 9:
-                                available_universes.append(uni['TITLE'])
-                            elif uni['TITLE'] in user['CROWN_TALES']:
-                                available_universes.append(uni['TITLE'])     
-                else:
-                    for uni in all_universes:
-                        if uni['PREREQUISITE'] in user['CROWN_TALES'] and not uni['TIER'] == 9:
-                            available_universes.append(uni['TITLE'])
-                            # Add Tier
-                        if uni['TITLE'] == check_card['UNIVERSE']:
-                            tier = uni['TIER']
-                if check_card['UNIVERSE'] not in available_universes:
-                    if check_card['UNIVERSE'] in rift_universes:
-                        await ctx.send("You are not connected to the rift...")
-                    else:                   
-                        await ctx.send("You cannot purchase Cards from Universes you haven't unlocked or Rifts yet completed.")
-                    return
+                
+                if check_card['UNIVERSE'] in rift_universes:
+                    await ctx.send("You are not connected to the rift...")
+                
                 if check_card['HAS_COLLECTION']:
-                    await ctx.send("This card can not be purchased.")
+                    await ctx.send("Destiny Cards can only be unlocked by completing the Destiny Line.")
                     return
 
-            currentBalance = vault['BALANCE']
-            cost = 0
-            mintedCard = ""
-            stock = 0
-            newstock = 0
-            cardInStock = False
-            checkout = True
-            for card in shop:
-                if card_name == card['NAME']:
-                    if stock == card['STOCK']:
-                        checkout = cardInStock
-                    else:        
-                        cardInStock == True           
-                        mintedCard = card['NAME']
-                        cost = card['PRICE']
-                        stock = card['STOCK']
-                        newstock = stock - 1
-                        
+                if check_card['IS_SKIN'] and check_card['SKIN_FOR'] not in vault['CARDS']:
+                    await ctx.send("You can not purchase **skins** for cards you do not own.")
+                    return
 
-            if bool(mintedCard):
-                if mintedCard in vault['CARDS']:
-                    await ctx.send(m.USER_ALREADY_HAS_CARD, delete_after=5)
-                else:
-                    newBalance = currentBalance - cost
+                icon = ":coin:"
+                if price >= 150000:
+                    icon = ":money_with_wings:"
+                elif price >=100000:
+                    icon = ":moneybag:"
+                elif price >= 50000:
+                    icon = ":dollar:"
 
-                    if newBalance < 0 :
-                        await ctx.send("You have an insufficent Balance")
-                    else:
-                        await main.curse(cost, str(ctx.author))
-                        card_query = {'NAME' : str(mintedCard)}
-                        cardInventory = db.queryCard(card_query)
-                        update_query = {"$set": {"STOCK": newstock}} 
-                        response = db.updateCard(cardInventory, update_query)
-                        response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(card_name)}})
-                        
-                        # Add Card Level config
-                        if card_name not in owned_card_levels_list:
-                            update_query = {'$addToSet': {'CARD_LEVELS': {'CARD': str(card_name), 'LVL': 0, 'TIER': int(tier), 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}        
-                            r = db.updateVaultNoFilter(vault_query, update_query)
-                        
-                        await ctx.send(f"You Purchased **{mintedCard}**\n**{newstock}** {mintedCard} cards left in the Shop!")
-                        # Add Destiny
-                        for destiny in d.destiny:
-                            if card_name in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
-                                db.updateVaultNoFilter(vault_query,{'$addToSet':{'DESTINY': destiny}})
-                                await ctx.send(f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.")
+                card_buttons = [
+                    manage_components.create_button(
+                        style=ButtonStyle.blue,
+                        label="Yes",
+                        custom_id="Yes"
+                    ),
+                    manage_components.create_button(
+                        style=ButtonStyle.red,
+                        label="No",
+                        custom_id="No"
+                    )
+                ]
+                card_buttons_action_row = manage_components.create_actionrow(*card_buttons)
+                await ctx.send(f"{ctx.author.mention}, are you sure you want to buy **{card_name}** for {icon}**{'{:,}'.format(price)}**?", components=[card_buttons_action_row])
 
-                        card_buttons = [
-                            manage_components.create_button(
-                                style=ButtonStyle.blue,
-                                label="Yes",
-                                custom_id="Yes"
-                            ),
-                            manage_components.create_button(
-                                style=ButtonStyle.red,
-                                label="No",
-                                custom_id="No"
-                            )
-                        ]
-                        card_buttons_action_row = manage_components.create_actionrow(*card_buttons)
-                        await ctx.send(f"{ctx.author.mention} would you like to equip this Card?", components=[card_buttons_action_row])
+                def check(button_ctx):
+                    return button_ctx.author == ctx.author
 
-                        def check(button_ctx):
-                            return button_ctx.author == ctx.author
+                try:
+                    button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[card_buttons_action_row], check=check)
 
-                        try:
-                            button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[card_buttons_action_row], check=check)
+                    if button_ctx.custom_id == "No":
+                        await button_ctx.send("Purchase ended. ")
+                        return
 
-                            if button_ctx.custom_id == "No":
-                                await button_ctx.send("Did not equip card.")
-                                return
+                    if button_ctx.custom_id == "Yes":
+                        await button_ctx.send("Please wait...")
+                        currentBalance = vault['BALANCE']
+                        cost = 0
+                        mintedCard = ""
+                        stock = 0
+                        newstock = 0
+                        cardInStock = False
+                        checkout = True
+                        for card in shop:
+                            if card_name == card['NAME']:
+                                if stock == card['STOCK']:
+                                    checkout = cardInStock
+                                else:        
+                                    cardInStock == True           
+                                    mintedCard = card['NAME']
+                                    cost = card['PRICE']
+                                    stock = card['STOCK']
+                                    newstock = stock - 1
+                                    
 
-                            if button_ctx.custom_id == "Yes":
-                                user_query = {'DISNAME': str(ctx.author)}
-                                response = db.updateUserNoFilter(user_query, {'$set': {'CARD': str(card_name)}})
-                                await button_ctx.send(response)
-                        except Exception as ex:
-                            trace = []
-                            tb = ex.__traceback__
-                            while tb is not None:
-                                trace.append({
-                                    "filename": tb.tb_frame.f_code.co_filename,
-                                    "name": tb.tb_frame.f_code.co_name,
-                                    "lineno": tb.tb_lineno
-                                })
-                                tb = tb.tb_next
-                            print(str({
-                                'type': type(ex).__name__,
-                                'message': str(ex),
-                                'trace': trace
-                            }))
+                        if bool(mintedCard):
+                            if mintedCard in vault['CARDS']:
+                                await ctx.send(m.USER_ALREADY_HAS_CARD, delete_after=5)
+                            else:
+                                newBalance = currentBalance - cost
 
-            elif checkout == True:
-                await ctx.send(m.CARD_DOESNT_EXIST)
-            else:
-                await ctx.send(m.CARD_OUT_OF_STOCK)
+                                if newBalance < 0 :
+                                    await ctx.send("Insufficent Balance.")
+                                else:
+                                    await main.curse(cost, str(ctx.author))
+                                    card_query = {'NAME' : str(mintedCard)}
+                                    cardInventory = db.queryCard(card_query)
+                                    update_query = {"$set": {"STOCK": newstock}} 
+                                    response = db.updateCard(cardInventory, update_query)
+                                    response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'CARDS': str(card_name)}})
+                                    
+                                    # Add Card Level config
+                                    if card_name not in owned_card_levels_list:
+                                        update_query = {'$addToSet': {'CARD_LEVELS': {'CARD': str(card_name), 'LVL': 0, 'TIER': int(tier), 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}        
+                                        r = db.updateVaultNoFilter(vault_query, update_query)
+                                    
+                                    await ctx.send(f"You Purchased **{mintedCard}**\n**{newstock}** {mintedCard} cards left in the Shop!")
+                                    # Add Destiny
+                                    for destiny in d.destiny:
+                                        if card_name in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
+                                            db.updateVaultNoFilter(vault_query,{'$addToSet':{'DESTINY': destiny}})
+                                            await ctx.send(f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.")
+
+                                    card_buttons = [
+                                        manage_components.create_button(
+                                            style=ButtonStyle.blue,
+                                            label="Yes",
+                                            custom_id="Yes"
+                                        ),
+                                        manage_components.create_button(
+                                            style=ButtonStyle.red,
+                                            label="No",
+                                            custom_id="No"
+                                        )
+                                    ]
+                                    card_buttons_action_row = manage_components.create_actionrow(*card_buttons)
+                                    await ctx.send(f"{ctx.author.mention} would you like to equip this Card?", components=[card_buttons_action_row])
+
+                                    def check(button_ctx):
+                                        return button_ctx.author == ctx.author
+
+                                    try:
+                                        button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[card_buttons_action_row], check=check)
+
+                                        if button_ctx.custom_id == "No":
+                                            await button_ctx.send("Did not equip card.")
+                                            return
+
+                                        if button_ctx.custom_id == "Yes":
+                                            user_query = {'DISNAME': str(ctx.author)}
+                                            response = db.updateUserNoFilter(user_query, {'$set': {'CARD': str(card_name)}})
+                                            await button_ctx.send(response)
+                                    except Exception as ex:
+                                        trace = []
+                                        tb = ex.__traceback__
+                                        while tb is not None:
+                                            trace.append({
+                                                "filename": tb.tb_frame.f_code.co_filename,
+                                                "name": tb.tb_frame.f_code.co_name,
+                                                "lineno": tb.tb_lineno
+                                            })
+                                            tb = tb.tb_next
+                                        print(str({
+                                            'type': type(ex).__name__,
+                                            'message': str(ex),
+                                            'trace': trace
+                                        }))
+
+                        elif checkout == True:
+                            await ctx.send(m.CARD_DOESNT_EXIST)
+                        else:
+                            await ctx.send(m.CARD_OUT_OF_STOCK)
+                except Exception as e:
+                    await ctx.send(f"Failure to purchase card: {e}")
+                    return
         except Exception as e:
             await ctx.send(f"Failure to purchase card: {e}")
             return

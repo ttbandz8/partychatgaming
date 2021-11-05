@@ -9093,6 +9093,9 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             #Universe Cost
             selected_universe = _selected
             universe = db.queryUniverse({'TITLE': str(selected_universe)})
+            if not universe['HAS_DUNGEON']:
+                await ctx.send(f"**{selected_universe}'s** dungeon is not available at this time. ")
+                return
             private_channel = await guild.create_text_channel(f'{str(ctx.author)}-{mode}-run', overwrites=overwrites)
             await ctx.send(f"{ctx.author.mention} private channel has been opened for you. Good luck!")
             return {'SELECTED_UNIVERSE': selected_universe, 'PRIVATE_CHANNEL': private_channel, 'UNIVERSE_DATA': universe, 'CREST_LIST': crestlist, 'CREST_SEARCH': crestsearch, 'COMPLETED_DUNGEONS': completed_dungeons, 'OGUILD': oguild}
@@ -9183,11 +9186,15 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
         m_gametime = starttime[14:16]
         s_gametime = starttime[17:19]
 
-        if mode not in B_modes and not randomized_battle and mode not in PVP_MODES:
+        if mode not in B_modes and not randomized_battle and mode not in PVP_MODES and mode not in D_modes:
             legends = [x for x in universe['CROWN_TALES']]
             total_legends = len(legends)
             currentopponent = 0
-
+        if mode not in B_modes and not randomized_battle and mode not in PVP_MODES and mode in D_modes:
+            legends = [x for x in universe['DUNGEONS']]
+            total_legends = len(legends)
+            currentopponent = 0
+        
         continued = True
 
         while continued == True:
