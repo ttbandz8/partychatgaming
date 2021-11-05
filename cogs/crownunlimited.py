@@ -5316,9 +5316,6 @@ class CrownUnlimited(commands.Cog):
     async def cardlist(self, ctx: SlashContext, universe: str):
         universe_data = db.queryUniverse({'TITLE': {"$regex": str(universe), "$options": "i"}})
         user = db.queryUser({'DISNAME': str(ctx.author)})
-        if universe_data['PREREQUISITE'] not in user['CROWN_TALES'] and universe_data['PREREQUISITE'] != "":
-            await ctx.send("You have not unlocked this universe!")
-            return
         list_of_cards = db.queryAllCardsBasedOnUniverse({'UNIVERSE': {"$regex": str(universe), "$options": "i"}})
         cards = [x for x in list_of_cards]
         dungeon_card_details = []
@@ -5395,9 +5392,6 @@ class CrownUnlimited(commands.Cog):
     async def titlelist(self, ctx: SlashContext, universe: str):
         universe_data = db.queryUniverse({'TITLE': {"$regex": universe, "$options": "i"}})
         user = db.queryUser({'DISNAME': str(ctx.author)})
-        if universe_data['PREREQUISITE'] not in user['CROWN_TALES'] and universe_data['PREREQUISITE'] != "":
-            await ctx.send("You have not unlocked this universe!")
-            return
         list_of_titles = db.queryAllTitlesBasedOnUniverses({'UNIVERSE': {"$regex": str(universe), "$options": "i"}})
         titles = [x for x in list_of_titles]
         dungeon_titles_details = []
@@ -5469,9 +5463,6 @@ class CrownUnlimited(commands.Cog):
     async def armlist(self, ctx: SlashContext, universe: str):
         universe_data = db.queryUniverse({'TITLE': {"$regex": universe, "$options": "i"}})
         user = db.queryUser({'DISNAME': str(ctx.author)})
-        if universe_data['PREREQUISITE'] not in user['CROWN_TALES'] and universe_data['PREREQUISITE'] != "":
-            await ctx.send("You have not unlocked this universe!")
-            return
         list_of_arms = db.queryAllArmsBasedOnUniverses({'UNIVERSE': {"$regex": str(universe), "$options": "i"}})
         arms = [x for x in list_of_arms]
         dungeon_arms_details = []
@@ -5539,10 +5530,6 @@ class CrownUnlimited(commands.Cog):
     async def destinylist(self, ctx: SlashContext, universe: str):
         universe_data = db.queryUniverse({'TITLE': {"$regex": universe, "$options": "i"}})
         user = db.queryUser({'DISNAME': str(ctx.author)})
-        if universe_data['PREREQUISITE'] not in user['CROWN_TALES'] and universe_data['PREREQUISITE'] != "":
-            await ctx.send("You have not unlocked this universe!")
-            return
-
         destinies = []
         for destiny in d.destiny:
             if destiny["UNIVERSE"].upper() == universe.upper():
@@ -5592,9 +5579,6 @@ class CrownUnlimited(commands.Cog):
     async def petlist(self, ctx: SlashContext, universe: str):
         universe_data = db.queryUniverse({'TITLE': {"$regex": universe, "$options": "i"}})
         user = db.queryUser({'DISNAME': str(ctx.author)})
-        if universe_data['PREREQUISITE'] not in user['CROWN_TALES'] and universe_data['PREREQUISITE'] != "":
-            await ctx.send("You have not unlocked this universe!")
-            return
         list_of_pets = db.queryAllPetsBasedOnUniverses({'UNIVERSE': {"$regex": str(universe), "$options": "i"}})
         pets = [x for x in list_of_pets]
         dungeon_pets_details = []
@@ -6551,97 +6535,10 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, stamina, en
             return
 
 
-def health_bar(size, radius, alpha=255):
-    factor = 5  # Factor to increase the image size that I can later antialiaze the corners
-    radius = radius * factor
-    image = Image.new('RGBA', (size[0] * factor, size[1] * factor), (0, 0, 0, 0))
-
-    # create corner
-    corner = Image.new('RGBA', (radius, radius), (0, 0, 0, 0))
-    draw = ImageDraw.Draw(corner)
-    # added the fill = .. you only drew a line, no fill
-    draw.pieslice((0, 0, radius * 2, radius * 2), 180, 270, fill=(50, 50, 50, alpha + 55))
-
-    # max_x, max_y
-    mx, my = (size[0] * factor, size[1] * factor)
-
-    # paste corner rotated as needed
-    # use corners alpha channel as mask
-    image.paste(corner, (0, 0), corner)
-    image.paste(corner.rotate(90), (0, my - radius), corner.rotate(90))
-    image.paste(corner.rotate(180), (mx - radius, my - radius), corner.rotate(180))
-    image.paste(corner.rotate(270), (mx - radius, 0), corner.rotate(270))
-
-    # draw both inner rects
-    draw = ImageDraw.Draw(image)
-    draw.rectangle([(radius, 0), (mx - radius, my)], fill=(50, 50, 50, alpha))
-    draw.rectangle([(0, radius), (mx, my - radius)], fill=(255,0,0,alpha))
-    image = image.resize(size, Image.ANTIALIAS)  # Smooth the corners
-
-    return image
-
-
-def stamina_bar(size, radius, alpha=255):
-    factor = 5  # Factor to increase the image size that I can later antialiaze the corners
-    radius = radius * factor
-    image = Image.new('RGBA', (size[0] * factor, size[1] * factor), (0, 0, 0, 0))
-
-    # create corner
-    corner = Image.new('RGBA', (radius, radius), (0, 0, 0, 0))
-    draw = ImageDraw.Draw(corner)
-    # added the fill = .. you only drew a line, no fill
-    draw.pieslice((0, 0, radius * 2, radius * 2), 180, 270, fill=(50, 50, 50, alpha + 55))
-
-    # max_x, max_y
-    mx, my = (size[0] * factor, size[1] * factor)
-
-    # paste corner rotated as needed
-    # use corners alpha channel as mask
-    image.paste(corner, (0, 0), corner)
-    image.paste(corner.rotate(90), (0, my - radius), corner.rotate(90))
-    image.paste(corner.rotate(180), (mx - radius, my - radius), corner.rotate(180))
-    image.paste(corner.rotate(270), (mx - radius, 0), corner.rotate(270))
-
-    # draw both inner rects
-    draw = ImageDraw.Draw(image)
-    draw.rectangle([(radius, 0), (mx - radius, my)], fill=(50, 50, 50, alpha))
-    draw.rectangle([(0, radius), (mx, my - radius)], fill=(30,144,255,alpha))
-    image = image.resize(size, Image.ANTIALIAS)  # Smooth the corners
-
-    return image
-
-
-def round_rectangle(size, radius, alpha=55):
-    factor = 5  # Factor to increase the image size that I can later antialiaze the corners
-    radius = radius * factor
-    image = Image.new('RGBA', (size[0] * factor, size[1] * factor), (0, 0, 0, 0))
-
-    # create corner
-    corner = Image.new('RGBA', (radius, radius), (0, 0, 0, 0))
-    draw = ImageDraw.Draw(corner)
-    # added the fill = .. you only drew a line, no fill
-    draw.pieslice((0, 0, radius * 2, radius * 2), 180, 270, fill=(50, 50, 50, alpha + 55))
-
-    # max_x, max_y
-    mx, my = (size[0] * factor, size[1] * factor)
-
-    # paste corner rotated as needed
-    # use corners alpha channel as mask
-    image.paste(corner, (0, 0), corner)
-    image.paste(corner.rotate(90), (0, my - radius), corner.rotate(90))
-    image.paste(corner.rotate(180), (mx - radius, my - radius), corner.rotate(180))
-    image.paste(corner.rotate(270), (mx - radius, 0), corner.rotate(270))
-
-    # draw both inner rects
-    draw = ImageDraw.Draw(image)
-    draw.rectangle([(radius, 0), (mx - radius, my)], fill=(0, 0, 0, alpha))
-    draw.rectangle([(0, radius), (mx, my - radius)], fill=(0, 0, 0, alpha))
-    image = image.resize(size, Image.ANTIALIAS)  # Smooth the corners
-
-    return image
-
 
 def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focused, attack, defense, turn_total, ap1, ap2, ap3, enh1, enhname, lvl):
+    # Card Name can be 16 Characters before going off Card
+    # Lower Card Name Font once after 16 characters
     try:
         if health <= 0:
             im = Image.open(requests.get(d['PATH'], stream=True).raw)
@@ -6653,81 +6550,63 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
             else:
                 im = Image.open(requests.get(d['PATH'], stream=True).raw)
             
-            level_stat = f"🔱{lvl}"
-            lvl_color = (255, 255, 255) #white
-            focus_color = (30,144,255) #focusblue
-            stroke_color = (0,0,0)
-            if lvl == 200:
-                lvl_color = (255, 215, 0)
-                focus_color = (138,43,226)# blue violet
-            elif lvl >= 180:
-                lvl_color = (255, 0, 255)#fuchsia
-                focus_color = (0,0,139)#darkblue
-            elif lvl >= 160:
-                lvl_color = (0, 0, 0)#black
-                focus_color = (255,253,208)#cream
-                stroke_color = (255,255,255)
-                if lvl >= 170:
-                    focus_color = (0,0,139)#darkblue
-            elif lvl >= 140:
-                lvl_color = (192, 192, 192)#silver
-                focus_color = (255,253,208)#cream
-            elif lvl == 120:
-                lvl_color = (220, 20, 60)#crimsonred
-                focus_color = (255,253,208)#cream
-            elif lvl >= 100:
-                lvl_color = (255, 20, 147)#deeppink
-                focus_color = (192,192,192)#silver
-            elif lvl >= 80:
-                lvl_color = (0, 191, 255)#deepskyblue
-                focus_color = (30,144,255)
-            elif lvl >= 60:
-                lvl_color = (255, 69, 0)#orangered
-                focus_color = (30,144,255)
-            elif lvl >= 40:
-                lvl_color = (0, 255, 0)#green
-                focus_color = (30,144,255)
-            elif lvl >= 20:
-                lvl_color = (165, 42, 42)#brown
-                focus_color = (30,144,255)
+            draw = ImageDraw.Draw(im)
 
-            draw = ImageDraw.Draw(im, "RGBA")
-            lc = list(lvl_color)
-            lc.append(60)
-            lc_border = list(lvl_color)
-            lc_border.append(130)
+            # Font Size Adjustments
+            # Name not go over Card
+            name_font_size = 62
+            if len(list(d['NAME'])) >= 16 and not resolved:
+                name_font_size = 45
+            if len(list(d['RNAME'])) >= 16 and resolved:
+                name_font_size = 45
 
 
-            # Moveset Box
-            draw.rounded_rectangle(((55, 310), (1300, 600)), fill=(0, 0, 0, 80), radius=10)
-            # draw.rounded_rectangle(((55, 310), (1160, 630)), outline=(0, 0, 0, 127), width=3, radius=10)
-
-            # Level Box
-            draw.rounded_rectangle(((995, 35), (1300, 90)), fill=tuple(lc), radius=10)
-            # draw.rounded_rectangle(((995, 35), (1300, 90)), outline=tuple(lc_border), width=4, radius=10)
-
-
-            header = ImageFont.truetype("KomikaTitle.ttf", 70)
-            tournament_wins_font = ImageFont.truetype("RobotoCondensed-Bold.ttf", 35)
+            header = ImageFont.truetype("YesevaOne-Regular.ttf", name_font_size)
             s = ImageFont.truetype("Roboto-Bold.ttf", 22)
-            h = ImageFont.truetype("Roboto-Bold.ttf", 35)
+            h = ImageFont.truetype("YesevaOne-Regular.ttf", 37)
             m = ImageFont.truetype("Roboto-Bold.ttf", 25)
             r = ImageFont.truetype("Freedom-10eM.ttf", 40)
+            lvl_font = ImageFont.truetype("Neuton-Bold.ttf", 68)
+            health_and_stamina_font = ImageFont.truetype("Neuton-Light.ttf", 41)
+            attack_and_shield_font = ImageFont.truetype("Neuton-Bold.ttf", 48)
+            moveset_font = ImageFont.truetype("antonio.regular.ttf", 24)
             rhs = ImageFont.truetype("destructobeambb_bold.ttf", 35)
             stats = ImageFont.truetype("Freedom-10eM.ttf", 30)
             card_details_font_size = ImageFont.truetype("destructobeambb_bold.ttf", 25)
             card_levels = ImageFont.truetype("destructobeambb_bold.ttf", 40)
 
+            # Character & Title Name
+            if not resolved:
+                draw.text((600,80), d['NAME'], (255, 255, 255), font=header, stroke_width=1, stroke_fill=(0,0,0) ,align="left")
+            if resolved:
+                draw.text((600,80), d['RNAME'], (255, 255, 255), font=header, stroke_width=1, stroke_fill=(0,0,0) ,align="left")
+            draw.text((602,150), title['TITLE'], (255, 255, 255), font=h, stroke_width=1, stroke_fill=(0,0,0) ,align="left")
 
-            h_a_s_response = health_and_stamina_bars(health, stamina, max_health, max_stamina, resolved)
-            health_bar = f"{health}/{max_health} {h_a_s_response['HEALTH']}"
-            if health == max_health:
-                health_bar = f"{max_health} {h_a_s_response['HEALTH']}"
-            stamina_bar =f"{stamina}/{max_stamina} {h_a_s_response['STAMINA']}"
-            if stamina == max_stamina:
-                stamina_bar =f"{max_stamina} {h_a_s_response['STAMINA']}"
-            attack_stat = f"🗡️{round(attack)}"
-            defense_stat = f"🛡️{round(defense)}"
+            # Level
+            lvl_sizing = (89,70)
+            lvl = 200
+            if int(lvl) > 9:
+                lvl_sizing = (75,70)
+            if int(lvl) > 99:
+                lvl_sizing = (55, 70)
+            draw.text(lvl_sizing, f"{lvl}", (255, 255, 255), font=lvl_font, stroke_width=1, stroke_fill=(0,0,0),align="center")
+
+            # Health & Stamina
+            draw.text((730,417), f"{health}", (255, 255, 255), font=health_and_stamina_font, stroke_width=1, stroke_fill=(0,0,0),align="left")
+            draw.text((730,457), f"{stamina}", (255, 255, 255), font=health_and_stamina_font, stroke_width=1, stroke_fill=(0,0,0),align="left")
+
+            # Attack & Shield (Defense)
+            a_sizing = (89,515)
+            d_sizing = (1062,515)
+            if int(attack) > 99:
+                a_sizing = (78,515)
+            if int(defense) > 99:
+                d_sizing = (1048,515)
+
+            draw.text(a_sizing, f"{round(attack)}", (255, 255, 255), font=attack_and_shield_font, stroke_width=1, stroke_fill=(0,0,0),align="center")
+            draw.text(d_sizing, f"{round(defense)}", (255, 255, 255), font=attack_and_shield_font, stroke_width=1, stroke_fill=(0,0,0),align="center")
+
+            # Moveset Start
             moveset = d['MOVESET']
             move1 = moveset[0]
             move1_ap = ap1
@@ -6761,71 +6640,17 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
                 else:
                     move_enhanced_ap = enh1
             if not turn_crit:
-                move_enhanced_text = f"🦠 {list(move_enhanced.keys())[0]}: {move_enhanced_name} {move_enhanced_ap}{enhancer_suffix_mapping[enhname]}\n  ↘️ {enhancer_mapping[enhname]}"
+                move_enhanced_text = f"🦠 {list(move_enhanced.keys())[0]}: {move_enhanced_name} {move_enhanced_ap}{enhancer_suffix_mapping[enhname]}"
             else:
-                move_enhanced_text = f"🎇 {list(move_enhanced.keys())[0]}: {move_enhanced_name} {move_enhanced_ap}{enhancer_suffix_mapping[enhname]}\n  ↘️ {enhancer_mapping[enhname]}"
+                move_enhanced_text = f"🎇 {list(move_enhanced.keys())[0]}: {move_enhanced_name} {move_enhanced_ap}{enhancer_suffix_mapping[enhname]}"
             
-            title_stat = f"🎗️{title['TITLE']}"
-
-            # Character Name
-            if not resolved:
-                if d["HAS_COLLECTION"]:
-                    draw.text((82,40), f"{d['NAME']}", (255,215,0), font=header, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
-                else:
-                    draw.text((82,40), d['NAME'], (255, 255, 255), font=header, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
-
-            # Title Name
-            # draw.text((85,20), title['TITLE'], (255, 255, 255), font=h, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
             
             with Pilmoji(im) as pilmoji:
-                pilmoji.text((70, 160), health_bar.strip(), (255, 255, 255), font=rhs, stroke_width=2, stroke_fill=(0,0,0))
-                pilmoji.text((70, 210), stamina_bar.strip(), (255, 255, 255), font=rhs, stroke_width=2, stroke_fill=(0,0,0))
-                pilmoji.text((70, 260), attack_stat.strip(), (255, 255, 255), font=rhs, stroke_width=2, stroke_fill=(0,0,0))
-                pilmoji.text((220, 260), defense_stat.strip(), (255, 255, 255), font=rhs, stroke_width=2, stroke_fill=(0,0,0))
-
-                pilmoji.text((70,20), title_stat.strip(), (255, 255, 255), font=h, stroke_width=2, stroke_fill=(0,0,0), align="left")
-                pilmoji.text((70, 330), move1_text.strip(), (255, 255, 255), font=card_details_font_size, stroke_width=2, stroke_fill=(0,0,0))
-                pilmoji.text((70, 380), move2_text.strip(), (255, 255, 255), font=card_details_font_size, stroke_width=2, stroke_fill=(0,0,0))
-                pilmoji.text((70, 430), move3_text.strip(), (255, 255, 255), font=card_details_font_size, stroke_width=2, stroke_fill=(0,0,0))
-                pilmoji.text((70, 480), move_enhanced_text.strip(), (255, 255, 255), font=card_details_font_size, stroke_width=2, stroke_fill=(0,0,0))
-                
-                pilmoji.text((1005, 40), level_stat.strip(), lvl_color, font=card_levels, stroke_width=3, stroke_fill=stroke_color)
-               
-            if focused:
-                            # side    # vert
-                draw.line(((0, 0), (0, 800)), fill=focus_color, width=15)
-                draw.line(((1195, 0), (1195, 800)), fill=focus_color, width=10)
-                draw.line(((1195, 0), (0, 0)), fill=focus_color, width=15)
-                draw.line(((0, 600), (1195, 600)), fill=focus_color, width=15)
-                draw.text((82,120), "FOCUSED", focus_color, font=r, stroke_width=2, stroke_fill=stroke_color, align="left")
-
-            if resolved:
-                if d['RNAME'] != "N/A" and d['RNAME'] != "":
-                    if d["HAS_COLLECTION"]:
-                        draw.text((82,40), d['RNAME'], (255,215,0), font=header, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
-                    else:
-                        if d["HAS_COLLECTION"]:
-                            draw.text((82,40), d['RNAME'], (255,215,0), font=header, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
-                        else:
-                            draw.text((82,40), d['NAME'], (255, 255, 255), font=header, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
-                else:
-                    if d["HAS_COLLECTION"]:
-                        draw.text((82,40), d['NAME'], (255,215,0), font=header, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
-                    else:
-                        draw.text((82,40), d['NAME'], (255, 255, 255), font=header, stroke_width=5, stroke_fill=(0,0,0) ,align="left")
-                            # side    # vert
-                draw.line(((0, 0), (0, 800)), fill=lvl_color, width=15)
-                draw.line(((1195, 0), (1195, 800)), fill=lvl_color, width=10)
-                draw.line(((1195, 0), (0, 0)), fill=lvl_color, width=15)
-                draw.line(((0, 600), (1195, 600)), fill=lvl_color, width=15)
-                draw.text((280,120), "RESOLVED", lvl_color, font=r, stroke_width=2, stroke_fill=stroke_color, align="left")
-            
-
-            # data = io.BytesIO
-
-            # im.save(data, "PNG")
-
-            # encoded_img_data = base64.b64encode(data.getvalue())
+                pilmoji.text((600, 250), move1_text.strip(), (255, 255, 255), font=moveset_font, stroke_width=2, stroke_fill=(0,0,0))
+                pilmoji.text((600, 290), move2_text.strip(), (255, 255, 255), font=moveset_font, stroke_width=2, stroke_fill=(0,0,0))
+                pilmoji.text((600, 330), move3_text.strip(), (255, 255, 255), font=moveset_font, stroke_width=2, stroke_fill=(0,0,0))
+                pilmoji.text((600, 370), move_enhanced_text.strip(), (255, 255, 255), font=moveset_font, stroke_width=2, stroke_fill=(0,0,0))
+            # Moveset End        
 
             with BytesIO() as image_binary:
                 im.save(image_binary, "PNG")
