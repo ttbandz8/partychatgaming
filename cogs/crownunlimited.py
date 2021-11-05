@@ -6584,7 +6584,6 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
 
             # Level
             lvl_sizing = (89,70)
-            lvl = 200
             if int(lvl) > 9:
                 lvl_sizing = (75,70)
             if int(lvl) > 99:
