@@ -6547,6 +6547,8 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
         else:
             if resolved:
                 im = Image.open(requests.get(d['RPATH'], stream=True).raw)
+            elif focused and d['NAME'] == "Naruto":
+                im = Image.open(requests.get(d['FPATH'], stream=True).raw)
             else:
                 im = Image.open(requests.get(d['PATH'], stream=True).raw)
             
