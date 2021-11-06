@@ -1475,8 +1475,9 @@ class CrownUnlimited(commands.Cog):
                             else:
                                 healmessage = f"**{t_card}**'s blows don't appear to have any effect!"
                                 messagenumber = 0
-                        o_attack = o_attack + o_attackcalc
-                        o_defense =  o_defense + o_defensecalc
+                        if not o_used_resolve:
+                            o_attack = o_attack + o_attackcalc
+                            o_defense =  o_defense + o_defensecalc
                         o_used_focus = True
                             
                         # embedVar = discord.Embed(title=f"{o_card.upper()} FOCUSED", description=f"**{o_card} says**\n{o_focus_description}", colour=0xe91e63)
@@ -2182,8 +2183,9 @@ class CrownUnlimited(commands.Cog):
                                 else:
                                     healmessage = f"hasn't been touched..."
                                     messagenumber = 0
-                            t_attack = t_attack + t_attackcalc
-                            t_defense =  t_defense + t_defensecalc
+                            if not t_used_resolve:
+                                t_attack = t_attack + t_attackcalc
+                                t_defense =  t_defense + t_defensecalc
                             t_used_focus=True
                             
                             embedVar = discord.Embed(title=f"{t_card.upper()} FOCUSED", description=f"**{t_card} says**\n{t_focus_description}", colour=0xe91e63)
@@ -3899,6 +3901,7 @@ class CrownUnlimited(commands.Cog):
 
                         o_stamina = o_focus
                         o_healthcalc = round(((o_focus * .40) + (fortitude * 1))/2)
+                        
                         o_attackcalc = round(.20 * ((o_focus * .15) + round(fortitude * 1)))
                         o_defensecalc = round(.20 * ((o_focus * .15) + round(fortitude * 1)))
                         #check if user is at max health and sets messages and focus health value
@@ -3922,8 +3925,9 @@ class CrownUnlimited(commands.Cog):
                             else:
                                 healmessage = f"**{t_card}**'s blows don't appear to have any effect!"
                                 messagenumber = 0
-                        o_attack = o_attack + o_attackcalc
-                        o_defense =  o_defense + o_defensecalc
+                        if not o_used_resolve:
+                            o_attack = o_attack + o_attackcalc
+                            o_defense =  o_defense + o_defensecalc
                         o_used_focus = True
 
                         
@@ -4679,8 +4683,9 @@ class CrownUnlimited(commands.Cog):
                             else:
                                 healmessage = f"hasn't been touched..."
                                 messagenumber = 0
-                        t_attack = t_attack + t_attackcalc
-                        t_defense =  t_defense + t_defensecalc
+                        if not t_used_resolve:
+                            t_attack = t_attack + t_attackcalc
+                            t_defense =  t_defense + t_defensecalc
                         t_used_focus=True
                         
                         embedVar = discord.Embed(title=f"{t_card.upper()} FOCUSED", description=f"**{t_card} says**\n{t_focus_description}", colour=0xe91e63)
@@ -9465,8 +9470,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 else:
                                     healmessage = f"**{t_card}**'s blows don't appear to have any effect!"
                                     messagenumber = 0
-                            o_attack = o_attack + o_attackcalc
-                            o_defense =  o_defense + o_defensecalc
+                            if not o_used_resolve:
+                                o_attack = o_attack + o_attackcalc
+                                o_defense =  o_defense + o_defensecalc
                             o_used_focus = True
 
                             
@@ -10236,8 +10242,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 else:
                                     healmessage = f"hasn't been touched..."
                                     messagenumber = 0
-                            t_attack = t_attack + t_attackcalc
-                            t_defense =  t_defense + t_defensecalc
+                            if not t_used_resolve:
+                                t_attack = t_attack + t_attackcalc
+                                t_defense =  t_defense + t_defensecalc
                             t_used_focus=True
                             # embedVar = discord.Embed(title=f"{t_card.upper()} FOCUSED", description=f"**{t_card} says**\n{t_focus_description}", colour=0xe91e63)
                             # embedVar.add_field(name=f"{t_card} focused and {healmessage}", value="All stats & stamina increased")
@@ -11517,8 +11524,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 else:
                                     healmessage = f"**{t_card}**'s blows don't appear to have any effect!"
                                     messagenumber = 0
-                            o_attack = o_attack + o_attackcalc
-                            o_defense =  o_defense + o_defensecalc
+                            if not o_used_resolve:
+                                o_attack = o_attack + o_attackcalc
+                                o_defense =  o_defense + o_defensecalc
                             o_used_focus = True
                                 
                             # embedVar = discord.Embed(title=f"{o_card.upper()} FOCUSED", description=f"**{o_card} says**\n{o_focus_description}", colour=0xe91e63)
@@ -13054,8 +13062,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 else:
                                     healmessage = f"hasn't been touched..."
                                     messagenumber = 0
-                            t_attack = t_attack + t_attackcalc
-                            t_defense =  t_defense + t_defensecalc
+                            if not t_used_resolve:
+                                t_attack = t_attack + t_attackcalc
+                                t_defense =  t_defense + t_defensecalc
                             t_used_focus=True
                             if mode not in AUTO_BATTLE_modes:
                                 if mode in B_modes:
@@ -14371,8 +14380,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     else:
                                         healmessage = f"**{t_card}**'s blows don't appear to have any effect!"
                                         messagenumber = 0
-                                c_attack = c_attack + c_attackcalc
-                                c_defense =  c_defense + c_defensecalc
+                                if not c_used_resolve:
+                                    c_attack = c_attack + c_attackcalc
+                                    c_defense =  c_defense + c_defensecalc
                                 c_used_focus = True
                                     
                                 embedVar = discord.Embed(title=f"{c_card.upper()} FOCUSED", description=f"**{c_card} says**\n{c_focus_description}", colour=0xe91e63)
@@ -15962,8 +15972,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     else:
                                         healmessage = f"hasn't been touched..."
                                         messagenumber = 0
-                                t_attack = t_attack + t_attackcalc
-                                t_defense =  t_defense + t_defensecalc
+                                if not t_used_resolve:
+                                    t_attack = t_attack + t_attackcalc
+                                    t_defense =  t_defense + t_defensecalc
                                 t_used_focus=True
                                 
                                 if not t_used_resolve and t_used_focus and t_universe == "Digimon":  #Digimon Universal Trait
