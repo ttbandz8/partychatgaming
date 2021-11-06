@@ -6580,6 +6580,11 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
             card_details_font_size = ImageFont.truetype("destructobeambb_bold.ttf", 25)
             card_levels = ImageFont.truetype("destructobeambb_bold.ttf", 40)
 
+            if health == max_health:
+                health_bar = f"{max_health}"
+            else:
+                health_bar = f"{health}/{max_health}"
+
             # Character & Title Name
             if not resolved:
                 draw.text((600,80), d['NAME'], (255, 255, 255), font=header, stroke_width=1, stroke_fill=(0,0,0) ,align="left")
@@ -6596,7 +6601,7 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
             draw.text(lvl_sizing, f"{lvl}", (255, 255, 255), font=lvl_font, stroke_width=1, stroke_fill=(0,0,0),align="center")
 
             # Health & Stamina
-            draw.text((730,417), f"{health}", (255, 255, 255), font=health_and_stamina_font, stroke_width=1, stroke_fill=(0,0,0),align="left")
+            draw.text((730,417), health_bar, (255, 255, 255), font=health_and_stamina_font, stroke_width=1, stroke_fill=(0,0,0),align="left")
             draw.text((730,457), f"{stamina}", (255, 255, 255), font=health_and_stamina_font, stroke_width=1, stroke_fill=(0,0,0),align="left")
 
             # Attack & Shield (Defense)
