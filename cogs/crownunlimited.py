@@ -5323,6 +5323,7 @@ class CrownUnlimited(commands.Cog):
         destiny_card_details = []
         for card in cards:
             available = ""
+            is_skin = ""
             if card['AVAILABLE'] and card['EXCLUSIVE']:
                 available = ":purple_circle:"
             elif card['AVAILABLE'] and not card['HAS_COLLECTION']:
@@ -5331,12 +5332,14 @@ class CrownUnlimited(commands.Cog):
                 available = ":blue_circle:"
             else:
                 available = "🟠"
+            if card['IS_SKIN']:
+                is_skin = ":white_circle:"
             if card['EXCLUSIVE'] and not card['HAS_COLLECTION']:
-                dungeon_card_details.append(f"{available} **{card['NAME']}**: :coin:{'{:,}'.format(card['PRICE'])}\n:heart: {card['HLT']} :dagger: {card['ATK']}  🛡️ {card['DEF']}\n")
+                dungeon_card_details.append(f"{is_skin}{available} **{card['NAME']}**: :coin:{'{:,}'.format(card['PRICE'])}\n:heart: {card['HLT']} :dagger: {card['ATK']}  🛡️ {card['DEF']}\n")
             elif not card['HAS_COLLECTION']:
-                tales_card_details.append(f"{available} **{card['NAME']}**: :coin:{'{:,}'.format(card['PRICE'])}\n:heart: {card['HLT']} :dagger: {card['ATK']}  🛡️ {card['DEF']}\n")
+                tales_card_details.append(f"{is_skin}{available} **{card['NAME']}**: :coin:{'{:,}'.format(card['PRICE'])}\n:heart: {card['HLT']} :dagger: {card['ATK']}  🛡️ {card['DEF']}\n")
             elif card['HAS_COLLECTION']:
-                destiny_card_details.append(f"{available} **{card['NAME']}**: :coin:{'{:,}'.format(card['PRICE'])}\n:heart: {card['HLT']} :dagger: {card['ATK']}  🛡️ {card['DEF']}\n")
+                destiny_card_details.append(f"{is_skin}{available} **{card['NAME']}**: :coin:{'{:,}'.format(card['PRICE'])}\n:heart: {card['HLT']} :dagger: {card['ATK']}  🛡️ {card['DEF']}\n")
 
         all_cards = []
         if tales_card_details:
@@ -5369,13 +5372,13 @@ class CrownUnlimited(commands.Cog):
         # If it's not an array greater than 10, show paginationless embed
         if len(all_cards) < 10:
             embedVar = discord.Embed(title= f"{universe} Card List", description="\n".join(all_cards), colour=0x7289da)
-            embedVar.set_footer(text=f"{total_cards} Total Cards\n🟣 Dungeon Drop\n🟢 Tale Drop\n🔵 Destiny Line\n🟠 Unavailable")
+            embedVar.set_footer(text=f"{total_cards} Total Cards\n🟣 Dungeon Drop\n🟢 Tale Drop\n🔵 Destiny Line\n🟠 Unavailable\n⚪ Skin")
             await ctx.send(embed=embedVar)
 
         embed_list = []
         for i in range(0, len(cards_broken_up)):
             globals()['embedVar%s' % i] = discord.Embed(title= f":flower_playing_cards: {universe_data['TITLE']} Card List", description="\n".join(cards_broken_up[i]), colour=0x7289da)
-            globals()['embedVar%s' % i].set_footer(text=f"{total_cards} Total Cards\n🟣 Dungeon Drop\n🟢 Tale Drop\n🔵 Destiny Line\n🟠 Unavailable\n/viewcard 'Card Name' - View Card Details\n/destinies 'Universe Name' -View Destiny Lines")
+            globals()['embedVar%s' % i].set_footer(text=f"{total_cards} Total Cards\n🟣 Dungeon Drop\n🟢 Tale Drop\n🔵 Destiny Line\n🟠 Unavailable\n⚪ Skin\n/viewcard 'Card Name' - View Card Details\n/destinies 'Universe Name' -View Destiny Lines")
             embed_list.append(globals()['embedVar%s' % i])
 
         paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
@@ -6547,7 +6550,7 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
         else:
             if resolved:
                 im = Image.open(requests.get(d['RPATH'], stream=True).raw)
-            elif focused and d['NAME'] == "Naruto":
+            elif focused:
                 im = Image.open(requests.get(d['FPATH'], stream=True).raw)
             else:
                 im = Image.open(requests.get(d['PATH'], stream=True).raw)
@@ -6645,8 +6648,11 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
             else:
                 move_enhanced_text = f"🎇 {list(move_enhanced.keys())[0]}: {move_enhanced_name} {move_enhanced_ap}{enhancer_suffix_mapping[enhname]}"
             
-            
+            # attack_stat = f"🗡️{round(attack)}"
+            # defense_stat = f"🛡️{round(defense)}"
             with Pilmoji(im) as pilmoji:
+                # pilmoji.text(a_sizing, attack_stat.strip(), (255, 255, 255), font=attack_and_shield_font, stroke_width=2, stroke_fill=(0,0,0))
+                # pilmoji.text(d_sizing, defense_stat.strip(), (255, 255, 255), font=attack_and_shield_font, stroke_width=2, stroke_fill=(0,0,0))
                 pilmoji.text((600, 250), move1_text.strip(), (255, 255, 255), font=moveset_font, stroke_width=2, stroke_fill=(0,0,0))
                 pilmoji.text((600, 290), move2_text.strip(), (255, 255, 255), font=moveset_font, stroke_width=2, stroke_fill=(0,0,0))
                 pilmoji.text((600, 330), move3_text.strip(), (255, 255, 255), font=moveset_font, stroke_width=2, stroke_fill=(0,0,0))
