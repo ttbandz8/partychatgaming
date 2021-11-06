@@ -2090,13 +2090,27 @@ class CrownUnlimited(commands.Cog):
                                         elif tarm_barrier_active:
                                             if tbarrier_count >1:
                                                 t_health = t_health 
-                                                embedVar = discord.Embed(title=f"{t_card.upper()} Activates **Barrier** 💠", description=f"{o_card}'s attack **Nullified**!\n {tbarrier_count - 1} **Barriers** remain!", colour=0xe91e63)
+                                                embedVar = discord.Embed(title=f"{t_card.upper()} Activates **Barrier** 💠", description=f"{o_card}'s attack **Nullified**!\n **{tbarrier_count - 1} Barriers** remain!", colour=0xe91e63)
                                                 await button_ctx.send(embed=embedVar)
                                                 tbarrier_count = tbarrier_count - 1
                                             elif tbarrier_count==1:
                                                 embedVar = discord.Embed(title=f"{t_card.upper()} **Barrier** Broken!", description=f"{o_card} destroys the **Barrier**", colour=0xe91e63)
                                                 await button_ctx.send(embed=embedVar)
                                                 tarm_barrier_active =False  
+                                        elif tarm_parry_active:
+                                            if tparry_count >1:
+                                                t_health = t_health 
+                                                tparry_damage = round(dmg['DMG'] / 2)
+                                                t_health = t_health - tparry_damage
+                                                o_health = o_health - tparry_damage
+                                                tparry_count = tparry_count - 1
+                                                embedVar = discord.Embed(title=f"{t_card.upper()} Activates **Parry** 🔄", description=f"{o_card} takes {tparry_damage}!\n **{tparry_count} Parries** to go!!", colour=0xe91e63)
+                                                await button_ctx.send(embed=embedVar)
+                                                
+                                            elif tparry_count==1:
+                                                embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{o_card} breaks the **Parry**", colour=0xe91e63)
+                                                await button_ctx.send(embed=embedVar)
+                                                tarm_parry_active =False
                                         else:
                                             t_health = t_health - dmg['DMG']
                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
@@ -2815,6 +2829,19 @@ class CrownUnlimited(commands.Cog):
                                                 embedVar = discord.Embed(title=f"{o_card.upper()} **Barrier** Broken!", description=f"{t_card} destroys the **Barrier**", colour=0xe91e63)
                                                 await button_ctx.send(embed=embedVar)
                                                 oarm_barrier_active =False
+                                        elif oarm_parry_active:
+                                            if oparry_count >1:
+                                                oparry_damage = round(dmg['DMG'] / 2)
+                                                o_health = o_health - oparry_damage
+                                                o_health = o_health - oparry_damage
+                                                oparry_count = oparry_count - 1
+                                                embedVar = discord.Embed(title=f"{o_card.upper()} Activates **Parry** 🔄", description=f"{t_card} takes {oparry_damage}!\n **{cparry_count} Parries** to go!!", colour=0xe91e63)
+                                                await button_ctx.send(embed=embedVar)
+                                                
+                                            elif oparry_count==1:
+                                                embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} breaks the **Parry**", colour=0xe91e63)
+                                                await button_ctx.send(embed=embedVar)
+                                                oarm_parry_active =False
                                         else:
                                             o_health = o_health - int(dmg['DMG'])
                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
@@ -4161,7 +4188,9 @@ class CrownUnlimited(commands.Cog):
                         if tarm_barrier_active:
                             tarm_message = f"💠{tbarrier_count}"                  
                         elif tarm_shield_active:
-                            tarm_message = f"🌐{tshield_value}"  
+                            tarm_message = f"🌐{tshield_value}" 
+                        elif tarm_parry_active:
+                            tarm_message = f"🔄{tparry_count}" 
                         embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}", description=textwrap.dedent(f"""\
                         {pet_msg_on_resolve}
                         *Stamina costs located on buttons*
@@ -4640,13 +4669,28 @@ class CrownUnlimited(commands.Cog):
                                         elif tarm_barrier_active:
                                             if tbarrier_count >1:
                                                 t_health = t_health 
-                                                embedVar = discord.Embed(title=f"{t_card.upper()} Activates **Barrier** 💠", description=f"{o_card}'s attack **Nullified**!\n {tbarrier_count - 1} **Barriers** remain!", colour=0xe91e63)
+                                                embedVar = discord.Embed(title=f"{t_card.upper()} Activates **Barrier** 💠", description=f"{o_card}'s attack **Nullified**!\n **{tbarrier_count - 1} Barriers** remain!", colour=0xe91e63)
                                                 await button_ctx.send(embed=embedVar)
                                                 tbarrier_count = tbarrier_count - 1
                                             elif tbarrier_count==1:
                                                 embedVar = discord.Embed(title=f"{t_card.upper()} **Barrier** Broken!", description=f"{o_card} destroys the **Barrier**", colour=0xe91e63)
                                                 await button_ctx.send(embed=embedVar)
                                                 tarm_barrier_active =False  
+                                        
+                                        elif tarm_parry_active:
+                                            if tparry_count >1:
+                                                t_health = t_health 
+                                                tparry_damage = round(dmg['DMG'] / 2)
+                                                t_health = t_health - tparry_damage
+                                                o_health = o_health - tparry_damage
+                                                tparry_count = tparry_count - 1
+                                                embedVar = discord.Embed(title=f"{t_card.upper()} Activates **Parry** 🔄", description=f"{o_card} takes {tparry_damage}!\n **{tparry_count} Parries** to go!!", colour=0xe91e63)
+                                                await button_ctx.send(embed=embedVar)
+                                                
+                                            elif tparry_count==1:
+                                                embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{o_card} breaks the **Parry**", colour=0xe91e63)
+                                                await button_ctx.send(embed=embedVar)
+                                                tarm_parry_active =False
                                         else:
                                             t_health = t_health - dmg['DMG']
                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
@@ -5237,6 +5281,19 @@ class CrownUnlimited(commands.Cog):
                                             embedVar = discord.Embed(title=f"{o_card.upper()} **Barrier** Broken!", description=f"{t_card} destroys the **Barrier**", colour=0xe91e63)
                                             await button_ctx.send(embed=embedVar)
                                             oarm_barrier_active =False
+                                    elif oarm_parry_active:
+                                        if oparry_count >1:
+                                            oparry_damage = round(dmg['DMG'] / 2)
+                                            o_health = o_health - oparry_damage
+                                            o_health = o_health - oparry_damage
+                                            oparry_count = oparry_count - 1
+                                            embedVar = discord.Embed(title=f"{o_card.upper()} Activates **Parry** 🔄", description=f"{t_card} takes {oparry_damage}!\n **{cparry_count} Parries** to go!!", colour=0xe91e63)
+                                            await button_ctx.send(embed=embedVar)
+                                            
+                                        elif oparry_count==1:
+                                            embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} breaks the **Parry**", colour=0xe91e63)
+                                            await button_ctx.send(embed=embedVar)
+                                            oarm_parry_active =False
                                     else:
                                         o_health = o_health - int(dmg['DMG'])
                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
@@ -7407,6 +7464,8 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             cshield_value =0
             carm_barrier_active =False
             cbarrier_count = 0
+            carm_parry_active =False
+            cparry_count = 0
             if carm_passive_type == 'BASIC':
                 c_1[cmove1_text] = c_1[cmove1_text] + carm_passive_value
             elif carm_passive_type == 'SPECIAL':
@@ -7424,7 +7483,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 cshield_value = carm_passive_value
             elif carm_passive_type == 'BARRIER':
                 carm_barrier_active =True
-                cbarrier_count = oarm_passive_value
+                cbarrier_count = carm_passive_value
+            elif carm_passive_type == 'PARRY':
+                carm_parry_active =True
+                cparry_count = carm_passive_value
 
 
         ################################################################################
@@ -7651,6 +7713,8 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         oshield_value =0
         oarm_barrier_active =False
         obarrier_count =0
+        oarm_parry_active =False
+        oparry_count = 0
         if oarm_passive_type == 'BASIC':
             o_1[omove1_text] = o_1[omove1_text] + oarm_passive_value
         elif oarm_passive_type == 'SPECIAL':
@@ -7669,6 +7733,9 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         elif oarm_passive_type == 'BARRIER':
             oarm_barrier_active =True
             obarrier_count = oarm_passive_value
+        elif oarm_passive_type == 'PARRY':
+                oarm_parry_active =True
+                oparry_count = oarm_passive_value
             
         
 
@@ -7923,6 +7990,8 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         tshield_value = 0
         tarm_barrier_active =False
         tbarrier_count = 0
+        tarm_parry_active =False
+        tparry_count = 0
         if tarm_passive_type == 'BASIC':
             t_1[tmove1_text] = t_1[tmove1_text] + tarm_passive_value
         elif tarm_passive_type == 'SPECIAL':
@@ -7941,6 +8010,9 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         elif tarm_passive_type == 'BARRIER':
             tarm_barrier_active =True
             tbarrier_count = tarm_passive_value
+        elif tarm_passive_type == 'PARRY':
+                tarm_parry_active =True
+                tparry_count = tarm_passive_value
         
 
 
@@ -8042,6 +8114,8 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             'oshield_value' : oshield_value,
             'oarm_barrier_active' : oarm_barrier_active,
             'obarrier_count' : obarrier_count,
+            'oarm_parry_active' : oarm_parry_active,
+            'oparry_count' : oparry_count,
             'o_gif': o_gif,
             'o_enhancer': o_enhancer,
             'o_speed': o_speed,
@@ -8086,6 +8160,8 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             'tshield_value' : tshield_value,
             'tarm_barrier_active' : tarm_barrier_active,
             'tbarrier_count' : tbarrier_count,
+            'tarm_parry_active' : tarm_parry_active,
+            'tparry_count' : tparry_count,
             't_enhancer': t_enhancer,
             't_enhancer_used': t_enhancer_used,
             't_speed': t_speed,
@@ -8139,6 +8215,8 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 'oshield_value' : oshield_value,
                 'oarm_barrier_active' : oarm_barrier_active,
                 'obarrier_count' : obarrier_count,
+                'oarm_parry_active' : oarm_parry_active,
+                'oparry_count' : oparry_count,
                 'o_gif': o_gif,
                 'o_enhancer': o_enhancer,
                 'o_speed': o_speed,
@@ -8183,6 +8261,8 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 'tshield_value' : tshield_value,
                 'tarm_barrier_active' : tarm_barrier_active,
                 'tbarrier_count' : tbarrier_count,
+                'tarm_parry_active' : tarm_parry_active,
+                'tparry_count' : tparry_count,
                 'tmove1_text': tmove1_text,
                 'tmove2_text': tmove2_text,
                 'tmove3_text': tmove3_text,
@@ -8247,6 +8327,8 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 'oshield_value' : oshield_value,
                 'oarm_barrier_active' : oarm_barrier_active,
                 'obarrier_count' : obarrier_count,
+                'oarm_parry_active' : oarm_parry_active,
+                'oparry_count' : oparry_count,
                 'o_gif': o_gif,
                 'o_enhancer': o_enhancer,
                 'o_speed': o_speed,
@@ -8291,6 +8373,8 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 'tshield_value' : tshield_value,
                 'tarm_barrier_active' : tarm_barrier_active,
                 'tbarrier_count' : tbarrier_count,
+                'tarm_parry_active' : tarm_parry_active,
+                'tparry_count' : tparry_count,
                 't_enhancer': t_enhancer,
                 't_enhancer_used': t_enhancer_used,
                 't_speed': t_speed,
@@ -8359,6 +8443,8 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 'oshield_value' : oshield_value,
                 'oarm_barrier_active' : oarm_barrier_active,
                 'obarrier_count' : obarrier_count,
+                'oarm_parry_active' : oarm_parry_active,
+                'oparry_count' : oparry_count,
                 'o_gif': o_gif,
                 'o_enhancer': o_enhancer,
                 'o_speed': o_speed,
@@ -8403,6 +8489,8 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 'tshield_value' : tshield_value,
                 'tarm_barrier_active' : tarm_barrier_active,
                 'tbarrier_count' : tbarrier_count,
+                'tarm_parry_active' : tarm_parry_active,
+                'tparry_count' : tparry_count,
                 't_enhancer': t_enhancer,
                 't_enhancer_used': t_enhancer_used,
                 't_speed': t_speed,
@@ -8467,6 +8555,8 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 'cshield_value' : cshield_value,
                 'carm_barrier_active' : carm_barrier_active,
                 'cbarrier_count' : cbarrier_count,
+                'carm_parry_active' : carm_parry_active,
+                'cparry_count' : cparry_count,
                 'c_gif': c_gif,
                 'c_enhancer': c_enhancer,
                 'c_speed': c_speed,
@@ -8523,6 +8613,8 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             'oshield_value' : oshield_value,
             'oarm_barrier_active' : oarm_barrier_active,
             'obarrier_count' : obarrier_count,
+            'oarm_parry_active' : oarm_parry_active,
+            'oparry_count' : oparry_count,
             'o_gif': o_gif,
             'o_enhancer': o_enhancer,
             
@@ -8569,6 +8661,8 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             'tshield_value' : tshield_value,
             'tarm_barrier_active' : tarm_barrier_active,
             'tbarrier_count' : tbarrier_count,
+            'tarm_parry_active' : tarm_parry_active,
+            'tparry_count' : tparry_count,
             't_enhancer': t_enhancer,
             't_enhancer_used': t_enhancer_used,
             
@@ -8620,6 +8714,8 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             'cshield_value' : cshield_value,
             'carm_barrier_active' : carm_barrier_active,
             'cbarrier_count' : cbarrier_count,
+            'carm_parry_active' : carm_parry_active,
+            'cparry_count' : cparry_count,
             'c_gif': c_gif,
             'c_enhancer': c_enhancer,
             
@@ -9066,6 +9162,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             oshield_value = stats['oshield_value']
             oarm_barrier_active = stats['oarm_barrier_active']
             obarrier_count = stats['obarrier_count']
+            oarm_parry_active = stats['oarm_parry_active']
+            oparry_count = stats['oparry_count']
             o_gif = stats['o_gif']
             o_enhancer = stats['o_enhancer']   
             o_speed = stats['o_speed']
@@ -9121,6 +9219,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 tshield_value = stats['tshield_value']
                 tarm_barrier_active = stats['tarm_barrier_active']
                 tbarrier_count = stats['tbarrier_count']
+                tarm_parry_active = stats['tarm_parry_active']
+                tparry_count = stats['tparry_count']
                 t_gif = stats['t_gif']
                 t_enhancer = stats['t_enhancer']                
                 t_speed = stats['t_speed']
@@ -9174,6 +9274,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 tshield_value = stats['tshield_value']
                 tarm_barrier_active = stats['tarm_barrier_active']
                 tbarrier_count = stats['tbarrier_count']
+                tarm_parry_active = stats['tarm_parry_active']
+                tparry_count = stats['tparry_count']
                 t_enhancer = stats['t_enhancer']
                 t_enhancer_used = stats['t_enhancer_used']
                 t_speed = stats['t_speed']
@@ -9249,6 +9351,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 cshield_value = stats['cshield_value']
                 carm_barrier_active = stats['carm_barrier_active']
                 cbarrier_count = stats['cbarrier_count']
+                carm_parry_active = stats['carm_parry_active']
+                cparry_count = stats['cparry_count']
                 c_gif = stats['c_gif']
                 c_enhancer = stats['c_enhancer']
                 c_speed = stats['c_speed']
@@ -9602,6 +9706,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 tarm_message = f"💠{tbarrier_count}"                  
                             elif tarm_shield_active:
                                 tarm_message = f"🌐{tshield_value}"  
+                            elif tarm_parry_active:
+                                tarm_message = f"🔄{tparry_count}"
                             embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}", description=textwrap.dedent(f"""\
                             {pet_msg_on_resolve}
                             *Stamina costs located on buttons*
@@ -10096,13 +10202,27 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             elif tarm_barrier_active:
                                                 if tbarrier_count >1:
                                                     t_health = t_health 
-                                                    embedVar = discord.Embed(title=f"{t_card.upper()} Activates **Barrier** 💠", description=f"{o_card}'s attack **Nullified**!\n {tbarrier_count - 1} **Barriers** remain!", colour=0xe91e63)
+                                                    embedVar = discord.Embed(title=f"{t_card.upper()} Activates **Barrier** 💠", description=f"{o_card}'s attack **Nullified**!\n **{tbarrier_count - 1} Barriers** remain!", colour=0xe91e63)
                                                     await button_ctx.send(embed=embedVar)
                                                     tbarrier_count = tbarrier_count - 1
                                                 elif tbarrier_count==1:
                                                     embedVar = discord.Embed(title=f"{t_card.upper()} **Barrier** Broken!", description=f"{o_card} destroys the **Barrier**", colour=0xe91e63)
                                                     await button_ctx.send(embed=embedVar)
-                                                    tarm_barrier_active =False                       
+                                                    tarm_barrier_active =False          
+                                            elif tarm_parry_active:
+                                                if tparry_count >1:
+                                                    
+                                                    tparry_damage = round(dmg['DMG'] / 2)
+                                                    t_health = t_health - tparry_damage
+                                                    o_health = o_health - tparry_damage
+                                                    tparry_count = tparry_count - 1
+                                                    embedVar = discord.Embed(title=f"{t_card.upper()} Activates **Parry** 🔄", description=f"{o_card} takes {tparry_damage}!\n **{tparry_count} Parries** to go!!", colour=0xe91e63)
+                                                    await button_ctx.send(embed=embedVar)
+                                                    
+                                                elif tparry_count==1:
+                                                    embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{o_card} breaks the **Parry**", colour=0xe91e63)
+                                                    await button_ctx.send(embed=embedVar)
+                                                    tarm_parry_active =False             
                                             else:
                                                 t_health = t_health - dmg['DMG']
                                                 embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
@@ -10377,6 +10497,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     oarm_message = f"💠{obarrier_count}"                  
                                 elif oarm_shield_active:
                                     oarm_message = f"🌐{oshield_value}"
+                                elif oarm_parry_active:
+                                    oarm_message = f"🔄{oparry_count}"
 
                                 embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}", description=textwrap.dedent(f"""\
                                 {tpet_msg_on_resolve}
@@ -10848,6 +10970,19 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         embedVar = discord.Embed(title=f"{o_card.upper()} **Barrier** Broken!", description=f"{t_card} destroys the **Barrier**", colour=0xe91e63)
                                                         await button_ctx.send(embed=embedVar)
                                                         oarm_barrier_active =False
+                                                elif oarm_parry_active:
+                                                    if oparry_count >1:
+                                                        oparry_damage = round(dmg['DMG'] / 2)
+                                                        o_health = o_health - oparry_damage
+                                                        o_health = o_health - oparry_damage
+                                                        oparry_count = oparry_count - 1
+                                                        embedVar = discord.Embed(title=f"{o_card.upper()} Activates **Parry** 🔄", description=f"{t_card} takes {oparry_damage}!\n **{cparry_count} Parries** to go!!", colour=0xe91e63)
+                                                        await button_ctx.send(embed=embedVar)
+                                                        
+                                                    elif oparry_count==1:
+                                                        embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} breaks the **Parry**", colour=0xe91e63)
+                                                        await button_ctx.send(embed=embedVar)
+                                                        oarm_parry_active =False
                                                 else:
                                                     o_health = o_health - int(dmg['DMG'])
                                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
@@ -11395,6 +11530,19 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     embedVar = discord.Embed(title=f"{o_card.upper()} **Barrier** Broken!", description=f"{t_card} destroys the **Barrier**", colour=0xe91e63)
                                                     await button_ctx.send(embed=embedVar)
                                                     oarm_barrier_active =False
+                                            elif oarm_parry_active:
+                                                if oparry_count >1:
+                                                    oparry_damage = round(dmg['DMG'] / 2)
+                                                    o_health = o_health - oparry_damage
+                                                    o_health = o_health - oparry_damage
+                                                    oparry_count = oparry_count - 1
+                                                    embedVar = discord.Embed(title=f"{o_card.upper()} Activates **Parry** 🔄", description=f"{t_card} takes {oparry_damage}!\n **{cparry_count} Parries** to go!!", colour=0xe91e63)
+                                                    await button_ctx.send(embed=embedVar)
+                                                    
+                                                elif oparry_count==1:
+                                                    embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} breaks the **Parry**", colour=0xe91e63)
+                                                    await button_ctx.send(embed=embedVar)
+                                                    oarm_parry_active =False
                                             else:
                                                 o_health = o_health - int(dmg['DMG'])
                                                 embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
@@ -12289,6 +12437,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     tarm_message = f"💠{tbarrier_count}"                  
                                 elif tarm_shield_active:
                                     tarm_message = f"🌐{tshield_value}"  
+                                elif tarm_parry_active:
+                                    tarm_message = f"🔄{tparry_count}"
                                 embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}", description=textwrap.dedent(f"""\
                                 {pet_msg_on_resolve}
                                 *Stamina costs located on buttons*
@@ -12985,13 +13135,27 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 elif tarm_barrier_active:
                                                     if tbarrier_count >1:
                                                         t_health = t_health 
-                                                        embedVar = discord.Embed(title=f"{t_card.upper()} Activates **Barrier** 💠", description=f"{o_card}'s attack **Nullified**!\n {tbarrier_count - 1} **Barriers** remain!", colour=0xe91e63)
+                                                        embedVar = discord.Embed(title=f"{t_card.upper()} Activates **Barrier** 💠", description=f"{o_card}'s attack **Nullified**!\n **{tbarrier_count - 1} Barriers** remain!", colour=0xe91e63)
                                                         await button_ctx.send(embed=embedVar)
                                                         tbarrier_count = tbarrier_count - 1
                                                     elif tbarrier_count==1:
                                                         embedVar = discord.Embed(title=f"{t_card.upper()} **Barrier** Broken!", description=f"{o_card} destroys the **Barrier**", colour=0xe91e63)
                                                         await button_ctx.send(embed=embedVar)
                                                         tarm_barrier_active =False  
+                                                elif tarm_parry_active:
+                                                    if tparry_count >1:
+                                                        t_health = t_health 
+                                                        tparry_damage = round(dmg['DMG'] / 2)
+                                                        t_health = t_health - tparry_damage
+                                                        o_health = o_health - tparry_damage
+                                                        tparry_count = tparry_count - 1
+                                                        embedVar = discord.Embed(title=f"{t_card.upper()} Activates **Parry** 🔄", description=f"{o_card} takes {tparry_damage}!\n **{tparry_count} Parries** to go!!", colour=0xe91e63)
+                                                        await button_ctx.send(embed=embedVar)
+                                                        
+                                                    elif tparry_count==1:
+                                                        embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{o_card} breaks the **Parry**", colour=0xe91e63)
+                                                        await button_ctx.send(embed=embedVar)
+                                                        tarm_parry_active =False
                                                 else:
                                                     t_health = t_health - dmg['DMG']
                                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
@@ -14053,13 +14217,27 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 elif carm_barrier_active:
                                                     if cbarrier_count >1:
                                                         c_health = c_health 
-                                                        embedVar = discord.Embed(title=f"{c_card.upper()} Activates **Barrier** 💠", description=f"{t_card}'s attack **Nullified**!\n {cbarrier_count - 1} blocks remain!", colour=0xe91e63)
+                                                        embedVar = discord.Embed(title=f"{c_card.upper()} Activates **Barrier** 💠", description=f"{t_card}'s attack **Nullified**!\n **{cbarrier_count - 1} Barriers** remain!", colour=0xe91e63)
                                                         await button_ctx.send(embed=embedVar)
                                                         cbarrier_count = cbarrier_count - 1
                                                     elif cbarrier_count==1:
                                                         embedVar = discord.Embed(title=f"{c_card.upper()} **Barrier** Broken!", description=f"{t_card} destroys the **Barrier**", colour=0xe91e63)
                                                         await button_ctx.send(embed=embedVar)
                                                         carm_barrier_active =False
+                                                elif carm_parry_active:
+                                                    if cparry_count >1:
+                                                        c_health = c_health 
+                                                        cparry_damage = round(dmg['DMG'] / 2)
+                                                        c_health = c_health - cparry_damage
+                                                        t_health = t_health - cparry_damage
+                                                        cparry_count = cparry_count - 1
+                                                        embedVar = discord.Embed(title=f"{c_card.upper()} Activates **Parry** 🔄", description=f"{t_card} takes {cparry_damage}!\n **{cparry_count} Parries** to go!!", colour=0xe91e63)
+                                                        await button_ctx.send(embed=embedVar)
+                                                        
+                                                    elif cparry_count==1:
+                                                        embedVar = discord.Embed(title=f"{c_card.upper()} **Parry** Penetrated!!", description=f"{t_card} breaks the **Parry**", colour=0xe91e63)
+                                                        await button_ctx.send(embed=embedVar)
+                                                        carm_parry_active =False
                                                 else:
                                                     c_health = c_health - int(dmg['DMG'])
                                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
@@ -14218,6 +14396,19 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         embedVar = discord.Embed(title=f"{o_card.upper()} **Barrier** Broken!", description=f"{t_card} destroys the **Barrier**", colour=0xe91e63)
                                                         await button_ctx.send(embed=embedVar)
                                                         oarm_barrier_active =False
+                                                elif oarm_parry_active:
+                                                    if oparry_count >1:
+                                                        oparry_damage = round(dmg['DMG'] / 2)
+                                                        o_health = o_health - oparry_damage
+                                                        o_health = o_health - oparry_damage
+                                                        oparry_count = oparry_count - 1
+                                                        embedVar = discord.Embed(title=f"{o_card.upper()} Activates **Parry** 🔄", description=f"{t_card} takes {oparry_damage}!\n **{cparry_count} Parries** to go!!", colour=0xe91e63)
+                                                        await button_ctx.send(embed=embedVar)
+                                                        
+                                                    elif oparry_count==1:
+                                                        embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} breaks the **Parry**", colour=0xe91e63)
+                                                        await button_ctx.send(embed=embedVar)
+                                                        oarm_parry_active =False
                                                 else:
                                                     o_health = o_health - int(dmg['DMG'])
                                                     if mode not in AUTO_BATTLE_modes:
@@ -14380,6 +14571,19 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     embedVar = discord.Embed(title=f"{o_card.upper()} **Barrier** Broken!", description=f"{t_card} destroys the **Barrier**", colour=0xe91e63)
                                                     await button_ctx.send(embed=embedVar)
                                                     oarm_barrier_active =False
+                                            elif oarm_parry_active:
+                                                if oparry_count >1:
+                                                    oparry_damage = round(dmg['DMG'] / 2)
+                                                    o_health = o_health - oparry_damage
+                                                    o_health = o_health - oparry_damage
+                                                    oparry_count = oparry_count - 1
+                                                    embedVar = discord.Embed(title=f"{o_card.upper()} Activates **Parry** 🔄", description=f"{t_card} takes {oparry_damage}!\n **{cparry_count} Parries** to go!!", colour=0xe91e63)
+                                                    await button_ctx.send(embed=embedVar)
+                                                    
+                                                elif oparry_count==1:
+                                                    embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} breaks the **Parry**", colour=0xe91e63)
+                                                    await button_ctx.send(embed=embedVar)
+                                                    oarm_parry_active =False
                                             else:
                                                 o_health = o_health - int(dmg['DMG'])
                                                 if mode not in AUTO_BATTLE_modes:
@@ -15301,23 +15505,37 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         tshield_value = tshield_value -dmg['DMG']
                                                         t_health = t_health 
                                                         if tshield_value <=0:
-                                                            embedVar = discord.Embed(title=f"{t_card.upper()}'s' **Shield** Shattered!", description=f"{o_card} breaks the **Shield**!", colour=0xe91e63)
+                                                            embedVar = discord.Embed(title=f"{t_card.upper()}'s' **Shield** Shattered!", description=f"{c_card} breaks the **Shield**!", colour=0xe91e63)
                                                             await button_ctx.send(embed=embedVar)
                                                             tarm_shield_active =False
                                                         else:
-                                                            embedVar = discord.Embed(title=f"{t_card.upper()} Activates **Shield** 🌐", description=f"{o_card} strikes the **Shield** for **{dmg['DMG']}!**\n **{tshield_value} Shield** Left!", colour=0xe91e63)
+                                                            embedVar = discord.Embed(title=f"{t_card.upper()} Activates **Shield** 🌐", description=f"{c_card} strikes the **Shield** for **{dmg['DMG']}!**\n **{tshield_value} Shield** Left!", colour=0xe91e63)
                                                             await button_ctx.send(embed=embedVar)
         
                                                 elif tarm_barrier_active:
                                                     if tbarrier_count >1:
                                                         t_health = t_health 
-                                                        embedVar = discord.Embed(title=f"{t_card.upper()} Activates **Barrier** 💠", description=f"{o_card}'s attack **Nullified**!\n {tbarrier_count - 1} **Barriers** remain!", colour=0xe91e63)
+                                                        embedVar = discord.Embed(title=f"{t_card.upper()} Activates **Barrier** 💠", description=f"{c_card}'s attack **Nullified**!\n **{tbarrier_count - 1} Barriers** remain!", colour=0xe91e63)
                                                         await button_ctx.send(embed=embedVar)
                                                         tbarrier_count = tbarrier_count - 1
                                                     elif tbarrier_count==1:
-                                                        embedVar = discord.Embed(title=f"{t_card.upper()} **Barrier** Broken!", description=f"{o_card} destroys the **Barrier**", colour=0xe91e63)
+                                                        embedVar = discord.Embed(title=f"{t_card.upper()} **Barrier** Broken!", description=f"{c_card} destroys the **Barrier**", colour=0xe91e63)
                                                         await button_ctx.send(embed=embedVar)
-                                                        tarm_barrier_active =False  
+                                                        tarm_barrier_active =False
+                                                elif tarm_parry_active:
+                                                    if tparry_count >1:
+                                                        t_health = t_health 
+                                                        tparry_damage = round(dmg['DMG'] / 2)
+                                                        t_health = t_health - tparry_damage
+                                                        o_health = o_health - tparry_damage
+                                                        tparry_count = tparry_count - 1
+                                                        embedVar = discord.Embed(title=f"{t_card.upper()} Activates **Parry** 🔄", description=f"{c_card} takes {tparry_damage}!\n **{tparry_count} Parries** to go!!", colour=0xe91e63)
+                                                        await button_ctx.send(embed=embedVar)
+                                                        
+                                                    elif tparry_count==1:
+                                                        embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{c_card} breaks the **Parry**", colour=0xe91e63)
+                                                        await button_ctx.send(embed=embedVar)
+                                                        tarm_parry_active =False  
                                                 else:
                                                     t_health = t_health - dmg['DMG']
                                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
@@ -15448,8 +15666,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         cpet_msg_on_resolve =f"🐦 | *{enhancer_mapping[pet_enh_name]}*"
                                     if tarm_barrier_active:
                                         carm_message = f"💠{tbarrier_count}"                  
-                                    elif oarm_shield_active:
+                                    elif tarm_shield_active:
                                         carm_message = f"🌐{tshield_value}"
+                                    elif tarm_parry_active:
+                                        carm_message = f"🔄{tparry_count}"
 
                                     embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}", description=textwrap.dedent(f"""\
 
@@ -16005,23 +16225,37 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             tshield_value = tshield_value -dmg['DMG']
                                                             t_health = t_health 
                                                             if tshield_value <=0:
-                                                                embedVar = discord.Embed(title=f"{t_card.upper()}'s' **Shield** Shattered!", description=f"{o_card} breaks the **Shield**!", colour=0xe91e63)
+                                                                embedVar = discord.Embed(title=f"{t_card.upper()}'s' **Shield** Shattered!", description=f"{c_card} breaks the **Shield**!", colour=0xe91e63)
                                                                 await button_ctx.send(embed=embedVar)
                                                                 tarm_shield_active =False
                                                             else:
-                                                                embedVar = discord.Embed(title=f"{t_card.upper()} Activates **Shield** 🌐", description=f"{o_card} strikes the **Shield** for **{dmg['DMG']}!**\n **{tshield_value} Shield** Left!", colour=0xe91e63)
+                                                                embedVar = discord.Embed(title=f"{t_card.upper()} Activates **Shield** 🌐", description=f"{c_card} strikes the **Shield** for **{dmg['DMG']}!**\n **{tshield_value} Shield** Left!", colour=0xe91e63)
                                                                 await button_ctx.send(embed=embedVar)
                                                                 
                                                     elif tarm_barrier_active:
                                                         if tbarrier_count >1:
                                                             t_health = t_health 
-                                                            embedVar = discord.Embed(title=f"{t_card.upper()} Activates **Barrier** 💠", description=f"{o_card}'s attack **Nullified**!\n {tbarrier_count - 1} **Barriers** remain!", colour=0xe91e63)
+                                                            embedVar = discord.Embed(title=f"{t_card.upper()} Activates **Barrier** 💠", description=f"{c_card}'s attack **Nullified**!\n **{tbarrier_count - 1} Barriers** remain!", colour=0xe91e63)
                                                             await button_ctx.send(embed=embedVar)
                                                             tbarrier_count = tbarrier_count - 1
                                                         elif tbarrier_count==1:
-                                                            embedVar = discord.Embed(title=f"{t_card.upper()} **Barrier** Broken!", description=f"{o_card} destroys the **Barrier**", colour=0xe91e63)
+                                                            embedVar = discord.Embed(title=f"{t_card.upper()} **Barrier** Broken!", description=f"{c_card} destroys the **Barrier**", colour=0xe91e63)
                                                             await button_ctx.send(embed=embedVar)
-                                                            tarm_barrier_active =False  
+                                                            tarm_barrier_active =False 
+                                                    elif tarm_parry_active:
+                                                        if tparry_count >1:
+                                                            t_health = t_health 
+                                                            tparry_damage = round(dmg['DMG'] / 2)
+                                                            t_health = t_health - tparry_damage
+                                                            o_health = o_health - tparry_damage
+                                                            tparry_count = tparry_count - 1
+                                                            embedVar = discord.Embed(title=f"{t_card.upper()} Activates **Parry** 🔄", description=f"{c_card} takes {tparry_damage}!\n **{tparry_count} Parries** to go!!", colour=0xe91e63)
+                                                            await button_ctx.send(embed=embedVar)
+                                                            
+                                                        elif tparry_count==1:
+                                                            embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{c_card} breaks the **Parry**", colour=0xe91e63)
+                                                            await button_ctx.send(embed=embedVar)
+                                                            tarm_parry_active =False 
                                                     else:
                                                         t_health = t_health - dmg['DMG']
                                                         embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
@@ -16890,6 +17124,19 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         embedVar = discord.Embed(title=f"{o_card.upper()} **Barrier** Broken!", description=f"{t_card} destroys the **Barrier**", colour=0xe91e63)
                                                         await button_ctx.send(embed=embedVar)
                                                         oarm_barrier_active =False  
+                                                elif oarm_parry_active:
+                                                    if oparry_count >1:
+                                                        oparry_damage = round(dmg['DMG'] / 2)
+                                                        o_health = o_health - oparry_damage
+                                                        o_health = o_health - oparry_damage
+                                                        oparry_count = oparry_count - 1
+                                                        embedVar = discord.Embed(title=f"{o_card.upper()} Activates **Parry** 🔄", description=f"{t_card} takes {oparry_damage}!\n **{cparry_count} Parries** to go!!", colour=0xe91e63)
+                                                        await button_ctx.send(embed=embedVar)
+                                                        
+                                                    elif oparry_count==1:
+                                                        embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} breaks the **Parry**", colour=0xe91e63)
+                                                        await button_ctx.send(embed=embedVar)
+                                                        oarm_parry_active =False
                                                 else:
                                                     o_health = o_health - int(dmg['DMG'])
                                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
@@ -17039,13 +17286,27 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 elif carm_barrier_active:
                                                     if cbarrier_count >1:
                                                         c_health = c_health 
-                                                        embedVar = discord.Embed(title=f"{c_card.upper()} Activates **Barrier** 💠", description=f"{t_card}'s attack **Nullified**!\n {obarrier_count - 1} **Barriers** remain!", colour=0xe91e63)
+                                                        embedVar = discord.Embed(title=f"{c_card.upper()} Activates **Barrier** 💠", description=f"{t_card}'s attack **Nullified**!\n **{obarrier_count - 1} Barriers** remain!", colour=0xe91e63)
                                                         await button_ctx.send(embed=embedVar)
                                                         cbarrier_count = cbarrier_count - 1
                                                     elif cbarrier_count==1:
                                                         embedVar = discord.Embed(title=f"{c_card.upper()} **Barrier** Broken!", description=f"{t_card} destroys the **Barrier**", colour=0xe91e63)
                                                         await button_ctx.send(embed=embedVar)
                                                         carm_barrier_active =False
+                                                elif carm_parry_active:
+                                                    if cparry_count >1:
+                                                        c_health = c_health 
+                                                        cparry_damage = round(dmg['DMG'] / 2)
+                                                        c_health = c_health - cparry_damage
+                                                        t_health = t_health - cparry_damage
+                                                        cparry_count = cparry_count - 1
+                                                        embedVar = discord.Embed(title=f"{c_card.upper()} Activates **Parry** 🔄", description=f"{t_card} takes {cparry_damage}!\n **{cparry_count} Parries** to go!!", colour=0xe91e63)
+                                                        await button_ctx.send(embed=embedVar)
+                                                        
+                                                    elif cparry_count==1:
+                                                        embedVar = discord.Embed(title=f"{c_card.upper()} **Parry** Penetrated!!", description=f"{t_card} breaks the **Parry**", colour=0xe91e63)
+                                                        await button_ctx.send(embed=embedVar)
+                                                        carm_parry_active =False
                                                 else:
                                                     c_health = c_health - int(dmg['DMG'])
                                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_t)
