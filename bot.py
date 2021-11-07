@@ -1397,15 +1397,15 @@ async def trinketshop(ctx):
    Purchase Experience Boosts
    *Experience Boost Applied to Current Equipped Card*
 
-   🔋 1️⃣ **1,500EXP** for :coin: **80,000**
+   🔋 1️⃣ **1,500EXP** for :coin: **100,000**
    
-   🔋 2️⃣ **4,500EXP** for :dollar: **150,000**
+   🔋 2️⃣ **4,500EXP** for :dollar: **250,000**
 
-   🔋 3️⃣ **15,000EXP** for :moneybag: **425,000**
+   🔋 3️⃣ **15,000EXP** for :moneybag: **700,000**
 
    Purchase Gabe's Purse to Keep All Items When Rebirthing
 
-   **Gabe's Purse** 👛 for :money_with_wings: **1,000,000**
+   **Gabe's Purse** 👛 for :money_with_wings: **1,500,000**
 
    What would you like to buy?
    """), colour=0xf1c40f)
@@ -1422,13 +1422,13 @@ async def trinketshop(ctx):
       exp_boost_buttons = ["1", "2", "3"]
       if button_ctx.custom_id == "1":
          levels_gained = 10
-         price = 80000
+         price = 100000
       if button_ctx.custom_id == "2":
          levels_gained = 30
-         price = 150000
+         price = 250000
       if button_ctx.custom_id == "3":
          levels_gained = 100
-         price=425000
+         price=700000
       
       if button_ctx.custom_id == "cancel":
          await button_ctx.send("Cancelled purchase.")
@@ -1470,9 +1470,9 @@ async def trinketshop(ctx):
             return
       
       if button_ctx.custom_id == "4":
-         price = 1000000
+         price = 1500000
          if price > balance:
-            await button_ctx.send("You're too broke to buy. Get your money up.")
+            await button_ctx.send("Insufficent funds.")
             return
          if has_gabes_purse:
             await button_ctx.send("You already own Gabes Purse. You cannot purchase more than one.")
