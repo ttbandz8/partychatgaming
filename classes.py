@@ -1,13 +1,14 @@
 from dataclasses import dataclass, asdict, field
-import time 
+import time
 
 now = time.asctime()
+
 
 @dataclass(frozen=True, order=True)
 class USER():
     DISNAME: str
     NAME: str
-    DID: str 
+    DID: str
     AVATAR: list[str] = field(default_factory=lambda: [''])
     IGN: list[str] = field(default_factory=lambda: [{'DEFAULT': 'PCG'}])
     GAMES: list[str] = field(default_factory=lambda: ['Crown Unlimited'])
@@ -18,7 +19,7 @@ class USER():
     CARD: str = field(default_factory=lambda: "Ochaco Uraraka")
     DECK: list[str] = field(default_factory=lambda: [''])
     ARM: str = field(default_factory=lambda: "Stock")
-    PET:str = field(default_factory=lambda: "Chick")
+    PET: str = field(default_factory=lambda: "Chick")
     MATCHES: list = field(default_factory=lambda: [{'1V1': [0, 0]}, {'2V2': [0, 0]}, {'3V3': [0, 0]}, {'4V4': [0, 0]}, {'5V5': [0, 0]}])
     TOURNAMENT_WINS: int = field(default_factory=lambda: 0)
     # TOURNAMENT_LOSSES: int = field(default_factory=lambda: 0)
@@ -27,7 +28,7 @@ class USER():
     DUNGEONS: list[str] = field(default_factory=lambda: [""])
     BOSS_WINS: list[str] = field(default_factory=lambda: [""])
     REFERRED: bool = field(default_factory=lambda: False)
-    REFERRER:str = field(default_factory=lambda: "N/A")
+    REFERRER: str = field(default_factory=lambda: "N/A")
     TIMESTAMP: str = now
     IS_ADMIN: bool = field(default_factory=lambda: False)
     RIFT: int = field(default_factory=lambda: 0)
@@ -35,7 +36,9 @@ class USER():
     PATRON: bool = field(default_factory=lambda: False)
     LEVEL: int = field(default_factory=lambda: 0)
     EXPLORE: bool = field(default_factory=lambda: True)
-    
+    SAVE_SPOTS: list[str] = field(default_factory=lambda: [])
+
+
 @dataclass(frozen=True, order=True)
 class GUILD():
     GNAME: str = field(default_factory=lambda: '')
@@ -47,9 +50,9 @@ class GUILD():
     BANK: int = field(default_factory=lambda: 0)
     BOUNTY: int = field(default_factory=lambda: 1000)
     CREST: list[str] = field(default_factory=lambda: ['Unbound'])
-    HALL:str = field(default_factory=lambda: 'Mine')
+    HALL: str = field(default_factory=lambda: 'Mine')
     TIMESTAMP: str = now
-    
+
 
 @dataclass(frozen=True, order=True)
 class TEAMS():
@@ -62,10 +65,11 @@ class TEAMS():
     SCRIM_WINS: int = field(default_factory=lambda: 0)
     SCRIM_LOSSES: int = field(default_factory=lambda: 0)
     GAMES: list[str] = field(default_factory=lambda: ['PCG'])
-    LOGO_URL:  str = field(default_factory=lambda: '')
+    LOGO_URL: str = field(default_factory=lambda: '')
     LOGO_FLAG: bool = field(default_factory=lambda: False)
     BADGES: list[str] = field(default_factory=lambda: ['New Team'])
     TIMESTAMP: str = now
+
 
 @dataclass(frozen=True, order=True)
 class FAMILY():
@@ -73,10 +77,11 @@ class FAMILY():
     PARTNER: str = field(default_factory=lambda: '')
     KIDS: list[str] = field(default_factory=lambda: [])
     BANK: int = field(default_factory=lambda: 0)
-    HOUSE:str = field(default_factory=lambda: 'Cave')
+    HOUSE: str = field(default_factory=lambda: 'Cave')
     TIMESTAMP: str = now
 
-@dataclass(frozen=True, order=True) 
+
+@dataclass(frozen=True, order=True)
 class HOUSE():
     PATH: str
     HOUSE: str
@@ -84,8 +89,9 @@ class HOUSE():
     TIMESTAMP: str = now
     MULT: float = field(default_factory=lambda: 1.0)
     AVAILABLE: bool = field(default_factory=lambda: False)
-    
-@dataclass(frozen=True, order=True) 
+
+
+@dataclass(frozen=True, order=True)
 class HALL():
     PATH: str
     HALL: str
@@ -118,7 +124,8 @@ class SESSIONS():
     CROWN_UNLIMITED: bool = field(default_factory=lambda: False)
     TIMESTAMP: str = now
 
-@dataclass(frozen=True, order=True) 
+
+@dataclass(frozen=True, order=True)
 class MATCHES():
     PLAYER: str
     CARD: str = field(default_factory=lambda: 'N/A')
@@ -130,6 +137,7 @@ class MATCHES():
     EXCLUSIVE: bool = field(default_factory=lambda: False)
     TIMESTAMP: str = now
 
+
 @dataclass(frozen=True, order=True)
 class TOURNAMENTS():
     OWNER: str
@@ -140,7 +148,8 @@ class TOURNAMENTS():
     MATCHES: list
     TIMESTAMP: str = now
 
-@dataclass(frozen=True, order=True) 
+
+@dataclass(frozen=True, order=True)
 class CARDS():
     PATH: str
     NAME: str
@@ -148,12 +157,14 @@ class CARDS():
     PRICE: int = field(default_factory=lambda: 0)
     TOURNAMENT_REQUIREMENTS: int = field(default_factory=lambda: 0)
     TIMESTAMP: str = now
-    MOVESET: list[str] = field(default_factory=lambda: [{'MOVE1': 20, "STAM": 10}, {'MOVE2': 50, "STAM": 30}, {'ULTIMATE': 100, "STAM": 80}, {'ENHANCER': 0, "STAM": 20, "TYPE": "TYPE"}])
+    MOVESET: list[str] = field(
+        default_factory=lambda: [{'MOVE1': 20, "STAM": 10}, {'MOVE2': 50, "STAM": 30}, {'ULTIMATE': 100, "STAM": 80},
+                                 {'ENHANCER': 0, "STAM": 20, "TYPE": "TYPE"}])
     RPATH: str = field(default_factory=lambda: "N/A")
     RNAME: str = field(default_factory=lambda: "N/A")
     GIF: str = field(default_factory=lambda: "N/A")
     HLT: int = field(default_factory=lambda: 500)
-    STAM: int = field(default_factory=lambda: 100) 
+    STAM: int = field(default_factory=lambda: 100)
     ATK: int = field(default_factory=lambda: 25)
     DEF: int = field(default_factory=lambda: 25)
     TYPE: int = field(default_factory=lambda: 0)
@@ -174,12 +185,12 @@ class CARDS():
     SKIN_FOR: str = field(default_factory=lambda: "N/A")
 
 
-@dataclass(frozen=True, order=True) 
+@dataclass(frozen=True, order=True)
 class TITLES():
     TITLE: str
     PRICE: int = field(default_factory=lambda: 0)
     TOURNAMENT_REQUIREMENTS: int = field(default_factory=lambda: 0)
-    ABILITIES: list[str] = field(default_factory=lambda: [{'TYPE': 0}]) 
+    ABILITIES: list[str] = field(default_factory=lambda: [{'TYPE': 0}])
     UNIVERSE: str = field(default_factory=lambda: "Unbound")
     COLLECTION: str = field(default_factory=lambda: "N/A")
     TIMESTAMP: str = now
@@ -187,12 +198,13 @@ class TITLES():
     AVAILABLE: bool = field(default_factory=lambda: False)
     EXCLUSIVE: bool = field(default_factory=lambda: False)
 
-@dataclass(frozen=True, order=True) 
+
+@dataclass(frozen=True, order=True)
 class ARM():
     ARM: str
     PRICE: int = field(default_factory=lambda: 0)
     TOURNAMENT_REQUIREMENTS: int = field(default_factory=lambda: 0)
-    ABILITIES: list[str] = field(default_factory=lambda: [{'TYPE': 0}]) 
+    ABILITIES: list[str] = field(default_factory=lambda: [{'TYPE': 0}])
     UNIVERSE: str = field(default_factory=lambda: "Unbound")
     COLLECTION: str = field(default_factory=lambda: "N/A")
     TIMESTAMP: str = now
@@ -200,7 +212,8 @@ class ARM():
     AVAILABLE: bool = field(default_factory=lambda: False)
     EXCLUSIVE: bool = field(default_factory=lambda: False)
 
-@dataclass(frozen=True, order=True) 
+
+@dataclass(frozen=True, order=True)
 class PET():
     PET: str
     PATH: str = field(default_factory=lambda: '')
@@ -213,7 +226,8 @@ class PET():
     AVAILABLE: bool = field(default_factory=lambda: True)
     EXCLUSIVE: bool = field(default_factory=lambda: False)
 
-@dataclass(frozen=True, order=True) 
+
+@dataclass(frozen=True, order=True)
 class UNIVERSE():
     TITLE: str
     PATH: str = field(default_factory=lambda: '')
@@ -234,7 +248,8 @@ class UNIVERSE():
     TIER: int = field(default_factory=lambda: 0)
     GUILD: str = field(default_factory=lambda: "PCG")
 
-@dataclass(frozen=True, order=True) 
+
+@dataclass(frozen=True, order=True)
 class BOSS():
     NAME: str = field(default_factory=lambda: '')
     PATH: str = field(default_factory=lambda: '')
@@ -246,15 +261,19 @@ class BOSS():
     TIMESTAMP: str = now
     DESCRIPTION: list[str] = field(default_factory=lambda: '')
     AVAILABLE: bool = field(default_factory=lambda: True)
-    PET: list[str] = field(default_factory=lambda: [{'NAME': 'Chick', 'LVL': 1, 'EXP': 0, 'Glare': 5, 'TYPE': 'HLT', 'BOND': 0, 'PATH': "https://res.cloudinary.com/dkcmq8o15/image/upload/v1622307902/Pets/chick.jpg"}])
-   
-@dataclass(frozen=True, order=True) 
+    PET: list[str] = field(default_factory=lambda: [
+        {'NAME': 'Chick', 'LVL': 1, 'EXP': 0, 'Glare': 5, 'TYPE': 'HLT', 'BOND': 0,
+         'PATH': "https://res.cloudinary.com/dkcmq8o15/image/upload/v1622307902/Pets/chick.jpg"}])
+
+
+@dataclass(frozen=True, order=True)
 class SCORES():
     TOTAL: int
     MATCHES: list
     TIMESTAMP: str = now
 
-@dataclass(frozen=True, order=True) 
+
+@dataclass(frozen=True, order=True)
 class GAMES():
     GAME: str
     IMAGE_URL: str = field(default_factory=lambda: "")
@@ -263,7 +282,8 @@ class GAMES():
     ALIASES: list[str] = field(default_factory=lambda: [])
     TIMESTAMP: str = now
 
-@dataclass(frozen=True, order=True) 
+
+@dataclass(frozen=True, order=True)
 class GODS():
     TITLE: str
     GAME: str
@@ -275,41 +295,57 @@ class GODS():
     AVAILABLE: bool = field(default_factory=lambda: False)
     REGISTRATION: bool = field(default_factory=lambda: False)
     PARTICIPANTS: list[str] = field(default_factory=lambda: [])
-    WINNER: str = field(default_factory=lambda: '')  
+    WINNER: str = field(default_factory=lambda: '')
     TIMESTAMP: str = now
+
 
 @dataclass(frozen=True, order=True)
 class VAULT():
     OWNER: str
     BALANCE: int = field(default_factory=lambda: 1500)
-    CARDS: list[str] = field(default_factory=lambda: ['Ochaco Uraraka','Eevee','Garen'])
-    TITLES: list[str] = field(default_factory=lambda: ['Starter','Iron 4','UA 1st Year','Pokemon Trainer'])
+    CARDS: list[str] = field(default_factory=lambda: ['Ochaco Uraraka', 'Eevee', 'Garen'])
+    TITLES: list[str] = field(default_factory=lambda: ['Starter', 'Iron 4', 'UA 1st Year', 'Pokemon Trainer'])
     ARMS: list[str] = field(default_factory=lambda: ['Stock', 'Poke Ball', 'Hyper-Density Seals', 'Dorans Shield'])
-    PETS: list[str] = field(default_factory=lambda: [{'NAME': 'Chick', 'LVL': 1, 'EXP': 0, 'Heal': 3, 'TYPE': 'HLT', 'BOND': 0, 'BONDEXP': 0, 'PATH': "https://res.cloudinary.com/dkcmq8o15/image/upload/v1622307902/Pets/chick.jpg"}])
-    DECK: list[str] = field(default_factory=lambda: [{'CARD': 'Eevee', 'TITLE': 'Pokemon Trainer', 'ARM': 'Poke Ball', 'PET': 'Chick'}, {'CARD': 'Ochaco Uraraka', 'TITLE': 'UA 1st Year', 'ARM': 'Hyper-Density Seals', 'PET': 'Chick'}, {'CARD': 'Garen', 'TITLE': 'Iron 4', 'ARM': 'Dorans Shield', 'PET': 'Chick'}])
-    CARD_LEVELS: list[str] = field(default_factory=lambda: [{'CARD': 'Eevee', 'LVL': 0, 'TIER': 1, 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}, {'CARD': 'Ochaco Uraraka', 'LVL': 0, 'TIER': 1, 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}, {'CARD': 'Garen', 'LVL': 0, 'TIER': 1, 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}])
+    PETS: list[str] = field(default_factory=lambda: [
+        {'NAME': 'Chick', 'LVL': 1, 'EXP': 0, 'Heal': 3, 'TYPE': 'HLT', 'BOND': 0, 'BONDEXP': 0,
+         'PATH': "https://res.cloudinary.com/dkcmq8o15/image/upload/v1622307902/Pets/chick.jpg"}])
+    DECK: list[str] = field(
+        default_factory=lambda: [{'CARD': 'Eevee', 'TITLE': 'Pokemon Trainer', 'ARM': 'Poke Ball', 'PET': 'Chick'},
+                                 {'CARD': 'Ochaco Uraraka', 'TITLE': 'UA 1st Year', 'ARM': 'Hyper-Density Seals',
+                                  'PET': 'Chick'},
+                                 {'CARD': 'Garen', 'TITLE': 'Iron 4', 'ARM': 'Dorans Shield', 'PET': 'Chick'}])
+    CARD_LEVELS: list[str] = field(default_factory=lambda: [
+        {'CARD': 'Eevee', 'LVL': 0, 'TIER': 1, 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0},
+        {'CARD': 'Ochaco Uraraka', 'LVL': 0, 'TIER': 1, 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0},
+        {'CARD': 'Garen', 'LVL': 0, 'TIER': 1, 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}])
     QUESTS: list[str] = field(default_factory=lambda: [])
     DESTINY: list[str] = field(default_factory=lambda: [])
-    
 
-@dataclass(frozen=True, order=True) 
+
+@dataclass(frozen=True, order=True)
 class MENU():
     PATH: str
     NAME: str
     TIMESTAMP: str = now
 
+
 ''' Data Functions'''
+
+
 def newCard(card):
     c = CARDS(**card)
     return asdict(c)
+
 
 def newTitle(title):
     title = TITLES(**title)
     return asdict(title)
 
+
 def newArm(arm):
     arm = ARM(**arm)
     return asdict(arm)
+
 
 def newUser(users):
     user_list = []
@@ -322,13 +358,16 @@ def newUser(users):
         return asdict(u)
     return user_list
 
+
 def newTeam(team):
     t = TEAMS(**team)
     return asdict(t)
 
+
 def newFamily(family):
     f = FAMILY(**family)
     return asdict(f)
+
 
 def newUniverse(universe):
     nu = UNIVERSE(**universe)
@@ -344,33 +383,41 @@ def newSession(session):
     s = SESSIONS(**session)
     return asdict(s)
 
+
 def newGame(game):
     g = GAMES(**game)
     return asdict(g)
+
 
 def newGods(gods):
     god = GODS(**gods)
     return asdict(god)
 
+
 def newVault(vault):
     v = VAULT(**vault)
     return asdict(v)
+
 
 def newPet(pet):
     p = PET(**pet)
     return asdict(p)
 
+
 def newMatch(match):
     m = MATCHES(**match)
     return asdict(m)
+
 
 def newHouse(house):
     h = HOUSE(**house)
     return asdict(h)
 
+
 def newGuild(guild):
     gu = GUILD(**guild)
     return asdict(gu)
+
 
 def newHall(hall):
     ha = HALL(**hall)
