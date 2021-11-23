@@ -2196,6 +2196,7 @@ class CrownUnlimited(commands.Cog):
                                                 tbarrier_count = tbarrier_count - 1
                                             elif tbarrier_count==1:
                                                 embedVar = discord.Embed(title=f"{t_card.upper()}'s **Barrier** Broken!", description=f"{o_card} destroys the **Barrier**", colour=0xe91e63)
+                                                tbarrier_count = tbarrier_count - 1
                                                 if oarm_barrier_active:
                                                     oarm_barrier_active=False
                                                     embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -2216,6 +2217,7 @@ class CrownUnlimited(commands.Cog):
                                                 
                                             elif tparry_count==1:
                                                 embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{o_card} breaks the **Parry**", colour=0xe91e63)
+                                                tbarrier_count = tbarrier_count - 1
                                                 if oarm_barrier_active:
                                                     oarm_barrier_active=False
                                                     embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -3019,6 +3021,7 @@ class CrownUnlimited(commands.Cog):
                                                 obarrier_count = obarrier_count - 1
                                             elif obarrier_count==1:
                                                 embedVar = discord.Embed(title=f"{o_card.upper()}'s **Barrier** Broken!", description=f"{t_card} destroys the **Barrier**", colour=0xe91e63)
+                                                obarrier_count = obarrier_count - 1
                                                 if tarm_barrier_active:
                                                     tarm_barrier_active=False
                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -3038,6 +3041,7 @@ class CrownUnlimited(commands.Cog):
                                                 
                                             elif oparry_count==1:
                                                 embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} breaks the **Parry**", colour=0xe91e63)
+                                                oparry_count = oparry_count - 1
                                                 if tarm_barrier_active:
                                                     tarm_barrier_active=False
                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -3581,6 +3585,207 @@ class CrownUnlimited(commands.Cog):
 
             opet_move = {str(opetmove_text): int(opetmove_ap), 'STAM': 15, 'TYPE': str(opet_passive_type)}
 
+            # player 1 card passive
+            if o_card_passive_type == 'ATK':
+                o_attack = o_attack + int(o_card_passive)
+            elif o_card_passive_type == 'DEF':
+                o_defense = o_defense + int(o_card_passive)
+            elif o_card_passive_type == 'STAM':
+                o_stamina = o_stamina + int(o_card_passive)
+            elif o_card_passive_type == 'HLT':
+                o_max_health = o_max_health + int(o_card_passive)
+                o_health = o_health + int(o_card_passive)
+            elif o_card_passive_type == 'LIFE':
+                o_max_health = o_max_health + int((o_card_passive / 100) * t_health)
+            elif o_card_passive_type == 'DRAIN':
+                o_stamina = o_stamina + int(o_card_passive)
+                t_stamina = t_stamina - int(o_card_passive)
+            elif o_card_passive_type == 'FLOG':
+                o_attack = o_attack + int((o_card_passive / 100) * t_attack)
+                t_attack = t_attack - int((o_card_passive / 100) * t_attack)
+            elif o_card_passive_type == 'WITHER':
+                o_defense = o_defense + int((o_card_passive / 100) * t_defense)
+                t_defense = t_defense - int((o_card_passive / 100) * t_defense)
+            elif o_card_passive_type == 'RAGE':
+                o_attack = o_attack + int(((o_card_passive / 100) * o_defense))
+                o_defense = o_defense - int(((o_card_passive / 100) * o_attack))
+            elif o_card_passive_type == 'BRACE':
+                o_defense = o_defense + int(((o_card_passive / 100) * o_attack))
+                o_attack = o_attack - int(((o_card_passive / 100) * o_defense))
+            elif o_card_passive_type == 'BZRK':
+                o_attack = o_attack + int(((o_card_passive / 100) * o_health))
+                o_health = o_health - int((o_attack))
+            elif o_card_passive_type == 'CRYSTAL':
+                o_defense = o_defense + int(((o_card_passive / 100) * o_health))
+                o_health = o_health - int((o_attack))
+            elif o_card_passive_type == 'GROWTH':
+                o_attack = o_attack + int(((o_card_passive / 100) * o_attack))
+                o_defense = o_defense + int(((o_card_passive / 100) * o_defense))
+                o_max_health = o_max_health - int(((o_card_passive / 100) * o_max_health))
+                o_health = o_health - int(((o_card_passive / 100) * o_max_health))
+            elif o_card_passive_type == 'STANCE':
+                tempattack = o_attack + o_card_passive
+                o_attack = o_defense + o_card_passive
+                o_defense = tempattack
+            elif o_card_passive_type == 'CONFUSE':
+                tempattack = t_attack - o_card_passive
+                t_attack = t_defense - o_card_passive
+                t_defense = tempattack
+            elif o_card_passive_type == 'BLINK':
+                o_stamina = o_stamina - o_card_passive
+                t_stamina = t_stamina + o_card_passive - 10
+            elif o_card_passive_type == 'SLOW':
+                tempstam = t_stamina + o_card_passive
+                o_stamina = o_stamina - (2 * o_card_passive)
+                t_stamina = o_stamina
+                o_stamina = tempstam
+            elif o_card_passive_type == 'HASTE':
+                tempstam = t_stamina - o_card_passive
+                o_stamina = o_stamina + (2 * o_card_passive)
+                t_stamina = o_stamina
+                o_stamina = tempstam
+            elif o_card_passive_type == 'SOULCHAIN':
+                o_stamina = o_card_passive
+                t_stamina = o_card_passive
+            elif o_card_passive_type == 'FEAR':
+                o_health = o_health - int((o_card_passive / 100) * o_health)
+                t_attack = t_attack - int((o_card_passive / 100) * t_attack)
+                t_defense = t_defense - int((o_card_passive / 100) * t_defense)
+            elif o_card_passive_type == 'GAMBLE':
+                o_health = o_card_passive
+                t_health = o_card_passive
+
+                # Player 1 Title Passive
+            o_title_passive_type = list(o_title_passive.keys())[0]
+            o_title_passive_value = list(o_title_passive.values())[0]
+
+            if o_title_passive_bool:
+                if o_title_passive_type == 'ATK':
+                    o_attack = o_attack + int(o_title_passive_value)
+                elif o_title_passive_type == 'DEF':
+                    o_defense = o_defense + int(o_title_passive_value)
+                elif o_title_passive_type == 'STAM':
+                    o_stamina = o_stamina + int(o_title_passive_value)
+                elif o_title_passive_type == 'HLT':
+                    o_max_health = o_max_health + int(o_title_passive_value)
+                    o_health = o_health + int(o_title_passive_value)
+                elif o_title_passive_type == 'LIFE':
+                    _max_health = o_max_health + int((o_title_passive_value / 100) * t_health)
+                elif o_title_passive_type == 'DRAIN':
+                    t_stamina = t_stamina - int(o_title_passive_value)
+                    o_stamina = o_stamina + int(o_title_passive_value)
+                elif o_title_passive_type == 'FLOG':
+                    o_attack = o_attack + int((o_title_passive_value / 100) * t_attack)
+                    t_attack = t_attack - int((o_title_passive_value / 100) * t_attack)
+                elif o_title_passive_type == 'WITHER':
+                    o_defense = o_defense + int((o_title_passive_value / 100) * t_defense)
+                    t_defense = t_defense - int((o_title_passive_value / 100) * t_defense)
+                elif o_title_passive_type == 'RAGE':
+                    o_attack = o_attack + int(((o_title_passive_value / 100) * o_defense))
+                    o_defense = o_defense - int(((o_title_passive_value / 100) * o_attack))
+                elif o_title_passive_type == 'BRACE':
+                    o_defense = o_defense + int(((o_title_passive_value / 100) * o_attack))
+                    o_attack = o_attack - int(((o_title_passive_value / 100) * o_defense))
+                elif o_title_passive_type == 'BZRK':
+                    o_attack = o_attack + int(((o_title_passive_value / 100) * o_health))
+                    o_health = o_health - int((o_attack))
+                elif o_title_passive_type == 'CRYSTAL':
+                    o_defense = o_defense + int(((o_title_passive_value / 100) * o_health))
+                    o_health = o_health - int((o_defense))
+                elif o_title_passive_type == 'GROWTH':
+                    o_attack = o_attack + int((o_title_passive_value / 100) * o_attack)
+                    o_defense = o_defense + int((o_title_passive_value / 100) * o_defense)
+                    o_max_health = o_max_health - int((o_title_passive_value / 100) * o_max_health)
+                elif o_title_passive_type == 'STANCE':
+                    tempattack = o_attack
+                    o_attack = o_defense
+                    o_defense = tempattack
+                elif o_title_passive_type == 'CONFUSE':
+                    tempattack = t_attack
+                    t_attack = t_defense
+                    t_defense = tempattack
+                elif o_title_passive_type == 'BLINK':
+                    o_stamina = o_stamina - o_title_passive_value
+                    t_stamina = t_stamina + o_title_passive_value
+                elif o_title_passive_type == 'SLOW':
+                    tempstam = t_stamina + o_title_passive_value
+                    o_stamina = o_stamina - o_title_passive_value
+                    t_stamina = o_stamina
+                    o_stamina = tempstam
+                elif o_title_passive_type == 'HASTE':
+                    tempstam = t_stamina - o_title_passive_value
+                    o_stamina = o_stamina + o_title_passive_value
+                    t_stamina = o_stamina
+                    o_stamina = tempstam
+                elif o_title_passive_type == 'SOULCHAIN':
+                    o_stamina = o_title_passive_value
+                    t_stamina = o_title_passive_value
+                elif o_title_passive_type == 'FEAR':
+                    o_health = o_health - int((o_title_passive_value / 100) * o_health)
+                    t_attack = t_attack - int((o_title_passive_value / 100) * t_attack)
+                    t_defense = t_defense - int((o_title_passive_value / 100) * t_defense)
+                elif o_title_passive_type == 'GAMBLE':
+                    t_health = o_title_passive_value
+                    o_health = o_title_passive_value
+
+            # Arm Passive Player 1
+            oarm_passive_type = list(oarm_passive.keys())[0]
+            oarm_passive_value = list(oarm_passive.values())[0]
+            oarm_shield_active = False
+            oshield_value = 0
+            oarm_barrier_active = False
+            obarrier_count = 0
+            oarm_parry_active = False
+            oparry_count = 0
+            if oarm_passive_type == 'BASIC':
+                o_1[omove1_text] = o_1[omove1_text] + oarm_passive_value
+            elif oarm_passive_type == 'SPECIAL':
+                o_2[omove2_text] = o_2[omove2_text] + oarm_passive_value
+            elif oarm_passive_type == 'ULTIMATE':
+                o_3[omove3_text] = o_3[omove3_text] + oarm_passive_value
+            elif oarm_passive_type == 'ULTIMAX':
+                o_1[omove1_text] = o_1[omove1_text] + oarm_passive_value
+                o_2[omove2_text] = o_2[omove2_text] + oarm_passive_value
+                o_3[omove3_text] = o_3[omove3_text] + oarm_passive_value
+            elif oarm_passive_type == 'MANA':
+                o_enhancer[omove_enhanced_text] = round(o_enhancer[omove_enhanced_text] + (o_enhancer[omove_enhanced_text] * (oarm_passive_value / 100)))
+            elif oarm_passive_type == 'SHIELD':
+                oarm_shield_active = True
+                oshield_value = oarm_passive_value
+            elif oarm_passive_type == 'BARRIER':
+                oarm_barrier_active = True
+                obarrier_count = oarm_passive_value
+            elif oarm_passive_type == 'PARRY':
+                oarm_parry_active = True
+                oparry_count = oarm_passive_value
+
+            # Player 2 Moves
+            t_1 = t_moveset[0]
+            t_2 = t_moveset[1]
+            t_3 = t_moveset[2]
+            t_enhancer = t_moveset[3]
+            t_enhancer_used = False
+            t_pet_used = False
+
+            # Player 1 Focus & Resolve
+            t_focus_count = 0
+            t_focus = 90
+            t_used_focus = False
+            t_resolve = 60
+            t_used_resolve = False
+            t_block_used = False
+            t_defend_used = False
+            t_chainsaw = False
+            t_def_chainsaw = False
+            t_atk_chainsaw = False
+            if t_universe == "Chainsawman":
+                t_chainsaw = True
+
+            tmove1_text = list(t_1.keys())[0]
+            tmove2_text = list(t_2.keys())[0]
+            tmove3_text = list(t_3.keys())[0]
+            tmove_enhanced_text = list(t_enhancer.keys())[0]
+            
             # Player 2 Passive Config
             if (t_universe == t_title_universe) or (t_title_universe == "Unbound"):
                 t_title_passive_bool = True
@@ -3738,319 +3943,37 @@ class CrownUnlimited(commands.Cog):
                     t_health = t_title_passive_value
                     o_health = t_title_passive_value
 
-            # Arm Passive Player 2
+           # Arm Passive Player 2
             tarm_passive_type = list(tarm_passive.keys())[0]
             tarm_passive_value = list(tarm_passive.values())[0]
+            tarm_shield_active = False
+            tshield_value = 0
+            tarm_barrier_active = False
+            tbarrier_count = 0
+            tarm_parry_active = False
+            tparry_count = 0
+            if tarm_passive_type == 'BASIC':
+                t_1[tmove1_text] = t_1[tmove1_text] + tarm_passive_value
+            elif tarm_passive_type == 'SPECIAL':
+                t_2[tmove2_text] = t_2[tmove2_text] + tarm_passive_value
+            elif tarm_passive_type == 'ULTIMATE':
+                t_3[tmove3_text] = t_3[tmove3_text] + tarm_passive_value
+            elif tarm_passive_type == 'ULTIMAX':
+                t_1[tmove1_text] = t_1[tmove1_text] + tarm_passive_value
+                t_2[tmove2_text] = t_2[tmove2_text] + tarm_passive_value
+                t_3[tmove3_text] = t_3[tmove3_text] + tarm_passive_value
+            elif tarm_passive_type == 'MANA':
+                t_enhancer[tmove_enhanced_text] = round(t_enhancer[tmove_enhanced_text] + (t_enhancer[tmove_enhanced_text] * (tarm_passive_value / 100)))
+            elif tarm_passive_type == 'SHIELD':
+                tarm_shield_active = True
+                tshield_value = tarm_passive_value
+            elif tarm_passive_type == 'BARRIER':
+                tarm_barrier_active = True
+                tbarrier_count = tarm_passive_value
+            elif tarm_passive_type == 'PARRY':
+                tarm_parry_active = True
+                tparry_count = tarm_passive_value
 
-            if tarm_passive_type == 'ATK':
-                t_attack = t_attack + int(tarm_passive_value)
-            elif tarm_passive_type == 'DEF':
-                t_defense = t_defense + int(tarm_passive_value)
-            elif tarm_passive_type == 'STAM':
-                t_stamina = t_stamina + int(tarm_passive_value)
-            elif tarm_passive_type == 'HLT':
-                t_max_health = t_max_health + int(tarm_passive_value)
-                t_health = t_health + int(tarm_passive_value)
-            elif tarm_passive_type == 'LIFE':
-                t_max_health = t_max_health + int((tarm_passive_value / 100) * o_health)
-            elif tarm_passive_type == 'DRAIN':
-                o_stamina = o_stamina - int(tarm_passive_value)
-                t_stamina = t_stamina + int(tarm_passive_value)
-            elif tarm_passive_type == 'FLOG':
-                t_attack = t_attack + int((tarm_passive_value / 100) * o_attack)
-                o_attack = o_attack - int((tarm_passive_value / 100) * o_attack)
-            elif tarm_passive_type == 'WITHER':
-                t_defense = t_defense + int((tarm_passive_value / 100) * o_defense)
-                o_defense = o_defense - int((tarm_passive_value / 100) * o_defense)
-            elif tarm_passive_type == 'RAGE':
-                t_attack = t_attack + int((tarm_passive_value / 100) * t_defense)
-                t_defense = t_defense - int((tarm_passive_value / 100) * t_attack)
-            elif tarm_passive_type == 'BRACE':
-                t_defense = t_defense + int((tarm_passive_value / 100) * t_attack)
-                t_attack = t_attack - int((tarm_passive_value / 100) * t_defense)
-            elif tarm_passive_type == 'BZRK':
-                t_attack = t_attack + int((tarm_passive_value / 100) * t_health)
-                t_health = t_health - int((t_attack))
-            elif tarm_passive_type == 'CRYSTAL':
-                t_defense = t_defense + int((tarm_passive_value / 100) * t_health)
-                t_health = t_health - int(t_defense)
-            elif tarm_passive_type == 'GROWTH':
-                t_attack = t_attack + int((tarm_passive_value / 100) * t_attack)
-                t_defense = t_defense + int((tarm_passive_value / 100) * t_defense)
-                t_max_health = t_max_health - int(((tarm_passive_value / 100) * t_max_health))
-            elif tarm_passive_type == 'STANCE':
-                tempattack = t_attack + tarm_passive_value
-                t_attack = t_defense + tarm_passive_value
-                t_defense = tempattack
-            elif tarm_passive_type == 'CONFUSE':
-                tempattack = o_attack - tarm_passive_value
-                o_attack = o_defense - tarm_passive_value
-                o_defense = tempattack
-            elif tarm_passive_type == 'BLINK':
-                t_stamina = t_stamina - tarm_passive_value
-                o_stamina = o_stamina + tarm_passive_value
-            elif tarm_passive_type == 'SLOW':
-                tempstam = o_stamina + tarm_passive_value
-                t_stamina = t_stamina - tarm_passive_value
-                o_stamina = t_stamina
-                t_stamina = tempstam
-            elif tarm_passive_type == 'HASTE':
-                tempstam = o_stamina - tarm_passive_value
-                t_stamina = t_stamina + tarm_passive_value
-                o_stamina = t_stamina
-                t_stamina = tempstam
-            elif tarm_passive_type == 'SOULCHAIN':
-                t_stamina = tarm_passive_value
-                o_stamina = tarm_passive_value
-            elif tarm_passive_type == 'FEAR':
-                t_health = t_health - int((tarm_passive_value / 100) * t_health)
-                o_attack = o_attack - int((tarm_passive_value / 100) * o_attack)
-                o_defense = o_defense - int((tarm_passive_value / 100) * o_defense)
-            elif tarm_passive_type == 'GAMBLE':
-                t_health = tarm_passive_value
-                o_health = tarm_passive_value
-
-            # player 1 card passive
-            if o_card_passive_type == 'ATK':
-                o_attack = o_attack + int(o_card_passive)
-            elif o_card_passive_type == 'DEF':
-                o_defense = o_defense + int(o_card_passive)
-            elif o_card_passive_type == 'STAM':
-                o_stamina = o_stamina + int(o_card_passive)
-            elif o_card_passive_type == 'HLT':
-                o_max_health = o_max_health + int(o_card_passive)
-                o_health = o_health + int(o_card_passive)
-            elif o_card_passive_type == 'LIFE':
-                o_max_health = o_max_health + int((o_card_passive / 100) * t_health)
-            elif o_card_passive_type == 'DRAIN':
-                o_stamina = o_stamina + int(o_card_passive)
-                t_stamina = t_stamina - int(o_card_passive)
-            elif o_card_passive_type == 'FLOG':
-                o_attack = o_attack + int((o_card_passive / 100) * t_attack)
-                t_attack = t_attack - int((o_card_passive / 100) * t_attack)
-            elif o_card_passive_type == 'WITHER':
-                o_defense = o_defense + int((o_card_passive / 100) * t_defense)
-                t_defense = t_defense - int((o_card_passive / 100) * t_defense)
-            elif o_card_passive_type == 'RAGE':
-                o_attack = o_attack + int(((o_card_passive / 100) * o_defense))
-                o_defense = o_defense - int(((o_card_passive / 100) * o_attack))
-            elif o_card_passive_type == 'BRACE':
-                o_defense = o_defense + int(((o_card_passive / 100) * o_attack))
-                o_attack = o_attack - int(((o_card_passive / 100) * o_defense))
-            elif o_card_passive_type == 'BZRK':
-                o_attack = o_attack + int(((o_card_passive / 100) * o_health))
-                o_health = o_health - int((o_attack))
-            elif o_card_passive_type == 'CRYSTAL':
-                o_defense = o_defense + int(((o_card_passive / 100) * o_health))
-                o_health = o_health - int((o_attack))
-            elif o_card_passive_type == 'GROWTH':
-                o_attack = o_attack + int(((o_card_passive / 100) * o_attack))
-                o_defense = o_defense + int(((o_card_passive / 100) * o_defense))
-                o_max_health = o_max_health - int(((o_card_passive / 100) * o_max_health))
-                o_health = o_health - int(((o_card_passive / 100) * o_max_health))
-            elif o_card_passive_type == 'STANCE':
-                tempattack = o_attack + o_card_passive
-                o_attack = o_defense + o_card_passive
-                o_defense = tempattack
-            elif o_card_passive_type == 'CONFUSE':
-                tempattack = t_attack - o_card_passive
-                t_attack = t_defense - o_card_passive
-                t_defense = tempattack
-            elif o_card_passive_type == 'BLINK':
-                o_stamina = o_stamina - o_card_passive
-                t_stamina = t_stamina + o_card_passive - 10
-            elif o_card_passive_type == 'SLOW':
-                tempstam = t_stamina + o_card_passive
-                o_stamina = o_stamina - (2 * o_card_passive)
-                t_stamina = o_stamina
-                o_stamina = tempstam
-            elif o_card_passive_type == 'HASTE':
-                tempstam = t_stamina - o_card_passive
-                o_stamina = o_stamina + (2 * o_card_passive)
-                t_stamina = o_stamina
-                o_stamina = tempstam
-            elif o_card_passive_type == 'SOULCHAIN':
-                o_stamina = o_card_passive
-                t_stamina = o_card_passive
-            elif o_card_passive_type == 'FEAR':
-                o_health = o_health - int((o_card_passive / 100) * o_health)
-                t_attack = t_attack - int((o_card_passive / 100) * t_attack)
-                t_defense = t_defense - int((o_card_passive / 100) * t_defense)
-            elif o_card_passive_type == 'GAMBLE':
-                o_health = o_card_passive
-                t_health = o_card_passive
-
-                # Player 1 Title Passive
-            o_title_passive_type = list(o_title_passive.keys())[0]
-            o_title_passive_value = list(o_title_passive.values())[0]
-
-            if o_title_passive_bool:
-                if o_title_passive_type == 'ATK':
-                    o_attack = o_attack + int(o_title_passive_value)
-                elif o_title_passive_type == 'DEF':
-                    o_defense = o_defense + int(o_title_passive_value)
-                elif o_title_passive_type == 'STAM':
-                    o_stamina = o_stamina + int(o_title_passive_value)
-                elif o_title_passive_type == 'HLT':
-                    o_max_health = o_max_health + int(o_title_passive_value)
-                    o_health = o_health + int(o_title_passive_value)
-                elif o_title_passive_type == 'LIFE':
-                    _max_health = o_max_health + int((o_title_passive_value / 100) * t_health)
-                elif o_title_passive_type == 'DRAIN':
-                    t_stamina = t_stamina - int(o_title_passive_value)
-                    o_stamina = o_stamina + int(o_title_passive_value)
-                elif o_title_passive_type == 'FLOG':
-                    o_attack = o_attack + int((o_title_passive_value / 100) * t_attack)
-                    t_attack = t_attack - int((o_title_passive_value / 100) * t_attack)
-                elif o_title_passive_type == 'WITHER':
-                    o_defense = o_defense + int((o_title_passive_value / 100) * t_defense)
-                    t_defense = t_defense - int((o_title_passive_value / 100) * t_defense)
-                elif o_title_passive_type == 'RAGE':
-                    o_attack = o_attack + int(((o_title_passive_value / 100) * o_defense))
-                    o_defense = o_defense - int(((o_title_passive_value / 100) * o_attack))
-                elif o_title_passive_type == 'BRACE':
-                    o_defense = o_defense + int(((o_title_passive_value / 100) * o_attack))
-                    o_attack = o_attack - int(((o_title_passive_value / 100) * o_defense))
-                elif o_title_passive_type == 'BZRK':
-                    o_attack = o_attack + int(((o_title_passive_value / 100) * o_health))
-                    o_health = o_health - int((o_attack))
-                elif o_title_passive_type == 'CRYSTAL':
-                    o_defense = o_defense + int(((o_title_passive_value / 100) * o_health))
-                    o_health = o_health - int((o_defense))
-                elif o_title_passive_type == 'GROWTH':
-                    o_attack = o_attack + int((o_title_passive_value / 100) * o_attack)
-                    o_defense = o_defense + int((o_title_passive_value / 100) * o_defense)
-                    o_max_health = o_max_health - int((o_title_passive_value / 100) * o_max_health)
-                elif o_title_passive_type == 'STANCE':
-                    tempattack = o_attack
-                    o_attack = o_defense
-                    o_defense = tempattack
-                elif o_title_passive_type == 'CONFUSE':
-                    tempattack = t_attack
-                    t_attack = t_defense
-                    t_defense = tempattack
-                elif o_title_passive_type == 'BLINK':
-                    o_stamina = o_stamina - o_title_passive_value
-                    t_stamina = t_stamina + o_title_passive_value
-                elif o_title_passive_type == 'SLOW':
-                    tempstam = t_stamina + o_title_passive_value
-                    o_stamina = o_stamina - o_title_passive_value
-                    t_stamina = o_stamina
-                    o_stamina = tempstam
-                elif o_title_passive_type == 'HASTE':
-                    tempstam = t_stamina - o_title_passive_value
-                    o_stamina = o_stamina + o_title_passive_value
-                    t_stamina = o_stamina
-                    o_stamina = tempstam
-                elif o_title_passive_type == 'SOULCHAIN':
-                    o_stamina = o_title_passive_value
-                    t_stamina = o_title_passive_value
-                elif o_title_passive_type == 'FEAR':
-                    o_health = o_health - int((o_title_passive_value / 100) * o_health)
-                    t_attack = t_attack - int((o_title_passive_value / 100) * t_attack)
-                    t_defense = t_defense - int((o_title_passive_value / 100) * t_defense)
-                elif o_title_passive_type == 'GAMBLE':
-                    t_health = o_title_passive_value
-                    o_health = o_title_passive_value
-
-            # Arm Passive Player 1
-            oarm_passive_type = list(oarm_passive.keys())[0]
-            oarm_passive_value = list(oarm_passive.values())[0]
-
-            if oarm_passive_type == 'ATK':
-                o_attack = o_attack + int(oarm_passive_value)
-            elif oarm_passive_type == 'DEF':
-                o_defense = o_defense + int(oarm_passive_value)
-            elif oarm_passive_type == 'STAM':
-                o_stamina = o_stamina + int(oarm_passive_value)
-            elif oarm_passive_type == 'HLT':
-                o_max_health = o_max_health + int(oarm_passive_value)
-                o_health = o_health + int(oarm_passive_value)
-            elif oarm_passive_type == 'LIFE':
-                o_max_health = o_max_health + int((oarm_passive_value / 100) * t_health)
-            elif oarm_passive_type == 'DRAIN':
-                t_stamina = t_stamina - int(oarm_passive_value)
-                o_stamina = o_stamina + int(oarm_passive_value)
-            elif oarm_passive_type == 'FLOG':
-                o_attack = o_attack + int((oarm_passive_value / 100) * t_attack)
-                t_attack = t_attack - int((oarm_passive_value / 100) * t_attack)
-            elif oarm_passive_type == 'WITHER':
-                o_defense = o_defense + int((oarm_passive_value / 100) * t_defense)
-                t_defense = t_defense - int((oarm_passive_value / 100) * t_defense)
-            elif oarm_passive_type == 'RAGE':
-                o_attack = o_attack + int(((oarm_passive_value / 100) * o_defense))
-                o_defense = o_defense - int(((oarm_passive_value / 100) * o_attack))
-            elif oarm_passive_type == 'BRACE':
-                o_defense = o_defense + int(((oarm_passive_value / 100) * o_attack))
-                o_attack = o_attack - int(((oarm_passive_value / 100) * o_defense))
-            elif oarm_passive_type == 'BZRK':
-                o_attack = o_attack + int(((oarm_passive_value / 100) * o_health))
-                o_health = o_health - int((o_attack))
-            elif oarm_passive_type == 'CRYSTAL':
-                o_defense = o_defense + int(((oarm_passive_value / 100) * o_health))
-                o_health = o_health - int((o_defense))
-            elif oarm_passive_type == 'GROWTH':
-                o_attack = o_attack + int((oarm_passive_value / 100) * o_attack)
-                o_defense = o_defense + int((oarm_passive_value / 100) * o_defense)
-                o_max_health = o_max_health - int((oarm_passive_value / 100) * o_max_health)
-            elif oarm_passive_type == 'STANCE':
-                tempattack = o_attack + oarm_passive_value
-                o_attack = o_defense + oarm_passive_value
-                o_defense = tempattack
-            elif oarm_passive_type == 'CONFUSE':
-                tempattack = o_attack - oarm_passive_value
-                t_attack = t_defense - oarm_passive_value
-                t_defense = tempattack
-            elif oarm_passive_type == 'BLINK':
-                o_stamina = o_stamina - oarm_passive_value
-                t_stamina = t_stamina + oarm_passive_value
-            elif oarm_passive_type == 'SLOW':
-                tempstam = t_stamina + oarm_passive_value
-                o_stamina = o_stamina - oarm_passive_value
-                t_stamina = o_stamina
-                o_stamina = tempstam
-            elif oarm_passive_type == 'HASTE':
-                tempstam = t_stamina - oarm_passive_value
-                o_stamina = o_stamina + oarm_passive_value
-                t_stamina = o_stamina
-                o_stamina = tempstam
-            elif oarm_passive_type == 'SOULCHAIN':
-                o_stamina = oarm_passive_value
-                t_stamina = oarm_passive_value
-            elif oarm_passive_type == 'FEAR':
-                o_health = o_health - int((oarm_passive_value / 100) * o_health)
-                t_attack = t_attack - int((oarm_passive_value / 100) * t_attack)
-                t_defense = t_defense - int((oarm_passive_value / 100) * t_defense)
-            elif oarm_passive_type == 'GAMBLE':
-                t_health = oarm_passive_value
-                o_health = oarm_passive_value
-
-            # Player 2 Moves
-            t_1 = t_moveset[0]
-            t_2 = t_moveset[1]
-            t_3 = t_moveset[2]
-            t_enhancer = t_moveset[3]
-            t_enhancer_used = False
-            t_pet_used = False
-
-            # Player 1 Focus & Resolve
-            t_focus_count = 0
-            t_focus = 90
-            t_used_focus = False
-            t_resolve = 60
-            t_used_resolve = False
-            t_block_used = False
-            t_defend_used = False
-            t_chainsaw = False
-            t_def_chainsaw = False
-            t_atk_chainsaw = False
-            if t_universe == "Chainsawman":
-                t_chainsaw = True
-
-            tmove1_text = list(t_1.keys())[0]
-            tmove2_text = list(t_2.keys())[0]
-            tmove3_text = list(t_3.keys())[0]
-            tmove_enhanced_text = list(t_enhancer.keys())[0]
 
             # Turn iterator
             turn = 0
@@ -4419,10 +4342,25 @@ class CrownUnlimited(commands.Cog):
                             tarm_message = f"🌐{tshield_value}"
                         elif tarm_parry_active:
                             tarm_message = f"🔄{tparry_count}"
+                        if oarm_passive_type == "BARRIER":
+                            if oarm_barrier_active:
+                                oarm_passive_value = f"{obarrier_count}"
+                            else:
+                                oarm_passive_value = 0
+                        elif oarm_passive_type == "SHIELD":
+                            if oarm_shield_active:
+                                oarm_passive_value = f"{oshield_value}"
+                            else:
+                                oarm_passive_value = 0
+                        elif oarm_passive_type == "PARRY":
+                            if oarm_parry_active:
+                                oarm_passive_value = f"{oparry_count}"
+                            else:
+                                oarm_passive_value = 0
                         embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}",
                                                  description=textwrap.dedent(f"""\
                         {pet_msg_on_resolve}
-                        *Stamina costs located on buttons*
+                        :mechanical_arm: **{oarm_name}** - *{oarm_passive_type} {oarm_passive_value}{enhancer_suffix_mapping[oarm_passive_type]}*
                         """), color=0xe74c3c)
                         embedVar.set_thumbnail(url=opet_image)
                         embedVar.set_footer(
@@ -4992,6 +4930,7 @@ class CrownUnlimited(commands.Cog):
                                                 tbarrier_count = tbarrier_count - 1
                                             elif tbarrier_count==1:
                                                 embedVar = discord.Embed(title=f"{t_card.upper()}'s **Barrier** Broken!", description=f"{o_card} destroys the **Barrier**", colour=0xe91e63)
+                                                tbarrier_count = tbarrier_count - 1
                                                 if oarm_barrier_active:
                                                     oarm_barrier_active=False
                                                     embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -5013,6 +4952,7 @@ class CrownUnlimited(commands.Cog):
                                                 
                                             elif tparry_count==1:
                                                 embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{o_card} breaks the **Parry**", colour=0xe91e63)
+                                                tbarrier_count = tbarrier_count - 1
                                                 if oarm_barrier_active:
                                                     oarm_barrier_active=False
                                                     embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -5682,6 +5622,7 @@ class CrownUnlimited(commands.Cog):
                                             obarrier_count = obarrier_count - 1
                                         elif obarrier_count==1:
                                             embedVar = discord.Embed(title=f"{o_card.upper()}'s **Barrier** Broken!", description=f"{t_card} destroys the **Barrier**", colour=0xe91e63)
+                                            obarrier_count = obarrier_count - 1
                                             if tarm_barrier_active:
                                                 tarm_barrier_active=False
                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -5701,6 +5642,7 @@ class CrownUnlimited(commands.Cog):
                                             
                                         elif oparry_count==1:
                                             embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} breaks the **Parry**", colour=0xe91e63)
+                                            oparry_count = oparry_count - 1
                                             if tarm_barrier_active:
                                                 tarm_barrier_active=False
                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -8573,6 +8515,8 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             'ocard_lvl': ocard_lvl,
             'o_card_path': o_card_path,
             'oarm': oarm,
+            'oarm_passive_type' : oarm_passive_type,
+            'oarm_passive_value' : oarm_passive_value,
             'o_user': o_user,
             'o_universe': o_universe,
             'o_attack': o_attack,
@@ -8624,6 +8568,9 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             'o_enhancer_used': o_enhancer_used,
             'o_final_stand': o_final_stand,
             't_card': t_card,
+            'tarm': tarm_name,
+            'tarm_passive_type' : tarm_passive_type,
+            'tarm_passive_value' : tarm_passive_value,
             'tcard_lvl': tcard_lvl,
             't_universe': t_universe,
             't_attack': t_attack,
@@ -8674,6 +8621,8 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 'ocard_lvl': ocard_lvl,
                 'o_card_path': o_card_path,
                 'oarm': oarm,
+                'oarm_passive_type' : oarm_passive_type,
+                'oarm_passive_value' : oarm_passive_value,
                 'o_user': o_user,
                 'o_universe': o_universe,
                 'o_attack': o_attack,
@@ -8726,6 +8675,9 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 'o_final_stand': o_final_stand,
                 't_card': t_card,
                 'tcard_lvl': tcard_lvl,
+                'tarm': tarm_name,
+                'tarm_passive_type' : tarm_passive_type,
+                'tarm_passive_value' : tarm_passive_value,
                 't_universe': t_universe,
                 't_attack': t_attack,
                 't_defense': t_defense,
@@ -8786,6 +8738,8 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 'ocard_lvl': ocard_lvl,
                 'o_card_path': o_card_path,
                 'oarm': oarm,
+                'oarm_passive_type' : oarm_passive_type,
+                'oarm_passive_value' : oarm_passive_value,
                 'o_user': o_user,
                 'o_universe': o_universe,
                 'o_attack': o_attack,
@@ -8902,6 +8856,8 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 'ocard_lvl': ocard_lvl,
                 'o_card_path': o_card_path,
                 'oarm': oarm,
+                'oarm_passive_type' : oarm_passive_type,
+                'oarm_passive_value' : oarm_passive_value,
                 'o_user': o_user,
                 'o_universe': o_universe,
                 'o_attack': o_attack,
@@ -9013,7 +8969,9 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 'c_card': c_card,
                 'ccard_lvl': ccard_lvl,
                 'c_card_path': c_card_path,
-                'carm': carm,
+                'carm': carm_name,
+                'carm_passive_type' : carm_passive_type,
+                'carm_passive_value' : carm_passive_value,
                 'c_user': c_user,
                 'c_universe': c_universe,
                 'c_attack': c_attack,
@@ -9072,6 +9030,8 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 'ocard_lvl': ocard_lvl,
                 'o_card_path': o_card_path,
                 'oarm': oarm,
+                'oarm_passive_type' : oarm_passive_type,
+                'oarm_passive_value' : oarm_passive_value,
                 'o_user': o_user,
                 'o_universe': o_universe,
                 'o_attack': o_attack,
@@ -9170,7 +9130,9 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 'c_card': c_card,
                 'ccard_lvl': ccard_lvl,
                 'c_card_path': c_card_path,
-                'carm': carm,
+                'carm': carm_name,
+                'carm_passive_type' : carm_passive_type,
+                'carm_passive_value' : carm_passive_value,
                 'c_user': c_user,
                 'c_universe': c_universe,
                 'c_attack': c_attack,
@@ -9276,7 +9238,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
     B_modes = ['Boss', 'CBoss']
     C_MODES = ['CTales', 'CDungeon', 'CBoss']
 
-    saved_spots = sowner['SAVE_SPOTS']
+    saved_spots = sowner['SAVE_SPOT']
     if isinstance(ctx.channel, discord.channel.DMChannel):
         await ctx.send(m.SERVER_FUNCTION_ONLY)
         return
@@ -9667,6 +9629,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             ocard_lvl = stats['ocard_lvl']
             o_card_path = stats['o_card_path']
             oarm = stats['oarm']
+            oarm_name = oarm['ARM']
+            oarm_passive_type = stats['oarm_passive_type']
+            oarm_passive_value = stats['oarm_passive_value']
             o_user = stats['o_user']
             o_universe = stats['o_universe']
             o_attack = stats['o_attack']
@@ -9723,6 +9688,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 tcard_lvl = stats['tcard_lvl']
                 t_card_path = stats['t_card_path']
                 tarm = stats['tarm']
+                tarm_passive_type = stats['tarm_passive_type']
+                tarm_passive_value = stats['tarm_passive_value']
                 t_user = stats['t_user']
                 t_universe = stats['t_universe']
                 t_attack = stats['t_attack']
@@ -9776,6 +9743,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             else:
                 t_card = stats['t_card']
                 tcard_lvl_ap_buff = stats['tcard_lvl_ap_buff']
+                tarm = stats['tarm']
                 if mode in D_modes:
                     tcard_lvl = 150
                     tcard_lvl_ap_buff = 50
@@ -9855,6 +9823,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 ccard_lvl = stats['ccard_lvl']
                 c_card_path = stats['c_card_path']
                 carm = stats['carm']
+                carm_passive_type = stats['carm_passive_type']
+                carm_passive_value = stats['carm_passive_value']
                 c_user = stats['c_user']
                 c_universe = stats['c_universe']
                 c_attack = stats['c_attack']
@@ -10269,10 +10239,25 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 tarm_message = f"🌐{tshield_value}"
                             elif tarm_parry_active:
                                 tarm_message = f"🔄{tparry_count}"
+                            if oarm_passive_type == "BARRIER":
+                                if oarm_barrier_active:
+                                    oarm_passive_value = f"{obarrier_count}"
+                                else:
+                                    oarm_passive_value = 0
+                            elif oarm_passive_type == "SHIELD":
+                                if oarm_shield_active:
+                                    oarm_passive_value = f"{oshield_value}"
+                                else:
+                                    oarm_passive_value = 0
+                            elif oarm_passive_type == "PARRY":
+                                if oarm_parry_active:
+                                    oarm_passive_value = f"{oparry_count}"
+                                else:
+                                    oarm_passive_value = 0
                             embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}",
                                                      description=textwrap.dedent(f"""\
                             {pet_msg_on_resolve}
-                            *Stamina costs located on buttons*
+                            :mechanical_arm: **{oarm_name}** - *{oarm_passive_type} {oarm_passive_value} {enhancer_suffix_mapping[oarm_passive_type]}*
                             """), color=0xe74c3c)
                             embedVar.set_thumbnail(url=opet_image)
                             embedVar.set_footer(
@@ -10890,6 +10875,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     tbarrier_count = tbarrier_count - 1
                                                 elif tbarrier_count==1:
                                                     embedVar = discord.Embed(title=f"{t_card.upper()}'s **Barrier** Broken!", description=f"{o_card} destroys the **Barrier**", colour=0xe91e63)
+                                                    tbarrier_count = tbarrier_count - 1
                                                     if oarm_barrier_active:
                                                         oarm_barrier_active=False
                                                         embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -10910,6 +10896,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     
                                                 elif tparry_count==1:
                                                     embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{o_card} breaks the **Parry**", colour=0xe91e63)
+                                                    tbarrier_count = tbarrier_count - 1
                                                     if oarm_barrier_active:
                                                         oarm_barrier_active=False
                                                         embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -11214,11 +11201,26 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     oarm_message = f"🌐{oshield_value}"
                                 elif oarm_parry_active:
                                     oarm_message = f"🔄{oparry_count}"
+                                if tarm_passive_type == "BARRIER":
+                                    if tarm_barrier_active:
+                                        tarm_passive_value = f"{tbarrier_count}"
+                                    else:
+                                        tarm_passive_value = 0
+                                elif tarm_passive_type == "SHIELD":
+                                    if tarm_shield_active:
+                                        tarm_passive_value = f"{tshield_value}"
+                                    else:
+                                        tarm_passive_value = 0
+                                elif tarm_passive_type == "PARRY":
+                                    if tarm_parry_active:
+                                        tarm_passive_value = f"{tparry_count}"
+                                    else:
+                                        tarm_passive_value = 0
 
                                 embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}",
                                                          description=textwrap.dedent(f"""\
                                 {tpet_msg_on_resolve}
-                                *Stamina costs located on buttons*
+                                :mechanical_arm: **{tarm_name}** - *{tarm_passive_type} {tarm_passive_value} {enhancer_suffix_mapping[tarm_passive_type]}*
                                 """), color=0xe74c3c)
                                 embedVar.set_thumbnail(url=tpet_image)
                                 embedVar.set_footer(
@@ -11777,6 +11779,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         obarrier_count = obarrier_count - 1
                                                     elif obarrier_count==1:
                                                         embedVar = discord.Embed(title=f"{o_card.upper()}'s **Barrier** Broken!", description=f"{t_card} destroys the **Barrier**", colour=0xe91e63)
+                                                        obarrier_count = obarrier_count - 1
                                                         if tarm_barrier_active:
                                                             tarm_barrier_active=False
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -11796,6 +11799,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         
                                                     elif oparry_count==1:
                                                         embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} breaks the **Parry**", colour=0xe91e63)
+                                                        oparry_count = oparry_count - 1
                                                         if tarm_barrier_active:
                                                             tarm_barrier_active=False
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -12425,6 +12429,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     obarrier_count = obarrier_count - 1
                                                 elif obarrier_count==1:
                                                     embedVar = discord.Embed(title=f"{o_card.upper()}'s **Barrier** Broken!", description=f"{t_card} destroys the **Barrier**", colour=0xe91e63)
+                                                    obarrier_count = obarrier_count - 1
                                                     if tarm_barrier_active:
                                                         tarm_barrier_active=False
                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -12444,6 +12449,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     
                                                 elif oparry_count==1:
                                                     embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} breaks the **Parry**", colour=0xe91e63)
+                                                    oparry_count = oparry_count - 1
                                                     if tarm_barrier_active:
                                                         tarm_barrier_active=False
                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -13429,10 +13435,25 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     tarm_message = f"🌐{tshield_value}"
                                 elif tarm_parry_active:
                                     tarm_message = f"🔄{tparry_count}"
+                                if oarm_passive_type == "BARRIER":
+                                    if oarm_barrier_active:
+                                        oarm_passive_value = f"{obarrier_count}"
+                                    else:
+                                        oarm_passive_value = 0
+                                elif oarm_passive_type == "SHIELD":
+                                    if oarm_shield_active:
+                                        oarm_passive_value = f"{oshield_value}"
+                                    else:
+                                        oarm_passive_value = 0
+                                elif oarm_passive_type == "PARRY":
+                                    if oarm_parry_active:
+                                        oarm_passive_value = f"{oparry_count}"
+                                    else:
+                                        oarm_passive_value = 0
                                 embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}",
                                                          description=textwrap.dedent(f"""\
                                 {pet_msg_on_resolve}
-                                *Stamina costs located on buttons*
+                                :mechanical_arm: **{oarm_name}** - *{oarm_passive_type} {oarm_passive_value} {enhancer_suffix_mapping[oarm_passive_type]}*
                                 """), color=0xe74c3c)
                                 embedVar.set_thumbnail(url=opet_image)
                                 embedVar.set_footer(
@@ -14252,6 +14273,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         tbarrier_count = tbarrier_count - 1
                                                     elif tbarrier_count==1:
                                                         embedVar = discord.Embed(title=f"{t_card.upper()}'s **Barrier** Broken!", description=f"{o_card} destroys the **Barrier**", colour=0xe91e63)
+                                                        tbarrier_count = tbarrier_count - 1
                                                         if oarm_barrier_active:
                                                             oarm_barrier_active=False
                                                             embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -14272,6 +14294,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         
                                                     elif tparry_count==1:
                                                         embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{o_card} breaks the **Parry**", colour=0xe91e63)
+                                                        tbarrier_count = tbarrier_count - 1
                                                         if oarm_barrier_active:
                                                             oarm_barrier_active=False
                                                             embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -15509,6 +15532,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         cbarrier_count = cbarrier_count - 1
                                                     elif cbarrier_count==1:
                                                         embedVar = discord.Embed(title=f"{c_card.upper()}'s **Barrier** Broken!", description=f"{t_card} destroys the **Barrier**", colour=0xe91e63)
+                                                        cbarrier_count = cbarrier_count - 1
                                                         if tarm_barrier_active:
                                                             tarm_barrier_active=False
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -15529,6 +15553,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         
                                                     elif cparry_count==1:
                                                         embedVar = discord.Embed(title=f"{c_card.upper()} **Parry** Penetrated!!", description=f"{t_card} breaks the **Parry**", colour=0xe91e63)
+                                                        cparry_count = cparry_count - 1
                                                         if tarm_barrier_active:
                                                             tarm_barrier_active=False
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -15712,6 +15737,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         obarrier_count = obarrier_count - 1
                                                     elif obarrier_count==1:
                                                         embedVar = discord.Embed(title=f"{o_card.upper()}'s **Barrier** Broken!", description=f"{t_card} destroys the **Barrier**", colour=0xe91e63)
+                                                        obarrier_count = obarrier_count - 1
                                                         if tarm_barrier_active:
                                                             tarm_barrier_active=False
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -15731,6 +15757,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         
                                                     elif oparry_count==1:
                                                         embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} breaks the **Parry**", colour=0xe91e63)
+                                                        oparry_count = oparry_count - 1
                                                         if tarm_barrier_active:
                                                             tarm_barrier_active=False
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -15918,6 +15945,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     obarrier_count = obarrier_count - 1
                                                 elif obarrier_count==1:
                                                     embedVar = discord.Embed(title=f"{o_card.upper()}'s **Barrier** Broken!", description=f"{t_card} destroys the **Barrier**", colour=0xe91e63)
+                                                    obarrier_count = obarrier_count - 1
                                                     if tarm_barrier_active:
                                                         tarm_barrier_active=False
                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -15937,6 +15965,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     
                                                 elif oparry_count==1:
                                                     embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} breaks the **Parry**", colour=0xe91e63)
+                                                    oparry_count = oparry_count - 1
                                                     if tarm_barrier_active:
                                                         tarm_barrier_active=False
                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -16999,6 +17028,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         tbarrier_count = tbarrier_count - 1
                                                     elif tbarrier_count==1:
                                                         embedVar = discord.Embed(title=f"{t_card.upper()}'s **Barrier** Broken!", description=f"{c_card} destroys the **Barrier**", colour=0xe91e63)
+                                                        tbarrier_count = tbarrier_count - 1
                                                         if oarm_barrier_active:
                                                             oarm_barrier_active=False
                                                             embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -17019,6 +17049,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         
                                                     elif tparry_count==1:
                                                         embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{c_card} breaks the **Parry**", colour=0xe91e63)
+                                                        tbarrier_count = tbarrier_count - 1
                                                         if oarm_barrier_active:
                                                             oarm_barrier_active=False
                                                             embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -17166,12 +17197,26 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         carm_message = f"🌐{tshield_value}"
                                     elif tarm_parry_active:
                                         carm_message = f"🔄{tparry_count}"
-
+                                    if carm_passive_type == "BARRIER":
+                                        if carm_barrier_active:
+                                            carm_passive_value = f"{cbarrier_count}"
+                                        else:
+                                            carm_passive_value = 0
+                                    elif carm_passive_type == "SHIELD":
+                                        if carm_shield_active:
+                                            carm_passive_value = f"{cshield_value}"
+                                        else:
+                                            carm_passive_value = 0
+                                    elif carm_passive_type == "PARRY":
+                                        if carm_parry_active:
+                                            carm_passive_value = f"{cparry_count}"
+                                        else:
+                                            carm_passive_value = 0
                                     embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}",
                                                              description=textwrap.dedent(f"""\
 
                                     {cpet_msg_on_resolve}
-                                    *Stamina costs located on buttons*
+                                    :mechanical_arm: **{carm_name}** - *{carm_passive_type} {carm_passive_value} {enhancer_suffix_mapping[carm_passive_type]}*
                                     """), color=0xe74c3c)
                                     embedVar.set_thumbnail(url=cpet_image)
                                     embedVar.set_footer(
@@ -17843,6 +17888,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             tbarrier_count = tbarrier_count - 1
                                                         elif tbarrier_count==1:
                                                             embedVar = discord.Embed(title=f"{t_card.upper()}'s **Barrier** Broken!", description=f"{c_card} destroys the **Barrier**", colour=0xe91e63)
+                                                            tbarrier_count = tbarrier_count - 1
                                                             if carm_barrier_active:
                                                                 carm_barrier_active=False
                                                                 embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -17863,6 +17909,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             
                                                         elif tparry_count==1:
                                                             embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{c_card} breaks the **Parry**", colour=0xe91e63)
+                                                            tbarrier_count = tbarrier_count - 1
                                                             if carm_barrier_active:
                                                                 carm_barrier_active=False
                                                                 embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -18880,6 +18927,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         obarrier_count = obarrier_count - 1
                                                     elif obarrier_count==1:
                                                         embedVar = discord.Embed(title=f"{o_card.upper()}'s **Barrier** Broken!", description=f"{t_card} destroys the **Barrier**", colour=0xe91e63)
+                                                        obarrier_count = obarrier_count - 1
                                                         if tarm_barrier_active:
                                                             tarm_barrier_active=False
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -18899,6 +18947,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         
                                                     elif oparry_count==1:
                                                         embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} breaks the **Parry**", colour=0xe91e63)
+                                                        oparry_count = oparry_count - 1
                                                         if tarm_barrier_active:
                                                             tarm_barrier_active=False
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -19080,6 +19129,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         cbarrier_count = cbarrier_count - 1
                                                     elif cbarrier_count==1:
                                                         embedVar = discord.Embed(title=f"{c_card.upper()}'s **Barrier** Broken!", description=f"{t_card} destroys the **Barrier**", colour=0xe91e63)
+                                                        cbarrier_count = cbarrier_count - 1
                                                         if tarm_barrier_active:
                                                             tarm_barrier_active=False
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -19100,6 +19150,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         
                                                     elif cparry_count==1:
                                                         embedVar = discord.Embed(title=f"{c_card.upper()} **Parry** Penetrated!!", description=f"{t_card} breaks the **Parry**", colour=0xe91e63)
+                                                        cparry_count = cparry_count - 1
                                                         if tarm_barrier_active:
                                                             tarm_barrier_active=False
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -19594,7 +19645,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
 async def save_spot(self, ctx, universe, mode, currentopponent):
     user = {"DISNAME": str(ctx.author)}
-    query = {"$addToSet": {"SAVE_SPOTS": {"UNIVERSE": str(universe['TITLE']), "MODE": str(mode), "CURRENTOPPONENT": currentopponent}}}
+    query = {"$addToSet": {"SAVE_SPOT": {"UNIVERSE": str(universe['TITLE']), "MODE": str(mode), "CURRENTOPPONENT": currentopponent}}}
     response = db.updateUserNoFilter(user, query)
     return
 
@@ -19645,7 +19696,7 @@ def update_save_spot(self, ctx, saved_spots, selected_universe, modes):
             if save['UNIVERSE'] == selected_universe and save['MODE'] in modes:
                 currentopponent = save['CURRENTOPPONENT']
                 query = {'DISNAME': str(ctx.author)}
-                update_query = {'$pull': {'SAVE_SPOTS': {"UNIVERSE": selected_universe}}}
+                update_query = {'$pull': {'SAVE_SPOT': {"UNIVERSE": selected_universe}}}
                 resp = db.updateUserNoFilter(query, update_query)
     return currentopponent
 
@@ -20495,9 +20546,9 @@ enhancer_suffix_mapping = {'ATK': '%',
 'ULTIMATE': ' Flat',
 'ULTIMAX': ' Flat',
 'MANA': ' %',
-'SHIELD': ' DMG',
-'BARRIER': ' Blocks',
-'PARRY': ' Counters'
+'SHIELD': ' DMG 🌐',
+'BARRIER': ' Blocks 💠',
+'PARRY': ' Counters 🔄'
 }
 crown_rift_universe_mappings = {'Crown Rift Awakening': 3, 'Crown Rift Slayers': 2, 'Crown Rift Madness': 5}
 Healer_Enhancer_Check = ['HLT', 'LIFE']
