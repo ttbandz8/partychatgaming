@@ -7309,8 +7309,8 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
 
         vault = db.queryVault({'OWNER': str(o_user['DISNAME']), 'PETS.NAME': o_user['PET']})
         update_durability_message = update_arm_durability(self, vault, oarm)
-        if update_durability_message:
-            await ctx.send(f"{update_durability_message['MESSAGE']}")
+        if update_durability_message['MESSAGE']:
+            await ctx.author.send(f"{update_durability_message['MESSAGE']}")
         opet = {}
         for pet in vault['PETS']:
             if o_user['PET'] == pet['NAME']:
@@ -7405,7 +7405,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                         cpet = pet
                 carm = db.queryArm({'ARM': c_user['ARM']})
                 cupdate_durability_message = update_arm_durability(self, cvault, carm)
-                if cupdate_durability_message:
+                if cupdate_durability_message['MESSAGE']:
                     await ctx.send(f"{cupdate_durability_message['MESSAGE']}")
 
                 carm_universe = carm['UNIVERSE']
@@ -7492,7 +7492,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
 
             vault = db.queryVault({'OWNER': str(t_user['DISNAME']), 'PETS.NAME': t_user['PET']})
             tupdate_durability_message = update_arm_durability(self, tvault, tarm)
-            if tupdate_durability_message:
+            if tupdate_durability_message['MESSAGE']:
                 await ctx.send(f"{tupdate_durability_message['MESSAGE']}")
 
             tpet = {}
