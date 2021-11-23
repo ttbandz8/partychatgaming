@@ -7954,7 +7954,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 c_2[cmove2_text] = c_2[cmove2_text] + carm_passive_value
                 c_3[cmove3_text] = c_3[cmove3_text] + carm_passive_value
             elif carm_passive_type == 'MANA':
-                c_enhancer[cmove_enhanced_text] = c_enhancer[cmove_enhanced_text] * (carm_passive_value / 100)
+                c_enhancer[cmove_enhanced_text] = c_enhancer[cmove_enhanced_text] +  (c_enhancer[cmove_enhanced_text] * (carm_passive_value / 100))
             elif carm_passive_type == 'SHIELD':
                 carm_shield_active = True
                 cshield_value = carm_passive_value
@@ -8202,7 +8202,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             o_2[omove2_text] = o_2[omove2_text] + oarm_passive_value
             o_3[omove3_text] = o_3[omove3_text] + oarm_passive_value
         elif oarm_passive_type == 'MANA':
-            o_enhancer[omove_enhanced_text] = o_enhancer[omove_enhanced_text] * (oarm_passive_value / 100)
+            o_enhancer[omove_enhanced_text] = o_enhancer[omove_enhanced_text] + (o_enhancer[omove_enhanced_text] * (oarm_passive_value / 100))
         elif oarm_passive_type == 'SHIELD':
             oarm_shield_active = True
             oshield_value = oarm_passive_value
@@ -8477,7 +8477,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             t_2[tmove2_text] = t_2[tmove2_text] + tarm_passive_value
             t_3[tmove3_text] = t_3[tmove3_text] + tarm_passive_value
         elif tarm_passive_type == 'MANA':
-            t_enhancer[tmove_enhanced_text] = t_enhancer[tmove_enhanced_text] * (tarm_passive_value / 100)
+            t_enhancer[tmove_enhanced_text] = t_enhancer[tmove_enhanced_text] + (t_enhancer[tmove_enhanced_text] * (tarm_passive_value / 100))
         elif tarm_passive_type == 'SHIELD':
             tarm_shield_active = True
             tshield_value = tarm_passive_value
