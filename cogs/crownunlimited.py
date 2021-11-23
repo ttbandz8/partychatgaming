@@ -7366,6 +7366,9 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         oarm_name = oarm['ARM']
 
         vault = db.queryVault({'OWNER': str(o_user['DISNAME']), 'PETS.NAME': o_user['PET']})
+        update_durability_message = update_arm_durability(self, vault, oarm)
+        if update_durability_message:
+            await ctx.send(f"{update_durability_message['MESSAGE']}")
         opet = {}
         for pet in vault['PETS']:
             if o_user['PET'] == pet['NAME']:
@@ -7459,6 +7462,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                     if c_user['PET'] == pet['NAME']:
                         cpet = pet
                 carm = db.queryArm({'ARM': c_user['ARM']})
+                cupdate_durability_message = update_arm_durability(self, cvault, carm)
+                if cupdate_durability_message:
+                    await ctx.send(f"{cupdate_durability_message['MESSAGE']}")
+
                 carm_universe = carm['UNIVERSE']
                 carm_passive = carm['ABILITIES'][0]
                 carm_name = carm['ARM']
@@ -7542,6 +7549,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             tarm_name = tarm['ARM']
 
             vault = db.queryVault({'OWNER': str(t_user['DISNAME']), 'PETS.NAME': t_user['PET']})
+            tupdate_durability_message = update_arm_durability(self, tvault, tarm)
+            if tupdate_durability_message:
+                await ctx.send(f"{tupdate_durability_message['MESSAGE']}")
+
             tpet = {}
             for pet in vault['PETS']:
                 if t_user['PET'] == pet['NAME']:
@@ -9265,7 +9276,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
     B_modes = ['Boss', 'CBoss']
     C_MODES = ['CTales', 'CDungeon', 'CBoss']
 
-    saved_spots = sowner['SAVE_SPOT']
+    saved_spots = sowner['SAVE_SPOTS']
     if isinstance(ctx.channel, discord.channel.DMChannel):
         await ctx.send(m.SERVER_FUNCTION_ONLY)
         return
@@ -19580,11 +19591,52 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
         }))
         return
 
+
 async def save_spot(self, ctx, universe, mode, currentopponent):
     user = {"DISNAME": str(ctx.author)}
-    query = {"$addToSet": {"SAVE_SPOT": {"UNIVERSE": str(universe['TITLE']), "MODE": str(mode), "CURRENTOPPONENT": currentopponent}}}
+    query = {"$addToSet": {"SAVE_SPOTS": {"UNIVERSE": str(universe['TITLE']), "MODE": str(mode), "CURRENTOPPONENT": currentopponent}}}
     response = db.updateUserNoFilter(user, query)
     return
+
+
+def update_arm_durability(self, vault, arm):
+    try:
+        for a in vault['ARMS']:
+            if a['ARM'] == str(arm['ARM']):
+                current_durability = a['DUR']
+                if current_durability == 1:
+                    query = {'OWNER': str(vault['OWNER'])}
+                    update_query = {'$pull': {'ARMS': {'ARM': str(arm['ARM'])}}}
+                    resp = db.updateVaultNoFilter(query, update_query)
+
+                    user_query = {'DISNAME': str(vault['OWNER'])}
+                    user_update_query = {'$set': {'ARM': 'Stock'}}
+                    user_resp = db.updateUserNoFilter(user_query, user_update_query)
+                    return {"MESSAGE": f"**{arm['ARM']}** has broken after losing all ⚒️ durability. Your arm will be **Stock** after your next match."}
+                else:
+                    query = {'OWNER': str(vault['OWNER'])}
+                    update_query = {'$inc': {'ARMS.$[type].' + 'DUR': -1}}
+                    filter_query = [{'type.' + "ARM": str(arm['ARM'])}]
+                    resp = db.updateVault(query, update_query, filter_query)
+                    return {"MESSAGE": False}
+
+    except Exception as ex:
+        trace = []
+        tb = ex.__traceback__
+        while tb is not None:
+            trace.append({
+                "filename": tb.tb_frame.f_code.co_filename,
+                "name": tb.tb_frame.f_code.co_name,
+                "lineno": tb.tb_lineno
+            })
+            tb = tb.tb_next
+        print(str({
+            'type': type(ex).__name__,
+            'message': str(ex),
+            'trace': trace
+        }))
+        return
+        
 
 def update_save_spot(self, ctx, saved_spots, selected_universe, modes):
     currentopponent = 0
@@ -19593,7 +19645,7 @@ def update_save_spot(self, ctx, saved_spots, selected_universe, modes):
             if save['UNIVERSE'] == selected_universe and save['MODE'] in modes:
                 currentopponent = save['CURRENTOPPONENT']
                 query = {'DISNAME': str(ctx.author)}
-                update_query = {'$pull': {'SAVE_SPOT': {"UNIVERSE": selected_universe}}}
+                update_query = {'$pull': {'SAVE_SPOTS': {"UNIVERSE": selected_universe}}}
                 resp = db.updateUserNoFilter(query, update_query)
     return currentopponent
 

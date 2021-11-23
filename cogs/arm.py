@@ -37,11 +37,17 @@ class Arm(commands.Cog):
             return
         shop = db.queryShopArms()
         arms = []
+        arm_list = []
+        for arm in vault['ARMS']:
+            arm_list.append(arm['ARM'])
         rift_universes = ['Crown Rift Slayers', 'Crown Rift Awakening', 'Crown Rift Madness']
         riftShopOpen = False
         check_arm = db.queryArm({'ARM' : {"$regex": f"^{str(arm_name)}$", "$options": "i"}})
         arm_name = check_arm['ARM']
         if check_arm:
+            if check_arm['UNIVERSE'] in rift_universes:
+                await ctx.send("You are not connected to the rift...")
+                return
             all_universes = db.queryAllUniverse()
             user = db.queryUser({'DISNAME': str(ctx.author)})
             available_universes = []
@@ -58,12 +64,7 @@ class Arm(commands.Cog):
                 for uni in all_universes:
                     if uni['PREREQUISITE'] in user['CROWN_TALES'] and not uni['TIER'] == 9:
                         available_universes.append(uni['TITLE'])
-            if check_arm['UNIVERSE'] not in available_universes:
-                if check_arm in rift_universes:
-                    await ctx.send("You are not connected to the rift...")
-                else:     
-                    await ctx.send("You cannot purchase arms from Universes you haven't unlocked or Rifts yet completed.")
-                return
+
 
         currentBalance = vault['BALANCE']
         cost = 0
@@ -85,7 +86,7 @@ class Arm(commands.Cog):
                     newstock = stock - 1
 
         if bool(mintedArm):
-            if mintedArm in vault['ARMS']:
+            if mintedArm in arm_list:
                 await ctx.send(m.USER_ALREADY_HAS_ARM, delete_after=5)
             else:
                 newBalance = currentBalance - cost
@@ -98,7 +99,7 @@ class Arm(commands.Cog):
                     armInventory = db.queryArm(arm_query)
                     update_query = {"$set": {"STOCK": newstock}} 
                     response = db.updateArm(armInventory, update_query)
-                    response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'ARMS': str(arm_name)}})
+                    response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'ARMS': {'ARM': str(arm_name), 'DUR': 25}}})
                     await ctx.send(m.PURCHASE_COMPLETE_1 + f"`{newstock}` `{mintedArm}` ARMS left in the Shop!")
 
                     arm_buttons = [
@@ -147,29 +148,38 @@ class Arm(commands.Cog):
         vault = db.altQueryVault(vault_query)
 
         resp = db.queryArm({'ARM': {"$regex": f"^{str(arm_name)}$", "$options": "i"}})
-        arm_name = resp['ARM']
-        if resp['TOURNAMENT_REQUIREMENTS'] == 0:
-
-            # Do not Check Tourney wins
-            if arm_name in vault['ARMS']:
-                response = db.updateUserNoFilter(user_query, {'$set': {'ARM': str(arm_name)}})
-                await ctx.send(response)
-            else:
-                await ctx.send(m.USER_DOESNT_HAVE_THE_ARM, delete_after=5)
-        else:
-
-            # Check tourney wins
-            tournament_wins = user['TOURNAMENT_WINS']
-            arm_query = {'TOURNAMENT_REQUIREMENTS': tournament_wins}
-
-            if tournament_wins >= resp['TOURNAMENT_REQUIREMENTS']:
-                if arm_name in vault['ARMS']:
-                    response = db.updateUserNoFilter(user_query, {'$set': {'ARM': str(arm_name)}})
-                    await ctx.send(response)
-                else:
+        
+        if resp :
+            try:
+                arm_name = resp['ARM']
+                owned = False
+                for arm in vault['ARMS']:
+                    if arm_name in arm['ARM']:
+                        response = db.updateUserNoFilter(user_query, {'$set': {'ARM': str(arm_name)}})
+                        owned = True
+                        await ctx.send(response)
+                if not owned:
                     await ctx.send(m.USER_DOESNT_HAVE_THE_ARM, delete_after=5)
-            else:
-                return "Unable to update Arm."
+                    return
+            except Exception as ex:
+                trace = []
+                tb = ex.__traceback__
+                while tb is not None:
+                    trace.append({
+                        "filename": tb.tb_frame.f_code.co_filename,
+                        "name": tb.tb_frame.f_code.co_name,
+                        "lineno": tb.tb_lineno
+                    })
+                    tb = tb.tb_next
+                print(str({
+                    'type': type(ex).__name__,
+                    'message': str(ex),
+                    'trace': trace
+                }))
+        else:
+            await ctx.send("That arm doesn't exist.", delete_after=5)
+            return
+           
 
     @cog_ext.cog_slash(description="View an Arm")
     async def viewarm(self, ctx, arm: str):

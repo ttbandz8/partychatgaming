@@ -70,6 +70,7 @@ class Profile(commands.Cog):
             else:
                 await ctx.send("Invalid command", delete_after=5)
 
+
     @cog_ext.cog_slash(description="View your current build", guild_ids=main.guild_ids)
     async def build(self, ctx):
         query = {'DISNAME': str(ctx.author)}
@@ -80,6 +81,10 @@ class Profile(commands.Cog):
         vault = db.queryVault({'OWNER': d['DISNAME']})
         if card:
             try:
+                durability = ""
+                for a in vault['ARMS']:
+                    if a['ARM'] == str(d['ARM']):
+                        durability = f"⚒️ {a['DUR']}"
                 # Acquire Card Levels data
                 card_lvl = 0
                 card_tier = 0
@@ -242,7 +247,7 @@ class Profile(commands.Cog):
 
                 embedVar = discord.Embed(title=f"{licon} {card_lvl} {message}".format(self), description=textwrap.dedent(f"""\
                 {titlemessage}
-                :mechanical_arm: | **{arm_name}** *{arm_passive_type} {arm_passive_value}{enhancer_suffix_mapping[arm_passive_type]}*
+                :mechanical_arm: | **{arm_name}** *{arm_passive_type} {arm_passive_value}{enhancer_suffix_mapping[arm_passive_type]}* | {durability}
                 :bird: | **{active_pet['NAME']}** *{active_pet['TYPE']} {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]}*
                 **Bond** _{bond}_ {bond_message} / **Level** _{lvl}_ {lvl_message}
                 
@@ -276,6 +281,7 @@ class Profile(commands.Cog):
                 return
         else:
             await ctx.send(m.USER_NOT_REGISTERED, delete_after=3)
+
 
     @cog_ext.cog_slash(description="Check all your cards", guild_ids=main.guild_ids)
     async def cards(self, ctx):
@@ -498,7 +504,7 @@ class Profile(commands.Cog):
 
                 for arm in arms_list:
                     index = arms_list.index(arm)
-                    resp = db.queryArm({"ARM": str(arm)})
+                    resp = db.queryArm({"ARM": str(arm['ARM'])})
                     arm_passive = resp['ABILITIES'][0]
                     arm_passive_type = list(arm_passive.keys())[0]
                     arm_passive_value = list(arm_passive.values())[0]
@@ -512,7 +518,10 @@ class Profile(commands.Cog):
                     arms.append(textwrap.dedent(f"""
                     {icon} [{index}] **{resp['ARM']}**
                     :microbe: **{arm_passive_type}:** {arm_passive_value}
-                    :earth_africa: **Universe:** {resp['UNIVERSE']}"""))
+                    :earth_africa: **Universe:** {resp['UNIVERSE']}
+                    ⚒️ {arm['DUR']}
+                    """))
+
 
                 # Adding to array until divisible by 10
                 while len(arms) % 10 != 0:

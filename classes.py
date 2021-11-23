@@ -22,7 +22,6 @@ class USER():
     PET: str = field(default_factory=lambda: "Chick")
     MATCHES: list = field(default_factory=lambda: [{'1V1': [0, 0]}, {'2V2': [0, 0]}, {'3V3': [0, 0]}, {'4V4': [0, 0]}, {'5V5': [0, 0]}])
     TOURNAMENT_WINS: int = field(default_factory=lambda: 0)
-    # TOURNAMENT_LOSSES: int = field(default_factory=lambda: 0)
     AVAILABLE: bool = field(default_factory=lambda: True)
     CROWN_TALES: list[str] = field(default_factory=lambda: [""])
     DUNGEONS: list[str] = field(default_factory=lambda: [""])
@@ -305,7 +304,7 @@ class VAULT():
     BALANCE: int = field(default_factory=lambda: 1500)
     CARDS: list[str] = field(default_factory=lambda: ['Ochaco Uraraka', 'Eevee', 'Garen'])
     TITLES: list[str] = field(default_factory=lambda: ['Starter', 'Iron 4', 'UA 1st Year', 'Pokemon Trainer'])
-    ARMS: list[str] = field(default_factory=lambda: ['Stock', 'Poke Ball', 'Hyper-Density Seals', 'Dorans Shield'])
+    ARMS: list[str] = field(default_factory=lambda: [{'ARM':'Stock', 'DUR': 100}, {'ARM': 'Poke Ball', 'DUR': 100}, {'ARM': 'Hyper-Density Seals', 'DUR': 100}, {'ARM': 'Dorans Shield', 'DUR': 100}])
     PETS: list[str] = field(default_factory=lambda: [
         {'NAME': 'Chick', 'LVL': 1, 'EXP': 0, 'Heal': 3, 'TYPE': 'HLT', 'BOND': 0, 'BONDEXP': 0,
          'PATH': "https://res.cloudinary.com/dkcmq8o15/image/upload/v1622307902/Pets/chick.jpg"}])
