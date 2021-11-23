@@ -929,7 +929,10 @@ def queryAllArmsBasedOnUniverses(query):
 
 def queryArm(query):
     data = arm_col.find_one(query)
-    return data
+    if data is None:
+        return False
+    else:
+        return data
 
 def queryDropArms(args):
     data = arm_col.find({'UNIVERSE': args, 'EXCLUSIVE': False, 'AVAILABLE': True})

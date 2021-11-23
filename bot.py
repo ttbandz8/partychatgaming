@@ -1349,6 +1349,7 @@ async def cursefamily(amount, family):
 async def trinketshop(ctx):
    user_query = {'DISNAME': str(ctx.author)}
    user = db.queryUser(user_query)
+   current_arm = user['ARM']
    vault = db.altQueryVault({'OWNER' : str(ctx.author)})
    current_card = user['CARD']
    has_gabes_purse = user['TOURNAMENT_WINS']
@@ -1378,9 +1379,9 @@ async def trinketshop(ctx):
             custom_id="3"
          ),
          manage_components.create_button(
-            style=ButtonStyle.grey,
-            label="Gabe's Purse 👛",
-            custom_id="4"
+            style=ButtonStyle.red,
+            label="⚒️ 4️⃣",
+            custom_id="5"
          ),
          manage_components.create_button(
             style=ButtonStyle.grey,
@@ -1388,7 +1389,16 @@ async def trinketshop(ctx):
             custom_id="cancel"
          )
       ]
+   
+   util_sell_buttons = [
+         manage_components.create_button(
+            style=ButtonStyle.grey,
+            label="Gabe's Purse 👛",
+            custom_id="4"
+         )
+   ]
    sell_buttons_action_row = manage_components.create_actionrow(*sell_buttons)
+   util_sell_buttons_action_row = manage_components.create_actionrow(*util_sell_buttons)
    embedVar = discord.Embed(title=f":tickets: | **Trinket Shop** - {icon}{'{:,}'.format(balance)} ", description=textwrap.dedent(f"""\
    Purchase Experience Boosts
    *Experience Boost Applied to Current Equipped Card*
@@ -1399,6 +1409,8 @@ async def trinketshop(ctx):
 
    🔋 3️⃣ **15,000EXP** for :moneybag: **700,000**
 
+   ⚒️ 4️⃣ **25 Durability** for :moneybag: **50,000**
+
    Purchase Gabe's Purse to Keep All Items When Rebirthing
 
    **Gabe's Purse** 👛 for :money_with_wings: **1,500,000**
@@ -1406,13 +1418,14 @@ async def trinketshop(ctx):
    What would you like to buy?
    """), colour=0xf1c40f)
    embedVar.set_footer(text="Boosts are used immediately upon purchase. Click cancel to exit purchase.", icon_url="https://cdn.discordapp.com/emojis/784402243519905792.gif?v=1")
-   await ctx.send(embed=embedVar, components=[sell_buttons_action_row])
+   await ctx.send(embed=embedVar, components=[sell_buttons_action_row, util_sell_buttons_action_row])
 
    def check(button_ctx):
       return button_ctx.author == ctx.author
 
    try:
-      button_ctx: ComponentContext = await manage_components.wait_for_component(bot, components=[sell_buttons_action_row], timeout=120,check=check)
+      print("TESTING")
+      button_ctx: ComponentContext = await manage_components.wait_for_component(bot, components=[sell_buttons_action_row, util_sell_buttons_action_row], timeout=120,check=check)
       levels_gained = 0
       price = 0
       exp_boost_buttons = ["1", "2", "3"]
@@ -1425,6 +1438,10 @@ async def trinketshop(ctx):
       if button_ctx.custom_id == "3":
          levels_gained = 100
          price=700000
+      if button_ctx.custom_id == "5":
+         levels_gained = 25
+         price=50000
+
 
       if button_ctx.custom_id == "cancel":
          await button_ctx.send("Cancelled purchase.")
@@ -1478,7 +1495,24 @@ async def trinketshop(ctx):
             await curse(1000000, str(ctx.author))
             await button_ctx.send("Gabe's Purse has been purchased!")
             return
+      
+      if button_ctx.custom_id == "5":
+         if price > balance:
+            await button_ctx.send("Insufficent funds.")
+            return
+         else:
+            try:
+               query = {'OWNER': str(ctx.author)}
+               update_query = {'$inc': {'ARMS.$[type].' + 'DUR': levels_gained}}
+               filter_query = [{'type.' + "ARM": str(current_arm)}]
+               resp = db.updateVault(query, update_query, filter_query)
 
+               await curse(50000, str(ctx.author))
+               await button_ctx.send(f"{current_arm}'s ⚒️ durability has increased by 25!")
+               return
+            except:
+               await ctx.send("Failed to purchase durability boost.")
+         
    except Exception as ex:
       trace = []
       tb = ex.__traceback__

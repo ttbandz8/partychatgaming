@@ -18,8 +18,8 @@ LEGEND = textwrap.dedent(f"""\
 🛡️ - Defense
 
 **Accessories**
-:reminder_ribbon: - Title for Card
-:mechanical_arm: - Arm for Card
+:reminder_ribbon: - Title
+:mechanical_arm: - Arm
 :bird: - Pet
 
 **Moveset**
@@ -35,12 +35,12 @@ LEGEND = textwrap.dedent(f"""\
 """)
 
 BOT_COMMANDS = textwrap.dedent(f"""\
-**ACCOUNT COMMANDS**
+**Register, Delete, Lookup**
 **/r**: Account Registration
 **/deleteaccount @player**IWANTTODELETEMYACCOUNT: Delete your account
 **/lookup @player**: Profile lookup
 
-**TEAM COMMANDS**
+**Team Commands**
 **/team team name**: Team lookup
 **/createteam game team name**: Create team 
 **/deleteteam**: Delete team
@@ -51,7 +51,7 @@ BOT_COMMANDS = textwrap.dedent(f"""\
 **/pay @player amount**: Send Team Members coin (Owner Onlu)
 **/donate amount team name**: Donate coin to Team Bank
 
-**GUILD COMMANDS**
+**Guild Commands**
 **/guild guild name**: Guild lookup
 **/oath player guild name**: Create Guild/Reswear Guild
 **/disband**: Delete Guild (Founder Only)
@@ -66,7 +66,7 @@ BOT_COMMANDS = textwrap.dedent(f"""\
 **/viewhall**: View Hall Information
 **/buyhall**: Buy and move into a new Guild Hall
 
-**FAMILY COMMANDS**
+**Family Commands**
 **/family @user**: Family lookup
 **/marry @user**:Create Family with a User
 **/divorce @user**: Ask for divorce from partner
@@ -83,10 +83,7 @@ BOT_COMMANDS = textwrap.dedent(f"""\
 """)
 
 CROWN_UNLIMITED_COMMANDS = textwrap.dedent(f"""\
-**CROWN UNLIMITED PROFILE COMMANDS**
-**/menu**: View In Game Menu
-
-**/crown**: Crown Unlimited Help Book
+**Profile Commands**
 **/build**: View your current build
 **/preset** View your build presets
 **/savepreset**: Save your current build as preset
@@ -100,25 +97,29 @@ CROWN_UNLIMITED_COMMANDS = textwrap.dedent(f"""\
 **/rebirth**: Rebirth Account with permanent increases
 
 
-**CROWN UNLIMITED PVP COMMANDS**
+**PvP Commands**
 **/battle @player**: Challenge another Player
 **/wager amount**: Wager amount to battle in current session
 **/raid guild**: Start Guild Raid Battle
 
-**CROWN UNLIMITED PVP TUTORIAL BOTS**
+**Tutorial Bot Commands**
 **/battle @Senpai**: Tutorial Bot
 **/battle @Legend**: Advanced Tutorial Bot
 *Must be in Support Server For Tutorial*
+**/menu**: View In Game Menu
+**/crown**: Crown Unlimited Help Book
 
-**CROWN UNLIMITED STORY MODE COMMANDS**
+**Story Commands**
 **/ff**: Leave current tale, dungeon, or boss fight
 **/universes**: Show List Of Crown Universes
 **/tales**: Opens Crown Tales Story Mode Menu
 **/cooptales**: Opens Crown Tales CO-OP Story Mode Menu
 **/aitales**: Opens Crown Tales Duo Story Mode Menu
+
+
 """)
 CTAP_COMMANDS = textwrap.dedent(f"""\
-**CARD COMMANDS**
+**Card Commands**
 **/cards universe**: View Universe Card List
 **/viewcard**: Preview Card 
 **/buycard**: Buy Card
@@ -128,24 +129,24 @@ CTAP_COMMANDS = textwrap.dedent(f"""\
 **/destinies universe**: Show Available Universe Destinies
 **/viewboss boss**:Show Boss Description
 
-**TITLE COMMANDS**
+**Title Commands**
 **/titlelist universe**: View Universe Title List
 **/viewtitle**: Preview Title
 **/buytitle**: Buy Title
 **/equiptitle title**: - Equip title
 
-**ARM COMMANDS**
+**Arm Commands**
 **/armlist universe**: View Universe Arm List
 **/viewarm**: Preview Arm
 **/buyarm**: Buy Arm
 **/equiparm arm**: Equip arm
 
-**PET COMMANDS**
+**Pet Commands**
 **/petlist universe**: View Universe Pet List
 **/viewpet** Preview Pet
 **/equippet pet**: Equip pet
 
-**ECONOMY COMMANDS**
+**Sell, Trade, Resell, Gift**
 **/trade @player item**: Trade Cards, Titles, Arms, Pets
 **/sell @player item**: Sell Cards, Titles, and Arms
 **/resell item**: Sell Card, Title, Arm back to shop
