@@ -82,9 +82,13 @@ class Profile(commands.Cog):
         if card:
             try:
                 durability = ""
+                base_arm_names = ['Reborn Stock', 'Stock', 'Deadgun', 'Glaive', 'Kings Glaive', 'Legendary Weapon']
                 for a in vault['ARMS']:
-                    if a['ARM'] == str(d['ARM']):
-                        durability = f"⚒️ {a['DUR']}"
+                    if a['ARM'] == str(d['ARM']) and a['ARM'] in base_arm_names:
+                        durability = f""
+                    elif a['ARM'] == str(d['ARM']) and a['ARM'] not in base_arm_names:
+                        durability = f"| ⚒️ {a['DUR']}"
+                   
                 # Acquire Card Levels data
                 card_lvl = 0
                 card_tier = 0
@@ -247,7 +251,7 @@ class Profile(commands.Cog):
 
                 embedVar = discord.Embed(title=f"{licon} {card_lvl} {message}".format(self), description=textwrap.dedent(f"""\
                 {titlemessage}
-                :mechanical_arm: | **{arm_name}** *{arm_passive_type} {arm_passive_value}{enhancer_suffix_mapping[arm_passive_type]}* | {durability}
+                :mechanical_arm: | **{arm_name}** *{arm_passive_type} {arm_passive_value}{enhancer_suffix_mapping[arm_passive_type]}* {durability}
                 :bird: | **{active_pet['NAME']}** *{active_pet['TYPE']} {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]}*
                 **Bond** _{bond}_ {bond_message} / **Level** _{lvl}_ {lvl_message}
                 
