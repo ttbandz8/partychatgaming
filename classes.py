@@ -304,7 +304,7 @@ class VAULT():
     BALANCE: int = field(default_factory=lambda: 1500)
     CARDS: list[str] = field(default_factory=lambda: ['Ochaco Uraraka', 'Eevee', 'Garen'])
     TITLES: list[str] = field(default_factory=lambda: ['Starter', 'Iron 4', 'UA 1st Year', 'Pokemon Trainer'])
-    ARMS: list[str] = field(default_factory=lambda: [{'ARM':'Stock', 'DUR': 999999}, {'ARM': 'Poke Ball', 'DUR': 100}, {'ARM': 'Hyper-Density Seals', 'DUR': 100}, {'ARM': 'Dorans Shield', 'DUR': 100}])
+    ARMS: list[str] = field(default_factory=lambda: [{'ARM':'Stock', 'DUR': 999999}, {'ARM': 'Poke Ball', 'DUR': 50}, {'ARM': 'Hyper-Density Seals', 'DUR': 50}, {'ARM': 'Dorans Shield', 'DUR': 50}])
     PETS: list[str] = field(default_factory=lambda: [
         {'NAME': 'Chick', 'LVL': 1, 'EXP': 0, 'Heal': 3, 'TYPE': 'HLT', 'BOND': 0, 'BONDEXP': 0,
          'PATH': "https://res.cloudinary.com/dkcmq8o15/image/upload/v1622307902/Pets/chick.jpg"}])

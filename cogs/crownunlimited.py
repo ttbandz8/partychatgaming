@@ -7623,14 +7623,16 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             if mode in D_modes:
                 tpet_lvl = 10
                 tpet_bond = 3
+                tcard_lvl = 100
+                tcard_lvl_ap_buff = 50 + (10 * currentopponent)
             else:
                 tpet_lvl = 3
                 tpet_bond = 1
+                tcard_lvl = 10
+                tcard_lvl_ap_buff = 10 + (10 * currentopponent)
             tarm_passive = tarm['ABILITIES'][0]
             tarm_name = tarm['ARM']
-            tcard_lvl_ap_buff = 0 + (10 * currentopponent)
             t_card = t['NAME']
-            tcard_lvl = 0
             t_gif = t['GIF']
             t_card_path = t['PATH']
             t_rcard_path = t['RPATH']
@@ -20000,6 +20002,10 @@ async def drops(player, universe, matchcount):
     all_available_drop_pets = db.queryDropPets(universe)
     vault_query = {'OWNER': str(player)}
     vault = db.queryVault(vault_query)
+    owned_arms = []
+    for arm in vault['ARMS']:
+        owned_arms.append(arm['ARM'])
+
     user_query = {'DISNAME': str(player)}
     user = db.queryUser(user_query)
     rebirth = user['REBIRTH']
@@ -20012,31 +20018,30 @@ async def drops(player, universe, matchcount):
     arms = []
     pets = []
 
-    for card in all_available_drop_cards:
-        cards.append(card['NAME'])
+    if all_available_drop_cards:
+        for card in all_available_drop_cards:
+            cards.append(card['NAME'])
+        c = len(cards) - 1
+        rand_card = random.randint(0, c)
 
-    for title in all_available_drop_titles:
-        titles.append(title['TITLE'])
+    if all_available_drop_titles:
+        for title in all_available_drop_titles:
+            titles.append(title['TITLE'])
+        t = len(titles) - 1
+        rand_title = random.randint(0, t)
 
-    for arm in all_available_drop_arms:
-        arms.append(arm['ARM'])
+    if all_available_drop_arms:
+        for arm in all_available_drop_arms:
+            arms.append(arm['ARM'])
+        a = len(arms) - 1
+        rand_arm = random.randint(0, a)
 
-    for pet in all_available_drop_pets:
-        pets.append(pet['PET'])
-
-    for pet in all_available_drop_pets:
-        pets.append(pet['PET'])
-
-    c = len(cards) - 1
-    t = len(titles) - 1
-    a = len(arms) - 1
-    p = len(pets) - 1
-
-    rand_card = random.randint(0, c)
-    rand_title = random.randint(0, t)
-    rand_arm = random.randint(0, a)
-    rand_pet = random.randint(0, p)
-
+    if all_available_drop_pets:
+        for pet in all_available_drop_pets:
+            pets.append(pet['PET'])
+        p = len(pets) - 1
+        rand_pet = random.randint(0, p)    
+    
     gold_drop = 150  # 150
     rift_rate = 175  # 175
     title_drop = 190  # 190
@@ -20044,6 +20049,7 @@ async def drops(player, universe, matchcount):
     pet_drop = 198  # 198
     card_drop = 200  # 200
     drop_rate = random.randint((0 + (rebirth * rebirth) * (1 + rebirth)), 200)
+    durability = random.randint(1, 45)
 
     try:
         if drop_rate <= gold_drop:
@@ -20056,78 +20062,98 @@ async def drops(player, universe, matchcount):
             await bless(bless_amount, player)
             return f"A RIFT HAS OPENED! You have earned :coin: **{bless_amount}**!"
         elif drop_rate <= title_drop and drop_rate > gold_drop:
-            if len(vault['TITLES']) >= 150:
+            if all_available_drop_titles:
+                if len(vault['TITLES']) >= 150:
+                    await bless(150, player)
+                    return f"You're maxed out on Titles! You earned :coin: 300 instead!"
+                response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'TITLES': str(titles[rand_title])}})
+                return f"You earned _Title:_ **{titles[rand_title]}**!"
+            else:
                 await bless(150, player)
-                return f"You're maxed out on Titles! You earned :coin: 300 instead!"
-            response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'TITLES': str(titles[rand_title])}})
-            return f"You earned _Title:_ **{titles[rand_title]}**!"
+                return f"You earned :coin: **150**!"
         elif drop_rate <= arm_drop and drop_rate > title_drop:
-            if len(vault['ARMS']) >= 150:
+            if all_available_drop_arms:
+                if len(vault['ARMS']) >= 150:
+                    await bless(150, player)
+                    return f"You're maxed out on Arms! You earned :coin: 300 instead!"
+                if str(arms[rand_arm]) in owned_arms:
+                    await bless(150, player)
+                    return f"You already own **{arms[rand_arm]}**! You earn :coin: **150**."
+                else:
+                    response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'ARMS': {'ARM': str(arms[rand_arm]), 'DUR': durability}}})
+                    return f"You earned _Arm:_ **{arms[rand_arm]}** with ⚒️**{str(durability)}**!"
+            else:
                 await bless(150, player)
-                return f"You're maxed out on Arms! You earned :coin: 300 instead!"
-            response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'ARMS': str(arms[rand_arm])}})
-            return f"You earned _Arm:_ **{arms[rand_arm]}**!"
+                return f"You earned :coin: **150**!"
         elif drop_rate <= pet_drop and drop_rate > arm_drop:
-            if len(vault['PETS']) >= 150:
-                await bless(150, player)
-                return f"You're maxed out on Pets! You earned :coin: 300 instead!"
+            if all_available_drop_pets:
+                if len(vault['PETS']) >= 150:
+                    await bless(150, player)
+                    return f"You're maxed out on Pets! You earned :coin: 300 instead!"
 
-            pet_owned = False
-            for p in vault['PETS']:
-                if p['NAME'] == pets[rand_pet]:
-                    pet_owned = True
+                pet_owned = False
+                for p in vault['PETS']:
+                    if p['NAME'] == pets[rand_pet]:
+                        pet_owned = True
 
-            if pet_owned:
+                if pet_owned:
 
-                await bless(150, player)
-                return f"You own _Pet:_ **{pets[rand_pet]}**! Received extra + :coin: 150!"
+                    await bless(150, player)
+                    return f"You own _Pet:_ **{pets[rand_pet]}**! Received extra + :coin: 150!"
+                else:
+
+                    selected_pet = db.queryPet({'PET': pets[rand_pet]})
+                    pet_ability_name = list(selected_pet['ABILITIES'][0].keys())[0]
+                    pet_ability_power = list(selected_pet['ABILITIES'][0].values())[0]
+                    pet_ability_type = list(selected_pet['ABILITIES'][0].values())[1]
+
+                    response = db.updateVaultNoFilter(vault_query, {'$addToSet': {
+                        'PETS': {'NAME': selected_pet['PET'], 'LVL': 0, 'EXP': 0, pet_ability_name: int(pet_ability_power),
+                                'TYPE': pet_ability_type, 'BOND': 0, 'BONDEXP': 0, 'PATH': selected_pet['PATH']}}})
+                    await bless(50, player)
+                    return f"You earned _Pet:_ **{pets[rand_pet]}** + :coin: 50!"
             else:
-
-                selected_pet = db.queryPet({'PET': pets[rand_pet]})
-                pet_ability_name = list(selected_pet['ABILITIES'][0].keys())[0]
-                pet_ability_power = list(selected_pet['ABILITIES'][0].values())[0]
-                pet_ability_type = list(selected_pet['ABILITIES'][0].values())[1]
-
-                response = db.updateVaultNoFilter(vault_query, {'$addToSet': {
-                    'PETS': {'NAME': selected_pet['PET'], 'LVL': 0, 'EXP': 0, pet_ability_name: int(pet_ability_power),
-                             'TYPE': pet_ability_type, 'BOND': 0, 'BONDEXP': 0, 'PATH': selected_pet['PATH']}}})
-                await bless(50, player)
-                return f"You earned _Pet:_ **{pets[rand_pet]}** + :coin: 50!"
+                await bless(150, player)
+                return f"You earned :coin: **150**!"
         elif drop_rate <= card_drop and drop_rate > pet_drop:
-            if len(vault['CARDS']) >= 150:
-                await bless(150, player)
-                return f"You're maxed out on Cards! You earned :coin: 300 instead!"
+            if all_available_drop_cards:
+                if len(vault['CARDS']) >= 150:
+                    await bless(150, player)
+                    return f"You're maxed out on Cards! You earned :coin: 300 instead!"
 
-            # Check if already owned
-            card_owned = False
-            for c in vault['CARD_LEVELS']:
-                if c['CARD'] == str(cards[rand_card]):
-                    card_owned = True
+                # Check if already owned
+                card_owned = False
+                for c in vault['CARD_LEVELS']:
+                    if c['CARD'] == str(cards[rand_card]):
+                        card_owned = True
 
-            if card_owned:
-                await cardlevel(cards[rand_card], player, universe, universe, "Tales")
-                response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'CARDS': str(cards[rand_card])}})
-                message = ""
-                await bless(150, player)
-                return f"You earned EXP for _Card:_ **{cards[rand_card]}** + :coin: 150!\n{message}"
+                if card_owned:
+                    await cardlevel(cards[rand_card], player, universe, universe, "Tales")
+                    response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'CARDS': str(cards[rand_card])}})
+                    message = ""
+                    await bless(150, player)
+                    return f"You earned EXP for _Card:_ **{cards[rand_card]}** + :coin: 150!\n{message}"
+                else:
+
+                    card_data = db.queryCard({'NAME': str(cards[rand_card])})
+                    uni = db.queryUniverse({'TITLE': card_data['UNIVERSE']})
+                    tier = uni['TIER']
+                    update_query = {'$addToSet': {
+                        'CARD_LEVELS': {'CARD': str(cards[rand_card]), 'LVL': 0, 'TIER': int(tier), 'EXP': 0, 'HLT': 0,
+                                        'ATK': 0, 'DEF': 0, 'AP': 0}}}
+                    response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'CARDS': str(cards[rand_card])}})
+                    r = db.updateVaultNoFilter(vault_query, update_query)
+                    message = ""
+                    for destiny in d.destiny:
+                        if cards[rand_card] in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
+                            db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
+                            message = f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault."
+
+                    await bless(50, player)
+                    return f"You earned _Card:_ **{cards[rand_card]}** + :coin: 50!\n{message}"
             else:
-
-                card_data = db.queryCard({'NAME': str(cards[rand_card])})
-                uni = db.queryUniverse({'TITLE': card_data['UNIVERSE']})
-                tier = uni['TIER']
-                update_query = {'$addToSet': {
-                    'CARD_LEVELS': {'CARD': str(cards[rand_card]), 'LVL': 0, 'TIER': int(tier), 'EXP': 0, 'HLT': 0,
-                                    'ATK': 0, 'DEF': 0, 'AP': 0}}}
-                response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'CARDS': str(cards[rand_card])}})
-                r = db.updateVaultNoFilter(vault_query, update_query)
-                message = ""
-                for destiny in d.destiny:
-                    if cards[rand_card] in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
-                        db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
-                        message = f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault."
-
-                await bless(50, player)
-                return f"You earned _Card:_ **{cards[rand_card]}** + :coin: 50!\n{message}"
+                await bless(250, player)
+                return f"You earned :coin: **250**!"
     except Exception as ex:
         trace = []
         tb = ex.__traceback__
@@ -20217,6 +20243,10 @@ async def dungeondrops(player, universe, matchcount):
     all_available_drop_pets = db.queryExclusiveDropPets(universe)
     vault_query = {'OWNER': str(player)}
     vault = db.queryVault(vault_query)
+    owned_arms = []
+    for arm in vault['ARMS']:
+        owned_arms.append(arm['ARM'])
+
     user_query = {'DISNAME': str(player)}
     user = db.queryUser(user_query)
     rebirth = user['REBIRTH']
@@ -20258,41 +20288,46 @@ async def dungeondrops(player, universe, matchcount):
     pet_drop = 396  #
     card_drop = 400  #
     drop_rate = random.randint((0 + (rebirth * rebirth) * (1 + rebirth)), 400)
+    durability = random.randint(10, 75)
 
     try:
         if drop_rate <= gold_drop:
-            bless_amount = (60 + (5 * matchcount)) * (1 + rebirth)
+            bless_amount = (150 + (5 * matchcount)) * (1 + rebirth)
             await bless(bless_amount, player)
             return f"You earned :coin: **{bless_amount}**!"
         elif drop_rate <= rift_rate and drop_rate > gold_drop:
             response = db.updateUserNoFilter(user_query, {'$set': {'RIFT': 1}})
-            bless_amount = (80 + (5 * matchcount)) * (1 + rebirth)
+            bless_amount = (150 + (5 * matchcount)) * (1 + rebirth)
             await bless(bless_amount, player)
             return f"A RIFT HAS OPENED! You have earned :coin: **{bless_amount}**!"
         elif drop_rate <= title_drop and drop_rate > gold_drop:
             if len(vault['TITLES']) >= 150:
-                await bless(1000, player)
-                return f"You're maxed out on Titles! You earned :coin: 1000 instead!"
+                await bless(1500, player)
+                return f"You're maxed out on Titles! You earned :coin: 1500 instead!"
             response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'TITLES': str(titles[rand_title])}})
             return f"You earned _Title:_ **{titles[rand_title]}**!"
         elif drop_rate <= arm_drop and drop_rate > title_drop:
             if len(vault['ARMS']) >= 150:
-                await bless(1000, player)
-                return f"You're maxed out on Arms! You earned :coin: 1000 instead!"
-            response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'ARMS': str(arms[rand_arm])}})
-            return f"You earned _Arm:_ **{arms[rand_arm]}**!"
+                await bless(1500, player)
+                return f"You're maxed out on Arms! You earned :coin: 1500 instead!"
+            if str(arms[rand_arm]) in owned_arms:
+                await bless(1250, player)
+                return f"You already own **{arms[rand_arm]}**! You earn :coin: **1250**."
+            else:
+                response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'ARMS': {'ARM': str(arms[rand_arm]), 'DUR': durability}}})
+                return f"You earned _Arm:_ **{arms[rand_arm]}** with ⚒️**{str(durability)}**!"
         elif drop_rate <= pet_drop and drop_rate > arm_drop:
             if len(vault['PETS']) >= 150:
-                await bless(1000, player)
-                return f"You're maxed out on Pets! You earned :coin: 1000 instead!"
+                await bless(3000, player)
+                return f"You're maxed out on Pets! You earned :coin: 3000 instead!"
             pet_owned = False
             for p in vault['PETS']:
                 if p['NAME'] == pets[rand_pet]:
                     pet_owned = True
 
             if pet_owned:
-                await bless(200, player)
-                return f"You own _Pet:_ **{pets[rand_pet]}**! Received extra + :coin: 200!"
+                await bless(1800, player)
+                return f"You own _Pet:_ **{pets[rand_pet]}**! Received extra + :coin: 1800!"
             else:
                 selected_pet = db.queryPet({'PET': pets[rand_pet]})
                 pet_ability_name = list(selected_pet['ABILITIES'][0].keys())[0]
@@ -20306,8 +20341,8 @@ async def dungeondrops(player, universe, matchcount):
                 return f"You earned _Pet:_ **{pets[rand_pet]}** + :coin: 100!"
         elif drop_rate <= card_drop and drop_rate > pet_drop:
             if len(vault['CARDS']) >= 150:
-                await bless(1000, player)
-                return f"You're maxed out on Cards! You earned :coin: 1000 instead!"
+                await bless(5000, player)
+                return f"You're maxed out on Cards! You earned :coin: 5000 instead!"
             card_owned = False
             for c in vault['CARD_LEVELS']:
                 if c['CARD'] == cards[rand_card]:
@@ -20317,8 +20352,8 @@ async def dungeondrops(player, universe, matchcount):
                 await cardlevel(cards[rand_card], player, universe, universe, "Dungeon")
                 response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'CARDS': str(cards[rand_card])}})
                 message = ""
-                await bless(200, player)
-                return f"You earned {exp_gain} EXP for _Card:_ **{cards[rand_card]}** + :coin: 200!\n{message}"
+                await bless(2500, player)
+                return f"You earned {exp_gain} EXP for _Card:_ **{cards[rand_card]}** + :coin: 2500!\n{message}"
             else:
                 card_data = db.queryCard({'NAME': str(cards[rand_card])})
                 uni = db.queryUniverse({'TITLE': card_data['UNIVERSE']})
@@ -20334,8 +20369,8 @@ async def dungeondrops(player, universe, matchcount):
                         db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
                         message = f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault."
 
-                await bless(50, player)
-                return f"You earned _Card:_ **{cards[rand_card]}** + :coin: 80!\n{message}"
+                await bless(2000, player)
+                return f"You earned _Card:_ **{cards[rand_card]}** + :coin: 2000!\n{message}"
     except Exception as ex:
         trace = []
         tb = ex.__traceback__
