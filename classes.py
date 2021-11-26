@@ -35,7 +35,7 @@ class USER():
     PATRON: bool = field(default_factory=lambda: False)
     LEVEL: int = field(default_factory=lambda: 0)
     EXPLORE: bool = field(default_factory=lambda: True)
-    SAVE_SPOTS: list[str] = field(default_factory=lambda: [])
+    SAVE_SPOT: list[str] = field(default_factory=lambda: [])
 
 
 @dataclass(frozen=True, order=True)
