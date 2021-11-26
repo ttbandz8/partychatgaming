@@ -833,6 +833,9 @@ async def trade(ctx, player: User, item: str):
    p1_cards = p1_vault['CARDS']
    p1_titles = p1_vault['TITLES']
    p1_arms = p1_vault['ARMS']
+   p1_arms_names_list = []
+   for arm in p1_arms:
+      p1_arms_names_list.append(arm['ARM'])
    p1_pets = p1_vault['PETS']
    p1_balance = p1_vault['BALANCE']
    p1_owned_destinies = []
@@ -854,6 +857,10 @@ async def trade(ctx, player: User, item: str):
    p2_cards = p2_vault['CARDS']
    p2_titles = p2_vault['TITLES']
    p2_arms = p2_vault['ARMS']
+   p2_arms_names_list = []
+   for arm in p2_arms:
+      p2_arms_names_list.append(arm['ARM'])
+
    p2_pets = p2_vault['PETS']
    p2_balance = p2_vault['BALANCE']
    p2_trade_item = ""
@@ -868,7 +875,7 @@ async def trade(ctx, player: User, item: str):
 
    commence = False
 
-   if p1_trade_item not in p1_cards and p1_trade_item not in p1_titles and p1_trade_item not in p1_arms and p1_trade_item not in p1_pet_names and p1_trade_item not in p2_pet_names:
+   if p1_trade_item not in p1_cards and p1_trade_item not in p1_titles and p1_trade_item not in p1_arms_names_list and p1_trade_item not in p1_pet_names and p1_trade_item not in p2_pet_names:
       await ctx.send("You do not own this item.")
       return
    else:
@@ -881,9 +888,9 @@ async def trade(ctx, player: User, item: str):
 
       def check(msg):
          if p1_trade_item in p1_pet_names:
-            return msg.author == user2 and msg.content in p2_pet_names and msg.content not in p1_cards and msg.content not in p1_titles and msg.content not in p1_arms and msg.content not in p1_pet_names
+            return msg.author == user2 and msg.content in p2_pet_names and msg.content not in p1_cards and msg.content not in p1_titles and msg.content not in p1_arms_names_list and msg.content not in p1_pet_names
          else:
-            return msg.author == user2 and msg.content in p2_cards or msg.content in p2_titles or msg.content in p2_arms or msg.content in p2_pet_names and msg.content not in p1_cards and msg.content not in p1_titles and msg.content not in p1_arms and msg.content not in p1_pet_names
+            return msg.author == user2 and msg.content in p2_cards or msg.content in p2_titles or msg.content in p2_arms_names_list or msg.content in p2_pet_names and msg.content not in p1_cards and msg.content not in p1_titles and msg.content not in p2_arms_names_list and msg.content not in p1_pet_names
 
       try:
          msg = await bot.wait_for('message', timeout=20.0, check=check)
@@ -922,9 +929,11 @@ async def trade(ctx, player: User, item: str):
                await ctx.send("Trade ended.")
                return
 
-            if p2_trade_item in p2_arms:
-               db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'ARMS': str(p1_trade_item)}})
-               response = db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$addToSet':{'ARMS': str(p2_trade_item)}})
+            if p2_trade_item in p2_arms_names_list:
+               db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'ARMS': {'ARM': str(p1_trade_item)}}})
+               for arm in p2_arms:
+                  if arm['ARM'] == str(p2_trade_item):
+                     response = db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$addToSet':{'ARMS': {'ARM': str(p2_trade_item), 'DUR': arm['DUR']}}})
                await ctx.send(f"{p2_trade_item} has been added to {ctx.author.mention}'s vault: ARMS")
             elif p2_trade_item in p2_titles:
                db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'TITLES': str(p1_trade_item)}})
@@ -960,9 +969,11 @@ async def trade(ctx, player: User, item: str):
                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'PET': p2_active_pet['NAME']}})
                await ctx.send(f"{p2_trade_item} has been added to {ctx.author.mention}'s vault: PETS")
 
-            if p1_trade_item in p1_arms:
-               db.updateVaultNoFilter({'OWNER': str(user2)},{'$pull':{'ARMS': str(p2_trade_item)}})
-               response = db.updateVaultNoFilter({'OWNER': str(user2)},{'$addToSet':{'ARMS': str(p1_trade_item)}})
+            if p1_trade_item in p1_arms_names_list:
+               db.updateVaultNoFilter({'OWNER': str(user2)},{'$pull':{'ARMS': {'ARM': str(p2_trade_item)}}})
+               for arm in p1_arms:
+                  if arm['ARM'] == str(p1_trade_item):
+                     response = db.updateVaultNoFilter({'OWNER': str(user2)},{'$addToSet':{'ARMS': {'ARM': str(p1_trade_item), 'DUR': arm['DUR']}}})
                await ctx.send(f"{p1_trade_item} has been added to {user2.mention}'s vault: ARMS")
             elif p1_trade_item in p1_titles:
                db.updateVaultNoFilter({'OWNER': str(user2)},{'$pull':{'TITLES': str(p2_trade_item)}})
@@ -1013,6 +1024,9 @@ async def sell(ctx, player: User, item: str):
    p1_cards = p1_vault['CARDS']
    p1_titles = p1_vault['TITLES']
    p1_arms = p1_vault['ARMS']
+   p1_arms_names_list = []
+   for arm in p1_arms:
+      p1_arms_names_list.append(arm['ARM'])
    p1_pets = p1_vault['PETS']
    p1_balance = p1_vault['BALANCE']
 
@@ -1031,6 +1045,10 @@ async def sell(ctx, player: User, item: str):
    p2_cards = p2_vault['CARDS']
    p2_titles = p2_vault['TITLES']
    p2_arms = p2_vault['ARMS']
+   p2_arms_names_list = []
+   for arm in p2_arms:
+      p2_arms_names_list.append(arm['ARM'])
+
    p2_pets = p2_vault['PETS']
    p2_balance = p2_vault['BALANCE']
    p2_trade_item = ""
@@ -1046,7 +1064,7 @@ async def sell(ctx, player: User, item: str):
 
    if p1_trade_item in p1_cards and len(p1_cards) == 1:
       await ctx.send("You cannot sell your only card.")
-   elif p1_trade_item in p1_arms and len(p1_arms) == 1:
+   elif p1_trade_item in p1_arms_names_list and len(p1_arms_names_list) == 1:
       await ctx.send("You cannot sell your only arm.")
    elif p1_trade_item in p1_titles and len(p1_titles) == 1:
       await ctx.send("You cannot sell your only title.")
@@ -1060,7 +1078,7 @@ async def sell(ctx, player: User, item: str):
             await ctx.send("You cannot sell an equipped item.")
             return
 
-      if p1_trade_item not in p1_cards and p1_trade_item not in p1_titles and p1_trade_item not in p1_arms and p1_trade_item not in p1_pet_names:
+      if p1_trade_item not in p1_cards and p1_trade_item not in p1_titles and p1_trade_item not in p1_arms_names_list and p1_trade_item not in p1_pet_names:
          await ctx.send("You do not own this item.")
          return
       else:
@@ -1103,8 +1121,8 @@ async def sell(ctx, player: User, item: str):
                   return
 
                if button_ctx.custom_id == "Yes":
-                  if p1_trade_item in p1_arms:
-                     db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'ARMS': str(p1_trade_item)}})
+                  if p1_trade_item in p1_arms_names_list:
+                     db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'ARMS': {'ARM': str(p1_trade_item)}}})
                      await bless(p2_trade_item, ctx.author)
                      await button_ctx.send(f"{p2_trade_item} has been added to {ctx.author.mention}'s balance.")
                   elif p1_trade_item in p1_titles:
@@ -1122,9 +1140,11 @@ async def sell(ctx, player: User, item: str):
                      await button_ctx.send(f"{p2_trade_item }has been added to {ctx.author.mention}'s balance.")
 
 
-                  if p1_trade_item in p1_arms:
+                  if p1_trade_item in p1_arms_names_list:
                      await curse(p2_trade_item, user2)
-                     response = db.updateVaultNoFilter({'OWNER': str(user2)},{'$addToSet':{'ARMS': str(p1_trade_item)}})
+                     for arm in p1_arms:
+                        if arm['ARM'] == str(p1_trade_item):
+                           response = db.updateVaultNoFilter({'OWNER': str(user2)},{'$addToSet':{'ARMS': {'ARM': str(p1_trade_item), 'DUR': arm['DUR']}}})
                      await button_ctx.send(f"{p1_trade_item} has been added to {user2.mention}'s vault: ARMS")
                   elif p1_trade_item in p1_titles:
                      await curse(p2_trade_item, user2)
@@ -1743,10 +1763,10 @@ async def resell(ctx, where: str, selections: list):
          selections_as_list = selections.split()
          for selected in selections_as_list:
             arm = p1_arms[int(selected)]
-            if arm not in list_to_sell and arm != user["ARM"]:
-               arm_data = db.queryArm({'ARM':{"$regex": str(arm), "$options": "i"}})
+            if arm['ARM'] not in list_to_sell and arm['ARM'] != user["ARM"]:
+               arm_data = db.queryArm({'ARM':{"$regex": str(arm['ARM']), "$options": "i"}})
                sell_price = sell_price + (arm_data['PRICE'] * .30)
-               list_to_sell.append(f"{str(arm)}")
+               list_to_sell.append(f"{str(arm['ARM'])}")
          list_to_sell_as_text = "\n".join(list_to_sell)
 
       await ctx.send(f"Are you sure you want to sell\n **{list_to_sell_as_text}**\n for :coin:{round(sell_price)}?", components=[sell_buttons_action_row])
@@ -1775,7 +1795,7 @@ async def resell(ctx, where: str, selections: list):
 
             if where.lower() in arm_indications:
                for arm in list_to_sell:
-                  db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'ARMS': str(arm)}})
+                  db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'ARMS': {'ARM': str(arm)}}})
 
             await bless(sell_price, ctx.author)
             await ctx.author.send(f"**SOLD**\n **{list_to_sell_as_text}**\n for :coin:{round(sell_price)}!")
