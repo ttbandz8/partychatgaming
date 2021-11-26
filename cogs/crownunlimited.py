@@ -1610,7 +1610,7 @@ class CrownUnlimited(commands.Cog):
                         # UNIVERSE CARD
                         player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve,
                                                  otitle, o_used_focus, o_attack, o_defense, turn_total, ap1, ap2, ap3,
-                                                 enh1, enh_name, ocard_lvl)
+                                                 enh1, enh_name, ocard_lvl, t_defense)
                         # await private_channel.send(file=player_1_card)
 
                         if o_used_focus and o_used_resolve:
@@ -2452,7 +2452,7 @@ class CrownUnlimited(commands.Cog):
                             # UNIVERSE CARD
                             player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina,
                                                      t_used_resolve, ttitle, t_used_focus, t_attack, t_defense,
-                                                     turn_total, tap1, tap2, tap3, tenh1, tenh_name, tcard_lvl)
+                                                     turn_total, tap1, tap2, tap3, tenh1, tenh_name, tcard_lvl, o_defense)
                             await private_channel.send(file=player_2_card)
                             aiMove = 0
 
@@ -4258,7 +4258,7 @@ class CrownUnlimited(commands.Cog):
                         # UNIVERSE CARD
                         player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina, o_used_resolve,
                                                  otitle, o_used_focus, o_attack, o_defense, turn_total, ap1, ap2, ap3,
-                                                 enh1, enh_name, ocard_lvl)
+                                                 enh1, enh_name, ocard_lvl, t_defense)
                         # await private_channel.send(file=player_1_card)
 
                         if o_used_focus and o_used_resolve:
@@ -5180,7 +5180,7 @@ class CrownUnlimited(commands.Cog):
                         tpet_msg_on_resolve = ""
                         player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina, t_used_resolve,
                                                  ttitle, t_used_focus, t_attack, t_defense, turn_total, tap1, tap2,
-                                                 tap3, tenh1, tenh_name, tcard_lvl)
+                                                 tap3, tenh1, tenh_name, tcard_lvl, o_defense)
                         await private_channel.send(file=player_2_card)
                         aiMove = 0
 
@@ -7086,7 +7086,7 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, stamina, en
 
 
 def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focused, attack, defense, turn_total, ap1,
-             ap2, ap3, enh1, enhname, lvl):
+             ap2, ap3, enh1, enhname, lvl, op_defense):
     # Card Name can be 16 Characters before going off Card
     # Lower Card Name Font once after 16 characters
     try:
@@ -7128,6 +7128,44 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
             stats = ImageFont.truetype("Freedom-10eM.ttf", 30)
             card_details_font_size = ImageFont.truetype("destructobeambb_bold.ttf", 25)
             card_levels = ImageFont.truetype("destructobeambb_bold.ttf", 40)
+            engagement_basic = 0
+            engagement_special = 0
+            engagement_ultimate = 0
+            ebasic = '💢'
+            especial = '💢'
+            eultimate = '💢'
+            if op_defense is None:
+                ebasic = ' '
+                especial = ' '
+                eultimate = ' '
+            else:
+                defensepower = op_defense - attack
+                if defensepower <=0:
+                    defensepower = 1
+                basic = ((attack + ap1) / defensepower)
+                if basic > (ap1 * 1.5):
+                    engagement_basic = 2
+                    ebasic = '‼️'
+                elif basic < (ap1 / 2):
+                    engagement_basic = 1
+                    ebasic = '❕'
+            
+                    
+                special = ((attack + ap2) / defensepower)
+                if special > (ap2 * 1.5):
+                    engagement_special = 2
+                    especial = '‼️'
+                elif special < (ap2 / 2):
+                    engagement_special = 1
+                    especial = '❕'
+        
+                ultimate = ((attack + ap3) / defensepower)
+                if ultimate > (ap3 * 1.5):
+                    engagement_ultimate = 2
+                    eultimate = '‼️'
+                elif ultimate < (ap3 / 2):
+                    engagement_ultimate = 1
+                    eultimate = '❕'
 
             if health == max_health:
                 health_bar = f"{max_health}"
@@ -7176,15 +7214,15 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
             moveset = d['MOVESET']
             move1 = moveset[0]
             move1_ap = ap1
-            move1_text = f"💥 {list(move1.keys())[0]}: {move1_ap}"
+            move1_text = f"💥 {list(move1.keys())[0]}: {move1_ap} {ebasic}"
 
             move2 = moveset[1]
             move2_ap = ap2
-            move2_text = f"☄️ {list(move2.keys())[0]}: {move2_ap}"
+            move2_text = f"☄️ {list(move2.keys())[0]}: {move2_ap} {especial}"
 
             move3 = moveset[2]
             move3_ap = ap3
-            move3_text = f"🏵️ {list(move3.keys())[0]}: {move3_ap}"
+            move3_text = f"🏵️ {list(move3.keys())[0]}: {move3_ap} {eultimate}"
 
             move_enhanced = moveset[3]
             move_enhanced_ap = enh1
@@ -10165,7 +10203,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             # UNIVERSE CARD
                             player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina,
                                                      o_used_resolve, otitle, o_used_focus, o_attack, o_defense,
-                                                     turn_total, ap1, ap2, ap3, enh1, enh_name, ocard_lvl)
+                                                     turn_total, ap1, ap2, ap3, enh1, enh_name, ocard_lvl, t_defense)
                             # await private_channel.send(file=player_1_card)
 
                             if o_used_focus and o_used_resolve:
@@ -11128,7 +11166,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 # UNIVERSE CARD
                                 player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina,
                                                          t_used_resolve, ttitle, t_used_focus, t_attack, t_defense,
-                                                         turn_total, tap1, tap2, tap3, tenh1, tenh_name, tcard_lvl)
+                                                         turn_total, tap1, tap2, tap3, tenh1, tenh_name, tcard_lvl, o_defense)
                                 # await private_channel.send(file=player_2_card)
 
                                 if t_used_focus and t_used_resolve:
@@ -11864,7 +11902,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 # UNIVERSE CARD
                                 player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina,
                                                          t_used_resolve, ttitle, t_used_focus, t_attack, t_defense,
-                                                         turn_total, tap1, tap2, tap3, tenh1, tenh_name, tcard_lvl)
+                                                         turn_total, tap1, tap2, tap3, tenh1, tenh_name, tcard_lvl, o_defense)
                                 await ctx.send(file=player_2_card)
 
                                 aiMove = 0
@@ -13307,7 +13345,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 # UNIVERSE CARD
                                 player_1_card = showcard(o, o_max_health, o_health, o_max_stamina, o_stamina,
                                                          o_used_resolve, otitle, o_used_focus, o_attack, o_defense,
-                                                         turn_total, ap1, ap2, ap3, enh1, enh_name, ocard_lvl)
+                                                         turn_total, ap1, ap2, ap3, enh1, enh_name, ocard_lvl, t_defense)
                                 # await private_channel.send(file=player_1_card)
 
                                 # Configure options which are buttons used to play
@@ -14565,7 +14603,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 # UNIVERSE CARD
                                 player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina,
                                                          t_used_resolve, ttitle, t_used_focus, t_attack, t_defense,
-                                                         turn_total, tap1, tap2, tap3, tenh1, tenh_name, tcard_lvl)
+                                                         turn_total, tap1, tap2, tap3, tenh1, tenh_name, tcard_lvl, o_defense)
                                 await private_channel.send(file=player_2_card)
                             aiMove = 0
 
@@ -16211,7 +16249,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     cpet_msg_on_resolve = ""
                                     companion_card = showcard(c, c_max_health, c_health, c_max_stamina, c_stamina,
                                                               c_used_resolve, ctitle, c_used_focus, c_attack, c_defense,
-                                                              turn_total, cap1, cap2, cap3, cenh1, cenh_name, ccard_lvl)
+                                                              turn_total, cap1, cap2, cap3, cenh1, cenh_name, ccard_lvl, t_defense)
                                     await private_channel.send(file=companion_card)
                                     aiMove = 0
 
@@ -17106,7 +17144,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     cpet_msg_on_resolve = ""
                                     companion = showcard(c, c_max_health, c_health, c_max_stamina, c_stamina,
                                                          c_used_resolve, ctitle, c_used_focus, c_attack, c_defense,
-                                                         turn_total, cap1, cap2, cap3, cenh1, cenh_name, ccard_lvl)
+                                                         turn_total, cap1, cap2, cap3, cenh1, cenh_name, ccard_lvl, t_defense)
 
                                     # await private_channel.send(file=companion)
 
@@ -18149,7 +18187,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 # UNIVERSE CARD
                                 player_2_card = showcard(t, t_max_health, t_health, t_max_stamina, t_stamina,
                                                          t_used_resolve, ttitle, t_used_focus, t_attack, t_defense,
-                                                         turn_total, tap1, tap2, tap3, tenh1, tenh_name, tcard_lvl)
+                                                         turn_total, tap1, tap2, tap3, tenh1, tenh_name, tcard_lvl, c_defense)
                                 await private_channel.send(file=player_2_card)
                                 aiMove = 0
 

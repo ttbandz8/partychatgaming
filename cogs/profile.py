@@ -247,7 +247,7 @@ class Profile(commands.Cog):
                     titlemessage = f":reminder_ribbon: | **{title_name}** *{title_passive_type} {title_passive_value}{enhancer_suffix_mapping[title_passive_type]}*"
                     warningmessage= f""
                 cardtitle = {'TITLE': title_name}
-                card_file = showcard(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, cardtitle, focused, o_attack, o_defense, turn, move1ap, move2ap, move3ap, move4ap, move4enh, card_lvl)
+                card_file = showcard(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, cardtitle, focused, o_attack, o_defense, turn, move1ap, move2ap, move3ap, move4ap, move4enh, card_lvl, None)
 
                 embedVar = discord.Embed(title=f"{licon} {card_lvl} {message}".format(self), description=textwrap.dedent(f"""\
                 {titlemessage}
