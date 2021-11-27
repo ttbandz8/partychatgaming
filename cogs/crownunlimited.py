@@ -20399,6 +20399,10 @@ async def bossdrops(player, universe):
     boss = db.queryBoss({'UNIVERSE': universe})
     vault_query = {'OWNER': str(player)}
     vault = db.queryVault(vault_query)
+    owned_arms = []
+    for arm in vault['ARMS']:
+        owned_arms.append(arm['ARM'])
+
     user_query = {'DISNAME': str(player)}
     user = db.queryUser(user_query)
     rebirth = user['REBIRTH']
@@ -20445,28 +20449,33 @@ async def bossdrops(player, universe):
     boss_card_drop = 500  #
 
     drop_rate = random.randint((0 + (rebirth * rebirth) * (1 + rebirth)), 500)
+    durability = random.randint(25, 120)
 
     try:
         if drop_rate <= gold_drop:
-            bless_amount = 100 * (1 + rebirth)
+            bless_amount = 5000 * (1 + rebirth)
             await bless(bless_amount, player)
-            return f"You earned :coin: 60!"
+            return f"You earned :coin: 5000!"
         elif drop_rate <= title_drop and drop_rate > gold_drop:
             if len(vault['TITLES']) >= 150:
-                await bless(5000, player)
-                return f"You're maxed out on Titles! You earned :coin: 5000 instead!"
+                await bless(8000, player)
+                return f"You're maxed out on Titles! You earned :coin: **8000** instead!"
             response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'TITLES': str(titles[rand_title])}})
             return f"You earned {titles[rand_title]}!"
         elif drop_rate <= arm_drop and drop_rate > title_drop:
             if len(vault['ARMS']) >= 150:
-                await bless(5000, player)
-                return f"You're maxed out on Arms! You earned :coin: 5000 instead!"
-            response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'ARMS': str(arms[rand_arm])}})
-            return f"You earned {arms[rand_arm]}!"
+                await bless(8000, player)
+                return f"You're maxed out on Arms! You earned :coin: 8000 instead!"
+            if str(arms[rand_arm]) in owned_arms:
+                await bless(8000, player)
+                return f"You already own **{arms[rand_arm]}**! You earn :coin: **8000**."
+            else:
+                response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'ARMS': {'ARM': str(arms[rand_arm]), 'DUR': durability}}})
+                return f"You earned _Arm:_ **{arms[rand_arm]}** with ⚒️**{str(durability)}**!"
         elif drop_rate <= pet_drop and drop_rate > arm_drop:
             if len(vault['PETS']) >= 150:
-                await bless(5000, player)
-                return f"You're maxed out on Pets! You earned :coin: 5000 instead!"
+                await bless(8000, player)
+                return f"You're maxed out on Pets! You earned :coin: 8000 instead!"
             selected_pet = db.queryPet({'PET': pets[rand_pet]})
             pet_ability_name = list(selected_pet['ABILITIES'][0].keys())[0]
             pet_ability_power = list(selected_pet['ABILITIES'][0].values())[0]
@@ -20479,27 +20488,32 @@ async def bossdrops(player, universe):
             return f"You earned {pets[rand_pet]} + :coin: 80!"
         elif drop_rate <= card_drop and drop_rate > pet_drop:
             if len(vault['CARDS']) >= 150:
-                await bless(5000, player)
-                return f"You're maxed out on Cards! You earned :coin: 5000 instead!"
+                await bless(8000, player)
+                return f"You're maxed out on Cards! You earned :coin: 8000 instead!"
                 response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'CARDS': str(cards[rand_card])}})
                 await bless(50, player)
                 return f"You earned {cards[rand_card]} + :coin: 50!"
         elif drop_rate <= boss_title_drop and drop_rate > card_drop:
             if len(vault['TITLES']) >= 150:
-                await bless(5000, player)
-                return f"You're maxed out on Titles! You earned :coin: 5000 instead!"
+                await bless(10000, player)
+                return f"You're maxed out on Titles! You earned :coin: **10,000** instead!"
             response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'TITLES': str(boss_title)}})
             return f"You earned the Exclusive Boss Title: {boss_title}!"
         elif drop_rate <= boss_arm_drop and drop_rate > boss_title_drop:
             if len(vault['ARMS']) >= 150:
-                await bless(5000, player)
-                return f"You're maxed out on Arms! You earned :coin: 5000 instead!"
-            response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'ARMS': str(boss_arm)}})
-            return f"You earned the Exclusive Boss Arm:  {boss_arm}!"
+                await bless(10000, player)
+                return f"You're maxed out on Arms! You earned :coin: **10,000** instead!"
+            if str(boss_arm) in owned_arms:
+                await bless(20000, player)
+                return f"You already own **{arms[rand_arm]}**! You earn :coin: **20,000**."
+            else:
+                response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'ARMS': {'ARM': str(boss_arm), 'DUR': durability}}})
+                return f"You earned the Exclusive Boss Arm: **{str(boss_arm)}** with ⚒️**{str(durability)}**!"
+
         elif drop_rate <= boss_pet_drop and drop_rate > boss_arm_drop:
             if len(vault['PETS']) >= 150:
-                await bless(5000, player)
-                return f"You're maxed out on Pets! You earned :coin: 5000 instead!"
+                await bless(10000, player)
+                return f"You're maxed out on Pets! You earned :coin: **10,000** instead!"
             selected_pet = db.queryPet({'PET': boss['PET']})
             pet_ability_name = list(selected_pet['ABILITIES'][0].keys())[0]
             pet_ability_power = list(selected_pet['ABILITIES'][0].values())[0]
@@ -20508,12 +20522,12 @@ async def bossdrops(player, universe):
             response = db.updateVaultNoFilter(vault_query, {'$addToSet': {
                 'PETS': {'NAME': selected_pet['PET'], 'LVL': 0, 'EXP': 0, pet_ability_name: int(pet_ability_power),
                          'TYPE': pet_ability_type, 'BOND': 0, 'BONDEXP': 0, 'PATH': selected_pet['PATH']}}})
-            await bless(80, player)
-            return f"You earned the Exclusive Boss Pet:  {boss['PET']} + :coin: 80!"
+            await bless(10000, player)
+            return f"You earned the Exclusive Boss Pet:  {boss['PET']} + :coin: **10,000**!"
         elif drop_rate <= boss_card_drop and drop_rate > boss_pet_drop:
             if len(vault['CARDS']) >= 150:
-                await bless(5000, player)
-                return f"You're maxed out on Cards! You earned :coin: 5000 instead!"
+                await bless(10000, player)
+                return f"You're maxed out on Cards! You earned :coin: **10,000** instead!"
             card_owned = False
             for c in vault['CARD_LEVELS']:
                 if c['CARD'] == str(boss_card):
@@ -20534,7 +20548,7 @@ async def bossdrops(player, universe):
                 r = db.updateVaultNoFilter(vault_query, update_query)
 
                 response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'CARDS': str(boss_card)}})
-                await bless(50, player)
+                await bless(8000, player)
     except Exception as ex:
         trace = []
         tb = ex.__traceback__
