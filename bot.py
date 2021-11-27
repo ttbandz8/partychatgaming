@@ -1271,6 +1271,18 @@ async def pay(ctx, player: User, amount):
       return
 
 
+@slash.slash(name="Traits", description="List of Universe Traits", guild_ids=guild_ids)
+@commands.check(validate_user)
+async def traits(ctx):
+   traits = ut.traits
+   traitmessages = []
+   for trait in traits:
+      traitmessages.append(f"_{trait['NAME']}_\n**{trait['EFFECT']}**: {trait['TRAIT']}\n")
+
+   embedVar = discord.Embed(title="Universe Traits", description="\n".join(traitmessages))
+
+   await ctx.author.send(embed=embedVar)
+
 async def blessteam(amount, team):
    blessAmount = amount
    posBlessAmount = 0 + abs(int(blessAmount))

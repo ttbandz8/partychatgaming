@@ -17,7 +17,7 @@ from PIL import Image, ImageFont, ImageDraw
 import requests
 from collections import ChainMap
 import DiscordUtils
-from .crownunlimited import showcard, enhancer_mapping, enhancer_suffix_mapping
+from .crownunlimited import showcard, cardback, enhancer_mapping, enhancer_suffix_mapping
 import random
 import textwrap
 from discord_slash import cog_ext, SlashContext
@@ -140,7 +140,7 @@ class Profile(commands.Cog):
                         if trait['NAME'] == 'Pokemon':
                             mytrait = trait
                 if mytrait:
-                    traitmessage = f"**{mytrait['EFFECT']}**: {mytrait['TRAIT']}"
+                    traitmessage = f"{mytrait['EFFECT']}"
 
                 pets = vault['PETS']
                 active_pet = {}
@@ -248,6 +248,9 @@ class Profile(commands.Cog):
                     warningmessage= f""
                 cardtitle = {'TITLE': title_name}
                 card_file = showcard(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, cardtitle, focused, o_attack, o_defense, turn, move1ap, move2ap, move3ap, move4ap, move4enh, card_lvl, None)
+                card_back_file = cardback(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, arm, focused,
+                                    o_attack, o_defense, turn, passive_name, traitmessage, 0, None, None, passive_type, passive_num)
+
 
                 embedVar = discord.Embed(title=f"{licon} {card_lvl} {message}".format(self), description=textwrap.dedent(f"""\
                 {titlemessage}
@@ -265,7 +268,7 @@ class Profile(commands.Cog):
                 if card_lvl != 200:
                     embedVar.set_footer(text=f"EXP Until Next Level: {150 - card_exp}\nRebirth Buff: +{rebirthBonus}", icon_url="https://cdn.discordapp.com/emojis/841486485826961448.gif?v=1")
 
-                await ctx.send(embed=embedVar, file=card_file)
+                await ctx.send(files=[card_file, card_back_file])
             except Exception as ex:
                 trace = []
                 tb = ex.__traceback__
