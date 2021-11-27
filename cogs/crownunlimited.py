@@ -7309,7 +7309,7 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
 
 
 def cardback(d, max_health, health, max_stamina, stamina, resolved, arm, focused, attack, defense, turn_total, passive_name,
-             traitmessage, lvl, price_message, card_icon, passive_type, passive_num):
+             traitmessage, lvl, price_message, card_icon, passive_type, passive_num, active_pet, pet_ability_power):
     # Card Name can be 16 Characters before going off Card
     # Lower Card Name Font once after 16 characters
     try:
@@ -7387,10 +7387,14 @@ def cardback(d, max_health, health, max_stamina, stamina, resolved, arm, focused
             
             back_name = ""
             durability = ""
+            pet_info = ""
             if price_message:
                 back_name = f"{card_icon} {price_message}"
+                pet_info = ""
             else:
                 back_name = d['NAME']
+                pet_info = f"🐦 {active_pet['NAME']}: {active_pet['TYPE']} {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]}"
+
             with Pilmoji(im) as pilmoji:
                 pilmoji.text((600, 80), back_name, (255, 255, 255), font=header, stroke_width=1, stroke_fill=(0, 0, 0),
                           align="left")
@@ -7401,6 +7405,9 @@ def cardback(d, max_health, health, max_stamina, stamina, resolved, arm, focused
                              stroke_fill=(0, 0, 0))
                 pilmoji.text((600, 290), f"♾️ {traitmessage}".strip(), (255, 255, 255), font=moveset_font, stroke_width=2,
                              stroke_fill=(0, 0, 0))
+
+                pilmoji.text((600, 330), f"{pet_info}".strip(), (255, 255, 255), font=moveset_font, stroke_width=2,stroke_fill=(0, 0, 0))
+
 
 
             with BytesIO() as image_binary:
@@ -7424,8 +7431,6 @@ def cardback(d, max_health, health, max_stamina, stamina, resolved, arm, focused
             'trace': trace
         }))
         return
-
-
 
 
 def setup(bot):

@@ -345,6 +345,9 @@ class Cards(commands.Cog):
                 move4ap = list(o_enhancer.values())[0]
                 move4_stamina = list(o_enhancer.values())[1]
                 move4enh = list(o_enhancer.values())[2]
+                active_pet = {}
+                pet_ability_power = 0
+
 
                 message = ""
                 tip = ""
@@ -369,7 +372,7 @@ class Cards(commands.Cog):
                                     o_attack, o_defense, turn, move1ap, move2ap, move3ap, move4ap, move4enh, 0, None)
 
                 card_back_file = cardback(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, arm, focused,
-                                    o_attack, o_defense, turn, passive_name, traitmessage, 0, price_message, card_icon, passive_type, passive_num)
+                                    o_attack, o_defense, turn, passive_name, traitmessage, 0, price_message, card_icon, passive_type, passive_num, active_pet, pet_ability_power)
 
                 pages = [card_file, card_back_file]
                 await ctx.send(files=pages)
