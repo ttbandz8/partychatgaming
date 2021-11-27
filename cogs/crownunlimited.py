@@ -3251,7 +3251,7 @@ class CrownUnlimited(commands.Cog):
                 # universe = "Naruto"
                 # selected_universe = {"TITLE": "Naruto"}
                 await battle_commands(self, ctx, mode, None, None, None, oguild, None, None, private_channel, sowner,
-                                      oteam, None, opponent, tteam, tguild, None, None)
+                                      oteam, None, opponent, tteam, tguild, None, None, None)
         except Exception as ex:
             trace = []
             tb = ex.__traceback__
