@@ -7077,6 +7077,22 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, stamina, en
             }))
             return
 
+# DONT REMOVE THIS
+cache = dict()
+
+def get_card(url, cardname):
+    save_path = f"image_cache/{str(cardname)}.png"
+    if url not in cache:
+        # print("Fetching card from server...")
+        im = Image.open(requests.get(url, stream=True).raw)
+        cache[url] = save_path
+        im.save(save_path)
+        return im
+    else:
+        # print("Getting card...")
+        im = Image.open(cache[url]) 
+        return im
+
 
 def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focused, attack, defense, turn_total, ap1,
              ap2, ap3, enh1, enhname, lvl, op_defense):
@@ -7084,19 +7100,19 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
     # Lower Card Name Font once after 16 characters
     try:
         if health <= 0:
-            im = Image.open(requests.get(d['PATH'], stream=True).raw)
+            im = get_card(d['PATH'], d['NAME'])
             im.save("text.png")
             return discord.File("text.png")
         else:
             if resolved:
-                im = Image.open(requests.get(d['RPATH'], stream=True).raw)
+                im = get_card(d['RPATH'], d['RNAME'])
             elif focused:
                 if d["FPATH"]:
-                    im = Image.open(requests.get(d['FPATH'], stream=True).raw)
+                    im = get_card(d['FPATH'], d['NAME'])
                 else:
-                    im = Image.open(requests.get(d['PATH'], stream=True).raw)
+                    im = get_card(d['PATH'], d['NAME'])
             else:
-                im = Image.open(requests.get(d['PATH'], stream=True).raw)
+                im = get_card(d['PATH'], d['NAME'])
 
             draw = ImageDraw.Draw(im)
 
@@ -7172,8 +7188,8 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
             if resolved:
                 draw.text((600, 80), d['RNAME'], (255, 255, 255), font=header, stroke_width=1, stroke_fill=(0, 0, 0),
                           align="left")
-            draw.text((602, 150), title['TITLE'], (255, 255, 255), font=h, stroke_width=1, stroke_fill=(0, 0, 0),
-                      align="left")
+            # draw.text((602, 150), title['TITLE'], (255, 255, 255), font=h, stroke_width=1, stroke_fill=(0, 0, 0),
+            #           align="left")
 
             # Level
             lvl_sizing = (89, 70)
@@ -7244,8 +7260,8 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
             # attack_stat = f"🗡️{round(attack)}"
             # defense_stat = f"🛡️{round(defense)}"
             with Pilmoji(im) as pilmoji:
-                # pilmoji.text(a_sizing, attack_stat.strip(), (255, 255, 255), font=attack_and_shield_font, stroke_width=2, stroke_fill=(0,0,0))
-                # pilmoji.text(d_sizing, defense_stat.strip(), (255, 255, 255), font=attack_and_shield_font, stroke_width=2, stroke_fill=(0,0,0))
+                pilmoji.text((602, 150), f"🎗️ {title['TITLE']}", (255, 255, 255), font=h, stroke_width=1, stroke_fill=(0, 0, 0),
+                      align="left")
                 pilmoji.text((600, 250), move1_text.strip(), (255, 255, 255), font=moveset_font, stroke_width=2,
                              stroke_fill=(0, 0, 0))
                 pilmoji.text((600, 290), move2_text.strip(), (255, 255, 255), font=moveset_font, stroke_width=2,
@@ -7260,6 +7276,132 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
                 # pilmoji.text((1000, 545), "🛡️", (255, 255, 255), font=moveset_font, stroke_width=2,
                 #              stroke_fill=(0, 0, 0))
             # Moveset End
+
+            with BytesIO() as image_binary:
+                im.save(image_binary, "PNG")
+                image_binary.seek(0)
+                # await ctx.send(file=discord.File(fp=image_binary,filename="image.png"))
+
+                return discord.File(fp=image_binary, filename="image.png")
+    except Exception as ex:
+        trace = []
+        tb = ex.__traceback__
+        while tb is not None:
+            trace.append({
+                "filename": tb.tb_frame.f_code.co_filename,
+                "name": tb.tb_frame.f_code.co_name,
+                "lineno": tb.tb_lineno
+            })
+            tb = tb.tb_next
+        print(str({
+            'type': type(ex).__name__,
+            'message': str(ex),
+            'trace': trace
+        }))
+        return
+
+
+def cardback(d, max_health, health, max_stamina, stamina, resolved, arm, focused, attack, defense, turn_total, passive_name,
+             traitmessage, lvl, price_message, card_icon, passive_type, passive_num, active_pet, pet_ability_power):
+    # Card Name can be 16 Characters before going off Card
+    # Lower Card Name Font once after 16 characters
+    try:
+        if health <= 0:
+            im = get_card(d['PATH'], d['NAME'])
+            im.save("text.png")
+            return discord.File("text.png")
+        else:
+            if resolved:
+                im = get_card(d['RPATH'], d['RNAME'])
+            elif focused:
+                if d["FPATH"]:
+                    im = get_card(d['FPATH'], d['NAME'])
+                else:
+                    im = get_card(d['PATH'], d['NAME'])
+            else:
+                im = get_card(d['PATH'], d['NAME'])
+
+            draw = ImageDraw.Draw(im)
+
+            # Font Size Adjustments
+            # Name not go over Card
+            name_font_size = 62
+            if len(list(d['NAME'])) >= 16 and not resolved:
+                name_font_size = 45
+            if len(list(d['RNAME'])) >= 16 and resolved:
+                name_font_size = 45
+
+            header = ImageFont.truetype("YesevaOne-Regular.ttf", name_font_size)
+            s = ImageFont.truetype("Roboto-Bold.ttf", 22)
+            h = ImageFont.truetype("YesevaOne-Regular.ttf", 37)
+            m = ImageFont.truetype("Roboto-Bold.ttf", 25)
+            r = ImageFont.truetype("Freedom-10eM.ttf", 40)
+            lvl_font = ImageFont.truetype("Neuton-Bold.ttf", 68)
+            health_and_stamina_font = ImageFont.truetype("Neuton-Light.ttf", 41)
+            attack_and_shield_font = ImageFont.truetype("Neuton-Bold.ttf", 48)
+            moveset_font = ImageFont.truetype("antonio.regular.ttf", 30)
+            rhs = ImageFont.truetype("destructobeambb_bold.ttf", 35)
+            stats = ImageFont.truetype("Freedom-10eM.ttf", 30)
+            card_details_font_size = ImageFont.truetype("destructobeambb_bold.ttf", 25)
+            card_levels = ImageFont.truetype("destructobeambb_bold.ttf", 40)
+
+            if health == max_health:
+                health_bar = f"{max_health}"
+            else:
+                health_bar = f"{health}/{max_health}"
+
+            # Level
+            lvl_sizing = (89, 70)
+            if int(lvl) > 9:
+                lvl_sizing = (75, 70)
+            if int(lvl) > 99:
+                lvl_sizing = (55, 70)
+            draw.text(lvl_sizing, f"{lvl}", (255, 255, 255), font=lvl_font, stroke_width=1, stroke_fill=(0, 0, 0),
+                      align="center")
+
+            # Health & Stamina
+            draw.text((730, 417), health_bar, (255, 255, 255), font=health_and_stamina_font, stroke_width=1,
+                      stroke_fill=(0, 0, 0), align="left")
+            draw.text((730, 457), f"{stamina}", (255, 255, 255), font=health_and_stamina_font, stroke_width=1,
+                      stroke_fill=(0, 0, 0), align="left")
+
+            # Attack & Shield (Defense)
+            a_sizing = (89, 515)
+            d_sizing = (1062, 515)
+            if int(attack) > 99:
+                a_sizing = (78, 515)
+            if int(defense) > 99:
+                d_sizing = (1048, 515)
+
+            draw.text(a_sizing, f"{round(attack)}", (255, 255, 255), font=attack_and_shield_font, stroke_width=1,
+                      stroke_fill=(0, 0, 0), align="center")
+            draw.text(d_sizing, f"{round(defense)}", (255, 255, 255), font=attack_and_shield_font, stroke_width=1,
+                      stroke_fill=(0, 0, 0), align="center")
+            
+            back_name = ""
+            durability = ""
+            pet_info = ""
+            if price_message:
+                back_name = f"{card_icon} {price_message}"
+                pet_info = ""
+            else:
+                back_name = d['NAME']
+                pet_info = f"🐦 {active_pet['NAME']}: {active_pet['TYPE']} {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]}"
+
+            with Pilmoji(im) as pilmoji:
+                pilmoji.text((600, 80), back_name, (255, 255, 255), font=header, stroke_width=1, stroke_fill=(0, 0, 0),
+                          align="left")
+                
+                pilmoji.text((602, 150), f"🦾 {arm['ARM']}", (255, 255, 255), font=h, stroke_width=1, stroke_fill=(0, 0, 0),
+                      align="left")
+                pilmoji.text((600, 250), f"🩸 {passive_name}: {passive_type} by {passive_num}{enhancer_suffix_mapping[passive_type]}".strip(), (255, 255, 255), font=moveset_font, stroke_width=2,
+                             stroke_fill=(0, 0, 0))
+                pilmoji.text((600, 290), f"♾️ {traitmessage}".strip(), (255, 255, 255), font=moveset_font, stroke_width=2,
+                             stroke_fill=(0, 0, 0))
+
+                pilmoji.text((600, 330), f"{pet_info}".strip(), (255, 255, 255), font=moveset_font, stroke_width=2,stroke_fill=(0, 0, 0))
+
+
 
             with BytesIO() as image_binary:
                 im.save(image_binary, "PNG")
