@@ -31,6 +31,7 @@ from discord_slash import cog_ext, SlashContext
 from discord_slash.utils import manage_components
 from discord_slash.model import ButtonStyle
 from discord_slash.utils.manage_commands import create_option, create_choice
+from dinteractions_Paginator import Paginator
 import typing
 from pilmoji import Pilmoji
 
@@ -9466,6 +9467,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
         available_universes = []
         universe_menu = []
         selected_universe = ""
+        universe_embed_list = []
         if sowner['RIFT'] == 1:
             for uni in all_universes:
                 if uni['HAS_CROWN_TALES'] == True or uni['TIER'] == 9:
@@ -9481,52 +9483,61 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             for uni in all_universes:
                 if uni['HAS_CROWN_TALES'] == True and uni['TIER'] != 9:
                     if uni['TITLE'] in completed_crown_tales:
-                        available_universes.append(uni['TITLE'])
-                        universe_menu.append(
-                            f"{Crest_dict[uni['TITLE']]} | **{uni['TITLE']}** : :crossed_swords: **{len(uni['CROWN_TALES'])}** :white_check_mark: \n")
+                        save_spot_text = "No Save Data"
+                        for save in saved_spots:
+                            if save['UNIVERSE'] == uni['TITLE'] and save['MODE'] in U_modes:
+                                save_spot_text = str(save['CURRENTOPPONENT'])
+
+                        embedVar = discord.Embed(title= f"{uni['TITLE']}", description=textwrap.dedent(f"""
+                        {Crest_dict[uni['TITLE']]} **Number of Fights**: :crossed_swords: **{len(uni['CROWN_TALES'])}**
+                        🎗️ **Universe Title**: {uni['UTITLE']}
+                        🦾 **Universe Arm**: {uni['UARM']}
+                        🐦 **Universe Pet**: {uni['UPET']}
+
+                        **Saved Game**: :crossed_swords: *{save_spot_text}*
+                        """))
+                        embedVar.set_image(url=uni['PATH'])
+                        universe_embed_list.append(embedVar)
                     else:
-                        universe_menu.append(
-                            f"{Crest_dict[uni['TITLE']]} | **{uni['TITLE']}** : :crossed_swords: **{len(uni['CROWN_TALES'])}**\n")
-                        available_universes.append(uni['TITLE'])
+                        save_spot_text = "No Save Data"
+                        for save in saved_spots:
+                            if save['UNIVERSE'] == uni['TITLE'] and save['MODE'] in U_modes:
+                                save_spot_text = str(save['CURRENTOPPONENT'])
 
-        icon = ":crown:"
-        if sowner['RIFT'] == 1:
-            icon = ":crystal_ball:"
+                        embedVar = discord.Embed(title= f"{uni['TITLE']}", description=textwrap.dedent(f"""
+                        {Crest_dict[uni['TITLE']]} **Number of Fights**: :crossed_swords: **{len(uni['CROWN_TALES'])}**
+                        🎗️ **Universe Title**: {uni['UTITLE']}
+                        🦾 **Universe Arm**: {uni['UARM']}
+                        🐦 **Universe Pet**: {uni['UPET']}
 
-        embedVar = discord.Embed(title=f"{icon} Select {mode} Universe | :crossed_swords: *Battles*",
-                                 description="\n".join(universe_menu), colour=0xe91e63)
-        embedVar.set_author(name="Type the universe you want to explore",
-                            icon_url="https://cdn.discordapp.com/emojis/866090350015545384.gif?v=1")
-        embedVar.set_footer(text="Type Quit to exit Tales selection")
-        await ctx.send(embed=embedVar, delete_after=30)
-        accept = await ctx.send(f"{ctx.author.mention} which Universe would you like to explore!", delete_after=30)
+                        **Saved Game**: :crossed_swords: *{save_spot_text}*
+                        """))
+                        embedVar.set_image(url=uni['PATH'])
+                        universe_embed_list.append(embedVar)
 
-        def check(msg):
-            _selected = ""
-            for uni in available_universes:
-                if uni.upper() == msg.content.upper():
-                    _selected = uni
-            return msg.author == ctx.author and (_selected in available_universes) or (msg.content == "Quit")
+        custom_button = manage_components.create_button(style=3, label="Start")
+
+        async def custom_function(self, button_ctx):
+            await button_ctx.send("Starting...", hidden=True)
+            selected_universe = custom_function
+            custom_function.selected_universe = str(button_ctx.origin_message.embeds[0].title)
+            self.stop = True
+            
+
+        await Paginator(bot=self.bot, ctx=ctx,  deleteAfterTimeout=True, pages=universe_embed_list, timeout=60, authorOnly=True, customButton=[
+            custom_button,
+            custom_function,
+        ]).run()
+        
 
         try:
-            msg = await self.bot.wait_for('message', timeout=30.0, check=check)
-            _selected = ""
-            for uni in available_universes:
-                if uni.upper() == msg.content.upper():
-                    _selected = uni
-
-            if msg.content == "Quit":
-                await ctx.send("Quit Tales selection. ")
-
-                return
-
+            # print(custom_function.selected_universe)
+            selected_universe = custom_function.selected_universe
             channel_exists_response = existing_channel_check(self, ctx)
             if channel_exists_response:
                 await ctx.send(m.ALREADY_IN_TALES)
                 return
 
-            # Universe Cost
-            selected_universe = _selected
             universe = db.queryUniverse({'TITLE': str(selected_universe)})
             if not universe['CROWN_TALES']:
                 await ctx.send(f"{selected_universe} is not ready to be explored! Check back later!")
@@ -9540,6 +9551,8 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             return {'SELECTED_UNIVERSE': selected_universe, 'PRIVATE_CHANNEL': private_channel,
                     'UNIVERSE_DATA': universe, 'CREST_LIST': crestlist, 'CREST_SEARCH': crestsearch,
                     'COMPLETED_TALES': completed_crown_tales, 'OGUILD': oguild, 'CURRENTOPPONENT': currentopponent}
+
+            
         except Exception as ex:
             trace = []
             tb = ex.__traceback__
