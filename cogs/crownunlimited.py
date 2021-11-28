@@ -4396,8 +4396,7 @@ class CrownUnlimited(commands.Cog):
                                     embedVar.set_footer(
                                         text=f"Basic Attacks are great when you are low on stamina, but don't be afraid to enter focus state and REPLENISH!")
                                     await button_ctx.send(embed=embedVar)
-                                dmg = damage_cal(o_universe, o_card, o_1, o_attack, o_defense, t_defense, o_vul,
-                                                 o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,
+                                dmg = damage_cal(o_universe, o_card, o_1, o_attack, o_defense, t_defense, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,
                                                  o_max_health, t_attack, o_special_move_description, turn_total,
                                                  ocard_lvl_ap_buff)
 
@@ -4411,8 +4410,7 @@ class CrownUnlimited(commands.Cog):
                                     embedVar.set_footer(
                                         text=f"Special Attacks are great when you need to control the focus game! Use Them to Maximize your focus and build stronger combos!")
                                     await button_ctx.send(embed=embedVar)
-                                dmg = damage_cal(o_universe, o_card, o_2, o_attack, o_defense, t_defense, o_vul,
-                                                 o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,
+                                dmg = damage_cal(o_universe, o_card, o_2, o_attack, o_defense, t_defense, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,
                                                  o_max_health, t_attack, o_special_move_description, turn_total,
                                                  ocard_lvl_ap_buff)
 
@@ -4426,8 +4424,7 @@ class CrownUnlimited(commands.Cog):
                                     embedVar.set_footer(
                                         text=f"Ultimate moves will consume most of your stamina! Use Them Wisely!")
                                     await button_ctx.send(embed=embedVar)
-                                dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_vul,
-                                                 o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,
+                                dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,
                                                  o_max_health, t_attack, o_special_move_description, turn_total,
                                                  ocard_lvl_ap_buff)
 
@@ -4445,8 +4442,7 @@ class CrownUnlimited(commands.Cog):
                                         text=f"Use .enhance to view a full list of enhancers! Look for the {list(o_enhancer.values())[2]} Enhancer")
                                     await button_ctx.send(embed=embedVar)
                                 o_enhancer_used = True
-                                dmg = damage_cal(o_universe, o_card, o_enhancer, o_attack, o_defense, t_defense, o_vul,
-                                                 o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,
+                                dmg = damage_cal(o_universe, o_card, o_enhancer, o_attack, o_defense, t_defense, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,
                                                  o_max_health, t_attack, o_special_move_description, turn_total,
                                                  ocard_lvl_ap_buff)
 
@@ -4585,8 +4581,7 @@ class CrownUnlimited(commands.Cog):
                                         o_attack = round(o_attack + o_resolve_attack)
                                         o_defense = round(o_defense - o_resolve_defense)
 
-                                        dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_vul,
-                                                         o_accuracy, o_stamina, o_enhancer_used, o_health, t_health,
+                                        dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_stamina, o_enhancer_used, o_health, t_health,
                                                          t_stamina, o_max_health, t_attack, o_special_move_description,
                                                          turn_total, ocard_lvl_ap_buff)
                                         t_health = t_health - dmg['DMG']
@@ -4675,7 +4670,7 @@ class CrownUnlimited(commands.Cog):
                             #             embedVar.set_footer(text=f"Pets will Level Up and build Bond as you win battles! Train up your pets to perform better in the field!")
                             #             await button_ctx.send(embed=embedVar)
                             #         o_enhancer_used=True
-                            #         dmg = damage_cal(o_universe, o_card, opet_move, o_attack, o_defense, t_defense, o_vul, o_accuracy, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total, ocard_lvl_ap_buff)
+                            #         dmg = damage_cal(o_universe, o_card, opet_move, o_attack, o_defense, t_defense,o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total, ocard_lvl_ap_buff)
                             #         o_enhancer_used=False
                             #         o_pet_used =True
                             #         opet_dmg = dmg['DMG']
@@ -4890,7 +4885,7 @@ class CrownUnlimited(commands.Cog):
                                         if oarm_barrier_active:
                                             oarm_barrier_active=False
                                             embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                        await button_ctx.send(embed=embedVar)
+                                        await ctx.send(embed=embedVar)
                                         turn_total = turn_total + 1
                                         turn = 1
                                     else:
@@ -4900,7 +4895,7 @@ class CrownUnlimited(commands.Cog):
                                             if oarm_barrier_active:
                                                 oarm_barrier_active=False
                                                 embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                            await button_ctx.send(embed=embedVar)
+                                            await ctx.send(embed=embedVar)
                                         elif tarm_shield_active:
                                             if tshield_value > 0:
                                                 tshield_value = tshield_value -dmg['DMG']
@@ -4910,14 +4905,14 @@ class CrownUnlimited(commands.Cog):
                                                     if oarm_barrier_active:
                                                         oarm_barrier_active=False
                                                         embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                    await button_ctx.send(embed=embedVar)
+                                                    await ctx.send(embed=embedVar)
                                                     tarm_shield_active = False
                                                 else:
                                                     embedVar = discord.Embed(title=f"{t_card.upper()} Activates **Shield** 🌐", description=f"{o_card} strikes the **Shield** for **{dmg['DMG']} DMG!**\n **{tshield_value} Shield** Left!", colour=0xe91e63)
                                                     if oarm_barrier_active:
                                                         oarm_barrier_active=False
                                                         embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                    await button_ctx.send(embed=embedVar)
+                                                    await ctx.send(embed=embedVar)
 
                                         elif tarm_barrier_active:
                                             if tbarrier_count >1:
@@ -4926,7 +4921,7 @@ class CrownUnlimited(commands.Cog):
                                                 if oarm_barrier_active:
                                                     oarm_barrier_active=False
                                                     embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                await button_ctx.send(embed=embedVar)
+                                                await ctx.send(embed=embedVar)
                                                 tbarrier_count = tbarrier_count - 1
                                             elif tbarrier_count==1:
                                                 embedVar = discord.Embed(title=f"{t_card.upper()}'s **Barrier** Broken!", description=f"{o_card} destroys the **Barrier**", colour=0xe91e63)
@@ -4934,7 +4929,7 @@ class CrownUnlimited(commands.Cog):
                                                 if oarm_barrier_active:
                                                     oarm_barrier_active=False
                                                     embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                await button_ctx.send(embed=embedVar)
+                                                await ctx.send(embed=embedVar)
                                                 tarm_barrier_active = False
 
                                         elif tarm_parry_active:
@@ -4948,7 +4943,7 @@ class CrownUnlimited(commands.Cog):
                                                 if oarm_barrier_active:
                                                     oarm_barrier_active=False
                                                     embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                await button_ctx.send(embed=embedVar)
+                                                await ctx.send(embed=embedVar)
                                                 
                                             elif tparry_count==1:
                                                 embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{o_card} breaks the **Parry**", colour=0xe91e63)
@@ -4956,7 +4951,7 @@ class CrownUnlimited(commands.Cog):
                                                 if oarm_barrier_active:
                                                     oarm_barrier_active=False
                                                     embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                await button_ctx.send(embed=embedVar)
+                                                await ctx.send(embed=embedVar)
                                                 tarm_parry_active = False
                                         else:
                                             t_health = t_health - dmg['DMG']
@@ -4964,7 +4959,7 @@ class CrownUnlimited(commands.Cog):
                                             if oarm_barrier_active:
                                                 oarm_barrier_active=False
                                                 embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                            await button_ctx.send(embed=embedVar)
+                                            await ctx.send(embed=embedVar)
                                         if t_health <= 0:
                                             if t_final_stand==True:
                                                 embedVar = discord.Embed(title=f"{t_card.upper()}'s LAST STAND", description=f"{t_card} FINDS RESOLVE", colour=0xe91e63)
@@ -4972,7 +4967,7 @@ class CrownUnlimited(commands.Cog):
                                                 if oarm_barrier_active:
                                                     oarm_barrier_active=False
                                                     embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                await button_ctx.send(embed=embedVar)
+                                                await ctx.send(embed=embedVar)
                                                 t_health = int(.75 * (t_attack + t_defense))
                                                 t_attack = t_attack + (.50 * t_attack)
                                                 t_defense = t_defense + (.50 * t_defense)
@@ -5269,23 +5264,22 @@ class CrownUnlimited(commands.Cog):
                         if int(aiMove) == 0:
                             t_health = 0
                         if int(aiMove) == 1:
-                            dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense, t_vul, t_accuracy,
+                            dmg = damage_cal(t_universe, t_card, t_1, t_attack, t_defense, o_defense,
                                              t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health,
                                              o_attack, t_special_move_description, turn_total, tcard_lvl_ap_buff)
                         elif int(aiMove) == 2:
-                            dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, t_vul, t_accuracy,
+                            dmg = damage_cal(t_universe, t_card, t_2, t_attack, t_defense, o_defense, 
                                              t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health,
                                              o_attack, t_special_move_description, turn_total, tcard_lvl_ap_buff)
                         elif int(aiMove) == 3:
-                            dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul, t_accuracy,
+                            dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense,
                                              t_stamina, t_enhancer_used, t_health, o_health, o_stamina, t_max_health,
                                              o_attack, t_special_move_description, turn_total, tcard_lvl_ap_buff)
                             if t_gif != "N/A":
                                 await private_channel.send(f"{t_gif}")
                         elif int(aiMove) == 4:
                             t_enhancer_used = True
-                            dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense, t_vul,
-                                             t_accuracy, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,
+                            dmg = damage_cal(t_universe, t_card, t_enhancer, t_attack, t_defense, o_defense, t_stamina, t_enhancer_used, t_health, o_health, o_stamina,
                                              t_max_health, o_attack, t_special_move_description, turn_total,
                                              tcard_lvl_ap_buff)
                             t_enhancer_used = False
@@ -5414,8 +5408,7 @@ class CrownUnlimited(commands.Cog):
                                     t_defense = round(t_defense - t_resolve_defense)
                                     t_used_resolve = True
 
-                                    dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_vul,
-                                                     t_accuracy, t_stamina, t_enhancer_used, t_health, o_health,
+                                    dmg = damage_cal(t_universe, t_card, t_3, t_attack, t_defense, o_defense, t_stamina, t_enhancer_used, t_health, o_health,
                                                      o_stamina, t_max_health, o_attack, t_special_move_description,
                                                      turn_total, tcard_lvl_ap_buff)
                                     t_pet_used = False
@@ -5602,14 +5595,14 @@ class CrownUnlimited(commands.Cog):
                                                 if tarm_barrier_active:
                                                     tarm_barrier_active=False
                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                await button_ctx.send(embed=embedVar)
+                                                await ctx.send(embed=embedVar)
                                                 oarm_shield_active = False
                                             else:
                                                 embedVar = discord.Embed(title=f"{o_card.upper()} Activates **Shield** 🌐", description=f"{t_card} strikes the **Shield** for **{dmg['DMG']} DMG!**\n **{oshield_value} Shield** Left!", colour=0xe91e63)
                                                 if tarm_barrier_active:
                                                     tarm_barrier_active=False
                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                await button_ctx.send(embed=embedVar)
+                                                await ctx.send(embed=embedVar)
 
                                     elif oarm_barrier_active:
                                         if obarrier_count >1:
@@ -5618,7 +5611,7 @@ class CrownUnlimited(commands.Cog):
                                             if tarm_barrier_active:
                                                 tarm_barrier_active=False
                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                            await button_ctx.send(embed=embedVar)
+                                            await ctx.send(embed=embedVar)
                                             obarrier_count = obarrier_count - 1
                                         elif obarrier_count==1:
                                             embedVar = discord.Embed(title=f"{o_card.upper()}'s **Barrier** Broken!", description=f"{t_card} destroys the **Barrier**", colour=0xe91e63)
@@ -5626,7 +5619,7 @@ class CrownUnlimited(commands.Cog):
                                             if tarm_barrier_active:
                                                 tarm_barrier_active=False
                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                            await button_ctx.send(embed=embedVar)
+                                            await ctx.send(embed=embedVar)
                                             oarm_barrier_active = False
                                     elif oarm_parry_active:
                                         if oparry_count > 1:
@@ -5638,7 +5631,7 @@ class CrownUnlimited(commands.Cog):
                                             if tarm_barrier_active:
                                                 tarm_barrier_active=False
                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                            await button_ctx.send(embed=embedVar)
+                                            await ctx.send(embed=embedVar)
                                             
                                         elif oparry_count==1:
                                             embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} breaks the **Parry**", colour=0xe91e63)
@@ -5646,7 +5639,7 @@ class CrownUnlimited(commands.Cog):
                                             if tarm_barrier_active:
                                                 tarm_barrier_active=False
                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                            await button_ctx.send(embed=embedVar)
+                                            await ctx.send(embed=embedVar)
                                             oarm_parry_active = False
                                     else:
                                         o_health = o_health - int(dmg['DMG'])
