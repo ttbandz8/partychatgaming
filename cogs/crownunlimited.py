@@ -9548,19 +9548,20 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             self.stop = True
             
 
-        await Paginator(bot=self.bot, ctx=ctx,  deleteAfterTimeout=True, pages=universe_embed_list, timeout=60, authorOnly=True, customButton=[
+        await Paginator(bot=self.bot, ctx=ctx, dm=True,  deleteAfterTimeout=True, pages=universe_embed_list, timeout=60,  customButton=[
             custom_button,
             custom_function,
         ]).run()
         
 
         try:
-            # print(custom_function.selected_universe)
-            selected_universe = custom_function.selected_universe
             channel_exists_response = existing_channel_check(self, ctx)
             if channel_exists_response:
                 await ctx.send(m.ALREADY_IN_TALES)
                 return
+
+            # print(custom_function.selected_universe)
+            selected_universe = custom_function.selected_universe
 
             universe = db.queryUniverse({'TITLE': str(selected_universe)})
             if not universe['CROWN_TALES']:
@@ -9633,7 +9634,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             self.stop = True
             
 
-        await Paginator(bot=self.bot, ctx=ctx,  deleteAfterTimeout=True, pages=universe_embed_list, timeout=60, authorOnly=True, customButton=[
+        await Paginator(bot=self.bot, ctx=ctx, dm=True, deleteAfterTimeout=True, pages=universe_embed_list, timeout=60,  customButton=[
             custom_button,
             custom_function,
         ]).run()
@@ -9709,7 +9710,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             custom_function.selected_universe = str(button_ctx.origin_message.embeds[0].title)
             self.stop = True
         
-        await Paginator(bot=self.bot, ctx=ctx,  deleteAfterTimeout=True, pages=universe_embed_list, timeout=60, authorOnly=True, customButton=[
+        await Paginator(bot=self.bot, ctx=ctx, dm=True, deleteAfterTimeout=True, pages=universe_embed_list, timeout=60,  customButton=[
             custom_button,
             custom_function,
         ]).run()
