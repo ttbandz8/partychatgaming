@@ -9472,13 +9472,37 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             for uni in all_universes:
                 if uni['HAS_CROWN_TALES'] == True or uni['TIER'] == 9:
                     if uni['TITLE'] in completed_crown_tales:
-                        available_universes.append(uni['TITLE'])
-                        universe_menu.append(
-                            f"{Crest_dict[uni['TITLE']]} | **{uni['TITLE']}** : :crossed_swords: **{len(uni['CROWN_TALES'])}**\n :white_check_mark: ")
+                        save_spot_text = "No Save Data"
+                        for save in saved_spots:
+                            if save['UNIVERSE'] == uni['TITLE'] and save['MODE'] in U_modes:
+                                save_spot_text = str(save['CURRENTOPPONENT'])
+
+                        embedVar = discord.Embed(title= f"{uni['TITLE']}", description=textwrap.dedent(f"""
+                        {Crest_dict[uni['TITLE']]} **Number of Fights**: :crossed_swords: **{len(uni['CROWN_TALES'])}**
+                        🎗️ **Universe Title**: {uni['UTITLE']}
+                        🦾 **Universe Arm**: {uni['UARM']}
+                        🐦 **Universe Pet**: {uni['UPET']}
+
+                        **Saved Game**: :crossed_swords: *{save_spot_text}*
+                        """))
+                        embedVar.set_image(url=uni['PATH'])
+                        universe_embed_list.append(embedVar)
                     else:
-                        universe_menu.append(
-                            f"{Crest_dict[uni['TITLE']]} | **{uni['TITLE']}** : :crossed_swords: **{len(uni['CROWN_TALES'])}**\n")
-                        available_universes.append(uni['TITLE'])
+                        save_spot_text = "No Save Data"
+                        for save in saved_spots:
+                            if save['UNIVERSE'] == uni['TITLE'] and save['MODE'] in U_modes:
+                                save_spot_text = str(save['CURRENTOPPONENT'])
+
+                        embedVar = discord.Embed(title= f"{uni['TITLE']}", description=textwrap.dedent(f"""
+                        {Crest_dict[uni['TITLE']]} **Number of Fights**: :crossed_swords: **{len(uni['CROWN_TALES'])}**
+                        🎗️ **Universe Title**: {uni['UTITLE']}
+                        🦾 **Universe Arm**: {uni['UARM']}
+                        🐦 **Universe Pet**: {uni['UPET']}
+
+                        **Saved Game**: :crossed_swords: *{save_spot_text}*
+                        """))
+                        embedVar.set_image(url=uni['PATH'])
+                        universe_embed_list.append(embedVar)
         else:
             for uni in all_universes:
                 if uni['HAS_CROWN_TALES'] == True and uni['TIER'] != 9:
@@ -9577,43 +9601,50 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
         available_universes = []
         universe_menu = []
         selected_universe = ""
+        universe_embed_list = []
         for uni in completed_crown_tales:
             if uni != "":
-                universe_menu.append(f"{Crest_dict[uni]} | **{uni}**\n")
-                available_universes.append(uni)
+                uni_option = db.queryUniverse({"TITLE": str(uni)})
+                save_spot_text = "No Save Data"
+                for save in saved_spots:
+                    if save['UNIVERSE'] == uni and save['MODE'] in D_modes:
+                        save_spot_text = str(save['CURRENTOPPONENT'])
 
-        if not available_universes:
+                embedVar = discord.Embed(title= f"{uni}", description=textwrap.dedent(f"""
+                {Crest_dict[uni_option['TITLE']]} **Number of Fights**: :fire: **{len(uni_option['DUNGEONS'])}**
+                🎗️ **Dungeon Title**: {uni_option['DTITLE']}
+                🦾 **Dungeon Arm**: {uni_option['DARM']}
+                🐦 **Dungeon Pet**: {uni_option['DPET']}
+
+                **Saved Game**: :fire: *{save_spot_text}*
+                """))
+                embedVar.set_image(url=uni_option['PATH'])
+                universe_embed_list.append(embedVar)
+
+        if not universe_embed_list:
             await ctx.send("No available Dungeons for you at this time!")
             return
-        embedVar = discord.Embed(title=f":fire: Select A Dungeon", description="\n".join(universe_menu),
-                                 colour=0xe91e63)
-        embedVar.set_author(name="Type the universe you want to explore",
-                            icon_url="https://cdn.discordapp.com/emojis/866090350015545384.gif?v=1")
-        embedVar.set_footer(text="Type Quit to exit Dungeon selection")
-        await ctx.send(embed=embedVar, delete_after=30)
-        accept = await ctx.send(f"{ctx.author.mention} which Dungeon would you like to explore!", delete_after=30)
+        custom_button = manage_components.create_button(style=3, label="Start")
 
-        def check(msg):
-            _selected = ""
-            for uni in available_universes:
-                if uni.upper() == msg.content.upper():
-                    _selected = uni
-            return msg.author == ctx.author and (_selected in available_universes) or (msg.content == "Quit")
+        async def custom_function(self, button_ctx):
+            await button_ctx.send("Starting...", hidden=True)
+            selected_universe = custom_function
+            custom_function.selected_universe = str(button_ctx.origin_message.embeds[0].title)
+            self.stop = True
+            
+
+        await Paginator(bot=self.bot, ctx=ctx,  deleteAfterTimeout=True, pages=universe_embed_list, timeout=60, authorOnly=True, customButton=[
+            custom_button,
+            custom_function,
+        ]).run()
 
         try:
-            msg = await self.bot.wait_for('message', timeout=30.0, check=check)
-            _selected = ""
-            for uni in available_universes:
-                if uni.upper() == msg.content.upper():
-                    _selected = uni
-
-            if msg.content == "Quit":
-                await ctx.send("Quit Dungeon selection. ")
-
+            selected_universe = custom_function.selected_universe
+            channel_exists_response = existing_channel_check(self, ctx)
+            if channel_exists_response:
+                await ctx.send(m.ALREADY_IN_TALES)
                 return
-
             # Universe Cost
-            selected_universe = _selected
             universe = db.queryUniverse({'TITLE': str(selected_universe)})
             if not universe['HAS_DUNGEON']:
                 await ctx.send(f"**{selected_universe}'s** dungeon is not available at this time. ")
@@ -9650,49 +9681,52 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
         available_universes = []
         selected_universe = ""
         universe_menu = []
+        universe_embed_list = []
         for uni in completed_dungeons:
             if uni != "":
                 searchUni = db.queryUniverse({'TITLE': str(uni)})
                 if searchUni['UNIVERSE_BOSS'] != "":
-                    universe_menu.append(f"{Crest_dict[uni]} | **{uni}**\n")
-                    available_universes.append(uni)
-        if not available_universes:
+                    boss_info = db.queryBoss({"NAME": searchUni['UNIVERSE_BOSS']})
+                    if boss_info:
+                        embedVar = discord.Embed(title= f"{uni}", description=textwrap.dedent(f"""
+                        {Crest_dict[uni]} **Boss**: :japanese_ogre: **{boss_info['NAME']}**
+                        🎗️ **Boss Title**: {boss_info['TITLE']}
+                        🦾 **Boss Arm**: {boss_info['ARM']}
+                        🐦 **Boss Pet**: {boss_info['PET']}
+
+                        """))
+                        embedVar.set_image(url=boss_info['PATH'])
+                        universe_embed_list.append(embedVar)
+        if not universe_embed_list:
             await ctx.send("No available Bosses for you at this time!")
             return
+        
+        custom_button = manage_components.create_button(style=3, label="Start")
 
-        embedVar = discord.Embed(title=f":japanese_ogre: Select A Boss Arena", description="\n".join(universe_menu),
-                                 colour=0xe91e63)
-        embedVar.set_footer(text="Type Quit to exit Tales selection")
-        await ctx.send(embed=embedVar)
-        accept = await ctx.send(f"{ctx.author.mention} which Universe would you like to explore!")
-
-        def check(msg):
-            _selected = ""
-            for uni in available_universes:
-                if uni.upper() == msg.content.upper():
-                    _selected = uni
-            return msg.author == ctx.author and (_selected in available_universes) or (msg.content == "Quit")
+        async def custom_function(self, button_ctx):
+            await button_ctx.send("Starting...", hidden=True)
+            selected_universe = custom_function
+            custom_function.selected_universe = str(button_ctx.origin_message.embeds[0].title)
+            self.stop = True
+        
+        await Paginator(bot=self.bot, ctx=ctx,  deleteAfterTimeout=True, pages=universe_embed_list, timeout=60, authorOnly=True, customButton=[
+            custom_button,
+            custom_function,
+        ]).run()
 
         try:
-            msg = await self.bot.wait_for('message', timeout=30.0, check=check)
-            _selected = ""
-            for uni in available_universes:
-                if uni.upper() == msg.content.upper():
-                    _selected = uni
-
-            if msg.content == "Quit":
-                await ctx.send("Quit Boss selection. ")
-
+            selected_universe = custom_function.selected_universe
+            channel_exists_response = existing_channel_check(self, ctx)
+            if channel_exists_response:
+                await ctx.send(m.ALREADY_IN_TALES)
                 return
-
             # Universe Cost
-            selected_universe = _selected
             universe = db.queryUniverse({'TITLE': str(selected_universe)})
             private_channel = await guild.create_text_channel(f'{str(ctx.author)}-{mode}-fight', overwrites=overwrites)
-            await ctx.send(f"{ctx.author.mention} private channel has been opened for you.")
+            await ctx.send(f"{selected_universe}{ctx.author.mention} private channel has been opened for you.")
             return {'SELECTED_UNIVERSE': selected_universe, 'PRIVATE_CHANNEL': private_channel,
                     'UNIVERSE_DATA': universe, 'CREST_LIST': crestlist, 'CREST_SEARCH': crestsearch,
-                    'COMPLETED_DUNGEONS': completed_dungeons, 'OGUILD': oguild, 'BOSS_NAME': bossname}
+                    'COMPLETED_DUNGEONS': completed_dungeons, 'OGUILD': oguild, 'BOSS_NAME': boss_info['NAME']}
         except:
             embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", delete_after=30, colour=0xe91e63)
             await ctx.send(embed=embedVar)
