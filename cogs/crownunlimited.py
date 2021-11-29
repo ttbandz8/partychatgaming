@@ -7093,8 +7093,14 @@ def get_card(url, cardname):
             return im
         elif url in cache:
             # print("Getting card...")
-            im = Image.open(cache[url]) 
-            return im
+            im = Image.open(cache[url])
+            if not im:
+                im = Image.open(requests.get(url, stream=True).raw)
+                cache[url] = save_path
+                im.save(save_path)
+                return im
+            else:
+                return im
         else:
             im = Image.open(requests.get(url, stream=True).raw)
             cache[url] = save_path
