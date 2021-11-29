@@ -7086,13 +7086,13 @@ def get_card(url, cardname):
         
         save_path = f"image_cache/{str(cardname)}.png"
         if url not in cache:
-            # print("Fetching card from server...")
+            print("Fetching card from server...")
             im = Image.open(requests.get(url, stream=True).raw)
             cache[url] = save_path
             im.save(save_path)
             return im
         elif url in cache:
-            # print("Getting card...")
+            print("Getting card...")
             im = Image.open(cache[url])
             if not im:
                 im = Image.open(requests.get(url, stream=True).raw)
