@@ -7082,24 +7082,48 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, stamina, en
 cache = dict()
 
 def get_card(url, cardname):
-    save_path = f"image_cache/{str(cardname)}.png"
-    if url not in cache:
-        # print("Fetching card from server...")
-        im = Image.open(requests.get(url, stream=True).raw)
-        cache[url] = save_path
-        im.save(save_path)
-        return im
-    else:
-        # print("Getting card...")
-        im = Image.open(cache[url]) 
-        return im
-
+    try:
+        
+        save_path = f"image_cache/{str(cardname)}.png"
+        if url not in cache:
+            # print("Fetching card from server...")
+            im = Image.open(requests.get(url, stream=True).raw)
+            cache[url] = save_path
+            im.save(save_path)
+            return im
+        elif url in cache:
+            # print("Getting card...")
+            im = Image.open(cache[url]) 
+            return im
+        else:
+            im = Image.open(requests.get(url, stream=True).raw)
+            cache[url] = save_path
+            im.save(save_path)
+            return im
+           
+    except Exception as ex:
+        trace = []
+        tb = ex.__traceback__
+        while tb is not None:
+            trace.append({
+                "filename": tb.tb_frame.f_code.co_filename,
+                "name": tb.tb_frame.f_code.co_name,
+                "lineno": tb.tb_lineno
+            })
+            tb = tb.tb_next
+        print(str({
+            'type': type(ex).__name__,
+            'message': str(ex),
+            'trace': trace
+        }))
+        return
 
 def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focused, attack, defense, turn_total, ap1,
              ap2, ap3, enh1, enhname, lvl, op_defense):
     # Card Name can be 16 Characters before going off Card
     # Lower Card Name Font once after 16 characters
     try:
+        
         if health <= 0:
             im = get_card(d['PATH'], d['NAME'])
             im.save("text.png")
