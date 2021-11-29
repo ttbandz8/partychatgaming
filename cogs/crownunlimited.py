@@ -498,7 +498,7 @@ class CrownUnlimited(commands.Cog):
 
             if mode in B_MODES:
                 await battle_commands(self, ctx, mode, universe, selected_universe, None, oguild, crestlist,
-                                      crestsearch, private_channel, sowner, oteam, ofam, None, None, None, None, None)
+                                      crestsearch, private_channel, sowner, oteam, ofam, None, None, None, None, None, None)
             else:
                 await battle_commands(self, ctx, mode, universe, selected_universe, completed_universes, oguild,
                                       crestlist, crestsearch, private_channel, sowner, oteam, ofam, currentopponent, None, None, None,
@@ -8967,6 +8967,9 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 'o_enhancer_used': o_enhancer_used,
                 'o_final_stand': o_final_stand,
                 't_card': t_card,
+                'tarm': tarm_name,
+                'tarm_passive_type' : tarm_passive_type,
+                'tarm_passive_value' : tarm_passive_value,
                 'tcard_lvl': tcard_lvl,
                 't_universe': t_universe,
                 't_attack': t_attack,
@@ -9085,6 +9088,9 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 'o_enhancer_used': o_enhancer_used,
                 'o_final_stand': o_final_stand,
                 't_card': t_card,
+                'tarm': tarm_name,
+                'tarm_passive_type' : tarm_passive_type,
+                'tarm_passive_value' : tarm_passive_value,
                 'tcard_lvl': tcard_lvl,
                 't_universe': t_universe,
                 't_attack': t_attack,
@@ -9724,10 +9730,13 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             # Universe Cost
             universe = db.queryUniverse({'TITLE': str(selected_universe)})
             private_channel = await guild.create_text_channel(f'{str(ctx.author)}-{mode}-fight', overwrites=overwrites)
-            await ctx.send(f"{selected_universe}{ctx.author.mention} private channel has been opened for you.")
+            await ctx.send(f"{ctx.author.mention} private channel has been opened for you.")
+
+            currentopponent = 0
             return {'SELECTED_UNIVERSE': selected_universe, 'PRIVATE_CHANNEL': private_channel,
                     'UNIVERSE_DATA': universe, 'CREST_LIST': crestlist, 'CREST_SEARCH': crestsearch,
-                    'COMPLETED_DUNGEONS': completed_dungeons, 'OGUILD': oguild, 'BOSS_NAME': boss_info['NAME']}
+                    'COMPLETED_DUNGEONS': completed_dungeons, 'OGUILD': oguild, 'BOSS_NAME': universe['UNIVERSE_BOSS'],
+                    'CURRENTOPPONENT': currentopponent}
         except:
             embedVar = discord.Embed(title=f"{m.STORY_NOT_SELECTED}", delete_after=30, colour=0xe91e63)
             await ctx.send(embed=embedVar)
