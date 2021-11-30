@@ -264,19 +264,19 @@ class Titles(commands.Cog):
             if title_show != "Unbound":
                 embedVar.set_thumbnail(url=title_img)
             if o_title_passive_type == "ATK" or o_title_passive_type == "DEF" or o_title_passive_type == "HLT" or o_title_passive_type == "STAM":
-                embedVar.add_field(name=f"Unique Passive **{o_title_passive_type}**", value=f"Increases **{typetext}** by **{o_title_passive_value}{enhancer_suffix_mapping[o_title_passive_type]}**", inline=False)
+                embedVar.add_field(name=f"**Unique Passive**", value=f"Increases **{typetext}** by **{o_title_passive_value}{enhancer_suffix_mapping[o_title_passive_type]}**", inline=False)
             elif o_title_passive_type == "FLOG" or o_title_passive_type == "WITHER" or o_title_passive_type == "LIFE" or o_title_passive_type == "DRAIN":
-                embedVar.add_field(name=f"Unique Passive **{o_title_passive_type}**", value=f"Steals **{typetext} {o_title_passive_value}{enhancer_suffix_mapping[o_title_passive_type]}**", inline=False)
+                embedVar.add_field(name=f"**Unique Passive**", value=f"Steals **{o_title_passive_value}{enhancer_suffix_mapping[o_title_passive_type]} {typetext}**", inline=False)
             elif o_title_passive_type == "RAGE" or o_title_passive_type == "BRACE" or o_title_passive_type == "BZRK" or o_title_passive_type == "CRYSTAL" or o_title_passive_type == "GROWTH" or o_title_passive_type == "FEAR":
-                embedVar.add_field(name=f"Unique Passive **{o_title_passive_type}**", value=f"Sacrifice **{o_title_passive_value}{enhancer_suffix_mapping[o_title_passive_type]} {typetext}**", inline=False)
+                embedVar.add_field(name=f"**Unique Passive**", value=f"Sacrifice **{o_title_passive_value}{enhancer_suffix_mapping[o_title_passive_type]} {typetext}**", inline=False)
             elif o_title_passive_type == "STANCE" or o_title_passive_type == "CONFUSE":
-                embedVar.add_field(name=f"Unique Passive **{o_title_passive_type}**", value=f"Swap {typetext} Defense by **{o_title_passive_value}**", inline=False)
+                embedVar.add_field(name=f"**Unique Passive**", value=f"Swap {typetext} Defense by **{o_title_passive_value}**", inline=False)
             elif o_title_passive_type == "BLINK":
-                embedVar.add_field(name=f"Unique Passive **{o_title_passive_type}**", value=f"**{typetext}** by **{o_title_passive_value}**", inline=False)
+                embedVar.add_field(name=f"**Unique Passive**", value=f"**{typetext}** by **{o_title_passive_value}**", inline=False)
             elif o_title_passive_type == "SLOW" or o_title_passive_type == "HASTE":
-                embedVar.add_field(name=f"Unique Passive **{o_title_passive_type}**", value=f"**{typetext}** by **{o_title_passive_value}**", inline=False)
+                embedVar.add_field(name=f"**Unique Passive**", value=f"**{typetext}** by **{o_title_passive_value}**", inline=False)
             elif o_title_passive_type == "SOULCHAIN" or o_title_passive_type == "GAMBLE":
-                embedVar.add_field(name=f"Unique Passive **{o_title_passive_type}**", value=f"Set both players **{typetext}** equal to **{o_title_passive_value}**", inline=False)
+                embedVar.add_field(name=f"**Unique Passive**", value=f"Set both players **{typetext}** equal to **{o_title_passive_value}**", inline=False)
             embedVar.set_footer(text=f"{o_title_passive_type}: {enhancer_mapping[o_title_passive_type]}")
 
             await ctx.send(embed=embedVar)

@@ -236,7 +236,7 @@ class Arm(commands.Cog):
             embedVar = discord.Embed(title=f"{Crest_dict[arm_show]} {arm_arm}\n{price_message}".format(self), colour=000000)
             if arm_show != "Unbound":
                 embedVar.set_thumbnail(url=arm_show_img)
-            embedVar.add_field(name=f"Unique Passive {o_arm_passive_type}", value=f"Increases **{typetext}** by **{o_arm_passive_value}**", inline=False)
+            embedVar.add_field(name=f"Unique Passive", value=f"Increases {typetext} by **{o_arm_passive_value}**", inline=False)
             embedVar.set_footer(text=f"{o_arm_passive_type}: {enhancer_mapping[o_arm_passive_type]}")
 
             await ctx.send(embed=embedVar)
