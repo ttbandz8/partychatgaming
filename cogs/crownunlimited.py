@@ -9204,6 +9204,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 'ccard_lvl': ccard_lvl,
                 'c_card_path': c_card_path,
                 'carm': carm_name,
+                'carm_name': carm_name,
                 'carm_passive_type' : carm_passive_type,
                 'carm_passive_value' : carm_passive_value,
                 'c_user': c_user,
@@ -9331,6 +9332,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 't_def_chainsaw': t_def_chainsaw,
                 't_stamina': t_stamina,
                 't_max_stamina': t_max_stamina,
+                'tmove1_text': tmove1_text,
+                'tmove2_text': tmove2_text,
+                'tmove3_text': tmove3_text,
+                'tmove_enhanced_text': tmove_enhanced_text,
                 't_1': t_1,
                 't_2': t_2,
                 't_3': t_3,
@@ -9367,6 +9372,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 'ccard_lvl': ccard_lvl,
                 'c_card_path': c_card_path,
                 'carm': carm_name,
+                'carm_name': carm_name,
                 'carm_passive_type' : carm_passive_type,
                 'carm_passive_value' : carm_passive_value,
                 'c_user': c_user,
@@ -17482,7 +17488,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     cenh_name = list(c_enhancer.values())[2]
                                     cpet_enh_name = list(cpet_move.values())[2]
                                     cpet_msg_on_resolve = ""
-
+                                    carm_message = " "
+                                    
                                     if c_used_resolve:
                                         cpet_msg_on_resolve = f"🐦 | *{enhancer_mapping[pet_enh_name]}*"
                                     if tarm_barrier_active:
