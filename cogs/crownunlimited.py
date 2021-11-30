@@ -7693,8 +7693,9 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             tarm_universe = tarm['UNIVERSE']
             tarm_passive = tarm['ABILITIES'][0]
             tarm_name = tarm['ARM']
+            print(tarm_name)
 
-            vault = db.queryVault({'OWNER': str(t_user['DISNAME']), 'PETS.NAME': t_user['PET']})
+            tvault = db.queryVault({'OWNER': str(t_user['DISNAME']), 'PETS.NAME': t_user['PET']})
             tupdate_durability_message = update_arm_durability(self, tvault, tarm)
             if tupdate_durability_message['MESSAGE']:
                 await ctx.send(f"{tupdate_durability_message['MESSAGE']}")
@@ -8780,6 +8781,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             'o_final_stand': o_final_stand,
             't_card': t_card,
             'tarm': tarm_name,
+            'tarm_name': tarm_name,
             'tarm_passive_type' : tarm_passive_type,
             'tarm_passive_value' : tarm_passive_value,
             'tcard_lvl': tcard_lvl,
@@ -8891,6 +8893,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 't_card': t_card,
                 'tcard_lvl': tcard_lvl,
                 'tarm': tarm_name,
+                'tarm_name': tarm_name,
                 'tarm_passive_type' : tarm_passive_type,
                 'tarm_passive_value' : tarm_passive_value,
                 't_universe': t_universe,
@@ -9007,6 +9010,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 'o_final_stand': o_final_stand,
                 't_card': t_card,
                 'tarm': tarm_name,
+                'tarm_name': tarm_name,
                 'tarm_passive_type' : tarm_passive_type,
                 'tarm_passive_value' : tarm_passive_value,
                 'tcard_lvl': tcard_lvl,
@@ -9132,6 +9136,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 'o_final_stand': o_final_stand,
                 't_card': t_card,
                 'tarm': tarm_name,
+                'tarm_name': tarm_name,
                 'tarm_passive_type' : tarm_passive_type,
                 'tarm_passive_value' : tarm_passive_value,
                 'tcard_lvl': tcard_lvl,
@@ -9313,6 +9318,8 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 'o_enhancer_used': o_enhancer_used,
                 'o_final_stand': o_final_stand,
                 't_card': t_card,
+                'tarm_name': tarm_name,
+                'tarm': tarm_name,
                 'tcard_lvl': tcard_lvl,
                 't_universe': t_universe,
                 't_attack': t_attack,
@@ -9826,7 +9833,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             otitle = db.queryTitle({'TITLE': sowner['TITLE']})
 
             if mode in PVP_MODES:
-                opponent = cowner
+                opponent = currentopponent
                 t = db.queryCard({'NAME': opponent['CARD']})
                 ttitle = db.queryTitle({'TITLE': opponent['TITLE']})
                 tguild = cfam
@@ -9967,6 +9974,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 tcard_lvl = stats['tcard_lvl']
                 t_card_path = stats['t_card_path']
                 tarm = stats['tarm']
+                tarm_name = stats['tarm_name']
                 tarm_passive_type = stats['tarm_passive_type']
                 tarm_passive_value = stats['tarm_passive_value']
                 t_user = stats['t_user']
@@ -10023,6 +10031,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 t_card = stats['t_card']
                 tcard_lvl_ap_buff = stats['tcard_lvl_ap_buff']
                 tarm = stats['tarm']
+                tarm_name = stats['tarm_name']
                 if mode in D_modes:
                     tcard_lvl = 150
                     tcard_lvl_ap_buff = 50
@@ -10107,6 +10116,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 ccard_lvl = stats['ccard_lvl']
                 c_card_path = stats['c_card_path']
                 carm = stats['carm']
+                carm_name = stats['carm_name']
                 carm_passive_type = stats['carm_passive_type']
                 carm_passive_value = stats['carm_passive_value']
                 c_user = stats['c_user']
@@ -11476,7 +11486,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                 battle_action_row = manage_components.create_actionrow(*battle_buttons)
                                 util_action_row = manage_components.create_actionrow(*util_buttons)
-
+                                oarm_message =""
                                 if t_used_resolve:
                                     tpet_msg_on_resolve = f"🐦 *{enhancer_mapping[tpet_enh_name]}*"
                                 if oarm_barrier_active:
