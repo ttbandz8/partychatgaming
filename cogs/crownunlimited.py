@@ -17285,9 +17285,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 c_stamina = c_stamina - int(dmg['STAMINA_USED'])
 
                                                 embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_c)
-                                                if oarm_barrier_active:
-                                                    oarm_barrier_active=False
-                                                    embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
+                                                if carm_barrier_active:
+                                                    carm_barrier_active=False
+                                                    embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                 await private_channel.send(embed=embedVar)
                                                 turn_total = turn_total + 1
                                                 turn = 3
@@ -17295,9 +17295,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 if t_universe == "Naruto" and t_stamina < 10:
                                                     t_health = t_health 
                                                     embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{c_card} strikes a log", colour=0xe91e63)
-                                                    if oarm_barrier_active:
-                                                        oarm_barrier_active=False
-                                                        embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
+                                                    if carm_barrier_active:
+                                                        carm_barrier_active=False
+                                                        embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                     await private_channel.send(embed=embedVar)
                                                 elif tarm_shield_active:
                                                     if tshield_value > 0:
@@ -17305,15 +17305,15 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = t_health 
                                                         if tshield_value <=0:
                                                             embedVar = discord.Embed(title=f"{t_card.upper()}'s' **Shield** Shattered!", description=f"{c_card} breaks the **Shield**!", colour=0xe91e63)
-                                                            if oarm_barrier_active:
-                                                                oarm_barrier_active=False
-                                                                embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
+                                                            if carm_barrier_active:
+                                                                carm_barrier_active=False
+                                                                embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                             await button_ctx.send(embed=embedVar)
                                                             tarm_shield_active = False
                                                         else:
                                                             embedVar = discord.Embed(title=f"{t_card.upper()} Activates **Shield** 🌐", description=f"{c_card} strikes the **Shield** for **{dmg['DMG']} DMG!**\n **{tshield_value} Shield** Left!", colour=0xe91e63)
-                                                            if oarm_barrier_active:
-                                                                oarm_barrier_active=False
+                                                            if carm_barrier_active:
+                                                                carm_barrier_active=False
                                                                 embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                             await button_ctx.send(embed=embedVar)
 
@@ -17321,17 +17321,17 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     if tbarrier_count >1:
                                                         t_health = t_health 
                                                         embedVar = discord.Embed(title=f"{t_card.upper()} Activates **Barrier** 💠", description=f"{c_card}'s attack **Nullified**!\n **{tbarrier_count - 1} Barriers** remain!", colour=0xe91e63)
-                                                        if oarm_barrier_active:
-                                                            oarm_barrier_active=False
-                                                            embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
+                                                        if carm_barrier_active:
+                                                            carm_barrier_active=False
+                                                            embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                         await button_ctx.send(embed=embedVar)
                                                         tbarrier_count = tbarrier_count - 1
                                                     elif tbarrier_count==1:
                                                         embedVar = discord.Embed(title=f"{t_card.upper()}'s **Barrier** Broken!", description=f"{c_card} destroys the **Barrier**", colour=0xe91e63)
                                                         tbarrier_count = tbarrier_count - 1
-                                                        if oarm_barrier_active:
-                                                            oarm_barrier_active=False
-                                                            embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
+                                                        if carm_barrier_active:
+                                                            carm_barrier_active=False
+                                                            embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                         await button_ctx.send(embed=embedVar)
                                                         tarm_barrier_active = False
                                                 elif tarm_parry_active:
@@ -17342,33 +17342,33 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_health = o_health - tparry_damage
                                                         tparry_count = tparry_count - 1
                                                         embedVar = discord.Embed(title=f"{t_card.upper()} Activates **Parry** 🔄", description=f"{c_card} takes {tparry_damage}! DMG\n **{tparry_count} Parries** to go!!", colour=0xe91e63)
-                                                        if oarm_barrier_active:
-                                                            oarm_barrier_active=False
-                                                            embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
+                                                        if carm_barrier_active:
+                                                            carm_barrier_active=False
+                                                            embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                         await button_ctx.send(embed=embedVar)
                                                         
                                                     elif tparry_count==1:
                                                         embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{c_card} breaks the **Parry**", colour=0xe91e63)
                                                         tbarrier_count = tbarrier_count - 1
-                                                        if oarm_barrier_active:
-                                                            oarm_barrier_active=False
-                                                            embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
+                                                        if carm_barrier_active:
+                                                            carm_barrier_active=False
+                                                            embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                         await button_ctx.send(embed=embedVar)
                                                         tarm_parry_active = False
                                                 else:
                                                     t_health = t_health - dmg['DMG']
                                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
-                                                    if oarm_barrier_active:
-                                                        oarm_barrier_active=False
-                                                        embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
+                                                    if carm_barrier_active:
+                                                        carm_barrier_active=False
+                                                        embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                     await private_channel.send(embed=embedVar)
                                                 if t_health <= 0:
                                                     if t_final_stand==True:
                                                         embedVar = discord.Embed(title=f"{t_card.upper()}'s LAST STAND", description=f"{t_card} FINDS RESOLVE", colour=0xe91e63)
                                                         embedVar.add_field(name=f"{t_card} resolved and continues to fight", value="All stats & stamina increased")
-                                                        if oarm_barrier_active:
-                                                            oarm_barrier_active=False
-                                                            embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
+                                                        if carm_barrier_active:
+                                                            carm_barrier_active=False
+                                                            embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                         await private_channel.send(embed=embedVar)
                                                         t_health = int(.75 * (t_attack + t_defense))
                                                         t_attack = t_attack + (.50 * t_attack)
