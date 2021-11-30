@@ -8362,6 +8362,11 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             t_2 = t_moveset[1]
             t_3 = t_moveset[2]
             t_enhancer = t_moveset[3]
+            
+            tmove1_text = list(t_1.keys())[0]
+            tmove2_text = list(t_2.keys())[0]
+            tmove3_text = list(t_3.keys())[0]
+            tmove_enhanced_text = list(t_enhancer.keys())[0]
 
             tpetmove_text = list(tpet_passive.keys())[0]
             tpetmove_ap = (tpet_bond * tpet_lvl) + list(opet.values())[3]  # Ability Power
@@ -8767,6 +8772,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             'tbarrier_count': tbarrier_count,
             'tarm_parry_active': tarm_parry_active,
             'tparry_count': tparry_count,
+            'tmove1_text': tmove1_text,
+            'tmove2_text': tmove2_text,
+            'tmove3_text': tmove3_text,
+            'tmove_enhanced_text': tmove_enhanced_text,
             't_enhancer': t_enhancer,
             't_enhancer_used': t_enhancer_used,
             't_speed': t_speed,
@@ -8981,6 +8990,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 't_def_chainsaw': t_def_chainsaw,
                 't_stamina': t_stamina,
                 't_max_stamina': t_max_stamina,
+                'tmove1_text': tmove1_text,
+                'tmove2_text': tmove2_text,
+                'tmove3_text': tmove3_text,
+                'tmove_enhanced_text': tmove_enhanced_text,
                 't_1': t_1,
                 't_2': t_2,
                 't_3': t_3,
@@ -9102,6 +9115,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 't_def_chainsaw': t_def_chainsaw,
                 't_stamina': t_stamina,
                 't_max_stamina': t_max_stamina,
+                'tmove1_text': tmove1_text,
+                'tmove2_text': tmove2_text,
+                'tmove3_text': tmove3_text,
+                'tmove_enhanced_text': tmove_enhanced_text,
                 't_1': t_1,
                 't_2': t_2,
                 't_3': t_3,
@@ -9995,6 +10012,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 t_def_chainsaw = stats['t_def_chainsaw']
                 t_stamina = stats['t_stamina']
                 t_max_stamina = stats['t_max_stamina']
+                tmove1_text = stats['tmove1_text']
+                tmove2_text = stats['tmove2_text']
+                tmove3_text = stats['tmove3_text']
+                tmove_enhanced_text = stats['tmove_enhanced_text']
+                t_enhancer_used = stats['t_enhancer_used']
                 t_1 = stats['t_1']
                 t_2 = stats['t_2']
                 t_3 = stats['t_3']
