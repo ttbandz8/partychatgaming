@@ -7083,23 +7083,26 @@ cache = dict()
 
 def get_card(url, cardname):
     try:
+        im = Image.open(requests.get(url, stream=True).raw)
+        return im
+
         
-        save_path = f"image_cache/{str(cardname)}.png"
-        if url not in cache:
-            # print("Fetching card from server...")
-            im = Image.open(requests.get(url, stream=True).raw)
-            cache[url] = save_path
-            im.save(save_path)
-            return im
-        elif url in cache:
-            # print("Getting card...")
-            im = Image.open(cache[url]) 
-            return im
-        else:
-            im = Image.open(requests.get(url, stream=True).raw)
-            cache[url] = save_path
-            im.save(save_path)
-            return im
+        # save_path = f"image_cache/{str(cardname)}.png"
+        # if url not in cache:
+        #     # print("Fetching card from server...")
+        #     im = Image.open(requests.get(url, stream=True).raw)
+        #     cache[url] = save_path
+        #     im.save(save_path)
+        #     return im
+        # elif url in cache:
+        #     # print("Getting card...")
+        #     im = Image.open(cache[url]) 
+        #     return im
+        # else:
+        #     im = Image.open(requests.get(url, stream=True).raw)
+        #     cache[url] = save_path
+        #     im.save(save_path)
+        #     return im
            
     except Exception as ex:
         trace = []
