@@ -206,55 +206,38 @@ class Arm(commands.Cog):
             else:
                 price_message = f":coin: {'{:,}'.format(arm_price)}"
 
-            if o_arm_passive_type == 'ATK':
-                message=f"{arm_arm} is an ATK arm"
-            elif o_arm_passive_type == 'DEF':
-                message=f"{arm_arm} is a DEF arm"
-            elif o_arm_passive_type == 'STAM':
-                message=f"{arm_arm} is a STAM arm"
-            elif o_arm_passive_type == 'HLT':
-                message=f"{arm_arm} is a HLT arm"
-            elif o_arm_passive_type == 'LIFE':
-                message=f"{arm_arm} is a LIFE arm"
-            elif o_arm_passive_type == 'DRAIN':
-                message=f"{arm_arm} is an DRAIN arm"
-            elif o_arm_passive_type == 'FLOG':
-                message=f"{arm_arm} is a FLOG arm"
-            elif o_arm_passive_type == 'WITHER':
-                message=f"{arm_arm} is a WITHER arm"
-            elif o_arm_passive_type == 'RAGE':
-                message=f"{arm_arm} is a RAGE arm"
-            elif o_arm_passive_type == 'BRACE':            
-                message=f"{arm_arm} is a BRACE arm"
-            elif o_arm_passive_type == 'BZRK':            
-                message=f"{arm_arm} is a BZRK arm"
-            elif o_arm_passive_type == 'CRYSTAL':            
-                message=f"{arm_arm} is a CRYSTAL arm"
-            elif o_arm_passive_type == 'GROWTH':            
-                message=f"{arm_arm} is a GROWTH arm"
-            elif o_arm_passive_type == 'STANCE':
-                message=f"{arm_arm} is a STANCE arm"
-            elif o_arm_passive_type == 'CONFUSE':
-                message=f"{arm_arm} is a CONFUSE arm"
-            elif o_arm_passive_type == 'BLINK':
-                message=f"{arm_arm} is a BLINK arm"
-            elif o_arm_passive_type == 'SLOW':
-                message=f"{arm_arm} is a SLOW arm"
-            elif o_arm_passive_type == 'HASTE':
-                message=f"{arm_arm} is a HASTE arm" 
-            elif o_arm_passive_type == 'SOULCHAIN':
-                message=f"{arm_arm} is a SOULCHAIN arm"
-            elif o_arm_passive_type == 'FEAR':
-                message=f"{arm_arm} is a FEAR arm"
-            elif o_arm_passive_type == 'GAMBLE':
-                message=f"{arm_arm} is a GAMBLE arm"
+            if o_arm_passive_type == 'BASIC':
+                typetext = 'Basic'
+                message=f"{arm_arm} is an BASIC arm"
+            elif o_arm_passive_type == 'SPECIAL':
+                typetext = 'Special'
+                message=f"{arm_arm} is a SPECIAL arm"
+            elif o_arm_passive_type == 'ULTIMATE':
+                typetext = 'Ultimate'
+                message=f"{arm_arm} is a ULTIMATE arm"
+            elif o_arm_passive_type == 'ULTIMAX':
+                typetext = 'Ultimax'
+                message=f"{arm_arm} is a ULTIMAX arm"
+            elif o_arm_passive_type == 'SHIELD':
+                typetext = 'Shield'
+                message=f"{arm_arm} is a SHIELD arm"
+            elif o_arm_passive_type == 'BARRIER':
+                typetext = 'Barrier'
+                message=f"{arm_arm} is an BARRIER arm"
+            elif o_arm_passive_type == 'PARRY':
+                typetext = 'Parry'
+                message=f"{arm_arm} is a PARRY arm"
+            elif o_arm_passive_type == 'MANA':
+                typetext = 'Mana'
+                message=f"{arm_arm} is a MANA arm"
 
 
-            embedVar = discord.Embed(title=f"{arm_arm}\n{price_message}".format(self), colour=000000)
+
+            embedVar = discord.Embed(title=f"{Crest_dict[arm_show]} {arm_arm}\n{price_message}".format(self), colour=000000)
             if arm_show != "Unbound":
                 embedVar.set_thumbnail(url=arm_show_img)
-            embedVar.add_field(name="Unique Passive", value=f"`Increases {o_arm_passive_type} by {o_arm_passive_value}`", inline=False)
-            embedVar.set_footer(text=f"/enhancers - Enhancement Menu")
+            embedVar.add_field(name=f"Unique Passive", value=f"Increases {typetext} by **{o_arm_passive_value}**", inline=False)
+            embedVar.set_footer(text=f"{o_arm_passive_type}: {enhancer_mapping[o_arm_passive_type]}")
 
             await ctx.send(embed=embedVar)
 
@@ -263,3 +246,98 @@ class Arm(commands.Cog):
 
 def setup(bot):
     bot.add_cog(Arm(bot))
+    
+Crest_dict = {'Unbound': ':ideograph_advantage:',
+              'My Hero Academia': ':sparkle:',
+              'League Of Legends': ':u6307:',
+              'Kanto Region': ':chart:',
+              'Naruto': ':u7121:',
+              'Bleach': ':u6709:',
+              'God Of War': ':u7533:',
+              'Chainsawman': ':accept:',
+              'One Punch Man': ':u55b6:',
+              'Johto Region': ':u6708:',
+              'Black Clover': ':ophiuchus:',
+              'Demon Slayer': ':aries:',
+              'Attack On Titan': ':taurus:',
+              '7ds': ':capricorn:',
+              'Hoenn Region': ':leo:',
+              'Digimon': ':cancer:',
+              'Fate': ':u6e80:',
+              'Solo Leveling': ':u5408:',
+              'Souls': ':sos:',
+              'Dragon Ball Z': ':u5272:',
+              'Sinnoh Region': ':u7981:',
+              'Death Note': ':white_flower:',
+              'Crown Rift Awakening': ':u7a7a:',
+              'Crown Rift Slayers': ':sa:',
+              'Crown Rift Madness': ':m:',
+              'Persona': ':o:'}
+enhancer_mapping = {'ATK': 'Increase Attack %',
+'DEF': 'Increase Defense %',
+'STAM': 'Increase Stamina',
+'HLT': 'Heal yourself or companion',
+'LIFE': 'Steal Health from Opponent',
+'DRAIN': 'Drain Stamina from Opponent',
+'FLOG': 'Steal Attack from Opponent',
+'WITHER': 'Steal Defense from Opponent',
+'RAGE': 'Lose Defense, Increase Attack',
+'BRACE': 'Lose Attack, Increase Defense',
+'BZRK': 'Lose Health, Increase Attack',
+'CRYSTAL': 'Lose Health, Increase Defense',
+'GROWTH': 'Lose Health, Increase Attack & Defense',
+'STANCE': 'Swap your Attack & Defense, Increase Attack',
+'CONFUSE': 'Swap Opponent Attack & Defense, Decrease Opponent Defense',
+'BLINK': 'Decrease your  Stamina, Increase Target Stamina',
+'SLOW': 'Decrease Opponent Stamina, Swap Stamina with Opponent',
+'HASTE': ' Increase your Stamina, Swap Stamina with Opponent',
+'FEAR': 'Decrease your Health, Decrease Opponent Attack and Defense',
+'SOULCHAIN': 'You and Your Opponent Stamina Link',
+'GAMBLE': 'You and Your Opponent Health Link',
+'WAVE': 'Deal Damage, Decreases over time',
+'CREATION': 'Heals you, Decreases over time',
+'BLAST': 'Deals Damage, Increases over time',
+'DESTRUCTION': 'Decreases Opponent Max Health, Increases over time',
+'BASIC': 'Increase Basic Attack AP',
+'SPECIAL': 'Increase Special Attack AP',
+'ULTIMATE': 'Increase Ultimate Attack AP',
+'ULTIMAX': 'Increase All AP Values',
+'MANA': 'Increase Enchancer AP',
+'SHIELD': 'Blocks Incoming DMG, until broken',
+'BARRIER': 'Nullifies Incoming Attacks, until broken',
+'PARRY': 'Returns Half Damage, until broken'
+}
+enhancer_suffix_mapping = {'ATK': '%',
+'DEF': '%',
+'STAM': ' Flat',
+'HLT': '%',
+'LIFE': '%',
+'DRAIN': ' Flat',
+'FLOG': '%',
+'WITHER': '%',
+'RAGE': '%',
+'BRACE': '%',
+'BZRK': '%',
+'CRYSTAL': '%',
+'GROWTH': '%',
+'STANCE': ' Flat',
+'CONFUSE': ' Flat',
+'BLINK': ' Flat',
+'SLOW': ' Flat',
+'HASTE': ' Flat',
+'FEAR': '%',
+'SOULCHAIN': ' Flat',
+'GAMBLE': ' Flat',
+'WAVE': ' Flat',
+'CREATION': ' Flat',
+'BLAST': ' Flat',
+'DESTRUCTION': ' Flat',
+'BASIC': ' Flat',
+'SPECIAL': ' Flat',
+'ULTIMATE': ' Flat',
+'ULTIMAX': ' Flat',
+'MANA': ' %',
+'SHIELD': ' DMG 🌐',
+'BARRIER': ' Blocks 💠',
+'PARRY': ' Counters 🔄'
+}

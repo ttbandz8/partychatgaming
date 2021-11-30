@@ -7690,8 +7690,9 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             tarm_universe = tarm['UNIVERSE']
             tarm_passive = tarm['ABILITIES'][0]
             tarm_name = tarm['ARM']
+            print(tarm_name)
 
-            vault = db.queryVault({'OWNER': str(t_user['DISNAME']), 'PETS.NAME': t_user['PET']})
+            tvault = db.queryVault({'OWNER': str(t_user['DISNAME']), 'PETS.NAME': t_user['PET']})
             tupdate_durability_message = update_arm_durability(self, tvault, tarm)
             if tupdate_durability_message['MESSAGE']:
                 await ctx.send(f"{tupdate_durability_message['MESSAGE']}")
@@ -8389,6 +8390,11 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             t_2 = t_moveset[1]
             t_3 = t_moveset[2]
             t_enhancer = t_moveset[3]
+            
+            tmove1_text = list(t_1.keys())[0]
+            tmove2_text = list(t_2.keys())[0]
+            tmove3_text = list(t_3.keys())[0]
+            tmove_enhanced_text = list(t_enhancer.keys())[0]
 
             tpetmove_text = list(tpet_passive.keys())[0]
             tpetmove_ap = (tpet_bond * tpet_lvl) + list(opet.values())[3]  # Ability Power
@@ -8772,6 +8778,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             'o_final_stand': o_final_stand,
             't_card': t_card,
             'tarm': tarm_name,
+            'tarm_name': tarm_name,
             'tarm_passive_type' : tarm_passive_type,
             'tarm_passive_value' : tarm_passive_value,
             'tcard_lvl': tcard_lvl,
@@ -8794,6 +8801,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             'tbarrier_count': tbarrier_count,
             'tarm_parry_active': tarm_parry_active,
             'tparry_count': tparry_count,
+            'tmove1_text': tmove1_text,
+            'tmove2_text': tmove2_text,
+            'tmove3_text': tmove3_text,
+            'tmove_enhanced_text': tmove_enhanced_text,
             't_enhancer': t_enhancer,
             't_enhancer_used': t_enhancer_used,
             't_speed': t_speed,
@@ -8879,6 +8890,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 't_card': t_card,
                 'tcard_lvl': tcard_lvl,
                 'tarm': tarm_name,
+                'tarm_name': tarm_name,
                 'tarm_passive_type' : tarm_passive_type,
                 'tarm_passive_value' : tarm_passive_value,
                 't_universe': t_universe,
@@ -8995,6 +9007,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 'o_final_stand': o_final_stand,
                 't_card': t_card,
                 'tarm': tarm_name,
+                'tarm_name': tarm_name,
                 'tarm_passive_type' : tarm_passive_type,
                 'tarm_passive_value' : tarm_passive_value,
                 'tcard_lvl': tcard_lvl,
@@ -9008,6 +9021,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 't_def_chainsaw': t_def_chainsaw,
                 't_stamina': t_stamina,
                 't_max_stamina': t_max_stamina,
+                'tmove1_text': tmove1_text,
+                'tmove2_text': tmove2_text,
+                'tmove3_text': tmove3_text,
+                'tmove_enhanced_text': tmove_enhanced_text,
                 't_1': t_1,
                 't_2': t_2,
                 't_3': t_3,
@@ -9116,6 +9133,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 'o_final_stand': o_final_stand,
                 't_card': t_card,
                 'tarm': tarm_name,
+                'tarm_name': tarm_name,
                 'tarm_passive_type' : tarm_passive_type,
                 'tarm_passive_value' : tarm_passive_value,
                 'tcard_lvl': tcard_lvl,
@@ -9129,6 +9147,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 't_def_chainsaw': t_def_chainsaw,
                 't_stamina': t_stamina,
                 't_max_stamina': t_max_stamina,
+                'tmove1_text': tmove1_text,
+                'tmove2_text': tmove2_text,
+                'tmove3_text': tmove3_text,
+                'tmove_enhanced_text': tmove_enhanced_text,
                 't_1': t_1,
                 't_2': t_2,
                 't_3': t_3,
@@ -9179,6 +9201,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 'ccard_lvl': ccard_lvl,
                 'c_card_path': c_card_path,
                 'carm': carm_name,
+                'carm_name': carm_name,
                 'carm_passive_type' : carm_passive_type,
                 'carm_passive_value' : carm_passive_value,
                 'c_user': c_user,
@@ -9293,6 +9316,8 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 'o_enhancer_used': o_enhancer_used,
                 'o_final_stand': o_final_stand,
                 't_card': t_card,
+                'tarm_name': tarm_name,
+                'tarm': tarm_name,
                 'tcard_lvl': tcard_lvl,
                 't_universe': t_universe,
                 't_attack': t_attack,
@@ -9304,6 +9329,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 't_def_chainsaw': t_def_chainsaw,
                 't_stamina': t_stamina,
                 't_max_stamina': t_max_stamina,
+                'tmove1_text': tmove1_text,
+                'tmove2_text': tmove2_text,
+                'tmove3_text': tmove3_text,
+                'tmove_enhanced_text': tmove_enhanced_text,
                 't_1': t_1,
                 't_2': t_2,
                 't_3': t_3,
@@ -9340,6 +9369,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 'ccard_lvl': ccard_lvl,
                 'c_card_path': c_card_path,
                 'carm': carm_name,
+                'carm_name': carm_name,
                 'carm_passive_type' : carm_passive_type,
                 'carm_passive_value' : carm_passive_value,
                 'c_user': c_user,
@@ -9806,7 +9836,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             otitle = db.queryTitle({'TITLE': sowner['TITLE']})
 
             if mode in PVP_MODES:
-                opponent = cowner
+                opponent = currentopponent
                 t = db.queryCard({'NAME': opponent['CARD']})
                 ttitle = db.queryTitle({'TITLE': opponent['TITLE']})
                 tguild = cfam
@@ -9947,6 +9977,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 tcard_lvl = stats['tcard_lvl']
                 t_card_path = stats['t_card_path']
                 tarm = stats['tarm']
+                tarm_name = stats['tarm_name']
                 tarm_passive_type = stats['tarm_passive_type']
                 tarm_passive_value = stats['tarm_passive_value']
                 t_user = stats['t_user']
@@ -10003,6 +10034,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 t_card = stats['t_card']
                 tcard_lvl_ap_buff = stats['tcard_lvl_ap_buff']
                 tarm = stats['tarm']
+                tarm_name = stats['tarm_name']
                 if mode in D_modes:
                     tcard_lvl = 150
                     tcard_lvl_ap_buff = 50
@@ -10022,6 +10054,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 t_def_chainsaw = stats['t_def_chainsaw']
                 t_stamina = stats['t_stamina']
                 t_max_stamina = stats['t_max_stamina']
+                tmove1_text = stats['tmove1_text']
+                tmove2_text = stats['tmove2_text']
+                tmove3_text = stats['tmove3_text']
+                tmove_enhanced_text = stats['tmove_enhanced_text']
+                t_enhancer_used = stats['t_enhancer_used']
                 t_1 = stats['t_1']
                 t_2 = stats['t_2']
                 t_3 = stats['t_3']
@@ -10082,6 +10119,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 ccard_lvl = stats['ccard_lvl']
                 c_card_path = stats['c_card_path']
                 carm = stats['carm']
+                carm_name = stats['carm_name']
                 carm_passive_type = stats['carm_passive_type']
                 carm_passive_value = stats['carm_passive_value']
                 c_user = stats['c_user']
@@ -11451,7 +11489,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                 battle_action_row = manage_components.create_actionrow(*battle_buttons)
                                 util_action_row = manage_components.create_actionrow(*util_buttons)
-
+                                oarm_message =""
                                 if t_used_resolve:
                                     tpet_msg_on_resolve = f"🐦 *{enhancer_mapping[tpet_enh_name]}*"
                                 if oarm_barrier_active:
@@ -17244,9 +17282,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 c_stamina = c_stamina - int(dmg['STAMINA_USED'])
 
                                                 embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_c)
-                                                if oarm_barrier_active:
-                                                    oarm_barrier_active=False
-                                                    embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
+                                                if carm_barrier_active:
+                                                    carm_barrier_active=False
+                                                    embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                 await private_channel.send(embed=embedVar)
                                                 turn_total = turn_total + 1
                                                 turn = 3
@@ -17254,9 +17292,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 if t_universe == "Naruto" and t_stamina < 10:
                                                     t_health = t_health 
                                                     embedVar = discord.Embed(title=f"{t_card.upper()}: Substitution Jutsu", description=f"{c_card} strikes a log", colour=0xe91e63)
-                                                    if oarm_barrier_active:
-                                                        oarm_barrier_active=False
-                                                        embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
+                                                    if carm_barrier_active:
+                                                        carm_barrier_active=False
+                                                        embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                     await private_channel.send(embed=embedVar)
                                                 elif tarm_shield_active:
                                                     if tshield_value > 0:
@@ -17264,15 +17302,15 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = t_health 
                                                         if tshield_value <=0:
                                                             embedVar = discord.Embed(title=f"{t_card.upper()}'s' **Shield** Shattered!", description=f"{c_card} breaks the **Shield**!", colour=0xe91e63)
-                                                            if oarm_barrier_active:
-                                                                oarm_barrier_active=False
-                                                                embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
+                                                            if carm_barrier_active:
+                                                                carm_barrier_active=False
+                                                                embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                             await button_ctx.send(embed=embedVar)
                                                             tarm_shield_active = False
                                                         else:
                                                             embedVar = discord.Embed(title=f"{t_card.upper()} Activates **Shield** 🌐", description=f"{c_card} strikes the **Shield** for **{dmg['DMG']} DMG!**\n **{tshield_value} Shield** Left!", colour=0xe91e63)
-                                                            if oarm_barrier_active:
-                                                                oarm_barrier_active=False
+                                                            if carm_barrier_active:
+                                                                carm_barrier_active=False
                                                                 embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                             await button_ctx.send(embed=embedVar)
 
@@ -17280,17 +17318,17 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     if tbarrier_count >1:
                                                         t_health = t_health 
                                                         embedVar = discord.Embed(title=f"{t_card.upper()} Activates **Barrier** 💠", description=f"{c_card}'s attack **Nullified**!\n **{tbarrier_count - 1} Barriers** remain!", colour=0xe91e63)
-                                                        if oarm_barrier_active:
-                                                            oarm_barrier_active=False
-                                                            embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
+                                                        if carm_barrier_active:
+                                                            carm_barrier_active=False
+                                                            embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                         await button_ctx.send(embed=embedVar)
                                                         tbarrier_count = tbarrier_count - 1
                                                     elif tbarrier_count==1:
                                                         embedVar = discord.Embed(title=f"{t_card.upper()}'s **Barrier** Broken!", description=f"{c_card} destroys the **Barrier**", colour=0xe91e63)
                                                         tbarrier_count = tbarrier_count - 1
-                                                        if oarm_barrier_active:
-                                                            oarm_barrier_active=False
-                                                            embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
+                                                        if carm_barrier_active:
+                                                            carm_barrier_active=False
+                                                            embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                         await button_ctx.send(embed=embedVar)
                                                         tarm_barrier_active = False
                                                 elif tarm_parry_active:
@@ -17301,33 +17339,33 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         o_health = o_health - tparry_damage
                                                         tparry_count = tparry_count - 1
                                                         embedVar = discord.Embed(title=f"{t_card.upper()} Activates **Parry** 🔄", description=f"{c_card} takes {tparry_damage}! DMG\n **{tparry_count} Parries** to go!!", colour=0xe91e63)
-                                                        if oarm_barrier_active:
-                                                            oarm_barrier_active=False
-                                                            embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
+                                                        if carm_barrier_active:
+                                                            carm_barrier_active=False
+                                                            embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                         await button_ctx.send(embed=embedVar)
                                                         
                                                     elif tparry_count==1:
                                                         embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{c_card} breaks the **Parry**", colour=0xe91e63)
                                                         tbarrier_count = tbarrier_count - 1
-                                                        if oarm_barrier_active:
-                                                            oarm_barrier_active=False
-                                                            embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
+                                                        if carm_barrier_active:
+                                                            carm_barrier_active=False
+                                                            embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                         await button_ctx.send(embed=embedVar)
                                                         tarm_parry_active = False
                                                 else:
                                                     t_health = t_health - dmg['DMG']
                                                     embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
-                                                    if oarm_barrier_active:
-                                                        oarm_barrier_active=False
-                                                        embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
+                                                    if carm_barrier_active:
+                                                        carm_barrier_active=False
+                                                        embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                     await private_channel.send(embed=embedVar)
                                                 if t_health <= 0:
                                                     if t_final_stand==True:
                                                         embedVar = discord.Embed(title=f"{t_card.upper()}'s LAST STAND", description=f"{t_card} FINDS RESOLVE", colour=0xe91e63)
                                                         embedVar.add_field(name=f"{t_card} resolved and continues to fight", value="All stats & stamina increased")
-                                                        if oarm_barrier_active:
-                                                            oarm_barrier_active=False
-                                                            embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
+                                                        if carm_barrier_active:
+                                                            carm_barrier_active=False
+                                                            embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                         await private_channel.send(embed=embedVar)
                                                         t_health = int(.75 * (t_attack + t_defense))
                                                         t_attack = t_attack + (.50 * t_attack)
@@ -17447,7 +17485,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     cenh_name = list(c_enhancer.values())[2]
                                     cpet_enh_name = list(cpet_move.values())[2]
                                     cpet_msg_on_resolve = ""
-
+                                    carm_message = " "
+                                    
                                     if c_used_resolve:
                                         cpet_msg_on_resolve = f"🐦 | *{enhancer_mapping[pet_enh_name]}*"
                                     if tarm_barrier_active:
@@ -20859,11 +20898,11 @@ enhancer_suffix_mapping = {'ATK': '%',
 crown_rift_universe_mappings = {'Crown Rift Awakening': 3, 'Crown Rift Slayers': 2, 'Crown Rift Madness': 5}
 Healer_Enhancer_Check = ['HLT', 'LIFE']
 # DPS_Enhancer_Check = ['FLOG', 'WITHER', 'LIFE', ]
-Gamble_Enhancer_Check = ['GAMBLE', 'SOUL']
+Gamble_Enhancer_Check = ['GAMBLE', 'SOULCHAIN']
 Support_Enhancer_Check = ['DEF', 'ATK', 'WITHER', 'FLOG']
 Sacrifice_Enhancer_Check = ['BZRK', 'CRYSTAL', 'GROWTH', 'FEAR']
 Stamina_Enhancer_Check = ['STAM', 'DRAIN']
-Control_Enhancer_Check = ['SOUL']
+Control_Enhancer_Check = ['SOULCHAIN']
 Damage_Enhancer_Check = ['DESTRUCTION', 'BLAST']
 Turn_Enhancer_Check = ['WAVE', 'CREATION']
 Crest_dict = {'Unbound': ':ideograph_advantage:',

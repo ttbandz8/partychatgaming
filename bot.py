@@ -2305,11 +2305,11 @@ async def menu(ctx):
          if menu['NAME'] == "Objectives":
             objectives = menu['PATH']
 
-      embedVar1 = discord.Embed(title= f"Story Mode", description="Journey through Universes to defeat powerful foes to unlock vast new worlds, tough boss fights, and new possibilities!", colour=0x7289da)
+      embedVar1 = discord.Embed(title= f"Story Mode", description="Journey through Universes to defeat powerful foes to unlock vast new worlds, tough boss fights, and new possibilities! Click arrow below to go to the next page!", colour=0x7289da)
       embedVar1.set_image(url=story)
       embedVar1.set_footer(text=f"use /crown for additional assistance")
 
-      embedVar2 = discord.Embed(title= f"Profile Menu", description="View and Edit your Cards, Titles, Arms, and Pets to craft new builds and strategies.", colour=0x7289da)
+      embedVar2 = discord.Embed(title= f"Profile Menu", description="View and Edit your Cards, Titles, Arms, and Pets to craft new Builds and strategies.", colour=0x7289da)
       embedVar2.set_image(url=profile)
       # embedVar2.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
       embedVar2.set_footer(text=f"use /crown for additional assistance")
@@ -2319,7 +2319,7 @@ async def menu(ctx):
       # embedVar3.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
       embedVar3.set_footer(text=f"use /crown for additional assistance")
 
-      embedVar4 = discord.Embed(title= f"Crown Unlimited Menu", description="5 Primary Objectives of Crown Unlimited. Click arrow below to go to the next page!", colour=0x7289da)
+      embedVar4 = discord.Embed(title= f"TIPS", description="5 Primary Objectives of Crown Unlimited.", colour=0x7289da)
       embedVar4.set_image(url=objectives)
       # embedVar4.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
       embedVar4.set_footer(text=f"use /crown for additional assistance")
@@ -2330,7 +2330,7 @@ async def menu(ctx):
       paginator.add_reaction('🔒', "lock")
       paginator.add_reaction('➡️', "next")
       paginator.add_reaction('⏭️', "last")
-      embeds = [embedVar4, embedVar2,embedVar1, embedVar3]
+      embeds = [embedVar1, embedVar3,embedVar2, embedVar4]
       await paginator.run(embeds)
 
    except Exception as e:
