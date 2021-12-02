@@ -86,9 +86,9 @@ class Profile(commands.Cog):
                 base_arm_names = ['Reborn Stock', 'Stock', 'Deadgun', 'Glaive', 'Kings Glaive', 'Legendary Weapon']
                 for a in vault['ARMS']:
                     if a['ARM'] == str(d['ARM']) and a['ARM'] in base_arm_names:
-                        durability = f"Unlimited"
+                        durability = f"⚒️ Unlimited"
                     elif a['ARM'] == str(d['ARM']) and a['ARM'] not in base_arm_names:
-                        durability = f"| ⚒️ {a['DUR']}"
+                        durability = f"⚒️ {a['DUR']}"
                    
                 # Acquire Card Levels data
                 card_lvl = 0
@@ -140,7 +140,7 @@ class Profile(commands.Cog):
                         if trait['NAME'] == 'Pokemon':
                             mytrait = trait
                 if mytrait:
-                    traitmessage = f"**{mytrait['EFFECT']}**: {mytrait['TRAIT']}"
+                    traitmessage = f"{mytrait['EFFECT']}: {mytrait['TRAIT']}"
 
                 pets = vault['PETS']
 
@@ -231,21 +231,21 @@ class Profile(commands.Cog):
 
                 #Title errors 
                 titled =False
-                titleicon=":warning:"
-                licon = ":trident:"
+                titleicon="⚠️"
+                licon = "🔱"
                 if card_lvl == 200:
-                    licon =":fleur_de_lis:"
-                titlemessage = f"{titleicon} **{title_name}** ~ **INEFFECTIVE**"
-                warningmessage = f"*Use {o_show} or Unbound Titles on this card*"
+                    licon ="⚜️"
+                titlemessage = f"{titleicon} {title_name} ~ INEFFECTIVE"
+                warningmessage = f"Use {o_show} or Unbound Titles on this card"
                 if o_title_universe == "Unbound":
                     titled =True
-                    titleicon = ":reminder_ribbon:"
-                    titlemessage = f":reminder_ribbon: **{title_name}** {title_passive_type} *{title_passive_value}{enhancer_suffix_mapping[title_passive_type]}*"
+                    titleicon = "🎗️"
+                    titlemessage = f"🎗️ {title_name} {title_passive_type} {title_passive_value}{enhancer_suffix_mapping[title_passive_type]}"
                     warningmessage= f""
                 elif o_title_universe == o_show:
                     titled =True
-                    titleicon = ":reminder_ribbon:"
-                    titlemessage = f":reminder_ribbon: **{title_name}** *{title_passive_type} {title_passive_value}{enhancer_suffix_mapping[title_passive_type]}*"
+                    titleicon = "🎗️"
+                    titlemessage = f"🎗️ {title_name} {title_passive_type} {title_passive_value}{enhancer_suffix_mapping[title_passive_type]}"
                     warningmessage= f""
                 cardtitle = {'TITLE': title_name}
                 card_file = showcard(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, cardtitle, focused, o_attack, o_defense, turn, move1ap, move2ap, move3ap, move4ap, move4enh, card_lvl, None)
@@ -253,26 +253,22 @@ class Profile(commands.Cog):
                 #                     o_attack, o_defense, turn, passive_name, traitmessage, 0, None, None, passive_type, passive_num, active_pet, pet_ability_power, card_exp)
 
 
-                embedVar = discord.Embed(title=f"{message} {o_card} Build".format(self), description=textwrap.dedent(f"""\
-                {titlemessage}
-                :mechanical_arm: **{arm_name}** *{arm_passive_type} {arm_passive_value}{enhancer_suffix_mapping[arm_passive_type]}*
-                :mechanical_arm: **Durability:** {durability}
-
-                :bird: **{active_pet['NAME']}** *{active_pet['TYPE']} {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]}*
-                :bird: **Bond** _{bond}_ {bond_message}
-                :bird: **Level** _{lvl}_ {lvl_message}
-                
-                :drop_of_blood: **{passive_name}:** *{passive_type} {passive_num}{enhancer_suffix_mapping[passive_type]}*
-                :infinity: {traitmessage}
-                {warningmessage}
-                """)
-                
-                , colour=000000)
+                embedVar = discord.Embed(title=f"EXP Until Next Level: {150 - card_exp}".format(self), colour=000000)
                 # file = discord.File(fp=card_file,filename="image.png")
                 embedVar.set_image(url="attachment://image.png")
                 embedVar.set_thumbnail(url=active_pet['PATH'])
                 if card_lvl != 200:
-                    embedVar.set_footer(text=f"EXP Until Next Level: {150 - card_exp}\nRebirth Buff: +{rebirthBonus}", icon_url="https://cdn.discordapp.com/emojis/841486485826961448.gif?v=1")
+                    embedVar.set_author(name=textwrap.dedent(f"""\
+                    {titlemessage}
+                    🦾 {arm_name}: {arm_passive_type} {arm_passive_value}{enhancer_suffix_mapping[arm_passive_type]}
+                    {durability}
+                    🐦 {active_pet['NAME']}: {active_pet['TYPE']}: {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]}
+                    Bond {bond} {bond_message} / Level {lvl} {lvl_message}
+                    🩸 {passive_name}: {passive_type} {passive_num}{enhancer_suffix_mapping[passive_type]}
+                    ♾️ {traitmessage}
+                    Rebirth Buff: +{rebirthBonus}
+                    {warningmessage}
+                    """))
                 
                 await ctx.send(file=card_file, embed=embedVar)
                 # await ctx.send(files=[card_file, card_back_file])
@@ -340,9 +336,9 @@ class Profile(commands.Cog):
                             icon = ":japanese_ogre:"
                     for cl in card_levels:
                         if card == cl['CARD']:
-                            licon = ":trident:"
+                            licon = "🔱"
                             if cl['LVL'] == 200:
-                                licon =":fleur_de_lis:"
+                                licon ="⚜️"
                             lvl = f"{licon} **{cl['LVL']}**"
                     # cards.append(textwrap.dedent(f"""
                     # {icon} [{index}] **{resp['NAME']}** | {lvl}
@@ -457,7 +453,7 @@ class Profile(commands.Cog):
                     title_passive_value = list(title_passive.values())[0]
                     title_available = resp['AVAILABLE']
                     title_exclusive = resp['EXCLUSIVE']
-                    icon = ":reminder_ribbon:"
+                    icon = "🎗️"
                     if title_available and title_exclusive:
                         icon = ":fire:"
                     elif title_available == False and title_exclusive ==False:
@@ -487,7 +483,7 @@ class Profile(commands.Cog):
 
                 embed_list = []
                 for i in range(0, len(titles_broken_up)):
-                    globals()['embedVar%s' % i] = discord.Embed(title= f":reminder_ribbon: Titles\n**Balance**: {icon}{'{:,}'.format(balance)}", description="\n".join(titles_broken_up[i]), colour=0x7289da)
+                    globals()['embedVar%s' % i] = discord.Embed(title= f"🎗️ Titles\n**Balance**: {icon}{'{:,}'.format(balance)}", description="\n".join(titles_broken_up[i]), colour=0x7289da)
                     globals()['embedVar%s' % i].set_thumbnail(url=avatar)
                     globals()['embedVar%s' % i].set_footer(text=f"{total_titles} Total Titles\n/equiptitle title name: Equip Title\n/viewtitle title name: View Title Details")
                     embed_list.append(globals()['embedVar%s' % i])
