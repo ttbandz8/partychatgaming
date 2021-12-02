@@ -86,7 +86,7 @@ class Profile(commands.Cog):
                 base_arm_names = ['Reborn Stock', 'Stock', 'Deadgun', 'Glaive', 'Kings Glaive', 'Legendary Weapon']
                 for a in vault['ARMS']:
                     if a['ARM'] == str(d['ARM']) and a['ARM'] in base_arm_names:
-                        durability = f""
+                        durability = f"Unlimited"
                     elif a['ARM'] == str(d['ARM']) and a['ARM'] not in base_arm_names:
                         durability = f"| ⚒️ {a['DUR']}"
                    
@@ -98,7 +98,6 @@ class Profile(commands.Cog):
                 card_lvl_defense_buff = 0
                 card_lvl_ap_buff = 0
                 card_lvl_hlt_buff = 0
-
 
                 for x in vault['CARD_LEVELS']:
                     if x['CARD'] == card['NAME']:
@@ -257,8 +256,11 @@ class Profile(commands.Cog):
                 embedVar = discord.Embed(title=f"{message} {o_card} Build".format(self), description=textwrap.dedent(f"""\
                 {titlemessage}
                 :mechanical_arm: **{arm_name}** *{arm_passive_type} {arm_passive_value}{enhancer_suffix_mapping[arm_passive_type]}* {durability}
+                :mechanical_arm: **Durability:** {durability}
+
                 :bird: **{active_pet['NAME']}** *{active_pet['TYPE']} {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]}*
-                :bird: **Bond** _{bond}_ {bond_message} / **Level** _{lvl}_ {lvl_message}
+                :bird: **Bond** _{bond}_ {bond_message}
+                :bird: **Level** _{lvl}_ {lvl_message}
                 
                 :drop_of_blood: **{passive_name}:** *{passive_type} {passive_num}{enhancer_suffix_mapping[passive_type]}*
                 :infinity: {traitmessage}

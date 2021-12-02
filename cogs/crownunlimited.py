@@ -185,9 +185,65 @@ class CrownUnlimited(commands.Cog):
             {message.author.mention}, **{battle_message}**
             """), colour=0xf1c40f)
             # embedVar.set_author(name="Enemy Approaches!", icon_url=f"{icon}")
-            embedVar.set_image(url=f"{cards[rand_card]['PATH']}")
+            card_lvl_attack_buff = 0
+            card_lvl_defense_buff = 0
+            card_lvl_ap_buff = 0
+            card_lvl_hlt_buff = 0
+        
+            o_card = cards[rand_card]['NAME']
+            o_card_path=cards[rand_card]['PATH']
+            o_max_health = cards[rand_card]['HLT'] + card_lvl_hlt_buff
+            o_health = cards[rand_card]['HLT'] + card_lvl_hlt_buff
+            o_stamina = cards[rand_card]['STAM']
+            o_max_stamina = cards[rand_card]['STAM']
+            o_moveset = cards[rand_card]['MOVESET']
+            o_attack = cards[rand_card]['ATK'] + card_lvl_attack_buff
+            o_defense = cards[rand_card]['DEF'] + card_lvl_defense_buff
+            o_type = cards[rand_card]['TYPE']
+            o_passive = cards[rand_card]['PASS'][0]
+            o_speed = cards[rand_card]['SPD']
+            o_show = cards[rand_card]['UNIVERSE']
+            o_collection = cards[rand_card]['COLLECTION']
+            o_destiny = cards[rand_card]['HAS_COLLECTION']
+            
+            o_1 = o_moveset[0]
+            o_2 = o_moveset[1]
+            o_3 = o_moveset[2]
+            o_enhancer = o_moveset[3]
+            
+            # Move 1
+            move1 = list(o_1.keys())[0]
+            move1ap = list(o_1.values())[0] + card_lvl_ap_buff
+            move1_stamina = list(o_1.values())[1]
+            
+            # Move 2
+            move2 = list(o_2.keys())[0]
+            move2ap = list(o_2.values())[0] + card_lvl_ap_buff
+            move2_stamina = list(o_2.values())[1]
+
+            # Move 3
+            move3 = list(o_3.keys())[0]
+            move3ap = list(o_3.values())[0] + card_lvl_ap_buff
+            move3_stamina = list(o_3.values())[1]
+
+            # Move Enhancer
+            move4 = list(o_enhancer.keys())[0]
+            move4ap = list(o_enhancer.values())[0]
+            move4_stamina = list(o_enhancer.values())[1]
+            move4enh = list(o_enhancer.values())[2]
+            resolved = False
+            focused = False
+            card_lvl = 0
+            turn = 0
+            if selected_mode == "Tales":
+                cardtitle = {'TITLE': 'Universe Title'}
+            else:
+                cardtitle = {'TITLE': 'Dungeon Title'}
+            card_file = showcard(cards[rand_card], o_max_health, o_health, o_max_stamina, o_stamina, resolved, cardtitle, focused, o_attack, o_defense, turn, move1ap, move2ap, move3ap, move4ap, move4enh, card_lvl, None)
+
+            embedVar.set_image(url="attachment://image.png")
             embedVar.set_footer(text="Use /explore to turn off these interactions.")
-            await message.channel.send(embed=embedVar, components=[random_battle_buttons_action_row], delete_after=60)
+            await message.channel.send(embed=embedVar, file=card_file, components=[random_battle_buttons_action_row], delete_after=60)
 
             def check(button_ctx):
                 return button_ctx.author == message.author
