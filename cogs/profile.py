@@ -252,7 +252,7 @@ class Profile(commands.Cog):
                 # card_back_file = cardback(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, arm, focused,
                 #                     o_attack, o_defense, turn, passive_name, traitmessage, 0, None, None, passive_type, passive_num, active_pet, pet_ability_power, card_exp)
 
-
+                #<:PCG:769471288083218432>
                 embedVar = discord.Embed(title=f"".format(self), colour=000000)
                 # file = discord.File(fp=card_file,filename="image.png")
                 embedVar.set_image(url="attachment://image.png")
@@ -267,7 +267,7 @@ class Profile(commands.Cog):
                 {warningmessage}
                 """))
                 if card_lvl != 200:
-                    embedVar.set_footer(text=f"EXP Until Next Level: {150 - card_exp}")
+                    embedVar.set_footer(text=f"EXP Until Next Level: {150 - card_exp}", icon_url="https://cdn.discordapp.com/emojis/841486485826961448.gif?v=1")
                 else:
                     embedVar.set_footer(text=f"Max Level")
                 
