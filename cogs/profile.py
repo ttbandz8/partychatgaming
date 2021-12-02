@@ -254,7 +254,7 @@ class Profile(commands.Cog):
                 #                     o_attack, o_defense, turn, passive_name, traitmessage, 0, None, None, passive_type, passive_num, active_pet, pet_ability_power, card_exp)
 
 
-                embedVar = discord.Embed(title=f"{licon} {card_lvl} {message} {o_card} Build".format(self), description=textwrap.dedent(f"""\
+                embedVar = discord.Embed(title=f"{message} {o_card} Build".format(self), description=textwrap.dedent(f"""\
                 {titlemessage}
                 :mechanical_arm: **{arm_name}** *{arm_passive_type} {arm_passive_value}{enhancer_suffix_mapping[arm_passive_type]}* {durability}
                 :bird: **{active_pet['NAME']}** *{active_pet['TYPE']} {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]}*
