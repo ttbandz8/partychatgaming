@@ -9685,7 +9685,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             self.stop = True
             
 
-        await Paginator(bot=self.bot, ctx=ctx, dm=True,  deleteAfterTimeout=True, pages=universe_embed_list, timeout=60,  customButton=[
+        await Paginator(bot=self.bot, ctx=ctx, deleteAfterTimeout=True, pages=universe_embed_list, timeout=60,  customButton=[
             custom_button,
             custom_function,
         ]).run()
@@ -9771,7 +9771,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             self.stop = True
             
 
-        await Paginator(bot=self.bot, ctx=ctx, dm=True, deleteAfterTimeout=True, pages=universe_embed_list, timeout=60,  customButton=[
+        await Paginator(bot=self.bot, ctx=ctx, deleteAfterTimeout=True, pages=universe_embed_list, timeout=60,  customButton=[
             custom_button,
             custom_function,
         ]).run()
@@ -9847,7 +9847,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             custom_function.selected_universe = str(button_ctx.origin_message.embeds[0].title)
             self.stop = True
         
-        await Paginator(bot=self.bot, ctx=ctx, dm=True, deleteAfterTimeout=True, pages=universe_embed_list, timeout=60,  customButton=[
+        await Paginator(bot=self.bot, ctx=ctx, deleteAfterTimeout=True, pages=universe_embed_list, timeout=60,  customButton=[
             custom_button,
             custom_function,
         ]).run()
