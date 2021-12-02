@@ -255,7 +255,7 @@ class Profile(commands.Cog):
 
                 embedVar = discord.Embed(title=f"{message} {o_card} Build".format(self), description=textwrap.dedent(f"""\
                 {titlemessage}
-                :mechanical_arm: **{arm_name}** *{arm_passive_type} {arm_passive_value}{enhancer_suffix_mapping[arm_passive_type]}* {durability}
+                :mechanical_arm: **{arm_name}** *{arm_passive_type} {arm_passive_value}{enhancer_suffix_mapping[arm_passive_type]}*
                 :mechanical_arm: **Durability:** {durability}
 
                 :bird: **{active_pet['NAME']}** *{active_pet['TYPE']} {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]}*
@@ -320,7 +320,8 @@ class Profile(commands.Cog):
                 elif balance >= 50000:
                     icon = ":dollar:"
                 
-                
+                embed_list = []
+
                 for card in cards_list:
                     index = cards_list.index(card)
                     resp = db.queryCard({"NAME": str(card)})
@@ -328,6 +329,7 @@ class Profile(commands.Cog):
                     card_available = resp['AVAILABLE']
                     card_exclusive = resp['EXCLUSIVE']
                     card_collection = resp['HAS_COLLECTION']
+                    show_img = db.queryUniverse({'TITLE': resp['UNIVERSE']})['PATH']
                     icon = ":flower_playing_cards:"
                     if card_available and card_exclusive:
                         icon = ":fire:"
@@ -342,44 +344,69 @@ class Profile(commands.Cog):
                             if cl['LVL'] == 200:
                                 licon =":fleur_de_lis:"
                             lvl = f"{licon} **{cl['LVL']}**"
-                    cards.append(textwrap.dedent(f"""
-                    {icon} [{index}] **{resp['NAME']}** | {lvl}
+                    # cards.append(textwrap.dedent(f"""
+                    # {icon} [{index}] **{resp['NAME']}** | {lvl}
+                    # :heart: {resp['HLT']} :dagger: {resp['ATK']} :shield: {resp['DEF']}
+                    # :earth_americas:  {resp['UNIVERSE']}"""))
+
+                    embedVar = discord.Embed(title= f"{resp['NAME']}", description=textwrap.dedent(f"""
+                    {icon} [{index}] {lvl}
                     :heart: {resp['HLT']} :dagger: {resp['ATK']} :shield: {resp['DEF']}
-                    :earth_americas:  {resp['UNIVERSE']}"""))
+                    """), colour=0x7289da)
+                    embedVar.set_thumbnail(url=show_img)
+                    # embedVar.set_footer(text=f"/equipcard card name: Equip Card\n/viewcard card name: View Cards Details")
+                    embed_list.append(embedVar)
+                    # await ctx.send(embed=embedVar)
+
 
                 # Adding to array until divisible by 10
-                while len(cards) % 10 != 0:
-                    cards.append("")
-                # Check if divisible by 10, then start to split evenly
-                if len(cards) % 10 == 0:
-                    first_digit = int(str(len(cards))[:1])
-                    if len(cards) >= 89:
-                        if first_digit == 1:
-                            first_digit = 10
-                    cards_broken_up = np.array_split(cards, first_digit)
+                # while len(cards) % 10 != 0:
+                #     cards.append("")
+                # # Check if divisible by 10, then start to split evenly
+                # if len(cards) % 10 == 0:
+                #     first_digit = int(str(len(cards))[:1])
+                #     if len(cards) >= 89:
+                #         if first_digit == 1:
+                #             first_digit = 10
+                #     cards_broken_up = np.array_split(cards, first_digit)
                 
-                # If it's not an array greater than 10, show paginationless embed
-                if len(cards) < 10:
-                    embedVar = discord.Embed(title= f":flower_playing_cards: Cards\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(cards), colour=0x7289da)
-                    embedVar.set_thumbnail(url=avatar)
-                    embedVar.set_footer(text=f"/equipcard card name: Equip Card\n/viewcard card name: View Cards Details")
-                    await ctx.send(embed=embedVar)
+                # # If it's not an array greater than 10, show paginationless embed
+                # if len(cards) < 10:
+                #     embedVar = discord.Embed(title= f":flower_playing_cards: Cards\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(cards), colour=0x7289da)
+                #     embedVar.set_thumbnail(url=avatar)
+                #     embedVar.set_footer(text=f"/equipcard card name: Equip Card\n/viewcard card name: View Cards Details")
+                #     await ctx.send(embed=embedVar)
 
-                embed_list = []
-                for i in range(0, len(cards_broken_up)):
-                    globals()['embedVar%s' % i] = discord.Embed(title= f":flower_playing_cards: Cards\n**Balance**: {icon}{'{:,}'.format(balance)}", description="\n".join(cards_broken_up[i]), colour=0x7289da)
-                    globals()['embedVar%s' % i].set_thumbnail(url=avatar)
-                    globals()['embedVar%s' % i].set_footer(text=f"{total_cards} Total Cards\n/equipcard card name: Equip Card\n/viewcard card name: View Cards Details")
-                    embed_list.append(globals()['embedVar%s' % i])
+                
+                # for i in range(0, len(cards_broken_up)):
+                #     globals()['embedVar%s' % i] = discord.Embed(title= f":flower_playing_cards: Cards\n**Balance**: {icon}{'{:,}'.format(balance)}", description="\n".join(cards_broken_up[i]), colour=0x7289da)
+                #     globals()['embedVar%s' % i].set_thumbnail(url=avatar)
+                #     globals()['embedVar%s' % i].set_footer(text=f"{total_cards} Total Cards\n/equipcard card name: Equip Card\n/viewcard card name: View Cards Details")
+                #     embed_list.append(globals()['embedVar%s' % i])
 
-                paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
-                paginator.add_reaction('⏮️', "first")
-                paginator.add_reaction('⬅️', "back")
-                paginator.add_reaction('🔐', "lock")
-                paginator.add_reaction('➡️', "next")
-                paginator.add_reaction('⏭️', "last")
-                embeds = embed_list
-                await paginator.run(embeds)
+                # paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+                # paginator.add_reaction('⏮️', "first")
+                # paginator.add_reaction('⬅️', "back")
+                # paginator.add_reaction('🔐', "lock")
+                # paginator.add_reaction('➡️', "next")
+                # paginator.add_reaction('⏭️', "last")
+                # embeds = embed_list
+                # await paginator.run(embeds)
+        
+                custom_button = manage_components.create_button(style=3, label="Equip")
+
+                async def custom_function(self, button_ctx):
+                    selected_universe = custom_function
+                    custom_function.selected_universe = str(button_ctx.origin_message.embeds[0].title)
+                    user_query = {'DISNAME': str(ctx.author)}
+                    response = db.updateUserNoFilter(user_query, {'$set': {'CARD': str(button_ctx.origin_message.embeds[0].title)}})
+                    await button_ctx.send(f"**{str(button_ctx.origin_message.embeds[0].title)}** equipped.", hidden=True)
+                    self.stop = True
+
+                await Paginator(bot=self.bot, ctx=ctx, pages=embed_list, dm=True, timeout=60, customButton=[
+            custom_button,
+            custom_function,
+        ]).run()
             else:
                 newVault = db.createVault({'OWNER': d['DISNAME']})
         except Exception as ex:
