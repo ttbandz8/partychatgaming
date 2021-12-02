@@ -86,7 +86,7 @@ class Profile(commands.Cog):
                 base_arm_names = ['Reborn Stock', 'Stock', 'Deadgun', 'Glaive', 'Kings Glaive', 'Legendary Weapon']
                 for a in vault['ARMS']:
                     if a['ARM'] == str(d['ARM']) and a['ARM'] in base_arm_names:
-                        durability = f"⚒️ Unlimited"
+                        durability = f""
                     elif a['ARM'] == str(d['ARM']) and a['ARM'] not in base_arm_names:
                         durability = f"⚒️ {a['DUR']}"
                    
@@ -253,22 +253,23 @@ class Profile(commands.Cog):
                 #                     o_attack, o_defense, turn, passive_name, traitmessage, 0, None, None, passive_type, passive_num, active_pet, pet_ability_power, card_exp)
 
 
-                embedVar = discord.Embed(title=f"EXP Until Next Level: {150 - card_exp}".format(self), colour=000000)
+                embedVar = discord.Embed(title=f"".format(self), colour=000000)
                 # file = discord.File(fp=card_file,filename="image.png")
                 embedVar.set_image(url="attachment://image.png")
                 embedVar.set_thumbnail(url=active_pet['PATH'])
+                embedVar.set_author(name=textwrap.dedent(f"""\
+                {titlemessage}
+                🦾 {arm_name}: {arm_passive_type} {arm_passive_value}{enhancer_suffix_mapping[arm_passive_type]} {durability}
+                🐦 {active_pet['NAME']}: {active_pet['TYPE']}: {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]} | Bond {bond} {bond_message} / Level {lvl} {lvl_message}
+                🩸 {passive_name}: {passive_type} {passive_num}{enhancer_suffix_mapping[passive_type]}
+                ♾️ {traitmessage}
+                Rebirth Buff: +{rebirthBonus}
+                {warningmessage}
+                """))
                 if card_lvl != 200:
-                    embedVar.set_author(name=textwrap.dedent(f"""\
-                    {titlemessage}
-                    🦾 {arm_name}: {arm_passive_type} {arm_passive_value}{enhancer_suffix_mapping[arm_passive_type]}
-                    {durability}
-                    🐦 {active_pet['NAME']}: {active_pet['TYPE']}: {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]}
-                    Bond {bond} {bond_message} / Level {lvl} {lvl_message}
-                    🩸 {passive_name}: {passive_type} {passive_num}{enhancer_suffix_mapping[passive_type]}
-                    ♾️ {traitmessage}
-                    Rebirth Buff: +{rebirthBonus}
-                    {warningmessage}
-                    """))
+                    embedVar.set_footer(text=f"EXP Until Next Level: {150 - card_exp}")
+                else:
+                    embedVar.set_footer(text=f"Max Level")
                 
                 await ctx.send(file=card_file, embed=embedVar)
                 # await ctx.send(files=[card_file, card_back_file])
@@ -399,7 +400,7 @@ class Profile(commands.Cog):
                     await button_ctx.send(f"**{str(button_ctx.origin_message.embeds[0].title)}** equipped.", hidden=True)
                     self.stop = True
 
-                await Paginator(bot=self.bot, ctx=ctx, pages=embed_list, dm=True, timeout=60, customButton=[
+                await Paginator(bot=self.bot, ctx=ctx, pages=embed_list, timeout=60, customButton=[
             custom_button,
             custom_function,
         ]).run()
