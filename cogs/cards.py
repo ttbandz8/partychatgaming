@@ -314,7 +314,7 @@ class Cards(commands.Cog):
                         if trait['NAME'] == 'Pokemon':
                             mytrait = trait
                 if mytrait:
-                    traitmessage = f"{mytrait['EFFECT']}"
+                    traitmessage = f"**{mytrait['EFFECT']}**: {mytrait['TRAIT']}"
 
                 passive_name = list(o_passive.keys())[0]
                 passive_num = list(o_passive.values())[0]
@@ -372,12 +372,28 @@ class Cards(commands.Cog):
                 card_file = showcard(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, title, focused,
                                     o_attack, o_defense, turn, move1ap, move2ap, move3ap, move4ap, move4enh, 0, None)
 
-                card_back_file = cardback(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, arm, focused,
-                                    o_attack, o_defense, turn, passive_name, traitmessage, 0, price_message, card_icon, passive_type, passive_num, active_pet, pet_ability_power, card_exp)
+                # card_back_file = cardback(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, arm, focused,
+                #                     o_attack, o_defense, turn, passive_name, traitmessage, 0, price_message, card_icon, passive_type, passive_num, active_pet, pet_ability_power, card_exp)
+                
+                embedVar = discord.Embed(title=f"{card_icon} {price_message}".format(self), description=textwrap.dedent(f"""\
+                **Passive & Universe Trait**
+                :drop_of_blood: **{passive_name}:** *{passive_type} {passive_num}{enhancer_suffix_mapping[passive_type]}*
+                :infinity: {traitmessage}
+                """)
+                , colour=000000)
+                embedVar.set_image(url="attachment://image.png")
+                embedVar.set_thumbnail(url=show_img)
 
-                pages = [card_file, card_back_file]
-                await ctx.send(files=pages)
-                # await Paginator(bot=self.bot, ctx=ctx, content=["Front", "Back"], files=[card_file, card_back_file], authorOnly=True, timeout=60, prevLabel="Front", nextLabel="Back").run()
+                # backEmbed = discord.Embed(title=f"Back Page".format(self), description=textwrap.dedent(f"""\
+                # hello world
+                # """)
+                # , colour=000000)
+                # backEmbed.set_image(url="attachment://backimage.png")
+
+                # card_files_list = [card_file, card_back_file]
+                # pages = [frontEmbed, backEmbed]
+                await ctx.send(file=card_file, embed=embedVar)
+                # await Paginator(bot=self.bot, ctx=ctx, pages=pages, files=[card_file, card_back_file], authorOnly=True, timeout=60, prevLabel="Front", nextLabel="Back").run()
             else:
                 await ctx.send(m.CARD_DOESNT_EXIST, delete_after=3)
         except Exception as ex:

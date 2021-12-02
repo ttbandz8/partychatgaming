@@ -21,6 +21,7 @@ from .crownunlimited import showcard, cardback, enhancer_mapping, enhancer_suffi
 import random
 import textwrap
 from discord_slash import cog_ext, SlashContext
+from dinteractions_Paginator import Paginator
 
 emojis = ['👍', '👎']
 
@@ -140,7 +141,7 @@ class Profile(commands.Cog):
                         if trait['NAME'] == 'Pokemon':
                             mytrait = trait
                 if mytrait:
-                    traitmessage = f"{mytrait['EFFECT']}"
+                    traitmessage = f"**{mytrait['EFFECT']}**: {mytrait['TRAIT']}"
 
                 pets = vault['PETS']
 
@@ -235,41 +236,44 @@ class Profile(commands.Cog):
                 licon = ":trident:"
                 if card_lvl == 200:
                     licon =":fleur_de_lis:"
-                titlemessage = f"{titleicon} | **{title_name}** ~ **INEFFECTIVE**"
+                titlemessage = f"{titleicon} **{title_name}** ~ **INEFFECTIVE**"
                 warningmessage = f"*Use {o_show} or Unbound Titles on this card*"
                 if o_title_universe == "Unbound":
                     titled =True
                     titleicon = ":reminder_ribbon:"
-                    titlemessage = f":reminder_ribbon: | **{title_name}** {title_passive_type} *{title_passive_value}{enhancer_suffix_mapping[title_passive_type]}*"
+                    titlemessage = f":reminder_ribbon: **{title_name}** {title_passive_type} *{title_passive_value}{enhancer_suffix_mapping[title_passive_type]}*"
                     warningmessage= f""
                 elif o_title_universe == o_show:
                     titled =True
                     titleicon = ":reminder_ribbon:"
-                    titlemessage = f":reminder_ribbon: | **{title_name}** *{title_passive_type} {title_passive_value}{enhancer_suffix_mapping[title_passive_type]}*"
+                    titlemessage = f":reminder_ribbon: **{title_name}** *{title_passive_type} {title_passive_value}{enhancer_suffix_mapping[title_passive_type]}*"
                     warningmessage= f""
                 cardtitle = {'TITLE': title_name}
                 card_file = showcard(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, cardtitle, focused, o_attack, o_defense, turn, move1ap, move2ap, move3ap, move4ap, move4enh, card_lvl, None)
-                card_back_file = cardback(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, arm, focused,
-                                    o_attack, o_defense, turn, passive_name, traitmessage, 0, None, None, passive_type, passive_num, active_pet, pet_ability_power, card_exp)
+                # card_back_file = cardback(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, arm, focused,
+                #                     o_attack, o_defense, turn, passive_name, traitmessage, 0, None, None, passive_type, passive_num, active_pet, pet_ability_power, card_exp)
 
 
-                embedVar = discord.Embed(title=f"{licon} {card_lvl} {message}".format(self), description=textwrap.dedent(f"""\
+                embedVar = discord.Embed(title=f"{licon} {card_lvl} {message} {o_card} Build".format(self), description=textwrap.dedent(f"""\
                 {titlemessage}
-                :mechanical_arm: | **{arm_name}** *{arm_passive_type} {arm_passive_value}{enhancer_suffix_mapping[arm_passive_type]}* {durability}
-                :bird: | **{active_pet['NAME']}** *{active_pet['TYPE']} {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]}*
-                **Bond** _{bond}_ {bond_message} / **Level** _{lvl}_ {lvl_message}
+                :mechanical_arm: **{arm_name}** *{arm_passive_type} {arm_passive_value}{enhancer_suffix_mapping[arm_passive_type]}* {durability}
+                :bird: **{active_pet['NAME']}** *{active_pet['TYPE']} {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]}*
+                :bird: **Bond** _{bond}_ {bond_message} / **Level** _{lvl}_ {lvl_message}
                 
-                :drop_of_blood: | _Passive:_ **{passive_name}:** *{passive_type} {passive_num}{enhancer_suffix_mapping[passive_type]}*
-                :infinity: | {traitmessage}
+                :drop_of_blood: **{passive_name}:** *{passive_type} {passive_num}{enhancer_suffix_mapping[passive_type]}*
+                :infinity: {traitmessage}
                 {warningmessage}
                 """)
                 
                 , colour=000000)
+                # file = discord.File(fp=card_file,filename="image.png")
+                embedVar.set_image(url="attachment://image.png")
                 embedVar.set_thumbnail(url=active_pet['PATH'])
                 if card_lvl != 200:
                     embedVar.set_footer(text=f"EXP Until Next Level: {150 - card_exp}\nRebirth Buff: +{rebirthBonus}", icon_url="https://cdn.discordapp.com/emojis/841486485826961448.gif?v=1")
-
-                await ctx.send(files=[card_file, card_back_file])
+                
+                await ctx.send(file=card_file, embed=embedVar)
+                # await ctx.send(files=[card_file, card_back_file])
             except Exception as ex:
                 trace = []
                 tb = ex.__traceback__
