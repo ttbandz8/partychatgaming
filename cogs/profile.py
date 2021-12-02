@@ -240,12 +240,12 @@ class Profile(commands.Cog):
                 if o_title_universe == "Unbound":
                     titled =True
                     titleicon = "🎗️"
-                    titlemessage = f"🎗️ {title_name} {title_passive_type} {title_passive_value}{enhancer_suffix_mapping[title_passive_type]}"
+                    titlemessage = f"🎗️ {title_name}: {title_passive_type} {title_passive_value}{enhancer_suffix_mapping[title_passive_type]}"
                     warningmessage= f""
                 elif o_title_universe == o_show:
                     titled =True
                     titleicon = "🎗️"
-                    titlemessage = f"🎗️ {title_name} {title_passive_type} {title_passive_value}{enhancer_suffix_mapping[title_passive_type]}"
+                    titlemessage = f"🎗️ {title_name}: {title_passive_type} {title_passive_value}{enhancer_suffix_mapping[title_passive_type]}"
                     warningmessage= f""
                 cardtitle = {'TITLE': title_name}
                 card_file = showcard(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, cardtitle, focused, o_attack, o_defense, turn, move1ap, move2ap, move3ap, move4ap, move4enh, card_lvl, None)
