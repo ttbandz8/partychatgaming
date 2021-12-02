@@ -403,7 +403,7 @@ class Profile(commands.Cog):
                     await button_ctx.send(f"**{str(button_ctx.origin_message.embeds[0].title)}** equipped.", hidden=True)
                     self.stop = True
 
-                await Paginator(bot=self.bot, ctx=ctx, pages=embed_list, dm=True, timeout=60, customButton=[
+                await Paginator(bot=self.bot, ctx=ctx, pages=embed_list, timeout=60, customButton=[
             custom_button,
             custom_function,
         ]).run()
