@@ -7081,13 +7081,28 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, stamina, en
 # DONT REMOVE THIS
 cache = dict()
 
-def get_card(url, cardname):
+def get_card(url, cardname, cardtype):
     try:
-        im = Image.open(requests.get(url, stream=True).raw)
-        return im
+        save_path = f"image_cache/{str(cardtype)}/{str(cardname)}.png"
+        # print(save_path)
+        
+        if url not in cache:
+            # print("Not in Cache")
+            cache[url] = save_path
+            im = Image.open(requests.get(url, stream=True).raw)
+            im.save(f"{save_path}", "PNG")
+            # print(f"NO : {cardname}")
+            return im
+
+        else:
+            # print("In Cache")
+            im = Image.open(cache[url])
+            # print(f"YES : {cardname}")
+            return im
+        
+        
 
         
-        # save_path = f"image_cache/{str(cardname)}.png"
         # if url not in cache:
         #     # print("Fetching card from server...")
         #     im = Image.open(requests.get(url, stream=True).raw)
@@ -7128,19 +7143,19 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
     try:
         
         if health <= 0:
-            im = get_card(d['PATH'], d['NAME'])
+            im = get_card(d['PATH'], d['NAME'], "base")
             im.save("text.png")
             return discord.File("text.png")
         else:
             if resolved:
-                im = get_card(d['RPATH'], d['RNAME'])
+                im = get_card(d['RPATH'], d['RNAME'], "resolve")
             elif focused:
                 if d["FPATH"]:
-                    im = get_card(d['FPATH'], d['NAME'])
+                    im = get_card(d['FPATH'], d['NAME'], "focus")
                 else:
-                    im = get_card(d['PATH'], d['NAME'])
+                    im = get_card(d['PATH'], d['NAME'], "base")
             else:
-                im = get_card(d['PATH'], d['NAME'])
+                im = get_card(d['PATH'], d['NAME'], "base")
 
             draw = ImageDraw.Draw(im)
 
@@ -7214,8 +7229,13 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
                 draw.text((600, 80), d['NAME'], (255, 255, 255), font=header, stroke_width=1, stroke_fill=(0, 0, 0),
                           align="left")
             if resolved:
-                draw.text((600, 80), d['RNAME'], (255, 255, 255), font=header, stroke_width=1, stroke_fill=(0, 0, 0),
-                          align="left")
+                if d['RNAME'] != "":
+                    draw.text((600, 80), d['RNAME'], (255, 255, 255), font=header, stroke_width=1, stroke_fill=(0, 0, 0),
+                            align="left")
+                else:
+                    draw.text((600, 80), d['NAME'], (255, 255, 255), font=header, stroke_width=1, stroke_fill=(0, 0, 0),
+                            align="left")
+
             # draw.text((602, 150), title['TITLE'], (255, 255, 255), font=h, stroke_width=1, stroke_fill=(0, 0, 0),
             #           align="left")
 
@@ -7330,24 +7350,24 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
 
 
 def cardback(d, max_health, health, max_stamina, stamina, resolved, arm, focused, attack, defense, turn_total, passive_name,
-             traitmessage, lvl, price_message, card_icon, passive_type, passive_num, active_pet, pet_ability_power):
+             traitmessage, lvl, price_message, card_icon, passive_type, passive_num, active_pet, pet_ability_power, card_exp):
     # Card Name can be 16 Characters before going off Card
     # Lower Card Name Font once after 16 characters
     try:
         if health <= 0:
-            im = get_card(d['PATH'], d['NAME'])
+            im = get_card(d['PATH'], d['NAME'], "base")
             im.save("text.png")
             return discord.File("text.png")
         else:
             if resolved:
-                im = get_card(d['RPATH'], d['RNAME'])
+                im = get_card(d['RPATH'], d['RNAME'], "resolve")
             elif focused:
                 if d["FPATH"]:
-                    im = get_card(d['FPATH'], d['NAME'])
+                    im = get_card(d['FPATH'], d['NAME'], "focus")
                 else:
-                    im = get_card(d['PATH'], d['NAME'])
+                    im = get_card(d['PATH'], d['NAME'], "base")
             else:
-                im = get_card(d['PATH'], d['NAME'])
+                im = get_card(d['PATH'], d['NAME'], "base")
 
             draw = ImageDraw.Draw(im)
 
@@ -7416,6 +7436,14 @@ def cardback(d, max_health, health, max_stamina, stamina, resolved, arm, focused
                 back_name = d['NAME']
                 pet_info = f"🐦 {active_pet['NAME']}: {active_pet['TYPE']} {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]}"
 
+            
+            # Level Message
+            lvl_msg = ""
+            if lvl == 200:
+                lvl_msg = f"🔱 Max Level"
+            else:
+                lvl_msg = f"🔱 EXP Until Next Level: {150 - card_exp}"
+
             with Pilmoji(im) as pilmoji:
                 pilmoji.text((600, 80), back_name, (255, 255, 255), font=header, stroke_width=1, stroke_fill=(0, 0, 0),
                           align="left")
@@ -7428,6 +7456,9 @@ def cardback(d, max_health, health, max_stamina, stamina, resolved, arm, focused
                              stroke_fill=(0, 0, 0))
 
                 pilmoji.text((600, 330), f"{pet_info}".strip(), (255, 255, 255), font=moveset_font, stroke_width=2,stroke_fill=(0, 0, 0))
+                
+                pilmoji.text((600, 370), lvl_msg.strip(), (255, 255, 255), font=moveset_font, stroke_width=2,
+                             stroke_fill=(0, 0, 0))
 
 
 
