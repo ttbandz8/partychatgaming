@@ -263,12 +263,9 @@ class Profile(commands.Cog):
                 🐦 {active_pet['NAME']}: {active_pet['TYPE']}: {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]} | Bond {bond} {bond_message} / Level {lvl} {lvl_message}
                 🩸 {passive_name}: {passive_type} {passive_num}{enhancer_suffix_mapping[passive_type]}
                 🏃 {o_speed}
-                ♾️ {traitmessage}
-                Rebirth Buff: +{rebirthBonus}
-                {warningmessage}
                 """))
                 if card_lvl != 200:
-                    embedVar.set_footer(text=f"EXP Until Next Level: {150 - card_exp}", icon_url="https://cdn.discordapp.com/emojis/841486485826961448.gif?v=1")
+                    embedVar.set_footer(text=f"EXP Until Next Level: {150 - card_exp}\nRebirth Buff: +{rebirthBonus}\n♾️ {traitmessage}\n{warningmessage}", icon_url="https://cdn.discordapp.com/emojis/841486485826961448.gif?v=1")
                 else:
                     embedVar.set_footer(text=f"Max Level")
                 
