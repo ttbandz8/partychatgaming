@@ -21,6 +21,7 @@ from .crownunlimited import showcard, cardback, enhancer_mapping, enhancer_suffi
 import random
 import textwrap
 from discord_slash import cog_ext, SlashContext
+from dinteractions_Paginator import Paginator
 
 emojis = ['👍', '👎']
 
@@ -87,7 +88,7 @@ class Profile(commands.Cog):
                     if a['ARM'] == str(d['ARM']) and a['ARM'] in base_arm_names:
                         durability = f""
                     elif a['ARM'] == str(d['ARM']) and a['ARM'] not in base_arm_names:
-                        durability = f"| ⚒️ {a['DUR']}"
+                        durability = f"⚒️ {a['DUR']}"
                    
                 # Acquire Card Levels data
                 card_lvl = 0
@@ -97,7 +98,6 @@ class Profile(commands.Cog):
                 card_lvl_defense_buff = 0
                 card_lvl_ap_buff = 0
                 card_lvl_hlt_buff = 0
-
 
                 for x in vault['CARD_LEVELS']:
                     if x['CARD'] == card['NAME']:
@@ -140,7 +140,7 @@ class Profile(commands.Cog):
                         if trait['NAME'] == 'Pokemon':
                             mytrait = trait
                 if mytrait:
-                    traitmessage = f"{mytrait['EFFECT']}"
+                    traitmessage = f"{mytrait['EFFECT']}: {mytrait['TRAIT']}"
 
                 pets = vault['PETS']
 
@@ -231,45 +231,49 @@ class Profile(commands.Cog):
 
                 #Title errors 
                 titled =False
-                titleicon=":warning:"
-                licon = ":trident:"
+                titleicon="⚠️"
+                licon = "🔱"
                 if card_lvl == 200:
-                    licon =":fleur_de_lis:"
-                titlemessage = f"{titleicon} | **{title_name}** ~ **INEFFECTIVE**"
-                warningmessage = f"*Use {o_show} or Unbound Titles on this card*"
+                    licon ="⚜️"
+                titlemessage = f"{titleicon} {title_name} ~ INEFFECTIVE"
+                warningmessage = f"Use {o_show} or Unbound Titles on this card"
                 if o_title_universe == "Unbound":
                     titled =True
-                    titleicon = ":reminder_ribbon:"
-                    titlemessage = f":reminder_ribbon: | **{title_name}** {title_passive_type} *{title_passive_value}{enhancer_suffix_mapping[title_passive_type]}*"
+                    titleicon = "🎗️"
+                    titlemessage = f"🎗️ {title_name}: {title_passive_type} {title_passive_value}{enhancer_suffix_mapping[title_passive_type]}"
                     warningmessage= f""
                 elif o_title_universe == o_show:
                     titled =True
-                    titleicon = ":reminder_ribbon:"
-                    titlemessage = f":reminder_ribbon: | **{title_name}** *{title_passive_type} {title_passive_value}{enhancer_suffix_mapping[title_passive_type]}*"
+                    titleicon = "🎗️"
+                    titlemessage = f"🎗️ {title_name}: {title_passive_type} {title_passive_value}{enhancer_suffix_mapping[title_passive_type]}"
                     warningmessage= f""
                 cardtitle = {'TITLE': title_name}
-                card_file = showcard(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, title, focused, o_attack, o_defense, turn, move1ap, move2ap, move3ap, move4ap, move4enh, card_lvl, None)
-                card_back_file = cardback(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, arm, focused,
-                                    o_attack, o_defense, turn, passive_name, traitmessage, 0, None, None, passive_type, passive_num, active_pet, pet_ability_power)
+                card_file = showcard(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, cardtitle, focused, o_attack, o_defense, turn, move1ap, move2ap, move3ap, move4ap, move4enh, card_lvl, None)
+                # card_back_file = cardback(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, arm, focused,
+                #                     o_attack, o_defense, turn, passive_name, traitmessage, 0, None, None, passive_type, passive_num, active_pet, pet_ability_power, card_exp)
 
-
-                embedVar = discord.Embed(title=f"{licon} {card_lvl} {message}".format(self), description=textwrap.dedent(f"""\
-                {titlemessage}
-                :mechanical_arm: | **{arm_name}** *{arm_passive_type} {arm_passive_value}{enhancer_suffix_mapping[arm_passive_type]}* {durability}
-                :bird: | **{active_pet['NAME']}** *{active_pet['TYPE']} {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]}*
-                **Bond** _{bond}_ {bond_message} / **Level** _{lvl}_ {lvl_message}
-                
-                :drop_of_blood: | _Passive:_ **{passive_name}:** *{passive_type} {passive_num}{enhancer_suffix_mapping[passive_type]}*
-                :infinity: | {traitmessage}
-                {warningmessage}
-                """)
-                
-                , colour=000000)
+                #<:PCG:769471288083218432>
+                embedVar = discord.Embed(title=f"".format(self), colour=000000)
+                # file = discord.File(fp=card_file,filename="image.png")
+                embedVar.set_image(url="attachment://image.png")
                 embedVar.set_thumbnail(url=active_pet['PATH'])
+                embedVar.set_author(name=textwrap.dedent(f"""\
+                {titlemessage}
+                🦾 {arm_name}: {arm_passive_type} {arm_passive_value}{enhancer_suffix_mapping[arm_passive_type]} {durability}
+                🐦 {active_pet['NAME']}: {active_pet['TYPE']}: {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]} | Bond {bond} {bond_message} / Level {lvl} {lvl_message}
+                🩸 {passive_name}: {passive_type} {passive_num}{enhancer_suffix_mapping[passive_type]}
+                🏃 {o_speed}
+                ♾️ {traitmessage}
+                Rebirth Buff: +{rebirthBonus}
+                {warningmessage}
+                """))
                 if card_lvl != 200:
-                    embedVar.set_footer(text=f"EXP Until Next Level: {150 - card_exp}\nRebirth Buff: +{rebirthBonus}", icon_url="https://cdn.discordapp.com/emojis/841486485826961448.gif?v=1")
-
-                await ctx.send(files=[card_file, card_back_file])
+                    embedVar.set_footer(text=f"EXP Until Next Level: {150 - card_exp}", icon_url="https://cdn.discordapp.com/emojis/841486485826961448.gif?v=1")
+                else:
+                    embedVar.set_footer(text=f"Max Level")
+                
+                await ctx.send(file=card_file, embed=embedVar)
+                # await ctx.send(files=[card_file, card_back_file])
             except Exception as ex:
                 trace = []
                 tb = ex.__traceback__
@@ -314,7 +318,8 @@ class Profile(commands.Cog):
                 elif balance >= 50000:
                     icon = ":dollar:"
                 
-                
+                embed_list = []
+
                 for card in cards_list:
                     index = cards_list.index(card)
                     resp = db.queryCard({"NAME": str(card)})
@@ -322,6 +327,7 @@ class Profile(commands.Cog):
                     card_available = resp['AVAILABLE']
                     card_exclusive = resp['EXCLUSIVE']
                     card_collection = resp['HAS_COLLECTION']
+                    show_img = db.queryUniverse({'TITLE': resp['UNIVERSE']})['PATH']
                     icon = ":flower_playing_cards:"
                     if card_available and card_exclusive:
                         icon = ":fire:"
@@ -332,48 +338,73 @@ class Profile(commands.Cog):
                             icon = ":japanese_ogre:"
                     for cl in card_levels:
                         if card == cl['CARD']:
-                            licon = ":trident:"
+                            licon = "🔱"
                             if cl['LVL'] == 200:
-                                licon =":fleur_de_lis:"
+                                licon ="⚜️"
                             lvl = f"{licon} **{cl['LVL']}**"
-                    cards.append(textwrap.dedent(f"""
-                    {icon} [{index}] **{resp['NAME']}** | {lvl}
-                    :heart: {resp['HLT']} :dagger: {resp['ATK']} :shield: {resp['DEF']}
-                    :earth_americas:  {resp['UNIVERSE']}"""))
+                    # cards.append(textwrap.dedent(f"""
+                    # {icon} [{index}] **{resp['NAME']}** | {lvl}
+                    # :heart: {resp['HLT']} :dagger: {resp['ATK']} :shield: {resp['DEF']}
+                    # :earth_americas:  {resp['UNIVERSE']}"""))
+
+                    embedVar = discord.Embed(title= f"{resp['NAME']}", description=textwrap.dedent(f"""
+                    {icon} [{index}] {lvl}
+                    :heart: {resp['HLT']} :dagger: {resp['ATK']} :shield: {resp['DEF']} 🏃 {resp['SPD']}
+                    """), colour=0x7289da)
+                    embedVar.set_thumbnail(url=show_img)
+                    # embedVar.set_footer(text=f"/equipcard card name: Equip Card\n/viewcard card name: View Cards Details")
+                    embed_list.append(embedVar)
+                    # await ctx.send(embed=embedVar)
+
 
                 # Adding to array until divisible by 10
-                while len(cards) % 10 != 0:
-                    cards.append("")
-                # Check if divisible by 10, then start to split evenly
-                if len(cards) % 10 == 0:
-                    first_digit = int(str(len(cards))[:1])
-                    if len(cards) >= 89:
-                        if first_digit == 1:
-                            first_digit = 10
-                    cards_broken_up = np.array_split(cards, first_digit)
+                # while len(cards) % 10 != 0:
+                #     cards.append("")
+                # # Check if divisible by 10, then start to split evenly
+                # if len(cards) % 10 == 0:
+                #     first_digit = int(str(len(cards))[:1])
+                #     if len(cards) >= 89:
+                #         if first_digit == 1:
+                #             first_digit = 10
+                #     cards_broken_up = np.array_split(cards, first_digit)
                 
-                # If it's not an array greater than 10, show paginationless embed
-                if len(cards) < 10:
-                    embedVar = discord.Embed(title= f":flower_playing_cards: Cards\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(cards), colour=0x7289da)
-                    embedVar.set_thumbnail(url=avatar)
-                    embedVar.set_footer(text=f"/equipcard card name: Equip Card\n/viewcard card name: View Cards Details")
-                    await ctx.send(embed=embedVar)
+                # # If it's not an array greater than 10, show paginationless embed
+                # if len(cards) < 10:
+                #     embedVar = discord.Embed(title= f":flower_playing_cards: Cards\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(cards), colour=0x7289da)
+                #     embedVar.set_thumbnail(url=avatar)
+                #     embedVar.set_footer(text=f"/equipcard card name: Equip Card\n/viewcard card name: View Cards Details")
+                #     await ctx.send(embed=embedVar)
 
-                embed_list = []
-                for i in range(0, len(cards_broken_up)):
-                    globals()['embedVar%s' % i] = discord.Embed(title= f":flower_playing_cards: Cards\n**Balance**: {icon}{'{:,}'.format(balance)}", description="\n".join(cards_broken_up[i]), colour=0x7289da)
-                    globals()['embedVar%s' % i].set_thumbnail(url=avatar)
-                    globals()['embedVar%s' % i].set_footer(text=f"{total_cards} Total Cards\n/equipcard card name: Equip Card\n/viewcard card name: View Cards Details")
-                    embed_list.append(globals()['embedVar%s' % i])
+                
+                # for i in range(0, len(cards_broken_up)):
+                #     globals()['embedVar%s' % i] = discord.Embed(title= f":flower_playing_cards: Cards\n**Balance**: {icon}{'{:,}'.format(balance)}", description="\n".join(cards_broken_up[i]), colour=0x7289da)
+                #     globals()['embedVar%s' % i].set_thumbnail(url=avatar)
+                #     globals()['embedVar%s' % i].set_footer(text=f"{total_cards} Total Cards\n/equipcard card name: Equip Card\n/viewcard card name: View Cards Details")
+                #     embed_list.append(globals()['embedVar%s' % i])
 
-                paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
-                paginator.add_reaction('⏮️', "first")
-                paginator.add_reaction('⬅️', "back")
-                paginator.add_reaction('🔐', "lock")
-                paginator.add_reaction('➡️', "next")
-                paginator.add_reaction('⏭️', "last")
-                embeds = embed_list
-                await paginator.run(embeds)
+                # paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+                # paginator.add_reaction('⏮️', "first")
+                # paginator.add_reaction('⬅️', "back")
+                # paginator.add_reaction('🔐', "lock")
+                # paginator.add_reaction('➡️', "next")
+                # paginator.add_reaction('⏭️', "last")
+                # embeds = embed_list
+                # await paginator.run(embeds)
+        
+                custom_button = manage_components.create_button(style=3, label="Equip")
+
+                async def custom_function(self, button_ctx):
+                    selected_universe = custom_function
+                    custom_function.selected_universe = str(button_ctx.origin_message.embeds[0].title)
+                    user_query = {'DISNAME': str(ctx.author)}
+                    response = db.updateUserNoFilter(user_query, {'$set': {'CARD': str(button_ctx.origin_message.embeds[0].title)}})
+                    await button_ctx.send(f"**{str(button_ctx.origin_message.embeds[0].title)}** equipped.", hidden=True)
+                    self.stop = True
+
+                await Paginator(bot=self.bot, ctx=ctx, pages=embed_list, timeout=60, customButton=[
+            custom_button,
+            custom_function,
+        ]).run()
             else:
                 newVault = db.createVault({'OWNER': d['DISNAME']})
         except Exception as ex:
@@ -424,7 +455,7 @@ class Profile(commands.Cog):
                     title_passive_value = list(title_passive.values())[0]
                     title_available = resp['AVAILABLE']
                     title_exclusive = resp['EXCLUSIVE']
-                    icon = ":reminder_ribbon:"
+                    icon = "🎗️"
                     if title_available and title_exclusive:
                         icon = ":fire:"
                     elif title_available == False and title_exclusive ==False:
@@ -454,7 +485,7 @@ class Profile(commands.Cog):
 
                 embed_list = []
                 for i in range(0, len(titles_broken_up)):
-                    globals()['embedVar%s' % i] = discord.Embed(title= f":reminder_ribbon: Titles\n**Balance**: {icon}{'{:,}'.format(balance)}", description="\n".join(titles_broken_up[i]), colour=0x7289da)
+                    globals()['embedVar%s' % i] = discord.Embed(title= f"🎗️ Titles\n**Balance**: {icon}{'{:,}'.format(balance)}", description="\n".join(titles_broken_up[i]), colour=0x7289da)
                     globals()['embedVar%s' % i].set_thumbnail(url=avatar)
                     globals()['embedVar%s' % i].set_footer(text=f"{total_titles} Total Titles\n/equiptitle title name: Equip Title\n/viewtitle title name: View Title Details")
                     embed_list.append(globals()['embedVar%s' % i])

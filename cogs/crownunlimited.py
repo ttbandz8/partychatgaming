@@ -24,6 +24,7 @@ from collections import ChainMap
 now = time.asctime()
 import base64
 from io import BytesIO
+import io
 import asyncio
 import textwrap
 from discord import Embed
@@ -184,9 +185,65 @@ class CrownUnlimited(commands.Cog):
             {message.author.mention}, **{battle_message}**
             """), colour=0xf1c40f)
             # embedVar.set_author(name="Enemy Approaches!", icon_url=f"{icon}")
-            embedVar.set_image(url=f"{cards[rand_card]['PATH']}")
+            card_lvl_attack_buff = 0
+            card_lvl_defense_buff = 0
+            card_lvl_ap_buff = 0
+            card_lvl_hlt_buff = 0
+        
+            o_card = cards[rand_card]['NAME']
+            o_card_path=cards[rand_card]['PATH']
+            o_max_health = cards[rand_card]['HLT'] + card_lvl_hlt_buff
+            o_health = cards[rand_card]['HLT'] + card_lvl_hlt_buff
+            o_stamina = cards[rand_card]['STAM']
+            o_max_stamina = cards[rand_card]['STAM']
+            o_moveset = cards[rand_card]['MOVESET']
+            o_attack = cards[rand_card]['ATK'] + card_lvl_attack_buff
+            o_defense = cards[rand_card]['DEF'] + card_lvl_defense_buff
+            o_type = cards[rand_card]['TYPE']
+            o_passive = cards[rand_card]['PASS'][0]
+            o_speed = cards[rand_card]['SPD']
+            o_show = cards[rand_card]['UNIVERSE']
+            o_collection = cards[rand_card]['COLLECTION']
+            o_destiny = cards[rand_card]['HAS_COLLECTION']
+            
+            o_1 = o_moveset[0]
+            o_2 = o_moveset[1]
+            o_3 = o_moveset[2]
+            o_enhancer = o_moveset[3]
+            
+            # Move 1
+            move1 = list(o_1.keys())[0]
+            move1ap = list(o_1.values())[0] + card_lvl_ap_buff
+            move1_stamina = list(o_1.values())[1]
+            
+            # Move 2
+            move2 = list(o_2.keys())[0]
+            move2ap = list(o_2.values())[0] + card_lvl_ap_buff
+            move2_stamina = list(o_2.values())[1]
+
+            # Move 3
+            move3 = list(o_3.keys())[0]
+            move3ap = list(o_3.values())[0] + card_lvl_ap_buff
+            move3_stamina = list(o_3.values())[1]
+
+            # Move Enhancer
+            move4 = list(o_enhancer.keys())[0]
+            move4ap = list(o_enhancer.values())[0]
+            move4_stamina = list(o_enhancer.values())[1]
+            move4enh = list(o_enhancer.values())[2]
+            resolved = False
+            focused = False
+            card_lvl = 0
+            turn = 0
+            if selected_mode == "Tales":
+                cardtitle = {'TITLE': 'Universe Title'}
+            else:
+                cardtitle = {'TITLE': 'Dungeon Title'}
+            card_file = showcard(cards[rand_card], o_max_health, o_health, o_max_stamina, o_stamina, resolved, cardtitle, focused, o_attack, o_defense, turn, move1ap, move2ap, move3ap, move4ap, move4enh, card_lvl, None)
+
+            embedVar.set_image(url="attachment://image.png")
             embedVar.set_footer(text="Use /explore to turn off these interactions.")
-            await message.channel.send(embed=embedVar, components=[random_battle_buttons_action_row], delete_after=60)
+            await message.channel.send(embed=embedVar, file=card_file, components=[random_battle_buttons_action_row], delete_after=60)
 
             def check(button_ctx):
                 return button_ctx.author == message.author
@@ -586,7 +643,7 @@ class CrownUnlimited(commands.Cog):
             if banned_titles:
                 embedVar.add_field(name=":reminder_ribbon: Banned Titles", value="\n".join(banned_titles), inline=True)
             if banned_arms:
-                embedVar.add_field(name=":mechanical_arm: Banned Arms", value="\n".join(banned_arms), inline=True)
+                embedVar.add_field(name="🦾 Banned Arms", value="\n".join(banned_arms), inline=True)
             if banned_pets:
                 embedVar.add_field(name=":bird: Banned Pets", value="\n".join(banned_pets))
 
@@ -2037,6 +2094,7 @@ class CrownUnlimited(commands.Cog):
                                         embedVar.add_field(name=f"{opet_name} used **{opetmove_text}**!",
                                                            value=f"Enhanced **{opet_type}**")
                                         embedVar.set_thumbnail(url=opet_image)
+                                        embedVar.set_image(url="attachment://image.png")
                                         await button_ctx.send(embed=embedVar)
                                         turn = 0
                                     else:
@@ -2881,6 +2939,7 @@ class CrownUnlimited(commands.Cog):
                                         embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!",
                                                            value=f"Enhanced **{tpet_type}**")
                                         embedVar.set_thumbnail(url=tpet_image)
+                                        embedVar.set_image(url="attachment://image.png")
                                         await private_channel.send(embed=embedVar)
                                         turn = 1
                                     else:
@@ -4358,12 +4417,10 @@ class CrownUnlimited(commands.Cog):
                                 oarm_passive_value = f"{oparry_count}"
                             else:
                                 oarm_passive_value = 0
-                        embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}",
-                                                 description=textwrap.dedent(f"""\
-                        {pet_msg_on_resolve}
-                        :mechanical_arm: **{oarm_name}** - *{oarm_passive_type} {oarm_passive_value}{enhancer_suffix_mapping[oarm_passive_type]}*
-                        """), color=0xe74c3c)
+                        embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}", color=0xe74c3c)
+                        embedVar.set_author(name=f"🦾 {oarm_name} - {oarm_passive_type} {oarm_passive_value} {enhancer_suffix_mapping[oarm_passive_type]}\n{pet_msg_on_resolve}")
                         embedVar.set_thumbnail(url=opet_image)
+                        embedVar.set_image(url="attachment://image.png")
                         embedVar.set_footer(
                             text=f"{t_card}: ❤️{t_health} 🌀{t_stamina} 🗡️{t_attack}/🛡️{t_defense} {tarm_message}",
                             icon_url="https://cdn.discordapp.com/emojis/789290881654980659.gif?v=1")
@@ -6008,10 +6065,10 @@ class CrownUnlimited(commands.Cog):
                 available = ":red_circle:"
             if arm['EXCLUSIVE']:
                 dungeon_arms_details.append(
-                    f"{available} :mechanical_arm: **{arm['ARM']}**\n**{arm_passive_type}:** {arm_passive_value}\n")
+                    f"{available} 🦾 **{arm['ARM']}**\n**{arm_passive_type}:** {arm_passive_value}\n")
             else:
                 tales_arms_details.append(
-                    f"{available} :mechanical_arm: **{arm['ARM']}**: :coin:{'{:,}'.format(arm['PRICE'])}\n**{arm_passive_type}:** {arm_passive_value}\n")
+                    f"{available} 🦾 **{arm['ARM']}**: :coin:{'{:,}'.format(arm['PRICE'])}\n**{arm_passive_type}:** {arm_passive_value}\n")
 
         all_arms = []
         if tales_arms_details:
@@ -6042,7 +6099,7 @@ class CrownUnlimited(commands.Cog):
 
         embed_list = []
         for i in range(0, len(arms_broken_up)):
-            globals()['embedVar%s' % i] = discord.Embed(title=f":mechanical_arm: {universe_data['TITLE']} Arms List",
+            globals()['embedVar%s' % i] = discord.Embed(title=f"🦾 {universe_data['TITLE']} Arms List",
                                                         description="\n".join(arms_broken_up[i]), colour=0x7289da)
             globals()['embedVar%s' % i].set_footer(
                 text=f"{total_arms} Total Arms\n🟣 Dungeon Drop\n🟢 Tale Drop\n🔴 Boss Drop\n/viewarm 'Arm Name' - View Arm Details")
@@ -7081,30 +7138,23 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, stamina, en
 # DONT REMOVE THIS
 cache = dict()
 
-def get_card(url, cardname):
+def get_card(url, cardname, cardtype):
     try:
+        save_path = f"image_cache/{str(cardtype)}/{str(cardname)}.png"
+        # print(save_path)
         
-        save_path = f"image_cache/{str(cardname)}.png"
         if url not in cache:
-            # print("Fetching card from server...")
-            im = Image.open(requests.get(url, stream=True).raw)
+            # print("Not in Cache")
             cache[url] = save_path
-            im.save(save_path)
+            im = Image.open(requests.get(url, stream=True).raw)
+            im.save(f"{save_path}", "PNG")
+            # print(f"NO : {cardname}")
             return im
-        elif url in cache:
-            # print("Getting card...")
-            im = Image.open(cache[url])
-            if not im:
-                im = Image.open(requests.get(url, stream=True).raw)
-                cache[url] = save_path
-                im.save(save_path)
-                return im
-            else:
-                return im
+
         else:
-            im = Image.open(requests.get(url, stream=True).raw)
-            cache[url] = save_path
-            im.save(save_path)
+            # print("In Cache")
+            im = Image.open(cache[url])
+            # print(f"YES : {cardname}")
             return im
            
     except Exception as ex:
@@ -7131,19 +7181,19 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
     try:
         
         if health <= 0:
-            im = get_card(d['PATH'], d['NAME'])
+            im = get_card(d['PATH'], d['NAME'], "base")
             im.save("text.png")
             return discord.File("text.png")
         else:
             if resolved:
-                im = get_card(d['RPATH'], d['RNAME'])
+                im = get_card(d['RPATH'], d['RNAME'], "resolve")
             elif focused:
                 if d["FPATH"]:
-                    im = get_card(d['FPATH'], d['NAME'])
+                    im = get_card(d['FPATH'], d['NAME'], "focus")
                 else:
-                    im = get_card(d['PATH'], d['NAME'])
+                    im = get_card(d['PATH'], d['NAME'], "base")
             else:
-                im = get_card(d['PATH'], d['NAME'])
+                im = get_card(d['PATH'], d['NAME'], "base")
 
             draw = ImageDraw.Draw(im)
 
@@ -7181,10 +7231,10 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
                 especial = ' '
                 eultimate = ' '
                 vieworbuild =True
-                title_passive = title['ABILITIES'][0]
-                # Title Passive
-                title_passive_type = list(title_passive.keys())[0]
-                title_passive_value = list(title_passive.values())[0]
+                # title_passive = title['ABILITIES'][0]
+                # # Title Passive
+                # title_passive_type = list(title_passive.keys())[0]
+                # title_passive_value = list(title_passive.values())[0]
             else:
                 defensepower = op_defense - attack
                 if defensepower <=0:
@@ -7224,8 +7274,13 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
                 draw.text((600, 80), d['NAME'], (255, 255, 255), font=header, stroke_width=1, stroke_fill=(0, 0, 0),
                           align="left")
             if resolved:
-                draw.text((600, 80), d['RNAME'], (255, 255, 255), font=header, stroke_width=1, stroke_fill=(0, 0, 0),
-                          align="left")
+                if d['RNAME'] != "":
+                    draw.text((600, 80), d['RNAME'], (255, 255, 255), font=header, stroke_width=1, stroke_fill=(0, 0, 0),
+                            align="left")
+                else:
+                    draw.text((600, 80), d['NAME'], (255, 255, 255), font=header, stroke_width=1, stroke_fill=(0, 0, 0),
+                            align="left")
+
             # draw.text((602, 150), title['TITLE'], (255, 255, 255), font=h, stroke_width=1, stroke_fill=(0, 0, 0),
             #           align="left")
 
@@ -7298,14 +7353,11 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
             # attack_stat = f"🗡️{round(attack)}"
             # defense_stat = f"🛡️{round(defense)}"
             with Pilmoji(im) as pilmoji:
-                if vieworbuild == True:
-                    pilmoji.text((602, 190), f"{title_passive_type}: {title_passive_value}{enhancer_suffix_mapping[title_passive_type]}", (255, 255, 255), font=m, stroke_width=1, stroke_fill=(0, 0, 0),
-                      align="left")
                 pilmoji.text((602, 150), f"🎗️ {title['TITLE']}", (255, 255, 255), font=h, stroke_width=1, stroke_fill=(0, 0, 0),
                     align="left")
                 pilmoji.text((600, 250), move1_text.strip(), (255, 255, 255), font=moveset_font, stroke_width=2,
                              stroke_fill=(0, 0, 0))
-                pilmoji.text((600, 290), move2s_text.strip(), (255, 255, 255), font=moveset_font, stroke_width=2,
+                pilmoji.text((600, 290), move2_text.strip(), (255, 255, 255), font=moveset_font, stroke_width=2,
                              stroke_fill=(0, 0, 0))
                 pilmoji.text((600, 330), move3_text.strip(), (255, 255, 255), font=moveset_font, stroke_width=2,
                              stroke_fill=(0, 0, 0))
@@ -7322,8 +7374,9 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
                 im.save(image_binary, "PNG")
                 image_binary.seek(0)
                 # await ctx.send(file=discord.File(fp=image_binary,filename="image.png"))
+                file = discord.File(fp=image_binary,filename="image.png")
+                return file
 
-                return discord.File(fp=image_binary, filename="image.png")
     except Exception as ex:
         trace = []
         tb = ex.__traceback__
@@ -7343,24 +7396,24 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
 
 
 def cardback(d, max_health, health, max_stamina, stamina, resolved, arm, focused, attack, defense, turn_total, passive_name,
-             traitmessage, lvl, price_message, card_icon, passive_type, passive_num, active_pet, pet_ability_power):
+             traitmessage, lvl, price_message, card_icon, passive_type, passive_num, active_pet, pet_ability_power, card_exp):
     # Card Name can be 16 Characters before going off Card
     # Lower Card Name Font once after 16 characters
     try:
         if health <= 0:
-            im = get_card(d['PATH'], d['NAME'])
+            im = get_card(d['PATH'], d['NAME'], "base")
             im.save("text.png")
             return discord.File("text.png")
         else:
             if resolved:
-                im = get_card(d['RPATH'], d['RNAME'])
+                im = get_card(d['RPATH'], d['RNAME'], "resolve")
             elif focused:
                 if d["FPATH"]:
-                    im = get_card(d['FPATH'], d['NAME'])
+                    im = get_card(d['FPATH'], d['NAME'], "focus")
                 else:
-                    im = get_card(d['PATH'], d['NAME'])
+                    im = get_card(d['PATH'], d['NAME'], "base")
             else:
-                im = get_card(d['PATH'], d['NAME'])
+                im = get_card(d['PATH'], d['NAME'], "base")
 
             draw = ImageDraw.Draw(im)
 
@@ -7429,6 +7482,14 @@ def cardback(d, max_health, health, max_stamina, stamina, resolved, arm, focused
                 back_name = d['NAME']
                 pet_info = f"🐦 {active_pet['NAME']}: {active_pet['TYPE']} {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]}"
 
+            
+            # Level Message
+            lvl_msg = ""
+            if lvl == 200:
+                lvl_msg = f"🔱 Max Level"
+            else:
+                lvl_msg = f"🔱 EXP Until Next Level: {150 - card_exp}"
+
             with Pilmoji(im) as pilmoji:
                 pilmoji.text((600, 80), back_name, (255, 255, 255), font=header, stroke_width=1, stroke_fill=(0, 0, 0),
                           align="left")
@@ -7441,6 +7502,9 @@ def cardback(d, max_health, health, max_stamina, stamina, resolved, arm, focused
                              stroke_fill=(0, 0, 0))
 
                 pilmoji.text((600, 330), f"{pet_info}".strip(), (255, 255, 255), font=moveset_font, stroke_width=2,stroke_fill=(0, 0, 0))
+                
+                pilmoji.text((600, 370), lvl_msg.strip(), (255, 255, 255), font=moveset_font, stroke_width=2,
+                             stroke_fill=(0, 0, 0))
 
 
 
@@ -7448,7 +7512,8 @@ def cardback(d, max_health, health, max_stamina, stamina, resolved, arm, focused
                 im.save(image_binary, "PNG")
                 image_binary.seek(0)
                 # await ctx.send(file=discord.File(fp=image_binary,filename="image.png"))
-                return discord.File(fp=image_binary, filename="image.png")
+                file = discord.File(fp=image_binary,filename="backimage.png")
+                return file
     except Exception as ex:
         trace = []
         tb = ex.__traceback__
@@ -9624,7 +9689,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             self.stop = True
             
 
-        await Paginator(bot=self.bot, ctx=ctx, dm=True,  deleteAfterTimeout=True, pages=universe_embed_list, timeout=60,  customButton=[
+        await Paginator(bot=self.bot, ctx=ctx, deleteAfterTimeout=True, pages=universe_embed_list, timeout=60,  customButton=[
             custom_button,
             custom_function,
         ]).run()
@@ -9710,7 +9775,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             self.stop = True
             
 
-        await Paginator(bot=self.bot, ctx=ctx, dm=True, deleteAfterTimeout=True, pages=universe_embed_list, timeout=60,  customButton=[
+        await Paginator(bot=self.bot, ctx=ctx, deleteAfterTimeout=True, pages=universe_embed_list, timeout=60,  customButton=[
             custom_button,
             custom_function,
         ]).run()
@@ -9786,7 +9851,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             custom_function.selected_universe = str(button_ctx.origin_message.embeds[0].title)
             self.stop = True
         
-        await Paginator(bot=self.bot, ctx=ctx, dm=True, deleteAfterTimeout=True, pages=universe_embed_list, timeout=60,  customButton=[
+        await Paginator(bot=self.bot, ctx=ctx, deleteAfterTimeout=True, pages=universe_embed_list, timeout=60,  customButton=[
             custom_button,
             custom_function,
         ]).run()
@@ -10191,6 +10256,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
             o_focus_count = 0
             t_focus_count = 0
             turn = 0
+            if o_speed > t_speed:
+                turn = 0
+            else:
+                turn = 1
             turn_total = 0
             # Enhance Turn Iterators
             eo = 0
@@ -10564,12 +10633,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     oarm_passive_value = f"{oparry_count}"
                                 else:
                                     oarm_passive_value = 0
-                            embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}",
-                                                     description=textwrap.dedent(f"""\
-                            {pet_msg_on_resolve}
-                            :mechanical_arm: **{oarm_name}** - *{oarm_passive_type} {oarm_passive_value} {enhancer_suffix_mapping[oarm_passive_type]}*
-                            """), color=0xe74c3c)
+                            embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}", color=0xe74c3c)
+                            embedVar.set_author(name=f"🦾 {oarm_name} - {oarm_passive_type} {oarm_passive_value} {enhancer_suffix_mapping[oarm_passive_type]}\n{pet_msg_on_resolve}")
                             embedVar.set_thumbnail(url=opet_image)
+                            embedVar.set_image(url="attachment://image.png")
                             embedVar.set_footer(
                                 text=f"{t_card}: ❤️{t_health} 🌀{t_stamina} 🗡️{t_attack}/🛡️{t_defense} {tarm_message}",
                                 icon_url="https://cdn.discordapp.com/emojis/789290881654980659.gif?v=1")
@@ -11010,6 +11077,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                    value=f"Enhanced **{opet_type}**")
 
                                                 embedVar.set_thumbnail(url=opet_image)
+                                                embedVar.set_image(url="attachment://image.png")
                                             else:
                                                 embedVar = discord.Embed(
                                                     title=f"{o_card.upper()} Summoned :bird: {opet_name}",
@@ -11017,6 +11085,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 embedVar.add_field(name=f"{opet_name} used **{opetmove_text}**!",
                                                                    value=f"Enhanced **{opet_type}**")
                                                 embedVar.set_thumbnail(url=opet_image)
+                                                embedVar.set_image(url="attachment://image.png")
+                                                embedVar.set_image(url="attachment://image.png")
 
                                             await button_ctx.send(embed=embedVar)
                                             turn = 0
@@ -11527,12 +11597,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     else:
                                         tarm_passive_value = 0
 
-                                embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}",
-                                                         description=textwrap.dedent(f"""\
-                                {tpet_msg_on_resolve}
-                                :mechanical_arm: **{tarm_name}** - *{tarm_passive_type} {tarm_passive_value} {enhancer_suffix_mapping[tarm_passive_type]}*
-                                """), color=0xe74c3c)
+                                embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}", color=0xe74c3c)
+                                embedVar.set_author(name=f"🦾 {tarm_name} - {tarm_passive_type} {tarm_passive_value} {enhancer_suffix_mapping[tarm_passive_type]}\n{tpet_msg_on_resolve}")
                                 embedVar.set_thumbnail(url=tpet_image)
+                                embedVar.set_image(url="attachment://image.png")
                                 embedVar.set_footer(
                                     text=f"{o_card}: ❤️{o_health} 🌀{o_stamina} 🗡️{o_attack}/🛡️{o_defense}{oarm_message}",
                                     icon_url="https://cdn.discordapp.com/emojis/789290881654980659.gif?v=1")
@@ -11922,6 +11990,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                        value=f"Enhanced **{tpet_type}**")
 
                                                     embedVar.set_thumbnail(url=tpet_image)
+                                                    embedVar.set_image(url="attachment://image.png")
                                                 else:
                                                     embedVar = discord.Embed(
                                                         title=f"{t_card.upper()} Summoned :bird: {tpet_name}",
@@ -11929,6 +11998,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!",
                                                                        value=f"Enhanced **{tpet_type}**")
                                                     embedVar.set_thumbnail(url=tpet_image)
+                                                    embedVar.set_image(url="attachment://image.png")
 
                                                 await button_ctx.send(embed=embedVar)
                                                 turn = 1
@@ -12597,6 +12667,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!",
                                                                value=f"Enhanced **{tpet_type}**")
                                             embedVar.set_thumbnail(url=tpet_image)
+                                            embedVar.set_image(url="attachment://image.png")
                                             await private_channel.send(embed=embedVar)
                                             turn = 1
                                         else:
@@ -13760,12 +13831,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         oarm_passive_value = f"{oparry_count}"
                                     else:
                                         oarm_passive_value = 0
-                                embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}",
-                                                         description=textwrap.dedent(f"""\
-                                {pet_msg_on_resolve}
-                                :mechanical_arm: **{oarm_name}** - *{oarm_passive_type} {oarm_passive_value} {enhancer_suffix_mapping[oarm_passive_type]}*
-                                """), color=0xe74c3c)
+                                embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}", color=0xe74c3c)
+                                embedVar.set_author(name=f"🦾 {oarm_name} - {oarm_passive_type} {oarm_passive_value} {enhancer_suffix_mapping[oarm_passive_type]}\n{pet_msg_on_resolve}")
                                 embedVar.set_thumbnail(url=opet_image)
+                                embedVar.set_image(url="attachment://image.png")
                                 embedVar.set_footer(
                                     text=f"{t_card}: ❤️{t_health} 🌀{t_stamina} 🗡️{t_attack}/🛡️{t_defense} {tarm_message}{companion_stats}",
                                     icon_url="https://cdn.discordapp.com/emojis/789290881654980659.gif?v=1")
@@ -14185,6 +14254,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                        value=f"Enhanced **{opet_type}**")
 
                                                     embedVar.set_thumbnail(url=opet_image)
+                                                    embedVar.set_image(url="attachment://image.png")
                                                     await button_ctx.send(embed=embedVar)
                                                 else:
                                                     embedVar = discord.Embed(
@@ -14193,6 +14263,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     embedVar.add_field(name=f"{opet_name} used **{opetmove_text}**!",
                                                                        value=f"Enhanced **{opet_type}**")
                                                     embedVar.set_thumbnail(url=opet_image)
+                                                    embedVar.set_image(url="attachment://image.png")
                                                     await button_ctx.send(embed=embedVar)
                                                 turn = 0
                                             else:
@@ -15412,6 +15483,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             name=f"{tpet_name} used a follow up attack dealing **{petdmg['DMG']}** damage!",
                                                             value=f"Enhanced **{tpet_type}**")
                                                         embedVar.set_thumbnail(url=tpet_image)
+                                                        embedVar.set_image(url="attachment://image.png")
                                                         await button_ctx.send(embed=embedVar)
                                                     else:
                                                         embedVar = discord.Embed(
@@ -15421,6 +15493,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             name=f"{tpet_name} used **{tpetmove_text}**!",
                                                             value=f"Enhanced **{tpet_type}**")
                                                         embedVar.set_thumbnail(url=tpet_image)
+                                                        embedVar.set_image(url="attachment://image.png")
                                                         await private_channel.send(embed=embedVar)
 
                                                 if t_universe == "Persona":
@@ -15545,6 +15618,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             value=f"Enhanced **{tpet_type}**")
 
                                                         embedVar.set_thumbnail(url=tpet_image)
+                                                        embedVar.set_image(url="attachment://image.png")
                                                         await button_ctx.send(embed=embedVar)
                                                     else:
                                                         embedVar = discord.Embed(
@@ -15554,6 +15628,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             name=f"{tpet_name} used **{tpetmove_text}**!",
                                                             value=f"Enhanced **{tpet_type}**")
                                                         embedVar.set_thumbnail(url=tpet_image)
+                                                        embedVar.set_image(url="attachment://image.png")
                                                         await button_ctx.send(embed=embedVar)
 
                                                 if t_universe == "Persona":
@@ -15677,6 +15752,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                        value=f"Enhanced **{tpet_type}**")
 
                                                     embedVar.set_thumbnail(url=tpet_image)
+                                                    embedVar.set_image(url="attachment://image.png")
                                                     await button_ctx.send(embed=embedVar)
                                                 else:
                                                     embedVar = discord.Embed(
@@ -15685,6 +15761,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!",
                                                                        value=f"Enhanced **{tpet_type}**")
                                                     embedVar.set_thumbnail(url=tpet_image)
+                                                    embedVar.set_image(url="attachment://image.png")
                                                     await private_channel.send(embed=embedVar)
                                             turn = 1
                                         else:
@@ -15822,14 +15899,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                            await button_ctx.send(embed=embedVar)
+                                                            await private_channel.send(embed=embedVar)
                                                             carm_shield_active = False
                                                         else:
                                                             embedVar = discord.Embed(title=f"{c_card.upper()} Activates **Shield** 🌐", description=f"{t_card} strikes the **Shield** for **{dmg['DMG']} DMG!**\n **{cshield_value} Shield** Left!", colour=0xe91e63)
                                                             if tarm_barrier_active:
                                                                 tarm_barrier_active=False
                                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                            await button_ctx.send(embed=embedVar)
+                                                            await private_channel.send(embed=embedVar)
 
                                                 elif carm_barrier_active:
                                                     if cbarrier_count >1:
@@ -15838,7 +15915,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if tarm_barrier_active:
                                                             tarm_barrier_active=False
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                        await button_ctx.send(embed=embedVar)
+                                                        await private_channel.send(embed=embedVar)
                                                         cbarrier_count = cbarrier_count - 1
                                                     elif cbarrier_count==1:
                                                         embedVar = discord.Embed(title=f"{c_card.upper()}'s **Barrier** Broken!", description=f"{t_card} destroys the **Barrier**", colour=0xe91e63)
@@ -15846,7 +15923,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if tarm_barrier_active:
                                                             tarm_barrier_active=False
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                        await button_ctx.send(embed=embedVar)
+                                                        await private_channel.send(embed=embedVar)
                                                         carm_barrier_active = False
                                                 elif carm_parry_active:
                                                     if cparry_count > 1:
@@ -15859,7 +15936,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if tarm_barrier_active:
                                                             tarm_barrier_active=False
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                        await button_ctx.send(embed=embedVar)
+                                                        await private_channel.send(embed=embedVar)
                                                         
                                                     elif cparry_count==1:
                                                         embedVar = discord.Embed(title=f"{c_card.upper()} **Parry** Penetrated!!", description=f"{t_card} breaks the **Parry**", colour=0xe91e63)
@@ -15867,7 +15944,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if tarm_barrier_active:
                                                             tarm_barrier_active=False
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                        await button_ctx.send(embed=embedVar)
+                                                        await private_channel.send(embed=embedVar)
                                                         carm_parry_active = False
                                                 else:
                                                     c_health = c_health - int(dmg['DMG'])
@@ -16235,14 +16312,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         if tarm_barrier_active:
                                                             tarm_barrier_active=False
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                        await button_ctx.send(embed=embedVar)
+                                                        await private_channel.send(embed=embedVar)
                                                         oarm_shield_active = False
                                                     else:
                                                         embedVar = discord.Embed(title=f"{o_card.upper()} Activates **Shield** 🌐", description=f"{t_card} strikes the **Shield** for **{dmg['DMG']} DMG!**\n **{oshield_value} Shield** Left!", colour=0xe91e63)
                                                         if tarm_barrier_active:
                                                             tarm_barrier_active=False
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                        await button_ctx.send(embed=embedVar)
+                                                        await private_channel.send(embed=embedVar)
 
                                             elif oarm_barrier_active:
                                                 if obarrier_count >1:
@@ -16251,7 +16328,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     if tarm_barrier_active:
                                                         tarm_barrier_active=False
                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                    await button_ctx.send(embed=embedVar)
+                                                    await private_channel.send(embed=embedVar)
                                                     obarrier_count = obarrier_count - 1
                                                 elif obarrier_count==1:
                                                     embedVar = discord.Embed(title=f"{o_card.upper()}'s **Barrier** Broken!", description=f"{t_card} destroys the **Barrier**", colour=0xe91e63)
@@ -16259,7 +16336,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     if tarm_barrier_active:
                                                         tarm_barrier_active=False
                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                    await button_ctx.send(embed=embedVar)
+                                                    await private_channel.send(embed=embedVar)
                                                     oarm_barrier_active = False
                                             elif oarm_parry_active:
                                                 if oparry_count > 1:
@@ -16271,7 +16348,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     if tarm_barrier_active:
                                                         tarm_barrier_active=False
                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                    await button_ctx.send(embed=embedVar)
+                                                    await private_channel.send(embed=embedVar)
                                                     
                                                 elif oparry_count==1:
                                                     embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} breaks the **Parry**", colour=0xe91e63)
@@ -16279,7 +16356,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     if tarm_barrier_active:
                                                         tarm_barrier_active=False
                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
-                                                    await button_ctx.send(embed=embedVar)
+                                                    await private_channel.send(embed=embedVar)
                                                     oarm_parry_active = False
                                             else:
                                                 o_health = o_health - int(dmg['DMG'])
@@ -17065,6 +17142,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                        value=f"Enhanced **{cpet_type}**")
 
                                                     embedVar.set_thumbnail(url=cpet_image)
+                                                    embedVar.set_image(url="attachment://image.png")
                                                     await private_channel.send(embed=embedVar)
                                                 else:
                                                     embedVar = discord.Embed(
@@ -17073,6 +17151,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     embedVar.add_field(name=f"{cpet_name} used **{cpetmove_text}**!",
                                                                        value=f"Enhanced **{cpet_type}**")
                                                     embedVar.set_thumbnail(url=cpet_image)
+                                                    embedVar.set_image(url="attachment://image.png")
                                                     await private_channel.send(embed=embedVar)
                                                 turn = 2
                                             else:
@@ -17523,13 +17602,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             carm_passive_value = f"{cparry_count}"
                                         else:
                                             carm_passive_value = 0
-                                    embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}",
-                                                             description=textwrap.dedent(f"""\
-
-                                    {cpet_msg_on_resolve}
-                                    :mechanical_arm: **{carm_name}** - *{carm_passive_type} {carm_passive_value} {enhancer_suffix_mapping[carm_passive_type]}*
-                                    """), color=0xe74c3c)
+                                    embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}", color=0xe74c3c)
+                                    embedVar.set_author(name=f"🦾 {carm_name} - {carm_passive_type} {carm_passive_value} {enhancer_suffix_mapping[carm_passive_type]}\n{cpet_msg_on_resolve}")
                                     embedVar.set_thumbnail(url=cpet_image)
+                                    embedVar.set_image(url="attachment://image.png")
                                     embedVar.set_footer(
                                         text=f"{t_card}: ❤️{t_health} 🌀{t_stamina} 🗡️{t_attack}/🛡️{t_defense} {carm_message}\n{o_card}: ❤️{o_health} 🌀{o_stamina} 🗡️{o_attack}/🛡️{o_defense}",
                                         icon_url="https://cdn.discordapp.com/emojis/789290881654980659.gif?v=1")
@@ -17921,6 +17997,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             value=f"Enhanced **{cpet_type}**")
 
                                                         embedVar.set_thumbnail(url=cpet_image)
+                                                        embedVar.set_image(url="attachment://image.png")
                                                         await button_ctx.send(embed=embedVar)
                                                     else:
                                                         embedVar = discord.Embed(
@@ -17930,6 +18007,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             name=f"{cpet_name} used **{cpetmove_text}**!",
                                                             value=f"Enhanced **{cpet_type}**")
                                                         embedVar.set_thumbnail(url=cpet_image)
+                                                        embedVar.set_image(url="attachment://image.png")
                                                         await private_channel.send(embed=embedVar)
                                                     turn = 2
                                                 else:
@@ -18960,6 +19038,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                        value=f"Enhanced **{tpet_type}**")
 
                                                     embedVar.set_thumbnail(url=tpet_image)
+                                                    embedVar.set_image(url="attachment://image.png")
                                                     await button_ctx.send(embed=embedVar)
                                                 else:
                                                     embedVar = discord.Embed(
@@ -18968,6 +19047,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!",
                                                                        value=f"Enhanced **{tpet_type}**")
                                                     embedVar.set_thumbnail(url=tpet_image)
+                                                    embedVar.set_image(url="attachment://image.png")
                                                     await private_channel.send(embed=embedVar)
                                                 turn = 1
                                             else:
@@ -19080,6 +19160,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                        value=f"Enhanced **{tpet_type}**")
 
                                                     embedVar.set_thumbnail(url=tpet_image)
+                                                    embedVar.set_image(url="attachment://image.png")
                                                     await button_ctx.send(embed=embedVar)
                                                 else:
                                                     embedVar = discord.Embed(
@@ -19088,6 +19169,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!",
                                                                        value=f"Enhanced **{tpet_type}**")
                                                     embedVar.set_thumbnail(url=tpet_image)
+                                                    embedVar.set_image(url="attachment://image.png")
                                                     await private_channel.send(embed=embedVar)
                                                 turn = 1
                                             else:

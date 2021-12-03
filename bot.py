@@ -379,7 +379,7 @@ async def crown(ctx):
    await paginator.run(embeds)
 
 @slash.slash(description="Register for Crown Unlimited", guild_ids=guild_ids)
-async def r(ctx):
+async def register(ctx):
    disname = str(ctx.author)
    name = disname.split("#",1)[0]
    user = {'DISNAME': disname, 'NAME': name, 'DID' : str(ctx.author.id), 'AVATAR': str(ctx.author.avatar_url)}
