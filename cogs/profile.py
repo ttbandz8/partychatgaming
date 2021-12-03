@@ -662,51 +662,21 @@ class Profile(commands.Cog):
                     icon = ":moneybag:"
                 elif balance >= 50000:
                     icon = ":dollar:"
+                
+                embed_list = []
                 for d in destiny:
                     if not d['COMPLETED']:
-                        destiny_messages.append(textwrap.dedent(f"""\
-                        :sparkles: **{d["NAME"]}**
-                        Defeat **{d['DEFEAT']}** with **{" ".join(d['USE_CARDS'])}** | **Current Progress:** {d['WINS']}/{d['REQUIRED']}
+                        embedVar = discord.Embed(title= f"{d['NAME']}", description=textwrap.dedent(f"""\
+                        :sparkles: Defeat **{d['DEFEAT']}** with **{" ".join(d['USE_CARDS'])}**
+                        **Current Progress:** {d['WINS']}/{d['REQUIRED']}
                         Win :flower_playing_cards: **{d['EARN']}**
-                        """))
-
-                if not destiny_messages:
-                    await ctx.send("No Destiny Lines available at this time!")
-                    return
-                # Adding to array until divisible by 10
-                while len(destiny_messages) % 10 != 0:
-                    destiny_messages.append("")
-
-                # Check if divisible by 10, then start to split evenly
-                if len(destiny_messages) % 10 == 0:
-                    first_digit = int(str(len(destiny_messages))[:1])
-                    if len(destiny_messages) >= 89:
-                        if first_digit == 1:
-                            first_digit = 10
-                    destinies_broken_up = np.array_split(destiny_messages, first_digit)
+                        """), 
+                        colour=0x7289da)
+                        embedVar.set_thumbnail(url=avatar)
+                        embed_list.append(embedVar)
                 
-                # If it's not an array greater than 10, show paginationless embed
-                if len(destiny_messages) < 10:
-                    embedVar = discord.Embed(title= f"Destiny Lines\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(destiny_messages), colour=0x7289da)
-                    embedVar.set_thumbnail(url=avatar)
-                    # embedVar.set_footer(text=f".equippet pet name: Equip Pet\n.viewpet pet name: View Pet Details")
-                    await ctx.send(embed=embedVar)
+                await Paginator(bot=self.bot, ctx=ctx, pages=embed_list, timeout=60).run()
 
-                embed_list = []
-                for i in range(0, len(destinies_broken_up)):
-                    globals()['embedVar%s' % i] = discord.Embed(title= f":sparkles: Destiny Lines\n**Balance**: {icon}{'{:,}'.format(balance)}", description="\n".join(destinies_broken_up[i]), colour=0x7289da)
-                    globals()['embedVar%s' % i].set_thumbnail(url=avatar)
-                    # globals()['embedVar%s' % i].set_footer(text=f"{total_pets} Total Pets\n.equippet pet name: Equip Pet\n.viewpet pet name: View Pet Details")
-                    embed_list.append(globals()['embedVar%s' % i])
-
-                paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
-                paginator.add_reaction('⏮️', "first")
-                paginator.add_reaction('⬅️', "back")
-                paginator.add_reaction('🔐', "lock")
-                paginator.add_reaction('➡️', "next")
-                paginator.add_reaction('⏭️', "last")
-                embeds = embed_list
-                await paginator.run(embeds)
             except Exception as ex:
                 trace = []
                 tb = ex.__traceback__
