@@ -358,16 +358,19 @@ class Cards(commands.Cog):
                         tip = f"Complete {o_show} Destiny: {o_collection} to unlock this card"
                     else:
                         message = f"{o_card} is a Dungeon card. "
-                        tip = f"Find this card in the {o_show} /dungeon"
+                        tip = f"Find this card in the {o_show} Dungeon"
                 elif o_has_collection == False and o_available == False and o_exclusive == False:
                     message = f"{o_card} is a Boss card. "
-                    tip = f"Defeat the {o_show} /boss to earn this card"
+                    tip = f"Defeat the {o_show} Boss to earn this card"
                 elif o_attack > o_defense:
                     message = f"{o_card} is an offensive card. "
-                    tip = "Equipping defensive /titles and /arms would help boost survivability"
+                    tip = "Tip: Equipping defensive /titles and /arms would help boost survivability"
                 elif o_defense > o_attack:
                     message = f"{o_card} is a defensive card. "
-                    tip = "Equipping offensive /titles and /arms would help boost killability"
+                    tip = "Tip: Equipping offensive /titles and /arms would help boost killability"
+                else:
+                    message = f"{o_card} is a balanced card. "
+                    tip = "Tip: Equip /titles and /arms that will maximize your Enhancer"
 
                 card_file = showcard(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, title, focused,
                                     o_attack, o_defense, turn, move1ap, move2ap, move3ap, move4ap, move4enh, 0, None)
@@ -384,6 +387,7 @@ class Cards(commands.Cog):
                 , colour=000000)
                 embedVar.set_image(url="attachment://image.png")
                 embedVar.set_thumbnail(url=show_img)
+                embedVar.set_footer(text=f"{tip}")
 
                 # backEmbed = discord.Embed(title=f"Back Page".format(self), description=textwrap.dedent(f"""\
                 # hello world
