@@ -379,6 +379,7 @@ class Cards(commands.Cog):
                 **Passive & Universe Trait**
                 :drop_of_blood: **{passive_name}:** *{passive_type} {passive_num}{enhancer_suffix_mapping[passive_type]}*
                 :infinity: {traitmessage}
+                🏃 {o_speed}
                 """)
                 , colour=000000)
                 embedVar.set_image(url="attachment://image.png")

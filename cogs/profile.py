@@ -262,6 +262,7 @@ class Profile(commands.Cog):
                 🦾 {arm_name}: {arm_passive_type} {arm_passive_value}{enhancer_suffix_mapping[arm_passive_type]} {durability}
                 🐦 {active_pet['NAME']}: {active_pet['TYPE']}: {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]} | Bond {bond} {bond_message} / Level {lvl} {lvl_message}
                 🩸 {passive_name}: {passive_type} {passive_num}{enhancer_suffix_mapping[passive_type]}
+                🏃 {o_speed}
                 ♾️ {traitmessage}
                 Rebirth Buff: +{rebirthBonus}
                 {warningmessage}
@@ -348,7 +349,7 @@ class Profile(commands.Cog):
 
                     embedVar = discord.Embed(title= f"{resp['NAME']}", description=textwrap.dedent(f"""
                     {icon} [{index}] {lvl}
-                    :heart: {resp['HLT']} :dagger: {resp['ATK']} :shield: {resp['DEF']}
+                    :heart: {resp['HLT']} :dagger: {resp['ATK']} :shield: {resp['DEF']} 🏃 {resp['SPD']}
                     """), colour=0x7289da)
                     embedVar.set_thumbnail(url=show_img)
                     # embedVar.set_footer(text=f"/equipcard card name: Equip Card\n/viewcard card name: View Cards Details")
