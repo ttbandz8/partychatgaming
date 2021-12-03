@@ -4394,7 +4394,7 @@ class CrownUnlimited(commands.Cog):
                         pet_msg_on_resolve = ""
 
                         if o_used_resolve:
-                            pet_msg_on_resolve = f"🐦 | *{enhancer_mapping[pet_enh_name]}*"
+                            pet_msg_on_resolve = f"🐦 {enhancer_mapping[pet_enh_name]}"
                         tarm_message = ""
                         if tarm_barrier_active:
                             tarm_message = f"💠{tbarrier_count}"
@@ -6860,7 +6860,7 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, stamina, en
             crystal = round((ap / 100) * health)
         elif enh == 'GROWTH':
             enh_type = "GROWTH"
-            growth = (ap / 100)
+            growth = (ap / 100 * maxhealth)
         elif enh == 'STANCE':
             enh_type = "STANCE"
             stance = attack + ap
@@ -6879,7 +6879,7 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, stamina, en
             haste = ap
         elif enh == 'FEAR':
             enh_type = "FEAR"
-            fear = ap
+            fear = (ap / 100 * maxhealth)
         elif enh == 'SOULCHAIN':
             enh_type = "SOULCHAIN"
             soulchain = ap
@@ -7018,15 +7018,15 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, stamina, en
         elif enh_type == 'DESTRUCTION':
             message = f'**{card}** used **{move}** :microbe: Destroying **{round(enhanced)} Max Health**'
         elif enh_type == 'GROWTH':
-            message = f'**{card}** used **{move}** :microbe: Sacrificing **Max Health** to Increase **Attack** and **Defense**'
+            message = f'**{card}** used **{move}** :microbe: Sacrificing **{round(enhanced)}** **Max Health** to Increase **Attack** and **Defense** by **{round(enhanced * .5)}**'
         elif enh_type == 'STANCE':
-            message = f'**{card}** used **{move}** :microbe: Swapping **Attack** and **Defense**, Increasing **Attack** by **{enhanced}**'
+            message = f'**{card}** used **{move}** :microbe: Swapping **Attack** and **Defense**, Increasing **Attack** to **{enhanced}**'
         elif enh_type == 'CONFUSE':
-            message = f'**{card}** used **{move}** :microbe: Swapping **Attack** and **Defense**, Decreasing **Defense** by **{enhanced}**'
+            message = f'**{card}** used **{move}** :microbe: Swapping **Attack** and **Defense**, Decreasing **Defense** to **{enhanced}**'
         elif enh_type == 'HLT':
             message = f'**{card}** used **{move}** :microbe: Healing for  **{enhanced}**!'
         elif enh_type == 'FEAR':
-            message = f'**{card}** used **{move}** :microbe: Sacrificing **Max Health** to Decrease **Attack** and **Defense**'
+            message = f'**{card}** used **{move}** :microbe: Sacrificing **{round(enhanced)}** **Max Health** to Decrease **Attack** and **Defense** by **{round(enhanced * .5)}**'
         elif enh_type == 'SOULCHAIN':
             message = f'**{card}** used **{move}** :microbe: Synchronizing **Stamina** to **{enhanced}**'
         elif enh_type == 'GAMBLE':
@@ -7224,17 +7224,10 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
             ebasic = '💢'
             especial = '💢'
             eultimate = '💢'
-            vieworbuild = False            
-            
             if op_defense is None:
                 ebasic = ' '
                 especial = ' '
                 eultimate = ' '
-                vieworbuild =True
-                # title_passive = title['ABILITIES'][0]
-                # # Title Passive
-                # title_passive_type = list(title_passive.keys())[0]
-                # title_passive_value = list(title_passive.values())[0]
             else:
                 defensepower = op_defense - attack
                 if defensepower <=0:
@@ -7354,7 +7347,7 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
             # defense_stat = f"🛡️{round(defense)}"
             with Pilmoji(im) as pilmoji:
                 pilmoji.text((602, 150), f"🎗️ {title['TITLE']}", (255, 255, 255), font=h, stroke_width=1, stroke_fill=(0, 0, 0),
-                    align="left")
+                      align="left")
                 pilmoji.text((600, 250), move1_text.strip(), (255, 255, 255), font=moveset_font, stroke_width=2,
                              stroke_fill=(0, 0, 0))
                 pilmoji.text((600, 290), move2_text.strip(), (255, 255, 255), font=moveset_font, stroke_width=2,
@@ -8027,10 +8020,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 c_defense = c_defense + int(((c_card_passive / 100) * c_health))
                 c_health = c_health - int((c_defense))
             elif c_card_passive_type == 'GROWTH':
-                c_attack = c_attack + int(((c_card_passive / 100) * c_attack))
-                c_defense = c_defense + int(((c_card_passive / 100) * c_defense))
+                c_attack = c_attack + int(((c_card_passive / 50) * c_max_health))
+                c_defense = c_defense + int(((c_card_passive / 50) * c_max_health))
                 c_max_health = c_max_health - int(((c_card_passive / 100) * c_max_health))
-                c_health = c_health - int(((c_card_passive / 100) * c_max_health))
+                # c_health = c_health - int(((c_card_passive / 100) * c_max_health))
             elif c_card_passive_type == 'STANCE':
                 tempattack = c_attack + c_card_passive
                 c_attack = c_defense + c_card_passive
@@ -8057,13 +8050,13 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 t_stamina = c_card_passive
             elif c_card_passive_type == 'FEAR':
                 if c_universe == "Chainsawman":
-                    c_health = c_health - int((c_card_passive / 190) * c_health)
-                    t_attack = t_attack - int((c_card_passive / 100) * t_attack)
-                    t_defense = t_defense - int((c_card_passive / 100) * t_defense)
+                    c_health = c_health - int((c_card_passive / 190) * c_max_health)
+                    t_attack = t_attack - int((c_card_passive / 100) * c_max_health)
+                    t_defense = t_defense - int((c_card_passive / 100) * c_max_health)
                 else:
-                    c_health = c_health - int((c_card_passive / 100) * c_health)
-                    t_attack = t_attack - int((c_card_passive / 100) * t_attack)
-                    t_defense = t_defense - int((c_card_passive / 100) * t_defense)
+                    c_health = c_health - int((c_card_passive / 100) * c_max_health)
+                    t_attack = t_attack - int((c_card_passive / 50) * c_max_health)
+                    t_defense = t_defense - int((c_card_passive / 50) * c_max_health)
             elif c_card_passive_type == 'GAMBLE':
                 if mode in B_modes:
                     c_health = o_card_passive
@@ -8119,8 +8112,8 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                     c_defense = c_defense + int(((c_title_passive_value / 100) * c_health))
                     c_health = c_health - int((c_defense))
                 elif c_title_passive_type == 'GROWTH':
-                    c_attack = c_attack + int(((c_title_passive_value / 100) * c_attack))
-                    c_defense = c_defense + int(((c_title_passive_value / 100) * c_defense))
+                    c_attack = c_attack + int(((c_title_passive_value / 50) * c_max_health))
+                    c_defense = c_defense + int(((c_title_passive_value / 50) * c_max_health))
                     c_max_health = c_max_health - int(((c_title_passive_value / 100) * c_max_health))
                 elif c_title_passive_type == 'STANCE':
                     tempattack = c_attack
@@ -8148,13 +8141,13 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                     t_stamina = c_title_passive_value
                 elif c_title_passive_type == 'FEAR':
                     if c_universe == "Chainsawman":
-                        c_health = c_health - int((c_title_passive_value / 190) * c_health)
-                        t_attack = t_attack - int((c_title_passive_value / 100) * t_attack)
-                        t_defense = t_defense - int((c_title_passive_value / 100) * t_defense)
+                        c_health = c_health - int((c_title_passive_value / 190) * c_max_health)
+                        t_attack = t_attack - int((c_title_passive_value / 100) * c_max_health)
+                        t_defense = t_defense - int((c_title_passive_value / 100) * c_max_health)
                     else:
-                        c_health = c_health - int((c_title_passive_value / 100) * c_health)
-                        t_attack = t_attack - int((c_title_passive_value / 100) * t_attack)
-                        t_defense = t_defense - int((c_title_passive_value / 100) * t_defense)
+                        c_health = c_health - int((c_title_passive_value / 100) * c_max_health)
+                        t_attack = t_attack - int((c_title_passive_value / 50) * c_max_health)
+                        t_defense = t_defense - int((c_title_passive_value / 50) * c_max_health)
                 elif c_title_passive_type == 'GAMBLE':
                     if mode in B_modes:
                         c_health = o_card_passive
@@ -8277,10 +8270,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             o_defense = o_defense + int(((o_card_passive / 100) * o_health))
             o_health = o_health - int((o_defense))
         elif o_card_passive_type == 'GROWTH':
-            o_attack = o_attack + int(((o_card_passive / 100) * o_attack))
-            o_defense = o_defense + int(((o_card_passive / 100) * o_defense))
+            o_attack = o_attack + int(((o_card_passive / 50) * o_max_health))
+            o_defense = o_defense + int(((o_card_passive / 50) * o_max_health))
             o_max_health = o_max_health - int(((o_card_passive / 100) * o_max_health))
-            o_health = o_health - int(((o_card_passive / 100) * o_max_health))
+            # o_health = o_health - int(((o_card_passive / 100) * o_max_health))
         elif o_card_passive_type == 'STANCE':
             tempattack = o_attack + o_card_passive
             o_attack = o_defense + o_card_passive
@@ -8307,13 +8300,13 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             t_stamina = o_card_passive
         elif o_card_passive_type == 'FEAR':
             if o_universe == "Chainsawman":
-                o_health = o_health - int((o_card_passive / 190) * o_health)
-                t_attack = t_attack - int((o_card_passive / 100) * t_attack)
-                t_defense = t_defense - int((o_card_passive / 100) * t_defense)
+                o_health = o_health - int((o_card_passive / 190) * o_max_health)
+                t_attack = t_attack - int((o_card_passive / 100) * o_max_health)
+                t_defense = t_defense - int((o_card_passive / 100) * o_max_health)
             else:
-                o_health = o_health - int((o_card_passive / 100) * o_health)
-                t_attack = t_attack - int((o_card_passive / 100) * t_attack)
-                t_defense = t_defense - int((o_card_passive / 100) * t_defense)
+                o_health = o_health - int((o_card_passive / 100) * o_max_health)
+                t_attack = t_attack - int((o_card_passive / 50) * o_max_health)
+                t_defense = t_defense - int((o_card_passive / 50) * o_max_health)
         elif o_card_passive_type == 'GAMBLE':
             if mode in B_modes:
                 o_health = o_card_passive
@@ -8368,8 +8361,8 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 o_defense = o_defense + int(((o_title_passive_value / 100) * o_health))
                 o_health = o_health - int((o_defense))
             elif o_title_passive_type == 'GROWTH':
-                o_attack = o_attack + int((o_title_passive_value / 100) * o_attack)
-                o_defense = o_defense + int((o_title_passive_value / 100) * o_defense)
+                o_attack = o_attack + int((o_title_passive_value / 50) * o_max_health)
+                o_defense = o_defense + int((o_title_passive_value / 50) * o_max_health)
                 o_max_health = o_max_health - int((o_title_passive_value / 100) * o_max_health)
             elif o_title_passive_type == 'STANCE':
                 tempattack = o_attack
@@ -8397,13 +8390,13 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 t_stamina = o_title_passive_value
             elif o_title_passive_type == 'FEAR':
                 if o_universe == "Chainsawman":
-                    o_health = o_health - int((o_title_passive_value / 190) * o_health)
-                    t_attack = t_attack - int((o_title_passive_value / 100) * t_attack)
-                    t_defense = t_defense - int((o_title_passive_value / 100) * t_defense)
+                    o_health = o_health - int((o_title_passive_value / 190) * o_max_health)
+                    t_attack = t_attack - int((o_title_passive_value / 100) * o_max_health)
+                    t_defense = t_defense - int((o_title_passive_value / 100) * o_max_health)
                 else:
-                    o_health = o_health - int((o_title_passive_value / 100) * o_health)
-                    t_attack = t_attack - int((o_title_passive_value / 100) * t_attack)
-                    t_defense = t_defense - int((o_title_passive_value / 100) * t_defense)
+                    o_health = o_health - int((o_title_passive_value / 100) * o_max_health)
+                    t_attack = t_attack - int((o_title_passive_value / 50) * o_max_health)
+                    t_defense = t_defense - int((o_title_passive_value / 50) * o_max_health)
             elif o_title_passive_type == 'GAMBLE':
                 if mode in B_modes:
                     o_health = o_title_passive_value
@@ -8529,10 +8522,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             t_defense = t_defense + int((t_card_passive / 100) * t_health)
             t_health = t_health - int(t_defense)
         elif t_card_passive_type == 'GROWTH':
-            t_attack = t_attack + int((t_card_passive / 100) * t_attack)
-            t_defense = t_defense + int((t_card_passive / 100) * t_defense)
+            t_attack = t_attack + int((t_card_passive / 50) * t_max_health)
+            t_defense = t_defense + int((t_card_passive / 50) * t_max_health)
             t_max_health = t_max_health - int(((t_card_passive / 100) * t_max_health))
-            t_health = t_health - int(((t_card_passive / 100) * t_health))
+            # t_health = t_health - int(((t_card_passive / 100) * t_health))
         elif t_card_passive_type == 'STANCE':
             tempattack = t_attack + t_card_passive
             t_attack = t_defense + t_card_passive
@@ -8561,19 +8554,19 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 c_stamina = t_card_passive
         elif t_card_passive_type == 'FEAR':
             if t_universe == "Chainsawman":
-                t_health = t_health - int((t_card_passive / 190) * t_health)
-                o_attack = o_attack - int((t_card_passive / 100) * o_attack)
-                o_defense = o_defense - int((t_card_passive / 100) * o_defense)
+                t_health = t_health - int((t_card_passive / 190) * t_max_health)
+                o_attack = o_attack - int((t_card_passive / 100) * t_max_health)
+                o_defense = o_defense - int((t_card_passive / 100) * t_max_health)
                 if companion:
-                    c_attack = o_attack - int((t_card_passive / 100 * o_attack))
-                    c_defense = o_defense - int((t_card_passive / 100 * o_defense))
+                    c_attack = o_attack - int((t_card_passive / 50 * t_max_health))
+                    c_defense = o_defense - int((t_card_passive / 50 * t_max_health))
             else:
-                t_health = t_health - int((t_card_passive / 100) * t_health)
-                o_attack = o_attack - int((t_card_passive / 100) * o_attack)
-                o_defense = o_defense - int((t_card_passive / 100) * o_defense)
+                t_health = t_health - int((t_card_passive / 100) * t_max_health)
+                o_attack = o_attack - int((t_card_passive / 50) * t_max_health)
+                o_defense = o_defense - int((t_card_passive / 50) * t_max_health)
                 if companion:
-                    c_attack = o_attack - int((t_card_passive / 100 * o_attack))
-                    c_defense = o_defense - int((t_card_passive / 100 * o_defense))
+                    c_attack = o_attack - int((t_card_passive / 50 * t_max_health))
+                    c_defense = o_defense - int((t_card_passive / 50 * t_max_health))
         elif t_card_passive_type == 'GAMBLE':
             if mode in B_modes:
                 o_health = t_card_passive
@@ -8631,8 +8624,8 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 t_defense = t_defense + int(((t_title_passive_value / 100) * t_health))
                 t_health = t_health - int(t_defense)
             elif t_title_passive_type == 'GROWTH':
-                t_attack = t_attack + int(((t_title_passive_value / 100) * t_attack))
-                t_defense = t_defense + int(((t_title_passive_value / 100) * t_defense))
+                t_attack = t_attack + int(((t_title_passive_value / 50) * t_max_health))
+                t_defense = t_defense + int(((t_title_passive_value / 50) * t_max_health))
                 t_max_health = t_max_health - int(((t_title_passive_value / 100) * t_max_health))
             elif t_title_passive_type == 'STANCE':
                 tempattack = t_attack + t_title_passive_value
@@ -8671,19 +8664,19 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                     c_stamina = t_title_passive_value
             elif t_title_passive_type == 'FEAR':
                 if t_universe == "Chainsawman":
-                    t_health = t_health - int((t_title_passive_value / 190) * t_health)
-                    o_attack = o_attack - int((t_title_passive_value / 100) * o_attack)
-                    o_defense = o_defense - int((t_title_passive_value / 100) * o_defense)
+                    t_health = t_health - int((t_title_passive_value / 190) * t_max_health)
+                    o_attack = o_attack - int((t_title_passive_value / 100) * t_max_health)
+                    o_defense = o_defense - int((t_title_passive_value / 100) * t_max_health)
                     if companion:
-                        c_attack = o_attack - int((t_title_passive_value / 100) * o_attack)
-                        c_defense = o_defense - int((t_title_passive_value / 100) * o_defense)
+                        c_attack = o_attack - int((t_title_passive_value / 50) * t_max_health)
+                        c_defense = o_defense - int((t_title_passive_value / 50) * t_max_health)
                 else:
-                    t_health = t_health - int((t_title_passive_value / 100) * t_health)
-                    o_attack = o_attack - int((t_title_passive_value / 100) * o_attack)
-                    o_defense = o_defense - int((t_title_passive_value / 100) * o_defense)
+                    t_health = t_health - int((t_title_passive_value / 100) * t_max_health)
+                    o_attack = o_attack - int((t_title_passive_value / 50) * t_max_health)
+                    o_defense = o_defense - int((t_title_passive_value / 50) * t_max_health)
                     if companion:
-                        c_attack = o_attack - int((t_title_passive_value / 100) * o_attack)
-                        c_defense = o_defense - int((t_title_passive_value / 100) * o_defense)
+                        c_attack = o_attack - int((t_title_passive_value / 50) * t_max_health)
+                        c_defense = o_defense - int((t_title_passive_value / 50) * t_max_health)
             elif t_title_passive_type == 'GAMBLE':
                 if mode in B_modes:
                     o_health = t_title_passive_value
@@ -10610,7 +10603,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             util_action_row = manage_components.create_actionrow(*util_buttons)
 
                             if o_used_resolve:
-                                pet_msg_on_resolve = f"🐦 | *{enhancer_mapping[pet_enh_name]}*"
+                                pet_msg_on_resolve = f"🐦 {enhancer_mapping[pet_enh_name]}"
                             tarm_message = ""
                             if tarm_barrier_active:
                                 tarm_message = f"💠{tbarrier_count}"
@@ -11014,9 +11007,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 o_health = round(o_health - dmg['DMG'])
                                                 o_defense = round(o_defense + dmg['DMG'])
                                             elif opet_type == 'GROWTH':
-                                                o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
-                                                o_defense = round(o_defense + (o_defense * dmg['DMG']))
-                                                o_attack = round(o_attack + (o_attack * dmg['DMG']))
+                                                o_max_health = round(o_max_health - dmg['DMG'])
+                                                o_defense = round(o_defense + (dmg['DMG'] * .5))
+                                                o_attack = round(o_attack + (dmg['DMG'] * .5))
                                             elif opet_type == 'STANCE':
                                                 tempattack = dmg['DMG']
                                                 o_attack = o_defense
@@ -11045,9 +11038,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 o_health = round(dmg['DMG'])
                                                 t_health = o_health
                                             elif opet_type == 'FEAR':
-                                                o_health = round(o_health - ((dmg['DMG'] / 100) * o_health))
-                                                t_attack = round(t_attack - ((dmg['DMG'] / 100) * t_attack))
-                                                t_defense = round(t_defense - ((dmg['DMG'] / 100) * t_defense))
+                                                o_max_health = round(o_max_health - dmg['DMG'])
+                                                t_defense = round(t_defense - (dmg['DMG'] * .5))
+                                                t_attack = round(t_attack - (dmg['DMG'] * .5))
                                             elif opet_type == 'WAVE':
                                                 t_health = round(t_health - dmg['DMG'])
                                             elif opet_type == 'BLAST':
@@ -11157,9 +11150,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 o_health = round(o_health - dmg['DMG'])
                                                 o_defense = round(o_defense + dmg['DMG'])
                                             elif enh_type == 'GROWTH':
-                                                o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
-                                                o_defense = round(o_defense + (o_defense * dmg['DMG']))
-                                                o_attack = round(o_attack + (o_attack * dmg['DMG']))
+                                                o_max_health = round(o_max_health - dmg['DMG'])
+                                                o_defense = round(o_defense + (dmg['DMG'] * .5))
+                                                o_attack = round(o_attack + (dmg['DMG'] * .5))
                                             elif enh_type == 'STANCE':
                                                 tempattack = dmg['DMG']
                                                 o_attack = o_defense
@@ -11188,9 +11181,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 o_health = round(dmg['DMG'])
                                                 t_health = o_health
                                             elif enh_type == 'FEAR':
-                                                o_health = round(o_health - ((dmg['DMG'] / 100) * o_health))
-                                                t_attack = round(t_attack - ((dmg['DMG'] / 100) * t_attack))
-                                                t_defense = round(t_defense - ((dmg['DMG'] / 100) * t_defense))
+                                                o_max_health = round(o_max_health - dmg['DMG'])
+                                                t_defense = round(t_defense - (dmg['DMG'] * .5))
+                                                t_attack = round(t_attack - (dmg['DMG'] * .5))
                                             elif enh_type == 'WAVE':
                                                 t_health = round(t_health - dmg['DMG'])
                                             elif enh_type == 'BLAST':
@@ -11928,9 +11921,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_health = round(t_health - dmg['DMG'])
                                                     t_defense = round(t_defense + dmg['DMG'])
                                                 elif tpet_type == 'GROWTH':
-                                                    t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                                    t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                                    t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                                    t_max_health = round(t_max_health - dmg['DMG'])
+                                                    t_defense = round(t_defense + (dmg['DMG'] * .5))
+                                                    t_attack = round(t_attack + (dmg['DMG'] * .5))
                                                 elif tpet_type == 'STANCE':
                                                     tempattack = dmg['DMG']
                                                     t_attack = t_defense
@@ -11959,9 +11952,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_health = round(dmg['DMG'])
                                                     o_health = t_health
                                                 elif tpet_type == 'FEAR':
-                                                    t_health = round(t_health - ((dmg['DMG'] / 100) * t_health))
-                                                    o_attack = round(o_attack - ((dmg['DMG'] / 100) * o_attack))
-                                                    o_defense = round(o_defense - ((dmg['DMG'] / 100) * o_defense))
+                                                    t_max_health = round(t_max_health - dmg['DMG'])
+                                                    o_defense = round(o_defense + (dmg['DMG'] * .5))
+                                                    o_attack = round(o_attack + (dmg['DMG'] * .5))
                                                 elif tpet_type == 'WAVE':
                                                     o_health = round(o_health - dmg['DMG'])
                                                 elif tpet_type == 'BLAST':
@@ -12064,9 +12057,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_health = round(t_health - dmg['DMG'])
                                                     t_defense = round(t_defense + dmg['DMG'])
                                                 elif enh_type == 'GROWTH':
-                                                    t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                                    t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                                    t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                                    t_max_health = round(t_max_health - dmg['DMG'])
+                                                    t_defense = round(t_defense + (dmg['DMG'] * .5))
+                                                    t_attack = round(t_attack + (dmg['DMG'] * .5))
                                                 elif enh_type == 'STANCE':
                                                     tempattack = dmg['DMG']
                                                     t_attack = t_defense
@@ -12095,9 +12088,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_health = round(dmg['DMG'])
                                                     o_health = t_health
                                                 elif enh_type == 'FEAR':
-                                                    t_health = round(t_health - ((dmg['DMG'] / 100) * t_health))
-                                                    o_attack = round(o_attack - ((dmg['DMG'] / 100) * o_attack))
-                                                    o_defense = round(o_defense - ((dmg['DMG'] / 100) * o_defense))
+                                                    t_max_health = round(t_max_health - dmg['DMG'])
+                                                    o_defense = round(o_defense - (dmg['DMG'] * .5))
+                                                    o_attack = round(o_attack - (dmg['DMG'] * .5))
                                                 elif enh_type == 'WAVE':
                                                     o_health = round(o_health - dmg['DMG'])
                                                 elif enh_type == 'BLAST':
@@ -12615,9 +12608,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 t_health = round(t_health - dmg['DMG'])
                                                 t_defense = round(t_defense + dmg['DMG'])
                                             elif tpet_type == 'GROWTH':
-                                                t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                                t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                                t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                                t_max_health = round(t_max_health - dmg['DMG'])
+                                                t_defense = round(t_defense + (dmg['DMG'] * .5))
+                                                t_attack = round(t_attack + (dmg['DMG'] * .5))
                                             elif tpet_type == 'STANCE':
                                                 tempattack = dmg['DMG']
                                                 t_attack = t_defense
@@ -12646,9 +12639,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 t_health = round(dmg['DMG'])
                                                 o_health = t_health
                                             elif tpet_type == 'FEAR':
-                                                t_health = round(t_health - ((dmg['DMG'] / 100) * t_health))
-                                                o_attack = round(o_attack - ((dmg['DMG'] / 100) * o_attack))
-                                                o_defense = round(o_defense - ((dmg['DMG'] / 100) * o_defense))
+                                                t_max_health = round(t_max_health - dmg['DMG'])
+                                                o_defense = round(o_defense - (dmg['DMG'] * .5))
+                                                o_attack = round(o_attack - (dmg['DMG'] * .5))
                                             elif tpet_type == 'WAVE':
                                                 o_health = round(o_health - dmg['DMG'])
                                             elif tpet_type == 'BLAST':
@@ -12715,9 +12708,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 t_health = round(t_health - dmg['DMG'])
                                                 t_defense = round(t_defense + dmg['DMG'])
                                             elif enh_type == 'GROWTH':
-                                                t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                                t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                                t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                                t_max_health = round(t_max_health - dmg['DMG'])
+                                                t_defense = round(t_defense + (dmg['DMG'] * .5))
+                                                t_attack = round(t_attack + (dmg['DMG'] * .5))
                                             elif enh_type == 'STANCE':
                                                 tempattack = dmg['DMG']
                                                 t_attack = t_defense
@@ -12746,9 +12739,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 t_health = round(dmg['DMG'])
                                                 o_health = t_health
                                             elif enh_type == 'FEAR':
-                                                t_health = round(t_health - ((dmg['DMG'] / 100) * t_health))
-                                                o_attack = round(o_attack - ((dmg['DMG'] / 100) * o_attack))
-                                                o_defense = round(o_defense - ((dmg['DMG'] / 100) * o_defense))
+                                                t_max_health = round(t_max_health - dmg['DMG'])
+                                                o_defense = round(o_defense - (dmg['DMG'] * .5))
+                                                o_attack = round(o_attack - (dmg['DMG'] * .5))
                                             elif enh_type == 'WAVE':
                                                 o_health = round(o_health - dmg['DMG'])
                                             elif enh_type == 'BLAST':
@@ -13475,9 +13468,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 o_health = round(o_health - dmg['DMG'])
                                                 o_defense = round(o_defense + dmg['DMG'])
                                             elif opet_type == 'GROWTH':
-                                                o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
-                                                o_defense = round(o_defense + (o_defense * dmg['DMG']))
-                                                o_attack = round(o_attack + (o_attack * dmg['DMG']))
+                                                o_max_health = round(o_max_health - dmg['DMG'])
+                                                o_defense = round(o_defense + (dmg['DMG'] * .5))
+                                                o_attack = round(o_attack + (dmg['DMG'] * .5))
                                             elif opet_type == 'STANCE':
                                                 tempattack = dmg['DMG']
                                                 o_attack = o_defense
@@ -13506,9 +13499,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 o_health = round(dmg['DMG'])
                                                 t_health = o_health
                                             elif opet_type == 'FEAR':
-                                                o_health = round(o_health - ((dmg['DMG'] / 100) * o_health))
-                                                t_attack = round(t_attack - ((dmg['DMG'] / 100) * t_attack))
-                                                t_defense = round(t_defense - ((dmg['DMG'] / 100) * t_defense))
+                                                o_max_health = round(o_max_health - dmg['DMG'])
+                                                t_defense = round(t_defense - (dmg['DMG'] * .5))
+                                                t_attack = round(t_attack - (dmg['DMG'] * .5))
                                             elif opet_type == 'WAVE':
                                                 t_health = round(t_health - dmg['DMG'])
                                             elif opet_type == 'BLAST':
@@ -13586,9 +13579,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 o_health = round(o_health - dmg['DMG'])
                                                 o_defense = round(o_defense + dmg['DMG'])
                                             elif enh_type == 'GROWTH':
-                                                o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
-                                                o_defense = round(o_defense + (o_defense * dmg['DMG']))
-                                                o_attack = round(o_attack + (o_attack * dmg['DMG']))
+                                                o_max_health = round(o_max_health - dmg['DMG'])
+                                                o_defense = round(o_defense + (dmg['DMG'] * .5))
+                                                o_attack = round(o_attack + (dmg['DMG'] * .5))
                                             elif enh_type == 'STANCE':
                                                 tempattack = dmg['DMG']
                                                 o_attack = o_defense
@@ -13624,9 +13617,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_health = round(dmg['DMG'])
                                                     o_health = round(dmg['DMG'])
                                             elif enh_type == 'FEAR':
-                                                o_health = round(o_health - ((dmg['DMG'] / 100) * o_health))
-                                                t_attack = round(t_attack - ((dmg['DMG'] / 100) * t_attack))
-                                                t_defense = round(t_defense - ((dmg['DMG'] / 100) * t_defense))
+                                                o_max_health = round(o_max_health - dmg['DMG'])
+                                                t_defense = round(t_defense - (dmg['DMG'] * .5))
+                                                t_attack = round(t_attack - (dmg['DMG'] * .5))
                                             elif enh_type == 'WAVE':
                                                 t_health = round(t_health - dmg['DMG'])
                                             elif enh_type == 'BLAST':
@@ -13808,7 +13801,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     components = [battle_action_row, util_action_row]
 
                                 if o_used_resolve:
-                                    pet_msg_on_resolve = f"🐦 | *{enhancer_mapping[pet_enh_name]}*"
+                                    pet_msg_on_resolve = f"🐦 {enhancer_mapping[pet_enh_name]}"
                                 tarm_message = ""
                                 if tarm_barrier_active:
                                     tarm_message = f"💠{tbarrier_count}"
@@ -14192,9 +14185,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     o_health = round(o_health - dmg['DMG'])
                                                     o_defense = round(o_defense + dmg['DMG'])
                                                 elif opet_type == 'GROWTH':
-                                                    o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
-                                                    o_defense = round(o_defense + (o_defense * dmg['DMG']))
-                                                    o_attack = round(o_attack + (o_attack * dmg['DMG']))
+                                                    o_max_health = round(o_max_health - dmg['DMG'])
+                                                    o_defense = round(o_defense + (dmg['DMG'] * .5))
+                                                    o_attack = round(o_attack + (dmg['DMG'] * .5))
                                                 elif opet_type == 'STANCE':
                                                     tempattack = dmg['DMG']
                                                     o_attack = o_defense
@@ -14223,9 +14216,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     o_health = round(dmg['DMG'])
                                                     t_health = o_health
                                                 elif opet_type == 'FEAR':
-                                                    o_health = round(o_health - ((dmg['DMG'] / 100) * o_health))
-                                                    t_attack = round(t_attack - ((dmg['DMG'] / 100) * t_attack))
-                                                    t_defense = round(t_defense - ((dmg['DMG'] / 100) * t_defense))
+                                                    o_max_health = round(o_max_health - dmg['DMG'])
+                                                    t_defense = round(t_defense - (dmg['DMG'] * .5))
+                                                    t_attack = round(t_attack - (dmg['DMG'] * .5))
                                                 elif opet_type == 'WAVE':
                                                     t_health = round(t_health - dmg['DMG'])
                                                 elif opet_type == 'BLAST':
@@ -14315,9 +14308,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     c_health = round(c_health - dmg['DMG'])
                                                     c_defense = round(c_defense + dmg['DMG'])
                                                 elif comp_enh == 'GROWTH':
-                                                    c_max_health = round(c_max_health - (c_max_health * dmg['DMG']))
-                                                    c_defense = round(c_defense + (c_defense * dmg['DMG']))
-                                                    c_attack = round(c_attack + (c_attack * dmg['DMG']))
+                                                    c_max_health = round(c_max_health - dmg['DMG'])
+                                                    c_defense = round(c_defense + (dmg['DMG'] * .5))
+                                                    c_attack = round(c_attack + (dmg['DMG'] * .5))
                                                 elif comp_enh == 'STANCE':
                                                     tempattack = dmg['DMG']
                                                     c_attack = c_defense
@@ -14346,9 +14339,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     c_health = round(dmg['DMG'])
                                                     o_health = c_health
                                                 elif comp_enh == 'FEAR':
-                                                    c_health = round(c_health - ((dmg['DMG'] / 100) * c_health))
-                                                    t_attack = round(t_attack - ((dmg['DMG'] / 100) * t_attack))
-                                                    t_defense = round(t_defense - ((dmg['DMG'] / 100) * t_defense))
+                                                    c_max_health = round(c_max_health - dmg['DMG'])
+                                                    t_defense = round(t_defense - (dmg['DMG'] * .5))
+                                                    t_attack = round(t_attack - (dmg['DMG'] * .5))
                                                 elif comp_enh == 'WAVE':
                                                     t_health = round(t_health - dmg['DMG'])
                                                 elif comp_enh == 'BLAST':
@@ -14415,9 +14408,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     o_health = round(o_health - dmg['DMG'])
                                                     o_defense = round(o_defense + dmg['DMG'])
                                                 elif cenh_type == 'GROWTH':
-                                                    o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
-                                                    o_defense = round(o_defense + (o_defense * dmg['DMG']))
-                                                    o_attack = round(o_attack + (o_attack * dmg['DMG']))
+                                                    o_max_health = round(o_max_health - dmg['DMG'])
+                                                    o_defense = round(o_defense + (dmg['DMG'] * .5))
+                                                    o_attack = round(o_attack + (dmg['DMG'] * .5))
                                                 elif cenh_type == 'STANCE':
                                                     tempattack = dmg['DMG']
                                                     o_attack = o_defense
@@ -14446,9 +14439,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     o_health = round(dmg['DMG'])
                                                     c_health = o_health
                                                 elif cenh_type == 'FEAR':
-                                                    o_health = round(o_health - ((dmg['DMG'] / 100) * o_health))
-                                                    t_attack = round(t_attack - ((dmg['DMG'] / 100) * t_attack))
-                                                    t_defense = round(t_defense - ((dmg['DMG'] / 100) * t_defense))
+                                                    o_max_health = round(o_max_health - dmg['DMG'])
+                                                    t_defense = round(t_defense - (dmg['DMG'] * .5))
+                                                    t_attack = round(t_attack - (dmg['DMG'] * .5))
                                                 elif cenh_type == 'WAVE':
                                                     t_health = round(t_health - dmg['DMG'])
                                                 elif cenh_type == 'BLAST':
@@ -14548,9 +14541,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     o_health = round(o_health - dmg['DMG'])
                                                     o_defense = round(o_defense + dmg['DMG'])
                                                 elif enh_type == 'GROWTH':
-                                                    o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
-                                                    o_defense = round(o_defense + (o_defense * dmg['DMG']))
-                                                    o_attack = round(o_attack + (o_attack * dmg['DMG']))
+                                                    o_max_health = round(o_max_health - dmg['DMG'])
+                                                    o_defense = round(o_defense + (dmg['DMG'] * .5))
+                                                    o_attack = round(o_attack + (dmg['DMG'] * .5))
                                                 elif enh_type == 'STANCE':
                                                     tempattack = dmg['DMG']
                                                     o_attack = o_defense
@@ -14586,9 +14579,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = round(dmg['DMG'])
                                                         o_health = round(dmg['DMG'])
                                                 elif enh_type == 'FEAR':
-                                                    o_health = round(o_health - ((dmg['DMG'] / 100) * o_health))
-                                                    t_attack = round(t_attack - ((dmg['DMG'] / 100) * t_attack))
-                                                    t_defense = round(t_defense - ((dmg['DMG'] / 100) * t_defense))
+                                                    o_max_health = round(o_max_health - dmg['DMG'])
+                                                    t_defense = round(t_defense - (dmg['DMG'] * .5))
+                                                    t_attack = round(t_attack - (dmg['DMG'] * .5))
                                                 elif enh_type == 'WAVE':
                                                     t_health = round(t_health - dmg['DMG'])
                                                 elif enh_type == 'BLAST':
@@ -15416,9 +15409,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_health = round(t_health - dmg['DMG'])
                                                     t_defense = round(t_defense + dmg['DMG'])
                                                 elif tpet_type == 'GROWTH':
-                                                    t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                                    t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                                    t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                                    t_max_health = round(t_max_health - dmg['DMG'])
+                                                    t_defense = round(t_defense + (dmg['DMG'] * .5))
+                                                    t_attack = round(t_attack + (dmg['DMG'] * .5))
                                                 elif tpet_type == 'STANCE':
                                                     tempattack = dmg['DMG']
                                                     t_attack = t_defense
@@ -15447,9 +15440,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_health = round(dmg['DMG'])
                                                     c_health = t_health
                                                 elif tpet_type == 'FEAR':
-                                                    t_health = round(t_health - ((dmg['DMG'] / 100) * t_health))
-                                                    c_attack = round(c_attack - ((dmg['DMG'] / 100) * c_attack))
-                                                    c_defense = round(c_defense - ((dmg['DMG'] / 100) * c_defense))
+                                                    t_max_health = round(t_max_health - dmg['DMG'])
+                                                    c_defense = round(c_defense - (dmg['DMG'] * .5))
+                                                    c_attack = round(c_attack - (dmg['DMG'] * .5))
                                                 elif tpet_type == 'WAVE':
                                                     c_health = round(c_health - dmg['DMG'])
                                                 elif tpet_type == 'BLAST':
@@ -15552,9 +15545,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_health = round(t_health - dmg['DMG'])
                                                     t_defense = round(t_defense + dmg['DMG'])
                                                 elif tpet_type == 'GROWTH':
-                                                    t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                                    t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                                    t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                                    t_max_health = round(t_max_health - dmg['DMG'])
+                                                    t_defense = round(t_defense + (dmg['DMG'] * .5))
+                                                    t_attack = round(t_attack + (dmg['DMG'] * .5))
                                                 elif tpet_type == 'STANCE':
                                                     tempattack = dmg['DMG']
                                                     t_attack = t_defense
@@ -15583,9 +15576,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_health = round(dmg['DMG'])
                                                     o_health = t_health
                                                 elif tpet_type == 'FEAR':
-                                                    t_health = round(t_health - ((dmg['DMG'] / 100) * t_health))
-                                                    o_attack = round(o_attack - ((dmg['DMG'] / 100) * o_attack))
-                                                    o_defense = round(o_defense - ((dmg['DMG'] / 100) * o_defense))
+                                                    t_max_health = round(t_max_health - dmg['DMG'])
+                                                    o_defense = round(o_defense - (dmg['DMG'] * .5))
+                                                    o_attack = round(o_attack - (dmg['DMG'] * .5))
                                                 elif tpet_type == 'WAVE':
                                                     o_health = round(o_health - dmg['DMG'])
                                                 elif tpet_type == 'BLAST':
@@ -15687,9 +15680,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 t_health = round(t_health - dmg['DMG'])
                                                 t_defense = round(t_defense + dmg['DMG'])
                                             elif tpet_type == 'GROWTH':
-                                                t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                                t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                                t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                                t_max_health = round(t_max_health - dmg['DMG'])
+                                                t_defense = round(t_defense + (dmg['DMG'] * .5))
+                                                t_attack = round(t_attack + (dmg['DMG'] * .5))
                                             elif tpet_type == 'STANCE':
                                                 tempattack = dmg['DMG']
                                                 t_attack = t_defense
@@ -15718,9 +15711,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 t_health = round(dmg['DMG'])
                                                 o_health = t_health
                                             elif tpet_type == 'FEAR':
-                                                t_health = round(t_health - ((dmg['DMG'] / 100) * t_health))
-                                                o_attack = round(o_attack - ((dmg['DMG'] / 100) * o_attack))
-                                                o_defense = round(o_defense - ((dmg['DMG'] / 100) * o_defense))
+                                                t_max_health = round(t_max_health - dmg['DMG'])
+                                                o_defense = round(o_defense - (dmg['DMG'] * .5))
+                                                o_attack = round(o_attack - (dmg['DMG'] * .5))
                                             elif tpet_type == 'WAVE':
                                                 o_health = round(o_health - dmg['DMG'])
                                             elif tpet_type == 'BLAST':
@@ -15813,9 +15806,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_health = round(t_health - dmg['DMG'])
                                                     t_defense = round(t_defense + dmg['DMG'])
                                                 elif enh_type == 'GROWTH':
-                                                    t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                                    t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                                    t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                                    t_max_health = round(t_max_health - dmg['DMG'])
+                                                    t_defense = round(t_defense + (dmg['DMG'] * .5))
+                                                    t_attack = round(t_attack + (dmg['DMG'] * .5))
                                                 elif enh_type == 'STANCE':
                                                     tempattack = dmg['DMG']
                                                     t_attack = t_defense
@@ -15851,9 +15844,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = round(dmg['DMG'])
                                                         _health = round(dmg['DMG'])
                                                 elif enh_type == 'FEAR':
-                                                    t_health = round(t_health - ((dmg['DMG'] / 100) * t_health))
-                                                    c_attack = round(c_attack - ((dmg['DMG'] / 100) * c_attack))
-                                                    c_defense = round(c_defense - ((dmg['DMG'] / 100) * c_defense))
+                                                    t_max_health = round(t_max_health - dmg['DMG'])
+                                                    c_attack = round(c_attack - ((dmg['DMG'] * .5)))
+                                                    c_defense = round(c_defense - ((dmg['DMG'] * .5)))
                                                 elif enh_type == 'WAVE':
                                                     c_health = round(c_health - dmg['DMG'])
                                                 elif enh_type == 'BLAST':
@@ -16019,9 +16012,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_health = round(t_health - dmg['DMG'])
                                                     t_defense = round(t_defense + dmg['DMG'])
                                                 elif enh_type == 'GROWTH':
-                                                    t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                                    t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                                    t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                                    t_max_health = round(t_max_health - dmg['DMG'])
+                                                    t_defense = round(t_defense + (dmg['DMG'] * .5))
+                                                    t_attack = round(t_attack + (dmg['DMG'] * .5))
                                                 elif enh_type == 'STANCE':
                                                     tempattack = dmg['DMG']
                                                     t_attack = t_defense
@@ -16057,9 +16050,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = round(dmg['DMG'])
                                                         o_health = round(dmg['DMG'])
                                                 elif enh_type == 'FEAR':
-                                                    t_health = round(t_health - ((dmg['DMG'] / 100) * t_health))
-                                                    o_attack = round(c_attack - ((dmg['DMG'] / 100) * o_attack))
-                                                    o_defense = round(c_defense - ((dmg['DMG'] / 100) * o_defense))
+                                                    t_max_health = round(t_max_health - dmg['DMG'])
+                                                    o_defense = round(o_defense - (dmg['DMG'] * .5))
+                                                    o_attack = round(o_attack - (dmg['DMG'] * .5))
                                                 elif enh_type == 'WAVE':
                                                     o_health = round(o_health - dmg['DMG'])
                                                 elif enh_type == 'BLAST':
@@ -16227,9 +16220,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 t_health = round(t_health - dmg['DMG'])
                                                 t_defense = round(t_defense + dmg['DMG'])
                                             elif enh_type == 'GROWTH':
-                                                t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                                t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                                t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                                t_max_health = round(t_max_health - dmg['DMG'])
+                                                t_defense = round(t_defense + (dmg['DMG'] * .5))
+                                                t_attack = round(t_attack + (dmg['DMG'] * .5))
                                             elif enh_type == 'STANCE':
                                                 tempattack = dmg['DMG']
                                                 t_attack = t_defense
@@ -16265,9 +16258,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_health = round(dmg['DMG'])
                                                     o_health = round(dmg['DMG'])
                                             elif enh_type == 'FEAR':
-                                                t_health = round(t_health - ((dmg['DMG'] / 100) * t_health))
-                                                o_attack = round(o_attack - ((dmg['DMG'] / 100) * o_attack))
-                                                o_defense = round(o_defense - ((dmg['DMG'] / 100) * o_defense))
+                                                t_max_health = round(t_max_health - dmg['DMG'])
+                                                o_defense = round(o_defense - (dmg['DMG'] * .5))
+                                                o_attack = round(o_attack - (dmg['DMG'] * .5))
                                             elif enh_type == 'WAVE':
                                                 o_health = round(o_health - dmg['DMG'])
                                             elif enh_type == 'BLAST':
@@ -17079,9 +17072,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     c_health = round(c_health - dmg['DMG'])
                                                     c_defense = round(c_defense + dmg['DMG'])
                                                 elif cpet_type == 'GROWTH':
-                                                    c_max_health = round(c_max_health - (c_max_health * dmg['DMG']))
-                                                    c_defense = round(c_defense + (c_defense * dmg['DMG']))
-                                                    c_attack = round(c_attack + (c_attack * dmg['DMG']))
+                                                    c_max_health = round(c_max_health - dmg['DMG'])
+                                                    c_defense = round(c_defense + (dmg['DMG'] * .5))
+                                                    c_attack = round(c_attack + (dmg['DMG'] * .5))
                                                 elif cpet_type == 'STANCE':
                                                     tempattack = dmg['DMG']
                                                     c_attack = c_defense
@@ -17110,9 +17103,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     c_health = round(dmg['DMG'])
                                                     t_health = c_health
                                                 elif cpet_type == 'FEAR':
-                                                    c_health = round(c_health - ((dmg['DMG'] / 100) * c_health))
-                                                    t_attack = round(t_attack - ((dmg['DMG'] / 100) * t_attack))
-                                                    t_defense = round(t_defense - ((dmg['DMG'] / 100) * t_defense))
+                                                    c_max_health = round(c_max_health - dmg['DMG'])
+                                                    t_defense = round(t_defense - (dmg['DMG'] * .5))
+                                                    t_attack = round(t_attack - (dmg['DMG'] * .5))
                                                 elif cpet_type == 'WAVE':
                                                     t_health = round(t_health - dmg['DMG'])
                                                 elif cpet_type == 'BLAST':
@@ -17202,9 +17195,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 o_health = round(o_health - dmg['DMG'])
                                                 o_defense = round(o_defense + dmg['DMG'])
                                             elif cenh_type == 'GROWTH':
-                                                o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
-                                                o_defense = round(o_defense + (o_defense * dmg['DMG']))
-                                                o_attack = round(o_attack + (o_attack * dmg['DMG']))
+                                                o_max_health = round(o_max_health - dmg['DMG'])
+                                                o_defense = round(o_defense + (dmg['DMG'] * .5))
+                                                o_attack = round(o_attack + (dmg['DMG'] * .5))
                                             elif cenh_type == 'STANCE':
                                                 tempattack = dmg['DMG']
                                                 o_attack = o_defense
@@ -17233,9 +17226,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 o_health = round(dmg['DMG'])
                                                 c_health = o_health
                                             elif cenh_type == 'FEAR':
-                                                o_health = round(o_health - ((dmg['DMG'] / 100) * o_health))
-                                                t_attack = round(t_attack - ((dmg['DMG'] / 100) * t_attack))
-                                                t_defense = round(t_defense - ((dmg['DMG'] / 100) * t_defense))
+                                                o_max_health = round(o_max_health - dmg['DMG'])
+                                                t_defense = round(t_defense - (dmg['DMG'] * .5))
+                                                t_attack = round(t_attack - (dmg['DMG'] * .5))
                                             elif cenh_type == 'WAVE':
                                                 t_health = round(t_health - dmg['DMG'])
                                             elif cenh_type == 'BLAST':
@@ -17312,9 +17305,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     c_health = round(c_health - dmg['DMG'])
                                                     c_defense = round(c_defense + dmg['DMG'])
                                                 elif enh_type == 'GROWTH':
-                                                    c_max_health = round(c_max_health - (c_max_health * dmg['DMG']))
-                                                    c_defense = round(c_defense + (c_defense * dmg['DMG']))
-                                                    c_attack = round(c_attack + (c_attack * dmg['DMG']))
+                                                    c_max_health = round(c_max_health - dmg['DMG'])
+                                                    c_defense = round(c_defense + (dmg['DMG'] * .5))
+                                                    c_attack = round(c_attack + (dmg['DMG'] * .5))
                                                 elif enh_type == 'STANCE':
                                                     tempattack = dmg['DMG']
                                                     c_attack = c_defense
@@ -17350,9 +17343,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = round(dmg['DMG'])
                                                         c_health = round(dmg['DMG'])
                                                 elif enh_type == 'FEAR':
-                                                    c_health = round(c_health - ((dmg['DMG'] / 100) * c_health))
-                                                    t_attack = round(t_attack - ((dmg['DMG'] / 100) * t_attack))
-                                                    t_defense = round(t_defense - ((dmg['DMG'] / 100) * t_defense))
+                                                    c_max_health = round(c_max_health - dmg['DMG'])
+                                                    t_defense = round(t_defense - (dmg['DMG'] * .5))
+                                                    t_attack = round(t_attack - (dmg['DMG'] * .5))
                                                 elif enh_type == 'WAVE':
                                                     t_health = round(t_health - dmg['DMG'])
                                                 elif enh_type == 'BLAST':
@@ -17580,7 +17573,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     carm_message = " "
                                     
                                     if c_used_resolve:
-                                        cpet_msg_on_resolve = f"🐦 | *{enhancer_mapping[pet_enh_name]}*"
+                                        cpet_msg_on_resolve = f"🐦 {enhancer_mapping[pet_enh_name]}"
                                     if tarm_barrier_active:
                                         carm_message = f"💠{tbarrier_count}"
                                     elif tarm_shield_active:
@@ -17932,9 +17925,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         c_health = round(c_health - dmg['DMG'])
                                                         c_defense = round(c_defense + dmg['DMG'])
                                                     elif cpet_type == 'GROWTH':
-                                                        c_max_health = round(c_max_health - (c_max_health * dmg['DMG']))
-                                                        c_defense = round(c_defense + (c_defense * dmg['DMG']))
-                                                        c_attack = round(c_attack + (c_attack * dmg['DMG']))
+                                                        c_max_health = round(c_max_health - dmg['DMG'])
+                                                        c_defense = round(c_defense + (dmg['DMG'] * .5))
+                                                        c_attack = round(c_attack + (dmg['DMG'] * .5))
                                                     elif cpet_type == 'STANCE':
                                                         tempattack = dmg['DMG']
                                                         c_attack = c_defense
@@ -17963,9 +17956,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         c_health = round(dmg['DMG'])
                                                         t_health = c_health
                                                     elif cpet_type == 'FEAR':
-                                                        c_health = round(c_health - ((dmg['DMG'] / 100) * c_health))
-                                                        t_attack = round(t_attack - ((dmg['DMG'] / 100) * t_attack))
-                                                        t_defense = round(t_defense - ((dmg['DMG'] / 100) * t_defense))
+                                                        c_max_health = round(c_max_health - dmg['DMG'])
+                                                        t_defense = round(t_defense - (dmg['DMG'] * .5))
+                                                        t_attack = round(t_attack - (dmg['DMG'] * .5))
                                                     elif cpet_type == 'WAVE':
                                                         t_health = round(t_health - dmg['DMG'])
                                                     elif cpet_type == 'BLAST':
@@ -18058,9 +18051,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     o_health = round(o_health - dmg['DMG'])
                                                     o_defense = round(o_defense + dmg['DMG'])
                                                 elif cenh_type == 'GROWTH':
-                                                    o_max_health = round(o_max_health - (o_max_health * dmg['DMG']))
-                                                    o_defense = round(o_defense + (o_defense * dmg['DMG']))
-                                                    o_attack = round(o_attack + (o_attack * dmg['DMG']))
+                                                    o_max_health = round(o_max_health - dmg['DMG'])
+                                                    o_defense = round(o_defense + (dmg['DMG'] * .5))
+                                                    o_attack = round(o_attack + (dmg['DMG'] * .5))
                                                 elif cenh_type == 'STANCE':
                                                     tempattack = dmg['DMG']
                                                     o_attack = o_defense
@@ -18089,9 +18082,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     o_health = round(dmg['DMG'])
                                                     c_health = o_health
                                                 elif cenh_type == 'FEAR':
-                                                    o_health = round(o_health - ((dmg['DMG'] / 100) * o_health))
-                                                    t_attack = round(t_attack - ((dmg['DMG'] / 100) * t_attack))
-                                                    t_defense = round(t_defense - ((dmg['DMG'] / 100) * t_defense))
+                                                    o_max_health = round(o_max_health - dmg['DMG'])
+                                                    c_defense = round(c_defense - (dmg['DMG'] * .5))
+                                                    c_attack = round(c_attack - (dmg['DMG'] * .5))
                                                 elif cenh_type == 'WAVE':
                                                     t_health = round(t_health - dmg['DMG'])
                                                 elif cenh_type == 'BLAST':
@@ -18172,9 +18165,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         c_health = round(c_health - dmg['DMG'])
                                                         c_defense = round(c_defense + dmg['DMG'])
                                                     elif enh_type == 'GROWTH':
-                                                        c_max_health = round(c_max_health - (c_max_health * dmg['DMG']))
-                                                        c_defense = round(c_defense + (c_defense * dmg['DMG']))
-                                                        c_attack = round(c_attack + (c_attack * dmg['DMG']))
+                                                        c_max_health = round(c_max_health - dmg['DMG'])
+                                                        c_defense = round(c_defense + (dmg['DMG'] * .5))
+                                                        c_attack = round(c_attack + (dmg['DMG'] * .5))
                                                     elif enh_type == 'STANCE':
                                                         tempattack = dmg['DMG']
                                                         c_attack = c_defense
@@ -18210,9 +18203,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             t_health = round(dmg['DMG'])
                                                             c_health = round(dmg['DMG'])
                                                     elif enh_type == 'FEAR':
-                                                        c_health = round(c_health - ((dmg['DMG'] / 100) * c_health))
-                                                        t_attack = round(t_attack - ((dmg['DMG'] / 100) * t_attack))
-                                                        t_defense = round(t_defense - ((dmg['DMG'] / 100) * t_defense))
+                                                        c_max_health = round(c_max_health - dmg['DMG'])
+                                                        t_defense = round(t_defense - (dmg['DMG'] * .5))
+                                                        t_attack = round(t_attack - (dmg['DMG'] * .5))
                                                     elif enh_type == 'WAVE':
                                                         t_health = round(t_health - dmg['DMG'])
                                                     elif enh_type == 'BLAST':
@@ -18975,9 +18968,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_health = round(t_health - dmg['DMG'])
                                                     t_defense = round(t_defense + dmg['DMG'])
                                                 elif tpet_type == 'GROWTH':
-                                                    t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                                    t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                                    t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                                    t_max_health = round(t_max_health - dmg['DMG'])
+                                                    t_defense = round(t_defense + (dmg['DMG'] * .5))
+                                                    t_attack = round(t_attack + (dmg['DMG'] * .5))
                                                 elif tpet_type == 'STANCE':
                                                     tempattack = dmg['DMG']
                                                     t_attack = t_defense
@@ -19006,9 +18999,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_health = round(dmg['DMG'])
                                                     o_health = t_health
                                                 elif tpet_type == 'FEAR':
-                                                    t_health = round(t_health - ((dmg['DMG'] / 100) * t_health))
-                                                    o_attack = round(o_attack - ((dmg['DMG'] / 100) * o_attack))
-                                                    o_defense = round(o_defense - ((dmg['DMG'] / 100) * o_defense))
+                                                    t_max_health = round(t_max_health - dmg['DMG'])
+                                                    o_defense = round(o_defense - (dmg['DMG'] * .5))
+                                                    o_attack = round(o_attack - (dmg['DMG'] * .5))
                                                 elif tpet_type == 'WAVE':
                                                     o_health = round(o_health - dmg['DMG'])
                                                 elif tpet_type == 'BLAST':
@@ -19097,9 +19090,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_health = round(t_health - dmg['DMG'])
                                                     t_defense = round(t_defense + dmg['DMG'])
                                                 elif tpet_type == 'GROWTH':
-                                                    t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                                    t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                                    t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                                    t_max_health = round(t_max_health - dmg['DMG'])
+                                                    t_defense = round(t_defense + (dmg['DMG'] * .5))
+                                                    t_attack = round(t_attack + (dmg['DMG'] * .5))
                                                 elif tpet_type == 'STANCE':
                                                     tempattack = dmg['DMG']
                                                     t_attack = t_defense
@@ -19128,9 +19121,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_health = round(dmg['DMG'])
                                                     c_health = t_health
                                                 elif tpet_type == 'FEAR':
-                                                    t_health = round(t_health - ((dmg['DMG'] / 100) * t_health))
-                                                    c_attack = round(c_attack - ((dmg['DMG'] / 100) * c_attack))
-                                                    c_defense = round(c_defense - ((dmg['DMG'] / 100) * c_defense))
+                                                    t_max_health = round(t_max_health - dmg['DMG'])
+                                                    c_attack = round(c_attack - ((dmg['DMG'] * .5)))
+                                                    c_defense = round(c_defense - ((dmg['DMG'] * .5)))
                                                 elif tpet_type == 'WAVE':
                                                     c_health = round(c_health - dmg['DMG'])
                                                 elif tpet_type == 'BLAST':
@@ -19218,9 +19211,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_health = round(t_health - dmg['DMG'])
                                                     t_defense = round(t_defense + dmg['DMG'])
                                                 elif enh_type == 'GROWTH':
-                                                    t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                                    t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                                    t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                                    t_max_health = round(t_max_health - dmg['DMG'])
+                                                    t_defense = round(t_defense + (dmg['DMG'] * .5))
+                                                    t_attack = round(t_attack + (dmg['DMG'] * .5))
                                                 elif enh_type == 'STANCE':
                                                     tempattack = dmg['DMG']
                                                     t_attack = t_defense
@@ -19256,9 +19249,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = round(dmg['DMG']) * 2
                                                         o_health = round(dmg['DMG'])
                                                 elif enh_type == 'FEAR':
-                                                    t_health = round(t_health - ((dmg['DMG'] / 100) * t_health))
-                                                    o_attack = round(c_attack - ((dmg['DMG'] / 100) * o_attack))
-                                                    o_defense = round(c_defense - ((dmg['DMG'] / 100) * o_defense))
+                                                    t_max_health = round(t_max_health - dmg['DMG'])
+                                                    o_defense = round(o_defense - (dmg['DMG'] * .5))
+                                                    o_attack = round(o_attack - (dmg['DMG'] * .5))
                                                 elif enh_type == 'WAVE':
                                                     o_health = round(o_health - dmg['DMG'])
                                                 elif enh_type == 'BLAST':
@@ -19420,9 +19413,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_health = round(t_health - dmg['DMG'])
                                                     t_defense = round(t_defense + dmg['DMG'])
                                                 elif enh_type == 'GROWTH':
-                                                    t_max_health = round(t_max_health - (t_max_health * dmg['DMG']))
-                                                    t_defense = round(t_defense + (t_defense * dmg['DMG']))
-                                                    t_attack = round(t_attack + (t_attack * dmg['DMG']))
+                                                    t_max_health = round(t_max_health - dmg['DMG'])
+                                                    t_defense = round(t_defense + (dmg['DMG'] * .5))
+                                                    t_attack = round(t_attack + (dmg['DMG'] * .5))
                                                 elif enh_type == 'STANCE':
                                                     tempattack = dmg['DMG']
                                                     t_attack = t_defense
@@ -19458,9 +19451,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_health = round(dmg['DMG']) * 2
                                                         c_health = round(dmg['DMG'])
                                                 elif enh_type == 'FEAR':
-                                                    t_health = round(t_health - ((dmg['DMG'] / 100) * t_health))
-                                                    c_attack = round(c_attack - ((dmg['DMG'] / 100) * c_attack))
-                                                    c_defense = round(c_defense - ((dmg['DMG'] / 100) * c_defense))
+                                                    t_max_health = round(t_max_health - dmg['DMG'])
+                                                    c_attack = round(c_attack - ((dmg['DMG'] * .5)))
+                                                    c_defense = round(c_defense - ((dmg['DMG'] * .5)))
                                                 elif enh_type == 'WAVE':
                                                     c_health = round(c_health - dmg['DMG'])
                                                 elif enh_type == 'BLAST':
