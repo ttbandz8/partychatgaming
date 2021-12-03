@@ -339,54 +339,14 @@ class Profile(commands.Cog):
                             if cl['LVL'] == 200:
                                 licon ="⚜️"
                             lvl = f"{licon} **{cl['LVL']}**"
-                    # cards.append(textwrap.dedent(f"""
-                    # {icon} [{index}] **{resp['NAME']}** | {lvl}
-                    # :heart: {resp['HLT']} :dagger: {resp['ATK']} :shield: {resp['DEF']}
-                    # :earth_americas:  {resp['UNIVERSE']}"""))
 
                     embedVar = discord.Embed(title= f"{resp['NAME']}", description=textwrap.dedent(f"""
                     {icon} [{index}] {lvl}
                     :heart: {resp['HLT']} :dagger: {resp['ATK']} :shield: {resp['DEF']} 🏃 {resp['SPD']}
                     """), colour=0x7289da)
                     embedVar.set_thumbnail(url=show_img)
-                    # embedVar.set_footer(text=f"/equipcard card name: Equip Card\n/viewcard card name: View Cards Details")
                     embed_list.append(embedVar)
-                    # await ctx.send(embed=embedVar)
 
-
-                # Adding to array until divisible by 10
-                # while len(cards) % 10 != 0:
-                #     cards.append("")
-                # # Check if divisible by 10, then start to split evenly
-                # if len(cards) % 10 == 0:
-                #     first_digit = int(str(len(cards))[:1])
-                #     if len(cards) >= 89:
-                #         if first_digit == 1:
-                #             first_digit = 10
-                #     cards_broken_up = np.array_split(cards, first_digit)
-                
-                # # If it's not an array greater than 10, show paginationless embed
-                # if len(cards) < 10:
-                #     embedVar = discord.Embed(title= f":flower_playing_cards: Cards\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(cards), colour=0x7289da)
-                #     embedVar.set_thumbnail(url=avatar)
-                #     embedVar.set_footer(text=f"/equipcard card name: Equip Card\n/viewcard card name: View Cards Details")
-                #     await ctx.send(embed=embedVar)
-
-                
-                # for i in range(0, len(cards_broken_up)):
-                #     globals()['embedVar%s' % i] = discord.Embed(title= f":flower_playing_cards: Cards\n**Balance**: {icon}{'{:,}'.format(balance)}", description="\n".join(cards_broken_up[i]), colour=0x7289da)
-                #     globals()['embedVar%s' % i].set_thumbnail(url=avatar)
-                #     globals()['embedVar%s' % i].set_footer(text=f"{total_cards} Total Cards\n/equipcard card name: Equip Card\n/viewcard card name: View Cards Details")
-                #     embed_list.append(globals()['embedVar%s' % i])
-
-                # paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
-                # paginator.add_reaction('⏮️', "first")
-                # paginator.add_reaction('⬅️', "back")
-                # paginator.add_reaction('🔐', "lock")
-                # paginator.add_reaction('➡️', "next")
-                # paginator.add_reaction('⏭️', "last")
-                # embeds = embed_list
-                # await paginator.run(embeds)
         
                 custom_button = manage_components.create_button(style=3, label="Equip")
 
@@ -395,7 +355,7 @@ class Profile(commands.Cog):
                     custom_function.selected_universe = str(button_ctx.origin_message.embeds[0].title)
                     user_query = {'DISNAME': str(ctx.author)}
                     response = db.updateUserNoFilter(user_query, {'$set': {'CARD': str(button_ctx.origin_message.embeds[0].title)}})
-                    await button_ctx.send(f"**{str(button_ctx.origin_message.embeds[0].title)}** equipped.", hidden=True)
+                    await button_ctx.send(f":flower_playing_cards: **{str(button_ctx.origin_message.embeds[0].title)}** equipped.", hidden=True)
                     self.stop = True
 
                 await Paginator(bot=self.bot, ctx=ctx, pages=embed_list, timeout=60, customButton=[
@@ -444,6 +404,8 @@ class Profile(commands.Cog):
                 elif balance >= 50000:
                     icon = ":dollar:"
 
+
+                embed_list = []
                 for title in titles_list:
                     index = titles_list.index(title)
                     resp = db.queryTitle({"TITLE": str(title)})
@@ -457,44 +419,30 @@ class Profile(commands.Cog):
                         icon = ":fire:"
                     elif title_available == False and title_exclusive ==False:
                         icon = ":japanese_ogre:"
-                    titles.append(textwrap.dedent(f"""
-                    {icon} [{index}] **{resp['TITLE']}**
+                    
+                    embedVar = discord.Embed(title= f"{resp['TITLE']}", description=textwrap.dedent(f"""
+                    {icon} [{index}]
                     :microbe: **{title_passive_type}:** {title_passive_value}
-                    :earth_africa: **Universe:** {resp['UNIVERSE']}"""))
-
-                # Adding to array until divisible by 10
-                while len(titles) % 10 != 0:
-                    titles.append("")
-                # Check if divisible by 10, then start to split evenly
-                if len(titles) % 10 == 0:
-                    first_digit = int(str(len(titles))[:1])
-                    if len(titles) >= 89:
-                        if first_digit == 1:
-                            first_digit = 10
-                    titles_broken_up = np.array_split(titles, first_digit)
-                
-                # If it's not an array greater than 10, show paginationless embed
-                if len(titles) < 10:
-                    embedVar = discord.Embed(title= f"Titles\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(titles), colour=0x7289da)
+                    :earth_africa: **Universe:** {resp['UNIVERSE']}"""), 
+                    colour=0x7289da)
                     embedVar.set_thumbnail(url=avatar)
-                    embedVar.set_footer(text=f"/equiptitle title name: Equip Title\n/viewtitle title name: View Title Details")
-                    await ctx.send(embed=embedVar)
+                    embed_list.append(embedVar)
+                
+                custom_button = manage_components.create_button(style=3, label="Equip")
 
-                embed_list = []
-                for i in range(0, len(titles_broken_up)):
-                    globals()['embedVar%s' % i] = discord.Embed(title= f"🎗️ Titles\n**Balance**: {icon}{'{:,}'.format(balance)}", description="\n".join(titles_broken_up[i]), colour=0x7289da)
-                    globals()['embedVar%s' % i].set_thumbnail(url=avatar)
-                    globals()['embedVar%s' % i].set_footer(text=f"{total_titles} Total Titles\n/equiptitle title name: Equip Title\n/viewtitle title name: View Title Details")
-                    embed_list.append(globals()['embedVar%s' % i])
+                async def custom_function(self, button_ctx):
+                    selected_universe = custom_function
+                    custom_function.selected_universe = str(button_ctx.origin_message.embeds[0].title)
+                    user_query = {'DISNAME': str(ctx.author)}
+                    response = db.updateUserNoFilter(user_query, {'$set': {'TITLE': str(button_ctx.origin_message.embeds[0].title)}})
+                    await button_ctx.send(f"🎗️ **{str(button_ctx.origin_message.embeds[0].title)}** equipped.", hidden=True)
+                    self.stop = True
 
-                paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
-                paginator.add_reaction('⏮️', "first")
-                paginator.add_reaction('⬅️', "back")
-                paginator.add_reaction('🔐', "lock")
-                paginator.add_reaction('➡️', "next")
-                paginator.add_reaction('⏭️', "last")
-                embeds = embed_list
-                await paginator.run(embeds)
+                await Paginator(bot=self.bot, ctx=ctx, pages=embed_list, timeout=60, customButton=[
+            custom_button,
+            custom_function,
+        ]).run()
+      
             except Exception as ex:
                 trace = []
                 tb = ex.__traceback__
@@ -538,6 +486,7 @@ class Profile(commands.Cog):
                 elif balance >= 50000:
                     icon = ":dollar:"
 
+                embed_list = []
                 for arm in arms_list:
                     index = arms_list.index(arm)
                     resp = db.queryArm({"ARM": str(arm['ARM'])})
@@ -551,47 +500,32 @@ class Profile(commands.Cog):
                         icon = ":fire:"
                     elif arm_available == False and arm_exclusive ==False:
                         icon = ":japanese_ogre:"
-                    arms.append(textwrap.dedent(f"""
-                    {icon} [{index}] **{resp['ARM']}**
+ 
+                    embedVar = discord.Embed(title= f"{resp['ARM']}", description=textwrap.dedent(f"""
+                    {icon} [{index}]
                     :microbe: **{arm_passive_type}:** {arm_passive_value}
                     :earth_africa: **Universe:** {resp['UNIVERSE']}
                     ⚒️ {arm['DUR']}
-                    """))
-
-
-                # Adding to array until divisible by 10
-                while len(arms) % 10 != 0:
-                    arms.append("")
-                # Check if divisible by 10, then start to split evenly
-                if len(arms) % 10 == 0:
-                    first_digit = int(str(len(arms))[:1])
-                    if len(arms) >= 89:
-                        if first_digit == 1:
-                            first_digit = 10
-                    arms_broken_up = np.array_split(arms, first_digit)
-                
-                # If it's not an array greater than 10, show paginationless embed
-                if len(arms) < 10:
-                    embedVar = discord.Embed(title= f"Arms\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(arms), colour=0x7289da)
+                    """), 
+                    colour=0x7289da)
                     embedVar.set_thumbnail(url=avatar)
-                    embedVar.set_footer(text=f"/equiparm arm name: Equip Arm\n/viewarm arm name: View Arm Details")
-                    await ctx.send(embed=embedVar)
+                    embed_list.append(embedVar)
+                
+                custom_button = manage_components.create_button(style=3, label="Equip")
 
-                embed_list = []
-                for i in range(0, len(arms_broken_up)):
-                    globals()['embedVar%s' % i] = discord.Embed(title= f":mechanical_arm: Arms\n**Balance**: {icon}{'{:,}'.format(balance)}", description="\n".join(arms_broken_up[i]), colour=0x7289da)
-                    globals()['embedVar%s' % i].set_thumbnail(url=avatar)
-                    globals()['embedVar%s' % i].set_footer(text=f"{total_arms} Total Arms\n/equiparm arm name: Equip Arm\n/viewarm arm name: View Arm Details")
-                    embed_list.append(globals()['embedVar%s' % i])
+                async def custom_function(self, button_ctx):
+                    selected_universe = custom_function
+                    custom_function.selected_universe = str(button_ctx.origin_message.embeds[0].title)
+                    user_query = {'DISNAME': str(ctx.author)}
+                    response = db.updateUserNoFilter(user_query, {'$set': {'ARM': str(button_ctx.origin_message.embeds[0].title)}})
+                    await button_ctx.send(f":mechanical_arm: **{str(button_ctx.origin_message.embeds[0].title)}** equipped.", hidden=True)
+                    self.stop = True
 
-                paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
-                paginator.add_reaction('⏮️', "first")
-                paginator.add_reaction('⬅️', "back")
-                paginator.add_reaction('🔐', "lock")
-                paginator.add_reaction('➡️', "next")
-                paginator.add_reaction('⏭️', "last")
-                embeds = embed_list
-                await paginator.run(embeds)
+                await Paginator(bot=self.bot, ctx=ctx, pages=embed_list, timeout=60, customButton=[
+                    custom_button,
+                    custom_function,
+                ]).run()
+      
             except Exception as ex:
                 trace = []
                 tb = ex.__traceback__
@@ -637,6 +571,7 @@ class Profile(commands.Cog):
                     icon = ":dollar:"
                 bond_message = ""
                 lvl_message = ""
+                embed_list = []
                 for pet in pets_list:
                     #cpetmove_ap= (cpet_bond * cpet_lvl) + list(cpet.values())[3] # Ability Power
                     bond_message = ""
@@ -658,45 +593,32 @@ class Profile(commands.Cog):
                         icon = ":fire:"
                     elif pet_available == False and pet_exclusive ==False:
                         icon = ":japanese_ogre:"
-                    pets.append(textwrap.dedent(f"""
-                    {icon} **{pet['NAME']}** | _B_ **{pet['BOND']}** {bond_message} / _L_ **{pet['LVL']} {lvl_message}**
+
+                    embedVar = discord.Embed(title= f"{pet['NAME']}", description=textwrap.dedent(f"""
+                    {icon} 
+                    _Bond_ **{pet['BOND']}** {bond_message}
+                    _Level_ **{pet['LVL']} {lvl_message}**
                     :small_blue_diamond: **{pet_ability}:** {power}
-                    :microbe: **Type:** {pet['TYPE']}"""))
-
-                # Adding to array until divisible by 10
-                while len(pets) % 10 != 0:
-                    pets.append("")
-
-                # Check if divisible by 10, then start to split evenly
-                if len(pets) % 10 == 0:
-                    first_digit = int(str(len(pets))[:1])
-                    if len(pets) >= 89:
-                        if first_digit == 1:
-                            first_digit = 10
-                    pets_broken_up = np.array_split(pets, first_digit)
-                
-                # If it's not an array greater than 10, show paginationless embed
-                if len(pets) < 10:
-                    embedVar = discord.Embed(title= f"Pets\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(pets), colour=0x7289da)
+                    :microbe: **Type:** {pet['TYPE']}"""), 
+                    colour=0x7289da)
                     embedVar.set_thumbnail(url=avatar)
-                    embedVar.set_footer(text=f"/equippet pet name: Equip Pet\n/viewpet pet name: View Pet Details")
-                    await ctx.send(embed=embedVar)
+                    embed_list.append(embedVar)
+                
+                custom_button = manage_components.create_button(style=3, label="Equip")
 
-                embed_list = []
-                for i in range(0, len(pets_broken_up)):
-                    globals()['embedVar%s' % i] = discord.Embed(title= f":bird: Pets\n**Balance**: {icon}{'{:,}'.format(balance)}", description="\n".join(pets_broken_up[i]), colour=0x7289da)
-                    globals()['embedVar%s' % i].set_thumbnail(url=avatar)
-                    globals()['embedVar%s' % i].set_footer(text=f"{total_pets} Total Pets\n/equippet pet name: Equip Pet\n/viewpet pet name: View Pet Details")
-                    embed_list.append(globals()['embedVar%s' % i])
+                async def custom_function(self, button_ctx):
+                    selected_universe = custom_function
+                    custom_function.selected_universe = str(button_ctx.origin_message.embeds[0].title)
+                    user_query = {'DISNAME': str(ctx.author)}
+                    response = db.updateUserNoFilter(user_query, {'$set': {'PET': str(button_ctx.origin_message.embeds[0].title)}})
+                    await button_ctx.send(f":bird: **{str(button_ctx.origin_message.embeds[0].title)}** equipped.", hidden=True)
+                    self.stop = True
 
-                paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
-                paginator.add_reaction('⏮️', "first")
-                paginator.add_reaction('⬅️', "back")
-                paginator.add_reaction('🔐', "lock")
-                paginator.add_reaction('➡️', "next")
-                paginator.add_reaction('⏭️', "last")
-                embeds = embed_list
-                await paginator.run(embeds)
+                await Paginator(bot=self.bot, ctx=ctx, pages=embed_list, timeout=60, customButton=[
+                    custom_button,
+                    custom_function,
+                ]).run()
+
             except Exception as ex:
                 trace = []
                 tb = ex.__traceback__
