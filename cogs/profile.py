@@ -248,7 +248,7 @@ class Profile(commands.Cog):
                     titlemessage = f":reminder_ribbon: | **{title_name}** *{title_passive_type} {title_passive_value}{enhancer_suffix_mapping[title_passive_type]}*"
                     warningmessage= f""
                 cardtitle = {'TITLE': title_name}
-                card_file = showcard(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, cardtitle, focused, o_attack, o_defense, turn, move1ap, move2ap, move3ap, move4ap, move4enh, card_lvl, None)
+                card_file = showcard(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, title, focused, o_attack, o_defense, turn, move1ap, move2ap, move3ap, move4ap, move4enh, card_lvl, None)
                 card_back_file = cardback(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, arm, focused,
                                     o_attack, o_defense, turn, passive_name, traitmessage, 0, None, None, passive_type, passive_num, active_pet, pet_ability_power)
 

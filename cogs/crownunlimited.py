@@ -7174,10 +7174,17 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
             ebasic = '💢'
             especial = '💢'
             eultimate = '💢'
+            vieworbuild = False            
+            
             if op_defense is None:
                 ebasic = ' '
                 especial = ' '
                 eultimate = ' '
+                vieworbuild =True
+                title_passive = title['ABILITIES'][0]
+                # Title Passive
+                title_passive_type = list(title_passive.keys())[0]
+                title_passive_value = list(title_passive.values())[0]
             else:
                 defensepower = op_defense - attack
                 if defensepower <=0:
@@ -7291,11 +7298,14 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
             # attack_stat = f"🗡️{round(attack)}"
             # defense_stat = f"🛡️{round(defense)}"
             with Pilmoji(im) as pilmoji:
-                pilmoji.text((602, 150), f"🎗️ {title['TITLE']}", (255, 255, 255), font=h, stroke_width=1, stroke_fill=(0, 0, 0),
+                if vieworbuild == True:
+                    pilmoji.text((602, 190), f"{title_passive_type}: {title_passive_value}{enhancer_suffix_mapping[title_passive_type]}", (255, 255, 255), font=m, stroke_width=1, stroke_fill=(0, 0, 0),
                       align="left")
+                pilmoji.text((602, 150), f"🎗️ {title['TITLE']}", (255, 255, 255), font=h, stroke_width=1, stroke_fill=(0, 0, 0),
+                    align="left")
                 pilmoji.text((600, 250), move1_text.strip(), (255, 255, 255), font=moveset_font, stroke_width=2,
                              stroke_fill=(0, 0, 0))
-                pilmoji.text((600, 290), move2_text.strip(), (255, 255, 255), font=moveset_font, stroke_width=2,
+                pilmoji.text((600, 290), move2s_text.strip(), (255, 255, 255), font=moveset_font, stroke_width=2,
                              stroke_fill=(0, 0, 0))
                 pilmoji.text((600, 330), move3_text.strip(), (255, 255, 255), font=moveset_font, stroke_width=2,
                              stroke_fill=(0, 0, 0))
