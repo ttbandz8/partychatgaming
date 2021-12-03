@@ -20056,7 +20056,7 @@ def update_arm_durability(self, vault, arm):
                     filter_query = [{'type.' + "ARM": str(arm['ARM'])}]
                     resp = db.updateVault(query, update_query, filter_query)
                     return {"MESSAGE": False}
-
+        return {"MESSAGE": False}
     except Exception as ex:
         trace = []
         tb = ex.__traceback__
