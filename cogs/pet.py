@@ -131,6 +131,18 @@ class Pet(commands.Cog):
             elif o_pet_passive_type == 'GAMBLE':
                 typetext = "Health"
                 message=f"{pet_pet} is a GAMBLE Pet"   
+            elif o_pet_passive_type == 'BLAST':
+                typetext = "Deals Increasing AP * Turn Count Damage "
+                message=f"{pet_pet} is a BLAST Pet"
+            elif o_pet_passive_type == 'WAVE':
+                typetext = "Deals Decreasing AP / Turn Count Damage"
+                message=f"{pet_pet} is a SOULCHAIN Pet"
+            elif o_pet_passive_type == 'DESTRUCTION':
+                typetext = "Destroys Increasing AP * Turn Count Max Health"
+                message=f"{pet_pet} is a FEAR Pet"
+            elif o_pet_passive_type == 'CREATION':
+                typetext = "Grants Decreasing AP / Turn Count Max Health"
+                message=f"{pet_pet} is a GAMBLE Pet"   
 
 
             # embedVar = discord.Embed(pet=f"{Crest_dict[pet_show]} {pet_pet}".format(self), description=f"{message}", colour=000000)
@@ -159,6 +171,10 @@ class Pet(commands.Cog):
                 embedVar.add_field(name=f"**Unique Passive**", value=f"**{typetext}** by **{o_pet_passive_value}**", inline=False)
             elif o_pet_passive_type == "SOULCHAIN" or o_pet_passive_type == "GAMBLE":
                 embedVar.add_field(name=f"**Unique Passive**", value=f"Set both players **{typetext}** equal to **{o_pet_passive_value}**", inline=False)
+            elif o_pet_passive_type == "BLAST" or o_pet_passive_type == "DESTRUCTION":
+                embedVar.add_field(name=f"**Unique Passive**", value=f"**{typetext}** starting at **{o_pet_passive_value}**", inline=False)
+            elif o_pet_passive_type == "WAVE" or o_pet_passive_type == "CREATION":
+                embedVar.add_field(name=f"**Unique Passive**", value=f"**{typetext}** starting at **{o_pet_passive_value}**", inline=False)
             embedVar.set_footer(text=f"{o_pet_passive_type}: {enhancer_mapping[o_pet_passive_type]}")
 
             await ctx.send(embed=embedVar)

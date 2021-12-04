@@ -561,13 +561,13 @@ class Profile(commands.Cog):
                 total_pets = len(pets_list)
 
                 pets=[]
-                icon = ":coin:"
+                licon = ":coin:"
                 if balance >= 150000:
-                    icon = ":money_with_wings:"
+                    licon = ":money_with_wings:"
                 elif balance >=100000:
-                    icon = ":moneybag:"
+                    licon = ":moneybag:"
                 elif balance >= 50000:
-                    icon = ":dollar:"
+                    licon = ":dollar:"
                 bond_message = ""
                 lvl_message = ""
                 embed_list = []
@@ -594,7 +594,7 @@ class Profile(commands.Cog):
                         icon = ":japanese_ogre:"
 
                     embedVar = discord.Embed(title= f"{pet['NAME']}", description=textwrap.dedent(f"""
-                    {icon} 
+                    {icon}
                     _Bond_ **{pet['BOND']}** {bond_message}
                     _Level_ **{pet['LVL']} {lvl_message}**
                     :small_blue_diamond: **{pet_ability}:** {power}
