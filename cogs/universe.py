@@ -93,18 +93,18 @@ class Universe(commands.Cog):
                 
                 🗒️ | **Details**
                 
-                :crown: | **Tale Build** */tales*
+                :crown: | **Tale Build** 
                 :reminder_ribbon: | **Title** - {ttitle}
                 :mechanical_arm: | **Arm** - {tarm}
                 
-                :fire: | **Dungeon Build** */dungeon*
+                :fire: | **Dungeon Build** 
                 :reminder_ribbon: | **Title** - {dtitle}
                 :mechanical_arm: | **Arm** - {darm}
                 
                 :bird: | **Universe Pet ** - {dpet}
                 */petlist {universe_title}*
                 
-                :japanese_ogre: | **Universe Boss** */boss*
+                :japanese_ogre: | **Universe Boss**
                 :flower_playing_cards: | **Card** - {boss}
                 {bossmessage}\n
                 :infinity: | **Universe Trait** - {traitmessage}
