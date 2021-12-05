@@ -811,7 +811,7 @@ class Profile(commands.Cog):
             for titles in vault['TITLES']:
                 ownedtitles.append(titles)
             for arms in vault['ARMS']:
-                ownedarms.append(arms)
+                ownedarms.append(arms['ARM'])
             for pets in vault['PETS']:
                 ownedpets.append(pets['NAME'])
 
