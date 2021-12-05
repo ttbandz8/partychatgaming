@@ -357,7 +357,7 @@ class Profile(commands.Cog):
                     await button_ctx.send(f":flower_playing_cards: **{str(button_ctx.origin_message.embeds[0].title)}** equipped.", hidden=True)
                     self.stop = True
 
-                await Paginator(bot=self.bot, ctx=ctx, pages=embed_list, timeout=60, customButton=[
+                await Paginator(bot=self.bot, ctx=ctx, hidden=True, pages=embed_list, timeout=60, customButton=[
             custom_button,
             custom_function,
         ]).run()
@@ -437,7 +437,7 @@ class Profile(commands.Cog):
                     await button_ctx.send(f"🎗️ **{str(button_ctx.origin_message.embeds[0].title)}** equipped.", hidden=True)
                     self.stop = True
 
-                await Paginator(bot=self.bot, ctx=ctx, pages=embed_list, timeout=60, customButton=[
+                await Paginator(bot=self.bot, ctx=ctx, hidden=True, pages=embed_list, timeout=60, customButton=[
             custom_button,
             custom_function,
         ]).run()
@@ -520,7 +520,7 @@ class Profile(commands.Cog):
                     await button_ctx.send(f":mechanical_arm: **{str(button_ctx.origin_message.embeds[0].title)}** equipped.", hidden=True)
                     self.stop = True
 
-                await Paginator(bot=self.bot, ctx=ctx, pages=embed_list, timeout=60, customButton=[
+                await Paginator(bot=self.bot, ctx=ctx, hidden=True, pages=embed_list, timeout=60, customButton=[
                     custom_button,
                     custom_function,
                 ]).run()
@@ -613,7 +613,7 @@ class Profile(commands.Cog):
                     await button_ctx.send(f":bird: **{str(button_ctx.origin_message.embeds[0].title)}** equipped.", hidden=True)
                     self.stop = True
 
-                await Paginator(bot=self.bot, ctx=ctx, pages=embed_list, timeout=60, customButton=[
+                await Paginator(bot=self.bot, ctx=ctx, hidden=True, pages=embed_list, timeout=60, customButton=[
                     custom_button,
                     custom_function,
                 ]).run()
@@ -675,7 +675,7 @@ class Profile(commands.Cog):
                         embedVar.set_thumbnail(url=avatar)
                         embed_list.append(embedVar)
                 
-                await Paginator(bot=self.bot, ctx=ctx, pages=embed_list, timeout=60).run()
+                await Paginator(bot=self.bot, ctx=ctx, hidden=True, pages=embed_list, timeout=60).run()
 
             except Exception as ex:
                 trace = []
@@ -704,7 +704,7 @@ class Profile(commands.Cog):
         d = db.queryUser(query)
         vault = db.queryVault({'OWNER': d['DISNAME']})
         if not vault['QUESTS']:
-            await ctx.send("No Quests available at this time!")
+            await ctx.send("No Quests available at this time!, hidden=True")
             return
         if vault:
             try:
@@ -730,7 +730,7 @@ class Profile(commands.Cog):
                     **Balance**: :coin:{'{:,}'.format(balance)}
                     \n{"".join(quest_messages)}
                     """), colour=0x7289da)
-                embedVar.set_footer(text="Use /tales or /dungeons to complete daily quest!", icon_url="https://cdn.discordapp.com/emojis/784402243519905792.gif?v=1")
+                embedVar.set_footer(text="Use /tales to complete daily quest!", icon_url="https://cdn.discordapp.com/emojis/784402243519905792.gif?v=1")
                 await ctx.send(embed=embedVar, hidden=True)
             except Exception as ex:
                 trace = []
@@ -753,7 +753,7 @@ class Profile(commands.Cog):
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
     @cog_ext.cog_slash(description="Check your balance", guild_ids=main.guild_ids)
-    async def bal(self, ctx):
+    async def balance(self, ctx):
         try:
             query = {'DISNAME': str(ctx.author)}
             d = db.queryUser(query)
@@ -776,7 +776,7 @@ class Profile(commands.Cog):
                         f = db.queryFamily({'HEAD': d['FAMILY']})
                         fbal = f['BANK']
                 embedVar = discord.Embed(title= f"{icon}{'{:,}'.format(balance)}", colour=0x7289da)
-                await ctx.send(embed=embedVar)
+                await ctx.send(embed=embedVar, hidden=True)
             else:
                 newVault = db.createVault({'OWNER': d['DISNAME']})
         except:
@@ -871,7 +871,7 @@ class Profile(commands.Cog):
             ]
             util_action_row = manage_components.create_actionrow(*util_buttons)
             components = [util_action_row]
-            await ctx.send(embed=embedVar,components=[util_action_row])
+            await ctx.send(embed=embedVar,components=[util_action_row], hidden=True)
             
             def check(button_ctx):
                 return button_ctx.author == ctx.author
@@ -879,7 +879,7 @@ class Profile(commands.Cog):
                 button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[util_action_row], timeout=120,check=check)
 
                 if  button_ctx.custom_id == "0":
-                    await button_ctx.send(f"{ctx.author.mention}, No change has been made")
+                    await button_ctx.send(f"{ctx.author.mention}, No change has been made", hidden=True)
                     return
                 elif  button_ctx.custom_id == "1":
                     for card in ownedcards :                     
@@ -891,19 +891,19 @@ class Profile(commands.Cog):
                                             for pet in ownedpets:
                                                 if preset1_pet in ownedpets:
                                                     response = db.updateUserNoFilter(query, {'$set': {'CARD': str(preset1_card), 'TITLE': str(preset1_title),'ARM': str(preset1_arm), 'PET': str(preset1_pet)}})
-                                                    await button_ctx.send(response)
+                                                    await button_ctx.send(response, hidden=True)
                                                     return
                                                 else:
-                                                    await button_ctx.send(f"{ctx.author.mention}, You No Longer Own {preset1_pet}")
+                                                    await button_ctx.send(f"{ctx.author.mention}, You No Longer Own {preset1_pet}", hidden=True)
                                                     return
                                         else:
-                                            await button_ctx.send(f"{ctx.author.mention}, You No Longer Own {preset1_arm}")
+                                            await button_ctx.send(f"{ctx.author.mention}, You No Longer Own {preset1_arm}", hidden=True)
                                             return
                                 else:
-                                    await button_ctx.send(f"{ctx.author.mention}, You No Longer Own {preset1_title}")
+                                    await button_ctx.send(f"{ctx.author.mention}, You No Longer Own {preset1_title}", hidden=True)
                                     return
                         else:
-                            await button_ctx.send(f"{ctx.author.mention}, You No Longer Own {preset1_card}")
+                            await button_ctx.send(f"{ctx.author.mention}, You No Longer Own {preset1_card}", hidden=True)
                             return
                 elif  button_ctx.custom_id == "2":
                     for card in ownedcards :                     
@@ -915,19 +915,19 @@ class Profile(commands.Cog):
                                             for pet in ownedpets:
                                                 if preset2_pet in ownedpets:
                                                     response = db.updateUserNoFilter(query, {'$set': {'CARD': str(preset2_card), 'TITLE': str(preset2_title),'ARM': str(preset2_arm), 'PET': str(preset2_pet)}})
-                                                    await button_ctx.send(response)
+                                                    await button_ctx.send(response, hidden=True)
                                                     return
                                                 else:
-                                                    await button_ctx.send(f"{ctx.author.mention}, You No Longer Own {preset2_pet}")
+                                                    await button_ctx.send(f"{ctx.author.mention}, You No Longer Own {preset2_pet}", hidden=True)
                                                     return
                                         else:
-                                            await button_ctx.send(f"{ctx.author.mention}, You No Longer Own {preset2_arm}")
+                                            await button_ctx.send(f"{ctx.author.mention}, You No Longer Own {preset2_arm}", hidden=True)
                                             return
                                 else:
-                                    await button_ctx.send(f"{ctx.author.mention}, You No Longer Own {preset2_title}")
+                                    await button_ctx.send(f"{ctx.author.mention}, You No Longer Own {preset2_title}", hidden=True)
                                     return
                         else:
-                            await button_ctx.send(f"{ctx.author.mention}, You No Longer Own {preset2_card}")
+                            await button_ctx.send(f"{ctx.author.mention}, You No Longer Own {preset2_card}", hidden=True)
                             return
                 elif  button_ctx.custom_id == "3":
                     for card in ownedcards :                     
@@ -939,19 +939,19 @@ class Profile(commands.Cog):
                                             for pet in ownedpets:
                                                 if preset3_pet in ownedpets:
                                                     response = db.updateUserNoFilter(query, {'$set': {'CARD': str(preset3_card), 'TITLE': str(preset3_title),'ARM': str(preset3_arm), 'PET': str(preset3_pet)}})
-                                                    await button_ctx.send(response)
+                                                    await button_ctx.send(response, hidden=True)
                                                     return
                                                 else:
-                                                    await button_ctx.send(f"{ctx.author.mention}, You No Longer Own {preset3_pet}")
+                                                    await button_ctx.send(f"{ctx.author.mention}, You No Longer Own {preset3_pet}", hidden=True)
                                                     return
                                         else:
-                                            await button_ctx.send(f"{ctx.author.mention}, You No Longer Own {preset3_arm}")
+                                            await button_ctx.send(f"{ctx.author.mention}, You No Longer Own {preset3_arm}", hidden=True)
                                             return
                                 else:
-                                    await button_ctx.send(f"{ctx.author.mention}, You No Longer Own {preset3_title}")
+                                    await button_ctx.send(f"{ctx.author.mention}, You No Longer Own {preset3_title}", hidden=True)
                                     return
                         else:
-                            await button_ctx.send(f"{ctx.author.mention}, You No Longer Own {preset3_card}")
+                            await button_ctx.send(f"{ctx.author.mention}, You No Longer Own {preset3_card}", hidden=True)
                             return  
             except Exception as ex:
                 trace = []
@@ -968,7 +968,7 @@ class Profile(commands.Cog):
                     'message': str(ex),
                     'trace': trace
                 }))
-                await ctx.send("Preset Issue Seek support.")
+                await ctx.send("Preset Issue Seek support.", hidden=True)
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
@@ -1049,19 +1049,19 @@ class Profile(commands.Cog):
                 button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[util_action_row], timeout=120,check=check)
 
                 if button_ctx.custom_id == "0":
-                    await button_ctx.send(f"{ctx.author.mention}, No change has been made")
+                    await button_ctx.send(f"{ctx.author.mention}, No change has been made", hidden=True)
                     return
                 elif button_ctx.custom_id == "1":
                     response = db.updateVaultNoFilter(vault_query, {'$set': {'DECK.0.CARD' :str(current_card), 'DECK.0.TITLE': str(current_title),'DECK.0.ARM': str(current_arm), 'DECK.0.PET': str(current_pet)}})
-                    await button_ctx.send(response)
+                    await button_ctx.send(response, hidden=True)
                     return
                 elif button_ctx.custom_id == "2":
                     response = db.updateVaultNoFilter(vault_query, {'$set': {'DECK.1.CARD' :str(current_card), 'DECK.1.TITLE': str(current_title),'DECK.1.ARM': str(current_arm), 'DECK.1.PET': str(current_pet)}})
-                    await button_ctx.send(response)
+                    await button_ctx.send(response, hidden=True)
                     return
                 elif button_ctx.custom_id == "3":
                     response = db.updateVaultNoFilter(vault_query, {'$set': {'DECK.2.CARD' :str(current_card), 'DECK.2.TITLE': str(current_title),'DECK.2.ARM': str(current_arm), 'DECK.2.PET': str(current_pet)}})
-                    await button_ctx.send(response)
+                    await button_ctx.send(response, hidden=True)
                     return
             except Exception as ex:
                 trace = []
@@ -1078,7 +1078,7 @@ class Profile(commands.Cog):
                     'message': str(ex),
                     'trace': trace
                 }))
-                await ctx.send("Preset Issue Seek support.")
+                await ctx.send("Preset Issue Seek support.", hidden=True)
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
