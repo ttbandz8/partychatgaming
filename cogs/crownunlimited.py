@@ -7579,11 +7579,11 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         enemy_arm = boss['ARM']
         enemy_pet = boss['PET']
         t_user = boss
-        opponent_scaling = 350
+        opponent_scaling = 400
     if mode in U_modes:
         enemy_title = "UTITLE"
         enemy_arm = "UARM"
-        opponent_scaling = 25
+        opponent_scaling = 15
         if randomized_battle:
             currentopponent = 10
             opponent_scaling = 25
@@ -10135,8 +10135,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                     tcard_lvl = 300
                     tcard_lvl_ap_buff = 100
                 elif mode in U_modes:
-                    tcard_lvl = 50
-                    tcard_lvl_ap_buff = 16
+                    tcard_lvl = 30
+                    tcard_lvl_ap_buff = 10
                 elif mode in B_modes:
                     tcard_lvl = 500
                     tcard_lvl_ap_buff = 166
