@@ -704,7 +704,7 @@ class Profile(commands.Cog):
         d = db.queryUser(query)
         vault = db.queryVault({'OWNER': d['DISNAME']})
         if not vault['QUESTS']:
-            await ctx.send("No Quests available at this time!")
+            await ctx.send("No Quests available at this time!, hidden=True")
             return
         if vault:
             try:
@@ -730,7 +730,7 @@ class Profile(commands.Cog):
                     **Balance**: :coin:{'{:,}'.format(balance)}
                     \n{"".join(quest_messages)}
                     """), colour=0x7289da)
-                embedVar.set_footer(text="Use /tales or /dungeons to complete daily quest!", icon_url="https://cdn.discordapp.com/emojis/784402243519905792.gif?v=1")
+                embedVar.set_footer(text="Use /tales to complete daily quest!", icon_url="https://cdn.discordapp.com/emojis/784402243519905792.gif?v=1")
                 await ctx.send(embed=embedVar, hidden=True)
             except Exception as ex:
                 trace = []
