@@ -3129,6 +3129,16 @@ destiny = [
         "UNIVERSE": "Solo Leveling"
     },
     {
+        "NAME": "The Shadow Vs The Dragon",
+        "WINS": 0,
+        "REQUIRED": 30,
+        "DEFEAT": "Antares",
+        "USE_CARDS": ["Jin Woo"],
+        "EARN": "Jin Woo", 
+        "COMPLETED": False,
+        "UNIVERSE": "Solo Leveling"
+    },
+    {
         "NAME": "The Grand Marshal",
         "WINS": 0,
         "REQUIRED": 25,
