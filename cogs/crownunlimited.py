@@ -139,7 +139,7 @@ class CrownUnlimited(commands.Cog):
             # Lose / Bounty
             take_chances_response = ""
             random_flee_loss = random.randint(1, 30)
-            bounty = random.randint(1, 15000)
+            bounty = random.randint(1, 20000)
 
             if bounty >= 150000:
                 bounty_icon = ":money_with_wings:"
