@@ -354,10 +354,10 @@ class Profile(commands.Cog):
                     custom_function.selected_universe = str(button_ctx.origin_message.embeds[0].title)
                     user_query = {'DISNAME': str(ctx.author)}
                     response = db.updateUserNoFilter(user_query, {'$set': {'CARD': str(button_ctx.origin_message.embeds[0].title)}})
-                    await button_ctx.send(f":flower_playing_cards: **{str(button_ctx.origin_message.embeds[0].title)}** equipped.", hidden=True)
+                    await button_ctx.send(f":flower_playing_cards: **{str(button_ctx.origin_message.embeds[0].title)}** equipped.")
                     self.stop = True
 
-                await Paginator(bot=self.bot, ctx=ctx, hidden=True, pages=embed_list, timeout=60, customButton=[
+                await Paginator(bot=self.bot, ctx=ctx, pages=embed_list, timeout=60, customButton=[
             custom_button,
             custom_function,
         ]).run()
@@ -434,10 +434,10 @@ class Profile(commands.Cog):
                     custom_function.selected_universe = str(button_ctx.origin_message.embeds[0].title)
                     user_query = {'DISNAME': str(ctx.author)}
                     response = db.updateUserNoFilter(user_query, {'$set': {'TITLE': str(button_ctx.origin_message.embeds[0].title)}})
-                    await button_ctx.send(f"🎗️ **{str(button_ctx.origin_message.embeds[0].title)}** equipped.", hidden=True)
+                    await button_ctx.send(f"🎗️ **{str(button_ctx.origin_message.embeds[0].title)}** equipped.")
                     self.stop = True
 
-                await Paginator(bot=self.bot, ctx=ctx, hidden=True, pages=embed_list, timeout=60, customButton=[
+                await Paginator(bot=self.bot, ctx=ctx, pages=embed_list, timeout=60, customButton=[
             custom_button,
             custom_function,
         ]).run()
@@ -517,10 +517,10 @@ class Profile(commands.Cog):
                     custom_function.selected_universe = str(button_ctx.origin_message.embeds[0].title)
                     user_query = {'DISNAME': str(ctx.author)}
                     response = db.updateUserNoFilter(user_query, {'$set': {'ARM': str(button_ctx.origin_message.embeds[0].title)}})
-                    await button_ctx.send(f":mechanical_arm: **{str(button_ctx.origin_message.embeds[0].title)}** equipped.", hidden=True)
+                    await button_ctx.send(f":mechanical_arm: **{str(button_ctx.origin_message.embeds[0].title)}** equipped.")
                     self.stop = True
 
-                await Paginator(bot=self.bot, ctx=ctx, hidden=True, pages=embed_list, timeout=60, customButton=[
+                await Paginator(bot=self.bot, ctx=ctx, pages=embed_list, timeout=60, customButton=[
                     custom_button,
                     custom_function,
                 ]).run()
@@ -610,10 +610,10 @@ class Profile(commands.Cog):
                     custom_function.selected_universe = str(button_ctx.origin_message.embeds[0].title)
                     user_query = {'DISNAME': str(ctx.author)}
                     response = db.updateUserNoFilter(user_query, {'$set': {'PET': str(button_ctx.origin_message.embeds[0].title)}})
-                    await button_ctx.send(f":bird: **{str(button_ctx.origin_message.embeds[0].title)}** equipped.", hidden=True)
+                    await button_ctx.send(f":bird: **{str(button_ctx.origin_message.embeds[0].title)}** equipped.")
                     self.stop = True
 
-                await Paginator(bot=self.bot, ctx=ctx, hidden=True, pages=embed_list, timeout=60, customButton=[
+                await Paginator(bot=self.bot, ctx=ctx, pages=embed_list, timeout=60, customButton=[
                     custom_button,
                     custom_function,
                 ]).run()
@@ -675,7 +675,7 @@ class Profile(commands.Cog):
                         embedVar.set_thumbnail(url=avatar)
                         embed_list.append(embedVar)
                 
-                await Paginator(bot=self.bot, ctx=ctx, hidden=True, pages=embed_list, timeout=60).run()
+                await Paginator(bot=self.bot, ctx=ctx, pages=embed_list, timeout=60).run()
 
             except Exception as ex:
                 trace = []
@@ -704,7 +704,7 @@ class Profile(commands.Cog):
         d = db.queryUser(query)
         vault = db.queryVault({'OWNER': d['DISNAME']})
         if not vault['QUESTS']:
-            await ctx.send("No Quests available at this time!, hidden=True")
+            await ctx.send("No Quests available at this time!", hidden=True)
             return
         if vault:
             try:
