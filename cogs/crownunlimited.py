@@ -6926,7 +6926,13 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, stamina, en
         elif enh_type == "HLT":
             enhanced = hlt
         elif enh_type == 'LIFE':
-            enhanced = lifesteal
+            newhealth = lifesteal + health
+            if health >= maxhealth:
+                enhanced = 0
+            elif newhealth >= maxhealth:
+                enhanced = maxhealth - health
+            else:
+                enhanced = lifesteal
         elif enh_type == 'DRAIN':
             enhanced = drain
         elif enh_type == "FLOG":
@@ -7010,7 +7016,10 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, stamina, en
         elif enh_type == 'STAM':
             message = f'**{card}** used **{move}** :microbe: Increasing Stamina by **{enhanced}**'
         elif enh_type == 'LIFE':
-            message = f'**{card}** used **{move}** :microbe: Stealing **{enhanced} Health**'
+            if enhanced == 0:
+                message = f'**{card}** used **{move}** :microbe: Stealing **{enhanced} Health** \n*Your **Health** is full!*'
+            else:
+                message = f'**{card}** used **{move}** :microbe: Stealing **{enhanced} Health**'
         elif enh_type == 'DRAIN':
             message = f'**{card}** used **{move}** :microbe: Draining **{enhanced} Stamina**'
         elif enh_type == 'FLOG':
