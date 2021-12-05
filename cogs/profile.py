@@ -17,7 +17,7 @@ from PIL import Image, ImageFont, ImageDraw
 import requests
 from collections import ChainMap
 import DiscordUtils
-from .crownunlimited import showcard, cardback, enhancer_mapping, enhancer_suffix_mapping
+from .crownunlimited import showcard, cardback, enhancer_mapping, title_enhancer_mapping, enhancer_suffix_mapping, title_enhancer_suffix_mapping, passive_enhancer_suffix_mapping
 import random
 import textwrap
 from discord_slash import cog_ext, SlashContext
@@ -240,12 +240,12 @@ class Profile(commands.Cog):
                 if o_title_universe == "Unbound":
                     titled =True
                     titleicon = "🎗️"
-                    titlemessage = f"🎗️ {title_name}: {title_passive_type} {title_passive_value}{enhancer_suffix_mapping[title_passive_type]}"
+                    titlemessage = f"🎗️ {title_name}: {title_passive_type} {title_passive_value}{title_enhancer_suffix_mapping[title_passive_type]}"
                     warningmessage= f""
                 elif o_title_universe == o_show:
                     titled =True
                     titleicon = "🎗️"
-                    titlemessage = f"🎗️ {title_name}: {title_passive_type} {title_passive_value}{enhancer_suffix_mapping[title_passive_type]}"
+                    titlemessage = f"🎗️ {title_name}: {title_passive_type} {title_passive_value}{title_enhancer_suffix_mapping[title_passive_type]}"
                     warningmessage= f""
                 cardtitle = {'TITLE': title_name}
                 card_file = showcard(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, cardtitle, focused, o_attack, o_defense, turn, move1ap, move2ap, move3ap, move4ap, move4enh, card_lvl, None)
@@ -261,7 +261,7 @@ class Profile(commands.Cog):
                 {titlemessage}
                 🦾 {arm_name}: {arm_passive_type} {arm_passive_value}{enhancer_suffix_mapping[arm_passive_type]} {durability}
                 🐦 {active_pet['NAME']}: {active_pet['TYPE']}: {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]} | Bond {bond} {bond_message} / Level {lvl} {lvl_message}
-                🩸 {passive_name}: {passive_type} {passive_num}{enhancer_suffix_mapping[passive_type]}                
+                🩸 {passive_name}: {passive_type} {passive_num}{passive_enhancer_suffix_mapping[passive_type]}                
                 """))
                 if card_lvl != 500:
                     embedVar.set_footer(text=f"EXP Until Next Level: {150 - card_exp}\nRebirth Buff: +{rebirthBonus}\n♾️ {traitmessage}\n{warningmessage}")
@@ -425,6 +425,7 @@ class Profile(commands.Cog):
                     :earth_africa: **Universe:** {resp['UNIVERSE']}"""), 
                     colour=0x7289da)
                     embedVar.set_thumbnail(url=avatar)
+                    embedVar.set_footer(text=f"{title_passive_type}: {title_enhancer_mapping[title_passive_type]}")
                     embed_list.append(embedVar)
                 
                 custom_button = manage_components.create_button(style=3, label="Equip")
@@ -601,6 +602,7 @@ class Profile(commands.Cog):
                     :microbe: **Type:** {pet['TYPE']}"""), 
                     colour=0x7289da)
                     embedVar.set_thumbnail(url=avatar)
+                    embedVar.set_footer(text=f"{pet['TYPE']}: {enhancer_mapping[pet['TYPE']]}")
                     embed_list.append(embedVar)
                 
                 custom_button = manage_components.create_button(style=3, label="Equip")

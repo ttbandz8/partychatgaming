@@ -15,6 +15,7 @@ from discord_slash import cog_ext, SlashContext
 from discord_slash import SlashCommand
 from discord_slash.utils import manage_components
 from discord_slash.model import ButtonStyle
+from .crownunlimited import enhancer_mapping, title_enhancer_mapping, enhancer_suffix_mapping, title_enhancer_suffix_mapping
 
 class Titles(commands.Cog):
     def __init__(self, bot):
@@ -264,11 +265,11 @@ class Titles(commands.Cog):
             if title_show != "Unbound":
                 embedVar.set_thumbnail(url=title_img)
             if o_title_passive_type == "ATK" or o_title_passive_type == "DEF" or o_title_passive_type == "HLT" or o_title_passive_type == "STAM":
-                embedVar.add_field(name=f"**Unique Passive**", value=f"Increases **{typetext}** by **{o_title_passive_value}{enhancer_suffix_mapping[o_title_passive_type]}**", inline=False)
+                embedVar.add_field(name=f"**Unique Passive**", value=f"Increases **{typetext}** by **{o_title_passive_value}{title_enhancer_suffix_mapping[o_title_passive_type]}**", inline=False)
             elif o_title_passive_type == "FLOG" or o_title_passive_type == "WITHER" or o_title_passive_type == "LIFE" or o_title_passive_type == "DRAIN":
-                embedVar.add_field(name=f"**Unique Passive**", value=f"Steals **{o_title_passive_value}{enhancer_suffix_mapping[o_title_passive_type]} {typetext}**", inline=False)
+                embedVar.add_field(name=f"**Unique Passive**", value=f"Steals **{o_title_passive_value}{title_enhancer_suffix_mapping[o_title_passive_type]} {typetext}**", inline=False)
             elif o_title_passive_type == "RAGE" or o_title_passive_type == "BRACE" or o_title_passive_type == "BZRK" or o_title_passive_type == "CRYSTAL" or o_title_passive_type == "GROWTH" or o_title_passive_type == "FEAR":
-                embedVar.add_field(name=f"**Unique Passive**", value=f"Sacrifice **{o_title_passive_value}{enhancer_suffix_mapping[o_title_passive_type]} {typetext}**", inline=False)
+                embedVar.add_field(name=f"**Unique Passive**", value=f"Sacrifice **{o_title_passive_value}{title_enhancer_suffix_mapping[o_title_passive_type]} {typetext}**", inline=False)
             elif o_title_passive_type == "STANCE" or o_title_passive_type == "CONFUSE":
                 embedVar.add_field(name=f"**Unique Passive**", value=f"Swap {typetext} Defense by **{o_title_passive_value}**", inline=False)
             elif o_title_passive_type == "BLINK":
@@ -277,7 +278,7 @@ class Titles(commands.Cog):
                 embedVar.add_field(name=f"**Unique Passive**", value=f"**{typetext}** by **{o_title_passive_value}**", inline=False)
             elif o_title_passive_type == "SOULCHAIN" or o_title_passive_type == "GAMBLE":
                 embedVar.add_field(name=f"**Unique Passive**", value=f"Set both players **{typetext}** equal to **{o_title_passive_value}**", inline=False)
-            embedVar.set_footer(text=f"{o_title_passive_type}: {enhancer_mapping[o_title_passive_type]}")
+            embedVar.set_footer(text=f"{o_title_passive_type}: {title_enhancer_mapping[o_title_passive_type]}")
 
             await ctx.send(embed=embedVar, hidden=True)
 
@@ -314,71 +315,3 @@ Crest_dict = {'Unbound': ':ideograph_advantage:',
               'Crown Rift Slayers': ':sa:',
               'Crown Rift Madness': ':m:',
               'Persona': ':o:'}
-enhancer_mapping = {'ATK': 'Increase Attack %',
-'DEF': 'Increase Defense %',
-'STAM': 'Increase Stamina',
-'HLT': 'Heal yourself or companion',
-'LIFE': 'Steal Health from Opponent',
-'DRAIN': 'Drain Stamina from Opponent',
-'FLOG': 'Steal Attack from Opponent',
-'WITHER': 'Steal Defense from Opponent',
-'RAGE': 'Lose Defense, Increase Attack',
-'BRACE': 'Lose Attack, Increase Defense',
-'BZRK': 'Lose Health, Increase Attack',
-'CRYSTAL': 'Lose Health, Increase Defense',
-'GROWTH': 'Lose Health, Increase Attack & Defense',
-'STANCE': 'Swap your Attack & Defense, Increase Attack',
-'CONFUSE': 'Swap Opponent Attack & Defense, Decrease Opponent Defense',
-'BLINK': 'Decrease your  Stamina, Increase Target Stamina',
-'SLOW': 'Decrease Opponent Stamina, Swap Stamina with Opponent',
-'HASTE': ' Increase your Stamina, Swap Stamina with Opponent',
-'FEAR': 'Decrease your Health, Decrease Opponent Attack and Defense',
-'SOULCHAIN': 'You and Your Opponent Stamina Link',
-'GAMBLE': 'You and Your Opponent Health Link',
-'WAVE': 'Deal Damage, Decreases over time',
-'CREATION': 'Heals you, Decreases over time',
-'BLAST': 'Deals Damage, Increases over time',
-'DESTRUCTION': 'Decreases Opponent Max Health, Increases over time',
-'BASIC': 'Increase Basic Attack AP',
-'SPECIAL': 'Increase Special Attack AP',
-'ULTIMATE': 'Increase Ultimate Attack AP',
-'ULTIMAX': 'Increase All AP Values',
-'MANA': 'Increase Enchancer AP',
-'SHIELD': 'Blocks Incoming DMG, until broken',
-'BARRIER': 'Nullifies Incoming Attacks, until broken',
-'PARRY': 'Returns Half Damage, until broken'
-}
-enhancer_suffix_mapping = {'ATK': '%',
-'DEF': '%',
-'STAM': ' Flat',
-'HLT': '%',
-'LIFE': '%',
-'DRAIN': ' Flat',
-'FLOG': '%',
-'WITHER': '%',
-'RAGE': '%',
-'BRACE': '%',
-'BZRK': '%',
-'CRYSTAL': '%',
-'GROWTH': '%',
-'STANCE': ' Flat',
-'CONFUSE': ' Flat',
-'BLINK': ' Flat',
-'SLOW': ' Flat',
-'HASTE': ' Flat',
-'FEAR': '%',
-'SOULCHAIN': ' Flat',
-'GAMBLE': ' Flat',
-'WAVE': ' Flat',
-'CREATION': ' Flat',
-'BLAST': ' Flat',
-'DESTRUCTION': ' Flat',
-'BASIC': ' Flat',
-'SPECIAL': ' Flat',
-'ULTIMATE': ' Flat',
-'ULTIMAX': ' Flat',
-'MANA': ' %',
-'SHIELD': ' DMG 🌐',
-'BARRIER': ' Blocks 💠',
-'PARRY': ' Counters 🔄'
-}

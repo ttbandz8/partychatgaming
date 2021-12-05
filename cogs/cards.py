@@ -15,7 +15,7 @@ from discord import Member
 from PIL import Image, ImageFont, ImageDraw
 import requests
 import random
-from .crownunlimited import showcard, cardback, enhancer_mapping, enhancer_suffix_mapping
+from .crownunlimited import showcard, cardback, enhancer_mapping, enhancer_suffix_mapping, passive_enhancer_suffix_mapping
 from discord_slash import cog_ext, SlashContext
 from discord_slash import SlashCommand
 from discord_slash.utils import manage_components
@@ -381,7 +381,7 @@ class Cards(commands.Cog):
                 embedVar.set_author(name=textwrap.dedent(f"""\
                 {card_icon} {price_message}
                 Passive & Universe Trait
-                🩸 {passive_name}: {passive_type} {passive_num}{enhancer_suffix_mapping[passive_type]}
+                🩸 {passive_name}: {passive_type} {passive_num}{passive_enhancer_suffix_mapping[passive_type]}
                 ♾️ {traitmessage}
                 🏃 {o_speed}
                 """))
