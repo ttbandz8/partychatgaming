@@ -6743,7 +6743,7 @@ async def cardlevel(card: str, player: str, card_universe: str, mode_universe: s
     atk_def_buff = 0
     ap_buff = 0
 
-    if lvl < 200:
+    if lvl < 500:
         # Experience Code
         if exp < (lvl_req - 1):
             query = {'OWNER': str(player)}
@@ -7492,7 +7492,7 @@ def cardback(d, max_health, health, max_stamina, stamina, resolved, arm, focused
             
             # Level Message
             lvl_msg = ""
-            if lvl == 200:
+            if lvl == 500:
                 lvl_msg = f"🔱 Max Level"
             else:
                 lvl_msg = f"🔱 EXP Until Next Level: {150 - card_exp}"
@@ -10121,14 +10121,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                 tarm = stats['tarm']
                 tarm_name = stats['tarm_name']
                 if mode in D_modes:
-                    tcard_lvl = 150
-                    tcard_lvl_ap_buff = 50
+                    tcard_lvl = 200
+                    tcard_lvl_ap_buff = 66
                 elif mode in U_modes:
                     tcard_lvl = 30
                     tcard_lvl_ap_buff = 10
                 elif mode in B_modes:
-                    tcard_lvl = 200
-                    tcard_lvl_ap_buff = 66
+                    tcard_lvl = 500
+                    tcard_lvl_ap_buff = 166
                 t_universe = stats['t_universe']
                 t_attack = stats['t_attack']
                 t_defense = stats['t_defense']

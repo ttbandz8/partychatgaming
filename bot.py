@@ -1476,12 +1476,12 @@ async def trinketshop(ctx):
 
 
       if button_ctx.custom_id == "cancel":
-         await button_ctx.send("Cancelled purchase.")
+         await button_ctx.send("Cancelled purchase.", hidden=True)
          return
 
       if button_ctx.custom_id in exp_boost_buttons:
          if price > balance:
-            await button_ctx.send("You're too broke to buy. Get your money up.")
+            await button_ctx.send("You're too broke to buy. Get your money up.", hidden=True)
             return
 
          card_info = {}
@@ -1492,7 +1492,7 @@ async def trinketshop(ctx):
          lvl = card_info['LVL']
          max_lvl = 200
          if lvl == max_lvl:
-            await button_ctx.send(f"**{current_card}** is already max level.")
+            await button_ctx.send(f"**{current_card}** is already at max Trinket level. You may level up in /tales, but you can no longer purchase levels for this card.", hidden=True)
             return
 
          if (levels_gained + lvl) > max_lvl:
@@ -1508,29 +1508,29 @@ async def trinketshop(ctx):
          filter_query = [{'type.'+ "CARD": str(current_card)}]
          response = db.updateVault(query, update_query, filter_query)
          await curse(price, str(ctx.author))
-         await button_ctx.send(f"**{str(current_card)}** gained {levels_gained} levels!")
+         await button_ctx.send(f"**{str(current_card)}** gained {levels_gained} levels!", hidden=True)
 
          if button_ctx.custom_id == "cancel":
-            await button_ctx.send("Sell ended.")
+            await button_ctx.send("Sell ended.", hidden=True)
             return
 
       if button_ctx.custom_id == "4":
          price = 1500000
          if price > balance:
-            await button_ctx.send("Insufficent funds.")
+            await button_ctx.send("Insufficent funds.", hidden=True)
             return
          if has_gabes_purse:
-            await button_ctx.send("You already own Gabes Purse. You cannot purchase more than one.")
+            await button_ctx.send("You already own Gabes Purse. You cannot purchase more than one.", hidden=True)
             return
          else:
             db.updateUserNoFilter(user_query, {'$set': {'TOURNAMENT_WINS': 1}})
             await curse(1000000, str(ctx.author))
-            await button_ctx.send("Gabe's Purse has been purchased!")
+            await button_ctx.send("Gabe's Purse has been purchased!", hidden=True)
             return
       
       if button_ctx.custom_id == "5":
          if price > balance:
-            await button_ctx.send("Insufficent funds.")
+            await button_ctx.send("Insufficent funds.", hidden=True)
             return
          else:
             try:
@@ -1540,10 +1540,10 @@ async def trinketshop(ctx):
                resp = db.updateVault(query, update_query, filter_query)
 
                await curse(50000, str(ctx.author))
-               await button_ctx.send(f"{current_arm}'s ⚒️ durability has increased by 25!")
+               await button_ctx.send(f"{current_arm}'s ⚒️ durability has increased by 25!", hidden=True)
                return
             except:
-               await ctx.send("Failed to purchase durability boost.")
+               await ctx.send("Failed to purchase durability boost.", hidden=True)
          
    except Exception as ex:
       trace = []
@@ -1560,7 +1560,7 @@ async def trinketshop(ctx):
          'message': str(ex),
          'trace': trace
       }))
-      await ctx.send("Trinket Shop closed unexpectedly. Seek support.")
+      await ctx.send("Trinket Shop closed unexpectedly. Seek support.", hidden=True)
 
 
 @slash.slash(name="Bounty", description="Set Guild Bounty", guild_ids=guild_ids)
