@@ -2092,7 +2092,8 @@ class CrownUnlimited(commands.Cog):
                                         embedVar = discord.Embed(title=f"{o_card.upper()} Summoned :bird: {opet_name}",
                                                                  colour=0xe91e63)
                                         embedVar.add_field(name=f"{opet_name} used **{opetmove_text}**!",
-                                                           value=f"Enhanced **{opet_type}**")
+                                                           value=f"Enhanced **{opet_type}** by **{opet_dmg}**")
+                                        embedVar.set_footer(text=f"{opet_type}: {enhancer_mapping[opet_type]}")
                                         embedVar.set_thumbnail(url=opet_image)
                                         embedVar.set_image(url="attachment://image.png")
                                         await button_ctx.send(embed=embedVar)
@@ -2941,7 +2942,8 @@ class CrownUnlimited(commands.Cog):
                                         embedVar = discord.Embed(title=f"{t_card.upper()} Summoned :bird: {tpet_name}",
                                                                  colour=0xe91e63)
                                         embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!",
-                                                           value=f"Enhanced **{tpet_type}**")
+                                                           value=f"Enhanced **{tpet_type}** by **{tpet_dmg}**")
+                                        embedVar.set_footer(text=f"{tpet_type}: {enhancer_mapping[tpet_type]}")
                                         embedVar.set_thumbnail(url=tpet_image)
                                         embedVar.set_image(url="attachment://image.png")
                                         await private_channel.send(embed=embedVar)
@@ -7014,7 +7016,7 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, stamina, en
         elif enh_type == 'DEF':
             message = f'**{card}** used **{move}** :microbe: Increasing **Defense** by **{enhanced}**'
         elif enh_type == 'STAM':
-            message = f'**{card}** used **{move}** :microbe: Increasing Stamina by **{enhanced}**'
+            message = f'**{card}** used **{move}** :microbe: Increasing **Stamina** by **{enhanced}**'
         elif enh_type == 'LIFE':
             if enhanced == 0:
                 message = f'**{card}** used **{move}** :microbe: Stealing **{enhanced} Health** \n*Your **Health** is full!*'
@@ -7037,7 +7039,7 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, stamina, en
         elif enh_type == 'WAVE' or enh_type == 'BLAST':
             message = f'**{card}** used **{move}** :microbe: Dealing **{round(enhanced)} {enh_type}** Damage!'
         elif enh_type == 'CREATION':
-            message = f'**{card}** used **{move}** :microbe: Healing and Increasing **Max Health** by **{round(enhanced)}**'
+            message = f'**{card}** used **{move}** :microbe: **Healing** and Increasing **Max Health** by **{round(enhanced)}**'
         elif enh_type == 'DESTRUCTION':
             message = f'**{card}** used **{move}** :microbe: Destroying **{round(enhanced)} Max Health**'
         elif enh_type == 'GROWTH':
@@ -7045,7 +7047,7 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, stamina, en
         elif enh_type == 'STANCE':
             message = f'**{card}** used **{move}** :microbe: Swapping **Attack** and **Defense**, Increasing **Attack** to **{enhanced}**'
         elif enh_type == 'CONFUSE':
-            message = f'**{card}** used **{move}** :microbe: Swapping **Attack** and **Defense**, Decreasing **Defense** to **{enhanced}**'
+            message = f'**{card}** used **{move}** :microbe: Swapping Opponent **Attack** and **Defense**, Decreasing **Defense** to **{enhanced}**'
         elif enh_type == 'HLT':
             message = f'**{card}** used **{move}** :microbe: Healing for  **{enhanced}**!'
         elif enh_type == 'FEAR':
@@ -11092,7 +11094,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     title=f"**PERSONA!**\n{opet_name} was summoned from {o_card}'s soul dealing **{petdmg['DMG']}** damage!!",
                                                     colour=0xe91e63)
                                                 embedVar.add_field(name=f"{opet_name} used **{opetmove_text}**!",
-                                                                   value=f"Enhanced **{opet_type}**")
+                                                                   value=f"Enhanced **{opet_type}** by **{opet_dmg}**")
+                                                embedVar.set_footer(text=f"{opet_type}: {enhancer_mapping[opet_type]}")
 
                                                 embedVar.set_thumbnail(url=opet_image)
                                                 embedVar.set_image(url="attachment://image.png")
@@ -11101,7 +11104,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     title=f"{o_card.upper()} Summoned :bird: {opet_name}",
                                                     colour=0xe91e63)
                                                 embedVar.add_field(name=f"{opet_name} used **{opetmove_text}**!",
-                                                                   value=f"Enhanced **{opet_type}**")
+                                                                   value=f"Enhanced **{opet_type}** by **{opet_dmg}**")
+                                                embedVar.set_footer(text=f"{opet_type}: {enhancer_mapping[opet_type]}")
                                                 embedVar.set_thumbnail(url=opet_image)
                                                 embedVar.set_image(url="attachment://image.png")
                                                 embedVar.set_image(url="attachment://image.png")
@@ -12009,8 +12013,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         title=f"**PERSONA!**\n{tpet_name} was summoned from {t_card}'s soul dealing **{petdmg['DMG']}** damage!!",
                                                         colour=0xe91e63)
                                                     embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!",
-                                                                       value=f"Enhanced **{tpet_type}**")
-
+                                                                       value=f"Enhanced **{tpet_type}** by **{tpet_dmg}**")
+                                                    embedVar.set_footer(text=f"{tpet_type}: {enhancer_mapping[tpet_type]}")
                                                     embedVar.set_thumbnail(url=tpet_image)
                                                     embedVar.set_image(url="attachment://image.png")
                                                 else:
@@ -12018,7 +12022,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         title=f"{t_card.upper()} Summoned :bird: {tpet_name}",
                                                         colour=0xe91e63)
                                                     embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!",
-                                                                       value=f"Enhanced **{tpet_type}**")
+                                                                       value=f"Enhanced **{tpet_type}** by **{tpet_dmg}**")
+                                                    embedVar.set_footer(text=f"{tpet_type}: {enhancer_mapping[tpet_type]}")
                                                     embedVar.set_thumbnail(url=tpet_image)
                                                     embedVar.set_image(url="attachment://image.png")
 
@@ -12690,7 +12695,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             embedVar = discord.Embed(
                                                 title=f"{t_card.upper()} Summoned :bird: {tpet_name}", colour=0xe91e63)
                                             embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!",
-                                                               value=f"Enhanced **{tpet_type}**")
+                                                               value=f"Enhanced **{tpet_type}** by **{tpet_dmg}**")
+                                            embedVar.set_footer(text=f"{tpet_type}: {enhancer_mapping[tpet_type]}")
                                             embedVar.set_thumbnail(url=tpet_image)
                                             embedVar.set_image(url="attachment://image.png")
                                             await private_channel.send(embed=embedVar)
@@ -14279,8 +14285,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         title=f"**PERSONA!**\n{opet_name} was summoned from {o_card}'s soul dealing **{petdmg['DMG']}** damage!!",
                                                         colour=0xe91e63)
                                                     embedVar.add_field(name=f"{opet_name} used **{opetmove_text}**!",
-                                                                       value=f"Enhanced **{opet_type}**")
-
+                                                                       value=f"Enhanced **{opet_type}** by **{opet_dmg}**")
+                                                    embedVar.set_footer(text=f"{opet_type}: {enhancer_mapping[opet_type]}")
                                                     embedVar.set_thumbnail(url=opet_image)
                                                     embedVar.set_image(url="attachment://image.png")
                                                     await button_ctx.send(embed=embedVar)
@@ -14289,7 +14295,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         title=f"{o_card.upper()} Summoned :bird: {opet_name}",
                                                         colour=0xe91e63)
                                                     embedVar.add_field(name=f"{opet_name} used **{opetmove_text}**!",
-                                                                       value=f"Enhanced **{opet_type}**")
+                                                                       value=f"Enhanced **{opet_type}** by **{opet_dmg}**")
+                                                    embedVar.set_footer(text=f"{opet_type}: {enhancer_mapping[opet_type]}")
                                                     embedVar.set_thumbnail(url=opet_image)
                                                     embedVar.set_image(url="attachment://image.png")
                                                     await button_ctx.send(embed=embedVar)
@@ -15510,11 +15517,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             colour=0xe91e63)
                                                         embedVar.add_field(
                                                             name=f"{tpet_name} used **{tpetmove_text}**!",
-                                                            value=f"Enhanced **{tpet_type}**")
+                                                            value=f"Enhanced **{tpet_type}** by **{tpet_dmg}**")
                                                         embedVar.add_field(
                                                             name=f"{tpet_name} used a follow up attack dealing **{petdmg['DMG']}** damage!",
-                                                            value=f"Enhanced **{tpet_type}**")
+                                                            value=f"Enhanced **{tpet_type}** by **{tpet_dmg}**")
                                                         embedVar.set_thumbnail(url=tpet_image)
+                                                        embedVar.set_footer(text=f"{tpet_type}: {enhancer_mapping[tpet_type]}")
                                                         embedVar.set_image(url="attachment://image.png")
                                                         await button_ctx.send(embed=embedVar)
                                                     else:
@@ -15523,8 +15531,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             colour=0xe91e63)
                                                         embedVar.add_field(
                                                             name=f"{tpet_name} used **{tpetmove_text}**!",
-                                                            value=f"Enhanced **{tpet_type}**")
+                                                            value=f"Enhanced **{tpet_type}** by **{tpet_dmg}**")
                                                         embedVar.set_thumbnail(url=tpet_image)
+                                                        embedVar.set_footer(text=f"{tpet_type}: {enhancer_mapping[tpet_type]}")
                                                         embedVar.set_image(url="attachment://image.png")
                                                         await private_channel.send(embed=embedVar)
 
@@ -15647,8 +15656,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             colour=0xe91e63)
                                                         embedVar.add_field(
                                                             name=f"{tpet_name} used **{tpetmove_text}**!",
-                                                            value=f"Enhanced **{tpet_type}**")
-
+                                                            value=f"Enhanced **{tpet_type}** by **{tpet_dmg}**")
+                                                        embedVar.set_footer(text=f"{tpet_type}: {enhancer_mapping[tpet_type]}")
                                                         embedVar.set_thumbnail(url=tpet_image)
                                                         embedVar.set_image(url="attachment://image.png")
                                                         await button_ctx.send(embed=embedVar)
@@ -15658,7 +15667,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             colour=0xe91e63)
                                                         embedVar.add_field(
                                                             name=f"{tpet_name} used **{tpetmove_text}**!",
-                                                            value=f"Enhanced **{tpet_type}**")
+                                                            value=f"Enhanced **{tpet_type}** by **{tpet_dmg}**")
+                                                        embedVar.set_footer(text=f"{tpet_type}: {enhancer_mapping[tpet_type]}")
                                                         embedVar.set_thumbnail(url=tpet_image)
                                                         embedVar.set_image(url="attachment://image.png")
                                                         await button_ctx.send(embed=embedVar)
@@ -15781,8 +15791,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         title=f"**PERSONA!**\n{tpet_name} was summoned from {t_card}'s soul dealing **{petdmg['DMG']}** damage!!",
                                                         colour=0xe91e63)
                                                     embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!",
-                                                                       value=f"Enhanced **{tpet_type}**")
-
+                                                                       value=f"Enhanced **{tpet_type}** by **{tpet_dmg}**")
+                                                    embedVar.set_footer(text=f"{tpet_type}: {enhancer_mapping[tpet_type]}")
                                                     embedVar.set_thumbnail(url=tpet_image)
                                                     embedVar.set_image(url="attachment://image.png")
                                                     await button_ctx.send(embed=embedVar)
@@ -15791,7 +15801,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         title=f"{t_card.upper()} Summoned :bird: {tpet_name}",
                                                         colour=0xe91e63)
                                                     embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!",
-                                                                       value=f"Enhanced **{tpet_type}**")
+                                                                       value=f"Enhanced **{tpet_type}** by **{tpet_dmg}**")
+                                                    embedVar.set_footer(text=f"{tpet_type}: {enhancer_mapping[tpet_type]}")
                                                     embedVar.set_thumbnail(url=tpet_image)
                                                     embedVar.set_image(url="attachment://image.png")
                                                     await private_channel.send(embed=embedVar)
@@ -17181,7 +17192,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         title=f"**PERSONA!**\n{cpet_name} was summoned from {c_card}'s soul dealing **{petdmg['DMG']}** damage!!",
                                                         colour=0xe91e63)
                                                     embedVar.add_field(name=f"{cpet_name} used **{cpetmove_text}**!",
-                                                                       value=f"Enhanced **{cpet_type}**")
+                                                                       value=f"Enhanced **{cpet_type}** by **{cpet_dmg}**")
+                                                    embedVar.set_footer(text=f"{cpet_type}: {enhancer_mapping[cpet_type]}")
 
                                                     embedVar.set_thumbnail(url=cpet_image)
                                                     embedVar.set_image(url="attachment://image.png")
@@ -17191,7 +17203,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         title=f"{c_card.upper()} Summoned :bird: {cpet_name}",
                                                         colour=0xe91e63)
                                                     embedVar.add_field(name=f"{cpet_name} used **{cpetmove_text}**!",
-                                                                       value=f"Enhanced **{cpet_type}**")
+                                                                       value=f"Enhanced **{cpet_type}** by **{cpet_dmg}**")
+                                                    embedVar.set_footer(text=f"{cpet_type}: {enhancer_mapping[cpet_type]}")
                                                     embedVar.set_thumbnail(url=cpet_image)
                                                     embedVar.set_image(url="attachment://image.png")
                                                     await private_channel.send(embed=embedVar)
@@ -18040,7 +18053,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             colour=0xe91e63)
                                                         embedVar.add_field(
                                                             name=f"{cpet_name} used **{cpetmove_text}**!",
-                                                            value=f"Enhanced **{cpet_type}**")
+                                                            value=f"Enhanced **{cpet_type}** by **{cpet_dmg}**")
+                                                        embedVar.set_footer(text=f"{cpet_type}: {enhancer_mapping[cpet_type]}")
 
                                                         embedVar.set_thumbnail(url=cpet_image)
                                                         embedVar.set_image(url="attachment://image.png")
@@ -18051,7 +18065,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             colour=0xe91e63)
                                                         embedVar.add_field(
                                                             name=f"{cpet_name} used **{cpetmove_text}**!",
-                                                            value=f"Enhanced **{cpet_type}**")
+                                                            value=f"Enhanced **{cpet_type}** by **{cpet_dmg}**")
+                                                        embedVar.set_footer(text=f"{cpet_type}: {enhancer_mapping[cpet_type]}")
                                                         embedVar.set_thumbnail(url=cpet_image)
                                                         embedVar.set_image(url="attachment://image.png")
                                                         await private_channel.send(embed=embedVar)
@@ -19085,8 +19100,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         title=f"**PERSONA!**\n{tpet_name} was summoned from {t_card}'s soul dealing **{petdmg['DMG']}** damage!!",
                                                         colour=0xe91e63)
                                                     embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!",
-                                                                       value=f"Enhanced **{tpet_type}**")
-
+                                                                       value=f"Enhanced **{tpet_type}** by **{tpet_dmg}**")
+                                                    embedVar.set_footer(text=f"{tpet_type}: {enhancer_mapping[tpet_type]}")
                                                     embedVar.set_thumbnail(url=tpet_image)
                                                     embedVar.set_image(url="attachment://image.png")
                                                     await button_ctx.send(embed=embedVar)
@@ -19095,7 +19110,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         title=f"{t_card.upper()} Summoned :bird: {tpet_name}",
                                                         colour=0xe91e63)
                                                     embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!",
-                                                                       value=f"Enhanced **{tpet_type}**")
+                                                                       value=f"Enhanced **{tpet_type}** by **{tpet_dmg}**")
+                                                    embedVar.set_footer(text=f"{tpet_type}: {enhancer_mapping[tpet_type]}")
                                                     embedVar.set_thumbnail(url=tpet_image)
                                                     embedVar.set_image(url="attachment://image.png")
                                                     await private_channel.send(embed=embedVar)
@@ -19207,8 +19223,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         title=f"**PERSONA!**\n{tpet_name} was summoned from {t_card}'s soul dealing **{petdmg['DMG']}** damage!!",
                                                         colour=0xe91e63)
                                                     embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!",
-                                                                       value=f"Enhanced **{tpet_type}**")
-
+                                                                       value=f"Enhanced **{tpet_type}** by **{tpet_dmg}**")
+                                                    embedVar.set_footer(text=f"{tpet_type}: {enhancer_mapping[tpet_type]}")
                                                     embedVar.set_thumbnail(url=tpet_image)
                                                     embedVar.set_image(url="attachment://image.png")
                                                     await button_ctx.send(embed=embedVar)
@@ -19217,7 +19233,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         title=f"{t_card.upper()} Summoned :bird: {tpet_name}",
                                                         colour=0xe91e63)
                                                     embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!",
-                                                                       value=f"Enhanced **{tpet_type}**")
+                                                                       value=f"Enhanced **{tpet_type}** by **{tpet_dmg}**")
+                                                    embedVar.set_footer(text=f"{tpet_type}: {enhancer_mapping[tpet_type]}")
                                                     embedVar.set_thumbnail(url=tpet_image)
                                                     embedVar.set_image(url="attachment://image.png")
                                                     await private_channel.send(embed=embedVar)
