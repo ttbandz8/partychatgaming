@@ -7594,7 +7594,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         opponent_health_scaling = 350
         if randomized_battle:
             currentopponent = 30
-            opponent_scaling = 50
+            opponent_scaling = 275
 
     try:
         # Player 1 Data
