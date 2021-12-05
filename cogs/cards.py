@@ -42,7 +42,7 @@ class Cards(commands.Cog):
             vault = db.altQueryVault(vault_query)
             owned_card_levels_list = []
             if len(vault['CARDS']) >= 150:
-                await ctx.send("You're maxed out on Cards!")
+                await ctx.send("You're maxed out on Cards!", hidden=True)
                 return
 
             for c in vault['CARD_LEVELS']:
@@ -64,7 +64,7 @@ class Cards(commands.Cog):
 
             if check_card:
                 if check_card['UNIVERSE'] == 'Unbound':
-                    await ctx.send("You cannot purchase this card.")
+                    await ctx.send("You cannot purchase this card.", hidden=True)
                     return
 
                 user = db.queryUser({'DISNAME': str(ctx.author)})
@@ -73,14 +73,14 @@ class Cards(commands.Cog):
                     riftShopOpen = True
 
                 if check_card['UNIVERSE'] in rift_universes:
-                    await ctx.send("You are not connected to the rift...")
+                    await ctx.send("You are not connected to the rift...", hidden=True)
 
                 if check_card['HAS_COLLECTION']:
-                    await ctx.send("Destiny Cards can only be unlocked by completing the Destiny Line.")
+                    await ctx.send("Destiny Cards can only be unlocked by completing the Destiny Line.", hidden=True)
                     return
 
                 if check_card['IS_SKIN'] and check_card['SKIN_FOR'] not in vault['CARDS']:
-                    await ctx.send("You can not purchase **skins** for cards you do not own.")
+                    await ctx.send("You can not purchase **skins** for cards you do not own.", hidden=True)
                     return
 
                 icon = ":coin:"
@@ -106,7 +106,7 @@ class Cards(commands.Cog):
                 card_buttons_action_row = manage_components.create_actionrow(*card_buttons)
                 await ctx.send(
                     f"{ctx.author.mention}, are you sure you want to buy **{card_name}** for {icon}**{'{:,}'.format(price)}**?",
-                    components=[card_buttons_action_row])
+                    components=[card_buttons_action_row], hidden=True)
 
                 def check(button_ctx):
                     return button_ctx.author == ctx.author
@@ -116,11 +116,11 @@ class Cards(commands.Cog):
                         card_buttons_action_row], check=check)
 
                     if button_ctx.custom_id == "No":
-                        await button_ctx.send("Purchase ended. ")
+                        await button_ctx.send("Purchase ended. ", hidden=True)
                         return
 
                     if button_ctx.custom_id == "Yes":
-                        await button_ctx.send("Please wait...")
+                        await button_ctx.send("Please wait...", hidden=True)
                         currentBalance = vault['BALANCE']
                         cost = 0
                         mintedCard = ""
@@ -141,12 +141,12 @@ class Cards(commands.Cog):
 
                         if bool(mintedCard):
                             if mintedCard in vault['CARDS']:
-                                await ctx.send(m.USER_ALREADY_HAS_CARD, delete_after=5)
+                                await ctx.send(m.USER_ALREADY_HAS_CARD, delete_after=5, hidden=True)
                             else:
                                 newBalance = currentBalance - cost
 
                                 if newBalance < 0:
-                                    await ctx.send("Insufficent Balance.")
+                                    await ctx.send("Insufficent Balance.", hidden=True)
                                 else:
                                     await main.curse(cost, str(ctx.author))
                                     card_query = {'NAME': str(mintedCard)}
@@ -164,13 +164,13 @@ class Cards(commands.Cog):
                                         r = db.updateVaultNoFilter(vault_query, update_query)
 
                                     await ctx.send(
-                                        f"You Purchased **{mintedCard}**\n**{newstock}** {mintedCard} cards left in the Shop!")
+                                        f"You Purchased **{mintedCard}**\n**{newstock}** {mintedCard} cards left in the Shop!", hidden=True)
                                     # Add Destiny
                                     for destiny in d.destiny:
                                         if card_name in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
                                             db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
                                             await ctx.send(
-                                                f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.")
+                                                f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.", hidden=True)
 
                                     card_buttons = [
                                         manage_components.create_button(
@@ -185,8 +185,8 @@ class Cards(commands.Cog):
                                         )
                                     ]
                                     card_buttons_action_row = manage_components.create_actionrow(*card_buttons)
-                                    await ctx.send(f"{ctx.author.mention} would you like to equip this Card?",
-                                                   components=[card_buttons_action_row])
+                                    await ctx.send(f"{ctx.author.mention} would you like to equip this **{card_name}**?",
+                                                   components=[card_buttons_action_row], hidden=True)
 
                                     def check(button_ctx):
                                         return button_ctx.author == ctx.author
@@ -196,14 +196,14 @@ class Cards(commands.Cog):
                                             self.bot, components=[card_buttons_action_row], check=check)
 
                                         if button_ctx.custom_id == "No":
-                                            await button_ctx.send("Did not equip card.")
+                                            await button_ctx.send("Did not equip card.", hidden=True)
                                             return
 
                                         if button_ctx.custom_id == "Yes":
                                             user_query = {'DISNAME': str(ctx.author)}
                                             response = db.updateUserNoFilter(user_query,
                                                                              {'$set': {'CARD': str(card_name)}})
-                                            await button_ctx.send(response)
+                                            await button_ctx.send(response, hidden=True)
                                     except Exception as ex:
                                         trace = []
                                         tb = ex.__traceback__
@@ -221,14 +221,14 @@ class Cards(commands.Cog):
                                         }))
 
                         elif checkout == True:
-                            await ctx.send(m.CARD_DOESNT_EXIST)
+                            await ctx.send(m.CARD_DOESNT_EXIST, hidden=True)
                         else:
-                            await ctx.send(m.CARD_OUT_OF_STOCK)
+                            await ctx.send(m.CARD_OUT_OF_STOCK, hidden=True)
                 except Exception as e:
-                    await ctx.send(f"Failure to purchase card: {e}")
+                    await ctx.send(f"Failure to purchase card: **{e}**", hidden=True)
                     return
         except Exception as e:
-            await ctx.send(f"Failure to purchase card: {e}")
+            await ctx.send(f"Failure to purchase card: **{e}**", hidden=True)
             return
 
     @cog_ext.cog_slash(description="Equip a Card", guild_ids=main.guild_ids)
@@ -246,9 +246,9 @@ class Cards(commands.Cog):
         # Do not Check Tourney wins
         if card_name in vault['CARDS']:
             response = db.updateUserNoFilter(user_query, {'$set': {'CARD': str(card_name)}})
-            await ctx.send(response)
+            await ctx.send(response, hidden=True)
         else:
-            await ctx.send(m.USER_DOESNT_HAVE_THE_CARD, delete_after=5)
+            await ctx.send(m.USER_DOESNT_HAVE_THE_CARD, delete_after=5, hidden=True)
 
     @cog_ext.cog_slash(description="View a Card", guild_ids=main.guild_ids)
     async def viewcard(self, ctx, card: str):
@@ -283,7 +283,7 @@ class Cards(commands.Cog):
                 arm = {'ARM': 'CARD PREVIEW'}
 
                 if o_show == "Unbound":
-                    await ctx.send("You cannot view this card at this time. ")
+                    await ctx.send("You cannot view this card at this time. ", hidden=True)
                     return
 
                 price_message = ""
@@ -314,7 +314,7 @@ class Cards(commands.Cog):
                         if trait['NAME'] == 'Pokemon':
                             mytrait = trait
                 if mytrait:
-                    traitmessage = f"**{mytrait['EFFECT']}**: {mytrait['TRAIT']}"
+                    traitmessage = f"{mytrait['EFFECT']}: {mytrait['TRAIT']}"
 
                 passive_name = list(o_passive.keys())[0]
                 passive_num = list(o_passive.values())[0]
@@ -375,32 +375,21 @@ class Cards(commands.Cog):
                 card_file = showcard(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, title, focused,
                                     o_attack, o_defense, turn, move1ap, move2ap, move3ap, move4ap, move4enh, 0, None)
 
-                # card_back_file = cardback(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, arm, focused,
-                #                     o_attack, o_defense, turn, passive_name, traitmessage, 0, price_message, card_icon, passive_type, passive_num, active_pet, pet_ability_power, card_exp)
-                
-                embedVar = discord.Embed(title=f"{card_icon} {price_message}".format(self), description=textwrap.dedent(f"""\
-                **Passive & Universe Trait**
-                :drop_of_blood: **{passive_name}:** *{passive_type} {passive_num}{enhancer_suffix_mapping[passive_type]}*
-                :infinity: {traitmessage}
-                🏃 {o_speed}
-                """)
-                , colour=000000)
+                embedVar = discord.Embed(title=f"", colour=000000)
                 embedVar.set_image(url="attachment://image.png")
                 embedVar.set_thumbnail(url=show_img)
+                embedVar.set_author(name=textwrap.dedent(f"""\
+                {card_icon} {price_message}
+                Passive & Universe Trait
+                🩸 {passive_name}: {passive_type} {passive_num}{enhancer_suffix_mapping[passive_type]}
+                ♾️ {traitmessage}
+                🏃 {o_speed}
+                """))
                 embedVar.set_footer(text=f"{tip}")
 
-                # backEmbed = discord.Embed(title=f"Back Page".format(self), description=textwrap.dedent(f"""\
-                # hello world
-                # """)
-                # , colour=000000)
-                # backEmbed.set_image(url="attachment://backimage.png")
-
-                # card_files_list = [card_file, card_back_file]
-                # pages = [frontEmbed, backEmbed]
-                await ctx.send(file=card_file, embed=embedVar)
-                # await Paginator(bot=self.bot, ctx=ctx, pages=pages, files=[card_file, card_back_file], authorOnly=True, timeout=60, prevLabel="Front", nextLabel="Back").run()
+                await ctx.send(file=card_file, embed=embedVar, hidden=True)
             else:
-                await ctx.send(m.CARD_DOESNT_EXIST, delete_after=3)
+                await ctx.send(m.CARD_DOESNT_EXIST, delete_after=3, hidden=True)
         except Exception as ex:
             trace = []
             tb = ex.__traceback__

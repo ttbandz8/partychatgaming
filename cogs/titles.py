@@ -35,7 +35,7 @@ class Titles(commands.Cog):
         vault_query = {'OWNER' : str(ctx.author)}
         vault = db.altQueryVault(vault_query)
         if len(vault['TITLES']) >= 150:
-            await ctx.send("You're maxed out on Titles!")
+            await ctx.send("You're maxed out on Titles!", hidden=True)
             return
 
         shop = db.queryShopTitles()
@@ -63,9 +63,9 @@ class Titles(commands.Cog):
                         available_universes.append(uni['TITLE'])
             if check_title['UNIVERSE'] not in available_universes:
                 if check_title['UNIVERSE'] in rift_universes:
-                    await ctx.send("You are not connected to the rift...")
+                    await ctx.send("You are not connected to the rift...", hidden=True)
                 else:
-                    await ctx.send("You cannot purchase titles from Universes you haven't unlocked or Rifts yet completed.")
+                    await ctx.send("You cannot purchase titles from Universes you haven't unlocked or Rifts yet completed.", hidden=True)
                 return
 
         currentBalance = vault['BALANCE']
@@ -89,12 +89,12 @@ class Titles(commands.Cog):
 
         if bool(mintedTitle):
             if mintedTitle in vault['TITLES']:
-                await ctx.send(m.USER_ALREADY_HAS_TITLE, delete_after=5)
+                await ctx.send(m.USER_ALREADY_HAS_TITLE, delete_after=5, hidden=True)
             else:
                 newBalance = currentBalance - cost
 
                 if newBalance < 0 :
-                    await ctx.send("You have an insufficent Balance")
+                    await ctx.send("You have an insufficent Balance", hidden=True)
                 else:
                     await main.curse(cost, str(ctx.author))
                     title_query = {'TITLE' : str(mintedTitle)}
@@ -102,7 +102,7 @@ class Titles(commands.Cog):
                     update_query = {"$set": {"STOCK": newstock}} 
                     response = db.updateTitle(titleInventory, update_query)
                     response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'TITLES': str(title_name)}})
-                    await ctx.send(m.PURCHASE_COMPLETE_1 + f"`{newstock}` `{mintedTitle}` TITLES left in the Shop!")
+                    await ctx.send(m.PURCHASE_COMPLETE_1 + f"`{newstock}` `{mintedTitle}` TITLES left in the Shop!", hidden=True)
 
 
                     title_buttons = [
@@ -118,7 +118,7 @@ class Titles(commands.Cog):
                             )
                         ]
                     title_buttons_action_row = manage_components.create_actionrow(*title_buttons)
-                    await ctx.send(f"{ctx.author.mention} would you like to equip this Title?", components=[title_buttons_action_row])
+                    await ctx.send(f"{ctx.author.mention} would you like to equip this Title?", components=[title_buttons_action_row], hidden=True)
 
                     def check(button_ctx):
                         return button_ctx.author == ctx.author
@@ -127,20 +127,20 @@ class Titles(commands.Cog):
                         button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[title_buttons_action_row], check=check)
                         
                         if button_ctx.custom_id == "No":
-                            await button_ctx.send("Did not equip title.")
+                            await button_ctx.send("Did not equip title.", hidden=True)
                             return
                         
                         if button_ctx.custom_id == "Yes":
                             user_query = {'DISNAME': str(ctx.author)}
                             response = db.updateUserNoFilter(user_query, {'$set': {'TITLE': str(title_name)}})
-                            await button_ctx.send(response)
+                            await button_ctx.send(response, hidden=True)
                     except:
                         return
 
         elif checkout == True:
-            await ctx.send(m.TITLE_DOESNT_EXIST)
+            await ctx.send(m.TITLE_DOESNT_EXIST, hidden=True)
         else:
-            await ctx.send(m.TITLE_OUT_OF_STOCK)
+            await ctx.send(m.TITLE_OUT_OF_STOCK, hidden=True)
 
 
     @cog_ext.cog_slash(description="Equip a Title", guild_ids=main.guild_ids)
@@ -159,16 +159,16 @@ class Titles(commands.Cog):
 
             if title_name in vault['TITLES']:
                 response = db.updateUserNoFilter(user_query, {'$set': {'TITLE': title_name}})
-                await ctx.send(response)
+                await ctx.send(response, hidden=True)
             else:
-                await ctx.send(m.USER_DOESNT_HAVE_THE_Title)
+                await ctx.send(m.USER_DOESNT_HAVE_THE_Title, hidden=True)
         else:
 
             if title_name in vault['TITLES']:
                 response = db.updateUserNoFilter(user_query, {'$set': {'TITLE': str(title_name)}})
-                await ctx.send(response)
+                await ctx.send(response, hidden=True)
             else:
-                await ctx.send(m.USER_DOESNT_HAVE_THE_Title)
+                await ctx.send(m.USER_DOESNT_HAVE_THE_Title, hidden=True)
 
 
     @cog_ext.cog_slash(description="View a Title", guild_ids=main.guild_ids)
@@ -279,10 +279,10 @@ class Titles(commands.Cog):
                 embedVar.add_field(name=f"**Unique Passive**", value=f"Set both players **{typetext}** equal to **{o_title_passive_value}**", inline=False)
             embedVar.set_footer(text=f"{o_title_passive_type}: {enhancer_mapping[o_title_passive_type]}")
 
-            await ctx.send(embed=embedVar)
+            await ctx.send(embed=embedVar, hidden=True)
 
         else:
-            await ctx.send("That title doesn't exist.", delete_after=3)
+            await ctx.send("That title doesn't exist.", delete_after=3, hidden=True)
 
 def setup(bot):
     bot.add_cog(Titles(bot))

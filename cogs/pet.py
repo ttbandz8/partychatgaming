@@ -45,9 +45,9 @@ class Pet(commands.Cog):
         # Do not Check Tourney wins
         if selected_pet:
             response = db.updateUserNoFilter(user_query, {'$set': {'PET': str(selected_pet['NAME'])}})
-            await ctx.send(f"{selected_pet['NAME']} is ready for battle!")
+            await ctx.send(f"{selected_pet['NAME']} is ready for battle!", hidden=True)
         else:
-            await ctx.send(m.USER_DOESNT_HAVE_THE_PET, delete_after=5)
+            await ctx.send(m.USER_DOESNT_HAVE_THE_PET, delete_after=5, hidden=True)
             return
 
     @cog_ext.cog_slash(description="View a Pet", guild_ids=main.guild_ids)
@@ -177,10 +177,10 @@ class Pet(commands.Cog):
                 embedVar.add_field(name=f"**Unique Passive**", value=f"**{typetext}** starting at **{o_pet_passive_value}**", inline=False)
             embedVar.set_footer(text=f"{o_pet_passive_type}: {enhancer_mapping[o_pet_passive_type]}")
 
-            await ctx.send(embed=embedVar)
+            await ctx.send(embed=embedVar, hidden=True)
 
         else:
-            await ctx.send(m.PET_DOESNT_EXIST, delete_after=3)
+            await ctx.send(m.PET_DOESNT_EXIST, delete_after=3, hidden=True)
 
 def setup(bot):
     bot.add_cog(Pet(bot))
