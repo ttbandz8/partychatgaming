@@ -40,7 +40,7 @@ from pilmoji import Pilmoji
 class CrownUnlimited(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self._cd = commands.CooldownMapping.from_cooldown(1, 30,
+        self._cd = commands.CooldownMapping.from_cooldown(1, 1800,
                                                           commands.BucketType.member)  # Change accordingly. Currently every 8 minutes (3600 seconds == 60 minutes)
 
     co_op_modes = ['CTales', 'DTales', 'CDungeon', 'DDungeon']
