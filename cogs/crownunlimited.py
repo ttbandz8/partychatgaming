@@ -40,7 +40,7 @@ from pilmoji import Pilmoji
 class CrownUnlimited(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self._cd = commands.CooldownMapping.from_cooldown(1, 3600,
+        self._cd = commands.CooldownMapping.from_cooldown(1, 30,
                                                           commands.BucketType.member)  # Change accordingly. Currently every 8 minutes (3600 seconds == 60 minutes)
 
     co_op_modes = ['CTales', 'DTales', 'CDungeon', 'DDungeon']
@@ -243,7 +243,7 @@ class CrownUnlimited(commands.Cog):
 
             embedVar.set_image(url="attachment://image.png")
             embedVar.set_footer(text="Use /explore to turn off these interactions.")
-            await message.channel.send(embed=embedVar, file=card_file, components=[random_battle_buttons_action_row], delete_after=60)
+            await message.channel.send(embed=embedVar, file=card_file, components=[random_battle_buttons_action_row], delete_after=60,)
 
             def check(button_ctx):
                 return button_ctx.author == message.author
@@ -278,9 +278,9 @@ class CrownUnlimited(commands.Cog):
                 #     'message': str(ex),
                 #     'trace': trace
                 # }))
-                print("Explore Exception. Likely nothing, but yea.")
+                # # print("Explore Exception. Likely nothing, but yea.")
                 # await message.channel.send("Something ain't right, my guy.Check with support.")
-
+                print("")
     @cog_ext.cog_slash(description="Toggle Explore Mode On/Off", guild_ids=main.guild_ids)
     @commands.cooldown(1, 15, commands.BucketType.user)
     async def explore(self, ctx: SlashContext):
@@ -7580,7 +7580,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         enemy_title = "DTITLE"
         enemy_arm = "DARM"
         opponent_scaling = opponent_scaling + 50
-        opponent_health_scaling = 450
+        opponent_health_scaling = 300
         if randomized_battle:
             currentopponent = 30
             opponent_scaling = 50
@@ -9552,7 +9552,7 @@ async def enemy_approached(self, message, channel, player, selected_mode, univer
     crestlist = opponent
     crestsearch = bounty
     await battle_commands(self, message.author, mode, universe, universe['TITLE'], None, oguild, crestlist, crestsearch,
-                          private_channel, sowner, None, None, None, None, None, None, None)
+                          private_channel, sowner, None, None, None, None, None, None, None, None)
 
 
 async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode: str, user: None):

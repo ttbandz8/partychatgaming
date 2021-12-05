@@ -285,7 +285,7 @@ class Profile(commands.Cog):
                     'message': str(ex),
                     'trace': trace
                 }))
-                await ctx.send("There's an issue with your build. Check with support.")
+                await ctx.send("There's an issue with your build. Check with support.", hidden=True)
                 return
         else:
             await ctx.send(m.USER_NOT_REGISTERED, delete_after=3)
@@ -378,7 +378,7 @@ class Profile(commands.Cog):
                 'message': str(ex),
                 'trace': trace
             }))
-            await ctx.send("There's an issue with loading your cards. Check with support.")
+            await ctx.send("There's an issue with loading your cards. Check with support.", hidden=True)
             return
 
     @cog_ext.cog_slash(description="Check all your titles", guild_ids=main.guild_ids)
@@ -457,7 +457,7 @@ class Profile(commands.Cog):
                     'message': str(ex),
                     'trace': trace
                 }))
-                await ctx.send("There's an issue with your Titles list. Check with support.")
+                await ctx.send("There's an issue with your Titles list. Check with support.", hidden=True)
                 return
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
@@ -540,7 +540,7 @@ class Profile(commands.Cog):
                     'message': str(ex),
                     'trace': trace
                 }))
-                await ctx.send("There's an issue with your Arms list. Check with support.")
+                await ctx.send("There's an issue with your Arms list. Check with support.", hidden=True)
                 return
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
@@ -633,7 +633,7 @@ class Profile(commands.Cog):
                     'message': str(ex),
                     'trace': trace
                 }))
-                await ctx.send("There's an issue with your Pets list. Check with support.")
+                await ctx.send("There's an issue with your Pets list. Check with support.", hidden=True)
                 return
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
@@ -692,7 +692,7 @@ class Profile(commands.Cog):
                     'message': str(ex),
                     'trace': trace
                 }))
-                await ctx.send("There's an issue with your Destiny Line list. Check with support.")
+                await ctx.send("There's an issue with your Destiny Line list. Check with support.", hidden=True)
                 return
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
@@ -731,7 +731,7 @@ class Profile(commands.Cog):
                     \n{"".join(quest_messages)}
                     """), colour=0x7289da)
                 embedVar.set_footer(text="Use /tales or /dungeons to complete daily quest!", icon_url="https://cdn.discordapp.com/emojis/784402243519905792.gif?v=1")
-                await ctx.send(embed=embedVar)
+                await ctx.send(embed=embedVar, hidden=True)
             except Exception as ex:
                 trace = []
                 tb = ex.__traceback__
@@ -747,7 +747,7 @@ class Profile(commands.Cog):
                     'message': str(ex),
                     'trace': trace
                 }))
-                await ctx.send("There's an issue with your Quest list. Check with support.")
+                await ctx.send("There's an issue with your Quest list. Check with support.", hidden=True)
                 return
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})

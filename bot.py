@@ -421,7 +421,7 @@ async def register(ctx):
       """), colour=0xe91e63)
       embedVar.set_footer(text="Changing your Discord Account Name or Numbers will break your Crown Unlimited Account.")
       await ctx.author.send(embed=embedVar)
-      await ctx.send(f"Welcome to Crown Unlimited, {ctx.author.mention}! Use **/daily** to collect your daily reward!\nType **/menu** for quick overview of the game! Additional info has been DM'd to you!")
+      await ctx.send(f"Welcome to Crown Unlimited, {ctx.author.mention}! Use **/daily** to collect your daily reward!\nType **/menu** for quick overview of the game! Additional info has been DM'd to you!", hidden=True)
 
       vault = db.queryVault({'OWNER': disname})
       if vault:
@@ -477,7 +477,7 @@ async def rebirth(ctx):
          
          *Rebirth is permanent and cannot be undone*
          """))
-         accept = await ctx.send(embed=embedVar1, components=[util_action_row] )
+         accept = await ctx.send(embed=embedVar1, components=[util_action_row], hidden=True)
 
          def check(button_ctx):
                return button_ctx.author == ctx.author
@@ -726,7 +726,7 @@ async def on_slash_command_error(ctx, ex):
 @commands.cooldown(1, 60*60*24, commands.BucketType.user)
 async def daily(ctx):
    try:
-      dailyamount = 1000
+      dailyamount = 5000
       await bless(dailyamount, ctx.author)
 
       user_data = db.queryUser({'DISNAME': str(ctx.author)})
@@ -746,14 +746,14 @@ async def daily(ctx):
       q2 = random.randint(0, oppponent_len)
       q3 = random.randint(0, oppponent_len)
 
-      q1_earn = round(random.randint(1000, 25000))
-      q2_earn = round(random.randint(3000, 25000))
+      q1_earn = round(random.randint(1000, 20000))
+      q2_earn = round(random.randint(3000, 30000))
       q3_earn = round(random.randint(3000, 150000))
 
       quests = [{'OPPONENT': opponents[q1], 'TYPE': 'Tales', 'GOAL': 3, 'WINS': 0, 'REWARD': q1_earn },{'OPPONENT': opponents[q2], 'TYPE': 'Tales', 'GOAL': 5, 'WINS': 0, 'REWARD': q2_earn }, {'OPPONENT': opponents[q3], 'TYPE': 'Dungeon', 'GOAL': 10, 'WINS': 0, 'REWARD': q3_earn }]
       db.updateVaultNoFilter({'OWNER': str(ctx.author)}, {'$set': {'QUESTS': quests}})
 
-      await ctx.send(f"Daily bonus :coin:{dailyamount} has been applied for {ctx.author.mention}!\nYour new quests are available!\n**use /quests to open the Quest Board**!")
+      await ctx.send(f"Daily bonus :coin:{dailyamount} has been applied for {ctx.author.mention}!\nYour new quests are available!\n**use /quests to open the Quest Board**!", hidden=True)
    except Exception as ex:
       trace = []
       tb = ex.__traceback__
@@ -1220,7 +1220,7 @@ async def donate(ctx, amount, team: str):
       else:
          await blessteam(int(amount), dteam)
          await curse(int(amount), ctx.author)
-         await ctx.send(f":coin:{amount} has been gifted to {dteam}.")
+         await ctx.send(f":coin:{amount} has been gifted to {dteam}.", hidden=True)
          return
    else:
       await ctx.send(f"Team: {dteam} does not exist")
@@ -1235,11 +1235,11 @@ async def invest(ctx, amount):
    balance = vault['BALANCE']
    if family:
       if balance <= int(amount):
-         await ctx.send("You do not have that amount to invest.")
+         await ctx.send("You do not have that amount to invest.", hidden=True)
       else:
          await blessfamily_Alt(int(amount), user['FAMILY'])
          await curse(int(amount), ctx.author)
-         await ctx.send(f":coin:{amount} invested into **{user['NAME']}'s Family**.")
+         await ctx.send(f":coin:{amount} invested into **{user['NAME']}'s Family**.", hidden=True)
          return
    else:
       await ctx.send(f"Family does not exist")
@@ -1281,7 +1281,7 @@ async def traits(ctx):
 
    embedVar = discord.Embed(title="Universe Traits", description="\n".join(traitmessages))
 
-   await ctx.author.send(embed=embedVar)
+   await ctx.author.send(embed=embedVar, hidden=True)
 
 async def blessteam(amount, team):
    blessAmount = amount
@@ -1450,7 +1450,7 @@ async def trinketshop(ctx):
    What would you like to buy?
    """), colour=0xf1c40f)
    embedVar.set_footer(text="Boosts are used immediately upon purchase. Click cancel to exit purchase.", icon_url="https://cdn.discordapp.com/emojis/784402243519905792.gif?v=1")
-   await ctx.send(embed=embedVar, components=[sell_buttons_action_row, util_sell_buttons_action_row])
+   await ctx.send(embed=embedVar, components=[sell_buttons_action_row, util_sell_buttons_action_row], hidden=True)
 
    def check(button_ctx):
       return button_ctx.author == ctx.author
@@ -1781,7 +1781,7 @@ async def resell(ctx, where: str, selections: list):
                list_to_sell.append(f"{str(arm['ARM'])}")
          list_to_sell_as_text = "\n".join(list_to_sell)
 
-      await ctx.send(f"Are you sure you want to sell\n **{list_to_sell_as_text}**\n for :coin:{round(sell_price)}?", components=[sell_buttons_action_row])
+      await ctx.send(f"Are you sure you want to sell\n **{list_to_sell_as_text}**\n for :coin:{round(sell_price)}?", components=[sell_buttons_action_row], hidden=True)
 
       def check(button_ctx):
          return button_ctx.author == ctx.author
@@ -1851,40 +1851,40 @@ async def resell(ctx, where: str, selections: list):
       return
 
 
-@bot.command()
-@commands.check(validate_user)
-async def addfield(ctx, collection, new_field, field_type):
-   if ctx.author.guild_permissions.administrator == True:
+# @bot.command()
+# @commands.check(validate_user)
+# async def addfield(ctx, collection, new_field, field_type):
+#    if ctx.author.guild_permissions.administrator == True:
 
-      if field_type == 'string':
-         field_type = "N/A"
-      elif field_type == 'int':
-         field_type = 1
-      elif field_type == 'list':
-         field_type = []
-      elif field_type == 'bool':
-         field_type = False
+#       if field_type == 'string':
+#          field_type = "N/A"
+#       elif field_type == 'int':
+#          field_type = 1
+#       elif field_type == 'list':
+#          field_type = []
+#       elif field_type == 'bool':
+#          field_type = False
 
-      if collection == 'cards':
-         response = db.updateManyCards({'$set': {new_field: field_type}})
-      elif collection == 'titles':
-         response = db.updateManyTitles({'$set': {new_field: field_type}})
-      elif collection == 'vaults':
-         response = db.updateManyVaults({'$set': {new_field: field_type}})
-      elif collection == 'users':
-         response = db.updateManyUsers({'$set': {new_field: field_type}})
-      elif collection == 'universe':
-         response = db.updateManyUniverses({'$set': {new_field: field_type}})
-      elif collection == 'boss':
-         response = db.updateManyBosses({'$set': {new_field: field_type}})
-      elif collection == 'arms':
-         response = db.updateManyArms({'$set': {new_field: field_type}})
-      elif collection == 'pets':
-         response = db.updateManyPets({'$set': {new_field: field_type}})
-      elif collection == 'teams':
-         response = db.updateManyTeams({'$set': {new_field: field_type}})
-   else:
-      print(m.ADMIN_ONLY_COMMAND)
+#       if collection == 'cards':
+#          response = db.updateManyCards({'$set': {new_field: field_type}})
+#       elif collection == 'titles':
+#          response = db.updateManyTitles({'$set': {new_field: field_type}})
+#       elif collection == 'vaults':
+#          response = db.updateManyVaults({'$set': {new_field: field_type}})
+#       elif collection == 'users':
+#          response = db.updateManyUsers({'$set': {new_field: field_type}})
+#       elif collection == 'universe':
+#          response = db.updateManyUniverses({'$set': {new_field: field_type}})
+#       elif collection == 'boss':
+#          response = db.updateManyBosses({'$set': {new_field: field_type}})
+#       elif collection == 'arms':
+#          response = db.updateManyArms({'$set': {new_field: field_type}})
+#       elif collection == 'pets':
+#          response = db.updateManyPets({'$set': {new_field: field_type}})
+#       elif collection == 'teams':
+#          response = db.updateManyTeams({'$set': {new_field: field_type}})
+#    else:
+#       print(m.ADMIN_ONLY_COMMAND)
 
 @bot.command()
 @commands.check(validate_user)

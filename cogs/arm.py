@@ -33,7 +33,7 @@ class Arm(commands.Cog):
         vault_query = {'OWNER' : str(ctx.author)}
         vault = db.altQueryVault(vault_query)
         if len(vault['ARMS']) >= 150:
-            await ctx.send("You're maxed out on Arms!")
+            await ctx.send("You're maxed out on Arms!", hidden=True)
             return
         shop = db.queryShopArms()
         arms = []
@@ -46,7 +46,7 @@ class Arm(commands.Cog):
         arm_name = check_arm['ARM']
         if check_arm:
             if check_arm['UNIVERSE'] in rift_universes:
-                await ctx.send("You are not connected to the rift...")
+                await ctx.send("You are not connected to the rift...", hidden=True)
                 return
             all_universes = db.queryAllUniverse()
             user = db.queryUser({'DISNAME': str(ctx.author)})
@@ -87,12 +87,12 @@ class Arm(commands.Cog):
 
         if bool(mintedArm):
             if mintedArm in arm_list:
-                await ctx.send(m.USER_ALREADY_HAS_ARM, delete_after=5)
+                await ctx.send(m.USER_ALREADY_HAS_ARM, delete_after=5, hidden=True)
             else:
                 newBalance = currentBalance - cost
 
                 if newBalance < 0 :
-                    await ctx.send("You have an insufficent Balance")
+                    await ctx.send("You have an insufficent Balance", hidden=True)
                 else:
                     await main.curse(cost, str(ctx.author))
                     arm_query = {'ARM' : str(mintedArm)}
@@ -100,7 +100,7 @@ class Arm(commands.Cog):
                     update_query = {"$set": {"STOCK": newstock}} 
                     response = db.updateArm(armInventory, update_query)
                     response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'ARMS': {'ARM': str(arm_name), 'DUR': 25}}})
-                    await ctx.send(m.PURCHASE_COMPLETE_1 + f"`{newstock}` `{mintedArm}` ARMS left in the Shop!")
+                    await ctx.send(m.PURCHASE_COMPLETE_1 + f"`{newstock}` `{mintedArm}` ARMS left in the Shop!", hidden=True)
 
                     arm_buttons = [
                             manage_components.create_button(
@@ -115,7 +115,7 @@ class Arm(commands.Cog):
                             )
                         ]
                     arm_buttons_action_row = manage_components.create_actionrow(*arm_buttons)
-                    await ctx.send(f"{ctx.author.mention} would you like to equip this Arm?", components=[arm_buttons_action_row])
+                    await ctx.send(f"{ctx.author.mention} would you like to equip this Arm?", components=[arm_buttons_action_row], hidden=True)
 
                     def check(button_ctx):
                         return button_ctx.author == ctx.author
@@ -123,20 +123,20 @@ class Arm(commands.Cog):
                         button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[arm_buttons_action_row], check=check)
 
                         if button_ctx.custom_id == "No":
-                            await button_ctx.send("Did not equip arm.")
+                            await button_ctx.send("Did not equip arm.", hidden=True)
                             return
 
                         if button_ctx.custom_id == "Yes":
                             user_query = {'DISNAME': str(ctx.author)}
                             response = db.updateUserNoFilter(user_query, {'$set': {'ARM': str(arm_name)}})
-                            await button_ctx.send(response)
+                            await button_ctx.send(response, hidden=True)
                     except:
                         return
 
         elif checkout == True:
-            await ctx.send(m.ARM_DOESNT_EXIST)
+            await ctx.send(m.ARM_DOESNT_EXIST, hidden=True)
         else:
-            await ctx.send(m.ARM_OUT_OF_STOCK)
+            await ctx.send(m.ARM_OUT_OF_STOCK, hidden=True)
 
     @cog_ext.cog_slash(description="Equip an Arm")
     async def equiparm(self, ctx, arm: str):
@@ -157,9 +157,9 @@ class Arm(commands.Cog):
                     if arm_name in arm['ARM']:
                         response = db.updateUserNoFilter(user_query, {'$set': {'ARM': str(arm_name)}})
                         owned = True
-                        await ctx.send(response)
+                        await ctx.send(response, hidden=True)
                 if not owned:
-                    await ctx.send(m.USER_DOESNT_HAVE_THE_ARM, delete_after=5)
+                    await ctx.send(m.USER_DOESNT_HAVE_THE_ARM, delete_after=5, hidden=True)
                     return
             except Exception as ex:
                 trace = []
@@ -177,7 +177,7 @@ class Arm(commands.Cog):
                     'trace': trace
                 }))
         else:
-            await ctx.send("That arm doesn't exist.", delete_after=5)
+            await ctx.send("That arm doesn't exist.", delete_after=5, hidden=True)
             return
            
 
@@ -239,10 +239,10 @@ class Arm(commands.Cog):
             embedVar.add_field(name=f"Unique Passive", value=f"Increases {typetext} by **{o_arm_passive_value}**", inline=False)
             embedVar.set_footer(text=f"{o_arm_passive_type}: {enhancer_mapping[o_arm_passive_type]}")
 
-            await ctx.send(embed=embedVar)
+            await ctx.send(embed=embedVar, hidden=True)
 
         else:
-            await ctx.send(m.ARM_DOESNT_EXIST, delete_after=3)
+            await ctx.send(m.ARM_DOESNT_EXIST, delete_after=3, hidden=True)
 
 def setup(bot):
     bot.add_cog(Arm(bot))
