@@ -45,7 +45,7 @@ class Profile(commands.Cog):
                 user_is_validated = db.queryUser(query)
                 if user_is_validated:
 
-                    accept = await ctx.send(f"{ctx.author.mention}, are you sure you want to delete your account? " + "\n" + "All of your wins, tournament wins, shop purchases and other earnings will be removed from the system can can not be recovered. ", delete_after=10)
+                    accept = await ctx.send(f"{ctx.author.mention}, are you sure you want to delete your account? " + "\n" + "All of your wins, tournament wins, shop purchases and other earnings will be removed from the system can can not be recovered. ", hidden=True)
                     for emoji in emojis:
                         await accept.add_reaction(emoji)
 
@@ -63,13 +63,13 @@ class Profile(commands.Cog):
                         if vault:
                             db.deleteVault(vault)
                         else:
-                            await ctx.send(delete_user_resp, delete_after=5)
+                            await ctx.send(delete_user_resp, hidden=True)
                         team = db.queryTeam()
                     except:
-                        await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=3)
+                        await ctx.send(m.RESPONSE_NOT_DETECTED, hidden=True)
                 
             else:
-                await ctx.send("Invalid command", delete_after=5)
+                await ctx.send("Invalid command", hidden=True)
 
 
     @cog_ext.cog_slash(description="View your current build", guild_ids=main.guild_ids)
@@ -288,7 +288,7 @@ class Profile(commands.Cog):
                 await ctx.send("There's an issue with your build. Check with support.", hidden=True)
                 return
         else:
-            await ctx.send(m.USER_NOT_REGISTERED, delete_after=3)
+            await ctx.send(m.USER_NOT_REGISTERED, hidden=True)
 
 
     @cog_ext.cog_slash(description="Check all your cards", guild_ids=main.guild_ids)

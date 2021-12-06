@@ -9815,7 +9815,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             await ctx.send(f"{ctx.author.mention} private channel has been opened for you. Good luck!")
             
             
-            currentopponent = update_save_spot(self, ctx, saved_spots, selected_universe, U_modes)
+            currentopponent = update_save_spot(self, ctx, saved_spots, selected_universe, D_modes)
             return {'SELECTED_UNIVERSE': selected_universe, 'PRIVATE_CHANNEL': private_channel,
                     'UNIVERSE_DATA': universe, 'CREST_LIST': crestlist, 'CREST_SEARCH': crestsearch,
                     'COMPLETED_DUNGEONS': completed_dungeons, 'OGUILD': oguild, 'CURRENTOPPONENT': currentopponent}

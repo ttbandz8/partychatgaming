@@ -90,7 +90,7 @@ class Titles(commands.Cog):
 
         if bool(mintedTitle):
             if mintedTitle in vault['TITLES']:
-                await ctx.send(m.USER_ALREADY_HAS_TITLE, delete_after=5, hidden=True)
+                await ctx.send(m.USER_ALREADY_HAS_TITLE, hidden=True)
             else:
                 newBalance = currentBalance - cost
 
@@ -283,7 +283,7 @@ class Titles(commands.Cog):
             await ctx.send(embed=embedVar, hidden=True)
 
         else:
-            await ctx.send("That title doesn't exist.", delete_after=3, hidden=True)
+            await ctx.send("That title doesn't exist.", hidden=True)
 
 def setup(bot):
     bot.add_cog(Titles(bot))
