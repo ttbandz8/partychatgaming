@@ -47,7 +47,7 @@ class Pet(commands.Cog):
             response = db.updateUserNoFilter(user_query, {'$set': {'PET': str(selected_pet['NAME'])}})
             await ctx.send(f"{selected_pet['NAME']} is ready for battle!", hidden=True)
         else:
-            await ctx.send(m.USER_DOESNT_HAVE_THE_PET, delete_after=5, hidden=True)
+            await ctx.send(m.USER_DOESNT_HAVE_THE_PET, hidden=True)
             return
 
     @cog_ext.cog_slash(description="View a Pet", guild_ids=main.guild_ids)
@@ -180,7 +180,7 @@ class Pet(commands.Cog):
             await ctx.send(embed=embedVar, hidden=True)
 
         else:
-            await ctx.send(m.PET_DOESNT_EXIST, delete_after=3, hidden=True)
+            await ctx.send(m.PET_DOESNT_EXIST, hidden=True)
 
 def setup(bot):
     bot.add_cog(Pet(bot))
