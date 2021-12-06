@@ -193,7 +193,7 @@ async def crown(ctx):
    embedVar2 = discord.Embed(title= f":crown: Getting Started", description=textwrap.dedent(f"""\
    Players begin with 3 cards from the **Starter Universes**.
    The Title **Starter** and the Arm **Stock** are equipped.
-   Your first Pet **Chick** will be joining as well!   
+   Your first Summon **Chick** will be joining as well!   
 
    The **Starter Universes** are _My Hero Academia_, _Kanto Region_, and _League Of Legends_.
 
@@ -241,7 +241,7 @@ async def crown(ctx):
    """), colour=0x7289da)
    embedVar3.set_thumbnail(url=avatar)
 
-   embedVar4 = discord.Embed(title= f":crown: Titles, Arms, and Pets", description=textwrap.dedent(f"""\
+   embedVar4 = discord.Embed(title= f":crown: Titles, Arms, and Summons", description=textwrap.dedent(f"""\
    **Titles** & **Arms** 
    Modify you or the Opponents **Stats** prior to battle by applying **Enhancers** at the start of the match.
    
@@ -255,12 +255,12 @@ async def crown(ctx):
    **Destiny Universe Buff** Destiny Cards gain an additional **Buff**.
    **Buff**: **Universe Buff** + 50 **HLT**, 5 **ATK** and 5 **DEF**.
 
-   **Pets**
+   **Summons**
    Can assist during battle with an **Enhancer**.
-   Earn **Pets** through Tales, Dungeon and Boss **Drops** or through trade with other Players!
-   Battle with your **Pet** to gain **EXP** to increase Pet **Ability Power**. 
+   Earn **Summons** through Tales, Dungeon and Boss **Drops** or through trade with other Players!
+   Battle with your **Summon** to gain **EXP** to increase Summon **Ability Power**. 
 
-   Mix and Match Titles, Arms and Pets to gain the **Tactical Advantage**!
+   Mix and Match Titles, Arms and Summons to gain the **Tactical Advantage**!
    """) ,colour=0x7289da)
    embedVar4.set_thumbnail(url=avatar)
 
@@ -285,12 +285,12 @@ async def crown(ctx):
    **Resolve**
    Once in **Focus State** players can use 5 to **Resolve**!
    **Resolved Characters** transform to greatly increase attack and health while sacrificing defense.
-   **Resolved Characters** can summon Pets to aid them in battle.
+   **Resolved Characters** can summon Summons to aid them in battle.
    **5:** Resolve _uses 1 turn_.
 
-   **Pet Assistance!**
-   Pets Enhancers can either boost your stats or inflict status effects on your opponent. Pet moves do not end the player turn!
-   **6:** Pet _uses 15 stamina_.
+   **Summon Assistance!**
+   Summons Enhancers can either boost your stats or inflict status effects on your opponent. Summon moves do not end the player turn!
+   **6:** Summon _uses 15 stamina_.
 
    """) ,colour=0x7289da)
    embedVar6.set_thumbnail(url=avatar)
@@ -328,9 +328,9 @@ async def crown(ctx):
    **PVP**
    **/battle @player:** Select your Build and Challenge any Crown Unlimited Player to join your Game Lobby.
    **/start:** Starts round against current opponent.
-   **/arena:** Starts round against current opponent and No Pets Allowed.
+   **/arena:** Starts round against current opponent and No Summons Allowed.
    **/brawl:** Starts round against current opponent with equal health, attack, and defense.
-   **/arenabrawl:** Starts round against current opponent with equal health, attack, and defense and No Pets are allowed.
+   **/arenabrawl:** Starts round against current opponent with equal health, attack, and defense and No Summons are allowed.
    **/wager number:*** In lobby players can wager :coin:.
    *Builds are locked during lobbies, to change your build end the lobby with **/end** .*
    
@@ -361,7 +361,7 @@ async def crown(ctx):
    Items in the shop have a **Stock**. When they are sold out they become unavailable.
 
    **Sell & Trade**
-   **/sell** and **/trade** will allow you to trade Cards, Titles, Arms and Pets with other players.
+   **/sell** and **/trade** will allow you to trade Cards, Titles, Arms and Summons with other players.
 
    **Resell**
    **/resell item** to sell Cards, Titles, and Arms back to the market.
@@ -404,7 +404,7 @@ async def register(ctx):
       **Accessories**
       :reminder_ribbon: - Title for Card
       :mechanical_arm: - Arm for Card
-      :bird: - Pet
+      :bird: - Summon
 
       **Moveset**
       :boom: - Basic Attack *costs 10 :cyclone:*
@@ -466,7 +466,7 @@ async def rebirth(ctx):
          embedVar1.add_field(name=f"Rebirth Level: {user_is_validated['REBIRTH']}\nRebirth Cost: :coin:{'{:,}'.format(rebirthCost)}", value=textwrap.dedent(f"""\
          **Rebirth Effects**
          New Starting Deck
-         Starting Pet Bond
+         Starting Summon Bond
          Increase Base ATK + 10
          Increase Base DEF + 10
          Increased :coin: drops + %10
@@ -821,7 +821,7 @@ async def curse(amount, user):
          db.updateVaultNoFilter(vault, update_query)
 
 
-@slash.slash(name="Trade", description="Trade Cards, Titles, Arms, and Pets for other items", guild_ids=guild_ids)
+@slash.slash(name="Trade", description="Trade Cards, Titles, Arms, and Summons for other items", guild_ids=guild_ids)
 @commands.check(validate_user)
 async def trade(ctx, player: User, item: str):
    user2 = player
@@ -1013,7 +1013,7 @@ async def trade(ctx, player: User, item: str):
             await ctx.send("Trade ended. ")
 
 
-@slash.slash(name="Sell", description="Sell Cards, Titles, Arms, and Pets for coin", guild_ids=guild_ids)
+@slash.slash(name="Sell", description="Sell Cards, Titles, Arms, and Summons for coin", guild_ids=guild_ids)
 @commands.check(validate_user)
 async def sell(ctx, player: User, item: str):
    user2 = player
@@ -1069,7 +1069,7 @@ async def sell(ctx, player: User, item: str):
    elif p1_trade_item in p1_titles and len(p1_titles) == 1:
       await ctx.send("You cannot sell your only title.")
    elif p1_trade_item in p1_pet_names and len(p1_pet_names) == 1:
-      await ctx.send("You cannot sell your only Pet.")
+      await ctx.send("You cannot sell your only Summon.")
    elif p1_trade_item in p2_pet_names:
       await ctx.send(f"{user2.mention} already owns a {p1_trade_item}!.")
    else:
@@ -2309,7 +2309,7 @@ async def menu(ctx):
       embedVar1.set_image(url=story)
       embedVar1.set_footer(text=f"use /crown for additional assistance")
 
-      embedVar2 = discord.Embed(title= f"Profile Menu", description="View and Edit your Cards, Titles, Arms, and Pets to craft new Builds and strategies.", colour=0x7289da)
+      embedVar2 = discord.Embed(title= f"Profile Menu", description="View and Edit your Cards, Titles, Arms, and Summons to craft new Builds and strategies.", colour=0x7289da)
       embedVar2.set_image(url=profile)
       # embedVar2.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
       embedVar2.set_footer(text=f"use /crown for additional assistance")
