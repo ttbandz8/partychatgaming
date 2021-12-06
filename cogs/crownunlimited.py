@@ -7796,7 +7796,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 await ctx.send(f"{tupdate_durability_message['MESSAGE']}")
 
             tpet = {}
-            for pet in vault['PETS']:
+            for pet in tvault['PETS']:
                 if t_user['PET'] == pet['NAME']:
                     tpet = pet
 
