@@ -24,8 +24,8 @@ TITLE_DOESNT_EXIST="This title is currently unavailable. "
 TITLE_OUT_OF_STOCK="Out Of Stock. Check Back Later for new Inventory!"
 USER_DOESNT_HAVE_THE_Title="You do not own this card."
 
-PET_DOESNT_EXIST="This pet does not exist in our system."
-USER_DOESNT_HAVE_THE_PET="You do not own this pet. "
+PET_DOESNT_EXIST="This summon does not exist in our system."
+USER_DOESNT_HAVE_THE_PET="You do not own this summon. "
 
 TOO_FEW_PLAYERS_ON_TEAM="Not enough players for the team. "
 TOO_MANY_PLAYERS_ON_TEAM="Too many players for the team. "

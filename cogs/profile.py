@@ -17,7 +17,7 @@ from PIL import Image, ImageFont, ImageDraw
 import requests
 from collections import ChainMap
 import DiscordUtils
-from .crownunlimited import showcard, cardback, enhancer_mapping, enhancer_suffix_mapping
+from .crownunlimited import showcard, cardback, enhancer_mapping, title_enhancer_mapping, enhancer_suffix_mapping, title_enhancer_suffix_mapping, passive_enhancer_suffix_mapping
 import random
 import textwrap
 from discord_slash import cog_ext, SlashContext
@@ -45,7 +45,7 @@ class Profile(commands.Cog):
                 user_is_validated = db.queryUser(query)
                 if user_is_validated:
 
-                    accept = await ctx.send(f"{ctx.author.mention}, are you sure you want to delete your account? " + "\n" + "All of your wins, tournament wins, shop purchases and other earnings will be removed from the system can can not be recovered. ", delete_after=10)
+                    accept = await ctx.send(f"{ctx.author.mention}, are you sure you want to delete your account? " + "\n" + "All of your wins, tournament wins, shop purchases and other earnings will be removed from the system can can not be recovered. ", hidden=True)
                     for emoji in emojis:
                         await accept.add_reaction(emoji)
 
@@ -63,13 +63,13 @@ class Profile(commands.Cog):
                         if vault:
                             db.deleteVault(vault)
                         else:
-                            await ctx.send(delete_user_resp, delete_after=5)
+                            await ctx.send(delete_user_resp, hidden=True)
                         team = db.queryTeam()
                     except:
-                        await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=3)
+                        await ctx.send(m.RESPONSE_NOT_DETECTED, hidden=True)
                 
             else:
-                await ctx.send("Invalid command", delete_after=5)
+                await ctx.send("Invalid command", hidden=True)
 
 
     @cog_ext.cog_slash(description="View your current build", guild_ids=main.guild_ids)
@@ -240,12 +240,12 @@ class Profile(commands.Cog):
                 if o_title_universe == "Unbound":
                     titled =True
                     titleicon = "🎗️"
-                    titlemessage = f"🎗️ {title_name}: {title_passive_type} {title_passive_value}{enhancer_suffix_mapping[title_passive_type]}"
+                    titlemessage = f"🎗️ {title_name}: {title_passive_type} {title_passive_value}{title_enhancer_suffix_mapping[title_passive_type]}"
                     warningmessage= f""
                 elif o_title_universe == o_show:
                     titled =True
                     titleicon = "🎗️"
-                    titlemessage = f"🎗️ {title_name}: {title_passive_type} {title_passive_value}{enhancer_suffix_mapping[title_passive_type]}"
+                    titlemessage = f"🎗️ {title_name}: {title_passive_type} {title_passive_value}{title_enhancer_suffix_mapping[title_passive_type]}"
                     warningmessage= f""
                 cardtitle = {'TITLE': title_name}
                 card_file = showcard(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, cardtitle, focused, o_attack, o_defense, turn, move1ap, move2ap, move3ap, move4ap, move4enh, card_lvl, None)
@@ -260,8 +260,8 @@ class Profile(commands.Cog):
                 embedVar.set_author(name=textwrap.dedent(f"""\
                 {titlemessage}
                 🦾 {arm_name}: {arm_passive_type} {arm_passive_value}{enhancer_suffix_mapping[arm_passive_type]} {durability}
-                🐦 {active_pet['NAME']}: {active_pet['TYPE']}: {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]} | Bond {bond} {bond_message} / Level {lvl} {lvl_message}
-                🩸 {passive_name}: {passive_type} {passive_num}{enhancer_suffix_mapping[passive_type]}                
+                🧬 {active_pet['NAME']}: {active_pet['TYPE']}: {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]} | Bond {bond} {bond_message} / Level {lvl} {lvl_message}
+                🩸 {passive_name}: {passive_type} {passive_num}{passive_enhancer_suffix_mapping[passive_type]}                
                 """))
                 if card_lvl != 500:
                     embedVar.set_footer(text=f"EXP Until Next Level: {150 - card_exp}\nRebirth Buff: +{rebirthBonus}\n♾️ {traitmessage}\n{warningmessage}")
@@ -288,7 +288,7 @@ class Profile(commands.Cog):
                 await ctx.send("There's an issue with your build. Check with support.", hidden=True)
                 return
         else:
-            await ctx.send(m.USER_NOT_REGISTERED, delete_after=3)
+            await ctx.send(m.USER_NOT_REGISTERED, hidden=True)
 
 
     @cog_ext.cog_slash(description="Check all your cards", guild_ids=main.guild_ids)
@@ -354,10 +354,10 @@ class Profile(commands.Cog):
                     custom_function.selected_universe = str(button_ctx.origin_message.embeds[0].title)
                     user_query = {'DISNAME': str(ctx.author)}
                     response = db.updateUserNoFilter(user_query, {'$set': {'CARD': str(button_ctx.origin_message.embeds[0].title)}})
-                    await button_ctx.send(f":flower_playing_cards: **{str(button_ctx.origin_message.embeds[0].title)}** equipped.", hidden=True)
+                    await button_ctx.send(f":flower_playing_cards: **{str(button_ctx.origin_message.embeds[0].title)}** equipped.")
                     self.stop = True
 
-                await Paginator(bot=self.bot, ctx=ctx, hidden=True, pages=embed_list, timeout=60, customButton=[
+                await Paginator(bot=self.bot, ctx=ctx, pages=embed_list, timeout=60, customButton=[
             custom_button,
             custom_function,
         ]).run()
@@ -425,6 +425,7 @@ class Profile(commands.Cog):
                     :earth_africa: **Universe:** {resp['UNIVERSE']}"""), 
                     colour=0x7289da)
                     embedVar.set_thumbnail(url=avatar)
+                    embedVar.set_footer(text=f"{title_passive_type}: {title_enhancer_mapping[title_passive_type]}")
                     embed_list.append(embedVar)
                 
                 custom_button = manage_components.create_button(style=3, label="Equip")
@@ -434,10 +435,10 @@ class Profile(commands.Cog):
                     custom_function.selected_universe = str(button_ctx.origin_message.embeds[0].title)
                     user_query = {'DISNAME': str(ctx.author)}
                     response = db.updateUserNoFilter(user_query, {'$set': {'TITLE': str(button_ctx.origin_message.embeds[0].title)}})
-                    await button_ctx.send(f"🎗️ **{str(button_ctx.origin_message.embeds[0].title)}** equipped.", hidden=True)
+                    await button_ctx.send(f"🎗️ **{str(button_ctx.origin_message.embeds[0].title)}** equipped.")
                     self.stop = True
 
-                await Paginator(bot=self.bot, ctx=ctx, hidden=True, pages=embed_list, timeout=60, customButton=[
+                await Paginator(bot=self.bot, ctx=ctx, pages=embed_list, timeout=60, customButton=[
             custom_button,
             custom_function,
         ]).run()
@@ -517,10 +518,10 @@ class Profile(commands.Cog):
                     custom_function.selected_universe = str(button_ctx.origin_message.embeds[0].title)
                     user_query = {'DISNAME': str(ctx.author)}
                     response = db.updateUserNoFilter(user_query, {'$set': {'ARM': str(button_ctx.origin_message.embeds[0].title)}})
-                    await button_ctx.send(f":mechanical_arm: **{str(button_ctx.origin_message.embeds[0].title)}** equipped.", hidden=True)
+                    await button_ctx.send(f":mechanical_arm: **{str(button_ctx.origin_message.embeds[0].title)}** equipped.")
                     self.stop = True
 
-                await Paginator(bot=self.bot, ctx=ctx, hidden=True, pages=embed_list, timeout=60, customButton=[
+                await Paginator(bot=self.bot, ctx=ctx, pages=embed_list, timeout=60, customButton=[
                     custom_button,
                     custom_function,
                 ]).run()
@@ -587,7 +588,7 @@ class Profile(commands.Cog):
                     if pet_info:
                         pet_available = pet_info['AVAILABLE']
                         pet_exclusive = pet_info['EXCLUSIVE']
-                    icon = ":bird:"
+                    icon = "🧬"
                     if pet_available and pet_exclusive:
                         icon = ":fire:"
                     elif pet_available == False and pet_exclusive ==False:
@@ -601,6 +602,7 @@ class Profile(commands.Cog):
                     :microbe: **Type:** {pet['TYPE']}"""), 
                     colour=0x7289da)
                     embedVar.set_thumbnail(url=avatar)
+                    embedVar.set_footer(text=f"{pet['TYPE']}: {enhancer_mapping[pet['TYPE']]}")
                     embed_list.append(embedVar)
                 
                 custom_button = manage_components.create_button(style=3, label="Equip")
@@ -610,10 +612,10 @@ class Profile(commands.Cog):
                     custom_function.selected_universe = str(button_ctx.origin_message.embeds[0].title)
                     user_query = {'DISNAME': str(ctx.author)}
                     response = db.updateUserNoFilter(user_query, {'$set': {'PET': str(button_ctx.origin_message.embeds[0].title)}})
-                    await button_ctx.send(f":bird: **{str(button_ctx.origin_message.embeds[0].title)}** equipped.", hidden=True)
+                    await button_ctx.send(f"🧬 **{str(button_ctx.origin_message.embeds[0].title)}** equipped.")
                     self.stop = True
 
-                await Paginator(bot=self.bot, ctx=ctx, hidden=True, pages=embed_list, timeout=60, customButton=[
+                await Paginator(bot=self.bot, ctx=ctx, pages=embed_list, timeout=60, customButton=[
                     custom_button,
                     custom_function,
                 ]).run()
@@ -633,7 +635,7 @@ class Profile(commands.Cog):
                     'message': str(ex),
                     'trace': trace
                 }))
-                await ctx.send("There's an issue with your Pets list. Check with support.", hidden=True)
+                await ctx.send("There's an issue with your Summons list. Check with support.", hidden=True)
                 return
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
@@ -675,7 +677,7 @@ class Profile(commands.Cog):
                         embedVar.set_thumbnail(url=avatar)
                         embed_list.append(embedVar)
                 
-                await Paginator(bot=self.bot, ctx=ctx, hidden=True, pages=embed_list, timeout=60).run()
+                await Paginator(bot=self.bot, ctx=ctx, pages=embed_list, timeout=60).run()
 
             except Exception as ex:
                 trace = []
@@ -704,7 +706,7 @@ class Profile(commands.Cog):
         d = db.queryUser(query)
         vault = db.queryVault({'OWNER': d['DISNAME']})
         if not vault['QUESTS']:
-            await ctx.send("No Quests available at this time!, hidden=True")
+            await ctx.send("No Quests available at this time!", hidden=True)
             return
         if vault:
             try:
@@ -836,17 +838,17 @@ class Profile(commands.Cog):
             preset3_arm = list(deck[2].values())[2]
             preset3_pet = list(deck[2].values())[3]    
    
-            listed_options = [f"1️⃣ | {preset1_title} {preset1_card} and {preset1_pet}\n**Card**: {preset1_card}\n**Title**: {preset1_title}\n**Arm**: {preset1_arm}\n**Pet**: {preset1_pet}\n\n", 
-            f"2️⃣ | {preset2_title} {preset2_card} and {preset2_pet}\n**Card**: {preset2_card}\n**Title**: {preset2_title}\n**Arm**: {preset2_arm}\n**Pet**: {preset2_pet}\n\n", 
-            f"3️⃣ | {preset3_title} {preset3_card} and {preset3_pet}\n**Card**: {preset3_card}\n**Title**: {preset3_title}\n**Arm**: {preset3_arm}\n**Pet**: {preset3_pet}\n\n"]
+            listed_options = [f"1️⃣ | {preset1_title} {preset1_card} and {preset1_pet}\n**Card**: {preset1_card}\n**Title**: {preset1_title}\n**Arm**: {preset1_arm}\n**Summon**: {preset1_pet}\n\n", 
+            f"2️⃣ | {preset2_title} {preset2_card} and {preset2_pet}\n**Card**: {preset2_card}\n**Title**: {preset2_title}\n**Arm**: {preset2_arm}\n**Summon**: {preset2_pet}\n\n", 
+            f"3️⃣ | {preset3_title} {preset3_card} and {preset3_pet}\n**Card**: {preset3_card}\n**Title**: {preset3_title}\n**Arm**: {preset3_arm}\n**Summon**: {preset3_pet}\n\n"]
         
             embedVar = discord.Embed(title="What Preset would you like?", description=textwrap.dedent(f"""
             {"".join(listed_options)}
             """))
             embedVar.set_thumbnail(url=avatar)
-            # embedVar.add_field(name=f"Preset 1:{preset1_title} {preset1_card} and {preset1_pet}", value=f"Card: {preset1_card}\nTitle: {preset1_title}\nArm: {preset1_arm}\nPet: {preset1_pet}", inline=False)
-            # embedVar.add_field(name=f"Preset 2:{preset2_title} {preset2_card} and {preset2_pet}", value=f"Card: {preset2_card}\nTitle: {preset2_title}\nArm: {preset2_arm}\nPet: {preset2_pet}", inline=False)
-            # embedVar.add_field(name=f"Preset 3:{preset3_title} {preset3_card} and {preset3_pet}", value=f"Card: {preset3_card}\nTitle: {preset3_title}\nArm: {preset3_arm}\nPet: {preset3_pet}", inline=False)
+            # embedVar.add_field(name=f"Preset 1:{preset1_title} {preset1_card} and {preset1_pet}", value=f"Card: {preset1_card}\nTitle: {preset1_title}\nArm: {preset1_arm}\nSummon: {preset1_pet}", inline=False)
+            # embedVar.add_field(name=f"Preset 2:{preset2_title} {preset2_card} and {preset2_pet}", value=f"Card: {preset2_card}\nTitle: {preset2_title}\nArm: {preset2_arm}\nSummon: {preset2_pet}", inline=False)
+            # embedVar.add_field(name=f"Preset 3:{preset3_title} {preset3_card} and {preset3_pet}", value=f"Card: {preset3_card}\nTitle: {preset3_title}\nArm: {preset3_arm}\nSummon: {preset3_pet}", inline=False)
             util_buttons = [
                 manage_components.create_button(
                     style=ButtonStyle.red,
@@ -1007,10 +1009,10 @@ class Profile(commands.Cog):
             preset3_arm = list(deck[2].values())[2]
             preset3_pet = list(deck[2].values())[3]    
    
-            listed_options = [f"📝 | {current_title} {current_card} & {current_pet}\n**Card**: {current_card}\n**Title**: {current_title}\n**Arm**: {current_arm}\n**Pet**: {current_pet}\n\n",
-            f"1️⃣ | {preset1_title} {preset1_card} & {preset1_pet}\n**Card**: {preset1_card}\n**Title**: {preset1_title}\n**Arm**: {preset1_arm}\n**Pet**: {preset1_pet}\n\n", 
-            f"2️⃣ | {preset2_title} {preset2_card} & {preset2_pet}\n**Card**: {preset2_card}\n**Title**: {preset2_title}\n**Arm**: {preset2_arm}\n**Pet**: {preset2_pet}\n\n", 
-            f"3️⃣ | {preset3_title} {preset3_card} & {preset3_pet}\n**Card**: {preset3_card}\n**Title**: {preset3_title}\n**Arm**: {preset3_arm}\n**Pet**: {preset3_pet}\n\n"]
+            listed_options = [f"📝 | {current_title} {current_card} & {current_pet}\n**Card**: {current_card}\n**Title**: {current_title}\n**Arm**: {current_arm}\n**Summon**: {current_pet}\n\n",
+            f"1️⃣ | {preset1_title} {preset1_card} & {preset1_pet}\n**Card**: {preset1_card}\n**Title**: {preset1_title}\n**Arm**: {preset1_arm}\n**Summon**: {preset1_pet}\n\n", 
+            f"2️⃣ | {preset2_title} {preset2_card} & {preset2_pet}\n**Card**: {preset2_card}\n**Title**: {preset2_title}\n**Arm**: {preset2_arm}\n**Summon**: {preset2_pet}\n\n", 
+            f"3️⃣ | {preset3_title} {preset3_card} & {preset3_pet}\n**Card**: {preset3_card}\n**Title**: {preset3_title}\n**Arm**: {preset3_arm}\n**Summon**: {preset3_pet}\n\n"]
         
             embedVar = discord.Embed(title=f"Save Current Build", description=textwrap.dedent(f"""
             {"".join(listed_options)}

@@ -87,7 +87,7 @@ class Arm(commands.Cog):
 
         if bool(mintedArm):
             if mintedArm in arm_list:
-                await ctx.send(m.USER_ALREADY_HAS_ARM, delete_after=5, hidden=True)
+                await ctx.send(m.USER_ALREADY_HAS_ARM, hidden=True)
             else:
                 newBalance = currentBalance - cost
 
@@ -159,7 +159,7 @@ class Arm(commands.Cog):
                         owned = True
                         await ctx.send(response, hidden=True)
                 if not owned:
-                    await ctx.send(m.USER_DOESNT_HAVE_THE_ARM, delete_after=5, hidden=True)
+                    await ctx.send(m.USER_DOESNT_HAVE_THE_ARM, hidden=True)
                     return
             except Exception as ex:
                 trace = []
@@ -177,7 +177,7 @@ class Arm(commands.Cog):
                     'trace': trace
                 }))
         else:
-            await ctx.send("That arm doesn't exist.", delete_after=5, hidden=True)
+            await ctx.send("That arm doesn't exist.", hidden=True)
             return
            
 
@@ -242,7 +242,7 @@ class Arm(commands.Cog):
             await ctx.send(embed=embedVar, hidden=True)
 
         else:
-            await ctx.send(m.ARM_DOESNT_EXIST, delete_after=3, hidden=True)
+            await ctx.send(m.ARM_DOESNT_EXIST, hidden=True)
 
 def setup(bot):
     bot.add_cog(Arm(bot))

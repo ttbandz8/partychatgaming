@@ -15,7 +15,7 @@ from discord import Member
 from PIL import Image, ImageFont, ImageDraw
 import requests
 import random
-from .crownunlimited import showcard, cardback, enhancer_mapping, enhancer_suffix_mapping
+from .crownunlimited import showcard, cardback, enhancer_mapping, enhancer_suffix_mapping, passive_enhancer_suffix_mapping
 from discord_slash import cog_ext, SlashContext
 from discord_slash import SlashCommand
 from discord_slash.utils import manage_components
@@ -141,7 +141,7 @@ class Cards(commands.Cog):
 
                         if bool(mintedCard):
                             if mintedCard in vault['CARDS']:
-                                await ctx.send(m.USER_ALREADY_HAS_CARD, delete_after=5, hidden=True)
+                                await ctx.send(m.USER_ALREADY_HAS_CARD, hidden=True)
                             else:
                                 newBalance = currentBalance - cost
 
@@ -248,7 +248,7 @@ class Cards(commands.Cog):
             response = db.updateUserNoFilter(user_query, {'$set': {'CARD': str(card_name)}})
             await ctx.send(response, hidden=True)
         else:
-            await ctx.send(m.USER_DOESNT_HAVE_THE_CARD, delete_after=5, hidden=True)
+            await ctx.send(m.USER_DOESNT_HAVE_THE_CARD, hidden=True)
 
     @cog_ext.cog_slash(description="View a Card", guild_ids=main.guild_ids)
     async def viewcard(self, ctx, card: str):
@@ -381,7 +381,7 @@ class Cards(commands.Cog):
                 embedVar.set_author(name=textwrap.dedent(f"""\
                 {card_icon} {price_message}
                 Passive & Universe Trait
-                🩸 {passive_name}: {passive_type} {passive_num}{enhancer_suffix_mapping[passive_type]}
+                🩸 {passive_name}: {passive_type} {passive_num}{passive_enhancer_suffix_mapping[passive_type]}
                 ♾️ {traitmessage}
                 🏃 {o_speed}
                 """))
@@ -389,7 +389,7 @@ class Cards(commands.Cog):
 
                 await ctx.send(file=card_file, embed=embedVar, hidden=True)
             else:
-                await ctx.send(m.CARD_DOESNT_EXIST, delete_after=3, hidden=True)
+                await ctx.send(m.CARD_DOESNT_EXIST, hidden=True)
         except Exception as ex:
             trace = []
             tb = ex.__traceback__

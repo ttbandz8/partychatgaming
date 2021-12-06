@@ -101,8 +101,8 @@ class Universe(commands.Cog):
                 :reminder_ribbon: | **Title** - {dtitle}
                 :mechanical_arm: | **Arm** - {darm}
                 
-                :bird: | **Universe Pet ** - {dpet}
-                */petlist {universe_title}*
+                🧬 | **Universe Summons ** - {dpet}
+                */summonlist {universe_title}*
                 
                 :japanese_ogre: | **Universe Boss**
                 :flower_playing_cards: | **Card** - {boss}
