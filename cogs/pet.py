@@ -28,8 +28,8 @@ class Pet(commands.Cog):
         return await main.validate_user(ctx)
 
     @cog_ext.cog_slash(description="Equip Summon", guild_ids=main.guild_ids)
-    async def equipsummon(self, ctx, pet: str):
-        pet_name = pet
+    async def equipsummon(self, ctx, summon: str):
+        pet_name = summon
         user_query = {'DISNAME': str(ctx.author)}
         user = db.queryUser(user_query)
 
@@ -51,8 +51,8 @@ class Pet(commands.Cog):
             return
 
     @cog_ext.cog_slash(description="View a Summon", guild_ids=main.guild_ids)
-    async def viewsummon(self, ctx, pet: str):
-        pet = db.queryPet({'PET': {"$regex": f"^{str(pet)}$", "$options": "i"}})
+    async def viewsummon(self, ctx, summon: str):
+        pet = db.queryPet({'PET': {"$regex": f"^{str(summon)}$", "$options": "i"}})
         if pet:
             pet_pet = pet['PET']
             pet_show = pet['UNIVERSE']
