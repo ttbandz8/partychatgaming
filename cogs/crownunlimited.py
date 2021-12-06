@@ -13878,11 +13878,27 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                                                               timeout=120,
                                                                                                               check=check)
                                     if button_ctx.custom_id == "s":
-                                        print("SAVE INVOKED")
-                                        o_health = 0
-                                        await save_spot(self, ctx, universe, mode, currentopponent)
-                                        await discord.TextChannel.delete(private_channel, reason=None)
-                                        return
+                                        try:
+                                            o_health = 0
+                                            await save_spot(self, ctx, universe, mode, currentopponent)
+                                            await discord.TextChannel.delete(private_channel, reason=None)
+                                            return
+                                        except Exception as ex:
+                                            trace = []
+                                            tb = ex.__traceback__
+                                            while tb is not None:
+                                                trace.append({
+                                                    "filename": tb.tb_frame.f_code.co_filename,
+                                                    "name": tb.tb_frame.f_code.co_name,
+                                                    "lineno": tb.tb_lineno
+                                                })
+                                                tb = tb.tb_next
+                                            print(str({
+                                                'type': type(ex).__name__,
+                                                'message': str(ex),
+                                                'trace': trace
+                                            }))
+                                            
 
                                     # calculate data based on selected move
                                     if button_ctx.custom_id == "q" or button_ctx.custom_id == "Q":
