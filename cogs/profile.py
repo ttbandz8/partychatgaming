@@ -260,7 +260,7 @@ class Profile(commands.Cog):
                 embedVar.set_author(name=textwrap.dedent(f"""\
                 {titlemessage}
                 🦾 {arm_name}: {arm_passive_type} {arm_passive_value}{enhancer_suffix_mapping[arm_passive_type]} {durability}
-                🐦 {active_pet['NAME']}: {active_pet['TYPE']}: {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]} | Bond {bond} {bond_message} / Level {lvl} {lvl_message}
+                🧬 {active_pet['NAME']}: {active_pet['TYPE']}: {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]} | Bond {bond} {bond_message} / Level {lvl} {lvl_message}
                 🩸 {passive_name}: {passive_type} {passive_num}{passive_enhancer_suffix_mapping[passive_type]}                
                 """))
                 if card_lvl != 500:
@@ -588,7 +588,7 @@ class Profile(commands.Cog):
                     if pet_info:
                         pet_available = pet_info['AVAILABLE']
                         pet_exclusive = pet_info['EXCLUSIVE']
-                    icon = ":bird:"
+                    icon = "🧬"
                     if pet_available and pet_exclusive:
                         icon = ":fire:"
                     elif pet_available == False and pet_exclusive ==False:
@@ -612,7 +612,7 @@ class Profile(commands.Cog):
                     custom_function.selected_universe = str(button_ctx.origin_message.embeds[0].title)
                     user_query = {'DISNAME': str(ctx.author)}
                     response = db.updateUserNoFilter(user_query, {'$set': {'PET': str(button_ctx.origin_message.embeds[0].title)}})
-                    await button_ctx.send(f":bird: **{str(button_ctx.origin_message.embeds[0].title)}** equipped.")
+                    await button_ctx.send(f"🧬 **{str(button_ctx.origin_message.embeds[0].title)}** equipped.")
                     self.stop = True
 
                 await Paginator(bot=self.bot, ctx=ctx, pages=embed_list, timeout=60, customButton=[
@@ -635,7 +635,7 @@ class Profile(commands.Cog):
                     'message': str(ex),
                     'trace': trace
                 }))
-                await ctx.send("There's an issue with your Pets list. Check with support.", hidden=True)
+                await ctx.send("There's an issue with your Summons list. Check with support.", hidden=True)
                 return
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
@@ -838,17 +838,17 @@ class Profile(commands.Cog):
             preset3_arm = list(deck[2].values())[2]
             preset3_pet = list(deck[2].values())[3]    
    
-            listed_options = [f"1️⃣ | {preset1_title} {preset1_card} and {preset1_pet}\n**Card**: {preset1_card}\n**Title**: {preset1_title}\n**Arm**: {preset1_arm}\n**Pet**: {preset1_pet}\n\n", 
-            f"2️⃣ | {preset2_title} {preset2_card} and {preset2_pet}\n**Card**: {preset2_card}\n**Title**: {preset2_title}\n**Arm**: {preset2_arm}\n**Pet**: {preset2_pet}\n\n", 
-            f"3️⃣ | {preset3_title} {preset3_card} and {preset3_pet}\n**Card**: {preset3_card}\n**Title**: {preset3_title}\n**Arm**: {preset3_arm}\n**Pet**: {preset3_pet}\n\n"]
+            listed_options = [f"1️⃣ | {preset1_title} {preset1_card} and {preset1_pet}\n**Card**: {preset1_card}\n**Title**: {preset1_title}\n**Arm**: {preset1_arm}\n**Summon**: {preset1_pet}\n\n", 
+            f"2️⃣ | {preset2_title} {preset2_card} and {preset2_pet}\n**Card**: {preset2_card}\n**Title**: {preset2_title}\n**Arm**: {preset2_arm}\n**Summon**: {preset2_pet}\n\n", 
+            f"3️⃣ | {preset3_title} {preset3_card} and {preset3_pet}\n**Card**: {preset3_card}\n**Title**: {preset3_title}\n**Arm**: {preset3_arm}\n**Summon**: {preset3_pet}\n\n"]
         
             embedVar = discord.Embed(title="What Preset would you like?", description=textwrap.dedent(f"""
             {"".join(listed_options)}
             """))
             embedVar.set_thumbnail(url=avatar)
-            # embedVar.add_field(name=f"Preset 1:{preset1_title} {preset1_card} and {preset1_pet}", value=f"Card: {preset1_card}\nTitle: {preset1_title}\nArm: {preset1_arm}\nPet: {preset1_pet}", inline=False)
-            # embedVar.add_field(name=f"Preset 2:{preset2_title} {preset2_card} and {preset2_pet}", value=f"Card: {preset2_card}\nTitle: {preset2_title}\nArm: {preset2_arm}\nPet: {preset2_pet}", inline=False)
-            # embedVar.add_field(name=f"Preset 3:{preset3_title} {preset3_card} and {preset3_pet}", value=f"Card: {preset3_card}\nTitle: {preset3_title}\nArm: {preset3_arm}\nPet: {preset3_pet}", inline=False)
+            # embedVar.add_field(name=f"Preset 1:{preset1_title} {preset1_card} and {preset1_pet}", value=f"Card: {preset1_card}\nTitle: {preset1_title}\nArm: {preset1_arm}\nSummon: {preset1_pet}", inline=False)
+            # embedVar.add_field(name=f"Preset 2:{preset2_title} {preset2_card} and {preset2_pet}", value=f"Card: {preset2_card}\nTitle: {preset2_title}\nArm: {preset2_arm}\nSummon: {preset2_pet}", inline=False)
+            # embedVar.add_field(name=f"Preset 3:{preset3_title} {preset3_card} and {preset3_pet}", value=f"Card: {preset3_card}\nTitle: {preset3_title}\nArm: {preset3_arm}\nSummon: {preset3_pet}", inline=False)
             util_buttons = [
                 manage_components.create_button(
                     style=ButtonStyle.red,
@@ -1009,10 +1009,10 @@ class Profile(commands.Cog):
             preset3_arm = list(deck[2].values())[2]
             preset3_pet = list(deck[2].values())[3]    
    
-            listed_options = [f"📝 | {current_title} {current_card} & {current_pet}\n**Card**: {current_card}\n**Title**: {current_title}\n**Arm**: {current_arm}\n**Pet**: {current_pet}\n\n",
-            f"1️⃣ | {preset1_title} {preset1_card} & {preset1_pet}\n**Card**: {preset1_card}\n**Title**: {preset1_title}\n**Arm**: {preset1_arm}\n**Pet**: {preset1_pet}\n\n", 
-            f"2️⃣ | {preset2_title} {preset2_card} & {preset2_pet}\n**Card**: {preset2_card}\n**Title**: {preset2_title}\n**Arm**: {preset2_arm}\n**Pet**: {preset2_pet}\n\n", 
-            f"3️⃣ | {preset3_title} {preset3_card} & {preset3_pet}\n**Card**: {preset3_card}\n**Title**: {preset3_title}\n**Arm**: {preset3_arm}\n**Pet**: {preset3_pet}\n\n"]
+            listed_options = [f"📝 | {current_title} {current_card} & {current_pet}\n**Card**: {current_card}\n**Title**: {current_title}\n**Arm**: {current_arm}\n**Summon**: {current_pet}\n\n",
+            f"1️⃣ | {preset1_title} {preset1_card} & {preset1_pet}\n**Card**: {preset1_card}\n**Title**: {preset1_title}\n**Arm**: {preset1_arm}\n**Summon**: {preset1_pet}\n\n", 
+            f"2️⃣ | {preset2_title} {preset2_card} & {preset2_pet}\n**Card**: {preset2_card}\n**Title**: {preset2_title}\n**Arm**: {preset2_arm}\n**Summon**: {preset2_pet}\n\n", 
+            f"3️⃣ | {preset3_title} {preset3_card} & {preset3_pet}\n**Card**: {preset3_card}\n**Title**: {preset3_title}\n**Arm**: {preset3_arm}\n**Summon**: {preset3_pet}\n\n"]
         
             embedVar = discord.Embed(title=f"Save Current Build", description=textwrap.dedent(f"""
             {"".join(listed_options)}

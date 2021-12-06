@@ -645,7 +645,7 @@ class CrownUnlimited(commands.Cog):
             if banned_arms:
                 embedVar.add_field(name="🦾 Banned Arms", value="\n".join(banned_arms), inline=True)
             if banned_pets:
-                embedVar.add_field(name=":bird: Banned Pets", value="\n".join(banned_pets))
+                embedVar.add_field(name="🧬 Banned Summons", value="\n".join(banned_pets))
 
             if banned_universes:
                 embedVar.add_field(name=":ringed_planet: Banned Universes", value="\n".join(banned_universes),
@@ -1718,7 +1718,7 @@ class CrownUnlimited(commands.Cog):
                             util_buttons.append(
                                 manage_components.create_button(
                                     style=ButtonStyle.green,
-                                    label="🐦 15",
+                                    label="🧬 15",
                                     custom_id="6"
                                 )
                             )
@@ -2089,7 +2089,7 @@ class CrownUnlimited(commands.Cog):
 
                                         o_stamina = o_stamina - int(dmg['STAMINA_USED'])
 
-                                        embedVar = discord.Embed(title=f"{o_card.upper()} Summoned :bird: {opet_name}",
+                                        embedVar = discord.Embed(title=f"{o_card.upper()} Summoned 🧬 {opet_name}",
                                                                  colour=0xe91e63)
                                         embedVar.add_field(name=f"{opet_name} used **{opetmove_text}**!",
                                                            value=f"Enhanced **{opet_type}** by **{opet_dmg}**")
@@ -2939,7 +2939,7 @@ class CrownUnlimited(commands.Cog):
                                             o_max_health = round(o_max_health - dmg['DMG'])
                                         t_stamina = t_stamina - int(dmg['STAMINA_USED'])
 
-                                        embedVar = discord.Embed(title=f"{t_card.upper()} Summoned :bird: {tpet_name}",
+                                        embedVar = discord.Embed(title=f"{t_card.upper()} Summoned 🧬 {tpet_name}",
                                                                  colour=0xe91e63)
                                         embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!",
                                                            value=f"Enhanced **{tpet_type}** by **{tpet_dmg}**")
@@ -3648,7 +3648,7 @@ class CrownUnlimited(commands.Cog):
             o_card_passive_type = list(o_passive.values())[1]
             o_card_passive = list(o_passive.values())[0]
 
-            # Pet
+            # Summon
             opetmove_text = list(opet.keys())[3]  # Name of the ability
             opetmove_ap = (opet_bond * opet_lvl) + list(opet.values())[3]  # Ability Power
 
@@ -3863,7 +3863,7 @@ class CrownUnlimited(commands.Cog):
             t_card_passive_type = list(t_passive.values())[1]
             t_card_passive = list(t_passive.values())[0]
 
-            # TPet
+            # TSummon
             tpetmove_text = list(tpet.keys())[3]  # Name of the ability
             tpetmove_ap = (tpet_bond * tpet_lvl) + list(tpet.values())[3]  # Ability Power
             # tpetmove_type= list(tpet.values())[4]
@@ -4377,7 +4377,7 @@ class CrownUnlimited(commands.Cog):
                         #     util_buttons.append(
                         #             manage_components.create_button(
                         #             style=ButtonStyle.green,
-                        #             label="🐦 15",
+                        #             label="🧬 15",
                         #             custom_id = "6"
                         #         )
                         #     )
@@ -4403,7 +4403,7 @@ class CrownUnlimited(commands.Cog):
                         pet_msg_on_resolve = ""
 
                         if o_used_resolve:
-                            pet_msg_on_resolve = f"🐦 {enhancer_mapping[pet_enh_name]}"
+                            pet_msg_on_resolve = f"🧬 {enhancer_mapping[pet_enh_name]}"
                         tarm_message = ""
                         if tarm_barrier_active:
                             tarm_message = f"💠{tbarrier_count}"
@@ -4732,9 +4732,9 @@ class CrownUnlimited(commands.Cog):
                             #     #Resolve Check and Calculation
                             #     if o_used_resolve and o_used_focus and not o_pet_used:
                             #         if botActive:
-                            #             embedVar = discord.Embed(title=f"Pet Summons!", description=f"You've summoned {opet_name}", colour=0xe91e63)
-                            #             embedVar.add_field(name=f"Pet Enhancers!", value="Pet Enhancers cost 15 Stamina but do not count as the Summoners turn!")
-                            #             embedVar.set_footer(text=f"Pets will Level Up and build Bond as you win battles! Train up your pets to perform better in the field!")
+                            #             embedVar = discord.Embed(title=f"Summon Summons!", description=f"You've summoned {opet_name}", colour=0xe91e63)
+                            #             embedVar.add_field(name=f"Summon Enhancers!", value="Summon Enhancers cost 15 Stamina but do not count as the Summoners turn!")
+                            #             embedVar.set_footer(text=f"Summons will Level Up and build Bond as you win battles! Train up your pets to perform better in the field!")
                             #             await button_ctx.send(embed=embedVar)
                             #         o_enhancer_used=True
                             #         dmg = damage_cal(o_universe, o_card, opet_move, o_attack, o_defense, t_defense,o_stamina, o_enhancer_used, o_health, t_health, t_stamina,o_max_health, t_attack, o_special_move_description, turn_total, ocard_lvl_ap_buff)
@@ -4824,7 +4824,7 @@ class CrownUnlimited(commands.Cog):
 
                             #             o_stamina = o_stamina - int(dmg['STAMINA_USED'])
 
-                            #             embedVar = discord.Embed(title=f"{o_card.upper()} Summoned :bird: {opet_name}", colour=0xe91e63)
+                            #             embedVar = discord.Embed(title=f"{o_card.upper()} Summoned 🧬 {opet_name}", colour=0xe91e63)
                             #             embedVar.add_field(name=f"{opet_name} used **{opetmove_text}**!", value =f"Enhanced **{opet_type}**")
                             #             embedVar.set_thumbnail(url=opet_image)
                             #             await button_ctx.send(embed=embedVar)
@@ -6181,8 +6181,8 @@ class CrownUnlimited(commands.Cog):
         embeds = embed_list
         await paginator.run(embeds)
 
-    @cog_ext.cog_slash(description="View all Pets of a Universe you unlocked", guild_ids=main.guild_ids)
-    async def petlist(self, ctx: SlashContext, universe: str):
+    @cog_ext.cog_slash(description="View all Summons of a Universe you unlocked", guild_ids=main.guild_ids)
+    async def summonlist(self, ctx: SlashContext, universe: str):
         universe_data = db.queryUniverse({'TITLE': {"$regex": universe, "$options": "i"}})
         user = db.queryUser({'DISNAME': str(ctx.author)})
         list_of_pets = db.queryAllPetsBasedOnUniverses({'UNIVERSE': {"$regex": str(universe), "$options": "i"}})
@@ -6202,10 +6202,10 @@ class CrownUnlimited(commands.Cog):
                 available = ":red_circle:"
             if pet['EXCLUSIVE']:
                 dungeon_pets_details.append(
-                    f"{available} :bird: **{pet['PET']}**\n**{pet_ability}:** {pet_ability_power}\n**Type:** {pet_ability_type}\n")
+                    f"{available} 🧬 **{pet['PET']}**\n**{pet_ability}:** {pet_ability_power}\n**Type:** {pet_ability_type}\n")
             else:
                 tales_pets_details.append(
-                    f"{available} :bird: **{pet['PET']}**\n**{pet_ability}:** {pet_ability_power}\n**Type:** {pet_ability_type}\n")
+                    f"{available} 🧬 **{pet['PET']}**\n**{pet_ability}:** {pet_ability_power}\n**Type:** {pet_ability_type}\n")
 
         all_pets = []
         if tales_pets_details:
@@ -6232,16 +6232,16 @@ class CrownUnlimited(commands.Cog):
 
         # If it's not an array greater than 10, show paginationless embed
         if len(all_pets) < 10:
-            embedVar = discord.Embed(title=f"{universe} Pet List", description="\n".join(all_pets), colour=0x7289da)
-            embedVar.set_footer(text=f"{total_pets} Total Pets\n🟣 Dungeon Drop\n🟢 Tale Drop\n🔴 Boss Drop")
+            embedVar = discord.Embed(title=f"{universe} Summon List", description="\n".join(all_pets), colour=0x7289da)
+            embedVar.set_footer(text=f"{total_pets} Total Summons\n🟣 Dungeon Drop\n🟢 Tale Drop\n🔴 Boss Drop")
             await ctx.send(embed=embedVar)
 
         embed_list = []
         for i in range(0, len(pets_broken_up)):
-            globals()['embedVar%s' % i] = discord.Embed(title=f":dog: {universe_data['TITLE']} Pet List",
+            globals()['embedVar%s' % i] = discord.Embed(title=f":dog: {universe_data['TITLE']} Summon List",
                                                         description="\n".join(pets_broken_up[i]), colour=0x7289da)
             globals()['embedVar%s' % i].set_footer(
-                text=f"{total_pets} Total Pets\n🟣 Dungeon Drop\n🟢 Tale Drop\n🔴 Boss Drop\n/viewpet 'Pet Name' - View Pet Details")
+                text=f"{total_pets} Total Summons\n🟣 Dungeon Drop\n🟢 Tale Drop\n🔴 Boss Drop\n/viewpet 'Summon Name' - View Summon Details")
             embed_list.append(globals()['embedVar%s' % i])
 
         paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
@@ -6643,7 +6643,7 @@ async def destiny(player, opponent, mode):
         return
 
 
-async def petlevel(pet, player):
+async def summonlevel(pet, player):
     vault = db.queryVault({'OWNER': str(player)})
     petinfo = {}
     try:
@@ -6706,7 +6706,7 @@ async def petlevel(pet, player):
             'trace': trace
         }))
         await ctx.send(
-            "There's an issue with leveling your Pet. Please use /ff to close this channel and start anew. Alert support.")
+            "There's an issue with leveling your Summon. Please use /ff to close this channel and start anew. Alert support.")
         return
 
 
@@ -7498,7 +7498,7 @@ def cardback(d, max_health, health, max_stamina, stamina, resolved, arm, focused
                 pet_info = ""
             else:
                 back_name = d['NAME']
-                pet_info = f"🐦 {active_pet['NAME']}: {active_pet['TYPE']} {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]}"
+                pet_info = f"🧬 {active_pet['NAME']}: {active_pet['TYPE']} {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]}"
 
             
             # Level Message
@@ -9642,7 +9642,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                         {Crest_dict[uni['TITLE']]} **Number of Fights**: :crossed_swords: **{len(uni['CROWN_TALES'])}**
                         🎗️ **Universe Title**: {uni['UTITLE']}
                         🦾 **Universe Arm**: {uni['UARM']}
-                        🐦 **Universe Pet**: {uni['UPET']}
+                        🧬 **Universe Summon**: {uni['UPET']}
 
                         **Saved Game**: :crossed_swords: *{save_spot_text}*
                         """))
@@ -9658,7 +9658,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                         {Crest_dict[uni['TITLE']]} **Number of Fights**: :crossed_swords: **{len(uni['CROWN_TALES'])}**
                         🎗️ **Universe Title**: {uni['UTITLE']}
                         🦾 **Universe Arm**: {uni['UARM']}
-                        🐦 **Universe Pet**: {uni['UPET']}
+                        🧬 **Universe Summon**: {uni['UPET']}
 
                         **Saved Game**: :crossed_swords: *{save_spot_text}*
                         """))
@@ -9677,7 +9677,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                         {Crest_dict[uni['TITLE']]} **Number of Fights**: :crossed_swords: **{len(uni['CROWN_TALES'])}**
                         🎗️ **Universe Title**: {uni['UTITLE']}
                         🦾 **Universe Arm**: {uni['UARM']}
-                        🐦 **Universe Pet**: {uni['UPET']}
+                        🧬 **Universe Summon**: {uni['UPET']}
 
                         **Saved Game**: :crossed_swords: *{save_spot_text}*
                         """))
@@ -9693,7 +9693,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                         {Crest_dict[uni['TITLE']]} **Number of Fights**: :crossed_swords: **{len(uni['CROWN_TALES'])}**
                         🎗️ **Universe Title**: {uni['UTITLE']}
                         🦾 **Universe Arm**: {uni['UARM']}
-                        🐦 **Universe Pet**: {uni['UPET']}
+                        🧬 **Universe Summon**: {uni['UPET']}
 
                         **Saved Game**: :crossed_swords: *{save_spot_text}*
                         """))
@@ -9776,7 +9776,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                 {Crest_dict[uni_option['TITLE']]} **Number of Fights**: :fire: **{len(uni_option['DUNGEONS'])}**
                 🎗️ **Dungeon Title**: {uni_option['DTITLE']}
                 🦾 **Dungeon Arm**: {uni_option['DARM']}
-                🐦 **Dungeon Pet**: {uni_option['DPET']}
+                🧬 **Dungeon Summon**: {uni_option['DPET']}
 
                 **Saved Game**: :fire: *{save_spot_text}*
                 """))
@@ -9854,7 +9854,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                         {Crest_dict[uni]} **Boss**: :japanese_ogre: **{boss_info['NAME']}**
                         🎗️ **Boss Title**: {boss_info['TITLE']}
                         🦾 **Boss Arm**: {boss_info['ARM']}
-                        🐦 **Boss Pet**: {boss_info['PET']}
+                        🧬 **Boss Summon**: {boss_info['PET']}
 
                         """))
                         embedVar.set_image(url=boss_info['PATH'])
@@ -10612,7 +10612,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 util_buttons.append(
                                     manage_components.create_button(
                                         style=ButtonStyle.green,
-                                        label="🐦 15",
+                                        label="🧬 15",
                                         custom_id="6"
                                     )
                                 )
@@ -10630,7 +10630,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             util_action_row = manage_components.create_actionrow(*util_buttons)
 
                             if o_used_resolve:
-                                pet_msg_on_resolve = f"🐦 {enhancer_mapping[pet_enh_name]}"
+                                pet_msg_on_resolve = f"🧬 {enhancer_mapping[pet_enh_name]}"
                             tarm_message = ""
                             if tarm_barrier_active:
                                 tarm_message = f"💠{tbarrier_count}"
@@ -10982,13 +10982,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     # Resolve Check and Calculation
                                     if o_used_resolve and o_used_focus and not o_pet_used:
                                         if botActive:
-                                            embedVar = discord.Embed(title=f"Pet Summons!",
+                                            embedVar = discord.Embed(title=f"Summon Summons!",
                                                                      description=f"You've summoned {opet_name}",
                                                                      colour=0xe91e63)
-                                            embedVar.add_field(name=f"Pet Enhancers!",
-                                                               value="Pet Enhancers cost 15 Stamina but do not count as the Summoners turn!")
+                                            embedVar.add_field(name=f"Summon Enhancers!",
+                                                               value="Summon Enhancers cost 15 Stamina but do not count as the Summoners turn!")
                                             embedVar.set_footer(
-                                                text=f"Pets will Level Up and build Bond as you win battles! Train up your pets to perform better in the field!")
+                                                text=f"Summons will Level Up and build Bond as you win battles! Train up your pets to perform better in the field!")
                                             await button_ctx.send(embed=embedVar)
                                             await asyncio.sleep(5)
                                         o_enhancer_used = True
@@ -11101,7 +11101,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 embedVar.set_image(url="attachment://image.png")
                                             else:
                                                 embedVar = discord.Embed(
-                                                    title=f"{o_card.upper()} Summoned :bird: {opet_name}",
+                                                    title=f"{o_card.upper()} Summoned 🧬 {opet_name}",
                                                     colour=0xe91e63)
                                                 embedVar.add_field(name=f"{opet_name} used **{opetmove_text}**!",
                                                                    value=f"Enhanced **{opet_type}** by **{opet_dmg}**")
@@ -11582,7 +11582,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     util_buttons.append(
                                         manage_components.create_button(
                                             style=ButtonStyle.green,
-                                            label="🐦 15",
+                                            label="🧬 15",
                                             custom_id="6"
                                         )
                                     )
@@ -11600,7 +11600,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 util_action_row = manage_components.create_actionrow(*util_buttons)
                                 oarm_message =""
                                 if t_used_resolve:
-                                    tpet_msg_on_resolve = f"🐦 *{enhancer_mapping[tpet_enh_name]}*"
+                                    tpet_msg_on_resolve = f"🧬 *{enhancer_mapping[tpet_enh_name]}*"
                                 if oarm_barrier_active:
                                     oarm_message = f"💠{obarrier_count}"
                                 elif oarm_shield_active:
@@ -12019,7 +12019,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     embedVar.set_image(url="attachment://image.png")
                                                 else:
                                                     embedVar = discord.Embed(
-                                                        title=f"{t_card.upper()} Summoned :bird: {tpet_name}",
+                                                        title=f"{t_card.upper()} Summoned 🧬 {tpet_name}",
                                                         colour=0xe91e63)
                                                     embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!",
                                                                        value=f"Enhanced **{tpet_type}** by **{tpet_dmg}**")
@@ -12693,7 +12693,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             t_stamina = t_stamina - int(dmg['STAMINA_USED'])
 
                                             embedVar = discord.Embed(
-                                                title=f"{t_card.upper()} Summoned :bird: {tpet_name}", colour=0xe91e63)
+                                                title=f"{t_card.upper()} Summoned 🧬 {tpet_name}", colour=0xe91e63)
                                             embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!",
                                                                value=f"Enhanced **{tpet_type}** by **{tpet_dmg}**")
                                             embedVar.set_footer(text=f"{tpet_type}: {enhancer_mapping[tpet_type]}")
@@ -13815,7 +13815,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     util_buttons.append(
                                         manage_components.create_button(
                                             style=ButtonStyle.green,
-                                            label="🐦 15",
+                                            label="🧬 15",
                                             custom_id="6"
                                         )
                                     )
@@ -13842,7 +13842,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     components = [battle_action_row, util_action_row]
 
                                 if o_used_resolve:
-                                    pet_msg_on_resolve = f"🐦 {enhancer_mapping[pet_enh_name]}"
+                                    pet_msg_on_resolve = f"🧬 {enhancer_mapping[pet_enh_name]}"
                                 tarm_message = ""
                                 if tarm_barrier_active:
                                     tarm_message = f"💠{tbarrier_count}"
@@ -14292,7 +14292,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     await button_ctx.send(embed=embedVar)
                                                 else:
                                                     embedVar = discord.Embed(
-                                                        title=f"{o_card.upper()} Summoned :bird: {opet_name}",
+                                                        title=f"{o_card.upper()} Summoned 🧬 {opet_name}",
                                                         colour=0xe91e63)
                                                     embedVar.add_field(name=f"{opet_name} used **{opetmove_text}**!",
                                                                        value=f"Enhanced **{opet_type}** by **{opet_dmg}**")
@@ -15527,7 +15527,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         await button_ctx.send(embed=embedVar)
                                                     else:
                                                         embedVar = discord.Embed(
-                                                            title=f"{t_card.upper()} Summoned :bird: {tpet_name}",
+                                                            title=f"{t_card.upper()} Summoned 🧬 {tpet_name}",
                                                             colour=0xe91e63)
                                                         embedVar.add_field(
                                                             name=f"{tpet_name} used **{tpetmove_text}**!",
@@ -15663,7 +15663,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         await button_ctx.send(embed=embedVar)
                                                     else:
                                                         embedVar = discord.Embed(
-                                                            title=f"{t_card.upper()} Summoned :bird: {tpet_name}",
+                                                            title=f"{t_card.upper()} Summoned 🧬 {tpet_name}",
                                                             colour=0xe91e63)
                                                         embedVar.add_field(
                                                             name=f"{tpet_name} used **{tpetmove_text}**!",
@@ -15798,7 +15798,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     await button_ctx.send(embed=embedVar)
                                                 else:
                                                     embedVar = discord.Embed(
-                                                        title=f"{t_card.upper()} Summoned :bird: {tpet_name}",
+                                                        title=f"{t_card.upper()} Summoned 🧬 {tpet_name}",
                                                         colour=0xe91e63)
                                                     embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!",
                                                                        value=f"Enhanced **{tpet_type}** by **{tpet_dmg}**")
@@ -17200,7 +17200,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     await private_channel.send(embed=embedVar)
                                                 else:
                                                     embedVar = discord.Embed(
-                                                        title=f"{c_card.upper()} Summoned :bird: {cpet_name}",
+                                                        title=f"{c_card.upper()} Summoned 🧬 {cpet_name}",
                                                         colour=0xe91e63)
                                                     embedVar.add_field(name=f"{cpet_name} used **{cpetmove_text}**!",
                                                                        value=f"Enhanced **{cpet_type}** by **{cpet_dmg}**")
@@ -17611,7 +17611,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         util_buttons.append(
                                             manage_components.create_button(
                                                 style=ButtonStyle.green,
-                                                label="🐦 15",
+                                                label="🧬 15",
                                                 custom_id="6"
                                             )
                                         )
@@ -17639,7 +17639,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     carm_message = " "
                                     
                                     if c_used_resolve:
-                                        cpet_msg_on_resolve = f"🐦 {enhancer_mapping[pet_enh_name]}"
+                                        cpet_msg_on_resolve = f"🧬 {enhancer_mapping[pet_enh_name]}"
                                     if tarm_barrier_active:
                                         carm_message = f"💠{tbarrier_count}"
                                     elif tarm_shield_active:
@@ -18061,7 +18061,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         await button_ctx.send(embed=embedVar)
                                                     else:
                                                         embedVar = discord.Embed(
-                                                            title=f"{c_card.upper()} Summoned :bird: {cpet_name}",
+                                                            title=f"{c_card.upper()} Summoned 🧬 {cpet_name}",
                                                             colour=0xe91e63)
                                                         embedVar.add_field(
                                                             name=f"{cpet_name} used **{cpetmove_text}**!",
@@ -19107,7 +19107,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     await button_ctx.send(embed=embedVar)
                                                 else:
                                                     embedVar = discord.Embed(
-                                                        title=f"{t_card.upper()} Summoned :bird: {tpet_name}",
+                                                        title=f"{t_card.upper()} Summoned 🧬 {tpet_name}",
                                                         colour=0xe91e63)
                                                     embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!",
                                                                        value=f"Enhanced **{tpet_type}** by **{tpet_dmg}**")
@@ -19230,7 +19230,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     await button_ctx.send(embed=embedVar)
                                                 else:
                                                     embedVar = discord.Embed(
-                                                        title=f"{t_card.upper()} Summoned :bird: {tpet_name}",
+                                                        title=f"{t_card.upper()} Summoned 🧬 {tpet_name}",
                                                         colour=0xe91e63)
                                                     embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!",
                                                                        value=f"Enhanced **{tpet_type}** by **{tpet_dmg}**")
@@ -19932,7 +19932,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                      str(carm['ARM']), "N/A", "Boss", c['EXCLUSIVE'])
                             cfambank = await blessfamily(15000, cfam)
                             cteambank = await blessteam(15000, cteam)
-                            cpetlogger = await petlevel(cpet_name, user2)
+                            cpetlogger = await summonlevel(cpet_name, user2)
                             ccardlogger = await cardlevel(c_card, user2, c_universe, selected_universe, "Dungeon")
                             await bless(50, str(user2))
                             embedVar = discord.Embed(
@@ -19948,7 +19948,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         await bless(25000, str(ctx.author))
                         ofambank = await blessfamily(15000, ofam)
                         oteambank = await blessteam(15000, oteam)
-                        petlogger = await petlevel(opet_name, ouser)
+                        petlogger = await summonlevel(opet_name, ouser)
                         cardlogger = await cardlevel(o_card, ouser, o_universe, selected_universe, "Dungeon")
 
                         if crestsearch:
@@ -20015,7 +20015,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 o['EXCLUSIVE'])
                         questlogger = await quest(ouser, t_card, tale_or_dungeon_only)
                         destinylogger = await destiny(ouser, t_card, tale_or_dungeon_only)
-                        petlogger = await petlevel(opet_name, ouser)
+                        petlogger = await summonlevel(opet_name, ouser)
                         cardlogger = await cardlevel(o_card, ouser, o_universe, selected_universe, tale_or_dungeon_only)
                         if questlogger:
                             await private_channel.send(questlogger)
@@ -20516,7 +20516,7 @@ async def drops(player, universe, matchcount):
             if all_available_drop_pets:
                 if len(vault['PETS']) >= 150:
                     await bless(150, player)
-                    return f"You're maxed out on Pets! You earned :coin: 300 instead!"
+                    return f"You're maxed out on Summons! You earned :coin: 300 instead!"
 
                 pet_owned = False
                 for p in vault['PETS']:
@@ -20526,7 +20526,7 @@ async def drops(player, universe, matchcount):
                 if pet_owned:
 
                     await bless(150, player)
-                    return f"You own _Pet:_ **{pets[rand_pet]}**! Received extra + :coin: 150!"
+                    return f"You own _Summon:_ **{pets[rand_pet]}**! Received extra + :coin: 150!"
                 else:
 
                     selected_pet = db.queryPet({'PET': pets[rand_pet]})
@@ -20538,7 +20538,7 @@ async def drops(player, universe, matchcount):
                         'PETS': {'NAME': selected_pet['PET'], 'LVL': 0, 'EXP': 0, pet_ability_name: int(pet_ability_power),
                                 'TYPE': pet_ability_type, 'BOND': 0, 'BONDEXP': 0, 'PATH': selected_pet['PATH']}}})
                     await bless(50, player)
-                    return f"You earned _Pet:_ **{pets[rand_pet]}** + :coin: 50!"
+                    return f"You earned _Summon:_ **{pets[rand_pet]}** + :coin: 50!"
             else:
                 await bless(150, player)
                 return f"You earned :coin: **150**!"
@@ -20746,7 +20746,7 @@ async def dungeondrops(player, universe, matchcount):
         elif drop_rate <= pet_drop and drop_rate > arm_drop:
             if len(vault['PETS']) >= 150:
                 await bless(3000, player)
-                return f"You're maxed out on Pets! You earned :coin: 3000 instead!"
+                return f"You're maxed out on Summons! You earned :coin: 3000 instead!"
             pet_owned = False
             for p in vault['PETS']:
                 if p['NAME'] == pets[rand_pet]:
@@ -20754,7 +20754,7 @@ async def dungeondrops(player, universe, matchcount):
 
             if pet_owned:
                 await bless(1800, player)
-                return f"You own _Pet:_ **{pets[rand_pet]}**! Received extra + :coin: 1800!"
+                return f"You own _Summon:_ **{pets[rand_pet]}**! Received extra + :coin: 1800!"
             else:
                 selected_pet = db.queryPet({'PET': pets[rand_pet]})
                 pet_ability_name = list(selected_pet['ABILITIES'][0].keys())[0]
@@ -20765,7 +20765,7 @@ async def dungeondrops(player, universe, matchcount):
                     'PETS': {'NAME': selected_pet['PET'], 'LVL': 0, 'EXP': 0, pet_ability_name: int(pet_ability_power),
                              'TYPE': pet_ability_type, 'BOND': 0, 'BONDEXP': 0, 'PATH': selected_pet['PATH']}}})
                 await bless(100, player)
-                return f"You earned _Pet:_ **{pets[rand_pet]}** + :coin: 100!"
+                return f"You earned _Summon:_ **{pets[rand_pet]}** + :coin: 100!"
         elif drop_rate <= card_drop and drop_rate > pet_drop:
             if len(vault['CARDS']) >= 150:
                 await bless(5000, player)
@@ -20902,7 +20902,7 @@ async def bossdrops(player, universe):
         elif drop_rate <= pet_drop and drop_rate > arm_drop:
             if len(vault['PETS']) >= 150:
                 await bless(8000, player)
-                return f"You're maxed out on Pets! You earned :coin: 8000 instead!"
+                return f"You're maxed out on Summons! You earned :coin: 8000 instead!"
             selected_pet = db.queryPet({'PET': pets[rand_pet]})
             pet_ability_name = list(selected_pet['ABILITIES'][0].keys())[0]
             pet_ability_power = list(selected_pet['ABILITIES'][0].values())[0]
@@ -20940,7 +20940,7 @@ async def bossdrops(player, universe):
         elif drop_rate <= boss_pet_drop and drop_rate > boss_arm_drop:
             if len(vault['PETS']) >= 150:
                 await bless(10000, player)
-                return f"You're maxed out on Pets! You earned :coin: **10,000** instead!"
+                return f"You're maxed out on Summons! You earned :coin: **10,000** instead!"
             selected_pet = db.queryPet({'PET': boss['PET']})
             pet_ability_name = list(selected_pet['ABILITIES'][0].keys())[0]
             pet_ability_power = list(selected_pet['ABILITIES'][0].values())[0]
@@ -20950,7 +20950,7 @@ async def bossdrops(player, universe):
                 'PETS': {'NAME': selected_pet['PET'], 'LVL': 0, 'EXP': 0, pet_ability_name: int(pet_ability_power),
                          'TYPE': pet_ability_type, 'BOND': 0, 'BONDEXP': 0, 'PATH': selected_pet['PATH']}}})
             await bless(10000, player)
-            return f"You earned the Exclusive Boss Pet:  {boss['PET']} + :coin: **10,000**!"
+            return f"You earned the Exclusive Boss Summon:  {boss['PET']} + :coin: **10,000**!"
         elif drop_rate <= boss_card_drop and drop_rate > boss_pet_drop:
             if len(vault['CARDS']) >= 150:
                 await bless(10000, player)
