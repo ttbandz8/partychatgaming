@@ -7413,6 +7413,207 @@ def showcard(d, max_health, health, max_stamina, stamina, resolved, title, focus
         return
 
 
+def showsummon(summon, lvl, bond):
+    # Card Name can be 16 Characters before going off Card
+    # Lower Card Name Font once after 16 characters
+    try:
+        
+        im = Image.open(requests.get(url, stream=True).raw)
+
+        draw = ImageDraw.Draw(im)
+
+        # Font Size Adjustments
+        # Name not go over Card
+        name_font_size = 62
+        if len(list(d['NAME'])) >= 16 and not resolved:
+            name_font_size = 45
+        if len(list(d['RNAME'])) >= 16 and resolved:
+            name_font_size = 45
+
+        header = ImageFont.truetype("YesevaOne-Regular.ttf", name_font_size)
+        s = ImageFont.truetype("Roboto-Bold.ttf", 22)
+        h = ImageFont.truetype("YesevaOne-Regular.ttf", 37)
+        m = ImageFont.truetype("Roboto-Bold.ttf", 25)
+        r = ImageFont.truetype("Freedom-10eM.ttf", 40)
+        lvl_font = ImageFont.truetype("Neuton-Bold.ttf", 68)
+        health_and_stamina_font = ImageFont.truetype("Neuton-Light.ttf", 41)
+        attack_and_shield_font = ImageFont.truetype("Neuton-Bold.ttf", 48)
+        moveset_font = ImageFont.truetype("antonio.regular.ttf", 30)
+        rhs = ImageFont.truetype("destructobeambb_bold.ttf", 35)
+        stats = ImageFont.truetype("Freedom-10eM.ttf", 30)
+        card_details_font_size = ImageFont.truetype("destructobeambb_bold.ttf", 25)
+        card_levels = ImageFont.truetype("destructobeambb_bold.ttf", 40)
+        engagement_basic = 0
+        engagement_special = 0
+        engagement_ultimate = 0
+        ebasic = '💢'
+        especial = '💢'
+        eultimate = '💢'
+        if op_defense is None:
+            ebasic = ' '
+            especial = ' '
+            eultimate = ' '
+        else:
+            defensepower = op_defense - attack
+            if defensepower <=0:
+                defensepower = 1
+            basic = ((attack + ap1) / defensepower)
+            if basic > (ap1 * 1.5):
+                engagement_basic = 2
+                ebasic = '‼️'
+            elif basic < (ap1 / 2):
+                engagement_basic = 1
+                ebasic = '❕'
+        
+                
+            special = ((attack + ap2) / defensepower)
+            if special > (ap2 * 1.5):
+                engagement_special = 2
+                especial = '‼️'
+            elif special < (ap2 / 2):
+                engagement_special = 1
+                especial = '❕'
+    
+            ultimate = ((attack + ap3) / defensepower)
+            if ultimate > (ap3 * 1.5):
+                engagement_ultimate = 2
+                eultimate = '‼️'
+            elif ultimate < (ap3 / 2):
+                engagement_ultimate = 1
+                eultimate = '❕'
+
+        if health == max_health:
+            health_bar = f"{max_health}"
+        else:
+            health_bar = f"{health}/{max_health}"
+
+        # Character & Title Name
+        if not resolved:
+            draw.text((600, 80), d['NAME'], (255, 255, 255), font=header, stroke_width=1, stroke_fill=(0, 0, 0),
+                        align="left")
+        if resolved:
+            if d['RNAME'] != "":
+                draw.text((600, 80), d['RNAME'], (255, 255, 255), font=header, stroke_width=1, stroke_fill=(0, 0, 0),
+                        align="left")
+            else:
+                draw.text((600, 80), d['NAME'], (255, 255, 255), font=header, stroke_width=1, stroke_fill=(0, 0, 0),
+                        align="left")
+
+        # draw.text((602, 150), title['TITLE'], (255, 255, 255), font=h, stroke_width=1, stroke_fill=(0, 0, 0),
+        #           align="left")
+
+        # Level
+        lvl_sizing = (89, 70)
+        if int(lvl) > 9:
+            lvl_sizing = (75, 70)
+        if int(lvl) > 99:
+            lvl_sizing = (55, 70)
+        draw.text(lvl_sizing, f"{lvl}", (255, 255, 255), font=lvl_font, stroke_width=1, stroke_fill=(0, 0, 0),
+                    align="center")
+
+        # Health & Stamina
+        draw.text((730, 417), health_bar, (255, 255, 255), font=health_and_stamina_font, stroke_width=1,
+                    stroke_fill=(0, 0, 0), align="left")
+        draw.text((730, 457), f"{stamina}", (255, 255, 255), font=health_and_stamina_font, stroke_width=1,
+                    stroke_fill=(0, 0, 0), align="left")
+
+        # Attack & Shield (Defense)
+        a_sizing = (89, 515)
+        d_sizing = (1062, 515)
+        if int(attack) > 99:
+            a_sizing = (78, 515)
+        if int(defense) > 99:
+            d_sizing = (1048, 515)
+
+        draw.text(a_sizing, f"{round(attack)}", (255, 255, 255), font=attack_and_shield_font, stroke_width=1,
+                    stroke_fill=(0, 0, 0), align="center")
+        draw.text(d_sizing, f"{round(defense)}", (255, 255, 255), font=attack_and_shield_font, stroke_width=1,
+                    stroke_fill=(0, 0, 0), align="center")
+
+        # Moveset Start
+        moveset = d['MOVESET']
+        move1 = moveset[0]
+        move1_ap = ap1
+        move1_text = f"💥 {list(move1.keys())[0]}: {move1_ap} {ebasic}"
+
+        move2 = moveset[1]
+        move2_ap = ap2
+        move2_text = f"☄️ {list(move2.keys())[0]}: {move2_ap} {especial}"
+
+        move3 = moveset[2]
+        move3_ap = ap3
+        move3_text = f"🏵️ {list(move3.keys())[0]}: {move3_ap} {eultimate}"
+
+        move_enhanced = moveset[3]
+        move_enhanced_ap = enh1
+        move_enhanced_name = enhname
+        turn_crit = False
+        if enhname in Turn_Enhancer_Check:
+            if turn_total == 0:
+                move_enhanced_ap = round(enh1)
+            elif turn_total % 10 == 0:
+                move_enhanced_ap = round(enh1 * .50)
+                turn_crit == True
+            elif turn_total >= 1:
+                move_enhanced_ap = round(enh1 / turn_total)
+            else:
+                move_enhanced_ap = enh1
+        elif enhname in Damage_Enhancer_Check:
+            if turn_total > 0:
+                move_enhanced_ap = round(enh1 * turn_total)
+            else:
+                move_enhanced_ap = enh1
+        if not turn_crit:
+            move_enhanced_text = f"🦠 {list(move_enhanced.keys())[0]}: {move_enhanced_name} {move_enhanced_ap}{enhancer_suffix_mapping[enhname]}"
+        else:
+            move_enhanced_text = f"🎇 {list(move_enhanced.keys())[0]}: {move_enhanced_name} {move_enhanced_ap}{enhancer_suffix_mapping[enhname]}"
+
+        # attack_stat = f"🗡️{round(attack)}"
+        # defense_stat = f"🛡️{round(defense)}"
+        with Pilmoji(im) as pilmoji:
+            pilmoji.text((602, 150), f"🎗️ {title['TITLE']}", (255, 255, 255), font=h, stroke_width=1, stroke_fill=(0, 0, 0),
+                    align="left")
+            pilmoji.text((600, 250), move1_text.strip(), (255, 255, 255), font=moveset_font, stroke_width=2,
+                            stroke_fill=(0, 0, 0))
+            pilmoji.text((600, 290), move2_text.strip(), (255, 255, 255), font=moveset_font, stroke_width=2,
+                            stroke_fill=(0, 0, 0))
+            pilmoji.text((600, 330), move3_text.strip(), (255, 255, 255), font=moveset_font, stroke_width=2,
+                            stroke_fill=(0, 0, 0))
+            pilmoji.text((600, 370), move_enhanced_text.strip(), (255, 255, 255), font=moveset_font, stroke_width=2,
+                            stroke_fill=(0, 0, 0))
+
+            # pilmoji.text((40, 545), "🗡️", (255, 255, 255), font=moveset_font, stroke_width=2,
+            #              stroke_fill=(0, 0, 0))
+            # pilmoji.text((1000, 545), "🛡️", (255, 255, 255), font=moveset_font, stroke_width=2,
+            #              stroke_fill=(0, 0, 0))
+        # Moveset End
+
+        with BytesIO() as image_binary:
+            im.save(image_binary, "PNG")
+            image_binary.seek(0)
+            # await ctx.send(file=discord.File(fp=image_binary,filename="image.png"))
+            file = discord.File(fp=image_binary,filename="image.png")
+            return file
+
+    except Exception as ex:
+        trace = []
+        tb = ex.__traceback__
+        while tb is not None:
+            trace.append({
+                "filename": tb.tb_frame.f_code.co_filename,
+                "name": tb.tb_frame.f_code.co_name,
+                "lineno": tb.tb_lineno
+            })
+            tb = tb.tb_next
+        print(str({
+            'type': type(ex).__name__,
+            'message': str(ex),
+            'trace': trace
+        }))
+        return
+
+
+
 def cardback(d, max_health, health, max_stamina, stamina, resolved, arm, focused, attack, defense, turn_total, passive_name,
              traitmessage, lvl, price_message, card_icon, passive_type, passive_num, active_pet, pet_ability_power, card_exp):
     # Card Name can be 16 Characters before going off Card
