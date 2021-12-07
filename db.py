@@ -579,24 +579,10 @@ def altQueryVault(query):
     return data
 
 '''Delete Vault'''
-def deleteVault(vaults):
+def deleteVault(vault):
     try:
-        if isinstance(vaults, list):
-            for vault in vaults:
-                exists = vault_exist(vault)
-                if exists:
-                    vault_col.delete_one({'OWNER': vault['OWNER']})
-                    return "Vault removed from the system. "
-                else:
-                    return "Vault does not exist in the system. "
-        else:
-            exists = vault_exist({'OWNER': vaults['OWNER']})
-            if exists:
-                vault_col.delete_one({'OWNER': vaults['OWNER']})
-                return "Vault has been removed from the system. "
-            else:
-                return "Vault does not exist in the system. "
-
+        vault_col.delete_one({'OWNER': vault['OWNER']})
+        return "Vault removed from the system. "
     except:
         print("Delete Vault failed.")
 
@@ -1304,24 +1290,10 @@ def createUsers(users):
         data = users_col.insert_one(users)
         return True
     
-def deleteUser(users):
+def deleteUser(user):
     try:
-        if isinstance(users, list):
-            for user in users:
-                exists = user_exists(user)
-                if exists:
-                    users_col.delete_one({'DISNAME': user['DISNAME']})
-                    return "User removed from the system. "
-                else:
-                    return "User does not exist in the system. "
-        else:
-            exists = user_exists({'DISNAME': users['DISNAME']})
-            if exists:
-                users_col.delete_one({'DISNAME': users['DISNAME']})
-                return "User has been removed from the system. "
-            else:
-                return "User does not exist in the system. "
-
+        users_col.delete_one({'DISNAME': user})
+        return "User removed from the system. "
     except:
         print("Delete User failed.")
 

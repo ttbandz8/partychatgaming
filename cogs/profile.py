@@ -36,40 +36,51 @@ class Profile(commands.Cog):
     async def cog_check(self, ctx):
         return await main.validate_user(ctx)
 
-    @cog_ext.cog_slash(description="Delete your account (password - IWANTTODELETEMYACCOUNT)", guild_ids=main.guild_ids)
-    async def deleteaccount(self, ctx, account: User, password: str):
-        user = account
-        if password == 'IWANTTODELETEMYACCOUNT':
-            if str(ctx.author) == str(account):
-                query = {'DISNAME': str(ctx.author)}
-                user_is_validated = db.queryUser(query)
-                if user_is_validated:
+    @cog_ext.cog_slash(description="Delete your account", guild_ids=main.guild_ids)
+    async def deleteaccount(self, ctx):
+        user = str(ctx.author)
+        query = {'DISNAME': str(ctx.author)}
+        user_is_validated = db.queryUser(query)
+        if user_is_validated:
+            accept_buttons = [
+                manage_components.create_button(
+                    style=ButtonStyle.green,
+                    label="Yes",
+                    custom_id="yes"
+                ),
+                manage_components.create_button(
+                    style=ButtonStyle.blue,
+                    label="No",
+                    custom_id="no"
+                )
+            ]
+            accept_buttons_action_row = manage_components.create_actionrow(*accept_buttons)
 
-                    accept = await ctx.send(f"{ctx.author.mention}, are you sure you want to delete your account? " + "\n" + "All of your wins, tournament wins, shop purchases and other earnings will be removed from the system can can not be recovered. ", hidden=True)
-                    for emoji in emojis:
-                        await accept.add_reaction(emoji)
 
-                    def check(reaction, user):
-                        return (user == ctx.author and (str(reaction.emoji) == '👍')) or (user == ctx.author and (str(reaction.emoji) == '👎'))
+            await ctx.send(f"{ctx.author.mention}, are you sure you want to delete your account? " + "\n" + "All of your wins, purchases and other earnings will be removed from the system and can not be recovered. ", hidden=True, components=[accept_buttons_action_row])
 
-                    try:
-                        reaction, user = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
-                        if str(reaction.emoji) == '👎':
-                            await ctx.send("You're still here!")
-                            return
+            def check(button_ctx):
+                return button_ctx.author == ctx.author
 
-                        delete_user_resp = db.deleteUser(query)
-                        vault = db.queryVault({'OWNER': user_is_validated['DISNAME']})
-                        if vault:
-                            db.deleteVault(vault)
-                        else:
-                            await ctx.send(delete_user_resp, hidden=True)
-                        team = db.queryTeam()
-                    except:
-                        await ctx.send(m.RESPONSE_NOT_DETECTED, hidden=True)
-                
-            else:
-                await ctx.send("Invalid command", hidden=True)
+            try:
+                button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[accept_buttons_action_row], timeout=120,check=check)
+
+                if button_ctx.custom_id == "no":
+                    await button_ctx.send("Account not deleted.")
+                    return
+
+                if button_ctx.custom_id == "yes":
+                    delete_user_resp = db.deleteUser(user)
+                    vault = db.queryVault({'OWNER': user})
+                    if vault:
+                        db.deleteVault(vault)
+
+                    await button_ctx.send("Account successfully deleted.", hidden=True)
+
+            except:
+                await ctx.send(m.RESPONSE_NOT_DETECTED, hidden=True) 
+        else:
+            await ctx.send("You aren't registered.", hidden=True)
 
 
     @cog_ext.cog_slash(description="View your current build", guild_ids=main.guild_ids)
