@@ -404,7 +404,7 @@ async def register(ctx):
       **Accessories**
       :reminder_ribbon: - Title for Card
       :mechanical_arm: - Arm for Card
-      :bird: - Summon
+      🧬 - Summon
 
       **Moveset**
       :boom: - Basic Attack *costs 10 :cyclone:*

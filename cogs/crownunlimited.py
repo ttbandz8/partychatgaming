@@ -2093,8 +2093,8 @@ class CrownUnlimited(commands.Cog):
                                                                  colour=0xe91e63)
                                         embedVar.add_field(name=f"{opet_name} used **{opetmove_text}**!",
                                                            value=f"Enhanced **{opet_type}** by **{opet_dmg}**")
-                                        embedVar.set_footer(text=f"{opet_type}: {enhancer_mapping[opet_type]}")
-                                        await asyncio.sleep(2)
+                                        
+                                        # await asyncio.sleep(2)
                                         embedVar.set_image(url="attachment://image.png")
                                         await button_ctx.send(embed=embedVar)
                                         turn = 0
@@ -2943,7 +2943,7 @@ class CrownUnlimited(commands.Cog):
                                                                  colour=0xe91e63)
                                         embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!",
                                                            value=f"Enhanced **{tpet_type}** by **{tpet_dmg}**")
-                                        embedVar.set_footer(text=f"{tpet_type}: {enhancer_mapping[tpet_type]}")
+                                        
                                         
                                         embedVar.set_image(url="attachment://image.png")
                                         await private_channel.send(embed=embedVar)
@@ -4428,7 +4428,7 @@ class CrownUnlimited(commands.Cog):
                                 oarm_passive_value = 0
                         embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}", color=0xe74c3c)
                         embedVar.set_author(name=f"🦾 {oarm_name} - {oarm_passive_type} {oarm_passive_value} {enhancer_suffix_mapping[oarm_passive_type]}\n{pet_msg_on_resolve}")
-                        await asyncio.sleep(2)
+                        # await asyncio.sleep(2)
                         embedVar.set_image(url="attachment://image.png")
                         embedVar.set_footer(
                             text=f"{t_card}: ❤️{t_health} 🌀{t_stamina} 🗡️{t_attack}/🛡️{t_defense} {tarm_message}",
@@ -4826,7 +4826,7 @@ class CrownUnlimited(commands.Cog):
 
                             #             embedVar = discord.Embed(title=f"{o_card.upper()} Summoned 🧬 {opet_name}", colour=0xe91e63)
                             #             embedVar.add_field(name=f"{opet_name} used **{opetmove_text}**!", value =f"Enhanced **{opet_type}**")
-                            #             await asyncio.sleep(2)
+                            #             # await asyncio.sleep(2)
                             #             await button_ctx.send(embed=embedVar)
                             #             turn=0
                             #         else:
@@ -6710,15 +6710,8 @@ async def summonlevel(pet, player):
         return
 
 
-async def cardlevel(card: str, player: str, card_universe: str, mode_universe: str, mode: str):
+async def cardlevel(card: str, player: str, mode: str):
     vault = db.queryVault({'OWNER': str(player)})
-    mode_uni = db.queryUniverse({'TITLE': mode_universe})
-    mode_tier = mode_uni['TIER']
-    multiplier = 0
-    if mode == "Dungeon":
-        multiplier = mode_tier
-    uni = db.queryUniverse({'TITLE': card_universe})
-    tier = uni['TIER']
     cardinfo = {}
     for x in vault['CARD_LEVELS']:
         if x['CARD'] == str(card):
@@ -6728,18 +6721,11 @@ async def cardlevel(card: str, player: str, card_universe: str, mode_universe: s
     lvl_req = 150
     exp = cardinfo['EXP']
     exp_gain = 0
-    if tier == 1:
-        exp_gain = 6 + mode_tier + multiplier
-    if tier == 2:
-        exp_gain = 4 + mode_tier + multiplier
-    if tier == 3:
-        exp_gain = 2 + mode_tier + multiplier
-    if tier == 4:
-        exp_gain = 1 + mode_tier + multiplier
-    if tier == 5:
-        exp_gain = 1 + mode_tier + multiplier
-    if tier == 9:
-        exp_gain = 3 + mode_tier + multiplier
+    if mode == "Dungeon":
+        exp_gain = 10
+    if mode == "Tales":
+        exp_gain = 5
+
 
     hlt_buff = 0
     atk_def_buff = 0
@@ -7008,56 +6994,56 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, stamina, en
             else:
                 enhanced = round(ap * turn)
             if enhanced > op_health:
-                message = f'🦠 {move} used!\nOpponent has been reduced.'
+                message = f'{move} used!\nOpponent has been reduced.'
                 enhanced = op_health - 1
 
         if enh_type == 'ATK':
-            message = f'🦠 {move} used!\nIncreasing Attack by {enhanced}'
+            message = f'{move} used!\nIncreasing Attack by {enhanced}'
         elif enh_type == 'DEF':
-            message = f'🦠 {move} used!\nIncreasing Defense by {enhanced}'
+            message = f'{move} used!\nIncreasing Defense by {enhanced}'
         elif enh_type == 'STAM':
-            message = f'🦠 {move} used!\nIncreasing Stamina by {enhanced}'
+            message = f'{move} used!\nIncreasing Stamina by {enhanced}'
         elif enh_type == 'LIFE':
             if enhanced == 0:
-                message = f'🦠 {move} used!\nStealing {enhanced} Health \n*Your Health is full!*'
+                message = f'{move} used!\nStealing {enhanced} Health \n*Your Health is full!*'
             else:
-                message = f'🦠 {move} used!\nStealing {enhanced} Health'
+                message = f'{move} used!\nStealing {enhanced} Health'
         elif enh_type == 'DRAIN':
-            message = f'🦠 {move} used!\nDraining {enhanced} Stamina'
+            message = f'{move} used!\nDraining {enhanced} Stamina'
         elif enh_type == 'FLOG':
-            message = f'🦠 {move} used!\nStealing {enhanced} Attack'
+            message = f'{move} used!\nStealing {enhanced} Attack'
         elif enh_type == 'WITHER':
-            message = f'🦠 {move} used!\nStealing {enhanced} Defense'
+            message = f'{move} used!\nStealing {enhanced} Defense'
         elif enh_type == 'RAGE':
-            message = f'🦠 {move} used!\nSacrificing {enhanced} Defense, Increasing Attack by {enhanced}'
+            message = f'{move} used!\nSacrificing {enhanced} Defense, Increasing Attack by {enhanced}'
         elif enh_type == 'BRACE':
-            message = f'🦠 {move} used!\nSacrificing {enhanced} Attack, Increasing Defense by {enhanced}'
+            message = f'{move} used!\nSacrificing {enhanced} Attack, Increasing Defense by {enhanced}'
         elif enh_type == 'BZRK':
-            message = f'🦠 {move} used!\nSacrificing {enhanced} Health, Increasing Attack by {enhanced}'
+            message = f'{move} used!\nSacrificing {enhanced} Health, Increasing Attack by {enhanced}'
         elif enh_type == 'CRYSTAL':
-            message = f'🦠 {move} used!\nSacrifices {enhanced} Health, Increasing Defense by {enhanced}'
+            message = f'{move} used!\nSacrifices {enhanced} Health, Increasing Defense by {enhanced}'
         elif enh_type == 'WAVE' or enh_type == 'BLAST':
-            message = f'🦠 {move} used!\nDealing {round(enhanced)} {enh_type} Damage!'
+            message = f'{move} used!\nDealing {round(enhanced)} {enh_type} Damage!'
         elif enh_type == 'CREATION':
-            message = f'🦠 {move} used!\nHealing and Increasing Max Health by {round(enhanced)}'
+            message = f'{move} used!\nHealing and Increasing Max Health by {round(enhanced)}'
         elif enh_type == 'DESTRUCTION':
-            message = f'🦠 {move} used!\nDestroying {round(enhanced)} Max Health'
+            message = f'{move} used!\nDestroying {round(enhanced)} Max Health'
         elif enh_type == 'GROWTH':
-            message = f'🦠 {move} used!\nSacrificing {round(enhanced)} Max Health to Increase Attack and Defense by {round(enhanced * .5)}'
+            message = f'{move} used!\nSacrificing {round(enhanced)} Max Health to Increase Attack and Defense by {round(enhanced * .5)}'
         elif enh_type == 'STANCE':
-            message = f'🦠 {move} used!\nSwapping Attack and Defense, Increasing Attack to {enhanced}'
+            message = f'{move} used!\nSwapping Attack and Defense, Increasing Attack to {enhanced}'
         elif enh_type == 'CONFUSE':
-            message = f'🦠 {move} used!\nSwapping Opponent Attack and Defense, Decreasing Defense to {enhanced}'
+            message = f'{move} used!\nSwapping Opponent Attack and Defense, Decreasing Defense to {enhanced}'
         elif enh_type == 'HLT':
-            message = f'🦠 {move} used!\nHealing for  {enhanced}!'
+            message = f'{move} used!\nHealing for {enhanced}!'
         elif enh_type == 'FEAR':
-            message = f'🦠 {move} used!\nSacrificing {round(enhanced)} Max Health to Decrease Attack and Defense by {round(enhanced * .5)}'
+            message = f'{move} used!\nSacrificing {round(enhanced)} Max Health to Decrease Attack and Defense by {round(enhanced * .5)}'
         elif enh_type == 'SOULCHAIN':
-            message = f'🦠 {move} used!\nSynchronizing Stamina to {enhanced}'
+            message = f'{move} used!\nSynchronizing Stamina to {enhanced}'
         elif enh_type == 'GAMBLE':
-            message = f'🦠 {move} used!\nSynchronizing Health to {enhanced}'
+            message = f'{move} used!\nSynchronizing Health to {enhanced}'
         else:
-            message = f'🦠 {move} used!\ninflicts {enh_type}'
+            message = f'{move} used!\ninflicts {enh_type}'
 
         response = {"DMG": enhanced, "MESSAGE": message, "STAMINA_USED": move_stamina,
                     "CAN_USE_MOVE": can_use_move_flag, "ENHANCED_TYPE": enh_type, "ENHANCE": True}
@@ -7455,7 +7441,7 @@ def showsummon(url, summon, message, lvl, bond):
         draw.text((1096, 65), f"{bond}", (255, 255, 255), font=lvl_font, stroke_width=1, stroke_fill=(0, 0, 0),
                     align="center")
 
-        lines = textwrap.wrap(message, width=40)
+        lines = textwrap.wrap(message, width=28)
         y_text = 330
         for line in lines:
             font=moveset_font
@@ -10460,7 +10446,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 embedVar.set_footer(
                                     text="Select a move to get started. DON'T WORRY! When your STAMINA depletes to 0 your character will Focus to REPLENISH!")
                                 await private_channel.send(embed=embedVar)
-                                await asyncio.sleep(2)
+                                # await asyncio.sleep(2)
                             else:
                                 # await ctx.send(f"{user1.mention}{user2.mention}")
                                 embedVar = discord.Embed(
@@ -10510,7 +10496,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 embedVar.set_footer(
                                     text="After you entered focus state once, a transformation is possible by strengthening your RESOLVE! **Press 5**")
                                 await ctx.send(embed=embedVar)
-                                await asyncio.sleep(2)
+                                # await asyncio.sleep(2)
                             # Universal Trait
                             # fortitude or luck is based on health
                             fortitude = 0.0
@@ -10764,7 +10750,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     oarm_passive_value = 0
                             embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}", color=0xe74c3c)
                             embedVar.set_author(name=f"🦾 {oarm_name} - {oarm_passive_type} {oarm_passive_value} {enhancer_suffix_mapping[oarm_passive_type]}\n{pet_msg_on_resolve}")
-                            await asyncio.sleep(2)
+                            # await asyncio.sleep(2)
                             embedVar.set_image(url="attachment://image.png")
                             embedVar.set_footer(
                                 text=f"{t_card}: ❤️{t_health} 🌀{t_stamina} 🗡️{t_attack}/🛡️{t_defense} {tarm_message}",
@@ -10866,7 +10852,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             embedVar.set_footer(
                                                 text=f"You can only enter Resolve once per match! Use the Heal Wisely!!!")
                                             await button_ctx.send(embed=embedVar)
-                                            await asyncio.sleep(2)
+                                            # await asyncio.sleep(2)
                                         if o_universe == "My Hero Academia":  # My Hero Trait
                                             # fortitude or luck is based on health
                                             fortitude = 0.0
@@ -11097,7 +11083,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             embedVar.set_footer(
                                                 text=f"Summons will Level Up and build Bond as you win battles! Train up your pets to perform better in the field!")
                                             await button_ctx.send(embed=embedVar)
-                                            await asyncio.sleep(2)
+                                            # await asyncio.sleep(2)
                                         o_enhancer_used = True
                                         dmg = damage_cal(o_universe, o_card, opet_move, o_attack, o_defense, t_defense,
                                                          o_stamina, o_enhancer_used, o_health, t_health, t_stamina,
@@ -11200,14 +11186,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 embedVar = discord.Embed(
                                                     title=f"**Persona!**\n{opet_name} was summoned from {o_card}'s soul dealing **{petdmg['DMG']}** damage!!",
                                                     colour=0xe91e63)
-                                                embedVar.set_footer(text=f"{opet_type}: {enhancer_mapping[opet_type]}")
+                                                
                                                 summon_file = showsummon(opet_image, opet_name, dmg['MESSAGE'], opet_lvl, opet_bond)
                                                 embedVar.set_image(url="attachment://pet.png")
                                             else:
                                                 embedVar = discord.Embed(
                                                     title=f"{o_card.upper()} Summoned 🧬 {opet_name}",
                                                     colour=0xe91e63)
-                                                embedVar.set_footer(text=f"{opet_type}: {enhancer_mapping[opet_type]}")
+                                                
                                                 summon_file = showsummon(opet_image, opet_name, dmg['MESSAGE'], opet_lvl, opet_bond)
                                                 embedVar.set_image(url="attachment://pet.png")
 
@@ -11229,7 +11215,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             embedVar.set_footer(
                                                 text=f"Use block strategically to defend against your opponents strongest abilities!")
                                             await button_ctx.send(embed=embedVar)
-                                            await asyncio.sleep(2)
+                                            # await asyncio.sleep(2)
                                         o_stamina = o_stamina - 20
                                         o_block_used = True
                                         o_defense = o_defense * 2
@@ -11328,7 +11314,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
                                             await button_ctx.send(embed=embedVar)
                                             if botActive:
-                                                await asyncio.sleep(2)
+                                                # await asyncio.sleep(2)
                                             turn_total = turn_total + 1
                                             turn = 1
                                         elif dmg['DMG'] == 0:
@@ -11417,7 +11403,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                 await button_ctx.send(embed=embedVar)
                                                 if botActive:
-                                                    await asyncio.sleep(2)
+                                                    # await asyncio.sleep(2)
                                             if t_health <= 0:
                                                 if t_final_stand==True:
                                                     embedVar = discord.Embed(title=f"{t_card.upper()}'s LAST STAND", description=f"{t_card} FINDS RESOLVE", colour=0xe91e63)
@@ -12113,7 +12099,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     embedVar = discord.Embed(
                                                         title=f"**PERSONA!**\n{tpet_name} was summoned from {t_card}'s soul dealing **{petdmg['DMG']}** damage!!",
                                                         colour=0xe91e63)
-                                                    embedVar.set_footer(text=f"{tpet_type}: {enhancer_mapping[tpet_type]}")
+                                                    
                                                     tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
                                                     embedVar.set_image(url="attachment://pet.png")
                                                 else:
@@ -12121,7 +12107,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         title=f"{t_card.upper()} Summoned 🧬 {tpet_name}",
                                                         colour=0xe91e63)
                                                     tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
-                                                    embedVar.set_footer(text=f"{tpet_type}: {enhancer_mapping[tpet_type]}")
+                                                    
                                                     
                                                     embedVar.set_image(url="attachment://image.png")
 
@@ -12794,7 +12780,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 title=f"{t_card.upper()} Summoned 🧬 {tpet_name}", colour=0xe91e63)
                                             embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!",
                                                                value=f"Enhanced **{tpet_type}** by **{tpet_dmg}**")
-                                            embedVar.set_footer(text=f"{tpet_type}: {enhancer_mapping[tpet_type]}")
+                                            
                                             tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
                                             embedVar.set_image(url="attachment://pet.png")
 
@@ -13055,7 +13041,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 embedVar.add_field(name=f"{t_arena}", value=f"{t_arenades}")
                                 embedVar.add_field(name=f"Entering the {t_arena}", value=f"{t_entrance}", inline=False)
                                 embedVar.set_footer(text=f"{t_card} waits for you to strike....")
-                                await asyncio.sleep(2)
+                                # await asyncio.sleep(2)
                             elif mode in co_op_modes and mode not in B_modes:
                                 embedVar = discord.Embed(
                                     title=f"**{o_card}** & **{c_card}** VS **{t_card}** has begun! {lineup}\n{t_universe} {mode} Battle",
@@ -13112,7 +13098,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 embedVar.add_field(name=f"{t_arena}", value=f"{t_world}", inline=False)
                                 embedVar.set_footer(text=f"{t_assault}")
                                 await private_channel.send(embed=embedVar)
-                                await asyncio.sleep(2)
+                                # await asyncio.sleep(2)
                             # fortitude or luck is based on health
                             fortitude = 0.0
                             low = o_health - (o_health * .90)
@@ -13966,7 +13952,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         oarm_passive_value = 0
                                 embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}", color=0xe74c3c)
                                 embedVar.set_author(name=f"🦾 {oarm_name} - {oarm_passive_type} {oarm_passive_value} {enhancer_suffix_mapping[oarm_passive_type]}\n{pet_msg_on_resolve}")
-                                await asyncio.sleep(2)
+                                # await asyncio.sleep(2)
                                 embedVar.set_image(url="attachment://image.png")
                                 embedVar.set_footer(
                                     text=f"{t_card}: ❤️{t_health} 🌀{t_stamina} 🗡️{t_attack}/🛡️{t_defense} {tarm_message}{companion_stats}",
@@ -14399,7 +14385,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     embedVar = discord.Embed(
                                                         title=f"**PERSONA!**\n{opet_name} was summoned from {o_card}'s soul dealing **{petdmg['DMG']}** damage!!",
                                                         colour=0xe91e63)
-                                                    embedVar.set_footer(text=f"{opet_type}: {enhancer_mapping[opet_type]}")
+                                                    
                                                     summon_file = showsummon(opet_image, opet_name, dmg['MESSAGE'], opet_lvl, opet_bond)
                                                     embedVar.set_image(url="attachment://pet.png")
 
@@ -14410,7 +14396,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         colour=0xe91e63)
                                                     summon_file = showsummon(opet_image, opet_name, dmg['MESSAGE'], opet_lvl, opet_bond)
                                                     embedVar.set_image(url="attachment://pet.png")
-                                                    embedVar.set_footer(text=f"{opet_type}: {enhancer_mapping[opet_type]}")
+                                                    
                                                     
 
                                                     await button_ctx.send(embed=embedVar, file=summon_file)
@@ -14890,7 +14876,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             embedVar.add_field(name=f"**{o_card}** Braces: ", value=f"{t_feeling}")
                             embedVar.set_footer(text=f"{t_card} begins his assault")
                             await private_channel.send(embed=embedVar)
-                            await asyncio.sleep(2)
+                            # await asyncio.sleep(2)
                         if t_attack <= 25:
                             t_attack = 25
                         if t_defense <= 30:
@@ -15292,7 +15278,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                  description=f"{t_rmessage}", colour=0xe91e63)
                                         embedVar.set_footer(text=f"{o_card} this will not be easy...")
                                         await private_channel.send(embed=embedVar)
-                                        await asyncio.sleep(2)
+                                        # await asyncio.sleep(2)
 
                                     if t_universe == "My Hero Academia":  # My hero TRait
                                         # fortitude or luck is based on health
@@ -15630,15 +15616,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             title=f"**PERSONA!**\n{tpet_name} was summoned from {t_card}'s soul dealing **{petdmg['DMG']}** damage!!",
                                                             colour=0xe91e63)
                                                         embedVar.add_field(
-                                                            name=f"{tpet_name} used **{tpetmove_text}**!",
-                                                            value=f"Enhanced **{tpet_type}** by **{tpet_dmg}**")
-                                                        embedVar.add_field(
                                                             name=f"{tpet_name} used a follow up attack dealing **{petdmg['DMG']}** damage!",
                                                             value=f"Enhanced **{tpet_type}** by **{tpet_dmg}**")
                                                         
-                                                        embedVar.set_footer(text=f"{tpet_type}: {enhancer_mapping[tpet_type]}")
-                                                        embedVar.set_image(url="attachment://image.png")
-                                                        await button_ctx.send(embed=embedVar)
+                                                        tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
+                                                        embedVar.set_image(url="attachment://pet.png")
+                                                        await private_channel.send(embed=embedVar, file=tsummon_file)
                                                     else:
                                                         embedVar = discord.Embed(
                                                             title=f"{t_card.upper()} Summoned 🧬 {tpet_name}",
@@ -15646,10 +15629,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         embedVar.add_field(
                                                             name=f"{tpet_name} used **{tpetmove_text}**!",
                                                             value=f"Enhanced **{tpet_type}** by **{tpet_dmg}**")
-                                                        embedVar.set_footer(text=f"{tpet_type}: {enhancer_mapping[tpet_type]}")
+                                                        
                                                         tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
                                                         embedVar.set_image(url="attachment://pet.png")
-                                                        await private_channel.send(embed=embedVar)
+                                                        await private_channel.send(embed=embedVar, file=tsummon_file)
 
 
 
@@ -15773,7 +15756,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         embedVar.add_field(
                                                             name=f"{tpet_name} used **{tpetmove_text}**!",
                                                             value=f"Enhanced **{tpet_type}** by **{tpet_dmg}**")
-                                                        embedVar.set_footer(text=f"{tpet_type}: {enhancer_mapping[tpet_type]}")
+                                                        
                                                         
                                                         embedVar.set_image(url="attachment://image.png")
                                                         await button_ctx.send(embed=embedVar)
@@ -15784,7 +15767,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         embedVar.add_field(
                                                             name=f"{tpet_name} used **{tpetmove_text}**!",
                                                             value=f"Enhanced **{tpet_type}** by **{tpet_dmg}**")
-                                                        embedVar.set_footer(text=f"{tpet_type}: {enhancer_mapping[tpet_type]}")
+                                                        
                                                         
                                                         embedVar.set_image(url="attachment://image.png")
                                                         await button_ctx.send(embed=embedVar)
@@ -15908,7 +15891,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         colour=0xe91e63)
                                                     embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!",
                                                                        value=f"Enhanced **{tpet_type}** by **{tpet_dmg}**")
-                                                    embedVar.set_footer(text=f"{tpet_type}: {enhancer_mapping[tpet_type]}")
+                                                    
                                                     
                                                     embedVar.set_image(url="attachment://image.png")
                                                     await button_ctx.send(embed=embedVar)
@@ -15918,7 +15901,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         colour=0xe91e63)
                                                     embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!",
                                                                        value=f"Enhanced **{tpet_type}** by **{tpet_dmg}**")
-                                                    embedVar.set_footer(text=f"{tpet_type}: {enhancer_mapping[tpet_type]}")
+                                                    
                                                     
                                                     embedVar.set_image(url="attachment://image.png")
                                                     await private_channel.send(embed=embedVar)
@@ -19215,7 +19198,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         colour=0xe91e63)
                                                     embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!",
                                                                        value=f"Enhanced **{tpet_type}** by **{tpet_dmg}**")
-                                                    embedVar.set_footer(text=f"{tpet_type}: {enhancer_mapping[tpet_type]}")
+                                                    
                                                     
                                                     embedVar.set_image(url="attachment://image.png")
                                                     await button_ctx.send(embed=embedVar)
@@ -19225,7 +19208,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         colour=0xe91e63)
                                                     embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!",
                                                                        value=f"Enhanced **{tpet_type}** by **{tpet_dmg}**")
-                                                    embedVar.set_footer(text=f"{tpet_type}: {enhancer_mapping[tpet_type]}")
+                                                    
                                                     
                                                     embedVar.set_image(url="attachment://image.png")
                                                     await private_channel.send(embed=embedVar)
@@ -19338,7 +19321,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         colour=0xe91e63)
                                                     embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!",
                                                                        value=f"Enhanced **{tpet_type}** by **{tpet_dmg}**")
-                                                    embedVar.set_footer(text=f"{tpet_type}: {enhancer_mapping[tpet_type]}")
+                                                    
                                                     
                                                     embedVar.set_image(url="attachment://image.png")
                                                     await button_ctx.send(embed=embedVar)
@@ -19348,7 +19331,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         colour=0xe91e63)
                                                     embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!",
                                                                        value=f"Enhanced **{tpet_type}** by **{tpet_dmg}**")
-                                                    embedVar.set_footer(text=f"{tpet_type}: {enhancer_mapping[tpet_type]}")
+                                                    
                                                     
                                                     embedVar.set_image(url="attachment://image.png")
                                                     await private_channel.send(embed=embedVar)
@@ -20047,7 +20030,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             cfambank = await blessfamily(15000, cfam)
                             cteambank = await blessteam(15000, cteam)
                             cpetlogger = await summonlevel(cpet_name, user2)
-                            ccardlogger = await cardlevel(c_card, user2, c_universe, selected_universe, "Dungeon")
+                            ccardlogger = await cardlevel(c_card, user2, "Dungeon")
                             await bless(50, str(user2))
                             embedVar = discord.Embed(
                                 title=f":zap: **{o_card}** and **{c_card}**defeated the {t_universe} Boss {t_card}!",
@@ -20063,7 +20046,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         ofambank = await blessfamily(15000, ofam)
                         oteambank = await blessteam(15000, oteam)
                         petlogger = await summonlevel(opet_name, ouser)
-                        cardlogger = await cardlevel(o_card, ouser, o_universe, selected_universe, "Dungeon")
+                        cardlogger = await cardlevel(o_card, ouser, "Dungeon")
 
                         if crestsearch:
                             await blessguild(25000, oguild['GNAME'])
@@ -20130,7 +20113,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         questlogger = await quest(ouser, t_card, tale_or_dungeon_only)
                         destinylogger = await destiny(ouser, t_card, tale_or_dungeon_only)
                         petlogger = await summonlevel(opet_name, ouser)
-                        cardlogger = await cardlevel(o_card, ouser, o_universe, selected_universe, tale_or_dungeon_only)
+                        cardlogger = await cardlevel(o_card, ouser, tale_or_dungeon_only)
                         if questlogger:
                             await private_channel.send(questlogger)
                         if destinylogger:
@@ -20669,7 +20652,7 @@ async def drops(player, universe, matchcount):
                         card_owned = True
 
                 if card_owned:
-                    await cardlevel(cards[rand_card], player, universe, universe, "Tales")
+                    await cardlevel(cards[rand_card], player, "Tales")
                     response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'CARDS': str(cards[rand_card])}})
                     message = ""
                     await bless(150, player)
@@ -20736,7 +20719,7 @@ async def specific_drops(player, card, universe):
                 card_owned = True
 
         if card_owned:
-            await cardlevel(card, player, universe, universe, "Tales")
+            await cardlevel(card, player, "Tales")
             message = ""
             await bless(150, player)
             return f"You earned EXP for _Card:_ **{card}** + :coin: 150 in addition to the card bounty!!"
@@ -20890,7 +20873,7 @@ async def dungeondrops(player, universe, matchcount):
                     card_owned = True
 
             if card_owned:
-                await cardlevel(cards[rand_card], player, universe, universe, "Dungeon")
+                await cardlevel(cards[rand_card], player, "Dungeon")
                 response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'CARDS': str(cards[rand_card])}})
                 message = ""
                 await bless(2500, player)
@@ -21075,7 +21058,7 @@ async def bossdrops(player, universe):
                     card_owned = True
 
             if card_owned:
-                await cardlevel(str(boss_card), player, universe, universe, "Dungeon")
+                await cardlevel(str(boss_card), player, "Dungeon")
                 message = ""
                 await bless(200, player)
             else:
