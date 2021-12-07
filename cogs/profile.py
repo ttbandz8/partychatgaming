@@ -256,7 +256,7 @@ class Profile(commands.Cog):
                 embedVar = discord.Embed(title=f"".format(self), colour=000000)
                 # file = discord.File(fp=card_file,filename="image.png")
                 embedVar.set_image(url="attachment://image.png")
-                embedVar.set_thumbnail(url=active_pet['PATH'])
+                # embedVar.set_thumbnail(url=active_pet['PATH'])
                 embedVar.set_author(name=textwrap.dedent(f"""\
                 {titlemessage}
                 🦾 {arm_name}: {arm_passive_type} {arm_passive_value}{enhancer_suffix_mapping[arm_passive_type]} {durability}

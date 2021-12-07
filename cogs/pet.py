@@ -54,134 +54,154 @@ class Pet(commands.Cog):
     @cog_ext.cog_slash(description="View a Summon", guild_ids=main.guild_ids)
     async def viewsummon(self, ctx, summon: str):
         pet = db.queryPet({'PET': {"$regex": f"^{str(summon)}$", "$options": "i"}})
-        if pet:
-            pet_pet = pet['PET']
-            pet_show = pet['UNIVERSE']
-            pet_image = pet['PATH']
+        try:
+            if pet:
+                pet_pet = pet['PET']
+                pet_show = pet['UNIVERSE']
+                pet_image = pet['PATH']
 
-            if pet_show != 'Unbound':
-                pet_show_img = db.queryUniverse({'TITLE': pet_show})['PATH']
-            pet_passive = pet['ABILITIES'][0]
-                # Summon Passive
-            o_pet_passive_name = list(pet_passive.keys())[0]
-            o_pet_passive_value = list(pet_passive.values())[0]
-            o_pet_passive_type = list(pet_passive.values())[1]
+                if pet_show != 'Unbound':
+                    pet_show_img = db.queryUniverse({'TITLE': pet_show})['PATH']
+                pet_passive = pet['ABILITIES'][0]
+                    # Summon Passive
+                o_pet_passive_name = list(pet_passive.keys())[0]
+                o_pet_passive_value = list(pet_passive.values())[0]
+                o_pet_passive_type = list(pet_passive.values())[1]
 
-            message=""
-            
-            if o_pet_passive_type == 'ATK':
-                typetext = "Attack"
-                message=f"{pet_pet} is a ATK Summon"
-                value=f"Increases {typetext} by {o_pet_passive_value}{enhancer_suffix_mapping[o_pet_passive_type]}"
-            elif o_pet_passive_type == 'DEF':
-                typetext = "Defense"
-                mmessage=f"{pet_pet} is a DEF Summon"
-                value=f"Increases {typetext} by {o_pet_passive_value}{enhancer_suffix_mapping[o_pet_passive_type]}"
-            elif o_pet_passive_type == 'STAM':
-                typetext = "Stamina"
-                message=f"{pet_pet} is a STAM Summon"
-                value=f"Increases {typetext} by {o_pet_passive_value}{enhancer_suffix_mapping[o_pet_passive_type]}"
-            elif o_pet_passive_type == 'HLT':
-                typetext = "Health"
-                message=f"{pet_pet} is a HLT Summon"
-                value=f"Increases {typetext} by {o_pet_passive_value}{enhancer_suffix_mapping[o_pet_passive_type]}"
-            elif o_pet_passive_type == 'LIFE':
-                typetext = "Health"
-                message=f"{pet_pet} is a LIFE Summon"
-                value=f"Steals {o_pet_passive_value}{enhancer_suffix_mapping[o_pet_passive_type]} {typetext}"
-            elif o_pet_passive_type == 'DRAIN':
-                typetext = "Stamina"
-                message=f"{pet_pet} is a DRAIN Summon"
-                value=f"Steals {o_pet_passive_value}{enhancer_suffix_mapping[o_pet_passive_type]} {typetext}"
-            elif o_pet_passive_type == 'FLOG':
-                typetext = "Attack"
-                message=f"{pet_pet} is a FLOG Summon"
-                value=f"Steals {o_pet_passive_value}{enhancer_suffix_mapping[o_pet_passive_type]} {typetext}"
-            elif o_pet_passive_type == 'WITHER':
-                typetext = "Defense"
-                message=f"{pet_pet} is a WITHER Summon"
-                value=f"Steals {o_pet_passive_value}{enhancer_suffix_mapping[o_pet_passive_type]} {typetext}"
-            elif o_pet_passive_type == 'RAGE':
-                typetext = "Defense gain Attack"
-                message=f"{pet_pet} is a RAGE Summon"
-                value=f"Sacrifice {o_pet_passive_value}{enhancer_suffix_mapping[o_pet_passive_type]} {typetext}"
-            elif o_pet_passive_type == 'BRACE':    
-                typetext = "Attack gain Defense"        
-                message=f"{pet_pet} is a BRACE Summon"
-                value=f"Sacrifice {o_pet_passive_value}{enhancer_suffix_mapping[o_pet_passive_type]} {typetext}"
-            elif o_pet_passive_type == 'BZRK':    
-                typetext = "Health gain Attack"        
-                message=f"{pet_pet} is a BZRK Summon"
-                value=f"Sacrifice {o_pet_passive_value}{enhancer_suffix_mapping[o_pet_passive_type]} {typetext}"
-            elif o_pet_passive_type == 'CRYSTAL':    
-                typetext = "Health gain Defense"        
-                message=f"{pet_pet} is a CRYSTAL Summon"
-                value=f"Sacrifice {o_pet_passive_value}{enhancer_suffix_mapping[o_pet_passive_type]} {typetext}"
-            elif o_pet_passive_type == 'GROWTH':    
-                typetext = "Max Health gain Attack and Defense"      
-                message=f"{pet_pet} is a GROWTH Summon"
-                value=f"Sacrifice {o_pet_passive_value}{enhancer_suffix_mapping[o_pet_passive_type]} {typetext}"
-            elif o_pet_passive_type == 'STANCE':
-                typetext = "Attack and Defense increase"
-                message=f"{pet_pet} is a STANCE Summon"
-                value=f"Swap {typetext} Defense by {o_pet_passive_value}"
-            elif o_pet_passive_type == 'CONFUSE':
-                typetext = "Opponent Attack And Defense decrease Opponent"
-                message=f"{pet_pet} is a CONFUSE Summon"
-                value=f"Swap {typetext} Defense by {o_pet_passive_value}"
-            elif o_pet_passive_type == 'BLINK':
-                typetext = "Decrease Stamina, Increase Opponent Stamina"
-                message=f"{pet_pet} is a BLINK Summon"
-                value=f"{typetext} by {o_pet_passive_value}"
-            elif o_pet_passive_type == 'SLOW':
-                typetext = "Decrease Stamina by"
-                message=f"{pet_pet} is a SLOW Summon"
-                value=f"{typetext} by {o_pet_passive_value}"
-            elif o_pet_passive_type == 'HASTE':
-                typetext = "Increase Stamina by"
-                message=f"{pet_pet} is a HASTE Summon"
-            elif o_pet_passive_type == 'SOULCHAIN':
-                typetext = "Stamina"
-                message=f"{pet_pet} is a SOULCHAIN Summon"
-                value=f"Set both players {typetext} equal to {o_pet_passive_value}"
-            elif o_pet_passive_type == 'FEAR':
-                typetext = "Max Health reduce Opponent Attack and Defense"
-                message=f"{pet_pet} is a FEAR Summon"
-                value=f"Sacrifice {o_pet_passive_value}{enhancer_suffix_mapping[o_pet_passive_type]} {typetext}"
-            elif o_pet_passive_type == 'GAMBLE':
-                typetext = "Health"
-                message=f"{pet_pet} is a GAMBLE Summon"
-                value=f"Set both players {typetext} equal to {o_pet_passive_value}"
-            elif o_pet_passive_type == 'BLAST':
-                typetext = "Deals Increasing AP * Turn Count Damage "
-                message=f"{pet_pet} is a BLAST Summon"
-                value=f"{typetext} starting at {o_pet_passive_value}"
-            elif o_pet_passive_type == 'WAVE':
-                typetext = "Deals Decreasing AP / Turn Count Damage"
-                message=f"{pet_pet} is a WAVE Summon"
-                value=f"{typetext} starting at {o_pet_passive_value}"
-            elif o_pet_passive_type == 'DESTRUCTION':
-                typetext = "Destroys Increasing AP * Turn Count Max Health"
-                message=f"{pet_pet} is a DESTRUCTION Summon"
-                value=f"{typetext} starting at {o_pet_passive_value}"
-            elif o_pet_passive_type == 'CREATION':
-                typetext = "Grants Decreasing AP / Turn Count Max Health"
-                message=f"{pet_pet} is a CREATION Summon"
-                value=f"{typetext} starting at {o_pet_passive_value}"  
+                message=""
+                
+                if o_pet_passive_type == 'ATK':
+                    typetext = "Attack"
+                    message=f"{pet_pet} is a ATK Summon"
+                    value=f"Increases {typetext} by {o_pet_passive_value}{enhancer_suffix_mapping[o_pet_passive_type]}"
+                elif o_pet_passive_type == 'DEF':
+                    typetext = "Defense"
+                    mmessage=f"{pet_pet} is a DEF Summon"
+                    value=f"Increases {typetext} by {o_pet_passive_value}{enhancer_suffix_mapping[o_pet_passive_type]}"
+                elif o_pet_passive_type == 'STAM':
+                    typetext = "Stamina"
+                    message=f"{pet_pet} is a STAM Summon"
+                    value=f"Increases {typetext} by {o_pet_passive_value}{enhancer_suffix_mapping[o_pet_passive_type]}"
+                elif o_pet_passive_type == 'HLT':
+                    typetext = "Health"
+                    message=f"{pet_pet} is a HLT Summon"
+                    value=f"Increases {typetext} by {o_pet_passive_value}{enhancer_suffix_mapping[o_pet_passive_type]}"
+                elif o_pet_passive_type == 'LIFE':
+                    typetext = "Health"
+                    message=f"{pet_pet} is a LIFE Summon"
+                    value=f"Steals {o_pet_passive_value}{enhancer_suffix_mapping[o_pet_passive_type]} {typetext}"
+                elif o_pet_passive_type == 'DRAIN':
+                    typetext = "Stamina"
+                    message=f"{pet_pet} is a DRAIN Summon"
+                    value=f"Steals {o_pet_passive_value}{enhancer_suffix_mapping[o_pet_passive_type]} {typetext}"
+                elif o_pet_passive_type == 'FLOG':
+                    typetext = "Attack"
+                    message=f"{pet_pet} is a FLOG Summon"
+                    value=f"Steals {o_pet_passive_value}{enhancer_suffix_mapping[o_pet_passive_type]} {typetext}"
+                elif o_pet_passive_type == 'WITHER':
+                    typetext = "Defense"
+                    message=f"{pet_pet} is a WITHER Summon"
+                    value=f"Steals {o_pet_passive_value}{enhancer_suffix_mapping[o_pet_passive_type]} {typetext}"
+                elif o_pet_passive_type == 'RAGE':
+                    typetext = "Defense gain Attack"
+                    message=f"{pet_pet} is a RAGE Summon"
+                    value=f"Sacrifice {o_pet_passive_value}{enhancer_suffix_mapping[o_pet_passive_type]} {typetext}"
+                elif o_pet_passive_type == 'BRACE':    
+                    typetext = "Attack gain Defense"        
+                    message=f"{pet_pet} is a BRACE Summon"
+                    value=f"Sacrifice {o_pet_passive_value}{enhancer_suffix_mapping[o_pet_passive_type]} {typetext}"
+                elif o_pet_passive_type == 'BZRK':    
+                    typetext = "Health gain Attack"        
+                    message=f"{pet_pet} is a BZRK Summon"
+                    value=f"Sacrifice {o_pet_passive_value}{enhancer_suffix_mapping[o_pet_passive_type]} {typetext}"
+                elif o_pet_passive_type == 'CRYSTAL':    
+                    typetext = "Health gain Defense"        
+                    message=f"{pet_pet} is a CRYSTAL Summon"
+                    value=f"Sacrifice {o_pet_passive_value}{enhancer_suffix_mapping[o_pet_passive_type]} {typetext}"
+                elif o_pet_passive_type == 'GROWTH':    
+                    typetext = "Max Health gain Attack and Defense"      
+                    message=f"{pet_pet} is a GROWTH Summon"
+                    value=f"Sacrifice {o_pet_passive_value}{enhancer_suffix_mapping[o_pet_passive_type]} {typetext}"
+                elif o_pet_passive_type == 'STANCE':
+                    typetext = "Attack and Defense increase"
+                    message=f"{pet_pet} is a STANCE Summon"
+                    value=f"Swap {typetext} Defense by {o_pet_passive_value}"
+                elif o_pet_passive_type == 'CONFUSE':
+                    typetext = "Opponent Attack And Defense decrease Opponent"
+                    message=f"{pet_pet} is a CONFUSE Summon"
+                    value=f"Swap {typetext} Defense by {o_pet_passive_value}"
+                elif o_pet_passive_type == 'BLINK':
+                    typetext = "Decrease Stamina, Increase Opponent Stamina"
+                    message=f"{pet_pet} is a BLINK Summon"
+                    value=f"{typetext} by {o_pet_passive_value}"
+                elif o_pet_passive_type == 'SLOW':
+                    typetext = "Decrease Stamina by"
+                    message=f"{pet_pet} is a SLOW Summon"
+                    value=f"{typetext} by {o_pet_passive_value}"
+                elif o_pet_passive_type == 'HASTE':
+                    typetext = "Increase Stamina by"
+                    message=f"{pet_pet} is a HASTE Summon"
+                elif o_pet_passive_type == 'SOULCHAIN':
+                    typetext = "Stamina"
+                    message=f"{pet_pet} is a SOULCHAIN Summon"
+                    value=f"Set both players {typetext} equal to {o_pet_passive_value}"
+                elif o_pet_passive_type == 'FEAR':
+                    typetext = "Max Health reduce Opponent Attack and Defense"
+                    message=f"{pet_pet} is a FEAR Summon"
+                    value=f"Sacrifice {o_pet_passive_value}{enhancer_suffix_mapping[o_pet_passive_type]} {typetext}"
+                elif o_pet_passive_type == 'GAMBLE':
+                    typetext = "Health"
+                    message=f"{pet_pet} is a GAMBLE Summon"
+                    value=f"Set both players {typetext} equal to {o_pet_passive_value}"
+                elif o_pet_passive_type == 'BLAST':
+                    typetext = "Deals Increasing AP * Turn Count Damage "
+                    message=f"{pet_pet} is a BLAST Summon"
+                    value=f"{typetext} starting at {o_pet_passive_value}"
+                elif o_pet_passive_type == 'WAVE':
+                    typetext = "Deals Decreasing AP / Turn Count Damage"
+                    message=f"{pet_pet} is a WAVE Summon"
+                    value=f"{typetext} starting at {o_pet_passive_value}"
+                elif o_pet_passive_type == 'DESTRUCTION':
+                    typetext = "Destroys Increasing AP * Turn Count Max Health"
+                    message=f"{pet_pet} is a DESTRUCTION Summon"
+                    value=f"{typetext} starting at {o_pet_passive_value}"
+                elif o_pet_passive_type == 'CREATION':
+                    typetext = "Grants Decreasing AP / Turn Count Max Health"
+                    message=f"{pet_pet} is a CREATION Summon"
+                    value=f"{typetext} starting at {o_pet_passive_value}"
+
+                explanation = f"{o_pet_passive_type}: {enhancer_mapping[o_pet_passive_type]}"  
 
 
-            summon_file = showsummon()
-            embedVar = discord.Embed(title=f"Summon".format(self), colour=000000)
-            if pet_show != "Unbound":
-                embedVar.set_thumbnail(url=pet_show_img)
-                        
-            embedVar.set_image(url="attachment://image.png")
-            embedVar.set_footer(text=f"{o_pet_passive_type}: {enhancer_mapping[o_pet_passive_type]}")
+                summon_file = showsummon(pet_image, pet_pet, value, 0, 0)
+                embedVar = discord.Embed(title=f"Summon".format(self), colour=000000)
+                if pet_show != "Unbound":
+                    embedVar.set_thumbnail(url=pet_show_img)
+                            
+                embedVar.set_image(url="attachment://pet.png")
+                embedVar.set_footer(text=f"{o_pet_passive_type}: {enhancer_mapping[o_pet_passive_type]}")
 
-            await ctx.send(embed=embedVar, hidden=True)
+                await ctx.send(file=summon_file, embed=embedVar, hidden=True)
 
-        else:
-            await ctx.send(m.PET_DOESNT_EXIST, hidden=True)
+            else:
+                await ctx.send(m.PET_DOESNT_EXIST, hidden=True)
+        except Exception as ex:
+            trace = []
+            tb = ex.__traceback__
+            while tb is not None:
+                trace.append({
+                    "filename": tb.tb_frame.f_code.co_filename,
+                    "name": tb.tb_frame.f_code.co_name,
+                    "lineno": tb.tb_lineno
+                })
+                tb = tb.tb_next
+            print(str({
+                'type': type(ex).__name__,
+                'message': str(ex),
+                'trace': trace
+            }))
+            return
+
 
 def setup(bot):
     bot.add_cog(Pet(bot))
