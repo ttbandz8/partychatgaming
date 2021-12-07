@@ -14397,8 +14397,6 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     summon_file = showsummon(opet_image, opet_name, dmg['MESSAGE'], opet_lvl, opet_bond)
                                                     embedVar.set_image(url="attachment://pet.png")
                                                     
-                                                    
-
                                                     await button_ctx.send(embed=embedVar, file=summon_file)
                                                 turn = 0
                                             else:
