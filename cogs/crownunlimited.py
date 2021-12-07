@@ -2094,7 +2094,7 @@ class CrownUnlimited(commands.Cog):
                                         embedVar.add_field(name=f"{opet_name} used **{opetmove_text}**!",
                                                            value=f"Enhanced **{opet_type}** by **{opet_dmg}**")
                                         
-                                        # await asyncio.sleep(2)
+                                        await asyncio.sleep(2)
                                         embedVar.set_image(url="attachment://image.png")
                                         await button_ctx.send(embed=embedVar)
                                         turn = 0
@@ -4428,7 +4428,7 @@ class CrownUnlimited(commands.Cog):
                                 oarm_passive_value = 0
                         embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}", color=0xe74c3c)
                         embedVar.set_author(name=f"🦾 {oarm_name} - {oarm_passive_type} {oarm_passive_value} {enhancer_suffix_mapping[oarm_passive_type]}\n{pet_msg_on_resolve}")
-                        # await asyncio.sleep(2)
+                        await asyncio.sleep(2)
                         embedVar.set_image(url="attachment://image.png")
                         embedVar.set_footer(
                             text=f"{t_card}: ❤️{t_health} 🌀{t_stamina} 🗡️{t_attack}/🛡️{t_defense} {tarm_message}",
@@ -4826,7 +4826,7 @@ class CrownUnlimited(commands.Cog):
 
                             #             embedVar = discord.Embed(title=f"{o_card.upper()} Summoned 🧬 {opet_name}", colour=0xe91e63)
                             #             embedVar.add_field(name=f"{opet_name} used **{opetmove_text}**!", value =f"Enhanced **{opet_type}**")
-                            #             # await asyncio.sleep(2)
+                            #             await asyncio.sleep(2)
                             #             await button_ctx.send(embed=embedVar)
                             #             turn=0
                             #         else:
@@ -10446,7 +10446,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 embedVar.set_footer(
                                     text="Select a move to get started. DON'T WORRY! When your STAMINA depletes to 0 your character will Focus to REPLENISH!")
                                 await private_channel.send(embed=embedVar)
-                                # await asyncio.sleep(2)
+                                await asyncio.sleep(2)
                             else:
                                 # await ctx.send(f"{user1.mention}{user2.mention}")
                                 embedVar = discord.Embed(
@@ -10496,7 +10496,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 embedVar.set_footer(
                                     text="After you entered focus state once, a transformation is possible by strengthening your RESOLVE! **Press 5**")
                                 await ctx.send(embed=embedVar)
-                                # await asyncio.sleep(2)
+                                await asyncio.sleep(2)
                             # Universal Trait
                             # fortitude or luck is based on health
                             fortitude = 0.0
@@ -10750,7 +10750,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     oarm_passive_value = 0
                             embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}", color=0xe74c3c)
                             embedVar.set_author(name=f"🦾 {oarm_name} - {oarm_passive_type} {oarm_passive_value} {enhancer_suffix_mapping[oarm_passive_type]}\n{pet_msg_on_resolve}")
-                            # await asyncio.sleep(2)
+                            await asyncio.sleep(2)
                             embedVar.set_image(url="attachment://image.png")
                             embedVar.set_footer(
                                 text=f"{t_card}: ❤️{t_health} 🌀{t_stamina} 🗡️{t_attack}/🛡️{t_defense} {tarm_message}",
@@ -10852,7 +10852,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             embedVar.set_footer(
                                                 text=f"You can only enter Resolve once per match! Use the Heal Wisely!!!")
                                             await button_ctx.send(embed=embedVar)
-                                            # await asyncio.sleep(2)
+                                            await asyncio.sleep(2)
                                         if o_universe == "My Hero Academia":  # My Hero Trait
                                             # fortitude or luck is based on health
                                             fortitude = 0.0
@@ -11083,7 +11083,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             embedVar.set_footer(
                                                 text=f"Summons will Level Up and build Bond as you win battles! Train up your pets to perform better in the field!")
                                             await button_ctx.send(embed=embedVar)
-                                            # await asyncio.sleep(2)
+                                            await asyncio.sleep(2)
                                         o_enhancer_used = True
                                         dmg = damage_cal(o_universe, o_card, opet_move, o_attack, o_defense, t_defense,
                                                          o_stamina, o_enhancer_used, o_health, t_health, t_stamina,
@@ -11215,7 +11215,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             embedVar.set_footer(
                                                 text=f"Use block strategically to defend against your opponents strongest abilities!")
                                             await button_ctx.send(embed=embedVar)
-                                            # await asyncio.sleep(2)
+                                            await asyncio.sleep(2)
                                         o_stamina = o_stamina - 20
                                         o_block_used = True
                                         o_defense = o_defense * 2
@@ -11314,7 +11314,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
                                             await button_ctx.send(embed=embedVar)
                                             if botActive:
-                                                # await asyncio.sleep(2)
+                                                await asyncio.sleep(2)
                                             turn_total = turn_total + 1
                                             turn = 1
                                         elif dmg['DMG'] == 0:
@@ -11403,7 +11403,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                 await button_ctx.send(embed=embedVar)
                                                 if botActive:
-                                                    # await asyncio.sleep(2)
+                                                    await asyncio.sleep(2)
                                             if t_health <= 0:
                                                 if t_final_stand==True:
                                                     embedVar = discord.Embed(title=f"{t_card.upper()}'s LAST STAND", description=f"{t_card} FINDS RESOLVE", colour=0xe91e63)
@@ -13041,7 +13041,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 embedVar.add_field(name=f"{t_arena}", value=f"{t_arenades}")
                                 embedVar.add_field(name=f"Entering the {t_arena}", value=f"{t_entrance}", inline=False)
                                 embedVar.set_footer(text=f"{t_card} waits for you to strike....")
-                                # await asyncio.sleep(2)
+                                await asyncio.sleep(2)
                             elif mode in co_op_modes and mode not in B_modes:
                                 embedVar = discord.Embed(
                                     title=f"**{o_card}** & **{c_card}** VS **{t_card}** has begun! {lineup}\n{t_universe} {mode} Battle",
@@ -13098,7 +13098,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 embedVar.add_field(name=f"{t_arena}", value=f"{t_world}", inline=False)
                                 embedVar.set_footer(text=f"{t_assault}")
                                 await private_channel.send(embed=embedVar)
-                                # await asyncio.sleep(2)
+                                await asyncio.sleep(2)
                             # fortitude or luck is based on health
                             fortitude = 0.0
                             low = o_health - (o_health * .90)
@@ -13952,7 +13952,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                         oarm_passive_value = 0
                                 embedVar = discord.Embed(title=f" Press your move below! _Turn_ {turn_total}", color=0xe74c3c)
                                 embedVar.set_author(name=f"🦾 {oarm_name} - {oarm_passive_type} {oarm_passive_value} {enhancer_suffix_mapping[oarm_passive_type]}\n{pet_msg_on_resolve}")
-                                # await asyncio.sleep(2)
+                                await asyncio.sleep(2)
                                 embedVar.set_image(url="attachment://image.png")
                                 embedVar.set_footer(
                                     text=f"{t_card}: ❤️{t_health} 🌀{t_stamina} 🗡️{t_attack}/🛡️{t_defense} {tarm_message}{companion_stats}",
@@ -14874,7 +14874,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             embedVar.add_field(name=f"**{o_card}** Braces: ", value=f"{t_feeling}")
                             embedVar.set_footer(text=f"{t_card} begins his assault")
                             await private_channel.send(embed=embedVar)
-                            # await asyncio.sleep(2)
+                            await asyncio.sleep(2)
                         if t_attack <= 25:
                             t_attack = 25
                         if t_defense <= 30:
@@ -15276,7 +15276,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                  description=f"{t_rmessage}", colour=0xe91e63)
                                         embedVar.set_footer(text=f"{o_card} this will not be easy...")
                                         await private_channel.send(embed=embedVar)
-                                        # await asyncio.sleep(2)
+                                        await asyncio.sleep(2)
 
                                     if t_universe == "My Hero Academia":  # My hero TRait
                                         # fortitude or luck is based on health

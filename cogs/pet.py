@@ -13,7 +13,7 @@ from discord import Member
 from PIL import Image, ImageFont, ImageDraw
 import requests
 from discord_slash import cog_ext, SlashContext
-from .crownunlimited import showsummon, Crest_dict
+from .crownunlimited import showsummon
 
 class Pet(commands.Cog):
     def __init__(self, bot):
@@ -175,7 +175,7 @@ class Pet(commands.Cog):
 
 
                 summon_file = showsummon(pet_image, pet_pet, value, 0, 0)
-                embedVar = discord.Embed(title=f"{Crest_dict[pet_show]} {pet_show} Summon".format(self), colour=000000)
+                embedVar = discord.Embed(title=f"Summon".format(self), colour=000000)
                 if pet_show != "Unbound":
                     embedVar.set_thumbnail(url=pet_show_img)
                             
