@@ -6418,8 +6418,8 @@ class CrownUnlimited(commands.Cog):
         embeds = embed_list
         await paginator.run(embeds)
 
-    @cog_ext.cog_slash(description="Quit Match", guild_ids=main.guild_ids)
-    async def ff(self, ctx: SlashContext):
+    @cog_ext.cog_slash(description="Quit and Close your private channel", guild_ids=main.guild_ids)
+    async def forcequit(self, ctx: SlashContext):
         private_channel = ctx
         ov = private_channel.channel.overwrites
         validator = False
@@ -7027,7 +7027,7 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, stamina, en
         elif enh_type == 'GROWTH':
             message = f'{move} used!\nSacrificing {round(enhanced)} Max Health to Increase Attack and Defense by {round(enhanced * .5)}'
         elif enh_type == 'STANCE':
-            message = f'{move} used!\nSwapping Attack and Defense, Increasing Attack to {enhanced}'
+            message = f'{move} used!\nSwapping Attack and Defense, Increasing Defense to {enhanced}'
         elif enh_type == 'CONFUSE':
             message = f'{move} used!\nSwapping Opponent Attack and Defense, Decreasing Defense to {enhanced}'
         elif enh_type == 'HLT':
