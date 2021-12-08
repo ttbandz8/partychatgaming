@@ -1634,7 +1634,7 @@ class CrownUnlimited(commands.Cog):
                             embedVar = discord.Embed(title=f"Increase Power Level! {t_card} Increased Stamina 🌀",
                                                      colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
-                            t_stamina = t_stamina + 80
+                            t_stamina = t_stamina + 60
 
                         elif t_universe == "Souls":
                             embedVar = discord.Embed(
@@ -4294,7 +4294,7 @@ class CrownUnlimited(commands.Cog):
                             embedVar = discord.Embed(title=f"Increase Power Level! {t_card} Increased Stamina 🌀",
                                                      colour=0xe91e63)
                             await ctx.send(embed=embedVar)
-                            t_stamina = t_stamina + 80
+                            t_stamina = t_stamina + 60
 
                         elif t_universe == "Souls":
                             embedVar = discord.Embed(
@@ -10625,7 +10625,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 embedVar = discord.Embed(title=f"Increase Power Level! {t_card} Increased Stamina 🌀",
                                                          colour=0xe91e63)
                                 await ctx.send(embed=embedVar)
-                                t_stamina = t_stamina + 80
+                                t_stamina = t_stamina + 60
 
                             elif t_universe == "Souls":
                                 embedVar = discord.Embed(
@@ -13219,7 +13219,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 embedVar = discord.Embed(title=f"Increase Power Level! {t_card} Increased Stamina 🌀",
                                                          colour=0xe91e63)
                                 await private_channel.send(embed=embedVar)
-                                t_stamina = t_stamina + 80
+                                t_stamina = t_stamina + 60
 
                             elif t_universe == "Souls":
                                 embedVar = discord.Embed(
@@ -16714,7 +16714,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     embedVar = discord.Embed(
                                         title=f"Increase Power Level! {t_card} Increased Stamina 🌀", colour=0xe91e63)
                                     await private_channel.send(embed=embedVar)
-                                    t_stamina = t_stamina + 80
+                                    t_stamina = t_stamina + 60
 
                                 elif t_universe == "Souls":
                                     embedVar = discord.Embed(
