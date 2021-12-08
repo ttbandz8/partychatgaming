@@ -2303,8 +2303,7 @@ class CrownUnlimited(commands.Cog):
                                                     embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                 await button_ctx.send(embed=embedVar)
                                                 t_health = int(.75 * (t_attack + t_defense))
-                                                t_attack = t_attack + (.50 * t_attack)
-                                                t_defense = t_defense + (.50 * t_defense)
+                                                
                                                 t_used_resolve = True
                                                 t_used_focus = True
                                                 t_final_stand = False
@@ -3132,8 +3131,7 @@ class CrownUnlimited(commands.Cog):
                                                     embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                 await private_channel.send(embed=embedVar)
                                                 o_health = int(.75 * (o_attack + o_defense))
-                                                o_attack = o_attack + (.50 * o_attack)
-                                                o_defense = o_defense + (.50 * o_defense)
+                                                
                                                 o_stamina = 100
                                                 o_used_resolve = True
                                                 o_used_focus = True
@@ -5040,8 +5038,7 @@ class CrownUnlimited(commands.Cog):
                                                     embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                 await ctx.send(embed=embedVar)
                                                 t_health = int(.75 * (t_attack + t_defense))
-                                                t_attack = t_attack + (.50 * t_attack)
-                                                t_defense = t_defense + (.50 * t_defense)
+                                                
                                                 t_used_resolve = True
                                                 t_final_stand = False
                                                 t_used_focus = True
@@ -5731,8 +5728,7 @@ class CrownUnlimited(commands.Cog):
                                                 embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                             await private_channel.send(embed=embedVar)
                                             o_health = int(.75 * (o_attack + o_defense))
-                                            o_attack = o_attack + (.50 * o_attack)
-                                            o_defense = o_defense + (.50 * o_defense)
+                                            
                                             o_stamina = 100
                                             o_used_resolve = True
                                             o_used_focus = True
@@ -11413,8 +11409,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                     await button_ctx.send(embed=embedVar)
                                                     t_health = int(.75 * (t_attack + t_defense))
-                                                    t_attack = t_attack + (.50 * t_attack)
-                                                    t_defense = t_defense + (.50 * t_defense)
+                                                    
                                                     t_used_resolve = True
                                                     t_final_stand = False
                                                     t_used_focus = True
@@ -12315,8 +12310,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                         await private_channel.send(embed=embedVar)
                                                         o_health = int(.75 * (o_attack + o_defense))
-                                                        o_attack = o_attack + (.50 * o_attack)
-                                                        o_defense = o_defense + (.50 * o_defense)
+                                                        
                                                         o_stamina = 100
                                                         o_used_resolve = True
                                                         o_used_focus = True
@@ -12971,8 +12965,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                     await private_channel.send(embed=embedVar)
                                                     o_health = int(.75 * (o_attack + o_defense))
-                                                    o_attack = o_attack + (.50 * o_attack)
-                                                    o_defense = o_defense + (.50 * o_defense)
+                                                    
                                                     o_stamina = 100
                                                     o_used_resolve = True
                                                     o_final_stand = False
@@ -14835,8 +14828,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                         await button_ctx.send(embed=embedVar)
                                                         t_health = int(.75 * (t_attack + t_defense))
-                                                        t_attack = t_attack + (.50 * t_attack)
-                                                        t_defense = t_defense + (.50 * t_defense)
+                                                        
                                                         t_used_resolve = True
                                                         t_used_focus = True
                                                         t_final_stand = False
@@ -16106,8 +16098,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                         await private_channel.send(embed=embedVar)
                                                         c_health = int(.75 * (c_attack + c_defense))
-                                                        c_attack = c_attack + (.50 * c_attack)
-                                                        c_defense = c_defense + (.50 * c_defense)
+                                                        
                                                         c_used_resolve = True
                                                         c_used_focus = True
                                                         c_final_stand = False
@@ -17616,8 +17607,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                         await private_channel.send(embed=embedVar)
                                                         t_health = int(.75 * (t_attack + t_defense))
-                                                        t_attack = t_attack + (.50 * t_attack)
-                                                        t_defense = t_defense + (.50 * t_defense)
+                                                        
                                                         t_used_resolve = True
                                                         t_final_stand = False
                                                         t_used_focus = True
@@ -18480,8 +18470,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                                 embedVar.add_field(name=f"{c_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                             await button_ctx.send(embed=embedVar)
                                                             t_health = int(.75 * (t_attack + t_defense))
-                                                            t_attack = t_attack + (.50 * t_attack)
-                                                            t_defense = t_defense + (.50 * t_defense)
+                                                            
                                                             t_used_resolve = True
                                                             t_used_focus = True
                                                             t_final_stand = False
@@ -19527,8 +19516,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                         await private_channel.send(embed=embedVar)
                                                         o_health = int(.75 * (o_attack + o_defense))
-                                                        o_attack = o_attack + (.50 * o_attack)
-                                                        o_defense = o_defense + (.50 * o_defense)
+                                                        
                                                         o_stamina = 100
                                                         o_used_resolve = True
                                                         o_final_stand = False
@@ -19734,8 +19722,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                         await private_channel.send(embed=embedVar)
                                                         c_health = int(.75 * (c_attack + c_defense))
-                                                        c_attack = c_attack + (.50 * c_attack)
-                                                        c_defense = c_defense + (.50 * c_defense)
+                                                        
                                                         c_used_resolve = True
                                                         c_used_focus = True
                                                         c_final_stand = False
