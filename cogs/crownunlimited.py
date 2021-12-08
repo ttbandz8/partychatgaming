@@ -7147,22 +7147,24 @@ cache = dict()
 
 def get_card(url, cardname, cardtype):
     try:
-        save_path = f"image_cache/{str(cardtype)}/{str(cardname)}.png"
-        # print(save_path)
+        # save_path = f"image_cache/{str(cardtype)}/{str(cardname)}.png"
+        # # print(save_path)
         
-        if url not in cache:
-            # print("Not in Cache")
-            cache[url] = save_path
-            im = Image.open(requests.get(url, stream=True).raw)
-            im.save(f"{save_path}", "PNG")
-            # print(f"NO : {cardname}")
-            return im
+        # if url not in cache:
+        #     # print("Not in Cache")
+        #     cache[url] = save_path
+        #     im = Image.open(requests.get(url, stream=True).raw)
+        #     im.save(f"{save_path}", "PNG")
+        #     # print(f"NO : {cardname}")
+        #     return im
 
-        else:
-            # print("In Cache")
-            im = Image.open(cache[url])
-            # print(f"YES : {cardname}")
-            return im
+        # else:
+        #     # print("In Cache")
+        #     im = Image.open(cache[url])
+        #     # print(f"YES : {cardname}")
+        #     return im
+        im = Image.open(requests.get(url, stream=True).raw)
+        return im
            
     except Exception as ex:
         trace = []
