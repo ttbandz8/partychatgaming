@@ -182,6 +182,7 @@ class CARDS():
     EXCLUSIVE: bool = field(default_factory=lambda: False)
     IS_SKIN: bool = field(default_factory=lambda: False)
     SKIN_FOR: str = field(default_factory=lambda: "N/A")
+    PERFORMANCE: bool = field(default_factory=lambda: False)
 
 
 @dataclass(frozen=True, order=True)

@@ -253,6 +253,8 @@ class Cards(commands.Cog):
     @cog_ext.cog_slash(description="View a Card", guild_ids=main.guild_ids)
     async def viewcard(self, ctx, card: str):
         card_name = card
+        query = {'DISNAME': str(ctx.author)}
+        d = db.queryUser(query)
         card = db.queryCard({'NAME': {"$regex": f"^{str(card_name)}$", "$options": "i"}})
         try:
             if card:
@@ -276,6 +278,7 @@ class Cards(commands.Cog):
                 traits = ut.traits
                 show_img = db.queryUniverse({'TITLE': o_show})['PATH']
                 o_collection = card['COLLECTION']
+                performance_mode = d['PERFORMANCE']
                 resolved = False
                 focused = False
                 dungeon = False
@@ -372,22 +375,43 @@ class Cards(commands.Cog):
                     message = f"{o_card} is a balanced card. "
                     tip = "Tip: Equip /titles and /arms that will maximize your Enhancer"
 
-                card_file = showcard(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, title, focused,
-                                    o_attack, o_defense, turn, move1ap, move2ap, move3ap, move4ap, move4enh, 0, None)
+                
+                if performance_mode:
+                    embedVar = discord.Embed(title=f"{card_icon} {price_message} {o_card}", description=textwrap.dedent(f"""\
+                    ❤️ {o_max_health}
+                    🗡️ {o_attack}
+                    🛡️ {o_defense}
+                    🏃 {o_speed}
 
-                embedVar = discord.Embed(title=f"", colour=000000)
-                embedVar.set_image(url="attachment://image.png")
-                embedVar.set_thumbnail(url=show_img)
-                embedVar.set_author(name=textwrap.dedent(f"""\
-                {card_icon} {price_message}
-                Passive & Universe Trait
-                🩸 {passive_name}: {passive_type} {passive_num}{passive_enhancer_suffix_mapping[passive_type]}
-                ♾️ {traitmessage}
-                🏃 {o_speed}
-                """))
-                embedVar.set_footer(text=f"{tip}")
+                    🩸 {passive_name}: {passive_type} {passive_num}{passive_enhancer_suffix_mapping[passive_type]}                
+                    
+                    💥 {move1}: {move1ap}
+                    ☄️ {move2}: {move2ap}
+                    🏵️ {move3}: {move3ap}
+                    🦠 {move4}: {move4ap}
 
-                await ctx.send(file=card_file, embed=embedVar, hidden=True)
+                    ♾️ {traitmessage}
+                    """), colour=000000)
+                    embedVar.set_footer(text=f"{tip}")
+                    await ctx.send(embed=embedVar)
+
+                else:
+                    card_file = showcard(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, title, focused,
+                                        o_attack, o_defense, turn, move1ap, move2ap, move3ap, move4ap, move4enh, 0, None)
+
+                    embedVar = discord.Embed(title=f"", colour=000000)
+                    embedVar.set_image(url="attachment://image.png")
+                    embedVar.set_thumbnail(url=show_img)
+                    embedVar.set_author(name=textwrap.dedent(f"""\
+                    {card_icon} {price_message}
+                    Passive & Universe Trait
+                    🩸 {passive_name}: {passive_type} {passive_num}{passive_enhancer_suffix_mapping[passive_type]}
+                    ♾️ {traitmessage}
+                    🏃 {o_speed}
+                    """))
+                    embedVar.set_footer(text=f"{tip}")
+
+                    await ctx.send(file=card_file, embed=embedVar)
             else:
                 await ctx.send(m.CARD_DOESNT_EXIST, hidden=True)
         except Exception as ex:

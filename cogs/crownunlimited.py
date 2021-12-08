@@ -8075,11 +8075,11 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             c_card_passive = list(c_passive.values())[0]
 
             if c_card_passive_type == 'ATK':
-                c_attack = c_attack + int(c_card_passive)
+                c_attack = c_attack + int((c_card_passive / 100) * c_attack)
             elif c_card_passive_type == 'DEF':
-                c_defense = o_defense + int(c_card_passive)
+                c_defense = c_defense + int((c_card_passive / 100) * c_defense)
             elif c_card_passive_type == 'STAM':
-                c_stamina = o_stamina + int(c_card_passive)
+                c_stamina = c_stamina + int(c_card_passive)
             elif c_card_passive_type == 'HLT':
                 c_max_health = c_max_health + int(c_card_passive)
                 c_health = c_health + int(c_card_passive)
@@ -8325,9 +8325,9 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         o_card_passive = list(o_passive.values())[0]
 
         if o_card_passive_type == 'ATK':
-            o_attack = o_attack + int(o_card_passive)
+            o_attack = o_attack + int((o_card_passive / 100) * o_attack)
         elif o_card_passive_type == 'DEF':
-            o_defense = o_defense + int(o_card_passive)
+            o_defense = o_defense + int((o_card_passive / 100) * o_defense)
         elif o_card_passive_type == 'STAM':
             o_stamina = o_stamina + int(o_card_passive)
         elif o_card_passive_type == 'HLT':
@@ -8571,9 +8571,9 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         t_card_passive = list(t_passive.values())[0]
 
         if t_card_passive_type == 'ATK':
-            t_attack = t_attack + int(t_card_passive)
+            t_attack = t_attack + int((t_card_passive / 100) * t_attack)
         elif t_card_passive_type == 'DEF':
-            t_defense = t_defense + int(t_card_passive)
+            t_defense = t_defense + int((t_card_passive / 100) * t_defense)
         elif t_card_passive_type == 'STAM':
             t_stamina = t_stamina + int(t_card_passive)
         elif t_card_passive_type == 'HLT':
