@@ -138,8 +138,8 @@ class CrownUnlimited(commands.Cog):
 
             # Lose / Bounty
             take_chances_response = ""
-            random_flee_loss = random.randint(1, 30)
-            bounty = random.randint(1, 20000)
+            random_flee_loss = random.randint(1, 50)
+            bounty = random.randint(1, 30000)
 
             if bounty >= 150000:
                 bounty_icon = ":money_with_wings:"
@@ -165,9 +165,9 @@ class CrownUnlimited(commands.Cog):
 
             elif random_flee_loss <= 100:
                 if selected_mode == "Tales":
-                    found_amount = round(bounty / 2)
-                else:
                     found_amount = round(bounty / 3)
+                else:
+                    found_amount = round(bounty / 5)
                 await bless(found_amount, str(message.author))
                 embedVar = discord.Embed(title=f"You fled but found {bounty_icon} {found_amount}!", colour=0xf1c40f)
                 embedVar.set_footer(text="Money Earned!",
