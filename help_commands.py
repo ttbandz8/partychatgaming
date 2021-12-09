@@ -20,14 +20,14 @@ LEGEND = textwrap.dedent(f"""\
 **Accessories**
 :reminder_ribbon: - Title
 :mechanical_arm: - Arm
-:bird: - Pet
+🧬 - Summon
 
 **Moveset**
 :boom: - Basic Attack *costs 10 :cyclone:*
 :comet: - Special Attack *costs 30 :cyclone:*
 :rosette: - Ultimate Attack *costs 80 :cyclone:*
 :microbe: - Enhancer Ability *costs 20 :cyclone:*
-↘️ - Explains Enhancer Ability
+↘️ - Explains Enhancer Ability */enhancers*
 
 **Passives**
 :drop_of_blood: - Card Passive
@@ -140,7 +140,7 @@ CTAP_COMMANDS = textwrap.dedent(f"""\
 **/buyarm**: Buy Arm
 **/equiparm arm**: Equip arm
 
-**Pet Commands**
+**Summon Commands**
 **/petlist universe**: View Universe Pet List
 **/viewpet** Preview Pet
 **/equippet pet**: Equip pet

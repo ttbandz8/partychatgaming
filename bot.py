@@ -86,7 +86,7 @@ async def help(ctx):
    embedVar2.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
    embedVar2.set_footer(text=f"/crown - Crown Unlimited Manual")
 
-   embedVar3 = discord.Embed(title= f"CTAP Commands", description=h.CTAP_COMMANDS, colour=0x7289da)
+   embedVar3 = discord.Embed(title= f"Cards, Titles, Arms, Summons and Shop", description=h.CTAP_COMMANDS, colour=0x7289da)
    embedVar3.set_thumbnail(url=avatar)
    embedVar3.add_field(name="Help Navigation", value="*First Page: :track_previous:|Prev Page: :rewind:|\nNext Page: :fast_forward:| Last Page: :track_next:*")
    embedVar3.set_footer(text=f"/crown - Crown Unlimited Manual")
@@ -97,14 +97,9 @@ async def help(ctx):
    embedVar4.set_footer(text=f"/crown - Crown Unlimited Manual")
 
 
-   paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
-   paginator.add_reaction('⏮️', "first")
-   paginator.add_reaction('⬅️', "back")
-   paginator.add_reaction('🔒', "lock")
-   paginator.add_reaction('➡️', "next")
-   paginator.add_reaction('⏭️', "last")
    embeds = [embedVar4, embedVar2,embedVar3, embedVar1]
-   await paginator.run(embeds)
+
+   await Paginator(bot=bot, ctx=ctx, pages=embeds, timeout=60).run()
 
 
 async def validate_user(ctx):
@@ -126,71 +121,64 @@ async def enhancers(ctx):
    avatar="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png"
 
    try:
-      embedVar1 = discord.Embed(title= f":microbe: **Title** Enhancer Type: Boosts",colour=0x7289da)
+      embedVar1 = discord.Embed(title= f"Title Enhancer Type: Boosts",colour=0x7289da)
       embedVar1.set_thumbnail(url=avatar)
       embedVar1.add_field(name="`BOOSTS`", value="**ATK**\n**Title, Arm, Card Passive Effect:** Increase Attack by Flat AP value.\n**Card Active Enhancer Effect:** Increase Attack By AP %.\n\n**DEF**\n**Title, Arm, Card Passive Effect:** Increase Defense by Flat AP value.\n**Card Active Enhancer Effect:** Increase Defense By AP %.\n\n**HLT**\n**Title, Arm, Card Passive Effect:** Increase Health by Flat AP value.\n**Card Active Enhancer Effect:** Increase Health By Flat AP + 16% of Current Health.\n\n**STAM** - Increase Stamina by Flat AP\n\n")
-      embedVar1.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help\nPage 1/11")
+      embedVar1.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
 
-      embedVar2 = discord.Embed(title= f":microbe: **Title** Enhancer Type: Steals",colour=0x7289da)
+      embedVar2 = discord.Embed(title= f"Title Enhancer Type: Steals",colour=0x7289da)
       embedVar2.set_thumbnail(url=avatar)
       embedVar2.add_field(name="`STEALS`", value="**FLOG**- Steal Opponent Attack and Add it to Your Attack by AP %\n\n**WITHER**- Steal Opponent Defense and Add it to Your Defense by AP %\n\n**LIFE**\n**Title, Arm, Card Passive Effect:** Steal Opponent Health and Add it to your Max Health by AP %\n**Card Active Enhancer Effect:** Steal Opponent Health and Add it to your Current Health by Flat AP + 9% of Opponent Current Health. \n\n**DRAIN** - Steal Opponent Stamina and Add it to your Stamina by Flat AP\n\n")
-      embedVar2.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help\nPage 2/11")
+      embedVar2.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
 
-      embedVar3 = discord.Embed(title= f":microbe: **Title** Enhancer Type: Sacrifice",colour=0x7289da)
+      embedVar3 = discord.Embed(title= f"Title Enhancer Type: Sacrifice",colour=0x7289da)
       embedVar3.set_thumbnail(url=avatar)
       embedVar3.add_field(name="`SACRIFICE`", value="**RAGE** - Decrease Your Defense by AP %, Increase Your Attack by Amount of Decreased Defense\n\n**BRACE** - Decrease Your Attack by AP %, Increase Your Defense By Amount of Decreased Attack\n\n**BZRK** - Decrease Your Current Health by AP %,  Increase Your Attack by Amount of Decreased Health\n\n**CRYSTAL** - Decrease Your Health by AP %, Increase Your Defense by Amount of Decreased Health\n\n")
-      embedVar3.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help\nPage 3/11")
+      embedVar3.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
 
-      embedVar4 = discord.Embed(title= f":microbe: **Title** Enhancer Type: Conversion",colour=0x7289da)
+      embedVar4 = discord.Embed(title= f"Title Enhancer Type: Conversion",colour=0x7289da)
       embedVar4.set_thumbnail(url=avatar)
       embedVar4.add_field(name="`CONVERSION`", value="**STANCE** - Swap Your Attack and Defense, Increase Your Attack By Flat AP\n\n**CONFUSE** - Swap Opponenet Attack and Defense, Decrease Opponent Defense by Flat AP\n\n")
-      embedVar4.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help\nPage 4/11")
+      embedVar4.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
 
-      embedVar5 = discord.Embed(title= f":microbe: **Title** Enhancer Type: Time Manipulation",colour=0x7289da)
+      embedVar5 = discord.Embed(title= f"Title Enhancer Type: Time Manipulation",colour=0x7289da)
       embedVar5.set_thumbnail(url=avatar)
       embedVar5.add_field(name="`TIME MANIPULATION`", value="**BLINK**  - Decrease Your Stamina by Flat AP, Increase Opponent Stamina by Flat AP\n\n**SLOW** - Decrease Your Stamina by Flat AP, Swap You and Your Opponent's Stamina\n\n**HASTE** - Increase Your Stamina, Swap You and Your Opponent's Stamina\n\n")
-      embedVar5.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help\nPage 5/11")
+      embedVar5.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
 
-      embedVar6 = discord.Embed(title= f":microbe: **Title** Enhancer Type: Control",colour=0x7289da)
+      embedVar6 = discord.Embed(title= f"Title Enhancer Type: Control",colour=0x7289da)
       embedVar6.set_thumbnail(url=avatar)
       embedVar6.add_field(name="`CONTROL`", value="**SOULCHAIN** - You and Your Opponent's Stamina Equal Flat AP\n\n**GAMBLE** - You and Your Opponent's Health Equal Flat AP\n\n")
-      embedVar6.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help\nPage 6/11")
+      embedVar6.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
 
-      embedVar7 = discord.Embed(title= f":microbe: **Title** Enhancer Type: Fortitude",colour=0x7289da)
+      embedVar7 = discord.Embed(title= f"Title Enhancer Type: Fortitude",colour=0x7289da)
       embedVar7.set_thumbnail(url=avatar)
       embedVar7.add_field(name="`FORTITUDE`", value="**GROWTH**- Decrease Your Max Health by AP %, Increase Your Attack and Defense by AP %\n\n**FEAR** - Decrease Your Max Health by AP %, Decrease Opponent Attack and Defense by AP %\n\n")
-      embedVar7.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help\nPage 7/11")
+      embedVar7.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
 
-      embedVar8 = discord.Embed(title= f":microbe: **Title** Enhancer Type: Damage",colour=0x7289da)
+      embedVar8 = discord.Embed(title= f"Title Enhancer Type: Damage",colour=0x7289da)
       embedVar8.set_thumbnail(url=avatar)
       embedVar8.add_field(name="`DAMAGE`", value="**WAVE** - Deal Flat AP Damage to Opponent. AP Decreases each turn. If used on turn that is divisible by 10 you will deal 30% of Flat AP Damage. You have chance to Crit for Double Flat AP Damage. \n\n**BLAST** - Deal Flat AP Damage to Opponent. AP Increases each turn.\n\n")
-      embedVar8.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help\nPage 8/11")
+      embedVar8.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
 
-      embedVar9 = discord.Embed(title= f":microbe: **Title** Enhancer Type: Divinity",colour=0x7289da)
+      embedVar9 = discord.Embed(title= f"Title Enhancer Type: Divinity",colour=0x7289da)
       embedVar9.set_thumbnail(url=avatar)
       embedVar9.add_field(name="`DIVINITY`", value="**CREATION** - Increase Max Health by Flat AP. AP Decreases each turn. If used on turn that is divisible by 10 you will heal Health & Max Health for 20% of Flat AP. You have chance to Crit Heal Health and Max Health for Double Flat AP. \n\n**DESTRUCTION** - Decrease Opponent Max Health by Flat AP. AP Increases each turn.\n\n")
-      embedVar9.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help\nPage 9/11")
+      embedVar9.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
       
-      embedVar10 = discord.Embed(title= f":microbe: **Arm** Enhancer Type: Offensive",colour=0x7289da)
+      embedVar10 = discord.Embed(title= f"Arm Enhancer Type: Offensive",colour=0x7289da)
       embedVar10.set_thumbnail(url=avatar)
       embedVar10.add_field(name="`OFFENSE`", value="**BASIC** - Increase 💥 Basic Attack Ability Power by Value \n\n**SPECIAL** - Increase ☄️ Special Attack Ability Power by Value \n\n**ULTIMATE** - Increase 🏵️ Ultimate Attack Ability Power by Value \n\n**ULTIMAX** - Increase **ALL** Attack Move Ability Power by Value \n\n**MANA** - Increase 🦠 Enhancer Ability Power by Percentage \n\n")
-      embedVar10.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help\nPage 10/11")
+      embedVar10.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
       
-      embedVar11 = discord.Embed(title= f":microbe: **Arm** Enhancer Type: Defensive",colour=0x7289da)
+      embedVar11 = discord.Embed(title= f"Arm Enhancer Type: Defensive",colour=0x7289da)
       embedVar11.set_thumbnail(url=avatar)
       embedVar11.add_field(name="`DEFENSE`", value="**SHIELD**- Grant Damage absorbing Shield until destroyed \n\n**BARRIER** - Blocks all Attack Damage until player Attacks or is Destoyed (Enhancers Exempt)\n\n**PARRY** - Reflects 50% Damage back to Attacker\n\n")
-      embedVar11.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help\nPage 11/11")
-      
+      embedVar11.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
       
 
-      paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
-      paginator.add_reaction('⏮️', "first")
-      paginator.add_reaction('⬅️', "back")
-      paginator.add_reaction('🔒', "lock")
-      paginator.add_reaction('➡️', "next")
-      paginator.add_reaction('⏭️', "last")
       embeds = [embedVar1, embedVar2, embedVar3, embedVar4, embedVar5, embedVar6, embedVar7, embedVar8, embedVar9, embedVar10, embedVar11]
-      await paginator.run(embeds)
+      await Paginator(bot=bot, ctx=ctx, pages=embeds, timeout=60).run()
       
    
    except Exception as ex:
@@ -216,84 +204,106 @@ async def crown(ctx):
    avatar="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png"
 
 
-   embedVar1 = discord.Embed(title= f":crown: Crown Unlimited",colour=0x7289da)
+   embedVar1 = discord.Embed(title= f"About Crown Unlimited",colour=0x7289da)
    embedVar1.set_thumbnail(url=avatar)
-   embedVar1.add_field(name="About The Game!", value=textwrap.dedent(f"""\
+   embedVar1.add_field(name="**About The Game!**", value=textwrap.dedent(f"""\
+      
    **Crown Unlimited** is a Multiplatform Card Game exploring **Universes** from your favorite Video Game and Anime Series!
 
    Explore Tales, Dungeons, and Bosses! Play **Solo**, or with **Friends**!
    """))
 
-   embedVar2 = discord.Embed(title= f":crown: Getting Started", description=textwrap.dedent(f"""\
+   embedVar2 = discord.Embed(title= f"Getting Started", description=textwrap.dedent(f"""\
    Players begin with 3 cards from the **Starter Universes**.
+   
    The Title **Starter** and the Arm **Stock** are equipped.
-   Your first Summon **Chick** will be joining as well!   
+   
+   Your first Summon **Chick** will be joining as well!
+      
 
    The **Starter Universes** are _My Hero Academia_, _Kanto Region_, and _League Of Legends_.
 
    Play **Single Player** and **Multiplayer** Modes to earn :coin:
-   Buy and equip better Items and unlock new **Universes**!
+   Buy and equip better Items to Conquer the Multiverse!
    """), colour=0x7289da)
    embedVar2.set_thumbnail(url=avatar)
 
-   embedVar3 = discord.Embed(title= f":crown: Card Mechanics", description=textwrap.dedent(f"""\
+   embedVar3 = discord.Embed(title= f"Card Mechanics", description=textwrap.dedent(f"""\
    **Card Stats** 
    Health (**HLT**) Stamina (**STAM**) Attack (**ATK**) Defense(**DEF**)
 
-   **Cards Have 6 Elements** 
-   3 Abilities
+   **Cards Have 5 Abilities** 
+   3 Attack Moves
    1 Enhancer
-   1 Unique Passive
-   1 Universe Trait
+   1 Block
    
-
-   **Abilities**
-   Abilities inflict damage on the opponent.
-   Each ability matches a **Number** and **Stamina Cost** in the Movelist.
-   **1:** Basic Attack _uses 10 stamina_
-   **2:** Special Attack _uses 30 stamina_
-   **3:** Ultimate Attack _uses 80 stamina_
+   **Attack Moves**
+   Attacks inflict damage on the opponent.
+   Each Attack matches an **Emoji** and **Stamina Cost** in the Movelist.
+   💥 Basic Attack _uses 10 stamina_
+   ☄️ Special Attack _uses 30 stamina_
+   🏵️ Ultimate Attack _uses 80 stamina_
+   
+   **Enhancer**
+   Enhancers either boost your stats or inflict status effects on your opponent. Use **/enhancers** for full list of Enhancers and their effects.
+   🦠 Enhancer _uses 20 stamina_
    
    **Block**
    Doubles Defense for 1 turn
-   **0:** _uses 20 stamina_ 
-
-   **Enhancer**
-   Enhancers either boost your stats or inflict status effects on your opponent. Use /enhancers for full list of Enhancers and their effects.
-   **4:** Enhancer _uses 20 stamina_
-
-   **Unique Passive**
-   Unique Passives are Enhancers that take effect at the beginning of the battle.
-
-   **Universe Traits**
-   Universe Traits are universe specific abilities activated during battle. Use .traits for a full list of Universe Traits.
-
-   **Destinies**
-   Destinies are card specific achievements that earn you special **Destiny Cards**
- 
-
+   🛡️ _uses 20 stamina_ 
    """), colour=0x7289da)
    embedVar3.set_thumbnail(url=avatar)
+   
+   embedVar11 = discord.Embed(title= f"Card Types", description=textwrap.dedent(f"""                                                                           
+   🎴 **Universe Cards** - Purchasable in the **Shop** and Drops in **Tales**
+   ⚪ **Card Skins** - Purchasable in the **Shop**
+   🔥 **Dungeon Cards** - Drops in **Dungeons**
+   ✨ **Destiny Cards** - Earned via **Destinies**
+   👹 **Boss Cards** - Exchange for **Boss Souls**
+   
+   **Cards Have 5 Passive Elements** 
+   1 Card Type
+   1 Unique Passive
+   1 Universe Trait
+   Card Level
+   Destinies
+   
+   🩸 **Unique Passive**
+   Enhancers that take effect **at the beginning** of the battle.
 
-   embedVar4 = discord.Embed(title= f":crown: Titles, Arms, and Summons ", description=textwrap.dedent(f"""\
+   ♾️ **Universe Traits**
+   Universe specific abilities activated during battle. 
+   Use **/traits** for a full list.
+   
+   🎇 **Card Level**
+   As you battle your card will level up, increasing Stats and Ability Power 
+   Cards Start at **Level 0** and Max out at **Level 500**
+
+   ✨ **Destinies**
+   Card Specific Quest that earn **Destiny Cards**
+ 
+   """), colour=0x7289da)
+   embedVar11.set_thumbnail(url=avatar)
+
+   embedVar4 = discord.Embed(title= f"Titles, Arms, and Summons ", description=textwrap.dedent(f"""\
    **Titles** & **Arms** 
    Modify you or the Opponents **Stats** prior to battle by applying **Enhancers** at the start of the match.
    
-   **Title Exlusivity**
+   🎗️ **Title Exlusivity**
    Titles are only effective on cards from the same Universe or Unbound!
    Buy **Titles** and **Arms** with :coin: or Earn them via **Drops**
    
-   **Arm Durability**
+   🦾 **Arm Durability**
    Arms are effective across the Multiverse, however they do break!
-   Stock up on **Arms** and repair Durability in the /trinketshop
+   Stock up on **Arms** and repair **Durability** in the **/trinketshop**
 
-   **Universe Buff** :Match Your Titles and Arms to your Card **Universe**.
+   👑 **Universe Buff** :Match Your Titles and Arms to your **Card Universe**.
    **Buff**: **Base Stats** + 100 **HLT** , 20 **ATK** & 20 **DEF**.
 
-   **Destiny Universe Buff** Destiny Cards gain an additional **Buff**.
+   ✨ **Destiny Universe Buff** Destiny Cards gain an additional **Buff**.
    **Buff**: **Universe Buff** + 50 **HLT**, 5 **ATK** and 5 **DEF**.
 
-   **Summons**
+   🧬 **Summons**
    Can assist during battle with an **Enhancer**.
    Earn **Summons** through Tales, Dungeon and Boss **Drops** or through trade with other Players!
    Battle with your **Summon** to gain **EXP** to increase Summon **Ability Power**. 
@@ -302,25 +312,25 @@ async def crown(ctx):
    """) ,colour=0x7289da)
    embedVar4.set_thumbnail(url=avatar)
 
-   embedVar5 = discord.Embed(title= f":crown: Battle Mechanics", description=textwrap.dedent(f"""\
-   Players take turns dealing damage using one of their 3 **Abilities**.
+   embedVar5 = discord.Embed(title= f"Battle Mechanics", description=textwrap.dedent(f"""\
+   Players take turns dealing damage using one of their 5 **Abilities**.
    
-   **Stamina** costs are standard across all Cards 
-   _check Cards page for details_.
+   🌀 **Stamina** costs are standard across all Cards 
+   _See Card Mechanics page for details_.
    
-   **Recovery**
+   ⚕️ **Recovery**
    When Players have used all of their **Stamina** they enter **Focus State**.
 
    The Match is over when a players **Health** reaches 0.
    """) ,colour=0x7289da)
    embedVar5.set_thumbnail(url=avatar)
 
-   embedVar6 = discord.Embed(title= f":crown: Focus & Resolve", description=textwrap.dedent(f"""\
-   **Focus**
+   embedVar6 = discord.Embed(title= f"Focus & Resolve", description=textwrap.dedent(f"""\
+   ⚕️ **Focus**
    Players can take advantage of **Focus State** to **Recover**.
    **Focus State** sacrifices a turn to Level Up Stats, increase **Stamina** to 90, and **Recover** some **Health**.
    
-   **Resolve**
+   ⚡**Resolve**
    Once in **Focus State** players can **Resolve**!
    **Resolved Characters** transform to greatly increase attack and health while sacrificing defense.
    **Resolved Characters** can summon Summons to aid them in battle.
@@ -328,52 +338,51 @@ async def crown(ctx):
 
    **Summon Assistance!**
    Summons Enhancers can either boost your stats or inflict status effects on your opponent. Summon moves do not end the player turn!
-   **6:** Summon _uses 15 stamina_.
+   🧬 Summon _uses 15 stamina_.
 
    """) ,colour=0x7289da)
    embedVar6.set_thumbnail(url=avatar)
 
-   embedVar7 = discord.Embed(title= f":crown:CROWN Single Player", description=textwrap.dedent(f"""\
+   embedVar7 = discord.Embed(title= f"Single Player", description=textwrap.dedent(f"""\
    **Single Player**
    
-   **Solo**/tales
-   **tales** Single player adventures where you traverse through your favorite universes as characters from various worlds!
-   **dungeon** Hard version of tales with better loot and better drop rates! (Unlocks after completing **Crown Tale**)
-   **boss** End Game battles featuring Iconic Villians from Crown Universes. (Unlocks after completing **Crown Dungeon**)
+   👤 **Solo**/tales
+   **Tales:** Single player adventures where you traverse through your favorite universes as characters from various worlds!
+   **Dungeon:** Hard version of tales with better loot and better drop rates! (Unlocks after completing **Crown Tale**)
+   **Boss:** End Game battles featuring Iconic Villians from Crown Universes. (Unlocks after completing **Crown Dungeon**)
+   
    **PATREON ONLY**
-   **Auto Battler**:Auto-Battle Tales
+   **Auto Battler:** Auto-Battle Tales
    
-   **Duo**
-   **tales 1-3** Battle with your favorite AI preset in this Duo Tale!
-   **dungeon 1-3** Bring your strongest builds through the Darkest Duo Dungeons.
-   **boss 1-3** Bring your Dynanmic duo to take on one Incredible Boss.
-   
+   👥 **Duo**/duo
+   **Tales Deck(1-3):** Battle with your favorite AI preset in this Duo Tale!
+   **Dungeon Deck(1-3):** Bring your strongest builds through the Darkest Duo Dungeons.
  
-   **Crown Rifts**
+   🔮 **Crown Rifts**
    Mash-Up Universes featuring heroes and villians connected through common traits and themes!
-   Pay attention, Rifts will not stay open for long!
+   *Pay attention, Rifts will not stay open if you continue through your Tale!*
    """),colour=0x7289da)
    embedVar7.set_thumbnail(url=avatar)
 
-   embedVar8 = discord.Embed(title= f":crown:CROWN Multiplayer", description=textwrap.dedent(f"""\
+   embedVar8 = discord.Embed(title= f"Multiplayer", description=textwrap.dedent(f"""\
    **Multiplayer**
    
-   **Co-Op**/coop
-   **tales @partner** Take a companion with your through your favorite tales with higher stakes!
-   **dungeon @partner** Bring a companion through the darkest dungeons to earn awesome loot together.
-   **boss @partner** Epic battles between two high level companions and one Incredible Boss.
+   :people_hugging: **Co-Op**/coop
+   **Tales @partner:** Take a companion with your through your favorite tales with higher stakes!
+   **Dungeon @partner:** Bring a companion through the darkest dungeons to earn awesome loot together.
+   **Boss @partner:** Epic battles between two high level companions and one Incredible Boss.
 
-   **PVP**
+   🤼 **PVP**
    **/battle @player:** Select your Build and Challenge any Crown Unlimited Player to join your Game Lobby.
    
-   **Crown Rifts**
+   🔮 **Crown Rifts**
    Crown Rifts are Co-Op Compatable and Helping other players in Co-Op **WILL NOT** close your open Rift!
    Grind Those Rifts Together!
    
    """),colour=0x7289da)
    embedVar8.set_thumbnail(url=avatar)
 
-   embedVar9 = discord.Embed(title= f":crown: Presets",description=textwrap.dedent(f"""\
+   embedVar9 = discord.Embed(title= f"Presets",description=textwrap.dedent(f"""\
    Save your favorite builds in your **Preset**
    **/preset** to open the deck menu and select a preset with **1-3**
    **/savepreset** to save your current build **1-3**
@@ -385,7 +394,7 @@ async def crown(ctx):
    """) ,colour=0x7289da)
    embedVar9.set_thumbnail(url=avatar)
 
-   embedVar10 = discord.Embed(title= f":crown: Economy",description=textwrap.dedent(f"""\
+   embedVar10 = discord.Embed(title= f"Economy",description=textwrap.dedent(f"""\
    Crown Unlimited features an in game **Shop** where you can purchase new Cards, Titles, and Arms.
    Use /shop to open the **Pop-Up Shop!**
 
@@ -404,14 +413,10 @@ async def crown(ctx):
    embedVar10.set_thumbnail(url=avatar)
 
 
-   paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
-   paginator.add_reaction('⏮️', "first")
-   paginator.add_reaction('⬅️', "back")
-   paginator.add_reaction('🔒', "lock")
-   paginator.add_reaction('➡️', "next")
-   paginator.add_reaction('⏭️', "last")
-   embeds = [embedVar1, embedVar2, embedVar3, embedVar4, embedVar5, embedVar6, embedVar7, embedVar8,embedVar9, embedVar10]
-   await paginator.run(embeds)
+
+   embeds = [embedVar1, embedVar2, embedVar3, embedVar11, embedVar4, embedVar5, embedVar6, embedVar7, embedVar8,embedVar9, embedVar10]
+   await Paginator(bot=bot, ctx=ctx, pages=embeds, timeout=60).run()
+  
 
 @slash.slash(description="Register for Crown Unlimited", guild_ids=guild_ids)
 async def register(ctx):
@@ -426,6 +431,7 @@ async def register(ctx):
       **/crown** - Game Manual
       **/battle @Senpai** - Tutorial Battle
       **/help** - Help Menu
+      **/enhancers** - Enhancer Help Menu
       
       */battle @legend - Advanced Tutorial Battle*
       **Some Important Symbols**
