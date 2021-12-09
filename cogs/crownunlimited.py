@@ -11315,7 +11315,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                                             embedVar = discord.Embed(title=f"{dmg['MESSAGE']}", colour=embed_color_o)
                                             await button_ctx.send(embed=embedVar)
-                                            if botActive:
+                                            # if botActive:
                                                 # await asyncio.sleep(1)
                                             turn_total = turn_total + 1
                                             turn = 1
@@ -11404,7 +11404,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     oarm_barrier_active=False
                                                     embedVar.add_field(name=f"{o_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
                                                 await button_ctx.send(embed=embedVar)
-                                                if botActive:
+                                                # if botActive:
                                                     # await asyncio.sleep(1)
                                             if t_health <= 0:
                                                 if t_final_stand==True:
