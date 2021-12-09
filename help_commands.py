@@ -37,7 +37,7 @@ LEGEND = textwrap.dedent(f"""\
 BOT_COMMANDS = textwrap.dedent(f"""\
 **Register, Delete, Lookup**
 **/register**: Account Registration
-**/deleteaccount: Delete your account
+**/deleteaccount**: Delete your account
 **/lookup @player**: Profile lookup
 
 **Team Commands**
