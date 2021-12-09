@@ -704,7 +704,7 @@ class Profile(commands.Cog):
                     elif pet_available == False and pet_exclusive ==False:
                         icon = ":japanese_ogre:"
 
-                    embedVar = discord.Embed(title= f"{Crest_dict[pet_universe]} {pet['NAME']}", description=textwrap.dedent(f"""
+                    embedVar = discord.Embed(title= f"{pet['NAME']}", description=textwrap.dedent(f"""
                     {icon}
                     _Bond_ **{pet['BOND']}** {bond_message}
                     _Level_ **{pet['LVL']} {lvl_message}**
