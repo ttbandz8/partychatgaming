@@ -17,7 +17,7 @@ from PIL import Image, ImageFont, ImageDraw
 import requests
 from collections import ChainMap
 import DiscordUtils
-from .crownunlimited import showcard, cardback, enhancer_mapping, title_enhancer_mapping, enhancer_suffix_mapping, title_enhancer_suffix_mapping, passive_enhancer_suffix_mapping
+from .crownunlimited import showcard, cardback, enhancer_mapping, title_enhancer_mapping, enhancer_suffix_mapping, title_enhancer_suffix_mapping, passive_enhancer_suffix_mapping, Crest_dict
 import random
 import textwrap
 from discord_slash import cog_ext, SlashContext
@@ -439,7 +439,7 @@ class Profile(commands.Cog):
                         traitmessage = f"**{mytrait['EFFECT']}:** {mytrait['TRAIT']}"
 
 
-                    embedVar = discord.Embed(title= f"{resp['NAME']}", description=textwrap.dedent(f"""
+                    embedVar = discord.Embed(title= f"{Crest_dict[resp['UNIVERSE']]} {resp['NAME']}", description=textwrap.dedent(f"""
                     {icon} **[{index}]** {lvl}
                     :heart: **{resp['HLT']}** :dagger: **{resp['ATK']}** :shield: **{resp['DEF']}**
                     
@@ -527,7 +527,7 @@ class Profile(commands.Cog):
                     elif title_available == False and title_exclusive ==False:
                         icon = ":japanese_ogre:"
                     
-                    embedVar = discord.Embed(title= f"{resp['TITLE']}", description=textwrap.dedent(f"""
+                    embedVar = discord.Embed(title= f"{Crest_dict[resp['UNIVERSE']]} {resp['TITLE']}", description=textwrap.dedent(f"""
                     {icon} **[{index}]**
                     :microbe: **{title_passive_type}:** {title_passive_value}
                     :earth_africa: **Universe:** {resp['UNIVERSE']}"""), 
@@ -609,7 +609,7 @@ class Profile(commands.Cog):
                     elif arm_available == False and arm_exclusive ==False:
                         icon = ":japanese_ogre:"
  
-                    embedVar = discord.Embed(title= f"{resp['ARM']}", description=textwrap.dedent(f"""
+                    embedVar = discord.Embed(title= f"{Crest_dict[resp['UNIVERSE']]} {resp['ARM']}", description=textwrap.dedent(f"""
                     {icon} **[{index}]**
                     :microbe: **{arm_passive_type}:** {arm_passive_value}
                     :earth_africa: **Universe:** {resp['UNIVERSE']}
@@ -617,6 +617,7 @@ class Profile(commands.Cog):
                     """), 
                     colour=0x7289da)
                     embedVar.set_thumbnail(url=avatar)
+                    embedVar.set_footer(text=f"{arm_passive_type}: {enhancer_mapping[arm_passive_type]}")
                     embed_list.append(embedVar)
                 
                 custom_button = manage_components.create_button(style=3, label="Equip")
@@ -696,13 +697,14 @@ class Profile(commands.Cog):
                     if pet_info:
                         pet_available = pet_info['AVAILABLE']
                         pet_exclusive = pet_info['EXCLUSIVE']
+                        pet_universe = pet_info['UNIVERSE']
                     icon = "🧬"
                     if pet_available and pet_exclusive:
                         icon = ":fire:"
                     elif pet_available == False and pet_exclusive ==False:
                         icon = ":japanese_ogre:"
 
-                    embedVar = discord.Embed(title= f"{pet['NAME']}", description=textwrap.dedent(f"""
+                    embedVar = discord.Embed(title= f"{Crest_dict[pet_universe]} {pet['NAME']}", description=textwrap.dedent(f"""
                     {icon}
                     _Bond_ **{pet['BOND']}** {bond_message}
                     _Level_ **{pet['LVL']} {lvl_message}**
