@@ -252,12 +252,12 @@ class Profile(commands.Cog):
                 if o_title_universe == "Unbound":
                     titled =True
                     titleicon = "🎗️"
-                    titlemessage = f"🎗️ {title_name}: {title_passive_type} {title_passive_value}{title_enhancer_suffix_mapping[title_passive_type]}"
+                    titlemessage = f"🎗️ **{title_name}**: {title_passive_type} {title_passive_value}{title_enhancer_suffix_mapping[title_passive_type]}"
                     warningmessage= f""
                 elif o_title_universe == o_show:
                     titled =True
                     titleicon = "🎗️"
-                    titlemessage = f"🎗️ {title_name}: {title_passive_type} {title_passive_value}{title_enhancer_suffix_mapping[title_passive_type]}"
+                    titlemessage = f"🎗️ **{title_name}**: {title_passive_type} {title_passive_value}{title_enhancer_suffix_mapping[title_passive_type]}"
                     warningmessage= f""
                 cardtitle = {'TITLE': title_name}
 
