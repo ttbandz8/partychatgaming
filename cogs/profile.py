@@ -264,20 +264,20 @@ class Profile(commands.Cog):
                 #<:PCG:769471288083218432>
                 if performance_mode:
                     embedVar = discord.Embed(title=f"{licon}{card_lvl} {o_card}".format(self), description=textwrap.dedent(f"""\
-                    ❤️ {o_max_health}
-                    🗡️ {o_attack}
-                    🛡️ {o_defense}
-                    🏃 {o_speed}
+                    ❤️ **{o_max_health}**
+                    🗡️ **{o_attack}**
+                    🛡️ **{o_defense}**
+                    🏃 **{o_speed}**
 
                     {titlemessage}
-                    🦾 {arm_name}: {arm_passive_type} {arm_passive_value}{enhancer_suffix_mapping[arm_passive_type]} {durability}
-                    🧬 {active_pet['NAME']}: {active_pet['TYPE']}: {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]} | Bond {bond} {bond_message} / Level {lvl} {lvl_message}
-                    🩸 {passive_name}: {passive_type} {passive_num}{passive_enhancer_suffix_mapping[passive_type]}                
+                    🦾 **{arm_name}:** {arm_passive_type} {arm_passive_value}{enhancer_suffix_mapping[arm_passive_type]} {durability}
+                    🧬 **{active_pet['NAME']}:** {active_pet['TYPE']}: {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]} | Bond {bond} {bond_message} / Level {lvl} {lvl_message}
+                    🩸 **{passive_name}:** {passive_type} {passive_num}{passive_enhancer_suffix_mapping[passive_type]}                
                     
-                    💥 {move1}: {move1ap}
-                    ☄️ {move2}: {move2ap}
-                    🏵️ {move3}: {move3ap}
-                    🦠 {move4}: {move4ap}
+                    💥 **{move1}:** {move1ap}
+                    ☄️ **{move2}:** {move2ap}
+                    🏵️ **{move3}:** {move3ap}
+                    🦠 **{move4}:** {move4enh} {move4ap}{enhancer_suffix_mapping[move4enh]}
 
                     ♾️ {traitmessage}
                     """),colour=000000)
@@ -446,7 +446,7 @@ class Profile(commands.Cog):
                     💥 **{move1}:** {move1ap}
                     ☄️ **{move2}:** {move2ap}
                     🏵️ **{move3}:** {move3ap}
-                    🦠 **{move4}:** {move4ap}
+                    🦠 **{move4}:** {move4enh} {move4ap}{enhancer_suffix_mapping[move4enh]}
 
                     🩸 **{passive_name}:** {passive_type} {passive_num}{passive_enhancer_suffix_mapping[passive_type]}
                     ♾️ {traitmessage}
