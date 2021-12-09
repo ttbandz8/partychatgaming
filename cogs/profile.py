@@ -439,7 +439,7 @@ class Profile(commands.Cog):
                         traitmessage = f"**{mytrait['EFFECT']}:** {mytrait['TRAIT']}"
 
 
-                    embedVar = discord.Embed(title= f"{Crest_dict[resp['UNIVERSE']]} {resp['NAME']}", description=textwrap.dedent(f"""
+                    embedVar = discord.Embed(title= f"{resp['NAME']}", description=textwrap.dedent(f"""
                     {icon} **[{index}]** {lvl}
                     :heart: **{resp['HLT']}** :dagger: **{resp['ATK']}** :shield: **{resp['DEF']}**
                     
@@ -527,7 +527,7 @@ class Profile(commands.Cog):
                     elif title_available == False and title_exclusive ==False:
                         icon = ":japanese_ogre:"
                     
-                    embedVar = discord.Embed(title= f"{Crest_dict[resp['UNIVERSE']]} {resp['TITLE']}", description=textwrap.dedent(f"""
+                    embedVar = discord.Embed(title= f"{resp['TITLE']}", description=textwrap.dedent(f"""
                     {icon} **[{index}]**
                     :microbe: **{title_passive_type}:** {title_passive_value}
                     :earth_africa: **Universe:** {resp['UNIVERSE']}"""), 
@@ -609,7 +609,7 @@ class Profile(commands.Cog):
                     elif arm_available == False and arm_exclusive ==False:
                         icon = ":japanese_ogre:"
  
-                    embedVar = discord.Embed(title= f"{Crest_dict[resp['UNIVERSE']]} {resp['ARM']}", description=textwrap.dedent(f"""
+                    embedVar = discord.Embed(title= f"{resp['ARM']}", description=textwrap.dedent(f"""
                     {icon} **[{index}]**
                     :microbe: **{arm_passive_type}:** {arm_passive_value}
                     :earth_africa: **Universe:** {resp['UNIVERSE']}
