@@ -36,8 +36,8 @@ LEGEND = textwrap.dedent(f"""\
 
 BOT_COMMANDS = textwrap.dedent(f"""\
 **Register, Delete, Lookup**
-**/r**: Account Registration
-**/deleteaccount @player**IWANTTODELETEMYACCOUNT: Delete your account
+**/register**: Account Registration
+**/deleteaccount: Delete your account
 **/lookup @player**: Profile lookup
 
 **Team Commands**
@@ -88,7 +88,7 @@ CROWN_UNLIMITED_COMMANDS = textwrap.dedent(f"""\
 **/preset** View your build presets
 **/savepreset**: Save your current build as preset
 **/shop**: Open shop
-**/bal**: View Balance
+**/balance**: View Balance
 **/cards**: Open your list of Cards
 **/titles**: Open your list of Titles
 **/arms**: Open your list of Arms
@@ -99,7 +99,6 @@ CROWN_UNLIMITED_COMMANDS = textwrap.dedent(f"""\
 
 **PvP Commands**
 **/battle @player**: Challenge another Player
-**/wager amount**: Wager amount to battle in current session
 **/raid guild**: Start Guild Raid Battle
 
 **Tutorial Bot Commands**
@@ -110,11 +109,11 @@ CROWN_UNLIMITED_COMMANDS = textwrap.dedent(f"""\
 **/crown**: Crown Unlimited Help Book
 
 **Story Commands**
-**/ff**: Leave current tale, dungeon, or boss fight
+**/forcequit**: Leave current tale, dungeon, or boss fight
 **/universes**: Show List Of Crown Universes
 **/tales**: Opens Crown Tales Story Mode Menu
-**/cooptales**: Opens Crown Tales CO-OP Story Mode Menu
-**/aitales**: Opens Crown Tales Duo Story Mode Menu
+**/coop**: Opens Crown Tales CO-OP Story Mode Menu
+**/duo**: Opens Crown Tales Duo Story Mode Menu
 
 
 """)
