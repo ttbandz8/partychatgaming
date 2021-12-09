@@ -2941,7 +2941,7 @@ class CrownUnlimited(commands.Cog):
                                         embedVar = discord.Embed(title=f"{t_card.upper()} Summoned 🧬 {tpet_name}",
                                                                  colour=0xe91e63)
                                         embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!",
-                                                           value=f"Enhanced **{tpet_type}** by **{tpet_dmg}**")
+                                                            value=f"{dmg['MESSAGE']}")
                                         
                                         
                                         embedVar.set_image(url="attachment://image.png")
@@ -6990,56 +6990,106 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, stamina, en
             else:
                 enhanced = round(ap * turn)
             if enhanced > op_health:
-                message = f'{move} used!\nOpponent has been reduced.'
+                message = f'Opponent has been reduced.'
                 enhanced = op_health - 1
-
-        if enh_type == 'ATK':
-            message = f'{move} used!\nIncreasing Attack by {enhanced}'
-        elif enh_type == 'DEF':
-            message = f'{move} used!\nIncreasing Defense by {enhanced}'
-        elif enh_type == 'STAM':
-            message = f'{move} used!\nIncreasing Stamina by {enhanced}'
-        elif enh_type == 'LIFE':
-            if enhanced == 0:
-                message = f'{move} used!\nStealing {enhanced} Health \n*Your Health is full!*'
+        if move_stamina ==15: #If move is a pet move
+            if enh_type == 'ATK':
+                message = f'{move} used!\nIncreasing Attack by {enhanced}'
+            elif enh_type == 'DEF':
+                message = f'{move} used!\nIncreasing Defense by {enhanced}'
+            elif enh_type == 'STAM':
+                message = f'{move} used!\nIncreasing Stamina by {enhanced}'
+            elif enh_type == 'LIFE':
+                if enhanced == 0:
+                    message = f'{move} used!\nStealing {enhanced} Health \n*Your Health is full!*'
+                else:
+                    message = f'{move} used!\nStealing {enhanced} Health'
+            elif enh_type == 'DRAIN':
+                message = f'{move} used!\nDraining {enhanced} Stamina'
+            elif enh_type == 'FLOG':
+                message = f'{move} used!\nStealing {enhanced} Attack'
+            elif enh_type == 'WITHER':
+                message = f'{move} used!\nStealing {enhanced} Defense'
+            elif enh_type == 'RAGE':
+                message = f'{move} used!\nSacrificing {enhanced} Defense, Increasing Attack by {enhanced}'
+            elif enh_type == 'BRACE':
+                message = f'{move} used!\nSacrificing {enhanced} Attack, Increasing Defense by {enhanced}'
+            elif enh_type == 'BZRK':
+                message = f'{move} used!\nSacrificing {enhanced} Health, Increasing Attack by {enhanced}'
+            elif enh_type == 'CRYSTAL':
+                message = f'{move} used!\nSacrifices {enhanced} Health, Increasing Defense by {enhanced}'
+            elif enh_type == 'WAVE' or enh_type == 'BLAST':
+                if enh_type == 'BLAST' and enhanced > 100:
+                    enhanced =100
+                message = f'{move} used!\nDealing {round(enhanced)} {enh_type} Damage!'
+            elif enh_type == 'CREATION':
+                message = f'{move} used!\nHealing and Increasing Max Health by {round(enhanced)}'
+            elif enh_type == 'DESTRUCTION':
+                message = f'{move} used!\nDestroying {round(enhanced)} Max Health'
+            elif enh_type == 'GROWTH':
+                message = f'{move} used!\nSacrificing {round(enhanced)} Max Health to Increase Attack and Defense by {round(enhanced * .5)}'
+            elif enh_type == 'STANCE':
+                message = f'{move} used!\nSwapping Attack and Defense, Increasing Defense to {enhanced}'
+            elif enh_type == 'CONFUSE':
+                message = f'{move} used!\nSwapping Opponent Attack and Defense, Decreasing Defense to {enhanced}'
+            elif enh_type == 'HLT':
+                message = f'{move} used!\nHealing for {enhanced}!'
+            elif enh_type == 'FEAR':
+                message = f'{move} used!\nSacrificing {round(enhanced)} Max Health to Decrease Opponent Attack and Defense by {round(enhanced * .5)}'
+            elif enh_type == 'SOULCHAIN':
+                message = f'{move} used!\nSynchronizing Stamina to {enhanced}'
+            elif enh_type == 'GAMBLE':
+                message = f'{move} used!\nSynchronizing Health to {enhanced}'
             else:
-                message = f'{move} used!\nStealing {enhanced} Health'
-        elif enh_type == 'DRAIN':
-            message = f'{move} used!\nDraining {enhanced} Stamina'
-        elif enh_type == 'FLOG':
-            message = f'{move} used!\nStealing {enhanced} Attack'
-        elif enh_type == 'WITHER':
-            message = f'{move} used!\nStealing {enhanced} Defense'
-        elif enh_type == 'RAGE':
-            message = f'{move} used!\nSacrificing {enhanced} Defense, Increasing Attack by {enhanced}'
-        elif enh_type == 'BRACE':
-            message = f'{move} used!\nSacrificing {enhanced} Attack, Increasing Defense by {enhanced}'
-        elif enh_type == 'BZRK':
-            message = f'{move} used!\nSacrificing {enhanced} Health, Increasing Attack by {enhanced}'
-        elif enh_type == 'CRYSTAL':
-            message = f'{move} used!\nSacrifices {enhanced} Health, Increasing Defense by {enhanced}'
-        elif enh_type == 'WAVE' or enh_type == 'BLAST':
-            message = f'{move} used!\nDealing {round(enhanced)} {enh_type} Damage!'
-        elif enh_type == 'CREATION':
-            message = f'{move} used!\nHealing and Increasing Max Health by {round(enhanced)}'
-        elif enh_type == 'DESTRUCTION':
-            message = f'{move} used!\nDestroying {round(enhanced)} Max Health'
-        elif enh_type == 'GROWTH':
-            message = f'{move} used!\nSacrificing {round(enhanced)} Max Health to Increase Attack and Defense by {round(enhanced * .5)}'
-        elif enh_type == 'STANCE':
-            message = f'{move} used!\nSwapping Attack and Defense, Increasing Defense to {enhanced}'
-        elif enh_type == 'CONFUSE':
-            message = f'{move} used!\nSwapping Opponent Attack and Defense, Decreasing Defense to {enhanced}'
-        elif enh_type == 'HLT':
-            message = f'{move} used!\nHealing for {enhanced}!'
-        elif enh_type == 'FEAR':
-            message = f'{move} used!\nSacrificing {round(enhanced)} Max Health to Decrease Attack and Defense by {round(enhanced * .5)}'
-        elif enh_type == 'SOULCHAIN':
-            message = f'{move} used!\nSynchronizing Stamina to {enhanced}'
-        elif enh_type == 'GAMBLE':
-            message = f'{move} used!\nSynchronizing Health to {enhanced}'
-        else:
-            message = f'{move} used!\ninflicts {enh_type}'
+                message = f'{move} used!\ninflicts {enh_type}'
+        else: #If not a pet move
+            if enh_type == 'ATK':
+                message = f'**{move}** used!\nIncreasing **Attack** by **{enhanced}**'
+            elif enh_type == 'DEF':
+                message = f'**{move}** used!\nIncreasing **Defense** by **{enhanced}**'
+            elif enh_type == 'STAM':
+                message = f'**{move}** used!\nIncreasing **Stamina** by **{enhanced}**'
+            elif enh_type == 'LIFE':
+                if enhanced == 0:
+                    message = f'**{move}** used!\nStealing **{enhanced} Health** \n*Your Health is full!*'
+                else:
+                    message = f'**{move}** used!\nStealing **{enhanced} Health**'
+            elif enh_type == 'DRAIN':
+                message = f'**{move}** used!\nDraining **{enhanced} Stamina**'
+            elif enh_type == 'FLOG':
+                message = f'**{move}** used!\nStealing **{enhanced} Attack**'
+            elif enh_type == 'WITHER':
+                message = f'**{move}** used!\nStealing **{enhanced} Defense**'
+            elif enh_type == 'RAGE':
+                message = f'**{move}** used!\nSacrificing **{enhanced}** Defense**, Increasing **Attack** by **{enhanced}**'
+            elif enh_type == 'BRACE':
+                message = f'**{move}** used!\nSacrificing **{enhanced}** Attack, Increasing ****Defense** by **{enhanced}**'
+            elif enh_type == 'BZRK':
+                message = f'**{move}** used!\nSacrificing **{enhanced}** Health, Increasing **Attack** by **{enhanced}**'
+            elif enh_type == 'CRYSTAL':
+                message = f'**{move}** used!\nSacrifices **{enhanced}** Health, Increasing **Defense** by **{enhanced}**'
+            elif enh_type == 'WAVE' or enh_type == 'BLAST':
+                message = f'**{move}** used!\nDealing **{round(enhanced)} {enh_type}** Damage!'
+            elif enh_type == 'CREATION':
+                message = f'**{move}** used!\n**Healing and Increasing Max Health** by **{round(enhanced)}**'
+            elif enh_type == 'DESTRUCTION':
+                message = f'**{move}** used!\nDestroying **{round(enhanced)} Max Health**'
+            elif enh_type == 'GROWTH':
+                message = f'**{move}** used!\nSacrificing **{round(enhanced)} Max Health** to Increase **Attack and Defense** by **{round(enhanced * .5)}**'
+            elif enh_type == 'STANCE':
+                message = f'**{move}** used!\nSwapping **Attack and Defense**, Increasing **Defense** to **{enhanced}**'
+            elif enh_type == 'CONFUSE':
+                message = f'**{move}** used!\nSwapping **Opponent Attack and Defense**, Decreasing **Defense** to **{enhanced}**'
+            elif enh_type == 'HLT':
+                message = f'**{move}** used!\n**Healing** for **{enhanced}**!'
+            elif enh_type == 'FEAR':
+                message = f'**{move}** used!\nSacrificing **{round(enhanced)} Max Health** to Decrease **Opponent Attack and Defense** by **{round(enhanced * .5)}**'
+            elif enh_type == 'SOULCHAIN':
+                message = f'**{move}** used!\n**Synchronizing Stamina** to **{enhanced}**'
+            elif enh_type == 'GAMBLE':
+                message = f'**{move}** used!\n**Synchronizing Health** to **{enhanced}**'
+            else:
+                message = f'**{move}** used!\n**Inflicts {enh_type}**'
 
         response = {"DMG": enhanced, "MESSAGE": message, "STAMINA_USED": move_stamina,
                     "CAN_USE_MOVE": can_use_move_flag, "ENHANCED_TYPE": enh_type, "ENHANCE": True}
@@ -12779,7 +12829,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                             embedVar = discord.Embed(
                                                 title=f"{t_card.upper()} Summoned 🧬 {tpet_name}", colour=0xe91e63)
                                             embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!",
-                                                               value=f"Enhanced **{tpet_type}** by **{tpet_dmg}**")
+                                                            value=f"{dmg['MESSAGE']}")
                                             
                                             tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
                                             embedVar.set_image(url="attachment://pet.png")
@@ -15624,7 +15674,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             colour=0xe91e63)
                                                         embedVar.add_field(
                                                             name=f"{tpet_name} used **{tpetmove_text}**!",
-                                                            value=f"Enhanced **{tpet_type}** by **{tpet_dmg}**")
+                                                            value=f"{dmg['MESSAGE']}")
                                                         
                                                         tsummon_file = showsummon(tpet_image, tpet_name, dmg['MESSAGE'], tpet_lvl, tpet_bond)
                                                         embedVar.set_image(url="attachment://pet.png")
@@ -15751,7 +15801,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             colour=0xe91e63)
                                                         embedVar.add_field(
                                                             name=f"{tpet_name} used **{tpetmove_text}**!",
-                                                            value=f"Enhanced **{tpet_type}** by **{tpet_dmg}**")
+                                                            value=f"{dmg['MESSAGE']}")
                                                         
                                                         
                                                         embedVar.set_image(url="attachment://image.png")
@@ -15762,7 +15812,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             colour=0xe91e63)
                                                         embedVar.add_field(
                                                             name=f"{tpet_name} used **{tpetmove_text}**!",
-                                                            value=f"Enhanced **{tpet_type}** by **{tpet_dmg}**")
+                                                            value=f"{dmg['MESSAGE']}")
                                                         
                                                         
                                                         embedVar.set_image(url="attachment://image.png")
@@ -15886,7 +15936,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         title=f"**PERSONA!**\n{tpet_name} was summoned from {t_card}'s soul dealing **{petdmg['DMG']}** damage!!",
                                                         colour=0xe91e63)
                                                     embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!",
-                                                                       value=f"Enhanced **{tpet_type}** by **{tpet_dmg}**")
+                                                            value=f"{dmg['MESSAGE']}")
                                                     
                                                     
                                                     embedVar.set_image(url="attachment://image.png")
@@ -15896,7 +15946,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         title=f"{t_card.upper()} Summoned 🧬 {tpet_name}",
                                                         colour=0xe91e63)
                                                     embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!",
-                                                                       value=f"Enhanced **{tpet_type}** by **{tpet_dmg}**")
+                                                                        value=f"{dmg['MESSAGE']}")
                                                     
                                                     
                                                     embedVar.set_image(url="attachment://image.png")
@@ -17290,7 +17340,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         title=f"**PERSONA!**\n{cpet_name} was summoned from {c_card}'s soul dealing **{petdmg['DMG']}** damage!!",
                                                         colour=0xe91e63)
                                                     embedVar.add_field(name=f"{cpet_name} used **{cpetmove_text}**!",
-                                                                       value=f"Enhanced **{cpet_type}** by **{cpet_dmg}**")
+                                                            value=f"{dmg['MESSAGE']}")
                                                     embedVar.set_footer(text=f"{cpet_type}: {enhancer_mapping[cpet_type]}")
 
                                                     embedVar.set_thumbnail(url=cpet_image)
@@ -17301,7 +17351,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         title=f"{c_card.upper()} Summoned 🧬 {cpet_name}",
                                                         colour=0xe91e63)
                                                     embedVar.add_field(name=f"{cpet_name} used **{cpetmove_text}**!",
-                                                                       value=f"Enhanced **{cpet_type}** by **{cpet_dmg}**")
+                                                            value=f"{dmg['MESSAGE']}")
                                                     embedVar.set_footer(text=f"{cpet_type}: {enhancer_mapping[cpet_type]}")
                                                     embedVar.set_thumbnail(url=cpet_image)
                                                     embedVar.set_image(url="attachment://image.png")
@@ -18160,7 +18210,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             colour=0xe91e63)
                                                         embedVar.add_field(
                                                             name=f"{cpet_name} used **{cpetmove_text}**!",
-                                                            value=f"Enhanced **{cpet_type}** by **{cpet_dmg}**")
+                                                            value=f"{dmg['MESSAGE']}")
                                                         embedVar.set_footer(text=f"{cpet_type}: {enhancer_mapping[cpet_type]}")
                                                         embedVar.set_thumbnail(url=cpet_image)
                                                         embedVar.set_image(url="attachment://image.png")
@@ -19194,7 +19244,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         title=f"**PERSONA!**\n{tpet_name} was summoned from {t_card}'s soul dealing **{petdmg['DMG']}** damage!!",
                                                         colour=0xe91e63)
                                                     embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!",
-                                                                       value=f"Enhanced **{tpet_type}** by **{tpet_dmg}**")
+                                                            value=f"{dmg['MESSAGE']}")
                                                     
                                                     
                                                     embedVar.set_image(url="attachment://image.png")
@@ -19204,7 +19254,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         title=f"{t_card.upper()} Summoned 🧬 {tpet_name}",
                                                         colour=0xe91e63)
                                                     embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!",
-                                                                       value=f"Enhanced **{tpet_type}** by **{tpet_dmg}**")
+                                                            value=f"{dmg['MESSAGE']}")
                                                     
                                                     
                                                     embedVar.set_image(url="attachment://image.png")
@@ -19317,7 +19367,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         title=f"**PERSONA!**\n{tpet_name} was summoned from {t_card}'s soul dealing **{petdmg['DMG']}** damage!!",
                                                         colour=0xe91e63)
                                                     embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!",
-                                                                       value=f"Enhanced **{tpet_type}** by **{tpet_dmg}**")
+                                                            value=f"{dmg['MESSAGE']}")
                                                     
                                                     
                                                     embedVar.set_image(url="attachment://image.png")
@@ -19327,7 +19377,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         title=f"{t_card.upper()} Summoned 🧬 {tpet_name}",
                                                         colour=0xe91e63)
                                                     embedVar.add_field(name=f"{tpet_name} used **{tpetmove_text}**!",
-                                                                       value=f"Enhanced **{tpet_type}** by **{tpet_dmg}**")
+                                                            value=f"{dmg['MESSAGE']}")
                                                     
                                                     
                                                     embedVar.set_image(url="attachment://image.png")
@@ -20099,7 +20149,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         elif mode in U_modes:
                             drop_response = await drops(ctx.author, selected_universe, currentopponent)
                         if mode in D_modes:
-                            ofambank = await blessfamily(100, ofam)
+                            ofambank = await blessfamily(250, ofam)
                         else:
                             ofambank = await blessfamily(50, ofam)
                         match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']),
@@ -20572,12 +20622,12 @@ async def drops(player, universe, matchcount):
 
     try:
         if drop_rate <= gold_drop:
-            bless_amount = (25 + (5 * matchcount)) * (1 + rebirth)
+            bless_amount = (100 + (5 * matchcount)) * (1 + rebirth)
             await bless(bless_amount, player)
             return f"You earned :coin: **{bless_amount}**!"
         elif drop_rate <= rift_rate and drop_rate > gold_drop:
             response = db.updateUserNoFilter(user_query, {'$set': {'RIFT': 1}})
-            bless_amount = (40 + (5 * matchcount)) * (1 + rebirth)
+            bless_amount = (200 + (5 * matchcount)) * (1 + rebirth)
             await bless(bless_amount, player)
             return f"A RIFT HAS OPENED! You have earned :coin: **{bless_amount}**!"
         elif drop_rate <= title_drop and drop_rate > gold_drop:
