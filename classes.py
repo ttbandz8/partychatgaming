@@ -36,6 +36,7 @@ class USER():
     LEVEL: int = field(default_factory=lambda: 0)
     EXPLORE: bool = field(default_factory=lambda: True)
     SAVE_SPOT: list[str] = field(default_factory=lambda: [])
+    PERFORMANCE: bool = field(default_factory=lambda: False)
 
 
 @dataclass(frozen=True, order=True)
@@ -182,6 +183,7 @@ class CARDS():
     EXCLUSIVE: bool = field(default_factory=lambda: False)
     IS_SKIN: bool = field(default_factory=lambda: False)
     SKIN_FOR: str = field(default_factory=lambda: "N/A")
+    
 
 
 @dataclass(frozen=True, order=True)

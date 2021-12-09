@@ -138,6 +138,7 @@ class Profile(commands.Cog):
                 o_collection = card['COLLECTION']
                 o_destiny = card['HAS_COLLECTION']
                 o_rebirth = d['REBIRTH']
+                performance_mode = d['PERFORMANCE']
                 
         
                 rebirthBonus = o_rebirth * 10
@@ -259,28 +260,55 @@ class Profile(commands.Cog):
                     titlemessage = f"🎗️ {title_name}: {title_passive_type} {title_passive_value}{title_enhancer_suffix_mapping[title_passive_type]}"
                     warningmessage= f""
                 cardtitle = {'TITLE': title_name}
-                card_file = showcard(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, cardtitle, focused, o_attack, o_defense, turn, move1ap, move2ap, move3ap, move4ap, move4enh, card_lvl, None)
-                # card_back_file = cardback(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, arm, focused,
-                #                     o_attack, o_defense, turn, passive_name, traitmessage, 0, None, None, passive_type, passive_num, active_pet, pet_ability_power, card_exp)
 
                 #<:PCG:769471288083218432>
-                embedVar = discord.Embed(title=f"".format(self), colour=000000)
-                # file = discord.File(fp=card_file,filename="image.png")
-                embedVar.set_image(url="attachment://image.png")
-                # embedVar.set_thumbnail(url=active_pet['PATH'])
-                embedVar.set_author(name=textwrap.dedent(f"""\
-                {titlemessage}
-                🦾 {arm_name}: {arm_passive_type} {arm_passive_value}{enhancer_suffix_mapping[arm_passive_type]} {durability}
-                🧬 {active_pet['NAME']}: {active_pet['TYPE']}: {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]} | Bond {bond} {bond_message} / Level {lvl} {lvl_message}
-                🩸 {passive_name}: {passive_type} {passive_num}{passive_enhancer_suffix_mapping[passive_type]}                
-                """))
-                if card_lvl != 500:
-                    embedVar.set_footer(text=f"EXP Until Next Level: {150 - card_exp}\nRebirth Buff: +{rebirthBonus}\n♾️ {traitmessage}\n{warningmessage}")
+                if performance_mode:
+                    embedVar = discord.Embed(title=f"{licon}{card_lvl} {o_card}".format(self), description=textwrap.dedent(f"""\
+                    ❤️ {o_max_health}
+                    🗡️ {o_attack}
+                    🛡️ {o_defense}
+                    🏃 {o_speed}
+
+                    {titlemessage}
+                    🦾 {arm_name}: {arm_passive_type} {arm_passive_value}{enhancer_suffix_mapping[arm_passive_type]} {durability}
+                    🧬 {active_pet['NAME']}: {active_pet['TYPE']}: {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]} | Bond {bond} {bond_message} / Level {lvl} {lvl_message}
+                    🩸 {passive_name}: {passive_type} {passive_num}{passive_enhancer_suffix_mapping[passive_type]}                
+                    
+                    💥 {move1}: {move1ap}
+                    ☄️ {move2}: {move2ap}
+                    🏵️ {move3}: {move3ap}
+                    🦠 {move4}: {move4ap}
+
+                    ♾️ {traitmessage}
+                    """),colour=000000)
+                    embedVar.set_image(url="attachment://image.png")
+                    if card_lvl != 500:
+                        embedVar.set_footer(text=f"EXP Until Next Level: {150 - card_exp}\nRebirth Buff: +{rebirthBonus}\n♾️ {traitmessage}\n{warningmessage}")
+                    else:
+                        embedVar.set_footer(text=f"Max Level")
+                    
+                    await ctx.send(embed=embedVar)
+                    return
+                   
                 else:
-                    embedVar.set_footer(text=f"Max Level")
-                
-                await ctx.send(file=card_file, embed=embedVar)
-                # await ctx.send(files=[card_file, card_back_file])
+                    card_file = showcard(card, o_max_health, o_health, o_max_stamina, o_stamina, resolved, cardtitle, focused, o_attack, o_defense, turn, move1ap, move2ap, move3ap, move4ap, move4enh, card_lvl, None)
+
+                    embedVar = discord.Embed(title=f"".format(self), colour=000000)
+                    embedVar.set_image(url="attachment://image.png")
+                    embedVar.set_author(name=textwrap.dedent(f"""\
+                    {titlemessage}
+                    🦾 {arm_name}: {arm_passive_type} {arm_passive_value}{enhancer_suffix_mapping[arm_passive_type]} {durability}
+                    🧬 {active_pet['NAME']}: {active_pet['TYPE']}: {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]} | Bond {bond} {bond_message} / Level {lvl} {lvl_message}
+                    🩸 {passive_name}: {passive_type} {passive_num}{passive_enhancer_suffix_mapping[passive_type]}                
+                    🏃 {o_speed}
+                    """))
+                    if card_lvl != 500:
+                        embedVar.set_footer(text=f"EXP Until Next Level: {150 - card_exp}\nRebirth Buff: +{rebirthBonus}\n♾️ {traitmessage}\n{warningmessage}")
+                    else:
+                        embedVar.set_footer(text=f"Max Level")
+                    
+                    await ctx.send(file=card_file, embed=embedVar)
+                    return
             except Exception as ex:
                 trace = []
                 tb = ex.__traceback__

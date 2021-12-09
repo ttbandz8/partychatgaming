@@ -726,6 +726,35 @@ async def rebirth(ctx):
          await ctx.send(f"You are at full Rebirth\n:angel:Level: {user_is_validated['REBIRTH']} ", delete_after=5)
 
 
+@slash.slash(name="Performance", description="Toggles Text Only Performance Mode", guild_ids=guild_ids)
+async def performance(ctx):
+   try:
+      player = db.queryUser({"DISNAME": str(ctx.author)})
+      if not player["PERFORMANCE"]:
+            await ctx.send(f"Entering Performance Mode :gear:")
+            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'PERFORMANCE': True}})
+            return
+      if player["PERFORMANCE"]:
+            await ctx.send(f"Exiting Performance Mode :gear:")
+            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'PERFORMANCE': False}})
+            return
+   except Exception as ex:
+      trace = []
+      tb = ex.__traceback__
+      while tb is not None:
+            trace.append({
+               "filename": tb.tb_frame.f_code.co_filename,
+               "name": tb.tb_frame.f_code.co_name,
+               "lineno": tb.tb_lineno
+            })
+            tb = tb.tb_next
+      print(str({
+            'type': type(ex).__name__,
+            'message': str(ex),
+            'trace': trace
+      }))
+
+
 @bot.event
 async def on_slash_command_error(ctx, ex):
    if isinstance(ex, commands.CommandOnCooldown): # Checks Cooldown
@@ -1446,13 +1475,13 @@ async def trinketshop(ctx):
    Purchase Experience Boosts
    *Experience Boost Applied to Current Equipped Card*
 
-   🔋 1️⃣ **1,500EXP** for :coin: **100,000**
+   🔋 1️⃣ **1,500EXP** for :coin: **30,000**
    
-   🔋 2️⃣ **4,500EXP** for :dollar: **250,000**
+   🔋 2️⃣ **4,500EXP** for :dollar: **80,000**
 
-   🔋 3️⃣ **15,000EXP** for :moneybag: **700,000**
+   🔋 3️⃣ **15,000EXP** for :moneybag: **250,000**
 
-   ⚒️ 4️⃣ **25 Durability** for :moneybag: **50,000**
+   ⚒️ 4️⃣ **25 Durability** for :moneybag: **25,000**
 
    Purchase Gabe's Purse to Keep All Items When Rebirthing
 
@@ -1474,16 +1503,16 @@ async def trinketshop(ctx):
       exp_boost_buttons = ["1", "2", "3"]
       if button_ctx.custom_id == "1":
          levels_gained = 10
-         price = 100000
+         price = 30000
       if button_ctx.custom_id == "2":
          levels_gained = 30
-         price = 250000
+         price = 80000
       if button_ctx.custom_id == "3":
          levels_gained = 100
-         price=700000
+         price=250000
       if button_ctx.custom_id == "5":
          levels_gained = 25
-         price=50000
+         price=25000
 
 
       if button_ctx.custom_id == "cancel":
@@ -1862,40 +1891,40 @@ async def resell(ctx, where: str, selections: list):
       return
 
 
-# @bot.command()
-# @commands.check(validate_user)
-# async def addfield(ctx, collection, new_field, field_type):
-#    if ctx.author.guild_permissions.administrator == True:
+@bot.command()
+@commands.check(validate_user)
+async def addfield(ctx, collection, new_field, field_type):
+   if ctx.author.guild_permissions.administrator == True:
 
-#       if field_type == 'string':
-#          field_type = "N/A"
-#       elif field_type == 'int':
-#          field_type = 1
-#       elif field_type == 'list':
-#          field_type = []
-#       elif field_type == 'bool':
-#          field_type = False
+      if field_type == 'string':
+         field_type = "N/A"
+      elif field_type == 'int':
+         field_type = 1
+      elif field_type == 'list':
+         field_type = []
+      elif field_type == 'bool':
+         field_type = False
 
-#       if collection == 'cards':
-#          response = db.updateManyCards({'$set': {new_field: field_type}})
-#       elif collection == 'titles':
-#          response = db.updateManyTitles({'$set': {new_field: field_type}})
-#       elif collection == 'vaults':
-#          response = db.updateManyVaults({'$set': {new_field: field_type}})
-#       elif collection == 'users':
-#          response = db.updateManyUsers({'$set': {new_field: field_type}})
-#       elif collection == 'universe':
-#          response = db.updateManyUniverses({'$set': {new_field: field_type}})
-#       elif collection == 'boss':
-#          response = db.updateManyBosses({'$set': {new_field: field_type}})
-#       elif collection == 'arms':
-#          response = db.updateManyArms({'$set': {new_field: field_type}})
-#       elif collection == 'pets':
-#          response = db.updateManyPets({'$set': {new_field: field_type}})
-#       elif collection == 'teams':
-#          response = db.updateManyTeams({'$set': {new_field: field_type}})
-#    else:
-#       print(m.ADMIN_ONLY_COMMAND)
+      if collection == 'cards':
+         response = db.updateManyCards({'$set': {new_field: field_type}})
+      elif collection == 'titles':
+         response = db.updateManyTitles({'$set': {new_field: field_type}})
+      elif collection == 'vaults':
+         response = db.updateManyVaults({'$set': {new_field: field_type}})
+      elif collection == 'users':
+         response = db.updateManyUsers({'$set': {new_field: field_type}})
+      elif collection == 'universe':
+         response = db.updateManyUniverses({'$set': {new_field: field_type}})
+      elif collection == 'boss':
+         response = db.updateManyBosses({'$set': {new_field: field_type}})
+      elif collection == 'arms':
+         response = db.updateManyArms({'$set': {new_field: field_type}})
+      elif collection == 'pets':
+         response = db.updateManyPets({'$set': {new_field: field_type}})
+      elif collection == 'teams':
+         response = db.updateManyTeams({'$set': {new_field: field_type}})
+   else:
+      print(m.ADMIN_ONLY_COMMAND)
 
 @bot.command()
 @commands.check(validate_user)

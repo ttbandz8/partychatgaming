@@ -6418,8 +6418,8 @@ class CrownUnlimited(commands.Cog):
         embeds = embed_list
         await paginator.run(embeds)
 
-    @cog_ext.cog_slash(description="Quit Match", guild_ids=main.guild_ids)
-    async def ff(self, ctx: SlashContext):
+    @cog_ext.cog_slash(description="Quit and Close your private channel", guild_ids=main.guild_ids)
+    async def forcequit(self, ctx: SlashContext):
         private_channel = ctx
         ov = private_channel.channel.overwrites
         validator = False
@@ -7027,7 +7027,7 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, stamina, en
         elif enh_type == 'GROWTH':
             message = f'{move} used!\nSacrificing {round(enhanced)} Max Health to Increase Attack and Defense by {round(enhanced * .5)}'
         elif enh_type == 'STANCE':
-            message = f'{move} used!\nSwapping Attack and Defense, Increasing Attack to {enhanced}'
+            message = f'{move} used!\nSwapping Attack and Defense, Increasing Defense to {enhanced}'
         elif enh_type == 'CONFUSE':
             message = f'{move} used!\nSwapping Opponent Attack and Defense, Decreasing Defense to {enhanced}'
         elif enh_type == 'HLT':
@@ -7147,22 +7147,24 @@ cache = dict()
 
 def get_card(url, cardname, cardtype):
     try:
-        save_path = f"image_cache/{str(cardtype)}/{str(cardname)}.png"
-        # print(save_path)
+        # save_path = f"image_cache/{str(cardtype)}/{str(cardname)}.png"
+        # # print(save_path)
         
-        if url not in cache:
-            # print("Not in Cache")
-            cache[url] = save_path
-            im = Image.open(requests.get(url, stream=True).raw)
-            im.save(f"{save_path}", "PNG")
-            # print(f"NO : {cardname}")
-            return im
+        # if url not in cache:
+        #     # print("Not in Cache")
+        #     cache[url] = save_path
+        #     im = Image.open(requests.get(url, stream=True).raw)
+        #     im.save(f"{save_path}", "PNG")
+        #     # print(f"NO : {cardname}")
+        #     return im
 
-        else:
-            # print("In Cache")
-            im = Image.open(cache[url])
-            # print(f"YES : {cardname}")
-            return im
+        # else:
+        #     # print("In Cache")
+        #     im = Image.open(cache[url])
+        #     # print(f"YES : {cardname}")
+        #     return im
+        im = Image.open(requests.get(url, stream=True).raw)
+        return im
            
     except Exception as ex:
         trace = []
@@ -8071,11 +8073,11 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             c_card_passive = list(c_passive.values())[0]
 
             if c_card_passive_type == 'ATK':
-                c_attack = c_attack + int(c_card_passive)
+                c_attack = c_attack + int((c_card_passive / 100) * c_attack)
             elif c_card_passive_type == 'DEF':
-                c_defense = o_defense + int(c_card_passive)
+                c_defense = c_defense + int((c_card_passive / 100) * c_defense)
             elif c_card_passive_type == 'STAM':
-                c_stamina = o_stamina + int(c_card_passive)
+                c_stamina = c_stamina + int(c_card_passive)
             elif c_card_passive_type == 'HLT':
                 c_max_health = c_max_health + int(c_card_passive)
                 c_health = c_health + int(c_card_passive)
@@ -8321,9 +8323,9 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         o_card_passive = list(o_passive.values())[0]
 
         if o_card_passive_type == 'ATK':
-            o_attack = o_attack + int(o_card_passive)
+            o_attack = o_attack + int((o_card_passive / 100) * o_attack)
         elif o_card_passive_type == 'DEF':
-            o_defense = o_defense + int(o_card_passive)
+            o_defense = o_defense + int((o_card_passive / 100) * o_defense)
         elif o_card_passive_type == 'STAM':
             o_stamina = o_stamina + int(o_card_passive)
         elif o_card_passive_type == 'HLT':
@@ -8567,9 +8569,9 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         t_card_passive = list(t_passive.values())[0]
 
         if t_card_passive_type == 'ATK':
-            t_attack = t_attack + int(t_card_passive)
+            t_attack = t_attack + int((t_card_passive / 100) * t_attack)
         elif t_card_passive_type == 'DEF':
-            t_defense = t_defense + int(t_card_passive)
+            t_defense = t_defense + int((t_card_passive / 100) * t_defense)
         elif t_card_passive_type == 'STAM':
             t_stamina = t_stamina + int(t_card_passive)
         elif t_card_passive_type == 'HLT':
