@@ -363,6 +363,7 @@ class Profile(commands.Cog):
                     card_exclusive = resp['EXCLUSIVE']
                     card_collection = resp['HAS_COLLECTION']
                     show_img = db.queryUniverse({'TITLE': resp['UNIVERSE']})['PATH']
+                    o_show = resp['UNIVERSE']
                     icon = ":flower_playing_cards:"
                     if card_available and card_exclusive:
                         icon = ":fire:"
@@ -371,16 +372,84 @@ class Profile(commands.Cog):
                             icon =":sparkles:"
                         else:
                             icon = ":japanese_ogre:"
+                    card_lvl = 0
+                    card_tier = 0
+                    card_exp = 0
+                    card_lvl_attack_buff = 0
+                    card_lvl_defense_buff = 0
+                    card_lvl_ap_buff = 0
+                    card_lvl_hlt_buff = 0
+
                     for cl in card_levels:
                         if card == cl['CARD']:
                             licon = "🔱"
                             if cl['LVL'] == 200:
                                 licon ="⚜️"
                             lvl = f"{licon} **{cl['LVL']}**"
+                            card_lvl = cl['LVL']
+                            card_tier = cl['TIER']
+                            card_exp = cl['EXP']
+                            card_lvl_ap_buff = cl['AP']
+                            card_lvl_attack_buff = cl['ATK']
+                            card_lvl_defense_buff = cl['DEF']
+                            card_lvl_hlt_buff = cl['HLT']
+                    
+                    o_passive = resp['PASS'][0] 
+                    o_moveset = resp['MOVESET']
+                    o_1 = o_moveset[0]
+                    o_2 = o_moveset[1]
+                    o_3 = o_moveset[2]
+                    o_enhancer = o_moveset[3]
+                    
+                    # Move 1
+                    move1 = list(o_1.keys())[0]
+                    move1ap = list(o_1.values())[0] + card_lvl_ap_buff
+                    move1_stamina = list(o_1.values())[1]
+                    
+                    # Move 2
+                    move2 = list(o_2.keys())[0]
+                    move2ap = list(o_2.values())[0] + card_lvl_ap_buff
+                    move2_stamina = list(o_2.values())[1]
+
+                    # Move 3
+                    move3 = list(o_3.keys())[0]
+                    move3ap = list(o_3.values())[0] + card_lvl_ap_buff
+                    move3_stamina = list(o_3.values())[1]
+
+                    # Move Enhancer
+                    move4 = list(o_enhancer.keys())[0]
+                    move4ap = list(o_enhancer.values())[0]
+                    move4_stamina = list(o_enhancer.values())[1]
+                    move4enh = list(o_enhancer.values())[2]
+
+                    passive_name = list(o_passive.keys())[0]
+                    passive_num = list(o_passive.values())[0]
+                    passive_type = list(o_passive.values())[1]
+
+                    traits = ut.traits
+                    mytrait = {}
+                    traitmessage = ''
+                    for trait in traits:
+                        if trait['NAME'] == o_show:
+                            mytrait = trait
+                        if o_show == 'Kanto Region' or o_show == 'Johto Region' or o_show == 'Kalos Region' or o_show == 'Unova Region' or o_show == 'Sinnoh Region' or o_show == 'Hoenn Region' or o_show == 'Galar Region' or o_show == 'Alola Region':
+                            if trait['NAME'] == 'Pokemon':
+                                mytrait = trait
+                    if mytrait:
+                        traitmessage = f"**{mytrait['EFFECT']}:** {mytrait['TRAIT']}"
+
 
                     embedVar = discord.Embed(title= f"{resp['NAME']}", description=textwrap.dedent(f"""
-                    {icon} [{index}] {lvl}
-                    :heart: {resp['HLT']} :dagger: {resp['ATK']} :shield: {resp['DEF']}
+                    {icon} **[{index}]** {lvl}
+                    :heart: **{resp['HLT']}** :dagger: **{resp['ATK']}** :shield: **{resp['DEF']}**
+                    
+                    💥 **{move1}:** {move1ap}
+                    ☄️ **{move2}:** {move2ap}
+                    🏵️ **{move3}:** {move3ap}
+                    🦠 **{move4}:** {move4ap}
+
+                    🩸 **{passive_name}:** {passive_type} {passive_num}{passive_enhancer_suffix_mapping[passive_type]}
+                    ♾️ {traitmessage}
                     """), colour=0x7289da)
                     embedVar.set_thumbnail(url=show_img)
                     embed_list.append(embedVar)
@@ -459,7 +528,7 @@ class Profile(commands.Cog):
                         icon = ":japanese_ogre:"
                     
                     embedVar = discord.Embed(title= f"{resp['TITLE']}", description=textwrap.dedent(f"""
-                    {icon} [{index}]
+                    {icon} **[{index}]**
                     :microbe: **{title_passive_type}:** {title_passive_value}
                     :earth_africa: **Universe:** {resp['UNIVERSE']}"""), 
                     colour=0x7289da)
@@ -541,7 +610,7 @@ class Profile(commands.Cog):
                         icon = ":japanese_ogre:"
  
                     embedVar = discord.Embed(title= f"{resp['ARM']}", description=textwrap.dedent(f"""
-                    {icon} [{index}]
+                    {icon} **[{index}]**
                     :microbe: **{arm_passive_type}:** {arm_passive_value}
                     :earth_africa: **Universe:** {resp['UNIVERSE']}
                     ⚒️ {arm['DUR']}

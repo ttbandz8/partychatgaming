@@ -1185,6 +1185,10 @@ def queryAllUniverse():
     data = universe_col.find()
     return data
 
+def queryExploreUniverses():
+    data = universe_col.find({"HAS_CROWN_TALES": True})
+    return data
+
 def queryUniverse(query):
     try:
         data = universe_col.find_one(query)
