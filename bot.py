@@ -13,6 +13,9 @@ from discord import User
 from discord_slash import SlashCommand
 from discord_slash.utils import manage_components
 from discord_slash.model import ButtonStyle
+import textwrap
+from discord_slash import cog_ext, SlashContext
+from dinteractions_Paginator import Paginator
 import os
 import logging
 from decouple import config
@@ -122,70 +125,91 @@ async def on_ready():
 async def enhancers(ctx):
    avatar="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620496215/PCG%20LOGOS%20AND%20RESOURCES/Legend.png"
 
+   try:
+      embedVar1 = discord.Embed(title= f":microbe: **Title** Enhancer Type: Boosts",colour=0x7289da)
+      embedVar1.set_thumbnail(url=avatar)
+      embedVar1.add_field(name="`BOOSTS`", value="**ATK**\n**Title, Arm, Card Passive Effect:** Increase Attack by Flat AP value.\n**Card Active Enhancer Effect:** Increase Attack By AP %.\n\n**DEF**\n**Title, Arm, Card Passive Effect:** Increase Defense by Flat AP value.\n**Card Active Enhancer Effect:** Increase Defense By AP %.\n\n**HLT**\n**Title, Arm, Card Passive Effect:** Increase Health by Flat AP value.\n**Card Active Enhancer Effect:** Increase Health By Flat AP + 16% of Current Health.\n\n**STAM** - Increase Stamina by Flat AP\n\n")
+      embedVar1.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help\nPage 1/11")
 
-   embedVar1 = discord.Embed(title= f":microbe: **Title** Enhancer Type: Boosts",colour=0x7289da)
-   embedVar1.set_thumbnail(url=avatar)
-   embedVar1.add_field(name="`BOOSTS`", value="**ATK**\n**Title, Arm, Card Passive Effect:** Increase Attack by Flat AP value.\n**Card Active Enhancer Effect:** Increase Attack By AP %.\n\n**DEF**\n**Title, Arm, Card Passive Effect:** Increase Defense by Flat AP value.\n**Card Active Enhancer Effect:** Increase Defense By AP %.\n\n**HLT**\n**Title, Arm, Card Passive Effect:** Increase Health by Flat AP value.\n**Card Active Enhancer Effect:** Increase Health By Flat AP + 16% of Current Health.\n\n**STAM** - Increase Stamina by Flat AP\n\n")
-   embedVar1.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
+      embedVar2 = discord.Embed(title= f":microbe: **Title** Enhancer Type: Steals",colour=0x7289da)
+      embedVar2.set_thumbnail(url=avatar)
+      embedVar2.add_field(name="`STEALS`", value="**FLOG**- Steal Opponent Attack and Add it to Your Attack by AP %\n\n**WITHER**- Steal Opponent Defense and Add it to Your Defense by AP %\n\n**LIFE**\n**Title, Arm, Card Passive Effect:** Steal Opponent Health and Add it to your Max Health by AP %\n**Card Active Enhancer Effect:** Steal Opponent Health and Add it to your Current Health by Flat AP + 9% of Opponent Current Health. \n\n**DRAIN** - Steal Opponent Stamina and Add it to your Stamina by Flat AP\n\n")
+      embedVar2.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help\nPage 2/11")
 
-   embedVar2 = discord.Embed(title= f":microbe: **Title** Enhancer Type: Steals",colour=0x7289da)
-   embedVar2.set_thumbnail(url=avatar)
-   embedVar2.add_field(name="`STEALS`", value="**FLOG**- Steal Opponent Attack and Add it to Your Attack by AP %\n\n**WITHER**- Steal Opponent Defense and Add it to Your Defense by AP %\n\n**LIFE**\n**Title, Arm, Card Passive Effect:** Steal Opponent Health and Add it to your Max Health by AP %\n**Card Active Enhancer Effect:** Steal Opponent Health and Add it to your Current Health by Flat AP + 9% of Opponent Current Health. \n\n**DRAIN** - Steal Opponent Stamina and Add it to your Stamina by Flat AP\n\n")
-   embedVar2.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
+      embedVar3 = discord.Embed(title= f":microbe: **Title** Enhancer Type: Sacrifice",colour=0x7289da)
+      embedVar3.set_thumbnail(url=avatar)
+      embedVar3.add_field(name="`SACRIFICE`", value="**RAGE** - Decrease Your Defense by AP %, Increase Your Attack by Amount of Decreased Defense\n\n**BRACE** - Decrease Your Attack by AP %, Increase Your Defense By Amount of Decreased Attack\n\n**BZRK** - Decrease Your Current Health by AP %,  Increase Your Attack by Amount of Decreased Health\n\n**CRYSTAL** - Decrease Your Health by AP %, Increase Your Defense by Amount of Decreased Health\n\n")
+      embedVar3.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help\nPage 3/11")
 
-   embedVar3 = discord.Embed(title= f":microbe: **Title** Enhancer Type: Sacrifice",colour=0x7289da)
-   embedVar3.set_thumbnail(url=avatar)
-   embedVar3.add_field(name="`SACRIFICE`", value="**RAGE** - Decrease Your Defense by AP %, Increase Your Attack by Amount of Decreased Defense\n\n**BRACE** - Decrease Your Attack by AP %, Increase Your Defense By Amount of Decreased Attack\n\n**BZRK** - Decrease Your Current Health by AP %,  Increase Your Attack by Amount of Decreased Health\n\n**CRYSTAL** - Decrease Your Health by AP %, Increase Your Defense by Amount of Decreased Health\n\n")
-   embedVar3.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
+      embedVar4 = discord.Embed(title= f":microbe: **Title** Enhancer Type: Conversion",colour=0x7289da)
+      embedVar4.set_thumbnail(url=avatar)
+      embedVar4.add_field(name="`CONVERSION`", value="**STANCE** - Swap Your Attack and Defense, Increase Your Attack By Flat AP\n\n**CONFUSE** - Swap Opponenet Attack and Defense, Decrease Opponent Defense by Flat AP\n\n")
+      embedVar4.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help\nPage 4/11")
 
-   embedVar4 = discord.Embed(title= f":microbe: **Title** Enhancer Type: Conversion",colour=0x7289da)
-   embedVar4.set_thumbnail(url=avatar)
-   embedVar4.add_field(name="`CONVERSION`", value="**STANCE** - Swap Your Attack and Defense, Increase Your Attack By Flat AP\n\n**CONFUSE** - Swap Opponenet Attack and Defense, Decrease Opponent Defense by Flat AP\n\n")
-   embedVar4.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
+      embedVar5 = discord.Embed(title= f":microbe: **Title** Enhancer Type: Time Manipulation",colour=0x7289da)
+      embedVar5.set_thumbnail(url=avatar)
+      embedVar5.add_field(name="`TIME MANIPULATION`", value="**BLINK**  - Decrease Your Stamina by Flat AP, Increase Opponent Stamina by Flat AP\n\n**SLOW** - Decrease Your Stamina by Flat AP, Swap You and Your Opponent's Stamina\n\n**HASTE** - Increase Your Stamina, Swap You and Your Opponent's Stamina\n\n")
+      embedVar5.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help\nPage 5/11")
 
-   embedVar5 = discord.Embed(title= f":microbe: **Title** Enhancer Type: Time Manipulation",colour=0x7289da)
-   embedVar5.set_thumbnail(url=avatar)
-   embedVar5.add_field(name="`TIME MANIPULATION`", value="**BLINK**  - Decrease Your Stamina by Flat AP, Increase Opponent Stamina by Flat AP\n\n**SLOW** - Decrease Your Stamina by Flat AP, Swap You and Your Opponent's Stamina\n\n**HASTE** - Increase Your Stamina, Swap You and Your Opponent's Stamina\n\n")
-   embedVar5.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
+      embedVar6 = discord.Embed(title= f":microbe: **Title** Enhancer Type: Control",colour=0x7289da)
+      embedVar6.set_thumbnail(url=avatar)
+      embedVar6.add_field(name="`CONTROL`", value="**SOULCHAIN** - You and Your Opponent's Stamina Equal Flat AP\n\n**GAMBLE** - You and Your Opponent's Health Equal Flat AP\n\n")
+      embedVar6.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help\nPage 6/11")
 
-   embedVar6 = discord.Embed(title= f":microbe: **Title** Enhancer Type: Control",colour=0x7289da)
-   embedVar6.set_thumbnail(url=avatar)
-   embedVar6.add_field(name="`CONTROL`", value="**SOULCHAIN** - You and Your Opponent's Stamina Equal Flat AP\n\n**GAMBLE** - You and Your Opponent's Health Equal Flat AP\n\n")
-   embedVar6.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
+      embedVar7 = discord.Embed(title= f":microbe: **Title** Enhancer Type: Fortitude",colour=0x7289da)
+      embedVar7.set_thumbnail(url=avatar)
+      embedVar7.add_field(name="`FORTITUDE`", value="**GROWTH**- Decrease Your Max Health by AP %, Increase Your Attack and Defense by AP %\n\n**FEAR** - Decrease Your Max Health by AP %, Decrease Opponent Attack and Defense by AP %\n\n")
+      embedVar7.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help\nPage 7/11")
 
-   embedVar7 = discord.Embed(title= f":microbe: **Title** Enhancer Type: Fortitude",colour=0x7289da)
-   embedVar7.set_thumbnail(url=avatar)
-   embedVar7.add_field(name="`FORTITUDE`", value="**GROWTH**- Decrease Your Max Health by AP %, Increase Your Attack and Defense by AP %\n\n**FEAR** - Decrease Your Max Health by AP %, Decrease Opponent Attack and Defense by AP %\n\n")
-   embedVar7.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
+      embedVar8 = discord.Embed(title= f":microbe: **Title** Enhancer Type: Damage",colour=0x7289da)
+      embedVar8.set_thumbnail(url=avatar)
+      embedVar8.add_field(name="`DAMAGE`", value="**WAVE** - Deal Flat AP Damage to Opponent. AP Decreases each turn. If used on turn that is divisible by 10 you will deal 30% of Flat AP Damage. You have chance to Crit for Double Flat AP Damage. \n\n**BLAST** - Deal Flat AP Damage to Opponent. AP Increases each turn.\n\n")
+      embedVar8.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help\nPage 8/11")
 
-   embedVar8 = discord.Embed(title= f":microbe: **Title** Enhancer Type: Damage",colour=0x7289da)
-   embedVar8.set_thumbnail(url=avatar)
-   embedVar8.add_field(name="`DAMAGE`", value="**WAVE** - Deal Flat AP Damage to Opponent. AP Decreases each turn. If used on turn that is divisible by 10 you will deal 30% of Flat AP Damage. You have chance to Crit for Double Flat AP Damage. \n\n**BLAST** - Deal Flat AP Damage to Opponent. AP Increases each turn.\n\n")
-   embedVar8.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
+      embedVar9 = discord.Embed(title= f":microbe: **Title** Enhancer Type: Divinity",colour=0x7289da)
+      embedVar9.set_thumbnail(url=avatar)
+      embedVar9.add_field(name="`DIVINITY`", value="**CREATION** - Increase Max Health by Flat AP. AP Decreases each turn. If used on turn that is divisible by 10 you will heal Health & Max Health for 20% of Flat AP. You have chance to Crit Heal Health and Max Health for Double Flat AP. \n\n**DESTRUCTION** - Decrease Opponent Max Health by Flat AP. AP Increases each turn.\n\n")
+      embedVar9.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help\nPage 9/11")
+      
+      embedVar10 = discord.Embed(title= f":microbe: **Arm** Enhancer Type: Offensive",colour=0x7289da)
+      embedVar10.set_thumbnail(url=avatar)
+      embedVar10.add_field(name="`OFFENSE`", value="**BASIC** - Increase 💥 Basic Attack Ability Power by Value \n\n**SPECIAL** - Increase ☄️ Special Attack Ability Power by Value \n\n**ULTIMATE** - Increase 🏵️ Ultimate Attack Ability Power by Value \n\n**ULTIMAX** - Increase **ALL** Attack Move Ability Power by Value \n\n**MANA** - Increase 🦠 Enhancer Ability Power by Percentage \n\n")
+      embedVar10.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help\nPage 10/11")
+      
+      embedVar11 = discord.Embed(title= f":microbe: **Arm** Enhancer Type: Defensive",colour=0x7289da)
+      embedVar11.set_thumbnail(url=avatar)
+      embedVar11.add_field(name="`DEFENSE`", value="**SHIELD**- Grant Damage absorbing Shield until destroyed \n\n**BARRIER** - Blocks all Attack Damage until player Attacks or is Destoyed (Enhancers Exempt)\n\n**PARRY** - Reflects 50% Damage back to Attacker\n\n")
+      embedVar11.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help\nPage 11/11")
+      
+      
 
-   embedVar9 = discord.Embed(title= f":microbe: **Title** Enhancer Type: Divinity",colour=0x7289da)
-   embedVar9.set_thumbnail(url=avatar)
-   embedVar9.add_field(name="`DIVINITY`", value="**CREATION** - Increase Max Health by Flat AP. AP Decreases each turn. If used on turn that is divisible by 10 you will heal Health & Max Health for 20% of Flat AP. You have chance to Crit Heal Health and Max Health for Double Flat AP. \n\n**DESTRUCTION** - Decrease Opponent Max Health by Flat AP. AP Increases each turn.\n\n")
-   embedVar9.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
+      paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+      paginator.add_reaction('⏮️', "first")
+      paginator.add_reaction('⬅️', "back")
+      paginator.add_reaction('🔒', "lock")
+      paginator.add_reaction('➡️', "next")
+      paginator.add_reaction('⏭️', "last")
+      embeds = [embedVar1, embedVar2, embedVar3, embedVar4, embedVar5, embedVar6, embedVar7, embedVar8, embedVar9, embedVar10, embedVar11]
+      await paginator.run(embeds)
+      
    
-   embedVar10 = discord.Embed(title= f":microbe: **Arm** Enhancer Type: Offensive",colour=0x7289da)
-   embedVar10.set_thumbnail(url=avatar)
-   embedVar10.add_field(name="`OFFENSE`", value="**BASIC** - Increase 💥 Basic Attack Ability Power by Value \n\n**SPECIAL** - Increase ☄️ Special Attack Ability Power by Value \n\n**ULTIMATE** - Increase 🏵️ Ultimate Attack Ability Power by Value \n\n**ULTIMAX** - Increase **ALL** Ability Power by Value \n\n**MANA** - Increase Enhancer Ability Power by Percentage \n\n")
-   embedVar10.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
-   
-   embedVar11 = discord.Embed(title= f":microbe: **Arm** Enhancer Type: Defensive",colour=0x7289da)
-   embedVar11.set_thumbnail(url=avatar)
-   embedVar11.add_field(name="`DEFENSE`", value="**SHIELD**- Grant Damage absorbing Shield until destroyed \n\n**BARRIER** - Blocks all incoming Damage until player Attacks or is Destoyed\n\n**PARRY** - Reflects 50% \n\n")
-   embedVar11.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
-
-   paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
-   paginator.add_reaction('⏮️', "first")
-   paginator.add_reaction('⬅️', "back")
-   paginator.add_reaction('🔒', "lock")
-   paginator.add_reaction('➡️', "next")
-   paginator.add_reaction('⏭️', "last")
-   embeds = [embedVar1, embedVar2, embedVar3, embedVar4, embedVar5, embedVar6, embedVar7, embedVar8, embedVar9, embdedVar10, embedVar11]
-   await paginator.run(embeds)
+   except Exception as ex:
+            trace = []
+            tb = ex.__traceback__
+            while tb is not None:
+                trace.append({
+                    "filename": tb.tb_frame.f_code.co_filename,
+                    "name": tb.tb_frame.f_code.co_name,
+                    "lineno": tb.tb_lineno
+                })
+                tb = tb.tb_next
+            print(str({
+                'type': type(ex).__name__,
+                'message': str(ex),
+                'trace': trace
+            }))
+            await ctx.send("Hmm something ain't right. Check with support.", hidden=True)
+            return
 
 @slash.slash(name="Crown", description="Crown Unlimited Tutorial", guild_ids=guild_ids)
 async def crown(ctx):
@@ -724,35 +748,6 @@ async def rebirth(ctx):
             await ctx.send("Rebirth Issue Seek support.")
       else:
          await ctx.send(f"You are at full Rebirth\n:angel:Level: {user_is_validated['REBIRTH']} ", delete_after=5)
-
-
-@slash.slash(name="Performance", description="Toggles Text Only Performance Mode", guild_ids=guild_ids)
-async def performance(ctx):
-   try:
-      player = db.queryUser({"DISNAME": str(ctx.author)})
-      if not player["PERFORMANCE"]:
-            await ctx.send(f"Entering Performance Mode :gear:")
-            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'PERFORMANCE': True}})
-            return
-      if player["PERFORMANCE"]:
-            await ctx.send(f"Exiting Performance Mode :gear:")
-            db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'PERFORMANCE': False}})
-            return
-   except Exception as ex:
-      trace = []
-      tb = ex.__traceback__
-      while tb is not None:
-            trace.append({
-               "filename": tb.tb_frame.f_code.co_filename,
-               "name": tb.tb_frame.f_code.co_name,
-               "lineno": tb.tb_lineno
-            })
-            tb = tb.tb_next
-      print(str({
-            'type': type(ex).__name__,
-            'message': str(ex),
-            'trace': trace
-      }))
 
 
 @bot.event
@@ -1475,13 +1470,13 @@ async def trinketshop(ctx):
    Purchase Experience Boosts
    *Experience Boost Applied to Current Equipped Card*
 
-   🔋 1️⃣ **1,500EXP** for :coin: **30,000**
+   🔋 1️⃣ **1,500EXP** for :coin: **100,000**
    
-   🔋 2️⃣ **4,500EXP** for :dollar: **80,000**
+   🔋 2️⃣ **4,500EXP** for :dollar: **250,000**
 
-   🔋 3️⃣ **15,000EXP** for :moneybag: **250,000**
+   🔋 3️⃣ **15,000EXP** for :moneybag: **700,000**
 
-   ⚒️ 4️⃣ **25 Durability** for :moneybag: **25,000**
+   ⚒️ 4️⃣ **25 Durability** for :moneybag: **50,000**
 
    Purchase Gabe's Purse to Keep All Items When Rebirthing
 
@@ -1503,16 +1498,16 @@ async def trinketshop(ctx):
       exp_boost_buttons = ["1", "2", "3"]
       if button_ctx.custom_id == "1":
          levels_gained = 10
-         price = 30000
+         price = 100000
       if button_ctx.custom_id == "2":
          levels_gained = 30
-         price = 80000
+         price = 250000
       if button_ctx.custom_id == "3":
          levels_gained = 100
-         price=250000
+         price=700000
       if button_ctx.custom_id == "5":
          levels_gained = 25
-         price=25000
+         price=50000
 
 
       if button_ctx.custom_id == "cancel":
@@ -1891,40 +1886,40 @@ async def resell(ctx, where: str, selections: list):
       return
 
 
-@bot.command()
-@commands.check(validate_user)
-async def addfield(ctx, collection, new_field, field_type):
-   if ctx.author.guild_permissions.administrator == True:
+# @bot.command()
+# @commands.check(validate_user)
+# async def addfield(ctx, collection, new_field, field_type):
+#    if ctx.author.guild_permissions.administrator == True:
 
-      if field_type == 'string':
-         field_type = "N/A"
-      elif field_type == 'int':
-         field_type = 1
-      elif field_type == 'list':
-         field_type = []
-      elif field_type == 'bool':
-         field_type = False
+#       if field_type == 'string':
+#          field_type = "N/A"
+#       elif field_type == 'int':
+#          field_type = 1
+#       elif field_type == 'list':
+#          field_type = []
+#       elif field_type == 'bool':
+#          field_type = False
 
-      if collection == 'cards':
-         response = db.updateManyCards({'$set': {new_field: field_type}})
-      elif collection == 'titles':
-         response = db.updateManyTitles({'$set': {new_field: field_type}})
-      elif collection == 'vaults':
-         response = db.updateManyVaults({'$set': {new_field: field_type}})
-      elif collection == 'users':
-         response = db.updateManyUsers({'$set': {new_field: field_type}})
-      elif collection == 'universe':
-         response = db.updateManyUniverses({'$set': {new_field: field_type}})
-      elif collection == 'boss':
-         response = db.updateManyBosses({'$set': {new_field: field_type}})
-      elif collection == 'arms':
-         response = db.updateManyArms({'$set': {new_field: field_type}})
-      elif collection == 'pets':
-         response = db.updateManyPets({'$set': {new_field: field_type}})
-      elif collection == 'teams':
-         response = db.updateManyTeams({'$set': {new_field: field_type}})
-   else:
-      print(m.ADMIN_ONLY_COMMAND)
+#       if collection == 'cards':
+#          response = db.updateManyCards({'$set': {new_field: field_type}})
+#       elif collection == 'titles':
+#          response = db.updateManyTitles({'$set': {new_field: field_type}})
+#       elif collection == 'vaults':
+#          response = db.updateManyVaults({'$set': {new_field: field_type}})
+#       elif collection == 'users':
+#          response = db.updateManyUsers({'$set': {new_field: field_type}})
+#       elif collection == 'universe':
+#          response = db.updateManyUniverses({'$set': {new_field: field_type}})
+#       elif collection == 'boss':
+#          response = db.updateManyBosses({'$set': {new_field: field_type}})
+#       elif collection == 'arms':
+#          response = db.updateManyArms({'$set': {new_field: field_type}})
+#       elif collection == 'pets':
+#          response = db.updateManyPets({'$set': {new_field: field_type}})
+#       elif collection == 'teams':
+#          response = db.updateManyTeams({'$set': {new_field: field_type}})
+#    else:
+#       print(m.ADMIN_ONLY_COMMAND)
 
 @bot.command()
 @commands.check(validate_user)
