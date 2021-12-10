@@ -1493,6 +1493,10 @@ class CrownUnlimited(commands.Cog):
                         o_attack = 25
                     if o_defense <= 30:
                         o_defense = 30
+                    if o_attack >= 999:
+                        o_attack = 999
+                    if o_defense >= 999:
+                        o_defense = 999
                     if o_health >= o_max_health:
                         o_health = o_max_health
                     # Tutorial Instructions
@@ -2350,6 +2354,10 @@ class CrownUnlimited(commands.Cog):
                             t_attack = 25
                         if t_defense <= 30:
                             t_defense = 30
+                        if t_attack >= 999:
+                            t_attack = 999
+                        if t_defense >= 999:
+                            t_defense = 999
                         if t_health >= t_max_health:
                             t_health = t_max_health
 
@@ -4115,6 +4123,10 @@ class CrownUnlimited(commands.Cog):
                         o_attack = 25
                     if o_defense <= 30:
                         o_defense = 30
+                    if o_attack >= 999:
+                        o_attack = 999
+                    if o_defense >= 999:
+                        o_defense = 999
                     if o_health >= o_max_health:
                         o_health = o_max_health
 
@@ -5081,6 +5093,10 @@ class CrownUnlimited(commands.Cog):
                         t_attack = 25
                     if t_defense <= 30:
                         t_defense = 30
+                    if t_attack >= 999:
+                        t_attack = 999
+                    if t_defense >= 999:
+                        t_defense = 999
                     if t_health >= t_max_health:
                         t_health = t_max_health
 
@@ -11517,6 +11533,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             t_attack = 25
                         if t_defense <= 30:
                             t_defense = 30
+                        if t_attack >= 999:
+                            t_attack = 999
+                        if t_defense >= 999:
+                            t_defense = 999
                         if t_health >= t_max_health:
                             t_health = t_max_health
                         if turn_total == 0:
@@ -13096,6 +13116,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             o_attack = 25
                         if o_defense <= 30:
                             o_defense = 30
+                        if o_attack >= 999:
+                            o_attack = 999
+                        if o_defense >= 999:
+                            o_defense = 999
                         if o_health >= o_max_health:
                             o_health = o_max_health
 
@@ -14944,6 +14968,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             t_attack = 25
                         if t_defense <= 30:
                             t_defense = 30
+                        if t_attack >= 999:
+                            t_attack = 999
+                        if t_defense >= 999:
+                            t_defense = 999
                         if t_health >= t_max_health:
                             t_health = t_max_health
                         # o_pet_used = True
@@ -18582,6 +18610,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 t_attack = 25
                             if t_defense <= 30:
                                 t_defense = 30
+                            if t_attack >= 999:
+                                t_attack = 999
+                            if t_defense >= 999:
+                                t_defense = 999
                             if t_health >= t_max_health:
                                 t_health = t_max_health
                             # o_pet_used = True
