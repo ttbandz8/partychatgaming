@@ -13878,9 +13878,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 main_options = ["1", "2", "3", "4"]
                                 if o_used_focus and o_used_resolve:
                                     if mode in co_op_modes:
-                                        options = ["q", "Q", "0", "1", "2", "3", "4", "6", "7", "8", "9"]
+                                        options = ["q", "Q", "0", "1", "2", "3", "4", "6", "7", "8", "9", "s"]
                                     else:
-                                        options = ["q", "Q", "0", "1", "2", "3", "4", "6"]
+                                        options = ["q", "Q", "0", "1", "2", "3", "4", "6", "s"]
 
                                 elif o_used_focus and not o_used_resolve:
                                     if mode in co_op_modes:
