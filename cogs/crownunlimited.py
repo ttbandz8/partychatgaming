@@ -185,10 +185,23 @@ class CrownUnlimited(commands.Cog):
             {message.author.mention}, **{battle_message}**
             """), colour=0xf1c40f)
             # embedVar.set_author(name="Enemy Approaches!", icon_url=f"{icon}")
-            card_lvl_attack_buff = 0
-            card_lvl_defense_buff = 0
-            card_lvl_ap_buff = 0
-            card_lvl_hlt_buff = 0
+            card_lvl = 0
+
+            if selected_mode == "Tales":
+                cardtitle = {'TITLE': 'Universe Title'}
+                card_lvl = 30
+                card_lvl_attack_buff = 15
+                card_lvl_defense_buff = 15
+                card_lvl_ap_buff = 10
+                card_lvl_hlt_buff = 25
+            else:
+                cardtitle = {'TITLE': 'Dungeon Title'}
+                card_lvl = 300
+                card_lvl_attack_buff = 150
+                card_lvl_defense_buff = 150
+                card_lvl_ap_buff = 100
+                card_lvl_hlt_buff = 375
+            
         
             o_card = cards[rand_card]['NAME']
             o_card_path=cards[rand_card]['PATH']
@@ -210,6 +223,9 @@ class CrownUnlimited(commands.Cog):
             o_2 = o_moveset[1]
             o_3 = o_moveset[2]
             o_enhancer = o_moveset[3]
+
+ 
+
             
             # Move 1
             move1 = list(o_1.keys())[0]
@@ -233,12 +249,7 @@ class CrownUnlimited(commands.Cog):
             move4enh = list(o_enhancer.values())[2]
             resolved = False
             focused = False
-            card_lvl = 0
             turn = 0
-            if selected_mode == "Tales":
-                cardtitle = {'TITLE': 'Universe Title'}
-            else:
-                cardtitle = {'TITLE': 'Dungeon Title'}
             card_file = showcard(cards[rand_card], o_max_health, o_health, o_max_stamina, o_stamina, resolved, cardtitle, focused, o_attack, o_defense, turn, move1ap, move2ap, move3ap, move4ap, move4enh, card_lvl, None)
 
             embedVar.set_image(url="attachment://image.png")
@@ -7694,6 +7705,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         enemy_pet = boss['PET']
         t_user = boss
         opponent_scaling = 400
+        opponent_health_scaling = 625
     if mode in U_modes:
         enemy_title = "UTITLE"
         enemy_arm = "UARM"
@@ -7704,10 +7716,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
     if mode in D_modes:
         enemy_title = "DTITLE"
         enemy_arm = "DARM"
-        opponent_scaling = 175
-        opponent_health_scaling = 350
+        opponent_scaling = 150
+        opponent_health_scaling = 375
         if randomized_battle:
-            currentopponent = 30
+            currentopponent = 15
             opponent_scaling = 275
 
     try:
@@ -7996,13 +8008,18 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             if mode in D_modes:
                 tpet_lvl = 10
                 tpet_bond = 3
-                tcard_lvl = 100
-                tcard_lvl_ap_buff = 50 + (10 * currentopponent)
+                tcard_lvl = 300
+                tcard_lvl_ap_buff = 100 + (5 * currentopponent)
+            elif mode in B_modes:
+                tpet_lvl = 10
+                tpet_bond = 3
+                tcard_lvl = 500
+                tcard_lvl_ap_buff = 200
             else:
                 tpet_lvl = 3
                 tpet_bond = 1
-                tcard_lvl = 10
-                tcard_lvl_ap_buff = 10 + (10 * currentopponent)
+                tcard_lvl = 30
+                tcard_lvl_ap_buff = 10 + (5 * currentopponent)
             tarm_passive = tarm['ABILITIES'][0]
             tarm_name = tarm['ARM']
             t_card = t['NAME']
