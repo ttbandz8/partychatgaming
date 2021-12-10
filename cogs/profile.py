@@ -252,12 +252,12 @@ class Profile(commands.Cog):
                 if o_title_universe == "Unbound":
                     titled =True
                     titleicon = "🎗️"
-                    titlemessage = f"🎗️ **{title_name}**: {title_passive_type} {title_passive_value}{title_enhancer_suffix_mapping[title_passive_type]}"
+                    titlemessage = f"🎗️ {title_name}: {title_passive_type} {title_passive_value}{title_enhancer_suffix_mapping[title_passive_type]}"
                     warningmessage= f""
                 elif o_title_universe == o_show:
                     titled =True
                     titleicon = "🎗️"
-                    titlemessage = f"🎗️ **{title_name}**: {title_passive_type} {title_passive_value}{title_enhancer_suffix_mapping[title_passive_type]}"
+                    titlemessage = f"🎗️ {title_name}: {title_passive_type} {title_passive_value}{title_enhancer_suffix_mapping[title_passive_type]}"
                     warningmessage= f""
                 cardtitle = {'TITLE': title_name}
 
@@ -269,9 +269,9 @@ class Profile(commands.Cog):
                     🛡️ **{o_defense}**
                     🏃 **{o_speed}**
 
-                    {titlemessage}
-                    🦾 **{arm_name}:** {arm_passive_type} {arm_passive_value}{enhancer_suffix_mapping[arm_passive_type]} {durability}
-                    🧬 **{active_pet['NAME']}:** {active_pet['TYPE']}: {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]} | Bond {bond} {bond_message} / Level {lvl} {lvl_message}
+                    **{titlemessage}**
+                    🦾 **{arm_name}: {arm_passive_type} {arm_passive_value}{enhancer_suffix_mapping[arm_passive_type]} {durability}**
+                    🧬 **{active_pet['NAME']}: {active_pet['TYPE']}: {pet_ability_power}{enhancer_suffix_mapping[active_pet['TYPE']]} | Bond {bond} {bond_message} / Level {lvl} {lvl_message}**
                     🩸 **{passive_name}:** {passive_type} {passive_num}{passive_enhancer_suffix_mapping[passive_type]}                
                     
                     💥 **{move1}:** {move1ap}
