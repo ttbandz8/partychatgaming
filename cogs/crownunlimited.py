@@ -533,9 +533,9 @@ class CrownUnlimited(commands.Cog):
                        ]
         , guild_ids=main.guild_ids)
     async def tales(self, ctx: SlashContext, mode: str):
-        U_modes = ['ATales', 'Tales', 'CTales', 'DTales']
-        D_modes = ['CDungeon', 'DDungeon', 'Dungeon', 'ADungeon']
-        B_MODES = ['Boss', 'CBoss']
+        U_modes = ['ATales', 'Tales', 'CTales', 'DTales', 'tales']
+        D_modes = ['CDungeon', 'DDungeon', 'Dungeon', 'ADungeon', 'dungeon']
+        B_MODES = ['Boss', 'CBoss', 'boss']
         try:
             # await ctx.defer()
 
