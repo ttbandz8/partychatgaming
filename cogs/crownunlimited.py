@@ -20270,10 +20270,30 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
 
 async def save_spot(self, ctx, universe, mode, currentopponent):
-    user = {"DISNAME": str(ctx.author)}
-    query = {"$addToSet": {"SAVE_SPOT": {"UNIVERSE": str(universe['TITLE']), "MODE": str(mode), "CURRENTOPPONENT": currentopponent}}}
-    response = db.updateUserNoFilter(user, query)
-    return
+    try:
+        user = {"DISNAME": str(ctx.author)}
+        query = {"$addToSet": {"SAVE_SPOT": {"UNIVERSE": str(universe['TITLE']), "MODE": str(mode), "CURRENTOPPONENT": currentopponent}}}
+        response = db.updateUserNoFilter(user, query)
+        return
+    except Exception as ex:
+        trace = []
+        tb = ex.__traceback__
+        while tb is not None:
+            trace.append({
+                "filename": tb.tb_frame.f_code.co_filename,
+                "name": tb.tb_frame.f_code.co_name,
+                "lineno": tb.tb_lineno
+            })
+            tb = tb.tb_next
+        print(str({
+            'PLAYER': str(ctx.author),
+            'type': type(ex).__name__,
+            'message': str(ex),
+            'trace': trace
+        }))
+        return
+
+        
 
 
 def update_arm_durability(self, vault, arm):
@@ -20316,15 +20336,34 @@ def update_arm_durability(self, vault, arm):
         
 
 def update_save_spot(self, ctx, saved_spots, selected_universe, modes):
-    currentopponent = 0
-    if saved_spots:
-        for save in saved_spots:
-            if save['UNIVERSE'] == selected_universe and save['MODE'] in modes:
-                currentopponent = save['CURRENTOPPONENT']
-                query = {'DISNAME': str(ctx.author)}
-                update_query = {'$pull': {'SAVE_SPOT': {"UNIVERSE": selected_universe}}}
-                resp = db.updateUserNoFilter(query, update_query)
-    return currentopponent
+    try:
+        currentopponent = 0
+        if saved_spots:
+            for save in saved_spots:
+                if save['UNIVERSE'] == selected_universe and save['MODE'] in modes:
+                    currentopponent = save['CURRENTOPPONENT']
+                    query = {'DISNAME': str(ctx.author)}
+                    update_query = {'$pull': {'SAVE_SPOT': {"UNIVERSE": selected_universe}}}
+                    resp = db.updateUserNoFilter(query, update_query)
+        return currentopponent
+    except Exception as ex:
+        trace = []
+        tb = ex.__traceback__
+        while tb is not None:
+            trace.append({
+                "filename": tb.tb_frame.f_code.co_filename,
+                "name": tb.tb_frame.f_code.co_name,
+                "lineno": tb.tb_lineno
+            })
+            tb = tb.tb_next
+        print(str({
+            'PLAYER': str(ctx.author),
+            'type': type(ex).__name__,
+            'message': str(ex),
+            'trace': trace
+        }))
+        return
+
 
 
 def health_and_stamina_bars(health, stamina, max_health, max_stamina, resolved):
