@@ -1476,13 +1476,13 @@ async def trinketshop(ctx):
    Purchase Experience Boosts
    *Experience Boost Applied to Current Equipped Card*
 
-   🔋 1️⃣ **1,500EXP** for :coin: **100,000**
+   🔋 1️⃣ **1,500EXP** for :coin: **50,000**
    
-   🔋 2️⃣ **4,500EXP** for :dollar: **250,000**
+   🔋 2️⃣ **4,500EXP** for :dollar: **140,000**
 
-   🔋 3️⃣ **15,000EXP** for :moneybag: **700,000**
+   🔋 3️⃣ **15,000EXP** for :moneybag: **400,000**
 
-   ⚒️ 4️⃣ **25 Durability** for :moneybag: **50,000**
+   ⚒️ 4️⃣ **25 Durability** for :moneybag: **10,000**
 
    Purchase Gabe's Purse to Keep All Items When Rebirthing
 
@@ -1504,16 +1504,16 @@ async def trinketshop(ctx):
       exp_boost_buttons = ["1", "2", "3"]
       if button_ctx.custom_id == "1":
          levels_gained = 10
-         price = 100000
+         price = 50000
       if button_ctx.custom_id == "2":
          levels_gained = 30
-         price = 250000
+         price = 140000
       if button_ctx.custom_id == "3":
          levels_gained = 100
-         price=700000
+         price=400000
       if button_ctx.custom_id == "5":
          levels_gained = 25
-         price=50000
+         price=10000
 
 
       if button_ctx.custom_id == "cancel":
