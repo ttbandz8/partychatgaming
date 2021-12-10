@@ -7957,7 +7957,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             tcard_lvl_ap_buff = 0
             tcard_lvl_hlt_buff = 0
 
-            for x in vault['CARD_LEVELS']:
+            for x in tvault['CARD_LEVELS']:
                 if x['CARD'] == t_card:
                     tcard_lvl = x['LVL']
                     tcard_tier = x['TIER']
