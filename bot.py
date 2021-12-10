@@ -138,7 +138,7 @@ async def enhancers(ctx):
 
       embedVar4 = discord.Embed(title= f"Title Enhancer Type: Conversion",colour=0x7289da)
       embedVar4.set_thumbnail(url=avatar)
-      embedVar4.add_field(name="`CONVERSION`", value="**STANCE** - Swap Your Attack and Defense, Increase Your Attack By Flat AP\n\n**CONFUSE** - Swap Opponenet Attack and Defense, Decrease Opponent Defense by Flat AP\n\n")
+      embedVar4.add_field(name="`CONVERSION`", value="**STANCE** - Swap Your Attack and Defense, Increase Your Defense By Flat AP\n\n**CONFUSE** - Swap Opponenet Attack and Defense, Decrease Opponent Defense by Flat AP\n\n")
       embedVar4.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
 
       embedVar5 = discord.Embed(title= f"Title Enhancer Type: Time Manipulation",colour=0x7289da)
