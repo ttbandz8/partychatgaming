@@ -21,7 +21,7 @@ traits = [{
 },{
     'NAME': 'Chainsawman',
     'EFFECT': 'Devilization',
-    'TRAIT': 'When health reaches _50%_ gain double ATK and double DEF. Strong Fear Infliction.'
+    'TRAIT': 'When health reaches 50% gain double ATK and double DEF. Strong Fear Infliction.'
 },{
     'NAME': 'Bleach',
     'EFFECT': 'Bankai',
@@ -65,11 +65,11 @@ traits = [{
 },{
     'NAME': 'Death Note',
     'EFFECT': 'Scheduled Death',
-    'TRAIT': 'After 24 Turns You Win'
+    'TRAIT': 'After 50 Turns You Win'
 },{
     'NAME': 'Dragon Ball Z',
     'EFFECT': 'Final Stand',
-    'TRAIT': 'When you die, Resolve with _75%_ ATK + DEF as Health'
+    'TRAIT': 'When you die, Resolve with 75% ATK + DEF as Health'
 },{
     'NAME': 'Crown Rift Slayers',
     'EFFECT': 'Follow Up Attack',

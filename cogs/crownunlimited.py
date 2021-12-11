@@ -1630,7 +1630,7 @@ class CrownUnlimited(commands.Cog):
                             o_stamina = 100
                             ocard_lvl_ap_buff = ocard_lvl_ap_buff + 30
                         elif o_universe == "Death Note":
-                            if turn_total >= 24:
+                            if turn_total >= 50:
                                 embedVar = discord.Embed(title=f"{t_card.upper()}'s' Scheduled Death 📓",
                                                          description=f"**{o_card} says**\n**Delete**", colour=0xe91e63)
                                 embedVar.add_field(name=f"{t_card} had a heart attack and died", value=f"Death....")
@@ -2484,7 +2484,7 @@ class CrownUnlimited(commands.Cog):
                                 tcard_lvl_ap_buff = tcard_lvl_ap_buff + 30
 
                             elif t_universe == "Death Note":
-                                if turn_total >= 24:
+                                if turn_total >= 50:
                                     embedVar = discord.Embed(title=f"{o_card.upper()}'s' Scheduled Death 📓 ",
                                                              description=f"**{t_card} says**\n**Delete**",
                                                              colour=0xe91e63)
@@ -4296,7 +4296,7 @@ class CrownUnlimited(commands.Cog):
                             o_stamina = 100
                             ocard_lvl_ap_buff = ocard_lvl_ap_buff + 30
                         elif o_universe == "Death Note":
-                            if turn_total >= 24:
+                            if turn_total >= 50:
                                 embedVar = discord.Embed(title=f"{t_card.upper()}'s' Scheduled Death 📓",
                                                          description=f"**{o_card} says**\n**Delete**", colour=0xe91e63)
                                 embedVar.add_field(name=f"{t_card} had a heart attack and died", value=f"Death....")
@@ -5221,7 +5221,7 @@ class CrownUnlimited(commands.Cog):
                             t_stamina = 100
                             tcard_lvl_ap_buff = tcard_lvl_ap_buff + 30
                         elif t_universe == "Death Note":
-                            if turn_total >= 24:
+                            if turn_total >= 50:
                                 embedVar = discord.Embed(title=f"{o_card.upper()}'s' Scheduled Death 📓",
                                                          description=f"**{t_card} says**\n**Delete**", colour=0xe91e63)
                                 embedVar.add_field(name=f"{o_card} had a heart attack and died", value=f"Death....")
@@ -10690,7 +10690,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 ocard_lvl_ap_buff = ocard_lvl_ap_buff + 30
 
                             elif o_universe == "Death Note":
-                                if turn_total >= 24:
+                                if turn_total >= 50:
                                     embedVar = discord.Embed(title=f"{t_card.upper()}'s' Scheduled Death 📓",
                                                              description=f"**{o_card} says**\n**Delete**",
                                                              colour=0xe91e63)
@@ -11658,7 +11658,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 t_stamina = 100
                                 tcard_lvl_ap_buff = tcard_lvl_ap_buff + 30
                             elif t_universe == "Death Note":
-                                if turn_total >= 24:
+                                if turn_total >= 50:
                                     embedVar = discord.Embed(title=f"{o_card.upper()}'s' Scheduled Death 📓",
                                                              description=f"**{t_card} says**\n**Delete**",
                                                              colour=0xe91e63)
@@ -13279,7 +13279,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 o_stamina = 100
                                 ocard_lvl_ap_buff = ocard_lvl_ap_buff + 30
                             elif o_universe == "Death Note":
-                                if turn_total >= 24:
+                                if turn_total >= 50:
                                     if t_universe == "Death Note":
                                         embedVar = discord.Embed(title=f"{o_card.upper()}'s' Scheduled Death 📓",
                                                                  description=f"**{t_card} says**\n**Delete**",
@@ -15110,7 +15110,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 t_stamina = 100
                                 tcard_lvl_ap_buff = tcard_lvl_ap_buff + 30
                             elif t_universe == "Death Note":
-                                if turn_total >= 24:
+                                if turn_total >= 50:
                                     embedVar = discord.Embed(title=f"{o_card.upper()}'s' Scheduled Death 📓",
                                                              description=f"**{t_card} says**\n**Delete**",
                                                              colour=0xe91e63)
@@ -16789,7 +16789,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     c_stamina = 100
                                     ccard_lvl_ap_buff = ccard_lvl_ap_buff + 30
                                 elif c_universe == "Death Note":
-                                    if turn_total >= 24:
+                                    if turn_total >= 50:
                                         embedVar = discord.Embed(title=f"{t_card.upper()}'s' Scheduled Death 📓",
                                                                  description=f"**{c_card} says**\n**Delete**",
                                                                  colour=0xe91e63)
@@ -18741,7 +18741,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                     tcard_lvl_ap_buff = tcard_lvl_ap_buff + 30
 
                                 elif t_universe == "Death Note":
-                                    if turn_total >= 24:
+                                    if turn_total >= 50:
                                         embedVar = discord.Embed(title=f"{o_card.upper()}'s' Scheduled Death 📓",
                                                                  description=f"**{t_card} says**\n**Delete**",
                                                                  colour=0xe91e63)
