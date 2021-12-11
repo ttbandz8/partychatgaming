@@ -1481,12 +1481,12 @@ class CrownUnlimited(commands.Cog):
                         o_defense = int(o_defense / 2)
                     if o_universe == "Death Note" and turn_total == 0:
                         embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death 📓",
-                                                 description=f"**{o_card} says**\nYou will die in 24 turns...",
+                                                 description=f"**{o_card} says**\nYou will die in 50  turns...",
                                                  colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                     if t_universe == 'Death Note' and turn_total == 0:
                         embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death 📓",
-                                                 description=f"**{t_card} says**\nYou will die in 24 turns...",
+                                                 description=f"**{t_card} says**\nYou will die in 50  turns...",
                                                  colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                     if o_attack <= 25:
@@ -4111,12 +4111,12 @@ class CrownUnlimited(commands.Cog):
                         o_defense = o_defense / 2
                     if o_universe == "Death Note" and turn_total == 0:
                         embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death 📓",
-                                                 description=f"**{o_card} says**\nYou will die in 24 turns...",
+                                                 description=f"**{o_card} says**\nYou will die in 50  turns...",
                                                  colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                     if t_universe == 'Death Note' and turn_total == 0:
                         embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death 📓",
-                                                 description=f"**{t_card} says**\nYou will die in 24 turns...",
+                                                 description=f"**{t_card} says**\nYou will die in 50  turns...",
                                                  colour=0xe91e63)
                         await private_channel.send(embed=embedVar)
                     if o_attack <= 25:
@@ -10501,12 +10501,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             o_defense = o_defense / 2
                         if o_universe == "Death Note" and turn_total == 0:
                             embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death 📓",
-                                                     description=f"**{o_card} says**\nYou will die in 24 turns...",
+                                                     description=f"**{o_card} says**\nYou will die in 50  turns...",
                                                      colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                         if t_universe == 'Death Note' and turn_total == 0:
                             embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death 📓",
-                                                     description=f"**{t_card} says**\nYou will die in 24 turns...",
+                                                     description=f"**{t_card} says**\nYou will die in 50  turns...",
                                                      colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                         if o_attack <= 25:
@@ -13091,7 +13091,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             o_defend_used = False
                         if o_universe == "Death Note" and turn_total == 0:
                             embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death 📓",
-                                                     description=f"**{o_card} says**\nYou will die in 24 turns...",
+                                                     description=f"**{o_card} says**\nYou will die in 50  turns...",
                                                      colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
 
@@ -13104,12 +13104,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         if mode in co_op_modes:
                             if c_universe == "Death Note" and turn_total == 0:
                                 embedVar = discord.Embed(title=f"{c_card.upper()} Scheduled Death 📓",
-                                                         description=f"**{c_card} says**\nYou will die in 24 turns...",
+                                                         description=f"**{c_card} says**\nYou will die in 50  turns...",
                                                          colour=0xe91e63)
                                 await private_channel.send(embed=embedVar)
                         if t_universe == 'Death Note' and turn_total == 0:
                             embedVar = discord.Embed(title=f"{o_card.upper()} Scheduled Death 📓",
-                                                     description=f"**{t_card} says**\nYou will die in 24 turns...",
+                                                     description=f"**{t_card} says**\nYou will die in 50  turns...",
                                                      colour=0xe91e63)
                             await private_channel.send(embed=embedVar)
                         if o_attack <= 25:
