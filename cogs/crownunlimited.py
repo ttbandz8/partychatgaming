@@ -6280,73 +6280,29 @@ class CrownUnlimited(commands.Cog):
     async def universes(self, ctx: SlashContext):
         try:
             universe_data = db.queryAllUniverse()
-            user = db.queryUser({'DISNAME': str(ctx.author)})
-
-            available_universes = []
-            unavailable_universes = []
+            # user = db.queryUser({'DISNAME': str(ctx.author)})
+            universe_embed_list = []
             for uni in universe_data:
                 available = ""
                 if len(uni['CROWN_TALES']) > 2:
                     available = f"{Crest_dict[uni['TITLE']]}"
-                    tier = ""
-                    prerequisite = ""
-                    if uni['TIER'] == 9:
-                        tier = ":crystal_ball:"
-                    else:
-                        tier = str(uni['TIER'])
+                    
+                    tales_list = ", ".join(uni['CROWN_TALES'])
 
-                    if uni['PREREQUISITE'] == "":
-                        prerequisite = "*Starter Universe*"
-                    else:
-                        prerequisite = f":lock: *{uni['PREREQUISITE']}*"
-                    if uni['TIER'] == 9:
-                        prerequisite = "*Crown Rift*"
-                    available_universes.append(
-                        f"{available} **{uni['TITLE']}**\n:earth_africa: Tier {tier} | {prerequisite}\n")
+                    embedVar = discord.Embed(title= f"{uni['TITLE']}", description=textwrap.dedent(f"""
+                    {Crest_dict[uni['TITLE']]} **Number of Fights**: :crossed_swords: **{len(uni['CROWN_TALES'])}**
+                    🎗️ **Universe Title**: {uni['UTITLE']}
+                    🦾 **Universe Arm**: {uni['UARM']}
+                    🧬 **Universe Summon**: {uni['UPET']}
 
-            all_universes = []
-            if available_universes:
-                for a in available_universes:
-                    all_universes.append(a)
-            total_universes = len(all_universes)
+                    :crossed_swords: **Tales Order**: {tales_list}
+                    """))
+                    embedVar.set_image(url=uni['PATH'])
+                    universe_embed_list.append(embedVar)
 
-            # Adding to array until divisible by 10
-            while len(all_universes) % 10 != 0:
-                all_universes.append("")
+            await Paginator(bot=self.bot, ctx=ctx, deleteAfterTimeout=True, pages=universe_embed_list).run()
 
-            # Check if divisible by 10, then start to split evenly
-            if len(all_universes) % 10 == 0:
-                first_digit = int(str(len(all_universes))[:1])
-                universes_broken_up = np.array_split(all_universes, first_digit)
 
-            # If it's not an array greater than 10, show paginationless embed
-            if len(all_universes) < 10:
-                embedVar = discord.Embed(title=f"Universe List | :lock: *Prerequisite*",
-                                         description="\n".join(all_universes), colour=0x7289da)
-                embedVar.set_footer(
-                    text=f"{total_universes} Total Universes\n/viewuniverse *Universe Name*- Universe Details")
-                await ctx.send(embed=embedVar)
-
-            embed_list = []
-            icon = ":crown:"
-            if user['RIFT'] == 1:
-                icon = ":crystal_ball:"
-            for i in range(0, len(universes_broken_up)):
-                globals()['embedVar%s' % i] = discord.Embed(title=f"{icon} Universe List | :lock: *Prerequisite*",
-                                                            description="\n".join(universes_broken_up[i]),
-                                                            colour=0x7289da)
-                globals()['embedVar%s' % i].set_footer(
-                    text=f"{total_universes} Total Universes\nFull list of Universes and their Crests\n/viewuniverse Universe - Universe Details")
-                embed_list.append(globals()['embedVar%s' % i])
-
-            paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
-            paginator.add_reaction('⏮️', "first")
-            paginator.add_reaction('⬅️', "back")
-            paginator.add_reaction('🔐', "lock")
-            paginator.add_reaction('➡️', "next")
-            paginator.add_reaction('⏭️', "last")
-            embeds = embed_list
-            await paginator.run(embeds)
         except Exception as ex:
             trace = []
             tb = ex.__traceback__
