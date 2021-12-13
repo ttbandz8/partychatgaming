@@ -153,7 +153,7 @@ class Lookup(commands.Cog):
                 :flower_playing_cards: | **Card:** {card}
                 :reminder_ribbon:** | Title: **{titles}
                 :mechanical_arm: | **Arm: **{arm}
-                :bird: | **Pet: **{pet}
+                🧬 | **Summon: **{pet}
 
                 :military_medal: | {most_played_card_message}
                 **Tales Played: **{len(tales_matches)}
@@ -165,7 +165,7 @@ class Lookup(commands.Cog):
                 :flower_playing_cards: **Cards** {all_cards}
                 :reminder_ribbon: **Titles** {all_titles}
                 :mechanical_arm: **Arms** {all_arms}
-                :bird: **Pets** {all_pets}
+                🧬 **Summons** {all_pets}
                 
                 :flags: | **Guild: **{guild}
                 :military_helmet: | **Team: **{team} 

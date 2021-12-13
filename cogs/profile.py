@@ -489,7 +489,7 @@ class Profile(commands.Cog):
             await ctx.send("There's an issue with loading your cards. Check with support.", hidden=True)
             return
 
-    @cog_ext.cog_slash(description="Check all your titles", guild_ids=main.guild_ids)
+    @cog_ext.cog_slash(description="Check all your Titles", guild_ids=main.guild_ids)
     async def titles(self, ctx):
         await ctx.defer()
         query = {'DISNAME': str(ctx.author)}
@@ -571,7 +571,7 @@ class Profile(commands.Cog):
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
-    @cog_ext.cog_slash(description="Check all your arms", guild_ids=main.guild_ids)
+    @cog_ext.cog_slash(description="Check all your Arms", guild_ids=main.guild_ids)
     async def arms(self, ctx):
         await ctx.defer()
         query = {'DISNAME': str(ctx.author)}
@@ -655,8 +655,8 @@ class Profile(commands.Cog):
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
-    @cog_ext.cog_slash(description="Check all your pets", guild_ids=main.guild_ids)
-    async def pets(self, ctx):
+    @cog_ext.cog_slash(description="Check all your Summons", guild_ids=main.guild_ids)
+    async def summons(self, ctx):
         await ctx.defer()
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
@@ -750,7 +750,7 @@ class Profile(commands.Cog):
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
-    @cog_ext.cog_slash(description="Check all your destiny lines", guild_ids=main.guild_ids)
+    @cog_ext.cog_slash(description="Check all your Destiny Lines", guild_ids=main.guild_ids)
     async def destinies(self, ctx):
         await ctx.defer()
         query = {'DISNAME': str(ctx.author)}
@@ -809,7 +809,7 @@ class Profile(commands.Cog):
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
-    @cog_ext.cog_slash(description="Check all your quests", guild_ids=main.guild_ids)
+    @cog_ext.cog_slash(description="Check all your Quests", guild_ids=main.guild_ids)
     async def quests(self, ctx):
         await ctx.defer()
         query = {'DISNAME': str(ctx.author)}
@@ -864,7 +864,7 @@ class Profile(commands.Cog):
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
-    @cog_ext.cog_slash(description="Check your balance", guild_ids=main.guild_ids)
+    @cog_ext.cog_slash(description="Check your Balance", guild_ids=main.guild_ids)
     async def balance(self, ctx):
         try:
             query = {'DISNAME': str(ctx.author)}
@@ -907,7 +907,7 @@ class Profile(commands.Cog):
                 'trace': trace
             }))
             
-    @cog_ext.cog_slash(description="Check your build presets", guild_ids=main.guild_ids)
+    @cog_ext.cog_slash(description="Check your Build Presets", guild_ids=main.guild_ids)
     async def preset(self, ctx):
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
@@ -1084,7 +1084,7 @@ class Profile(commands.Cog):
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
-    @cog_ext.cog_slash(description="Save your current build as preset", guild_ids=main.guild_ids)
+    @cog_ext.cog_slash(description="Save your current Build as Preset", guild_ids=main.guild_ids)
     async def savepreset(self, ctx):
         query = {'DISNAME': str(ctx.author)}
         d = db.queryUser(query)
@@ -1194,7 +1194,7 @@ class Profile(commands.Cog):
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
-    @cog_ext.cog_slash(description="Open pop up shop", guild_ids=main.guild_ids)
+    @cog_ext.cog_slash(description="Open Pop-Up Shop", guild_ids=main.guild_ids)
     async def shop(self, ctx):
         all_universes = db.queryAllUniverse()
         user = db.queryUser({'DISNAME': str(ctx.author)})

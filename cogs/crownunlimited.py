@@ -6261,7 +6261,7 @@ class CrownUnlimited(commands.Cog):
 
         embed_list = []
         for i in range(0, len(pets_broken_up)):
-            globals()['embedVar%s' % i] = discord.Embed(title=f":dog: {universe_data['TITLE']} Summon List",
+            globals()['embedVar%s' % i] = discord.Embed(title=f"🧬 {universe_data['TITLE']} Summon List",
                                                         description="\n".join(pets_broken_up[i]), colour=0x7289da)
             globals()['embedVar%s' % i].set_footer(
                 text=f"{total_pets} Total Summons\n🟣 Dungeon Drop\n🟢 Tale Drop\n🔴 Boss Drop\n/viewpet 'Summon Name' - View Summon Details")
