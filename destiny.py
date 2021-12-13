@@ -63,9 +63,9 @@ destiny = [
         "NAME": "Wise Old Sage",
         "WINS": 0,
         "REQUIRED": 10,
-        "DEFEAT": "Cystal Sage",
+        "DEFEAT": "Crystal Sage",
         "USE_CARDS": ["Hollow Cleric"],
-        "EARN": "Cystal Sage",
+        "EARN": "Crystal Sage",
         "COMPLETED": False,
         "UNIVERSE": "Souls"
     },
