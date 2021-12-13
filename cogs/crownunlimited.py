@@ -7046,7 +7046,7 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, stamina, en
             elif enh_type == 'RAGE':
                 message = f'**{move}** used!\nSacrificing **{enhanced} Defense**, Increasing **Attack** by **{enhanced}**'
             elif enh_type == 'BRACE':
-                message = f'**{move}** used!\nSacrificing **{enhanced} Attack**, Increasing ****Defense** by **{enhanced}**'
+                message = f'**{move}** used!\nSacrificing **{enhanced} Attack**, Increasing **Defense** by **{enhanced}**'
             elif enh_type == 'BZRK':
                 message = f'**{move}** used!\nSacrificing **{enhanced} Health**, Increasing **Attack** by **{enhanced}**'
             elif enh_type == 'CRYSTAL':
