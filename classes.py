@@ -38,6 +38,25 @@ class USER():
     SAVE_SPOT: list[str] = field(default_factory=lambda: [])
     PERFORMANCE: bool = field(default_factory=lambda: False)
 
+@dataclass(frozen=True, order=True)
+class TRADE():
+    MERCHANT: str = field(default_factory=lambda: '')
+    MCOIN: int = field(default_factory=lambda: 0)
+    MCARDS: list[str] = field(default_factory=lambda: '')
+    MTITLES: list[str] = field(default_factory=lambda: '')
+    MARMS: list[str] = field(default_factory=lambda: '')
+    MSUMMONS: list[str] = field(default_factory=lambda: '')
+    BUYER: str = field(default_factory=lambda: '')
+    BCOIN: int = field(default_factory=lambda: 0)
+    BCARDS: list[str] = field(default_factory=lambda: '')
+    BTITLES: list[str] = field(default_factory=lambda: '')
+    BARMS: list[str] = field(default_factory=lambda: '')
+    BSUMMONS: list[str] = field(default_factory=lambda: '')
+    TAX: int = field(default_factory=lambda: 0)
+    OPEN: bool = field(default_factory=lambda:True)
+    
+    
+    
 
 @dataclass(frozen=True, order=True)
 class GUILD():
@@ -423,3 +442,7 @@ def newGuild(guild):
 def newHall(hall):
     ha = HALL(**hall)
     return asdict(ha)
+
+def newTrade(trade):
+    tr = TRADE(**trade)
+    return asdict(tr)

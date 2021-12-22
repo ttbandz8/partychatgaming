@@ -38,6 +38,7 @@ house_col =db["HOUSE"]
 hall_col =db["HALL"]
 menu_col = db['MENU']
 abyss_col = db['ABYSS']
+trade_col = db['TRADE']
 acceptable = [1, 2, 3, 4]
 
 
@@ -1678,4 +1679,70 @@ def updatekg(session, query, update_query, arrayFilter):
         sessions_col.update_one(query, update_query,  array_filters=arrayFilter)
         return True
     else:
+        return False
+    
+    
+''' TRADES '''
+def trade_exists(data):
+    collection_exists = col_exists("TRADE")
+    print(collection_exists)
+    if collection_exists:
+        trade_does_exist = trade_col.find_one(data)
+        if trade_does_exist:
+            return True
+        else:
+            return False
+    else:
+        return False
+
+def updateManyTrade(new_value):
+    trade_col.update_many({}, new_value)
+    return True
+
+def createTrade(trade):
+    try:
+        tradeexists = trade_exists({'_id': trade['_id']})
+        if tradeexists:
+            return "Trade already exists."
+        else:
+            trade_col.insert_one(trade)
+            return "New Trade created."
+    except:
+        return "Cannot create Trade."
+
+def updateTrade(query, new_value):
+    try:
+        tradeexists = trade_exists({'_id': query['_id']})
+        if tradeexists:
+            trade_col.update_one(query, new_value)
+            return True
+        else:
+            return False
+    except:
+        return False
+
+def deleteTrade(query):
+    try:
+        tradeexists = trade_exists({'_id': query['_id']})
+        if tradeexists:
+            trade_col.delete_one(query)
+            return True
+        else:
+            return False
+    except:
+        return False
+
+def queryAllTrade():
+    data = trade_col.find()
+    return data
+
+def queryExploreTrade():
+    data = trade_col.find({"HAS_CROWN_TALES": True})
+    return data
+
+def queryTrade(query):
+    try:
+        data = trade_col.find_one(query)
+        return data
+    except:
         return False

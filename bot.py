@@ -411,10 +411,123 @@ async def crown(ctx):
    **/trinketshop** to purchase Card Levels, Arm Durability and Gabe's Purse!
    """) ,colour=0x7289da)
    embedVar10.set_thumbnail(url=avatar)
+   
+   embedVar15 = discord.Embed(title= f"Teams", description=textwrap.dedent(f"""\
+   **Teams Explained**
+   Use **/team** to lookup any Crown Unlimited Team!
+   
+   **Team Members** earn extra :coin: towards the **Team Bank** 
+
+   **Creating A Team**
+   Use **/createteam** and create a **Team Name**
+   **/recruit** your friends to join your newly named **Team** !
+   Players can use **/apply** to join as well!
+   
+   **Team Bonusus**
+   Teammates gain an extra **10 Attack** and **Defense** playing Co-Op Together !
+   Teams earn additional :coin: for every **Tales**, **Dungeon** and **Boss** Victory
+   
+   **Team Economy**
+   Players across **Crown Unlimited** can **/donate** :coin: to their favorite teams
+   Owners can ****/pay**** their members a wage.
+   """),colour=0x7289da)
+   embedVar15.set_thumbnail(url=avatar)
+
+   embedVar12 = discord.Embed(title= f"Families",description=textwrap.dedent(f"""\
+   **Families Explained**
+   Use **/family** to lookup any Crown Unlimited Family!
+   
+   Two players with a strong bond can come together and form a **Family**
+   
+   **Starting A Family**
+   Use **/marry** to start a marriage proposal to your chosen **Partner**
+   If they accept, your will form a Household under your name
+   **2 Kids** can be adopted into the family to create a 4 player Maximum.
+   
+   **Family Bonuses**
+   Family Members gain an extra **50 Health** when playing Co-Op Together !
+   Family Members earn extra :coin: towards the **Family Bank**.
+   Families can /invest their income together.
+   Heads of Household and Partners can pay **/allowance** to Family members. 
+   
+   **Housing**
+   The **Family Bank** can be used to buy **Houses**
+   **Houses** increase your :coin: earned via **Mutlipliers**
+   **/invest** your income to buy bigger **Houses** and earn more :coin: across the game.
+   """) ,colour=0x7289da)
+   embedVar12.set_thumbnail(url=avatar)
+
+   embedVar13 = discord.Embed(title= f"Guilds",description=textwrap.dedent(f"""\
+   **Guilds Explained**
+   Guilds in Crown Unlmited are formed by an Oath between two Team Owners
+   
+   The Oathgiver becomes the **Founder** and the Oathreciever becomes the ****Sworn and Shield****.
+   
+   The **Shield** defends the Guild from raiding players.
+   
+   Both teams become enlisted as **Swords** of the new **Guild**
+   Their respective members become **Blades**
+   
+   **Guilds** earn money by winning **PvP** matches and earning **Universe Crest** and defending against raids
+   
+   The Founder & Sworn may /ally with other Teams increasing the size and power of the guild
+   
+   **Guild Bonuses**
+   Guilds earn extra income towards the Guild Bank
+   Guilds increase the earned income in PvP
+   Guilds can partipate in /raids
+   Guilds can earn passive income owning **Universe Crest**
+   Guilds can purchase **Halls**
+   
+   **Universe Crest**
+   When you complete a dungeon 
+   
+   
+   **Halls**
+   The **Guild Bank** can be used to purchase **Halls**
+   **Halls** increase the Income earned to Guilds via **Multipliers**
+   **Halls** increase the income earned to **Blades** via **Splits**
+   **Halls** increase the defense of the **Shield**
+   **Halls** increase the bounty cost to /raid the guild 
+   """) ,colour=0x7289da)
+   embedVar13.set_thumbnail(url=avatar)
+   
+   embedVar14 = discord.Embed(title= f"Raids",description=textwrap.dedent(f"""\
+   **Raids Explained**
+   Players aligned with a guild can use /raid to claim bounties from other guilds
+   
+   Victory claims the bounty and resets the Guilds victory multiplier !
+   
+   Income from Raids is limited to the bounty offered from the guild.
+   To take money from a **Guild Bank** players must compete in PvP
+   
+   Raiding a guild hall is no easy feat and must be done **Without Summons**
+   
+   **Raid Benefits**
+   Earn Large Bounties from guilds 
+   
+   **Shield  Defense Explained**
+   The Shield has a big repsonsible to defend the guild from /raids and earn income from challengers
+   
+   The shield exist within the guild hall as the **Current Equipped Build** of the Shield Player
+   
+   As the shield, whenver your Avatar is raided and succesfully defends you earn :coin:
+   With each victory you will build a streak earning both respect and more :coin: via **Multipliers**.
+   
+   However, many of **Blades** will covet this position and may /raid you themseleves triggering a **Title Match**
+   Occasionally the Founder or Sworn may /raid to start a Defense Test gauging the strength of their Chosen Shield
+   host a /raid tournament within the guild to find a new champion or simply /knight one yourself
+   
+   **Shield Benefits**
+   Earn income by defending your guild from raiders
+   Earn respect by increasing the guild victory streak 
+   
+   """) ,colour=0x7289da)
+   embedVar14.set_thumbnail(url=avatar)
 
 
 
-   embeds = [embedVar1, embedVar2, embedVar3, embedVar11, embedVar4, embedVar5, embedVar6, embedVar7, embedVar8,embedVar9, embedVar10]
+   embeds = [embedVar1, embedVar2, embedVar3, embedVar11, embedVar4, embedVar5, embedVar6, embedVar7, embedVar8,embedVar9, embedVar10,embedVar15,embedVar12,embedVar13,embedVar14]
    await Paginator(bot=bot, ctx=ctx, pages=embeds, timeout=60).run()
   
 

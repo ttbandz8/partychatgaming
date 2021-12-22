@@ -14,6 +14,10 @@ import requests
 from collections import ChainMap
 import DiscordUtils
 from discord_slash import cog_ext, SlashContext
+from discord_slash.utils import manage_components
+from discord_slash.model import ButtonStyle
+from discord_slash.utils.manage_commands import create_option, create_choice
+from dinteractions_Paginator import Paginator
 
 emojis = ['👍', '👎']
 
@@ -30,21 +34,116 @@ class Guild(commands.Cog):
 
 
     @cog_ext.cog_slash(description="Swear into Guild!", guild_ids=main.guild_ids)
-    async def oath(self, ctx, owner: User, guildname: str):
-        guild_name = guildname
-        cost = 10000
-        founder_profile = db.queryUser({'DISNAME': str(ctx.author)})
-        guildsearch_name = founder_profile['GUILD']
-        if guildsearch_name != "PCG":
-            guildsearch_query = {'GNAME' : guildsearch_name}
-            guildsearch = db.queryGuildAlt(guildsearch_query)
-            if guildsearch:
-                if guild_name != guildsearch_name:
-                    await ctx.send(m.FOUNDER_LEAVE)
+    async def oath(self, ctx, sworn: User, guildname: str):
+        try:
+            owner = sworn
+            guild_name = guildname
+            cost = 10000
+            founder_profile = db.queryUser({'DISNAME': str(ctx.author)})
+            guildsearch_name = founder_profile['GUILD']
+            if guildsearch_name != "PCG":
+                guildsearch_query = {'GNAME' : guildsearch_name}
+                guildsearch = db.queryGuildAlt(guildsearch_query)
+                if guildsearch:
+                    if guild_name != guildsearch_name:
+                        await ctx.send(m.FOUNDER_LEAVE)
+                        return
+                    await ctx.send(f"{guildsearch_name} NEW OATH!")
+                    sworn_profile = db.queryUser({'DISNAME': str(owner)})              
+                    if sworn_profile['GUILD'] != 'PCG' and guildsearch['SHIELD'] != sworn_profile['DISNAME']:
+                        await ctx.send(m.USER_IN_GUILD, delete_after=3)
+                        return
+                    else:
+                        if founder_profile['TEAM'] == 'PCG' or sworn_profile['TEAM'] == 'PCG':
+                            await ctx.send(m.FOUNDER_NO_TEAM, delete_after=3)
+                            return
+                        else:
+                            fteam_query = {'TNAME' : founder_profile['TEAM']}
+                            steam_query = {'TNAME' : sworn_profile['TEAM']}
+                            founder_team = db.queryTeam(fteam_query)
+                            sworn_team = db.queryTeam(steam_query)
+                            fbal = founder_team['BANK']
+                            sbal = sworn_team['BANK']
+                            if founder_team['TNAME'] == sworn_team['TNAME']:
+                                await ctx.send(m.SAME_TEAM, delete_after=3)
+                                return
+                            if sbal < cost:
+                                await ctx.send(m.NBROKE_TEAM, delete_after=3)
+                                return
+                        
+                            guild_query = {'FOUNDER': str(ctx.author)}
+                            guild_buttons = [
+                                manage_components.create_button(
+                                    style=ButtonStyle.blue,
+                                    label="✔️",
+                                    custom_id="Yes"
+                                ),
+                                manage_components.create_button(
+                                    style=ButtonStyle.red,
+                                    label="❌",
+                                    custom_id="No"
+                                )
+                            ]
+                            guild_buttons_action_row = manage_components.create_actionrow(*guild_buttons)
+                            await ctx.send(f"Do you wish to swear an oath with {owner.mention}?".format(self), components=[guild_buttons_action_row])
+
+
+                            def check(button_ctx):
+                                return button_ctx.author == ctx.author
+
+                            try:
+                                button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[guild_buttons_action_row], check=check)
+
+                                if button_ctx.custom_id == "No":
+                                    await button_ctx.send("No Oath Sent")
+                                    return
+                                
+                                if button_ctx.custom_id == "Yes":
+                                    await main.DM(ctx, owner, f"{ctx.author.mention}" + f" would like to join the Guild {guild_name}" + f" React in server to join their Guild" )
+                                    await ctx.send(f"{owner.mention}" +f" will you swear the oath?".format(self), components=[guild_buttons_action_row])
+                                    def check(button_ctx):
+                                        return button_ctx.author == ctx.user
+
+                                    try:
+                                        button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[guild_buttons_action_row], check=check)
+
+                                        if button_ctx.custom_id == "No":
+                                            await button_ctx.send("Oath Request Denied")
+                                            return
+                                        
+                                        if button_ctx.custom_id == "Yes":
+                                            try:
+                                                sword_list = []
+                                                for sword in guildsearch['SWORDS']:
+                                                    sword_list.append(sword)
+                                                newvalue = {'$set': {'SWORN': str(owner)}}
+                                                nextresponse = db.addGuildSworn(guild_query, newvalue, str(ctx.author), str(owner))
+                                                await ctx.send(nextresponse)
+                                                shield = db.updateGuild(guild_query, {'$set' : {'SHIELD' : str(owner) }})
+                                                newvalue = {'$set': {'SHIELD': str(owner)}}
+                                                response = db.addGuildShield(guild_query, newvalue, str(ctx.author), str(owner))
+                                                await ctx.send(response)
+                                                if sworn_team['TNAME'] not in sword_list:
+                                                    newvalue = {'$push': {'SWORDS': str(sworn_team['TNAME'])}}
+                                                    swordaddition2 = db.addGuildSword(guild_query, newvalue, str(ctx.author), str(sworn_team['TNAME']))
+                                                    await ctx.send(swordaddition2)
+                                                gbank = db.updateGuild(guild_query,{'$inc' : {'BANK' : investment }})
+                                                s_new_bal = sbal - cost
+                                                new_value = {'$set' : {'BANK' : s_new_bal}}
+                                                steambal = db.updateTeam(steam_query, new_value)                      
+                                            except:
+                                                await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=3)
+                                    except:
+                                        print("Guild creation ended unexpectedly. ")
+                            except:
+                                print("Guild creation ended unexpectedly. ")                    
+            else:
+                sworn_profile = db.queryUser({'DISNAME': str(owner)})
+                investment = cost * 2
+                if founder_profile['GUILD'] != 'PCG' and founder_profile['GUILD'] != 'N/A' and founder_profile['GUILD'] != founder_profile['DISNAME'] :
+                    await ctx.send(m.USER_IN_GUILD, delete_after=3)
                     return
-                await ctx.send(f"{guildsearch_name} NEW OATH!")
-                sworn_profile = db.queryUser({'DISNAME': str(owner)})              
-                if sworn_profile['GUILD'] != 'PCG' and guildsearch['SHIELD'] != sworn_profile['DISNAME']:
+                elif sworn_profile['GUILD'] != 'PCG' and sworn_profile['GUILD'] != 'N/A':
                     await ctx.send(m.USER_IN_GUILD, delete_after=3)
                     return
                 else:
@@ -61,128 +160,101 @@ class Guild(commands.Cog):
                         if founder_team['TNAME'] == sworn_team['TNAME']:
                             await ctx.send(m.SAME_TEAM, delete_after=3)
                             return
-                        if sbal < cost:
-                            await ctx.send(m.NBROKE_TEAM, delete_after=3)
+                        if fbal < cost or sbal < cost:
+                            await ctx.send(m.BROKE_TEAM, delete_after=3)
                             return
-                    
+                                        
                         guild_query = {'FOUNDER': str(ctx.author)}
-                        accept = await ctx.send(f"Do you wish to swear an oath with {owner.mention}?".format(self), delete_after=10)
-                        for emoji in emojis:
-                            await accept.add_reaction(emoji)
+                        guild_buttons = [
+                            manage_components.create_button(
+                                style=ButtonStyle.blue,
+                                label="✔️",
+                                custom_id="Yes"
+                            ),
+                            manage_components.create_button(
+                                style=ButtonStyle.red,
+                                label="❌",
+                                custom_id="No"
+                            )
+                        ]
+                        guild_buttons_action_row = manage_components.create_actionrow(*guild_buttons)
+                        await ctx.send(f"Do you wish to swear an oath with {owner.mention}?".format(self), components=[guild_buttons_action_row])
 
-                        def check(reaction, user):
-                            return user == ctx.author and str(reaction.emoji) == '👍'
+
+                        def check(button_ctx):
+                            return button_ctx.author == ctx.author
 
                         try:
-                            confirmed1 = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
-                            await main.DM(ctx, owner, f"{ctx.author.mention}" + f" would like to join the Guild {guild_name}" + f" React in server to join their Guild" )
-                            accept = await ctx.send(f"{owner.mention}" +f" will you swear the oath?".format(self), delete_after=10)
-                            for emoji in emojis:
-                                await accept.add_reaction(emoji)
+                            button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[guild_buttons_action_row], check=check)
 
-                            def check(reaction, partner):
-                                return partner == owner and str(reaction.emoji) == '👍'
+                            if button_ctx.custom_id == "No":
+                                await button_ctx.send("No Oath Sent")
+                                return
+                            
+                            if button_ctx.custom_id == "Yes":
+                                await main.DM(ctx, owner, f"{ctx.author.mention}" + f" would like to join the Guild {guild_name}" + f" React in server to join their Guild" )
+                                await ctx.send(f"{owner.mention}" +f" will you swear the oath?".format(self), components=[guild_buttons_action_row])
+                                def check(button_ctx):
+                                    return button_ctx.author == owner
 
-                            try:
-                                sword_list = []
-                                for sword in guildsearch['SWORDS']:
-                                    sword_list.append(sword)
-                                newvalue = {'$set': {'SWORN': str(owner)}}
-                                nextresponse = db.addGuildSworn(guild_query, newvalue, str(ctx.author), str(owner))
-                                await ctx.send(nextresponse)
-                                shield = db.updateGuild(guild_query, {'$set' : {'SHIELD' : str(owner) }})
-                                newvalue = {'$set': {'SHIELD': str(owner)}}
-                                response = db.addGuildShield(guild_query, newvalue, str(ctx.author), str(owner))
-                                await ctx.send(response)
-                                if sworn_team['TNAME'] not in sword_list:
-                                    newvalue = {'$push': {'SWORDS': str(sworn_team['TNAME'])}}
-                                    swordaddition2 = db.addGuildSword(guild_query, newvalue, str(ctx.author), str(sworn_team['TNAME']))
-                                    await ctx.send(swordaddition2)
-                                gbank = db.updateGuild(guild_query,{'$inc' : {'BANK' : investment }})
-                                s_new_bal = sbal - cost
-                                new_value = {'$set' : {'BANK' : s_new_bal}}
-                                steambal = db.updateTeam(steam_query, new_value)                      
-                            except:
-                                await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=3)
-                        except:
-                            print("No Oath Sent")                           
-        else:
-            sworn_profile = db.queryUser({'DISNAME': str(owner)})
-            investment = cost * 2
-            if founder_profile['GUILD'] != 'PCG' and founder_profile['GUILD'] != 'N/A' and founder_profile['GUILD'] != founder_profile['DISNAME'] :
-                await ctx.send(m.USER_IN_GUILD, delete_after=3)
-                return
-            elif sworn_profile['GUILD'] != 'PCG' and sworn_profile['GUILD'] != 'N/A':
-                await ctx.send(m.USER_IN_GUILD, delete_after=3)
-                return
-            else:
-                if founder_profile['TEAM'] == 'PCG' or sworn_profile['TEAM'] == 'PCG':
-                    await ctx.send(m.FOUNDER_NO_TEAM, delete_after=3)
-                    return
-                else:
-                    fteam_query = {'TNAME' : founder_profile['TEAM']}
-                    steam_query = {'TNAME' : sworn_profile['TEAM']}
-                    founder_team = db.queryTeam(fteam_query)
-                    sworn_team = db.queryTeam(steam_query)
-                    fbal = founder_team['BANK']
-                    sbal = sworn_team['BANK']
-                    if founder_team['TNAME'] == sworn_team['TNAME']:
-                        await ctx.send(m.SAME_TEAM, delete_after=3)
-                        return
-                    if fbal < cost or sbal < cost:
-                        await ctx.send(m.BROKE_TEAM, delete_after=3)
-                        return
+                                try:
+                                    button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[guild_buttons_action_row], check=check)
+
+                                    if button_ctx.custom_id == "No":
+                                        await button_ctx.send("Oath Request Denied")
+                                        return
                                     
-                    guild_query = {'FOUNDER': str(ctx.author)}
-                    accept = await ctx.send(f"Do you wish to swear an oath with {owner.mention}?".format(self), delete_after=10)
-                    for emoji in emojis:
-                        await accept.add_reaction(emoji)
-
-                    def check(reaction, user):
-                        return user == ctx.author and str(reaction.emoji) == '👍'
-
-                    try:
-                        confirmed1 = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
-                        await main.DM(ctx, owner, f"{ctx.author.mention}" + f" would like to form the Guild {guild_name}" + f" React in server to join their Guild" )
-                        accept = await ctx.send(f"{owner.mention}" +f" will you swear the oath?".format(self), delete_after=10)
-                        for emoji in emojis:
-                            await accept.add_reaction(emoji)
-
-                        def check(reaction, partner):
-                            return partner == owner and str(reaction.emoji) == '👍'
-
-                        try:
-                            confirmed2 = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
-                            response = db.createGuild(data.newGuild(guild_query), str(ctx.author), str(guild_name))
-                            await ctx.send(response)
-                            nameguild = db.updateGuild(guild_query,{'$set' : {'GNAME' : str(guild_name)}})
-                            newvalue = {'$set': {'SWORN': str(owner)}}
-                            nextresponse = db.addGuildSworn(guild_query, newvalue, str(ctx.author), str(owner))
-                            await ctx.send(nextresponse)
-                            shield = db.updateGuild(guild_query, {'$set' : {'SHIELD' : str(owner) }})
-                            newvalue = {'$set': {'SHIELD': str(owner)}}
-                            response = db.addGuildShield(guild_query, newvalue, str(ctx.author), str(owner))
-                            await ctx.send(response)
-                            newvalue = {'$push': {'SWORDS': str(founder_team['TNAME'])}}
-                            swordaddition = db.addGuildSword(guild_query, newvalue, str(ctx.author), str(founder_team['TNAME']))
-                            await ctx.send(swordaddition)
-                            newvalue = {'$push': {'SWORDS': str(sworn_team['TNAME'])}}
-                            swordaddition2 = db.addGuildSword(guild_query, newvalue, str(ctx.author), str(sworn_team['TNAME']))
-                            await ctx.send(swordaddition2)
-                            gbank = db.updateGuild(guild_query,{'$set' : {'BANK' : investment }})
-                            new_bal = fbal - cost
-                            new_value = {'$set' : {'BANK' : new_bal}}
-                            fteambal = db.updateTeam(fteam_query, new_value)
-                            s_new_bal = sbal - cost
-                            new_value = {'$set' : {'BANK' : s_new_bal}}
-                            steambal = db.updateTeam(steam_query, new_value)
-                            
-                            
-                            
+                                    if button_ctx.custom_id == "Yes":
+                                        try:
+                                            response = db.createGuild(data.newGuild(guild_query), str(ctx.author), str(guild_name))
+                                            await ctx.send(response)
+                                            nameguild = db.updateGuild(guild_query,{'$set' : {'GNAME' : str(guild_name)}})
+                                            newvalue = {'$set': {'SWORN': str(owner)}}
+                                            nextresponse = db.addGuildSworn(guild_query, newvalue, str(ctx.author), str(owner))
+                                            await ctx.send(nextresponse)
+                                            shield = db.updateGuild(guild_query, {'$set' : {'SHIELD' : str(owner) }})
+                                            newvalue = {'$set': {'SHIELD': str(owner)}}
+                                            response = db.addGuildShield(guild_query, newvalue, str(ctx.author), str(owner))
+                                            await ctx.send(response)
+                                            newvalue = {'$push': {'SWORDS': str(founder_team['TNAME'])}}
+                                            swordaddition = db.addGuildSword(guild_query, newvalue, str(ctx.author), str(founder_team['TNAME']))
+                                            await ctx.send(swordaddition)
+                                            newvalue = {'$push': {'SWORDS': str(sworn_team['TNAME'])}}
+                                            swordaddition2 = db.addGuildSword(guild_query, newvalue, str(ctx.author), str(sworn_team['TNAME']))
+                                            await ctx.send(swordaddition2)
+                                            gbank = db.updateGuild(guild_query,{'$set' : {'BANK' : investment }})
+                                            new_bal = fbal - cost
+                                            new_value = {'$set' : {'BANK' : new_bal}}
+                                            fteambal = db.updateTeam(fteam_query, new_value)
+                                            s_new_bal = sbal - cost
+                                            new_value = {'$set' : {'BANK' : s_new_bal}}
+                                            steambal = db.updateTeam(steam_query, new_value)                    
+                                        except:
+                                            await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=3)
+                                except:
+                                    print("Guild creation ended unexpectedly. ")
                         except:
-                            await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=3)
-                    except:
-                        print("No oath Sent") 
+                            print("Guild creation ended unexpectedly. ")   
+        except Exception as ex:
+            trace = []
+            tb = ex.__traceback__
+            while tb is not None:
+                trace.append({
+                    "filename": tb.tb_frame.f_code.co_filename,
+                    "name": tb.tb_frame.f_code.co_name,
+                    "lineno": tb.tb_lineno
+                })
+                tb = tb.tb_next
+            print(str({
+                'type': type(ex).__name__,
+                'message': str(ex),
+                'trace': trace
+            }))
+            await ctx.send(
+                "There's an issue with your Oath. Please use /ff to close this channel and start anew. Alert support.")
+            return
+            
+                   
 
     @cog_ext.cog_slash(description="Betray your Guild (Guild Sworn)", guild_ids=main.guild_ids)
     async def betray(self, ctx, founder: User):

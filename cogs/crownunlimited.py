@@ -72,6 +72,7 @@ class CrownUnlimited(commands.Cog):
     async def on_message(self, message):
         if message.author == main.bot.user:
             return
+        guild = message.author.guild
         ratelimit = self.get_ratelimit(message)
         if ratelimit is None:
             if isinstance(message.channel, discord.channel.DMChannel):
@@ -254,7 +255,29 @@ class CrownUnlimited(commands.Cog):
 
             embedVar.set_image(url="attachment://image.png")
             embedVar.set_footer(text="Use /explore to turn off these interactions.")
-            await message.channel.send(embed=embedVar, file=card_file, components=[random_battle_buttons_action_row], delete_after=60,)
+
+            #Create Explore Category
+            categoryname = "Explore"
+            channelname = "explore-encounters"
+            category = discord.utils.get(guild.categories, name=categoryname)
+            if category is None: #If there's no category matching with the `name`
+                print("Creating New Explore Room")
+                category = await guild.create_category_channel(categoryname)
+                setchannel = await guild.create_text_channel(channelname, category=category)
+                await setchannel.send(f"{ctx.author.mention} **was the first to Explore here!**")
+
+            else: #Else if it found the categoty
+                setchannel = discord.utils.get(guild.text_channels, name=channelname)
+                print("Found Explore Category")
+                if setchannel is None:
+                    print("Creating Encounter Channel")
+                    setchannel = await guild.create_text_channel(channelname, category=category)
+                    await setchannel.send(f"{ctx.author.mention} **was the first to Explore here!**")
+                else:
+                    print("Found Encounter Channel")
+                    await setchannel.send(f"{message.author.mention} Explore Here")    
+
+            await setchannel.send(embed=embedVar, file=card_file, components=[random_battle_buttons_action_row])
 
             def check(button_ctx):
                 return button_ctx.author == message.author
@@ -320,7 +343,50 @@ class CrownUnlimited(commands.Cog):
                 'message': str(ex),
                 'trace': trace
             }))
+            
+    @cog_ext.cog_slash(description="Set Server Explore Channel", guild_ids=main.guild_ids)
+    async def setexplorechannel(self, ctx: SlashContext):
+        guild = ctx.guild
+        categoryname = "Explore"
+        channelname = "explore-encounters"
+        try:
+            if ctx.author.guild_permissions.administrator == True:
+                category = discord.utils.get(guild.categories, name=categoryname)
+                if category is None: #If there's no category matching with the `name`
+                    category = await guild.create_category_channel(categoryname)
+                    setchannel = await guild.create_text_channel(channelname, category=category)
+                    await ctx.send(f"New **Explore** Category and **{channelname}** Channel Created!")
+                    await setchannel.send("**Explore Channel Set**")
+                    return setchannel
 
+                else: #Else if it found the categoty
+                    setchannel = discord.utils.get(guild.text_channels, name=channelname)
+                    if channel is None:
+                        setchannel = await guild.create_text_channel(channelname, category=category)
+                        await ctx.send(f"New Explore Channel is **{channelname}**")
+                        await setchannel.send("**Explore Channel Set**")
+                    else:
+                        await ctx.send(f"Explore Channel Already Exist **{channelname}**")
+                        await setchannel.send(f"{ctx.author.mention} Explore Here")            
+                
+            # else:
+            #     print("Not Admin")
+        except Exception as ex:
+            trace = []
+            tb = ex.__traceback__
+            while tb is not None:
+                trace.append({
+                    "filename": tb.tb_frame.f_code.co_filename,
+                    "name": tb.tb_frame.f_code.co_name,
+                    "lineno": tb.tb_lineno
+                })
+                tb = tb.tb_next
+            print(str({
+                'type': type(ex).__name__,
+                'message': str(ex),
+                'trace': trace
+            }))
+    
     @cog_ext.cog_slash(description="Duo Tales with AI",
                        options=[
                            create_option(
@@ -3324,9 +3390,17 @@ class CrownUnlimited(commands.Cog):
                 sowner = db.queryUser({'DISNAME': str(ctx.author)})
                 opponent = db.queryUser({'DISNAME': str(player)})
                 oteam = sowner['TEAM']
-                oguild = sowner['GUILD']
                 tteam = opponent['TEAM']
-                tguild = opponent['GUILD']
+                oteam_info = db.queryTeam({'TNAME':str(oteam)})
+                tteam_info = db.queryTeam({'TNAME':str(tteam)})
+                if oteam_info:
+                    oguild = oteam_info['GUILD']
+                else:
+                    oguild ="PCG"
+                if tteam_info:
+                    tguild = tteam_info['GUILD']
+                else:
+                    tguild ="PCG"
 
                 o = db.queryCard({'NAME': sowner['CARD']})
                 otitle = db.queryTitle({'TITLE': sowner['TITLE']})
@@ -4132,21 +4206,20 @@ class CrownUnlimited(commands.Cog):
 
                     # Tutorial Instructions
                     if turn_total == 0:
-                        if botActive:
-                            embedVar = discord.Embed(title=f"Welcome to **Crown Unlimited**!",
-                                                     description=f"Follow the instructions to learn how to play the Game!",
-                                                     colour=0xe91e63)
-                            embedVar.add_field(name="**How do I play?**",
-                                               value="The point of the game is to win **Battles**!\n**To do this**, you need to select moves outmanuevering your opponent to **secure the win**!")
-                            embedVar.set_footer(
-                                text="Select a move to get started. DON'T WORRY! When your STAMINA depletes to 0 your character will Focus to REPLENISH!")
-                            await private_channel.send(embed=embedVar)
-                        else:
-                            # await ctx.send(f"{user1.mention}{user2.mention}")
-                            embedVar = discord.Embed(
-                                title=f"**{o_card}** & {opet_name} VS **{t_card}** & {tpet_name} Ranked Battle has begun!",
-                                description=f"{o_card} Says:\n{o_greeting_description}", colour=0xe91e63)
-                            await private_channel.send(embed=embedVar)
+                        embedVar = discord.Embed(title=f"Raiding!",
+                                                    description=f"Attack the Shield and Claim the Bounty",
+                                                    colour=0xe91e63)
+                        embedVar.add_field(name="**Raid Battle Mechanics**",
+                                            value="Raids are PVE battles against a Guilds defender or SHIELD. This player was selected to defend the guild. You will battle their current Build.")
+                        embedVar.set_footer(
+                            text="Be wary, there are no summons allowed in the Guild Hall")
+                        await private_channel.send(embed=embedVar)
+                        await asyncio.sleep(2)
+                        # await ctx.send(f"{user1.mention}{user2.mention}")
+                        embedVar2 = discord.Embed(
+                            title=f"**{o_card}**  VS **{t_card}** Shield Defense has begun!",
+                            description=f"{o_card} Says:\n{o_greeting_description}", colour=0xe91e63)
+                        await private_channel.send(embed=embedVar2)
 
                     if o_health <= (o_max_health * .25):
                         embed_color_o = 0xe74c3c
@@ -9852,8 +9925,14 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             if not universe['CROWN_TALES']:
                 await ctx.send(f"{selected_universe} is not ready to be explored! Check back later!")
                 return
+            
+            #Create Explore Category
+            categoryname = "Crown Unlimited"
+            category = discord.utils.get(guild.categories, name=categoryname)
 
-            private_channel = await guild.create_text_channel(f'{str(ctx.author)}-{mode}-run', overwrites=overwrites)
+            if category is None: #If there's no category matching with the `name`
+                category = await guild.create_category_channel(categoryname)
+            private_channel = await guild.create_text_channel(f'{str(ctx.author)}-{mode}-run', overwrites=overwrites, category=category)
             await private_channel.send(f"{ctx.author.mention} private channel has been opened for you. Good luck!")
             
             # React to Saved Spots
@@ -9935,8 +10014,13 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             if not universe['HAS_DUNGEON']:
                 await ctx.send(f"**{selected_universe}'s** dungeon is not available at this time. ")
                 return
-            private_channel = await guild.create_text_channel(f'{str(ctx.author)}-{mode}-run', overwrites=overwrites)
-            await ctx.send(f"{ctx.author.mention} private channel has been opened for you. Good luck!")
+            categoryname = "Crown Unlimited"
+            category = discord.utils.get(guild.categories, name=categoryname)
+
+            if category is None: #If there's no category matching with the `name`
+                category = await guild.create_category_channel(categoryname)
+            private_channel = await guild.create_text_channel(f'{str(ctx.author)}-{mode}-run', overwrites=overwrites, category=category)
+            await private_channel.send(f"{ctx.author.mention} private channel has been opened for you. Good luck!")
             
             
             currentopponent = update_save_spot(self, ctx, saved_spots, selected_universe, D_modes)
@@ -10008,8 +10092,13 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                 return
             # Universe Cost
             universe = db.queryUniverse({'TITLE': str(selected_universe)})
-            private_channel = await guild.create_text_channel(f'{str(ctx.author)}-{mode}-fight', overwrites=overwrites)
-            await ctx.send(f"{ctx.author.mention} private channel has been opened for you.")
+            categoryname = "Crown Unlimited"
+            category = discord.utils.get(guild.categories, name=categoryname)
+
+            if category is None: #If there's no category matching with the `name`
+                category = await guild.create_category_channel(categoryname)
+            private_channel = await guild.create_text_channel(f'{str(ctx.author)}-{mode}-fight', overwrites=overwrites, category=category)
+            await private_channel.send(f"{ctx.author.mention} private channel has been opened for you.")
 
             currentopponent = 0
             return {'SELECTED_UNIVERSE': selected_universe, 'PRIVATE_CHANNEL': private_channel,
