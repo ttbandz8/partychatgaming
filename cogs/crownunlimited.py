@@ -99,7 +99,7 @@ class CrownUnlimited(commands.Cog):
             all_universes = db.queryExploreUniverses()
             available_universes = []
             for uni in all_universes:
-                if uni['HAS_CROWN_TALES'] and uni['HAS_DUNGEON'] and uni['AVAILABLE']:
+                if uni['HAS_CROWN_TALES'] and uni['HAS_DUNGEON']:
                     available_universes.append(uni)
 
             u = len(available_universes) - 1
@@ -264,13 +264,13 @@ class CrownUnlimited(commands.Cog):
                 if category is None: #If there's no category matching with the `name`
                     category = await guild.create_category_channel(categoryname)
                     setchannel = await guild.create_text_channel(channelname, category=category)
-                    await setchannel.send(f"{ctx.author.mention} **was the first to Explore here!**")
+                    await setchannel.send(f"{message.author.mention} **was the first to Explore here!**")
 
                 else: #Else if it found the categoty
                     setchannel = discord.utils.get(guild.text_channels, name=channelname)
                     if setchannel is None:
                         setchannel = await guild.create_text_channel(channelname, category=category)
-                        await setchannel.send(f"{ctx.author.mention} **was the first to Explore here!**")
+                        await setchannel.send(f"{message.author.mention} **was the first to Explore here!**")
                     else:
                         await setchannel.send(f"{message.author.mention}")    
 
@@ -9868,7 +9868,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
         universe_embed_list = []
         if sowner['RIFT'] == 1:
             for uni in all_universes:
-                if uni['HAS_CROWN_TALES'] == True or uni['TIER'] == 9 and uni['AVAILABLE']:
+                if uni['HAS_CROWN_TALES'] == True or uni['TIER'] == 9:
                     if uni['TITLE'] in completed_crown_tales:
                         save_spot_text = "No Save Data"
                         for save in saved_spots:
@@ -9903,7 +9903,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                         universe_embed_list.append(embedVar)
         else:
             for uni in all_universes:
-                if uni['HAS_CROWN_TALES'] == True and uni['TIER'] != 9 and uni['AVAILABLE']:
+                if uni['HAS_CROWN_TALES'] == True and uni['TIER'] != 9:
                     if uni['TITLE'] in completed_crown_tales:
                         save_spot_text = "No Save Data"
                         for save in saved_spots:
