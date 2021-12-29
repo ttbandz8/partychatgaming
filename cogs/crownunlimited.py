@@ -40,7 +40,7 @@ from pilmoji import Pilmoji
 class CrownUnlimited(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self._cd = commands.CooldownMapping.from_cooldown(1, 1800,
+        self._cd = commands.CooldownMapping.from_cooldown(1, 10,
                                                           commands.BucketType.member)  # Change accordingly. Currently every 8 minutes (3600 seconds == 60 minutes)
 
     co_op_modes = ['CTales', 'DTales', 'CDungeon', 'DDungeon']
@@ -86,16 +86,20 @@ class CrownUnlimited(commands.Cog):
 
             # Pull Character Information
             player = db.queryUser({'DISNAME': str(message.author)})
+            server_channel_response = db.queryServer({'GNAME': str(guild)})
+            server_channel = ""
+            if server_channel_response:
+                server_channel = str(server_channel_response['EXP_CHANNEL'])
+
             if not player:
                 return
             if player['EXPLORE'] is False:
                 return
 
-            completed_crown_tales = player['CROWN_TALES']
             all_universes = db.queryExploreUniverses()
             available_universes = []
             for uni in all_universes:
-                if uni['HAS_CROWN_TALES']:
+                if uni['HAS_CROWN_TALES'] and uni['HAS_DUNGEON']:
                     available_universes.append(uni)
 
             u = len(available_universes) - 1
@@ -183,7 +187,7 @@ class CrownUnlimited(commands.Cog):
             embedVar = discord.Embed(title=f"**{approach_message}{cards[rand_card]['NAME']}** Approaches!",
                                      description=textwrap.dedent(f"""\
             **Bounty** **{bounty_message}**
-            {message.author.mention}, **{battle_message}**
+            {battle_message}
             """), colour=0xf1c40f)
             # embedVar.set_author(name="Enemy Approaches!", icon_url=f"{icon}")
             card_lvl = 0
@@ -224,10 +228,7 @@ class CrownUnlimited(commands.Cog):
             o_2 = o_moveset[1]
             o_3 = o_moveset[2]
             o_enhancer = o_moveset[3]
-
- 
-
-            
+   
             # Move 1
             move1 = list(o_1.keys())[0]
             move1ap = list(o_1.values())[0] + card_lvl_ap_buff
@@ -254,30 +255,30 @@ class CrownUnlimited(commands.Cog):
             card_file = showcard(cards[rand_card], o_max_health, o_health, o_max_stamina, o_stamina, resolved, cardtitle, focused, o_attack, o_defense, turn, move1ap, move2ap, move3ap, move4ap, move4enh, card_lvl, None)
 
             embedVar.set_image(url="attachment://image.png")
-            embedVar.set_footer(text="Use /explore to turn off these interactions.")
 
             #Create Explore Category
-            categoryname = "Explore"
-            channelname = "explore-encounters"
-            category = discord.utils.get(guild.categories, name=categoryname)
-            if category is None: #If there's no category matching with the `name`
-                print("Creating New Explore Room")
-                category = await guild.create_category_channel(categoryname)
-                setchannel = await guild.create_text_channel(channelname, category=category)
-                await setchannel.send(f"{ctx.author.mention} **was the first to Explore here!**")
-
-            else: #Else if it found the categoty
-                setchannel = discord.utils.get(guild.text_channels, name=channelname)
-                print("Found Explore Category")
-                if setchannel is None:
-                    print("Creating Encounter Channel")
+            if not server_channel_response:
+                categoryname = "Explore"
+                channelname = "explore-encounters"
+                category = discord.utils.get(guild.categories, name=categoryname)
+                if category is None: #If there's no category matching with the `name`
+                    category = await guild.create_category_channel(categoryname)
                     setchannel = await guild.create_text_channel(channelname, category=category)
                     await setchannel.send(f"{ctx.author.mention} **was the first to Explore here!**")
-                else:
-                    print("Found Encounter Channel")
-                    await setchannel.send(f"{message.author.mention} Explore Here")    
 
-            await setchannel.send(embed=embedVar, file=card_file, components=[random_battle_buttons_action_row])
+                else: #Else if it found the categoty
+                    setchannel = discord.utils.get(guild.text_channels, name=channelname)
+                    if setchannel is None:
+                        setchannel = await guild.create_text_channel(channelname, category=category)
+                        await setchannel.send(f"{ctx.author.mention} **was the first to Explore here!**")
+                    else:
+                        await setchannel.send(f"{message.author.mention}")    
+
+                await setchannel.send(embed=embedVar, file=card_file, components=[random_battle_buttons_action_row])
+            else:
+                setchannel = discord.utils.get(guild.text_channels, name=server_channel)
+                await setchannel.send(f"{message.author.mention}")  
+                await setchannel.send(embed=embedVar, file=card_file, components=[random_battle_buttons_action_row])
 
             def check(button_ctx):
                 return button_ctx.author == message.author
@@ -315,6 +316,7 @@ class CrownUnlimited(commands.Cog):
                 # # print("Explore Exception. Likely nothing, but yea.")
                 # await message.channel.send("Something ain't right, my guy.Check with support.")
                 print("")
+    
     @cog_ext.cog_slash(description="Toggle Explore Mode On/Off", guild_ids=main.guild_ids)
     @commands.cooldown(1, 15, commands.BucketType.user)
     async def explore(self, ctx: SlashContext):
@@ -343,9 +345,47 @@ class CrownUnlimited(commands.Cog):
                 'message': str(ex),
                 'trace': trace
             }))
-            
-    @cog_ext.cog_slash(description="Set Server Explore Channel", guild_ids=main.guild_ids)
+    
+
+
+    @cog_ext.cog_slash(description="Set Explore Channel", guild_ids=main.guild_ids)
     async def setexplorechannel(self, ctx: SlashContext):
+        if ctx.author.guild_permissions.administrator:
+            guild = ctx.guild
+            server_channel = ctx.channel
+            server_query = {'GNAME': str(guild), 'EXP_CHANNEL': str(server_channel)}
+            try:
+                response = db.queryServer({'GNAME': str(guild)})
+                if response:
+                    update_channel = db.updateServer({'GNAME': str(guild)}, {'$set': {'EXP_CHANNEL': str(server_channel)}})
+                    await ctx.send(f"Explore Channel updated to **{server_channel}**")
+                    return
+                else:
+                    update_channel = db.createServer(data.newServer(server_query))
+                    await ctx.send("Explore Channel set.")
+                    return
+            except Exception as ex:
+                trace = []
+                tb = ex.__traceback__
+                while tb is not None:
+                    trace.append({
+                        "filename": tb.tb_frame.f_code.co_filename,
+                        "name": tb.tb_frame.f_code.co_name,
+                        "lineno": tb.tb_lineno
+                    })
+                    tb = tb.tb_next
+                print(str({
+                    'type': type(ex).__name__,
+                    'message': str(ex),
+                    'trace': trace
+                }))
+        else:
+            await ctx.send("Admin command only.")
+            return
+
+
+    @cog_ext.cog_slash(description="Create Default Server Explore Channel", guild_ids=main.guild_ids)
+    async def createexplorechannel(self, ctx: SlashContext):
         guild = ctx.guild
         categoryname = "Explore"
         channelname = "explore-encounters"

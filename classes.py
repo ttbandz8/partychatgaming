@@ -54,9 +54,14 @@ class TRADE():
     BSUMMONS: list[str] = field(default_factory=lambda: '')
     TAX: int = field(default_factory=lambda: 0)
     OPEN: bool = field(default_factory=lambda:True)
-    
-    
-    
+
+
+@dataclass(frozen=True, order=True)
+class SERVER():
+    GNAME: str = field(default_factory=lambda: '')
+    EXP_CHANNEL: str = field(default_factory=lambda: '')
+    TIMESTAMP: str = now
+        
 
 @dataclass(frozen=True, order=True)
 class GUILD():
@@ -204,7 +209,6 @@ class CARDS():
     SKIN_FOR: str = field(default_factory=lambda: "N/A")
     
 
-
 @dataclass(frozen=True, order=True)
 class TITLES():
     TITLE: str
@@ -350,6 +354,9 @@ class MENU():
 
 
 ''' Data Functions'''
+def newServer(server):
+    ser = SERVER(**server)
+    return asdict(ser)
 
 
 def newCard(card):

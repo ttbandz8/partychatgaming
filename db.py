@@ -39,6 +39,7 @@ hall_col =db["HALL"]
 menu_col = db['MENU']
 abyss_col = db['ABYSS']
 trade_col = db['TRADE']
+server_col = db['SERVER']
 acceptable = [1, 2, 3, 4]
 
 
@@ -51,17 +52,7 @@ def col_exists(col):
         return False
 
 
-''' MENU '''
-def menu_exists(data):
-    collection_exists = col_exists("MENU")
-    if collection_exists:
-        menuexist = menu_col.find_one(data)
-        if menuexist:
-            return True
-        else:
-            return False
-    else:
-        return False
+
 
 def queryAllAbyss():
     try:
@@ -78,6 +69,19 @@ def queryAbyss(query):
     except:
         return False
 
+''' MENU '''
+def menu_exists(data):
+    collection_exists = col_exists("MENU")
+    if collection_exists:
+        menuexist = menu_col.find_one(data)
+        if menuexist:
+            return True
+        else:
+            return False
+    else:
+        return False
+
+
 def queryAllMenu():
     try:
         data = menu_col.find()
@@ -85,11 +89,40 @@ def queryAllMenu():
     except:
         print("Find menu failed.")
 
+
 def createMenu(menu):
     try:
         data = menu_col.insert_one(menu)
     except Exception as e:
         return e
+
+
+#########################################################################
+''' SERVER '''
+def createServer(server):
+    try:
+        data = server_col.insert_one(server)
+        return True
+    except Exception as e:
+        return e
+
+def queryServer(server):
+    try:
+        data = server_col.find_one(server)
+        if data:
+            return data
+        else:
+            return False
+    except Exception as e:
+        return e
+
+def updateServer(server, new_server):
+    try:
+        data = server_col.update_one(server, new_server)
+        return True
+    except Exception as e:
+        return e
+
 
 #########################################################################
 ''' GUILD '''
