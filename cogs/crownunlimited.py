@@ -99,7 +99,7 @@ class CrownUnlimited(commands.Cog):
             all_universes = db.queryExploreUniverses()
             available_universes = []
             for uni in all_universes:
-                if uni['HAS_CROWN_TALES'] and uni['HAS_DUNGEON']:
+                if uni['HAS_CROWN_TALES'] and uni['HAS_DUNGEON'] and uni['AVAILABLE']:
                     available_universes.append(uni)
 
             u = len(available_universes) - 1
