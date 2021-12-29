@@ -9868,7 +9868,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
         universe_embed_list = []
         if sowner['RIFT'] == 1:
             for uni in all_universes:
-                if uni['HAS_CROWN_TALES'] == True or uni['TIER'] == 9:
+                if uni['HAS_CROWN_TALES'] == True or uni['TIER'] == 9 and uni['AVAILABLE']:
                     if uni['TITLE'] in completed_crown_tales:
                         save_spot_text = "No Save Data"
                         for save in saved_spots:
@@ -9903,7 +9903,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
                         universe_embed_list.append(embedVar)
         else:
             for uni in all_universes:
-                if uni['HAS_CROWN_TALES'] == True and uni['TIER'] != 9:
+                if uni['HAS_CROWN_TALES'] == True and uni['TIER'] != 9 and uni['AVAILABLE']:
                     if uni['TITLE'] in completed_crown_tales:
                         save_spot_text = "No Save Data"
                         for save in saved_spots:
