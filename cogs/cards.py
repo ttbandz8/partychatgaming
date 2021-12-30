@@ -106,7 +106,7 @@ class Cards(commands.Cog):
                 card_buttons_action_row = manage_components.create_actionrow(*card_buttons)
                 await ctx.send(
                     f"{ctx.author.mention}, are you sure you want to buy **{card_name}** for {icon}**{'{:,}'.format(price)}**?",
-                    components=[card_buttons_action_row], hidden=True)
+                    components=[card_buttons_action_row])
 
                 def check(button_ctx):
                     return button_ctx.author == ctx.author
@@ -164,7 +164,7 @@ class Cards(commands.Cog):
                                         r = db.updateVaultNoFilter(vault_query, update_query)
 
                                     await ctx.send(
-                                        f"You Purchased **{mintedCard}**\n**{newstock}** {mintedCard} cards left in the Shop!", hidden=True)
+                                        f"You Purchased **{mintedCard}**\n**{newstock}** {mintedCard} cards left in the Shop!")
                                     # Add Destiny
                                     for destiny in d.destiny:
                                         if card_name in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
@@ -186,7 +186,7 @@ class Cards(commands.Cog):
                                     ]
                                     card_buttons_action_row = manage_components.create_actionrow(*card_buttons)
                                     await ctx.send(f"{ctx.author.mention} would you like to equip this **{card_name}**?",
-                                                   components=[card_buttons_action_row], hidden=True)
+                                                   components=[card_buttons_action_row])
 
                                     def check(button_ctx):
                                         return button_ctx.author == ctx.author
@@ -196,14 +196,14 @@ class Cards(commands.Cog):
                                             self.bot, components=[card_buttons_action_row], check=check)
 
                                         if button_ctx.custom_id == "No":
-                                            await button_ctx.send("Did not equip card.", hidden=True)
+                                            await button_ctx.send("Did not equip card.")
                                             return
 
                                         if button_ctx.custom_id == "Yes":
                                             user_query = {'DISNAME': str(ctx.author)}
                                             response = db.updateUserNoFilter(user_query,
                                                                              {'$set': {'CARD': str(card_name)}})
-                                            await button_ctx.send(response, hidden=True)
+                                            await button_ctx.send(response)
                                     except Exception as ex:
                                         trace = []
                                         tb = ex.__traceback__
@@ -246,7 +246,7 @@ class Cards(commands.Cog):
         # Do not Check Tourney wins
         if card_name in vault['CARDS']:
             response = db.updateUserNoFilter(user_query, {'$set': {'CARD': str(card_name)}})
-            await ctx.send(response, hidden=True)
+            await ctx.send(response)
         else:
             await ctx.send(m.USER_DOESNT_HAVE_THE_CARD, hidden=True)
 

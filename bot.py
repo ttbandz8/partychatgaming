@@ -575,7 +575,7 @@ async def register(ctx):
       """), colour=0xe91e63)
       embedVar.set_footer(text="Changing your Discord Account Name or Numbers will break your Crown Unlimited Account.")
       await ctx.author.send(embed=embedVar)
-      await ctx.send(f"Welcome to Crown Unlimited, {ctx.author.mention}! Use **/daily** to collect your daily reward!\nType **/menu** for quick overview of the game! Additional info has been DM'd to you!", hidden=True)
+      await ctx.send(f"Welcome to Crown Unlimited, {ctx.author.mention}! Use **/daily** to collect your daily reward!\nType **/menu** for quick overview of the game! Additional info has been DM'd to you!")
 
       vault = db.queryVault({'OWNER': disname})
       if vault:
@@ -631,7 +631,7 @@ async def rebirth(ctx):
          
          *Rebirth is permanent and cannot be undone*
          """))
-         accept = await ctx.send(embed=embedVar1, components=[util_action_row], hidden=True)
+         accept = await ctx.send(embed=embedVar1, components=[util_action_row])
 
          def check(button_ctx):
                return button_ctx.author == ctx.author
@@ -907,7 +907,7 @@ async def daily(ctx):
       quests = [{'OPPONENT': opponents[q1], 'TYPE': 'Tales', 'GOAL': 3, 'WINS': 0, 'REWARD': q1_earn },{'OPPONENT': opponents[q2], 'TYPE': 'Tales', 'GOAL': 5, 'WINS': 0, 'REWARD': q2_earn }, {'OPPONENT': opponents[q3], 'TYPE': 'Tales', 'GOAL': 15, 'WINS': 0, 'REWARD': q3_earn }]
       db.updateVaultNoFilter({'OWNER': str(ctx.author)}, {'$set': {'QUESTS': quests}})
 
-      await ctx.send(f"Daily bonus :coin:{dailyamount} has been applied for {ctx.author.mention}!\nYour new quests are available!\n**use /quests to open the Quest Board**!", hidden=True)
+      await ctx.send(f"Daily bonus :coin:{dailyamount} has been applied for {ctx.author.mention}!\nYour new quests are available!\n**use /quests to open the Quest Board**!")
    except Exception as ex:
       trace = []
       tb = ex.__traceback__
@@ -1374,7 +1374,7 @@ async def donate(ctx, amount, team: str):
       else:
          await blessteam(int(amount), dteam)
          await curse(int(amount), ctx.author)
-         await ctx.send(f":coin:{amount} has been gifted to {dteam}.", hidden=True)
+         await ctx.send(f":coin:{amount} has been gifted to {dteam}.")
          return
    else:
       await ctx.send(f"Team: {dteam} does not exist")
@@ -1393,7 +1393,7 @@ async def invest(ctx, amount):
       else:
          await blessfamily_Alt(int(amount), user['FAMILY'])
          await curse(int(amount), ctx.author)
-         await ctx.send(f":coin:{amount} invested into **{user['NAME']}'s Family**.", hidden=True)
+         await ctx.send(f":coin:{amount} invested into **{user['NAME']}'s Family**.")
          return
    else:
       await ctx.send(f"Family does not exist")
@@ -1435,7 +1435,7 @@ async def traits(ctx):
 
    embedVar = discord.Embed(title="Universe Traits", description="\n".join(traitmessages))
 
-   await ctx.author.send(embed=embedVar, hidden=True)
+   await ctx.author.send(embed=embedVar)
 
 async def blessteam(amount, team):
    blessAmount = amount
@@ -1604,7 +1604,7 @@ async def trinketshop(ctx):
    What would you like to buy?
    """), colour=0xf1c40f)
    embedVar.set_footer(text="Boosts are used immediately upon purchase. Click cancel to exit purchase.", icon_url="https://cdn.discordapp.com/emojis/784402243519905792.gif?v=1")
-   await ctx.send(embed=embedVar, components=[sell_buttons_action_row, util_sell_buttons_action_row], hidden=True)
+   await ctx.send(embed=embedVar, components=[sell_buttons_action_row, util_sell_buttons_action_row])
 
    def check(button_ctx):
       return button_ctx.author == ctx.author
@@ -1662,7 +1662,7 @@ async def trinketshop(ctx):
          filter_query = [{'type.'+ "CARD": str(current_card)}]
          response = db.updateVault(query, update_query, filter_query)
          await curse(price, str(ctx.author))
-         await button_ctx.send(f"**{str(current_card)}** gained {levels_gained} levels!", hidden=True)
+         await button_ctx.send(f"**{str(current_card)}** gained {levels_gained} levels!")
 
          if button_ctx.custom_id == "cancel":
             await button_ctx.send("Sell ended.", hidden=True)
@@ -1679,7 +1679,7 @@ async def trinketshop(ctx):
          else:
             db.updateUserNoFilter(user_query, {'$set': {'TOURNAMENT_WINS': 1}})
             await curse(1000000, str(ctx.author))
-            await button_ctx.send("Gabe's Purse has been purchased!", hidden=True)
+            await button_ctx.send("Gabe's Purse has been purchased!")
             return
       
       if button_ctx.custom_id == "5":
@@ -1694,7 +1694,7 @@ async def trinketshop(ctx):
                resp = db.updateVault(query, update_query, filter_query)
 
                await curse(50000, str(ctx.author))
-               await button_ctx.send(f"{current_arm}'s ⚒️ durability has increased by 25!", hidden=True)
+               await button_ctx.send(f"{current_arm}'s ⚒️ durability has increased by 25!")
                return
             except:
                await ctx.send("Failed to purchase durability boost.", hidden=True)
@@ -1935,7 +1935,7 @@ async def resell(ctx, where: str, selections: list):
                list_to_sell.append(f"{str(arm['ARM'])}")
          list_to_sell_as_text = "\n".join(list_to_sell)
 
-      await ctx.send(f"Are you sure you want to sell\n **{list_to_sell_as_text}**\n for :coin:{round(sell_price)}?", components=[sell_buttons_action_row], hidden=True)
+      await ctx.send(f"Are you sure you want to sell\n **{list_to_sell_as_text}**\n for :coin:{round(sell_price)}?", components=[sell_buttons_action_row])
 
       def check(button_ctx):
          return button_ctx.author == ctx.author

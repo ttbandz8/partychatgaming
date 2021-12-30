@@ -72,7 +72,7 @@ class CrownUnlimited(commands.Cog):
     async def on_message(self, message):
         if message.author == main.bot.user:
             return
-        guild = message.author.guild
+        g = message.author.guild
         ratelimit = self.get_ratelimit(message)
         if ratelimit is None:
             if isinstance(message.channel, discord.channel.DMChannel):
@@ -86,7 +86,7 @@ class CrownUnlimited(commands.Cog):
 
             # Pull Character Information
             player = db.queryUser({'DISNAME': str(message.author)})
-            server_channel_response = db.queryServer({'GNAME': str(guild)})
+            server_channel_response = db.queryServer({'GNAME': str(g)})
             server_channel = ""
             if server_channel_response:
                 server_channel = str(server_channel_response['EXP_CHANNEL'])
@@ -174,13 +174,10 @@ class CrownUnlimited(commands.Cog):
                 else:
                     found_amount = round(bounty / 5)
                 await bless(found_amount, str(message.author))
-                embedVar = discord.Embed(title=f"You fled but found {bounty_icon} {found_amount}!", colour=0xf1c40f)
-                embedVar.set_footer(text="Money Earned!",
-                                    icon_url="https://cdn.discordapp.com/emojis/866116525613514752.gif?size=96")
+                embedVar = discord.Embed(title=f"{message.author.mention} fled but earned {bounty_icon} {found_amount}!", colour=0xf1c40f)
                 take_chances_response = embedVar
             else:
                 embedVar = discord.Embed(title=f"You fled", colour=0xf1c40f)
-                # embedVar.set_footer(text="", icon_url="https://cdn.discordapp.com/emojis/872980334487171092.gif?v=1")
                 take_chances_response = embedVar
 
             # Send Message
@@ -189,7 +186,6 @@ class CrownUnlimited(commands.Cog):
             **Bounty** **{bounty_message}**
             {battle_message}
             """), colour=0xf1c40f)
-            # embedVar.set_author(name="Enemy Approaches!", icon_url=f"{icon}")
             card_lvl = 0
 
             if selected_mode == "Tales":
@@ -260,23 +256,23 @@ class CrownUnlimited(commands.Cog):
             if not server_channel_response:
                 categoryname = "Explore"
                 channelname = "explore-encounters"
-                category = discord.utils.get(guild.categories, name=categoryname)
+                category = discord.utils.get(g.categories, name=categoryname)
                 if category is None: #If there's no category matching with the `name`
-                    category = await guild.create_category_channel(categoryname)
-                    setchannel = await guild.create_text_channel(channelname, category=category)
+                    category = await g.create_category_channel(categoryname)
+                    setchannel = await g.create_text_channel(channelname, category=category)
                     await setchannel.send(f"{message.author.mention} **was the first to Explore here!**")
 
                 else: #Else if it found the categoty
-                    setchannel = discord.utils.get(guild.text_channels, name=channelname)
+                    setchannel = discord.utils.get(g.text_channels, name=channelname)
                     if setchannel is None:
-                        setchannel = await guild.create_text_channel(channelname, category=category)
+                        setchannel = await g.create_text_channel(channelname, category=category)
                         await setchannel.send(f"{message.author.mention} **was the first to Explore here!**")
                     else:
                         await setchannel.send(f"{message.author.mention}")    
 
                 await setchannel.send(embed=embedVar, file=card_file, components=[random_battle_buttons_action_row])
             else:
-                setchannel = discord.utils.get(guild.text_channels, name=server_channel)
+                setchannel = discord.utils.get(g.text_channels, name=server_channel)
                 await setchannel.send(f"{message.author.mention}")  
                 await setchannel.send(embed=embedVar, file=card_file, components=[random_battle_buttons_action_row])
 

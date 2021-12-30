@@ -100,7 +100,7 @@ class Arm(commands.Cog):
                     update_query = {"$set": {"STOCK": newstock}} 
                     response = db.updateArm(armInventory, update_query)
                     response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'ARMS': {'ARM': str(arm_name), 'DUR': 25}}})
-                    await ctx.send(m.PURCHASE_COMPLETE_1 + f"`{newstock}` `{mintedArm}` ARMS left in the Shop!", hidden=True)
+                    await ctx.send(m.PURCHASE_COMPLETE_1 + f"`{newstock}` `{mintedArm}` ARMS left in the Shop!")
 
                     arm_buttons = [
                             manage_components.create_button(
@@ -115,7 +115,7 @@ class Arm(commands.Cog):
                             )
                         ]
                     arm_buttons_action_row = manage_components.create_actionrow(*arm_buttons)
-                    await ctx.send(f"{ctx.author.mention} would you like to equip this Arm?", components=[arm_buttons_action_row], hidden=True)
+                    await ctx.send(f"{ctx.author.mention} would you like to equip this Arm?", components=[arm_buttons_action_row])
 
                     def check(button_ctx):
                         return button_ctx.author == ctx.author
@@ -123,13 +123,13 @@ class Arm(commands.Cog):
                         button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[arm_buttons_action_row], check=check)
 
                         if button_ctx.custom_id == "No":
-                            await button_ctx.send("Did not equip arm.", hidden=True)
+                            await button_ctx.send("Did not equip arm.")
                             return
 
                         if button_ctx.custom_id == "Yes":
                             user_query = {'DISNAME': str(ctx.author)}
                             response = db.updateUserNoFilter(user_query, {'$set': {'ARM': str(arm_name)}})
-                            await button_ctx.send(response, hidden=True)
+                            await button_ctx.send(response)
                     except:
                         return
 
@@ -157,7 +157,7 @@ class Arm(commands.Cog):
                     if arm_name in arm['ARM']:
                         response = db.updateUserNoFilter(user_query, {'$set': {'ARM': str(arm_name)}})
                         owned = True
-                        await ctx.send(response, hidden=True)
+                        await ctx.send(response)
                 if not owned:
                     await ctx.send(m.USER_DOESNT_HAVE_THE_ARM, hidden=True)
                     return
@@ -239,7 +239,7 @@ class Arm(commands.Cog):
             embedVar.add_field(name=f"Unique Passive", value=f"Increases {typetext} by **{o_arm_passive_value}**", inline=False)
             embedVar.set_footer(text=f"{o_arm_passive_type}: {enhancer_mapping[o_arm_passive_type]}")
 
-            await ctx.send(embed=embedVar, hidden=True)
+            await ctx.send(embed=embedVar)
 
         else:
             await ctx.send(m.ARM_DOESNT_EXIST, hidden=True)

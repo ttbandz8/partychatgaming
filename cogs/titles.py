@@ -103,7 +103,7 @@ class Titles(commands.Cog):
                     update_query = {"$set": {"STOCK": newstock}} 
                     response = db.updateTitle(titleInventory, update_query)
                     response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'TITLES': str(title_name)}})
-                    await ctx.send(m.PURCHASE_COMPLETE_1 + f"`{newstock}` `{mintedTitle}` TITLES left in the Shop!", hidden=True)
+                    await ctx.send(m.PURCHASE_COMPLETE_1 + f"`{newstock}` `{mintedTitle}` TITLES left in the Shop!")
 
 
                     title_buttons = [
@@ -119,7 +119,7 @@ class Titles(commands.Cog):
                             )
                         ]
                     title_buttons_action_row = manage_components.create_actionrow(*title_buttons)
-                    await ctx.send(f"{ctx.author.mention} would you like to equip this Title?", components=[title_buttons_action_row], hidden=True)
+                    await ctx.send(f"{ctx.author.mention} would you like to equip this Title?", components=[title_buttons_action_row])
 
                     def check(button_ctx):
                         return button_ctx.author == ctx.author
@@ -128,13 +128,13 @@ class Titles(commands.Cog):
                         button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[title_buttons_action_row], check=check)
                         
                         if button_ctx.custom_id == "No":
-                            await button_ctx.send("Did not equip title.", hidden=True)
+                            await button_ctx.send("Did not equip title.")
                             return
                         
                         if button_ctx.custom_id == "Yes":
                             user_query = {'DISNAME': str(ctx.author)}
                             response = db.updateUserNoFilter(user_query, {'$set': {'TITLE': str(title_name)}})
-                            await button_ctx.send(response, hidden=True)
+                            await button_ctx.send(response)
                     except:
                         return
 
@@ -160,14 +160,14 @@ class Titles(commands.Cog):
 
             if title_name in vault['TITLES']:
                 response = db.updateUserNoFilter(user_query, {'$set': {'TITLE': title_name}})
-                await ctx.send(response, hidden=True)
+                await ctx.send(response)
             else:
                 await ctx.send(m.USER_DOESNT_HAVE_THE_Title, hidden=True)
         else:
 
             if title_name in vault['TITLES']:
                 response = db.updateUserNoFilter(user_query, {'$set': {'TITLE': str(title_name)}})
-                await ctx.send(response, hidden=True)
+                await ctx.send(response)
             else:
                 await ctx.send(m.USER_DOESNT_HAVE_THE_Title, hidden=True)
 
@@ -280,7 +280,7 @@ class Titles(commands.Cog):
                 embedVar.add_field(name=f"**Unique Passive**", value=f"Set both players **{typetext}** equal to **{o_title_passive_value}**", inline=False)
             embedVar.set_footer(text=f"{o_title_passive_type}: {title_enhancer_mapping[o_title_passive_type]}")
 
-            await ctx.send(embed=embedVar, hidden=True)
+            await ctx.send(embed=embedVar)
 
         else:
             await ctx.send("That title doesn't exist.", hidden=True)
