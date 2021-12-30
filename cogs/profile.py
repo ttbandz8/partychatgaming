@@ -624,7 +624,7 @@ class Profile(commands.Cog):
                             await button_ctx.send(f"🎗️ **{selected_title}** equipped.")
                             self.stop = True
                         else:
-                            await button_ctx.send(f"**{title_name}** is no longer in your vault.")                           
+                            await button_ctx.send(f"**{selected_title}** is no longer in your vault.")                           
                     elif button_ctx.custom_id == "Resell":
                         title_data = db.queryTitle({'TITLE': selected_title})
                         title_name = title_data['TITLE']
@@ -716,6 +716,7 @@ class Profile(commands.Cog):
             try:
                 name = d['DISNAME'].split("#",1)[0]
                 avatar = d['AVATAR']
+                current_arm = d['ARM']
                 balance = vault['BALANCE']
                 arms_list = vault['ARMS']
                 total_arms = len(arms_list)
@@ -755,18 +756,88 @@ class Profile(commands.Cog):
                     embedVar.set_footer(text=f"{arm_passive_type}: {enhancer_mapping[arm_passive_type]}")
                     embed_list.append(embedVar)
                 
-                custom_button = manage_components.create_button(style=3, label="Equip")
+                buttons = [
+                    manage_components.create_button(style=3, label="Equip", custom_id="Equip"),
+                    manage_components.create_button(style=1, label="Resell", custom_id="Resell"),
+                    manage_components.create_button(style=2, label="Exit", custom_id="Exit")
+                ]
+                custom_action_row = manage_components.create_actionrow(*buttons)
 
                 async def custom_function(self, button_ctx):
-                    selected_universe = custom_function
-                    custom_function.selected_universe = str(button_ctx.origin_message.embeds[0].title)
-                    user_query = {'DISNAME': str(ctx.author)}
-                    response = db.updateUserNoFilter(user_query, {'$set': {'ARM': str(button_ctx.origin_message.embeds[0].title)}})
-                    await button_ctx.send(f":mechanical_arm: **{str(button_ctx.origin_message.embeds[0].title)}** equipped.")
-                    self.stop = True
+                    u_vault = db.queryVault({'OWNER': d['DISNAME']})
+                    updated_vault = []
+                    for arm in u_vault['ARMS']:
+                        updated_vault.append(arm['ARM'])
+                    
+                    sell_price = 0
+                    selected_arm = str(button_ctx.origin_message.embeds[0].title)
+                    if button_ctx.custom_id == "Equip":
+                        if selected_arm in updated_vault:
+                            selected_universe = custom_function
+                            custom_function.selected_universe = selected_arm
+                            user_query = {'DISNAME': str(ctx.author)}
+                            response = db.updateUserNoFilter(user_query, {'$set': {'ARM': selected_arm}})
+                            await button_ctx.send(f":mechanical_arm: **{selected_arm}** equipped.")
+                            self.stop = True
+                        else:
+                            await button_ctx.send(f"**{selected_arm}** is no longer in your vault.")
+                    elif button_ctx.custom_id == "Resell":
+                        arm_data = db.queryArm({'ARM': selected_arm})
+                        arm_name = arm_data['ARM']
+                        sell_price = sell_price + (arm_data['PRICE'] * .30)
+                        if arm_name == current_arm:
+                            await button_ctx.send("You cannot resell equipped arms.")
+                        elif arm_name in updated_vault:
+                            sell_buttons = [
+                                manage_components.create_button(
+                                    style=ButtonStyle.green,
+                                    label="Yes",
+                                    custom_id="yes"
+                                ),
+                                manage_components.create_button(
+                                    style=ButtonStyle.blue,
+                                    label="No",
+                                    custom_id="no"
+                                )
+                            ]
+                            sell_buttons_action_row = manage_components.create_actionrow(*sell_buttons)
+                            await button_ctx.send(f"Are you sure you want to sell **{arm_name}** for :coin:{round(sell_price)}?", components=[sell_buttons_action_row])
+                            try:
+                                button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[sell_buttons_action_row], timeout=120)
 
-                await Paginator(bot=self.bot, ctx=ctx, pages=embed_list, timeout=60, customButton=[
-                    custom_button,
+                                if button_ctx.custom_id == "no":
+                                    await button_ctx.send("Sell cancelled. Please press the Exit button if you are done reselling titles.")
+                                    self.stop = True
+                                if button_ctx.custom_id == "yes":
+                                    db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'ARMS': {'ARM': str(arm_name)}}})
+                                    await main.bless(sell_price, ctx.author)
+                                    await button_ctx.send("Sold.")
+                            except Exception as ex:
+                                trace = []
+                                tb = ex.__traceback__
+                                while tb is not None:
+                                    trace.append({
+                                        "filename": tb.tb_frame.f_code.co_filename,
+                                        "name": tb.tb_frame.f_code.co_name,
+                                        "lineno": tb.tb_lineno
+                                    })
+                                    tb = tb.tb_next
+                                print(str({
+                                    'PLAYER': str(ctx.author),
+                                    'type': type(ex).__name__,
+                                    'message': str(ex),
+                                    'trace': trace
+                                }))
+                                await ctx.send("There's an issue with selling one or all of your items.")
+                                return
+                        else:
+                            await button_ctx.send(f"**{arm_name}** is no longer in your vault.")       
+                    elif button_ctx.custom_id == "Exit":
+                        await button_ctx.send("Done.")
+                        self.stop = True             
+
+                await Paginator(bot=self.bot, ctx=ctx, pages=embed_list, timeout=60, customActionRow=[
+                    custom_action_row,
                     custom_function,
                 ]).run()
       
