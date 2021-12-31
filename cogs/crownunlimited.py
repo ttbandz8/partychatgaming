@@ -40,7 +40,7 @@ from pilmoji import Pilmoji
 class CrownUnlimited(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self._cd = commands.CooldownMapping.from_cooldown(1, 1000,
+        self._cd = commands.CooldownMapping.from_cooldown(1, 10,
                                                           commands.BucketType.member)  # Change accordingly. Currently every 8 minutes (3600 seconds == 60 minutes)
 
     co_op_modes = ['CTales', 'DTales', 'CDungeon', 'DDungeon']
@@ -72,12 +72,30 @@ class CrownUnlimited(commands.Cog):
     async def on_message(self, message):
         if message.author == main.bot.user:
             return
-        g = message.author.guild
+
         ratelimit = self.get_ratelimit(message)
         if ratelimit is None:
             if isinstance(message.channel, discord.channel.DMChannel):
                 await message.channel.send(m.SERVER_FUNCTION_ONLY)
                 return
+
+            g = message.author.guild
+            channel_list = message.author.guild.text_channels
+            channel_names = []
+            for channel in channel_list:
+                channel_names.append(channel.name)
+
+            server_channel_response = db.queryServer({'GNAME': str(g)})
+            server_channel = ""
+            if server_channel_response:
+                server_channel = str(server_channel_response['EXP_CHANNEL'])
+            
+            if "explore-encounters" in channel_names:
+                server_channel = "explore-encounters"
+            
+            if not server_channel:
+                return
+
 
             # Check if currently in a match
             channel_exists_response = existing_channel_check(self, message)
@@ -86,11 +104,6 @@ class CrownUnlimited(commands.Cog):
 
             # Pull Character Information
             player = db.queryUser({'DISNAME': str(message.author)})
-            server_channel_response = db.queryServer({'GNAME': str(g)})
-            server_channel = ""
-            if server_channel_response:
-                server_channel = str(server_channel_response['EXP_CHANNEL'])
-
             if not player:
                 return
             if player['EXPLORE'] is False:
@@ -174,7 +187,7 @@ class CrownUnlimited(commands.Cog):
                 else:
                     found_amount = round(bounty / 5)
                 await bless(found_amount, str(message.author))
-                embedVar = discord.Embed(title=f"{message.author.mention} fled but earned {bounty_icon} {found_amount}!", colour=0xf1c40f)
+                embedVar = discord.Embed(title=f"You fled but earned {bounty_icon} {found_amount}!", colour=0xf1c40f)
                 take_chances_response = embedVar
             else:
                 embedVar = discord.Embed(title=f"You fled", colour=0xf1c40f)
@@ -252,29 +265,10 @@ class CrownUnlimited(commands.Cog):
 
             embedVar.set_image(url="attachment://image.png")
 
-            #Create Explore Category
-            if not server_channel_response:
-                categoryname = "Explore"
-                channelname = "explore-encounters"
-                category = discord.utils.get(g.categories, name=categoryname)
-                if category is None: #If there's no category matching with the `name`
-                    category = await g.create_category_channel(categoryname)
-                    setchannel = await g.create_text_channel(channelname, category=category)
-                    await setchannel.send(f"{message.author.mention} **was the first to Explore here!**")
 
-                else: #Else if it found the categoty
-                    setchannel = discord.utils.get(g.text_channels, name=channelname)
-                    if setchannel is None:
-                        setchannel = await g.create_text_channel(channelname, category=category)
-                        await setchannel.send(f"{message.author.mention} **was the first to Explore here!**")
-                    else:
-                        await setchannel.send(f"{message.author.mention}")    
-
-                await setchannel.send(embed=embedVar, file=card_file, components=[random_battle_buttons_action_row])
-            else:
-                setchannel = discord.utils.get(g.text_channels, name=server_channel)
-                await setchannel.send(f"{message.author.mention}")  
-                await setchannel.send(embed=embedVar, file=card_file, components=[random_battle_buttons_action_row])
+            setchannel = discord.utils.get(channel_list, name=server_channel)
+            await setchannel.send(f"{message.author.mention}")  
+            await setchannel.send(embed=embedVar, file=card_file, components=[random_battle_buttons_action_row])
 
             def check(button_ctx):
                 return button_ctx.author == message.author
@@ -20407,7 +20401,6 @@ async def save_spot(self, ctx, universe, mode, currentopponent):
 
         
 
-
 def update_arm_durability(self, vault, arm):
     try:
         for a in vault['ARMS']:
@@ -20446,6 +20439,7 @@ def update_arm_durability(self, vault, arm):
         }))
         return
         
+
 
 def update_save_spot(self, ctx, saved_spots, selected_universe, modes):
     try:
