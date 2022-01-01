@@ -32,7 +32,7 @@ class Arm(commands.Cog):
         arm_name = arm
         vault_query = {'OWNER' : str(ctx.author)}
         vault = db.altQueryVault(vault_query)
-        if len(vault['ARMS']) >= 150:
+        if len(vault['ARMS']) >= 25:
             await ctx.send("You're maxed out on Arms!", hidden=True)
             return
         shop = db.queryShopArms()

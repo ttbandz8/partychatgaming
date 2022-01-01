@@ -35,7 +35,7 @@ class Titles(commands.Cog):
         title_name = title
         vault_query = {'OWNER' : str(ctx.author)}
         vault = db.altQueryVault(vault_query)
-        if len(vault['TITLES']) >= 150:
+        if len(vault['TITLES']) >= 25:
             await ctx.send("You're maxed out on Titles!", hidden=True)
             return
 

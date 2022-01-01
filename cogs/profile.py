@@ -532,7 +532,7 @@ class Profile(commands.Cog):
                         await button_ctx.send("Done.")
                         self.stop = True
 
-                await Paginator(bot=self.bot, ctx=ctx, pages=embed_list, timeout=60, customActionRow=[
+                await Paginator(bot=self.bot, disableAfterTimeout=True, useFirstLast=False, ctx=ctx, pages=embed_list, timeout=60, customActionRow=[
                     custom_action_row,
                     custom_function,
                 ]).run()

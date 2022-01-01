@@ -988,6 +988,7 @@ async def trade(ctx, player: User, item: str):
    p1_titles = p1_vault['TITLES']
    p1_arms = p1_vault['ARMS']
    p1_arms_names_list = []
+
    for arm in p1_arms:
       p1_arms_names_list.append(arm['ARM'])
    p1_pets = p1_vault['PETS']
@@ -1200,6 +1201,7 @@ async def sell(ctx, player: User, item: str):
    p2_titles = p2_vault['TITLES']
    p2_arms = p2_vault['ARMS']
    p2_arms_names_list = []
+
    for arm in p2_arms:
       p2_arms_names_list.append(arm['ARM'])
 
@@ -1276,19 +1278,31 @@ async def sell(ctx, player: User, item: str):
 
                if button_ctx.custom_id == "Yes":
                   if p1_trade_item in p1_arms_names_list:
+                     if len(p2_arms) >= 25:
+                        await ctx.send(f"{user2.mention} is maxed out on Arms and cannot receive any more. Purchase cancelled.", hidden=True)
+                        return
                      db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'ARMS': {'ARM': str(p1_trade_item)}}})
                      await bless(p2_trade_item, ctx.author)
                      await button_ctx.send(f"{p2_trade_item} has been added to {ctx.author.mention}'s balance.")
                   elif p1_trade_item in p1_titles:
+                     if len(p2_titles) >= 25:
+                        await ctx.send(f"{user2.mention} is maxed out on Titles and cannot receive any more. Purchase cancelled.", hidden=True)
+                        return
                      db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'TITLES': str(p1_trade_item)}})
                      await bless(p2_trade_item, ctx.author)
                      await button_ctx.send(f"{p2_trade_item} has been added to {ctx.author.mention}'s balance.")
                   elif p1_trade_item in p1_cards:
+                     if len(p2_cards) >= 25:
+                        await ctx.send(f"{user2.mention} is maxed out on Cards and cannot receive any more. Purchase cancelled.", hidden=True)
+                        return
 
                      db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'CARDS': str(p1_trade_item)}})
                      await bless(p2_trade_item, ctx.author)
                      await button_ctx.send(f"{p2_trade_item} has been added to {ctx.author.mention}'s balance.")
                   elif p1_trade_item in p1_pet_names:
+                     if len(p2_pets) >= 25:
+                        await ctx.send(f"{user2.mention} is maxed out on Pets and cannot receive any more. Purchase cancelled.", hidden=True)
+                        retur
                      db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'PETS': {'NAME': str(p1_trade_item)}}})
                      await bless(p2_trade_item, ctx.author)
                      await button_ctx.send(f"{p2_trade_item }has been added to {ctx.author.mention}'s balance.")
