@@ -11,6 +11,7 @@ CROWN_UNLIMITED_GAMES="`/crownhelp` - Crown Unlimited Help Book\n\n`/senpaibattl
 
 LEGEND = textwrap.dedent(f"""\
 **Basics**
+🀄 - Tier
 :trident: - Level
 :heart:  - Health
 :cyclone: - Stamina
@@ -92,14 +93,14 @@ CROWN_UNLIMITED_COMMANDS = textwrap.dedent(f"""\
 **/cards**: Open your list of Cards
 **/titles**: Open your list of Titles
 **/arms**: Open your list of Arms
-**/pets**: Open your list of Pets
+**/summons**: Open your list of Summons
 **/quest**: Open your list of Quests
 **/rebirth**: Rebirth Account with permanent increases
 
 
 **PvP Commands**
 **/battle @player**: Challenge another Player
-**/raid guild**: Start Guild Raid Battle
+**/raid guild**: Raid another Guild
 
 **Tutorial Bot Commands**
 **/battle @Senpai**: Tutorial Bot
@@ -121,7 +122,6 @@ CTAP_COMMANDS = textwrap.dedent(f"""\
 **Card Commands**
 **/cards universe**: View Universe Card List
 **/viewcard**: Preview Card 
-**/buycard**: Buy Card
 **/equipcard card**: Equip card
 **/analysis card**: View Card Statistics and Optimal Builds
 **/destiny**: Open your Destiny List
@@ -131,19 +131,17 @@ CTAP_COMMANDS = textwrap.dedent(f"""\
 **Title Commands**
 **/titlelist universe**: View Universe Title List
 **/viewtitle**: Preview Title
-**/buytitle**: Buy Title
 **/equiptitle title**: - Equip title
 
 **Arm Commands**
 **/armlist universe**: View Universe Arm List
 **/viewarm**: Preview Arm
-**/buyarm**: Buy Arm
 **/equiparm arm**: Equip arm
 
 **Summon Commands**
-**/petlist universe**: View Universe Pet List
-**/viewpet** Preview Pet
-**/equippet pet**: Equip pet
+**/summonlist universe**: View Universe Pet List
+**/viewsummon** Preview Pet
+**/equipsummon pet**: Equip pet
 
 **Sell, Trade, Resell, Gift**
 **/trade @player item**: Trade Cards, Titles, Arms, Pets
