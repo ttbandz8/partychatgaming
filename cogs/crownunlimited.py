@@ -6806,6 +6806,8 @@ async def cardlevel(card: str, player: str, mode: str):
         exp_gain = 10
     if mode == "Tales":
         exp_gain = 5
+    if mode == "Purchase":
+        exp_gain = 150
 
 
     hlt_buff = 0

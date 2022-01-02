@@ -27,116 +27,116 @@ class Arm(commands.Cog):
     async def cog_check(self, ctx):
         return await main.validate_user(ctx)
 
-    @cog_ext.cog_slash(description="Buy an Arm")
-    async def buyarm(self, ctx, arm: str):
-        arm_name = arm
-        vault_query = {'OWNER' : str(ctx.author)}
-        vault = db.altQueryVault(vault_query)
-        if len(vault['ARMS']) >= 25:
-            await ctx.send("You're maxed out on Arms!", hidden=True)
-            return
-        shop = db.queryShopArms()
-        arms = []
-        arm_list = []
-        for arm in vault['ARMS']:
-            arm_list.append(arm['ARM'])
-        rift_universes = ['Crown Rift Slayers', 'Crown Rift Awakening', 'Crown Rift Madness']
-        riftShopOpen = False
-        check_arm = db.queryArm({'ARM' : {"$regex": f"^{str(arm_name)}$", "$options": "i"}})
-        arm_name = check_arm['ARM']
-        if check_arm:
-            if check_arm['UNIVERSE'] in rift_universes:
-                await ctx.send("You are not connected to the rift...", hidden=True)
-                return
-            all_universes = db.queryAllUniverse()
-            user = db.queryUser({'DISNAME': str(ctx.author)})
-            available_universes = []
-            if user['RIFT'] == 1:
-                riftShopOpen = True
-            if riftShopOpen:    
-                for uni in all_universes:
-                    if uni['PREREQUISITE'] in user['CROWN_TALES']:
-                        if uni['TIER'] != 9:
-                            available_universes.append(uni['TITLE'])
-                        elif uni['TITLE'] in user['CROWN_TALES']:
-                            available_universes.append(uni['TITLE'])
-            else:
-                for uni in all_universes:
-                    if uni['PREREQUISITE'] in user['CROWN_TALES'] and not uni['TIER'] == 9:
-                        available_universes.append(uni['TITLE'])
+    # @cog_ext.cog_slash(description="Buy an Arm")
+    # async def buyarm(self, ctx, arm: str):
+    #     arm_name = arm
+    #     vault_query = {'OWNER' : str(ctx.author)}
+    #     vault = db.altQueryVault(vault_query)
+    #     if len(vault['ARMS']) >= 25:
+    #         await ctx.send("You're maxed out on Arms!", hidden=True)
+    #         return
+    #     shop = db.queryShopArms()
+    #     arms = []
+    #     arm_list = []
+    #     for arm in vault['ARMS']:
+    #         arm_list.append(arm['ARM'])
+    #     rift_universes = ['Crown Rift Slayers', 'Crown Rift Awakening', 'Crown Rift Madness']
+    #     riftShopOpen = False
+    #     check_arm = db.queryArm({'ARM' : {"$regex": f"^{str(arm_name)}$", "$options": "i"}})
+    #     arm_name = check_arm['ARM']
+    #     if check_arm:
+    #         if check_arm['UNIVERSE'] in rift_universes:
+    #             await ctx.send("You are not connected to the rift...", hidden=True)
+    #             return
+    #         all_universes = db.queryAllUniverse()
+    #         user = db.queryUser({'DISNAME': str(ctx.author)})
+    #         available_universes = []
+    #         if user['RIFT'] == 1:
+    #             riftShopOpen = True
+    #         if riftShopOpen:    
+    #             for uni in all_universes:
+    #                 if uni['PREREQUISITE'] in user['CROWN_TALES']:
+    #                     if uni['TIER'] != 9:
+    #                         available_universes.append(uni['TITLE'])
+    #                     elif uni['TITLE'] in user['CROWN_TALES']:
+    #                         available_universes.append(uni['TITLE'])
+    #         else:
+    #             for uni in all_universes:
+    #                 if uni['PREREQUISITE'] in user['CROWN_TALES'] and not uni['TIER'] == 9:
+    #                     available_universes.append(uni['TITLE'])
 
 
-        currentBalance = vault['BALANCE']
-        cost = 0
-        mintedArm = ""
-        stock = 0
-        newstock = 0
-        armInStock = False
-        checkout = True
-        for arm in shop:
+    #     currentBalance = vault['BALANCE']
+    #     cost = 0
+    #     mintedArm = ""
+    #     stock = 0
+    #     newstock = 0
+    #     armInStock = False
+    #     checkout = True
+    #     for arm in shop:
 
-            if arm_name == arm['ARM']:
-                if stock == arm['STOCK']:
-                    checkout = armInStock
-                else:
-                    armInStock = True
-                    mintedArm = arm['ARM']
-                    cost = arm['PRICE']
-                    stock = arm['STOCK']
-                    newstock = stock - 1
+    #         if arm_name == arm['ARM']:
+    #             if stock == arm['STOCK']:
+    #                 checkout = armInStock
+    #             else:
+    #                 armInStock = True
+    #                 mintedArm = arm['ARM']
+    #                 cost = arm['PRICE']
+    #                 stock = arm['STOCK']
+    #                 newstock = stock - 1
 
-        if bool(mintedArm):
-            if mintedArm in arm_list:
-                await ctx.send(m.USER_ALREADY_HAS_ARM, hidden=True)
-            else:
-                newBalance = currentBalance - cost
+    #     if bool(mintedArm):
+    #         if mintedArm in arm_list:
+    #             await ctx.send(m.USER_ALREADY_HAS_ARM, hidden=True)
+    #         else:
+    #             newBalance = currentBalance - cost
 
-                if newBalance < 0 :
-                    await ctx.send("You have an insufficent Balance", hidden=True)
-                else:
-                    await main.curse(cost, str(ctx.author))
-                    arm_query = {'ARM' : str(mintedArm)}
-                    armInventory = db.queryArm(arm_query)
-                    update_query = {"$set": {"STOCK": newstock}} 
-                    response = db.updateArm(armInventory, update_query)
-                    response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'ARMS': {'ARM': str(arm_name), 'DUR': 25}}})
-                    await ctx.send(m.PURCHASE_COMPLETE_1 + f"`{newstock}` `{mintedArm}` ARMS left in the Shop!")
+    #             if newBalance < 0 :
+    #                 await ctx.send("You have an insufficent Balance", hidden=True)
+    #             else:
+    #                 await main.curse(cost, str(ctx.author))
+    #                 arm_query = {'ARM' : str(mintedArm)}
+    #                 armInventory = db.queryArm(arm_query)
+    #                 update_query = {"$set": {"STOCK": newstock}} 
+    #                 response = db.updateArm(armInventory, update_query)
+    #                 response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'ARMS': {'ARM': str(arm_name), 'DUR': 25}}})
+    #                 await ctx.send(m.PURCHASE_COMPLETE_1 + f"`{newstock}` `{mintedArm}` ARMS left in the Shop!")
 
-                    arm_buttons = [
-                            manage_components.create_button(
-                                style=ButtonStyle.blue,
-                                label="Yes",
-                                custom_id="Yes"
-                            ),
-                            manage_components.create_button(
-                                style=ButtonStyle.red,
-                                label="No",
-                                custom_id="No"
-                            )
-                        ]
-                    arm_buttons_action_row = manage_components.create_actionrow(*arm_buttons)
-                    await ctx.send(f"{ctx.author.mention} would you like to equip this Arm?", components=[arm_buttons_action_row])
+    #                 arm_buttons = [
+    #                         manage_components.create_button(
+    #                             style=ButtonStyle.blue,
+    #                             label="Yes",
+    #                             custom_id="Yes"
+    #                         ),
+    #                         manage_components.create_button(
+    #                             style=ButtonStyle.red,
+    #                             label="No",
+    #                             custom_id="No"
+    #                         )
+    #                     ]
+    #                 arm_buttons_action_row = manage_components.create_actionrow(*arm_buttons)
+    #                 await ctx.send(f"{ctx.author.mention} would you like to equip this Arm?", components=[arm_buttons_action_row])
 
-                    def check(button_ctx):
-                        return button_ctx.author == ctx.author
-                    try:
-                        button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[arm_buttons_action_row], check=check)
+    #                 def check(button_ctx):
+    #                     return button_ctx.author == ctx.author
+    #                 try:
+    #                     button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[arm_buttons_action_row], check=check)
 
-                        if button_ctx.custom_id == "No":
-                            await button_ctx.send("Did not equip arm.")
-                            return
+    #                     if button_ctx.custom_id == "No":
+    #                         await button_ctx.send("Did not equip arm.")
+    #                         return
 
-                        if button_ctx.custom_id == "Yes":
-                            user_query = {'DISNAME': str(ctx.author)}
-                            response = db.updateUserNoFilter(user_query, {'$set': {'ARM': str(arm_name)}})
-                            await button_ctx.send(response)
-                    except:
-                        return
+    #                     if button_ctx.custom_id == "Yes":
+    #                         user_query = {'DISNAME': str(ctx.author)}
+    #                         response = db.updateUserNoFilter(user_query, {'$set': {'ARM': str(arm_name)}})
+    #                         await button_ctx.send(response)
+    #                 except:
+    #                     return
 
-        elif checkout == True:
-            await ctx.send(m.ARM_DOESNT_EXIST, hidden=True)
-        else:
-            await ctx.send(m.ARM_OUT_OF_STOCK, hidden=True)
+    #     elif checkout == True:
+    #         await ctx.send(m.ARM_DOESNT_EXIST, hidden=True)
+    #     else:
+    #         await ctx.send(m.ARM_OUT_OF_STOCK, hidden=True)
 
     @cog_ext.cog_slash(description="Equip an Arm")
     async def equiparm(self, ctx, arm: str):

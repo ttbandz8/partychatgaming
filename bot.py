@@ -1692,7 +1692,7 @@ async def trinketshop(ctx):
             return
          else:
             db.updateUserNoFilter(user_query, {'$set': {'TOURNAMENT_WINS': 1}})
-            await curse(1000000, str(ctx.author))
+            await curse(1500000, str(ctx.author))
             await button_ctx.send("Gabe's Purse has been purchased!")
             return
       
@@ -1707,7 +1707,7 @@ async def trinketshop(ctx):
                filter_query = [{'type.' + "ARM": str(current_arm)}]
                resp = db.updateVault(query, update_query, filter_query)
 
-               await curse(50000, str(ctx.author))
+               await curse(price, str(ctx.author))
                await button_ctx.send(f"{current_arm}'s ⚒️ durability has increased by 25!")
                return
             except:
