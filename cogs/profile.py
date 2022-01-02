@@ -1463,9 +1463,9 @@ class Profile(commands.Cog):
                 🎗️ **Title:** Title Purchase for 💵 20,000
                 🦾 **Arm:** Arm Purchase for 💵 50,000
 
-                1️⃣🎴 **T1 Pack:** 1-3 Tier Card for 💵 30,000
-                2️⃣🎴 **T2 Pack:** 3-5 Tier Card for 💰 300,000
-                3️⃣🎴 **T3 Pack:** 5-7 Tier Card for 💸 6,000,000
+                1️⃣ **T1 Pack:** 1-3 Tier Card for 💵 30,000
+                2️⃣ **T2 Pack:** 3-5 Tier Card for 💰 300,000
+                3️⃣ **T3 Pack:** 5-7 Tier Card for 💸 6,000,000
                 """), colour=0x7289da)
                 embedVar.set_image(url=universe_image)
                 #embedVar.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236723/PCG%20LOGOS%20AND%20RESOURCES/Party_Chat_Shop.png")
@@ -1478,9 +1478,9 @@ class Profile(commands.Cog):
             buttons = [
                 manage_components.create_button(style=3, label="🎗️", custom_id="title"),
                 manage_components.create_button(style=1, label="🦾", custom_id="arm"),
-                manage_components.create_button(style=2, label="1️⃣🎴", custom_id="t1card"),
-                manage_components.create_button(style=2, label="2️⃣🎴", custom_id="t2card"),
-                manage_components.create_button(style=2, label="3️⃣🎴", custom_id="t3card"),
+                manage_components.create_button(style=2, label="1️⃣", custom_id="t1card"),
+                manage_components.create_button(style=2, label="2️⃣", custom_id="t2card"),
+                manage_components.create_button(style=2, label="3️⃣", custom_id="t3card"),
             ]
 
             custom_action_row = manage_components.create_actionrow(*buttons)
@@ -1551,10 +1551,12 @@ class Profile(commands.Cog):
                     if card_name in current_cards:
                         await cardlevel(card['NAME'], str(ctx.author), "Purchase")
                         await button_ctx.send(f"You received a level up for **{card_name}**!")
+                        await main.curse(price, str(ctx.author))
                         self.stop = True
                         
                     else:
                         response = db.updateVaultNoFilter(vault_query,{'$addToSet': {'CARDS': str(card_name)}})
+                        await main.curse(price, str(ctx.author))
 
                         # Add Card Level config
                         if card_name not in owned_card_levels_list:
@@ -1593,10 +1595,12 @@ class Profile(commands.Cog):
                     if card_name in current_cards:
                         await cardlevel(card['NAME'], str(ctx.author), "Purchase")
                         await button_ctx.send(f"You received a level up for **{card_name}**!")
+                        await main.curse(price, str(ctx.author))
                         self.stop = True
                         
                     else:
                         response = db.updateVaultNoFilter(vault_query,{'$addToSet': {'CARDS': str(card_name)}})
+                        await main.curse(price, str(ctx.author))
 
                         # Add Card Level config
                         if card_name not in owned_card_levels_list:
@@ -1634,10 +1638,12 @@ class Profile(commands.Cog):
                     if card_name in current_cards:
                         await cardlevel(card['NAME'], str(ctx.author), "Purchase")
                         await button_ctx.send(f"You received a level up for **{card_name}**!")
+                        await main.curse(price, str(ctx.author))
                         self.stop = True
                         
                     else:
                         response = db.updateVaultNoFilter(vault_query,{'$addToSet': {'CARDS': str(card_name)}})
+                        await main.curse(price, str(ctx.author))
 
                         # Add Card Level config
                         if card_name not in owned_card_levels_list:
