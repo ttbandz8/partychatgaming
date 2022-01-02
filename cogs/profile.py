@@ -390,7 +390,7 @@ class Profile(commands.Cog):
                                 licon ="⚜️"
                             lvl = f"{licon} **{cl['LVL']}**"
                             card_lvl = cl['LVL']
-                            card_tier = cl['TIER']
+                            card_tier = f"🀄**{cl['TIER']}**"
                             card_exp = cl['EXP']
                             card_lvl_ap_buff = cl['AP']
                             card_lvl_attack_buff = cl['ATK']
@@ -443,7 +443,8 @@ class Profile(commands.Cog):
 
 
                     embedVar = discord.Embed(title= f"{resp['NAME']}", description=textwrap.dedent(f"""
-                    {icon} **[{index}]** {lvl}
+                    {icon} **[{index}]** 
+                    {card_tier}: {lvl}
                     :heart: **{resp['HLT']}** :dagger: **{resp['ATK']}** :shield: **{resp['DEF']}**
                     
                     💥 **{move1}:** {move1ap}
@@ -1456,14 +1457,18 @@ class Profile(commands.Cog):
                 universe_image = universe['PATH']
 
                 embedVar = discord.Embed(title= f"{universe_name}", description=textwrap.dedent(f"""
+                *Welcome {ctx.author.mention}! 
+                You have {icon}{'{:,}'.format(balance)} coins!*
+                
                 🎗️ **Title:** Title Purchase for 💵 20,000
                 🦾 **Arm:** Arm Purchase for 💵 50,000
 
-                1️⃣🎴 **T1 Card Pack:** 1-3 Tier Card for 💵 30,000
-                2️⃣🎴 **T2 Card Pack:** 3-5 Tier Card for 💰 300,000
-                3️⃣🎴 **T3 Card Pack:** 5-7 Tier Card for 💸 6,000,000
+                1️⃣🎴 **T1 Pack:** 1-3 Tier Card for 💵 30,000
+                2️⃣🎴 **T2 Pack:** 3-5 Tier Card for 💰 300,000
+                3️⃣🎴 **T3 Pack:** 5-7 Tier Card for 💸 6,000,000
                 """), colour=0x7289da)
                 embedVar.set_image(url=universe_image)
+                #embedVar.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236723/PCG%20LOGOS%20AND%20RESOURCES/Party_Chat_Shop.png")
                 embed_list.append(embedVar)
 
             

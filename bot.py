@@ -261,12 +261,16 @@ async def crown(ctx):
    ✨ **Destiny Cards** - Earned via **Destinies**
    👹 **Boss Cards** - Exchange for **Boss Souls**
    
-   **Cards Have 5 Passive Elements** 
-   1 Card Type
+   **Cards Have 6 Passive Elements** 
+   Card Type
+   Card Tier
    1 Unique Passive
    1 Universe Trait
    Card Level
    Destinies
+   
+   🀄 **Card Tier**
+   Card Tier Determines Base Stats and Enhancer Types/Values.
    
    🩸 **Unique Passive**
    Enhancers that take effect **at the beginning** of the battle.
@@ -549,6 +553,7 @@ async def register(ctx):
       */battle @legend - Advanced Tutorial Battle*
       **Some Important Symbols**
       **Basics**
+      🀄 - Tier
       :trident: - Level
       :heart:  - Health
       :cyclone: - Stamina
