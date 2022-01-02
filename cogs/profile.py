@@ -17,11 +17,13 @@ from PIL import Image, ImageFont, ImageDraw
 import requests
 from collections import ChainMap
 import DiscordUtils
-from .crownunlimited import showcard, cardback, enhancer_mapping, title_enhancer_mapping, enhancer_suffix_mapping, title_enhancer_suffix_mapping, passive_enhancer_suffix_mapping, Crest_dict
+from .crownunlimited import showcard, cardback, enhancer_mapping, title_enhancer_mapping, enhancer_suffix_mapping, title_enhancer_suffix_mapping, passive_enhancer_suffix_mapping, Crest_dict, cardlevel
 import random
 import textwrap
 from discord_slash import cog_ext, SlashContext
 from dinteractions_Paginator import Paginator
+import destiny as d
+
 
 emojis = ['👍', '👎']
 
@@ -532,7 +534,7 @@ class Profile(commands.Cog):
                         await button_ctx.send("Done.")
                         self.stop = True
 
-                await Paginator(bot=self.bot, disableAfterTimeout=True, useFirstLast=False, ctx=ctx, pages=embed_list, timeout=60, customActionRow=[
+                await Paginator(bot=self.bot, disableAfterTimeout=True, ctx=ctx, pages=embed_list, timeout=60, customActionRow=[
                     custom_action_row,
                     custom_function,
                 ]).run()
@@ -1400,131 +1402,275 @@ class Profile(commands.Cog):
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
-    @cog_ext.cog_slash(description="Open Pop-Up Shop", guild_ids=main.guild_ids)
+    @cog_ext.cog_slash(description="Open Crown Shop", guild_ids=main.guild_ids)
     async def shop(self, ctx):
-        all_universes = db.queryAllUniverse()
-        user = db.queryUser({'DISNAME': str(ctx.author)})
-        available_universes = []
-        riftShopOpen = False
-        shopName = ':shopping_cart:Pop Up Shop'
-        if user['RIFT'] == 1:
-            riftShopOpen = True
-            shopName = ':crystal_ball: Rift Shop'
+        try:
+            all_universes = db.queryAllUniverse()
+            user = db.queryUser({'DISNAME': str(ctx.author)})
+            available_universes = []
+            riftShopOpen = False
+            shopName = ':shopping_cart: Crown Shop'
+            if user['RIFT'] == 1:
+                riftShopOpen = True
+                shopName = ':crystal_ball: Rift Shop'
+                
+            if riftShopOpen:    
+                for uni in all_universes:
+                    if uni['HAS_CROWN_TALES'] and uni['HAS_DUNGEON']:
+                        available_universes.append(uni)
+            else:
+                for uni in all_universes:
+                    if uni['TIER'] != 9 and uni['HAS_CROWN_TALES'] and uni['HAS_DUNGEON']:
+                        available_universes.append(uni)
             
-        if riftShopOpen:    
-            for uni in all_universes:
-                if uni['PREREQUISITE'] in user['CROWN_TALES']:
-                    if uni['TIER'] != 9:
-                        available_universes.append(uni['TITLE'])
-                    elif uni['TITLE'] in user['CROWN_TALES']:
-                        available_universes.append(uni['TITLE'])                      
-        else:
-            for uni in all_universes:
-                if uni['PREREQUISITE'] in user['CROWN_TALES'] and not uni['TIER'] == 9:
-                    available_universes.append(uni['TITLE'])
-        
-        
-        # Pull all cards that don't require tournaments
-        resp = db.queryShopCards()
+            vault_query = {'OWNER' : str(ctx.author)}
+            vault = db.altQueryVault(vault_query)
+            current_titles = vault['TITLES']
+            current_cards = vault['CARDS']
+            current_arms = []
+            for arm in vault['ARMS']:
+                current_arms.append(arm['ARM'])
 
-        #
-        vault_query = {'OWNER' : str(ctx.author)}
-        vault = db.altQueryVault(vault_query)
-        balance = vault['BALANCE']
-        icon = ":coin:"
-        if balance >= 150000:
-            icon = ":money_with_wings:"
-        elif balance >=100000:
-            icon = ":moneybag:"
-        elif balance >= 50000:
-            icon = ":dollar:"
-        cards = []
-        card_text_list = []
-        for card in resp:
-            if card['UNIVERSE'] in available_universes:
-                # Don't produce cards you can't afford
-                if card['PRICE'] != 0 and card['PRICE'] < (vault['BALANCE'] + 1500) and card['AVAILABLE'] and card['EXCLUSIVE'] != True:
-                    if card['NAME'] not in vault['CARDS']:
-                        cards.append({'NAME': card['NAME'], 'PRICE': card['PRICE'], 'UNIVERSE': card['UNIVERSE'], 'STOCK': card['STOCK']})
-        
-        random_cards = random.sample(cards, min(len(cards), 10))
-        for card in random_cards:
-            if card['STOCK'] == 0:
-                card_text_list.append(f"**{card['NAME']}**: :coin:{card['PRICE']} " + f"_{card['UNIVERSE']}_ **Out Of Stock**")
-            else:
-                card_text_list.append(f"**{card['NAME']}**: :coin:{card['PRICE']} " + f"_{card['UNIVERSE']}_")
+            owned_card_levels_list = []
+            for c in vault['CARD_LEVELS']:
+                owned_card_levels_list.append(c['CARD'])
 
-        title_resp = db.queryShopTitles()
-        titles = []
-        title_text_list = []
-        for title in title_resp:
-            if title['UNIVERSE'] in available_universes or title['UNIVERSE'] == 'Unbound':
-                if title['PRICE'] != 0 and title['PRICE'] < (vault['BALANCE'] + 1500) and title['AVAILABLE'] and title['EXCLUSIVE'] != True:
-                    if title['TITLE'] not in vault['TITLES']:
-                        titles.append({'TITLE': title['TITLE'], 'PRICE': title['PRICE'], 'UNIVERSE': title['UNIVERSE'], 'STOCK': title['STOCK']})
+            owned_destinies = []
+            for destiny in vault['DESTINY']:
+                owned_destinies.append(destiny['NAME'])
 
-        random_titles = random.sample(titles, min(len(titles), 10))
-        for title in random_titles:
-            if title['STOCK'] == 0:
-                title_text_list.append(f"**{title['TITLE']}**: :coin:{title['PRICE']} " + f"_{title['UNIVERSE']}_ **Out Of Stock**")
-            else:
-                title_text_list.append(f"**{title['TITLE']}**: :coin:{title['PRICE']} " + f"_{title['UNIVERSE']}_")
-        
-        
-        arm_resp = db.queryShopArms()
-        arms = []
-        arm_text_list = []
-        for arm in arm_resp:
-            if arm['UNIVERSE'] in available_universes or arm['UNIVERSE'] == 'Unbound':
-                if arm['PRICE'] != 0 and arm['PRICE'] < (vault['BALANCE'] + 1500) and arm['AVAILABLE'] and arm['EXCLUSIVE'] != True:
-                    if arm['ARM'] not in vault['ARMS']:
-                        arms.append({'ARM': arm['ARM'], 'PRICE': arm['PRICE'], 'UNIVERSE': arm['UNIVERSE'], 'STOCK': arm['STOCK']})
 
-        random_arms = random.sample(arms, min(len(arms), 10))
-        for arm in random_arms:
-            if arm['STOCK'] == 0:
-                arm_text_list.append(f"**{arm['ARM']}**: :coin:{arm['PRICE']} " + f"_{arm['UNIVERSE']}_ **Out Of Stock**")
-            else:
-                arm_text_list.append(f"**{arm['ARM']}**: :coin:{arm['PRICE']} " + f"_{arm['UNIVERSE']}_")
-        
-        embedVar1 = discord.Embed(title=f"{shopName}", description=textwrap.dedent(f"""
-        **Balance:** {icon}{'{:,}'.format(vault['BALANCE'])}
-        **/cardlist universe:** View Universe Card List
-        **/viewcard card name:** View Cards
-        **/buycard card name:** Buy Card
-        """), colour=0x2ecc71, value='Page 1')
-        # embedVar1.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236723/PCG%20LOGOS%20AND%20RESOURCES/Party_Chat_Shop.png")
-        embedVar1.add_field(name=":shopping_bags: Cards", value="\n".join(card_text_list))
-        embedVar1.set_footer(text="Stock updated every day")
+            balance = vault['BALANCE']
+            icon = ":coin:"
+            if balance >= 150000:
+                icon = ":money_with_wings:"
+            elif balance >=100000:
+                icon = ":moneybag:"
+            elif balance >= 50000:
+                icon = ":dollar:"
 
-        embedVar2 = discord.Embed(title=f"{shopName}", description=textwrap.dedent(f"""
-        **Balance:** :coin:{'{:,}'.format(vault['BALANCE'])}
-        **/titlelist universe:** View Universe Title List
-        **/viewtitle title name:** View Title Stats
-        **/buytitle title name:** Buy Title
-        """), colour=0x3498db, value='Page 2')
-        # embedVar2.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236723/PCG%20LOGOS%20AND%20RESOURCES/Party_Chat_Shop.png")
-        embedVar2.add_field(name=":shopping_bags: Titles", value="\n".join(title_text_list))
-        embedVar2.set_footer(text="Stock updated every day")
 
-        embedVar3 = discord.Embed(title=f"{shopName}", description=textwrap.dedent(f"""
-        **Balance:** :coin:{'{:,}'.format(vault['BALANCE'])}
-        **/armlist universe:** View Universe Arm List
-        **/viewarm arm name:** View Arm Stats
-        **/buyarm arm name** Buy Arm
-        """), colour=0xf1c40f, value='Page 3')
-        # embedVar3.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236723/PCG%20LOGOS%20AND%20RESOURCES/Party_Chat_Shop.png")
-        embedVar3.add_field(name=":shopping_bags: Arm", value="\n".join(arm_text_list))
-        embedVar3.set_footer(text="Stock updated every day")
+            embed_list = []
+            for universe in available_universes:
+                universe_name = universe['TITLE']
+                universe_image = universe['PATH']
 
-        paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
-        paginator.add_reaction('⏮️', "first")
-        paginator.add_reaction('⬅️', "back")
-        paginator.add_reaction('🔐', "lock")
-        paginator.add_reaction('➡️', "next")
-        paginator.add_reaction('⏭️', "last")
-        embeds = [embedVar1,embedVar2,embedVar3]
-        await paginator.run(embeds)
+                embedVar = discord.Embed(title= f"{universe_name}", description=textwrap.dedent(f"""
+                🎗️ **Title:** Title Purchase for 💵 20,000
+                🦾 **Arm:** Arm Purchase for 💵 50,000
+
+                1️⃣🎴 **T1 Card Pack:** 1-3 Tier Card for 💵 30,000
+                2️⃣🎴 **T2 Card Pack:** 3-5 Tier Card for 💰 300,000
+                3️⃣🎴 **T3 Card Pack:** 5-7 Tier Card for 💸 6,000,000
+                """), colour=0x7289da)
+                embedVar.set_image(url=universe_image)
+                embed_list.append(embedVar)
+
+            
+            # Pull all cards that don't require tournaments
+            # resp = db.queryShopCards()
+
+            buttons = [
+                manage_components.create_button(style=3, label="🎗️", custom_id="title"),
+                manage_components.create_button(style=1, label="🦾", custom_id="arm"),
+                manage_components.create_button(style=2, label="1️⃣🎴", custom_id="t1card"),
+                manage_components.create_button(style=2, label="2️⃣🎴", custom_id="t2card"),
+                manage_components.create_button(style=2, label="3️⃣🎴", custom_id="t3card"),
+            ]
+
+            custom_action_row = manage_components.create_actionrow(*buttons)
+
+            async def custom_function(self, button_ctx):
+                universe = str(button_ctx.origin_message.embeds[0].title)
+                end_transaction = False
+                if button_ctx.custom_id == "title":
+                    price = 20000
+                    if len(current_titles) >=25:
+                        await button_ctx.send("You have max amount of Titles. Transaction cancelled.")
+                        self.stop = True
+                    if price > balance:
+                        await button_ctx.send("Insufficent funds.")
+                        self.stop = True
+                    list_of_titles =[x for x in db.queryAllTitlesBasedOnUniverses({'UNIVERSE': str(universe)}) if not x['EXCLUSIVE']]
+                    selection = random.randint(1,len(list(list_of_titles)))
+                    
+                    title = list_of_titles[selection]
+
+                    response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'TITLES': str(title['TITLE'])}})   
+                    await main.curse(price, str(ctx.author))
+                    await button_ctx.send(f"You purchased **{title['TITLE']}**.")
+                    self.stop = True
+
+                elif button_ctx.custom_id == "arm":
+                    price = 50000
+                    if len(current_arms) >=25:
+                        await button_ctx.send("You have max amount of Arms. Transaction cancelled.")
+                        self.stop = True
+                    if price > balance:
+                        await button_ctx.send("Insufficent funds.")
+                        self.stop = True
+                    list_of_arms = [x for x in db.queryAllArmsBasedOnUniverses({'UNIVERSE': str(universe)}) if not x['EXCLUSIVE']]
+                    selection = random.randint(1,len(list(list_of_arms)))
+
+                    arm = list_of_arms[selection]['ARM']
+
+                    if arm not in current_arms:
+                        response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'ARMS': {'ARM': str(arm), 'DUR': 25}}})
+                        await main.curse(price, str(ctx.author))
+                        await button_ctx.send(f"You purchased **{arm}**.")
+                        self.stop = True
+                    else:
+                        update_query = {'$inc': {'ARMS.$[type].' + 'DUR': 10}}
+                        filter_query = [{'type.' + "ARM": str(arm)}]
+                        resp = db.updateVault(vault_query, update_query, filter_query)
+                        await main.curse(price, str(ctx.author))
+                        await button_ctx.send(f"You purchased **{arm}**. Increased durability for the arm by 10 as you already own it.")
+                        self.stop = True 
+                
+                elif button_ctx.custom_id == "t1card":
+                    price = 30000
+                    if len(current_cards) >= 25:
+                        await button_ctx.send("You have max amount of Cards. Transaction cancelled.")
+                        self.stop = True
+                        return
+                    acceptable = [1,2,3]
+                    if price > balance:
+                        await button_ctx.send("Insufficent funds.")
+                        self.stop = True
+                    list_of_cards = [x for x in db.queryAllCardsBasedOnUniverse({'UNIVERSE': str(universe), 'TIER': {'$in': acceptable}}) if not x['EXCLUSIVE'] and not x['HAS_COLLECTION']]
+                    selection = random.randint(0, round(len(list_of_cards)))
+                    card = list_of_cards[selection]
+                    card_name = card['NAME']
+                    tier = 0
+
+                    if card_name in current_cards:
+                        await cardlevel(card['NAME'], str(ctx.author), "Purchase")
+                        await button_ctx.send(f"You received a level up for **{card_name}**!")
+                        self.stop = True
+                        
+                    else:
+                        response = db.updateVaultNoFilter(vault_query,{'$addToSet': {'CARDS': str(card_name)}})
+
+                        # Add Card Level config
+                        if card_name not in owned_card_levels_list:
+                            update_query = {'$addToSet': {
+                                'CARD_LEVELS': {'CARD': str(card_name), 'LVL': 0, 'TIER': int(tier),
+                                                'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
+                            r = db.updateVaultNoFilter(vault_query, update_query)
+
+                        await button_ctx.send(f"You purchased **{card_name}**!")
+
+                        # Add Destiny
+                        for destiny in d.destiny:
+                            if card_name in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
+                                db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
+                                await button_ctx.send(
+                                    f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.", hidden=True)
+                        self.stop = True
+
+                elif button_ctx.custom_id == "t2card":
+                    price = 300000
+                    if len(current_cards) >=25:
+                        await button_ctx.send("You have max amount of Cards. Transaction cancelled.")
+                        self.stop = True
+                        return
+                    acceptable = [2,3,4,5]
+                    if price > balance:
+                        await button_ctx.send("Insufficent funds.")
+                        self.stop = True
+                    list_of_cards = [x for x in db.queryAllCardsBasedOnUniverse({'UNIVERSE': str(universe), 'TIER': {'$in': acceptable}}) if not x['EXCLUSIVE'] and not x['HAS_COLLECTION']]
+                    print(list_of_cards)
+                    selection = random.randint(0, round(len(list_of_cards)))
+                    card = list_of_cards[selection]
+                    card_name = card['NAME']
+                    tier = 0
+
+                    if card_name in current_cards:
+                        await cardlevel(card['NAME'], str(ctx.author), "Purchase")
+                        await button_ctx.send(f"You received a level up for **{card_name}**!")
+                        self.stop = True
+                        
+                    else:
+                        response = db.updateVaultNoFilter(vault_query,{'$addToSet': {'CARDS': str(card_name)}})
+
+                        # Add Card Level config
+                        if card_name not in owned_card_levels_list:
+                            update_query = {'$addToSet': {
+                                'CARD_LEVELS': {'CARD': str(card_name), 'LVL': 0, 'TIER': int(tier),
+                                                'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
+                            r = db.updateVaultNoFilter(vault_query, update_query)
+
+                        await button_ctx.send(f"You purchased **{card_name}**!")
+
+                        # Add Destiny
+                        for destiny in d.destiny:
+                            if card_name in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
+                                db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
+                                await button_ctx.send(
+                                    f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.", hidden=True)
+                        self.stop = True
+
+                elif button_ctx.custom_id == "t3card":
+                    price = 6000000
+                    if len(current_cards) >=25:
+                        await button_ctx.send("You have max amount of Cards. Transaction cancelled.")
+                        self.stop = True
+                        return
+                    acceptable = [3,4,5,6,7]
+                    if price > balance:
+                        await button_ctx.send("Insufficent funds.")
+                        self.stop = True
+                    list_of_cards = [x for x in db.queryAllCardsBasedOnUniverse({'UNIVERSE': str(universe), 'TIER': {'$in': acceptable}}) if not x['EXCLUSIVE'] and not x['HAS_COLLECTION']]
+                    selection = random.randint(0, round(len(list_of_cards)))
+                    card = list_of_cards[selection]
+                    card_name = card['NAME']
+                    tier = 0
+
+                    if card_name in current_cards:
+                        await cardlevel(card['NAME'], str(ctx.author), "Purchase")
+                        await button_ctx.send(f"You received a level up for **{card_name}**!")
+                        self.stop = True
+                        
+                    else:
+                        response = db.updateVaultNoFilter(vault_query,{'$addToSet': {'CARDS': str(card_name)}})
+
+                        # Add Card Level config
+                        if card_name not in owned_card_levels_list:
+                            update_query = {'$addToSet': {
+                                'CARD_LEVELS': {'CARD': str(card_name), 'LVL': 0, 'TIER': int(tier),
+                                                'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
+                            r = db.updateVaultNoFilter(vault_query, update_query)
+
+                        await button_ctx.send(f"You purchased **{card_name}**!")
+
+                        # Add Destiny
+                        for destiny in d.destiny:
+                            if card_name in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
+                                db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
+                                await button_ctx.send(
+                                    f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.", hidden=True)
+                        self.stop = True
+
+            await Paginator(bot=self.bot, disableAfterTimeout=True, ctx=ctx, pages=embed_list, timeout=60, customActionRow=[
+                custom_action_row,
+                custom_function,
+            ]).run()
+        except Exception as ex:
+            trace = []
+            tb = ex.__traceback__
+            while tb is not None:
+                trace.append({
+                    "filename": tb.tb_frame.f_code.co_filename,
+                    "name": tb.tb_frame.f_code.co_name,
+                    "lineno": tb.tb_lineno
+                })
+                tb = tb.tb_next
+            print(str({
+                'type': type(ex).__name__,
+                'message': str(ex),
+                'trace': trace
+            }))
+
 
 def setup(bot):
     bot.add_cog(Profile(bot))

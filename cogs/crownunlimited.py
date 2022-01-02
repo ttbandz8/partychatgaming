@@ -40,7 +40,7 @@ from pilmoji import Pilmoji
 class CrownUnlimited(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self._cd = commands.CooldownMapping.from_cooldown(1, 1000,
+        self._cd = commands.CooldownMapping.from_cooldown(1, 1500,
                                                           commands.BucketType.member)  # Change accordingly. Currently every 8 minutes (3600 seconds == 60 minutes)
 
     co_op_modes = ['CTales', 'DTales', 'CDungeon', 'DDungeon']
@@ -6806,6 +6806,8 @@ async def cardlevel(card: str, player: str, mode: str):
         exp_gain = 10
     if mode == "Tales":
         exp_gain = 5
+    if mode == "Purchase":
+        exp_gain = 150
 
 
     hlt_buff = 0
