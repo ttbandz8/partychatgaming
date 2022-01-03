@@ -6136,7 +6136,7 @@ class CrownUnlimited(commands.Cog):
                     f"{available} :reminder_ribbon: **{title['TITLE']}**\n**{title_passive_type}:** {title_passive_value}\n")
             else:
                 tales_titles_details.append(
-                    f"{available} :reminder_ribbon: **{title['TITLE']}**: :coin:{'{:,}'.format(title['PRICE'])}\n**{title_passive_type}:** {title_passive_value}\n")
+                    f"{available} :reminder_ribbon: **{title['TITLE']}**\n**{title_passive_type}:** {title_passive_value}\n")
 
         all_titles = []
         if tales_titles_details:
@@ -6209,7 +6209,7 @@ class CrownUnlimited(commands.Cog):
                     f"{available} 🦾 **{arm['ARM']}**\n**{arm_passive_type}:** {arm_passive_value}\n")
             else:
                 tales_arms_details.append(
-                    f"{available} 🦾 **{arm['ARM']}**: :coin:{'{:,}'.format(arm['PRICE'])}\n**{arm_passive_type}:** {arm_passive_value}\n")
+                    f"{available} 🦾 **{arm['ARM']}**\n**{arm_passive_type}:** {arm_passive_value}\n")
 
         all_arms = []
         if tales_arms_details:
