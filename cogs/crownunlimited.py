@@ -6050,13 +6050,13 @@ class CrownUnlimited(commands.Cog):
                 is_skin = ":white_circle:"
             if card['EXCLUSIVE'] and not card['HAS_COLLECTION']:
                 dungeon_card_details.append(
-                    f"{is_skin}{available}  👑 {card['TIER']} **{card['NAME']}**: :coin:{'{:,}'.format(card['PRICE'])}\n:heart: {card['HLT']} :dagger: {card['ATK']}  🛡️ {card['DEF']}\n")
+                    f"{is_skin}{available}  :mahjong: {card['TIER']} **{card['NAME']}**\n:heart: {card['HLT']} :dagger: {card['ATK']}  🛡️ {card['DEF']}\n")
             elif not card['HAS_COLLECTION']:
                 tales_card_details.append(
-                    f"{is_skin}{available} 👑 {card['TIER']} **{card['NAME']}**: :coin:{'{:,}'.format(card['PRICE'])}\n:heart: {card['HLT']} :dagger: {card['ATK']}  🛡️ {card['DEF']}\n")
+                    f"{is_skin}{available} :mahjong: {card['TIER']} **{card['NAME']}**\n:heart: {card['HLT']} :dagger: {card['ATK']}  🛡️ {card['DEF']}\n")
             elif card['HAS_COLLECTION']:
                 destiny_card_details.append(
-                    f"{is_skin}{available} 👑 {card['TIER']} **{card['NAME']}**: :coin:{'{:,}'.format(card['PRICE'])}\n:heart: {card['HLT']} :dagger: {card['ATK']}  🛡️ {card['DEF']}\n")
+                    f"{is_skin}{available} :mahjong: {card['TIER']} **{card['NAME']}**\n:heart: {card['HLT']} :dagger: {card['ATK']}  🛡️ {card['DEF']}\n")
 
         all_cards = []
         if tales_card_details:
