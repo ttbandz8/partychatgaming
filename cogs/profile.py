@@ -362,7 +362,10 @@ class Profile(commands.Cog):
                 for card in cards_list:
                     index = cards_list.index(card)
                     resp = db.queryCard({"NAME": str(card)})
+                    card_tier = 0
                     lvl = ""
+                    tier = ""
+                    card_tier = f":mahjong: {resp['TIER']}"
                     card_available = resp['AVAILABLE']
                     card_exclusive = resp['EXCLUSIVE']
                     card_collection = resp['HAS_COLLECTION']
@@ -377,7 +380,6 @@ class Profile(commands.Cog):
                         else:
                             icon = ":japanese_ogre:"
                     card_lvl = 0
-                    card_tier = 0
                     card_exp = 0
                     card_lvl_attack_buff = 0
                     card_lvl_defense_buff = 0
@@ -391,7 +393,6 @@ class Profile(commands.Cog):
                                 licon ="⚜️"
                             lvl = f"{licon} **{cl['LVL']}**"
                             card_lvl = cl['LVL']
-                            card_tier = f"🀄**{cl['TIER']}**"
                             card_exp = cl['EXP']
                             card_lvl_ap_buff = cl['AP']
                             card_lvl_attack_buff = cl['ATK']
