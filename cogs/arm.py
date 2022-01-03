@@ -204,7 +204,7 @@ class Arm(commands.Cog):
             if exclusive:
                 price_message = "_Priceless_"
             else:
-                price_message = f":coin: {'{:,}'.format(arm_price)}"
+                price_message = f"_Shop & Drop_"
 
             if o_arm_passive_type == 'BASIC':
                 typetext = 'Basic'

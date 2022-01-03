@@ -106,7 +106,7 @@ class Cards(commands.Cog):
                     price_message = "Priceless"
                     card_icon = f"👹"
                 else:
-                    price_message = f"🪙 {'{:,}'.format(o_price)}"
+                    price_message = f"Shop & Drop"
                     card_icon = f"🎴"
                 att = 0
                 defe = 0
