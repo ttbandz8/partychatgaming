@@ -6050,13 +6050,13 @@ class CrownUnlimited(commands.Cog):
                 is_skin = ":white_circle:"
             if card['EXCLUSIVE'] and not card['HAS_COLLECTION']:
                 dungeon_card_details.append(
-                    f"{is_skin}{available} **{card['NAME']}**: :coin:{'{:,}'.format(card['PRICE'])}\n:heart: {card['HLT']} :dagger: {card['ATK']}  🛡️ {card['DEF']}\n")
+                    f"{is_skin}{available}  👑 {card['TIER']} **{card['NAME']}**: :coin:{'{:,}'.format(card['PRICE'])}\n:heart: {card['HLT']} :dagger: {card['ATK']}  🛡️ {card['DEF']}\n")
             elif not card['HAS_COLLECTION']:
                 tales_card_details.append(
-                    f"{is_skin}{available} **{card['NAME']}**: :coin:{'{:,}'.format(card['PRICE'])}\n:heart: {card['HLT']} :dagger: {card['ATK']}  🛡️ {card['DEF']}\n")
+                    f"{is_skin}{available} 👑 {card['TIER']} **{card['NAME']}**: :coin:{'{:,}'.format(card['PRICE'])}\n:heart: {card['HLT']} :dagger: {card['ATK']}  🛡️ {card['DEF']}\n")
             elif card['HAS_COLLECTION']:
                 destiny_card_details.append(
-                    f"{is_skin}{available} **{card['NAME']}**: :coin:{'{:,}'.format(card['PRICE'])}\n:heart: {card['HLT']} :dagger: {card['ATK']}  🛡️ {card['DEF']}\n")
+                    f"{is_skin}{available} 👑 {card['TIER']} **{card['NAME']}**: :coin:{'{:,}'.format(card['PRICE'])}\n:heart: {card['HLT']} :dagger: {card['ATK']}  🛡️ {card['DEF']}\n")
 
         all_cards = []
         if tales_card_details:
@@ -9937,7 +9937,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             self.stop = True
             
 
-        await Paginator(bot=self.bot, ctx=ctx, deleteAfterTimeout=True, pages=universe_embed_list, timeout=60,  customButton=[
+        await Paginator(bot=self.bot, ctx=ctx, useQuitButton=True, deleteAfterTimeout=True, pages=universe_embed_list, timeout=60,  customButton=[
             custom_button,
             custom_function,
         ]).run()
@@ -10029,7 +10029,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             self.stop = True
             
 
-        await Paginator(bot=self.bot, ctx=ctx, deleteAfterTimeout=True, pages=universe_embed_list, timeout=60,  customButton=[
+        await Paginator(bot=self.bot, ctx=ctx, useQuitButton=True, deleteAfterTimeout=True, pages=universe_embed_list, timeout=60,  customButton=[
             custom_button,
             custom_function,
         ]).run()
@@ -10110,7 +10110,7 @@ async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode
             custom_function.selected_universe = str(button_ctx.origin_message.embeds[0].title)
             self.stop = True
         
-        await Paginator(bot=self.bot, ctx=ctx, deleteAfterTimeout=True, pages=universe_embed_list, timeout=60,  customButton=[
+        await Paginator(bot=self.bot, ctx=ctx, useQuitButton=True, deleteAfterTimeout=True, pages=universe_embed_list, timeout=60,  customButton=[
             custom_button,
             custom_function,
         ]).run()

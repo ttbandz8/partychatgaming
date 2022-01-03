@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+from pymongo import response
 import bot as main
 import db
 import classes as data
@@ -959,7 +960,7 @@ class Profile(commands.Cog):
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
 
-    @cog_ext.cog_slash(description="Check all your Destiny Lines", guild_ids=main.guild_ids)
+    @cog_ext.cog_slash(description="Check all your destiny lines", guild_ids=main.guild_ids)
     async def destinies(self, ctx):
         await ctx.defer()
         query = {'DISNAME': str(ctx.author)}
@@ -983,21 +984,51 @@ class Profile(commands.Cog):
                     icon = ":moneybag:"
                 elif balance >= 50000:
                     icon = ":dollar:"
-                
-                embed_list = []
                 for d in destiny:
                     if not d['COMPLETED']:
-                        embedVar = discord.Embed(title= f"{d['NAME']}", description=textwrap.dedent(f"""\
-                        :sparkles: Defeat **{d['DEFEAT']}** with **{" ".join(d['USE_CARDS'])}**
-                        **Current Progress:** {d['WINS']}/{d['REQUIRED']}
+                        destiny_messages.append(textwrap.dedent(f"""\
+                        :sparkles: **{d["NAME"]}**
+                        Defeat **{d['DEFEAT']}** with **{" ".join(d['USE_CARDS'])}** | **Current Progress:** {d['WINS']}/{d['REQUIRED']}
                         Win :flower_playing_cards: **{d['EARN']}**
-                        """), 
-                        colour=0x7289da)
-                        embedVar.set_thumbnail(url=avatar)
-                        embed_list.append(embedVar)
-                
-                await Paginator(bot=self.bot, ctx=ctx, pages=embed_list, timeout=60).run()
+                        """))
 
+                if not destiny_messages:
+                    await ctx.send("No Destiny Lines available at this time!")
+                    return
+                # Adding to array until divisible by 10
+                while len(destiny_messages) % 10 != 0:
+                    destiny_messages.append("")
+
+                # Check if divisible by 10, then start to split evenly
+                if len(destiny_messages) % 10 == 0:
+                    first_digit = int(str(len(destiny_messages))[:1])
+                    if len(destiny_messages) >= 89:
+                        if first_digit == 1:
+                            first_digit = 10
+                    destinies_broken_up = np.array_split(destiny_messages, first_digit)
+                
+                # If it's not an array greater than 10, show paginationless embed
+                if len(destiny_messages) < 10:
+                    embedVar = discord.Embed(title= f"Destiny Lines\n**Balance**: :coin:{'{:,}'.format(balance)}", description="\n".join(destiny_messages), colour=0x7289da)
+                    embedVar.set_thumbnail(url=avatar)
+                    # embedVar.set_footer(text=f".equippet pet name: Equip Pet\n.viewpet pet name: View Pet Details")
+                    await ctx.send(embed=embedVar)
+
+                embed_list = []
+                for i in range(0, len(destinies_broken_up)):
+                    globals()['embedVar%s' % i] = discord.Embed(title= f":sparkles: Destiny Lines\n**Balance**: {icon}{'{:,}'.format(balance)}", description="\n".join(destinies_broken_up[i]), colour=0x7289da)
+                    globals()['embedVar%s' % i].set_thumbnail(url=avatar)
+                    # globals()['embedVar%s' % i].set_footer(text=f"{total_pets} Total Pets\n.equippet pet name: Equip Pet\n.viewpet pet name: View Pet Details")
+                    embed_list.append(globals()['embedVar%s' % i])
+
+                paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+                paginator.add_reaction('⏮️', "first")
+                paginator.add_reaction('⬅️', "back")
+                paginator.add_reaction('🔐', "lock")
+                paginator.add_reaction('➡️', "next")
+                paginator.add_reaction('⏭️', "last")
+                embeds = embed_list
+                await paginator.run(embeds)
             except Exception as ex:
                 trace = []
                 tb = ex.__traceback__
@@ -1013,7 +1044,7 @@ class Profile(commands.Cog):
                     'message': str(ex),
                     'trace': trace
                 }))
-                await ctx.send("There's an issue with your Destiny Line list. Check with support.", hidden=True)
+                await ctx.send("There's an issue with your Destiny Line list. Check with support.")
                 return
         else:
             newVault = db.createVault({'OWNER': d['DISNAME']})
@@ -1408,6 +1439,8 @@ class Profile(commands.Cog):
         try:
             all_universes = db.queryAllUniverse()
             user = db.queryUser({'DISNAME': str(ctx.author)})
+            completed_tales = user['CROWN_TALES']
+            completed_dungeons = user['DUNGEONS']
             available_universes = []
             riftShopOpen = False
             shopName = ':shopping_cart: Crown Shop'
@@ -1455,17 +1488,16 @@ class Profile(commands.Cog):
             for universe in available_universes:
                 universe_name = universe['TITLE']
                 universe_image = universe['PATH']
-
+                adjusted_prices = price_adjuster(20000, universe_name, completed_tales, completed_dungeons)
                 embedVar = discord.Embed(title= f"{universe_name}", description=textwrap.dedent(f"""
-                *Welcome {ctx.author.mention}! 
+                *Welcome {ctx.author.mention}! {adjusted_prices['MESSAGE']}
                 You have {icon}{'{:,}'.format(balance)} coins!*
                 
-                🎗️ **Title:** Title Purchase for 💵 20,000
-                🦾 **Arm:** Arm Purchase for 💵 50,000
-
-                1️⃣ **T1 Pack:** 1-3 Tier Card for 💵 30,000
-                2️⃣ **T2 Pack:** 3-5 Tier Card for 💰 300,000
-                3️⃣ **T3 Pack:** 5-7 Tier Card for 💸 6,000,000
+                🎗️ **Title:** Title Purchase for 💵 {'{:,}'.format(adjusted_prices['TITLE_PRICE'])}
+                🦾 **Arm:** Arm Purchase for 💵 {'{:,}'.format(adjusted_prices['ARM_PRICE'])}
+                1️⃣ **1-3 Tier Card:** for 💵 {'{:,}'.format(adjusted_prices['C1'])}
+                2️⃣ **3-5 Tier Card:** for 💰 {'{:,}'.format(adjusted_prices['C2'])}
+                3️⃣ **4-7 Tier Card:** for 💸 {'{:,}'.format(adjusted_prices['C3'])}
                 """), colour=0x7289da)
                 embedVar.set_image(url=universe_image)
                 #embedVar.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236723/PCG%20LOGOS%20AND%20RESOURCES/Party_Chat_Shop.png")
@@ -1487,9 +1519,8 @@ class Profile(commands.Cog):
 
             async def custom_function(self, button_ctx):
                 universe = str(button_ctx.origin_message.embeds[0].title)
-                end_transaction = False
                 if button_ctx.custom_id == "title":
-                    price = 20000
+                    price = price_adjuster(20000, universe, completed_tales, completed_dungeons)['TITLE_PRICE']
                     if len(current_titles) >=25:
                         await button_ctx.send("You have max amount of Titles. Transaction cancelled.")
                         self.stop = True
@@ -1507,7 +1538,7 @@ class Profile(commands.Cog):
                     self.stop = True
 
                 elif button_ctx.custom_id == "arm":
-                    price = 50000
+                    price = price_adjuster(50000, universe, completed_tales, completed_dungeons)['ARM_PRICE']
                     if len(current_arms) >=25:
                         await button_ctx.send("You have max amount of Arms. Transaction cancelled.")
                         self.stop = True
@@ -1533,7 +1564,7 @@ class Profile(commands.Cog):
                         self.stop = True 
                 
                 elif button_ctx.custom_id == "t1card":
-                    price = 30000
+                    price = price_adjuster(30000, universe, completed_tales, completed_dungeons)['C1']
                     if len(current_cards) >= 25:
                         await button_ctx.send("You have max amount of Cards. Transaction cancelled.")
                         self.stop = True
@@ -1543,6 +1574,11 @@ class Profile(commands.Cog):
                         await button_ctx.send("Insufficent funds.")
                         self.stop = True
                     list_of_cards = [x for x in db.queryAllCardsBasedOnUniverse({'UNIVERSE': str(universe), 'TIER': {'$in': acceptable}}) if not x['EXCLUSIVE'] and not x['HAS_COLLECTION']]
+                    if not list_of_cards:
+                        await button_ctx.send("There are no cards available for purchase in this range.")
+                        self.stop = True
+                        return
+
                     selection = random.randint(0, round(len(list_of_cards)))
                     card = list_of_cards[selection]
                     card_name = card['NAME']
@@ -1576,7 +1612,7 @@ class Profile(commands.Cog):
                         self.stop = True
 
                 elif button_ctx.custom_id == "t2card":
-                    price = 300000
+                    price = price_adjuster(300000, universe, completed_tales, completed_dungeons)['C2']
                     if len(current_cards) >=25:
                         await button_ctx.send("You have max amount of Cards. Transaction cancelled.")
                         self.stop = True
@@ -1586,7 +1622,12 @@ class Profile(commands.Cog):
                         await button_ctx.send("Insufficent funds.")
                         self.stop = True
                     list_of_cards = [x for x in db.queryAllCardsBasedOnUniverse({'UNIVERSE': str(universe), 'TIER': {'$in': acceptable}}) if not x['EXCLUSIVE'] and not x['HAS_COLLECTION']]
-                    print(list_of_cards)
+                    
+                    if not list_of_cards:
+                        await button_ctx.send("There are no cards available for purchase in this range.")
+                        self.stop = True
+                        return
+
                     selection = random.randint(0, round(len(list_of_cards)))
                     card = list_of_cards[selection]
                     card_name = card['NAME']
@@ -1620,16 +1661,26 @@ class Profile(commands.Cog):
                         self.stop = True
 
                 elif button_ctx.custom_id == "t3card":
-                    price = 6000000
+                    price = price_adjuster(6000000, universe, completed_tales, completed_dungeons)['C3']
                     if len(current_cards) >=25:
                         await button_ctx.send("You have max amount of Cards. Transaction cancelled.")
                         self.stop = True
                         return
-                    acceptable = [3,4,5,6,7]
+                    acceptable = [4,5,6,7]
                     if price > balance:
                         await button_ctx.send("Insufficent funds.")
                         self.stop = True
-                    list_of_cards = [x for x in db.queryAllCardsBasedOnUniverse({'UNIVERSE': str(universe), 'TIER': {'$in': acceptable}}) if not x['EXCLUSIVE'] and not x['HAS_COLLECTION']]
+                    card_list_response = [x for x in db.queryAllCardsBasedOnUniverse({'UNIVERSE': str(universe), 'TIER': {'$in': acceptable}})]
+                    list_of_cards = []
+                    for card in card_list_response:
+                        if card['AVAILABLE'] and not card['EXCLUSIVE'] and not card['HAS_COLLECTION']:
+                            list_of_cards.append(card)
+
+                    if not list_of_cards:
+                        await button_ctx.send("There are no cards available for purchase in this range.")
+                        self.stop = True
+                        return
+
                     selection = random.randint(0, round(len(list_of_cards)))
                     card = list_of_cards[selection]
                     card_name = card['NAME']
@@ -1662,7 +1713,7 @@ class Profile(commands.Cog):
                                     f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.", hidden=True)
                         self.stop = True
 
-            await Paginator(bot=self.bot, disableAfterTimeout=True, ctx=ctx, pages=embed_list, timeout=60, customActionRow=[
+            await Paginator(bot=self.bot, useQuitButton=True, disableAfterTimeout=True, ctx=ctx, pages=embed_list, timeout=60, customActionRow=[
                 custom_action_row,
                 custom_function,
             ]).run()
@@ -1681,6 +1732,42 @@ class Profile(commands.Cog):
                 'message': str(ex),
                 'trace': trace
             }))
+
+def price_adjuster(price, selected_universe, completed_tales, completed_dungeons):
+    new_price = price
+    title_price = 20000
+    arm_price = 50000
+    c1 = 30000
+    c2 = 300000
+    c3 = 6000000
+    message = ""
+    if selected_universe in completed_tales:
+        new_price = price - round(price * .25)
+        title_price = title_price - round(title_price * .25)
+        arm_price = arm_price - round(arm_price * .25)
+        c1 = c1 - round(c1 * .25)
+        c2 = c2 - round(c2 * .25)
+        c3 = c3 - round(c3 * .25)
+        message = "**25% Sale**"
+    if selected_universe in completed_dungeons:
+        new_price = round(price * .50)
+        title_price = round(20000 * .50)
+        arm_price = round(50000 * .50)
+        c1 = round(30000 * .50)
+        c2 = round(300000 * 50)
+        c3 = round(6000000 * .50)
+        message = "**50% Sale**"
+
+    response = {'NEW_PRICE': new_price,
+    'TITLE_PRICE': title_price,
+    'ARM_PRICE': arm_price,
+    'C1': c1,
+    'C2': c2,
+    'C3': c3,
+    'MESSAGE': message
+    }
+    return response
+
 
 
 def setup(bot):
