@@ -6306,6 +6306,58 @@ class CrownUnlimited(commands.Cog):
         embeds = embed_list
         await paginator.run(embeds)
 
+    @cog_ext.cog_slash(description="View Gems", guild_ids=main.guild_ids)
+    async def gems(self, ctx: SlashContext):
+        vault = db.queryVault({'OWNER': str(ctx.author)})
+        current_gems = vault['GEMS']
+        if current_gems:
+            number_of_gems_universes = len(current_gems)
+
+            gem_details = []
+            for gd in current_gems:
+                heart = ""
+                if gd['UNIVERSE_HEART']:
+                    heart = "💟"
+                else:
+                    heart = "💔"
+                gem_details.append(
+                    f"🌍 **{gd['UNIVERSE']}**\n💎 {str(gd['GEMS'])}\n{heart}\n")
+
+            # Adding to array until divisible by 10
+            while len(gem_details) % 10 != 0:
+                gem_details.append("")
+            # Check if divisible by 10, then start to split evenly
+
+            if len(gem_details) % 10 == 0:
+                first_digit = int(str(len(gem_details))[:1])
+                if len(gem_details) >= 89:
+                    if first_digit == 1:
+                        first_digit = 10
+                gems_broken_up = np.array_split(gem_details, first_digit)
+
+            # If it's not an array greater than 10, show paginationless embed
+            if len(gem_details) < 10:
+                embedVar = discord.Embed(title=f"Gems", description="\n".join(gem_details),
+                                        colour=0x7289da)
+                await ctx.send(embed=embedVar)
+
+            embed_list = []
+            for i in range(0, len(gems_broken_up)):
+                globals()['embedVar%s' % i] = discord.Embed(title=f"Gems",
+                                                            description="\n".join(gems_broken_up[i]), colour=0x7289da)
+                embed_list.append(globals()['embedVar%s' % i])
+
+            paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+            paginator.add_reaction('⏮️', "first")
+            paginator.add_reaction('⬅️', "back")
+            paginator.add_reaction('🔐', "lock")
+            paginator.add_reaction('➡️', "next")
+            paginator.add_reaction('⏭️', "last")
+            embeds = embed_list
+            await paginator.run(embeds)
+        else:
+            await ctx.send("You currently own no 💎.")
+
     @cog_ext.cog_slash(description="View all Summons of a Universe you unlocked", guild_ids=main.guild_ids)
     async def summonlist(self, ctx: SlashContext, universe: str):
         universe_data = db.queryUniverse({'TITLE': {"$regex": universe, "$options": "i"}})
