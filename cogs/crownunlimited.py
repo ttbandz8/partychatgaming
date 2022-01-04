@@ -268,7 +268,7 @@ class CrownUnlimited(commands.Cog):
 
             setchannel = discord.utils.get(channel_list, name=server_channel)
             await setchannel.send(f"{message.author.mention}")  
-            await setchannel.send(embed=embedVar, file=card_file, components=[random_battle_buttons_action_row])
+            msg = await setchannel.send(embed=embedVar, file=card_file, components=[random_battle_buttons_action_row])
 
             def check(button_ctx):
                 return button_ctx.author == message.author
@@ -6306,6 +6306,58 @@ class CrownUnlimited(commands.Cog):
         embeds = embed_list
         await paginator.run(embeds)
 
+    @cog_ext.cog_slash(description="View Gems", guild_ids=main.guild_ids)
+    async def gems(self, ctx: SlashContext):
+        vault = db.queryVault({'OWNER': str(ctx.author)})
+        current_gems = vault['GEMS']
+        if current_gems:
+            number_of_gems_universes = len(current_gems)
+
+            gem_details = []
+            for gd in current_gems:
+                heart = ""
+                if gd['UNIVERSE_HEART']:
+                    heart = "💟"
+                else:
+                    heart = "💔"
+                gem_details.append(
+                    f"🌍 **{gd['UNIVERSE']}**\n💎 {str(gd['GEMS'])}\n{heart}\n")
+
+            # Adding to array until divisible by 10
+            while len(gem_details) % 10 != 0:
+                gem_details.append("")
+            # Check if divisible by 10, then start to split evenly
+
+            if len(gem_details) % 10 == 0:
+                first_digit = int(str(len(gem_details))[:1])
+                if len(gem_details) >= 89:
+                    if first_digit == 1:
+                        first_digit = 10
+                gems_broken_up = np.array_split(gem_details, first_digit)
+
+            # If it's not an array greater than 10, show paginationless embed
+            if len(gem_details) < 10:
+                embedVar = discord.Embed(title=f"Gems", description="\n".join(gem_details),
+                                        colour=0x7289da)
+                await ctx.send(embed=embedVar)
+
+            embed_list = []
+            for i in range(0, len(gems_broken_up)):
+                globals()['embedVar%s' % i] = discord.Embed(title=f"Gems",
+                                                            description="\n".join(gems_broken_up[i]), colour=0x7289da)
+                embed_list.append(globals()['embedVar%s' % i])
+
+            paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
+            paginator.add_reaction('⏮️', "first")
+            paginator.add_reaction('⬅️', "back")
+            paginator.add_reaction('🔐', "lock")
+            paginator.add_reaction('➡️', "next")
+            paginator.add_reaction('⏭️', "last")
+            embeds = embed_list
+            await paginator.run(embeds)
+        else:
+            await ctx.send("You currently own no 💎.")
+
     @cog_ext.cog_slash(description="View all Summons of a Universe you unlocked", guild_ids=main.guild_ids)
     async def summonlist(self, ctx: SlashContext, universe: str):
         universe_data = db.queryUniverse({'TITLE': {"$regex": universe, "$options": "i"}})
@@ -6791,21 +6843,27 @@ async def summonlevel(pet, player):
         return
 
 
-async def cardlevel(card: str, player: str, mode: str):
+async def cardlevel(card: str, player: str, mode: str, universe: str):
     vault = db.queryVault({'OWNER': str(player)})
     cardinfo = {}
     for x in vault['CARD_LEVELS']:
         if x['CARD'] == str(card):
             cardinfo = x
+    
+    has_universe_heart = False
+    for gems in vault['GEMS']:
+        if gems['UNIVERSE'] == universe and gems['UNIVERSE_HEART']:
+            has_universe_heart = True
+
 
     lvl = cardinfo['LVL']
     lvl_req = 150
     exp = cardinfo['EXP']
     exp_gain = 0
     if mode == "Dungeon":
-        exp_gain = 10
+        exp_gain = 30
     if mode == "Tales":
-        exp_gain = 5
+        exp_gain = 15
     if mode == "Purchase":
         exp_gain = 150
 
@@ -6814,11 +6872,35 @@ async def cardlevel(card: str, player: str, mode: str):
     atk_def_buff = 0
     ap_buff = 0
 
-    if lvl < 500:
+    if lvl < 200:
         # Experience Code
         if exp < (lvl_req - 1):
             query = {'OWNER': str(player)}
             update_query = {'$inc': {'CARD_LEVELS.$[type].' + "EXP": exp_gain}}
+            filter_query = [{'type.' + "CARD": str(card)}]
+            response = db.updateVault(query, update_query, filter_query)
+
+        # Level Up Code
+        if exp >= (lvl_req - exp_gain):
+            if (lvl + 1) % 2 == 0:
+                atk_def_buff = 1
+            if (lvl + 1) % 3 == 0:
+                ap_buff = 1
+            if (lvl + 1) % 20 == 0:
+                hlt_buff = 25
+            query = {'OWNER': str(player)}
+            update_query = {'$set': {'CARD_LEVELS.$[type].' + "EXP": 0},
+                            '$inc': {'CARD_LEVELS.$[type].' + "LVL": 1, 'CARD_LEVELS.$[type].' + "ATK": atk_def_buff,
+                                     'CARD_LEVELS.$[type].' + "DEF": atk_def_buff,
+                                     'CARD_LEVELS.$[type].' + "AP": ap_buff, 'CARD_LEVELS.$[type].' + "HLT": hlt_buff}}
+            filter_query = [{'type.' + "CARD": str(card)}]
+            response = db.updateVault(query, update_query, filter_query)
+
+    if lvl < 500 and lvl > 200 and has_universe_heart:
+        # Experience Code
+        if exp < (lvl_req - 1):
+            query = {'OWNER': str(player)}
+            update_query = {'$inc': {'CARD_LEVELS.$[type].' + "EXP": 35}}
             filter_query = [{'type.' + "CARD": str(card)}]
             response = db.updateVault(query, update_query, filter_query)
 
@@ -7812,7 +7894,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
         oarm_name = oarm['ARM']
 
         vault = db.queryVault({'OWNER': str(o_user['DISNAME']), 'PETS.NAME': o_user['PET']})
-        update_durability_message = update_arm_durability(self, vault, oarm)
+        update_durability_message = update_arm_durability(self, vault, oarm, universe)
         if update_durability_message['MESSAGE']:
             await ctx.author.send(f"{update_durability_message['MESSAGE']}")
         opet = {}
@@ -7908,7 +7990,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                     if c_user['PET'] == pet['NAME']:
                         cpet = pet
                 carm = db.queryArm({'ARM': c_user['ARM']})
-                cupdate_durability_message = update_arm_durability(self, cvault, carm)
+                cupdate_durability_message = update_arm_durability(self, cvault, carm, universe)
                 if cupdate_durability_message['MESSAGE']:
                     await ctx.send(f"{cupdate_durability_message['MESSAGE']}")
 
@@ -7995,7 +8077,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             tarm_name = tarm['ARM']
 
             tvault = db.queryVault({'OWNER': str(t_user['DISNAME']), 'PETS.NAME': t_user['PET']})
-            tupdate_durability_message = update_arm_durability(self, tvault, tarm)
+            tupdate_durability_message = update_arm_durability(self, tvault, tarm, universe)
             if tupdate_durability_message['MESSAGE']:
                 await ctx.send(f"{tupdate_durability_message['MESSAGE']}")
 
@@ -20204,7 +20286,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                             cfambank = await blessfamily(15000, cfam)
                             cteambank = await blessteam(15000, cteam)
                             cpetlogger = await summonlevel(cpet_name, user2)
-                            ccardlogger = await cardlevel(c_card, user2, "Dungeon")
+                            ccardlogger = await cardlevel(c_card, user2, "Dungeon", selected_universe)
                             await bless(50, str(user2))
                             embedVar = discord.Embed(
                                 title=f":zap: **{o_card}** and **{c_card}**defeated the {t_universe} Boss {t_card}!",
@@ -20220,7 +20302,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         ofambank = await blessfamily(15000, ofam)
                         oteambank = await blessteam(15000, oteam)
                         petlogger = await summonlevel(opet_name, ouser)
-                        cardlogger = await cardlevel(o_card, ouser, "Dungeon")
+                        cardlogger = await cardlevel(o_card, ouser, "Dungeon", selected_universe)
 
                         if crestsearch:
                             await blessguild(25000, oguild['GNAME'])
@@ -20287,7 +20369,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         questlogger = await quest(ouser, t_card, tale_or_dungeon_only)
                         destinylogger = await destiny(ouser, t_card, tale_or_dungeon_only)
                         petlogger = await summonlevel(opet_name, ouser)
-                        cardlogger = await cardlevel(o_card, ouser, tale_or_dungeon_only)
+                        cardlogger = await cardlevel(o_card, ouser, tale_or_dungeon_only, selected_universe)
                         if questlogger:
                             await private_channel.send(questlogger)
                         if destinylogger:
@@ -20407,12 +20489,30 @@ async def save_spot(self, ctx, universe, mode, currentopponent):
 
         
 
-def update_arm_durability(self, vault, arm):
+def update_arm_durability(self, vault, arm, universe):
     try:
         for a in vault['ARMS']:
             if a['ARM'] == str(arm['ARM']):
                 current_durability = a['DUR']
                 if current_durability == 1:
+                    selected_arm = arm['ARM']
+                    arm_data = db.queryArm({'ARM': selected_arm})
+                    arm_name = arm_data['ARM']
+                    selected_universe = arm_data['UNIVERSE']
+                    dismantle_amount = round(arm_data['PRICE'] * .03)
+                    current_gems = []
+                    for gems in vault['GEMS']:
+                        current_gems.append(gems['UNIVERSE'])
+
+                    if selected_universe in current_gems:
+                        query = {'OWNER': str(vault['OWNER'])}
+                        update_query = {'$inc': {'GEMS.$[type].' + "GEMS": dismantle_amount}}
+                        filter_query = [{'type.' + "UNIVERSE": selected_universe}]
+                        response = db.updateVault(query, update_query, filter_query)
+                    else:
+                        response = db.updateVaultNoFilter({'OWNER': str(vault['OWNER'])},{'$addToSet':{'GEMS': {'UNIVERSE': selected_universe, 'GEMS': dismantle_amount, 'UNIVERSE_HEART': False}}})
+
+
                     query = {'OWNER': str(vault['OWNER'])}
                     update_query = {'$pull': {'ARMS': {'ARM': str(arm['ARM'])}}}
                     resp = db.updateVaultNoFilter(query, update_query)
@@ -20420,7 +20520,7 @@ def update_arm_durability(self, vault, arm):
                     user_query = {'DISNAME': str(vault['OWNER'])}
                     user_update_query = {'$set': {'ARM': 'Stock'}}
                     user_resp = db.updateUserNoFilter(user_query, user_update_query)
-                    return {"MESSAGE": f"**{arm['ARM']}** has broken after losing all ⚒️ durability. Your arm will be **Stock** after your next match."}
+                    return {"MESSAGE": f"**{arm['ARM']}** has been dismantled after losing all ⚒️ durability, you earn 💎 {str(dismantle_amount)}. Your arm will be **Stock** after your next match."}
                 else:
                     query = {'OWNER': str(vault['OWNER'])}
                     update_query = {'$inc': {'ARMS.$[type].' + 'DUR': -1}}
@@ -20865,7 +20965,7 @@ async def drops(player, universe, matchcount):
                         card_owned = True
 
                 if card_owned:
-                    await cardlevel(cards[rand_card], player, "Tales")
+                    await cardlevel(cards[rand_card], player, "Tales", selected_universe)
                     response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'CARDS': str(cards[rand_card])}})
                     message = ""
                     await bless(150, player)
@@ -20932,7 +21032,7 @@ async def specific_drops(player, card, universe):
                 card_owned = True
 
         if card_owned:
-            await cardlevel(card, player, "Tales")
+            await cardlevel(card, player, "Tales", universe)
             message = ""
             await bless(150, player)
             return f"You earned EXP for _Card:_ **{card}** + :coin: 150 in addition to the card bounty!!"
@@ -21086,7 +21186,7 @@ async def dungeondrops(player, universe, matchcount):
                     card_owned = True
 
             if card_owned:
-                await cardlevel(cards[rand_card], player, "Dungeon")
+                await cardlevel(cards[rand_card], player, "Dungeon", universe)
                 response = db.updateVaultNoFilter(vault_query, {'$addToSet': {'CARDS': str(cards[rand_card])}})
                 message = ""
                 await bless(2500, player)
@@ -21271,7 +21371,7 @@ async def bossdrops(player, universe):
                     card_owned = True
 
             if card_owned:
-                await cardlevel(str(boss_card), player, "Dungeon")
+                await cardlevel(str(boss_card), player, "Dungeon", universe)
                 message = ""
                 await bless(200, player)
             else:
