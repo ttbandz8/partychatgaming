@@ -81,7 +81,7 @@ class Titles(commands.Cog):
             if exclusive:
                 price_message = "_Priceless_"
             else:
-                price_message = f":coin: {'{:,}'.format(title_price)}"
+                price_message = f"_Shop & Drop_"
             typetext = " "
             if o_title_passive_type == 'ATK':
                 typetext = "Attack"

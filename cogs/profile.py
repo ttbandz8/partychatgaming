@@ -365,7 +365,10 @@ class Profile(commands.Cog):
                 for card in cards_list:
                     index = cards_list.index(card)
                     resp = db.queryCard({"NAME": str(card)})
+                    card_tier = 0
                     lvl = ""
+                    tier = ""
+                    card_tier = f":mahjong: {resp['TIER']}"
                     card_available = resp['AVAILABLE']
                     card_exclusive = resp['EXCLUSIVE']
                     card_collection = resp['HAS_COLLECTION']
@@ -380,7 +383,6 @@ class Profile(commands.Cog):
                         else:
                             icon = ":japanese_ogre:"
                     card_lvl = 0
-                    card_tier = 0
                     card_exp = 0
                     card_lvl_attack_buff = 0
                     card_lvl_defense_buff = 0
@@ -394,7 +396,6 @@ class Profile(commands.Cog):
                                 licon ="⚜️"
                             lvl = f"{licon} **{cl['LVL']}**"
                             card_lvl = cl['LVL']
-                            card_tier = f"🀄**{cl['TIER']}**"
                             card_exp = cl['EXP']
                             card_lvl_ap_buff = cl['AP']
                             card_lvl_attack_buff = cl['ATK']
@@ -1694,7 +1695,7 @@ class Profile(commands.Cog):
             for universe in available_universes:
                 universe_name = universe['TITLE']
                 universe_image = universe['PATH']
-                adjusted_prices = price_adjuster(20000, universe_name, completed_tales, completed_dungeons)
+                adjusted_prices = price_adjuster(15000, universe_name, completed_tales, completed_dungeons)
                 embedVar = discord.Embed(title= f"{universe_name}", description=textwrap.dedent(f"""
                 *Welcome {ctx.author.mention}! {adjusted_prices['MESSAGE']}
                 You have {icon}{'{:,}'.format(balance)} coins!*
@@ -1726,14 +1727,14 @@ class Profile(commands.Cog):
             async def custom_function(self, button_ctx):
                 universe = str(button_ctx.origin_message.embeds[0].title)
                 if button_ctx.custom_id == "title":
-                    price = price_adjuster(20000, universe, completed_tales, completed_dungeons)['TITLE_PRICE']
+                    price = price_adjuster(15000, universe, completed_tales, completed_dungeons)['TITLE_PRICE']
                     if len(current_titles) >=25:
                         await button_ctx.send("You have max amount of Titles. Transaction cancelled.")
                         self.stop = True
                     if price > balance:
                         await button_ctx.send("Insufficent funds.")
                         self.stop = True
-                    list_of_titles =[x for x in db.queryAllTitlesBasedOnUniverses({'UNIVERSE': str(universe)}) if not x['EXCLUSIVE']]
+                    list_of_titles =[x for x in db.queryAllTitlesBasedOnUniverses({'UNIVERSE': str(universe)}) if not x['EXCLUSIVE'] and x['AVAILABLE']]
                     selection = random.randint(1,len(list(list_of_titles)))
                     
                     title = list_of_titles[selection]
@@ -1744,14 +1745,14 @@ class Profile(commands.Cog):
                     self.stop = True
 
                 elif button_ctx.custom_id == "arm":
-                    price = price_adjuster(50000, universe, completed_tales, completed_dungeons)['ARM_PRICE']
+                    price = price_adjuster(25000, universe, completed_tales, completed_dungeons)['ARM_PRICE']
                     if len(current_arms) >=25:
                         await button_ctx.send("You have max amount of Arms. Transaction cancelled.")
                         self.stop = True
                     if price > balance:
                         await button_ctx.send("Insufficent funds.")
                         self.stop = True
-                    list_of_arms = [x for x in db.queryAllArmsBasedOnUniverses({'UNIVERSE': str(universe)}) if not x['EXCLUSIVE']]
+                    list_of_arms = [x for x in db.queryAllArmsBasedOnUniverses({'UNIVERSE': str(universe)}) if not x['EXCLUSIVE'] and x['AVAILABLE']]
                     selection = random.randint(1,len(list(list_of_arms)))
 
                     arm = list_of_arms[selection]['ARM']
@@ -1941,8 +1942,8 @@ class Profile(commands.Cog):
 
 def price_adjuster(price, selected_universe, completed_tales, completed_dungeons):
     new_price = price
-    title_price = 20000
-    arm_price = 50000
+    title_price = 15000
+    arm_price = 25000
     c1 = 30000
     c2 = 300000
     c3 = 6000000
@@ -1957,8 +1958,8 @@ def price_adjuster(price, selected_universe, completed_tales, completed_dungeons
         message = "**25% Sale**"
     if selected_universe in completed_dungeons:
         new_price = round(price * .50)
-        title_price = round(20000 * .50)
-        arm_price = round(50000 * .50)
+        title_price = round(15000 * .50)
+        arm_price = round(25000 * .50)
         c1 = round(30000 * .50)
         c2 = round(300000 * 50)
         c3 = round(6000000 * .50)
