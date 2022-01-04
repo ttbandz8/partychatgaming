@@ -344,6 +344,7 @@ class VAULT():
         {'CARD': 'Garen', 'LVL': 0, 'TIER': 1, 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}])
     QUESTS: list[str] = field(default_factory=lambda: [])
     DESTINY: list[str] = field(default_factory=lambda: [])
+    GEMS: list[str] = field(default_factory=lambda: [])
 
 
 @dataclass(frozen=True, order=True)
