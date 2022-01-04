@@ -2386,7 +2386,7 @@ class CrownUnlimited(commands.Cog):
                                                 await button_ctx.send(embed=embedVar)
                                                 
                                             elif tparry_count==1:
-                                                embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{o_card} breaks the **Parry**", colour=0xe91e63)
+                                                embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{o_card} takes {tparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                 t_health = t_health
                                                 tparry_damage = round(dmg['DMG'] / 2)
                                                 t_health = t_health - tparry_damage
@@ -3219,7 +3219,7 @@ class CrownUnlimited(commands.Cog):
                                                 await button_ctx.send(embed=embedVar)
                                                 
                                             elif oparry_count==1:
-                                                embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} breaks the **Parry**", colour=0xe91e63)
+                                                embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} takes {oparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                 oparry_damage = round(dmg['DMG'] / 2)
                                                 o_health = o_health - oparry_damage
                                                 t_health = t_health - oparry_damage
@@ -5136,7 +5136,7 @@ class CrownUnlimited(commands.Cog):
                                                 await ctx.send(embed=embedVar)
                                                 
                                             elif tparry_count==1:
-                                                embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{o_card} breaks the **Parry**", colour=0xe91e63)
+                                                embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{o_card} takes {tparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                 t_health = t_health
                                                 tparry_damage = round(dmg['DMG'] / 2)
                                                 t_health = t_health - tparry_damage
@@ -5831,7 +5831,7 @@ class CrownUnlimited(commands.Cog):
                                             await ctx.send(embed=embedVar)
                                             
                                         elif oparry_count==1:
-                                            embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} breaks the **Parry**", colour=0xe91e63)
+                                            embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} takes {oparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
                                             oparry_damage = round(dmg['DMG'] / 2)
                                             o_health = o_health - oparry_damage
                                             t_health = t_health - oparry_damage
@@ -7191,9 +7191,14 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, stamina, en
             if defensepower <= 0:
                 defensepower = 1
 
-            attackpower = atk + ap
+            attackpower = (atk - op_defense) + ap
+            if attackpower<=0:
+                attackpower =ap
 
             abilitypower = round(attackpower / defensepower)
+            print(attackpower)
+            print(defensepower)
+            print(abilitypower)
             if abilitypower <= 0:
                 abilitypower = 25
 
@@ -11545,7 +11550,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     await button_ctx.send(embed=embedVar)
                                                     
                                                 elif tparry_count==1:
-                                                    embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{o_card} breaks the **Parry**", colour=0xe91e63)
+                                                    embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{o_card} takes {tparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                     t_health = t_health
                                                     tparry_damage = round(dmg['DMG'] / 2)
                                                     t_health = t_health - tparry_damage
@@ -12453,7 +12458,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         await button_ctx.send(embed=embedVar)
                                                         
                                                     elif oparry_count==1:
-                                                        embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} breaks the **Parry**", colour=0xe91e63)
+                                                        embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} takes {oparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                         oparry_damage = round(dmg['DMG'] / 2)
                                                         o_health = o_health - oparry_damage
                                                         t_health = t_health - oparry_damage
@@ -13108,7 +13113,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     await button_ctx.send(embed=embedVar)
                                                     
                                                 elif oparry_count==1:
-                                                    embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} breaks the **Parry**", colour=0xe91e63)
+                                                    embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} takes {oparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                     oparry_damage = round(dmg['DMG'] / 2)
                                                     o_health = o_health - oparry_damage
                                                     t_health = t_health - oparry_damage
@@ -14973,7 +14978,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         await button_ctx.send(embed=embedVar)
                                                         
                                                     elif tparry_count==1:
-                                                        embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{o_card} breaks the **Parry**", colour=0xe91e63)
+                                                        embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{o_card} takes {tparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                         t_health = t_health
                                                         tparry_damage = round(dmg['DMG'] / 2)
                                                         t_health = t_health - tparry_damage
@@ -16247,7 +16252,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         await private_channel.send(embed=embedVar)
                                                         
                                                     elif cparry_count==1:
-                                                        embedVar = discord.Embed(title=f"{c_card.upper()} **Parry** Penetrated!!", description=f"{t_card} breaks the **Parry**", colour=0xe91e63)
+                                                        embedVar = discord.Embed(title=f"{c_card.upper()} **Parry** Penetrated!!", description=f"{t_card} takes {cparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                         c_health = c_health
                                                         cparry_damage = round(dmg['DMG'] / 2)
                                                         c_health = c_health - cparry_damage
@@ -16454,7 +16459,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         await button_ctx.send(embed=embedVar)
                                                         
                                                     elif oparry_count==1:
-                                                        embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} breaks the **Parry**", colour=0xe91e63)
+                                                        embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} takes {oparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                         oparry_damage = round(dmg['DMG'] / 2)
                                                         o_health = o_health - oparry_damage
                                                         t_health = t_health - oparry_damage
@@ -16665,7 +16670,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     await private_channel.send(embed=embedVar)
                                                     
                                                 elif oparry_count==1:
-                                                    embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} breaks the **Parry**", colour=0xe91e63)
+                                                    embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} takes {oparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                     oparry_damage = round(dmg['DMG'] / 2)
                                                     o_health = o_health - oparry_damage
                                                     t_health = t_health - oparry_damage
@@ -17760,7 +17765,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         await button_ctx.send(embed=embedVar)
                                                         
                                                     elif tparry_count==1:
-                                                        embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{c_card} breaks the **Parry**", colour=0xe91e63)
+                                                        embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{c_card} takes {tparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                         t_health = t_health
                                                         tparry_damage = round(dmg['DMG'] / 2)
                                                         t_health = t_health - tparry_damage
@@ -18623,7 +18628,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             await button_ctx.send(embed=embedVar)
                                                             
                                                         elif tparry_count==1:
-                                                            embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{c_card} breaks the **Parry**", colour=0xe91e63)
+                                                            embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{c_card} takes {tparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                             t_health = t_health
                                                             tparry_damage = round(dmg['DMG'] / 2)
                                                             t_health = t_health - tparry_damage
@@ -19674,7 +19679,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         await button_ctx.send(embed=embedVar)
                                                         
                                                     elif oparry_count==1:
-                                                        embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} breaks the **Parry**", colour=0xe91e63)
+                                                        embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} takes {oparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                         oparry_damage = round(dmg['DMG'] / 2)
                                                         o_health = o_health - oparry_damage
                                                         t_health = t_health - oparry_damage
@@ -19879,7 +19884,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         await button_ctx.send(embed=embedVar)
                                                         
                                                     elif cparry_count==1:
-                                                        embedVar = discord.Embed(title=f"{c_card.upper()} **Parry** Penetrated!!", description=f"{t_card} breaks the **Parry**", colour=0xe91e63)
+                                                        embedVar = discord.Embed(title=f"{c_card.upper()} **Parry** Penetrated!!", description=f"{t_card} takes {cparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                         c_health = c_health
                                                         cparry_damage = round(dmg['DMG'] / 2)
                                                         c_health = c_health - cparry_damage
