@@ -1123,7 +1123,7 @@ class CrownUnlimited(commands.Cog):
                     t_defense = tempattack
                 elif o_card_passive_type == 'BLINK':
                     o_stamina = o_stamina - o_card_passive
-                    t_stamina = t_stamina + o_card_passive - 10
+                    t_stamina = t_stamina + o_card_passive
                 elif o_card_passive_type == 'SLOW':
                     tempstam = t_stamina + o_card_passive
                     o_stamina = o_stamina - (2 * o_card_passive)
@@ -1417,7 +1417,7 @@ class CrownUnlimited(commands.Cog):
                     o_defense = tempattack
                 elif t_card_passive_type == 'BLINK':
                     t_stamina = t_stamina - t_card_passive
-                    o_stamina = o_stamina + t_card_passive - 10
+                    o_stamina = o_stamina + t_card_passive
                 elif t_card_passive_type == 'SLOW':
                     tempstam = o_stamina + t_card_passive
                     t_stamina = t_stamina - (2 * t_card_passive)
@@ -2164,7 +2164,7 @@ class CrownUnlimited(commands.Cog):
                                             t_defense = tempattack
                                         elif opet_type == 'BLINK':
                                             o_stamina = round(o_stamina - dmg['DMG'])
-                                            t_stamina = round(t_stamina + dmg['DMG'] - 10)
+                                            t_stamina = round(t_stamina + dmg['DMG'])
                                         elif opet_type == 'SLOW':
                                             tempstam = round(t_stamina + dmg['DMG'])
                                             o_stamina = round(o_stamina - dmg['DMG'])
@@ -2281,7 +2281,7 @@ class CrownUnlimited(commands.Cog):
                                             t_defense = tempattack
                                         elif enh_type == 'BLINK':
                                             o_stamina = round(o_stamina - dmg['DMG'])
-                                            t_stamina = round(t_stamina + dmg['DMG'] - 10)
+                                            t_stamina = round(t_stamina + dmg['DMG'])
                                         elif enh_type == 'SLOW':
                                             tempstam = round(t_stamina + dmg['DMG'])
                                             o_stamina = round(o_stamina - dmg['DMG'])
@@ -3018,7 +3018,7 @@ class CrownUnlimited(commands.Cog):
                                             o_defense = tempattack
                                         elif tpet_type == 'BLINK':
                                             t_stamina = round(t_stamina - dmg['DMG'])
-                                            o_stamina = round(o_stamina + dmg['DMG'] - 10)
+                                            o_stamina = round(o_stamina + dmg['DMG'])
                                         elif tpet_type == 'SLOW':
                                             tempstam = round(o_stamina + dmg['DMG'])
                                             t_stamina = round(t_stamina - dmg['DMG'])
@@ -3120,7 +3120,7 @@ class CrownUnlimited(commands.Cog):
                                             o_defense = tempattack
                                         elif enh_type == 'BLINK':
                                             t_stamina = round(t_stamina - dmg['DMG'])
-                                            o_stamina = round(o_stamina + dmg['DMG'] - 10)
+                                            o_stamina = round(o_stamina + dmg['DMG'])
                                         elif enh_type == 'SLOW':
                                             tempstam = round(o_stamina + dmg['DMG'])
                                             t_stamina = round(t_stamina - dmg['DMG'])
@@ -3822,7 +3822,7 @@ class CrownUnlimited(commands.Cog):
                 t_defense = tempattack
             elif o_card_passive_type == 'BLINK':
                 o_stamina = o_stamina - o_card_passive
-                t_stamina = t_stamina + o_card_passive - 10
+                t_stamina = t_stamina + o_card_passive
             elif o_card_passive_type == 'SLOW':
                 tempstam = t_stamina + o_card_passive
                 o_stamina = o_stamina - (2 * o_card_passive)
@@ -4037,7 +4037,7 @@ class CrownUnlimited(commands.Cog):
                 o_defense = tempattack
             elif t_card_passive_type == 'BLINK':
                 t_stamina = t_stamina - t_card_passive
-                o_stamina = o_stamina + t_card_passive - 10
+                o_stamina = o_stamina + t_card_passive
             elif t_card_passive_type == 'SLOW':
                 tempstam = o_stamina + t_card_passive
                 t_stamina = t_stamina - (2 * t_card_passive)
@@ -5032,7 +5032,7 @@ class CrownUnlimited(commands.Cog):
                                             t_defense = tempattack
                                         elif enh_type == 'BLINK':
                                             o_stamina = round(o_stamina - dmg['DMG'])
-                                            t_stamina = round(t_stamina + dmg['DMG'] - 10)
+                                            t_stamina = round(t_stamina + dmg['DMG'])
                                         elif enh_type == 'SLOW':
                                             tempstam = round(t_stamina + dmg['DMG'])
                                             o_stamina = round(o_stamina - dmg['DMG'])
@@ -5731,7 +5731,7 @@ class CrownUnlimited(commands.Cog):
                                         o_defense = tempattack
                                     elif enh_type == 'BLINK':
                                         t_stamina = round(t_stamina - dmg['DMG'])
-                                        o_stamina = round(o_stamina + dmg['DMG'] - 10)
+                                        o_stamina = round(o_stamina + dmg['DMG'])
                                     elif enh_type == 'SLOW':
                                         tempstam = round(o_stamina + dmg['DMG'])
                                         t_stamina = round(t_stamina - dmg['DMG'])
@@ -8352,7 +8352,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 t_defense = tempattack
             elif c_card_passive_type == 'BLINK':
                 c_stamina = c_stamina - c_card_passive
-                t_stamina = t_stamina + c_card_passive - 10
+                t_stamina = t_stamina + c_card_passive
             elif c_card_passive_type == 'SLOW':
                 tempstam = t_stamina + o_card_passive
                 c_stamina = c_stamina - (2 * c_card_passive)
@@ -8602,7 +8602,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             t_defense = tempattack
         elif o_card_passive_type == 'BLINK':
             o_stamina = o_stamina - o_card_passive
-            t_stamina = t_stamina + o_card_passive - 10
+            t_stamina = t_stamina + o_card_passive
         elif o_card_passive_type == 'SLOW':
             tempstam = t_stamina + o_card_passive
             o_stamina = o_stamina - (2 * o_card_passive)
@@ -8854,7 +8854,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             o_defense = tempattack
         elif t_card_passive_type == 'BLINK':
             t_stamina = t_stamina - t_card_passive
-            o_stamina = o_stamina + t_card_passive - 10
+            o_stamina = o_stamina + t_card_passive
         elif t_card_passive_type == 'SLOW':
             tempstam = o_stamina + t_card_passive
             t_stamina = t_stamina - (2 * t_card_passive)
@@ -11388,7 +11388,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 t_defense = tempattack
                                             elif opet_type == 'BLINK':
                                                 o_stamina = round(o_stamina - dmg['DMG'])
-                                                t_stamina = round(t_stamina + dmg['DMG'] - 10)
+                                                t_stamina = round(t_stamina + dmg['DMG'])
                                             elif opet_type == 'SLOW':
                                                 tempstam = round(t_stamina + dmg['DMG'])
                                                 o_stamina = round(o_stamina - dmg['DMG'])
@@ -11527,7 +11527,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 t_defense = tempattack
                                             elif enh_type == 'BLINK':
                                                 o_stamina = round(o_stamina - dmg['DMG'])
-                                                t_stamina = round(t_stamina + dmg['DMG'] - 10)
+                                                t_stamina = round(t_stamina + dmg['DMG'])
                                             elif enh_type == 'SLOW':
                                                 tempstam = round(t_stamina + dmg['DMG'])
                                                 o_stamina = round(o_stamina - dmg['DMG'])
@@ -12305,7 +12305,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     o_defense = tempattack
                                                 elif tpet_type == 'BLINK':
                                                     t_stamina = round(t_stamina - dmg['DMG'])
-                                                    o_stamina = round(o_stamina + dmg['DMG'] - 10)
+                                                    o_stamina = round(o_stamina + dmg['DMG'])
                                                 elif tpet_type == 'SLOW':
                                                     tempstam = round(o_stamina + dmg['DMG'])
                                                     t_stamina = round(t_stamina - dmg['DMG'])
@@ -12439,7 +12439,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     o_defense = tempattack
                                                 elif enh_type == 'BLINK':
                                                     t_stamina = round(t_stamina - dmg['DMG'])
-                                                    o_stamina = round(o_stamina + dmg['DMG'] - 10)
+                                                    o_stamina = round(o_stamina + dmg['DMG'])
                                                 elif enh_type == 'SLOW':
                                                     tempstam = round(o_stamina + dmg['DMG'])
                                                     t_stamina = round(t_stamina - dmg['DMG'])
@@ -12992,7 +12992,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 o_defense = tempattack
                                             elif tpet_type == 'BLINK':
                                                 t_stamina = round(t_stamina - dmg['DMG'])
-                                                o_stamina = round(o_stamina + dmg['DMG'] - 10)
+                                                o_stamina = round(o_stamina + dmg['DMG'])
                                             elif tpet_type == 'SLOW':
                                                 tempstam = round(o_stamina + dmg['DMG'])
                                                 t_stamina = round(t_stamina - dmg['DMG'])
@@ -13094,7 +13094,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 o_defense = tempattack
                                             elif enh_type == 'BLINK':
                                                 t_stamina = round(t_stamina - dmg['DMG'])
-                                                o_stamina = round(o_stamina + dmg['DMG'] - 10)
+                                                o_stamina = round(o_stamina + dmg['DMG'])
                                             elif enh_type == 'SLOW':
                                                 tempstam = round(o_stamina + dmg['DMG'])
                                                 t_stamina = round(t_stamina - dmg['DMG'])
@@ -13860,7 +13860,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 t_defense = tempattack
                                             elif opet_type == 'BLINK':
                                                 o_stamina = round(o_stamina - dmg['DMG'])
-                                                t_stamina = round(t_stamina + dmg['DMG'] - 10)
+                                                t_stamina = round(t_stamina + dmg['DMG'])
                                             elif opet_type == 'SLOW':
                                                 tempstam = round(t_stamina + dmg['DMG'])
                                                 o_stamina = round(o_stamina - dmg['DMG'])
@@ -13971,7 +13971,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 t_defense = tempattack
                                             elif enh_type == 'BLINK':
                                                 o_stamina = round(o_stamina - dmg['DMG'])
-                                                t_stamina = round(t_stamina + dmg['DMG'] - 10)
+                                                t_stamina = round(t_stamina + dmg['DMG'])
                                             elif enh_type == 'SLOW':
                                                 tempstam = round(t_stamina + dmg['DMG'])
                                                 o_stamina = round(o_stamina - dmg['DMG'])
@@ -14593,7 +14593,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_defense = tempattack
                                                 elif opet_type == 'BLINK':
                                                     o_stamina = round(o_stamina - dmg['DMG'])
-                                                    t_stamina = round(t_stamina + dmg['DMG'] - 10)
+                                                    t_stamina = round(t_stamina + dmg['DMG'])
                                                 elif opet_type == 'SLOW':
                                                     tempstam = round(t_stamina + dmg['DMG'])
                                                     o_stamina = round(o_stamina - dmg['DMG'])
@@ -14714,7 +14714,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     o_defense = tempattack
                                                 elif comp_enh == 'BLINK':
                                                     c_stamina = round(c_stamina - dmg['DMG'])
-                                                    o_stamina = round(o_stamina + dmg['DMG'] - 10)
+                                                    o_stamina = round(o_stamina + dmg['DMG'])
                                                 elif comp_enh == 'SLOW':
                                                     tempstam = round(o_stamina + dmg['DMG'])
                                                     c_stamina = round(c_stamina - dmg['DMG'])
@@ -14814,7 +14814,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     c_defense = tempattack
                                                 elif cenh_type == 'BLINK':
                                                     o_stamina = round(o_stamina - dmg['DMG'])
-                                                    c_stamina = round(c_stamina + dmg['DMG'] - 10)
+                                                    c_stamina = round(c_stamina + dmg['DMG'])
                                                 elif cenh_type == 'SLOW':
                                                     tempstam = round(c_stamina + dmg['DMG'])
                                                     o_stamina = round(o_stamina - dmg['DMG'])
@@ -14947,7 +14947,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_defense = tempattack
                                                 elif enh_type == 'BLINK':
                                                     o_stamina = round(o_stamina - dmg['DMG'])
-                                                    t_stamina = round(t_stamina + dmg['DMG'] - 10)
+                                                    t_stamina = round(t_stamina + dmg['DMG'])
                                                 elif enh_type == 'SLOW':
                                                     tempstam = round(t_stamina + dmg['DMG'])
                                                     o_stamina = round(o_stamina - dmg['DMG'])
@@ -15821,7 +15821,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     c_defense = tempattack
                                                 elif tpet_type == 'BLINK':
                                                     t_stamina = round(t_stamina - dmg['DMG'])
-                                                    c_stamina = round(c_stamina + dmg['DMG'] - 10)
+                                                    c_stamina = round(c_stamina + dmg['DMG'])
                                                 elif tpet_type == 'SLOW':
                                                     tempstam = round(c_stamina + dmg['DMG'])
                                                     t_stamina = round(t_stamina - dmg['DMG'])
@@ -15958,7 +15958,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     o_defense = tempattack
                                                 elif tpet_type == 'BLINK':
                                                     t_stamina = round(t_stamina - dmg['DMG'])
-                                                    o_stamina = round(o_stamina + dmg['DMG'] - 10)
+                                                    o_stamina = round(o_stamina + dmg['DMG'])
                                                 elif tpet_type == 'SLOW':
                                                     tempstam = round(o_stamina + dmg['DMG'])
                                                     t_stamina = round(t_stamina - dmg['DMG'])
@@ -16094,7 +16094,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 o_defense = tempattack
                                             elif tpet_type == 'BLINK':
                                                 t_stamina = round(t_stamina - dmg['DMG'])
-                                                o_stamina = round(o_stamina + dmg['DMG'] - 10)
+                                                o_stamina = round(o_stamina + dmg['DMG'])
                                             elif tpet_type == 'SLOW':
                                                 tempstam = round(o_stamina + dmg['DMG'])
                                                 t_stamina = round(t_stamina - dmg['DMG'])
@@ -16221,7 +16221,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     c_defense = tempattack
                                                 elif enh_type == 'BLINK':
                                                     t_stamina = round(t_stamina - dmg['DMG'])
-                                                    c_stamina = round(c_stamina + dmg['DMG'] - 10)
+                                                    c_stamina = round(c_stamina + dmg['DMG'])
                                                 elif enh_type == 'SLOW':
                                                     tempstam = round(c_stamina + dmg['DMG'])
                                                     t_stamina = round(t_stamina - dmg['DMG'])
@@ -16430,7 +16430,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     o_defense = tempattack
                                                 elif enh_type == 'BLINK':
                                                     t_stamina = round(t_stamina - dmg['DMG'])
-                                                    o_stamina = round(o_stamina + dmg['DMG'] - 10)
+                                                    o_stamina = round(o_stamina + dmg['DMG'])
                                                 elif enh_type == 'SLOW':
                                                     tempstam = round(o_stamina + dmg['DMG'])
                                                     t_stamina = round(t_stamina - dmg['DMG'])
@@ -16641,7 +16641,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 o_defense = tempattack
                                             elif enh_type == 'BLINK':
                                                 t_stamina = round(t_stamina - dmg['DMG'])
-                                                o_stamina = round(o_stamina + dmg['DMG'] - 10)
+                                                o_stamina = round(o_stamina + dmg['DMG'])
                                             elif enh_type == 'SLOW':
                                                 tempstam = round(o_stamina + dmg['DMG'])
                                                 t_stamina = round(t_stamina - dmg['DMG'])
@@ -17500,7 +17500,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_defense = tempattack
                                                 elif cpet_type == 'BLINK':
                                                     c_stamina = round(c_stamina - dmg['DMG'])
-                                                    t_stamina = round(t_stamina + dmg['DMG'] - 10)
+                                                    t_stamina = round(t_stamina + dmg['DMG'])
                                                 elif cpet_type == 'SLOW':
                                                     tempstam = round(t_stamina + dmg['DMG'])
                                                     c_stamina = round(c_stamina - dmg['DMG'])
@@ -17625,7 +17625,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 c_defense = tempattack
                                             elif cenh_type == 'BLINK':
                                                 o_stamina = round(o_stamina - dmg['DMG'])
-                                                c_stamina = round(c_stamina + dmg['DMG'] - 10)
+                                                c_stamina = round(c_stamina + dmg['DMG'])
                                             elif cenh_type == 'SLOW':
                                                 tempstam = round(c_stamina + dmg['DMG'])
                                                 o_stamina = round(o_stamina - dmg['DMG'])
@@ -17735,7 +17735,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_defense = tempattack
                                                 elif enh_type == 'BLINK':
                                                     c_stamina = round(c_stamina - dmg['DMG'])
-                                                    t_stamina = round(t_stamina + dmg['DMG'] - 10)
+                                                    t_stamina = round(t_stamina + dmg['DMG'])
                                                 elif enh_type == 'SLOW':
                                                     tempstam = round(t_stamina + dmg['DMG'])
                                                     c_stamina = round(c_stamina - dmg['DMG'])
@@ -18358,7 +18358,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_defense = tempattack
                                                     elif cpet_type == 'BLINK':
                                                         c_stamina = round(c_stamina - dmg['DMG'])
-                                                        t_stamina = round(t_stamina + dmg['DMG'] - 10)
+                                                        t_stamina = round(t_stamina + dmg['DMG'])
                                                     elif cpet_type == 'SLOW':
                                                         tempstam = round(t_stamina + dmg['DMG'])
                                                         c_stamina = round(c_stamina - dmg['DMG'])
@@ -18484,7 +18484,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     c_defense = tempattack
                                                 elif cenh_type == 'BLINK':
                                                     o_stamina = round(o_stamina - dmg['DMG'])
-                                                    c_stamina = round(c_stamina + dmg['DMG'] - 10)
+                                                    c_stamina = round(c_stamina + dmg['DMG'])
                                                 elif cenh_type == 'SLOW':
                                                     tempstam = round(c_stamina + dmg['DMG'])
                                                     o_stamina = round(o_stamina - dmg['DMG'])
@@ -18598,7 +18598,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_defense = tempattack
                                                     elif enh_type == 'BLINK':
                                                         c_stamina = round(c_stamina - dmg['DMG'])
-                                                        t_stamina = round(t_stamina + dmg['DMG'] - 10)
+                                                        t_stamina = round(t_stamina + dmg['DMG'])
                                                     elif enh_type == 'SLOW':
                                                         tempstam = round(t_stamina + dmg['DMG'])
                                                         c_stamina = round(c_stamina - dmg['DMG'])
@@ -19408,7 +19408,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     o_defense = tempattack
                                                 elif tpet_type == 'BLINK':
                                                     t_stamina = round(t_stamina - dmg['DMG'])
-                                                    o_stamina = round(o_stamina + dmg['DMG'] - 10)
+                                                    o_stamina = round(o_stamina + dmg['DMG'])
                                                 elif tpet_type == 'SLOW':
                                                     tempstam = round(o_stamina + dmg['DMG'])
                                                     t_stamina = round(t_stamina - dmg['DMG'])
@@ -19531,7 +19531,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     c_defense = tempattack
                                                 elif tpet_type == 'BLINK':
                                                     t_stamina = round(t_stamina - dmg['DMG'])
-                                                    c_stamina = round(c_stamina + dmg['DMG'] - 10)
+                                                    c_stamina = round(c_stamina + dmg['DMG'])
                                                 elif tpet_type == 'SLOW':
                                                     tempstam = round(c_stamina + dmg['DMG'])
                                                     t_stamina = round(t_stamina - dmg['DMG'])
@@ -19653,7 +19653,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     o_defense = tempattack
                                                 elif enh_type == 'BLINK':
                                                     t_stamina = round(t_stamina - dmg['DMG'])
-                                                    o_stamina = round(o_stamina + dmg['DMG'] - 10)
+                                                    o_stamina = round(o_stamina + dmg['DMG'])
                                                 elif enh_type == 'SLOW':
                                                     tempstam = round(o_stamina + dmg['DMG'])
                                                     t_stamina = round(t_stamina - dmg['DMG'])
@@ -19857,7 +19857,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     c_defense = tempattack
                                                 elif enh_type == 'BLINK':
                                                     t_stamina = round(t_stamina - dmg['DMG'])
-                                                    c_stamina = round(c_stamina + dmg['DMG'] - 10)
+                                                    c_stamina = round(c_stamina + dmg['DMG'])
                                                 elif enh_type == 'SLOW':
                                                     tempstam = round(c_stamina + dmg['DMG'])
                                                     t_stamina = round(t_stamina - dmg['DMG'])
