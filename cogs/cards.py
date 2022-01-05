@@ -66,6 +66,8 @@ class Cards(commands.Cog):
                 o_price = card['PRICE']
                 o_exclusive = card['EXCLUSIVE']
                 o_available = card['AVAILABLE']
+                o_is_skin = card['IS_SKIN']
+                o_skin_for = card['SKIN_FOR']
                 o_max_health = card['HLT']
                 o_health = card['HLT']
                 o_stamina = card['STAM']
@@ -94,7 +96,10 @@ class Cards(commands.Cog):
 
                 price_message = ""
                 card_icon = ""
-                if o_exclusive or o_has_collection:
+                if o_is_skin:
+                    price_message = "Card Skin"
+                    card_icon = f"💎"
+                elif o_exclusive or o_has_collection:
                     if o_has_collection == True:
                         price_message = "Destiny Only"
                         card_icon = f"✨"
@@ -103,7 +108,7 @@ class Cards(commands.Cog):
                         card_icon = f"🔥"
                         dungeon = True
                 elif o_exclusive == False and o_available == False and o_has_collection == False:
-                    price_message = "Priceless"
+                    price_message = "Boss Only"
                     card_icon = f"👹"
                 else:
                     price_message = f"Shop & Drop"
@@ -158,16 +163,19 @@ class Cards(commands.Cog):
 
                 message = ""
                 tip = ""
-                if o_has_collection == True or dungeon == True:
+                if o_is_skin:
+                    message = f"{o_card} is a card Skin. "
+                    tip = f"Earn the {o_skin_for} card and use gems to unlock this Skin!"
+                elif o_has_collection == True or dungeon == True:
                     if o_has_collection:
                         message = f"{o_card} is a Destiny card. "
-                        tip = f"Complete {o_show} Destiny: {o_collection} to unlock this card"
+                        tip = f"Complete {o_show} Destiny: {o_collection} to unlock this card."
                     else:
                         message = f"{o_card} is a Dungeon card. "
                         tip = f"Find this card in the {o_show} Dungeon"
                 elif o_has_collection == False and o_available == False and o_exclusive == False:
                     message = f"{o_card} is a Boss card. "
-                    tip = f"Defeat the {o_show} Boss to earn this card"
+                    tip = f"Defeat {o_show} Boss to earn this card."
                 elif o_attack > o_defense:
                     message = f"{o_card} is an offensive card. "
                     tip = "Tip: Equipping defensive /titles and /arms would help boost survivability"
