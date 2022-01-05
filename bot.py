@@ -220,9 +220,6 @@ async def crown(ctx):
    
    Your first Summon **Chick** will be joining as well!
       
-
-   The **Starter Universes** are _My Hero Academia_, _Kanto Region_, and _League Of Legends_.
-
    Play **Single Player** and **Multiplayer** Modes to earn :coin:
    Buy and equip better Items to Conquer the Multiverse!
    """), colour=0x7289da)
@@ -298,7 +295,7 @@ async def crown(ctx):
    Buy **Titles** and **Arms** with :coin: or Earn them via **Drops**
    
    🦾 **Arm Durability**
-   Arms are effective across the Multiverse, however they do break!
+   Arms are effective across the Multiverse, however they do break! Turning into **Gems**
    Stock up on **Arms** and repair **Durability** in the **/trinketshop**
 
    👑 **Universe Buff** :Match Your Titles and Arms to your **Card Universe**.
@@ -400,7 +397,7 @@ async def crown(ctx):
 
    embedVar10 = discord.Embed(title= f"Economy",description=textwrap.dedent(f"""\
    Crown Unlimited features an in game **Shop** where you can purchase new Cards, Titles, and Arms.
-   Use /shop to open the **Pop-Up Shop!**
+   Use /shop to open the Shop!**
 
    **Stock**
    Items in the shop have a **Stock**. When they are sold out they become unavailable.
@@ -413,6 +410,12 @@ async def crown(ctx):
    
    **Trinket Shop**
    **/trinketshop** to purchase Card Levels, Arm Durability and Gabe's Purse!
+   
+   **Currency**
+   :coin: - Coins can be used to purchase Cards, Titles and Arms. You can use them to trade and sell items to other players!
+   :gems: - When Arms break they turn into **Gems**, You can also dismantle items from your inventory into **Gems**! 
+   **Gems** are universe specific items that can be crafted into Skins, Trikets or **Universe Hearts**
+   
    """) ,colour=0x7289da)
    embedVar10.set_thumbnail(url=avatar)
    
@@ -575,6 +578,10 @@ async def register(ctx):
       **Passives**
       :drop_of_blood: - Card Passive
       :infinity: - Universe Trait for Card
+      
+      **Currency**
+      :coin: - Coins
+      :gem: - Gems
 
       **Have fun!**
       """), colour=0xe91e63)
