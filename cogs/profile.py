@@ -467,7 +467,8 @@ class Profile(commands.Cog):
                     manage_components.create_button(style=3, label="Equip", custom_id="Equip"),
                     manage_components.create_button(style=1, label="Resell", custom_id="Resell"),
                     manage_components.create_button(style=1, label="Dismantle", custom_id="Dismantle"),
-                    manage_components.create_button(style=2, label="Exit", custom_id="Exit")
+                    manage_components.create_button(style=1, label="Add To Trade", custom_id="Add"),
+                    manage_components.create_button(style=1, label="Remove Trade", custom_id="Remove")
                 ]
                 custom_action_row = manage_components.create_actionrow(*buttons)
                 # custom_button = manage_components.create_button(style=3, label="Equip")
