@@ -1880,6 +1880,16 @@ destiny = [
         "UNIVERSE": "Naruto"
     },
     {
+        "NAME": "The Avenger",
+        "WINS": 0,
+        "REQUIRED": 5,
+        "DEFEAT": "Mangekyo Sasuke",
+        "USE_CARDS": ["Sasuke"],
+        "EARN": "Mangekyo Sasuke",
+        "COMPLETED": False,
+        "UNIVERSE": "Naruto"
+    },
+    {
         "NAME": "The Reanimated Rivalry",
         "WINS": 0,
         "REQUIRED": 15,
@@ -1895,7 +1905,7 @@ destiny = [
         "REQUIRED": 10,
         "DEFEAT": "Kakashi",
         "USE_CARDS": ["Awakened Obito"],
-        "EARN": "Broken Kakashi",
+        "EARN": "Awakened Kakashi",
         "COMPLETED": False,
         "UNIVERSE": "Naruto"
     },
