@@ -2429,7 +2429,7 @@ class Profile(commands.Cog):
                         await button_ctx.send("You have max amount of Cards. Transaction cancelled.")
                         self.stop = True
                         return
-                    acceptable = [2,3,4,5]
+                    acceptable = [3,4,5]
                     if price > balance:
                         await button_ctx.send("Insufficent funds.")
                         self.stop = True
@@ -2479,7 +2479,7 @@ class Profile(commands.Cog):
                         await button_ctx.send("You have max amount of Cards. Transaction cancelled.")
                         self.stop = True
                         return
-                    acceptable = [4,5,6,7]
+                    acceptable = [5,6,7]
                     if price > balance:
                         await button_ctx.send("Insufficent funds.")
                         self.stop = True
