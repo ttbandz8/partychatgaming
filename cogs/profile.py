@@ -467,8 +467,8 @@ class Profile(commands.Cog):
                     manage_components.create_button(style=3, label="Equip", custom_id="Equip"),
                     manage_components.create_button(style=1, label="Resell", custom_id="Resell"),
                     manage_components.create_button(style=1, label="Dismantle", custom_id="Dismantle"),
-                    manage_components.create_button(style=1, label="Add To Trade", custom_id="Add"),
-                    manage_components.create_button(style=1, label="Remove Trade", custom_id="Remove")
+                    manage_components.create_button(style=1, label="Trade", custom_id="Trade"),
+                    manage_components.create_button(style=2, label="Exit", custom_id="Exit")
                 ]
                 custom_action_row = manage_components.create_actionrow(*buttons)
                 # custom_button = manage_components.create_button(style=3, label="Equip")
@@ -602,6 +602,138 @@ class Profile(commands.Cog):
                         else:
                             await button_ctx.send(f"**{card_name}** is no longer in your vault.")
 
+                    elif button_ctx.custom_id == "Trade":
+                        
+                        card_data = db.queryCard({'NAME' : selected_card})
+                        card_name= card_data['NAME']
+                        sell_price = card_data['PRICE'] * .10
+                        mtrade = db.queryTrade({'MERCHANT' : str(ctx.author), 'OPEN' : True})
+                        mvalidation=False
+                        bvalidation=False
+                        item_already_in_trade=False
+                        if card_name == current_card:
+                            await button_ctx.send("You cannot trade equipped cards.")
+                        else:
+                            if mtrade:
+                                if selected_card in mtrade['MCARDS']:
+                                    await ctx.send(f"{ctx.author.mention} card already in **Trade**")
+                                    item_already_in_trade=True
+                                mvalidation=True
+                            else:
+                                btrade = db.queryTrade({'BUYER' : str(ctx.author), 'OPEN' : True})
+                                if btrade:
+                                    if selected_card in btrade['BCARDS']:
+                                        await ctx.send(f"{ctx.author.mention} card already in **Trade**")
+                                        item_already_in_trade=True
+                                    bvalidation=True
+                                else:
+                                    await ctx.send(f"{ctx.author.mention} use **/trade** to open a **trade**")
+                                    return
+                            if item_already_in_trade:
+                                trade_buttons = [
+                                    manage_components.create_button(
+                                        style=ButtonStyle.green,
+                                        label="Yes",
+                                        custom_id="yes"
+                                    ),
+                                    manage_components.create_button(
+                                        style=ButtonStyle.blue,
+                                        label="No",
+                                        custom_id="no"
+                                    )
+                                ]
+                                trade_buttons_action_row = manage_components.create_actionrow(*trade_buttons)
+                                await button_ctx.send(f"Woudl you like to remove **{selected_card}** from the **Trade**?", components=[trade_buttons_action_row])
+                                try:
+                                    button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[trade_buttons_action_row], timeout=120)
+                                    if button_ctx.custom_id == "no":
+                                            await button_ctx.send("Happy Trading")
+                                            self.stop = True
+                                    if button_ctx.custom_id == "yes":
+                                        neg_sell_price = 0 - abs(int(sell_price))
+                                        if mvalidation:
+                                            trade_query = {'MERCHANT' : str(button_ctx.author), 'BUYER' : str(mtrade['BUYER']), 'OPEN' : True}
+                                            update_query = {"$pull" : {'MCARDS': selected_card}, "$inc" : {'TAX' : int(neg_sell_price)}}
+                                            resp = db.updateTrade(trade_query, update_query)
+                                            await button_ctx.send("Returned.")
+                                            self.stop = True
+                                        elif bvalidation:
+                                            trade_query = {'MERCHANT' : str(btrade['MERCHANT']),'BUYER' : str(button_ctx.author), 'OPEN' : True}
+                                            update_query = {"$pull" : {'BCARDS': selected_card}, "$inc" : {'TAX' : int(neg_sell_price)}}
+                                            resp = db.updateTrade(trade_query, update_query)
+                                            await button_ctx.send("Returned.")
+                                            self.stop = True
+                                except Exception as ex:
+                                    trace = []
+                                    tb = ex.__traceback__
+                                    while tb is not None:
+                                        trace.append({
+                                            "filename": tb.tb_frame.f_code.co_filename,
+                                            "name": tb.tb_frame.f_code.co_name,
+                                            "lineno": tb.tb_lineno
+                                        })
+                                        tb = tb.tb_next
+                                    print(str({
+                                        'PLAYER': str(ctx.author),
+                                        'type': type(ex).__name__,
+                                        'message': str(ex),
+                                        'trace': trace
+                                    }))
+                                    await ctx.send("There's an issue with trading one or all of your items.")
+                                    return   
+                            elif mvalidation == True or bvalidation ==True:    #If user is valid
+                                sell_price = card_data['PRICE'] * .10
+                                trade_buttons = [
+                                    manage_components.create_button(
+                                        style=ButtonStyle.green,
+                                        label="Yes",
+                                        custom_id="yes"
+                                    ),
+                                    manage_components.create_button(
+                                        style=ButtonStyle.blue,
+                                        label="No",
+                                        custom_id="no"
+                                    )
+                                ]
+                                trade_buttons_action_row = manage_components.create_actionrow(*trade_buttons)
+                                await button_ctx.send(f"Are you sure you want to trade **{selected_card}**", components=[trade_buttons_action_row])
+                                try:
+                                    button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[trade_buttons_action_row], timeout=120)
+                                    if button_ctx.custom_id == "no":
+                                            await button_ctx.send("Not this time. ")
+                                            self.stop = True
+                                    if button_ctx.custom_id == "yes":
+                                        if mvalidation:
+                                            trade_query = {'MERCHANT' : str(ctx.author), 'BUYER' : str(mtrade['BUYER']), 'OPEN' : True}
+                                            update_query = {"$push" : {'MCARDS': selected_card}, "$inc" : {'TAX' : int(sell_price)}}
+                                            resp = db.updateTrade(trade_query, update_query)
+                                            await button_ctx.send("Traded.")
+                                            self.stop = True
+                                        elif bvalidation:
+                                            trade_query = {'MERCHANT' : str(btrade['MERCHANT']),'BUYER' : str(ctx.author), 'OPEN' : True}
+                                            update_query = {"$push" : {'BCARDS': selected_card}, "$inc" : {'TAX' : int(sell_price)}}
+                                            resp = db.updateTrade(trade_query, update_query)
+                                            await button_ctx.send("Traded.")
+                                            self.stop = True
+                                except Exception as ex:
+                                    trace = []
+                                    tb = ex.__traceback__
+                                    while tb is not None:
+                                        trace.append({
+                                            "filename": tb.tb_frame.f_code.co_filename,
+                                            "name": tb.tb_frame.f_code.co_name,
+                                            "lineno": tb.tb_lineno
+                                        })
+                                        tb = tb.tb_next
+                                    print(str({
+                                        'PLAYER': str(ctx.author),
+                                        'type': type(ex).__name__,
+                                        'message': str(ex),
+                                        'trace': trace
+                                    }))
+                                    await ctx.send("There's an issue with trading one or all of your items.")
+                                    return   
+                        
                     elif button_ctx.custom_id == "Exit":
                         await button_ctx.send("Done.")
                         self.stop = True
@@ -685,6 +817,7 @@ class Profile(commands.Cog):
                     manage_components.create_button(style=3, label="Equip", custom_id="Equip"),
                     manage_components.create_button(style=1, label="Resell", custom_id="Resell"),
                     manage_components.create_button(style=1, label="Dismantle", custom_id="Dismantle"),
+                    manage_components.create_button(style=1, label="Trade", custom_id="Trade"),
                     manage_components.create_button(style=2, label="Exit", custom_id="Exit")
                 ]
                 custom_action_row = manage_components.create_actionrow(*buttons)
@@ -818,7 +951,138 @@ class Profile(commands.Cog):
                         else:
                             await button_ctx.send(f"**{title_name}** is no longer in your vault.")
 
-                    
+                    elif button_ctx.custom_id == "Trade":
+                        title_data = db.queryTitle({'TITLE' : selected_title})
+                        title_name = title_data['TITLE']
+                        if title_name == current_title:
+                            await button_ctx.send("You cannot trade equipped titles.")
+                            return
+                        sell = title_data['PRICE'] * .10
+                        mtrade = db.queryTrade({'MERCHANT' : str(ctx.author), 'OPEN' : True})
+                        mvalidation=False
+                        bvalidation=False
+                        item_already_in_trade=False
+                        if mtrade:
+                            if selected_title in mtrade['MTITLES']:
+                                await ctx.send(f"{ctx.author.mention} title already in **Trade**")
+                                item_already_in_trade=True
+                            mvalidation=True
+                        else:
+                            btrade = db.queryTrade({'BUYER' : str(ctx.author), 'OPEN' : True})
+                            if btrade:
+                                if selected_title in btrade['BTITLES']:
+                                    await ctx.send(f"{ctx.author.mention} title already in **Trade**")
+                                    item_already_in_trade=True
+                                bvalidation=True
+                            else:
+                                await ctx.send(f"{ctx.author.mention} use **/trade** to open a **trade**")
+                                return
+                        if item_already_in_trade:
+                            trade_buttons = [
+                                manage_components.create_button(
+                                    style=ButtonStyle.green,
+                                    label="Yes",
+                                    custom_id="yes"
+                                ),
+                                manage_components.create_button(
+                                    style=ButtonStyle.blue,
+                                    label="No",
+                                    custom_id="no"
+                                )
+                            ]
+                            trade_buttons_action_row = manage_components.create_actionrow(*trade_buttons)
+                            await button_ctx.send(f"Woudl you like to remove **{selected_title}** from the **Trade**?", components=[trade_buttons_action_row])
+                            try:
+                                button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[trade_buttons_action_row], timeout=120)
+                                if button_ctx.custom_id == "no":
+                                        await button_ctx.send("Happy Trading")
+                                        self.stop = True
+                                if button_ctx.custom_id == "yes":
+                                    neg_sell_price = 0 - abs(int(sell_price))
+                                    if mvalidation:
+                                        trade_query = {'MERCHANT' : str(button_ctx.author), 'BUYER' : str(mtrade['BUYER']), 'OPEN' : True}
+                                        update_query = {"$pull" : {'MTITLES': selected_title}, "$inc" : {'TAX' : int(neg_sell_price)}}
+                                        resp = db.updateTrade(trade_query, update_query)
+                                        await button_ctx.send("Returned.")
+                                        self.stop = True
+                                    elif bvalidation:
+                                        trade_query = {'MERCHANT' : str(btrade['MERCHANT']),'BUYER' : str(button_ctx.author), 'OPEN' : True}
+                                        update_query = {"$pull" : {'BTITLES': selected_title}, "$inc" : {'TAX' : int(neg_sell_price)}}
+                                        resp = db.updateTrade(trade_query, update_query)
+                                        await button_ctx.send("Returned.")
+                                        self.stop = True
+                            except Exception as ex:
+                                trace = []
+                                tb = ex.__traceback__
+                                while tb is not None:
+                                    trace.append({
+                                        "filename": tb.tb_frame.f_code.co_filename,
+                                        "name": tb.tb_frame.f_code.co_name,
+                                        "lineno": tb.tb_lineno
+                                    })
+                                    tb = tb.tb_next
+                                print(str({
+                                    'PLAYER': str(ctx.author),
+                                    'type': type(ex).__name__,
+                                    'message': str(ex),
+                                    'trace': trace
+                                }))
+                                await ctx.send("There's an issue with trading one or all of your items.")
+                                return   
+                        elif mvalidation == True or bvalidation ==True:    #If user is valid
+                            sell_price = title_data['PRICE'] * .10
+                            trade_buttons = [
+                                manage_components.create_button(
+                                    style=ButtonStyle.green,
+                                    label="Yes",
+                                    custom_id="yes"
+                                ),
+                                manage_components.create_button(
+                                    style=ButtonStyle.blue,
+                                    label="No",
+                                    custom_id="no"
+                                )
+                            ]
+                            trade_buttons_action_row = manage_components.create_actionrow(*trade_buttons)
+                            await button_ctx.send(f"Are you sure you want to trade **{selected_title}**", components=[trade_buttons_action_row])
+                            try:
+                                button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[trade_buttons_action_row], timeout=120)
+                                if button_ctx.custom_id == "no":
+                                        await button_ctx.send("Not this time. ")
+                                        self.stop = True
+                                if button_ctx.custom_id == "yes":
+                                    if mvalidation:
+                                        trade_query = {'MERCHANT' : str(ctx.author), 'BUYER' : str(mtrade['BUYER']), 'OPEN' : True}
+                                        update_query = {"$push" : {'MTITLES': selected_title}, "$inc" : {'TAX' : int(sell_price)}}
+                                        resp = db.updateTrade(trade_query, update_query)
+                                        await button_ctx.send("Traded.")
+                                        self.stop = True
+                                    elif bvalidation:
+                                        trade_query = {'MERCHANT' : str(btrade['MERCHANT']),'BUYER' : str(ctx.author), 'OPEN' : True}
+                                        update_query = {"$push" : {'BTITLES': selected_title}, "$inc" : {'TAX' : int(sell_price)}}
+                                        resp = db.updateTrade(trade_query, update_query)
+                                        await button_ctx.send("Traded.")
+                                        self.stop = True
+                            except Exception as ex:
+                                trace = []
+                                tb = ex.__traceback__
+                                while tb is not None:
+                                    trace.append({
+                                        "filename": tb.tb_frame.f_code.co_filename,
+                                        "name": tb.tb_frame.f_code.co_name,
+                                        "lineno": tb.tb_lineno
+                                    })
+                                    tb = tb.tb_next
+                                print(str({
+                                    'PLAYER': str(ctx.author),
+                                    'type': type(ex).__name__,
+                                    'message': str(ex),
+                                    'trace': trace
+                                }))
+                                await ctx.send("There's an issue with trading one or all of your items.")
+                                return   
+                            
+                         
                     elif button_ctx.custom_id == "Exit":
                         await button_ctx.send("Done.")
                         self.stop = True
@@ -907,6 +1171,7 @@ class Profile(commands.Cog):
                     manage_components.create_button(style=3, label="Equip", custom_id="Equip"),
                     manage_components.create_button(style=1, label="Resell", custom_id="Resell"),
                     manage_components.create_button(style=1, label="Dismantle", custom_id="Dismantle"),
+                    manage_components.create_button(style=1, label="Trade", custom_id="Trade"),
                     manage_components.create_button(style=2, label="Exit", custom_id="Exit")
                 ]
                 custom_action_row = manage_components.create_actionrow(*buttons)
@@ -1043,6 +1308,138 @@ class Profile(commands.Cog):
                                 return
                         else:
                             await button_ctx.send(f"**{card_name}** is no longer in your vault.")
+  
+                    elif button_ctx.custom_id == "Trade":
+                        arm_data = db.queryArm({'ARM' : selected_arm})
+                        arm_name = arm_data['ARM']
+                        if arm_name == current_arm:
+                            await button_ctx.send("You cannot trade equipped arms.")
+                            return
+                        sell_price = arm_data['PRICE'] * .10
+                        mtrade = db.queryTrade({'MERCHANT' : str(ctx.author), 'OPEN' : True})
+                        mvalidation=False
+                        bvalidation=False
+                        item_already_in_trade=False
+                        if mtrade:
+                            if selected_arm in mtrade['MARMS']:
+                                await ctx.send(f"{ctx.author.mention} arm already in **Trade**")
+                                item_already_in_trade=True
+                            mvalidation=True
+                        else:
+                            btrade = db.queryTrade({'BUYER' : str(ctx.author), 'OPEN' : True})
+                            if btrade:
+                                if selected_arm in btrade['BARMS']:
+                                    await ctx.send(f"{ctx.author.mention} arm already in **Trade**")
+                                    item_already_in_trade=True
+                                bvalidation=True
+                            else:
+                                await ctx.send(f"{ctx.author.mention} use **/trade** to open a **trade**")
+                                return
+                        if item_already_in_trade:
+                            trade_buttons = [
+                                manage_components.create_button(
+                                    style=ButtonStyle.green,
+                                    label="Yes",
+                                    custom_id="yes"
+                                ),
+                                manage_components.create_button(
+                                    style=ButtonStyle.blue,
+                                    label="No",
+                                    custom_id="no"
+                                )
+                            ]
+                            trade_buttons_action_row = manage_components.create_actionrow(*trade_buttons)
+                            await button_ctx.send(f"Woudl you like to remove **{selected_arm}** from the **Trade**?", components=[trade_buttons_action_row])
+                            try:
+                                button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[trade_buttons_action_row], timeout=120)
+                                if button_ctx.custom_id == "no":
+                                        await button_ctx.send("Happy Trading")
+                                        self.stop = True
+                                if button_ctx.custom_id == "yes":
+                                    neg_sell_price = 0 - abs(int(sell_price))
+                                    if mvalidation:
+                                        trade_query = {'MERCHANT' : str(button_ctx.author), 'BUYER' : str(mtrade['BUYER']), 'OPEN' : True}
+                                        update_query = {"$pull" : {'MARMS': selected_arm}, "$inc" : {'TAX' : int(neg_sell_price)}}
+                                        resp = db.updateTrade(trade_query, update_query)
+                                        await button_ctx.send("Returned.")
+                                        self.stop = True
+                                    elif bvalidation:
+                                        trade_query = {'MERCHANT' : str(btrade['MERCHANT']),'BUYER' : str(button_ctx.author), 'OPEN' : True}
+                                        update_query = {"$pull" : {'BARMS': selected_arm}, "$inc" : {'TAX' : int(neg_sell_price)}}
+                                        resp = db.updateTrade(trade_query, update_query)
+                                        await button_ctx.send("Returned.")
+                                        self.stop = True
+                            except Exception as ex:
+                                trace = []
+                                tb = ex.__traceback__
+                                while tb is not None:
+                                    trace.append({
+                                        "filename": tb.tb_frame.f_code.co_filename,
+                                        "name": tb.tb_frame.f_code.co_name,
+                                        "lineno": tb.tb_lineno
+                                    })
+                                    tb = tb.tb_next
+                                print(str({
+                                    'PLAYER': str(ctx.author),
+                                    'type': type(ex).__name__,
+                                    'message': str(ex),
+                                    'trace': trace
+                                }))
+                                await ctx.send("There's an issue with trading one or all of your items.")
+                                return   
+                        elif mvalidation == True or bvalidation ==True:    #If user is valid
+                            sell_price = arm_data['PRICE'] * .10
+                            trade_buttons = [
+                                manage_components.create_button(
+                                    style=ButtonStyle.green,
+                                    label="Yes",
+                                    custom_id="yes"
+                                ),
+                                manage_components.create_button(
+                                    style=ButtonStyle.blue,
+                                    label="No",
+                                    custom_id="no"
+                                )
+                            ]
+                            trade_buttons_action_row = manage_components.create_actionrow(*trade_buttons)
+                            await button_ctx.send(f"Are you sure you want to trade **{selected_arm}**", components=[trade_buttons_action_row])
+                            try:
+                                button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[trade_buttons_action_row], timeout=120)
+                                if button_ctx.custom_id == "no":
+                                        await button_ctx.send("Not this time. ")
+                                        self.stop = True
+                                if button_ctx.custom_id == "yes":
+                                    if mvalidation:
+                                        trade_query = {'MERCHANT' : str(ctx.author), 'BUYER' : str(mtrade['BUYER']), 'OPEN' : True}
+                                        update_query = {"$push" : {'MARMS': selected_arm}, "$inc" : {'TAX' : int(sell_price)}}
+                                        resp = db.updateTrade(trade_query, update_query)
+                                        await button_ctx.send("Traded.")
+                                        self.stop = True
+                                    elif bvalidation:
+                                        trade_query = {'MERCHANT' : str(btrade['MERCHANT']),'BUYER' : str(ctx.author), 'OPEN' : True}
+                                        update_query = {"$push" : {'BARMS': selected_arm}, "$inc" : {'TAX' : int(sell_price)}}
+                                        resp = db.updateTrade(trade_query, update_query)
+                                        await button_ctx.send("Traded.")
+                                        self.stop = True
+                            except Exception as ex:
+                                trace = []
+                                tb = ex.__traceback__
+                                while tb is not None:
+                                    trace.append({
+                                        "filename": tb.tb_frame.f_code.co_filename,
+                                        "name": tb.tb_frame.f_code.co_name,
+                                        "lineno": tb.tb_lineno
+                                    })
+                                    tb = tb.tb_next
+                                print(str({
+                                    'PLAYER': str(ctx.author),
+                                    'type': type(ex).__name__,
+                                    'message': str(ex),
+                                    'trace': trace
+                                }))
+                                await ctx.send("There's an issue with trading one or all of your items.")
+                                return   
+                    
                     
                     elif button_ctx.custom_id == "Exit":
                         await button_ctx.send("Done.")
@@ -1084,6 +1481,7 @@ class Profile(commands.Cog):
                 name = d['DISNAME'].split("#",1)[0]
                 avatar = d['AVATAR']
                 balance = vault['BALANCE']
+                current_summon = d['PET']
                 pets_list = vault['PETS']
 
                 total_pets = len(pets_list)
@@ -1133,18 +1531,160 @@ class Profile(commands.Cog):
                     embedVar.set_footer(text=f"{pet['TYPE']}: {enhancer_mapping[pet['TYPE']]}")
                     embed_list.append(embedVar)
                 
-                custom_button = manage_components.create_button(style=3, label="Equip")
+                buttons = [
+                    manage_components.create_button(style=3, label="Equip", custom_id="Equip"),
+                    manage_components.create_button(style=1, label="Trade", custom_id="Trade"),
+                    manage_components.create_button(style=2, label="Exit", custom_id="Exit")
+                ]
+                custom_action_row = manage_components.create_actionrow(*buttons)
 
                 async def custom_function(self, button_ctx):
-                    selected_universe = custom_function
-                    custom_function.selected_universe = str(button_ctx.origin_message.embeds[0].title)
+                    updated_vault = db.queryVault({'OWNER': d['DISNAME']})
+                    sell_price = 0
+                    selected_summon = str(button_ctx.origin_message.embeds[0].title)
                     user_query = {'DISNAME': str(ctx.author)}
-                    response = db.updateUserNoFilter(user_query, {'$set': {'PET': str(button_ctx.origin_message.embeds[0].title)}})
-                    await button_ctx.send(f"🧬 **{str(button_ctx.origin_message.embeds[0].title)}** equipped.")
-                    self.stop = True
-
-                await Paginator(bot=self.bot, ctx=ctx, pages=embed_list, timeout=60, customButton=[
-                    custom_button,
+                    
+                    if button_ctx.custom_id == "Equip":
+                        response = db.updateUserNoFilter(user_query, {'$set': {'PET': str(button_ctx.origin_message.embeds[0].title)}})
+                        await button_ctx.send(f"🧬 **{str(button_ctx.origin_message.embeds[0].title)}** equipped.")
+                        self.stop = True
+                    elif button_ctx.custom_id =="Trade":
+                        summon_data = db.queryPet({'PET' : selected_summon})
+                        summon_name = summon_data['PET']
+                        if summon_name == current_summon:
+                            await button_ctx.send("You cannot trade equipped summons.")
+                            return
+                        sell_price = 5000
+                        mtrade = db.queryTrade({'MERCHANT' : str(ctx.author), 'OPEN' : True})
+                        mvalidation=False
+                        bvalidation=False
+                        item_already_in_trade=False
+                        if mtrade:
+                            if selected_summon in mtrade['MSUMMONS']:
+                                await ctx.send(f"{ctx.author.mention} summon already in **Trade**")
+                                item_already_in_trade=True
+                            mvalidation=True
+                        else:
+                            btrade = db.queryTrade({'BUYER' : str(ctx.author), 'OPEN' : True})
+                            if btrade:
+                                if selected_summon in btrade['BSUMMONS']:
+                                    await ctx.send(f"{ctx.author.mention} summon already in **Trade**")
+                                    item_already_in_trade=True
+                                bvalidation=True
+                            else:
+                                await ctx.send(f"{ctx.author.mention} use **/trade** to open a **trade**")
+                                return
+                        if item_already_in_trade:
+                            trade_buttons = [
+                                manage_components.create_button(
+                                    style=ButtonStyle.green,
+                                    label="Yes",
+                                    custom_id="yes"
+                                ),
+                                manage_components.create_button(
+                                    style=ButtonStyle.blue,
+                                    label="No",
+                                    custom_id="no"
+                                )
+                            ]
+                            trade_buttons_action_row = manage_components.create_actionrow(*trade_buttons)
+                            await button_ctx.send(f"Woudl you like to remove **{selected_summon}** from the **Trade**?", components=[trade_buttons_action_row])
+                            try:
+                                button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[trade_buttons_action_row], timeout=120)
+                                if button_ctx.custom_id == "no":
+                                        await button_ctx.send("Happy Trading")
+                                        self.stop = True
+                                if button_ctx.custom_id == "yes":
+                                    neg_sell_price = 0 - abs(int(sell_price))
+                                    if mvalidation:
+                                        trade_query = {'MERCHANT' : str(button_ctx.author), 'BUYER' : str(mtrade['BUYER']), 'OPEN' : True}
+                                        update_query = {"$pull" : {'MSUMMONS': selected_summon}, "$inc" : {'TAX' : int(neg_sell_price)}}
+                                        resp = db.updateTrade(trade_query, update_query)
+                                        await button_ctx.send("Returned.")
+                                        self.stop = True
+                                    elif bvalidation:
+                                        trade_query = {'MERCHANT' : str(btrade['MERCHANT']),'BUYER' : str(button_ctx.author), 'OPEN' : True}
+                                        update_query = {"$pull" : {'BSUMMONS': selected_summon}, "$inc" : {'TAX' : int(neg_sell_price)}}
+                                        resp = db.updateTrade(trade_query, update_query)
+                                        await button_ctx.send("Returned.")
+                                        self.stop = True
+                            except Exception as ex:
+                                trace = []
+                                tb = ex.__traceback__
+                                while tb is not None:
+                                    trace.append({
+                                        "filename": tb.tb_frame.f_code.co_filename,
+                                        "name": tb.tb_frame.f_code.co_name,
+                                        "lineno": tb.tb_lineno
+                                    })
+                                    tb = tb.tb_next
+                                print(str({
+                                    'PLAYER': str(ctx.author),
+                                    'type': type(ex).__name__,
+                                    'message': str(ex),
+                                    'trace': trace
+                                }))
+                                await ctx.send("There's an issue with trading one or all of your items.")
+                                return   
+                        elif mvalidation == True or bvalidation ==True:    #If user is valid
+                            sell_price = 5000
+                            trade_buttons = [
+                                manage_components.create_button(
+                                    style=ButtonStyle.green,
+                                    label="Yes",
+                                    custom_id="yes"
+                                ),
+                                manage_components.create_button(
+                                    style=ButtonStyle.blue,
+                                    label="No",
+                                    custom_id="no"
+                                )
+                            ]
+                            trade_buttons_action_row = manage_components.create_actionrow(*trade_buttons)
+                            await button_ctx.send(f"Are you sure you want to trade **{selected_summon}**", components=[trade_buttons_action_row])
+                            try:
+                                button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[trade_buttons_action_row], timeout=120)
+                                if button_ctx.custom_id == "no":
+                                        await button_ctx.send("Not this time. ")
+                                        self.stop = True
+                                if button_ctx.custom_id == "yes":
+                                    if mvalidation:
+                                        trade_query = {'MERCHANT' : str(ctx.author), 'BUYER' : str(mtrade['BUYER']), 'OPEN' : True}
+                                        update_query = {"$push" : {'MSUMMONS': selected_summon}, "$inc" : {'TAX' : int(sell_price)}}
+                                        resp = db.updateTrade(trade_query, update_query)
+                                        await button_ctx.send("Traded.")
+                                        self.stop = True
+                                    elif bvalidation:
+                                        trade_query = {'MERCHANT' : str(btrade['MERCHANT']),'BUYER' : str(ctx.author), 'OPEN' : True}
+                                        update_query = {"$push" : {'BSUMMONS': selected_summon}, "$inc" : {'TAX' : int(sell_price)}}
+                                        resp = db.updateTrade(trade_query, update_query)
+                                        await button_ctx.send("Traded.")
+                                        self.stop = True
+                            except Exception as ex:
+                                trace = []
+                                tb = ex.__traceback__
+                                while tb is not None:
+                                    trace.append({
+                                        "filename": tb.tb_frame.f_code.co_filename,
+                                        "name": tb.tb_frame.f_code.co_name,
+                                        "lineno": tb.tb_lineno
+                                    })
+                                    tb = tb.tb_next
+                                print(str({
+                                    'PLAYER': str(ctx.author),
+                                    'type': type(ex).__name__,
+                                    'message': str(ex),
+                                    'trace': trace
+                                }))
+                                await ctx.send("There's an issue with trading one or all of your items.")
+                                return   
+                            
+                         
+                    elif button_ctx.custom_id =="Exit":
+                        await button_ctx.send("Done.")
+                        self.stop = True
+                await Paginator(bot=self.bot, ctx=ctx, pages=embed_list, timeout=60, customActionRow=[
+                    custom_action_row,
                     custom_function,
                 ]).run()
 
