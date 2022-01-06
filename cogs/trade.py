@@ -352,7 +352,7 @@ class Trade(commands.Cog):
                                 await ctx.author.send(f"**SOLD**\n\n**CARDS SOLD**\n {m_cardlist}\n**TITLES SOLD**\n {m_titlelist}!\n**ARMS SOLD**\n {m_armlist}!\n**SUMMONS SOLD**\n {m_summonlist}!\n**TAX**\n {'{:,}'.format(tax_split)}!\n**COIN DIFF**\n {m_coin_diff}!\n\n")
                                 await ctx.author.send(f"\n\n**PURCHASED**\n\n**CARDS**\n {b_cardlist}\n**TITLES**\n {b_titlelist}!\n**ARMS**\n {b_armlist}!\n**SUMMONS**\n {b_summonlist}!")
                                 await ctx.send(f"Trade Finished, {ctx.author.mention} Check your DMS for Receipt")
-                                
+                                                               
                                 
                                 
                                     
