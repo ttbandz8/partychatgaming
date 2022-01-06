@@ -122,7 +122,7 @@ class Lookup(commands.Cog):
                     else:
                         most_played_card_message = f"**Most Played Card: **{card_main}"
                         match_history_message = f"""
-                        **Tales Played: **{'{:,}'.format(len(tales_matches))}
+                        **Tales Played: **{'{:,}'.format(int(len(tales_matches)))}
                         **Dungeons Played: **{'{:,}'.format(len(dungeon_matches))}
                         **Bosses Played: **{'{:,}'.format(len(boss_matches))}
                         **Pvp Played: **{'{:,}'.format(len(pvp_matches))}
