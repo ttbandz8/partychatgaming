@@ -61,7 +61,7 @@ class Trade(commands.Cog):
                            )
                        ]
         , guild_ids=main.guild_ids)
-    async def trade(self, ctx: SlashContext,mode : str, player: User):
+    async def trade(self, ctx: SlashContext, mode: str, player: User):
         try:
             buyer_name = player
             merchant = db.queryUser({'DISNAME': str(ctx.author)})
@@ -97,28 +97,36 @@ class Trade(commands.Cog):
                     trade_buttons_action_row = manage_components.create_actionrow(*trade_buttons)
                     await ctx.send(f"{player.mention} Do you accept the **Trade Invite**?", components=[trade_buttons_action_row])
                     def check(button_ctx):
-                        return button_ctx.author == ctx.author
+                        print(button_ctx.author)
+                        print(player)
+                        return button_ctx.author == player
                     try:
-                        button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[trade_buttons_action_row], timeout=120)
+                        button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[trade_buttons_action_row], timeout=120, check=check)
 
                         if button_ctx.custom_id == "no":
+                            print(button_ctx.author)
+                            print(player)
                             await button_ctx.send("Trade **Declined**")
                             self.stop = True
                         if button_ctx.custom_id == "yes":
                             await button_ctx.send("Trade **Started**")
                             trade = db.createTrade(data.newTrade(trade_query))
+                            mcards = ", ".join(trade['MCARDS'])
+                            mtitles = ", ".join(trade['MTITLES'])
+                            marms = ", ".join(trade['MARMS'])
+                            msummons = ", ".join(trade['MSUMMONS'])
                             if trade:
                                 embedVar = discord.Embed(title= f"{merchant['NAME']}'s New Trade", description=textwrap.dedent(f"""
                                 👨‍🏫 {trade['MERCHANT']} :coin: ~ {'{:,}'.format(trade['MCOIN'])}
-                                Cards : {trade['MCARDS']}
-                                Titles : {trade['MTITLES']}
-                                Arms : {trade['MARMS']}
-                                Summons : {trade['MSUMMONS']}
+                                🎴 {mcards}
+                                🎗️ {mtitles}
+                                🦾 {marms}
+                                🧬 {msummons}
                                 🤵{trade['BUYER']} :coin: ~ {'{:,}'.format(trade['BCOIN'])}
-                                Cards : {trade['BCARDS']}
-                                Titles : {trade['BTITLES']}
-                                Arms : {trade['BARMS']}
-                                Summons : {trade['BSUMMONS']}
+                                🎴 {trade['BCARDS']}
+                                🎗️ {trade['BTITLES']}
+                                🦾 {trade['BARMS']}
+                                🧬 {trade['BSUMMONS']}
                                 """), colour=0x7289da)
                                 embedVar.set_footer(text=f"Trade Tax: {trade['TAX']}")
                                 await ctx.send(embed=embedVar)
@@ -183,9 +191,9 @@ class Trade(commands.Cog):
                     await ctx.send(embed=embedVar, components=[trade_buttons_action_row])
                     #await ctx.send(f"{ctx.author.mention} do wish to **Cancel This Trade**?", components=[trade_buttons_action_row])
                     def check(button_ctx):
-                        return button_ctx.author == ctx.author
+                        return button_ctx.author == player
                     try:
-                        button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[trade_buttons_action_row], timeout=120)
+                        button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[trade_buttons_action_row], timeout=120, check=check)
 
                         if button_ctx.custom_id == "exit":
                             await button_ctx.send("No change to **Trade**")
@@ -418,7 +426,7 @@ class Trade(commands.Cog):
                         await ctx.send(embed=embedVar, components=[trade_buttons_action_row])
                         #await ctx.send(f"{ctx.author.mention} do wish to **Cancel This Trade**?", components=[trade_buttons_action_row])
                         def check(button_ctx):
-                            return button_ctx.author == ctx.author
+                            return button_ctx.author == player
                         try:
                             button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[trade_buttons_action_row], timeout=120)
 
