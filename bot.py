@@ -1180,192 +1180,192 @@ async def curse(amount, user):
 #             await ctx.send("Trade ended. ")
 
 
-@slash.slash(name="Sell", description="Sell Cards, Titles, Arms, and Summons for coin", guild_ids=guild_ids)
-@commands.check(validate_user)
-async def sell(ctx, player: User, item: str):
-   user2 = player
-   user = db.queryUser({'DISNAME': str(ctx.author)})
-   p1_trade_item = item
-   p1_vault = db.queryVault({'OWNER' : str(ctx.author)})
-   p1_card_levels = p1_vault['CARD_LEVELS']
-   p1_cards = p1_vault['CARDS']
-   p1_titles = p1_vault['TITLES']
-   p1_arms = p1_vault['ARMS']
-   p1_arms_names_list = []
-   for arm in p1_arms:
-      p1_arms_names_list.append(arm['ARM'])
-   p1_pets = p1_vault['PETS']
-   p1_balance = p1_vault['BALANCE']
+# @slash.slash(name="Sell", description="Sell Cards, Titles, Arms, and Summons for coin", guild_ids=guild_ids)
+# @commands.check(validate_user)
+# async def sell(ctx, player: User, item: str):
+#    user2 = player
+#    user = db.queryUser({'DISNAME': str(ctx.author)})
+#    p1_trade_item = item
+#    p1_vault = db.queryVault({'OWNER' : str(ctx.author)})
+#    p1_card_levels = p1_vault['CARD_LEVELS']
+#    p1_cards = p1_vault['CARDS']
+#    p1_titles = p1_vault['TITLES']
+#    p1_arms = p1_vault['ARMS']
+#    p1_arms_names_list = []
+#    for arm in p1_arms:
+#       p1_arms_names_list.append(arm['ARM'])
+#    p1_pets = p1_vault['PETS']
+#    p1_balance = p1_vault['BALANCE']
 
 
-   p1_active_pet = {}
-   p1_pet_names = []
-   for pet in p1_pets:
-         p1_pet_names.append(pet['NAME'])
-         if pet['NAME'] == p1_trade_item:
-            pet_ability = list(pet.keys())[3]
-            pet_ability_power = list(pet.values())[3]
-            p1_active_pet = {'NAME': pet['NAME'], 'LVL': pet['LVL'], 'EXP': pet['EXP'], pet_ability: pet_ability_power, 'TYPE': pet['TYPE'], 'BOND': 0, 'BONDEXP': 0, 'PATH': pet['PATH']}
+#    p1_active_pet = {}
+#    p1_pet_names = []
+#    for pet in p1_pets:
+#          p1_pet_names.append(pet['NAME'])
+#          if pet['NAME'] == p1_trade_item:
+#             pet_ability = list(pet.keys())[3]
+#             pet_ability_power = list(pet.values())[3]
+#             p1_active_pet = {'NAME': pet['NAME'], 'LVL': pet['LVL'], 'EXP': pet['EXP'], pet_ability: pet_ability_power, 'TYPE': pet['TYPE'], 'BOND': 0, 'BONDEXP': 0, 'PATH': pet['PATH']}
 
-   p2_vault = db.queryVault({'OWNER' : str(user2)})
-   p2_card_levels = p2_vault['CARD_LEVELS']
-   p2_cards = p2_vault['CARDS']
-   p2_titles = p2_vault['TITLES']
-   p2_arms = p2_vault['ARMS']
-   p2_arms_names_list = []
+#    p2_vault = db.queryVault({'OWNER' : str(user2)})
+#    p2_card_levels = p2_vault['CARD_LEVELS']
+#    p2_cards = p2_vault['CARDS']
+#    p2_titles = p2_vault['TITLES']
+#    p2_arms = p2_vault['ARMS']
+#    p2_arms_names_list = []
 
-   for arm in p2_arms:
-      p2_arms_names_list.append(arm['ARM'])
+#    for arm in p2_arms:
+#       p2_arms_names_list.append(arm['ARM'])
 
-   p2_pets = p2_vault['PETS']
-   p2_balance = p2_vault['BALANCE']
-   p2_trade_item = ""
-   owned_destinies = []
-   for destiny in p2_vault['DESTINY']:
-      owned_destinies.append(destiny['NAME'])
+#    p2_pets = p2_vault['PETS']
+#    p2_balance = p2_vault['BALANCE']
+#    p2_trade_item = ""
+#    owned_destinies = []
+#    for destiny in p2_vault['DESTINY']:
+#       owned_destinies.append(destiny['NAME'])
 
-   p2_pet_names = []
-   for pet in p2_pets:
-         p2_pet_names.append(pet['NAME'])
+#    p2_pet_names = []
+#    for pet in p2_pets:
+#          p2_pet_names.append(pet['NAME'])
 
-   commence = False
+#    commence = False
 
-   if p1_trade_item in p1_cards and len(p1_cards) == 1:
-      await ctx.send("You cannot sell your only card.")
-   elif p1_trade_item in p1_arms_names_list and len(p1_arms_names_list) == 1:
-      await ctx.send("You cannot sell your only arm.")
-   elif p1_trade_item in p1_titles and len(p1_titles) == 1:
-      await ctx.send("You cannot sell your only title.")
-   elif p1_trade_item in p1_pet_names and len(p1_pet_names) == 1:
-      await ctx.send("You cannot sell your only Summon.")
-   elif p1_trade_item in p2_pet_names:
-      await ctx.send(f"{user2.mention} already owns a {p1_trade_item}!.")
-   else:
+#    if p1_trade_item in p1_cards and len(p1_cards) == 1:
+#       await ctx.send("You cannot sell your only card.")
+#    elif p1_trade_item in p1_arms_names_list and len(p1_arms_names_list) == 1:
+#       await ctx.send("You cannot sell your only arm.")
+#    elif p1_trade_item in p1_titles and len(p1_titles) == 1:
+#       await ctx.send("You cannot sell your only title.")
+#    elif p1_trade_item in p1_pet_names and len(p1_pet_names) == 1:
+#       await ctx.send("You cannot sell your only Summon.")
+#    elif p1_trade_item in p2_pet_names:
+#       await ctx.send(f"{user2.mention} already owns a {p1_trade_item}!.")
+#    else:
 
-      if (p1_trade_item == user['CARD']) or (p1_trade_item == user['TITLE']) or (p1_trade_item == user['ARM']) or (p1_trade_item == user['PET']):
-            await ctx.send("You cannot sell an equipped item.")
-            return
+#       if (p1_trade_item == user['CARD']) or (p1_trade_item == user['TITLE']) or (p1_trade_item == user['ARM']) or (p1_trade_item == user['PET']):
+#             await ctx.send("You cannot sell an equipped item.")
+#             return
 
-      if p1_trade_item not in p1_cards and p1_trade_item not in p1_titles and p1_trade_item not in p1_arms_names_list and p1_trade_item not in p1_pet_names:
-         await ctx.send("You do not own this item.")
-         return
-      else:
-         await ctx.send(f"{user2.mention} how much are you willing to pay for {ctx.author.mention}'s {p1_trade_item}?")
+#       if p1_trade_item not in p1_cards and p1_trade_item not in p1_titles and p1_trade_item not in p1_arms_names_list and p1_trade_item not in p1_pet_names:
+#          await ctx.send("You do not own this item.")
+#          return
+#       else:
+#          await ctx.send(f"{user2.mention} how much are you willing to pay for {ctx.author.mention}'s {p1_trade_item}?")
 
-         def check(msg):
-            return msg.author == user2 and (int(msg.content) - int(p2_balance)) <= 0
-         try:
-            msg = await bot.wait_for('message', timeout=15.0, check=check)
-            p2_trade_item = msg.content
-            commence = True
-         except:
-            await ctx.send("Please, triple check your balance before making a trade. ")
-            return
+#          def check(msg):
+#             return msg.author == user2 and (int(msg.content) - int(p2_balance)) <= 0
+#          try:
+#             msg = await bot.wait_for('message', timeout=15.0, check=check)
+#             p2_trade_item = msg.content
+#             commence = True
+#          except:
+#             await ctx.send("Please, triple check your balance before making a trade. ")
+#             return
 
-         if commence:
-            sell_buttons = [
-               manage_components.create_button(
-                  style=ButtonStyle.blue,
-                  label="Yes",
-                  custom_id="Yes"
-               ),
-               manage_components.create_button(
-                  style=ButtonStyle.red,
-                  label="No",
-                  custom_id="No"
-               )
-            ]
-            sell_buttons_action_row = manage_components.create_actionrow(*sell_buttons)
-            await ctx.send(f"{ctx.author.mention} do you accept {user2.mention}'s offer?", components=[sell_buttons_action_row])
+#          if commence:
+#             sell_buttons = [
+#                manage_components.create_button(
+#                   style=ButtonStyle.blue,
+#                   label="Yes",
+#                   custom_id="Yes"
+#                ),
+#                manage_components.create_button(
+#                   style=ButtonStyle.red,
+#                   label="No",
+#                   custom_id="No"
+#                )
+#             ]
+#             sell_buttons_action_row = manage_components.create_actionrow(*sell_buttons)
+#             await ctx.send(f"{ctx.author.mention} do you accept {user2.mention}'s offer?", components=[sell_buttons_action_row])
 
-            def check(button_ctx):
-               return button_ctx.author == ctx.author
+#             def check(button_ctx):
+#                return button_ctx.author == ctx.author
 
-            try:
-               button_ctx: ComponentContext = await manage_components.wait_for_component(bot, components=[sell_buttons_action_row], check=check)
+#             try:
+#                button_ctx: ComponentContext = await manage_components.wait_for_component(bot, components=[sell_buttons_action_row], check=check)
 
-               if button_ctx.custom_id == "No":
-                  await button_ctx.send("Sell ended.")
-                  return
+#                if button_ctx.custom_id == "No":
+#                   await button_ctx.send("Sell ended.")
+#                   return
 
-               if button_ctx.custom_id == "Yes":
-                  if p1_trade_item in p1_arms_names_list:
-                     if len(p2_arms) >= 25:
-                        await ctx.send(f"{user2.mention} is maxed out on Arms and cannot receive any more. Purchase cancelled.", hidden=True)
-                        return
-                     db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'ARMS': {'ARM': str(p1_trade_item)}}})
-                     await bless(p2_trade_item, ctx.author)
-                     await button_ctx.send(f"{p2_trade_item} has been added to {ctx.author.mention}'s balance.")
-                  elif p1_trade_item in p1_titles:
-                     if len(p2_titles) >= 25:
-                        await ctx.send(f"{user2.mention} is maxed out on Titles and cannot receive any more. Purchase cancelled.", hidden=True)
-                        return
-                     db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'TITLES': str(p1_trade_item)}})
-                     await bless(p2_trade_item, ctx.author)
-                     await button_ctx.send(f"{p2_trade_item} has been added to {ctx.author.mention}'s balance.")
-                  elif p1_trade_item in p1_cards:
-                     if len(p2_cards) >= 25:
-                        await ctx.send(f"{user2.mention} is maxed out on Cards and cannot receive any more. Purchase cancelled.", hidden=True)
-                        return
+#                if button_ctx.custom_id == "Yes":
+#                   if p1_trade_item in p1_arms_names_list:
+#                      if len(p2_arms) >= 25:
+#                         await ctx.send(f"{user2.mention} is maxed out on Arms and cannot receive any more. Purchase cancelled.", hidden=True)
+#                         return
+#                      db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'ARMS': {'ARM': str(p1_trade_item)}}})
+#                      await bless(p2_trade_item, ctx.author)
+#                      await button_ctx.send(f"{p2_trade_item} has been added to {ctx.author.mention}'s balance.")
+#                   elif p1_trade_item in p1_titles:
+#                      if len(p2_titles) >= 25:
+#                         await ctx.send(f"{user2.mention} is maxed out on Titles and cannot receive any more. Purchase cancelled.", hidden=True)
+#                         return
+#                      db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'TITLES': str(p1_trade_item)}})
+#                      await bless(p2_trade_item, ctx.author)
+#                      await button_ctx.send(f"{p2_trade_item} has been added to {ctx.author.mention}'s balance.")
+#                   elif p1_trade_item in p1_cards:
+#                      if len(p2_cards) >= 25:
+#                         await ctx.send(f"{user2.mention} is maxed out on Cards and cannot receive any more. Purchase cancelled.", hidden=True)
+#                         return
 
-                     db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'CARDS': str(p1_trade_item)}})
-                     await bless(p2_trade_item, ctx.author)
-                     await button_ctx.send(f"{p2_trade_item} has been added to {ctx.author.mention}'s balance.")
-                  elif p1_trade_item in p1_pet_names:
-                     if len(p2_pets) >= 25:
-                        await ctx.send(f"{user2.mention} is maxed out on Pets and cannot receive any more. Purchase cancelled.", hidden=True)
-                        retur
-                     db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'PETS': {'NAME': str(p1_trade_item)}}})
-                     await bless(p2_trade_item, ctx.author)
-                     await button_ctx.send(f"{p2_trade_item }has been added to {ctx.author.mention}'s balance.")
+#                      db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'CARDS': str(p1_trade_item)}})
+#                      await bless(p2_trade_item, ctx.author)
+#                      await button_ctx.send(f"{p2_trade_item} has been added to {ctx.author.mention}'s balance.")
+#                   elif p1_trade_item in p1_pet_names:
+#                      if len(p2_pets) >= 25:
+#                         await ctx.send(f"{user2.mention} is maxed out on Pets and cannot receive any more. Purchase cancelled.", hidden=True)
+#                         retur
+#                      db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'PETS': {'NAME': str(p1_trade_item)}}})
+#                      await bless(p2_trade_item, ctx.author)
+#                      await button_ctx.send(f"{p2_trade_item }has been added to {ctx.author.mention}'s balance.")
 
 
-                  if p1_trade_item in p1_arms_names_list:
-                     await curse(p2_trade_item, user2)
-                     for arm in p1_arms:
-                        if arm['ARM'] == str(p1_trade_item):
-                           response = db.updateVaultNoFilter({'OWNER': str(user2)},{'$addToSet':{'ARMS': {'ARM': str(p1_trade_item), 'DUR': arm['DUR']}}})
-                     await button_ctx.send(f"{p1_trade_item} has been added to {user2.mention}'s vault: ARMS")
-                  elif p1_trade_item in p1_titles:
-                     await curse(p2_trade_item, user2)
-                     response = db.updateVaultNoFilter({'OWNER': str(user2)},{'$addToSet':{'TITLES': str(p1_trade_item)}})
-                     await button_ctx.send(f"{p1_trade_item} has been added to {user2.mention}'s vault: TITLES")
-                  elif p1_trade_item in p1_cards:
-                     await curse(p2_trade_item, user2)
-                     # CARD_LEVEL Configuration
-                     card_1 = db.queryCard({'NAME': str(p1_trade_item)})
-                     card_1_uni = db.queryUniverse({'TITLE': card_1['UNIVERSE']})
-                     card_1_tier = card_1_uni['TIER']
-                     cupdate_query = {'$addToSet': {'CARD_LEVELS': {'CARD': str(p1_trade_item), 'LVL': 0, 'TIER': int(card_1_tier), 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
-                     card_1_level_exist = False
-                     for card in p2_card_levels:
-                        if card['CARD'] == str(p1_trade_item):
-                           card_1_level_exist = True
-                     if card_1_level_exist == False:
-                        cvault_query = {'OWNER' : str(user2)}
-                        response = db.updateVaultNoFilter(cvault_query, cupdate_query)
+#                   if p1_trade_item in p1_arms_names_list:
+#                      await curse(p2_trade_item, user2)
+#                      for arm in p1_arms:
+#                         if arm['ARM'] == str(p1_trade_item):
+#                            response = db.updateVaultNoFilter({'OWNER': str(user2)},{'$addToSet':{'ARMS': {'ARM': str(p1_trade_item), 'DUR': arm['DUR']}}})
+#                      await button_ctx.send(f"{p1_trade_item} has been added to {user2.mention}'s vault: ARMS")
+#                   elif p1_trade_item in p1_titles:
+#                      await curse(p2_trade_item, user2)
+#                      response = db.updateVaultNoFilter({'OWNER': str(user2)},{'$addToSet':{'TITLES': str(p1_trade_item)}})
+#                      await button_ctx.send(f"{p1_trade_item} has been added to {user2.mention}'s vault: TITLES")
+#                   elif p1_trade_item in p1_cards:
+#                      await curse(p2_trade_item, user2)
+#                      # CARD_LEVEL Configuration
+#                      card_1 = db.queryCard({'NAME': str(p1_trade_item)})
+#                      card_1_uni = db.queryUniverse({'TITLE': card_1['UNIVERSE']})
+#                      card_1_tier = card_1_uni['TIER']
+#                      cupdate_query = {'$addToSet': {'CARD_LEVELS': {'CARD': str(p1_trade_item), 'LVL': 0, 'TIER': int(card_1_tier), 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
+#                      card_1_level_exist = False
+#                      for card in p2_card_levels:
+#                         if card['CARD'] == str(p1_trade_item):
+#                            card_1_level_exist = True
+#                      if card_1_level_exist == False:
+#                         cvault_query = {'OWNER' : str(user2)}
+#                         response = db.updateVaultNoFilter(cvault_query, cupdate_query)
 
-                     response = db.updateVaultNoFilter({'OWNER': str(user2)},{'$addToSet':{'CARDS': str(p1_trade_item)}})
+#                      response = db.updateVaultNoFilter({'OWNER': str(user2)},{'$addToSet':{'CARDS': str(p1_trade_item)}})
 
-                     for destiny in d.destiny:
-                        if p1_trade_item in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
-                           db.updateVaultNoFilter({'OWNER': str(user2)},{'$addToSet':{'DESTINY': destiny}})
-                           await button_ctx.send(f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.")
+#                      for destiny in d.destiny:
+#                         if p1_trade_item in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
+#                            db.updateVaultNoFilter({'OWNER': str(user2)},{'$addToSet':{'DESTINY': destiny}})
+#                            await button_ctx.send(f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.")
 
-                     await button_ctx.send(f"{p1_trade_item} has been added to {user2.mention}'s vault: CARDS")
-                  elif p1_trade_item in p1_pet_names:
-                     await curse(p2_trade_item, user2)
-                     selected_pet = db.queryPet({"PET": p1_trade_item})
-                     pet_ability_name = list(selected_pet['ABILITIES'][0].keys())[0]
-                     pet_ability_power = list(selected_pet['ABILITIES'][0].values())[0]
-                     pet_ability_type = list(selected_pet['ABILITIES'][0].values())[1]
+#                      await button_ctx.send(f"{p1_trade_item} has been added to {user2.mention}'s vault: CARDS")
+#                   elif p1_trade_item in p1_pet_names:
+#                      await curse(p2_trade_item, user2)
+#                      selected_pet = db.queryPet({"PET": p1_trade_item})
+#                      pet_ability_name = list(selected_pet['ABILITIES'][0].keys())[0]
+#                      pet_ability_power = list(selected_pet['ABILITIES'][0].values())[0]
+#                      pet_ability_type = list(selected_pet['ABILITIES'][0].values())[1]
 
-                     response = db.updateVaultNoFilter({'OWNER': str(user2)},{'$addToSet':{'PETS': p1_active_pet}})
-                     #response = db.updateVaultNoFilter({'OWNER': str(user2)},{'$addToSet':{'PETS': str(p1_trade_item)}})
-                     await button_ctx.send(f"{p1_trade_item} has been added to {user2.mention}'s vault: PETS")
+#                      response = db.updateVaultNoFilter({'OWNER': str(user2)},{'$addToSet':{'PETS': p1_active_pet}})
+#                      #response = db.updateVaultNoFilter({'OWNER': str(user2)},{'$addToSet':{'PETS': str(p1_trade_item)}})
+#                      await button_ctx.send(f"{p1_trade_item} has been added to {user2.mention}'s vault: PETS")
 
-            except:
-               await ctx.send("Sell ended unexpectedly.")
+#             except:
+#                await ctx.send("Sell ended unexpectedly.")
 
 
 @slash.slash(name="Gift", description="Give money to friend", guild_ids=guild_ids)
