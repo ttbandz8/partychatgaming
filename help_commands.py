@@ -33,6 +33,10 @@ LEGEND = textwrap.dedent(f"""\
 **Passives**
 :drop_of_blood: - Card Passive
 :infinity: - Universe Trait for Card
+
+**Currency**
+:coin: - Coins
+:gem: - Gems
 """)
 
 BOT_COMMANDS = textwrap.dedent(f"""\

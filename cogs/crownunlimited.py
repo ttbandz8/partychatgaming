@@ -275,7 +275,7 @@ class CrownUnlimited(commands.Cog):
 
             try:
                 button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[
-                    random_battle_buttons_action_row], timeout=60, check=check)
+                    random_battle_buttons_action_row], timeout=120, check=check)
 
                 if button_ctx.custom_id == "No":
                     await curse(random_flee_loss, message.author)
@@ -1123,7 +1123,7 @@ class CrownUnlimited(commands.Cog):
                     t_defense = tempattack
                 elif o_card_passive_type == 'BLINK':
                     o_stamina = o_stamina - o_card_passive
-                    t_stamina = t_stamina + o_card_passive - 10
+                    t_stamina = t_stamina + o_card_passive
                 elif o_card_passive_type == 'SLOW':
                     tempstam = t_stamina + o_card_passive
                     o_stamina = o_stamina - (2 * o_card_passive)
@@ -1417,7 +1417,7 @@ class CrownUnlimited(commands.Cog):
                     o_defense = tempattack
                 elif t_card_passive_type == 'BLINK':
                     t_stamina = t_stamina - t_card_passive
-                    o_stamina = o_stamina + t_card_passive - 10
+                    o_stamina = o_stamina + t_card_passive
                 elif t_card_passive_type == 'SLOW':
                     tempstam = o_stamina + t_card_passive
                     t_stamina = t_stamina - (2 * t_card_passive)
@@ -2164,7 +2164,7 @@ class CrownUnlimited(commands.Cog):
                                             t_defense = tempattack
                                         elif opet_type == 'BLINK':
                                             o_stamina = round(o_stamina - dmg['DMG'])
-                                            t_stamina = round(t_stamina + dmg['DMG'] - 10)
+                                            t_stamina = round(t_stamina + dmg['DMG'])
                                         elif opet_type == 'SLOW':
                                             tempstam = round(t_stamina + dmg['DMG'])
                                             o_stamina = round(o_stamina - dmg['DMG'])
@@ -2281,7 +2281,7 @@ class CrownUnlimited(commands.Cog):
                                             t_defense = tempattack
                                         elif enh_type == 'BLINK':
                                             o_stamina = round(o_stamina - dmg['DMG'])
-                                            t_stamina = round(t_stamina + dmg['DMG'] - 10)
+                                            t_stamina = round(t_stamina + dmg['DMG'])
                                         elif enh_type == 'SLOW':
                                             tempstam = round(t_stamina + dmg['DMG'])
                                             o_stamina = round(o_stamina - dmg['DMG'])
@@ -2386,7 +2386,7 @@ class CrownUnlimited(commands.Cog):
                                                 await button_ctx.send(embed=embedVar)
                                                 
                                             elif tparry_count==1:
-                                                embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{o_card} breaks the **Parry**", colour=0xe91e63)
+                                                embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{o_card} takes {tparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                 t_health = t_health
                                                 tparry_damage = round(dmg['DMG'] / 2)
                                                 t_health = t_health - tparry_damage
@@ -3018,7 +3018,7 @@ class CrownUnlimited(commands.Cog):
                                             o_defense = tempattack
                                         elif tpet_type == 'BLINK':
                                             t_stamina = round(t_stamina - dmg['DMG'])
-                                            o_stamina = round(o_stamina + dmg['DMG'] - 10)
+                                            o_stamina = round(o_stamina + dmg['DMG'])
                                         elif tpet_type == 'SLOW':
                                             tempstam = round(o_stamina + dmg['DMG'])
                                             t_stamina = round(t_stamina - dmg['DMG'])
@@ -3120,7 +3120,7 @@ class CrownUnlimited(commands.Cog):
                                             o_defense = tempattack
                                         elif enh_type == 'BLINK':
                                             t_stamina = round(t_stamina - dmg['DMG'])
-                                            o_stamina = round(o_stamina + dmg['DMG'] - 10)
+                                            o_stamina = round(o_stamina + dmg['DMG'])
                                         elif enh_type == 'SLOW':
                                             tempstam = round(o_stamina + dmg['DMG'])
                                             t_stamina = round(t_stamina - dmg['DMG'])
@@ -3219,7 +3219,7 @@ class CrownUnlimited(commands.Cog):
                                                 await button_ctx.send(embed=embedVar)
                                                 
                                             elif oparry_count==1:
-                                                embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} breaks the **Parry**", colour=0xe91e63)
+                                                embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} takes {oparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                 oparry_damage = round(dmg['DMG'] / 2)
                                                 o_health = o_health - oparry_damage
                                                 t_health = t_health - oparry_damage
@@ -3822,7 +3822,7 @@ class CrownUnlimited(commands.Cog):
                 t_defense = tempattack
             elif o_card_passive_type == 'BLINK':
                 o_stamina = o_stamina - o_card_passive
-                t_stamina = t_stamina + o_card_passive - 10
+                t_stamina = t_stamina + o_card_passive
             elif o_card_passive_type == 'SLOW':
                 tempstam = t_stamina + o_card_passive
                 o_stamina = o_stamina - (2 * o_card_passive)
@@ -4037,7 +4037,7 @@ class CrownUnlimited(commands.Cog):
                 o_defense = tempattack
             elif t_card_passive_type == 'BLINK':
                 t_stamina = t_stamina - t_card_passive
-                o_stamina = o_stamina + t_card_passive - 10
+                o_stamina = o_stamina + t_card_passive
             elif t_card_passive_type == 'SLOW':
                 tempstam = o_stamina + t_card_passive
                 t_stamina = t_stamina - (2 * t_card_passive)
@@ -5032,7 +5032,7 @@ class CrownUnlimited(commands.Cog):
                                             t_defense = tempattack
                                         elif enh_type == 'BLINK':
                                             o_stamina = round(o_stamina - dmg['DMG'])
-                                            t_stamina = round(t_stamina + dmg['DMG'] - 10)
+                                            t_stamina = round(t_stamina + dmg['DMG'])
                                         elif enh_type == 'SLOW':
                                             tempstam = round(t_stamina + dmg['DMG'])
                                             o_stamina = round(o_stamina - dmg['DMG'])
@@ -5136,7 +5136,7 @@ class CrownUnlimited(commands.Cog):
                                                 await ctx.send(embed=embedVar)
                                                 
                                             elif tparry_count==1:
-                                                embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{o_card} breaks the **Parry**", colour=0xe91e63)
+                                                embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{o_card} takes {tparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                 t_health = t_health
                                                 tparry_damage = round(dmg['DMG'] / 2)
                                                 t_health = t_health - tparry_damage
@@ -5731,7 +5731,7 @@ class CrownUnlimited(commands.Cog):
                                         o_defense = tempattack
                                     elif enh_type == 'BLINK':
                                         t_stamina = round(t_stamina - dmg['DMG'])
-                                        o_stamina = round(o_stamina + dmg['DMG'] - 10)
+                                        o_stamina = round(o_stamina + dmg['DMG'])
                                     elif enh_type == 'SLOW':
                                         tempstam = round(o_stamina + dmg['DMG'])
                                         t_stamina = round(t_stamina - dmg['DMG'])
@@ -5831,7 +5831,7 @@ class CrownUnlimited(commands.Cog):
                                             await ctx.send(embed=embedVar)
                                             
                                         elif oparry_count==1:
-                                            embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} breaks the **Parry**", colour=0xe91e63)
+                                            embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} takes {oparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
                                             oparry_damage = round(dmg['DMG'] / 2)
                                             o_health = o_health - oparry_damage
                                             t_health = t_health - oparry_damage
@@ -7273,9 +7273,14 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, stamina, en
             if defensepower <= 0:
                 defensepower = 1
 
-            attackpower = atk + ap
+            attackpower = (atk - op_defense) + ap
+            if attackpower<=0:
+                attackpower =ap
 
             abilitypower = round(attackpower / defensepower)
+            print(attackpower)
+            print(defensepower)
+            print(abilitypower)
             if abilitypower <= 0:
                 abilitypower = 25
 
@@ -8347,7 +8352,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 t_defense = tempattack
             elif c_card_passive_type == 'BLINK':
                 c_stamina = c_stamina - c_card_passive
-                t_stamina = t_stamina + c_card_passive - 10
+                t_stamina = t_stamina + c_card_passive
             elif c_card_passive_type == 'SLOW':
                 tempstam = t_stamina + o_card_passive
                 c_stamina = c_stamina - (2 * c_card_passive)
@@ -8597,7 +8602,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             t_defense = tempattack
         elif o_card_passive_type == 'BLINK':
             o_stamina = o_stamina - o_card_passive
-            t_stamina = t_stamina + o_card_passive - 10
+            t_stamina = t_stamina + o_card_passive
         elif o_card_passive_type == 'SLOW':
             tempstam = t_stamina + o_card_passive
             o_stamina = o_stamina - (2 * o_card_passive)
@@ -8849,7 +8854,7 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             o_defense = tempattack
         elif t_card_passive_type == 'BLINK':
             t_stamina = t_stamina - t_card_passive
-            o_stamina = o_stamina + t_card_passive - 10
+            o_stamina = o_stamina + t_card_passive
         elif t_card_passive_type == 'SLOW':
             tempstam = o_stamina + t_card_passive
             t_stamina = t_stamina - (2 * t_card_passive)
@@ -11383,7 +11388,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 t_defense = tempattack
                                             elif opet_type == 'BLINK':
                                                 o_stamina = round(o_stamina - dmg['DMG'])
-                                                t_stamina = round(t_stamina + dmg['DMG'] - 10)
+                                                t_stamina = round(t_stamina + dmg['DMG'])
                                             elif opet_type == 'SLOW':
                                                 tempstam = round(t_stamina + dmg['DMG'])
                                                 o_stamina = round(o_stamina - dmg['DMG'])
@@ -11522,7 +11527,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 t_defense = tempattack
                                             elif enh_type == 'BLINK':
                                                 o_stamina = round(o_stamina - dmg['DMG'])
-                                                t_stamina = round(t_stamina + dmg['DMG'] - 10)
+                                                t_stamina = round(t_stamina + dmg['DMG'])
                                             elif enh_type == 'SLOW':
                                                 tempstam = round(t_stamina + dmg['DMG'])
                                                 o_stamina = round(o_stamina - dmg['DMG'])
@@ -11627,7 +11632,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     await button_ctx.send(embed=embedVar)
                                                     
                                                 elif tparry_count==1:
-                                                    embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{o_card} breaks the **Parry**", colour=0xe91e63)
+                                                    embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{o_card} takes {tparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                     t_health = t_health
                                                     tparry_damage = round(dmg['DMG'] / 2)
                                                     t_health = t_health - tparry_damage
@@ -12300,7 +12305,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     o_defense = tempattack
                                                 elif tpet_type == 'BLINK':
                                                     t_stamina = round(t_stamina - dmg['DMG'])
-                                                    o_stamina = round(o_stamina + dmg['DMG'] - 10)
+                                                    o_stamina = round(o_stamina + dmg['DMG'])
                                                 elif tpet_type == 'SLOW':
                                                     tempstam = round(o_stamina + dmg['DMG'])
                                                     t_stamina = round(t_stamina - dmg['DMG'])
@@ -12434,7 +12439,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     o_defense = tempattack
                                                 elif enh_type == 'BLINK':
                                                     t_stamina = round(t_stamina - dmg['DMG'])
-                                                    o_stamina = round(o_stamina + dmg['DMG'] - 10)
+                                                    o_stamina = round(o_stamina + dmg['DMG'])
                                                 elif enh_type == 'SLOW':
                                                     tempstam = round(o_stamina + dmg['DMG'])
                                                     t_stamina = round(t_stamina - dmg['DMG'])
@@ -12535,7 +12540,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         await button_ctx.send(embed=embedVar)
                                                         
                                                     elif oparry_count==1:
-                                                        embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} breaks the **Parry**", colour=0xe91e63)
+                                                        embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} takes {oparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                         oparry_damage = round(dmg['DMG'] / 2)
                                                         o_health = o_health - oparry_damage
                                                         t_health = t_health - oparry_damage
@@ -12987,7 +12992,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 o_defense = tempattack
                                             elif tpet_type == 'BLINK':
                                                 t_stamina = round(t_stamina - dmg['DMG'])
-                                                o_stamina = round(o_stamina + dmg['DMG'] - 10)
+                                                o_stamina = round(o_stamina + dmg['DMG'])
                                             elif tpet_type == 'SLOW':
                                                 tempstam = round(o_stamina + dmg['DMG'])
                                                 t_stamina = round(t_stamina - dmg['DMG'])
@@ -13089,7 +13094,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 o_defense = tempattack
                                             elif enh_type == 'BLINK':
                                                 t_stamina = round(t_stamina - dmg['DMG'])
-                                                o_stamina = round(o_stamina + dmg['DMG'] - 10)
+                                                o_stamina = round(o_stamina + dmg['DMG'])
                                             elif enh_type == 'SLOW':
                                                 tempstam = round(o_stamina + dmg['DMG'])
                                                 t_stamina = round(t_stamina - dmg['DMG'])
@@ -13190,7 +13195,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     await button_ctx.send(embed=embedVar)
                                                     
                                                 elif oparry_count==1:
-                                                    embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} breaks the **Parry**", colour=0xe91e63)
+                                                    embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} takes {oparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                     oparry_damage = round(dmg['DMG'] / 2)
                                                     o_health = o_health - oparry_damage
                                                     t_health = t_health - oparry_damage
@@ -13855,7 +13860,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 t_defense = tempattack
                                             elif opet_type == 'BLINK':
                                                 o_stamina = round(o_stamina - dmg['DMG'])
-                                                t_stamina = round(t_stamina + dmg['DMG'] - 10)
+                                                t_stamina = round(t_stamina + dmg['DMG'])
                                             elif opet_type == 'SLOW':
                                                 tempstam = round(t_stamina + dmg['DMG'])
                                                 o_stamina = round(o_stamina - dmg['DMG'])
@@ -13966,7 +13971,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 t_defense = tempattack
                                             elif enh_type == 'BLINK':
                                                 o_stamina = round(o_stamina - dmg['DMG'])
-                                                t_stamina = round(t_stamina + dmg['DMG'] - 10)
+                                                t_stamina = round(t_stamina + dmg['DMG'])
                                             elif enh_type == 'SLOW':
                                                 tempstam = round(t_stamina + dmg['DMG'])
                                                 o_stamina = round(o_stamina - dmg['DMG'])
@@ -14588,7 +14593,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_defense = tempattack
                                                 elif opet_type == 'BLINK':
                                                     o_stamina = round(o_stamina - dmg['DMG'])
-                                                    t_stamina = round(t_stamina + dmg['DMG'] - 10)
+                                                    t_stamina = round(t_stamina + dmg['DMG'])
                                                 elif opet_type == 'SLOW':
                                                     tempstam = round(t_stamina + dmg['DMG'])
                                                     o_stamina = round(o_stamina - dmg['DMG'])
@@ -14709,7 +14714,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     o_defense = tempattack
                                                 elif comp_enh == 'BLINK':
                                                     c_stamina = round(c_stamina - dmg['DMG'])
-                                                    o_stamina = round(o_stamina + dmg['DMG'] - 10)
+                                                    o_stamina = round(o_stamina + dmg['DMG'])
                                                 elif comp_enh == 'SLOW':
                                                     tempstam = round(o_stamina + dmg['DMG'])
                                                     c_stamina = round(c_stamina - dmg['DMG'])
@@ -14809,7 +14814,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     c_defense = tempattack
                                                 elif cenh_type == 'BLINK':
                                                     o_stamina = round(o_stamina - dmg['DMG'])
-                                                    c_stamina = round(c_stamina + dmg['DMG'] - 10)
+                                                    c_stamina = round(c_stamina + dmg['DMG'])
                                                 elif cenh_type == 'SLOW':
                                                     tempstam = round(c_stamina + dmg['DMG'])
                                                     o_stamina = round(o_stamina - dmg['DMG'])
@@ -14942,7 +14947,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_defense = tempattack
                                                 elif enh_type == 'BLINK':
                                                     o_stamina = round(o_stamina - dmg['DMG'])
-                                                    t_stamina = round(t_stamina + dmg['DMG'] - 10)
+                                                    t_stamina = round(t_stamina + dmg['DMG'])
                                                 elif enh_type == 'SLOW':
                                                     tempstam = round(t_stamina + dmg['DMG'])
                                                     o_stamina = round(o_stamina - dmg['DMG'])
@@ -15055,7 +15060,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         await button_ctx.send(embed=embedVar)
                                                         
                                                     elif tparry_count==1:
-                                                        embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{o_card} breaks the **Parry**", colour=0xe91e63)
+                                                        embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{o_card} takes {tparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                         t_health = t_health
                                                         tparry_damage = round(dmg['DMG'] / 2)
                                                         t_health = t_health - tparry_damage
@@ -15816,7 +15821,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     c_defense = tempattack
                                                 elif tpet_type == 'BLINK':
                                                     t_stamina = round(t_stamina - dmg['DMG'])
-                                                    c_stamina = round(c_stamina + dmg['DMG'] - 10)
+                                                    c_stamina = round(c_stamina + dmg['DMG'])
                                                 elif tpet_type == 'SLOW':
                                                     tempstam = round(c_stamina + dmg['DMG'])
                                                     t_stamina = round(t_stamina - dmg['DMG'])
@@ -15953,7 +15958,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     o_defense = tempattack
                                                 elif tpet_type == 'BLINK':
                                                     t_stamina = round(t_stamina - dmg['DMG'])
-                                                    o_stamina = round(o_stamina + dmg['DMG'] - 10)
+                                                    o_stamina = round(o_stamina + dmg['DMG'])
                                                 elif tpet_type == 'SLOW':
                                                     tempstam = round(o_stamina + dmg['DMG'])
                                                     t_stamina = round(t_stamina - dmg['DMG'])
@@ -16089,7 +16094,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 o_defense = tempattack
                                             elif tpet_type == 'BLINK':
                                                 t_stamina = round(t_stamina - dmg['DMG'])
-                                                o_stamina = round(o_stamina + dmg['DMG'] - 10)
+                                                o_stamina = round(o_stamina + dmg['DMG'])
                                             elif tpet_type == 'SLOW':
                                                 tempstam = round(o_stamina + dmg['DMG'])
                                                 t_stamina = round(t_stamina - dmg['DMG'])
@@ -16216,7 +16221,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     c_defense = tempattack
                                                 elif enh_type == 'BLINK':
                                                     t_stamina = round(t_stamina - dmg['DMG'])
-                                                    c_stamina = round(c_stamina + dmg['DMG'] - 10)
+                                                    c_stamina = round(c_stamina + dmg['DMG'])
                                                 elif enh_type == 'SLOW':
                                                     tempstam = round(c_stamina + dmg['DMG'])
                                                     t_stamina = round(t_stamina - dmg['DMG'])
@@ -16329,7 +16334,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         await private_channel.send(embed=embedVar)
                                                         
                                                     elif cparry_count==1:
-                                                        embedVar = discord.Embed(title=f"{c_card.upper()} **Parry** Penetrated!!", description=f"{t_card} breaks the **Parry**", colour=0xe91e63)
+                                                        embedVar = discord.Embed(title=f"{c_card.upper()} **Parry** Penetrated!!", description=f"{t_card} takes {cparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                         c_health = c_health
                                                         cparry_damage = round(dmg['DMG'] / 2)
                                                         c_health = c_health - cparry_damage
@@ -16425,7 +16430,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     o_defense = tempattack
                                                 elif enh_type == 'BLINK':
                                                     t_stamina = round(t_stamina - dmg['DMG'])
-                                                    o_stamina = round(o_stamina + dmg['DMG'] - 10)
+                                                    o_stamina = round(o_stamina + dmg['DMG'])
                                                 elif enh_type == 'SLOW':
                                                     tempstam = round(o_stamina + dmg['DMG'])
                                                     t_stamina = round(t_stamina - dmg['DMG'])
@@ -16536,7 +16541,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         await button_ctx.send(embed=embedVar)
                                                         
                                                     elif oparry_count==1:
-                                                        embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} breaks the **Parry**", colour=0xe91e63)
+                                                        embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} takes {oparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                         oparry_damage = round(dmg['DMG'] / 2)
                                                         o_health = o_health - oparry_damage
                                                         t_health = t_health - oparry_damage
@@ -16636,7 +16641,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 o_defense = tempattack
                                             elif enh_type == 'BLINK':
                                                 t_stamina = round(t_stamina - dmg['DMG'])
-                                                o_stamina = round(o_stamina + dmg['DMG'] - 10)
+                                                o_stamina = round(o_stamina + dmg['DMG'])
                                             elif enh_type == 'SLOW':
                                                 tempstam = round(o_stamina + dmg['DMG'])
                                                 t_stamina = round(t_stamina - dmg['DMG'])
@@ -16747,7 +16752,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     await private_channel.send(embed=embedVar)
                                                     
                                                 elif oparry_count==1:
-                                                    embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} breaks the **Parry**", colour=0xe91e63)
+                                                    embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} takes {oparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                     oparry_damage = round(dmg['DMG'] / 2)
                                                     o_health = o_health - oparry_damage
                                                     t_health = t_health - oparry_damage
@@ -17495,7 +17500,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_defense = tempattack
                                                 elif cpet_type == 'BLINK':
                                                     c_stamina = round(c_stamina - dmg['DMG'])
-                                                    t_stamina = round(t_stamina + dmg['DMG'] - 10)
+                                                    t_stamina = round(t_stamina + dmg['DMG'])
                                                 elif cpet_type == 'SLOW':
                                                     tempstam = round(t_stamina + dmg['DMG'])
                                                     c_stamina = round(c_stamina - dmg['DMG'])
@@ -17620,7 +17625,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 c_defense = tempattack
                                             elif cenh_type == 'BLINK':
                                                 o_stamina = round(o_stamina - dmg['DMG'])
-                                                c_stamina = round(c_stamina + dmg['DMG'] - 10)
+                                                c_stamina = round(c_stamina + dmg['DMG'])
                                             elif cenh_type == 'SLOW':
                                                 tempstam = round(c_stamina + dmg['DMG'])
                                                 o_stamina = round(o_stamina - dmg['DMG'])
@@ -17730,7 +17735,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_defense = tempattack
                                                 elif enh_type == 'BLINK':
                                                     c_stamina = round(c_stamina - dmg['DMG'])
-                                                    t_stamina = round(t_stamina + dmg['DMG'] - 10)
+                                                    t_stamina = round(t_stamina + dmg['DMG'])
                                                 elif enh_type == 'SLOW':
                                                     tempstam = round(t_stamina + dmg['DMG'])
                                                     c_stamina = round(c_stamina - dmg['DMG'])
@@ -17842,7 +17847,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         await button_ctx.send(embed=embedVar)
                                                         
                                                     elif tparry_count==1:
-                                                        embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{c_card} breaks the **Parry**", colour=0xe91e63)
+                                                        embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{c_card} takes {tparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                         t_health = t_health
                                                         tparry_damage = round(dmg['DMG'] / 2)
                                                         t_health = t_health - tparry_damage
@@ -18353,7 +18358,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_defense = tempattack
                                                     elif cpet_type == 'BLINK':
                                                         c_stamina = round(c_stamina - dmg['DMG'])
-                                                        t_stamina = round(t_stamina + dmg['DMG'] - 10)
+                                                        t_stamina = round(t_stamina + dmg['DMG'])
                                                     elif cpet_type == 'SLOW':
                                                         tempstam = round(t_stamina + dmg['DMG'])
                                                         c_stamina = round(c_stamina - dmg['DMG'])
@@ -18479,7 +18484,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     c_defense = tempattack
                                                 elif cenh_type == 'BLINK':
                                                     o_stamina = round(o_stamina - dmg['DMG'])
-                                                    c_stamina = round(c_stamina + dmg['DMG'] - 10)
+                                                    c_stamina = round(c_stamina + dmg['DMG'])
                                                 elif cenh_type == 'SLOW':
                                                     tempstam = round(c_stamina + dmg['DMG'])
                                                     o_stamina = round(o_stamina - dmg['DMG'])
@@ -18593,7 +18598,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         t_defense = tempattack
                                                     elif enh_type == 'BLINK':
                                                         c_stamina = round(c_stamina - dmg['DMG'])
-                                                        t_stamina = round(t_stamina + dmg['DMG'] - 10)
+                                                        t_stamina = round(t_stamina + dmg['DMG'])
                                                     elif enh_type == 'SLOW':
                                                         tempstam = round(t_stamina + dmg['DMG'])
                                                         c_stamina = round(c_stamina - dmg['DMG'])
@@ -18705,7 +18710,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             await button_ctx.send(embed=embedVar)
                                                             
                                                         elif tparry_count==1:
-                                                            embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{c_card} breaks the **Parry**", colour=0xe91e63)
+                                                            embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{c_card} takes {tparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                             t_health = t_health
                                                             tparry_damage = round(dmg['DMG'] / 2)
                                                             t_health = t_health - tparry_damage
@@ -19403,7 +19408,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     o_defense = tempattack
                                                 elif tpet_type == 'BLINK':
                                                     t_stamina = round(t_stamina - dmg['DMG'])
-                                                    o_stamina = round(o_stamina + dmg['DMG'] - 10)
+                                                    o_stamina = round(o_stamina + dmg['DMG'])
                                                 elif tpet_type == 'SLOW':
                                                     tempstam = round(o_stamina + dmg['DMG'])
                                                     t_stamina = round(t_stamina - dmg['DMG'])
@@ -19526,7 +19531,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     c_defense = tempattack
                                                 elif tpet_type == 'BLINK':
                                                     t_stamina = round(t_stamina - dmg['DMG'])
-                                                    c_stamina = round(c_stamina + dmg['DMG'] - 10)
+                                                    c_stamina = round(c_stamina + dmg['DMG'])
                                                 elif tpet_type == 'SLOW':
                                                     tempstam = round(c_stamina + dmg['DMG'])
                                                     t_stamina = round(t_stamina - dmg['DMG'])
@@ -19648,7 +19653,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     o_defense = tempattack
                                                 elif enh_type == 'BLINK':
                                                     t_stamina = round(t_stamina - dmg['DMG'])
-                                                    o_stamina = round(o_stamina + dmg['DMG'] - 10)
+                                                    o_stamina = round(o_stamina + dmg['DMG'])
                                                 elif enh_type == 'SLOW':
                                                     tempstam = round(o_stamina + dmg['DMG'])
                                                     t_stamina = round(t_stamina - dmg['DMG'])
@@ -19756,7 +19761,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         await button_ctx.send(embed=embedVar)
                                                         
                                                     elif oparry_count==1:
-                                                        embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} breaks the **Parry**", colour=0xe91e63)
+                                                        embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} takes {oparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                         oparry_damage = round(dmg['DMG'] / 2)
                                                         o_health = o_health - oparry_damage
                                                         t_health = t_health - oparry_damage
@@ -19852,7 +19857,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     c_defense = tempattack
                                                 elif enh_type == 'BLINK':
                                                     t_stamina = round(t_stamina - dmg['DMG'])
-                                                    c_stamina = round(c_stamina + dmg['DMG'] - 10)
+                                                    c_stamina = round(c_stamina + dmg['DMG'])
                                                 elif enh_type == 'SLOW':
                                                     tempstam = round(c_stamina + dmg['DMG'])
                                                     t_stamina = round(t_stamina - dmg['DMG'])
@@ -19961,7 +19966,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         await button_ctx.send(embed=embedVar)
                                                         
                                                     elif cparry_count==1:
-                                                        embedVar = discord.Embed(title=f"{c_card.upper()} **Parry** Penetrated!!", description=f"{t_card} breaks the **Parry**", colour=0xe91e63)
+                                                        embedVar = discord.Embed(title=f"{c_card.upper()} **Parry** Penetrated!!", description=f"{t_card} takes {cparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                         c_health = c_health
                                                         cparry_damage = round(dmg['DMG'] / 2)
                                                         c_health = c_health - cparry_damage

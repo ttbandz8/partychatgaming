@@ -467,144 +467,294 @@ class Profile(commands.Cog):
                     manage_components.create_button(style=3, label="Equip", custom_id="Equip"),
                     manage_components.create_button(style=1, label="Resell", custom_id="Resell"),
                     manage_components.create_button(style=1, label="Dismantle", custom_id="Dismantle"),
+                    manage_components.create_button(style=1, label="Trade", custom_id="Trade"),
                     manage_components.create_button(style=2, label="Exit", custom_id="Exit")
                 ]
                 custom_action_row = manage_components.create_actionrow(*buttons)
                 # custom_button = manage_components.create_button(style=3, label="Equip")
 
                 async def custom_function(self, button_ctx):
-                    updated_vault = db.queryVault({'OWNER': d['DISNAME']})
-                    sell_price = 0
-                    selected_card = str(button_ctx.origin_message.embeds[0].title)
-                    if button_ctx.custom_id == "Equip":
-                        if selected_card in updated_vault['CARDS']:
-                            selected_universe = custom_function
-                            custom_function.selected_universe = selected_card
-                            user_query = {'DISNAME': str(ctx.author)}
-                            response = db.updateUserNoFilter(user_query, {'$set': {'CARD': selected_card}})
-                            await button_ctx.send(f":flower_playing_cards: **{selected_card}** equipped.")
-                            self.stop = True
-                        else:
-                            await button_ctx.send(f"**{selected_card}** is no longer in your vault.")
-                    
-                    elif button_ctx.custom_id == "Resell":
-                        card_data = db.queryCard({'NAME': selected_card})
-                        card_name = card_data['NAME']
-                        sell_price = sell_price + (card_data['PRICE'] * .30)
-                        if card_name == current_card:
-                            await button_ctx.send("You cannot resell equipped cards.")
-                        elif card_name in updated_vault['CARDS']:
-                            sell_buttons = [
-                                manage_components.create_button(
-                                    style=ButtonStyle.green,
-                                    label="Yes",
-                                    custom_id="yes"
-                                ),
-                                manage_components.create_button(
-                                    style=ButtonStyle.blue,
-                                    label="No",
-                                    custom_id="no"
-                                )
-                            ]
-                            sell_buttons_action_row = manage_components.create_actionrow(*sell_buttons)
-                            await button_ctx.send(f"Are you sure you want to sell **{card_name}** for :coin:{round(sell_price)}?", components=[sell_buttons_action_row])
-                            try:
-                                button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[sell_buttons_action_row], timeout=120)
+                    if button_ctx.author == ctx.author:
+                        updated_vault = db.queryVault({'OWNER': d['DISNAME']})
+                        sell_price = 0
+                        selected_card = str(button_ctx.origin_message.embeds[0].title)
+                        if button_ctx.custom_id == "Equip":
+                            if selected_card in updated_vault['CARDS']:
+                                selected_universe = custom_function
+                                custom_function.selected_universe = selected_card
+                                user_query = {'DISNAME': str(ctx.author)}
+                                response = db.updateUserNoFilter(user_query, {'$set': {'CARD': selected_card}})
+                                await button_ctx.send(f":flower_playing_cards: **{selected_card}** equipped.")
+                                self.stop = True
+                            else:
+                                await button_ctx.send(f"**{selected_card}** is no longer in your vault.")
+                        
+                        elif button_ctx.custom_id == "Resell":
+                            card_data = db.queryCard({'NAME': selected_card})
+                            card_name = card_data['NAME']
+                            sell_price = sell_price + (card_data['PRICE'] * .30)
+                            if card_name == current_card:
+                                await button_ctx.send("You cannot resell equipped cards.")
+                            elif card_name in updated_vault['CARDS']:
+                                sell_buttons = [
+                                    manage_components.create_button(
+                                        style=ButtonStyle.green,
+                                        label="Yes",
+                                        custom_id="yes"
+                                    ),
+                                    manage_components.create_button(
+                                        style=ButtonStyle.blue,
+                                        label="No",
+                                        custom_id="no"
+                                    )
+                                ]
+                                sell_buttons_action_row = manage_components.create_actionrow(*sell_buttons)
+                                await button_ctx.send(f"Are you sure you want to sell **{card_name}** for :coin:{round(sell_price)}?", components=[sell_buttons_action_row])
+                                
+                                def check(button_ctx):
+                                    return button_ctx.author == ctx.author
 
-                                if button_ctx.custom_id == "no":
-                                    await button_ctx.send("Sell cancelled. ")
-                                    self.stop = True
-                                if button_ctx.custom_id == "yes":
-                                    db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'CARDS': card_name}})
-                                    await main.bless(sell_price, ctx.author)
-                                    await button_ctx.send("Sold.")
-                            except Exception as ex:
-                                trace = []
-                                tb = ex.__traceback__
-                                while tb is not None:
-                                    trace.append({
-                                        "filename": tb.tb_frame.f_code.co_filename,
-                                        "name": tb.tb_frame.f_code.co_name,
-                                        "lineno": tb.tb_lineno
-                                    })
-                                    tb = tb.tb_next
-                                print(str({
-                                    'PLAYER': str(ctx.author),
-                                    'type': type(ex).__name__,
-                                    'message': str(ex),
-                                    'trace': trace
-                                }))
-                                await ctx.send("There's an issue with selling one or all of your items.")
-                                return
-                        else:
-                            await button_ctx.send(f"**{card_name}** is no longer in your vault.")
-                    
-                    elif button_ctx.custom_id == "Dismantle":
-                        card_data = db.queryCard({'NAME': selected_card})
-                        card_name = card_data['NAME']
-                        selected_universe = card_data['UNIVERSE']
-                        dismantle_amount = round(card_data['PRICE'] * .01)
-                        if card_name == current_card:
-                            await button_ctx.send("You cannot dismantle equipped cards.")
-                        elif card_name in updated_vault['CARDS']:
-                            dismantle_buttons = [
-                                manage_components.create_button(
-                                    style=ButtonStyle.green,
-                                    label="Yes",
-                                    custom_id="yes"
-                                ),
-                                manage_components.create_button(
-                                    style=ButtonStyle.blue,
-                                    label="No",
-                                    custom_id="no"
-                                )
-                            ]
-                            dismantle_buttons_action_row = manage_components.create_actionrow(*dismantle_buttons)
-                            await button_ctx.send(f"Are you sure you want to dismantle **{card_name}** for 💎 {round(dismantle_amount)}?", components=[dismantle_buttons_action_row])
-                            try:
-                                button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[dismantle_buttons_action_row], timeout=120)
+                                
+                                try:
+                                    button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[sell_buttons_action_row], timeout=120, check=check)
 
-                                if button_ctx.custom_id == "no":
-                                    await button_ctx.send("Dismantle cancelled. ")
-                                    self.stop = True
-                                if button_ctx.custom_id == "yes":
-                                    if selected_universe in current_gems:
-                                        query = {'OWNER': str(ctx.author)}
-                                        update_query = {'$inc': {'GEMS.$[type].' + "GEMS": dismantle_amount}}
-                                        filter_query = [{'type.' + "UNIVERSE": selected_universe}]
-                                        response = db.updateVault(query, update_query, filter_query)
+                                    if button_ctx.custom_id == "no":
+                                        await button_ctx.send("Sell cancelled. ")
+                                        self.stop = True
+                                    if button_ctx.custom_id == "yes":
+                                        db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'CARDS': card_name}})
+                                        await main.bless(sell_price, ctx.author)
+                                        await button_ctx.send("Sold.")
+                                except Exception as ex:
+                                    trace = []
+                                    tb = ex.__traceback__
+                                    while tb is not None:
+                                        trace.append({
+                                            "filename": tb.tb_frame.f_code.co_filename,
+                                            "name": tb.tb_frame.f_code.co_name,
+                                            "lineno": tb.tb_lineno
+                                        })
+                                        tb = tb.tb_next
+                                    print(str({
+                                        'PLAYER': str(ctx.author),
+                                        'type': type(ex).__name__,
+                                        'message': str(ex),
+                                        'trace': trace
+                                    }))
+                                    await ctx.send("There's an issue with selling one or all of your items.")
+                                    return
+                            else:
+                                await button_ctx.send(f"**{card_name}** is no longer in your vault.")
+                        
+                        elif button_ctx.custom_id == "Dismantle":
+                            card_data = db.queryCard({'NAME': selected_card})
+                            card_name = card_data['NAME']
+                            selected_universe = card_data['UNIVERSE']
+                            dismantle_amount = round(card_data['PRICE'] * .01)
+                            if card_name == current_card:
+                                await button_ctx.send("You cannot dismantle equipped cards.")
+                            elif card_name in updated_vault['CARDS']:
+                                dismantle_buttons = [
+                                    manage_components.create_button(
+                                        style=ButtonStyle.green,
+                                        label="Yes",
+                                        custom_id="yes"
+                                    ),
+                                    manage_components.create_button(
+                                        style=ButtonStyle.blue,
+                                        label="No",
+                                        custom_id="no"
+                                    )
+                                ]
+                                dismantle_buttons_action_row = manage_components.create_actionrow(*dismantle_buttons)
+                                await button_ctx.send(f"Are you sure you want to dismantle **{card_name}** for 💎 {round(dismantle_amount)}?", components=[dismantle_buttons_action_row])
+                                
+                                def check(button_ctx):
+                                    return button_ctx.author == ctx.author
+
+                                
+                                try:
+                                    button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[dismantle_buttons_action_row], timeout=120, check=check)
+
+                                    if button_ctx.custom_id == "no":
+                                        await button_ctx.send("Dismantle cancelled. ")
+                                        self.stop = True
+                                    if button_ctx.custom_id == "yes":
+                                        if selected_universe in current_gems:
+                                            query = {'OWNER': str(ctx.author)}
+                                            update_query = {'$inc': {'GEMS.$[type].' + "GEMS": dismantle_amount}}
+                                            filter_query = [{'type.' + "UNIVERSE": selected_universe}]
+                                            response = db.updateVault(query, update_query, filter_query)
+                                        else:
+                                            response = db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$addToSet':{'GEMS': {'UNIVERSE': selected_universe, 'GEMS': dismantle_amount, 'UNIVERSE_HEART': False}}})
+
+                                        db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'CARDS': card_name}})
+                                        await main.bless(sell_price, ctx.author)
+                                        await button_ctx.send("Dismantled.")
+                                        self.stop = True
+                                except Exception as ex:
+                                    trace = []
+                                    tb = ex.__traceback__
+                                    while tb is not None:
+                                        trace.append({
+                                            "filename": tb.tb_frame.f_code.co_filename,
+                                            "name": tb.tb_frame.f_code.co_name,
+                                            "lineno": tb.tb_lineno
+                                        })
+                                        tb = tb.tb_next
+                                    print(str({
+                                        'PLAYER': str(ctx.author),
+                                        'type': type(ex).__name__,
+                                        'message': str(ex),
+                                        'trace': trace
+                                    }))
+                                    await ctx.send("There's an issue with selling one or all of your items.")
+                                    return
+                            else:
+                                await button_ctx.send(f"**{card_name}** is no longer in your vault.")
+
+                        elif button_ctx.custom_id == "Trade":
+                            
+                            card_data = db.queryCard({'NAME' : selected_card})
+                            card_name= card_data['NAME']
+                            sell_price = card_data['PRICE'] * .10
+                            mtrade = db.queryTrade({'MERCHANT' : str(ctx.author), 'OPEN' : True})
+                            mvalidation=False
+                            bvalidation=False
+                            item_already_in_trade=False
+                            if card_name == current_card:
+                                await button_ctx.send("You cannot trade equipped cards.")
+                            else:
+                                if mtrade:
+                                    if selected_card in mtrade['MCARDS']:
+                                        await ctx.send(f"{ctx.author.mention} card already in **Trade**")
+                                        item_already_in_trade=True
+                                    mvalidation=True
+                                else:
+                                    btrade = db.queryTrade({'BUYER' : str(ctx.author), 'OPEN' : True})
+                                    if btrade:
+                                        if selected_card in btrade['BCARDS']:
+                                            await ctx.send(f"{ctx.author.mention} card already in **Trade**")
+                                            item_already_in_trade=True
+                                        bvalidation=True
                                     else:
-                                        response = db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$addToSet':{'GEMS': {'UNIVERSE': selected_universe, 'GEMS': dismantle_amount, 'UNIVERSE_HEART': False}}})
+                                        await ctx.send(f"{ctx.author.mention} use **/trade** to open a **trade**")
+                                        return
+                                if item_already_in_trade:
+                                    trade_buttons = [
+                                        manage_components.create_button(
+                                            style=ButtonStyle.green,
+                                            label="Yes",
+                                            custom_id="yes"
+                                        ),
+                                        manage_components.create_button(
+                                            style=ButtonStyle.blue,
+                                            label="No",
+                                            custom_id="no"
+                                        )
+                                    ]
+                                    trade_buttons_action_row = manage_components.create_actionrow(*trade_buttons)
+                                    await button_ctx.send(f"Woudl you like to remove **{selected_card}** from the **Trade**?", components=[trade_buttons_action_row])
+                                    
+                                    def check(button_ctx):
+                                        return button_ctx.author == ctx.author
 
-                                    db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'CARDS': card_name}})
-                                    await main.bless(sell_price, ctx.author)
-                                    await button_ctx.send("Dismantled.")
-                                    self.stop = True
-                            except Exception as ex:
-                                trace = []
-                                tb = ex.__traceback__
-                                while tb is not None:
-                                    trace.append({
-                                        "filename": tb.tb_frame.f_code.co_filename,
-                                        "name": tb.tb_frame.f_code.co_name,
-                                        "lineno": tb.tb_lineno
-                                    })
-                                    tb = tb.tb_next
-                                print(str({
-                                    'PLAYER': str(ctx.author),
-                                    'type': type(ex).__name__,
-                                    'message': str(ex),
-                                    'trace': trace
-                                }))
-                                await ctx.send("There's an issue with selling one or all of your items.")
-                                return
-                        else:
-                            await button_ctx.send(f"**{card_name}** is no longer in your vault.")
-
-                    elif button_ctx.custom_id == "Exit":
-                        await button_ctx.send("Done.")
-                        self.stop = True
-
+                                    
+                                    try:
+                                        button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[trade_buttons_action_row], timeout=120, check=check)
+                                        if button_ctx.custom_id == "no":
+                                                await button_ctx.send("Happy Trading")
+                                                self.stop = True
+                                        if button_ctx.custom_id == "yes":
+                                            neg_sell_price = 0 - abs(int(sell_price))
+                                            if mvalidation:
+                                                trade_query = {'MERCHANT' : str(button_ctx.author), 'BUYER' : str(mtrade['BUYER']), 'OPEN' : True}
+                                                update_query = {"$pull" : {'MCARDS': selected_card}, "$inc" : {'TAX' : int(neg_sell_price)}}
+                                                resp = db.updateTrade(trade_query, update_query)
+                                                await button_ctx.send("Returned.")
+                                                self.stop = True
+                                            elif bvalidation:
+                                                trade_query = {'MERCHANT' : str(btrade['MERCHANT']),'BUYER' : str(button_ctx.author), 'OPEN' : True}
+                                                update_query = {"$pull" : {'BCARDS': selected_card}, "$inc" : {'TAX' : int(neg_sell_price)}}
+                                                resp = db.updateTrade(trade_query, update_query)
+                                                await button_ctx.send("Returned.")
+                                                self.stop = True
+                                    except Exception as ex:
+                                        trace = []
+                                        tb = ex.__traceback__
+                                        while tb is not None:
+                                            trace.append({
+                                                "filename": tb.tb_frame.f_code.co_filename,
+                                                "name": tb.tb_frame.f_code.co_name,
+                                                "lineno": tb.tb_lineno
+                                            })
+                                            tb = tb.tb_next
+                                        print(str({
+                                            'PLAYER': str(ctx.author),
+                                            'type': type(ex).__name__,
+                                            'message': str(ex),
+                                            'trace': trace
+                                        }))
+                                        await ctx.send("There's an issue with trading one or all of your items.")
+                                        return   
+                                elif mvalidation == True or bvalidation ==True:    #If user is valid
+                                    sell_price = card_data['PRICE'] * .10
+                                    trade_buttons = [
+                                        manage_components.create_button(
+                                            style=ButtonStyle.green,
+                                            label="Yes",
+                                            custom_id="yes"
+                                        ),
+                                        manage_components.create_button(
+                                            style=ButtonStyle.blue,
+                                            label="No",
+                                            custom_id="no"
+                                        )
+                                    ]
+                                    trade_buttons_action_row = manage_components.create_actionrow(*trade_buttons)
+                                    await button_ctx.send(f"Are you sure you want to trade **{selected_card}**", components=[trade_buttons_action_row])
+                                    try:
+                                        button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[trade_buttons_action_row], timeout=120)
+                                        if button_ctx.custom_id == "no":
+                                                await button_ctx.send("Not this time. ")
+                                                self.stop = True
+                                        if button_ctx.custom_id == "yes":
+                                            if mvalidation:
+                                                trade_query = {'MERCHANT' : str(ctx.author), 'BUYER' : str(mtrade['BUYER']), 'OPEN' : True}
+                                                update_query = {"$push" : {'MCARDS': selected_card}, "$inc" : {'TAX' : int(sell_price)}}
+                                                resp = db.updateTrade(trade_query, update_query)
+                                                await button_ctx.send("Traded.")
+                                                self.stop = True
+                                            elif bvalidation:
+                                                trade_query = {'MERCHANT' : str(btrade['MERCHANT']),'BUYER' : str(ctx.author), 'OPEN' : True}
+                                                update_query = {"$push" : {'BCARDS': selected_card}, "$inc" : {'TAX' : int(sell_price)}}
+                                                resp = db.updateTrade(trade_query, update_query)
+                                                await button_ctx.send("Traded.")
+                                                self.stop = True
+                                    except Exception as ex:
+                                        trace = []
+                                        tb = ex.__traceback__
+                                        while tb is not None:
+                                            trace.append({
+                                                "filename": tb.tb_frame.f_code.co_filename,
+                                                "name": tb.tb_frame.f_code.co_name,
+                                                "lineno": tb.tb_lineno
+                                            })
+                                            tb = tb.tb_next
+                                        print(str({
+                                            'PLAYER': str(ctx.author),
+                                            'type': type(ex).__name__,
+                                            'message': str(ex),
+                                            'trace': trace
+                                        }))
+                                        await ctx.send("There's an issue with trading one or all of your items.")
+                                        return   
+                            
+                        elif button_ctx.custom_id == "Exit":
+                            await button_ctx.send("Done.")
+                            self.stop = True
+                    else:
+                        await ctx.send("This is not your card list.")
                 await Paginator(bot=self.bot, disableAfterTimeout=True, ctx=ctx, pages=embed_list, timeout=60, customActionRow=[
                     custom_action_row,
                     custom_function,
@@ -684,143 +834,292 @@ class Profile(commands.Cog):
                     manage_components.create_button(style=3, label="Equip", custom_id="Equip"),
                     manage_components.create_button(style=1, label="Resell", custom_id="Resell"),
                     manage_components.create_button(style=1, label="Dismantle", custom_id="Dismantle"),
+                    manage_components.create_button(style=1, label="Trade", custom_id="Trade"),
                     manage_components.create_button(style=2, label="Exit", custom_id="Exit")
                 ]
                 custom_action_row = manage_components.create_actionrow(*buttons)
 
                 async def custom_function(self, button_ctx):
-                    updated_vault = db.queryVault({'OWNER': d['DISNAME']})
-                    sell_price = 0
-                    selected_title = str(button_ctx.origin_message.embeds[0].title)
-                    if button_ctx.custom_id == "Equip":
-                        if selected_title in updated_vault['TITLES']:
-                            selected_universe = custom_function
-                            custom_function.selected_universe = selected_title
-                            user_query = {'DISNAME': str(ctx.author)}
-                            response = db.updateUserNoFilter(user_query, {'$set': {'TITLE': selected_title}})
-                            await button_ctx.send(f"🎗️ **{selected_title}** equipped.")
+                    if button_ctx.author == ctx.author:
+                        updated_vault = db.queryVault({'OWNER': d['DISNAME']})
+                        sell_price = 0
+                        selected_title = str(button_ctx.origin_message.embeds[0].title)
+                        if button_ctx.custom_id == "Equip":
+                            if selected_title in updated_vault['TITLES']:
+                                selected_universe = custom_function
+                                custom_function.selected_universe = selected_title
+                                user_query = {'DISNAME': str(ctx.author)}
+                                response = db.updateUserNoFilter(user_query, {'$set': {'TITLE': selected_title}})
+                                await button_ctx.send(f"🎗️ **{selected_title}** equipped.")
+                                self.stop = True
+                            else:
+                                await button_ctx.send(f"**{selected_title}** is no longer in your vault.")                           
+                        
+                        elif button_ctx.custom_id == "Resell":
+                            title_data = db.queryTitle({'TITLE': selected_title})
+                            title_name = title_data['TITLE']
+                            sell_price = sell_price + (title_data['PRICE'] * .30)
+                            if title_name == current_title:
+                                await button_ctx.send("You cannot resell equipped titles.")
+                            elif title_name in updated_vault['TITLES']:
+                                sell_buttons = [
+                                    manage_components.create_button(
+                                        style=ButtonStyle.green,
+                                        label="Yes",
+                                        custom_id="yes"
+                                    ),
+                                    manage_components.create_button(
+                                        style=ButtonStyle.blue,
+                                        label="No",
+                                        custom_id="no"
+                                    )
+                                ]
+                                sell_buttons_action_row = manage_components.create_actionrow(*sell_buttons)
+                                await button_ctx.send(f"Are you sure you want to sell **{title_name}** for :coin:{round(sell_price)}?", components=[sell_buttons_action_row])
+                                
+                                def check(button_ctx):
+                                    return button_ctx.author == ctx.author
+
+                                
+                                try:
+                                    button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[sell_buttons_action_row], timeout=120, check=check)
+
+                                    if button_ctx.custom_id == "no":
+                                        await button_ctx.send("Sell cancelled. Please press the Exit button if you are done reselling titles.")
+                                        self.stop = True
+                                    if button_ctx.custom_id == "yes":
+                                        db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'TITLES': title_name}})
+                                        await main.bless(sell_price, ctx.author)
+                                        await button_ctx.send("Sold.")
+                                except Exception as ex:
+                                    trace = []
+                                    tb = ex.__traceback__
+                                    while tb is not None:
+                                        trace.append({
+                                            "filename": tb.tb_frame.f_code.co_filename,
+                                            "name": tb.tb_frame.f_code.co_name,
+                                            "lineno": tb.tb_lineno
+                                        })
+                                        tb = tb.tb_next
+                                    print(str({
+                                        'PLAYER': str(ctx.author),
+                                        'type': type(ex).__name__,
+                                        'message': str(ex),
+                                        'trace': trace
+                                    }))
+                                    await ctx.send("There's an issue with selling one or all of your items.")
+                                    return
+                            else:
+                                await button_ctx.send(f"**{title_name}** is no longer in your vault.")
+                        
+                        elif button_ctx.custom_id == "Dismantle":
+                            title_data = db.queryTitle({'TITLE': selected_title})
+                            title_name = title_data['TITLE']
+                            selected_universe = title_data['UNIVERSE']
+                            dismantle_amount = round(title_data['PRICE'] * .03)
+                            if title_name == current_title:
+                                await button_ctx.send("You cannot resell equipped titles.")
+                            elif title_name in updated_vault['TITLES']:
+                                dismantle_buttons = [
+                                    manage_components.create_button(
+                                        style=ButtonStyle.green,
+                                        label="Yes",
+                                        custom_id="yes"
+                                    ),
+                                    manage_components.create_button(
+                                        style=ButtonStyle.blue,
+                                        label="No",
+                                        custom_id="no"
+                                    )
+                                ]
+                                dismantle_buttons_action_row = manage_components.create_actionrow(*dismantle_buttons)
+                                await button_ctx.send(f"Are you sure you want to dismantle **{title_name}** for 💎 {round(dismantle_amount)}?", components=[dismantle_buttons_action_row])
+                                
+                                def check(button_ctx):
+                                    return button_ctx.author == ctx.author
+
+                                
+                                try:
+                                    button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[dismantle_buttons_action_row], timeout=120, check=check)
+
+                                    if button_ctx.custom_id == "no":
+                                        await button_ctx.send("Dismantle cancelled. ")
+                                        self.stop = True
+                                    if button_ctx.custom_id == "yes":
+                                        if selected_universe in current_gems:
+                                            query = {'OWNER': str(ctx.author)}
+                                            update_query = {'$inc': {'GEMS.$[type].' + "GEMS": dismantle_amount}}
+                                            filter_query = [{'type.' + "UNIVERSE": selected_universe}]
+                                            response = db.updateVault(query, update_query, filter_query)
+                                        else:
+                                            response = db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$addToSet':{'GEMS': {'UNIVERSE': selected_universe, 'GEMS': dismantle_amount, 'UNIVERSE_HEART': False}}})
+
+                                        db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'TITLES': title_name}})
+                                        await main.bless(sell_price, ctx.author)
+                                        await button_ctx.send("Dismantled.")
+                                        self.stop = True
+                                except Exception as ex:
+                                    trace = []
+                                    tb = ex.__traceback__
+                                    while tb is not None:
+                                        trace.append({
+                                            "filename": tb.tb_frame.f_code.co_filename,
+                                            "name": tb.tb_frame.f_code.co_name,
+                                            "lineno": tb.tb_lineno
+                                        })
+                                        tb = tb.tb_next
+                                    print(str({
+                                        'PLAYER': str(ctx.author),
+                                        'type': type(ex).__name__,
+                                        'message': str(ex),
+                                        'trace': trace
+                                    }))
+                                    await ctx.send("There's an issue with selling one or all of your items.")
+                                    return
+                            else:
+                                await button_ctx.send(f"**{title_name}** is no longer in your vault.")
+
+                        elif button_ctx.custom_id == "Trade":
+                            title_data = db.queryTitle({'TITLE' : selected_title})
+                            title_name = title_data['TITLE']
+                            if title_name == current_title:
+                                await button_ctx.send("You cannot trade equipped titles.")
+                                return
+                            sell = title_data['PRICE'] * .10
+                            mtrade = db.queryTrade({'MERCHANT' : str(ctx.author), 'OPEN' : True})
+                            mvalidation=False
+                            bvalidation=False
+                            item_already_in_trade=False
+                            if mtrade:
+                                if selected_title in mtrade['MTITLES']:
+                                    await ctx.send(f"{ctx.author.mention} title already in **Trade**")
+                                    item_already_in_trade=True
+                                mvalidation=True
+                            else:
+                                btrade = db.queryTrade({'BUYER' : str(ctx.author), 'OPEN' : True})
+                                if btrade:
+                                    if selected_title in btrade['BTITLES']:
+                                        await ctx.send(f"{ctx.author.mention} title already in **Trade**")
+                                        item_already_in_trade=True
+                                    bvalidation=True
+                                else:
+                                    await ctx.send(f"{ctx.author.mention} use **/trade** to open a **trade**")
+                                    return
+                            if item_already_in_trade:
+                                trade_buttons = [
+                                    manage_components.create_button(
+                                        style=ButtonStyle.green,
+                                        label="Yes",
+                                        custom_id="yes"
+                                    ),
+                                    manage_components.create_button(
+                                        style=ButtonStyle.blue,
+                                        label="No",
+                                        custom_id="no"
+                                    )
+                                ]
+                                trade_buttons_action_row = manage_components.create_actionrow(*trade_buttons)
+                                await button_ctx.send(f"Woudl you like to remove **{selected_title}** from the **Trade**?", components=[trade_buttons_action_row])
+                                
+                                def check(button_ctx):
+                                    return button_ctx.author == ctx.author
+
+                                
+                                try:
+                                    button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[trade_buttons_action_row], timeout=120, check=check)
+                                    if button_ctx.custom_id == "no":
+                                            await button_ctx.send("Happy Trading")
+                                            self.stop = True
+                                    if button_ctx.custom_id == "yes":
+                                        neg_sell_price = 0 - abs(int(sell_price))
+                                        if mvalidation:
+                                            trade_query = {'MERCHANT' : str(button_ctx.author), 'BUYER' : str(mtrade['BUYER']), 'OPEN' : True}
+                                            update_query = {"$pull" : {'MTITLES': selected_title}, "$inc" : {'TAX' : int(neg_sell_price)}}
+                                            resp = db.updateTrade(trade_query, update_query)
+                                            await button_ctx.send("Returned.")
+                                            self.stop = True
+                                        elif bvalidation:
+                                            trade_query = {'MERCHANT' : str(btrade['MERCHANT']),'BUYER' : str(button_ctx.author), 'OPEN' : True}
+                                            update_query = {"$pull" : {'BTITLES': selected_title}, "$inc" : {'TAX' : int(neg_sell_price)}}
+                                            resp = db.updateTrade(trade_query, update_query)
+                                            await button_ctx.send("Returned.")
+                                            self.stop = True
+                                except Exception as ex:
+                                    trace = []
+                                    tb = ex.__traceback__
+                                    while tb is not None:
+                                        trace.append({
+                                            "filename": tb.tb_frame.f_code.co_filename,
+                                            "name": tb.tb_frame.f_code.co_name,
+                                            "lineno": tb.tb_lineno
+                                        })
+                                        tb = tb.tb_next
+                                    print(str({
+                                        'PLAYER': str(ctx.author),
+                                        'type': type(ex).__name__,
+                                        'message': str(ex),
+                                        'trace': trace
+                                    }))
+                                    await ctx.send("There's an issue with trading one or all of your items.")
+                                    return   
+                            elif mvalidation == True or bvalidation ==True:    #If user is valid
+                                sell_price = title_data['PRICE'] * .10
+                                trade_buttons = [
+                                    manage_components.create_button(
+                                        style=ButtonStyle.green,
+                                        label="Yes",
+                                        custom_id="yes"
+                                    ),
+                                    manage_components.create_button(
+                                        style=ButtonStyle.blue,
+                                        label="No",
+                                        custom_id="no"
+                                    )
+                                ]
+                                trade_buttons_action_row = manage_components.create_actionrow(*trade_buttons)
+                                await button_ctx.send(f"Are you sure you want to trade **{selected_title}**", components=[trade_buttons_action_row])
+                                try:
+                                    button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[trade_buttons_action_row], timeout=120)
+                                    if button_ctx.custom_id == "no":
+                                            await button_ctx.send("Not this time. ")
+                                            self.stop = True
+                                    if button_ctx.custom_id == "yes":
+                                        if mvalidation:
+                                            trade_query = {'MERCHANT' : str(ctx.author), 'BUYER' : str(mtrade['BUYER']), 'OPEN' : True}
+                                            update_query = {"$push" : {'MTITLES': selected_title}, "$inc" : {'TAX' : int(sell_price)}}
+                                            resp = db.updateTrade(trade_query, update_query)
+                                            await button_ctx.send("Traded.")
+                                            self.stop = True
+                                        elif bvalidation:
+                                            trade_query = {'MERCHANT' : str(btrade['MERCHANT']),'BUYER' : str(ctx.author), 'OPEN' : True}
+                                            update_query = {"$push" : {'BTITLES': selected_title}, "$inc" : {'TAX' : int(sell_price)}}
+                                            resp = db.updateTrade(trade_query, update_query)
+                                            await button_ctx.send("Traded.")
+                                            self.stop = True
+                                except Exception as ex:
+                                    trace = []
+                                    tb = ex.__traceback__
+                                    while tb is not None:
+                                        trace.append({
+                                            "filename": tb.tb_frame.f_code.co_filename,
+                                            "name": tb.tb_frame.f_code.co_name,
+                                            "lineno": tb.tb_lineno
+                                        })
+                                        tb = tb.tb_next
+                                    print(str({
+                                        'PLAYER': str(ctx.author),
+                                        'type': type(ex).__name__,
+                                        'message': str(ex),
+                                        'trace': trace
+                                    }))
+                                    await ctx.send("There's an issue with trading one or all of your items.")
+                                    return   
+                                                        
+                        elif button_ctx.custom_id == "Exit":
+                            await button_ctx.send("Done.")
                             self.stop = True
-                        else:
-                            await button_ctx.send(f"**{selected_title}** is no longer in your vault.")                           
-                    
-                    elif button_ctx.custom_id == "Resell":
-                        title_data = db.queryTitle({'TITLE': selected_title})
-                        title_name = title_data['TITLE']
-                        sell_price = sell_price + (title_data['PRICE'] * .30)
-                        if title_name == current_title:
-                            await button_ctx.send("You cannot resell equipped titles.")
-                        elif title_name in updated_vault['TITLES']:
-                            sell_buttons = [
-                                manage_components.create_button(
-                                    style=ButtonStyle.green,
-                                    label="Yes",
-                                    custom_id="yes"
-                                ),
-                                manage_components.create_button(
-                                    style=ButtonStyle.blue,
-                                    label="No",
-                                    custom_id="no"
-                                )
-                            ]
-                            sell_buttons_action_row = manage_components.create_actionrow(*sell_buttons)
-                            await button_ctx.send(f"Are you sure you want to sell **{title_name}** for :coin:{round(sell_price)}?", components=[sell_buttons_action_row])
-                            try:
-                                button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[sell_buttons_action_row], timeout=120)
-
-                                if button_ctx.custom_id == "no":
-                                    await button_ctx.send("Sell cancelled. Please press the Exit button if you are done reselling titles.")
-                                    self.stop = True
-                                if button_ctx.custom_id == "yes":
-                                    db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'TITLES': title_name}})
-                                    await main.bless(sell_price, ctx.author)
-                                    await button_ctx.send("Sold.")
-                            except Exception as ex:
-                                trace = []
-                                tb = ex.__traceback__
-                                while tb is not None:
-                                    trace.append({
-                                        "filename": tb.tb_frame.f_code.co_filename,
-                                        "name": tb.tb_frame.f_code.co_name,
-                                        "lineno": tb.tb_lineno
-                                    })
-                                    tb = tb.tb_next
-                                print(str({
-                                    'PLAYER': str(ctx.author),
-                                    'type': type(ex).__name__,
-                                    'message': str(ex),
-                                    'trace': trace
-                                }))
-                                await ctx.send("There's an issue with selling one or all of your items.")
-                                return
-                        else:
-                            await button_ctx.send(f"**{title_name}** is no longer in your vault.")
-                    
-                    elif button_ctx.custom_id == "Dismantle":
-                        title_data = db.queryTitle({'TITLE': selected_title})
-                        title_name = title_data['TITLE']
-                        selected_universe = title_data['UNIVERSE']
-                        dismantle_amount = round(title_data['PRICE'] * .03)
-                        if title_name == current_title:
-                            await button_ctx.send("You cannot resell equipped titles.")
-                        elif title_name in updated_vault['TITLES']:
-                            dismantle_buttons = [
-                                manage_components.create_button(
-                                    style=ButtonStyle.green,
-                                    label="Yes",
-                                    custom_id="yes"
-                                ),
-                                manage_components.create_button(
-                                    style=ButtonStyle.blue,
-                                    label="No",
-                                    custom_id="no"
-                                )
-                            ]
-                            dismantle_buttons_action_row = manage_components.create_actionrow(*dismantle_buttons)
-                            await button_ctx.send(f"Are you sure you want to dismantle **{title_name}** for 💎 {round(dismantle_amount)}?", components=[dismantle_buttons_action_row])
-                            try:
-                                button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[dismantle_buttons_action_row], timeout=120)
-
-                                if button_ctx.custom_id == "no":
-                                    await button_ctx.send("Dismantle cancelled. ")
-                                    self.stop = True
-                                if button_ctx.custom_id == "yes":
-                                    if selected_universe in current_gems:
-                                        query = {'OWNER': str(ctx.author)}
-                                        update_query = {'$inc': {'GEMS.$[type].' + "GEMS": dismantle_amount}}
-                                        filter_query = [{'type.' + "UNIVERSE": selected_universe}]
-                                        response = db.updateVault(query, update_query, filter_query)
-                                    else:
-                                        response = db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$addToSet':{'GEMS': {'UNIVERSE': selected_universe, 'GEMS': dismantle_amount, 'UNIVERSE_HEART': False}}})
-
-                                    db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'TITLES': title_name}})
-                                    await main.bless(sell_price, ctx.author)
-                                    await button_ctx.send("Dismantled.")
-                                    self.stop = True
-                            except Exception as ex:
-                                trace = []
-                                tb = ex.__traceback__
-                                while tb is not None:
-                                    trace.append({
-                                        "filename": tb.tb_frame.f_code.co_filename,
-                                        "name": tb.tb_frame.f_code.co_name,
-                                        "lineno": tb.tb_lineno
-                                    })
-                                    tb = tb.tb_next
-                                print(str({
-                                    'PLAYER': str(ctx.author),
-                                    'type': type(ex).__name__,
-                                    'message': str(ex),
-                                    'trace': trace
-                                }))
-                                await ctx.send("There's an issue with selling one or all of your items.")
-                                return
-                        else:
-                            await button_ctx.send(f"**{title_name}** is no longer in your vault.")
-
-                    
-                    elif button_ctx.custom_id == "Exit":
-                        await button_ctx.send("Done.")
-                        self.stop = True
+                    else:
+                        await ctx.send("This is not your Title list.")
 
 
                 await Paginator(bot=self.bot, ctx=ctx, pages=embed_list, timeout=60, customActionRow=[
@@ -906,146 +1205,296 @@ class Profile(commands.Cog):
                     manage_components.create_button(style=3, label="Equip", custom_id="Equip"),
                     manage_components.create_button(style=1, label="Resell", custom_id="Resell"),
                     manage_components.create_button(style=1, label="Dismantle", custom_id="Dismantle"),
+                    manage_components.create_button(style=1, label="Trade", custom_id="Trade"),
                     manage_components.create_button(style=2, label="Exit", custom_id="Exit")
                 ]
                 custom_action_row = manage_components.create_actionrow(*buttons)
 
                 async def custom_function(self, button_ctx):
-                    u_vault = db.queryVault({'OWNER': d['DISNAME']})
-                    updated_vault = []
-                    for arm in u_vault['ARMS']:
-                        updated_vault.append(arm['ARM'])
-                    
-                    sell_price = 0
-                    selected_arm = str(button_ctx.origin_message.embeds[0].title)
-                    if button_ctx.custom_id == "Equip":
-                        if selected_arm in updated_vault:
-                            selected_universe = custom_function
-                            custom_function.selected_universe = selected_arm
-                            user_query = {'DISNAME': str(ctx.author)}
-                            response = db.updateUserNoFilter(user_query, {'$set': {'ARM': selected_arm}})
-                            await button_ctx.send(f":mechanical_arm: **{selected_arm}** equipped.")
+                    if button_ctx.author == ctx.author:
+                        u_vault = db.queryVault({'OWNER': d['DISNAME']})
+                        updated_vault = []
+                        for arm in u_vault['ARMS']:
+                            updated_vault.append(arm['ARM'])
+                        
+                        sell_price = 0
+                        selected_arm = str(button_ctx.origin_message.embeds[0].title)
+                        if button_ctx.custom_id == "Equip":
+                            if selected_arm in updated_vault:
+                                selected_universe = custom_function
+                                custom_function.selected_universe = selected_arm
+                                user_query = {'DISNAME': str(ctx.author)}
+                                response = db.updateUserNoFilter(user_query, {'$set': {'ARM': selected_arm}})
+                                await button_ctx.send(f":mechanical_arm: **{selected_arm}** equipped.")
+                                self.stop = True
+                            else:
+                                await button_ctx.send(f"**{selected_arm}** is no longer in your vault.")
+                        
+                        elif button_ctx.custom_id == "Resell":
+                            arm_data = db.queryArm({'ARM': selected_arm})
+                            arm_name = arm_data['ARM']
+                            sell_price = sell_price + (arm_data['PRICE'] * .30)
+                            if arm_name == current_arm:
+                                await button_ctx.send("You cannot resell equipped arms.")
+                            elif arm_name in updated_vault:
+                                sell_buttons = [
+                                    manage_components.create_button(
+                                        style=ButtonStyle.green,
+                                        label="Yes",
+                                        custom_id="yes"
+                                    ),
+                                    manage_components.create_button(
+                                        style=ButtonStyle.blue,
+                                        label="No",
+                                        custom_id="no"
+                                    )
+                                ]
+                                sell_buttons_action_row = manage_components.create_actionrow(*sell_buttons)
+                                await button_ctx.send(f"Are you sure you want to sell **{arm_name}** for :coin:{round(sell_price)}?", components=[sell_buttons_action_row])
+                                
+                                def check(button_ctx):
+                                    return button_ctx.author == ctx.author
+
+                                
+                                try:
+                                    button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[sell_buttons_action_row], timeout=120, check=check)
+
+                                    if button_ctx.custom_id == "no":
+                                        await button_ctx.send("Sell cancelled. Please press the Exit button if you are done reselling titles.")
+                                        self.stop = True
+                                    if button_ctx.custom_id == "yes":
+                                        db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'ARMS': {'ARM': str(arm_name)}}})
+                                        await main.bless(sell_price, ctx.author)
+                                        await button_ctx.send("Sold.")
+                                except Exception as ex:
+                                    trace = []
+                                    tb = ex.__traceback__
+                                    while tb is not None:
+                                        trace.append({
+                                            "filename": tb.tb_frame.f_code.co_filename,
+                                            "name": tb.tb_frame.f_code.co_name,
+                                            "lineno": tb.tb_lineno
+                                        })
+                                        tb = tb.tb_next
+                                    print(str({
+                                        'PLAYER': str(ctx.author),
+                                        'type': type(ex).__name__,
+                                        'message': str(ex),
+                                        'trace': trace
+                                    }))
+                                    await ctx.send("There's an issue with selling one or all of your items.")
+                                    return
+                            else:
+                                await button_ctx.send(f"**{arm_name}** is no longer in your vault.")       
+                        
+                        elif button_ctx.custom_id == "Dismantle":
+                            arm_data = db.queryArm({'ARM': selected_arm})
+                            arm_name = arm_data['ARM']
+                            selected_universe = arm_data['UNIVERSE']
+                            dismantle_amount = round(arm_data['PRICE'] * .03)
+                            if arm_name == current_arm:
+                                await button_ctx.send("You cannot dismantle equipped arms.")
+                            elif arm_name in updated_vault:
+                                dismantle_buttons = [
+                                    manage_components.create_button(
+                                        style=ButtonStyle.green,
+                                        label="Yes",
+                                        custom_id="yes"
+                                    ),
+                                    manage_components.create_button(
+                                        style=ButtonStyle.blue,
+                                        label="No",
+                                        custom_id="no"
+                                    )
+                                ]
+                                dismantle_buttons_action_row = manage_components.create_actionrow(*dismantle_buttons)
+                                await button_ctx.send(f"Are you sure you want to dismantle **{arm_name}** for 💎 {round(dismantle_amount)}?", components=[dismantle_buttons_action_row])
+                                
+                                def check(button_ctx):
+                                    return button_ctx.author == ctx.author
+
+                                
+                                try:
+                                    button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[dismantle_buttons_action_row], timeout=120, check=check)
+
+                                    if button_ctx.custom_id == "no":
+                                        await button_ctx.send("Dismantle cancelled. ")
+                                        self.stop = True
+                                    if button_ctx.custom_id == "yes":
+                                        if selected_universe in current_gems:
+                                            query = {'OWNER': str(ctx.author)}
+                                            update_query = {'$inc': {'GEMS.$[type].' + "GEMS": dismantle_amount}}
+                                            filter_query = [{'type.' + "UNIVERSE": selected_universe}]
+                                            response = db.updateVault(query, update_query, filter_query)
+                                        else:
+                                            response = db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$addToSet':{'GEMS': {'UNIVERSE': selected_universe, 'GEMS': dismantle_amount, 'UNIVERSE_HEART': False}}})
+
+                                        db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'ARMS': {'ARM': str(arm_name)}}})
+                                        await main.bless(sell_price, ctx.author)
+                                        await button_ctx.send("Dismantled.")
+                                        self.stop = True
+                                except Exception as ex:
+                                    trace = []
+                                    tb = ex.__traceback__
+                                    while tb is not None:
+                                        trace.append({
+                                            "filename": tb.tb_frame.f_code.co_filename,
+                                            "name": tb.tb_frame.f_code.co_name,
+                                            "lineno": tb.tb_lineno
+                                        })
+                                        tb = tb.tb_next
+                                    print(str({
+                                        'PLAYER': str(ctx.author),
+                                        'type': type(ex).__name__,
+                                        'message': str(ex),
+                                        'trace': trace
+                                    }))
+                                    await ctx.send("There's an issue with selling one or all of your items.")
+                                    return
+                            else:
+                                await button_ctx.send(f"**{card_name}** is no longer in your vault.")
+    
+                        elif button_ctx.custom_id == "Trade":
+                            arm_data = db.queryArm({'ARM' : selected_arm})
+                            arm_name = arm_data['ARM']
+                            if arm_name == current_arm:
+                                await button_ctx.send("You cannot trade equipped arms.")
+                                return
+                            sell_price = arm_data['PRICE'] * .10
+                            mtrade = db.queryTrade({'MERCHANT' : str(ctx.author), 'OPEN' : True})
+                            mvalidation=False
+                            bvalidation=False
+                            item_already_in_trade=False
+                            if mtrade:
+                                if selected_arm in mtrade['MARMS']:
+                                    await ctx.send(f"{ctx.author.mention} arm already in **Trade**")
+                                    item_already_in_trade=True
+                                mvalidation=True
+                            else:
+                                btrade = db.queryTrade({'BUYER' : str(ctx.author), 'OPEN' : True})
+                                if btrade:
+                                    if selected_arm in btrade['BARMS']:
+                                        await ctx.send(f"{ctx.author.mention} arm already in **Trade**")
+                                        item_already_in_trade=True
+                                    bvalidation=True
+                                else:
+                                    await ctx.send(f"{ctx.author.mention} use **/trade** to open a **trade**")
+                                    return
+                            if item_already_in_trade:
+                                trade_buttons = [
+                                    manage_components.create_button(
+                                        style=ButtonStyle.green,
+                                        label="Yes",
+                                        custom_id="yes"
+                                    ),
+                                    manage_components.create_button(
+                                        style=ButtonStyle.blue,
+                                        label="No",
+                                        custom_id="no"
+                                    )
+                                ]
+                                trade_buttons_action_row = manage_components.create_actionrow(*trade_buttons)
+                                await button_ctx.send(f"Woudl you like to remove **{selected_arm}** from the **Trade**?", components=[trade_buttons_action_row])
+                                
+                                def check(button_ctx):
+                                    return button_ctx.author == ctx.author
+
+                                
+                                try:
+                                    button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[trade_buttons_action_row], timeout=120, check=check)
+                                    if button_ctx.custom_id == "no":
+                                            await button_ctx.send("Happy Trading")
+                                            self.stop = True
+                                    if button_ctx.custom_id == "yes":
+                                        neg_sell_price = 0 - abs(int(sell_price))
+                                        if mvalidation:
+                                            trade_query = {'MERCHANT' : str(button_ctx.author), 'BUYER' : str(mtrade['BUYER']), 'OPEN' : True}
+                                            update_query = {"$pull" : {'MARMS': selected_arm}, "$inc" : {'TAX' : int(neg_sell_price)}}
+                                            resp = db.updateTrade(trade_query, update_query)
+                                            await button_ctx.send("Returned.")
+                                            self.stop = True
+                                        elif bvalidation:
+                                            trade_query = {'MERCHANT' : str(btrade['MERCHANT']),'BUYER' : str(button_ctx.author), 'OPEN' : True}
+                                            update_query = {"$pull" : {'BARMS': selected_arm}, "$inc" : {'TAX' : int(neg_sell_price)}}
+                                            resp = db.updateTrade(trade_query, update_query)
+                                            await button_ctx.send("Returned.")
+                                            self.stop = True
+                                except Exception as ex:
+                                    trace = []
+                                    tb = ex.__traceback__
+                                    while tb is not None:
+                                        trace.append({
+                                            "filename": tb.tb_frame.f_code.co_filename,
+                                            "name": tb.tb_frame.f_code.co_name,
+                                            "lineno": tb.tb_lineno
+                                        })
+                                        tb = tb.tb_next
+                                    print(str({
+                                        'PLAYER': str(ctx.author),
+                                        'type': type(ex).__name__,
+                                        'message': str(ex),
+                                        'trace': trace
+                                    }))
+                                    await ctx.send("There's an issue with trading one or all of your items.")
+                                    return   
+                            elif mvalidation == True or bvalidation ==True:    #If user is valid
+                                sell_price = arm_data['PRICE'] * .10
+                                trade_buttons = [
+                                    manage_components.create_button(
+                                        style=ButtonStyle.green,
+                                        label="Yes",
+                                        custom_id="yes"
+                                    ),
+                                    manage_components.create_button(
+                                        style=ButtonStyle.blue,
+                                        label="No",
+                                        custom_id="no"
+                                    )
+                                ]
+                                trade_buttons_action_row = manage_components.create_actionrow(*trade_buttons)
+                                await button_ctx.send(f"Are you sure you want to trade **{selected_arm}**", components=[trade_buttons_action_row])
+                                try:
+                                    button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[trade_buttons_action_row], timeout=120)
+                                    if button_ctx.custom_id == "no":
+                                            await button_ctx.send("Not this time. ")
+                                            self.stop = True
+                                    if button_ctx.custom_id == "yes":
+                                        if mvalidation:
+                                            trade_query = {'MERCHANT' : str(ctx.author), 'BUYER' : str(mtrade['BUYER']), 'OPEN' : True}
+                                            update_query = {"$push" : {'MARMS': selected_arm}, "$inc" : {'TAX' : int(sell_price)}}
+                                            resp = db.updateTrade(trade_query, update_query)
+                                            await button_ctx.send("Traded.")
+                                            self.stop = True
+                                        elif bvalidation:
+                                            trade_query = {'MERCHANT' : str(btrade['MERCHANT']),'BUYER' : str(ctx.author), 'OPEN' : True}
+                                            update_query = {"$push" : {'BARMS': selected_arm}, "$inc" : {'TAX' : int(sell_price)}}
+                                            resp = db.updateTrade(trade_query, update_query)
+                                            await button_ctx.send("Traded.")
+                                            self.stop = True
+                                except Exception as ex:
+                                    trace = []
+                                    tb = ex.__traceback__
+                                    while tb is not None:
+                                        trace.append({
+                                            "filename": tb.tb_frame.f_code.co_filename,
+                                            "name": tb.tb_frame.f_code.co_name,
+                                            "lineno": tb.tb_lineno
+                                        })
+                                        tb = tb.tb_next
+                                    print(str({
+                                        'PLAYER': str(ctx.author),
+                                        'type': type(ex).__name__,
+                                        'message': str(ex),
+                                        'trace': trace
+                                    }))
+                                    await ctx.send("There's an issue with trading one or all of your items.")
+                                    return   
+                                        
+                        elif button_ctx.custom_id == "Exit":
+                            await button_ctx.send("Done.")
                             self.stop = True
-                        else:
-                            await button_ctx.send(f"**{selected_arm}** is no longer in your vault.")
-                    
-                    elif button_ctx.custom_id == "Resell":
-                        arm_data = db.queryArm({'ARM': selected_arm})
-                        arm_name = arm_data['ARM']
-                        sell_price = sell_price + (arm_data['PRICE'] * .30)
-                        if arm_name == current_arm:
-                            await button_ctx.send("You cannot resell equipped arms.")
-                        elif arm_name in updated_vault:
-                            sell_buttons = [
-                                manage_components.create_button(
-                                    style=ButtonStyle.green,
-                                    label="Yes",
-                                    custom_id="yes"
-                                ),
-                                manage_components.create_button(
-                                    style=ButtonStyle.blue,
-                                    label="No",
-                                    custom_id="no"
-                                )
-                            ]
-                            sell_buttons_action_row = manage_components.create_actionrow(*sell_buttons)
-                            await button_ctx.send(f"Are you sure you want to sell **{arm_name}** for :coin:{round(sell_price)}?", components=[sell_buttons_action_row])
-                            try:
-                                button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[sell_buttons_action_row], timeout=120)
-
-                                if button_ctx.custom_id == "no":
-                                    await button_ctx.send("Sell cancelled. Please press the Exit button if you are done reselling titles.")
-                                    self.stop = True
-                                if button_ctx.custom_id == "yes":
-                                    db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'ARMS': {'ARM': str(arm_name)}}})
-                                    await main.bless(sell_price, ctx.author)
-                                    await button_ctx.send("Sold.")
-                            except Exception as ex:
-                                trace = []
-                                tb = ex.__traceback__
-                                while tb is not None:
-                                    trace.append({
-                                        "filename": tb.tb_frame.f_code.co_filename,
-                                        "name": tb.tb_frame.f_code.co_name,
-                                        "lineno": tb.tb_lineno
-                                    })
-                                    tb = tb.tb_next
-                                print(str({
-                                    'PLAYER': str(ctx.author),
-                                    'type': type(ex).__name__,
-                                    'message': str(ex),
-                                    'trace': trace
-                                }))
-                                await ctx.send("There's an issue with selling one or all of your items.")
-                                return
-                        else:
-                            await button_ctx.send(f"**{arm_name}** is no longer in your vault.")       
-                    
-                    elif button_ctx.custom_id == "Dismantle":
-                        arm_data = db.queryArm({'ARM': selected_arm})
-                        arm_name = arm_data['ARM']
-                        selected_universe = arm_data['UNIVERSE']
-                        dismantle_amount = round(arm_data['PRICE'] * .03)
-                        if arm_name == current_arm:
-                            await button_ctx.send("You cannot dismantle equipped arms.")
-                        elif arm_name in updated_vault:
-                            dismantle_buttons = [
-                                manage_components.create_button(
-                                    style=ButtonStyle.green,
-                                    label="Yes",
-                                    custom_id="yes"
-                                ),
-                                manage_components.create_button(
-                                    style=ButtonStyle.blue,
-                                    label="No",
-                                    custom_id="no"
-                                )
-                            ]
-                            dismantle_buttons_action_row = manage_components.create_actionrow(*dismantle_buttons)
-                            await button_ctx.send(f"Are you sure you want to dismantle **{arm_name}** for 💎 {round(dismantle_amount)}?", components=[dismantle_buttons_action_row])
-                            try:
-                                button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[dismantle_buttons_action_row], timeout=120)
-
-                                if button_ctx.custom_id == "no":
-                                    await button_ctx.send("Dismantle cancelled. ")
-                                    self.stop = True
-                                if button_ctx.custom_id == "yes":
-                                    if selected_universe in current_gems:
-                                        query = {'OWNER': str(ctx.author)}
-                                        update_query = {'$inc': {'GEMS.$[type].' + "GEMS": dismantle_amount}}
-                                        filter_query = [{'type.' + "UNIVERSE": selected_universe}]
-                                        response = db.updateVault(query, update_query, filter_query)
-                                    else:
-                                        response = db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$addToSet':{'GEMS': {'UNIVERSE': selected_universe, 'GEMS': dismantle_amount, 'UNIVERSE_HEART': False}}})
-
-                                    db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'ARMS': {'ARM': str(arm_name)}}})
-                                    await main.bless(sell_price, ctx.author)
-                                    await button_ctx.send("Dismantled.")
-                                    self.stop = True
-                            except Exception as ex:
-                                trace = []
-                                tb = ex.__traceback__
-                                while tb is not None:
-                                    trace.append({
-                                        "filename": tb.tb_frame.f_code.co_filename,
-                                        "name": tb.tb_frame.f_code.co_name,
-                                        "lineno": tb.tb_lineno
-                                    })
-                                    tb = tb.tb_next
-                                print(str({
-                                    'PLAYER': str(ctx.author),
-                                    'type': type(ex).__name__,
-                                    'message': str(ex),
-                                    'trace': trace
-                                }))
-                                await ctx.send("There's an issue with selling one or all of your items.")
-                                return
-                        else:
-                            await button_ctx.send(f"**{card_name}** is no longer in your vault.")
-                    
-                    elif button_ctx.custom_id == "Exit":
-                        await button_ctx.send("Done.")
-                        self.stop = True             
+                    else:
+                        await ctx.send("This is not your Arms list.")        
 
                 await Paginator(bot=self.bot, ctx=ctx, pages=embed_list, timeout=60, customActionRow=[
                     custom_action_row,
@@ -1083,6 +1532,7 @@ class Profile(commands.Cog):
                 name = d['DISNAME'].split("#",1)[0]
                 avatar = d['AVATAR']
                 balance = vault['BALANCE']
+                current_summon = d['PET']
                 pets_list = vault['PETS']
 
                 total_pets = len(pets_list)
@@ -1132,18 +1582,167 @@ class Profile(commands.Cog):
                     embedVar.set_footer(text=f"{pet['TYPE']}: {enhancer_mapping[pet['TYPE']]}")
                     embed_list.append(embedVar)
                 
-                custom_button = manage_components.create_button(style=3, label="Equip")
+                buttons = [
+                    manage_components.create_button(style=3, label="Equip", custom_id="Equip"),
+                    manage_components.create_button(style=1, label="Trade", custom_id="Trade"),
+                    manage_components.create_button(style=2, label="Exit", custom_id="Exit")
+                ]
+                custom_action_row = manage_components.create_actionrow(*buttons)
 
                 async def custom_function(self, button_ctx):
-                    selected_universe = custom_function
-                    custom_function.selected_universe = str(button_ctx.origin_message.embeds[0].title)
-                    user_query = {'DISNAME': str(ctx.author)}
-                    response = db.updateUserNoFilter(user_query, {'$set': {'PET': str(button_ctx.origin_message.embeds[0].title)}})
-                    await button_ctx.send(f"🧬 **{str(button_ctx.origin_message.embeds[0].title)}** equipped.")
-                    self.stop = True
-
-                await Paginator(bot=self.bot, ctx=ctx, pages=embed_list, timeout=60, customButton=[
-                    custom_button,
+                    if button_ctx.author == ctx.author:
+                        updated_vault = db.queryVault({'OWNER': d['DISNAME']})
+                        sell_price = 0
+                        selected_summon = str(button_ctx.origin_message.embeds[0].title)
+                        user_query = {'DISNAME': str(ctx.author)}
+                        
+                        if button_ctx.custom_id == "Equip":
+                            response = db.updateUserNoFilter(user_query, {'$set': {'PET': str(button_ctx.origin_message.embeds[0].title)}})
+                            await button_ctx.send(f"🧬 **{str(button_ctx.origin_message.embeds[0].title)}** equipped.")
+                            self.stop = True
+                        
+                        elif button_ctx.custom_id =="Trade":
+                            summon_data = db.queryPet({'PET' : selected_summon})
+                            summon_name = summon_data['PET']
+                            if summon_name == current_summon:
+                                await button_ctx.send("You cannot trade equipped summons.")
+                                return
+                            sell_price = 5000
+                            mtrade = db.queryTrade({'MERCHANT' : str(ctx.author), 'OPEN' : True})
+                            mvalidation=False
+                            bvalidation=False
+                            item_already_in_trade=False
+                            if mtrade:
+                                if selected_summon in mtrade['MSUMMONS']:
+                                    await ctx.send(f"{ctx.author.mention} summon already in **Trade**")
+                                    item_already_in_trade=True
+                                mvalidation=True
+                            else:
+                                btrade = db.queryTrade({'BUYER' : str(ctx.author), 'OPEN' : True})
+                                if btrade:
+                                    if selected_summon in btrade['BSUMMONS']:
+                                        await ctx.send(f"{ctx.author.mention} summon already in **Trade**")
+                                        item_already_in_trade=True
+                                    bvalidation=True
+                                else:
+                                    await ctx.send(f"{ctx.author.mention} use **/trade** to open a **trade**")
+                                    return
+                            if item_already_in_trade:
+                                trade_buttons = [
+                                    manage_components.create_button(
+                                        style=ButtonStyle.green,
+                                        label="Yes",
+                                        custom_id="yes"
+                                    ),
+                                    manage_components.create_button(
+                                        style=ButtonStyle.blue,
+                                        label="No",
+                                        custom_id="no"
+                                    )
+                                ]
+                                trade_buttons_action_row = manage_components.create_actionrow(*trade_buttons)
+                                await button_ctx.send(f"Woudl you like to remove **{selected_summon}** from the **Trade**?", components=[trade_buttons_action_row])
+                                
+                                def check(button_ctx):
+                                    return button_ctx.author == ctx.author
+                                                             
+                                try:
+                                    button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[trade_buttons_action_row], timeout=120, check=check)
+                                    if button_ctx.custom_id == "no":
+                                            await button_ctx.send("Happy Trading")
+                                            self.stop = True
+                                    if button_ctx.custom_id == "yes":
+                                        neg_sell_price = 0 - abs(int(sell_price))
+                                        if mvalidation:
+                                            trade_query = {'MERCHANT' : str(button_ctx.author), 'BUYER' : str(mtrade['BUYER']), 'OPEN' : True}
+                                            update_query = {"$pull" : {'MSUMMONS': selected_summon}, "$inc" : {'TAX' : int(neg_sell_price)}}
+                                            resp = db.updateTrade(trade_query, update_query)
+                                            await button_ctx.send("Returned.")
+                                            self.stop = True
+                                        elif bvalidation:
+                                            trade_query = {'MERCHANT' : str(btrade['MERCHANT']),'BUYER' : str(button_ctx.author), 'OPEN' : True}
+                                            update_query = {"$pull" : {'BSUMMONS': selected_summon}, "$inc" : {'TAX' : int(neg_sell_price)}}
+                                            resp = db.updateTrade(trade_query, update_query)
+                                            await button_ctx.send("Returned.")
+                                            self.stop = True
+                                except Exception as ex:
+                                    trace = []
+                                    tb = ex.__traceback__
+                                    while tb is not None:
+                                        trace.append({
+                                            "filename": tb.tb_frame.f_code.co_filename,
+                                            "name": tb.tb_frame.f_code.co_name,
+                                            "lineno": tb.tb_lineno
+                                        })
+                                        tb = tb.tb_next
+                                    print(str({
+                                        'PLAYER': str(ctx.author),
+                                        'type': type(ex).__name__,
+                                        'message': str(ex),
+                                        'trace': trace
+                                    }))
+                                    await ctx.send("There's an issue with trading one or all of your items.")
+                                    return   
+                            elif mvalidation == True or bvalidation ==True:    #If user is valid
+                                sell_price = 5000
+                                trade_buttons = [
+                                    manage_components.create_button(
+                                        style=ButtonStyle.green,
+                                        label="Yes",
+                                        custom_id="yes"
+                                    ),
+                                    manage_components.create_button(
+                                        style=ButtonStyle.blue,
+                                        label="No",
+                                        custom_id="no"
+                                    )
+                                ]
+                                trade_buttons_action_row = manage_components.create_actionrow(*trade_buttons)
+                                await button_ctx.send(f"Are you sure you want to trade **{selected_summon}**", components=[trade_buttons_action_row])
+                                try:
+                                    button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[trade_buttons_action_row], timeout=120)
+                                    if button_ctx.custom_id == "no":
+                                            await button_ctx.send("Not this time. ")
+                                            self.stop = True
+                                    if button_ctx.custom_id == "yes":
+                                        if mvalidation:
+                                            trade_query = {'MERCHANT' : str(ctx.author), 'BUYER' : str(mtrade['BUYER']), 'OPEN' : True}
+                                            update_query = {"$push" : {'MSUMMONS': selected_summon}, "$inc" : {'TAX' : int(sell_price)}}
+                                            resp = db.updateTrade(trade_query, update_query)
+                                            await button_ctx.send("Traded.")
+                                            self.stop = True
+                                        elif bvalidation:
+                                            trade_query = {'MERCHANT' : str(btrade['MERCHANT']),'BUYER' : str(ctx.author), 'OPEN' : True}
+                                            update_query = {"$push" : {'BSUMMONS': selected_summon}, "$inc" : {'TAX' : int(sell_price)}}
+                                            resp = db.updateTrade(trade_query, update_query)
+                                            await button_ctx.send("Traded.")
+                                            self.stop = True
+                                except Exception as ex:
+                                    trace = []
+                                    tb = ex.__traceback__
+                                    while tb is not None:
+                                        trace.append({
+                                            "filename": tb.tb_frame.f_code.co_filename,
+                                            "name": tb.tb_frame.f_code.co_name,
+                                            "lineno": tb.tb_lineno
+                                        })
+                                        tb = tb.tb_next
+                                    print(str({
+                                        'PLAYER': str(ctx.author),
+                                        'type': type(ex).__name__,
+                                        'message': str(ex),
+                                        'trace': trace
+                                    }))
+                                    await ctx.send("There's an issue with trading one or all of your items.")
+                                    return   
+                                                        
+                        elif button_ctx.custom_id =="Exit":
+                            await button_ctx.send("Done.")
+                            self.stop = True
+                    else:
+                        await ctx.send("This is not your Summons list.")
+                await Paginator(bot=self.bot, ctx=ctx, pages=embed_list, timeout=60, customActionRow=[
+                    custom_action_row,
                     custom_function,
                 ]).run()
 
@@ -1731,9 +2330,12 @@ class Profile(commands.Cog):
                     if len(current_titles) >=25:
                         await button_ctx.send("You have max amount of Titles. Transaction cancelled.")
                         self.stop = True
+                        return
+
                     if price > balance:
                         await button_ctx.send("Insufficent funds.")
                         self.stop = True
+                        return
                     list_of_titles =[x for x in db.queryAllTitlesBasedOnUniverses({'UNIVERSE': str(universe)}) if not x['EXCLUSIVE'] and x['AVAILABLE']]
                     selection = random.randint(1,len(list(list_of_titles)))
                     
@@ -1749,9 +2351,11 @@ class Profile(commands.Cog):
                     if len(current_arms) >=25:
                         await button_ctx.send("You have max amount of Arms. Transaction cancelled.")
                         self.stop = True
+                        return
                     if price > balance:
                         await button_ctx.send("Insufficent funds.")
                         self.stop = True
+                        return
                     list_of_arms = [x for x in db.queryAllArmsBasedOnUniverses({'UNIVERSE': str(universe)}) if not x['EXCLUSIVE'] and x['AVAILABLE']]
                     selection = random.randint(1,len(list(list_of_arms)))
 
@@ -1780,6 +2384,7 @@ class Profile(commands.Cog):
                     if price > balance:
                         await button_ctx.send("Insufficent funds.")
                         self.stop = True
+                        return
                     list_of_cards = [x for x in db.queryAllCardsBasedOnUniverse({'UNIVERSE': str(universe), 'TIER': {'$in': acceptable}}) if not x['EXCLUSIVE'] and not x['HAS_COLLECTION']]
                     if not list_of_cards:
                         await button_ctx.send("There are no cards available for purchase in this range.")
@@ -1828,6 +2433,7 @@ class Profile(commands.Cog):
                     if price > balance:
                         await button_ctx.send("Insufficent funds.")
                         self.stop = True
+                        return
                     list_of_cards = [x for x in db.queryAllCardsBasedOnUniverse({'UNIVERSE': str(universe), 'TIER': {'$in': acceptable}}) if not x['EXCLUSIVE'] and not x['HAS_COLLECTION']]
                     
                     if not list_of_cards:
@@ -1877,6 +2483,7 @@ class Profile(commands.Cog):
                     if price > balance:
                         await button_ctx.send("Insufficent funds.")
                         self.stop = True
+                        return
                     card_list_response = [x for x in db.queryAllCardsBasedOnUniverse({'UNIVERSE': str(universe), 'TIER': {'$in': acceptable}})]
                     list_of_cards = []
                     for card in card_list_response:

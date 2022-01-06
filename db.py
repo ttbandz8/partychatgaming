@@ -1734,20 +1734,20 @@ def updateManyTrade(new_value):
 
 def createTrade(trade):
     try:
-        tradeexists = trade_exists({'_id': trade['_id']})
+        tradeexists = trade_exists({'MERCHANT': trade['MERCHANT'], 'BUYER': trade['BUYER'], 'OPEN': trade['OPEN']})
         if tradeexists:
             return "Trade already exists."
         else:
             trade_col.insert_one(trade)
-            return "New Trade created."
+            return trade
     except:
         return "Cannot create Trade."
 
-def updateTrade(query, new_value):
+def updateTrade(trade, new_value):
     try:
-        tradeexists = trade_exists({'_id': query['_id']})
+        tradeexists = trade_exists({'MERCHANT': trade['MERCHANT'], 'BUYER': trade['BUYER'], 'OPEN': trade['OPEN']})
         if tradeexists:
-            trade_col.update_one(query, new_value)
+            trade_col.update_one(trade, new_value)
             return True
         else:
             return False
@@ -1756,7 +1756,7 @@ def updateTrade(query, new_value):
 
 def deleteTrade(query):
     try:
-        tradeexists = trade_exists({'_id': query['_id']})
+        tradeexists = trade_exists({'MERCHANT': query['MERCHANT'], 'BUYER': query['BUYER'], 'OPEN': query['OPEN']})
         if tradeexists:
             trade_col.delete_one(query)
             return True
@@ -1767,10 +1767,6 @@ def deleteTrade(query):
 
 def queryAllTrade():
     data = trade_col.find()
-    return data
-
-def queryExploreTrade():
-    data = trade_col.find({"HAS_CROWN_TALES": True})
     return data
 
 def queryTrade(query):

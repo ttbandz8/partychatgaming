@@ -324,7 +324,7 @@ destiny = [
         "WINS": 0,
         "REQUIRED": 10,
         "DEFEAT": "Female Titan",
-        "USE_CARDS": ["Captain Levi"],
+        "USE_CARDS": ["Annie"],
         "EARN": "Female Titan",
         "COMPLETED": False,
         "UNIVERSE": "Attack On Titan"
