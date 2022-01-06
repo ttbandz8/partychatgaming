@@ -19470,10 +19470,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     
                                                     embedVar.set_image(url="attachment://image.png")
                                                     await private_channel.send(embed=embedVar)
-                                                turn = 1
+                                                turn = 3
                                             else:
                                                 await private_channel.send(f"{tpet_name} needs a turn to rest...")
-                                                turn = 1
+                                                turn = 3
                                         else:
                                             t_enhancer_used = True
                                             dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense,
@@ -19593,10 +19593,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     
                                                     embedVar.set_image(url="attachment://image.png")
                                                     await private_channel.send(embed=embedVar)
-                                                turn = 1
+                                                turn = 3
                                             else:
                                                 await private_channel.send(f"{tpet_name} needs a turn to rest...")
-                                                turn = 1
+                                                turn = 3
 
                                 if int(aiMove) != 5 and int(aiMove) != 6:
                                     # If you have enough stamina for move, use it
