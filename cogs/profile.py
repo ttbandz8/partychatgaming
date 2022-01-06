@@ -2303,7 +2303,7 @@ class Profile(commands.Cog):
                 🦾 **Arm:** Arm Purchase for 💵 {'{:,}'.format(adjusted_prices['ARM_PRICE'])}
                 1️⃣ **1-3 Tier Card:** for 💵 {'{:,}'.format(adjusted_prices['C1'])}
                 2️⃣ **3-5 Tier Card:** for 💰 {'{:,}'.format(adjusted_prices['C2'])}
-                3️⃣ **4-7 Tier Card:** for 💸 {'{:,}'.format(adjusted_prices['C3'])}
+                3️⃣ **5-7 Tier Card:** for 💸 {'{:,}'.format(adjusted_prices['C3'])}
                 """), colour=0x7289da)
                 embedVar.set_image(url=universe_image)
                 #embedVar.set_thumbnail(url="https://res.cloudinary.com/dkcmq8o15/image/upload/v1620236723/PCG%20LOGOS%20AND%20RESOURCES/Party_Chat_Shop.png")
