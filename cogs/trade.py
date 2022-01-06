@@ -67,9 +67,6 @@ class Trade(commands.Cog):
             merchant = db.queryUser({'DISNAME': str(ctx.author)})
             buyer = db.queryUser({'DISNAME': str(buyer_name)})
             mvault = db.queryVault({'OWNER' : str(ctx.author)})
-            bvault = db.queryVault({'OWNER' : str(player)})
-            m_status = merchant['TRADING']
-            b_status = buyer['TRADING']
             trade_query={'MERCHANT': str(ctx.author) , 'BUYER' : str(player), 'OPEN' : True}
             if mode == 'New':
                 m_query = {'MERCHANT': str(ctx.author), 'OPEN': True}
@@ -97,15 +94,11 @@ class Trade(commands.Cog):
                     trade_buttons_action_row = manage_components.create_actionrow(*trade_buttons)
                     await ctx.send(f"{player.mention} Do you accept the **Trade Invite**?", components=[trade_buttons_action_row])
                     def check(button_ctx):
-                        print(button_ctx.author)
-                        print(player)
                         return button_ctx.author == player
                     try:
                         button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[trade_buttons_action_row], timeout=120, check=check)
 
                         if button_ctx.custom_id == "no":
-                            print(button_ctx.author)
-                            print(player)
                             await button_ctx.send("Trade **Declined**")
                             self.stop = True
                         if button_ctx.custom_id == "yes":
