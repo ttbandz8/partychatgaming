@@ -115,6 +115,12 @@ class Trade(commands.Cog):
                             mtitles = ", ".join(trade['MTITLES'])
                             marms = ", ".join(trade['MARMS'])
                             msummons = ", ".join(trade['MSUMMONS'])
+
+                            bcards = ", ".join(trade['BCARDS'])
+                            btitles = ", ".join(trade['BTITLES'])
+                            barms = ", ".join(trade['BARMS'])
+                            bsummons = ", ".join(trade['BSUMMONS'])
+
                             if trade:
                                 embedVar = discord.Embed(title= f"{merchant['NAME']}'s New Trade", description=textwrap.dedent(f"""
                                 👨‍🏫 {trade['MERCHANT']} :coin: ~ {'{:,}'.format(trade['MCOIN'])}
@@ -123,10 +129,10 @@ class Trade(commands.Cog):
                                 🦾 {marms}
                                 🧬 {msummons}
                                 🤵{trade['BUYER']} :coin: ~ {'{:,}'.format(trade['BCOIN'])}
-                                🎴 {trade['BCARDS']}
-                                🎗️ {trade['BTITLES']}
-                                🦾 {trade['BARMS']}
-                                🧬 {trade['BSUMMONS']}
+                                🎴 {bcards}
+                                🎗️ {btitles}
+                                🦾 {barms}
+                                🧬 {bsummons}
                                 """), colour=0x7289da)
                                 embedVar.set_footer(text=f"Trade Tax: {trade['TAX']}")
                                 await ctx.send(embed=embedVar)
@@ -154,20 +160,30 @@ class Trade(commands.Cog):
             elif mode == 'Open':
                 m_query = {'MERCHANT': str(ctx.author), 'OPEN': True}
                 trade_check = db.queryTrade(m_query)
+                mcards = ", ".join(trade_check['MCARDS'])
+                mtitles = ", ".join(trade_check['MTITLES'])
+                marms = ", ".join(trade_check['MARMS'])
+                msummons = ", ".join(trade_check['MSUMMONS'])
+
+                bcards = ", ".join(trade_check['BCARDS'])
+                btitles = ", ".join(trade_check['BTITLES'])
+                barms = ", ".join(trade_check['BARMS'])
+                bsummons = ", ".join(trade_check['BSUMMONS'])
+
                 if trade_check:
                     buyer = trade_check['BUYER']
                     buyer_info = db.queryUser({'DISNAME': str(buyer)})
                     embedVar = discord.Embed(title= f"{merchant['NAME']}'s Current Trade", description=textwrap.dedent(f"""
                     👨‍🏫 {trade_check['MERCHANT']} :coin: ~ {'{:,}'.format(trade_check['MCOIN'])}
-                    Cards : {trade_check['MCARDS']}
-                    Titles : {trade_check['MTITLES']}
-                    Arms : {trade_check['MARMS']}
-                    Summons : {trade_check['MSUMMONS']}
+                    🎴 {mcards}
+                    🎗️ {mtitles}
+                    🦾 {marms}
+                    🧬 {msummons}
                     🤵{trade_check['BUYER']} :coin: ~ {'{:,}'.format(trade_check['BCOIN'])}
-                    Cards : {trade_check['BCARDS']}
-                    Titles : {trade_check['BTITLES']}
-                    Arms : {trade_check['BARMS']}
-                    Summons : {trade_check['BSUMMONS']}
+                    🎴 {bcards}
+                    🎗️ {btitles}
+                    🦾 {barms}
+                    🧬 {bsummons}
                     """), colour=0x7289da)
                     embedVar.set_footer(text=f"Trade Tax: {trade_check['TAX']}")
                     trade_buttons = [
@@ -191,7 +207,7 @@ class Trade(commands.Cog):
                     await ctx.send(embed=embedVar, components=[trade_buttons_action_row])
                     #await ctx.send(f"{ctx.author.mention} do wish to **Cancel This Trade**?", components=[trade_buttons_action_row])
                     def check(button_ctx):
-                        return button_ctx.author == player
+                        return button_ctx.author == ctx.author
                     try:
                         button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[trade_buttons_action_row], timeout=120, check=check)
 
@@ -426,7 +442,7 @@ class Trade(commands.Cog):
                         await ctx.send(embed=embedVar, components=[trade_buttons_action_row])
                         #await ctx.send(f"{ctx.author.mention} do wish to **Cancel This Trade**?", components=[trade_buttons_action_row])
                         def check(button_ctx):
-                            return button_ctx.author == player
+                            return button_ctx.author == ctx.author
                         try:
                             button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[trade_buttons_action_row], timeout=120)
 
