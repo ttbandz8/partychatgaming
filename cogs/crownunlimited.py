@@ -9894,7 +9894,7 @@ async def enemy_approached(self, message, channel, player, selected_mode, univer
         category = await guild.create_category_channel(categoryname)
     #private_channel = await guild.create_text_channel(f'{str(ctx.author)}-{mode}-run', overwrites=overwrites, category=category)
     private_channel = await guild.create_text_channel(f'{str(message.author)}-{selected_mode}-run',
-                                                      overwrites=overwrites, category=category)
+                                                      overwrites=overwrites)
     await private_channel.send(f"{ctx.author.mention} private channel has been opened for you. Good luck!")
 
     oguild = "RANDOMIZED_BATTLE"

@@ -70,7 +70,7 @@ class Teams(commands.Cog):
                 response = db.createTeam(data.newTeam(team_query), str(ctx.author))
                 await button_ctx.send(response)
         except:
-            print("Team creation ended unexpectedly. ")
+            print("Guild creation ended unexpectedly. ")
 
     @cog_ext.cog_slash(description="Recruit Guild member", guild_ids=main.guild_ids)
     async def recruit(self, ctx, player: User):
@@ -217,7 +217,7 @@ class Teams(commands.Cog):
                             response = db.deleteTeamMember(team_query, new_value_query, str(member))
                             await button_ctx.send(response)
                     except:
-                        print("Team not created. ")
+                        print("Guild not created. ")
             else:
                 await ctx.send(m.OWNER_ONLY_COMMAND, delete_after=5)
         else:
@@ -321,7 +321,7 @@ class Teams(commands.Cog):
                 except Exception as e:
                     print(e)
             else:
-                await ctx.send("Only the owner of the team can delete the team. ")
+                await ctx.send("Only the owner of the Guild can delete the Guild. ")
         else:
             await ctx.send(m.TEAM_DOESNT_EXIST, delete_after=5)
 
