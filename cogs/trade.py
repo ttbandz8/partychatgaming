@@ -104,33 +104,30 @@ class Trade(commands.Cog):
                         if button_ctx.custom_id == "yes":
                             await button_ctx.send("Trade **Started**")
                             trade = db.createTrade(data.newTrade(trade_query))
-                            mcards = ", ".join(trade['MCARDS'])
-                            mtitles = ", ".join(trade['MTITLES'])
-                            marms = ", ".join(trade['MARMS'])
-                            msummons = ", ".join(trade['MSUMMONS'])
-
-                            bcards = ", ".join(trade['BCARDS'])
-                            btitles = ", ".join(trade['BTITLES'])
-                            barms = ", ".join(trade['BARMS'])
-                            bsummons = ", ".join(trade['BSUMMONS'])
-
                             if trade:
-                                embedVar = discord.Embed(title= f"{merchant['NAME']}'s New Trade", description=textwrap.dedent(f"""
-                                👨‍🏫 {trade['MERCHANT']} :coin: ~ {'{:,}'.format(trade['MCOIN'])}
+                                mcards = ", ".join(trade['MCARDS'])
+                                mtitles = ", ".join(trade['MTITLES'])
+                                marms = ", ".join(trade['MARMS'])
+                                msummons = ", ".join(trade['MSUMMONS'])
+
+                                bcards = ", ".join(trade['BCARDS'])
+                                btitles = ", ".join(trade['BTITLES'])
+                                barms = ", ".join(trade['BARMS'])
+                                bsummons = ", ".join(trade['BSUMMONS'])
+                                embedVar = discord.Embed(title= f"{trade['MERCHANT']}'s New Trade", description=textwrap.dedent(f"""
+                                👨‍🏫 **{trade['MERCHANT']}** :coin: ~ {'{:,}'.format(trade['MCOIN'])}
                                 🎴 {mcards}
                                 🎗️ {mtitles}
                                 🦾 {marms}
                                 🧬 {msummons}
-                                🤵{trade['BUYER']} :coin: ~ {'{:,}'.format(trade['BCOIN'])}
+                                🤵**{trade['BUYER']}** :coin: ~ {'{:,}'.format(trade['BCOIN'])}
                                 🎴 {bcards}
                                 🎗️ {btitles}
                                 🦾 {barms}
                                 🧬 {bsummons}
                                 """), colour=0x7289da)
-                                embedVar.set_footer(text=f"Trade Tax: {trade['TAX']}")
+                                embedVar.set_footer(text=f"Trade Tax: {'{:,}'.format(trade['TAX'])}")
                                 await ctx.send(embed=embedVar)
-                                mresp = db.updateUserNoFilter({'DISNAME':str(merchant['DISNAME'])},{'$set' : {'TRADING': True}})
-                                bresp = db.updateUserNoFilter({'DISNAME':str(buyer['DISNAME'])},{'$set' : {'TRADING': True}})
                             else:
                                 await ctx.send(f"{ctx.author.mention} Error Reach Out To Support")
                     except Exception as ex:
@@ -153,32 +150,32 @@ class Trade(commands.Cog):
             elif mode == 'Open':
                 m_query = {'MERCHANT': str(ctx.author), 'OPEN': True}
                 trade_check = db.queryTrade(m_query)
-                mcards = ", ".join(trade_check['MCARDS'])
-                mtitles = ", ".join(trade_check['MTITLES'])
-                marms = ", ".join(trade_check['MARMS'])
-                msummons = ", ".join(trade_check['MSUMMONS'])
-
-                bcards = ", ".join(trade_check['BCARDS'])
-                btitles = ", ".join(trade_check['BTITLES'])
-                barms = ", ".join(trade_check['BARMS'])
-                bsummons = ", ".join(trade_check['BSUMMONS'])
-
                 if trade_check:
+                    mcards = ", ".join(trade_check['MCARDS'])
+                    mtitles = ", ".join(trade_check['MTITLES'])
+                    marms = ", ".join(trade_check['MARMS'])
+                    msummons = ", ".join(trade_check['MSUMMONS'])
+
+                    bcards = ", ".join(trade_check['BCARDS'])
+                    btitles = ", ".join(trade_check['BTITLES'])
+                    barms = ", ".join(trade_check['BARMS'])
+                    bsummons = ", ".join(trade_check['BSUMMONS'])
                     buyer = trade_check['BUYER']
                     buyer_info = db.queryUser({'DISNAME': str(buyer)})
-                    embedVar = discord.Embed(title= f"{merchant['NAME']}'s Current Trade", description=textwrap.dedent(f"""
-                    👨‍🏫 {trade_check['MERCHANT']} :coin: ~ {'{:,}'.format(trade_check['MCOIN'])}
+                    bvault = db.queryVault({'OWNER' : buyer_info['DISNAME']})
+                    embedVar = discord.Embed(title= f"{trade_check['MERCHANT']}'s Current Trade", description=textwrap.dedent(f"""
+                    👨‍🏫 **{trade_check['MERCHANT']}** :coin: ~ {'{:,}'.format(trade_check['MCOIN'])}
                     🎴 {mcards}
                     🎗️ {mtitles}
                     🦾 {marms}
                     🧬 {msummons}
-                    🤵{trade_check['BUYER']} :coin: ~ {'{:,}'.format(trade_check['BCOIN'])}
+                    🤵**{trade_check['BUYER']}** :coin: ~ {'{:,}'.format(trade_check['BCOIN'])}
                     🎴 {bcards}
                     🎗️ {btitles}
                     🦾 {barms}
                     🧬 {bsummons}
                     """), colour=0x7289da)
-                    embedVar.set_footer(text=f"Trade Tax: {trade_check['TAX']}")
+                    embedVar.set_footer(text=f"Trade Tax: {'{:,}'.format(trade_check['TAX'])}")
                     trade_buttons = [
                                 manage_components.create_button(
                                     style=ButtonStyle.green,
@@ -208,10 +205,7 @@ class Trade(commands.Cog):
                             await button_ctx.send("No change to **Trade**")
                             self.stop = True
                         if button_ctx.custom_id == "no":
-                            await button_ctx.send("Trade **Cancelled**")
-                            
-                            mresp = db.updateUserNoFilter({'DISNAME':str(merchant['DISNAME'])},{'$set' : {'TRADING': False}})
-                            bresp = db.updateUserNoFilter({'DISNAME':str(buyer_info['DISNAME'])},{'$set' : {'TRADING': False}})                              
+                            await button_ctx.send("Trade **Cancelled**")                
                             await main.bless(trade_check['MCOIN'], str(ctx.author))
                             await main.bless(trade_check['BCOIN'], str(trade_check['BUYER']))
                             resp = db.deleteTrade(trade_check)
@@ -230,7 +224,8 @@ class Trade(commands.Cog):
                                 b_coins = trade_check['BCOIN']
                                 tax = trade_check['TAX']
                                 tax_split = tax/2
-                                
+                            
+                                mvault = db.queryVault({'OWNER' : trade_check['MERCHANT']})
                                 m_destinies = mvault['DESTINY']
                                 m_owned_destinies = []
                                 for mdestiny in m_destinies:
@@ -253,13 +248,15 @@ class Trade(commands.Cog):
                                 m_titlelist = "\n".join(m_titles)
                                 m_armlist = "\n".join(m_arms)
                                 m_summonlist = "\n".join(m_summons)
-                                m_coin_diff = int(mvault['BALANCE']) - (int(mvault['BALANCE']) - m_fees + b_fees)
+                                
                                 b_cardlist = "\n".join(b_cards)
                                 b_titlelist = "\n".join(b_titles)
                                 b_armlist = "\n".join(b_arms)
                                 b_summonlist = "\n".join(b_summons)
-                                b_coin_diff = int(bvault['BALANCE']) - (int(bvault['BALANCE']) - b_fees + m_fees)
                                 
+                                
+                                m_coin_diff = int(bvault['BALANCE']) - (int(bvault['BALANCE']) - b_fees + m_coins)
+                                b_coin_diff = int(mvault['BALANCE']) - (int(mvault['BALANCE']) - m_fees + b_coins)
                                 
                                 
                                 if m_fees > mvault['BALANCE']:
@@ -292,9 +289,7 @@ class Trade(commands.Cog):
                                     dur = mvault['ARMS']
                                     for b in dur:
                                         if a == b['ARM']:
-                                            print(a)
                                             durability = b['DUR']
-                                            print(durability)
                                     db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'ARMS': {'ARM': str(a)}}})
                                     db.updateVaultNoFilter({'OWNER': str(buyer)},{'$addToSet':{'ARMS': {'ARM': str(a), 'DUR': durability}}})
                                     
@@ -356,10 +351,35 @@ class Trade(commands.Cog):
                                 await main.bless(b_coins, str(ctx.author))
                                 await main.bless(m_coins, str(buyer_info['DISNAME']))
                                 
-                                await ctx.author.send(f"**SOLD**\n\n**CARDS SOLD**\n {m_cardlist}\n**TITLES SOLD**\n {m_titlelist}!\n**ARMS SOLD**\n {m_armlist}!\n**SUMMONS SOLD**\n {m_summonlist}!\n**TAX**\n {int(tax_split)}!\n**COIN DIFF**\n {m_coin_diff}!\n\n")
-                                await ctx.author.send(f"\n\n**PURCHASED**\n\n**CARDS**\n {b_cardlist}\n**TITLES**\n {b_titlelist}!\n**ARMS**\n {b_armlist}!\n**SUMMONS**\n {b_summonlist}!")
-                                await ctx.send(f"Trade Finished, {ctx.author.mention} Check your DMS for Receipt")
+                                micon = '⚪'
+                                if m_coin_diff > 0:
+                                    micon = '🟢'
+                                if m_coin_diff < 0:
+                                    micon = '🔴'
                                 
+                                bicon = '⚪'
+                                if b_coin_diff > 0:
+                                    bicon = '🟢'
+                                if b_coin_diff < 0:
+                                    bicon = '🔴'
+                                embedVar = discord.Embed(title= f"{trade_check['MERCHANT']}'s Trade Receipt", description=textwrap.dedent(f"""
+                                👨‍🏫 {trade_check['MERCHANT']} :coin: ~ {'{:,}'.format(trade_check['MCOIN'])}
+                                🎴 {mcards}
+                                🎗️ {mtitles}
+                                🦾 {marms}
+                                🧬 {msummons}
+                                🤵{trade_check['BUYER']} :coin: ~ {'{:,}'.format(trade_check['BCOIN'])}
+                                🎴 {bcards}
+                                🎗️ {btitles}
+                                🦾 {barms}
+                                🧬 {bsummons}
+                                """), colour=0x7289da)
+                                embedVar.set_footer(text=f"Trade Tax: {'{:,}'.format(trade_check['TAX'])}\n{trade_check['TIMESTAMP']}")
+                                await ctx.author.send(embed=embedVar)
+                                # await ctx.author.send(f"*Party Chat Accounting*\n**💸 {trade_check['MERCHANT']} SOLD**\n\n**🎴 CARDS SOLD**\n{m_cardlist}\n**🎗️ TITLES SOLD**\n{m_titlelist}!\n**🦾 ARMS SOLD**\n{m_armlist}!\n**🧬 SUMMONS SOLD**\n{m_summonlist}!\n :coin: **TAX**\n {'{:,}'.format(tax_split)}!\n**COIN DIFF**\n{micon} {m_coin_diff}!\n\n")
+                                # await ctx.author.send(f"\n\n**{trade_check['BUYER']} TRADED**\n\n🎴 **CARDS**\n{b_cardlist}\n🎗️ **TITLES**\n{b_titlelist}!\n🦾 **ARMS**\n {b_armlist}!\n🧬 **SUMMONS**\n {b_summonlist}!\n**COIN DIFF**\n{bicon} {b_coin_diff}!\n\n{trade_check['TIMESTAMP']}")
+                                await ctx.send(f"Trade Finished, {ctx.author.mention} Check your DMS for Receipt")
+                                                               
                                 
                                 
                                     
@@ -403,19 +423,29 @@ class Trade(commands.Cog):
                     b_query = {'BUYER': str(ctx.author), 'OPEN': True}
                     trade_check2 = db.queryTrade(b_query)
                     if trade_check2:
+                        mcards = ", ".join(trade_check2['MCARDS'])
+                        mtitles = ", ".join(trade_check2['MTITLES'])
+                        marms = ", ".join(trade_check2['MARMS'])
+                        msummons = ", ".join(trade_check2['MSUMMONS'])
+
+                        bcards = ", ".join(trade_check2['BCARDS'])
+                        btitles = ", ".join(trade_check2['BTITLES'])
+                        barms = ", ".join(trade_check2['BARMS'])
+                        bsummons = ", ".join(trade_check2['BSUMMONS'])
                         buyer = trade_check2['BUYER']
                         buyer_info = db.queryUser({'DISNAME': str(buyer)})
-                        embedVar = discord.Embed(title= f"{buyer_info['NAME']}'s Current Trade", description=textwrap.dedent(f"""
+
+                        embedVar = discord.Embed(title= f"{trade_check2['BUYER']}'s Current Trade", description=textwrap.dedent(f"""
                         👨‍🏫 {trade_check2['MERCHANT']} :coin: ~ {'{:,}'.format(trade_check2['MCOIN'])}
-                        Cards : {trade_check2['MCARDS']}
-                        Titles : {trade_check2['MTITLES']}
-                        Arms : {trade_check2['MARMS']}
-                        Summons : {trade_check2['MSUMMONS']}
+                        🎴 {mcards}
+                        🎗️ {mtitles}
+                        🦾 {marms}
+                        🧬 {msummons}
                         🤵{trade_check2['BUYER']} :coin: ~ {'{:,}'.format(trade_check2['BCOIN'])}
-                        Cards : {trade_check2['BCARDS']}
-                        Titles : {trade_check2['BTITLES']}
-                        Arms : {trade_check2['BARMS']}
-                        Summons : {trade_check2['BSUMMONS']}
+                        🎴 {bcards}
+                        🎗️ {btitles}
+                        🦾 {barms}
+                        🧬 {bsummons}
                         """), colour=0x7289da)
                         embedVar.set_footer(text=f"Trade Tax: {trade_check2['TAX']}")
                         
@@ -437,15 +467,13 @@ class Trade(commands.Cog):
                         def check(button_ctx):
                             return button_ctx.author == ctx.author
                         try:
-                            button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[trade_buttons_action_row], timeout=120)
+                            button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[trade_buttons_action_row], timeout=120, check =check)
 
                             if button_ctx.custom_id == "exit":
                                 await button_ctx.send("No change to **Trade**")
                                 self.stop = True
                             if button_ctx.custom_id == "no":
                                 await button_ctx.send("Trade **Cancelled**")
-                                mresp = db.updateUserNoFilter({'DISNAME':str(trade_check2['MERCHANT'])},{'$set' : {'TRADING': False}})
-                                bresp = db.updateUserNoFilter({'DISNAME':str(trade_check2['BUYER'])},{'$set' : {'TRADING': False}})
                                 await main.bless(trade_check2['MCOIN'], str(trade_check2['MERCHANT']))
                                 await main.bless(trade_check2['BCOIN'], str(trade_check2['BUYER']))
                                 resp = db.deleteTrade(trade_check2)
@@ -546,7 +574,8 @@ class Trade(commands.Cog):
                 await ctx.send("Not Registered")
             if mvalidation == True or bvalidation ==True:    #If user is valid and has vault
                 if item == 'P':
-                    coins = abs(int(x))
+                    int_coins = int(x)
+                    coins = abs(int_coins)
                     bank = vault['BALANCE']
                     if mode == 'add':
                         if bank >= int(x):

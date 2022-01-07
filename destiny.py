@@ -1850,16 +1850,6 @@ destiny = [
         "UNIVERSE": "Naruto"
     },
     {
-        "NAME": "The Wandering Ninja",
-        "WINS": 0,
-        "REQUIRED": 10,
-        "DEFEAT": "Mangekyo Sasuke",
-        "USE_CARDS": ["Bjuu Naruto"],
-        "EARN": "Hobo Sasuke",
-        "COMPLETED": False,
-        "UNIVERSE": "Naruto"
-    },
-    {
         "NAME": "You Let Rin Die",
         "WINS": 0,
         "REQUIRED": 15,

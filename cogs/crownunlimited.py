@@ -2466,11 +2466,12 @@ class CrownUnlimited(commands.Cog):
                                                 await button_ctx.send(embed=embedVar)
                                                 
                                             elif tparry_count==1:
-                                                embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{o_card} takes {tparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                 t_health = t_health
                                                 tparry_damage = round(dmg['DMG'] / 2)
                                                 t_health = t_health - tparry_damage
                                                 o_health = o_health - tparry_damage
+                                                embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{o_card} takes {tparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
+                                                
                                                 tparry_count = tparry_count - 1
                                                 if oarm_barrier_active:
                                                     oarm_barrier_active=False
@@ -3299,10 +3300,11 @@ class CrownUnlimited(commands.Cog):
                                                 await button_ctx.send(embed=embedVar)
                                                 
                                             elif oparry_count==1:
-                                                embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} takes {oparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                 oparry_damage = round(dmg['DMG'] / 2)
                                                 o_health = o_health - oparry_damage
                                                 t_health = t_health - oparry_damage
+                                                embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} takes {oparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
+                                                
                                                 oparry_count = oparry_count - 1
                                                 if tarm_barrier_active:
                                                     tarm_barrier_active=False
@@ -3539,7 +3541,7 @@ class CrownUnlimited(commands.Cog):
             }))
             return
 
-    @cog_ext.cog_slash(description="Start a Guild Raid", guild_ids=main.guild_ids)
+    @cog_ext.cog_slash(description="Start a Association Raid", guild_ids=main.guild_ids)
     async def raid(self, ctx: SlashContext, guild: str):
         try:
             guildname = guild
@@ -3557,6 +3559,7 @@ class CrownUnlimited(commands.Cog):
             oteam = sowner['TEAM']
             oteam_info = db.queryTeam({'TNAME': oteam})
             shield_test_active = False
+            shield_training_active = False
             if oteam_info:
                 oguild_name = oteam_info['GUILD']
                 oguild = db.queryGuildAlt({'GNAME': oguild_name})
@@ -3565,9 +3568,13 @@ class CrownUnlimited(commands.Cog):
             if oguild_name == "PCG":
                 await ctx.send(m.NO_GUILD, delete_after=5)
                 return
-            if player_guild == guildname:
+            if oguild['SHIELD'] == sowner['DISNAME']:
+                shield_training_active = True
+                await ctx.send("Association Shield Training", delete_after=5)
+            elif player_guild == guildname:
                 shield_test_active = True
-                await ctx.send("Guild Shield Defense Test", delete_after=5)
+                await ctx.send("Association Shield Defense Test", delete_after=5)
+                
 
             guild_query = {'GNAME': guildname}
             guild_info = db.queryGuildAlt(guild_query)
@@ -4321,7 +4328,7 @@ class CrownUnlimited(commands.Cog):
                         embedVar.add_field(name="**Raid Battle Mechanics**",
                                             value="Raids are PVE battles against a Guilds defender or SHIELD. This player was selected to defend the guild. You will battle their current Build.")
                         embedVar.set_footer(
-                            text="Be wary, there are no summons allowed in the Guild Hall")
+                            text="Be wary, there are no summons allowed in the Association Hall")
                         await private_channel.send(embed=embedVar)
                         await asyncio.sleep(2)
                         # await ctx.send(f"{user1.mention}{user2.mention}")
@@ -4363,15 +4370,15 @@ class CrownUnlimited(commands.Cog):
 
                     if o_stamina < 10:
                         o_focus_count = o_focus_count + 1
-                        if botActive and not o_used_focus:
-                            embedVar = discord.Embed(title=f"You've entered **Focus State**!",
-                                                     description=f"Entering **Focus State** sacrifices a turn to power up and regain **STAMINA**!",
-                                                     colour=0xe91e63)
-                            embedVar.add_field(name="**Strategy**",
-                                               value="Pay attention to your oppononets **STAMINA** bar. If they are entering **Focus State**, you will have the ability to **strike twice!**")
-                            embedVar.set_footer(
-                                text="After you entered focus state once, a transformation is possible by strengthening your RESOLVE! **Press 5**")
-                            await ctx.send(embed=embedVar)
+                        # if botActive and not o_used_focus:
+                        #     embedVar = discord.Embed(title=f"You've entered **Focus State**!",
+                        #                              description=f"Entering **Focus State** sacrifices a turn to power up and regain **STAMINA**!",
+                        #                              colour=0xe91e63)
+                        #     embedVar.add_field(name="**Strategy**",
+                        #                        value="Pay attention to your oppononets **STAMINA** bar. If they are entering **Focus State**, you will have the ability to **strike twice!**")
+                        #     embedVar.set_footer(
+                        #         text="After you entered focus state once, a transformation is possible by strengthening your RESOLVE! **Press 5**")
+                        #     await ctx.send(embed=embedVar)
                         # Universal Trait
                         # fortitude or luck is based on health
                         fortitude = 0.0
@@ -4410,19 +4417,19 @@ class CrownUnlimited(commands.Cog):
                             o_defense = o_defense + o_defensecalc
                         o_used_focus = True
 
-                        if botActive:
-                            if messagenumber != 2:
-                                if messagenumber == 1:
-                                    embedVar = discord.Embed(title=f"{o_card} Stamina has recovered!",
-                                                             colour=embed_color_o)
-                                    await ctx.send(embed=embedVar)
-                                else:
-                                    embedVar = discord.Embed(title=f"{o_card} Stamina has recovered!",
-                                                             colour=embed_color_o)
-                                    await ctx.send(embed=embedVar)
-                            else:
-                                embedVar = discord.Embed(title=f"{o_card} Stamina has recovered!", colour=embed_color_o)
-                                await ctx.send(embed=embedVar)
+                        # if botActive:
+                        #     if messagenumber != 2:
+                        #         if messagenumber == 1:
+                        #             embedVar = discord.Embed(title=f"{o_card} Stamina has recovered!",
+                        #                                      colour=embed_color_o)
+                        #             await ctx.send(embed=embedVar)
+                        #         else:
+                        #             embedVar = discord.Embed(title=f"{o_card} Stamina has recovered!",
+                        #                                      colour=embed_color_o)
+                        #             await ctx.send(embed=embedVar)
+                        #     else:
+                        #         embedVar = discord.Embed(title=f"{o_card} Stamina has recovered!", colour=embed_color_o)
+                        #         await ctx.send(embed=embedVar)
 
                         # if not botActive:
                         #     embedVar = discord.Embed(title=f"{o_card.upper()} FOCUSED", description=f"**{o_card} says**\n{o_focus_description}", colour=0xe91e63)
@@ -4657,43 +4664,43 @@ class CrownUnlimited(commands.Cog):
                                 await button_ctx.send(f"{ctx.author.mention} has fled the battle...")
                                 return
                             if button_ctx.custom_id == "1":
-                                if botActive:
-                                    embedVar = discord.Embed(title=f"Basic Attack!",
-                                                             description=f"Nice Hit! Your Basic Attack cost 10 Stamina to deal Damage!",
-                                                             colour=0xe91e63)
-                                    embedVar.add_field(name=f"Combos!",
-                                                       value="Chain your Basic Attack with Summons And Enhancers To Maximize Damage!")
-                                    embedVar.set_footer(
-                                        text=f"Basic Attacks are great when you are low on stamina, but don't be afraid to enter focus state and REPLENISH!")
-                                    await button_ctx.send(embed=embedVar)
+                                # if botActive:
+                                #     embedVar = discord.Embed(title=f"Basic Attack!",
+                                #                              description=f"Nice Hit! Your Basic Attack cost 10 Stamina to deal Damage!",
+                                #                              colour=0xe91e63)
+                                #     embedVar.add_field(name=f"Combos!",
+                                #                        value="Chain your Basic Attack with Summons And Enhancers To Maximize Damage!")
+                                #     embedVar.set_footer(
+                                #         text=f"Basic Attacks are great when you are low on stamina, but don't be afraid to enter focus state and REPLENISH!")
+                                #     await button_ctx.send(embed=embedVar)
                                 dmg = damage_cal(o_universe, o_card, o_1, o_attack, o_defense, t_defense, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,
                                                  o_max_health, t_attack, o_special_move_description, turn_total,
                                                  ocard_lvl_ap_buff)
 
                             elif button_ctx.custom_id == "2":
-                                if botActive:
-                                    embedVar = discord.Embed(title=f"Special Attack!",
-                                                             description=f"Great Shot! Your Special Attack cost 30 Stamina to deal great Damage!",
-                                                             colour=0xe91e63)
-                                    embedVar.add_field(name=f"Strategy!",
-                                                       value="Special Attacks are the balance between STAMINA cost and Damage output when trying to build Combos!")
-                                    embedVar.set_footer(
-                                        text=f"Special Attacks are great when you need to control the focus game! Use Them to Maximize your focus and build stronger combos!")
-                                    await button_ctx.send(embed=embedVar)
+                                # if botActive:
+                                #     embedVar = discord.Embed(title=f"Special Attack!",
+                                #                              description=f"Great Shot! Your Special Attack cost 30 Stamina to deal great Damage!",
+                                #                              colour=0xe91e63)
+                                #     embedVar.add_field(name=f"Strategy!",
+                                #                        value="Special Attacks are the balance between STAMINA cost and Damage output when trying to build Combos!")
+                                #     embedVar.set_footer(
+                                #         text=f"Special Attacks are great when you need to control the focus game! Use Them to Maximize your focus and build stronger combos!")
+                                #     await button_ctx.send(embed=embedVar)
                                 dmg = damage_cal(o_universe, o_card, o_2, o_attack, o_defense, t_defense, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,
                                                  o_max_health, t_attack, o_special_move_description, turn_total,
                                                  ocard_lvl_ap_buff)
 
                             elif button_ctx.custom_id == "3":
-                                if botActive:
-                                    embedVar = discord.Embed(title=f"Ultimate Move!",
-                                                             description=f"Ultimate Moves cost 80 Stamina to deal incredible Damage!",
-                                                             colour=0xe91e63)
-                                    embedVar.add_field(name=f"Ultimate GIF",
-                                                       value="Using your ultimate move also comes with a bonus GIF to deliver that final blow!")
-                                    embedVar.set_footer(
-                                        text=f"Ultimate moves will consume most of your stamina! Use Them Wisely!")
-                                    await button_ctx.send(embed=embedVar)
+                                # if botActive:
+                                #     embedVar = discord.Embed(title=f"Ultimate Move!",
+                                #                              description=f"Ultimate Moves cost 80 Stamina to deal incredible Damage!",
+                                #                              colour=0xe91e63)
+                                #     embedVar.add_field(name=f"Ultimate GIF",
+                                #                        value="Using your ultimate move also comes with a bonus GIF to deliver that final blow!")
+                                #     embedVar.set_footer(
+                                #         text=f"Ultimate moves will consume most of your stamina! Use Them Wisely!")
+                                #     await button_ctx.send(embed=embedVar)
                                 dmg = damage_cal(o_universe, o_card, o_3, o_attack, o_defense, t_defense, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,
                                                  o_max_health, t_attack, o_special_move_description, turn_total,
                                                  ocard_lvl_ap_buff)
@@ -4701,16 +4708,16 @@ class CrownUnlimited(commands.Cog):
                                 if o_gif != "N/A":
                                     await private_channel.send(f"{o_gif}")
                             elif button_ctx.custom_id == "4":
-                                if botActive:
-                                    embedVar = discord.Embed(title=f"Enhancers!",
-                                                             description=f"Enhancers cost 20 Stamina to Boost your Character or Debuff Your Opponent!",
-                                                             colour=0xe91e63)
-                                    embedVar.add_field(
-                                        name=f"Your Enhancer: {omove_enhanced_text} is a {list(o_enhancer.values())[2]}",
-                                        value="Pay Attention to your enhancer messages to know what effect is being used!")
-                                    embedVar.set_footer(
-                                        text=f"Use .enhance to view a full list of enhancers! Look for the {list(o_enhancer.values())[2]} Enhancer")
-                                    await button_ctx.send(embed=embedVar)
+                                # if botActive:
+                                #     embedVar = discord.Embed(title=f"Enhancers!",
+                                #                              description=f"Enhancers cost 20 Stamina to Boost your Character or Debuff Your Opponent!",
+                                #                              colour=0xe91e63)
+                                #     embedVar.add_field(
+                                #         name=f"Your Enhancer: {omove_enhanced_text} is a {list(o_enhancer.values())[2]}",
+                                #         value="Pay Attention to your enhancer messages to know what effect is being used!")
+                                #     embedVar.set_footer(
+                                #         text=f"Use .enhance to view a full list of enhancers! Look for the {list(o_enhancer.values())[2]} Enhancer")
+                                #     await button_ctx.send(embed=embedVar)
                                 o_enhancer_used = True
                                 dmg = damage_cal(o_universe, o_card, o_enhancer, o_attack, o_defense, t_defense, o_stamina, o_enhancer_used, o_health, t_health, t_stamina,
                                                  o_max_health, t_attack, o_special_move_description, turn_total,
@@ -4720,15 +4727,15 @@ class CrownUnlimited(commands.Cog):
                             elif button_ctx.custom_id == "5":
                                 # Resolve Check and Calculation
                                 if not o_used_resolve and o_used_focus:
-                                    if botActive:
-                                        embedVar = discord.Embed(title=f"RESOLVE STATE!",
-                                                                 description=f"You've Entered Resolved State! Pay attention to your **STATS**!",
-                                                                 colour=0xe91e63)
-                                        embedVar.add_field(name=f"Trade Offs!",
-                                                           value="Resolved Charactes sacrifice **DEFENSE** to **HEAL**, gain **ATK** and the ability to **SUMMON PETS**!")
-                                        embedVar.set_footer(
-                                            text=f"You can only enter Resolve once per match! Use the Heal Wisely!!!")
-                                        await button_ctx.send(embed=embedVar)
+                                    # if botActive:
+                                    #     embedVar = discord.Embed(title=f"RESOLVE STATE!",
+                                    #                              description=f"You've Entered Resolved State! Pay attention to your **STATS**!",
+                                    #                              colour=0xe91e63)
+                                    #     embedVar.add_field(name=f"Trade Offs!",
+                                    #                        value="Resolved Charactes sacrifice **DEFENSE** to **HEAL**, gain **ATK** and the ability to **SUMMON PETS**!")
+                                    #     embedVar.set_footer(
+                                    #         text=f"You can only enter Resolve once per match! Use the Heal Wisely!!!")
+                                    #     await button_ctx.send(embed=embedVar)
                                     if o_universe == "My Hero Academia":  # My Hero Trait
                                         # fortitude or luck is based on health
                                         fortitude = 0.0
@@ -5039,15 +5046,15 @@ class CrownUnlimited(commands.Cog):
                             #         await private_channel.send(f"{opet_name} needs a turn to rest...")
                             elif button_ctx.custom_id == "0":
                                 if o_stamina >= 20:
-                                    if botActive:
-                                        embedVar = discord.Embed(title=f"Blocking!",
-                                                                 description=f"Blocking cost 20 STAMINA! Double your defense for 1 round",
-                                                                 colour=0xe91e63)
-                                        embedVar.add_field(name=f"**Strategy**",
-                                                           value="Sometimes the best Offense is a Stonewall Defense!")
-                                        embedVar.set_footer(
-                                            text=f"Use block strategically to defend against your opponents strongest abilities!")
-                                        await button_ctx.send(embed=embedVar)
+                                    # if botActive:
+                                    #     embedVar = discord.Embed(title=f"Blocking!",
+                                    #                              description=f"Blocking cost 20 STAMINA! Double your defense for 1 round",
+                                    #                              colour=0xe91e63)
+                                    #     embedVar.add_field(name=f"**Strategy**",
+                                    #                        value="Sometimes the best Offense is a Stonewall Defense!")
+                                    #     embedVar.set_footer(
+                                    #         text=f"Use block strategically to defend against your opponents strongest abilities!")
+                                    #     await button_ctx.send(embed=embedVar)
                                     o_stamina = o_stamina - 20
                                     o_block_used = True
                                     o_defense = o_defense * 2
@@ -5216,11 +5223,12 @@ class CrownUnlimited(commands.Cog):
                                                 await ctx.send(embed=embedVar)
                                                 
                                             elif tparry_count==1:
-                                                embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{o_card} takes {tparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                 t_health = t_health
                                                 tparry_damage = round(dmg['DMG'] / 2)
                                                 t_health = t_health - tparry_damage
                                                 o_health = o_health - tparry_damage
+                                                embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{o_card} takes {tparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
+                                                
                                                 tparry_count = tparry_count - 1
                                                 if oarm_barrier_active:
                                                     oarm_barrier_active=False
@@ -5911,10 +5919,11 @@ class CrownUnlimited(commands.Cog):
                                             await ctx.send(embed=embedVar)
                                             
                                         elif oparry_count==1:
-                                            embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} takes {oparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
                                             oparry_damage = round(dmg['DMG'] / 2)
                                             o_health = o_health - oparry_damage
                                             t_health = t_health - oparry_damage
+                                            embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} takes {oparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
+                                            
                                             oparry_count = oparry_count - 1
                                             if tarm_barrier_active:
                                                 tarm_barrier_active=False
@@ -6039,6 +6048,8 @@ class CrownUnlimited(commands.Cog):
                 if title_match_active:
                     if shield_test_active:
                         endmessage = f":flags: {guild_info['GNAME']} DEFENSE TEST OVER!"
+                    elif shield_training_active:
+                        endmessage = f":flags: {guild_info['GNAME']} TRAINING COMPLETE!"
                     else:
                         newshield = db.updateGuild(guild_query, {'$set': {'SHIELD': str(ctx.author)}})
                         guildwin = db.updateGuild(guild_query, {'$set': {'BOUNTY': winbonus, 'STREAK': 1}})
@@ -6046,18 +6057,18 @@ class CrownUnlimited(commands.Cog):
                 else:
                     guildloss = db.updateGuild(guild_query, {'$set': {'BOUNTY': fee, 'STREAK': 0}})
 
-                await bless(8, str(ctx.author))
-                await curse(3, str(t_user))
+                await bless(100, str(ctx.author))
+                await curse(100, str(t_user))
                 if oguild:
                     await bless(wage, str(ctx.author))
                     await blessteam(wage, oteam)
                     await teamwin(oteam)
                     await blessguild(wage, str(oguild_name))
                     if tguild:
-                        await curse(7, str(t_user))
-                        await curseteam(15, tteam)
+                        await curse(100, str(t_user))
+                        await curseteam(50, tteam)
                         await teamloss(tteam)
-                        await curseguild(30, tguild)
+                        await curseguild(50, tguild)
                 match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']),
                                         str(oarm['ARM']), "N/A", "PVP", o['EXCLUSIVE'])
                 embedVar = discord.Embed(
@@ -6078,16 +6089,16 @@ class CrownUnlimited(commands.Cog):
                 else:
                     embedVar.add_field(name="Most Focused", value=f"**{t_card}**")
                 await ctx.send(embed=embedVar)
-                if botActive:
-                    embedVar = discord.Embed(title=f"TUTORIAL COMPLETE",
-                                             description=f"Victories earn **ITEMS** ! Use the /end command to **END** the tutorial lobby\nOR use /start to **PLAY AGAIN**",
-                                             colour=0xe91e63)
-                    embedVar.set_author(name=f"Congratulations You Beat Senpai!")
-                    embedVar.add_field(name="Tips!",
-                                       value="Equiping stronger **TITLES** and **ARMS** will make you character tougher in a fight!")
-                    embedVar.set_footer(
-                        text="The /shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
-                    await ctx.send(embed=embedVar)
+                # if botActive:
+                #     embedVar = discord.Embed(title=f"TUTORIAL COMPLETE",
+                #                              description=f"Victories earn **ITEMS** ! Use the /end command to **END** the tutorial lobby\nOR use /start to **PLAY AGAIN**",
+                #                              colour=0xe91e63)
+                #     embedVar.set_author(name=f"Congratulations You Beat Senpai!")
+                #     embedVar.add_field(name="Tips!",
+                #                        value="Equiping stronger **TITLES** and **ARMS** will make you character tougher in a fight!")
+                #     embedVar.set_footer(
+                #         text="The /shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
+                #     await ctx.send(embed=embedVar)
         except Exception as ex:
             trace = []
             tb = ex.__traceback__
@@ -6601,7 +6612,7 @@ class CrownUnlimited(commands.Cog):
         embeds = embed_list
         await paginator.run(embeds)
 
-    @cog_ext.cog_slash(description="View all Guild Halls for purchase", guild_ids=main.guild_ids)
+    @cog_ext.cog_slash(description="View all Halls for purchase", guild_ids=main.guild_ids)
     async def halls(self, ctx: SlashContext):
         hall_data = db.queryAllHalls()
         user = db.queryUser({'DISNAME': str(ctx.author)})
@@ -7365,9 +7376,6 @@ def damage_cal(universe, card, ability, attack, defense, op_defense, stamina, en
                 attackpower =ap
 
             abilitypower = round(attackpower / defensepower)
-            print(attackpower)
-            print(defensepower)
-            print(abilitypower)
             if abilitypower <= 0:
                 abilitypower = 25
 
@@ -9951,6 +9959,8 @@ async def enemy_approached(self, message, channel, player, selected_mode, univer
     if channel_exists_response:
         await private_channel.send(m.ALREADY_IN_TALES)
         return
+    
+
 
     sowner = player
     guild = message.guild
@@ -9961,8 +9971,19 @@ async def enemy_approached(self, message, channel, player, selected_mode, univer
         guild.me: discord.PermissionOverwrite(read_messages=True),
         message.author: discord.PermissionOverwrite(read_messages=True, send_messages=True),
     }
+    #Create Explore Category
+    categoryname = "Crown Unlimited"
+    category = discord.utils.get(guild.categories, name=categoryname)
+    print("1:")
+    print(category)
+
+    if category is None: #If there's no category matching with the `name`
+        category = await guild.create_category_channel(categoryname)
+    #private_channel = await guild.create_text_channel(f'{str(ctx.author)}-{mode}-run', overwrites=overwrites, category=category)
     private_channel = await guild.create_text_channel(f'{str(message.author)}-{selected_mode}-run',
                                                       overwrites=overwrites)
+    await private_channel.send(f"{ctx.author.mention} private channel has been opened for you. Good luck!")
+
     oguild = "RANDOMIZED_BATTLE"
     crestlist = opponent
     crestsearch = bounty
@@ -11719,11 +11740,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     await button_ctx.send(embed=embedVar)
                                                     
                                                 elif tparry_count==1:
-                                                    embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{o_card} takes {tparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                     t_health = t_health
                                                     tparry_damage = round(dmg['DMG'] / 2)
                                                     t_health = t_health - tparry_damage
                                                     o_health = o_health - tparry_damage
+                                                    embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{o_card} takes {tparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
+                                                    
                                                     tparry_count = tparry_count - 1
                                                     if oarm_barrier_active:
                                                         oarm_barrier_active=False
@@ -12627,10 +12649,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         await button_ctx.send(embed=embedVar)
                                                         
                                                     elif oparry_count==1:
-                                                        embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} takes {oparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                         oparry_damage = round(dmg['DMG'] / 2)
                                                         o_health = o_health - oparry_damage
                                                         t_health = t_health - oparry_damage
+                                                        embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} takes {oparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
+                                                        
                                                         oparry_count = oparry_count - 1
                                                         if tarm_barrier_active:
                                                             tarm_barrier_active=False
@@ -13282,11 +13305,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     await button_ctx.send(embed=embedVar)
                                                     
                                                 elif oparry_count==1:
-                                                    embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} takes {oparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                     oparry_damage = round(dmg['DMG'] / 2)
                                                     o_health = o_health - oparry_damage
                                                     t_health = t_health - oparry_damage
                                                     oparry_count = oparry_count - 1
+                                                    embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} takes {oparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
+                                                    
                                                     if tarm_barrier_active:
                                                         tarm_barrier_active=False
                                                         embedVar.add_field(name=f"{t_card}'s **Barrier** Disabled!", value =f"*Maximize **Barriers** with your Enhancer!*")
@@ -15147,11 +15171,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         await button_ctx.send(embed=embedVar)
                                                         
                                                     elif tparry_count==1:
-                                                        embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{o_card} takes {tparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                         t_health = t_health
                                                         tparry_damage = round(dmg['DMG'] / 2)
                                                         t_health = t_health - tparry_damage
                                                         o_health = o_health - tparry_damage
+                                                        embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{o_card} takes {tparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
+                                                        
                                                         tparry_count = tparry_count - 1
                                                         if oarm_barrier_active:
                                                             oarm_barrier_active=False
@@ -16421,11 +16446,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         await private_channel.send(embed=embedVar)
                                                         
                                                     elif cparry_count==1:
-                                                        embedVar = discord.Embed(title=f"{c_card.upper()} **Parry** Penetrated!!", description=f"{t_card} takes {cparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                         c_health = c_health
                                                         cparry_damage = round(dmg['DMG'] / 2)
                                                         c_health = c_health - cparry_damage
                                                         t_health = t_health - cparry_damage
+                                                        embedVar = discord.Embed(title=f"{c_card.upper()} **Parry** Penetrated!!", description=f"{t_card} takes {cparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
+                                                        
                                                         cparry_count = cparry_count - 1
                                                         if tarm_barrier_active:
                                                             tarm_barrier_active=False
@@ -16628,10 +16654,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         await button_ctx.send(embed=embedVar)
                                                         
                                                     elif oparry_count==1:
-                                                        embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} takes {oparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                         oparry_damage = round(dmg['DMG'] / 2)
                                                         o_health = o_health - oparry_damage
                                                         t_health = t_health - oparry_damage
+                                                        embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} takes {oparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
+                                                        
                                                         oparry_count = oparry_count - 1
                                                         if tarm_barrier_active:
                                                             tarm_barrier_active=False
@@ -16839,10 +16866,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     await private_channel.send(embed=embedVar)
                                                     
                                                 elif oparry_count==1:
-                                                    embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} takes {oparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                     oparry_damage = round(dmg['DMG'] / 2)
                                                     o_health = o_health - oparry_damage
                                                     t_health = t_health - oparry_damage
+                                                    embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} takes {oparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
+                                                    
                                                     oparry_count = oparry_count - 1
                                                     if tarm_barrier_active:
                                                         tarm_barrier_active=False
@@ -17934,11 +17962,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         await button_ctx.send(embed=embedVar)
                                                         
                                                     elif tparry_count==1:
-                                                        embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{c_card} takes {tparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                         t_health = t_health
                                                         tparry_damage = round(dmg['DMG'] / 2)
                                                         t_health = t_health - tparry_damage
                                                         c_health = c_health - tparry_damage
+                                                        embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{c_card} takes {tparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
+                                                        
                                                         tparry_count = tparry_count - 1
                                                         if carm_barrier_active:
                                                             carm_barrier_active=False
@@ -18797,11 +18826,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                             await button_ctx.send(embed=embedVar)
                                                             
                                                         elif tparry_count==1:
-                                                            embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{c_card} takes {tparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                             t_health = t_health
                                                             tparry_damage = round(dmg['DMG'] / 2)
                                                             t_health = t_health - tparry_damage
                                                             c_health = c_health - tparry_damage
+                                                            embedVar = discord.Embed(title=f"{t_card.upper()} **Parry** Penetrated!!", description=f"{c_card} takes {tparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
+                                                            
                                                             tparry_count = tparry_count - 1
                                                             if carm_barrier_active:
                                                                 carm_barrier_active=False
@@ -19557,10 +19587,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     
                                                     embedVar.set_image(url="attachment://image.png")
                                                     await private_channel.send(embed=embedVar)
-                                                turn = 1
+                                                turn = 3
                                             else:
                                                 await private_channel.send(f"{tpet_name} needs a turn to rest...")
-                                                turn = 1
+                                                turn = 3
                                         else:
                                             t_enhancer_used = True
                                             dmg = damage_cal(t_universe, t_card, tpet_move, t_attack, t_defense,
@@ -19680,10 +19710,10 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     
                                                     embedVar.set_image(url="attachment://image.png")
                                                     await private_channel.send(embed=embedVar)
-                                                turn = 1
+                                                turn = 3
                                             else:
                                                 await private_channel.send(f"{tpet_name} needs a turn to rest...")
-                                                turn = 1
+                                                turn = 3
 
                                 if int(aiMove) != 5 and int(aiMove) != 6:
                                     # If you have enough stamina for move, use it
@@ -19848,10 +19878,11 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         await button_ctx.send(embed=embedVar)
                                                         
                                                     elif oparry_count==1:
-                                                        embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} takes {oparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                         oparry_damage = round(dmg['DMG'] / 2)
                                                         o_health = o_health - oparry_damage
                                                         t_health = t_health - oparry_damage
+                                                        embedVar = discord.Embed(title=f"{o_card.upper()} **Parry** Penetrated!!", description=f"{t_card} takes {oparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
+                                                        
                                                         oparry_count = oparry_count - 1
                                                         if tarm_barrier_active:
                                                             tarm_barrier_active=False
@@ -20053,11 +20084,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                         await button_ctx.send(embed=embedVar)
                                                         
                                                     elif cparry_count==1:
-                                                        embedVar = discord.Embed(title=f"{c_card.upper()} **Parry** Penetrated!!", description=f"{t_card} takes {cparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
                                                         c_health = c_health
                                                         cparry_damage = round(dmg['DMG'] / 2)
                                                         c_health = c_health - cparry_damage
                                                         t_health = t_health - cparry_damage
+                                                        embedVar = discord.Embed(title=f"{c_card.upper()} **Parry** Penetrated!!", description=f"{t_card} takes {cparry_damage}! DMG and breaks the **Parry**", colour=0xe91e63)
+                                                        
                                                         cparry_count = cparry_count - 1
                                                         if tarm_barrier_active:
                                                             tarm_barrier_active=False
@@ -20252,6 +20284,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         play_again_selector = ctx.author
                     elif mode in co_op_modes and mode not in ai_co_op_modes:
                         play_again_selector = user2
+                    else:
+                        play_again_selector = ctx.author
 
                     def check(button_ctx):
                         return button_ctx.author == play_again_selector
@@ -20393,6 +20427,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
 
                         if crestsearch:
                             await blessguild(25000, oguild['GNAME'])
+                            teambank = await blessteam(5000, oteam)
                             await movecrest(selected_universe, oguild['GNAME'])
                             embedVar.add_field(name=f"{selected_universe} CREST CLAIMED!",
                                                value=f"{oguild['GNAME']} earned the {selected_universe} **Crest**")
@@ -20436,7 +20471,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         gameClock = getTime(int(h_gametime), int(m_gametime), int(s_gametime), h_playtime, m_playtime,
                                             s_playtime)
                         if mode in D_modes:
-                            teambank = await blessteam(100, oteam)
+                            teambank = await blessteam(250, oteam)
                         else:
                             teambank = await blessteam(50, oteam)
                         if o_user['RIFT'] == 1:
@@ -20485,6 +20520,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 embedVar.set_author(name=f"New Universes have been unlocked to explore!")
                                 if crestsearch:
                                     await blessguild(25000, oguild['GNAME'])
+                                    teambank = await blessteam(10000, oteam)
                                     await movecrest(selected_universe, oguild['GNAME'])
                                     embedVar.add_field(name=f"{selected_universe} CREST CLAIMED!",
                                                        value=f"{oguild['GNAME']} earned the {selected_universe} **Crest**")
@@ -20496,12 +20532,14 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 r = db.updateUserNoFilter(upload_query, new_upload_query)
                                 if selected_universe in completed_universes:
                                     await bless(5000, ctx.author)
+                                    teambank = await blessteam(1000, oteam)
                                     # await bless(125, user2)
                                     await ctx.send(embed=embedVar)
                                     await ctx.send(
                                         f"You were awarded :coin: 5,000 for completing the {selected_universe} Dungeon again!")
                                 else:
                                     await bless(15000, ctx.author)
+                                    teambank = await blessteam(5000, oteam)
                                     await ctx.send(embed=embedVar)
                                     await ctx.send(
                                         f"You were awarded :coin: 15,000 for completing the {selected_universe} Dungeon! ")
@@ -20520,11 +20558,13 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 r = db.updateUserNoFilter(upload_query, new_upload_query)
                                 if selected_universe in completed_universes:
                                     await bless(1000, ctx.author)
+                                    teambank = await blessteam(500, oteam)
                                     await ctx.send(embed=embedVar)
                                     await ctx.send(
                                         f"You were awarded :coin: 1,000 for completing the {selected_universe} Tale again!")
                                 else:
                                     await bless(5000, ctx.author)
+                                    teambank = await blessteam(1000, oteam)
                                     await ctx.send(embed=embedVar)
                                     await ctx.send(
                                         f"You were awarded :coin: 5,000 for completing the {selected_universe} Tale! ")
@@ -20916,7 +20956,7 @@ async def movecrest(universe, guild):
         update = db.updateGuild(alt_query, update_query)
         universe_guild = db.updateUniverse({'TITLE': universe_name}, {'$set': {'GUILD': guild_name}})
     else:
-        print("Guild not found: Crest")
+        print("Association not found: Crest")
 
 
 async def drops(player, universe, matchcount):

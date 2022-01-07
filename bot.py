@@ -173,7 +173,7 @@ async def enhancers(ctx):
       
       embedVar11 = discord.Embed(title= f"Arm Enhancer Type: Defensive",colour=0x7289da)
       embedVar11.set_thumbnail(url=avatar)
-      embedVar11.add_field(name="`DEFENSE`", value="**SHIELD**- Grant Damage absorbing Shield until destroyed \n\n**BARRIER** - Blocks all Attack Damage until player Attacks or is Destoyed (Enhancers Exempt)\n\n**PARRY** - Reflects 50% Damage back to Attacker\n\n")
+      embedVar11.add_field(name="`DEFENSE`", value="🌐 **SHIELD**- Grant Damage absorbing Shield until destroyed \n\n💠 **BARRIER** - Blocks all Attack Damage until player Attacks or is Destoyed (Enhancers Exempt)\n\n🔄 **PARRY** - Reflects 50% Damage back to Attacker\n\n")
       embedVar11.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
       
 
@@ -399,11 +399,10 @@ async def crown(ctx):
    Crown Unlimited features an in game **Shop** where you can purchase new Cards, Titles, and Arms.
    Use /shop to open the Shop!**
 
-   **Stock**
-   Items in the shop have a **Stock**. When they are sold out they become unavailable.
-
-   **Sell & Trade**
-   **/sell** and **/trade** will allow you to trade Cards, Titles, Arms and Summons with other players.
+   **Trading**
+   **/trade** will allow you to trade Cards, Titles, Arms and Summons with other players.
+   Add items to the open trade using the buttons on the item menu *ex. /cards*
+   **/tradecoins** allows you to add or remove coins from the trade
 
    **Resell**
    **/resell item** to sell Cards, Titles, and Arms back to the market.
@@ -419,22 +418,22 @@ async def crown(ctx):
    """) ,colour=0x7289da)
    embedVar10.set_thumbnail(url=avatar)
    
-   embedVar15 = discord.Embed(title= f"Teams", description=textwrap.dedent(f"""\
-   **Teams Explained**
-   Use **/team** to lookup any Crown Unlimited Team!
+   embedVar15 = discord.Embed(title= f"Guilds", description=textwrap.dedent(f"""\
+   **Guilds Explained**
+   Use **/guild** to lookup any Crown Unlimited Guild!
    
-   **Team Members** earn extra :coin: towards the **Team Bank** 
+   **Guild Members** earn extra :coin: towards the **Guild Bank** 
 
-   **Creating A Team**
-   Use **/createteam** and create a **Team Name**
-   **/recruit** your friends to join your newly named **Team** !
+   **Creating A Guild**
+   Use **/createteam** and create a **Guild Name**
+   **/recruit** your friends to join your newly named **Guild** !
    Players can use **/apply** to join as well!
    
-   **Team Bonusus**
+   **Guild Bonusus**
    Teammates gain an extra **10 Attack** and **Defense** playing Co-Op Together !
    Teams earn additional :coin: for every **Tales**, **Dungeon** and **Boss** Victory
    
-   **Team Economy**
+   **Guild Economy**
    Players across **Crown Unlimited** can **/donate** :coin: to their favorite teams
    Owners can ****/pay**** their members a wage.
    """),colour=0x7289da)
@@ -464,70 +463,77 @@ async def crown(ctx):
    """) ,colour=0x7289da)
    embedVar12.set_thumbnail(url=avatar)
 
-   embedVar13 = discord.Embed(title= f"Guilds",description=textwrap.dedent(f"""\
-   **Guilds Explained**
-   Guilds in Crown Unlmited are formed by an Oath between two Team Owners
+   embedVar13 = discord.Embed(title= f"Associations",description=textwrap.dedent(f"""\
+   **Association Explained**
+   Associations in Crown Unlmited are formed by an Oath between two Guild Owners
    
    The Oathgiver becomes the **Founder** and the Oathreciever becomes the ****Sworn and Shield****.
    
-   The **Shield** defends the Guild from raiding players.
    
-   Both teams become enlisted as **Swords** of the new **Guild**
+   The **Shield** defends the Association from raiding players.
+   
+   Both teams become enlisted as **Swords** of the new **Association**
    Their respective members become **Blades**
    
-   **Guilds** earn money by winning **PvP** matches and earning **Universe Crest** and defending against raids
+   The Founder & Sworn may /ally with other Teams increasing the size and power of the Association.
+   These are the **Owners** and can **/sponsor** other teams allied with the Association.
    
-   The Founder & Sworn may /ally with other Teams increasing the size and power of the guild
+   **Associations** earn money by winning **PvP** matches, Income from **Universe Crest** and defending against **Raids**
    
-   **Guild Bonuses**
-   Guilds earn extra income towards the Guild Bank
-   Guilds increase the earned income in PvP
-   Guilds can partipate in /raids
-   Guilds can earn passive income owning **Universe Crest**
-   Guilds can purchase **Halls**
+   **Universe Crest** 
+   When a member of a Association defeats a **Dungeon** or **Boss** they earn the **Universe Crest** from that Universe.
+   This Crest will earn the Association **Passive Income** whenever someone goes into that universe in all servers!
    
-   **Universe Crest**
-   When you complete a dungeon 
+
+   **Association Bonuses**
+   Associations earn extra income towards the **Association Bank**
+   Associations increase the earned income in **PvP**
+   Associations can **/raid**
+   Associations can earn passive income owning **Universe Crest**
+   Associations can purchase **Halls**
    
    
    **Halls**
-   The **Guild Bank** can be used to purchase **Halls**
-   **Halls** increase the Income earned to Guilds via **Multipliers**
+   The **Association Bank** can be used to purchase **Halls**
+   **Halls** increase the Income earned to Associations via **Multipliers**
    **Halls** increase the income earned to **Blades** via **Splits**
    **Halls** increase the defense of the **Shield**
-   **Halls** increase the bounty cost to /raid the guild 
+   **Halls** increase the **Bounty** cost to raid the **Association**
    """) ,colour=0x7289da)
    embedVar13.set_thumbnail(url=avatar)
    
    embedVar14 = discord.Embed(title= f"Raids",description=textwrap.dedent(f"""\
    **Raids Explained**
-   Players aligned with a guild can use /raid to claim bounties from other guilds
+   Players aligned with a Association can use /raid to claim bounties from other guilds
    
-   Victory claims the bounty and resets the Guilds victory multiplier !
+   Victory claims the bounty and resets the Associations victory multiplier !
    
-   Income from Raids is limited to the bounty offered from the guild.
-   To take money from a **Guild Bank** players must compete in PvP
+   Income from Raids is limited to the bounty offered from the Association.
+   To take money from a **Association Bank** players must compete in PvP
    
-   Raiding a guild hall is no easy feat and must be done **Without Summons**
+   Raiding an Association is no easy feat and must be done **Without Summons**
    
    **Raid Benefits**
-   Earn Large Bounties from guilds 
+   Earn Large Bounties from guilds.
+   Earn Wins for your Crown Unlimited **Guild**
    
    **Shield  Defense Explained**
-   The Shield has a big repsonsible to defend the guild from /raids and earn income from challengers
+   The **Shield** has a big repsonsible to defend the **Association** from raids, earning income from **Challengers**.
    
-   The shield exist within the guild hall as the **Current Equipped Build** of the Shield Player
+   The **Shield** exist within the Association hall as the **Current Equipped Build** of the **Shield Player**.
    
-   As the shield, whenver your Avatar is raided and succesfully defends you earn :coin:
+   As the **Shield**, whenever your Avatar succesfully defends a raid you earn :coin:
    With each victory you will build a streak earning both respect and more :coin: via **Multipliers**.
    
+   **Association Competition**
    However, many of **Blades** will covet this position and may /raid you themseleves triggering a **Title Match**
+   The winner of this **Title MAtch** becomes the new **Shield** and must defend the 
    Occasionally the Founder or Sworn may /raid to start a Defense Test gauging the strength of their Chosen Shield
-   host a /raid tournament within the guild to find a new champion or simply /knight one yourself
+   host a /raid tournament within the Association to find a new champion or simply /knight one yourself
    
    **Shield Benefits**
-   Earn income by defending your guild from raiders
-   Earn respect by increasing the guild victory streak 
+   Earn income by defending your Association from raiders
+   Earn respect by increasing the Association victory streak 
    
    """) ,colour=0x7289da)
    embedVar14.set_thumbnail(url=avatar)
@@ -987,199 +993,6 @@ async def curse(amount, user):
          db.updateVaultNoFilter(vault, update_query)
 
 
-# @slash.slash(name="Trade", description="Trade Cards, Titles, Arms, and Summons for other items", guild_ids=guild_ids)
-# @commands.check(validate_user)
-# async def trade(ctx, player: User, item: str):
-#    user2 = player
-#    user = db.queryUser({'DISNAME': str(ctx.author)})
-#    traded_to = db.queryUser({'DISNAME': str(user2)})
-#    p1_trade_item = item
-#    p1_vault = db.queryVault({'OWNER' : str(ctx.author)})
-#    p1_card_levels = p1_vault['CARD_LEVELS']
-#    p1_cards = p1_vault['CARDS']
-#    p1_titles = p1_vault['TITLES']
-#    p1_arms = p1_vault['ARMS']
-#    p1_arms_names_list = []
-
-#    for arm in p1_arms:
-#       p1_arms_names_list.append(arm['ARM'])
-#    p1_pets = p1_vault['PETS']
-#    p1_balance = p1_vault['BALANCE']
-#    p1_owned_destinies = []
-#    for destiny in p1_vault['DESTINY']:
-#       p1_owned_destinies.append(destiny['NAME'])
-
-#    p1_active_pet = {}
-#    p1_pet_names = []
-#    for pet in p1_pets:
-#          p1_pet_names.append(pet['NAME'])
-#          if pet['NAME'] == p1_trade_item:
-#             pet_ability = list(pet.keys())[3]
-#             pet_ability_power = list(pet.values())[3]
-#             p1_active_pet = {'NAME': pet['NAME'], 'LVL': pet['LVL'], 'EXP': pet['EXP'], pet_ability: pet_ability_power, 'TYPE': pet['TYPE'], 'BOND': 0, 'BONDEXP': 0, 'PATH': pet['PATH']}
-
-
-#    p2_vault = db.queryVault({'OWNER' : str(user2)})
-#    p2_card_levels = p2_vault['CARD_LEVELS']
-#    p2_cards = p2_vault['CARDS']
-#    p2_titles = p2_vault['TITLES']
-#    p2_arms = p2_vault['ARMS']
-#    p2_arms_names_list = []
-#    for arm in p2_arms:
-#       p2_arms_names_list.append(arm['ARM'])
-
-#    p2_pets = p2_vault['PETS']
-#    p2_balance = p2_vault['BALANCE']
-#    p2_trade_item = ""
-#    p2_owned_destinies = []
-#    for destiny in p2_vault['DESTINY']:
-#       p2_owned_destinies.append(destiny['NAME'])
-
-#    p2_pet_names = []
-#    for pet in p2_pets:
-#          p2_pet_names.append(pet['NAME'])
-
-
-#    commence = False
-
-#    if p1_trade_item not in p1_cards and p1_trade_item not in p1_titles and p1_trade_item not in p1_arms_names_list and p1_trade_item not in p1_pet_names and p1_trade_item not in p2_pet_names:
-#       await ctx.send("You do not own this item.")
-#       return
-#    else:
-
-#       if (p1_trade_item == user['CARD']) or (p1_trade_item == user['TITLE']) or (p1_trade_item == user['ARM']) or (p1_trade_item == user['PET']):
-#             await ctx.send("You cannot trade an equipped item.")
-#             return
-
-#       await ctx.send(f"{user2.mention}, what will you trade for {ctx.author.mention}'s {p1_trade_item}?")
-
-#       def check(msg):
-#          if p1_trade_item in p1_pet_names:
-#             return msg.author == user2 and msg.content in p2_pet_names and msg.content not in p1_cards and msg.content not in p1_titles and msg.content not in p1_arms_names_list and msg.content not in p1_pet_names
-#          else:
-#             return msg.author == user2 and msg.content in p2_cards or msg.content in p2_titles or msg.content in p2_arms_names_list or msg.content in p2_pet_names and msg.content not in p1_cards and msg.content not in p1_titles and msg.content not in p2_arms_names_list and msg.content not in p1_pet_names
-
-#       try:
-#          msg = await bot.wait_for('message', timeout=20.0, check=check)
-#          p2_trade_item = msg.content
-
-#          p2_active_pet = {}
-#          p2_pet_names = []
-#          for pet in p2_pets:
-#                p2_pet_names.append(pet['NAME'])
-#                if pet['NAME'] == p2_trade_item:
-#                   pet_ability = list(pet.keys())[3]
-#                   pet_ability_power = list(pet.values())[3]
-#                   p2_active_pet = {'NAME': pet['NAME'], 'LVL': pet['LVL'], 'EXP': pet['EXP'], pet_ability: pet_ability_power, 'TYPE': pet['TYPE'], 'BOND': 0, 'BONDEXP': 0, 'PATH': pet['PATH']}
-
-#          if (p2_trade_item == user['CARD']) or (p2_trade_item == user['TITLE']) or (p2_trade_item == user['ARM']) or (p2_trade_item == user['PET']):
-#             await ctx.send("You cannot trade an equipped item.")
-#             return
-
-#          commence = True
-#       except:
-#          await ctx.send("Please, triple check your vaults before making a trade. ")
-#          return
-
-#       if commence:
-#          accept = await ctx.send(f"{ctx.author.mention} do you accept {user2.mention}'s {p2_trade_item}?")
-#          emojis = ['👍', '👎']
-#          for emoji in emojis:
-#             await accept.add_reaction(emoji)
-
-#          def check(reaction, user):
-#             return user == ctx.author and ((str(reaction.emoji) == '👍') or (str(reaction.emoji) == '👎'))
-
-#          try:
-#             reaction, user = await bot.wait_for('reaction_add', timeout=8.0, check=check)
-#             if str(reaction.emoji) == '👎':
-#                await ctx.send("Trade ended.")
-#                return
-
-#             if p2_trade_item in p2_arms_names_list:
-#                db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'ARMS': {'ARM': str(p1_trade_item)}}})
-#                for arm in p2_arms:
-#                   if arm['ARM'] == str(p2_trade_item):
-#                      response = db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$addToSet':{'ARMS': {'ARM': str(p2_trade_item), 'DUR': arm['DUR']}}})
-#                await ctx.send(f"{p2_trade_item} has been added to {ctx.author.mention}'s vault: ARMS")
-#             elif p2_trade_item in p2_titles:
-#                db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'TITLES': str(p1_trade_item)}})
-#                response = db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$addToSet':{'TITLES': str(p2_trade_item)}})
-#                await ctx.send(f"{p2_trade_item} has been added to {ctx.author.mention}'s vault: TITLES")
-#             elif p2_trade_item in p2_cards:
-#                # CARD_LEVEL Configuration
-#                card_2 = db.queryCard({'NAME': str(p2_trade_item)})
-#                card_2_uni = db.queryUniverse({'TITLE': card_2['UNIVERSE']})
-#                card_2_tier = card_2_uni['TIER']
-#                update_query = {'$addToSet': {'CARD_LEVELS': {'CARD': str(p2_trade_item), 'LVL': 0, 'TIER': int(card_2_tier), 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
-#                card_2_level_exist = False
-#                for card in p1_card_levels:
-#                   if card['CARD'] == str(p2_trade_item):
-#                      card_2_level_exist = True
-#                if card_2_level_exist == False:
-#                   vault_query = {'OWNER' : str(ctx.author)}
-#                   response = db.updateVaultNoFilter(vault_query, update_query)
-
-#                db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'CARDS': str(p1_trade_item)}})
-#                response = db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$addToSet':{'CARDS': str(p2_trade_item)}})
-
-#                for destiny in d.destiny:
-#                   if p2_trade_item in destiny["USE_CARDS"] and destiny['NAME'] not in p1_owned_destinies:
-#                      db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$addToSet':{'DESTINY': destiny}})
-#                      await ctx.send(f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.")
-
-#                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'CARD': str(p2_trade_item)}})
-#                await ctx.send(f"{p2_trade_item} has been added to {ctx.author.mention}'s vault: CARDS")
-#             elif p2_trade_item in p2_pet_names:
-#                db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'PETS':{'NAME': str(p1_trade_item)}}})
-#                response = db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$addToSet':{'PETS': p2_active_pet}})
-#                db.updateUserNoFilter({'DISNAME': str(ctx.author)}, {'$set': {'PET': p2_active_pet['NAME']}})
-#                await ctx.send(f"{p2_trade_item} has been added to {ctx.author.mention}'s vault: PETS")
-
-#             if p1_trade_item in p1_arms_names_list:
-#                db.updateVaultNoFilter({'OWNER': str(user2)},{'$pull':{'ARMS': {'ARM': str(p2_trade_item)}}})
-#                for arm in p1_arms:
-#                   if arm['ARM'] == str(p1_trade_item):
-#                      response = db.updateVaultNoFilter({'OWNER': str(user2)},{'$addToSet':{'ARMS': {'ARM': str(p1_trade_item), 'DUR': arm['DUR']}}})
-#                await ctx.send(f"{p1_trade_item} has been added to {user2.mention}'s vault: ARMS")
-#             elif p1_trade_item in p1_titles:
-#                db.updateVaultNoFilter({'OWNER': str(user2)},{'$pull':{'TITLES': str(p2_trade_item)}})
-#                response = db.updateVaultNoFilter({'OWNER': str(user2)},{'$addToSet':{'TITLES': str(p1_trade_item)}})
-#                await ctx.send(f"{p1_trade_item} has been added to {user2.mention}'s vault: TITLES")
-#             elif p1_trade_item in p1_cards:
-#                # CARD_LEVEL Configuration
-#                card_1 = db.queryCard({'NAME': str(p1_trade_item)})
-#                card_1_uni = db.queryUniverse({'TITLE': card_1['UNIVERSE']})
-#                card_1_tier = card_1_uni['TIER']
-#                cupdate_query = {'$addToSet': {'CARD_LEVELS': {'CARD': str(p1_trade_item), 'LVL': 0, 'TIER': int(card_1_tier), 'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
-#                card_1_level_exist = False
-#                for card in p2_card_levels:
-#                   if card['CARD'] == str(p1_trade_item):
-#                      card_1_level_exist = True
-#                if card_1_level_exist == False:
-#                   cvault_query = {'OWNER' : str(user2)}
-#                   response = db.updateVaultNoFilter(cvault_query, cupdate_query)
-
-#                db.updateVaultNoFilter({'OWNER': str(user2)},{'$pull':{'CARDS': str(p2_trade_item)}})
-#                response = db.updateVaultNoFilter({'OWNER': str(user2)},{'$addToSet':{'CARDS': str(p1_trade_item)}})
-
-#                for destiny in d.destiny:
-#                   if p1_trade_item in destiny["USE_CARDS"] and destiny['NAME'] not in p2_owned_destinies:
-#                      db.updateVaultNoFilter({'OWNER': str(user2)},{'$addToSet':{'DESTINY': destiny}})
-#                      await ctx.send(f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.")
-
-#                db.updateUserNoFilter({'DISNAME': str(user2)}, {'$set': {'CARD': str(p1_trade_item)}})
-#                await ctx.send(f"{p1_trade_item} has been added to {user2.mention}'s vault: CARDS")
-#             elif p1_trade_item in p1_pet_names:
-#                db.updateVaultNoFilter({'OWNER': str(user2)},{'$pull':{'PETS':{'NAME': str(p2_trade_item)}}})
-#                response = db.updateVaultNoFilter({'OWNER': str(user2)},{'$addToSet':{'PETS': p1_active_pet}})
-#                db.updateUserNoFilter({'DISNAME': str(user2)}, {'$set': {'PET': p1_active_pet['NAME']}})
-#                await ctx.send(f"{p1_trade_item} has been added to {user2.mention}'s vault: PETS")
-
-#          except:
-#             await ctx.send("Trade ended. ")
-
-
 @slash.slash(name="Gift", description="Give money to friend", guild_ids=guild_ids)
 @commands.check(validate_user)
 async def gift(ctx, player: User, amount: int):
@@ -1198,7 +1011,7 @@ async def gift(ctx, player: User, amount: int):
       return
 
 
-@slash.slash(name="Donate", description="Donate money to Team", guild_ids=guild_ids)
+@slash.slash(name="Donate", description="Donate money to Guild", guild_ids=guild_ids)
 @commands.check(validate_user)
 async def donate(ctx, amount, team: str):
    vault = db.queryVault({'OWNER': str(ctx.author)})
@@ -1215,7 +1028,7 @@ async def donate(ctx, amount, team: str):
          await ctx.send(f":coin:{amount} has been gifted to {dteam}.")
          return
    else:
-      await ctx.send(f"Team: {dteam} does not exist")
+      await ctx.send(f"Guild: {dteam} does not exist")
 
 
 @slash.slash(name="Invest", description="Invest money in your Family", guild_ids=guild_ids)
@@ -1237,7 +1050,7 @@ async def invest(ctx, amount):
       await ctx.send(f"Family does not exist")
 
 
-@slash.slash(name="Pay", description="Pay a Team Member", guild_ids=guild_ids)
+@slash.slash(name="Pay", description="Pay a Guild Member", guild_ids=guild_ids)
 @commands.check(validate_user)
 async def pay(ctx, player: User, amount):
    user2 = player
@@ -1284,7 +1097,7 @@ async def blessteam(amount, team):
       update_query = {"$inc": {'BANK': posBlessAmount}}
       db.updateTeam(query, update_query)
    else:
-      print("Cannot find Team")
+      print("Cannot find Guild")
 
 
 async def curseteam(amount, team):
@@ -1555,7 +1368,7 @@ async def trinketshop(ctx):
       await ctx.send("Trinket Shop closed unexpectedly. Seek support.", hidden=True)
 
 
-@slash.slash(name="Bounty", description="Set Guild Bounty", guild_ids=guild_ids)
+@slash.slash(name="Bounty", description="Set Association Bounty", guild_ids=guild_ids)
 @commands.check(validate_user)
 async def bounty(ctx, amount):
    negCurseAmount = 0 - abs(int(amount))
@@ -1578,16 +1391,16 @@ async def bounty(ctx, amount):
    finalBount = guild_bounty + posCurseAmount
    finalBal = guild_bank + negCurseAmount
    if finalBal < 0:
-      await ctx.send(f"Guild does not have that much :coin:", delete_after=5)
+      await ctx.send(f"Association does not have that much :coin:", delete_after=5)
       return
    else:
       update_query = {"$set": {'BOUNTY': int(finalBount)}, '$inc': {'BANK' : int(negCurseAmount)}}
       db.updateGuildAlt(guild_query, update_query)
-      await ctx.send(f"New {guild['GNAME']} Bounty: :yen: {'{:,}'.format(finalBount)}! Use /raid `guild`{guild['GNAME']} to claim the Bounty!")
+      await ctx.send(f"New {guild['GNAME']} Bounty: :yen: {'{:,}'.format(finalBount)}! Use /raid `Association`{guild['GNAME']} to claim the Bounty!")
       return
 
 
-@slash.slash(name="Sponsor", description="Sponsor Team with Guild Funds", guild_ids=guild_ids)
+@slash.slash(name="Sponsor", description="Sponsor Guild with Association Funds", guild_ids=guild_ids)
 @commands.check(validate_user)
 async def sponsor(ctx, team: str, amount):
    user = db.queryUser({'DISNAME': str(ctx.author)})
@@ -1601,7 +1414,7 @@ async def sponsor(ctx, team: str, amount):
    sworn = guild['SWORN']
    guild_bank = guild['BANK']
    if int(amount) >= guild['BANK']:
-      await ctx.send("Guild does not have that much :coin:", delete_after=5)
+      await ctx.send("Association does not have that much :coin:", delete_after=5)
       return
 
    if user['DISNAME'] != founder and user['DISNAME'] != sworn:
@@ -1630,7 +1443,7 @@ async def sponsor(ctx, team: str, amount):
    await ctx.send(f"{guild_name} sponsored {team_name} :coin:{amount}!!!")
    return
 
-@slash.slash(name="Fund", description="Fund Guild From Team Bank", guild_ids=guild_ids)
+@slash.slash(name="Fund", description="Fund Association From Guild Bank", guild_ids=guild_ids)
 @commands.check(validate_user)
 async def fund(ctx, amount):
    try:
@@ -1638,10 +1451,10 @@ async def fund(ctx, amount):
       team = db.queryTeam({'TNAME': user['TEAM']})
       team_guild = team['GUILD']
       if team_guild =="PCG":
-         await ctx.send("Your team must join a Guild First!")
+         await ctx.send("Your team must join a Association First!")
          return
       if user['TEAM'] == 'PCG' or user['DISNAME'] != team['OWNER']:
-         await ctx.send("You must be owner of team to fund the Guild. ")
+         await ctx.send("You must be owner of team to fund the Association. ")
          return
 
       balance = team['BANK']
@@ -1667,7 +1480,7 @@ async def fund(ctx, amount):
                 'message': str(ex),
                 'trace': trace
             }))
-            await ctx.send(f"Error when funding guild. Alert support. Thank you!")
+            await ctx.send(f"Error when funding Association. Alert support. Thank you!")
             return
 
 async def blessguild(amount, guild):
@@ -1683,7 +1496,7 @@ async def blessguild(amount, guild):
       update_query = {"$inc": {'BANK': int(posBlessAmount)}}
       db.updateGuildAlt(query, update_query)
    else:
-      print("Cannot find guild")
+      print("Cannot find Association")
 
 async def blessguild_Alt(amount, guild):
    blessAmount = amount
@@ -1697,7 +1510,7 @@ async def blessguild_Alt(amount, guild):
       update_query = {"$inc": {'BANK': posBlessAmount}}
       db.updateGuildAlt(query, update_query)
    else:
-      print("Cannot find guild")
+      print("Cannot find Association")
 
 async def curseguild(amount, guild):
       curseAmount = amount
@@ -1708,7 +1521,7 @@ async def curseguild(amount, guild):
          update_query = {"$inc": {'BANK': int(negCurseAmount)}}
          db.updateGuildAlt(query, update_query)
       else:
-         print("cant find guild")
+         print("cant find Association")
 
 
 
