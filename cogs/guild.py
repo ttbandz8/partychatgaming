@@ -295,7 +295,7 @@ class Guild(commands.Cog):
         else:
             await ctx.send(m.GUILD_DOESNT_EXIST, delete_after=5)
 
-    @cog_ext.cog_slash(description="Ask Team Owner to join Association! (Association Owner)", guild_ids=main.guild_ids)
+    @cog_ext.cog_slash(description="Ask Guild Owner to join Association! (Association Owner)", guild_ids=main.guild_ids)
     async def ally(self, ctx, owner: User):
         founder_profile = db.queryUser({'DISNAME': str(ctx.author)})
         guildname = founder_profile['GUILD']
@@ -402,7 +402,7 @@ class Guild(commands.Cog):
         except:
             print("No proposal Sent")
         
-    @cog_ext.cog_slash(description="Exile Team from Association (Association Owner)", guild_ids=main.guild_ids)
+    @cog_ext.cog_slash(description="Exile Guild from Association (Association Owner)", guild_ids=main.guild_ids)
     async def exile(self, ctx, owner: User):
         leader_profile = db.queryUser({'DISNAME': str(ctx.author)})
         exiled_profile = db.queryUser({'DISNAME': str(owner)})
@@ -438,7 +438,7 @@ class Guild(commands.Cog):
         else:
             await ctx.send(m.GUILD_DOESNT_EXIST, delete_after=5)
 
-    @cog_ext.cog_slash(description="Abandon Association (Team Owner)", guild_ids=main.guild_ids)
+    @cog_ext.cog_slash(description="Abandon Association (Guild Owner)", guild_ids=main.guild_ids)
     async def renounce(self, ctx):
         sword_profile = db.queryUser({'DISNAME': str(ctx.author)})
         team_profile = db.queryTeam({'TNAME' : sword_profile['TEAM']})
@@ -466,7 +466,7 @@ class Guild(commands.Cog):
                         response = db.deleteGuildSwordAlt(guild_query, new_value_query, str(team_name))
                         await ctx.send(response)
                     except:
-                        print("Team not created. ")
+                        print("Guild not created. ")
 
         else:
             await ctx.send(m.GUILD_DOESNT_EXIST, delete_after=5)
