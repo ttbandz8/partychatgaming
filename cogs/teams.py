@@ -32,8 +32,9 @@ class Teams(commands.Cog):
     async def cog_check(self, ctx):
         return await main.validate_user(ctx)
 
-    @cog_ext.cog_slash(description="Create a new team", guild_ids=main.guild_ids)
-    async def createteam(self, ctx, team: str):
+    @cog_ext.cog_slash(description="Create a new guild", guild_ids=main.guild_ids)
+    async def createguild(self, ctx, guild: str):
+        team = guild
         team_name = team
         if team_name == "":
             return
@@ -52,7 +53,7 @@ class Teams(commands.Cog):
             )
         ]
         team_buttons_action_row = manage_components.create_actionrow(*team_buttons)
-        await ctx.send(f"Do you want to create the team {team_name}?".format(self), components=[team_buttons_action_row])
+        await ctx.send(f"Do you want to create the Guild **{team_name}**?".format(self), components=[team_buttons_action_row])
 
 
         def check(button_ctx):
@@ -62,7 +63,7 @@ class Teams(commands.Cog):
             button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[team_buttons_action_row], check=check)
 
             if button_ctx.custom_id == "No":
-                await button_ctx.send("Team not created.")
+                await button_ctx.send("Guild not created.")
                 return
             
             if button_ctx.custom_id == "Yes":
@@ -71,7 +72,7 @@ class Teams(commands.Cog):
         except:
             print("Team creation ended unexpectedly. ")
 
-    @cog_ext.cog_slash(description="Recruit team member", guild_ids=main.guild_ids)
+    @cog_ext.cog_slash(description="Recruit Guild member", guild_ids=main.guild_ids)
     async def recruit(self, ctx, player: User):
         owner_profile = db.queryUser({'DISNAME': str(ctx.author)})
         team_profile = db.queryTeam({'TNAME': owner_profile['TEAM']})
@@ -85,7 +86,7 @@ class Teams(commands.Cog):
                 member_profile = db.queryUser({'DISNAME': str(player)})
                 # If user is part of a team you cannot add them to your team
                 if member_profile['TEAM'] == 'PCG':
-                    await main.DM(ctx, player, f"{ctx.author.mention}" + f" has invited you to join {team_profile['TNAME']} !" + f" React in server to join {team_profile['TNAME']}" )
+                    await main.DM(ctx, player, f"{ctx.author.mention}" + f" has invited you to join **{team_profile['TNAME']}** !" + f" React in server to join **{team_profile['TNAME']}**" )
 
                     team_buttons = [
                         manage_components.create_button(
@@ -100,7 +101,7 @@ class Teams(commands.Cog):
                         )
                     ]
                     team_buttons_action_row = manage_components.create_actionrow(*team_buttons)
-                    await ctx.send(f"{player.mention}" +f" do you want to join team {team_profile['TNAME']}?".format(self), components=[team_buttons_action_row])
+                    await ctx.send(f"{player.mention}" +f" do you want to join Guild **{team_profile['TNAME']}**?".format(self), components=[team_buttons_action_row])
 
                     def check(button_ctx):
                         return str(button_ctx.author) == str(player)
@@ -109,7 +110,7 @@ class Teams(commands.Cog):
                         button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[team_buttons_action_row], check=check)
                         
                         if button_ctx.custom_id == "No":
-                            await button_ctx.send("Team not created.")
+                            await button_ctx.send("Member not added.")
                             return
 
                         if button_ctx.custom_id == "Yes":
@@ -125,7 +126,7 @@ class Teams(commands.Cog):
             else:
                 await ctx.send(m.OWNER_ONLY_COMMAND, delete_after=5)
 
-    @cog_ext.cog_slash(description="Apply for a team", guild_ids=main.guild_ids)
+    @cog_ext.cog_slash(description="Apply for a Guild", guild_ids=main.guild_ids)
     async def apply(self, ctx, owner: User):
         owner_profile = db.queryUser({'DISNAME': str(owner)})
         team_profile = db.queryTeam({'TNAME': owner_profile['TEAM']})
@@ -138,7 +139,7 @@ class Teams(commands.Cog):
                 member_profile = db.queryUser({'DISNAME': str(owner)})
                 # If user is part of a team you cannot add them to your team
                 if member_profile['TEAM'] != 'PCG':
-                    await main.DM(ctx, owner, f"{ctx.author.mention}" + f" Applied to join {team_profile['TNAME']} !" + f" You may accept or deny in server." )
+                    await main.DM(ctx, owner, f"{ctx.author.mention}" + f" Applied to join **{team_profile['TNAME']}** !" + f" You may accept or deny in server." )
                     
                     team_buttons = [
                         manage_components.create_button(
@@ -163,7 +164,7 @@ class Teams(commands.Cog):
                         button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[team_buttons_action_row], check=check)
                         
                         if button_ctx.custom_id == "No":
-                            await button_ctx.send("Team not created.")
+                            await button_ctx.send("Application Denied.")
                             return
 
                         if button_ctx.custom_id == "Yes":
@@ -178,7 +179,7 @@ class Teams(commands.Cog):
             else:
                 await ctx.send(m.OWNER_ONLY_COMMAND, delete_after=5)
 
-    @cog_ext.cog_slash(description="Delete team member", guild_ids=main.guild_ids)
+    @cog_ext.cog_slash(description="Delete guild member", guild_ids=main.guild_ids)
     async def deletemember(self, ctx, member: User):
         owner_profile = db.queryUser({'DISNAME': str(ctx.author)})
         team_profile = db.queryTeam({'TNAME': owner_profile['TEAM']})
@@ -198,7 +199,7 @@ class Teams(commands.Cog):
                         )
                     ]
                     team_buttons_action_row = manage_components.create_actionrow(*team_buttons)
-                    await ctx.send(f"Do you want to remove {member.mention} from the {team_profile['TNAME']}?".format(self), components=[team_buttons_action_row])
+                    await ctx.send(f"Do you want to remove {member.mention} from the **{team_profile['TNAME']}**?".format(self), components=[team_buttons_action_row])
 
                     def check(button_ctx):
                         return button_ctx.author == ctx.author
@@ -207,7 +208,7 @@ class Teams(commands.Cog):
                         button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[team_buttons_action_row], check=check)
                         
                         if button_ctx.custom_id == "No":
-                            await button_ctx.send("Team not created.")
+                            await button_ctx.send("Member Not Deleted.")
                             return
 
                         if button_ctx.custom_id == "Yes":    
@@ -222,8 +223,8 @@ class Teams(commands.Cog):
         else:
             await ctx.send(m.TEAM_DOESNT_EXIST, delete_after=5)
 
-    @cog_ext.cog_slash(description="Leave a team", guild_ids=main.guild_ids)
-    async def leaveteam(self, ctx):
+    @cog_ext.cog_slash(description="Leave a guild", guild_ids=main.guild_ids)
+    async def leaveguild(self, ctx):
         member_profile = db.queryUser({'DISNAME': str(ctx.author)})
         team_profile = db.queryTeam({'TNAME': member_profile['TEAM']})
         if team_profile:
@@ -241,7 +242,7 @@ class Teams(commands.Cog):
                         )
                     ]
                     team_buttons_action_row = manage_components.create_actionrow(*team_buttons)
-                    await ctx.send(f"Do you want to leave team {member_profile['TEAM']}?".format(self), delete_after=8)
+                    await ctx.send(f"Do you want to leave guild **{member_profile['TEAM']}**?".format(self), delete_after=8)
 
                     def check(button_ctx):
                         return button_ctx.author == ctx.author
@@ -250,7 +251,7 @@ class Teams(commands.Cog):
                         button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[team_buttons_action_row], check=check)
 
                         if button_ctx.custom_id == "No":
-                            await button_ctx.send("Team not created.")
+                            await button_ctx.send("Stayed in Guild.")
                             return
                         
                         if button_ctx.custom_id == "Yes":
@@ -259,13 +260,14 @@ class Teams(commands.Cog):
                             response = db.deleteTeamMember(team_query, new_value_query, str(ctx.author))
                             await ctx.send(response)
                     except:
-                        print("Team not created. ")
+                        print("Guild not Left. ")
 
         else:
             await ctx.send(m.TEAM_DOESNT_EXIST, delete_after=5)
 
-    @cog_ext.cog_slash(description="Delete a team", guild_ids=main.guild_ids)
-    async def deleteteam(self, ctx, team: str):
+    @cog_ext.cog_slash(description="Delete a guild", guild_ids=main.guild_ids)
+    async def deleteguild(self, ctx, guild: str):
+        team = guild
         team_name = team
         team_query = {'OWNER': str(ctx.author), 'TNAME': team_name}
         team = db.queryTeam(team_query)
@@ -290,7 +292,7 @@ class Teams(commands.Cog):
                 ]
                 team_buttons_action_row = manage_components.create_actionrow(*team_buttons)
 
-                await ctx.send(f"Do you want to delete the {team['GAMES'][0]} team {team_name}?".format(self), components=[team_buttons_action_row])
+                await ctx.send(f"Do you want to delete the {team['GAMES'][0]} Guild **{team_name}**?".format(self), components=[team_buttons_action_row])
 
                 def check(button_ctx):
                     return button_ctx.author == ctx.author
@@ -299,7 +301,7 @@ class Teams(commands.Cog):
                     button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[team_buttons_action_row], check=check)
 
                     if button_ctx.custom_id == "No":
-                        await button_ctx.send("Team not created.")
+                        await button_ctx.send("Guild not deleted.")
                         return
 
                     if button_ctx.custom_id == "Yes":

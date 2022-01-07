@@ -115,18 +115,18 @@ class Trade(commands.Cog):
                                 barms = ", ".join(trade['BARMS'])
                                 bsummons = ", ".join(trade['BSUMMONS'])
                                 embedVar = discord.Embed(title= f"{trade['MERCHANT']}'s New Trade", description=textwrap.dedent(f"""
-                                👨‍🏫 {trade['MERCHANT']} :coin: ~ {'{:,}'.format(trade['MCOIN'])}
+                                👨‍🏫 **{trade['MERCHANT']}** :coin: ~ {'{:,}'.format(trade['MCOIN'])}
                                 🎴 {mcards}
                                 🎗️ {mtitles}
                                 🦾 {marms}
                                 🧬 {msummons}
-                                🤵{trade['BUYER']} :coin: ~ {'{:,}'.format(trade['BCOIN'])}
+                                🤵**{trade['BUYER']}** :coin: ~ {'{:,}'.format(trade['BCOIN'])}
                                 🎴 {bcards}
                                 🎗️ {btitles}
                                 🦾 {barms}
                                 🧬 {bsummons}
                                 """), colour=0x7289da)
-                                embedVar.set_footer(text=f"Trade Tax: {trade['TAX']}")
+                                embedVar.set_footer(text=f"Trade Tax: {'{:,}'.format(trade['TAX'])}")
                                 await ctx.send(embed=embedVar)
                             else:
                                 await ctx.send(f"{ctx.author.mention} Error Reach Out To Support")
@@ -164,18 +164,18 @@ class Trade(commands.Cog):
                     buyer_info = db.queryUser({'DISNAME': str(buyer)})
                     bvault = db.queryVault({'OWNER' : buyer_info['DISNAME']})
                     embedVar = discord.Embed(title= f"{trade_check['MERCHANT']}'s Current Trade", description=textwrap.dedent(f"""
-                    👨‍🏫 {trade_check['MERCHANT']} :coin: ~ {'{:,}'.format(trade_check['MCOIN'])}
+                    👨‍🏫 **{trade_check['MERCHANT']}** :coin: ~ {'{:,}'.format(trade_check['MCOIN'])}
                     🎴 {mcards}
                     🎗️ {mtitles}
                     🦾 {marms}
                     🧬 {msummons}
-                    🤵{trade_check['BUYER']} :coin: ~ {'{:,}'.format(trade_check['BCOIN'])}
+                    🤵**{trade_check['BUYER']}** :coin: ~ {'{:,}'.format(trade_check['BCOIN'])}
                     🎴 {bcards}
                     🎗️ {btitles}
                     🦾 {barms}
                     🧬 {bsummons}
                     """), colour=0x7289da)
-                    embedVar.set_footer(text=f"Trade Tax: {trade_check['TAX']}")
+                    embedVar.set_footer(text=f"Trade Tax: {'{:,}'.format(trade_check['TAX'])}")
                     trade_buttons = [
                                 manage_components.create_button(
                                     style=ButtonStyle.green,
@@ -248,13 +248,15 @@ class Trade(commands.Cog):
                                 m_titlelist = "\n".join(m_titles)
                                 m_armlist = "\n".join(m_arms)
                                 m_summonlist = "\n".join(m_summons)
-                                m_coin_diff = int(mvault['BALANCE']) - (int(mvault['BALANCE']) - m_fees + b_coins)
+                                
                                 b_cardlist = "\n".join(b_cards)
                                 b_titlelist = "\n".join(b_titles)
                                 b_armlist = "\n".join(b_arms)
                                 b_summonlist = "\n".join(b_summons)
-                                b_coin_diff = int(bvault['BALANCE']) - (int(bvault['BALANCE']) - b_fees + m_coins)
                                 
+                                
+                                m_coin_diff = int(bvault['BALANCE']) - (int(bvault['BALANCE']) - b_fees + m_coins)
+                                b_coin_diff = int(mvault['BALANCE']) - (int(mvault['BALANCE']) - m_fees + b_coins)
                                 
                                 
                                 if m_fees > mvault['BALANCE']:
@@ -349,8 +351,33 @@ class Trade(commands.Cog):
                                 await main.bless(b_coins, str(ctx.author))
                                 await main.bless(m_coins, str(buyer_info['DISNAME']))
                                 
-                                await ctx.author.send(f"**SOLD**\n\n**CARDS SOLD**\n {m_cardlist}\n**TITLES SOLD**\n {m_titlelist}!\n**ARMS SOLD**\n {m_armlist}!\n**SUMMONS SOLD**\n {m_summonlist}!\n**TAX**\n {'{:,}'.format(tax_split)}!\n**COIN DIFF**\n {m_coin_diff}!\n\n")
-                                await ctx.author.send(f"\n\n**PURCHASED**\n\n**CARDS**\n {b_cardlist}\n**TITLES**\n {b_titlelist}!\n**ARMS**\n {b_armlist}!\n**SUMMONS**\n {b_summonlist}!")
+                                micon = '⚪'
+                                if m_coin_diff > 0:
+                                    micon = '🟢'
+                                if m_coin_diff < 0:
+                                    micon = '🔴'
+                                
+                                bicon = '⚪'
+                                if b_coin_diff > 0:
+                                    bicon = '🟢'
+                                if b_coin_diff < 0:
+                                    bicon = '🔴'
+                                embedVar = discord.Embed(title= f"{trade_check['MERCHANT']}'s Trade Receipt", description=textwrap.dedent(f"""
+                                👨‍🏫 {trade_check['MERCHANT']} :coin: ~ {'{:,}'.format(trade_check['MCOIN'])}
+                                🎴 {mcards}
+                                🎗️ {mtitles}
+                                🦾 {marms}
+                                🧬 {msummons}
+                                🤵{trade_check['BUYER']} :coin: ~ {'{:,}'.format(trade_check['BCOIN'])}
+                                🎴 {bcards}
+                                🎗️ {btitles}
+                                🦾 {barms}
+                                🧬 {bsummons}
+                                """), colour=0x7289da)
+                                embedVar.set_footer(text=f"Trade Tax: {'{:,}'.format(trade_check['TAX'])}\n{trade_check['TIMESTAMP']}")
+                                await ctx.author.send(embed=embedVar)
+                                # await ctx.author.send(f"*Party Chat Accounting*\n**💸 {trade_check['MERCHANT']} SOLD**\n\n**🎴 CARDS SOLD**\n{m_cardlist}\n**🎗️ TITLES SOLD**\n{m_titlelist}!\n**🦾 ARMS SOLD**\n{m_armlist}!\n**🧬 SUMMONS SOLD**\n{m_summonlist}!\n :coin: **TAX**\n {'{:,}'.format(tax_split)}!\n**COIN DIFF**\n{micon} {m_coin_diff}!\n\n")
+                                # await ctx.author.send(f"\n\n**{trade_check['BUYER']} TRADED**\n\n🎴 **CARDS**\n{b_cardlist}\n🎗️ **TITLES**\n{b_titlelist}!\n🦾 **ARMS**\n {b_armlist}!\n🧬 **SUMMONS**\n {b_summonlist}!\n**COIN DIFF**\n{bicon} {b_coin_diff}!\n\n{trade_check['TIMESTAMP']}")
                                 await ctx.send(f"Trade Finished, {ctx.author.mention} Check your DMS for Receipt")
                                                                
                                 
@@ -547,7 +574,8 @@ class Trade(commands.Cog):
                 await ctx.send("Not Registered")
             if mvalidation == True or bvalidation ==True:    #If user is valid and has vault
                 if item == 'P':
-                    coins = abs(int(x))
+                    int_coins = int(x)
+                    coins = abs(int_coins)
                     bank = vault['BALANCE']
                     if mode == 'add':
                         if bank >= int(x):

@@ -45,31 +45,31 @@ BOT_COMMANDS = textwrap.dedent(f"""\
 **/deleteaccount**: Delete your account
 **/lookup @player**: Profile lookup
 
-**Team Commands**
-**/team team name**: Team lookup
-**/createteam game team name**: Create team 
-**/deleteteam**: Delete team
-**/recruit @player**: Add player to team
-**/deletemember @player**: Delete team member
-**/apply @player**: Apply for owners team 
-**/leaveteam team**: Leave Team
-**/pay @player amount**: Send Team Members coin (Owner Onlu)
-**/donate amount team name**: Donate coin to Team Bank
-
 **Guild Commands**
 **/guild guild name**: Guild lookup
-**/oath player guild name**: Create Guild/Reswear Guild
-**/disband**: Delete Guild (Founder Only)
-**/betray**: Leave Guild (Sworn Only)
-**/knight @player**: Set Guild Shield to Player (Guild Owners Only)
-**/ally @player**: Add Team To Guild (Guild Owners Only)
-**/exile @player**: Kick Team from Guild (Guild Owners Only)
-**/renounce**: Leave Guild (Team Owner Only)
-**/sponsor team name amount**: Send Team Guild coin (Guild Owners Onlu)
-**/fund amount**: Donate coin to Guild Bank
-**/bounty amount**: Set Guild Bounty (Guild Owners Only)
+**/createteam game guild name**: Create guild 
+**/deleteteam**: Delete guild
+**/recruit @player**: Add player to guild
+**/deletemember @player**: Delete guild member
+**/apply @player**: Apply for owners guild 
+**/leaveteam guild**: Leave Guild
+**/pay @player amount**: Send Guild Members coin (Owner Onlu)
+**/donate amount guild name**: Donate coin to Guild Bank
+
+**Association Commands**
+**/association association name**: Association lookup
+**/oath player association name**: Create Association/Reswear Association
+**/disband**: Delete Association (Founder Only)
+**/betray**: Leave Association (Sworn Only)
+**/knight @player**: Set Association Shield to Player (Association Owners Only)
+**/ally @player**: Add Guild To Association (Association Owners Only)
+**/exile @player**: Kick Guild from Association (Association Owners Only)
+**/renounce**: Leave Association (Guild Owner Only)
+**/sponsor guild name amount**: Send Guild coin (Association Owners Onlu)
+**/fund amount**: Donate coin to Association Bank
+**/bounty amount**: Set Association Bounty (Association Owners Only)
 **/viewhall**: View Hall Information
-**/buyhall**: Buy and move into a new Guild Hall
+**/buyhall**: Buy and move into a new Association Hall
 
 **Family Commands**
 **/family @user**: Family lookup
@@ -104,7 +104,7 @@ CROWN_UNLIMITED_COMMANDS = textwrap.dedent(f"""\
 
 **PvP Commands**
 **/battle @player**: Challenge another Player
-**/raid guild**: Raid another Guild
+**/raid association**: Raid another Association
 
 **Tutorial Bot Commands**
 **/battle @Senpai**: Tutorial Bot
@@ -148,8 +148,7 @@ CTAP_COMMANDS = textwrap.dedent(f"""\
 **/equipsummon pet**: Equip pet
 
 **Sell, Trade, Resell, Gift**
-**/trade @player item**: Trade Cards, Titles, Arms, Pets
-**/sell @player item**: Sell Cards, Titles, and Arms
-**/resell item**: Sell Card, Title, Arm back to shop
+**/trade** : Create trade
+**/tradecoins**: Add Coins to trade
 **/gift @player amount**: Gift player money
 """)

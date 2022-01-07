@@ -167,8 +167,8 @@ class Lookup(commands.Cog):
                 :mechanical_arm: **Arms** {all_arms}
                 🧬 **Summons** {all_pets}
                 
-                :flags: | **Guild: **{guild}
-                :military_helmet: | **Team: **{team} 
+                :flags: | **Association: **{guild}
+                :military_helmet: | **Guild: **{team} 
                 :family_mwgb: | **Family: **{family}
 
                 
@@ -229,8 +229,8 @@ class Lookup(commands.Cog):
             await ctx.send("There's an issue with your lookup command. Check with support.")
             return
 
-    @cog_ext.cog_slash(description="Lookup team stats", guild_ids=main.guild_ids)
-    async def team(self, ctx, team: str):
+    @cog_ext.cog_slash(description="Lookup Guild stats", guild_ids=main.guild_ids)
+    async def guild(self, ctx, guild: str):
         team_name = team
         team_query = {'TNAME': team_name}
         team = db.queryTeam(team_query)
@@ -267,21 +267,21 @@ class Lookup(commands.Cog):
                     team_list.append(f"{members}")
 
 
-            embed1 = discord.Embed(title=f":checkered_flag: | {team_name} Team Card - {icon} {'{:,}'.format(balance)}".format(self), description=":bank: | Party Chat Gaming Database", colour=000000)
+            embed1 = discord.Embed(title=f":checkered_flag: | {team_name} Guild Card - {icon} {'{:,}'.format(balance)}".format(self), description=":bank: | Party Chat Gaming Database", colour=000000)
             if team['LOGO_FLAG']:
                 embed1.set_image(url=logo)
             embed1.add_field(name=":man_detective: | **~ Owner ~**", value= owner_name.split("#",1)[0], inline=True)
-            embed1.add_field(name=":flags: | **~ Guild ~** ", value= guild, inline=False)
-            embed1.add_field(name=":medal: | **~ Scrim Wins ~**", value=scrim_wins)
-            embed1.add_field(name=":crossed_swords: | **~ Scrim Losses ~**", value=scrim_losses)
+            embed1.add_field(name=":flags: | **~ Association ~** ", value= guild, inline=False)
+            embed1.add_field(name=":medal: | **~ Raid Wins ~**", value=scrim_wins)
+            embed1.add_field(name=":crossed_swords: | **~ Raid Losses ~**", value=scrim_losses)
             embed1.add_field(name=":fireworks: | **~ Tournament Wins ~**", value=tournament_wins, inline=False)
             
-            embed2 = discord.Embed(title=f":checkered_flag: | {team_name} Team Members - {icon} {'{:,}'.format(balance)}".format(self), description=":bank: | Party Chat Gaming Database", colour=000000)
+            embed2 = discord.Embed(title=f":checkered_flag: | {team_name} Guild Members - {icon} {'{:,}'.format(balance)}".format(self), description=":bank: | Party Chat Gaming Database", colour=000000)
             if team['LOGO_FLAG']:
                 embed2.set_image(url=logo)
             embed2.add_field(name=":military_helmet: | **~ Members ~**", value="\n".join(f'{t}'.format(self) for t in team_list), inline=False)
 
-            embed3 = discord.Embed(title=f":checkered_flag: | {team_name} Team Members - {icon} {'{:,}'.format(balance)}".format(self), description=":bank: | Party Chat Gaming Database", colour=000000)
+            embed3 = discord.Embed(title=f":checkered_flag: | {team_name} Guild Members - {icon} {'{:,}'.format(balance)}".format(self), description=":bank: | Party Chat Gaming Database", colour=000000)
             if team['LOGO_FLAG']:
                 embed3.set_image(url=logo)
             embed3.add_field(name=":video_game: | Games ", value="\n".join(games), inline=False)
@@ -296,9 +296,9 @@ class Lookup(commands.Cog):
         else:
             await ctx.send(m.TEAM_DOESNT_EXIST)
 
-    @cog_ext.cog_slash(description="Lookup Guild", guild_ids=main.guild_ids)
-    async def guild(self, ctx, guild: str):
-        guild_name = guild
+    @cog_ext.cog_slash(description="Lookup Association", guild_ids=main.guild_ids)
+    async def association(self, ctx, association: str):
+        guild_name = association
         guild_query = {'GNAME': guild_name}
         guild = db.queryGuildAlt(guild_query)
         founder_name = ""
@@ -374,41 +374,37 @@ class Lookup(commands.Cog):
             #     embed1.set_image(url=logo)
             # embed1.add_field(name="Founder :dolls:", value= founder_name.split("#",1)[0], inline=True)
             # embed1.add_field(name="Sworn :dolls:", value= sworn_name.split("#",1)[0], inline=True)
-            embed1 = discord.Embed(title= f":flags: |{guild_name} Alliance Card - {icon} {'{:,}'.format(balance)}".format(self), description=textwrap.dedent(f"""\
+            embed1 = discord.Embed(title= f":flags: |{guild_name} Association Card - {icon} {'{:,}'.format(balance)}".format(self), description=textwrap.dedent(f"""\
             
             :nesting_dolls: | **Founder ~** {founder_name.split("#",1)[0]}
             :dolls: | **Sworn ~** {sworn_name.split("#",1)[0]}
             
-            *Guilds Owners can /knight a **Shield** to defend the Hall from **Raids**! Use /raid*
+
             :japanese_goblin: | **Shield: ~**{shield_name.split("#",1)[0].format(self)} ~ {sicon} | **Victories: **{streak}
             :flower_playing_cards: | **Card: **{shield_card}
             :reminder_ribbon: | **Title: **{shield_title}
             :mechanical_arm: | **Arm: **{shield_arm}
               
-            ***Swords** are employed by the guild to win PVP battles! They can claim the **Shield** by defeating them in a /raid*
             :ninja: | **Swords: **{sword_count}
-            :dollar: | **Split: **{hall_split} *Team Income Multiplier*
-            :secret: | **Crest: **{len(crest_list)} *Current Crest Holdings. Run /dungeons to Claim **Universe Crest***
-              
-            
-            :coin: | **Raid Fee: **{'{:,}'.format(hall_fee)} *Cost to /raid*
-            :yen: | **Bounty: **{'{:,}'.format(bounty)} *use /bounty to set Guild Bounty*
-            :moneybag: | **Bonus: **{'{:,}'.format(bonus)} *Victory Bonus Multiplier*
+            :dollar: | **Team Split: **{hall_split} 
+            :secret: | **Universe Crest: **{len(crest_list)} 
                    
-            
-            :shinto_shrine: | **Hall: **{hall_name} *Current Guild Hall*
-            :shield: | **Defenses: **{hall_def} *Current Raid Defense Multiplier*
+            :shinto_shrine: | **Hall: **{hall_name} 
+            :shield: | **Raid Defenses: **{hall_def} 
+            :coin: | **Raid Fee: **{'{:,}'.format(hall_fee)}
+            :yen: | **Bounty: **{'{:,}'.format(bounty)}
+            :moneybag: | **Victory Bonus: **{'{:,}'.format(bonus)}
             """), colour=000000)
             embed1.set_image(url=hall_img)
-            embed1.set_footer(text=f"/raid {guild_name} - Raid Guild")
+            embed1.set_footer(text=f"/raid {guild_name} - Raid Association")
             
             embed2 = discord.Embed(title=f":flags: |  {guild_name} **Sword** List".format(self), description=":bank: |  Party Chat Gaming Database", colour=000000)
             embed2.add_field(name=f"**Swords: | ** :ninja: ~ {sword_count}", value="\n".join(f'**{t}**'.format(self) for t in sword_list), inline=False)
-            embed2.set_footer(text=f"/lookupteam - Lookup Guild Teams")
+            embed2.set_footer(text=f"/lookupteam - Lookup Association Teams")
             
             embed3 = discord.Embed(title=f":flags: |  {guild_name} **OWNED CREST**".format(self), description=":bank: |  Party Chat Gaming Database", colour=000000)
             embed3.add_field(name=f":secret: | **CREST**", value="\n".join(f'**{c}**'.format(self) for c in crest_list), inline=False)
-            embed3.set_footer(text=f"/dungeons - Earn Universe Crest!")
+            embed3.set_footer(text=f"Earn Universe Crest in Dungeons!")
             # if guild['LOGO_FLAG']:
             #     embed3.set_image(url=logo)
             
