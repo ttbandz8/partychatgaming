@@ -464,70 +464,77 @@ async def crown(ctx):
    """) ,colour=0x7289da)
    embedVar12.set_thumbnail(url=avatar)
 
-   embedVar13 = discord.Embed(title= f"Guilds",description=textwrap.dedent(f"""\
-   **Guilds Explained**
-   Guilds in Crown Unlmited are formed by an Oath between two Team Owners
+   embedVar13 = discord.Embed(title= f"Associations",description=textwrap.dedent(f"""\
+   **Association Explained**
+   Associations in Crown Unlmited are formed by an Oath between two Team Owners
    
    The Oathgiver becomes the **Founder** and the Oathreciever becomes the ****Sworn and Shield****.
    
-   The **Shield** defends the Guild from raiding players.
    
-   Both teams become enlisted as **Swords** of the new **Guild**
+   The **Shield** defends the Association from raiding players.
+   
+   Both teams become enlisted as **Swords** of the new **Association**
    Their respective members become **Blades**
    
-   **Guilds** earn money by winning **PvP** matches and earning **Universe Crest** and defending against raids
+   The Founder & Sworn may /ally with other Teams increasing the size and power of the Association.
+   These are the **Owners** and can **/sponsor** other teams allied with the Association.
    
-   The Founder & Sworn may /ally with other Teams increasing the size and power of the guild
+   **Associations** earn money by winning **PvP** matches, Income from **Universe Crest** and defending against **Raids**
    
-   **Guild Bonuses**
-   Guilds earn extra income towards the Guild Bank
-   Guilds increase the earned income in PvP
-   Guilds can partipate in /raids
-   Guilds can earn passive income owning **Universe Crest**
-   Guilds can purchase **Halls**
+   **Universe Crest** 
+   When a member of a Association defeats a **Dungeon** or **Boss** they earn the **Universe Crest** from that Universe.
+   This Crest will earn the Association **Passive Income** whenever someone goes into that universe in all servers!
    
-   **Universe Crest**
-   When you complete a dungeon 
+
+   **Association Bonuses**
+   Associations earn extra income towards the **Association Bank**
+   Associations increase the earned income in **PvP**
+   Associations can **/raid**
+   Associations can earn passive income owning **Universe Crest**
+   Associations can purchase **Halls**
    
    
    **Halls**
-   The **Guild Bank** can be used to purchase **Halls**
-   **Halls** increase the Income earned to Guilds via **Multipliers**
+   The **Association Bank** can be used to purchase **Halls**
+   **Halls** increase the Income earned to Associations via **Multipliers**
    **Halls** increase the income earned to **Blades** via **Splits**
    **Halls** increase the defense of the **Shield**
-   **Halls** increase the bounty cost to /raid the guild 
+   **Halls** increase the **Bounty** cost to raid the **Association**
    """) ,colour=0x7289da)
    embedVar13.set_thumbnail(url=avatar)
    
    embedVar14 = discord.Embed(title= f"Raids",description=textwrap.dedent(f"""\
    **Raids Explained**
-   Players aligned with a guild can use /raid to claim bounties from other guilds
+   Players aligned with a Association can use /raid to claim bounties from other guilds
    
-   Victory claims the bounty and resets the Guilds victory multiplier !
+   Victory claims the bounty and resets the Associations victory multiplier !
    
-   Income from Raids is limited to the bounty offered from the guild.
-   To take money from a **Guild Bank** players must compete in PvP
+   Income from Raids is limited to the bounty offered from the Association.
+   To take money from a **Association Bank** players must compete in PvP
    
-   Raiding a guild hall is no easy feat and must be done **Without Summons**
+   Raiding an Association is no easy feat and must be done **Without Summons**
    
    **Raid Benefits**
-   Earn Large Bounties from guilds 
+   Earn Large Bounties from guilds.
+   Earn Wins for your Crown Unlimited **Team**
    
    **Shield  Defense Explained**
-   The Shield has a big repsonsible to defend the guild from /raids and earn income from challengers
+   The **Shield** has a big repsonsible to defend the **Association** from raids, earning income from **Challengers**.
    
-   The shield exist within the guild hall as the **Current Equipped Build** of the Shield Player
+   The **Shield** exist within the Association hall as the **Current Equipped Build** of the **Shield Player**.
    
-   As the shield, whenver your Avatar is raided and succesfully defends you earn :coin:
+   As the **Shield**, whenever your Avatar succesfully defends a raid you earn :coin:
    With each victory you will build a streak earning both respect and more :coin: via **Multipliers**.
    
+   **Association Competition**
    However, many of **Blades** will covet this position and may /raid you themseleves triggering a **Title Match**
+   The winner of this **Title MAtch** becomes the new **Shield** and must defend the 
    Occasionally the Founder or Sworn may /raid to start a Defense Test gauging the strength of their Chosen Shield
-   host a /raid tournament within the guild to find a new champion or simply /knight one yourself
+   host a /raid tournament within the Association to find a new champion or simply /knight one yourself
    
    **Shield Benefits**
-   Earn income by defending your guild from raiders
-   Earn respect by increasing the guild victory streak 
+   Earn income by defending your Association from raiders
+   Earn respect by increasing the Association victory streak 
    
    """) ,colour=0x7289da)
    embedVar14.set_thumbnail(url=avatar)
@@ -1743,7 +1750,7 @@ async def trinketshop(ctx):
       await ctx.send("Trinket Shop closed unexpectedly. Seek support.", hidden=True)
 
 
-@slash.slash(name="Bounty", description="Set Guild Bounty", guild_ids=guild_ids)
+@slash.slash(name="Bounty", description="Set Association Bounty", guild_ids=guild_ids)
 @commands.check(validate_user)
 async def bounty(ctx, amount):
    negCurseAmount = 0 - abs(int(amount))
@@ -1766,16 +1773,16 @@ async def bounty(ctx, amount):
    finalBount = guild_bounty + posCurseAmount
    finalBal = guild_bank + negCurseAmount
    if finalBal < 0:
-      await ctx.send(f"Guild does not have that much :coin:", delete_after=5)
+      await ctx.send(f"Association does not have that much :coin:", delete_after=5)
       return
    else:
       update_query = {"$set": {'BOUNTY': int(finalBount)}, '$inc': {'BANK' : int(negCurseAmount)}}
       db.updateGuildAlt(guild_query, update_query)
-      await ctx.send(f"New {guild['GNAME']} Bounty: :yen: {'{:,}'.format(finalBount)}! Use /raid `guild`{guild['GNAME']} to claim the Bounty!")
+      await ctx.send(f"New {guild['GNAME']} Bounty: :yen: {'{:,}'.format(finalBount)}! Use /raid `Association`{guild['GNAME']} to claim the Bounty!")
       return
 
 
-@slash.slash(name="Sponsor", description="Sponsor Team with Guild Funds", guild_ids=guild_ids)
+@slash.slash(name="Sponsor", description="Sponsor Team with Association Funds", guild_ids=guild_ids)
 @commands.check(validate_user)
 async def sponsor(ctx, team: str, amount):
    user = db.queryUser({'DISNAME': str(ctx.author)})
@@ -1789,7 +1796,7 @@ async def sponsor(ctx, team: str, amount):
    sworn = guild['SWORN']
    guild_bank = guild['BANK']
    if int(amount) >= guild['BANK']:
-      await ctx.send("Guild does not have that much :coin:", delete_after=5)
+      await ctx.send("Association does not have that much :coin:", delete_after=5)
       return
 
    if user['DISNAME'] != founder and user['DISNAME'] != sworn:
@@ -1818,7 +1825,7 @@ async def sponsor(ctx, team: str, amount):
    await ctx.send(f"{guild_name} sponsored {team_name} :coin:{amount}!!!")
    return
 
-@slash.slash(name="Fund", description="Fund Guild From Team Bank", guild_ids=guild_ids)
+@slash.slash(name="Fund", description="Fund Association From Team Bank", guild_ids=guild_ids)
 @commands.check(validate_user)
 async def fund(ctx, amount):
    try:
@@ -1826,10 +1833,10 @@ async def fund(ctx, amount):
       team = db.queryTeam({'TNAME': user['TEAM']})
       team_guild = team['GUILD']
       if team_guild =="PCG":
-         await ctx.send("Your team must join a Guild First!")
+         await ctx.send("Your team must join a Association First!")
          return
       if user['TEAM'] == 'PCG' or user['DISNAME'] != team['OWNER']:
-         await ctx.send("You must be owner of team to fund the Guild. ")
+         await ctx.send("You must be owner of team to fund the Association. ")
          return
 
       balance = team['BANK']
@@ -1855,7 +1862,7 @@ async def fund(ctx, amount):
                 'message': str(ex),
                 'trace': trace
             }))
-            await ctx.send(f"Error when funding guild. Alert support. Thank you!")
+            await ctx.send(f"Error when funding Association. Alert support. Thank you!")
             return
 
 async def blessguild(amount, guild):
@@ -1871,7 +1878,7 @@ async def blessguild(amount, guild):
       update_query = {"$inc": {'BANK': int(posBlessAmount)}}
       db.updateGuildAlt(query, update_query)
    else:
-      print("Cannot find guild")
+      print("Cannot find Association")
 
 async def blessguild_Alt(amount, guild):
    blessAmount = amount
@@ -1885,7 +1892,7 @@ async def blessguild_Alt(amount, guild):
       update_query = {"$inc": {'BANK': posBlessAmount}}
       db.updateGuildAlt(query, update_query)
    else:
-      print("Cannot find guild")
+      print("Cannot find Association")
 
 async def curseguild(amount, guild):
       curseAmount = amount
@@ -1896,7 +1903,7 @@ async def curseguild(amount, guild):
          update_query = {"$inc": {'BANK': int(negCurseAmount)}}
          db.updateGuildAlt(query, update_query)
       else:
-         print("cant find guild")
+         print("cant find Association")
 
 # @slash.slash(name="Resell", description="Sell items back to the shop", guild_ids=guild_ids)
 # @commands.check(validate_user)

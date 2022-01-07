@@ -33,11 +33,11 @@ class Guild(commands.Cog):
         return await main.validate_user(ctx)
 
 
-    @cog_ext.cog_slash(description="Swear into Guild!", guild_ids=main.guild_ids)
-    async def oath(self, ctx, sworn: User, guildname: str):
+    @cog_ext.cog_slash(description="Swear into Association!", guild_ids=main.guild_ids)
+    async def oath(self, ctx, sworn: User, association: str):
         try:
             owner = sworn
-            guild_name = guildname
+            guild_name = association
             cost = 10000
             founder_profile = db.queryUser({'DISNAME': str(ctx.author)})
             guildsearch_name = founder_profile['GUILD']
@@ -99,7 +99,7 @@ class Guild(commands.Cog):
                                     return
                                 
                                 if button_ctx.custom_id == "Yes":
-                                    await main.DM(ctx, owner, f"{ctx.author.mention}" + f" would like to join the Guild {guild_name}" + f" React in server to join their Guild" )
+                                    await main.DM(ctx, owner, f"{ctx.author.mention}" + f" would like to join the Association {guild_name}" + f" React in server to join their Association" )
                                     await ctx.send(f"{owner.mention}" +f" will you swear the oath?".format(self), components=[guild_buttons_action_row])
                                     def check(button_ctx):
                                         return button_ctx.author == ctx.user
@@ -134,9 +134,9 @@ class Guild(commands.Cog):
                                             except:
                                                 await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=3)
                                     except:
-                                        print("Guild creation ended unexpectedly. ")
+                                        print("Association creation ended unexpectedly. ")
                             except:
-                                print("Guild creation ended unexpectedly. ")                    
+                                print("Association creation ended unexpectedly. ")                    
             else:
                 sworn_profile = db.queryUser({'DISNAME': str(owner)})
                 investment = cost * 2
@@ -192,7 +192,7 @@ class Guild(commands.Cog):
                                 return
                             
                             if button_ctx.custom_id == "Yes":
-                                await main.DM(ctx, owner, f"{ctx.author.mention}" + f" would like to join the Guild {guild_name}" + f" React in server to join their Guild" )
+                                await main.DM(ctx, owner, f"{ctx.author.mention}" + f" would like to join the Association {guild_name}" + f" React in server to join their Association" )
                                 await ctx.send(f"{owner.mention}" +f" will you swear the oath?".format(self), components=[guild_buttons_action_row])
                                 def check(button_ctx):
                                     return button_ctx.author == owner
@@ -232,9 +232,9 @@ class Guild(commands.Cog):
                                         except:
                                             await ctx.send(m.RESPONSE_NOT_DETECTED, delete_after=3)
                                 except:
-                                    print("Guild creation ended unexpectedly. ")
+                                    print("Association creation ended unexpectedly. ")
                         except:
-                            print("Guild creation ended unexpectedly. ")   
+                            print("Association creation ended unexpectedly. ")   
         except Exception as ex:
             trace = []
             tb = ex.__traceback__
@@ -256,7 +256,7 @@ class Guild(commands.Cog):
             
                    
 
-    @cog_ext.cog_slash(description="Betray your Guild (Guild Sworn)", guild_ids=main.guild_ids)
+    @cog_ext.cog_slash(description="Betray your Association (Association Sworn)", guild_ids=main.guild_ids)
     async def betray(self, ctx, founder: User):
         sworn_profile = db.queryUser({'DISNAME': str(ctx.author)})
         founder_profile = db.queryUser({'DISNAME': str(founder)})
@@ -295,7 +295,7 @@ class Guild(commands.Cog):
         else:
             await ctx.send(m.GUILD_DOESNT_EXIST, delete_after=5)
 
-    @cog_ext.cog_slash(description="Ask Team Owner to join Guild! (Guild Owner)", guild_ids=main.guild_ids)
+    @cog_ext.cog_slash(description="Ask Team Owner to join Association! (Association Owner)", guild_ids=main.guild_ids)
     async def ally(self, ctx, owner: User):
         founder_profile = db.queryUser({'DISNAME': str(ctx.author)})
         guildname = founder_profile['GUILD']
@@ -328,7 +328,7 @@ class Guild(commands.Cog):
 
             try:
                 confirmed1 = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
-                await main.DM(ctx, owner, f"{ctx.author.mention}" + f" would like to ally with your team!" + f" React in server to join their Guild" )
+                await main.DM(ctx, owner, f"{ctx.author.mention}" + f" would like to ally with your team!" + f" React in server to join their Association" )
                 accept = await ctx.send(f"{owner.mention}" +f" will you join {guild_name}?".format(self), delete_after=10)
                 for emoji in emojis:
                     await accept.add_reaction(emoji)
@@ -347,7 +347,7 @@ class Guild(commands.Cog):
             except:
                 print("No proposal Sent") 
                 
-    @cog_ext.cog_slash(description="Knight your Guild Shield! (Guild Owner)", guild_ids=main.guild_ids)
+    @cog_ext.cog_slash(description="Knight your Association Shield! (Association Owner)", guild_ids=main.guild_ids)
     async def knight(self, ctx, blade: User):
         founder_profile = db.queryUser({'DISNAME': str(ctx.author)})
         shield_profile = db.queryUser({'DISNAME' : str(blade)})
@@ -383,7 +383,7 @@ class Guild(commands.Cog):
 
         try:
             confirmed1 = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
-            await main.DM(ctx, blade, f"{ctx.author.mention}" + f" would like you to serve as the Guild Shield!" + f" React in server to protect the Guild" )
+            await main.DM(ctx, blade, f"{ctx.author.mention}" + f" would like you to serve as the Association Shield!" + f" React in server to protect the Association" )
             accept = await ctx.send(f"{blade.mention}" +f" will you defend {guild_name}?".format(self), delete_after=10)
             for emoji in emojis:
                 await accept.add_reaction(emoji)
@@ -402,7 +402,7 @@ class Guild(commands.Cog):
         except:
             print("No proposal Sent")
         
-    @cog_ext.cog_slash(description="Exile Team from Guild (Guild Owner)", guild_ids=main.guild_ids)
+    @cog_ext.cog_slash(description="Exile Team from Association (Association Owner)", guild_ids=main.guild_ids)
     async def exile(self, ctx, owner: User):
         leader_profile = db.queryUser({'DISNAME': str(ctx.author)})
         exiled_profile = db.queryUser({'DISNAME': str(owner)})
@@ -438,7 +438,7 @@ class Guild(commands.Cog):
         else:
             await ctx.send(m.GUILD_DOESNT_EXIST, delete_after=5)
 
-    @cog_ext.cog_slash(description="Abandon Guild (Team Owner)", guild_ids=main.guild_ids)
+    @cog_ext.cog_slash(description="Abandon Association (Team Owner)", guild_ids=main.guild_ids)
     async def renounce(self, ctx):
         sword_profile = db.queryUser({'DISNAME': str(ctx.author)})
         team_profile = db.queryTeam({'TNAME' : sword_profile['TEAM']})
@@ -471,7 +471,7 @@ class Guild(commands.Cog):
         else:
             await ctx.send(m.GUILD_DOESNT_EXIST, delete_after=5)
 
-    @cog_ext.cog_slash(description="Disband your Guild (Guild Founder)", guild_ids=main.guild_ids)
+    @cog_ext.cog_slash(description="Disband your Association (Association Founder)", guild_ids=main.guild_ids)
     async def disband(self, ctx):
         guild_query = {'FOUNDER': str(ctx.author)}
         guild = db.queryGuild(guild_query)
@@ -494,9 +494,9 @@ class Guild(commands.Cog):
 
                     await ctx.send(response)
                 except:
-                    print("Guild Not Deleted. ")
+                    print("Association Not Deleted. ")
             else:
-                await ctx.send("Only the Founder can disband the Guild. ")
+                await ctx.send("Only the Founder can disband the Association. ")
         else:
             await ctx.send(m.TEAM_DOESNT_EXIST, delete_after=5)
 
