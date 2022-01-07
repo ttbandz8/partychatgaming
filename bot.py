@@ -173,7 +173,7 @@ async def enhancers(ctx):
       
       embedVar11 = discord.Embed(title= f"Arm Enhancer Type: Defensive",colour=0x7289da)
       embedVar11.set_thumbnail(url=avatar)
-      embedVar11.add_field(name="`DEFENSE`", value="**SHIELD**- Grant Damage absorbing Shield until destroyed \n\n**BARRIER** - Blocks all Attack Damage until player Attacks or is Destoyed (Enhancers Exempt)\n\n**PARRY** - Reflects 50% Damage back to Attacker\n\n")
+      embedVar11.add_field(name="`DEFENSE`", value="🌐 **SHIELD**- Grant Damage absorbing Shield until destroyed \n\n💠 **BARRIER** - Blocks all Attack Damage until player Attacks or is Destoyed (Enhancers Exempt)\n\n🔄 **PARRY** - Reflects 50% Damage back to Attacker\n\n")
       embedVar11.set_footer(text=f"/crown - Crown Unlimited Manual\n/help - Bot Help")
       
 
@@ -399,11 +399,10 @@ async def crown(ctx):
    Crown Unlimited features an in game **Shop** where you can purchase new Cards, Titles, and Arms.
    Use /shop to open the Shop!**
 
-   **Stock**
-   Items in the shop have a **Stock**. When they are sold out they become unavailable.
-
-   **Sell & Trade**
-   **/sell** and **/trade** will allow you to trade Cards, Titles, Arms and Summons with other players.
+   **Trading**
+   **/trade** will allow you to trade Cards, Titles, Arms and Summons with other players.
+   Add items to the open trade using the buttons on the item menu *ex. /cards*
+   **/tradecoins** allows you to add or remove coins from the trade
 
    **Resell**
    **/resell item** to sell Cards, Titles, and Arms back to the market.
@@ -419,22 +418,22 @@ async def crown(ctx):
    """) ,colour=0x7289da)
    embedVar10.set_thumbnail(url=avatar)
    
-   embedVar15 = discord.Embed(title= f"Teams", description=textwrap.dedent(f"""\
-   **Teams Explained**
-   Use **/team** to lookup any Crown Unlimited Team!
+   embedVar15 = discord.Embed(title= f"Guilds", description=textwrap.dedent(f"""\
+   **Guilds Explained**
+   Use **/guild** to lookup any Crown Unlimited Guild!
    
-   **Team Members** earn extra :coin: towards the **Team Bank** 
+   **Guild Members** earn extra :coin: towards the **Guild Bank** 
 
-   **Creating A Team**
-   Use **/createteam** and create a **Team Name**
-   **/recruit** your friends to join your newly named **Team** !
+   **Creating A Guild**
+   Use **/createteam** and create a **Guild Name**
+   **/recruit** your friends to join your newly named **Guild** !
    Players can use **/apply** to join as well!
    
-   **Team Bonusus**
+   **Guild Bonusus**
    Teammates gain an extra **10 Attack** and **Defense** playing Co-Op Together !
    Teams earn additional :coin: for every **Tales**, **Dungeon** and **Boss** Victory
    
-   **Team Economy**
+   **Guild Economy**
    Players across **Crown Unlimited** can **/donate** :coin: to their favorite teams
    Owners can ****/pay**** their members a wage.
    """),colour=0x7289da)
@@ -466,7 +465,7 @@ async def crown(ctx):
 
    embedVar13 = discord.Embed(title= f"Associations",description=textwrap.dedent(f"""\
    **Association Explained**
-   Associations in Crown Unlmited are formed by an Oath between two Team Owners
+   Associations in Crown Unlmited are formed by an Oath between two Guild Owners
    
    The Oathgiver becomes the **Founder** and the Oathreciever becomes the ****Sworn and Shield****.
    
@@ -516,7 +515,7 @@ async def crown(ctx):
    
    **Raid Benefits**
    Earn Large Bounties from guilds.
-   Earn Wins for your Crown Unlimited **Team**
+   Earn Wins for your Crown Unlimited **Guild**
    
    **Shield  Defense Explained**
    The **Shield** has a big repsonsible to defend the **Association** from raids, earning income from **Challengers**.
@@ -1393,7 +1392,7 @@ async def gift(ctx, player: User, amount: int):
       return
 
 
-@slash.slash(name="Donate", description="Donate money to Team", guild_ids=guild_ids)
+@slash.slash(name="Donate", description="Donate money to Guild", guild_ids=guild_ids)
 @commands.check(validate_user)
 async def donate(ctx, amount, team: str):
    vault = db.queryVault({'OWNER': str(ctx.author)})
@@ -1410,7 +1409,7 @@ async def donate(ctx, amount, team: str):
          await ctx.send(f":coin:{amount} has been gifted to {dteam}.")
          return
    else:
-      await ctx.send(f"Team: {dteam} does not exist")
+      await ctx.send(f"Guild: {dteam} does not exist")
 
 
 @slash.slash(name="Invest", description="Invest money in your Family", guild_ids=guild_ids)
@@ -1432,7 +1431,7 @@ async def invest(ctx, amount):
       await ctx.send(f"Family does not exist")
 
 
-@slash.slash(name="Pay", description="Pay a Team Member", guild_ids=guild_ids)
+@slash.slash(name="Pay", description="Pay a Guild Member", guild_ids=guild_ids)
 @commands.check(validate_user)
 async def pay(ctx, player: User, amount):
    user2 = player
@@ -1479,7 +1478,7 @@ async def blessteam(amount, team):
       update_query = {"$inc": {'BANK': posBlessAmount}}
       db.updateTeam(query, update_query)
    else:
-      print("Cannot find Team")
+      print("Cannot find Guild")
 
 
 async def curseteam(amount, team):
@@ -1782,7 +1781,7 @@ async def bounty(ctx, amount):
       return
 
 
-@slash.slash(name="Sponsor", description="Sponsor Team with Association Funds", guild_ids=guild_ids)
+@slash.slash(name="Sponsor", description="Sponsor Guild with Association Funds", guild_ids=guild_ids)
 @commands.check(validate_user)
 async def sponsor(ctx, team: str, amount):
    user = db.queryUser({'DISNAME': str(ctx.author)})
@@ -1825,7 +1824,7 @@ async def sponsor(ctx, team: str, amount):
    await ctx.send(f"{guild_name} sponsored {team_name} :coin:{amount}!!!")
    return
 
-@slash.slash(name="Fund", description="Fund Association From Team Bank", guild_ids=guild_ids)
+@slash.slash(name="Fund", description="Fund Association From Guild Bank", guild_ids=guild_ids)
 @commands.check(validate_user)
 async def fund(ctx, amount):
    try:

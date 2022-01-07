@@ -168,7 +168,7 @@ class Lookup(commands.Cog):
                 🧬 **Summons** {all_pets}
                 
                 :flags: | **Association: **{guild}
-                :military_helmet: | **Team: **{team} 
+                :military_helmet: | **Guild: **{team} 
                 :family_mwgb: | **Family: **{family}
 
                 
@@ -229,8 +229,8 @@ class Lookup(commands.Cog):
             await ctx.send("There's an issue with your lookup command. Check with support.")
             return
 
-    @cog_ext.cog_slash(description="Lookup team stats", guild_ids=main.guild_ids)
-    async def team(self, ctx, team: str):
+    @cog_ext.cog_slash(description="Lookup Guild stats", guild_ids=main.guild_ids)
+    async def guild(self, ctx, guild: str):
         team_name = team
         team_query = {'TNAME': team_name}
         team = db.queryTeam(team_query)
@@ -267,7 +267,7 @@ class Lookup(commands.Cog):
                     team_list.append(f"{members}")
 
 
-            embed1 = discord.Embed(title=f":checkered_flag: | {team_name} Team Card - {icon} {'{:,}'.format(balance)}".format(self), description=":bank: | Party Chat Gaming Database", colour=000000)
+            embed1 = discord.Embed(title=f":checkered_flag: | {team_name} Guild Card - {icon} {'{:,}'.format(balance)}".format(self), description=":bank: | Party Chat Gaming Database", colour=000000)
             if team['LOGO_FLAG']:
                 embed1.set_image(url=logo)
             embed1.add_field(name=":man_detective: | **~ Owner ~**", value= owner_name.split("#",1)[0], inline=True)
@@ -276,12 +276,12 @@ class Lookup(commands.Cog):
             embed1.add_field(name=":crossed_swords: | **~ Raid Losses ~**", value=scrim_losses)
             embed1.add_field(name=":fireworks: | **~ Tournament Wins ~**", value=tournament_wins, inline=False)
             
-            embed2 = discord.Embed(title=f":checkered_flag: | {team_name} Team Members - {icon} {'{:,}'.format(balance)}".format(self), description=":bank: | Party Chat Gaming Database", colour=000000)
+            embed2 = discord.Embed(title=f":checkered_flag: | {team_name} Guild Members - {icon} {'{:,}'.format(balance)}".format(self), description=":bank: | Party Chat Gaming Database", colour=000000)
             if team['LOGO_FLAG']:
                 embed2.set_image(url=logo)
             embed2.add_field(name=":military_helmet: | **~ Members ~**", value="\n".join(f'{t}'.format(self) for t in team_list), inline=False)
 
-            embed3 = discord.Embed(title=f":checkered_flag: | {team_name} Team Members - {icon} {'{:,}'.format(balance)}".format(self), description=":bank: | Party Chat Gaming Database", colour=000000)
+            embed3 = discord.Embed(title=f":checkered_flag: | {team_name} Guild Members - {icon} {'{:,}'.format(balance)}".format(self), description=":bank: | Party Chat Gaming Database", colour=000000)
             if team['LOGO_FLAG']:
                 embed3.set_image(url=logo)
             embed3.add_field(name=":video_game: | Games ", value="\n".join(games), inline=False)

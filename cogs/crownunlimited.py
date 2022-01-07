@@ -3479,6 +3479,7 @@ class CrownUnlimited(commands.Cog):
             oteam = sowner['TEAM']
             oteam_info = db.queryTeam({'TNAME': oteam})
             shield_test_active = False
+            shield_training_active = False
             if oteam_info:
                 oguild_name = oteam_info['GUILD']
                 oguild = db.queryGuildAlt({'GNAME': oguild_name})
@@ -3487,9 +3488,13 @@ class CrownUnlimited(commands.Cog):
             if oguild_name == "PCG":
                 await ctx.send(m.NO_GUILD, delete_after=5)
                 return
-            if player_guild == guildname:
+            if oguild['SHIELD'] == sowner['DISNAME']:
+                shield_training_active = True
+                await ctx.send("Association Shield Training", delete_after=5)
+            elif player_guild == guildname:
                 shield_test_active = True
                 await ctx.send("Association Shield Defense Test", delete_after=5)
+                
 
             guild_query = {'GNAME': guildname}
             guild_info = db.queryGuildAlt(guild_query)
@@ -5963,6 +5968,8 @@ class CrownUnlimited(commands.Cog):
                 if title_match_active:
                     if shield_test_active:
                         endmessage = f":flags: {guild_info['GNAME']} DEFENSE TEST OVER!"
+                    elif shield_training_active:
+                        endmessage = f":flags: {guild_info['GNAME']} TRAINING COMPLETE!"
                     else:
                         newshield = db.updateGuild(guild_query, {'$set': {'SHIELD': str(ctx.author)}})
                         guildwin = db.updateGuild(guild_query, {'$set': {'BOUNTY': winbonus, 'STREAK': 1}})
@@ -5970,18 +5977,18 @@ class CrownUnlimited(commands.Cog):
                 else:
                     guildloss = db.updateGuild(guild_query, {'$set': {'BOUNTY': fee, 'STREAK': 0}})
 
-                await bless(8, str(ctx.author))
-                await curse(3, str(t_user))
+                await bless(100, str(ctx.author))
+                await curse(100, str(t_user))
                 if oguild:
                     await bless(wage, str(ctx.author))
                     await blessteam(wage, oteam)
                     await teamwin(oteam)
                     await blessguild(wage, str(oguild_name))
                     if tguild:
-                        await curse(7, str(t_user))
-                        await curseteam(15, tteam)
+                        await curse(100, str(t_user))
+                        await curseteam(50, tteam)
                         await teamloss(tteam)
-                        await curseguild(30, tguild)
+                        await curseguild(50, tguild)
                 match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']),
                                         str(oarm['ARM']), "N/A", "PVP", o['EXCLUSIVE'])
                 embedVar = discord.Embed(
@@ -6002,16 +6009,16 @@ class CrownUnlimited(commands.Cog):
                 else:
                     embedVar.add_field(name="Most Focused", value=f"**{t_card}**")
                 await ctx.send(embed=embedVar)
-                if botActive:
-                    embedVar = discord.Embed(title=f"TUTORIAL COMPLETE",
-                                             description=f"Victories earn **ITEMS** ! Use the /end command to **END** the tutorial lobby\nOR use /start to **PLAY AGAIN**",
-                                             colour=0xe91e63)
-                    embedVar.set_author(name=f"Congratulations You Beat Senpai!")
-                    embedVar.add_field(name="Tips!",
-                                       value="Equiping stronger **TITLES** and **ARMS** will make you character tougher in a fight!")
-                    embedVar.set_footer(
-                        text="The /shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
-                    await ctx.send(embed=embedVar)
+                # if botActive:
+                #     embedVar = discord.Embed(title=f"TUTORIAL COMPLETE",
+                #                              description=f"Victories earn **ITEMS** ! Use the /end command to **END** the tutorial lobby\nOR use /start to **PLAY AGAIN**",
+                #                              colour=0xe91e63)
+                #     embedVar.set_author(name=f"Congratulations You Beat Senpai!")
+                #     embedVar.add_field(name="Tips!",
+                #                        value="Equiping stronger **TITLES** and **ARMS** will make you character tougher in a fight!")
+                #     embedVar.set_footer(
+                #         text="The /shop is full of strong CARDS, TITLES and ARMS try different combinations! ")
+                #     await ctx.send(embed=embedVar)
         except Exception as ex:
             trace = []
             tb = ex.__traceback__
@@ -9865,6 +9872,8 @@ async def enemy_approached(self, message, channel, player, selected_mode, univer
     if channel_exists_response:
         await private_channel.send(m.ALREADY_IN_TALES)
         return
+    
+
 
     sowner = player
     guild = message.guild
@@ -9875,8 +9884,19 @@ async def enemy_approached(self, message, channel, player, selected_mode, univer
         guild.me: discord.PermissionOverwrite(read_messages=True),
         message.author: discord.PermissionOverwrite(read_messages=True, send_messages=True),
     }
+    #Create Explore Category
+    categoryname = "Crown Unlimited"
+    category = discord.utils.get(guild.categories, name=categoryname)
+    print("1:")
+    print(category)
+
+    if category is None: #If there's no category matching with the `name`
+        category = await guild.create_category_channel(categoryname)
+    #private_channel = await guild.create_text_channel(f'{str(ctx.author)}-{mode}-run', overwrites=overwrites, category=category)
     private_channel = await guild.create_text_channel(f'{str(message.author)}-{selected_mode}-run',
-                                                      overwrites=overwrites)
+                                                      overwrites=overwrites, category=category)
+    await private_channel.send(f"{ctx.author.mention} private channel has been opened for you. Good luck!")
+
     oguild = "RANDOMIZED_BATTLE"
     crestlist = opponent
     crestsearch = bounty
@@ -20177,6 +20197,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         play_again_selector = ctx.author
                     elif mode in co_op_modes and mode not in ai_co_op_modes:
                         play_again_selector = user2
+                    else:
+                        play_again_selector = ctx.author
 
                     def check(button_ctx):
                         return button_ctx.author == play_again_selector

@@ -461,6 +461,7 @@ class Profile(commands.Cog):
                     ♾️ {traitmessage}
                     """), colour=0x7289da)
                     embedVar.set_thumbnail(url=show_img)
+                    embedVar.set_footer(text=f"/enhancers - 🩸 Enhancer Menu")
                     embed_list.append(embedVar)
 
                 buttons = [
