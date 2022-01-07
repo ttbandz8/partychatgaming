@@ -586,7 +586,7 @@ class Profile(commands.Cog):
                                             filter_query = [{'type.' + "UNIVERSE": selected_universe}]
                                             response = db.updateVault(query, update_query, filter_query)
                                         else:
-                                            response = db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$addToSet':{'GEMS': {'UNIVERSE': selected_universe, 'GEMS': dismantle_amount, 'UNIVERSE_HEART': False}}})
+                                            response = db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$addToSet':{'GEMS': {'UNIVERSE': selected_universe, 'GEMS': dismantle_amount, 'UNIVERSE_HEART': False, 'UNIVERSE_SOUL': False}}})
 
                                         db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'CARDS': card_name}})
                                         await main.bless(sell_price, ctx.author)
@@ -952,7 +952,7 @@ class Profile(commands.Cog):
                                             filter_query = [{'type.' + "UNIVERSE": selected_universe}]
                                             response = db.updateVault(query, update_query, filter_query)
                                         else:
-                                            response = db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$addToSet':{'GEMS': {'UNIVERSE': selected_universe, 'GEMS': dismantle_amount, 'UNIVERSE_HEART': False}}})
+                                            response = db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$addToSet':{'GEMS': {'UNIVERSE': selected_universe, 'GEMS': dismantle_amount, 'UNIVERSE_HEART': False, 'UNIVERSE_SOUL': False}}})
 
                                         db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'TITLES': title_name}})
                                         await main.bless(sell_price, ctx.author)
@@ -1327,7 +1327,7 @@ class Profile(commands.Cog):
                                             filter_query = [{'type.' + "UNIVERSE": selected_universe}]
                                             response = db.updateVault(query, update_query, filter_query)
                                         else:
-                                            response = db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$addToSet':{'GEMS': {'UNIVERSE': selected_universe, 'GEMS': dismantle_amount, 'UNIVERSE_HEART': False}}})
+                                            response = db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$addToSet':{'GEMS': {'UNIVERSE': selected_universe, 'GEMS': dismantle_amount, 'UNIVERSE_HEART': False, 'UNIVERSE_SOUL': False}}})
 
                                         db.updateVaultNoFilter({'OWNER': str(ctx.author)},{'$pull':{'ARMS': {'ARM': str(arm_name)}}})
                                         await main.bless(sell_price, ctx.author)
@@ -2324,208 +2324,312 @@ class Profile(commands.Cog):
             custom_action_row = manage_components.create_actionrow(*buttons)
 
             async def custom_function(self, button_ctx):
-                universe = str(button_ctx.origin_message.embeds[0].title)
-                if button_ctx.custom_id == "title":
-                    price = price_adjuster(15000, universe, completed_tales, completed_dungeons)['TITLE_PRICE']
-                    if len(current_titles) >=25:
-                        await button_ctx.send("You have max amount of Titles. Transaction cancelled.")
-                        self.stop = True
-                        return
+                if button_ctx.author == ctx.author:
+                    universe = str(button_ctx.origin_message.embeds[0].title)
+                    if button_ctx.custom_id == "title":
+                        price = price_adjuster(15000, universe, completed_tales, completed_dungeons)['TITLE_PRICE']
+                        if len(current_titles) >=25:
+                            await button_ctx.send("You have max amount of Titles. Transaction cancelled.")
+                            self.stop = True
+                            return
 
-                    if price > balance:
-                        await button_ctx.send("Insufficent funds.")
+                        if price > balance:
+                            await button_ctx.send("Insufficent funds.")
+                            self.stop = True
+                            return
+                        list_of_titles =[x for x in db.queryAllTitlesBasedOnUniverses({'UNIVERSE': str(universe)}) if not x['EXCLUSIVE'] and x['AVAILABLE']]
+                        selection = random.randint(1,len(list(list_of_titles)))
+                        
+                        title = list_of_titles[selection]
+
+                        response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'TITLES': str(title['TITLE'])}})   
+                        await main.curse(price, str(ctx.author))
+                        await button_ctx.send(f"You purchased **{title['TITLE']}**.")
                         self.stop = True
-                        return
-                    list_of_titles =[x for x in db.queryAllTitlesBasedOnUniverses({'UNIVERSE': str(universe)}) if not x['EXCLUSIVE'] and x['AVAILABLE']]
-                    selection = random.randint(1,len(list(list_of_titles)))
+
+                    elif button_ctx.custom_id == "arm":
+                        price = price_adjuster(25000, universe, completed_tales, completed_dungeons)['ARM_PRICE']
+                        if len(current_arms) >=25:
+                            await button_ctx.send("You have max amount of Arms. Transaction cancelled.")
+                            self.stop = True
+                            return
+                        if price > balance:
+                            await button_ctx.send("Insufficent funds.")
+                            self.stop = True
+                            return
+                        list_of_arms = [x for x in db.queryAllArmsBasedOnUniverses({'UNIVERSE': str(universe)}) if not x['EXCLUSIVE'] and x['AVAILABLE']]
+                        selection = random.randint(1,len(list(list_of_arms)))
+
+                        arm = list_of_arms[selection]['ARM']
+
+                        if arm not in current_arms:
+                            response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'ARMS': {'ARM': str(arm), 'DUR': 25}}})
+                            await main.curse(price, str(ctx.author))
+                            await button_ctx.send(f"You purchased **{arm}**.")
+                            self.stop = True
+                        else:
+                            update_query = {'$inc': {'ARMS.$[type].' + 'DUR': 10}}
+                            filter_query = [{'type.' + "ARM": str(arm)}]
+                            resp = db.updateVault(vault_query, update_query, filter_query)
+                            await main.curse(price, str(ctx.author))
+                            await button_ctx.send(f"You purchased **{arm}**. Increased durability for the arm by 10 as you already own it.")
+                            self.stop = True 
                     
-                    title = list_of_titles[selection]
+                    elif button_ctx.custom_id == "t1card":
+                        price = price_adjuster(30000, universe, completed_tales, completed_dungeons)['C1']
+                        if len(current_cards) >= 25:
+                            await button_ctx.send("You have max amount of Cards. Transaction cancelled.")
+                            self.stop = True
+                            return
+                        acceptable = [1,2,3]
+                        if price > balance:
+                            await button_ctx.send("Insufficent funds.")
+                            self.stop = True
+                            return
+                        list_of_cards = [x for x in db.queryAllCardsBasedOnUniverse({'UNIVERSE': str(universe), 'TIER': {'$in': acceptable}}) if not x['EXCLUSIVE'] and not x['HAS_COLLECTION']]
+                        if not list_of_cards:
+                            await button_ctx.send("There are no cards available for purchase in this range.")
+                            self.stop = True
+                            return
 
-                    response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'TITLES': str(title['TITLE'])}})   
-                    await main.curse(price, str(ctx.author))
-                    await button_ctx.send(f"You purchased **{title['TITLE']}**.")
-                    self.stop = True
+                        selection = random.randint(0, round(len(list_of_cards)))
+                        card = list_of_cards[selection]
+                        card_name = card['NAME']
+                        tier = 0
 
-                elif button_ctx.custom_id == "arm":
-                    price = price_adjuster(25000, universe, completed_tales, completed_dungeons)['ARM_PRICE']
-                    if len(current_arms) >=25:
-                        await button_ctx.send("You have max amount of Arms. Transaction cancelled.")
-                        self.stop = True
-                        return
-                    if price > balance:
-                        await button_ctx.send("Insufficent funds.")
-                        self.stop = True
-                        return
-                    list_of_arms = [x for x in db.queryAllArmsBasedOnUniverses({'UNIVERSE': str(universe)}) if not x['EXCLUSIVE'] and x['AVAILABLE']]
-                    selection = random.randint(1,len(list(list_of_arms)))
+                        if card_name in current_cards:
+                            await cardlevel(card['NAME'], str(ctx.author), "Purchase")
+                            await button_ctx.send(f"You received a level up for **{card_name}**!")
+                            await main.curse(price, str(ctx.author))
+                            self.stop = True
+                            
+                        else:
+                            response = db.updateVaultNoFilter(vault_query,{'$addToSet': {'CARDS': str(card_name)}})
+                            await main.curse(price, str(ctx.author))
 
-                    arm = list_of_arms[selection]['ARM']
+                            # Add Card Level config
+                            if card_name not in owned_card_levels_list:
+                                update_query = {'$addToSet': {
+                                    'CARD_LEVELS': {'CARD': str(card_name), 'LVL': 0, 'TIER': int(tier),
+                                                    'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
+                                r = db.updateVaultNoFilter(vault_query, update_query)
 
-                    if arm not in current_arms:
-                        response = db.updateVaultNoFilter(vault_query,{'$addToSet':{'ARMS': {'ARM': str(arm), 'DUR': 25}}})
-                        await main.curse(price, str(ctx.author))
-                        await button_ctx.send(f"You purchased **{arm}**.")
-                        self.stop = True
-                    else:
-                        update_query = {'$inc': {'ARMS.$[type].' + 'DUR': 10}}
-                        filter_query = [{'type.' + "ARM": str(arm)}]
-                        resp = db.updateVault(vault_query, update_query, filter_query)
-                        await main.curse(price, str(ctx.author))
-                        await button_ctx.send(f"You purchased **{arm}**. Increased durability for the arm by 10 as you already own it.")
-                        self.stop = True 
+                            await button_ctx.send(f"You purchased **{card_name}**!")
+
+                            # Add Destiny
+                            for destiny in d.destiny:
+                                if card_name in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
+                                    db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
+                                    await button_ctx.send(
+                                        f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.", hidden=True)
+                            self.stop = True
+
+                    elif button_ctx.custom_id == "t2card":
+                        price = price_adjuster(300000, universe, completed_tales, completed_dungeons)['C2']
+                        if len(current_cards) >=25:
+                            await button_ctx.send("You have max amount of Cards. Transaction cancelled.")
+                            self.stop = True
+                            return
+                        acceptable = [3,4,5]
+                        if price > balance:
+                            await button_ctx.send("Insufficent funds.")
+                            self.stop = True
+                            return
+                        list_of_cards = [x for x in db.queryAllCardsBasedOnUniverse({'UNIVERSE': str(universe), 'TIER': {'$in': acceptable}}) if not x['EXCLUSIVE'] and not x['HAS_COLLECTION']]
+                        
+                        if not list_of_cards:
+                            await button_ctx.send("There are no cards available for purchase in this range.")
+                            self.stop = True
+                            return
+
+                        selection = random.randint(0, round(len(list_of_cards)))
+                        card = list_of_cards[selection]
+                        card_name = card['NAME']
+                        tier = 0
+
+                        if card_name in current_cards:
+                            await cardlevel(card['NAME'], str(ctx.author), "Purchase")
+                            await button_ctx.send(f"You received a level up for **{card_name}**!")
+                            await main.curse(price, str(ctx.author))
+                            self.stop = True
+                            
+                        else:
+                            response = db.updateVaultNoFilter(vault_query,{'$addToSet': {'CARDS': str(card_name)}})
+                            await main.curse(price, str(ctx.author))
+
+                            # Add Card Level config
+                            if card_name not in owned_card_levels_list:
+                                update_query = {'$addToSet': {
+                                    'CARD_LEVELS': {'CARD': str(card_name), 'LVL': 0, 'TIER': int(tier),
+                                                    'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
+                                r = db.updateVaultNoFilter(vault_query, update_query)
+
+                            await button_ctx.send(f"You purchased **{card_name}**!")
+
+                            # Add Destiny
+                            for destiny in d.destiny:
+                                if card_name in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
+                                    db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
+                                    await button_ctx.send(
+                                        f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.", hidden=True)
+                            self.stop = True
+
+                    elif button_ctx.custom_id == "t3card":
+                        price = price_adjuster(6000000, universe, completed_tales, completed_dungeons)['C3']
+                        if len(current_cards) >=25:
+                            await button_ctx.send("You have max amount of Cards. Transaction cancelled.")
+                            self.stop = True
+                            return
+                        acceptable = [5,6,7]
+                        if price > balance:
+                            await button_ctx.send("Insufficent funds.")
+                            self.stop = True
+                            return
+                        card_list_response = [x for x in db.queryAllCardsBasedOnUniverse({'UNIVERSE': str(universe), 'TIER': {'$in': acceptable}})]
+                        list_of_cards = []
+                        for card in card_list_response:
+                            if card['AVAILABLE'] and not card['EXCLUSIVE'] and not card['HAS_COLLECTION']:
+                                list_of_cards.append(card)
+
+                        if not list_of_cards:
+                            await button_ctx.send("There are no cards available for purchase in this range.")
+                            self.stop = True
+                            return
+
+                        selection = random.randint(0, round(len(list_of_cards)))
+                        card = list_of_cards[selection]
+                        card_name = card['NAME']
+                        tier = 0
+
+                        if card_name in current_cards:
+                            await cardlevel(card['NAME'], str(ctx.author), "Purchase")
+                            await button_ctx.send(f"You received a level up for **{card_name}**!")
+                            await main.curse(price, str(ctx.author))
+                            self.stop = True
+                            
+                        else:
+                            response = db.updateVaultNoFilter(vault_query,{'$addToSet': {'CARDS': str(card_name)}})
+                            await main.curse(price, str(ctx.author))
+
+                            # Add Card Level config
+                            if card_name not in owned_card_levels_list:
+                                update_query = {'$addToSet': {
+                                    'CARD_LEVELS': {'CARD': str(card_name), 'LVL': 0, 'TIER': int(tier),
+                                                    'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
+                                r = db.updateVaultNoFilter(vault_query, update_query)
+
+                            await button_ctx.send(f"You purchased **{card_name}**!")
+
+                            # Add Destiny
+                            for destiny in d.destiny:
+                                if card_name in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
+                                    db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
+                                    await button_ctx.send(
+                                        f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.", hidden=True)
+                            self.stop = True
+                else:
+                    await ctx.send("This is not your Shop.")
+            await Paginator(bot=self.bot, useQuitButton=True, disableAfterTimeout=True, ctx=ctx, pages=embed_list, timeout=60, customActionRow=[
+                custom_action_row,
+                custom_function,
+            ]).run()
+        except Exception as ex:
+            trace = []
+            tb = ex.__traceback__
+            while tb is not None:
+                trace.append({
+                    "filename": tb.tb_frame.f_code.co_filename,
+                    "name": tb.tb_frame.f_code.co_name,
+                    "lineno": tb.tb_lineno
+                })
+                tb = tb.tb_next
+            print(str({
+                'type': type(ex).__name__,
+                'message': str(ex),
+                'trace': trace
+            }))
+
+    @cog_ext.cog_slash(description="Open Crown Shop", guild_ids=main.guild_ids)
+    async def craft(self, ctx):
+        # Craft with Gems
+        # Craft Universe Heart, Universe Soul, Skin Box
+        try:
+            all_universes = db.queryAllUniverse()
+            user = db.queryUser({'DISNAME': str(ctx.author)})
+            available_universes = []
+            riftShopOpen = False
+            shopName = ':shopping_cart: Crown Shop'
+            if user['RIFT'] == 1:
+                riftShopOpen = True
+                shopName = ':crystal_ball: Rift Shop'
                 
-                elif button_ctx.custom_id == "t1card":
-                    price = price_adjuster(30000, universe, completed_tales, completed_dungeons)['C1']
-                    if len(current_cards) >= 25:
-                        await button_ctx.send("You have max amount of Cards. Transaction cancelled.")
-                        self.stop = True
-                        return
-                    acceptable = [1,2,3]
-                    if price > balance:
-                        await button_ctx.send("Insufficent funds.")
-                        self.stop = True
-                        return
-                    list_of_cards = [x for x in db.queryAllCardsBasedOnUniverse({'UNIVERSE': str(universe), 'TIER': {'$in': acceptable}}) if not x['EXCLUSIVE'] and not x['HAS_COLLECTION']]
-                    if not list_of_cards:
-                        await button_ctx.send("There are no cards available for purchase in this range.")
-                        self.stop = True
-                        return
+            if riftShopOpen:    
+                for uni in all_universes:
+                    if uni['HAS_CROWN_TALES'] and uni['HAS_DUNGEON']:
+                        available_universes.append(uni)
+            else:
+                for uni in all_universes:
+                    if uni['TIER'] != 9 and uni['HAS_CROWN_TALES'] and uni['HAS_DUNGEON']:
+                        available_universes.append(uni)
+            
+            vault_query = {'OWNER' : str(ctx.author)}
+            vault = db.altQueryVault(vault_query)
+            current_cards = vault['CARDS']
+            owned_card_levels_list = []
+            for c in vault['CARD_LEVELS']:
+                owned_card_levels_list.append(c['CARD'])
 
-                    selection = random.randint(0, round(len(list_of_cards)))
-                    card = list_of_cards[selection]
-                    card_name = card['NAME']
-                    tier = 0
+            owned_destinies = []
+            for destiny in vault['DESTINY']:
+                owned_destinies.append(destiny['NAME'])
 
-                    if card_name in current_cards:
-                        await cardlevel(card['NAME'], str(ctx.author), "Purchase")
-                        await button_ctx.send(f"You received a level up for **{card_name}**!")
-                        await main.curse(price, str(ctx.author))
-                        self.stop = True
-                        
-                    else:
-                        response = db.updateVaultNoFilter(vault_query,{'$addToSet': {'CARDS': str(card_name)}})
-                        await main.curse(price, str(ctx.author))
 
-                        # Add Card Level config
-                        if card_name not in owned_card_levels_list:
-                            update_query = {'$addToSet': {
-                                'CARD_LEVELS': {'CARD': str(card_name), 'LVL': 0, 'TIER': int(tier),
-                                                'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
-                            r = db.updateVaultNoFilter(vault_query, update_query)
+            embed_list = []
+            for universe in available_universes:
+                universe_name = universe['TITLE']
+                universe_image = universe['PATH']
+                embedVar = discord.Embed(title= f"{universe_name}", description=textwrap.dedent(f"""
+                Welcome {ctx.author.mention}!
+                
+                💟 **Universe Heart:** 💎 400,000
+                🌹 **Universe Soul:** 💎 800,000
+                """), colour=0x7289da)
+                embedVar.set_image(url=universe_image)
+                embed_list.append(embedVar)
 
-                        await button_ctx.send(f"You purchased **{card_name}**!")
+        
+            buttons = [
+                manage_components.create_button(style=3, label="💟", custom_id="UNIVERSE_HEART"),
+                manage_components.create_button(style=1, label="🌹", custom_id="UNIVERSE_SOUL")
+            ]
 
-                        # Add Destiny
-                        for destiny in d.destiny:
-                            if card_name in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
-                                db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
-                                await button_ctx.send(
-                                    f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.", hidden=True)
-                        self.stop = True
+            custom_action_row = manage_components.create_actionrow(*buttons)
 
-                elif button_ctx.custom_id == "t2card":
-                    price = price_adjuster(300000, universe, completed_tales, completed_dungeons)['C2']
-                    if len(current_cards) >=25:
-                        await button_ctx.send("You have max amount of Cards. Transaction cancelled.")
-                        self.stop = True
-                        return
-                    acceptable = [3,4,5]
-                    if price > balance:
-                        await button_ctx.send("Insufficent funds.")
-                        self.stop = True
-                        return
-                    list_of_cards = [x for x in db.queryAllCardsBasedOnUniverse({'UNIVERSE': str(universe), 'TIER': {'$in': acceptable}}) if not x['EXCLUSIVE'] and not x['HAS_COLLECTION']]
-                    
-                    if not list_of_cards:
-                        await button_ctx.send("There are no cards available for purchase in this range.")
-                        self.stop = True
-                        return
+            async def custom_function(self, button_ctx):
+                if button_ctx.author == ctx.author:
+                    universe = str(button_ctx.origin_message.embeds[0].title)
+                    if button_ctx.custom_id == "UNIVERSE_HEART":
+                        price = 400000
+                        response = craft_adjuster(vault, universe, price, button_ctx.custom_id)
+                        if response['SUCCESS']:
+                            await button_ctx.send(f"{response['MESSAGE']}")
+                            self.stop = True
+                        else:
+                            await button_ctx.send(f"{response['MESSAGE']}")
+                            self.stop = True                           
 
-                    selection = random.randint(0, round(len(list_of_cards)))
-                    card = list_of_cards[selection]
-                    card_name = card['NAME']
-                    tier = 0
+                    if button_ctx.custom_id == "UNIVERSE_SOUL":
+                        price = 800000
+                        response = craft_adjuster(vault, universe, price, button_ctx.custom_id)
+                        if response['SUCCESS']:
+                            await button_ctx.send(f"{response['MESSAGE']}")
+                            self.stop = True
+                        else:
+                            await button_ctx.send(f"{response['MESSAGE']}")
+                            self.stop = True
 
-                    if card_name in current_cards:
-                        await cardlevel(card['NAME'], str(ctx.author), "Purchase")
-                        await button_ctx.send(f"You received a level up for **{card_name}**!")
-                        await main.curse(price, str(ctx.author))
-                        self.stop = True
-                        
-                    else:
-                        response = db.updateVaultNoFilter(vault_query,{'$addToSet': {'CARDS': str(card_name)}})
-                        await main.curse(price, str(ctx.author))
-
-                        # Add Card Level config
-                        if card_name not in owned_card_levels_list:
-                            update_query = {'$addToSet': {
-                                'CARD_LEVELS': {'CARD': str(card_name), 'LVL': 0, 'TIER': int(tier),
-                                                'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
-                            r = db.updateVaultNoFilter(vault_query, update_query)
-
-                        await button_ctx.send(f"You purchased **{card_name}**!")
-
-                        # Add Destiny
-                        for destiny in d.destiny:
-                            if card_name in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
-                                db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
-                                await button_ctx.send(
-                                    f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.", hidden=True)
-                        self.stop = True
-
-                elif button_ctx.custom_id == "t3card":
-                    price = price_adjuster(6000000, universe, completed_tales, completed_dungeons)['C3']
-                    if len(current_cards) >=25:
-                        await button_ctx.send("You have max amount of Cards. Transaction cancelled.")
-                        self.stop = True
-                        return
-                    acceptable = [5,6,7]
-                    if price > balance:
-                        await button_ctx.send("Insufficent funds.")
-                        self.stop = True
-                        return
-                    card_list_response = [x for x in db.queryAllCardsBasedOnUniverse({'UNIVERSE': str(universe), 'TIER': {'$in': acceptable}})]
-                    list_of_cards = []
-                    for card in card_list_response:
-                        if card['AVAILABLE'] and not card['EXCLUSIVE'] and not card['HAS_COLLECTION']:
-                            list_of_cards.append(card)
-
-                    if not list_of_cards:
-                        await button_ctx.send("There are no cards available for purchase in this range.")
-                        self.stop = True
-                        return
-
-                    selection = random.randint(0, round(len(list_of_cards)))
-                    card = list_of_cards[selection]
-                    card_name = card['NAME']
-                    tier = 0
-
-                    if card_name in current_cards:
-                        await cardlevel(card['NAME'], str(ctx.author), "Purchase")
-                        await button_ctx.send(f"You received a level up for **{card_name}**!")
-                        await main.curse(price, str(ctx.author))
-                        self.stop = True
-                        
-                    else:
-                        response = db.updateVaultNoFilter(vault_query,{'$addToSet': {'CARDS': str(card_name)}})
-                        await main.curse(price, str(ctx.author))
-
-                        # Add Card Level config
-                        if card_name not in owned_card_levels_list:
-                            update_query = {'$addToSet': {
-                                'CARD_LEVELS': {'CARD': str(card_name), 'LVL': 0, 'TIER': int(tier),
-                                                'EXP': 0, 'HLT': 0, 'ATK': 0, 'DEF': 0, 'AP': 0}}}
-                            r = db.updateVaultNoFilter(vault_query, update_query)
-
-                        await button_ctx.send(f"You purchased **{card_name}**!")
-
-                        # Add Destiny
-                        for destiny in d.destiny:
-                            if card_name in destiny["USE_CARDS"] and destiny['NAME'] not in owned_destinies:
-                                db.updateVaultNoFilter(vault_query, {'$addToSet': {'DESTINY': destiny}})
-                                await button_ctx.send(
-                                    f"**DESTINY AWAITS!**\n**{destiny['NAME']}** has been added to your vault.", hidden=True)
-                        self.stop = True
+                else:
+                    await ctx.send("This is not your Craft.")
 
             await Paginator(bot=self.bot, useQuitButton=True, disableAfterTimeout=True, ctx=ctx, pages=embed_list, timeout=60, customActionRow=[
                 custom_action_row,
@@ -2546,6 +2650,63 @@ class Profile(commands.Cog):
                 'message': str(ex),
                 'trace': trace
             }))
+
+
+def craft_adjuster(vault, universe, price, item):
+    try:
+        item_bools = [
+            'UNIVERSE_HEART', 
+            'UNIVERSE_SOUL'
+        ]
+        gems = 0
+        universe_heart = False
+        universe_soul = False
+        has_gems_for = False
+        negPriceAmount = 0 - abs(int(price))
+        response = {}
+        for uni in vault['GEMS']:
+            if uni['UNIVERSE'] == universe:
+                gems = uni['GEMS']
+                universe_heart = uni['UNIVERSE_HEART']
+                universe_soul = uni['UNIVERSE_SOUL']
+                has_gems_for = True
+
+        if has_gems_for:
+            if gems >= price:
+                if item in item_bools:
+                    query = {'OWNER': str(vault['OWNER'])}
+                    update_query = {
+                        '$inc': {'GEMS.$[type].' + "GEMS": int(negPriceAmount)}, 
+                        '$set': {'GEMS.$[type].' + str(item): True}
+                    }
+                    filter_query = [{'type.' + "UNIVERSE": universe}]
+                    res = db.updateVault(query, update_query, filter_query)
+
+                    response = {"HAS_GEMS_FOR": True, "SUCCESS":  True, "MESSAGE": "Success!"}
+                    return response
+            else:
+                    response = {"HAS_GEMS_FOR": True, "SUCCESS":  False, "MESSAGE": "Insufficent 💎!"}
+                    return response
+        else:
+            response = {"HAS_GEMS_FOR": False, "SUCCESS":  False, "MESSAGE": "You have no 💎 for this Universe."}
+            return response
+
+    except Exception as ex:
+        trace = []
+        tb = ex.__traceback__
+        while tb is not None:
+            trace.append({
+                "filename": tb.tb_frame.f_code.co_filename,
+                "name": tb.tb_frame.f_code.co_name,
+                "lineno": tb.tb_lineno
+            })
+            tb = tb.tb_next
+        print(str({
+            'type': type(ex).__name__,
+            'message': str(ex),
+            'trace': trace
+        }))
+
 
 def price_adjuster(price, selected_universe, completed_tales, completed_dungeons):
     new_price = price

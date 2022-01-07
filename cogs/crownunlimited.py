@@ -40,7 +40,7 @@ from pilmoji import Pilmoji
 class CrownUnlimited(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self._cd = commands.CooldownMapping.from_cooldown(1, 1500,
+        self._cd = commands.CooldownMapping.from_cooldown(1, 1200,
                                                           commands.BucketType.member)  # Change accordingly. Currently every 8 minutes (3600 seconds == 60 minutes)
 
     co_op_modes = ['CTales', 'DTales', 'CDungeon', 'DDungeon']
@@ -95,7 +95,6 @@ class CrownUnlimited(commands.Cog):
             
             if not server_channel:
                 return
-
 
             # Check if currently in a match
             channel_exists_response = existing_channel_check(self, message)
@@ -334,8 +333,6 @@ class CrownUnlimited(commands.Cog):
                 'message': str(ex),
                 'trace': trace
             }))
-    
-
 
     @cog_ext.cog_slash(description="Set Explore Channel", guild_ids=main.guild_ids)
     async def setexplorechannel(self, ctx: SlashContext):
@@ -593,6 +590,89 @@ class CrownUnlimited(commands.Cog):
                 })
                 tb = tb.tb_next
             print(str({
+                'type': type(ex).__name__,
+                'message': str(ex),
+                'trace': trace
+            }))
+            return
+
+
+    @cog_ext.cog_slash(description="Arena Battle!",
+                       options=[
+                           create_option(
+                               name="mode",
+                               description="Arena Mode",
+                               option_type=3,
+                               required=True,
+                               choices=[
+                                   create_choice(
+                                       name="1v1",
+                                       value="SINGLES"
+                                   ),
+                                   create_choice(
+                                       name="Team Battle",
+                                       value="TEAMS"
+                                   ),
+                                   create_choice(
+                                       name="Guild War",
+                                       value="GUILD_WAR"
+                                   ),
+                               ]
+                           )
+                       ]
+        , guild_ids=main.guild_ids)
+    async def arena(self, ctx: SlashContext, mode: str, opponent: User):
+        battle_buttons = [
+            manage_components.create_button(
+                style=ButtonStyle.blue,
+                label="Yes",
+                custom_id="Yes"
+            ),
+            manage_components.create_button(
+                style=ButtonStyle.red,
+                label="No",
+                custom_id="No"
+            )
+        ]
+        battle_buttons_action_row = manage_components.create_actionrow(*battle_buttons)
+        await ctx.send(f"{opponent.mention}, ready to enter the Arena?", components=[battle_buttons_action_row])
+
+        def check(button_ctx):
+            return button_ctx.author == ctx.author
+
+        try:
+            button_ctx: ComponentContext = await manage_components.wait_for_component(self.bot, components=[
+                battle_buttons_action_row], timeout=120, check=check)
+
+            if button_ctx.custom_id == "No":
+                await button_ctx.send("Arena Declined. ")
+                return
+
+            if button_ctx.custom_id == "Yes":
+
+                if mode == "SINGLES":
+                    response = db.createArena(data.newArena({}))
+                    
+                elif mode == "GUILD_WAR":
+                    response = db.createArena(data.newArena({}))
+                    
+                else:
+                    response = db.createArena(data.newArena({}))   
+
+                await button_ctx.send("Arena solidified.")
+                return
+        except Exception as ex:
+            trace = []
+            tb = ex.__traceback__
+            while tb is not None:
+                trace.append({
+                    "filename": tb.tb_frame.f_code.co_filename,
+                    "name": tb.tb_frame.f_code.co_name,
+                    "lineno": tb.tb_lineno
+                })
+                tb = tb.tb_next
+            print(str({
+                'PLAYER': str(ctx.author),
                 'type': type(ex).__name__,
                 'message': str(ex),
                 'trace': trace
@@ -6316,12 +6396,19 @@ class CrownUnlimited(commands.Cog):
             gem_details = []
             for gd in current_gems:
                 heart = ""
+                soul = ""
                 if gd['UNIVERSE_HEART']:
                     heart = "💟"
                 else:
                     heart = "💔"
+
+                if gd['UNIVERSE_SOUL']:
+                    soul = "🌹"
+                else:
+                    soul = "🥀"
+
                 gem_details.append(
-                    f"🌍 **{gd['UNIVERSE']}**\n💎 {str(gd['GEMS'])}\n{heart}\n")
+                    f"🌍 **{gd['UNIVERSE']}**\n💎 {str(gd['GEMS'])}\nUniverse Heart {heart}\nUniverse Soul {soul}\n")
 
             # Adding to array until divisible by 10
             while len(gem_details) % 10 != 0:
@@ -20510,7 +20597,7 @@ def update_arm_durability(self, vault, arm, universe):
                         filter_query = [{'type.' + "UNIVERSE": selected_universe}]
                         response = db.updateVault(query, update_query, filter_query)
                     else:
-                        response = db.updateVaultNoFilter({'OWNER': str(vault['OWNER'])},{'$addToSet':{'GEMS': {'UNIVERSE': selected_universe, 'GEMS': dismantle_amount, 'UNIVERSE_HEART': False}}})
+                        response = db.updateVaultNoFilter({'OWNER': str(vault['OWNER'])},{'$addToSet':{'GEMS': {'UNIVERSE': selected_universe, 'GEMS': dismantle_amount, 'UNIVERSE_HEART': False, 'UNIVERSE_SOUL': False}}})
 
 
                     query = {'OWNER': str(vault['OWNER'])}
@@ -21026,16 +21113,24 @@ async def specific_drops(player, card, universe):
             await bless(150, player)
             return f"You're maxed out on Cards! You earned :coin: 500 instead!"
         # Check if already owned
+        card_lvls_owned = False
         card_owned = False
         for c in vault['CARD_LEVELS']:
             if c['CARD'] == str(card):
-                card_owned = True
+                card_lvls_owned = True
+        if card in vault['CARDS']:
+            card_owned = True
 
-        if card_owned:
+        if card_owned and card_lvls_owned:
             await cardlevel(card, player, "Tales", universe)
             message = ""
-            await bless(150, player)
-            return f"You earned EXP for _Card:_ **{card}** + :coin: 150 in addition to the card bounty!!"
+            await bless(5000, player)
+            return f"You earned EXP for _Card:_ **{card}** + :coin: 5,000 in addition to the card bounty."
+        elif card_lvls_owned:
+            await cardlevel(card, player, "Tales", universe)
+            message = ""
+            await bless(5000, player)
+            return f"You earned EXP for _Card:_ **{card}** + :coin: 5,000 in addition to the card bounty."
         else:
             card_data = db.queryCard({'NAME': str(card)})
             uni = db.queryUniverse({'TITLE': card_data['UNIVERSE']})

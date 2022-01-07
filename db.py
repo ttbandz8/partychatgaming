@@ -40,6 +40,7 @@ menu_col = db['MENU']
 abyss_col = db['ABYSS']
 trade_col = db['TRADE']
 server_col = db['SERVER']
+arena_col = db['ARENA']
 acceptable = [1, 2, 3, 4]
 
 
@@ -119,6 +120,33 @@ def queryServer(server):
 def updateServer(server, new_server):
     try:
         data = server_col.update_one(server, new_server)
+        return True
+    except Exception as e:
+        return e
+
+
+#########################################################################
+''' ARENA '''
+def createArena(arena):
+    try:
+        data = arena_col.insert_one(arena)
+        return True
+    except Exception as e:
+        return e
+
+def queryArena(arena):
+    try:
+        data = arena_col.find_one(arena)
+        if data:
+            return data
+        else:
+            return False
+    except Exception as e:
+        return e
+
+def updateArena(arena, arena_update):
+    try:
+        data = arena_col.update_one(arena, arena_update)
         return True
     except Exception as e:
         return e

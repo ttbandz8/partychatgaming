@@ -98,6 +98,21 @@ class TEAMS():
 
 
 @dataclass(frozen=True, order=True)
+class ARENA():
+    TYPE: int = field(default_factory=lambda: 0)
+    ACTIVE: bool = field(default_factory=lambda: False)
+    READY: bool = field(default_factory=lambda: False)
+    SUBBED_PLAYER: bool = field(default_factory=lambda: False)
+    GUILD_WAR: bool = field(default_factory=lambda: False)
+    SINGLES: bool = field(default_factory=lambda: False)
+    IS_FULL: bool = field(default_factory=lambda: False)
+    WINNER: str = field(default_factory=lambda: '')
+    LOSER: str = field(default_factory=lambda: '')
+    TEAMS: list[str] = field(default_factory=lambda: [])
+    TIMESTAMP: str = now
+
+
+@dataclass(frozen=True, order=True)
 class FAMILY():
     HEAD: str = field(default_factory=lambda: '')
     PARTNER: str = field(default_factory=lambda: '')
@@ -360,6 +375,11 @@ class MENU():
 def newServer(server):
     ser = SERVER(**server)
     return asdict(ser)
+
+
+def newArena(arena):
+    are = ARENA(**arena)
+    return asdict(are)
 
 
 def newCard(card):
