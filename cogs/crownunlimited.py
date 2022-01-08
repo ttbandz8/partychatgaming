@@ -20406,7 +20406,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 description=f"Match concluded in {turn_total} turns!\n\n{drop_response} + :coin: 25,000!",
                                 colour=0xe91e63)
 
-                        await bless(25000, str(ctx.author))
+                        await bless(250000, str(ctx.author))
                         ofambank = await blessfamily(100000, ofam)
                         oteambank = await blessteam(100000, oteam)
                         petlogger = await summonlevel(opet_name, ouser)
@@ -20518,12 +20518,12 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 new_upload_query = {'$addToSet': {'DUNGEONS': selected_universe}}
                                 r = db.updateUserNoFilter(upload_query, new_upload_query)
                                 if selected_universe in completed_universes:
-                                    await bless(25000, ctx.author)
-                                    teambank = await blessteam(10000, oteam)
+                                    await bless(300000, ctx.author)
+                                    teambank = await blessteam(80000, oteam)
                                     # await bless(125, user2)
                                     await ctx.send(embed=embedVar)
                                     await ctx.send(
-                                        f"You were awarded :coin: 25,000 for completing the {selected_universe} Dungeon again!")
+                                        f"You were awarded :coin: 300,000 for completing the {selected_universe} Dungeon again!")
                                 else:
                                     await bless(6000000, ctx.author)
                                     teambank = await blessteam(1000000, oteam)
@@ -20545,7 +20545,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 r = db.updateUserNoFilter(upload_query, new_upload_query)
                                 if selected_universe in completed_universes:
                                     await bless(100000, ctx.author)
-                                    teambank = await blessteam(20000, oteam)
+                                    teambank = await blessteam(25000, oteam)
                                     await ctx.send(embed=embedVar)
                                     await ctx.send(
                                         f"You were awarded :coin: 100,000 for completing the {selected_universe} Tale again!")
