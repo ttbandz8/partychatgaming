@@ -1087,6 +1087,7 @@ async def traits(ctx):
    embedVar = discord.Embed(title="Universe Traits", description="\n".join(traitmessages))
 
    await ctx.author.send(embed=embedVar)
+   await ctx.send(f"{ctx.author.mention} Universe Trait list sent to you via DM!")
 
 async def blessteam(amount, team):
    blessAmount = amount
