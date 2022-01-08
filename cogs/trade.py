@@ -556,18 +556,12 @@ class Trade(commands.Cog):
             item = 'P'
             user = db.queryUser({'DISNAME': str(ctx.author)})
             if user:
-                print(user)
                 vault = db.queryVault({'OWNER': str(ctx.author)})
                 if vault:
-                    print(vault)
                     mtrade = db.queryTrade({'MERCHANT' : str(ctx.author), 'OPEN' : True})
                     if mtrade:
-                        print("m")
-                        print(mtrade)
                         mvalidation=True
                     else:
-                        print("B")
-                        print(btrade)
                         btrade = db.queryTrade({'BUYER' : str(ctx.author), 'OPEN' : True})
                         if btrade:
                             bvalidation=True
