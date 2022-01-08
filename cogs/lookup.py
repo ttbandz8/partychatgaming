@@ -231,6 +231,7 @@ class Lookup(commands.Cog):
 
     @cog_ext.cog_slash(description="Lookup Guild stats", guild_ids=main.guild_ids)
     async def guild(self, ctx, guild: str):
+        team = guild
         team_name = team
         team_query = {'TNAME': team_name}
         team = db.queryTeam(team_query)
