@@ -40,7 +40,7 @@ from pilmoji import Pilmoji
 class CrownUnlimited(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self._cd = commands.CooldownMapping.from_cooldown(1, 1200,
+        self._cd = commands.CooldownMapping.from_cooldown(1, 10,
                                                           commands.BucketType.member)  # Change accordingly. Currently every 8 minutes (3600 seconds == 60 minutes)
 
     co_op_modes = ['CTales', 'DTales', 'CDungeon', 'DDungeon']
@@ -282,8 +282,7 @@ class CrownUnlimited(commands.Cog):
                     return
 
                 if button_ctx.custom_id == "Yes":
-                    await button_ctx.send(
-                        f"{message.author.mention} private channel has been opened for you. Good luck!")
+                    await button_ctx.send(f"{message.author.mention} private channel has been opened for you. Good luck!")
                     await enemy_approached(self, message, message.channel, player, selected_mode, universe,
                                            cards[rand_card]['NAME'], bounty)
             except Exception as ex:
@@ -301,7 +300,7 @@ class CrownUnlimited(commands.Cog):
                 #     'message': str(ex),
                 #     'trace': trace
                 # }))
-                # # print("Explore Exception. Likely nothing, but yea.")
+                # print("Explore Exception. Likely nothing, but yea.")
                 # await message.channel.send("Something ain't right, my guy.Check with support.")
                 print("")
     
@@ -9959,8 +9958,6 @@ async def enemy_approached(self, message, channel, player, selected_mode, univer
     if channel_exists_response:
         await private_channel.send(m.ALREADY_IN_TALES)
         return
-    
-
 
     sowner = player
     guild = message.guild
@@ -9971,24 +9968,14 @@ async def enemy_approached(self, message, channel, player, selected_mode, univer
         guild.me: discord.PermissionOverwrite(read_messages=True),
         message.author: discord.PermissionOverwrite(read_messages=True, send_messages=True),
     }
-    #Create Explore Category
-    categoryname = "Crown Unlimited"
-    category = discord.utils.get(guild.categories, name=categoryname)
-    print("1:")
-    print(category)
-
-    if category is None: #If there's no category matching with the `name`
-        category = await guild.create_category_channel(categoryname)
-    #private_channel = await guild.create_text_channel(f'{str(ctx.author)}-{mode}-run', overwrites=overwrites, category=category)
     private_channel = await guild.create_text_channel(f'{str(message.author)}-{selected_mode}-run',
                                                       overwrites=overwrites)
-    await private_channel.send(f"{ctx.author.mention} private channel has been opened for you. Good luck!")
-
     oguild = "RANDOMIZED_BATTLE"
     crestlist = opponent
     crestsearch = bounty
     await battle_commands(self, message.author, mode, universe, universe['TITLE'], None, oguild, crestlist, crestsearch,
                           private_channel, sowner, None, None, None, None, None, None, None, None)
+
 
 
 async def select_universe(self, ctx, sowner: object, oteam: str, ofam: str, mode: str, user: None):
@@ -20420,8 +20407,8 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 colour=0xe91e63)
 
                         await bless(25000, str(ctx.author))
-                        ofambank = await blessfamily(15000, ofam)
-                        oteambank = await blessteam(15000, oteam)
+                        ofambank = await blessfamily(100000, ofam)
+                        oteambank = await blessteam(100000, oteam)
                         petlogger = await summonlevel(opet_name, ouser)
                         cardlogger = await cardlevel(o_card, ouser, "Dungeon", selected_universe)
 
@@ -20452,9 +20439,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         await ctx.send(embed=embedVar)
 
                         if t_card not in sowner['BOSS_WINS']:
-                            await bless(40000, str(ctx.author))
+                            await bless(15000000, str(ctx.author))
                             if mode == "CBoss":
-                                await bless(40000, str(user2))
+                                await bless(15000000, str(user2))
                             query = {'DISNAME': sowner['DISNAME']}
                             new_query = {'$addToSet': {'BOSS_WINS': t_card}}
                             resp = db.updateUserNoFilter(query, new_query)
@@ -20471,9 +20458,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         gameClock = getTime(int(h_gametime), int(m_gametime), int(s_gametime), h_playtime, m_playtime,
                                             s_playtime)
                         if mode in D_modes:
-                            teambank = await blessteam(250, oteam)
+                            teambank = await blessteam(2500, oteam)
                         else:
-                            teambank = await blessteam(50, oteam)
+                            teambank = await blessteam(500, oteam)
                         if o_user['RIFT'] == 1:
                             response = db.updateUserNoFilter({'DISNAME': str(o_user['DISNAME'])}, {'$set': {'RIFT': 0}})
 
@@ -20482,9 +20469,9 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                         elif mode in U_modes:
                             drop_response = await drops(ctx.author, selected_universe, currentopponent)
                         if mode in D_modes:
-                            ofambank = await blessfamily(250, ofam)
+                            ofambank = await blessfamily(2500, ofam)
                         else:
-                            ofambank = await blessfamily(50, ofam)
+                            ofambank = await blessfamily(500, ofam)
                         match = await savematch(str(ouser), str(o_card), str(o_card_path), str(otitle['TITLE']),
                                                 str(oarm['ARM']), str(selected_universe), tale_or_dungeon_only,
                                                 o['EXCLUSIVE'])
@@ -20531,18 +20518,18 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 new_upload_query = {'$addToSet': {'DUNGEONS': selected_universe}}
                                 r = db.updateUserNoFilter(upload_query, new_upload_query)
                                 if selected_universe in completed_universes:
-                                    await bless(5000, ctx.author)
-                                    teambank = await blessteam(1000, oteam)
+                                    await bless(25000, ctx.author)
+                                    teambank = await blessteam(10000, oteam)
                                     # await bless(125, user2)
                                     await ctx.send(embed=embedVar)
                                     await ctx.send(
-                                        f"You were awarded :coin: 5,000 for completing the {selected_universe} Dungeon again!")
+                                        f"You were awarded :coin: 25,000 for completing the {selected_universe} Dungeon again!")
                                 else:
-                                    await bless(15000, ctx.author)
-                                    teambank = await blessteam(5000, oteam)
+                                    await bless(6000000, ctx.author)
+                                    teambank = await blessteam(1000000, oteam)
                                     await ctx.send(embed=embedVar)
                                     await ctx.send(
-                                        f"You were awarded :coin: 15,000 for completing the {selected_universe} Dungeon! ")
+                                        f"You were awarded :coin: 6,000,000 for completing the {selected_universe} Dungeon! ")
                                 continued = False
                                 await discord.TextChannel.delete(private_channel, reason=None)
                             elif mode in U_modes:
@@ -20557,17 +20544,17 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                 new_upload_query = {'$addToSet': {'CROWN_TALES': selected_universe}}
                                 r = db.updateUserNoFilter(upload_query, new_upload_query)
                                 if selected_universe in completed_universes:
-                                    await bless(1000, ctx.author)
-                                    teambank = await blessteam(500, oteam)
+                                    await bless(100000, ctx.author)
+                                    teambank = await blessteam(20000, oteam)
                                     await ctx.send(embed=embedVar)
                                     await ctx.send(
-                                        f"You were awarded :coin: 1,000 for completing the {selected_universe} Tale again!")
+                                        f"You were awarded :coin: 100,000 for completing the {selected_universe} Tale again!")
                                 else:
-                                    await bless(5000, ctx.author)
-                                    teambank = await blessteam(1000, oteam)
+                                    await bless(2000000, ctx.author)
+                                    teambank = await blessteam(50000, oteam)
                                     await ctx.send(embed=embedVar)
                                     await ctx.send(
-                                        f"You were awarded :coin: 5,000 for completing the {selected_universe} Tale! ")
+                                        f"You were awarded :coin: 2,000,000 for completing the {selected_universe} Tale! ")
                                 continued = False
                                 await discord.TextChannel.delete(private_channel, reason=None)
 
@@ -21017,7 +21004,7 @@ async def drops(player, universe, matchcount):
 
     try:
         if drop_rate <= gold_drop:
-            bless_amount = (100 + (5 * matchcount)) * (1 + rebirth)
+            bless_amount = (1000 + (5 * matchcount)) * (1 + rebirth)
             await bless(bless_amount, player)
             return f"You earned :coin: **{bless_amount}**!"
         elif drop_rate <= rift_rate and drop_rate > gold_drop:
@@ -21150,8 +21137,8 @@ async def specific_drops(player, card, universe):
 
     try:
         if len(vault['CARDS']) >= 25:
-            await bless(150, player)
-            return f"You're maxed out on Cards! You earned :coin: 500 instead!"
+            await bless(3000, player)
+            return f"You're maxed out on Cards! You earned :coin: 3,000 instead!"
         # Check if already owned
         card_lvls_owned = False
         card_owned = False
@@ -21264,7 +21251,7 @@ async def dungeondrops(player, universe, matchcount):
 
     try:
         if drop_rate <= gold_drop:
-            bless_amount = (150 + (5 * matchcount)) * (1 + rebirth)
+            bless_amount = (5000 + (5 * matchcount)) * (1 + rebirth)
             await bless(bless_amount, player)
             return f"You earned :coin: **{bless_amount}**!"
         elif drop_rate <= rift_rate and drop_rate > gold_drop:
@@ -21425,7 +21412,7 @@ async def bossdrops(player, universe):
 
     try:
         if drop_rate <= gold_drop:
-            bless_amount = 5000 * (1 + rebirth)
+            bless_amount = 80000 * (1 + rebirth)
             await bless(bless_amount, player)
             return f"You earned :coin: 5000!"
         elif drop_rate <= title_drop and drop_rate > gold_drop:
