@@ -1183,10 +1183,10 @@ class CrownUnlimited(commands.Cog):
                     o_attack = o_attack - int(((o_card_passive / 100) * o_defense))
                 elif o_card_passive_type == 'BZRK':
                     o_attack = o_attack + int(((o_card_passive / 100) * o_health))
-                    o_health = o_health - int((o_attack))
+                    o_health = o_health - int(((o_card_passive / 100) * o_health))
                 elif o_card_passive_type == 'CRYSTAL':
                     o_defense = o_defense + int(((o_card_passive / 100) * o_health))
-                    o_health = o_health - int((o_defense))
+                    o_health = o_health - int(((o_card_passive / 100) * o_health))
                 elif o_card_passive_type == 'GROWTH':
                     o_attack = o_attack + int(((o_card_passive / 100) * o_attack))
                     o_defense = o_defense + int(((o_card_passive / 100) * o_defense))
@@ -1257,10 +1257,10 @@ class CrownUnlimited(commands.Cog):
                         o_attack = o_attack - int(((o_title_passive_value / 100) * o_defense))
                     elif o_title_passive_type == 'BZRK':
                         o_attack = o_attack + int(((o_title_passive_value / 100) * o_health))
-                        o_health = o_health - int((o_attack))
+                        o_health = o_health - int(((o_title_passive_value / 100) * o_health))
                     elif o_title_passive_type == 'CRYSTAL':
                         o_defense = o_defense + int(((o_title_passive_value / 100) * o_health))
-                        o_health = o_health - int((o_defense))
+                        o_health = o_health - int(((o_title_passive_value / 100) * o_health))
                     elif o_title_passive_type == 'GROWTH':
                         o_attack = o_attack + int((o_title_passive_value / 100) * o_attack)
                         o_defense = o_defense + int((o_title_passive_value / 100) * o_defense)
@@ -1329,10 +1329,10 @@ class CrownUnlimited(commands.Cog):
                     o_attack = o_attack - int(((oarm_passive_value / 100) * o_defense))
                 elif oarm_passive_type == 'BZRK':
                     o_attack = o_attack + int(((oarm_passive_value / 100) * o_health))
-                    o_health = o_health - int((o_attack))
+                    o_health = o_health - int(((oarm_passive_value / 100) * o_health))
                 elif oarm_passive_type == 'CRYSTAL':
                     o_defense = o_defense + int(((oarm_passive_value / 100) * o_health))
-                    o_health = o_health - int((o_defense))
+                    o_health = o_health - int(((oarm_passive_value / 100) * o_health))
                 elif oarm_passive_type == 'GROWTH':
                     o_attack = o_attack + int((oarm_passive_value / 100) * o_attack)
                     o_defense = o_defense + int((oarm_passive_value / 100) * o_defense)
@@ -1401,10 +1401,10 @@ class CrownUnlimited(commands.Cog):
                     t_attack = t_attack - int((tarm_passive_value / 100) * t_defense)
                 elif tarm_passive_type == 'BZRK':
                     t_attack = t_attack + int((tarm_passive_value / 100) * t_health)
-                    t_health = t_health - int((t_attack))
+                    t_health = t_health - int((tarm_passive_value / 100) * t_health)
                 elif tarm_passive_type == 'CRYSTAL':
                     t_defense = t_defense + int((tarm_passive_value / 100) * t_health)
-                    t_health = t_health - int(t_defense)
+                    t_health = t_health - int((tarm_passive_value / 100) * t_health)
                 elif tarm_passive_type == 'GROWTH':
                     t_attack = t_attack + int((tarm_passive_value / 100) * t_attack)
                     t_defense = t_defense + int((tarm_passive_value / 100) * t_defense)
@@ -1477,10 +1477,10 @@ class CrownUnlimited(commands.Cog):
                     t_attack = t_attack - int((t_card_passive / 100) * t_defense)
                 elif t_card_passive_type == 'BZRK':
                     t_attack = t_attack + int(((t_card_passive / 100) * t_health))
-                    t_health = t_health - int((t_attack))
+                    t_health = t_health - int(((t_card_passive / 100) * t_health))
                 elif t_card_passive_type == 'CRYSTAL':
                     t_defense = t_defense + int((t_card_passive / 100) * t_health)
-                    t_health = t_health - int(t_defense)
+                    t_health = t_health - int((t_card_passive / 100) * t_health)
                 elif t_card_passive_type == 'GROWTH':
                     t_attack = t_attack + int((t_card_passive / 100) * t_attack)
                     t_defense = t_defense + int((t_card_passive / 100) * t_defense)
@@ -1551,10 +1551,10 @@ class CrownUnlimited(commands.Cog):
                         t_attack = t_attack - int(((t_title_passive_value / 100) * t_defense))
                     elif t_title_passive_type == 'BZRK':
                         t_attack = t_attack + int(((t_title_passive_value / 100) * t_health))
-                        t_health = t_health - int((t_attack))
+                        t_health = t_health - int(((t_title_passive_value / 100) * t_health))
                     elif t_title_passive_type == 'CRYSTAL':
                         t_defense = t_defense + int(((t_title_passive_value / 100) * t_health))
-                        t_health = t_health - int(t_defense)
+                        t_health = t_health - int(((t_title_passive_value / 100) * t_health))
                     elif t_title_passive_type == 'GROWTH':
                         tt_attack = t_attack + int(((t_title_passive_value / 100) * t_attack))
                         t_defense = t_defense + int(((t_title_passive_value / 100) * t_defense))
@@ -3182,7 +3182,7 @@ class CrownUnlimited(commands.Cog):
                                             t_attack = round(t_attack - dmg['DMG'])
                                         elif enh_type == 'BZRK':
                                             t_health = round(t_health - dmg['DMG'])
-                                            t_attack = round(t_attack + (.75 * dmg['DMG']))
+                                            t_attack = round(t_attack + (dmg['DMG']))
                                         elif enh_type == 'CRYSTAL':
                                             t_health = round(t_health - dmg['DMG'])
                                             t_defense = round(t_defense + dmg['DMG'])
@@ -3889,10 +3889,10 @@ class CrownUnlimited(commands.Cog):
                 o_attack = o_attack - int(((o_card_passive / 100) * o_defense))
             elif o_card_passive_type == 'BZRK':
                 o_attack = o_attack + int(((o_card_passive / 100) * o_health))
-                o_health = o_health - int((o_attack))
+                o_health = o_health - int(((o_card_passive / 100) * o_health))
             elif o_card_passive_type == 'CRYSTAL':
                 o_defense = o_defense + int(((o_card_passive / 100) * o_health))
-                o_health = o_health - int((o_attack))
+                o_health = o_health - int(((o_card_passive / 100) * o_health))
             elif o_card_passive_type == 'GROWTH':
                 o_attack = o_attack + int(((o_card_passive / 100) * o_attack))
                 o_defense = o_defense + int(((o_card_passive / 100) * o_defense))
@@ -3963,10 +3963,10 @@ class CrownUnlimited(commands.Cog):
                     o_attack = o_attack - int(((o_title_passive_value / 100) * o_defense))
                 elif o_title_passive_type == 'BZRK':
                     o_attack = o_attack + int(((o_title_passive_value / 100) * o_health))
-                    o_health = o_health - int((o_attack))
+                    o_attack = o_attack + int(((o_title_passive_value / 100) * o_health))
                 elif o_title_passive_type == 'CRYSTAL':
                     o_defense = o_defense + int(((o_title_passive_value / 100) * o_health))
-                    o_health = o_health - int((o_defense))
+                    o_health = o_health - int(((o_title_passive_value / 100) * o_health))
                 elif o_title_passive_type == 'GROWTH':
                     o_attack = o_attack + int((o_title_passive_value / 100) * o_attack)
                     o_defense = o_defense + int((o_title_passive_value / 100) * o_defense)
@@ -4104,10 +4104,10 @@ class CrownUnlimited(commands.Cog):
                 t_attack = t_attack - int((t_card_passive / 100) * t_defense)
             elif t_card_passive_type == 'BZRK':
                 t_attack = t_attack + int(((t_card_passive / 100) * t_health))
-                t_health = t_health - int((t_attack))
+                t_attack = t_attack + int(((t_card_passive / 100) * t_health))
             elif t_card_passive_type == 'CRYSTAL':
                 t_defense = t_defense + int((t_card_passive / 100) * t_health)
-                t_health = t_health - int(t_defense)
+                t_health = t_health - int((t_card_passive / 100) * t_health)
             elif t_card_passive_type == 'GROWTH':
                 t_attack = t_attack + int(((t_card_passive / 100) * t_max_health))
                 t_defense = t_defense + int((t_card_passive / 100) * t_defense)
@@ -4178,10 +4178,10 @@ class CrownUnlimited(commands.Cog):
                     t_attack = t_attack - int(((t_title_passive_value / 100) * t_defense))
                 elif t_title_passive_type == 'BZRK':
                     t_attack = t_attack + int(((t_title_passive_value / 100) * t_health))
-                    t_health = t_health - int((t_attack))
+                    t_attack = t_attack + int(((t_title_passive_value / 100) * t_health))
                 elif t_title_passive_type == 'CRYSTAL':
                     t_defense = t_defense + int(((t_title_passive_value / 100) * t_health))
-                    t_health = t_health - int(t_defense)
+                    t_health = t_health - int(((t_title_passive_value / 100) * t_health))
                 elif t_title_passive_type == 'GROWTH':
                     tt_attack = t_attack + int(((t_title_passive_value / 100) * t_attack))
                     t_defense = t_defense + int(((t_title_passive_value / 100) * t_defense))
@@ -8427,10 +8427,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 c_attack = c_attack - int(((c_card_passive / 100) * c_defense))
             elif c_card_passive_type == 'BZRK':
                 c_attack = c_attack + int(((c_card_passive / 100) * c_health))
-                c_health = c_health - int((c_attack))
+                c_health = c_health - int(((c_card_passive / 100) * c_health))
             elif c_card_passive_type == 'CRYSTAL':
                 c_defense = c_defense + int(((c_card_passive / 100) * c_health))
-                c_health = c_health - int((c_defense))
+                c_health = c_health - int(((c_card_passive / 100) * c_health))
             elif c_card_passive_type == 'GROWTH':
                 c_attack = c_attack + int(((c_card_passive / 50) * c_max_health))
                 c_defense = c_defense + int(((c_card_passive / 50) * c_max_health))
@@ -8519,10 +8519,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                     c_attack = c_attack - int(((c_title_passive_value / 100) * c_defense))
                 elif c_title_passive_type == 'BZRK':
                     c_attack = c_attack + int(((c_title_passive_value / 100) * c_health))
-                    c_health = c_health - int((c_attack))
+                    c_health = c_health - int(((c_title_passive_value / 100) * c_health))
                 elif c_title_passive_type == 'CRYSTAL':
                     c_defense = c_defense + int(((c_title_passive_value / 100) * c_health))
-                    c_health = c_health - int((c_defense))
+                    c_health = c_health - int(((c_title_passive_value / 100) * c_health))
                 elif c_title_passive_type == 'GROWTH':
                     c_attack = c_attack + int(((c_title_passive_value / 50) * c_max_health))
                     c_defense = c_defense + int(((c_title_passive_value / 50) * c_max_health))
@@ -8677,10 +8677,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             o_attack = o_attack - int(((o_card_passive / 100) * o_defense))
         elif o_card_passive_type == 'BZRK':
             o_attack = o_attack + int(((o_card_passive / 100) * o_health))
-            o_health = o_health - int((o_attack))
+            o_health = o_health - int(((o_card_passive / 100) * o_health))
         elif o_card_passive_type == 'CRYSTAL':
             o_defense = o_defense + int(((o_card_passive / 100) * o_health))
-            o_health = o_health - int((o_defense))
+            o_health = o_health - int(((o_card_passive / 100) * o_health))
         elif o_card_passive_type == 'GROWTH':
             o_attack = o_attack + int(((o_card_passive / 50) * o_max_health))
             o_defense = o_defense + int(((o_card_passive / 50) * o_max_health))
@@ -8768,10 +8768,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 o_attack = o_attack - int(((o_title_passive_value / 100) * o_defense))
             elif o_title_passive_type == 'BZRK':
                 o_attack = o_attack + int(((o_title_passive_value / 100) * o_health))
-                o_health = o_health - int((o_attack))
+                o_health = o_health - int(((o_title_passive_value / 100) * o_health))
             elif o_title_passive_type == 'CRYSTAL':
                 o_defense = o_defense + int(((o_title_passive_value / 100) * o_health))
-                o_health = o_health - int((o_defense))
+                o_health = o_health - int(((o_title_passive_value / 100) * o_health))
             elif o_title_passive_type == 'GROWTH':
                 o_attack = o_attack + int((o_title_passive_value / 50) * o_max_health)
                 o_defense = o_defense + int((o_title_passive_value / 50) * o_max_health)
@@ -8929,10 +8929,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
             t_attack = t_attack - int((t_card_passive / 100) * t_defense)
         elif t_card_passive_type == 'BZRK':
             t_attack = t_attack + int(((t_card_passive / 100) * t_health))
-            t_health = t_health - int((t_attack))
+            t_health = t_health - int(((t_card_passive / 100) * t_health))
         elif t_card_passive_type == 'CRYSTAL':
             t_defense = t_defense + int((t_card_passive / 100) * t_health)
-            t_health = t_health - int(t_defense)
+            t_health = t_health - int((t_card_passive / 100) * t_health)
         elif t_card_passive_type == 'GROWTH':
             t_attack = t_attack + int((t_card_passive / 50) * t_max_health)
             t_defense = t_defense + int((t_card_passive / 50) * t_max_health)
@@ -9031,10 +9031,10 @@ async def build_player_stats(self, randomized_battle, ctx, sowner: str, o: dict,
                 t_attack = t_attack - int(((t_title_passive_value / 100) * t_defense))
             elif t_title_passive_type == 'BZRK':
                 t_attack = t_attack + int(((t_title_passive_value / 100) * t_health))
-                t_health = t_health - int((t_attack))
+                t_health = t_health - int(((t_title_passive_value / 100) * t_health))
             elif t_title_passive_type == 'CRYSTAL':
                 t_defense = t_defense + int(((t_title_passive_value / 100) * t_health))
-                t_health = t_health - int(t_defense)
+                t_health = t_health - int(((t_title_passive_value / 100) * t_health))
             elif t_title_passive_type == 'GROWTH':
                 t_attack = t_attack + int(((t_title_passive_value / 50) * t_max_health))
                 t_defense = t_defense + int(((t_title_passive_value / 50) * t_max_health))
@@ -13173,7 +13173,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 t_attack = round(t_attack - dmg['DMG'])
                                             elif enh_type == 'BZRK':
                                                 t_health = round(t_health - dmg['DMG'])
-                                                t_attack = round(t_attack + (.75 * dmg['DMG']))
+                                                t_attack = round(t_attack + (dmg['DMG']))
                                             elif enh_type == 'CRYSTAL':
                                                 t_health = round(t_health - dmg['DMG'])
                                                 t_defense = round(t_defense + dmg['DMG'])
@@ -16302,7 +16302,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_attack = round(t_attack - dmg['DMG'])
                                                 elif enh_type == 'BZRK':
                                                     t_health = round(t_health - dmg['DMG'])
-                                                    t_attack = round(t_attack + (.75 * dmg['DMG']))
+                                                    t_attack = round(t_attack + (dmg['DMG']))
                                                 elif enh_type == 'CRYSTAL':
                                                     t_health = round(t_health - dmg['DMG'])
                                                     t_defense = round(t_defense + dmg['DMG'])
@@ -16512,7 +16512,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_attack = round(t_attack - dmg['DMG'])
                                                 elif enh_type == 'BZRK':
                                                     t_health = round(t_health - dmg['DMG'])
-                                                    t_attack = round(t_attack + (.75 * dmg['DMG']))
+                                                    t_attack = round(t_attack + (dmg['DMG']))
                                                 elif enh_type == 'CRYSTAL':
                                                     t_health = round(t_health - dmg['DMG'])
                                                     t_defense = round(t_defense + dmg['DMG'])
@@ -16724,7 +16724,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                 t_attack = round(t_attack - dmg['DMG'])
                                             elif enh_type == 'BZRK':
                                                 t_health = round(t_health - dmg['DMG'])
-                                                t_attack = round(t_attack + (.75 * dmg['DMG']))
+                                                t_attack = round(t_attack + (dmg['DMG']))
                                             elif enh_type == 'CRYSTAL':
                                                 t_health = round(t_health - dmg['DMG'])
                                                 t_defense = round(t_defense + dmg['DMG'])
@@ -19739,7 +19739,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_attack = round(t_attack - dmg['DMG'])
                                                 elif enh_type == 'BZRK':
                                                     t_health = round(t_health - dmg['DMG'])
-                                                    t_attack = round(t_attack + (.75 * dmg['DMG']))
+                                                    t_attack = round(t_attack + (dmg['DMG']))
                                                 elif enh_type == 'CRYSTAL':
                                                     t_health = round(t_health - dmg['DMG'])
                                                     t_defense = round(t_defense + dmg['DMG'])
@@ -19944,7 +19944,7 @@ async def battle_commands(self, ctx, mode, universe, selected_universe, complete
                                                     t_attack = round(t_attack - dmg['DMG'])
                                                 elif enh_type == 'BZRK':
                                                     t_health = round(t_health - dmg['DMG'])
-                                                    t_attack = round(t_attack + (.75 * dmg['DMG']))
+                                                    t_attack = round(t_attack + (dmg['DMG']))
                                                 elif enh_type == 'CRYSTAL':
                                                     t_health = round(t_health - dmg['DMG'])
                                                     t_defense = round(t_defense + dmg['DMG'])
